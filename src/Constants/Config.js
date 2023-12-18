@@ -8,5 +8,6 @@ module.exports = Object.freeze({
 
     // Categories API calls
     LIST_ALL_CATEGORIES:"Categoryapi/category_list",
+    DELETE_SINGLE_CATEGORIE:"Categoryapi/delete_category",
   
   });

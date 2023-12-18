@@ -125,7 +125,10 @@
 .categories-items {
     width: 20%;
 }
-
+.categories-items-btn{
+width: auto !important;
+cursor:  pointer !important;
+}
 .categories-enable-disable {
     width: calc(100% - 52%);
 }
@@ -149,6 +152,7 @@
     font-size: 16px;
     color: #000000;
     font-family: CircularSTDMedium !important;
+    text-transform: capitalize;
 }
 
 .q-category-bottom-categories-single-category>.categories-items {
@@ -169,7 +173,7 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    width: 48%;
+    width: 200px;
 }
 
 .category-checkmark-div .category-checkmark-label {
@@ -320,4 +324,11 @@
 .q-add-categories-section-middle-footer .quic-btn-cancle {
     background: #878787;
     margin-left: 10px;
+}
+
+.view-category-item-modal{
+    background: #FFFFFF ;
+    box-shadow: 0px 3px 28px #00000014;
+    border-radius: 8px;
+    outline: none;
 }
