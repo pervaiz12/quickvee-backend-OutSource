@@ -1,0 +1,310 @@
+/* src/styles/tailwind.css */
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
+
+.icon {
+  color: blue;
+  font-size: 40px;
+}
+
+@font-face {
+  font-family: adminbold;
+  src: url(./Assests/Fonts/circular-bold.TTF);
+}
+
+@font-face {
+  font-family: adminmedium;
+  src: url(./Assests/Fonts/circulur-medium.TTF);
+}
+
+@font-face {
+  font-family: adminblack;
+  src: url(./Assests/Fonts/circulur-std-black.TTF);
+}
+
+@font-face {
+  font-family: adminstdbook;
+  src: url(./Assests/Fonts/circulur-std-book.TTF);
+}
+
+@font-face {
+  font-family: admin_std_medium;
+  src: url(./Assests//Fonts/FontsFree-Net-Circular-Std-Medium.ttf);
+}
+
+.Admin_bold {
+  font-family: adminbold !important;
+}
+
+.Admin_black {
+  font-family: adminblack !important;
+}
+
+.admin_medium {
+  font-family: adminmedium !important;
+}
+
+.Admin_std {
+  font-family: adminstdbook !important;
+}
+
+.adminstd_medium {
+  font-family: admin_std_medium !important;
+}
+
+.sales {
+  font-weight: normal !important;
+}
+
+/* In your CSS file or within your Tailwind configuration */
+.hover-text-yellow {
+  transition: color 0.3s ease;
+  /* Smooth transition effect */
+}
+
+.hover-text-yellow:hover {
+  color: #ffc400;
+  /* Yellow color when hovered */
+}
+
+.sidebar-menu {
+  position: fixed;
+  background-color: #f4f4f8;
+  /* top: 0; */
+  overflow-y: auto;
+  height: 100vh;
+  /* width: 16rem; */
+  z-index: 9;
+}
+
+.main-content {
+  overflow-y: auto;
+  height: calc(100vh - 98px);
+}
+
+.importBtn {
+  margin-left: 42rem;
+}
+
+.dot {
+  height: 10px;
+  width: 10px;
+  background-color: #fff;
+  border-radius: 50%;
+  display: inline-block;
+  border: 3px solid #0a64f9;
+}
+
+.border-customColor {
+  border-color: #438aff;
+  /* Replace with your desired border color */
+}
+
+.custom-tooltip {
+  background-color: white;
+  border: 1px solid #ccc;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transform: translateY(10px);
+  /* Adjust the value as needed */
+}
+
+.custom-box {
+  background: #f9f9f9;
+  border: 1px solid #ebebeb;
+  border-radius: 4px;
+  opacity: 1;
+}
+
+.custom-button {
+  background: #f9f9f9;
+  border: 1px solid #ebebeb;
+  border-radius: 4px;
+  opacity: 1;
+}
+
+.menu-item.active {
+  background-color: gray;
+  /* Set the default active background color */
+}
+
+.menu-item:hover {
+  color: #ffc400;
+  /* Set the hover color */
+}
+
+.vl {
+  border-left: 2px solid #0000001f;
+  height: 80px;
+  margin-top: 13px;
+}
+
+select {
+  margin-top: -1rem;
+}
+
+select::-ms-expand {
+  display: none;
+}
+
+select option {
+  box-sizing: border-box;
+  margin-top: -1rem;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes fadeCalnder {
+  0% {
+    height: 0px;
+    width: 0px;
+  }
+
+  30% {
+    height: 50px;
+    width: 50px;
+  }
+
+  30% {
+    height: 150px;
+    width: 150px;
+  }
+
+  50% {
+    height: 250px;
+    width: 250px;
+  }
+
+  70% {
+    height: 300px;
+    width: 300px;
+  }
+
+  85% {
+    height: 400px;
+    width: 400px;
+  }
+
+  100% {
+    height: 500px;
+    width: 500px;
+  }
+}
+
+.dataCalender {
+  background-color: #fff;
+  z-index: 5;
+  right: -0.5rem;
+  top: 3.5rem;
+  bottom: 3px;
+
+  position: absolute;
+  display: flex;
+  transition:
+    width 2s,
+    height 4s;
+  height: 500px;
+  width: 90%;
+  padding: 12px;
+  box-shadow: 0px 3px 6px #0000001f;
+  border-radius: 8px;
+  opacity: 1;
+}
+
+.nonedatacalender {
+  width: 0px;
+  height: 0px;
+  display: none;
+}
+
+.days_btn {
+  border-width: 1px;
+  padding-left: 3.5rem;
+  padding-right: 3.5rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+.pagination {
+  display: flex;
+  justify-content: end;
+  padding-top: 1rem;
+  padding-bottom: 2rem;
+}
+
+.page-item {
+  list-style: none;
+  margin: 0 5px;
+}
+
+.page-link {
+  display: block;
+  padding: 8px 15px 8px 15px;
+  border: 1px solid #ebebeb;
+  text-decoration: none;
+  color: #333;
+  border-radius: 4px;
+  opacity: 1;
+}
+
+.page-item.active {
+  display: block;
+  /* padding: 8px 15px 8px 15px; */
+  border: 1px solid #0a64f9;
+  text-decoration: none;
+  color: #333;
+  border-radius: 4px;
+  opacity: 1;
+}
+
+.page-link:hover {
+  background-color: #f0f0f0;
+}
+
+.Activeclass {
+  background-color: #526167;
+  color: #fff;
+  border-radius: 4px;
+}
+
+.active_link_pagination {
+  color: #fff;
+}
+
+.select_date_btn {
+  padding-left: 2rem;
+  padding-right: 4rem;
+}
+
+.days_filter {
+  color: #707070;
+  font-size: 16px;
+  font-family: "Admin_std", sans-serif;
+  /* Assuming 'Admin_std' is the font name */
+  font-weight: normal;
+}
+
+.main_blocks {
+  margin-right: -4.4rem;
+  margin-left: -4.4rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.main_block_content {
+  margin-right: -2.2rem;
+  margin-left: -2.2rem;
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.search_btn {
+  margin-top: 2rem !important;
+}
+
+.quickarrow_icon {
+  margin-left: 7.25rem;
+  /* display: flex; */
+  /* justify-content: space-between; */
+  margin-top: -1rem;
+}

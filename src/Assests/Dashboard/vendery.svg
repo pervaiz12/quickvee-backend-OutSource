@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_3953" data-name="Rectangle 3953" width="24" height="24" transform="translate(60 479)" fill="none" stroke="#ffc400" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="Mask_Group_4738" data-name="Mask Group 4738" transform="translate(-60 -479)" clip-path="url(#clip-path)">
+    <g id="wallet" transform="translate(43.167 462.167)">
+      <g id="Mobile_Banking_1_" transform="translate(24.342 20)">
+        <path id="Path_8218" data-name="Path 8218" d="M136,24.192V21.5a1.5,1.5,0,0,1,1.5-1.5h5.989a1.5,1.5,0,0,1,1.5,1.5v2.695" transform="translate(-136 -20)" fill="none" stroke="#ffc400" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+        <line id="Line_804" data-name="Line 804" y1="4.055" transform="translate(3.043 0.145)" fill="none" stroke="#ffc400" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+        <line id="Line_805" data-name="Line 805" y1="1.158" transform="translate(5.94 3.041)" fill="none" stroke="#ffc400" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      </g>
+      <path id="Path_8219" data-name="Path 8219" d="M20,172a1.5,1.5,0,0,0,1.5,1.5H34.672a1.5,1.5,0,0,1,1.5,1.5v1.5" transform="translate(0 -146.311)" fill="none" stroke="#ffc400" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Path_8220" data-name="Path 8220" d="M36.169,142.48v1.5a1.5,1.5,0,0,1-1.5,1.5H21.5a1.5,1.5,0,0,1-1.5-1.5V133.5a1.5,1.5,0,0,1,1.5-1.5" transform="translate(0 -107.808)" fill="none" stroke="#ffc400" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Path_8221" data-name="Path 8221" d="M336.491,296.491h-2.246a2.246,2.246,0,1,1,0-4.491h2.246a1.5,1.5,0,0,1,1.5,1.5v1.5A1.5,1.5,0,0,1,336.491,296.491Z" transform="translate(-300.322 -261.819)" fill="none" stroke="#ffc400" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>
