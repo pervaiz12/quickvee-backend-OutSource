@@ -1,5 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import categoriesReducer from "../features/Categories/categoriesSlice";
+ 
 
 
 const store = configureStore({
