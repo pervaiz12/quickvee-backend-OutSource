@@ -2,7 +2,10 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import "./index.css";
 import { Layout } from "./Components/Layout/Index";
-import "./Styles/CategoryPage.css"
+import "./Styles/CategoryPage.css";
+import "./Styles/AttributesPage.css"; 
+import "./Styles/PurchasePage.css"
+
 import DashboardMain from "./Components/Dashboard/DashboardMain";
 import MainOrder from "./Components/Orders/MainOrder";
 import MainCategory from "./Components/Category/MainCategory";
@@ -21,6 +24,7 @@ import AddCoupon from "./Components/Coupons/AddCoupon";
 import MainStoreSetting from "./Components/StoreSetting/MainStoreSetting";
 import MainReport from "./Components/ReportSetting/MainReport";
 import Info from "./Components/StoreSetting/SubSetting/Info";
+
 
 
 

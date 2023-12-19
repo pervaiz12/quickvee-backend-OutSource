@@ -301,7 +301,6 @@ const TableViewData = () => {
           <Pagination
   activePage={activePage}
   itemsCountPerPage={entriesPerPage}
-  totalItemsCount={tableData.length}
   pageRangeDisplayed={5}
   onChange={handlePageChange}
   itemclassName="page-item"
