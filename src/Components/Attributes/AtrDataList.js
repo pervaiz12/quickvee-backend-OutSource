@@ -1,36 +1,50 @@
-import React, { useState } from "react";
+import React, {useEffect, useState } from "react";
 import { FaPencilAlt } from "react-icons/fa";
  import CrossIcon from "../../Assests/Dashboard/cross.svg";
- import SortIcon from "../../Assests/Dashboard/sort-arrows-icon.svg"
+ import SortIcon from "../../Assests/Dashboard/sort-arrows-icon.svg";
+ import { fetchAttributesData } from "../../Redux/features/Attributes/attributesSlice"
+ import { useSelector, useDispatch } from 'react-redux';
 
 const AtrDataList = () => {
-  const [items, setItems] = useState([
-    { id: "1",sort: {SortIcon}, title: "Color", action: <FaPencilAlt /> },
-    { id: "2", sort: {SortIcon}, title: "Size", action: <FaPencilAlt /> },
-    { id: "3", sort: {SortIcon}, title: "Flavor", action: <FaPencilAlt /> },
-    { id: "4", sort: {SortIcon}, title: "Material", action: <FaPencilAlt /> },
-    { id: "5", sort: {SortIcon}, title: "Size", action: <FaPencilAlt /> },
-    { id: "6", sort: {SortIcon}, title: "Flavor", action: <FaPencilAlt /> },
-    // Add more data as needed
-  ]);
+    //sachin code start
+
+    
+    const [allattributes, setallattributes] = useState([])
+    const AllAttributesDataState = useSelector((state) => state.attributes)
+    const dispatch = useDispatch();
+    useEffect(() => {
+      let data = {
+        merchant_id: "MAL0100CA"
+      }
+      if (data) {
+        dispatch(fetchAttributesData(data))
+      }
+
+    }, [])
+
+    useEffect(() => {
+      if (!AllAttributesDataState.loading && AllAttributesDataState.attributesData) {
+        setallattributes(AllAttributesDataState.attributesData)
+      }
+    }, [AllAttributesDataState, AllAttributesDataState.loading , AllAttributesDataState.attributesData])
+
+
+
+
+  const [errorMessage ,  setErrorMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [newAttribute, setNewAttribute] = useState("");
 
-  const sortBy = (key) => {
-    const sortedItems = [...items].sort((a, b) => {
-      return a[key].localeCompare(b[key], undefined, { numeric: true });
-    });
-    setItems(sortedItems);
-  };
+
 
   const handleAddAttribute = () => {
+    const nameExists = allattributes.some(item => item.title === newAttribute);
+    if(nameExists){
+      setErrorMessage("Attribute name already exists");
+    }
     const newItem = {
-      id: (items.length + 1).toString(),
-      sort: (items.length + 1).toString(),
       title: newAttribute,
-      action: <FaPencilAlt />,
     };
-    setItems([...items, newItem]);
     setShowModal(false);
     setNewAttribute("");
   };
@@ -47,6 +61,7 @@ const AtrDataList = () => {
                 Attributes
               </div>
               <div>
+                {errorMessage}
                 <div className="text-[18px] Admin_std leading-0 text-blue-500 admin_medium font-semibold opacity-100">
                   Add New Attributes
                   <button className="text-[18px] text-blue-500 ml-1 focus:outline-none" onClick={() => setShowModal(true)}>+</button>
@@ -58,19 +73,23 @@ const AtrDataList = () => {
           <table className="w-full">
             <thead>
               <tr className="bg-[#253338] text-white">
-                <th className="p-3 text-left cursor-pointer" onClick={() => sortBy("sort")}>Sort</th>
+                <th className="p-3 text-left cursor-pointer" >Sort</th>
                 <th className="p-3 text-left">Title</th>
                 <th className="p-3 text-right">Action</th>
               </tr>
             </thead>
             <tbody>
-              {items.map((item, index) => (
+
+              {/* {items.map((item, index) => ( */}
+              {allattributes && allattributes.length >= 1 && allattributes.map((attribute, index) => (
                 <tr key={index} className="text-black text-[18px] admin_medium border-b">
                   <td className="p-3 h-14"><img src={SortIcon}  className="h-6 w-6"/></td>
-                  <td className="p-3">{item.title}</td>
-                  <td className="p-3 text-right flex justify-end mt-2">{item.action}</td>
+                  <td className="p-3">{attribute.title}</td>
+                  <td className="p-3 text-right flex justify-end mt-2"><FaPencilAlt />{attribute.action}</td>
                 </tr>
-              ))}
+                ))
+              }
+              {/* ))} */}
             </tbody>
           </table>
         </div>
@@ -94,6 +113,9 @@ const AtrDataList = () => {
               value={newAttribute}
               onChange={(e) => setNewAttribute(e.target.value)}
             />
+            <span className="input-error">
+              {errorMessage}
+            </span>
             <div className="flex justify-end">
               <button
                 className="px-4 py-2 bg-blue-500 text-white rounded-md"
