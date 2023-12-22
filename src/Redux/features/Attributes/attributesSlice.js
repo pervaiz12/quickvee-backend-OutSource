@@ -29,18 +29,14 @@ const attributesSlice = createSlice({
     name: 'attributes',
     initialState,
     reducers: {
-        addAttribute: (state, action) => {
-
-            state.attributesData = [...state.attributesData, ...action.payload];
-            // console.log( state.attributesData)
-        } ,
         editAttribute: (state, action) => {
             state.attributesData = state.attributesData.map(attribute => {
                 if (attribute.id === action.payload.id) {
 
                     return {
                         ...attribute, // Spread syntax to copy existing properties
-                        title: action.payload.title // Update the title
+                        title: action.payload.title, // Update the title
+                        old_title: action.payload.title
                     };
                 } else {
                     // This isn't the one we're looking for - leave it as is
@@ -82,5 +78,5 @@ const attributesSlice = createSlice({
     }
 })
 
-export const { addAttribute , editAttribute} = attributesSlice.actions;
+export const {  editAttribute} = attributesSlice.actions;
 export default attributesSlice.reducer

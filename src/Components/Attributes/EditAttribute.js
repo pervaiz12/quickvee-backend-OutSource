@@ -1,54 +1,31 @@
 import React, { useState } from "react";
 import axios from "axios";
 import Button from "@mui/material/Button";
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { editAttribute } from "../../Redux/features/Attributes/attributesSlice";
 import CrossIcon from "../../Assests/Dashboard/cross.svg";
-import Modal from "@mui/material/Modal";
-import CloseIcon from "@mui/icons-material/Close";
-import { FormControl, InputLabel, MenuItem, Select, TextField, } from "@mui/material";
 import { BASE_URL, ADD_ATTRIBUTE } from "../../Constants/Config";
 
 const EditDeliveryAddress = ({attribute , allattributes}) => {
    
-    const [open, setOpen] = useState(false);
-    const handleOpen = () => setOpen(true);
     const [nameExists , setNameExists] =  useState("");
+    // const [old_title, setold_title] = useState("");
     const [showModal, setShowModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [newAttribute, setNewAttribute] = useState("");
-    const [nameExistsEdit , setNameExistsEdit] =  useState("");
     const [submitmessage, setsubmitmessage] = useState("");
     
     const openModal = () => {
         setShowModal(true);
         setNewAttribute(attribute.title);
+        // setold_title(attribute.title);
       };
 
       
     const closeModal = () => {
-        // setNewAttribute('');
         setShowModal(false);
       };
-    const handleClose = () => {
-      setOpen(false);
-    //   values.errors.firstname = "";
-    //   values.errors.lastname = "";
-    //   values.errors.state = "";
-    //   values.errors.city = "";
-    //   values.errors.phone = "";
-    //   values.errors.streetaddress = "";
-    //   values.errors.apartmentnumber = "";
-    //   values.errors.city = "";
-    //   values.errors.zipcode = "";
-    }
-    // const {
-    //   DeliveryAddressInput,
-    //   handleSubmitDeliveryAddress,
-    //   values,
-    //   submitmessage,
-    //   setsubmitmessage,
-    // } = EditDeliveryAddressLogic({ handleClose ,address});
+    
     const dispatch = useDispatch();
     const changeTittleHandler = (event) => {
         console.log(event.target.value);
@@ -68,8 +45,7 @@ const EditDeliveryAddress = ({attribute , allattributes}) => {
       };
 
       const handleEditAttribute = async () => {
-        console.log(attribute + "dfdsfsdf")
-        console.log(allattributes)
+        console.log(attribute);
         if(nameExists){
           return false;
         }
@@ -77,10 +53,10 @@ const EditDeliveryAddress = ({attribute , allattributes}) => {
           merchant_id: "MAL0100CA",
           varient_id:attribute.id,
           title: newAttribute,
+          old_title: attribute.title,
         };
         const data = editItem;
-        // console.log(data);
-        // return false;
+        console.log(data);
         const response = await axios.post(BASE_URL + ADD_ATTRIBUTE, data, {
           headers: { "Content-Type": "multipart/form-data" },
         });
@@ -95,7 +71,7 @@ const EditDeliveryAddress = ({attribute , allattributes}) => {
 
 
     setTimeout(() => {
-    //   setsubmitmessage("")
+      setsubmitmessage("")
     }, 4000);
     return (
         <>
