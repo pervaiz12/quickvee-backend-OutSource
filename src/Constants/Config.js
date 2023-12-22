@@ -10,9 +10,8 @@ module.exports = Object.freeze({
     LIST_ALL_CATEGORIES:"Categoryapi/category_list",
     DELETE_SINGLE_CATEGORIE:"Categoryapi/delete_category",
 
-
-
-
-    // Attributes API calls
+    //Attributes API Calls
+    LIST_ALL_ATTRIBUTES:"Varientsapi/varients_list",
+    ADD_ATTRIBUTE:"Varientsapi/add_varient",
   
   });
