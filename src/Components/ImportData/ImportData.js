@@ -27,6 +27,7 @@ const ImportData = () => {
               className="px-4 py-2 border-[#0A64F9] text-blue text-[#0A64F9] border-2 rounded-md opacity-100 mt-3"
               onClick={() => {
                 // Handle the download functionality here
+                window.location.href = "https://sandbox.quickvee.com/upload/SampleCSV/SampleProductsCSVnew.csv";
               }}
             >
               Sample CSV Download
