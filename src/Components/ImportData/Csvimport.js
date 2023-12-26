@@ -1,10 +1,13 @@
 import React, { useState, useRef } from 'react';
+import axios from "axios";
 import UploadIcon from "../../Assests/Dashboard/upload.svg";
+import { BASE_URL, IMPORT_DATA } from '../../Constants/Config';
 
 const FileUpload = () => {
   const [dragActive, setDragActive] = useState(false);
   const [fileData, setFileData] = useState(null);
   const inputRef = useRef(null);
+  const [filename, setfilename] = useState(null);
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -22,6 +25,7 @@ const FileUpload = () => {
     setDragActive(false);
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       handleFile(e.dataTransfer.files);
+      setfilename(e.target.files[0].name);
     }
   };
 
@@ -29,6 +33,11 @@ const FileUpload = () => {
     e.preventDefault();
     if (e.target.files && e.target.files[0]) {
       handleFile(e.target.files);
+      setfilename(e.target.files[0].name);
+    }
+    else
+    {
+      setfilename('');
     }
   };
 
@@ -38,11 +47,31 @@ const FileUpload = () => {
 
   const handleFile = (files) => {
     setFileData(files); // Store the selected files
+    setfilename(files[0].name);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // Handle your submit logic with fileData
-    console.log('Submitting data:', fileData);
+    // console.log('Submitting data:', fileData);
+   
+    const fileInput = document.getElementById('input-file-upload');
+    const csvfileData = fileInput.files[0];    
+    const formData = new FormData();
+
+    // Append the merchant_id and the file to the FormData
+    formData.append("merchant_id", "MAL0100CA");
+    formData.append("file", csvfileData);
+    
+    const response = await axios.post(BASE_URL + IMPORT_DATA, formData, {
+      headers: { "Content-Type": "multipart/form-data" },
+    });
+    if (response) {
+      // console.log(response);
+      alert(response.data.message);
+      setfilename('');
+    } else {
+      alert('Something went wrong !');
+    }
     // Add your specific submit logic here
     // For example, you can send the data to a server
   };
@@ -59,7 +88,8 @@ const FileUpload = () => {
           ref={inputRef}
           type="file"
           id="input-file-upload"
-          multiple={true}
+          // multiple={true}
+          name="file"
           onChange={handleChange}
           className="mb-4 hidden"
         />
@@ -84,6 +114,7 @@ const FileUpload = () => {
               Choose Files
               <img src={UploadIcon} alt="" className="ml-2 h-6 w-6" />
             </button>
+            <span>{filename !== "undefined" ? filename : ''}</span>
           </div>
         </label>
 

@@ -13,5 +13,8 @@ module.exports = Object.freeze({
     //Attributes API Calls
     LIST_ALL_ATTRIBUTES:"Varientsapi/varients_list",
     ADD_ATTRIBUTE:"Varientsapi/add_varient",
+
+    //Importdata API Calls
+    IMPORT_DATA:"Import_data_api/import",
   
   });
