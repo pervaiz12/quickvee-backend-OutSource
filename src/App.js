@@ -20,7 +20,12 @@ import AddPo from "./Components/PurchaseOrders/AddPo";
 import AddCoupon from "./Components/Coupons/AddCoupon";
 // import MainStoreSetting from "./Components/StoreSetting/MainStoreSetting";
 import MainReport from "./Components/ReportSetting/MainReport";
+
+import Info from "./Components/StoreSetting/SubSetting/Info";
+import "./Styles/AttributesPage.css"
+
 import MainStoreOption from "./Components/StoreSetting/StoreOption/MainStoreOption";
+
 
 
 

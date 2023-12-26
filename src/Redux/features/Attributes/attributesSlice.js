@@ -28,6 +28,23 @@ export const fetchAttributesData = createAsyncThunk('attributes/fetchAttributesD
 const attributesSlice = createSlice({
     name: 'attributes',
     initialState,
+    reducers: {
+        editAttribute: (state, action) => {
+            state.attributesData = state.attributesData.map(attribute => {
+                if (attribute.id === action.payload.id) {
+
+                    return {
+                        ...attribute, // Spread syntax to copy existing properties
+                        title: action.payload.title, // Update the title
+                        old_title: action.payload.title
+                    };
+                } else {
+                    // This isn't the one we're looking for - leave it as is
+                    return attribute;
+                }
+            });
+        }
+    },
     extraReducers: (builder) => {
         builder.addCase(fetchAttributesData.pending, (state) => {
             state.loading = true;
@@ -61,5 +78,5 @@ const attributesSlice = createSlice({
     }
 })
 
-
+export const {  editAttribute} = attributesSlice.actions;
 export default attributesSlice.reducer
