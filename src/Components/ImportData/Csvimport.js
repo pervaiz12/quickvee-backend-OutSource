@@ -31,11 +31,11 @@ const FileUpload = () => {
         setalertmsg("");
     };
 
-  // if(alertmsg){
-  //   setTimeout(() => {
-  //     setalertmsg('');
-  //   }, 10000);
-  // }
+  if(alertmsg){
+    setTimeout(() => {
+      setalertmsg('');
+    }, 10000);
+  }
 
   const handleDrop = (e) => {
     e.preventDefault();
