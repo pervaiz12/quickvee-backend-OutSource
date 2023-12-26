@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import FilterEmp from "./FilterEmp";
 import DateRange from "./DateRange";
 import ContentList from "./ContentList";
-import TableViewData from "./TableViewData";
+import InstoreTableViewData from "./InstoreTableViewData";
+import OnlineTableViewData from "../OnlineOrder/OnlineTableViewData"
 import MainOnline from "../OnlineOrder/MainOnline";
 
 const MainInStore = () => {
@@ -36,21 +37,19 @@ const MainInStore = () => {
           <div className="mb-6">
             <button
               onClick={() => handleTabClick("offline")}
-              className={`${
-                activeTab === "offline"
+              className={`${activeTab === "offline"
                   ? "bg-[#EBF2FF] text-[#0A64F9]"
                   : "bg-white text-[#6A6A6A]"
-              } px-12 py-2 rounded  lg:text-[20px] md:text-[14px] sm:text-[12px] focus:outline-none`}
+                } px-12 py-2 rounded  lg:text-[20px] md:text-[14px] sm:text-[12px] focus:outline-none`}
             >
               In-Store Orders
             </button>
             <button
               onClick={() => handleTabClick("online")}
-              className={`${
-                activeTab === "online"
+              className={`${activeTab === "online"
                   ? "bg-[#EBF2FF] text-[#0A64F9]"
                   : "bg-white text-[#6A6A6A]"
-              } px-12 py-2 rounded focus:outline-none lg:text-[20px] md:text-[14px] sm:text-[12px]`}
+                } px-12 py-2 rounded focus:outline-none lg:text-[20px] md:text-[14px] sm:text-[12px]`}
             >
               Online Orders
             </button>
@@ -69,7 +68,11 @@ const MainInStore = () => {
         </div>
 
         <div className="q_dateRange_header">
-          <TableViewData />
+          {
+            activeTab === "offline" ?
+            < InstoreTableViewData />
+: <OnlineTableViewData />
+          }
         </div>
       </div>
     </>
