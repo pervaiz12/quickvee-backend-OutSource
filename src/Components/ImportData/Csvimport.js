@@ -2,12 +2,19 @@ import React, { useState, useRef } from 'react';
 import axios from "axios";
 import UploadIcon from "../../Assests/Dashboard/upload.svg";
 import { BASE_URL, IMPORT_DATA } from '../../Constants/Config';
+import Box from '@mui/material/Box';
+import Alert from '@mui/material/Alert';
+import IconButton from '@mui/material/IconButton';
+import Collapse from '@mui/material/Collapse';
+import CloseIcon from '@mui/icons-material/Close';
 
 const FileUpload = () => {
   const [dragActive, setDragActive] = useState(false);
   const [fileData, setFileData] = useState(null);
   const inputRef = useRef(null);
   const [filename, setfilename] = useState(null);
+  const [alertmsg,setalertmsg] = useState(null);
+  const [openAlert, setOpenAlert] = useState();
 
   const handleDrag = (e) => {
     e.preventDefault();
@@ -18,6 +25,17 @@ const FileUpload = () => {
       setDragActive(false);
     }
   };
+
+  const goToTop = () => {
+        setOpenAlert(false);
+        setalertmsg("");
+    };
+
+  // if(alertmsg){
+  //   setTimeout(() => {
+  //     setalertmsg('');
+  //   }, 10000);
+  // }
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -67,7 +85,11 @@ const FileUpload = () => {
     });
     if (response) {
       // console.log(response);
-      alert(response.data.message);
+      
+      setalertmsg(response.data.message);
+      // alert(response.data.message);
+      setOpenAlert(true);
+      // console.log(alertmsg);
       setfilename('');
     } else {
       alert('Something went wrong !');
@@ -77,13 +99,42 @@ const FileUpload = () => {
   };
 
   return (
-    <div className="mx-2 mt-2">
+    
+
+    <div className="mx-2 mt-2">     
+     
       <div
         onDragEnter={handleDrag}
         onSubmit={(e) => e.preventDefault()}
         className="box-content h-[300px] p-4 border-4 border-white bg-white rounded-xl opacity-100 mt-9 flex justify-between mx-8 my-9 relative" // Added 'relative' class
         style={{ boxShadow: "0px 3px 6px #0000001F" }}
       >
+        {alertmsg &&
+          <Box sx={{ width: '100%'}}   className={alertmsg ? "form-submit-info-message" : ""}  >    
+            {
+               alertmsg &&       
+                  <Collapse in={openAlert}>
+                
+                    <Alert severity="info"
+                      action={
+                        <IconButton
+                        className="info-close-icon"
+                          aria-label="close"
+                          color="info"
+                          size="small"
+                          onClick={goToTop}
+                        >
+                          <CloseIcon  />
+                        </IconButton>
+                      }
+                      sx={{ mb: 2 }}
+                    >
+                    {alertmsg}
+                    </Alert> 
+                  </Collapse>
+            }
+          </Box>
+        }
         <input
           ref={inputRef}
           type="file"
