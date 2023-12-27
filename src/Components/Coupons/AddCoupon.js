@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import AddNewCategory from "../../Assests/Dashboard/Left.svg";
+import CustomeDateTime from "./CustomeDateTime";
 
 
 
@@ -142,7 +143,7 @@ const AddCoupon = ({ seVisible }) => {
               
               <label for="coupon">Date & Time</label>
               <div className="q_datetimesection">
-               
+              <CustomeDateTime />
                 
                
        
@@ -190,6 +191,7 @@ const AddCoupon = ({ seVisible }) => {
             Cancel
           </button>
         </div>
+       
       </div>
     </>
   );
