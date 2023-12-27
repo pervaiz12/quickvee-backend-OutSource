@@ -21,7 +21,15 @@ const AddCategory = ({ seVisible }) => {
           <textarea id="description" name="description" rows="4" cols="50">
           </textarea>
         </div>
+        <div className="add-category-checkmark-div">
+          <label className="add-category-checkmark-label">Show Online ?
+            <input type="checkbox" />
+            <span className="add-category-checkmark"></span>
+          </label>
+
+        </div>
       </div>
+
       <div className='q-add-categories-section-middle-footer'>
         <button className='quic-btn quic-btn-save'>
           Add

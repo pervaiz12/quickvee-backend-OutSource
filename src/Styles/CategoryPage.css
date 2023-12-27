@@ -332,3 +332,76 @@ cursor:  pointer !important;
     border-radius: 8px;
     outline: none;
 }
+
+
+
+.add-category-checkmark-div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 200px;
+}
+
+.add-category-checkmark-div .add-category-checkmark-label {
+    color: #818181;
+    font-size: 14px;
+    font-family: CircularSTDBook !important;
+    display: block;
+    position: relative;
+    padding-left: 33px;
+    cursor: pointer;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.add-category-checkmark-div .add-category-checkmark-label input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.add-category-checkmark {
+    position: absolute;
+    top: -2px;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    border-radius: 5px;
+}
+
+
+/* When the checkbox is checked, add a blue background */
+.add-category-checkmark-div .add-category-checkmark-label input:checked~.add-category-checkmark {
+    background-color: #1EC26B;
+    border-radius: 5px;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.add-category-checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.add-category-checkmark-div .add-category-checkmark-label input:checked~.add-category-checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.add-category-checkmark-div .add-category-checkmark-label .add-category-checkmark:after {
+    left: 8px;
+    top: 4px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}

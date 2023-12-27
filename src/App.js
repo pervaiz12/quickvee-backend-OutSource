@@ -1,5 +1,5 @@
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Switch, Link } from 'react-router-dom';
 import "./index.css";
 import { Layout } from "./Components/Layout/Index";
 
@@ -18,15 +18,22 @@ import TopTenders from "./Components/Dashboard/TopTenders";
 import ProductEdit from "./Components/Products/ProductEdit";
 import AddPo from "./Components/PurchaseOrders/AddPo";
 import AddCoupon from "./Components/Coupons/AddCoupon";
-import MainStoreSetting from "./Components/StoreSetting/MainStoreSetting";
+// import MainStoreSetting from "./Components/StoreSetting/MainStoreSetting";
 import MainReport from "./Components/ReportSetting/MainReport";
+
 import Info from "./Components/StoreSetting/SubSetting/Info";
+
+import "./Styles/AttributesPage.css"
+
+import MainStoreOption from "./Components/StoreSetting/StoreOption/MainStoreOption";
+
 import "./Styles/CategoryPage.css";
 import "./Styles/AttributesPage.css"; 
 import "./Styles/PurchasePage.css";
 import "./Styles/TableOrderPage.css";
 import "./Styles/MainInStore.css";
 import "./Styles/MainOrderPage.css";
+
 
 
 
@@ -52,10 +59,11 @@ function App() {
           <Route exact path="/productedit" element={<ProductEdit />} />
           <Route exact path="/addpurchaseOrder" element={<AddPo />} />
           <Route exact path="/addCoupon" element={<AddCoupon />} />
-          <Route path ="/store-setting" element ={<MainStoreSetting />} />
+          {/* <Route path ="/store-setting" element ={<MainStoreSetting />} /> */}
           <Route path ="/report" element ={<MainReport />} />
 
-          <Route path="/store-setting"  element={<Info />} />
+          {/* <Route path="/store-settings/info"  element={<MainStoreOption />} /> */}
+          <Route path="/store-settings/options"  element={<MainStoreOption />} />
         
         </Route>
       </Routes>
