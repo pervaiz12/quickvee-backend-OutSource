@@ -66,7 +66,7 @@ const FilterEmp = () => {
             id="employeeFilter"
             value={selectedFilter === 'employee' ? 'allEmployees' : ''}
             onChange={(e) => handleFilterChange(e, 'employee')}
-            className="w-full bg-white text-[#000000] text-[18px] Admin_std px-4 py-2 border border-gray-300 focus:outline-none rounded"
+            className="w-full bg-white text-[#000000] lg:text-[18px] md:text-[12px] sm:text-xs Admin_std px-4 py-2 border border-gray-300 focus:outline-none rounded"
           >
             <option value="" disabled hidden>Select an option</option>
             <option value="allEmployees">All Employees</option>
@@ -82,7 +82,7 @@ const FilterEmp = () => {
             id="transactionFilter"
             value={selectedFilter === 'transaction' ? 'allTransactions' : ''}
             onChange={(e) => handleFilterChange(e, 'transaction')}
-            className="w-full bg-white text-[#000000] text-[18px] Admin_std px-4 py-2 border border-gray-300 focus:outline-none rounded"
+            className="w-full bg-white text-[#000000] lg:text-[18px] md:text-[12px] sm:text-xs Admin_std px-4 py-2 border border-gray-300 focus:outline-none rounded"
           >
             <option value="" disabled hidden>Select an option</option>
             <option value="allTransactions">All Transactions</option>
@@ -98,7 +98,7 @@ const FilterEmp = () => {
             id="orderStatusFilter"
             value={selectedFilter === 'orderStatus' ? 'orderStatus' : ''}
             onChange={(e) => handleFilterChange(e, 'orderStatus')}
-            className="w-full bg-white text-[#000000] text-[18px] Admin_std px-4 py-2 border border-gray-300 focus:outline-none rounded"
+            className="w-full bg-white text-[#000000] lg:text-[18px] md:text-[12px] sm:text-xs  Admin_std px-4 py-2 border border-gray-300 focus:outline-none rounded"
           >
             <option value="" disabled hidden>Select an option</option>
             <option value="orderStatus">Order Status</option>

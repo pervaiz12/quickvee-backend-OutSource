@@ -38,21 +38,22 @@ const DateRange = () => {
 
   return (
     <>
-      <div className="main_blocks">
-        <div className="bg-white px-8 py-8 mt-4 mx-10 shadow-md rounded-lg opacity-100 h-auto">
-          <div className="flex flex-col sm:flex-row mb-9">
-            <div className="sm:w-full">
-              <h3 className="text-black text-[18px] font-semibold leading-none mt-2">
+        <div className="q_dateRange_header">
+      
+        <div className="q-datarange-bottom-detail-section">
+         
+            <div className="q_datafilter_section">
+              <div className="text-black text-[18px] font-semibold leading-none mt-2">
                 Date Range
-              </h3>
-            </div>
-            <div className="w-full mt-4 sm:mt-0 sm:w-full">
-              <div className="flex flex-row text-gray-600 space-x-4 py-2 bg-[#F5F5F5] rounded ml-28 lg:text-[18px] Admin_std sm:text-[18px] md:text-[16px">
+              </div>
+        
+            
+              <div className="datarange_days_order">
                 {["Today", "Yesterday", "Last 7 Days", "Last 30 days"].map(
                   (option) => (
                     <div
                       key={option}
-                      className={`flex items-center px-4 py-2 rounded cursor-pointer ${
+                      className={`order_Details_days ${
                         isActive(option) ? "text-blue-500" : "text-gray-600"
                       }`}
                       onClick={() => setActive(option)}
@@ -64,9 +65,9 @@ const DateRange = () => {
                 )}
               </div>
             </div>
-          </div>
+          
 
-          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 items-start mt-4">
+          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 items-start mt-4 px-8 py-6">
             {/* Start Date */}
             <div className="relative">
               <div className="mb-2 text-[#818181]  Admin_std">Start Date</div>
