@@ -19,8 +19,13 @@ module.exports = Object.freeze({
     //Importdata API Calls
     IMPORT_DATA:"Import_data_api/import",
 
+
     LIST_ALL_IN_STORE_ORDER:"api/orderoffline",
     LIST_ALL_ONLINE_STORE_ORDER:'api/newOrder',
+
+
+    //Storesettings API Calls
+    EMPLOYEE_LIST:"App/employee_list",
 
   
   });
