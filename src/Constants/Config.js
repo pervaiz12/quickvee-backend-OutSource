@@ -16,5 +16,8 @@ module.exports = Object.freeze({
 
     //Importdata API Calls
     IMPORT_DATA:"Import_data_api/import",
+
+    //Storesettings API Calls
+    EMPLOYEE_LIST:"App/employee_list",
   
   });
