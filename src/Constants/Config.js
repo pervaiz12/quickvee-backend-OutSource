@@ -14,4 +14,9 @@ module.exports = Object.freeze({
     LIST_ALL_ATTRIBUTES:"Varientsapi/varients_list",
     ADD_ATTRIBUTE:"Varientsapi/add_varient",
   
+    // Store Setting options api
+    GET_STORE_OPTIONS_DATA:"Store_setting_api/get_store_options_data",
+
+    // Update Store Setting options api
+    UPDATE_STORE_OPTIONS_DATA:"Store_setting_api/update_store_options_data",
   });
