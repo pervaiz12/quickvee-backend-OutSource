@@ -19,13 +19,17 @@ const CustomDateTime = () => {
         >
           <DatePicker
             label="Start date"
+         className="input_label_section"
             renderInput={() => <input className="date-picker-input" />}
           />
           <div className="bl"></div>
         </LocalizationProvider>
         <div className="q_time_display">
         <LocalizationProvider dateAdapter={AdapterDayjs}>
-          <TimePicker label="Start Time" />
+        <TimePicker label="Start Time"
+         className="input_label_section"
+          style={{ fontSize: '12px' }} />
+
         </LocalizationProvider>
         </div>
       </div>
