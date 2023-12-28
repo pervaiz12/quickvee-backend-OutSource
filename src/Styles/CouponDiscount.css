@@ -410,9 +410,63 @@
 }
 
 .q_datetimesection{
-  border: 1px solid gray;
-    padding: 20px;
+ border: 1px solid #0000001F;
+    padding: 10x 0;
+    width:100%;
 }
+
+
+.bl{border-left: 2px solid #0000001f;
+height: 27px;
+margin-top: 13px;
+margin-left: auto;
+}
+.q_time_display{
+  margin-left: 11%;
+}
+
+.date_selected>div .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+  text-align: left;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  top: -5px;
+  left: 0;
+  margin: 0;
+  padding: 0 8px;
+  pointer-events: none;
+  border-radius: unset !important;
+  border-style: unset !important;
+  border-width: unset !important;
+  overflow: unset !important;
+  min-width: 0%;
+  border-color: rgba(0, 0, 0, 0.23);
+}
+
+
+.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
+  font: inherit;
+  letter-spacing: inherit;
+  color: currentColor;
+  padding: 4px 0 5px;
+  border: none !important;
+  box-sizing: content-box;
+  background: none;
+  height: 1.4375em;
+  margin: 0;
+  /* -webkit-tap-highlight-color: transparent; */
+  display: block;
+  min-width: 0;
+  width: 100%;
+  -webkit-animation-name: mui-auto-fill-cancel;
+  animation-name: mui-auto-fill-cancel;
+  -webkit-animation-duration: 10ms;
+  animation-duration: 10ms;
+  padding: 12px 12px !important;
+  padding-right: 0;
+}
+
+
 
 
 

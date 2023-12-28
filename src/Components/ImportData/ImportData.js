@@ -2,6 +2,7 @@ import React from 'react';
 import { BsDot } from "react-icons/bs";
 
 const ImportData = () => {
+
   return (
     <>
       <div className='mx-4 my-9'>
@@ -9,13 +10,13 @@ const ImportData = () => {
           <div className='box-content h-[100px] p-4 border-4 border-white bg-white rounded-xl opacity-100 mt-9 flex justify-between mx-8 my-9' style={{ boxShadow: '0px 3px 6px #0000001F' }}>
             <div className='col-span-8 mt-4'>
              
-              <div className="text-sm font-semibold  text-[#818181] flex ">
+              <div className="CircularSTDBook text-[14px] flex text-[#818181]">
               <BsDot className="text-black text-[22px] mr-1" />
               Download and check sample CSV file for proper file format and
               fields.
             </div>
 
-            <div className="text-sm font-semibold  text-[#818181] flex">
+            <div className="CircularSTDBook text-[14px] flex text-[#818181]">
               <BsDot className="text-black text-[22px] mr-1" />
               <span>Please enter variant names which are created for the store. (Also
               they are case sensitive).</span>
