@@ -8,7 +8,6 @@ import addEmployeeReducer from "../features/StoreSettings/AddEmployee/AddEmploye
 import inStoreOrderReducer from "../features/Orders/inStoreOrderSlice";
 import onlineStoreOrderReducer from "../features/Orders/onlineStoreOrderSlice";
 
-import settingstoreoptionReducer from "../features/StoreSettingOption/StoreSettingOptionSlice";
 
 
 
@@ -23,7 +22,7 @@ const store = configureStore({
 
     employeelistData:addEmployeeReducer
 
-    settingstoreoption: settingstoreoptionReducer,
+   
 
   },
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),
