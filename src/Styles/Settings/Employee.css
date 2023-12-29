@@ -1,0 +1,26 @@
+.employeeicon{
+    width: auto;
+    height: auto;
+    float: left;
+}
+.employee-sort{
+    width: 5%;
+}
+.employee-name{
+    width: 20%;
+}
+.employee-phone{
+    width: 15%;
+}
+.employee-email{
+    width: 25%;
+}
+.employee-pin{
+    width: 5%;
+}
+.employee-role{
+    width: 10%;
+}
+.employee-iconall{
+    width: 20%;
+}

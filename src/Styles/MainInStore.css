@@ -1,0 +1,34 @@
+/* Inside your CSS file or style block */
+
+.main_store_details{
+    background-color: white;
+    padding: 8px;
+    margin-top: 4px;
+    margin-left: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    opacity: 1;
+    width:100%
+  }
+  .custom-container{
+    width:90%;
+  }
+  
+  .btn {
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 20px;
+    outline: none;
+    cursor: pointer;
+  }
+  
+  .active-tab {
+    background-color: #ebf2ff;
+    color: #0a64f9;
+  }
+  
+  .inactive-tab {
+    background-color: white;
+    color: #6a6a6a;
+  }
+  

@@ -84,7 +84,7 @@
 }
 
 .importBtn {
-  margin-left: 42rem;
+  margin-left: 33rem;
 }
 
 .dot {
@@ -285,11 +285,10 @@ select option {
 }
 
 .main_blocks {
-  margin-right: -4.4rem;
-  margin-left: -4.4rem;
-  margin-top: 0.5rem;
-  margin-bottom: 0.5rem;
-}
+  margin-right: -2.4rem;
+    margin-left: -2.4rem;
+    margin-top: 0.5rem;
+    margin-bottom: 0.5rem;}
 
 .main_block_content {
   margin-right: -2.2rem;
@@ -308,3 +307,144 @@ select option {
   /* justify-content: space-between; */
   margin-top: -1rem;
 }
+
+/* .error-close-icon {
+  color: #000 !important;
+  background-color: #fff !important;
+} */
+
+.datarange_days_order {
+  display: flex;
+  flex-direction: row;
+  color: #666; 
+  margin-left: 28px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #F5F5F5;
+  border-radius: 8px; 
+}
+.datarange_days_order > * {
+  margin-right: 1rem; 
+}
+
+@media (min-width: 640px) {
+  .datarange_days_order {
+    font-size: 18px; 
+  
+  }
+}
+
+@media (max-width: 639px) {
+  .datarange_days_order {
+    font-size: 18px; 
+  }
+}
+
+@media (min-width: 640px) and (max-width: 767px) {
+  .datarange_days_order {
+    font-size: 18px; 
+  }
+}
+
+.order_Details_days{
+  display: flex;
+  align-items: center; 
+  padding-left: 8px; 
+  padding-right: 8px;
+  padding-top: 4px; 
+  padding-bottom: 4px;
+  border-radius: 8px; 
+  cursor: pointer; }
+
+
+  /* Custom Styles for Flex Container */
+.custom-flex-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+/* Custom Styles for Relative Positioning */
+.custom-relative {
+  position: relative;
+}
+
+/* Custom Styles for Date Picker Labels */
+.custom-label {
+  margin-bottom: 0.5rem;
+  color: #818181;
+}
+
+/* Custom Styles for Date Picker Container */
+.custom-datepicker-container {
+  position: relative;
+  width: 100%;
+}
+
+/* Custom Styles for Date Picker Input */
+.custom-input {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 8px;
+  margin-top: 0.5rem;
+  outline: none;
+  width: 100%;
+  font-size: 16px;
+}
+
+/* Custom Styles for Date Picker Icon */
+.custom-icon {
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #777;
+  cursor: pointer;
+}
+
+/* Custom Styles for Search Button */
+.custom-search-btn {
+  margin-top: 1.5rem;
+}
+
+/* Custom Styles for Search Button */
+.custom-search-button {
+  background-color: #3498db;
+  color: #fff;
+  font-weight: bold;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  outline: none;
+}
+
+/* Responsive Media Queries */
+@media (min-width: 640px) {
+  /* Adjust the layout for small screens (sm:flex-row) */
+  .custom-flex-container {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+
+  .custom-datepicker-container {
+    width: 100%;
+  }
+
+  .custom-search-btn {
+    margin-top: 0;
+    margin-left: 1rem;
+  }
+}
+
+@media (min-width: 768px) {
+  /* Adjust the layout for medium screens (md:flex-row) */
+  .custom-flex-container {
+    flex-direction: row;
+    justify-content: flex-start;
+  }
+}
+
+/* Add more media queries as needed for larger screens */
+

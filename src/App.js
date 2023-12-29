@@ -2,7 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Switch, Link } from 'react-router-dom';
 import "./index.css";
 import { Layout } from "./Components/Layout/Index";
-import "./Styles/CategoryPage.css"
+
 import DashboardMain from "./Components/Dashboard/DashboardMain";
 import MainOrder from "./Components/Orders/MainOrder";
 import MainCategory from "./Components/Category/MainCategory";
@@ -20,11 +20,26 @@ import AddPo from "./Components/PurchaseOrders/AddPo";
 import AddCoupon from "./Components/Coupons/AddCoupon";
 // import MainStoreSetting from "./Components/StoreSetting/MainStoreSetting";
 import MainReport from "./Components/ReportSetting/MainReport";
+import MainAddEmployee from "./Components/StoreSetting/AddEmployee/MainAddEmployee";
 
 // import Info from "./Components/StoreSetting/SubSetting/Info";
+
+
+// import Info from "./Components/StoreSetting/SubSetting/Info";
+
+// import Info from "./Components/StoreSetting/SubSetting/Info";
+
 import "./Styles/AttributesPage.css"
 
 import MainStoreOption from "./Components/StoreSetting/StoreOption/MainStoreOption";
+
+import "./Styles/CategoryPage.css";
+import "./Styles/AttributesPage.css"; 
+import "./Styles/PurchasePage.css";
+import "./Styles/TableOrderPage.css";
+import "./Styles/MainInStore.css";
+import "./Styles/MainOrderPage.css";
+import "./Styles/CouponDiscount.css"
 
 
 
@@ -56,6 +71,7 @@ function App() {
 
           {/* <Route path="/store-settings/info"  element={<MainStoreOption />} /> */}
           <Route path="/store-settings/options"  element={<MainStoreOption />} />
+          <Route path="/store-settings/addemployee"  element={<MainAddEmployee />} />
         
         </Route>
       </Routes>

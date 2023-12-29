@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="30" height="30" viewBox="0 0 30 30">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_3468" data-name="Rectangle 3468" width="13" height="13" transform="translate(1389 234)" fill="#fff" stroke="#707070" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="Group_7354" data-name="Group 7354" transform="translate(-1380 -225)">
+    <g id="Group_7267" data-name="Group 7267" transform="translate(-120 -86)">
+      <rect id="Rectangle_3398" data-name="Rectangle 3398" width="30" height="30" rx="6" transform="translate(1500 311)" fill="#f2f2f2"/>
+    </g>
+    <g id="Mask_Group_4685" data-name="Mask Group 4685" clip-path="url(#clip-path)">
+      <g id="Icon" transform="translate(1388.51 233.179)">
+        <circle id="Ellipse_302" data-name="Ellipse 302" cx="2.708" cy="2.708" r="2.708" transform="translate(4.233 1.386)" fill="none" stroke="#000" stroke-width="1.132"/>
+        <path id="Path_8090" data-name="Path 8090" d="M8.2,8.3H5.285a4.211,4.211,0,0,0-4.21,4.21h0a.316.316,0,0,0,.317.317H6.425" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.132" fill-rule="evenodd"/>
+        <circle id="Ellipse_303" data-name="Ellipse 303" cx="1.587" cy="1.587" r="1.587" transform="translate(9.73 8.222)" fill="none" stroke="#0a64f9" stroke-width="1.132"/>
+        <circle id="Ellipse_304" data-name="Ellipse 304" cx="0.521" cy="0.521" r="0.521" transform="translate(10.797 9.289)" fill="#0a64f9"/>
+        <path id="Path_8091" data-name="Path 8091" d="M10.867,11.309,9.048,13.128,7.8,13.346,8.015,12.1l1.822-1.822a1.457,1.457,0,0,0,.317.605A1.433,1.433,0,0,0,10.867,11.309Z" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="0.949" fill-rule="evenodd"/>
+      </g>
+    </g>
+  </g>
+</svg>
