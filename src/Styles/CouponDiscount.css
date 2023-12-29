@@ -77,7 +77,7 @@
     width: 100%;
     box-shadow: 0px 3px 6px #0000001f;
     border-radius: 8px !important;
-    height: 800px;
+    /* height: 75vh; */
     background-color: #ffffff !important;
   }
   
@@ -94,7 +94,8 @@
     flex-wrap: wrap;
     justify-content: space-between;
     width: 100%;
-    gap: 1rem; }
+    /* gap: 1rem;  */
+  }
   
   .q-coupon-bottom-header span {
     color: #000000;

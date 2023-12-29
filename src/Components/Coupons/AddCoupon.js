@@ -134,7 +134,7 @@ const AddCoupon = ({ seVisible }) => {
             </div>
 
             <div className="q_coupon_minium my-4">
-              <label for="coupon">Date & Time</label>
+              <label for="coupon mt-2">Date & Time</label>
               <div className="flex flex-row gap-5">
                 <div className="q_datetimesection">
                   <CustomeDateTime />

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import AddIcon from "../../Assests/Category/addIcon.svg";
 
+
 import DeletIcon from "../../Assests/Dashboard/delete.svg";
 import Edit from "../../Assests/Dashboard/edit.svg";
 
@@ -33,7 +34,7 @@ const CouponDiscount = ({ seVisible }) => {
           </div>
           <div className="q_main_section_coupon">
             <div
-              className={`q_copuon_header mx-6 ${couponStates.coupon1 ? "active" : ""
+              className={`q_copuon_header mx-6 my-6 ${couponStates.coupon1 ? "active" : ""
                 }`}
             >
               <div className="flex justify-between w-full">
@@ -71,7 +72,7 @@ const CouponDiscount = ({ seVisible }) => {
               </div>
             </div>
             <div
-              className={`q_copuon_header mx-6 ${couponStates.coupon2 ? "active" : ""
+              className={`q_copuon_header mx-6 my-6 ${couponStates.coupon2 ? "active" : ""
                 }`}
             >
               <div className="flex justify-between w-full">
@@ -109,7 +110,7 @@ const CouponDiscount = ({ seVisible }) => {
               </div>
             </div>
             <div
-              className={`q_copuon_header mx-6 ${couponStates.coupon3 ? "active" : ""
+              className={`q_copuon_header mx-6 my-6${couponStates.coupon3 ? "active" : ""
                 }`}
             >
               <div className="flex justify-between w-full">
@@ -147,7 +148,7 @@ const CouponDiscount = ({ seVisible }) => {
               </div>
             </div>
             <div
-              className={`q_copuon_header mx-6 ${couponStates.coupon4 ? "active" : ""
+              className={`q_copuon_header mx-6 my-6 ${couponStates.coupon4 ? "active" : ""
                 }`}
             >
               <div className="flex justify-between w-full">
