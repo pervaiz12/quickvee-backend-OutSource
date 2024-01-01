@@ -7,7 +7,7 @@ import addEmployeeReducer from "../features/StoreSettings/AddEmployee/AddEmploye
 
 import inStoreOrderReducer from "../features/Orders/inStoreOrderSlice";
 import onlineStoreOrderReducer from "../features/Orders/onlineStoreOrderSlice";
-
+import systemAccessListingReducer from "../features/SystemAccess/systemAccessSlice";
 
 
 
@@ -20,7 +20,8 @@ const store = configureStore({
     inStoreOrder: inStoreOrderReducer,
     onlineStoreOrder: onlineStoreOrderReducer,
 
-    employeelistData:addEmployeeReducer
+    employeelistData:addEmployeeReducer,
+    systemAccessList:systemAccessListingReducer,
 
    
 

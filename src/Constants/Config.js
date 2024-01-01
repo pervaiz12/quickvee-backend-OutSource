@@ -19,7 +19,7 @@ module.exports = Object.freeze({
     //Importdata API Calls
     IMPORT_DATA:"Import_data_api/import",
 
-
+    // Order API Calls (Offline and Online)
     LIST_ALL_IN_STORE_ORDER:"api/orderoffline",
     LIST_ALL_ONLINE_STORE_ORDER:'api/newOrder',
 
@@ -33,4 +33,7 @@ module.exports = Object.freeze({
 
     // Update Store Setting options api
     UPDATE_STORE_OPTIONS_DATA:"Store_setting_api/update_store_options_data",
+
+    // System Access API Calls Listing and Update
+    LIST_ALL_SYSTEM_ACCESS : "api/Settings_api/system_access",
   });
