@@ -8,8 +8,11 @@ import addEmployeeReducer from "../features/StoreSettings/AddEmployee/AddEmploye
 import inStoreOrderReducer from "../features/Orders/inStoreOrderSlice";
 import onlineStoreOrderReducer from "../features/Orders/onlineStoreOrderSlice";
 
+
 import settingstoreoptionReducer from "../features/StoreSettingOption/StoreSettingOptionSlice";
 
+
+import couponListReducer from "../features/Coupon/couponSlice";
 
 
 const store = configureStore({
@@ -21,7 +24,9 @@ const store = configureStore({
     inStoreOrder: inStoreOrderReducer,
     onlineStoreOrder: onlineStoreOrderReducer,
 
-    employeelistData:addEmployeeReducer
+    employeelistData:addEmployeeReducer,
+
+    couponList:couponListReducer
 
     settingstoreoption: settingstoreoptionReducer,
 
