@@ -28,4 +28,9 @@ module.exports = Object.freeze({
     EMPLOYEE_LIST:"App/employee_list",
 
   
+    // Store Setting options api
+    GET_STORE_OPTIONS_DATA:"Store_setting_api/get_store_options_data",
+
+    // Update Store Setting options api
+    UPDATE_STORE_OPTIONS_DATA:"Store_setting_api/update_store_options_data",
   });

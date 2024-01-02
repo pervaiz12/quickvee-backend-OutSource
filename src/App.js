@@ -27,6 +27,8 @@ import MainAddEmployee from "./Components/StoreSetting/AddEmployee/MainAddEmploy
 
 // import Info from "./Components/StoreSetting/SubSetting/Info";
 
+// import Info from "./Components/StoreSetting/SubSetting/Info";
+
 import "./Styles/AttributesPage.css"
 
 import MainStoreOption from "./Components/StoreSetting/StoreOption/MainStoreOption";
