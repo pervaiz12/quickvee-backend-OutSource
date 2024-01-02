@@ -83,7 +83,7 @@ const DateRange = () => {
                   timeIntervals={15}
                   timeCaption="Time"
                   dateFormat="MMMM d, yyyy h:mm aa"
-                  className="border rounded px-3 py-2 pr-10 mt-1 focus:outline-none focus:border-blue-500 w-[350px]  Admin_std"
+                  className="border rounded px-3 py-2 pr-10 mt-1 focus:outline-none focus:border-blue-500 w-auto  Admin_std"
                   ref={startDateRef}
                 />
                 <span
@@ -125,7 +125,7 @@ const DateRange = () => {
             <span className="search_btn">
               <button
                 onClick={handleSearch}
-                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-6 rounded focus:outline-none focus:shadow-outline self-start mt-6 sm:mt-0 ml-6"
+                className="q-order-daterange-button"
               >
                 Search
               </button>

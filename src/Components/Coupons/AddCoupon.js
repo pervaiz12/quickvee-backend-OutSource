@@ -1,12 +1,11 @@
 import React from "react";
 import { useState } from "react";
 import AddNewCategory from "../../Assests/Dashboard/Left.svg";
-
-
+import CustomeDateTime from "./CustomeDateTime";
 
 const AddCoupon = ({ seVisible }) => {
   const [activeTab, setActiveTab] = useState("amount");
-   const [couponStates, setCouponStates] = useState({
+  const [couponStates, setCouponStates] = useState({
     coupon1: true,
     coupon2: false,
     coupon3: false,
@@ -20,7 +19,6 @@ const AddCoupon = ({ seVisible }) => {
       [couponName]: e.target.checked,
     });
   };
- 
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
@@ -40,21 +38,21 @@ const AddCoupon = ({ seVisible }) => {
             </span>
           </div>
           <div className="q-add-categories-section-middle-form">
-           
-                <div
-                className={`q_coupon_Add_status_btn ${couponStates.coupon1 ? "active" : ""
-                  }`}
-              >
+            <div
+              className={`q_coupon_Add_status_btn ${
+                couponStates.coupon1 ? "active" : ""
+              }`}
+            >
               <p>show online</p>
               <p>
-              <label className="switch">
-                    <input
-                      type="checkbox"
-                      checked={couponStates.coupon1}
-                      onChange={handleCheckboxChange("coupon1")}
-                    />
-                    <span className="slider round"></span>
-                  </label>
+                <label className="switch">
+                  <input
+                    type="checkbox"
+                    checked={couponStates.coupon1}
+                    onChange={handleCheckboxChange("coupon1")}
+                  />
+                  <span className="slider round"></span>
+                </label>
               </p>
             </div>
             <div className="q-add-coupon-single-input">
@@ -135,38 +133,27 @@ const AddCoupon = ({ seVisible }) => {
               </div>
             </div>
 
-
-
-
-            <div className="q-add-coupon-single-input my-4">
-              
-              <label for="coupon">Date & Time</label>
-              <div className="q_datetimesection">
-               
-                
-               
-       
+            <div className="q_coupon_minium my-4">
+              <label for="coupon mt-2">Date & Time</label>
+              <div className="flex flex-row gap-5">
+                <div className="q_datetimesection">
+                  <CustomeDateTime />
+                </div>
+                <div className="q_datetimesection">
+                  <CustomeDateTime />
+                </div>
               </div>
-             
             </div>
 
-
-
-
-
-
-
-
             <div className="q-add-coupon-single-input">
-            <div
-                className={`q_coupon_Add_status_btn ${couponStates.coupon2 ? "active" : ""
-                  }`}
+              <div
+                className={`q_coupon_Add_status_btn ${
+                  couponStates.coupon2 ? "active" : ""
+                }`}
               >
+                <p>Enable Redemption Limit?</p>
                 <p>
-                Enable Redemption Limit?
-              </p>
-              <p>
-              <label className="switch">
+                  <label className="switch">
                     <input
                       type="checkbox"
                       checked={couponStates.coupon2}
@@ -174,13 +161,13 @@ const AddCoupon = ({ seVisible }) => {
                     />
                     <span className="slider round"></span>
                   </label>
-              </p>
+                </p>
               </div>
               <label for="coupon">Redemption Limit</label>
               <input type="number" id="coupon" name="coupon_code" />
             </div>
           </div>
-        </div>
+        
         <div className="q-add-categories-section-middle-footer">
           <button className="quic-btn quic-btn-save">Add</button>
           <button
@@ -189,6 +176,7 @@ const AddCoupon = ({ seVisible }) => {
           >
             Cancel
           </button>
+        </div>
         </div>
       </div>
     </>

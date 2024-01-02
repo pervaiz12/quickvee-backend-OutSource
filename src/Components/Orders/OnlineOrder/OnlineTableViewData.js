@@ -101,8 +101,8 @@ const OnlineTableViewData = () => {
                 </div>
                 <div className="table_view_items">
                   <select className="table_status_selected">
-                    <option value="day">Accepted</option>
-                    <option value="month">Rejected</option>
+                  <option value="day">{order.payment_result}</option>
+                    {/* <option value="month">Rejected</option> */}
                     {/* Add more options as needed */}
                   </select>
                 </div>
