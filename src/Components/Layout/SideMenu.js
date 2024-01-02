@@ -25,6 +25,7 @@ import CouIcon from "../../Assests/Dashboard/coupony.svg";
 import PurIcon from "../../Assests/Dashboard/purchaseY.svg";
 import SettingIcon from "../../Assests/Dashboard/settingY.svg";
 import ResportIcons from "../../Assests/Dashboard/reports.svg";
+import timesheetblackIcon  from "../../Assests/Dashboard/timesheetblackIcon.svg"
 import { useLocation } from 'react-router-dom';
 
 
@@ -280,7 +281,7 @@ const menuItems = [
   {
     id: 10,
     icon: (
-      <img src={TimesheetIcon} alt="Timesheet" className="h-6 w-10 mt-4 mb-4" />
+      <img src={timesheetblackIcon} alt="Timesheet" className="h-6 w-10 mt-4 mb-4" />
     ),
     text: "Timesheet",
     link: "/timesheet",
@@ -355,7 +356,7 @@ const menuItems = [
       />
     ),
     text: "Reporting",
-    link: "/reporting", // You can set a default link or remove it
+    link: "/reporting",
     className: "flex items-center gap-2",
   dropdownItems: [
 

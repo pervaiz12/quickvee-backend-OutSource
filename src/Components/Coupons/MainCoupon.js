@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import AddCoupon from "./AddCoupon";
 import CouponDiscount from "./CouponDiscount";
+import CustomeDateTime from "./CustomeDateTime";
 
 const MainCoupon = () => {
   const [visible, seVisible] = useState("CouponDiscount");
@@ -12,6 +13,7 @@ const MainCoupon = () => {
           <CouponDiscount seVisible={seVisible} />
         )}
         {visible === "AddCoupon" && <AddCoupon seVisible={seVisible} />}
+        {visible === "CustomeDate" && <CustomeDateTime seVisible={seVisible} />}
       </div>
     </>
   );
