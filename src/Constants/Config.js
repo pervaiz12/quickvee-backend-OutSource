@@ -27,5 +27,8 @@ module.exports = Object.freeze({
     //Storesettings API Calls
     EMPLOYEE_LIST:"App/employee_list",
 
-  
+    //Coupon API Calls
+    COUPON_LIST:"Couponapi/get_coupon_details",
+    COUPON_STATUS_UPDATE:"Couponapi/show_online",
+    COUPON_DELETE:"Couponapi/delete_coupon",
   });

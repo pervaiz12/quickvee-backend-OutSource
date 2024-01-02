@@ -6,7 +6,7 @@ import addEmployeeReducer from "../features/StoreSettings/AddEmployee/AddEmploye
 
 import inStoreOrderReducer from "../features/Orders/inStoreOrderSlice";
 import onlineStoreOrderReducer from "../features/Orders/onlineStoreOrderSlice";
-
+import couponListReducer from "../features/Coupon/couponSlice";
 
 const store = configureStore({
   reducer: {
@@ -18,7 +18,9 @@ const store = configureStore({
     inStoreOrder: inStoreOrderReducer,
     onlineStoreOrder: onlineStoreOrderReducer,
 
-    employeelistData:addEmployeeReducer
+    employeelistData:addEmployeeReducer,
+
+    couponList:couponListReducer
 
   },
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),
