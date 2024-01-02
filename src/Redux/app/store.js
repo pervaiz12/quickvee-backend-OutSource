@@ -26,7 +26,7 @@ const store = configureStore({
 
     employeelistData:addEmployeeReducer,
 
-    couponList:couponListReducer
+    couponList:couponListReducer,
 
     settingstoreoption: settingstoreoptionReducer,
 
