@@ -18,6 +18,8 @@ module.exports = Object.freeze({
     IMPORT_DATA:"Import_data_api/import",
 
     //Storesettings API Calls
-    EMPLOYEE_LIST:"App/employee_list",
+    EMPLOYEE_LIST:"Store_setting_api/employee_list",
+    ADDEDIT_EMPLOYEE:"Store_setting_api/addEdit_employee",
+    DELETE_EMPLOYEE:"Store_setting_api/delete_employee",
   
   });
