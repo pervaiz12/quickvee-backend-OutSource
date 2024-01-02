@@ -1,4 +1,107 @@
 @font-face {
+    font-family: CircularBold;
+    src: url("../Assests/Fonts/circular-bold.TTF");
+  }
+  
+  @font-face {
+    font-family: CircularMedium;
+    src: url("../Assests/Fonts/circulur-medium.TTF");
+  }
+  
+  @font-face {
+    font-family: CircularSTDBlack;
+    src: url("../Assests/Fonts/circulur-std-black.TTF");
+  }
+  
+  @font-face {
+    font-family: CircularSTDBook;
+    src: url("../Assests/Fonts/circulur-std-book.TTF");
+  }
+  
+  @font-face {
+    font-family: CircularSTDMedium;
+    src: url("../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
+  }
+  
+  .q-attributes-main-page {
+    margin: 0px 40px;
+    background-color: #FFFFFF !important;
+ 
+  }
+  
+  .q-attributes-top-detail-section {
+    padding: 20px;
+    background: #ffffff;
+    box-shadow: 0px 3px 6px #0000001f;
+    border-radius: 8px;
+    margin: 30px 0;
+  }
+  
+  .q-attributes-top-detail-section li {
+    color: #818181;
+    list-style-type: none;
+    font-family: CircularSTDBook !important;
+    font-size: 14px;
+    position: relative;
+    padding-left: 20px;
+  }
+  
+  .q-attributes-top-detail-section li::before {
+    content: "\2022";
+    color: #000;
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+  
+  .q-coupon-bottom-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+    border-bottom: 1px solid #0000001f;
+    margin-bottom: 1%;
+  }
+  
+  .q-coupon-bottom-header p {
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #0A64F9;
+      font-family: CircularSTDMedium !important;
+      font-size: 16px;
+  }
+  
+  .q-coupon-bottom-detail-section {
+    width: 100%;
+    box-shadow: 0px 3px 6px #0000001f;
+    border-radius: 8px !important;
+    /* height: 75vh; */
+    background-color: #ffffff !important;
+  }
+  
+  .q_copuon_header {
+    width: 46%;
+    border: 1px solid #efefef;
+    border-radius: 8px;
+    padding: 10px 10px;
+    background-color: #FFFFFF !important;
+
+  }
+  .q_main_section_coupon{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    /* gap: 1rem;  */
+  }
+  
+  .q-coupon-bottom-header span {
+    color: #000000;
+    font-size: 18px;
+    font-family: CircularSTDMedium !important;
+
   font-family: CircularBold;
   src: url("../Assests/Fonts/circular-bold.TTF");
 }
@@ -6,6 +109,7 @@
 @font-face {
   font-family: CircularMedium;
   src: url("../Assests/Fonts/circulur-medium.TTF");
+
 }
 
 @font-face {
@@ -411,6 +515,9 @@ font-size: 18px;
 }
 
 .q_datetimesection{
+ border: 1px solid #0000001F;
+    padding: 10x 0;
+    width:100%;
 border: 1px solid #0000001F;
   padding: 10x 0;
   width:100%;
@@ -468,6 +575,62 @@ animation-name: mui-auto-fill-cancel;
 animation-duration: 10ms;
 padding: 12px 12px !important;
 padding-right: 0;
+}
+
+
+
+
+.bl{border-left: 2px solid #0000001f;
+height: 27px;
+margin-top: 13px;
+margin-left: auto;
+}
+.q_time_display{
+  margin-left: 11%;
+}
+
+.date_selected>div .css-1d3z3hw-MuiOutlinedInput-notchedOutline {
+  text-align: left;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  top: -5px;
+  left: 0;
+  margin: 0;
+  padding: 0 8px;
+  pointer-events: none;
+  border-radius: unset !important;
+  border-style: unset !important;
+  border-width: unset !important;
+  overflow: unset !important;
+  min-width: 0%;
+  border-color: rgba(0, 0, 0, 0.23);
+}
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root{
+  font-size: 14px !important;
+}
+
+
+.css-nxo287-MuiInputBase-input-MuiOutlinedInput-input {
+  font: inherit;
+  letter-spacing: inherit;
+  color: currentColor;
+  padding: 4px 0 5px;
+  border: none !important;
+  box-sizing: content-box;
+  background: none;
+  height: 1.4375em;
+  margin: 0;
+  /* -webkit-tap-highlight-color: transparent; */
+  display: block;
+  min-width: 0;
+  width: 100%;
+  -webkit-animation-name: mui-auto-fill-cancel;
+  animation-name: mui-auto-fill-cancel;
+  -webkit-animation-duration: 10ms;
+  animation-duration: 10ms;
+  padding: 12px 12px !important;
+  padding-right: 0;
 }
 
 
@@ -553,6 +716,11 @@ padding-right: 0;
   background-color: #FFFFFF !important;}
 } 
 .datetimepicker-control-section {
+
+  max-width: 246px;
+  margin: 30px auto;
+  padding-top: 50px;
+
 max-width: 246px;
 margin: 30px auto;
 padding-top: 50px;
@@ -560,6 +728,8 @@ padding-top: 50px;
 
 
 .customDatePicker {
+  width:20%;
+  border: none;
 width:20%;
 border: none;
 display: none;}
