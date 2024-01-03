@@ -37,6 +37,7 @@
     "postcss": "^8.4.31",
     "react": "^18.2.0",
     "react-bootstrap": "^2.9.1",
+    "react-bootstrap-time-picker": "^2.0.1",
     "react-calendar": "^4.6.1",
     "react-chartjs-2": "^5.2.0",
     "react-datepicker": "^4.21.0",

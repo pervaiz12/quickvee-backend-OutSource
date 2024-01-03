@@ -9,7 +9,11 @@ import inStoreOrderReducer from "../features/Orders/inStoreOrderSlice";
 import onlineStoreOrderReducer from "../features/Orders/onlineStoreOrderSlice";
 
 
+
 import settingstoreoptionReducer from "../features/StoreSettingOption/StoreSettingOptionSlice";
+
+import systemAccessListingReducer from "../features/SystemAccess/systemAccessSlice";
+
 
 
 import couponListReducer from "../features/Coupon/couponSlice";
@@ -26,9 +30,13 @@ const store = configureStore({
 
     employeelistData:addEmployeeReducer,
 
+
     couponList:couponListReducer,
 
-    settingstoreoption: settingstoreoptionReducer,
+    systemAccessList:systemAccessListingReducer,
+
+
+   
 
   },
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),
