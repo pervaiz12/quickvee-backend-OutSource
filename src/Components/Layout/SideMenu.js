@@ -10,10 +10,8 @@ import PurchaseIcon from "../../Assests/Dashboard/purchesb.svg";
 import ProductIcon from "../../Assests/Dashboard/productb.svg";
 import VenderIcon from "../../Assests/Dashboard/vender.svg";
 
-import TimesheetsIcon from "../../Assests/Dashboard/timesheetb.svg";
-
-import TimesheetIcon from "../../Assests/Dashboard/TimesheetB.svg";
 import TimesheetsIcon from "../../Assests/Dashboard/TimesheetB.svg";
+
 
 import StoreIcon from "../../Assests/Dashboard/store.svg";
 import ReportIcon from "../../Assests/Dashboard/reporting.svg";
