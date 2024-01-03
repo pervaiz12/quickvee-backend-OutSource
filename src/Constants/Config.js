@@ -38,5 +38,5 @@ module.exports = Object.freeze({
     COUPON_LIST:"Couponapi/get_coupon_details",
     COUPON_STATUS_UPDATE:"Couponapi/show_online",
     COUPON_DELETE:"Couponapi/delete_coupon",
-
+    COUPON_TITLE_CHECK:"Couponapi/check_coupon_title",
   });
