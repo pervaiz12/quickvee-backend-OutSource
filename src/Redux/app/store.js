@@ -18,6 +18,8 @@ import systemAccessListingReducer from "../features/SystemAccess/systemAccessSli
 
 import couponListReducer from "../features/Coupon/couponSlice";
 
+import settingstorealtersReducer from "../features/SettingStoreAlters/SettingStoreAltersSlice"
+
 
 const store = configureStore({
   reducer: {
@@ -34,6 +36,8 @@ const store = configureStore({
     couponList:couponListReducer,
 
     systemAccessList:systemAccessListingReducer,
+    settingstoreoption: settingstoreoptionReducer,
+    settingstorealters: settingstorealtersReducer,
 
 
    
