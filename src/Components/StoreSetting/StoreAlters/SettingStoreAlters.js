@@ -90,6 +90,7 @@ export default function SettingStoreAlters() {
     const [isOrderTypeReport, setOrderTypeReport] = useState(false);
     const [isTaxesReport, setTaxesReport] = useState(false);
     const [isPaypointReport, setPaypointReport] = useState(false);
+    const [isReportEmailTime, setReportEmailTime] = useState(false);
 
     useEffect(() => {
         if (
@@ -131,6 +132,9 @@ export default function SettingStoreAlters() {
         }
         if (allStoreAlertsUserOption && allStoreAlertsUserOption.report_email_id) {
             setIsReportEmailId(allStoreAlertsUserOption.report_email_id);
+        }
+        if (allStoreAlertsUserOption && allStoreAlertsUserOption.report_email_time) {
+            setReportEmailTime(allStoreAlertsUserOption.report_email_time);
         }
         if (allStoreAlertsUserData && allStoreAlertsUserData.ol_fcm_notify && allStoreAlertsUserData.ol_fcm_notify == 1) {
             setIsOnlineOrderNotify(true);
@@ -194,6 +198,9 @@ export default function SettingStoreAlters() {
     };
     const IsEmailCancelledtoggleInput = () => {
         setEmailCancelled(!isEmailCancelled);
+    };
+    const IsReportEmailTimetoggleInput = (event) => {
+        setReportEmailTime(event.target.value);
     };
 
     const CheckBoxNotifyEmail = (valueToMatch)=>{
@@ -326,6 +333,7 @@ export default function SettingStoreAlters() {
             taxesreport:(isTaxesReport) ? "1" : "0",
             paypointreport:(isPaypointReport) ? "1" : "0",
             report_email_id:isReportEmailId,
+            report_email_time:isReportEmailTime,
             ol_fcm_notify:(isOnlineOrderNotify) ? "1" : "0",
         };
         console.log(FormData);
@@ -623,10 +631,9 @@ export default function SettingStoreAlters() {
                             <div className="store-setting-input-div">
                                 <input 
                                     type="time" 
-                                    // value={newDayCountValue} 
+                                    value={isReportEmailTime} 
                                     className="store-setting-alert-input" 
-                                    // onChange={changeDayCountHandler}
-                                    // disabled={!isFutureOrderEnabled} 
+                                    onChange={IsReportEmailTimetoggleInput}
                                 />
                             </div>
                         </div>
