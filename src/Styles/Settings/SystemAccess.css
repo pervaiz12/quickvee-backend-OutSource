@@ -215,3 +215,13 @@
 .fr{
   float: right;
 }
+.input_area .css-4jnixx-MuiStack-root{
+  padding-top: 0px;
+}
+.input_area fieldset{
+  display: none
+}
+.input_area .css-1t8l2tu-MuiInputBase-input-MuiOutlinedInput-input{
+  padding:0px 8px;
+}
+

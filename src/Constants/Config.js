@@ -36,4 +36,6 @@ module.exports = Object.freeze({
 
     // System Access API Calls Listing and Update
     LIST_ALL_SYSTEM_ACCESS : "api/Settings_api/system_access",
+    UPDATE_SYSTEM_ACCESS : "api/Settings_api/update_system_access",
+    END_DAY_ACTUAL_AMT:"api/Settings_api/day_end_actual_amt",
   });
