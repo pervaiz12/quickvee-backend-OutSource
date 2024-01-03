@@ -337,7 +337,7 @@ const menuItems = [
       },
       { id: 67, text: "Receipt", link: "/store-settings/receipt" },
       { id: 68, text: "Inventory", link: "/store-settings/inventory" },
-      { id: 69, text: "Register", link: "/store-settings/register" },
+      { id: 69, text: "Register Settings", link: "/store-settings/register" },
       { id: 70, text: "Quick Add", link: "/store-settings/quick-add" },
       { id: 71, text: "System Access", link: "/store-settings/system-access" },
     ],

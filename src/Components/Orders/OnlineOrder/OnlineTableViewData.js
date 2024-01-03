@@ -1,19 +1,14 @@
-
 import "../../../Styles/TableOrderPage.css";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 // import Pagination from "react-js-pagination";
 import DefaultPagination from "../InstoreOrder/DefaultPagination";
 import { fetchOnlieStoreOrderData } from "../../../Redux/features/Orders/onlineStoreOrderSlice";
-import { useSelector, useDispatch } from 'react-redux';
-
-
-
+import { useSelector, useDispatch } from "react-redux";
+import DownIcon from "../../../Assests/Dashboard/Down.svg";
 
 const OnlineTableViewData = () => {
   const [activePage, setActivePage] = useState(1);
   const entriesPerPage = 10;
-
-
 
   const startIndex = (activePage - 1) * entriesPerPage;
   const endIndex = startIndex + entriesPerPage;
@@ -21,32 +16,39 @@ const OnlineTableViewData = () => {
   const handlePageChange = (pageNumber) => {
     setActivePage(pageNumber);
   };
-  console.log()
+  console.log();
 
-  const [onlineStoreOrder, setallOnlineStoreOrders] = useState([])
+  const [onlineStoreOrder, setallOnlineStoreOrders] = useState([]);
 
-  const AllOnlineStoreDataState = useSelector((state) => state.onlineStoreOrder)
+  const AllOnlineStoreDataState = useSelector(
+    (state) => state.onlineStoreOrder
+  );
   const dispatch = useDispatch();
   useEffect(() => {
     let data = {
-      merchant_id: "MAL0100CA"
-    }
+      merchant_id: "MAL0100CA",
+    };
     if (data) {
-      dispatch(fetchOnlieStoreOrderData(data))
+      dispatch(fetchOnlieStoreOrderData(data));
     }
-
-  }, [])
+  }, []);
 
   useEffect(() => {
-    if (!AllOnlineStoreDataState.loading && AllOnlineStoreDataState.onlineStoreOrderData) {
-      setallOnlineStoreOrders(AllOnlineStoreDataState.onlineStoreOrderData)
+    if (
+      !AllOnlineStoreDataState.loading &&
+      AllOnlineStoreDataState.onlineStoreOrderData
+    ) {
+      setallOnlineStoreOrders(AllOnlineStoreDataState.onlineStoreOrderData);
     }
-  }, [AllOnlineStoreDataState, AllOnlineStoreDataState.loading, AllOnlineStoreDataState.inStoreOrderData])
-
+  }, [
+    AllOnlineStoreDataState,
+    AllOnlineStoreDataState.loading,
+    AllOnlineStoreDataState.inStoreOrderData,
+  ]);
 
   useEffect(() => {
-    console.log(onlineStoreOrder)
-  }, [onlineStoreOrder])
+    console.log(onlineStoreOrder);
+  }, [onlineStoreOrder]);
 
   // const handleDeleteCategory = (id) => {
   //   const data = {
@@ -63,7 +65,13 @@ const OnlineTableViewData = () => {
       <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
           <div className="q-attributes-bottom-header">
-
+            <div className="flex justify-between mr-auto">
+              <div className="text-black">show </div>
+              <p className="q_order_border">
+                1 <img src={DownIcon} alt="" className="" />
+              </p>
+              <div className="text-black">entries</div>
+            </div>
 
             {/* Pagination component */}
             <DefaultPagination />
@@ -76,22 +84,28 @@ const OnlineTableViewData = () => {
           </div>
         </div>
 
-
-
         <div className="q-attributes-bottom-attriButes-listing">
-          {
-            onlineStoreOrder && onlineStoreOrder.length >= 1 && onlineStoreOrder.map((order, index) => (
-              <div key={index} className="q-attributes-bottom-attriButes-single-attributes">
+          {onlineStoreOrder &&
+            onlineStoreOrder.length >= 1 &&
+            onlineStoreOrder.map((order, index) => (
+              <div
+                key={index}
+                className="q-attributes-bottom-attriButes-single-attributes"
+              >
                 <div className="table_view_sort">
                   <p className="table_user_details"> {order.users_name} </p>
-                  <p className="table_Existing_customer">{order.customer_type}</p>
+                  <p className="table_Existing_customer">
+                    {order.customer_type}
+                  </p>
                   <p className="table_phone_details">{order.delivery_phn} </p>
                   <p className="table_email_details">{order.users_email}</p>
                 </div>
 
                 <div className="table_view_title">
                   <p className="table_order_details">{order.order_id}</p>
-                  <p className="table_order_datedetails">{order.merchant_time}</p>
+                  <p className="table_order_datedetails">
+                    {order.merchant_time}
+                  </p>
                   <p className="table_order_delivery">{order.order_method}</p>
                 </div>
 
@@ -101,7 +115,7 @@ const OnlineTableViewData = () => {
                 </div>
                 <div className="table_view_items">
                   <select className="table_status_selected">
-                  <option value="day">{order.payment_result}</option>
+                    <option value="day">{order.payment_result}</option>
                     {/* <option value="month">Rejected</option> */}
                     {/* Add more options as needed */}
                   </select>
@@ -112,17 +126,11 @@ const OnlineTableViewData = () => {
                 </div>
                 <div className="table_border_bottom"></div>
               </div>
-            ))
-          }
-
-
+            ))}
 
           <div className="py-8">
-
             <DefaultPagination />
           </div>
-
-
         </div>
       </div>
     </>
@@ -130,11 +138,3 @@ const OnlineTableViewData = () => {
 };
 
 export default OnlineTableViewData;
-
-
-
-
-
-
-
-

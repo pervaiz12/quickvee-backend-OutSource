@@ -39,6 +39,8 @@ import "./Styles/MainInStore.css";
 import "./Styles/MainOrderPage.css";
 import "./Styles/CouponDiscount.css";
 import "./Styles/ImportData.css"
+import MainResigtersetting from "./Components/StoreSetting/ResigterSetting/MainResigtersetting";
+import "./Styles/ResigterSettingdata.css";
 
 
 
@@ -71,6 +73,7 @@ function App() {
           {/* <Route path="/store-settings/info"  element={<MainStoreOption />} /> */}
           <Route path="/store-settings/options"  element={<MainStoreOption />} />
           <Route path="/store-settings/addemployee"  element={<MainAddEmployee />} />
+          <Route path="/store-settings/register" element={<MainResigtersetting />} />
         
         </Route>
       </Routes>

@@ -110,7 +110,7 @@ const CouponDiscount = ({ seVisible }) => {
               </div>
             </div>
             <div
-              className={`q_copuon_header mx-6 my-6${couponStates.coupon3 ? "active" : ""
+              className={`q_copuon_header mx-6 my-6 ${couponStates.coupon3 ? "active" : ""
                 }`}
             >
               <div className="flex justify-between w-full">

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AiOutlineSearch } from 'react-icons/ai';
-import { BsChevronDown } from 'react-icons/bs';
+ import DownIcon from '../../../Assests/Dashboard/Down.svg';
 
 
 const FilterEmp = () => {
@@ -27,6 +27,133 @@ const FilterEmp = () => {
     setSelectedFilter(filterType);
 
     // Add any additional logic you need based on the selected filter
+
+    const top100Films = [
+      { label: 'The Shawshank Redemption', year: 1994 },
+      { label: 'The Godfather', year: 1972 },
+      { label: 'The Godfather: Part II', year: 1974 },
+      { label: 'The Dark Knight', year: 2008 },
+      { label: '12 Angry Men', year: 1957 },
+      { label: "Schindler's List", year: 1993 },
+      { label: 'Pulp Fiction', year: 1994 },
+      {
+        label: 'The Lord of the Rings: The Return of the King',
+        year: 2003,
+      },
+      { label: 'The Good, the Bad and the Ugly', year: 1966 },
+      { label: 'Fight Club', year: 1999 },
+      {
+        label: 'The Lord of the Rings: The Fellowship of the Ring',
+        year: 2001,
+      },
+      {
+        label: 'Star Wars: Episode V - The Empire Strikes Back',
+        year: 1980,
+      },
+      { label: 'Forrest Gump', year: 1994 },
+      { label: 'Inception', year: 2010 },
+      {
+        label: 'The Lord of the Rings: The Two Towers',
+        year: 2002,
+      },
+      { label: "One Flew Over the Cuckoo's Nest", year: 1975 },
+      { label: 'Goodfellas', year: 1990 },
+      { label: 'The Matrix', year: 1999 },
+      { label: 'Seven Samurai', year: 1954 },
+      {
+        label: 'Star Wars: Episode IV - A New Hope',
+        year: 1977,
+      },
+      { label: 'City of God', year: 2002 },
+      { label: 'Se7en', year: 1995 },
+      { label: 'The Silence of the Lambs', year: 1991 },
+      { label: "It's a Wonderful Life", year: 1946 },
+      { label: 'Life Is Beautiful', year: 1997 },
+      { label: 'The Usual Suspects', year: 1995 },
+      { label: 'Léon: The Professional', year: 1994 },
+      { label: 'Spirited Away', year: 2001 },
+      { label: 'Saving Private Ryan', year: 1998 },
+      { label: 'Once Upon a Time in the West', year: 1968 },
+      { label: 'American History X', year: 1998 },
+      { label: 'Interstellar', year: 2014 },
+      { label: 'Casablanca', year: 1942 },
+      { label: 'City Lights', year: 1931 },
+      { label: 'Psycho', year: 1960 },
+      { label: 'The Green Mile', year: 1999 },
+      { label: 'The Intouchables', year: 2011 },
+      { label: 'Modern Times', year: 1936 },
+      { label: 'Raiders of the Lost Ark', year: 1981 },
+      { label: 'Rear Window', year: 1954 },
+      { label: 'The Pianist', year: 2002 },
+      { label: 'The Departed', year: 2006 },
+      { label: 'Terminator 2: Judgment Day', year: 1991 },
+      { label: 'Back to the Future', year: 1985 },
+      { label: 'Whiplash', year: 2014 },
+      { label: 'Gladiator', year: 2000 },
+      { label: 'Memento', year: 2000 },
+      { label: 'The Prestige', year: 2006 },
+      { label: 'The Lion King', year: 1994 },
+      { label: 'Apocalypse Now', year: 1979 },
+      { label: 'Alien', year: 1979 },
+      { label: 'Sunset Boulevard', year: 1950 },
+      {
+        label: 'Dr. Strangelove or: How I Learned to Stop Worrying and Love the Bomb',
+        year: 1964,
+      },
+      { label: 'The Great Dictator', year: 1940 },
+      { label: 'Cinema Paradiso', year: 1988 },
+      { label: 'The Lives of Others', year: 2006 },
+      { label: 'Grave of the Fireflies', year: 1988 },
+      { label: 'Paths of Glory', year: 1957 },
+      { label: 'Django Unchained', year: 2012 },
+      { label: 'The Shining', year: 1980 },
+      { label: 'WALL·E', year: 2008 },
+      { label: 'American Beauty', year: 1999 },
+      { label: 'The Dark Knight Rises', year: 2012 },
+      { label: 'Princess Mononoke', year: 1997 },
+      { label: 'Aliens', year: 1986 },
+      { label: 'Oldboy', year: 2003 },
+      { label: 'Once Upon a Time in America', year: 1984 },
+      { label: 'Witness for the Prosecution', year: 1957 },
+      { label: 'Das Boot', year: 1981 },
+      { label: 'Citizen Kane', year: 1941 },
+      { label: 'North by Northwest', year: 1959 },
+      { label: 'Vertigo', year: 1958 },
+      {
+        label: 'Star Wars: Episode VI - Return of the Jedi',
+        year: 1983,
+      },
+      { label: 'Reservoir Dogs', year: 1992 },
+      { label: 'Braveheart', year: 1995 },
+      { label: 'M', year: 1931 },
+      { label: 'Requiem for a Dream', year: 2000 },
+      { label: 'Amélie', year: 2001 },
+      { label: 'A Clockwork Orange', year: 1971 },
+      { label: 'Like Stars on Earth', year: 2007 },
+      { label: 'Taxi Driver', year: 1976 },
+      { label: 'Lawrence of Arabia', year: 1962 },
+      { label: 'Double Indemnity', year: 1944 },
+      {
+        label: 'Eternal Sunshine of the Spotless Mind',
+        year: 2004,
+      },
+      { label: 'Amadeus', year: 1984 },
+      { label: 'To Kill a Mockingbird', year: 1962 },
+      { label: 'Toy Story 3', year: 2010 },
+      { label: 'Logan', year: 2017 },
+      { label: 'Full Metal Jacket', year: 1987 },
+      { label: 'Dangal', year: 2016 },
+      { label: 'The Sting', year: 1973 },
+      { label: '2001: A Space Odyssey', year: 1968 },
+      { label: "Singin' in the Rain", year: 1952 },
+      { label: 'Toy Story', year: 1995 },
+      { label: 'Bicycle Thieves', year: 1948 },
+      { label: 'The Kid', year: 1921 },
+      { label: 'Inglourious Basterds', year: 2009 },
+      { label: 'Snatch', year: 2000 },
+      { label: '3 Idiots', year: 2009 },
+      { label: 'Monty Python and the Holy Grail', year: 1975 },
+    ];
   };
 
 
@@ -41,6 +168,7 @@ const FilterEmp = () => {
             onChange={(e) => setSearchId(e.target.value)}
             className="w-full px-4 py-2 border-none focus:outline-none"
           />
+ 
           <button
             onClick={handleSearch}
             className="text-black px-4 py-2 focus:outline-none text-2xl"
@@ -57,56 +185,46 @@ const FilterEmp = () => {
 
       
 
-      <div className="flex flex-col sm:flex-row">
-        <div className="flex-1 mb-2 sm:mb-0 sm:mr-2">
-          <label className="q_order_page_labal" htmlFor="employeeFilter">
-            Employee
-          </label>
-          <select
-            id="employeeFilter"
-            value={selectedFilter === 'employee' ? 'allEmployees' : ''}
-            onChange={(e) => handleFilterChange(e, 'employee')}
-            className="custom-text-input"
-          >
-            <option value="" disabled hidden>Select an option</option>
-            <option value="allEmployees">All Employees</option>
-            {/* Add other options as needed */}
-          </select>
-        </div>
+      <div class="q-order-page-container">
+      <div className="q-order-page-filter">
+      <label className="q-order-page-label" htmlFor="employeeFilter">
+        Employee
+      </label>
+      <select id="employeeFilter" className="custom-text-input">
+        <option value="">Select an option</option>
+        <option value="allEmployees">All Employees</option>
+      </select>
+      <span className="q-order-page-dropdown-arrow">
+        <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
+      </span>
+    </div>
 
-        <div className="flex-1 mb-2 sm:mb-0 sm:mr-2">
-          <label className="q_order_page_labal" htmlFor="transactionFilter">
-            Transaction 
-          </label>
-          <select
-            id="transactionFilter"
-            value={selectedFilter === 'transaction' ? 'allTransactions' : ''}
-            onChange={(e) => handleFilterChange(e, 'transaction')}
-            className="custom-text-input"
-          >
-            <option value="" disabled hidden>Select an option</option>
-            <option value="allTransactions">All Transactions</option>
-  
-            {/* Add other options as needed */}
-          </select>
-        </div>
+  <div class="q-order-page-filter">
+    <label class="q-order-page-label" for="transactionFilter">Transaction</label>
+    <select id="transactionFilter" class="custom-text-input">
+      <option value="" >Select an option</option>
+      <option value="allTransactions">All Transactions</option>
+      
+ 
+    </select>
+    <span className="q-order-page-dropdown-arrow">
+        <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
+      </span>
+  </div>
 
-        <div className="flex-1">
-          <label className="q_order_page_labal" htmlFor="orderStatusFilter">
-            Order Status
-          </label>
-          <select
-            id="orderStatusFilter"
-            value={selectedFilter === 'orderStatus' ? 'orderStatus' : ''}
-            onChange={(e) => handleFilterChange(e, 'orderStatus')}
-            className="custom-text-input"
-          >
-            <option value="" disabled hidden>Select an option</option>
-            <option value="orderStatus">Order Status</option>
-            {/* Add other options as needed */}
-          </select>
-        </div>
-      </div>
+  <div class="q-order-page-filter">
+    <label class="q-order-page-label" for="orderStatusFilter">Order Status</label>
+    <select id="orderStatusFilter" class="custom-text-input">
+      <option value="" >Select an option</option>
+      <option value="orderStatus">Order Status</option>
+      
+    </select>
+    <span className="q-order-page-dropdown-arrow">
+        <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
+      </span>
+  </div>
+</div>
+
     </div>
       <div>
         

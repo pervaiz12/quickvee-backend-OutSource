@@ -1,0 +1,428 @@
+@font-face {
+    font-family: CircularBold;
+    src: url("../Assests/Fonts/circular-bold.TTF");
+}
+
+@font-face {
+    font-family: CircularMedium;
+    src: url("../Assests/Fonts/circulur-medium.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDBlack;
+    src: url("../Assests/Fonts/circulur-std-black.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDBook;
+    src: url("../Assests/Fonts/circulur-std-book.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDMedium;
+    src: url("../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
+}
+
+
+
+
+
+
+
+.q-resigtersetting-main-page {
+    margin: 20px 40px;
+}
+
+.q-resigtersetting-top-detail-section {
+    padding: 30px;
+    background: #FFFFFF;
+    box-shadow: 0px 3px 6px #0000001F;
+    border-radius: 8px;
+    margin: 30px 0;
+}
+
+/* .q-resigtersetting-top-detail-section li {
+    color: #818181;
+    list-style-type: none;
+    font-family: CircularSTDBook !important;
+    font-size: 14px;
+    position: relative;
+    padding-left: 20px;
+    list-style-type: none;
+} */
+
+.q-resigtersetting-top-detail-section li::before {
+    content: '\2022';
+    color: #000;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.q-resigtersetting-bottom-detail-section {
+    width: 100%;
+    box-shadow: 0px 3px 6px #0000001F;
+    border-radius: 8px !important;
+}
+
+.q-resigtersetting-bottom-header-sticky {
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    border-radius: 8px;
+}
+
+.q-resigtersetting-bottom-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.q-resigtersetting-bottom-header span {
+    color: #000000;
+    font-size: 18px;
+    font-family: CircularSTDMedium !important;
+}
+
+.q-resigtersetting-bottom-header p {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0A64F9;
+    font-family: CircularSTDMedium !important;
+    font-size: 16px;
+}
+
+.q-resigtersetting-bottom-header p img {
+    margin-left: 8px;
+}
+
+.q-resigtersetting-bottom-attriButes-header {
+    background: #253338;
+    display: flex;
+    padding: 10px 20px;
+}
+
+.q-attributes-bottom-attriButes-header p {
+    color: #FFFFFF;
+    font-size: 15px;
+    font-family: CircularSTDBook !important;
+
+}
+
+.attriButes-sort {
+    width: 12%;
+}
+
+.attriButes-title {
+    width: 20%;
+
+}
+
+.attriButes-items {
+    width: 20%;
+}
+
+.attriButes-enable-disable {
+    width: calc(100% - 36%);
+}
+
+
+.q-attributes-bottom-attriButes-listing {
+    width: 100%;
+    background: #fff;
+    border-radius: 8px;
+}
+
+.q-attributes-bottom-attriButes-single-attributes {
+    display: flex;
+    padding: 20px;
+    border-bottom: 1px solid #E8E8E8;
+    /* cursor: all-scroll; */
+    user-select: none;
+}
+
+.q-attributes-bottom-attriButes-single-attributes>.attriButes-title {
+    font-size: 16px;
+    color: #000000;
+    font-family: CircularSTDMedium !important;
+}
+
+.q-attributes-bottom-attriButes-single-attributes>.attriButes-items {
+    color: #0A64F9;
+    /* cursor: pointer; */
+    font-family: CircularSTDMedium !important;
+    font-size: 16px;
+    text-decoration: underline;
+}
+
+.q-attributes-bottom-attriButes-single-attributes>.attriButes-enable-disable {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-end;
+}
+
+.attributes-checkmark-div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 48%;
+}
+
+.attributes-checkmark-div .attributes-checkmark-label {
+    color: #000000;
+    font-family: CircularSTDMedium !important;
+    font-size: 16px;
+    display: block;
+    position: relative;
+    padding-left: 33px;
+    cursor: pointer;
+    font-size: 16px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.attributes-checkmark-div .attributes-checkmark-label input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.attributes-checkmark {
+    position: absolute;
+    top: 2px;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    border-radius: 5px;
+}
+
+
+/* When the checkbox is checked, add a blue background */
+.attributes-checkmark-div .attributes-checkmark-label input:checked~.attributes-checkmark {
+    background-color: #1EC26B;
+    border-radius: 5px;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.attributes-checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.attributes-checkmark-div .attributes-checkmark-label input:checked~.attributes-checkmark:after {
+    display: block;
+}
+
+
+
+
+/* add by priya */
+
+.q_setting_main_Section {
+    font-size: 26px;
+    font-family: CircularBold !important;
+    text-align: left;
+    opacity: 1;
+    color: #000000;
+}
+
+.q_resigter_checkboxfiled>ul {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    JUSTIFY-CONTENT: space-between;
+}
+
+.q_resigter_checkboxfiled>li {
+    list-style-type: none;
+}
+
+.q_resigter_checkboxfiled>li::after {
+    content: "after";
+}
+
+.custom-checkbox-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.custom-checkbox-list li {
+    margin-bottom: 10px;
+    color: gray;
+    font-size: 14px;
+    font-family: 'CircularSTDBook';
+}
+
+.custom-checkbox-list input {
+    margin-right: 8px;
+}
+
+.q_resigter_checkboxfiled_payment>ul {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-evenly;
+
+}
+
+.q_resigter_label>label {
+    font-size: 16px;
+    font-family: CircularSTDBook;
+    opacity: 1;
+    margin-top: 0.5rem;
+}
+
+.q_input_resigter {
+    border: 2px solid #E3E3E3 !important;
+
+    border-radius: 8px !important;
+    opacity: 1 !important;
+    margin-top: 0.5rem;
+}
+
+.input[type="checkbox" i] {
+    background-color: #1EC26B;
+    border-radius: 5px;
+}
+
+
+
+.q_resigter_setting_section {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default checkbox */
+.q_resigter_setting_section input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+
+.checkmark {
+    position: absolute;
+    top: 2px;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    border-radius: 4px;
+}
+
+.q_resigter_setting_section:hover input~.checkmark {
+    background-color: #ccc;
+}
+
+
+.q_resigter_setting_section input:checked~.checkmark {
+    background-color: #1EC26B;
+    border-radius: 5px;
+}
+
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+
+.q_resigter_setting_section input:checked~.checkmark:after {
+    display: block;
+}
+
+
+.q_resigter_setting_section .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+/* radio css */
+
+
+.q_setting_radio_resigter {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* Hide the browser's default radio button */
+.q_setting_radio_resigter input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+/*  Create a custom radio button */
+.checkmark_section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    border-radius: 50%;
+}
+
+/* On mouse-over, add a grey background color */
+.q_setting_radio_resigter:hover input~.checkmark_section {
+    background-color: #ccc;
+}
+
+/* When the radio button is checked, add a blue background */
+.q_setting_radio_resigter input:checked~.checkmark_section {
+    background-color: #1EC26B;
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+
+/* Show the indicator (dot/circle) when checked */
+.q_setting_radio_resigter input:checked~.checkmark_section:after {
+    display: block;
+}
+
+/* Style the indicator (dot/circle) */
+.q_setting_radio_resigter .checkmark_section:after {
+    top: 9px;
+    left: 9px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: white;
+}
