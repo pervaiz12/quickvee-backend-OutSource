@@ -6,8 +6,48 @@ import Switch from '@mui/material/Switch';
 import { useSelector, useDispatch } from "react-redux";
 import { BASE_URL, UPDATE_STORE_ALERTS_DATA } from "../../../Constants/Config";
 import { fetchStoreSettingalertsData } from "../../../Redux/features/SettingStoreAlters/SettingStoreAltersSlice";
+import { el } from "date-fns/locale";
 
 export default function SettingStoreAlters() {
+
+    const [formData, setFormData] = useState({
+        bccemail: '',
+        msg_no: '',
+        report_email_id: '',
+        phn_num: '',
+    });
+    
+    const [errors, setErrors] = useState({
+        bccemail: '',
+        msg_no: '',
+        report_email_id: '',
+        phn_num: '',
+    });
+
+    const validateEmail = (bccemail) => {
+        // Basic bccemail validation using regex
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(bccemail);
+    };
+
+    const validateMobile = (msg_no) => {
+        // Basic mobile number validation for 10-digit numbers
+        const mobileRegex = /^\d{10}$/;
+        return mobileRegex.test(msg_no);
+    };
+
+    const validateEmail1 = (report_email_id) => {
+        // Basic report_email_id validation using regex
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(report_email_id);
+    };
+
+    const validateMobile1 = (phn_num) => {
+        // Basic mobile number validation for 10-digit numbers
+        const mobileRegex = /^\d{10}$/;
+        return mobileRegex.test(phn_num);
+    };
+
     const label = { inputProps: { 'aria-label': 'Switch demo' } };
 
     const dispatch = useDispatch();
@@ -103,18 +143,38 @@ export default function SettingStoreAlters() {
     };
     const BccEmailtoggleInput = (event) => {
         setIsBccEmail(event.target.value);
+        const { name, value } = event.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
     };
-    const UserMsgEnabledtoggleInput = (event) => {
+    const UserMsgEnabledtoggleInput = () => {
         setIsUserMsgEnabled(!isUserMsgEnabled);
     };
     const UserMsgNumbertoggleInput = (event) => {
         setIsUserMsgNumber(event.target.value);
+        const { name, value } = event.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
     };
     const OnlinePhoneNumbertoggleInput = (event) => {
         setIsOnlinePhoneNumber(event.target.value);
+        const { name, value } = event.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
     };
     const ReportEmailIdtoggleInput = (event) => {
         setIsReportEmailId(event.target.value);
+        const { name, value } = event.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
     };
     const OnlineOrderNotifytoggleInput = () => {
         setIsOnlineOrderNotify(!isOnlineOrderNotify);
@@ -197,7 +257,50 @@ export default function SettingStoreAlters() {
         setPaypointReport(!isPaypointReport);
     };
 
-    const handleUpdateSettingAlerts = async () => {
+    const handleUpdateSettingAlerts = async (e) => {
+        e.preventDefault();
+        if (isBccEmail != '')
+        {
+            if (!validateEmail(isBccEmail)) {
+                setErrors({
+                    ...errors,
+                    bccemail: 'Please enter a valid email address.',
+                });
+                return;
+            }
+        }
+        if (isUserMsgNumber != '')
+        {
+            if (!validateMobile(isUserMsgNumber)) {
+                setErrors({
+                    ...errors,
+                    msg_no: 'Please enter a valid 10-digit mobile number.',
+                });
+                return;
+            }
+        }
+        if (isReportEmailId != '')
+        {
+            if (!validateEmail1(isReportEmailId)) {
+                setErrors({
+                    ...errors,
+                    report_email_id: 'Please enter a valid email address.',
+                });
+                return;
+            }
+        }
+        // setErrors("");
+        if (isOnlinePhoneNumber != '')
+        {
+            if (!validateMobile1(isOnlinePhoneNumber)) {
+                setErrors({
+                    ...errors,
+                    phn_num: 'Please enter a valid 10-digit mobile number.',
+                });
+                return;
+            }
+        }
+
         const FormData = {
             id: "100",
             merchant_id: "MAL0100CA",
@@ -225,17 +328,23 @@ export default function SettingStoreAlters() {
             report_email_id:isReportEmailId,
             ol_fcm_notify:(isOnlineOrderNotify) ? "1" : "0",
         };
+        console.log(FormData);
 
         const response = await axios.post(BASE_URL + UPDATE_STORE_ALERTS_DATA, FormData, {
             headers: { "Content-Type": "multipart/form-data" },
         });
-        console.log(response);
 
         if (response) {
             let merchantdata = {
                 merchant_id: "MAL0100CA",
             };
             if (merchantdata) {
+                setErrors({
+                    bccemail: '',
+                    msg_no: '',
+                    report_email_id: '',
+                    phn_num: '',
+                });
                 dispatch(fetchStoreSettingalertsData(merchantdata));
             }
         } else {
@@ -260,11 +369,14 @@ export default function SettingStoreAlters() {
                     <div className="store-setting-input-div">
                         <input 
                             type="email" 
+                            name="bccemail"
+                            // value={formData.bccemail}
                             value={isBccEmail} 
                             className="store-setting-alert-input" 
                             onChange={BccEmailtoggleInput} 
                             disabled={!isUserEmailEnabled} 
                         />
+                        <span className="store-setting-error">{errors.bccemail}</span>
                     </div>
 
                     <h2 className="store-setting-h2"><b>Get Notification Via SMS</b></h2>
@@ -279,11 +391,13 @@ export default function SettingStoreAlters() {
                     <div className="store-setting-input-div">
                         <input 
                             type="number" 
+                            name="msg_no"
                             value={isUserMsgNumber} 
                             className="store-setting-alert-input" 
                             onChange={UserMsgNumbertoggleInput} 
                             disabled={!isUserMsgEnabled} 
                         />
+                        <span className="store-setting-error">{errors.msg_no}</span>
                     </div>
                 </div>
 
@@ -412,10 +526,12 @@ export default function SettingStoreAlters() {
                     <div className="store-setting-input-div store-setting-mx-2">
                         <input 
                             type="number" 
+                            name="phn_num" 
                             value={isOnlinePhoneNumber} 
                             className="store-setting-alert-input" 
                             onChange={OnlinePhoneNumbertoggleInput}
                         />
+                        <span className="store-setting-error">{errors.phn_num}</span>
                     </div>
                 </div>
 
@@ -493,10 +609,12 @@ export default function SettingStoreAlters() {
                             <div className="store-setting-input-div">
                                 <input 
                                     type="email" 
+                                    name="report_email_id" 
                                     value={isReportEmailId} 
                                     className="store-setting-alert-input" 
                                     onChange={ReportEmailIdtoggleInput}
                                 />
+                                <span className="store-setting-error">{errors.report_email_id}</span>
                             </div>
                         </div>
                         <div className="store-setting-flex-child">

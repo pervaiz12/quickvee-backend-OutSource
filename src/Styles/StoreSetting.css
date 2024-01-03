@@ -218,7 +218,7 @@
 
 .store-setting-input-div{
     background: #FFFFFF 0% 0% no-repeat padding-box;
-    border: 1px solid #E3E3E3;
+    /* border: 1px solid #E3E3E3; */
     border-radius: 4px;
     overflow: hidden;
     opacity: 1;
@@ -291,4 +291,10 @@
     font-size: 12px;
     color: #7B7B7B;
     padding-bottom: 1rem;
+}
+
+.store-setting-error{
+    font-family:  CircularSTDBook !important;
+    color: red;
+    font-size: 14px;
 }
