@@ -1,13 +1,13 @@
 import React from "react";
-import { useState , useRef } from "react";
+import { useState , useRef, useEffect } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { fetchEmployeeListsData ,addToEmployeeList } from "../../../Redux/features/StoreSettings/AddEmployee/AddEmployeeSlice";
+import { fetchEmployeeListsData ,addToEmployeeList , editEmployee } from "../../../Redux/features/StoreSettings/AddEmployee/AddEmployeeSlice";
 import Validation from "../../../Constants/Validation";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL, ADDEDIT_EMPLOYEE } from "../../../Constants/Config";
 
-const AddEmployeeFormLogic = ({employeeList}) => {
+const AddEmployeeFormLogic = ({employee, employeeList}) => {
   const dispatch = useDispatch();
     const {  validateFirstName, validateLastName, validateEmail, validatePhoneNumber, validatePinNumber, validateWages, Address_line_1 , validateCity, validateState, validateZipCode  } = Validation();
     const [submitmessage, setsubmitmessage] = useState("");
@@ -41,8 +41,26 @@ const AddEmployeeFormLogic = ({employeeList}) => {
           state:"",
         },
       });
+    
+      useEffect(() => {
+        setValues((prevValues) => ({
+          ...prevValues,
+          firstname: employee && employee.f_name ? employee.f_name : "",
+          lastname: employee && employee.l_name ? employee.l_name : "",
+          email: employee && employee.email ? employee.email : "",
+          phone: employee && employee.phone ? employee.phone : "",
+          pin: employee && employee.pin ? employee.pin : "",
+          wages: employee && employee.wages_per_hr ? employee.wages_per_hr : "",
+          address_line_1: employee && employee.address ? employee.address : "",
+          city: employee && employee.city ? employee.city : "",
+          zipcode: employee && employee.zipcode ? employee.zipcode : "",
+          state: employee && employee.state ? employee.state : "",
+          
+        }));
+    
+      }, [employee])
 
-      const handleAddEmployeeInput = async (event) => {
+      const handleEditEmployeeInput = async (event) => {
        
         let { errors } = values;
         const fieldName = event.target.name;
@@ -91,25 +109,26 @@ const AddEmployeeFormLogic = ({employeeList}) => {
       };
 
 
-      const handleAddEmployee = async (e) => {
+      const handleEditEmployee = async (e) => {
+        console.log('222');
         e.preventDefault();
         let { errors } = values;
         await validateFirstName(values.firstname, errors);
         await validateLastName(values.lastname, errors);
         await validateEmail(values.email, errors);
         await validatePhoneNumber(values.phone, errors);
-        await validatePinNumber(values.pin, errors, employeeList);
+        await validatePinNumber(values.pin, errors);
         await validateWages(values.wages, errors);
         await Address_line_1(values.address_line_1, errors);
         await validateCity(values.city, errors);
         await validateZipCode(values.zipcode, errors);
         await validateState(values.state, errors);
-        
     
         if (errors.firstname === "" && errors.lastname === "" && errors.email === "" && errors.phone === "" && errors.pin === "" && errors.wages === "" && errors.address_line_1 === "" && errors.city === "" && errors.zipcode === "" && errors.state === "") {
           const data = {
             "merchant_id":"MAL0100CA",
             "admin_id":"MAL0100CA",
+            "employee_id":employee.id,
             "f_name": values.firstname,
             "l_name": values.lastname,
             "email": values.email.toLowerCase(),
@@ -121,42 +140,25 @@ const AddEmployeeFormLogic = ({employeeList}) => {
             "zip": values.zipcode,
             "state": values.state,
           }
+          
           try {
             const response = await axios.post(BASE_URL + ADDEDIT_EMPLOYEE, data, { headers: { "Content-Type": "multipart/form-data" } })
             console.log(response.data);
             if ( response.data.status === true) {
-             
-              const latest_employee = response.data.inserted_data;
-              dispatch(addToEmployeeList(latest_employee));
+              
+              dispatch(editEmployee(data));
               setShowModal(false);
-              values.firstname = "";
-              values.lastname = "";
-              values.email = "";
-              values.phone = "";
-              values.pin = "";
-              values.wages = "";
-              values.address_line_1 = "";
-              values.city = "";
-              values.zipcode = "";
-              values.state = "";
-            
-              values.errors.firstname = "";
-              values.errors.lastname = "";
-              values.errors.email = "";
-              values.errors.phone = "";
-              values.errors.pin = "";
-              values.errors.wages = "";
-              values.errors.address_line_1 = "";
-              values.errors.city = "";
-              values.errors.zipcode = "";
-              values.errors.state = "";
               // Navigate("/");
+              console.log('22311');
             }
             else {
+              console.log('33');
+            //   await handleScrollClick()
                setsubmitmessage(response.data.message);
                setShowModal(true)
             }
           } catch (error) {
+            console.log('33');
             return new Error(error)
           }
         }
@@ -167,7 +169,7 @@ const AddEmployeeFormLogic = ({employeeList}) => {
         }));
       };
 
-      return { handleAddEmployeeInput, values, handleAddEmployee, submitmessage, setsubmitmessage , showModal , setShowModal , scrollRef  };
+      return { handleEditEmployeeInput, values, handleEditEmployee, submitmessage, setsubmitmessage , showModal , setShowModal , scrollRef  };
 }
 
 export default AddEmployeeFormLogic;

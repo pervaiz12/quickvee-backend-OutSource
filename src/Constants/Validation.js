@@ -213,14 +213,15 @@ const Validation = () => {
           updatedErrors.wages = 'Emoji not allowed';
         } else if (wages.length > 8) {
           updatedErrors.wages = 'Max 8 number should be enter';
-        } else if (!Numberval.test(wages)) {
-          updatedErrors.wages = 'Wages only contain number ';
-        }else if (!/^\d+$/.test(wages)) { // Regular expression to check for only digits
+        }else if (!/^\d+(\.\d+)?$/.test(wages)) { // // Updated regular expression to allow decimals
           updatedErrors.wages = 'Wages should only contain numbers';
         } else {
           updatedErrors.wages = '';
         }
       };
+      // else if (!Numberval.test(wages)) {
+        // updatedErrors.wages = 'Wages only contain number ';
+      // }
 
     const validateIDproof = (idproof, updatedErrors) => {
       if (idproof === '') {

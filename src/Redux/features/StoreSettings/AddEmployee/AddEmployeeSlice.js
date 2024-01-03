@@ -5,6 +5,7 @@ import { BASE_URL, DELETE_EMPLOYEE, EMPLOYEE_LIST } from "../../../../Constants/
 const initialState = {
     loading: false,
     employeelistData: [],
+    states:[],
     successMessage: "",
     error: '',
 }
@@ -14,8 +15,9 @@ const initialState = {
 export const fetchEmployeeListsData = createAsyncThunk('employeelist/fetchEmployeeListsData.', async (data) => {
     try {
         const response = await axios.post(BASE_URL + EMPLOYEE_LIST, data, { headers: { "Content-Type": "multipart/form-data" } })
+        // console.log(response)
         if (response.status === 200) {
-           return response.data.result
+           return response.data
         }
     } catch (error) {
         throw new Error(error.response.data.message);
@@ -43,14 +45,21 @@ const AddEmployeeSlice = createSlice({
     name: 'employeelist',
     initialState,
     reducers: {
+        addToEmployeeList: (state, action) => {
+            state.employeelistData = [...state.employeelistData, action.payload];
+        },
         editEmployee: (state, action) => {
             state.employeelistData = state.employeelistData.map(employee => {
-                if (employee.id === action.payload.id) {
+                if (employee.id === action.payload.employee_id) {
 
                     return {
                         ...employee, // Spread syntax to copy existing properties
-                        title: action.payload.title, // Update the title
-                        old_title: action.payload.title
+                        f_name: action.payload.f_name, // Update the title
+                        l_name: action.payload.l_name,
+                        phone: action.payload.phone,
+                        email: action.payload.email,
+                        pin: action.payload.pin,
+                        
                     };
                 } else {
                     // This isn't the one we're looking for - leave it as is
@@ -65,7 +74,8 @@ const AddEmployeeSlice = createSlice({
         })
         builder.addCase(fetchEmployeeListsData.fulfilled, (state, action) => {
             state.loading = false;
-            state.employeelistData = action.payload;
+            state.employeelistData = action.payload.result;
+            state.states =  action.payload.states;
             state.error = '';
         })
         builder.addCase(fetchEmployeeListsData.rejected, (state, action) => {
@@ -94,5 +104,5 @@ const AddEmployeeSlice = createSlice({
     }
 })
 
-export const {  editEmployee} = AddEmployeeSlice.actions;
+export const { addToEmployeeList, editEmployee} = AddEmployeeSlice.actions;
 export default AddEmployeeSlice.reducer

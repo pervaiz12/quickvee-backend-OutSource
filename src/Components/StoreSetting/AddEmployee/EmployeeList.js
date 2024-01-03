@@ -1,6 +1,4 @@
 import React , {useState,useEffect} from "react";
-// import axios from "axios";
-// import { useSelector, useDispatch } from "react-redux";
 import CrossIcon from "../../../Assests/Dashboard/cross.svg";
 import { fetchEmployeeListsData , deleteEmployee } from "../../../Redux/features/StoreSettings/AddEmployee/AddEmployeeSlice";
 import { useSelector, useDispatch } from "react-redux";
@@ -11,11 +9,15 @@ import "../../../Styles/Settings/Employee.css"
 import EditEmployeeModal from "./EditEmployeeModal";
 import AddEmployeeFormLogic from "../../StoreSetting/AddEmployee/AddEmployeeFormLogic";
 
+
 const EmployeeList = () => {
     const employeeListDataState = useSelector((state) => state.employeelistData);
     const [employeeList, setemployeeList] = useState([]);
     const dispatch = useDispatch();
-    const [allemployee, setallemployee] = useState([]);
+    // const [allemployee, setallemployee] = useState([]);
+    const [states, setstates] = useState([]);
+    // const [value, setValue] = useState();
+    // const [inputValue, setInputValue] = useState('');
     // const [showModal, setShowModal] = useState(false);
     const {
         handleAddEmployeeInput,
@@ -44,6 +46,27 @@ const EmployeeList = () => {
       };
     const closeModal = () => {
         setShowModal(false);
+        values.firstname = "";
+        values.lastname = "";
+        values.email = "";
+        values.phone = "";
+        values.pin = "";
+        values.wages = "";
+        values.address_line_1 = "";
+        values.city = "";
+        values.zipcode = "";
+        values.state = "";
+       
+        values.errors.firstname = "";
+        values.errors.lastname = "";
+        values.errors.email = "";
+        values.errors.phone = "";
+        values.errors.pin = "";
+        values.errors.wages = "";
+        values.errors.address_line_1 = "";
+        values.errors.city = "";
+        values.errors.zipcode = "";
+        values.errors.state = "";
       };
 
     useEffect(() => {
@@ -52,6 +75,8 @@ const EmployeeList = () => {
           employeeListDataState.employeelistData
         ) {
             setemployeeList(employeeListDataState.employeelistData);
+                const all_states = employeeListDataState.states;
+                setstates(all_states);
         }
       }, [
         employeeListDataState,
@@ -67,10 +92,6 @@ const EmployeeList = () => {
         if(id)
         {
             dispatch(deleteEmployee(del_data))
-            // let data = {
-            //     merchant_id: "MAL0100CA",
-            // };
-            // dispatch(fetchEmployeeListsData(data));
         }
       }
 
@@ -117,13 +138,17 @@ const EmployeeList = () => {
                             </div>
                             <div className="col-qv-4">
                                 <div>
-                                <EditEmployeeModal  employee={employee}/>
+                                <EditEmployeeModal  employee={employee} states={states} employeeList={employeeList}/>
                                     {/* <img className="employeeicon" alt="edit-icon" src={Permission} /> */}
                                 </div>
                             </div>
                             <div className="col-qv-4">
                                 <div>
-                                    <img className="employeeicon" alt="delete-icon" src={Delete} onClick={() => handleDeleteEmployee(employee.id)} />
+                                    <img className="employeeicon" alt="delete-icon" src={Delete} onClick={() => {
+                                            if (window.confirm("Are you sure you want to delete this employee?")) {
+                                                handleDeleteEmployee(employee.id);
+                                            }
+                                        }}  />
                                 </div>
                             </div>
                         </div>
@@ -300,19 +325,24 @@ const EmployeeList = () => {
                 </div>
                 <div className="col-qv-4">
                     <div className="input_area">
-                        <input
-                            type="text"
-                            name="state"
-                            placeholder="state"
-                            value={values.state}
-                            onChange={handleAddEmployeeInput}
-                            className="q-custom-input-field"
-                        />
+                    <select
+                        name="state"
+                        placeholder="state"
+                        className="q-custom-input-field"
+                        onChange={handleAddEmployeeInput}
+                        >
+                        <option value="" >Select a state</option>
+                        {states.map((state, index) => (
+                            <option key={index} value={state.State}>{state.State}</option>
+                        ))}
+                    </select>
+                        
                         <span className="input-error">
                             {values.errors.state !== "" ? values.errors.state : ""}
                         </span>
                     </div>
                 </div>
+                
               </div>
               
               
