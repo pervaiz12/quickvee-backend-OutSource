@@ -34,8 +34,16 @@ module.exports = Object.freeze({
     // Update Store Setting options api
     UPDATE_STORE_OPTIONS_DATA:"Store_setting_api/update_store_options_data",
 
+
+    //Coupon API Calls
+    COUPON_LIST:"Couponapi/get_coupon_details",
+    COUPON_STATUS_UPDATE:"Couponapi/show_online",
+    COUPON_DELETE:"Couponapi/delete_coupon",
+    COUPON_TITLE_CHECK:"Couponapi/check_coupon_title",
+
     // System Access API Calls Listing and Update
     LIST_ALL_SYSTEM_ACCESS : "api/Settings_api/system_access",
     UPDATE_SYSTEM_ACCESS : "api/Settings_api/update_system_access",
     END_DAY_ACTUAL_AMT:"api/Settings_api/day_end_actual_amt",
+
   });

@@ -101,16 +101,16 @@ const FileUpload = () => {
   return (
     
 
-    <div className="mx-2 mt-2">     
+    <div className="mx-4 mt-2">     
      
       <div
         onDragEnter={handleDrag}
         onSubmit={(e) => e.preventDefault()}
-        className="box-content h-[300px] p-4 border-4 border-white bg-white rounded-xl opacity-100 mt-9 flex justify-between mx-8 my-9 relative" // Added 'relative' class
+        className="box-content h-[300px] p-4 border-4 border-white bg-white rounded-xl opacity-100 mt-9 flex justify-between mx-8 my-2 importBtn" // Added 'relative' class
         style={{ boxShadow: "0px 3px 6px #0000001F" }}
       >
         {alertmsg &&
-          <Box sx={{ width: '100%'}}   className={alertmsg ? "form-submit-info-message" : ""}  >    
+          <Box sx={{ width: '50%', position: 'absolute'}}   className={alertmsg ? "form-submit-info-message" : ""}  >    
             {
                alertmsg &&       
                   <Collapse in={openAlert}>
@@ -183,7 +183,7 @@ const FileUpload = () => {
         <div className='absolute bottom-4 '>
   <button
     onClick={handleSubmit}
-    className="bg-[#0A64F9] text-white px-4 py-2 rounded hover:bg-[#0A64F9] importBtn"
+    className="bg-[#0A64F9] text-white px-4 py-2 rounded hover:bg-[#0A64F9]"
   >
     Import
   </button>

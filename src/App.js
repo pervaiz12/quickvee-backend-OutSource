@@ -39,7 +39,8 @@ import "./Styles/PurchasePage.css";
 import "./Styles/TableOrderPage.css";
 import "./Styles/MainInStore.css";
 import "./Styles/MainOrderPage.css";
-import "./Styles/CouponDiscount.css"
+import "./Styles/CouponDiscount.css";
+import "./Styles/ImportData.css"
 
 
 
