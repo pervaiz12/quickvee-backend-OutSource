@@ -51,7 +51,6 @@ const AddEmployeeSlice = createSlice({
         editEmployee: (state, action) => {
             state.employeelistData = state.employeelistData.map(employee => {
                 if (employee.id === action.payload.employee_id) {
-
                     return {
                         ...employee, // Spread syntax to copy existing properties
                         f_name: action.payload.f_name, // Update the title
@@ -59,7 +58,11 @@ const AddEmployeeSlice = createSlice({
                         phone: action.payload.phone,
                         email: action.payload.email,
                         pin: action.payload.pin,
-                        
+                        wages_per_hr: action.payload.wages,
+                        address: action.payload.address_line_1,
+                        city: action.payload.city,
+                        zipcode: action.payload.zip,
+                        state: action.payload.state,
                     };
                 } else {
                     // This isn't the one we're looking for - leave it as is
