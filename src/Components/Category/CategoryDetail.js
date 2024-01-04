@@ -37,6 +37,8 @@ const CategoryDetail = ({ seVisible }) => {
       dispatch(deleteCategory(data))
     }
   }
+
+  // console.log('gdgfdgfdgfdgfdgfdgfd',AllCategoriesDataState)
   return (
     <>
       <div className='q-category-bottom-detail-section'>
