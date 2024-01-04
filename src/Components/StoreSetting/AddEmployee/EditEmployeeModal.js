@@ -1,17 +1,16 @@
-import { Box, Button, Modal } from '@mui/material';
 import React, { useState } from 'react'
 import EditIcon from "../../../Assests/Category/editIcon.svg";
 import CrossIcon from "../../../Assests/Dashboard/cross.svg";
 import EditEmployeeFormLogic from "../../../Components/StoreSetting/AddEmployee/EditEmployeeFormLogic";
 
 const EditEmployeeModal =  ({employee, states , employeeList}) => {
-    const [open, setOpen] = useState(false);
+    // const [open, setOpen] = useState(false);
     const handleOpen = () => setShowModal(true);
-    const handleClose = () => setShowModal(false);
+    // const handleClose = () => setShowModal(false);
     // const [showModal, setShowModal] = useState(false);
-    const openModal = () => {
-        setShowModal(true);
-      };
+    // const openModal = () => {
+    //     setShowModal(true);
+    //   };
     const closeModal = () => {
         setShowModal(false);
         values.errors.firstname = "";

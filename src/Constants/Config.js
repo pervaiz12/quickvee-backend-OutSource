@@ -25,13 +25,13 @@ module.exports = Object.freeze({
 
 
     //Storesettings API Calls
-<<<<<<< HEAD
+
     EMPLOYEE_LIST:"Store_setting_api/employee_list",
     ADDEDIT_EMPLOYEE:"Store_setting_api/addEdit_employee",
     DELETE_EMPLOYEE:"Store_setting_api/delete_employee",
-=======
-    EMPLOYEE_LIST:"App/employee_list",
 
->>>>>>> ab66306ce13f61734df968fe57560e10a38c4d64
+    // EMPLOYEE_LIST:"App/employee_list",
+
+
   
   });

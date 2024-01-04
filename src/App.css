@@ -377,7 +377,7 @@ select option {
   background-color: #fff !important;
 } */
 
-<<<<<<< HEAD
+
 .q-custom-modal-content.modal_custom{
   height: auto !important;
   top: 10%;
@@ -390,7 +390,7 @@ margin-bottom: 10px;
   padding-left:0px !important;
   padding-right: 0px !important;
 }
-=======
+
 .datarange_days_order {
   display: flex;
   flex-direction: row;
@@ -526,4 +526,4 @@ margin-bottom: 10px;
 
 /* Add more media queries as needed for larger screens */
 
->>>>>>> ab66306ce13f61734df968fe57560e10a38c4d64
+

@@ -22,7 +22,7 @@ import AddCoupon from "./Components/Coupons/AddCoupon";
 import MainReport from "./Components/ReportSetting/MainReport";
 import MainAddEmployee from "./Components/StoreSetting/AddEmployee/MainAddEmployee";
 
-import Info from "./Components/StoreSetting/SubSetting/Info";
+// import Info from "./Components/StoreSetting/SubSetting/Info";
 
 
 // import Info from "./Components/StoreSetting/SubSetting/Info";
