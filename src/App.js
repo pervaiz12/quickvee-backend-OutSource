@@ -32,6 +32,7 @@ import MainSyastemAccess from "./Components/StoreSetting/SystemAccess/MainSystem
 import "./Styles/AttributesPage.css"
 
 import MainStoreOption from "./Components/StoreSetting/StoreOption/MainStoreOption";
+import MainStoreAlters from "./Components/StoreSetting/StoreAlters/MainStoreAlters";
 
 import "./Styles/CategoryPage.css";
 import "./Styles/AttributesPage.css"; 
@@ -74,7 +75,7 @@ function App() {
           <Route path="/store-settings/options"  element={<MainStoreOption />} />
           <Route path="/store-settings/addemployee"  element={<MainAddEmployee />} />
           <Route path="/store-settings/system-access"  element={<MainSyastemAccess />} />
-          
+          <Route path="/store-settings/Alters"  element={<MainStoreAlters />} />
         </Route>
       </Routes>
   
