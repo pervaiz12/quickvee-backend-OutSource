@@ -206,20 +206,19 @@
 }
 
 
-/* When the checkbox is checked, add a blue background */
+
 .attributes-checkmark-div .attributes-checkmark-label input:checked~.attributes-checkmark {
     background-color: #1EC26B;
     border-radius: 5px;
 }
 
-/* Create the checkmark/indicator (hidden when not checked) */
+
 .attributes-checkmark:after {
     content: "";
     position: absolute;
     display: none;
 }
 
-/* Show the checkmark when checked */
 .attributes-checkmark-div .attributes-checkmark-label input:checked~.attributes-checkmark:after {
     display: block;
 }
@@ -241,7 +240,7 @@
     display: flex;
     flex-wrap: wrap;
     width: 100%;
-    JUSTIFY-CONTENT: space-between;
+ 
 }
 
 .q_resigter_checkboxfiled>li {
@@ -311,7 +310,6 @@
     user-select: none;
 }
 
-/* Hide the browser's default checkbox */
 .q_resigter_setting_section input {
     position: absolute;
     opacity: 0;
@@ -348,6 +346,15 @@
     display: none;
 }
 
+label.q_resigter_setting_section {
+    color: #6A6A6A;
+font-family: CircularSTDBook !important ;}
+
+    label.q_setting_radio_resigter {
+        color: #6A6A6A;
+        
+    }
+
 
 .q_resigter_setting_section input:checked~.checkmark:after {
     display: block;
@@ -382,47 +389,66 @@
     user-select: none;
 }
 
-/* Hide the browser's default radio button */
 .q_setting_radio_resigter input {
     position: absolute;
     opacity: 0;
     cursor: pointer;
 }
 
-/*  Create a custom radio button */
+
+/* Create a custom radio button */
 .checkmark_section {
     position: absolute;
     top: 0;
     left: 0;
-    height: 20px;
-    width: 20px;
+    height: 24px;
+    width: 24px;
     background-color: #eee;
     border-radius: 50%;
-}
-
-/* On mouse-over, add a grey background color */
-.q_setting_radio_resigter:hover input~.checkmark_section {
+  }
+  
+  /* On mouse-over, add a grey background color */
+  .q_setting_radio_resigter:hover input ~ .checkmark_section {
     background-color: #ccc;
-}
-
-/* When the radio button is checked, add a blue background */
-.q_setting_radio_resigter input:checked~.checkmark_section {
+  }
+  
+  /* When the radio button is checked, add a blue background */
+  .q_setting_radio_resigter input:checked ~ .checkmark_section {
     background-color: #1EC26B;
-}
-
-/* Create the indicator (the dot/circle - hidden when not checked) */
-
-/* Show the indicator (dot/circle) when checked */
-.q_setting_radio_resigter input:checked~.checkmark_section:after {
+  }
+  
+  /* Create the indicator (the dot/circle - hidden when not checked) */
+  .checkmark_section:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+  
+  /* Show the indicator (dot/circle) when checked */
+  .q_setting_radio_resigter input:checked ~ .checkmark_section:after {
     display: block;
-}
-
-/* Style the indicator (dot/circle) */
-.q_setting_radio_resigter .checkmark_section:after {
-    top: 9px;
-    left: 9px;
-    width: 8px;
-    height: 8px;
+  }
+  
+  /* Style the indicator (dot/circle) */
+  .q_setting_radio_resigter .checkmark_section:after {
+    top: 7px;
+    left: 7px;
+    width: 11px;
+    height: 11px;
     border-radius: 50%;
     background: white;
+    border: 1px solid #ffffff;
 }
+  
+
+  .q_resigter_setting_section .checkmark:after {
+    left: 7px;
+    top: 4px;
+    width: 7px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    transform: rotate(45deg);
+}
+
+
