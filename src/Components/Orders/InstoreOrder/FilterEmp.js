@@ -59,14 +59,14 @@ const FilterEmp = () => {
 
       <div className="flex flex-col sm:flex-row">
         <div className="flex-1 mb-2 sm:mb-0 sm:mr-2">
-          <label className="block text-[16px] text-[#818181] Admin_std mb-4" htmlFor="employeeFilter">
+          <label className="q_order_page_labal" htmlFor="employeeFilter">
             Employee
           </label>
           <select
             id="employeeFilter"
             value={selectedFilter === 'employee' ? 'allEmployees' : ''}
             onChange={(e) => handleFilterChange(e, 'employee')}
-            className="w-full bg-white text-[#000000] lg:text-[18px] md:text-[12px] sm:text-xs Admin_std px-4 py-2 border border-gray-300 focus:outline-none rounded"
+            className="custom-text-input"
           >
             <option value="" disabled hidden>Select an option</option>
             <option value="allEmployees">All Employees</option>
@@ -75,30 +75,31 @@ const FilterEmp = () => {
         </div>
 
         <div className="flex-1 mb-2 sm:mb-0 sm:mr-2">
-          <label className="block text-[16px] text-[#818181] Admin_std mb-4" htmlFor="transactionFilter">
+          <label className="q_order_page_labal" htmlFor="transactionFilter">
             Transaction 
           </label>
           <select
             id="transactionFilter"
             value={selectedFilter === 'transaction' ? 'allTransactions' : ''}
             onChange={(e) => handleFilterChange(e, 'transaction')}
-            className="w-full bg-white text-[#000000] lg:text-[18px] md:text-[12px] sm:text-xs Admin_std px-4 py-2 border border-gray-300 focus:outline-none rounded"
+            className="custom-text-input"
           >
             <option value="" disabled hidden>Select an option</option>
             <option value="allTransactions">All Transactions</option>
+  
             {/* Add other options as needed */}
           </select>
         </div>
 
         <div className="flex-1">
-          <label className="block text-[16px] text-[#818181] Admin_std mb-4" htmlFor="orderStatusFilter">
+          <label className="q_order_page_labal" htmlFor="orderStatusFilter">
             Order Status
           </label>
           <select
             id="orderStatusFilter"
             value={selectedFilter === 'orderStatus' ? 'orderStatus' : ''}
             onChange={(e) => handleFilterChange(e, 'orderStatus')}
-            className="w-full bg-white text-[#000000] lg:text-[18px] md:text-[12px] sm:text-xs  Admin_std px-4 py-2 border border-gray-300 focus:outline-none rounded"
+            className="custom-text-input"
           >
             <option value="" disabled hidden>Select an option</option>
             <option value="orderStatus">Order Status</option>

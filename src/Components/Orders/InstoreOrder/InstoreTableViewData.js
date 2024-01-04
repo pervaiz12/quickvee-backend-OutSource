@@ -1,72 +1,57 @@
-
-import "../../../Styles/TableOrderPage.css";
 import React, { useEffect, useState } from 'react';
-// import Pagination from "react-js-pagination";
 import DefaultPagination from "./DefaultPagination";
 import { fetchInStoreOrderData } from "../../../Redux/features/Orders/inStoreOrderSlice";
 import { useSelector, useDispatch } from 'react-redux';
 
-
-
-
 const InstoreTableViewData = () => {
-  const [activePage, setActivePage] = useState(1);
-  const entriesPerPage = 10;
+
+const [currentPage, setCurrentPage] = useState();
 
 
 
-  const startIndex = (activePage - 1) * entriesPerPage;
-  const endIndex = startIndex + entriesPerPage;
+  const [inStoreOrder, setAllInStoreOrders] = useState([]);
 
-  const handlePageChange = (pageNumber) => {
-    setActivePage(pageNumber);
-  };
-  console.log()
-
-  const [inStoreOrder, setallInStoreOrders] = useState([])
-
-  const AllInStoreDataState = useSelector((state) => state.inStoreOrder)
+  const AllInStoreDataState = useSelector((state) => state.inStoreOrder);
   const dispatch = useDispatch();
-  useEffect(() => {
-    let data = {
-      merchant_id: "MAL0100CA"
-    }
-    if (data) {
-      dispatch(fetchInStoreOrderData(data))
-    }
 
-  }, [])
+  useEffect(() => {
+    const fetchData = async () => {
+      let data = {
+        merchant_id: "MAL0100CA",
+        page: currentPage,
+        entriesPerPage: 10,
+      };
+
+      if (data) {
+        dispatch(fetchInStoreOrderData(data));
+      }
+    };
+
+    fetchData();
+  }, [dispatch, currentPage]);
 
   useEffect(() => {
     if (!AllInStoreDataState.loading && AllInStoreDataState.inStoreOrderData) {
-      setallInStoreOrders(AllInStoreDataState.inStoreOrderData)
+      setAllInStoreOrders(AllInStoreDataState.inStoreOrderData);
     }
-  }, [AllInStoreDataState, AllInStoreDataState.loading, AllInStoreDataState.inStoreOrderData])
+  }, [AllInStoreDataState.loading, AllInStoreDataState.inStoreOrderData]);
 
-
-  useEffect(() => {
-    console.log(inStoreOrder)
-  }, [inStoreOrder])
-
-  // const handleDeleteCategory = (id) => {
-  //   const data = {
-  //     id: id
-  //   }
-  //   if(id){
-  //     dispatch(deleteCategory(data))
-  //   }
-  // }
-  // console.log('gdgfdgfdgfdgfdgfdgfd',AllInStoreDataState)
+  const handlePageChange = (newPage) => {
+    setCurrentPage(newPage);
+  };
 
   return (
     <>
       <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
           <div className="q-attributes-bottom-header">
-
-
-            {/* Pagination component */}
-            <DefaultPagination />
+         
+      <DefaultPagination
+        totalEntries={100}
+        entriesPerPage={10}
+        page={currentPage}
+        onChange={handlePageChange}
+      />
           </div>
           <div className="q-attributes-bottom-attriButes-header">
             <p className="table_view_sort">Customer</p>
@@ -76,8 +61,7 @@ const InstoreTableViewData = () => {
           </div>
         </div>
 
-
-
+       
         <div className="q-attributes-bottom-attriButes-listing">
           {
             inStoreOrder && inStoreOrder.length >= 1 && inStoreOrder.map((order, index) => (
@@ -101,8 +85,8 @@ const InstoreTableViewData = () => {
                 </div>
                 <div className="table_view_items">
                   <select className="table_status_selected">
-                    <option value="day">Accepted</option>
-                    <option value="month">Rejected</option>
+                    <option value="day">{order.payment_result}</option>
+                    {/* <option value="month">Rejected</option> */}
                     {/* Add more options as needed */}
                   </select>
                 </div>
@@ -119,22 +103,19 @@ const InstoreTableViewData = () => {
 
           <div className="py-8">
 
-            <DefaultPagination />
+          <DefaultPagination
+        totalEntries={100}
+        entriesPerPage={10}
+        page={currentPage}
+        onChange={handlePageChange}
+      />
+          </div>
           </div>
 
 
         </div>
-      </div>
     </>
   );
 };
 
 export default InstoreTableViewData;
-
-
-
-
-
-
-
-

@@ -21,9 +21,11 @@ import AddCoupon from "./Components/Coupons/AddCoupon";
 // import MainStoreSetting from "./Components/StoreSetting/MainStoreSetting";
 import MainReport from "./Components/ReportSetting/MainReport";
 import MainAddEmployee from "./Components/StoreSetting/AddEmployee/MainAddEmployee";
+import MainSyastemAccess from "./Components/StoreSetting/SystemAccess/MainSystemAccess";
+// import Info from "./Components/StoreSetting/SubSetting/Info";
 
-import Info from "./Components/StoreSetting/SubSetting/Info";
 
+// import Info from "./Components/StoreSetting/SubSetting/Info";
 
 // import Info from "./Components/StoreSetting/SubSetting/Info";
 
@@ -37,6 +39,8 @@ import "./Styles/PurchasePage.css";
 import "./Styles/TableOrderPage.css";
 import "./Styles/MainInStore.css";
 import "./Styles/MainOrderPage.css";
+import "./Styles/CouponDiscount.css";
+import "./Styles/ImportData.css"
 
 
 
@@ -69,7 +73,8 @@ function App() {
           {/* <Route path="/store-settings/info"  element={<MainStoreOption />} /> */}
           <Route path="/store-settings/options"  element={<MainStoreOption />} />
           <Route path="/store-settings/addemployee"  element={<MainAddEmployee />} />
-        
+          <Route path="/store-settings/system-access"  element={<MainSyastemAccess />} />
+          
         </Route>
       </Routes>
   
