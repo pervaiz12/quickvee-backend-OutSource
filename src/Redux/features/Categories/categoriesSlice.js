@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
-import { BASE_URL, LIST_ALL_CATEGORIES , DELETE_SINGLE_CATEGORIE} from "../../../Constants/Config"
+import { BASE_URL, LIST_ALL_CATEGORIES , DELETE_SINGLE_CATEGORIE ,CATEGORIE_STATUS,CATEGORIE_BANNER_REMOVE} from "../../../Constants/Config"
 
 const initialState = {
     loading: false,
@@ -15,12 +15,19 @@ export const fetchCategoriesData = createAsyncThunk('categories/fetchCategoriesD
     try {
         const response = await axios.post(BASE_URL + LIST_ALL_CATEGORIES, data, { headers: { "Content-Type": "multipart/form-data" } })
         if (response.status === 200) {
+            // console.log(response.data)
            return response.data.result
         }
     } catch (error) {
         throw new Error(error.response.data.message);
     }
 })
+
+// Generate pening , fulfilled and rejected action type
+
+
+
+
 /* export const addToWishlist = createAsyncThunk('wishlist/addToWishlist', async (data) => {
     try {
         const response = await axios.post(BASE_URL + ADD_TO_WISHLIST, data, {
@@ -54,6 +61,40 @@ export const deleteCategory = createAsyncThunk('categories/deleteCategory', asyn
     }
 });
 
+// for deleteBanner image 
+export const deleteCategorybanner = createAsyncThunk('categories/deleteCategorybanner', async (data) => {
+
+    try {
+        const response = await axios.post(BASE_URL + CATEGORIE_BANNER_REMOVE, data, {
+            headers: { "Content-Type": "multipart/form-data" }
+        });
+      if(response){
+        console.log(response)
+        return {
+            categoryId:data.id
+        }
+      }
+        
+    } catch (error) {
+        throw new Error(error.response.data.message);
+    }
+});
+
+
+//  updating category status
+export const updateCategoryStatus = createAsyncThunk(
+    'categories/updateCategoryStatus',
+    async (data) => {
+      try {
+        const response = await axios.post(BASE_URL + CATEGORIE_STATUS, data, { headers: { "Content-Type": "multipart/form-data" } })
+        return response.data.status;  
+      } catch (error) {
+        throw error;
+      }
+    }
+  );
+
+
 
 const categoriesSlice = createSlice({
     name: 'categories',
@@ -72,6 +113,9 @@ const categoriesSlice = createSlice({
             state.categoriesData = {};
             state.error = action.error.message;
         })
+
+
+     
 
        /* builder.addCase(addToWishlist.pending, (state) => {
             state.loading = true;
@@ -99,6 +143,22 @@ const categoriesSlice = createSlice({
             state.error = ''; // Reset the error message
         });
         builder.addCase(deleteCategory.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+        });
+
+        // for deleteCategorybanner
+        builder.addCase(deleteCategorybanner.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(deleteCategorybanner.fulfilled, (state, action) => {
+            state.loading = false;
+            state.successMessage = action.payload.message;
+            state.categoriesData = state.categoriesData.filter((item) => item && item.id !== action.payload.categoryId);
+
+            state.error = ''; // Reset the error message
+        });
+        builder.addCase(deleteCategorybanner.rejected, (state, action) => {
             state.loading = false;
             state.error = action.error.message;
         });

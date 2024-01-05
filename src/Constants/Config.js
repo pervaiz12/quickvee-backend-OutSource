@@ -8,8 +8,14 @@ module.exports = Object.freeze({
 
 
     // Categories API calls
-    LIST_ALL_CATEGORIES:"Categoryapi/category_list",
-    DELETE_SINGLE_CATEGORIE:"Categoryapi/delete_category",
+    ADD_CATOGRY:"CategoryReactapi/addnewcolln",
+    UPDATE_CATOGRY:"CategoryReactapi/updateCategory",
+    LIST_ALL_CATEGORIES:"CategoryReactapi/category_list",
+    DELETE_SINGLE_CATEGORIE:"CategoryReactapi/delete_category",
+    PRODUCT_LIST_BY_CATEGORY:"CategoryReactapi/product_list_by_category",
+    CATEGORIE_STATUS:"CategoryReactapi/categoryapi_status",
+    CATEGORIE_BANNER_REMOVE:"CategoryReactapi/delete_banner_image",
+    EDIT_CATOGRY_DATA:"CategoryReactapi/category_data",
 
 
     //Attributes API Calls

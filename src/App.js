@@ -6,6 +6,7 @@ import { Layout } from "./Components/Layout/Index";
 import DashboardMain from "./Components/Dashboard/DashboardMain";
 import MainOrder from "./Components/Orders/MainOrder";
 import MainCategory from "./Components/Category/MainCategory";
+import EditCategory from "./Components/Category/EditCategory";
 import MainPurchase from "./Components/PurchaseOrders/MainPurchase";
 import MainAttributes from "./Components/Attributes/MainAttributes";
 import MainProducts from "./Components/Products/MainProducts";
@@ -62,6 +63,7 @@ function App() {
           <Route path="/dashboard" element={<DashboardMain />} />
           <Route path="/order" element={<MainOrder />} />
           <Route path="/category" element={<MainCategory />} />
+          <Route path="/category/edit-category/:categoryCode" element={<EditCategory />} />
           <Route path="/purchase-data" element={<MainPurchase />} />
           <Route path="/products" element={<MainProducts />} />
           <Route path="/attributes" element={<MainAttributes />} />
