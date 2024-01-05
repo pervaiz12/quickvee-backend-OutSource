@@ -111,6 +111,7 @@ const CouponDiscount = ({ seVisible }) => {
                   <p>Max Discount</p>
                   <p className="q_date_details">${parseFloat(coupons.maximum_discount).toFixed(2)}</p>
                 </div>
+
                 <div className="q_coupon_status_btn">
                   <p>Show online</p>
                   <p>
@@ -119,6 +120,45 @@ const CouponDiscount = ({ seVisible }) => {
                       <span className="slider round"></span>
                     </label>
                   </p>
+
+              </div>
+              <div className="q_discount_coupon_Code">
+                <div className="">20% OFF on minimum order of $30.00</div>
+              </div>
+              <div className="q_coupon_deatails_validtimes">
+                <p>Valid from</p>
+                <p className="q_date_details">1/08/2022 - 12:00AM to 1/09/2022 - 12:00AM</p>
+              </div>
+              <div className="q_coupon_discountCode">
+                <p>Max Discount</p>
+                <p className="q_date_details">$6.00</p>
+              </div>
+              <div className="q_coupon_status_btn">
+                <p>Show online</p>
+                <p>
+                  <label className="switch">
+                    <input
+                      type="checkbox"
+                      checked={couponStates.coupon2}
+                      onChange={handleCheckboxChange("coupon2")}
+                    />
+                    <span className="slider round"></span>
+                  </label>
+                </p>
+              </div>
+            </div>
+            <div
+              className={`q_copuon_header mx-6 my-6 ${couponStates.coupon3 ? "active" : ""
+                }`}
+            >
+              <div className="flex justify-between w-full">
+                <div className="q_coupon_code">
+                  <p>SUMMER25</p>
+                </div>
+                <div className="flex space-x-2 p-4">
+                  <img src={Edit} alt="" className="h-8 w-8" />
+                  <img src={DeletIcon} alt="delet" className="h-8 w-8" />
+
                 </div>
               </div>
             ))}
