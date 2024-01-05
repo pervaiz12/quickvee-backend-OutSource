@@ -46,4 +46,8 @@ module.exports = Object.freeze({
     UPDATE_SYSTEM_ACCESS : "api/Settings_api/update_system_access",
     END_DAY_ACTUAL_AMT:"api/Settings_api/day_end_actual_amt",
 
+    //Inventory
+    LIST_INVENTORY : 'api/Settings_api/inventory_list',
+    UPDATE_INVENTORY : 'api/Settings_api/update_inventory_info',
+
   });

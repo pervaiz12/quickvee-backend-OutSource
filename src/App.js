@@ -24,6 +24,7 @@ import MainAddEmployee from "./Components/StoreSetting/AddEmployee/MainAddEmploy
 import MainSyastemAccess from "./Components/StoreSetting/SystemAccess/MainSystemAccess";
 // import Info from "./Components/StoreSetting/SubSetting/Info";
 
+import MainInventory from "./Components/StoreSetting/Inventory/MainInventory";
 
 // import Info from "./Components/StoreSetting/SubSetting/Info";
 
@@ -74,6 +75,9 @@ function App() {
           <Route path="/store-settings/options"  element={<MainStoreOption />} />
           <Route path="/store-settings/addemployee"  element={<MainAddEmployee />} />
           <Route path="/store-settings/system-access"  element={<MainSyastemAccess />} />
+
+          {/* /store-settings/inventory */}
+          <Route path="/store-settings/inventory"  element={<MainInventory />} />
           
         </Route>
       </Routes>
