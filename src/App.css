@@ -32,7 +32,71 @@
   font-family: admin_std_medium;
   src: url(./Assests//Fonts/FontsFree-Net-Circular-Std-Medium.ttf);
 }
-
+.qvrow{
+  --bs-gutter-x: 1.5rem;
+  --bs-gutter-y: 0;
+  display: flex;
+  flex-wrap: wrap;
+  margin-top: calc(-1 * var(--bs-gutter-y));
+  margin-right: calc(-.5 * var(--bs-gutter-x));
+  margin-left: calc(-.5 * var(--bs-gutter-x));
+  }
+  .qvrow>*{
+    flex-shrink: 0;
+    width: 100%;
+    max-width: 100%;
+    padding-right: calc(var(--bs-gutter-x) * .5);
+    padding-left: calc(var(--bs-gutter-x) * .5);
+    margin-top: var(--bs-gutter-y);
+    }
+.col-qv-1{
+  flex: 0 0 auto;
+  width:8.33333333%;
+}
+.col-qv-2{
+  flex: 0 0 auto;
+  width: 16.66666667%;
+}
+.col-qv-3{
+  flex: 0 0 auto;
+  width: 25%;
+}
+.col-qv-4{
+  flex: 0 0 auto;
+  width: 33.33333333%;
+}
+.col-qv-5{
+  flex: 0 0 auto;
+  width: 41.66666667%;
+}
+.col-qv-6{
+  flex: 0 0 auto;
+  width: 50%;
+}
+.col-qv-7{
+  flex: 0 0 auto;
+  width: 58.33333333%;
+}
+.col-qv-8{
+  flex: 0 0 auto;
+  width:66.66666667%;
+}
+.col-qv-9{
+  flex: 0 0 auto;
+  width: 75%;
+}
+.col-qv-10{
+  flex: 0 0 auto;
+  width:83.33333333%;
+}
+.col-qv-11{
+  flex: 0 0 auto;
+  width:91.66666667%;
+}
+.col-qv-12{
+  flex: 0 0 auto;
+  width: 100%;
+}
 .Admin_bold {
   font-family: adminbold !important;
 }
@@ -73,7 +137,7 @@
   background-color: #f4f4f8;
   /* top: 0; */
   overflow-y: auto;
-  height: 100vh;
+  height: 92vh;
   /* width: 16rem; */
   z-index: 9;
 }
@@ -349,6 +413,20 @@ select option {
   background-color: #fff !important;
 } */
 
+
+.q-custom-modal-content.modal_custom{
+  height: auto !important;
+  top: 10%;
+}
+.input_area label{
+display: block;
+margin-bottom: 10px;
+}
+.plr0{
+  padding-left:0px !important;
+  padding-right: 0px !important;
+}
+
 .datarange_days_order {
   display: flex;
   flex-direction: row;
@@ -510,6 +588,7 @@ select option {
 /* Add more media queries as needed for larger screens */
 
 
+
 .q_order_page_labal{
   display: block;
   font-size: 16px;
@@ -517,3 +596,4 @@ select option {
   font-family: 'CircularSTDBook', sans-serif; /* Assuming CircularSTDBook is a font family */
   margin-bottom: 1rem;
 }
+
