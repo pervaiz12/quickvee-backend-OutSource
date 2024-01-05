@@ -38,12 +38,14 @@ import "./Styles/TableOrderPage.css";
 import "./Styles/MainInStore.css";
 import "./Styles/MainOrderPage.css";
 import "./Styles/CouponDiscount.css";
-import "./Styles/ImportData.css"
+import "./Styles/ImportData.css";
+import "./Styles/DailyDaterange.css";
 
 import "./Styles/ReceiptMainpage.css";
 import MainResigtersetting from "./Components/StoreSetting/ResigterSetting/MainResigtersetting";
 import "./Styles/ResigterSettingdata.css";
 import ReceiptMainpage from "./Components/StoreSetting/Receipt/ReceiptMainpage";
+import DailyTtlReport from "./Components/Reporting/DailyReport/DailyTtlReport";
 
 
 
@@ -78,6 +80,7 @@ function App() {
           <Route path="/store-settings/addemployee"  element={<MainAddEmployee />} />
           <Route path="/store-settings/register" element={<MainResigtersetting />} />
           <Route path="/store-settings/receipt" element={<ReceiptMainpage />} />
+          <Route path="/store-settings/daily-total-report" element={<DailyTtlReport />}/>
         
         </Route>
       </Routes>
