@@ -44,6 +44,11 @@ import "./Styles/MainOrderPage.css";
 import "./Styles/CouponDiscount.css";
 import "./Styles/ImportData.css"
 
+import "./Styles/ReceiptMainpage.css";
+import MainResigtersetting from "./Components/StoreSetting/ResigterSetting/MainResigtersetting";
+import "./Styles/ResigterSettingdata.css";
+import ReceiptMainpage from "./Components/StoreSetting/Receipt/ReceiptMainpage";
+
 
 
 
@@ -76,8 +81,14 @@ function App() {
           {/* <Route path="/store-settings/info"  element={<MainStoreOption />} /> */}
           <Route path="/store-settings/options"  element={<MainStoreOption />} />
           <Route path="/store-settings/addemployee"  element={<MainAddEmployee />} />
+
           <Route path="/store-settings/system-access"  element={<MainSyastemAccess />} />
           <Route path="/store-settings/Alters"  element={<MainStoreAlters />} />
+
+          <Route path="/store-settings/register" element={<MainResigtersetting />} />
+          <Route path="/store-settings/receipt" element={<ReceiptMainpage />} />
+        
+
         </Route>
       </Routes>
   

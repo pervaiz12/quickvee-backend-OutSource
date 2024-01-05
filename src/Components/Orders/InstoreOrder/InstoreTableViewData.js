@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState } from "react";
 import DefaultPagination from "./DefaultPagination";
 import { fetchInStoreOrderData } from "../../../Redux/features/Orders/inStoreOrderSlice";
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector, useDispatch } from "react-redux";
+import DownIcon from "../../../Assests/Dashboard/Down.svg";
 
 const InstoreTableViewData = () => {
-
-const [currentPage, setCurrentPage] = useState();
-
-
+  const [currentPage, setCurrentPage] = useState(1);
 
   const [inStoreOrder, setAllInStoreOrders] = useState([]);
 
@@ -45,13 +43,20 @@ const [currentPage, setCurrentPage] = useState();
       <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
           <div className="q-attributes-bottom-header">
-         
-      <DefaultPagination
-        totalEntries={100}
-        entriesPerPage={10}
-        page={currentPage}
-        onChange={handlePageChange}
-      />
+            <div className="flex justify-between mr-auto">
+              <div className="text-black">show </div>
+              <p className="q_order_border">
+                1 <img src={DownIcon} alt="" className="" />
+              </p>
+              <div className="text-black">entries</div>
+            </div>
+
+            <DefaultPagination
+              totalEntries={100}
+              entriesPerPage={10}
+              page={currentPage}
+              onChange={handlePageChange}
+            />
           </div>
           <div className="q-attributes-bottom-attriButes-header">
             <p className="table_view_sort">Customer</p>
@@ -61,11 +66,14 @@ const [currentPage, setCurrentPage] = useState();
           </div>
         </div>
 
-       
         <div className="q-attributes-bottom-attriButes-listing">
-          {
-            inStoreOrder && inStoreOrder.length >= 1 && inStoreOrder.map((order, index) => (
-              <div key={index} className="q-attributes-bottom-attriButes-single-attributes">
+          {inStoreOrder &&
+            inStoreOrder.length >= 1 &&
+            inStoreOrder.map((order, index) => (
+              <div
+                key={index}
+                className="q-attributes-bottom-attriButes-single-attributes"
+              >
                 <div className="table_view_sort">
                   <p className="table_user_details"> {order.name} </p>
                   {/* <p className="table_Existing_customer">Existing Customer</p> */}
@@ -75,7 +83,9 @@ const [currentPage, setCurrentPage] = useState();
 
                 <div className="table_view_title">
                   <p className="table_order_details">{order.order_id}</p>
-                  <p className="table_order_datedetails">{order.merchant_time}</p>
+                  <p className="table_order_datedetails">
+                    {order.merchant_time}
+                  </p>
                   <p className="table_order_delivery">{order.order_method}</p>
                 </div>
 
@@ -96,24 +106,18 @@ const [currentPage, setCurrentPage] = useState();
                 </div>
                 <div className="table_border_bottom"></div>
               </div>
-            ))
-          }
-
-
+            ))}
 
           <div className="py-8">
-
-          <DefaultPagination
-        totalEntries={100}
-        entriesPerPage={10}
-        page={currentPage}
-        onChange={handlePageChange}
-      />
+            <DefaultPagination
+              totalEntries={100}
+              entriesPerPage={10}
+              page={currentPage}
+              onChange={handlePageChange}
+            />
           </div>
-          </div>
-
-
         </div>
+      </div>
     </>
   );
 };
