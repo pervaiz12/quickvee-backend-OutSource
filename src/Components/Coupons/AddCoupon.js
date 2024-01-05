@@ -66,6 +66,7 @@ const AddCoupon = ({ seVisible }) => {
     setActiveTab(tab);
   };
 
+  
   return (
     <>
       <div className="mt-10">
