@@ -67,5 +67,14 @@ module.exports = Object.freeze({
     // Get Store Setting Receipt List and Update API
     GET_STORE_RECEIPT_DATA:"Store_setting_api/get_receipt_list",
     UPDATE_RECEIPT_INFO_DATA:"Store_setting_api/update_receipt_info_list",
+
+
+
+      // Taxes API Calls 
+      ADD_TAXES:"Taxesapi/add_Tax",
+      UPDATE_TAXES:"Taxesapi/update_Tax",
+      LIST_ALL_TAXES:"Taxesapi/Taxes_list",
+      DELETE_SINGLE_TAXE: "Taxesapi/delete_tax",
+      TAXE_CATEGORY_LIST: "Taxesapi/Taxes_category_list",
     
   });

@@ -24,7 +24,7 @@ import MainReport from "./Components/ReportSetting/MainReport";
 import MainAddEmployee from "./Components/StoreSetting/AddEmployee/MainAddEmployee";
 import MainSyastemAccess from "./Components/StoreSetting/SystemAccess/MainSystemAccess";
 // import Info from "./Components/StoreSetting/SubSetting/Info";
-
+import MainTaxes from "./Components/StoreSetting/SubSetting/Taxes/MainTaxes";
 
 // import Info from "./Components/StoreSetting/SubSetting/Info";
 
@@ -77,6 +77,7 @@ function App() {
           <Route exact path="/addCoupon" element={<AddCoupon />} />
           {/* <Route path ="/store-setting" element ={<MainStoreSetting />} /> */}
           <Route path ="/report" element ={<MainReport />} />
+          <Route path="/store-settings/taxes" element={<MainTaxes />} />
 
           {/* <Route path="/store-settings/info"  element={<MainStoreOption />} /> */}
           <Route path="/store-settings/options"  element={<MainStoreOption />} />
