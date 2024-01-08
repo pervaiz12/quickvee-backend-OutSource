@@ -24,7 +24,7 @@ import MainReport from "./Components/ReportSetting/MainReport";
 import MainAddEmployee from "./Components/StoreSetting/AddEmployee/MainAddEmployee";
 import MainSyastemAccess from "./Components/StoreSetting/SystemAccess/MainSystemAccess";
 // import Info from "./Components/StoreSetting/SubSetting/Info";
-
+import MainTaxes from "./Components/StoreSetting/SubSetting/Taxes/MainTaxes";
 
 // import Info from "./Components/StoreSetting/SubSetting/Info";
 
@@ -42,12 +42,14 @@ import "./Styles/TableOrderPage.css";
 import "./Styles/MainInStore.css";
 import "./Styles/MainOrderPage.css";
 import "./Styles/CouponDiscount.css";
-import "./Styles/ImportData.css"
+import "./Styles/ImportData.css";
+import "./Styles/DailyDaterange.css";
 
 import "./Styles/ReceiptMainpage.css";
 import MainResigtersetting from "./Components/StoreSetting/ResigterSetting/MainResigtersetting";
 import "./Styles/ResigterSettingdata.css";
 import ReceiptMainpage from "./Components/StoreSetting/Receipt/ReceiptMainpage";
+import DailyTtlReport from "./Components/Reporting/DailyReport/DailyTtlReport";
 
 
 
@@ -77,6 +79,7 @@ function App() {
           <Route exact path="/addCoupon" element={<AddCoupon />} />
           {/* <Route path ="/store-setting" element ={<MainStoreSetting />} /> */}
           <Route path ="/report" element ={<MainReport />} />
+          <Route path="/store-settings/taxes" element={<MainTaxes />} />
 
           {/* <Route path="/store-settings/info"  element={<MainStoreOption />} /> */}
           <Route path="/store-settings/options"  element={<MainStoreOption />} />
@@ -87,6 +90,7 @@ function App() {
 
           <Route path="/store-settings/register" element={<MainResigtersetting />} />
           <Route path="/store-settings/receipt" element={<ReceiptMainpage />} />
+          <Route path="/store-settings/daily-total-report" element={<DailyTtlReport />}/>
         
 
         </Route>

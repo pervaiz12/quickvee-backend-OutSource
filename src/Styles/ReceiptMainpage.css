@@ -215,10 +215,6 @@
 }
 
 
-/* .q_receipt_page_main input:checked~.checkmark_section {
-    background-color:#0A64F9;
-    border-radius: 50%;
-} */
 
 
 .checkmark_section:after {
@@ -288,11 +284,12 @@ font-weight: 400;}
     background-color: #ccc;
   }
 
-  .q_setting_radio_resigter input:checked ~ .checkmark_section label {
+  .q_setting_radio_resigter input:checked ~ .checkmark_section{
     background-color: #0A64F9;
     color: #0A64F9;
   }
   
+
 
   .checkmark_section:after {
     content: "";
@@ -335,13 +332,19 @@ font-weight: 400;}
     background-color: #FFFFFF;
   }
 
-  /* Change background color of the custom radio button when checked */
+
   .q_receipt_page_main input[type="radio"]:checked + span {
     background-color: #FFFFFF;
   }
 
-  /* Optional: Style the label text for better visibility */
   .q_receipt_page_main label {
     cursor: pointer;
   }
 
+
+
+
+
+  .radio-custom:checked ~ label {
+    color: blue;
+  }

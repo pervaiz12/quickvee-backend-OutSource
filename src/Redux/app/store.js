@@ -18,6 +18,8 @@ import systemAccessListingReducer from "../features/SystemAccess/systemAccessSli
 
 import couponListReducer from "../features/Coupon/couponSlice";
 
+import taxesReducer from "../features/Taxes/taxesSlice"
+
 import settingstorealtersReducer from "../features/SettingStoreAlters/SettingStoreAltersSlice"
 
 import SettingReceiptReducer from "../features/StoreSettings/SettingsReceipt/SettingsReceiptSlice";
@@ -38,6 +40,8 @@ const store = configureStore({
 
 
     couponList:couponListReducer,
+
+    taxes: taxesReducer,
 
     systemAccessList:systemAccessListingReducer,
     settingstoreoption: settingstoreoptionReducer,

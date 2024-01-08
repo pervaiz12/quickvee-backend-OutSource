@@ -76,7 +76,7 @@ const SellItems = () => {
                           Sales Tenders
                           <div className="ml-3">
                             <img src={RightIcon} alt="down" className="w-8" />{" "}
-                            {/* Adjust width and height as needed */}
+                           
                           </div>
                         </Link>
                       </div>
@@ -86,7 +86,7 @@ const SellItems = () => {
                       Total: 578.92
                     </th>
                   </tr>
-                  {/* <div className="mt-2 bg-[#000] border-b-2 w-[160%] mb-4"></div> */}
+                  
                 </thead>
                 <tbody className="text-gray-600 text-sm font-light ">
                 <tr>
@@ -95,21 +95,13 @@ const SellItems = () => {
           External Credit
         </div>
         <div className="lg:w-[95%] bg-[#438AFF] rounded h-12 overflow-hidden my-3 mx-4 px-3 md:w-[50%] sm:w-[30%]">
-          {/* First Progress Bar */}
-           {/* <ProgressBar
-            now={progressValue}
-            style={{ backgroundColor: '#fff', borderRadius: '8px' }}
-          />  */}
+       <span className="q_sales_number">$446.58</span>
         </div>
         <div className="text-[18px] font-normal Admin_std text-[#707070] leading-3 mt-2 ml-6">
           Cash
         </div>
         <div className="lg:w-96 bg-[#438AFF] rounded h-12 overflow-hidden my-3 ml-6 md:w-52 sm:w-52">
-          {/* Second Progress Bar */}
-          {/* <ProgressBar
-            now={progressValue1}
-            style={{ backgroundColor: '#438AFF', borderRadius: '8px' }}
-          /> */}
+        <span className="q_sales_number ml-2">$132.34</span>
         </div>
       </td>
     </tr>
