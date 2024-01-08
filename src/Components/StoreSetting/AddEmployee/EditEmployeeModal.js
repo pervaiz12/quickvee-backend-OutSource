@@ -1,163 +1,42 @@
-import React , {useState,useEffect} from "react";
+import { Box, Button, Modal } from '@mui/material';
+import React, { useState } from 'react'
+import EditIcon from "../../../Assests/Category/editIcon.svg";
 import CrossIcon from "../../../Assests/Dashboard/cross.svg";
-import { fetchEmployeeListsData , deleteEmployee } from "../../../Redux/features/StoreSettings/AddEmployee/AddEmployeeSlice";
-import { useSelector, useDispatch } from "react-redux";
-import AddIcon from "../../../Assests/Category/addIcon.svg";
-import Permission from "../../../Assests/Employee/Permission.svg";
-import Delete from "../../../Assests/Employee/Delete.svg";
-import "../../../Styles/Settings/Employee.css"
-import EditEmployeeModal from "./EditEmployeeModal";
-import AddEmployeeFormLogic from "../../StoreSetting/AddEmployee/AddEmployeeFormLogic";
+import EditEmployeeFormLogic from "../../../Components/StoreSetting/AddEmployee/EditEmployeeFormLogic";
 
-
-const EmployeeList = () => {
-    const employeeListDataState = useSelector((state) => state.employeelistData);
-    const [employeeList, setemployeeList] = useState([]);
-    const dispatch = useDispatch();
-    // const [allemployee, setallemployee] = useState([]);
-    const [states, setstates] = useState([]);
-    // const [value, setValue] = useState();
-    // const [inputValue, setInputValue] = useState('');
+const EditEmployeeModal =  ({employee, states , employeeList}) => {
+    const [open, setOpen] = useState(false);
+    const handleOpen = () => setShowModal(true);
+    const handleClose = () => setShowModal(false);
     // const [showModal, setShowModal] = useState(false);
-    const {
-        handleAddEmployeeInput,
-        values,
-        handleAddEmployee,
-        submitmessage,
-        showModal , 
-        setShowModal ,
-        scrollRef,
-        setsubmitmessage,
-      } = AddEmployeeFormLogic({employeeList});
-    
-    useEffect(() => {
-        let data = {
-            merchant_id: "MAL0100CA",
-        };
-        if (data) {
-            dispatch(fetchEmployeeListsData(data));
-        }
-        
-    }, [])
-    
-
     const openModal = () => {
         setShowModal(true);
       };
     const closeModal = () => {
         setShowModal(false);
-        values.firstname = "";
-        values.lastname = "";
-        values.email = "";
-        values.phone = "";
-        values.pin = "";
-        values.wages = "";
-        values.address_line_1 = "";
-        values.city = "";
-        values.zipcode = "";
-        values.state = "";
-       
         values.errors.firstname = "";
         values.errors.lastname = "";
-        values.errors.email = "";
+        values.errors.state = "";
+        values.errors.city = "";
         values.errors.phone = "";
-        values.errors.pin = "";
-        values.errors.wages = "";
-        values.errors.address_line_1 = "";
         values.errors.city = "";
         values.errors.zipcode = "";
-        values.errors.state = "";
       };
 
-    useEffect(() => {
-        if (
-          !employeeListDataState.loading &&
-          employeeListDataState.employeelistData
-        ) {
-            setemployeeList(employeeListDataState.employeelistData);
-                const all_states = employeeListDataState.states;
-                setstates(all_states);
-        }
-      }, [
-        employeeListDataState,
-        employeeListDataState.loading,
-        employeeListDataState.employeelistData,
-      ]);
-
-      const handleDeleteEmployee = (id) => {
-        const del_data = {
-                    merchant_id:"MAL0100CA",
-                    employee_id:id
-                }
-        if(id)
-        {
-            dispatch(deleteEmployee(del_data))
-        }
-      }
+    const {
+        handleEditEmployeeInput,
+        values,
+        handleEditEmployee,
+        submitmessage,
+        showModal , 
+        setShowModal ,
+        scrollRef,
+        setsubmitmessage,
+      } = EditEmployeeFormLogic({employee, employeeList});
 
     return <>
-       <div className="q-attributes-bottom-detail-section">
-        <div className="q-attributes-bottom-header-sticky">
-          <div className="q-attributes-bottom-header">
-            <span>Employee</span>
-            <p className="" onClick={openModal}>
-              Add Employee <img src={AddIcon} alt="add-icon" />
-            </p>
-          </div>
-          <div className="q-attributes-bottom-attriButes-header">
-            <p className="employee-sort">Sort</p>
-            <p className="employee-name">Employee</p>
-            <p className="employee-phone">Phone</p>
-            <p className="employee-email">Email</p>
-            <p className="employee-pin">Pin</p>
-            <p className="employee-role">Role</p>
-            <p className="employee-iconall"></p>            
-          </div>
-        </div>
-
-        <div className="q-attributes-bottom-attriButes-listing">
-            {employeeList &&
-            employeeList.length >= 1 &&
-            employeeList.map((employee, index) => (
-                <div
-                    key={index}
-                    className="q-attributes-bottom-attriButes-single-attributes"
-                >
-                    <p className="employee-sort">A</p>
-                    <p className="employee-name">{employee.f_name} {employee.l_name} </p>
-                    <p className="employee-phone">{employee.phone}</p>
-                    <p className="employee-email">{employee.email}</p>
-                    <p className="employee-pin">{employee.pin}</p>     
-                    <p className="employee-role">{employee.role}</p>      
-                    {/* <p className="employee-iconall"> */}
-                        <div className="qvrow">
-                            <div className="col-qv-4">
-                                <div>
-                                    <img className="employeeicon" alt="Permission-icon" src={Permission}/>
-                                </div>
-                            </div>
-                            <div className="col-qv-4">
-                                <div>
-                                <EditEmployeeModal  employee={employee} states={states} employeeList={employeeList}/>
-                                    {/* <img className="employeeicon" alt="edit-icon" src={Permission} /> */}
-                                </div>
-                            </div>
-                            <div className="col-qv-4">
-                                <div>
-                                    <img className="employeeicon" alt="delete-icon" src={Delete} onClick={() => {
-                                            if (window.confirm("Are you sure you want to delete this employee?")) {
-                                                handleDeleteEmployee(employee.id);
-                                            }
-                                        }}  />
-                                </div>
-                            </div>
-                        </div>
-                    {/* </p>       */}
-                               
-                </div>
-                 ))}  
-            </div>
-
+        <div>
+        <span className='categories-items categories-items-btn' onClick={handleOpen}> <img src={EditIcon} alt="edit-icon" /> </span>
         {showModal && (
           <div className="q-custom-modal-container" id="addemployee">
             {/* Your modal JSX */}
@@ -165,7 +44,7 @@ const EmployeeList = () => {
               {/* Your modal content */}
               <div className="">
                 <p className="q-custom-modal-header ">
-                  Add New Employee
+                  Edit Employee
                   <img
                     src={CrossIcon}
                     alt="icon"
@@ -184,7 +63,7 @@ const EmployeeList = () => {
                             name="firstname"
                             placeholder="First Name"
                             value={values.firstname}
-                            onChange={handleAddEmployeeInput}
+                            onChange={handleEditEmployeeInput}
                             className="q-custom-input-field"
                         />
                         <span className="input-error">
@@ -200,7 +79,7 @@ const EmployeeList = () => {
                             name="lastname"
                             placeholder="Last Name"
                             value={values.lastname}
-                            onChange={handleAddEmployeeInput}
+                            onChange={handleEditEmployeeInput}
                             className="q-custom-input-field"
                         />
                          <span className="input-error">
@@ -216,7 +95,7 @@ const EmployeeList = () => {
                             name="email"
                             placeholder="Email"
                             value={values.email}
-                            onChange={handleAddEmployeeInput}
+                            onChange={handleEditEmployeeInput}
                             className="q-custom-input-field"
                         />
                         <span className="input-error">
@@ -234,7 +113,7 @@ const EmployeeList = () => {
                             name="phone"
                             placeholder="Phone"
                             value={values.phone}
-                            onChange={handleAddEmployeeInput}
+                            onChange={handleEditEmployeeInput}
                             className="q-custom-input-field"
                         />
                         <span className="input-error">
@@ -250,7 +129,7 @@ const EmployeeList = () => {
                             name="pin"
                             placeholder="Pin"
                             value={values.pin}
-                            onChange={handleAddEmployeeInput}
+                            onChange={handleEditEmployeeInput}
                             className="q-custom-input-field"
                         />
                         <span className="input-error">
@@ -266,7 +145,7 @@ const EmployeeList = () => {
                             name="wages"
                             placeholder="Wages Per Hour"
                             value={values.wages}
-                            onChange={handleAddEmployeeInput}
+                            onChange={handleEditEmployeeInput}
                             className="q-custom-input-field"
                         />
                         <span className="input-error">
@@ -284,7 +163,7 @@ const EmployeeList = () => {
                             name="address_line_1"
                             placeholder="Address"
                             value={values.address_line_1}
-                            onChange={handleAddEmployeeInput}
+                            onChange={handleEditEmployeeInput}
                             className="q-custom-input-field"
                         />
                         <span className="input-error">
@@ -300,7 +179,7 @@ const EmployeeList = () => {
                             name="city"
                             placeholder="City"
                             value={values.city}
-                            onChange={handleAddEmployeeInput}
+                            onChange={handleEditEmployeeInput}
                             className="q-custom-input-field"
                         />
                         <span className="input-error">
@@ -315,7 +194,7 @@ const EmployeeList = () => {
                             name="zipcode"
                             placeholder="Zip"
                             value={values.zipcode}
-                            onChange={handleAddEmployeeInput}
+                            onChange={handleEditEmployeeInput}
                             className="q-custom-input-field"
                         />
                         <span className="input-error">
@@ -329,11 +208,11 @@ const EmployeeList = () => {
                         name="state"
                         placeholder="state"
                         className="q-custom-input-field"
-                        onChange={handleAddEmployeeInput}
+                        onChange={handleEditEmployeeInput}
                         >
                         <option value="" >Select a state</option>
                         {states.map((state, index) => (
-                            <option key={index} value={state.State}>{state.State}</option>
+                            <option key={index} value={state.State} selected={(values.state === state.State ) ? 'selected' : '' } >{state.State}</option>
                         ))}
                     </select>
                         
@@ -350,10 +229,10 @@ const EmployeeList = () => {
               
               <div className="q-add-categories-section-middle-footer plr0">
                 <button
-                    onClick={handleAddEmployee}
+                    onClick={handleEditEmployee}
                     className="quic-btn quic-btn-save"
                 >
-                  Add
+                  Update
                 </button>
                 <button
                   onClick={closeModal}
@@ -365,8 +244,10 @@ const EmployeeList = () => {
             </div>
           </div>
         )}
+        
         </div>
+    
     </>
 }
 
-export default EmployeeList
+export default EditEmployeeModal;

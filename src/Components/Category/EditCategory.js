@@ -1,0 +1,418 @@
+import React, { useState, useEffect, useRef } from "react";
+import AddNewCategory from "../../Assests/Category/addIcon.svg";
+import axios from "axios";
+
+import Upload from "../../Assests/Category/upload.svg";
+
+import {  BASE_URL,  EDIT_CATOGRY_DATA,  UPDATE_CATOGRY} from "../../Constants/Config";
+
+import { Link, useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import { deleteCategorybanner } from "../../Redux/features/Categories/categoriesSlice";
+
+import { useNavigate } from "react-router-dom";
+
+const EditCategory = () => {
+
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const [category, setCategory] = useState({
+    collID: "",
+    title: "",
+    description: "",
+    merchant_id: "",
+    show_online: "",
+    use_point: "",
+    earn_point: "",
+    image: "",
+  });
+
+  const params = useParams();
+  async function fetchData() {
+    const getcategoryData = {
+      merchant_id: "MAL0100CA",
+      id: params.categoryCode,
+    };
+
+    try {
+      const response = await axios.post(
+        BASE_URL + EDIT_CATOGRY_DATA,
+        getcategoryData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+
+      if (response.data.status === true) {
+        // console.log(response.data.result)
+        return response.data.result;
+      }
+    } catch (error) {
+      console.error("Error:", error);
+    }
+  }
+
+  useEffect(() => {
+    // Fetch data when the component mounts
+    const fetchDataAndUpdateState = async () => {
+      const res = await fetchData();
+
+      if (res) {
+        // Update the state with the fetched data
+        setCategory({
+          collID: res[0].id,
+          title: res[0].title,
+          description: res[0].description,
+          merchant_id: res[0].merchant_id,
+          show_online: res[0].show_online === "1" ? 1 : 0,
+          use_point:
+            res[0].use_point === "1" ? 1 : res[0].use_point === "0" ? 0 : 0,
+          earn_point:
+            res[0].earn_point === "1" ? 1 : res[0].earn_point === "0" ? 0 : 0,
+          image: res[0].categoryBanner, // Assuming you don't want to pre-fill the image field
+        });
+      }
+    };
+
+    fetchDataAndUpdateState();
+  }, [params.categoryCode]); // Make sure to include params.categoryCode in the dependency array
+
+  const inputChange = (e) => {
+    const { name, value } = e.target;
+    setCategory((preValue) => {
+      return {
+        ...preValue,
+        [name]: value,
+      };
+    });
+  };
+
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImage(reader.result);
+        setCategory((prevValue) => ({
+          ...prevValue,
+          image: {
+            file: file,
+            base64: reader.result,
+          },
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const formData = new FormData();
+    formData.append("collID", category.collID);
+    formData.append("title", category.title);
+    formData.append("description", category.description);
+    formData.append("merchant_id", category.merchant_id);
+    formData.append("show_online", category.show_online);
+    formData.append("use_point", category.use_point);
+    formData.append("earn_point", category.earn_point);
+
+    if (category.image && category.image.base64) {
+      formData.append("image", category.image.base64);
+      formData.append("filename", category.image.file.name);
+    } else {
+      formData.append("image", "");
+      formData.append("filename", "");
+    }
+
+    try {
+      const res = await axios.post(BASE_URL + UPDATE_CATOGRY, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      const data = await res.data.status;
+      const update_message = await res.data.update_message;
+      if (data == "Success") {
+        // alert(update_message);
+        setErrorMessage(" ");
+        let data = {
+          merchant_id: "MAL0100CA",
+        };
+        setSelectedImage(null);
+        navigate("/category");
+      } else if (data == "Failed" && update_message == "*Please enter title") {
+        setErrorMessage(update_message);
+      } else if (
+        data == "Failed" &&
+        update_message == "Category Title Already Exist!"
+      ) {
+        setErrorMessage(update_message);
+      } else if (
+        data == "Failed" &&
+        update_message == "Category ID Not Found"
+      ) {
+        setErrorMessage(update_message);
+      } else if (data == "Failed" && update_message == "Category Not Found") {
+        setErrorMessage(update_message);
+      }
+    } catch (error) {
+      console.error("API Error:", error);
+    }
+  };
+
+  const [errorMessage, setErrorMessage] = useState("");
+  const myStyles = {
+    display: "flex",
+  };
+
+  const renderRemoveBannerButton = () => {
+    if (selectedImage || (category && category.image)) {
+      return (
+        <>
+          <div className="remove-banner-button">
+            <button
+              onClick={(event) =>
+                handleRemoveBanner(event, category.collID, category.image)
+              }
+            >
+              Remove Banner
+            </button>
+          </div>
+
+          <div className="add-category-checkmark-div">
+            <label className="add-category-checkmark-label mt-2">
+              Show Online ?
+              <input
+                type="checkbox"
+                defaultChecked={category.show_online === 1}
+                onChange={(e) =>
+                  setCategory((prevValue) => ({
+                    ...prevValue,
+                    show_online: e.target.checked ? 1 : 0,
+                  }))
+                }
+              />
+              <span className="add-category-checkmark"></span>
+            </label>
+          </div>
+        </>
+      );
+    }
+    return null;
+  };
+
+  const handleRemoveBanner = (event, id, removeitem) => {
+    const data = {
+      id: id,
+      merchant_id: "MAL0100CA",
+      removeitem: removeitem,
+    };
+    const userConfirmed = window.confirm(
+      "Are you sure you want to delete this Category Image ?"
+    );
+    if (userConfirmed) {
+      if (id) {
+        dispatch(deleteCategorybanner(data));
+        setSelectedImage(null);
+        setCategory((prevValue) => ({
+          ...prevValue,
+          image: "",
+        }));
+      }
+    } else {
+      event.preventDefault();
+      setCategory((prevValue) => ({
+        ...prevValue,
+        image: category.image,
+      }));
+      console.log("Deletion canceled by user");
+    }
+  };
+
+  // Function to prevent default behavior for drag over
+  const inputRef = useRef(null);
+
+  const openFileInput = () => {
+    inputRef.current.click();
+  };
+
+  const handleDragOver = (event) => {
+    event.preventDefault();
+  };
+
+  // Function to handle image drop
+  const handleDrop = (event) => {
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setSelectedImage(reader.result);
+        setCategory((prevValue) => ({
+          ...prevValue,
+          image: {
+            file: file,
+            base64: reader.result,
+          },
+        }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  return (
+    <div className="q-category-main-page">
+      <div className="q-category-top-detail-section">
+        <li>In order to use the Quickvee app one Category is required.</li>
+        <li>
+          If you make changes to the Category, the Category status will be
+          pending until the admin approves it.
+        </li>
+        <li>
+          After you've made changes to your menu, select the option "Click Here
+          To Send For Approval To Admin" to get admin approval to update your
+          website.
+        </li>
+      </div>
+
+      <div className="q-add-categories-section">
+        <form>
+          <div className="q-add-categories-section-header">
+            <Link to={`/category`}>
+              <span style={myStyles}>
+                <img src={AddNewCategory} alt="Add-New-Category" />
+                <span className="pl-4">Edit Category</span>
+              </span>
+            </Link>
+          </div>
+          <div className="q-add-categories-section-middle-form">
+            <div className="q-add-categories-single-input">
+              <label for="title">Title</label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                value={category.title}
+                onChange={inputChange}
+              />
+            </div>
+            {errorMessage && (
+              <span className="error-message" style={{ color: "red" }}>
+                {errorMessage}
+              </span>
+            )}
+
+            <div className="q-add-categories-single-input">
+              <label for="description">Description</label>
+              <textarea
+                id="description"
+                name="description"
+                rows="4"
+                cols="50"
+                value={category.description}
+                onChange={inputChange}
+              ></textarea>
+            </div>
+
+            <div
+              className={`h-1/2 w-full h-[100px] flex items-center justify-center border-2 border-dashed border-[#BFBFBF] bg-white rounded-lg mt-2 `}
+              style={{ cursor: "pointer" }}
+              onDragOver={handleDragOver}
+              onDrop={handleDrop}
+              onClick={openFileInput}
+            >
+              <div className="flex-column ">
+                <img
+                  src={Upload}
+                  style={{ transform: "translate(2.5rem, 0px)" }}
+                  alt="Category Banner"
+                />
+                <span>Category Banner</span>
+              </div>
+
+              <div className="q-add-categories-single-input">
+                <input
+                  type="file"
+                  id="image"
+                  name="image"
+                  accept="image/*"
+                  ref={inputRef}
+                  style={{ display: "none", width: "100%" }}
+                  onChange={handleImageChange}
+                />
+              </div>
+            </div>
+
+            {selectedImage && (
+              <div className="image-preview" key={selectedImage}>
+                <img src={selectedImage} alt="Preview" />
+              </div>
+            )}
+
+            {!selectedImage && category.image && (
+              <div className="image-preview">
+                <img
+                  src={`${BASE_URL}/upload/banner/category_banners/${category.merchant_id}/${category.image}`}
+                  alt="Preview"
+                />
+              </div>
+            )}
+
+            {renderRemoveBannerButton()}
+
+            <div className="row " style={myStyles}>
+              <div className="add-category-checkmark-div">
+                <label className="add-category-checkmark-label mt-2">
+                  Use Loyalty Point ?
+                  <input
+                    type="checkbox"
+                    checked={category.use_point === 1}
+                    onChange={(e) =>
+                      setCategory((prevValue) => ({
+                        ...prevValue,
+                        use_point: e.target.checked ? 1 : 0,
+                      }))
+                    }
+                  />
+                  <span className="add-category-checkmark"></span>
+                </label>
+              </div>
+              <div className="add-category-checkmark-div">
+                <label className="add-category-checkmark-label mt-2">
+                  Earn Loyalty Point ?
+                  <input
+                    type="checkbox"
+                    checked={category.earn_point === 1}
+                    onChange={(e) =>
+                      setCategory((prevValue) => ({
+                        ...prevValue,
+                        earn_point: e.target.checked ? 1 : 0,
+                      }))
+                    }
+                  />
+                  <span className="add-category-checkmark"></span>
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div className="q-add-categories-section-middle-footer">
+            <button className="quic-btn quic-btn-save" onClick={handleSubmit}>
+              Save
+            </button>
+
+            <Link to={`/category`}>
+              <button className="quic-btn quic-btn-cancle">Cancel</button>
+            </Link>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default EditCategory;

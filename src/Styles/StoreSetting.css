@@ -1,3 +1,29 @@
+@font-face {
+    font-family: CircularBold;
+    src: url("../Assests/Fonts/circular-bold.TTF");
+}
+
+@font-face {
+    font-family: CircularMedium;
+    src: url("../Assests/Fonts/circulur-medium.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDBlack;
+    src: url("../Assests/Fonts/circulur-std-black.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDBook;
+    src: url("../Assests/Fonts/circulur-std-book.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDMedium;
+    src: url("../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
+}
+
+
 .store-setting-py-4 {
     padding-top: 1rem;
     padding-bottom: 1rem;
@@ -27,6 +53,11 @@
     margin-bottom: 2rem;
 }
 
+.store-setting-mx-2 {
+    margin-left: 2rem;
+    margin-right: 2rem;
+}
+
 .store-setting-store-setting-div {
     height: auto;
 }
@@ -50,15 +81,6 @@
     opacity: 1;
 }
 
-.store-setting-h1 {
-    font-size: 26px;
-}
-
-.store-setting-p {
-    font-size: 16px;
-    color: #7B7B7B;
-}
-
 .store-setting-pt-1-5{
     padding-top: 1.5rem;
 }
@@ -77,13 +99,26 @@
     opacity: 1;
 }
 
-.store-setting-inline-block{
-    display: inline-block;
-}
-
 .store-setting-gry{
     color: #818181;
 }
+
+.store-setting-color-white{
+    color: #fff;
+}
+
+.store-setting-color-black{
+    color: #000;
+}
+
+.store-setting-bg-white{
+    background: #fff;
+}
+
+.store-setting-bg-black{
+    background: #000;
+}
+
 .store-setting-border-gry{
     --tw-border-opacity: 1;
     border-color: rgb(225 225 225 / var(--tw-border-opacity));
@@ -114,4 +149,152 @@
     padding: 8px 25px;
     float: right;
     margin-right: 2.5rem;
+}
+
+.box-padding-5{
+    padding-top: 2rem;
+}
+
+.store-setting-w-full {
+    width: 100%;
+}
+
+.store-setting-checkmark-td{
+    text-align: center;
+}
+
+.store-setting-checkmark-td input{
+    width: 20px;
+    height: 20px;
+}
+
+.store-setting-flex {
+    display: flex;
+    padding: 1rem 2rem 0rem 2rem;
+}
+
+.store-setting-flex-child {
+    flex: 1;
+}  
+
+.store-setting-flex-child:first-child {
+    margin-right: 20px;
+} 
+
+/* store setting alerts css */
+
+.store-setting-main-div{
+    opacity: 1;
+    border-radius: 0.5rem;
+    margin: 2rem 2.5rem;
+    padding: 2rem 2rem 1rem 2rem;
+    --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+
+.store-setting-h2 {
+    font-family:  CircularBold !important;
+    font-size: 18px;
+    display: inline-block;
+}
+
+.store-setting-p{
+    font-family:  CircularSTDBook !important;
+    font-size: 12px;
+    color: #7B7B7B;
+    padding-bottom: 1rem;
+}
+
+.store-setting-head-div{
+    font-family:  CircularSTDBook !important;
+    font-size: 14px;
+    text-align: left;
+    padding-bottom: 0.5rem;
+    color: #6A6A6A;
+}
+
+.store-setting-input-div{
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    /* border: 1px solid #E3E3E3; */
+    border-radius: 4px;
+    overflow: hidden;
+    opacity: 1;
+    margin-bottom: 2rem;
+}
+
+.store-setting-alert-input{
+    font-family:  CircularSTDMedium !important;
+    font-size: 16px;
+    width: 100%;
+    padding: 0.5rem 0.5rem;
+    border: 1px solid #E3E3E3;
+    border-radius: 4px;
+    opacity: 1;
+}
+
+.store-setting-table-div{
+    opacity: 1;
+    border-radius: 0.5rem;
+    margin: 2rem 2.5rem;
+    padding-top: 1.5rem;
+    padding-bottom: 0.5rem;
+    --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+    --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
+    box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 255 255 / var(--tw-bg-opacity));
+}
+.store-setting-table {
+    width: 100%;
+    margin-top: 1.5rem;
+}
+
+.store-setting-table-div p{
+    font-family: CircularSTDBook !important;
+    font-size: 12px;
+    color: #7B7B7B;
+    padding: 1rem 2rem 1rem 2rem;
+}
+.store-setting-table thead {
+    background: #000;
+    color: #fff;
+}
+
+.store-setting-table th {
+    font-family:  CircularSTDBook !important;
+    font-size: 15px;
+    text-align: center;
+    padding: 8px 20px;
+    width: 33.33%;
+}
+
+.store-setting-table-tr td{
+    padding: 1rem 0rem 1rem 2rem;
+}
+
+.store-setting-table-tr{
+    font-family:  CircularSTDMedium !important;
+    font-size: 18px;
+    border-bottom: 1px solid #E8E8E8;
+}
+
+.store-setting-table-p{
+    font-family:  CircularSTDMedium !important;
+    font-size: 16px;
+}
+
+.store-setting-span{
+    font-family:  CircularSTDBook !important;
+    font-size: 12px;
+    color: #7B7B7B;
+    padding-bottom: 1rem;
+}
+
+.store-setting-error{
+    font-family:  CircularSTDBook !important;
+    color: red;
+    font-size: 14px;
 }

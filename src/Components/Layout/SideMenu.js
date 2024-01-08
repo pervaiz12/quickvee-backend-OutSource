@@ -9,8 +9,10 @@ import AttributesIcon from "../../Assests/Dashboard/attributesadmin.svg";
 import PurchaseIcon from "../../Assests/Dashboard/purchesb.svg";
 import ProductIcon from "../../Assests/Dashboard/productb.svg";
 import VenderIcon from "../../Assests/Dashboard/vender.svg";
-import TimesheetIcon from "../../Assests/Dashboard/timesheetb.svg";
-import TimesheetsIcon from "../../Assests/Dashboard/timesheetb.svg";
+
+import TimesheetsIcon from "../../Assests/Dashboard/TimesheetB.svg";
+
+
 import StoreIcon from "../../Assests/Dashboard/store.svg";
 import ReportIcon from "../../Assests/Dashboard/reporting.svg";
 import DashIcon from "../../Assests/Dashboard/dashIcon.svg";
@@ -323,7 +325,16 @@ const menuItems = [
         link: "/store-settings/options",
       },
       // { id: 63, text: "Options", link: "/store-settings/option" },
-      { id: 64, text: "Alters", link: "/store-settings/alters" },
+      // { id: 64, text: "Alters", link: "/store-settings/alters" },
+      {
+        id: 64,
+        icon: <img src={CouponIcon} alt="Alters" className="h-6 w-10 mt-4 mb-4" />,
+        activeIcon: (
+          <img src={CouIcon} alt="Alters" className="h-6 w-10 mt-4 mb-4 " />
+        ),
+        text: "Alters",
+        link: "/store-settings/Alters",
+      },
       { id: 65, text: "Taxes", link: "/store-settings/taxes" },
       // { id: 66, text: "Add Employee", link: "/store-settings/add-employee" },
       {
