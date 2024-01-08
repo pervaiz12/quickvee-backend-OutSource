@@ -209,7 +209,7 @@ select option {
   transition:
     width 2s,
     height 4s;
-  height: 500px;
+  height: 550px;
   width: 90%;
   padding: 12px;
   box-shadow: 0px 3px 6px #0000001f;
@@ -516,4 +516,14 @@ select option {
   color: #818181;
   font-family: 'CircularSTDBook', sans-serif; /* Assuming CircularSTDBook is a font family */
   margin-bottom: 1rem;
+}
+
+
+.q_sales_number{
+  font-size: 18px;
+  color:#ffffff;
+  font-weight: normal;
+  font-family: CircularSTDMedium !important;
+  position: relative;
+  top:14px;
 }
