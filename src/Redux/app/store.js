@@ -20,6 +20,8 @@ import couponListReducer from "../features/Coupon/couponSlice";
 
 import settingstorealtersReducer from "../features/SettingStoreAlters/SettingStoreAltersSlice"
 
+import SettingReceiptReducer from "../features/StoreSettings/SettingsReceipt/SettingsReceiptSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -38,6 +40,9 @@ const store = configureStore({
     systemAccessList:systemAccessListingReducer,
     settingstoreoption: settingstoreoptionReducer,
     settingstorealters: settingstorealtersReducer,
+
+
+    SettingReceiptList: SettingReceiptReducer,
 
 
    
