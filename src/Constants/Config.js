@@ -60,8 +60,12 @@ module.exports = Object.freeze({
 
     // get Store Setting alerts list api
     GET_STORE_ALERTS_DATA:"Store_setting_api/store_alerts_list",
-
+    
     // get Store Setting alerts list api
     UPDATE_STORE_ALERTS_DATA:"Store_setting_api/store_alerts_update",
-
+    
+    // Get Store Setting Receipt List and Update API
+    GET_STORE_RECEIPT_DATA:"Store_setting_api/get_receipt_list",
+    UPDATE_RECEIPT_INFO_DATA:"Store_setting_api/update_receipt_info_list",
+    
   });
