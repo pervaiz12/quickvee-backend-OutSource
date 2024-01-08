@@ -70,11 +70,16 @@ module.exports = Object.freeze({
 
 
 
+      // Purchase API Calls 
+      LIST_ALL_PARCHASE: "Purchase_ordersReactApi/purchase_order_list",
+
+
       // Taxes API Calls 
       ADD_TAXES:"Taxesapi/add_Tax",
       UPDATE_TAXES:"Taxesapi/update_Tax",
       LIST_ALL_TAXES:"Taxesapi/Taxes_list",
       DELETE_SINGLE_TAXE: "Taxesapi/delete_tax",
       TAXE_CATEGORY_LIST: "Taxesapi/Taxes_category_list",
+
     
   });

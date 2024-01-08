@@ -23,6 +23,7 @@ import taxesReducer from "../features/Taxes/taxesSlice"
 import settingstorealtersReducer from "../features/SettingStoreAlters/SettingStoreAltersSlice"
 
 import SettingReceiptReducer from "../features/StoreSettings/SettingsReceipt/SettingsReceiptSlice";
+import PurchaseOrderReducer from "../features/PurchaseOrder/purchaseOrderSlice"
 
 
 const store = configureStore({
@@ -30,6 +31,7 @@ const store = configureStore({
     categories: categoriesReducer,
 
     attributes: attributesReducer,
+    purchase:PurchaseOrderReducer,
 
     inStoreOrder: inStoreOrderReducer,
     onlineStoreOrder: onlineStoreOrderReducer,
