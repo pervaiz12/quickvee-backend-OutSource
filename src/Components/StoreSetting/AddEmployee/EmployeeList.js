@@ -332,7 +332,7 @@ const EmployeeList = () => {
                         onChange={handleAddEmployeeInput}
                         >
                         <option value="" >Select a state</option>
-                        {states.map((state, index) => (
+                        {states && states.map((state, index) => (
                             <option key={index} value={state.State}>{state.State}</option>
                         ))}
                     </select>

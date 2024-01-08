@@ -211,7 +211,7 @@ const EditEmployeeModal =  ({employee, states , employeeList}) => {
                         onChange={handleEditEmployeeInput}
                         >
                         <option value="" >Select a state</option>
-                        {states.map((state, index) => (
+                        {states && states.map((state, index) => (
                             <option key={index} value={state.State} selected={(values.state === state.State ) ? 'selected' : '' } >{state.State}</option>
                         ))}
                     </select>

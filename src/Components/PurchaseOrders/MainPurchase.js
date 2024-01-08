@@ -25,18 +25,11 @@ const MainPurchase = () => {
             type="text"
             placeholder="Search Purchase Order"
             value={searchId}
-
             onChange={inputChange}
-
-            onChange={(e) => setSearchId(e.target.value)}
-
             className="w-full px-4 py-2 border-none focus:outline-none"
           />
  
           <button
-
-            onClick={handleSearch}
-
             className="text-black px-4 py-2 focus:outline-none text-2xl"
           >
             <AiOutlineSearch className="h- w-8  text-[#231F20]" />
