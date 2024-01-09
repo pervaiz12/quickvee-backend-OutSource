@@ -51,7 +51,7 @@ import MainResigtersetting from "./Components/StoreSetting/ResigterSetting/MainR
 import "./Styles/ResigterSettingdata.css";
 import ReceiptMainpage from "./Components/StoreSetting/Receipt/ReceiptMainpage";
 import DailyTtlReport from "./Components/Reporting/DailyReport/DailyTtlReport";
-
+import MainSyastemAccess from "./Components/StoreSetting/SystemAccess/MainSystemAccess";
 
 
 
