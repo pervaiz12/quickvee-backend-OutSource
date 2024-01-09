@@ -37,7 +37,7 @@ module.exports = Object.freeze({
     DELETE_EMPLOYEE:"Store_setting_api/delete_employee",
 
 
-    EMPLOYEE_LIST:"App/employee_list",
+    // EMPLOYEE_LIST:"App/employee_list",
 
     EMPLOYEE_DATA:"Store_setting_api/getEmployeeByEmpid",
     PERMISSIONS_LIST:"Store_setting_api/permission_list",
