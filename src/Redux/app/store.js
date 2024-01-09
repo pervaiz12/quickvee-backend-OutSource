@@ -18,12 +18,20 @@ import systemAccessListingReducer from "../features/SystemAccess/systemAccessSli
 
 import couponListReducer from "../features/Coupon/couponSlice";
 
+import taxesReducer from "../features/Taxes/taxesSlice"
+
+import settingstorealtersReducer from "../features/SettingStoreAlters/SettingStoreAltersSlice"
+
+import SettingReceiptReducer from "../features/StoreSettings/SettingsReceipt/SettingsReceiptSlice";
+import PurchaseOrderReducer from "../features/PurchaseOrder/purchaseOrderSlice"
+
 
 const store = configureStore({
   reducer: {
     categories: categoriesReducer,
 
     attributes: attributesReducer,
+    purchase:PurchaseOrderReducer,
 
     inStoreOrder: inStoreOrderReducer,
     onlineStoreOrder: onlineStoreOrderReducer,
@@ -34,7 +42,14 @@ const store = configureStore({
     couponList:couponListReducer,
     settingStoreOption:settingstoreoptionReducer,
 
+    taxes: taxesReducer,
+
     systemAccessList:systemAccessListingReducer,
+    settingstoreoption: settingstoreoptionReducer,
+    settingstorealters: settingstorealtersReducer,
+
+
+    SettingReceiptList: SettingReceiptReducer,
 
 
    

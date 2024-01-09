@@ -1,0 +1,350 @@
+@font-face {
+    font-family: CircularBold;
+    src: url("../Assests/Fonts/circular-bold.TTF");
+}
+
+@font-face {
+    font-family: CircularMedium;
+    src: url("../Assests/Fonts/circulur-medium.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDBlack;
+    src: url("../Assests/Fonts/circulur-std-black.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDBook;
+    src: url("../Assests/Fonts/circulur-std-book.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDMedium;
+    src: url("../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
+}
+
+
+
+
+
+
+
+.q-reciptpage-main-page {
+    margin: 20px 40px;
+}
+
+.q-reciptpage-top-detail-section {
+    padding: 30px;
+    background: #FFFFFF;
+    box-shadow: 0px 3px 6px #0000001F;
+    border-radius: 8px;
+    margin: 30px 0;
+}
+
+.q_receipt_size_page{
+    color: #000;
+    margin-top:12px;
+    font-family:CircularBold !important;
+    font-size: 18px;
+    text-transform: capitalize;
+}
+.q-reciptpage-top-detail-section li::before {
+    content: '\2022';
+    color: #000;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.q-reciptpage-bottom-detail-section {
+    width: 100%;
+    box-shadow: 0px 3px 6px #0000001F;
+    border-radius: 8px !important;
+}
+
+.q-reciptpage-bottom-header-sticky {
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    border-radius: 8px;
+}
+
+.q-reciptpage-bottom-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.q-reciptpage-bottom-header span {
+    color: #000000;
+    font-size: 18px;
+    font-family: CircularSTDMedium !important;
+}
+
+.q-reciptpage-bottom-header p {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0A64F9;
+    font-family: CircularSTDMedium !important;
+    font-size: 16px;
+}
+
+.q-reciptpage-bottom-header p img {
+    margin-left: 8px;
+}
+
+.q-reciptpage-bottom-attriButes-header {
+    background: #253338;
+    display: flex;
+    padding: 10px 20px;
+}
+
+.q-attributes-bottom-attriButes-header p {
+    color: #FFFFFF;
+    font-size: 15px;
+    font-family: CircularSTDBook !important;
+
+}
+
+
+
+
+
+
+
+
+
+/* add by priya */
+
+.q_setting_main_Section {
+    font-size: 26px;
+    font-family: CircularBold !important;
+    text-align: left;
+    opacity: 1;
+    color: #000000;
+}
+
+.q_resigter_checkboxfiled>ul {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+}
+
+.q_resigter_checkboxfiled>li {
+    list-style-type: none;
+}
+
+.q_resigter_checkboxfiled>li::after {
+    content: "after";
+}
+
+.custom-checkbox-list {
+    list-style-type: none;
+    padding: 0;
+}
+
+.custom-checkbox-list li {
+    margin-bottom: 10px;
+    color: gray;
+    font-size: 14px;
+    font-family: 'CircularSTDBook';
+}
+
+.custom-checkbox-list input {
+    margin-right: 8px;
+}
+
+.q_resigter_checkboxfiled_payment>ul {
+    display: flex;
+    flex-wrap: wrap;
+    width: 100%;
+    justify-content: space-evenly;
+
+}
+
+.q_resigter_label>label {
+    font-size: 16px;
+    font-family: CircularSTDBook;
+    opacity: 1;
+    margin-top: 0.5rem;
+}
+
+.q_input_resigter {
+    border: 2px solid #E3E3E3 !important;
+
+    border-radius: 8px !important;
+    opacity: 1 !important;
+    margin-top: 0.5rem;
+}
+
+.input[type="checkbox" i] {
+    background-color: #1EC26B;
+    border-radius: 5px;
+}
+
+
+
+.q_receipt_page_main {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.q_receipt_page_main input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+
+.q_receipt_page_main:hover input~.checkmark_section {
+    background-color: #ccc;
+}
+
+
+
+
+.checkmark_section:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+label.q_receipt_page_main {
+    color: #6A6A6A;
+font-family: CircularSTDMedium !important ;
+font-weight: 400;}
+
+
+.q_receipt_page_main input:checked~.checkmark_section:after {
+    display: block;
+}
+
+
+.q_receipt_page_main .checkmark_section:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    /* border: solid white; */
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+/* radio css */
+
+
+.q_setting_radio_resigter {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 15px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.q_setting_radio_resigter input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+
+/* Create a custom radio button */
+.checkmark_section {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    border-radius: 50%;
+  }
+
+  .q_setting_radio_resigter:hover input ~ .checkmark_section {
+    background-color: #ccc;
+  }
+
+  .q_setting_radio_resigter input:checked ~ .checkmark_section{
+    background-color: #0A64F9;
+    color: #0A64F9;
+  }
+  
+
+
+  .checkmark_section:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  .q_setting_radio_resigter input:checked ~ .checkmark_section:after {
+    display: block;
+  }
+
+
+  .q_receipt_page_main .checkmark_section:after {
+    top: 3px;
+    left: 4px;
+    width: 13PX;
+    height: 13PX;
+    border: 1px solid #0A64F9;
+    border-radius: 50%;
+    background: #0A64F9;
+}
+
+
+
+.q_receipt_page_main input[type="radio"] {
+    display: none;
+  }
+
+  /* Custom radio button design */
+  .q_receipt_page_main input[type="radio"] + span {
+    width: 24px;
+    height: 24px;
+    border: 2px solid #0A64F9;
+    border-radius: 50%;
+    margin-right: 10px;
+    display: inline-block;
+    position: absolute;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    background-color: #FFFFFF;
+  }
+
+
+  .q_receipt_page_main input[type="radio"]:checked + span {
+    background-color: #FFFFFF;
+  }
+
+  .q_receipt_page_main label {
+    cursor: pointer;
+  }
+
+
+
+
+
+  .radio-custom:checked ~ label {
+    color: blue;
+  }

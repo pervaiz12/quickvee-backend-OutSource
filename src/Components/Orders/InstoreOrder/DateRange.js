@@ -3,6 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FiCalendar } from "react-icons/fi";
 
+
 const DateRange = () => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -19,53 +20,46 @@ const DateRange = () => {
   };
 
   const handleSearch = () => {
-    // Perform search logic here
     console.log("Selected Start Date:", startDate);
     console.log("Selected End Date:", endDate);
   };
 
   const [activeOption, setActiveOption] = useState("Today");
 
-  // Function to set the active option
   const setActive = (option) => {
     setActiveOption(option);
   };
 
-  // Function to check if an option is active
   const isActive = (option) => {
     return option === activeOption;
   };
 
   return (
     <>
-        <div className="q_dateRange_header">
-      
+      <div className="q_dateRange_header">
         <div className="q-datarange-bottom-detail-section">
-         
-            <div className="q_datafilter_section">
-              <div className="text-black text-[18px] font-semibold leading-none mt-2">
-                Date Range
-              </div>
-        
-            
-              <div className="datarange_days_order">
-                {["Today", "Yesterday", "Last 7 Days", "Last 30 days"].map(
-                  (option) => (
-                    <div
-                      key={option}
-                      className={`order_Details_days ${
-                        isActive(option) ? "text-blue-500" : "text-gray-600"
-                      }`}
-                      onClick={() => setActive(option)}
-                    >
-                      {isActive(option) && <div className="dot mr-2" />}
-                      {option}
-                    </div>
-                  )
-                )}
-              </div>
+          <div className="q_datafilter_section">
+            <div className="text-black text-[18px] font-semibold leading-none mt-2">
+              Date Range
             </div>
-          
+
+            <div className="datarange_days_order">
+              {["Today", "Yesterday", "Last 7 Days", "Last 30 days"].map(
+                (option) => (
+                  <div
+                    key={option}
+                    className={`order_Details_days ${
+                      isActive(option) ? "text-blue-500" : "text-gray-600"
+                    }`}
+                    onClick={() => setActive(option)}
+                  >
+                    {isActive(option) && <div className="dot mr-2" />}
+                    {option}
+                  </div>
+                )
+              )}
+            </div>
+          </div>
 
           <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 items-start mt-4 px-8 py-6">
             {/* Start Date */}
@@ -119,8 +113,6 @@ const DateRange = () => {
               >
                 <FiCalendar className="text-black " />
               </span>
-           
-             
             </div>
             <span className="search_btn">
               <button
@@ -129,7 +121,7 @@ const DateRange = () => {
               >
                 Search
               </button>
-              </span>
+            </span>
 
             {/* Search Button */}
           </div>

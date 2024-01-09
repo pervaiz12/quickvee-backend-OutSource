@@ -420,3 +420,97 @@
     justify-content: end;
 
 }
+.custom-text-input {
+    width: 100%;
+    background-color: #fff;
+    color: #000;
+    font-size: 15px; 
+    border: 1px solid #ccc;
+    outline: none;
+    padding: 8px 16px; 
+    border-radius: 4px;
+    -moz-appearance:none; 
+-webkit-appearance:none; 
+appearance:none;
+  }
+  
+  /* Media Queries for Responsive Font Sizes */
+  @media (max-width: 991px) {
+    .custom-text-input {
+      font-size: 12px; /* Medium screens */
+    }
+  }
+  
+  @media (max-width: 767px) {
+    .custom-text-input {
+      font-size: 10px; /* Small screens */
+    }
+  }
+  
+  @media (max-width: 575px) {
+    .custom-text-input {
+      font-size: 8px; /* Extra Small screens */
+    }
+  }
+
+  /* Styles for the container flex div */
+.q-order-page-container {
+    display: flex;
+    flex-direction: column;
+    @media (min-width: 640px) {
+      flex-direction: row;
+    }
+  }
+  
+  /* Styles for each filter container */
+  .q-order-page-filter {
+    flex: 1;
+    margin-bottom: 2rem;
+    @media (min-width: 640px) {
+      margin-right: 2rem;
+    }
+  }
+  
+  /* Styles for the label */
+  .q-order-page-label {
+    display: block;
+    margin-bottom: 1rem;
+    color:#818181;
+    font-family: CircularSTDBook;
+  }
+  
+  /* Styles for the select dropdown */
+  .custom-text-input {
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+  
+  /* Styles for the dropdown arrow */
+  .q-order-page-dropdown-arrow {
+    font-size: 1.5rem;
+    position: relative;
+    right: 1rem;
+    display: flex;
+    flex-flow: row-reverse;
+    top: -2.5rem;
+  }
+  
+  /* Optional: Hide the default arrow on the select dropdown */
+  .custom-text-input::-ms-expand {
+    display: none;
+  }
+  
+
+  .q_order_border{
+    border: 1px solid #EBEBEB;
+    padding: 5px 8px 5px 8px;
+    margin: 0px 8px 8px 8px;
+    border-radius: 4px;
+    color:black !important
+
+  }
+
+  

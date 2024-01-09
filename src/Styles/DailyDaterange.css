@@ -1,0 +1,369 @@
+@font-face {
+    font-family: CircularBold;
+    src: url("../Assests/Fonts/circular-bold.TTF");
+}
+
+@font-face {
+    font-family: CircularMedium;
+    src: url("../Assests/Fonts/circulur-medium.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDBlack;
+    src: url("../Assests/Fonts/circulur-std-black.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDBook;
+    src: url("../Assests/Fonts/circulur-std-book.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDMedium;
+    src: url("../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
+}
+
+
+
+
+
+
+
+.q-attributes-main-page {
+    margin: 0px 40px;
+}
+
+.q-attributes-top-detail-section {
+    padding: 20px;
+    background: #FFFFFF;
+    box-shadow: 0px 3px 6px #0000001F;
+    border-radius: 8px;
+    margin: 30px 0;
+}
+
+.q-attributes-top-detail-section li {
+    color: #818181;
+    list-style-type: none;
+    font-family: CircularSTDBook !important;
+    font-size: 14px;
+    position: relative;
+    padding-left: 20px;
+}
+
+.q-attributes-top-detail-section li::before {
+    content: '\2022';
+    color: #000;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.q-attributes-bottom-detail-section {
+    width: 100%;
+    box-shadow: 0px 3px 6px #0000001F;
+    border-radius: 8px !important;
+}
+
+.q-attributes-bottom-header-sticky {
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    border-radius: 8px;
+}
+
+.q-attributes-bottom-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.q-attributes-bottom-header span {
+    color: #000000;
+    font-size: 18px;
+    font-family: CircularSTDMedium !important;
+}
+
+.q-attributes-bottom-header p {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0A64F9;
+    font-family: CircularSTDMedium !important;
+    font-size: 16px;
+}
+
+.q-attributes-bottom-header p img {
+    margin-left: 8px;
+}
+
+.q-daily-report-bottom-report-header {
+    background: #253338;
+    display: flex;
+    padding: 15px 20px;
+    border-radius: 8px 8px 0px 0px;
+}
+
+.q-daily-report-bottom-report-header p {
+    color: #FFFFFF;
+    font-size: 15px;
+    font-family: CircularSTDBook !important;
+
+}
+
+.report-sort {
+    width:40%;
+}
+
+.report-title {
+    width: 60%;
+
+}
+
+.q-category-bottom-report-listing{
+background-color: #F8F8F8;
+    color: #0A64F9;}
+
+
+.q-attributes-bottom-attriButes-listing {
+    width: 100%;
+    background: #fff;
+    border-radius: 8px;
+}
+
+.q-attributes-bottom-attriButes-single-attributes {
+    display: flex;
+    padding: 20px;
+    border-bottom: 1px solid #E8E8E8;
+    /* cursor: all-scroll; */
+    user-select: none;
+}
+
+.q-attributes-bottom-attriButes-single-attributes>.attriButes-title {
+    font-size: 16px;
+    color: #000000;
+    font-family: CircularSTDMedium !important;
+}
+
+.q-attributes-bottom-attriButes-single-attributes>.attriButes-items {
+    color: #0A64F9;
+    /* cursor: pointer; */
+    font-family: CircularSTDMedium !important;
+    font-size: 16px;
+    text-decoration: underline;
+}
+
+.q-attributes-bottom-attriButes-single-attributes>.attriButes-enable-disable {
+    display: flex;
+    align-items: flex-start;
+    justify-content:flex-end;
+}
+
+.attributes-checkmark-div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 48%;
+}
+
+.attributes-checkmark-div .attributes-checkmark-label {
+    color: #000000;
+    font-family: CircularSTDMedium !important;
+    font-size: 16px;
+    display: block;
+    position: relative;
+    padding-left: 33px;
+    cursor: pointer;
+    font-size: 16px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.attributes-checkmark-div .attributes-checkmark-label input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.attributes-checkmark {
+    position: absolute;
+    top: 2px;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    border-radius: 5px;
+}
+
+
+/* When the checkbox is checked, add a blue background */
+.attributes-checkmark-div .attributes-checkmark-label input:checked~.attributes-checkmark {
+    background-color: #1EC26B;
+    border-radius: 5px;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.attributes-checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+/* Show the checkmark when checked */
+.attributes-checkmark-div .attributes-checkmark-label input:checked~.attributes-checkmark:after {
+    display: block;
+}
+
+/* Style the checkmark/indicator */
+.attributes-checkmark-div .attributes-checkmark-label .attributes-checkmark:after {
+    left: 8px;
+    top: 4px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+
+.attriButes-enable-disable>img {
+    cursor: pointer;
+}
+
+.q-add-attriButes-section {
+    width: 100%;
+    background: #FFFFFF;
+    box-shadow: 0px 3px 6px #0000001F;
+    border-radius: 8px;
+
+}
+
+.q-add-attriButes-section-header {
+    display: flex;
+    padding: 20px;
+    border-bottom: 1px solid #E8E8E8;
+}
+
+.q-add-attriButes-section-header>span {
+    display: flex;
+    width: 190px;
+    justify-content: space-between;
+    cursor: pointer;
+    color: #000000;
+    font-size: 18px;
+    font-family: CircularSTDMedium !important;
+
+}
+
+.q-add-attriButes-section-middle-form {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.q-add-attriButes-section-middle-form>.q-add-attriButes-single-input {
+    display: flex;
+    flex-direction: column;
+}
+
+.q-add-attriButes-single-input>label {
+    color: #818181;
+    font-size: 14px;
+    font-family: CircularSTDBook !important;
+}
+
+.q-add-attriButes-single-input input,
+.q-add-attriButes-single-input textarea {
+    font-family: CircularSTDBook !important;
+    color: #000000;
+    font-size: 15px;
+    outline: none;
+    background: #FFFFFF;
+    border: 1px solid #E1E1E1;
+    border-radius: 4px;
+    padding: 8px;
+    margin: 5px 0 15px 0;
+
+}
+
+.q-add-attriButes-section-middle-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 20px;
+}
+
+.q-add-attriButes-section-middle-footer .quic-btn {
+    font-family: CircularSTDBook !important;
+    font-size: 16px;
+    color: #fff;
+    padding: 10px 40px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.q-add-attriButes-section-middle-footer .quic-btn-save {
+    background: #0A64F9;
+}
+
+.q-add-attriButes-section-middle-footer .quic-btn-cancle {
+    background: #878787;
+    margin-left: 10px;
+}
+
+
+.q-custom-modal-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 50;
+    overflow: auto;
+    background-color: #808080; /* Adjust the color as needed */
+    background-color: rgba(0, 0, 0, 0.75); /* Adjust the opacity as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    
+  }
+  .q-custom-modal-content {
+    position: absolute;
+    top: 35%; 
+    left: 15.66666667%; 
+    width: 70%; 
+    height: 262px; 
+    background-color: #fff;
+    border-radius: 0.5rem; 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    padding: 1.5rem; 
+  }
+  .q-custom-modal-header{
+    font-size: 18px;
+    color: #000;
+    opacity: 1;
+   
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .q-custom-input-field {
+    width: 100%;
+    border: 1px solid #d1d5db; 
+    border-radius: 0.375rem; 
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+  }
+

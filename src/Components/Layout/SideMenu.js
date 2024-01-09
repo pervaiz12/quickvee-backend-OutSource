@@ -325,7 +325,16 @@ const menuItems = [
         link: "/store-settings/options",
       },
       // { id: 63, text: "Options", link: "/store-settings/option" },
-      { id: 64, text: "Alters", link: "/store-settings/alters" },
+      // { id: 64, text: "Alters", link: "/store-settings/alters" },
+      {
+        id: 64,
+        icon: <img src={CouponIcon} alt="Alters" className="h-6 w-10 mt-4 mb-4" />,
+        activeIcon: (
+          <img src={CouIcon} alt="Alters" className="h-6 w-10 mt-4 mb-4 " />
+        ),
+        text: "Alters",
+        link: "/store-settings/Alters",
+      },
       { id: 65, text: "Taxes", link: "/store-settings/taxes" },
       // { id: 66, text: "Add Employee", link: "/store-settings/add-employee" },
       {
@@ -339,7 +348,7 @@ const menuItems = [
       },
       { id: 67, text: "Receipt", link: "/store-settings/receipt" },
       { id: 68, text: "Inventory", link: "/store-settings/inventory" },
-      { id: 69, text: "Register", link: "/store-settings/register" },
+      { id: 69, text: "Register Settings", link: "/store-settings/register" },
       { id: 70, text: "Quick Add", link: "/store-settings/quick-add" },
       { id: 71, text: "System Access", link: "/store-settings/system-access" },
     ],

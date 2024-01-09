@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { AiOutlineSearch } from 'react-icons/ai';
-import { BsChevronDown } from 'react-icons/bs';
+ import DownIcon from '../../../Assests/Dashboard/Down.svg';
 
 
 const FilterEmp = () => {
@@ -26,7 +26,7 @@ const FilterEmp = () => {
     // Set the selected filter for the current option
     setSelectedFilter(filterType);
 
-    // Add any additional logic you need based on the selected filter
+   
   };
 
 
@@ -41,6 +41,7 @@ const FilterEmp = () => {
             onChange={(e) => setSearchId(e.target.value)}
             className="w-full px-4 py-2 border-none focus:outline-none"
           />
+ 
           <button
             onClick={handleSearch}
             className="text-black px-4 py-2 focus:outline-none text-2xl"
@@ -57,56 +58,46 @@ const FilterEmp = () => {
 
       
 
-      <div className="flex flex-col sm:flex-row">
-        <div className="flex-1 mb-2 sm:mb-0 sm:mr-2">
-          <label className="q_order_page_labal" htmlFor="employeeFilter">
-            Employee
-          </label>
-          <select
-            id="employeeFilter"
-            value={selectedFilter === 'employee' ? 'allEmployees' : ''}
-            onChange={(e) => handleFilterChange(e, 'employee')}
-            className="custom-text-input"
-          >
-            <option value="" disabled hidden>Select an option</option>
-            <option value="allEmployees">All Employees</option>
-            {/* Add other options as needed */}
-          </select>
-        </div>
+      <div class="q-order-page-container">
+      <div className="q-order-page-filter">
+      <label className="q-order-page-label" htmlFor="employeeFilter">
+        Employee
+      </label>
+      <select id="employeeFilter" className="custom-text-input">
+        <option value="">Select an option</option>
+        <option value="allEmployees">All Employees</option>
+      </select>
+      <span className="q-order-page-dropdown-arrow">
+        <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
+      </span>
+    </div>
 
-        <div className="flex-1 mb-2 sm:mb-0 sm:mr-2">
-          <label className="q_order_page_labal" htmlFor="transactionFilter">
-            Transaction 
-          </label>
-          <select
-            id="transactionFilter"
-            value={selectedFilter === 'transaction' ? 'allTransactions' : ''}
-            onChange={(e) => handleFilterChange(e, 'transaction')}
-            className="custom-text-input"
-          >
-            <option value="" disabled hidden>Select an option</option>
-            <option value="allTransactions">All Transactions</option>
-  
-            {/* Add other options as needed */}
-          </select>
-        </div>
+  <div class="q-order-page-filter">
+    <label class="q-order-page-label" for="transactionFilter">Transaction</label>
+    <select id="transactionFilter" class="custom-text-input">
+      <option value="" >Select an option</option>
+      <option value="allTransactions">All Transactions</option>
+      
+ 
+    </select>
+    <span className="q-order-page-dropdown-arrow">
+        <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
+      </span>
+  </div>
 
-        <div className="flex-1">
-          <label className="q_order_page_labal" htmlFor="orderStatusFilter">
-            Order Status
-          </label>
-          <select
-            id="orderStatusFilter"
-            value={selectedFilter === 'orderStatus' ? 'orderStatus' : ''}
-            onChange={(e) => handleFilterChange(e, 'orderStatus')}
-            className="custom-text-input"
-          >
-            <option value="" disabled hidden>Select an option</option>
-            <option value="orderStatus">Order Status</option>
-            {/* Add other options as needed */}
-          </select>
-        </div>
-      </div>
+  <div class="q-order-page-filter">
+    <label class="q-order-page-label" for="orderStatusFilter">Order Status</label>
+    <select id="orderStatusFilter" class="custom-text-input">
+      <option value="" >Select an option</option>
+      <option value="orderStatus">Order Status</option>
+      
+    </select>
+    <span className="q-order-page-dropdown-arrow">
+        <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
+      </span>
+  </div>
+</div>
+
     </div>
       <div>
         

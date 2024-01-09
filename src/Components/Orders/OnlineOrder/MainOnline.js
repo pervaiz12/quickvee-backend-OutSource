@@ -7,10 +7,10 @@ import { BsChevronDown } from 'react-icons/bs';
 const MainOnline = () => {
   const [searchId, setSearchId] = useState(""); // State to track search ID
 
-  const handleFilter = (filterType) => {
-    console.log('Selected filter:', filterType);
+  // const handleFilter = (filterType) => {
+  //   console.log('Selected filter:', filterType);
    
-  };
+  // };
 
   const handleSearch = () => {
     console.log("Search ID:", searchId);
@@ -20,7 +20,7 @@ const MainOnline = () => {
 
   const handleFilterChange = (event, filterType) => {
     // Clear selected filter for other options
-    document.getElementById('employeeFilter').selectedIndex = 0;
+ 
     document.getElementById('transactionFilter').selectedIndex = 0;
     document.getElementById('orderStatusFilter').selectedIndex = 0;
 

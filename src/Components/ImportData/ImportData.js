@@ -4,7 +4,7 @@ import { BsDot } from "react-icons/bs";
 const ImportData = () => {
   return (
     <>
-      <div className="q-category-main-page">
+      <div className="q-import-main-page">
       <div className="q-category-top-detail-section flex justify-between w-full">
   <div className="col-span-8 mt-4">
     <div className="CircularSTDBook text-[14px] flex text-[#818181]">
