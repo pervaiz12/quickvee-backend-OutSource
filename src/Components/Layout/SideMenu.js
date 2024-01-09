@@ -138,7 +138,7 @@ const DropdownMenuItem = ({ item }) => {
       </p>
     </div>
     {isDropdownOpen && (
-        <div className="absolute mt-0 bg-[#334247] p-4  shadow w-full text-center  z-10">
+        <div className="q_sideMenu_layout_details">
           {item.dropdownItems.map((dropdownItem) => (
             <Link
               key={dropdownItem.id}
