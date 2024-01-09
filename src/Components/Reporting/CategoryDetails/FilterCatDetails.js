@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
 
-const FilterCatDetails = () => {
+const FilterCatDetails = ({onFilterDataChange, title}) => {
   const [selectedOrderSource, setSelectedOrderSource] = useState("All");
   const [selectedOrderType, setSelectedOrderType] = useState("All");
   const [selectedSelectCategory, setSelectedSelectCategory] = useState("All");
@@ -45,12 +45,16 @@ const FilterCatDetails = () => {
     }
   };
 
+useEffect(() => {
+  onFilterDataChange(selectedOrderSource , selectedOrderType , selectedSelectCategory)
+}, [selectedOrderSource , selectedOrderType , selectedSelectCategory]);
+
   return (
     <>
       <div className="q-category-bottom-detail-section">
         <div className="q-category-bottom-header-sticky">
           <div className="q-category-bottom-header">
-            <div className='q_details_header ml-2'>Category Sale Report</div>
+            <div className='q_details_header ml-2'>{title}</div>
           </div>
           <div className='q_details_header ml-8'>Filter by</div>
         </div>
@@ -72,8 +76,8 @@ const FilterCatDetails = () => {
               {orderSourceDropdownVisible && (
                 <div className="dropdown-content ">
                   <div onClick={() => handleOptionClick("All", "orderSource")}>All</div>
-                  <div onClick={() => handleOptionClick("source1", "orderSource")}>source1</div>
-                  <div onClick={() => handleOptionClick("source2", "orderSource")}>source2</div>
+                  <div onClick={() => handleOptionClick("Online Order", "orderSource")}>Online Order</div>
+                  <div onClick={() => handleOptionClick("Store Order", "orderSource")}>Store Order</div>
                   {/* ... (other order source options) ... */}
                 </div>
               )}
@@ -96,8 +100,8 @@ const FilterCatDetails = () => {
               {orderTypeDropdownVisible && (
                 <div className="dropdown-content">
                   <div onClick={() => handleOptionClick("All", "orderType")}>All</div>
-                  <div onClick={() => handleOptionClick("type1", "orderType")}>type1</div>
-                  <div onClick={() => handleOptionClick("type2", "orderType")}>type2</div>
+                  <div onClick={() => handleOptionClick("Pickup", "orderType")}>Pickup</div>
+                  <div onClick={() => handleOptionClick("Delivery", "orderType")}>Delivery</div>
                   {/* ... (other order type options) ... */}
                 </div>
               )}
