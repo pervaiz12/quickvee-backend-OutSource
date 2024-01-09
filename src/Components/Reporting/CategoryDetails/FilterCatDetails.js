@@ -70,7 +70,7 @@ const FilterCatDetails = () => {
                 <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
               </div>
               {orderSourceDropdownVisible && (
-                <div className="dropdown-content ml-2">
+                <div className="dropdown-content ">
                   <div onClick={() => handleOptionClick("All", "orderSource")}>All</div>
                   <div onClick={() => handleOptionClick("source1", "orderSource")}>source1</div>
                   <div onClick={() => handleOptionClick("source2", "orderSource")}>source2</div>
@@ -94,7 +94,7 @@ const FilterCatDetails = () => {
                 <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
               </div>
               {orderTypeDropdownVisible && (
-                <div className="dropdown-content ml-2">
+                <div className="dropdown-content">
                   <div onClick={() => handleOptionClick("All", "orderType")}>All</div>
                   <div onClick={() => handleOptionClick("type1", "orderType")}>type1</div>
                   <div onClick={() => handleOptionClick("type2", "orderType")}>type2</div>
@@ -118,7 +118,7 @@ const FilterCatDetails = () => {
                 <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
               </div>
               {selectCategoryDropdownVisible && (
-                <div className="dropdown-content ml-2">
+                <div className="dropdown-content">
                   <div onClick={() => handleOptionClick("All", "selectCategory")}>All</div>
                   <div onClick={() => handleOptionClick("category1", "selectCategory")}>category1</div>
                   <div onClick={() => handleOptionClick("category2", "selectCategory")}>category2</div>
