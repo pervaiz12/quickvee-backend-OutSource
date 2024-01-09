@@ -8,6 +8,7 @@ import Delete from "../../../Assests/Employee/Delete.svg";
 import "../../../Styles/Settings/Employee.css"
 import EditEmployeeModal from "./EditEmployeeModal";
 import AddEmployeeFormLogic from "../../StoreSetting/AddEmployee/AddEmployeeFormLogic";
+import { Link } from "react-router-dom";
 
 
 const EmployeeList = () => {
@@ -133,7 +134,9 @@ const EmployeeList = () => {
                         <div className="qvrow">
                             <div className="col-qv-4">
                                 <div>
-                                    <img className="employeeicon" alt="Permission-icon" src={Permission}/>
+                                    <Link to={`/store-settings/permission/${employee.id}`}>
+                                      <img className="employeeicon" alt="Permission-icon" src={Permission}/>
+                                    </Link>
                                 </div>
                             </div>
                             <div className="col-qv-4">
@@ -332,7 +335,7 @@ const EmployeeList = () => {
                         onChange={handleAddEmployeeInput}
                         >
                         <option value="" >Select a state</option>
-                        {states.map((state, index) => (
+                        {states && states.map((state, index) => (
                             <option key={index} value={state.State}>{state.State}</option>
                         ))}
                     </select>

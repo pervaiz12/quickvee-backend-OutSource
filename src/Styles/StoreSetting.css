@@ -115,3 +115,42 @@
     float: right;
     margin-right: 2.5rem;
 }
+
+
+.actual_amt_green_button{
+   
+        color: #00ae68;
+        background-color: transparent;
+        border: 1px solid #00ae68 !important;
+        border-radius: 0;
+        box-shadow: none;
+        width: 100px;
+        font-size: 16px;
+        padding: 5px 10px;
+        display: inline-block;
+        text-align: center;
+        margin-right: 5px;
+        cursor: pointer;
+        font-family: Montserrat,sans-serif;
+        line-height: normal;
+        font-weight: normal;
+    
+}
+
+.actual_amt_cancel_button{
+    color: #ac2925;
+    background-color: transparent;
+    border: 1px solid #ac2925 !important;
+    border-radius: 0;
+    box-shadow: none;
+    width: 100px;
+    font-size: 16px;
+    padding: 5px 10px;
+    display: inline-block;
+    text-align: center;
+    margin-right: 5px;
+    cursor: pointer;
+    font-family: Montserrat,sans-serif;
+    line-height: normal;
+    font-weight: normal;
+}

@@ -23,7 +23,7 @@ const TenderTable = () => {
         <div className='mt-4'>
           <table className="min-w-full divide-y divide-gray-200">
             <thead>
-              <tr className='bg-black h-14'>
+              <tr className='bg-[#253338] h-14'>
                 <th className="px-6 py-3 text-left text-[15px] Admin_std opacity-100 text-white  tracking-wider">
                   Name
                 </th>

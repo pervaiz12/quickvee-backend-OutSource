@@ -562,6 +562,30 @@ const Validation = () => {
       // console.log(foundItem)
       return foundItem;
     };
+
+    const isNumber = (fieldValue,fieldName, updatedErrors) => {
+      if (fieldValue === '') {
+        updatedErrors[fieldName] = 'Please enter '+fieldName+' field ';
+      } else if (emoji.test(fieldValue)) {
+        updatedErrors[fieldName] = 'Emoji not allowed';
+      } else if (!Space.test(fieldValue)) {
+        updatedErrors[fieldName] = 'Space is not allow';
+      } else if (!Numberval.test(fieldValue)) {
+        updatedErrors[fieldName] = 'Only Numbers Allowed';
+      } else {
+        updatedErrors[fieldName] = '';
+      }
+      return updatedErrors;
+    };
+
+    const validateRadioBtn = (value, updatedErrors) => {
+      if (value === '') {
+        updatedErrors.role = 'Please Select one option';
+      } else {
+        updatedErrors.role = '';
+      }
+      return updatedErrors;
+    };
   
     return {
       handleGetVariData,
@@ -599,7 +623,9 @@ const Validation = () => {
       percentOffItem,
       validatePinNumber,
       validateWages,
-      Address_line_1
+      Address_line_1,
+      isNumber,
+      validateRadioBtn
     };
   };
   
