@@ -81,12 +81,12 @@ const FilterEmp = () => {
 
       <div className="bg-white p-4 rounded-md">
       <div className="mb-4">
-        <h3 className="text-[20px] font-normal opacity-100 text-black ml-4 admin_medium">Filter By</h3>
+        <h3 className="text-[20px] font-normal opacity-100 text-black admin_medium">Filter By</h3>
       </div>
 
       
 
-      <div className="q-order-page-container ml-8">
+      <div className="q-order-page-container">
           {/* Employee Dropdown */}
           <div className="q-order-page-filter">
             <label className="q-details-page-label" htmlFor="employeeFilter">
