@@ -25,6 +25,7 @@ import settingstorealtersReducer from "../features/SettingStoreAlters/SettingSto
 import SettingReceiptReducer from "../features/StoreSettings/SettingsReceipt/SettingsReceiptSlice";
 import PurchaseOrderReducer from "../features/PurchaseOrder/purchaseOrderSlice"
 
+import RegisterSettingReducer from "../features/StoreSettings/RegisterSettings/RegisterSettingsSlice";
 
 const store = configureStore({
   reducer: {
@@ -51,7 +52,7 @@ const store = configureStore({
 
     SettingReceiptList: SettingReceiptReducer,
 
-
+    RegisterSettingsData: RegisterSettingReducer,
    
 
   },

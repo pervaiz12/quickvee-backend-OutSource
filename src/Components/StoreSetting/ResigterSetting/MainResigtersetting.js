@@ -1,11 +1,40 @@
-import React, { useState }  from "react";
+import React, { useState,useEffect }  from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {fetchRegisterSettingsData} from "../../../Redux/features/StoreSettings/RegisterSettings/RegisterSettingsSlice";
 import { Box, Collapse, Alert, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { Input } from "@material-tailwind/react";
+import RegisterSettingFormLogic from "./RegisterSettingFormLogic";
 
 const MainResigtersetting = () => {
   const [alertmsg, setAlertMsg] = useState('');
   const [openAlert, setOpenAlert] = useState(true);
+  const RegisterSettings= useSelector((state) => state.RegisterSettingsData);
+  const dispatch = useDispatch();
+  useEffect(() => {
+      let data = {
+          merchant_id: "MAL0100CA",
+      };
+      if (data) {
+          dispatch(fetchRegisterSettingsData(data));
+      }
+  }, [])
+
+  useEffect(() => {
+    console.log(values)
+
+  }, [RegisterSettings])
+  
+  const {
+    handleEditEmpPermissionInput,
+    values,
+    handleEditEmpPermission,
+    submitmessage,
+    showModal , 
+    setShowModal ,
+    scrollRef,
+    setsubmitmessage,
+  } = RegisterSettingFormLogic({RegisterSettings});
 
   const handleSubmit = () => {
    
@@ -40,7 +69,7 @@ const MainResigtersetting = () => {
             <ul className="custom-checkbox-list flex space-x-5">
         
         <label class="q_resigter_setting_section">Stock Prompt
-          <input type="checkbox" checked="checked" /> 
+          <input type="checkbox" name="regi_setting[]" checked="checked" value={values.regi_setting}/> 
           <span class="checkmark"></span>
         </label>
         
@@ -249,7 +278,10 @@ If bar code scanned is not found</div>
               Idle Logout
             </label>
             <div className="w-full">
-              <Input className="q_input_resigter" placeholder=" enter idle logout" />
+              <Input className="q_input_resigter" name="idel_logout" value={values.idel_logout} placeholder="Enter idle logout" />
+              <span className="input-error">
+                {values.errors.idel_logout !== "" ? values.errors.idel_logout : ""}
+              </span>
             </div>
           </div>
           <div className="q_resigter_label">
@@ -257,8 +289,11 @@ If bar code scanned is not found</div>
               device name
             </label>
             <div className="w-full">
-              <Input className="q_input_resigter" placeholder="enter device name"/>
+              <Input className="q_input_resigter" name="device_name" value={values.devicename} placeholder="Enter device name"/>
             </div>
+            <span className="input-error">
+                {values.errors.device_name !== "" ? values.errors.device_name : ""}
+            </span>
           </div>
         </div>
       </div>
@@ -283,18 +318,17 @@ If bar code scanned is not found</div>
             <ul className="custom-checkbox-list flex space-x-5">
               <label class="q_setting_radio_resigter">
               All the Sale
-                <input type="radio" checked="checked" name="radio" />
+                <input type="radio"  name="customer_loyalty" value="1" checked={values.customer_loyalty === "1" }  />
                 <span class="checkmark_section"></span>
               </label>
-
               <label class="q_setting_radio_resigter">
               Prompt to Create a Customer
-                <input type="radio" checked="checked" name="radio" />
+                <input type="radio"  name="customer_loyalty" value="2" checked={values.customer_loyalty === "2" }  />
                 <span class="checkmark_section"></span>
               </label>
               <label class="q_setting_radio_resigter">
               Require a Customer be Created
-                <input type="radio" checked="checked" name="radio" />
+                <input type="radio" name="customer_loyalty" value="3" checked={values.customer_loyalty === "3" } />
                 <span class="checkmark_section"></span>
               </label>
             </ul>
