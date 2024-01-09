@@ -589,6 +589,7 @@ margin-bottom: 10px;
 
 
 
+
 .q_order_page_labal{
   display: block;
   font-size: 16px;
@@ -606,5 +607,11 @@ margin-bottom: 10px;
   font-family: CircularSTDMedium !important;
   position: relative;
   top:14px;
+}
+
+
+.permiddion_heading{
+  width:100%;
+  height: auto;
 }
 

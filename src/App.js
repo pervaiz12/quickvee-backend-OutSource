@@ -22,6 +22,7 @@ import AddCoupon from "./Components/Coupons/AddCoupon";
 // import MainStoreSetting from "./Components/StoreSetting/MainStoreSetting";
 import MainReport from "./Components/ReportSetting/MainReport";
 import MainAddEmployee from "./Components/StoreSetting/AddEmployee/MainAddEmployee";
+import Permission from "./Components/StoreSetting/AddEmployee/Permission";
 import MainSyastemAccess from "./Components/StoreSetting/SystemAccess/MainSystemAccess";
 // import Info from "./Components/StoreSetting/SubSetting/Info";
 import MainTaxes from "./Components/StoreSetting/SubSetting/Taxes/MainTaxes";
@@ -87,6 +88,7 @@ function App() {
           <Route path="/store-settings/options"  element={<MainStoreOption />} />
           <Route path="/store-settings/addemployee"  element={<MainAddEmployee />} />
 
+
           <Route path="/store-settings/system-access"  element={<MainSyastemAccess />} />
           <Route path="/store-settings/Alters"  element={<MainStoreAlters />} />
 
@@ -95,6 +97,11 @@ function App() {
           <Route path="/store-settings/daily-total-report" element={<DailyTtlReport />}/>
           <Route path="/store-settings/Details-category" element={<MainCatedetails />}/>
         
+
+
+          <Route path="/store-settings/permission/:employee_id"  element={<Permission />} />
+          {/* <Route path="/store-settings/system-access"  element={<MainSyastemAccess />} /> */}
+          
 
         </Route>
       </Routes>

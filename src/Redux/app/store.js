@@ -40,6 +40,7 @@ const store = configureStore({
 
 
     couponList:couponListReducer,
+    settingStoreOption:settingstoreoptionReducer,
 
     taxes: taxesReducer,
 
