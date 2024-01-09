@@ -23,7 +23,7 @@ import AddCoupon from "./Components/Coupons/AddCoupon";
 import MainReport from "./Components/ReportSetting/MainReport";
 import MainAddEmployee from "./Components/StoreSetting/AddEmployee/MainAddEmployee";
 import Permission from "./Components/StoreSetting/AddEmployee/Permission";
-
+import MainSyastemAccess from "./Components/StoreSetting/SystemAccess/MainSystemAccess";
 // import Info from "./Components/StoreSetting/SubSetting/Info";
 import MainTaxes from "./Components/StoreSetting/SubSetting/Taxes/MainTaxes";
 
