@@ -46,10 +46,12 @@ import "./Styles/ImportData.css";
 import "./Styles/DailyDaterange.css";
 
 import "./Styles/ReceiptMainpage.css";
+import "./Styles/MainCatedetails.css";
 import MainResigtersetting from "./Components/StoreSetting/ResigterSetting/MainResigtersetting";
 import "./Styles/ResigterSettingdata.css";
 import ReceiptMainpage from "./Components/StoreSetting/Receipt/ReceiptMainpage";
 import DailyTtlReport from "./Components/Reporting/DailyReport/DailyTtlReport";
+import MainCatedetails from "./Components/Reporting/CategoryDetails/MainCatedetails";
 
 
 
@@ -91,6 +93,7 @@ function App() {
           <Route path="/store-settings/register" element={<MainResigtersetting />} />
           <Route path="/store-settings/receipt" element={<ReceiptMainpage />} />
           <Route path="/store-settings/daily-total-report" element={<DailyTtlReport />}/>
+          <Route path="/store-settings/Details-category" element={<MainCatedetails />}/>
         
 
         </Route>
