@@ -12,19 +12,25 @@ const InventoryData = () => {
   const label = { inputProps: { "aria-label": "Switch demo" } };
 
   const [isSwitchEnabledCost, setIsSwitchCost] = useState(false);
+  //=============================================
   const [isSwitchEnabled, setIsSwitchEnabled] = useState(false);
-  const [isExpiration, setExpiration] = useState(false);
-  const [isUpdateItem, setUpdateItemVendor] = useState(false);
-  const [isInstantPos, setInstantPos] = useState(false);
   const [isCheckBirthday, setCheckBirthday] = useState(false);
-  const [disableCheckboxes, setDisableCheckboxes] = useState(false);
+  const [isExpiration, setExpiration] = useState(false);
+  const [checkedBirthDayChecked, setirthDayChecked] = useState(false);
+  const [ExpirationIdChecked, setExpirationIdChecked] = useState(false);
+  // =========================================================
+  const [isUpdateItem, setUpdateItemVendor] = useState(false);
+  // Require Description for Instant POs
+  const [isInstantPos, setInstantPos] = useState(false);
 
+  const [disableCheckboxesCost, setDisableCheckboxesCost] = useState(false);
 
-
-  const [inventory, setallInventory] = useState({
+  const [inventory, setAllInventory] = useState({
     cost_method: "",
-    age_verify: [],
-    inv_setting: [],
+    age_verify_birthday: "",
+    age_verify_expiration: "",
+    inv_setting_update: "",
+    inv_setting_require: "",
     cost_per: "",
     by_scanning: "",
   });
@@ -50,91 +56,48 @@ const InventoryData = () => {
       AllInventoryAccessState.inventoryData
     ) {
       // console.log(AllInventoryAccessState.inventoryData)
-      setallInventory(AllInventoryAccessState.inventoryData);
+      setAllInventory(AllInventoryAccessState.inventoryData);
     }
   }, [AllInventoryAccessState.loading]);
 
-  const handleCheckIdBirthdayChange = (e) => {
-    const { value, checked } = e.target;
-    setallInventory((prevState) => ({
-      ...prevState,
-      age_verify: checked
-        ? [...prevState.age_verify, value]
-        : prevState.age_verify.filter((item) => item !== value),
-    }));
-  };
-
-  const handleCheckIDChange = (e) => {
-    const { value, checked } = e.target;
-    setallInventory((prevState) => ({
-      ...prevState,
-      age_verify: checked
-        ? [...(prevState.age_verify || []), value]
-        : (prevState.age_verify || []).filter((item) => item !== value),
-    }));
-  };
-
-  const handleInstantPosChange = (e) => {
-    const { name, checked } = e.target;
-    setallInventory((prevState) => ({
-      ...prevState,
-      [name]: checked,
-    }));
-  };
-
-  const handleUpdateItemChange = (e) => {
-    const { value, name, checked } = e.target;
-
-    setallInventory((prevState) => {
-      const currentArray = Array.isArray(prevState[name])
-        ? prevState[name]
-        : [];
-
-      const updatedValue = checked
-        ? [...currentArray, value]
-        : currentArray.filter((item) => item !== value);
-
-      return {
-        ...prevState,
-        [name]: updatedValue,
-      };
-    });
-  };
-
   const IsBirthdaytoggleInput = () => {
     setCheckBirthday(!isCheckBirthday);
+    // setCheckBirthday(prevState => !prevState);
+    console.log(isCheckBirthday);
   };
-  const CheckBirthdayPrompt = (valueToMatch) => {
-    if (inventory && inventory.age_verify) {
-      const isValuePresent = inventory.age_verify.includes(valueToMatch);
-
-      if (isValuePresent) {
-        return true;
-      }
-    }
-  };
+  // const CheckBirthdayPrompt = (valueToMatch) => {
+  //   if (inventory && inventory.age_verify) {
+  //     const isValuePresent = inventory.age_verify.includes(valueToMatch);
+  //     if (isValuePresent) {
+  //       return true;
+  //     }
+  //   }
+  // };
 
   const IsExpirationtoggleInput = () => {
     setExpiration(!isExpiration);
   };
-  const CheckExpiration = (valueToMatch) => {
-    if (inventory && inventory.age_verify) {
-      const isValuePresent = inventory.age_verify.includes(valueToMatch);
+  // const CheckExpiration = (valueToMatch) => {
+  //   // debugger;
+  //   if (inventory && inventory.age_verify) {
+  //     const isValuePresent = inventory.age_verify.includes(valueToMatch);
 
-      if (isValuePresent) {
-        return true;
-      }
+  //     if (isValuePresent) {
+  //       return true;
+  //     }
+  //   }
+  // };
+
+  //Update Item Vendor Cost from POs
+  const IsUpdatetoggleInput = () => {
+    // Uncheck and disable the corresponding checkbox when isSwitchEnabledCost is true
+    if (isSwitchEnabledCost) {
+      setUpdateItemVendor(false);
+    } else {
+      setUpdateItemVendor(!isUpdateItem);
     }
   };
-
-  const IsUpdatetoggleInput = () => {
-    setUpdateItemVendor(!isUpdateItem);
-  };
   const CheckUpdateItemVendor = (valueToMatch) => {
-    // if (Array.isArray(inventory.inv_setting)) {
-    //   return inventory.inv_setting.includes(valueToMatch);
-    // }
-    // return true;
     if (inventory && inventory.inv_setting) {
       const isValuePresent = inventory.inv_setting.includes(valueToMatch);
 
@@ -144,97 +107,125 @@ const InventoryData = () => {
     }
   };
 
+  // Require Description for Instant POs
   const IsInstanttoggleInput = () => {
     setInstantPos(!isInstantPos);
   };
-  const CheckInstantPOs = (valueToMatch) => {
-    // if (Array.isArray(inventory.inv_setting)) {
-    //   return inventory.inv_setting.includes(valueToMatch);
-    // }
-    // return true;
-    if (inventory && inventory.inv_setting) {
-      const isValuePresent = inventory.inv_setting.includes(valueToMatch);
 
-      if (isValuePresent) {
-        return true;
-      }
-    }
-  };
+  // const CheckInstantPOs = (valueToMatch) => {
+  //   if (inventory && inventory.inv_setting) {
+  //     const isValuePresent = inventory.inv_setting.includes(valueToMatch);
+  //     //console.log("ccccc",isValuePresent);
+  //     return isValuePresent;
 
+  //   }
+  //   return false;
+  // };
 
-
-
-
-
-
+  //console.log("Instant Pos", isInstantPos);
 
   const handleCostPerChange = (e) => {
     const { name, value } = e.target;
     const numericValue = value.replace(/[^0-9.]/g, "");
 
-    setallInventory((prevState) => ({
+    setAllInventory((prevState) => ({
       ...prevState,
       [name]: numericValue,
     }));
   };
 
-  // useEffect(() => {
-  //   if (inventory && inventory.cost_method && inventory.cost_method == 1) {
-  //     setIsSwitchCost(true);
-  //   } else {
-  //     setIsSwitchCost(false);
-  //   }
-  // }, [inventory]);
-
-
   useEffect(() => {
-    if (inventory && inventory.cost_method && inventory.cost_method == 1) {
+    if (inventory && inventory.cost_method && inventory.cost_method == "1") {
       setIsSwitchCost(true);
+      // If cost_method is on, disable and uncheck the corresponding checkbox
+      setDisableCheckboxesCost(true);
+      setUpdateItemVendor(false);
     } else {
       setIsSwitchCost(false);
+      setDisableCheckboxesCost(false);
     }
   }, [inventory]);
 
-
+  const handleEnablePickup = () => {
+    setIsSwitchEnabled(!isSwitchEnabled);
+    // setcheckedBirthDay(true)
+    setCheckBirthday(false);
+    setExpiration(false);
+    setirthDayChecked(!checkedBirthDayChecked);
+    setExpirationIdChecked(!ExpirationIdChecked);
+  };
 
   useEffect(() => {
-    if (inventory && inventory.by_scanning  && isSwitchEnabled) {
-      console.log("by_scanning value:", inventory.by_scanning);
-      // setIsSwitchEnabled(true);
-      
-      setCheckBirthday(false);
-      setExpiration(false);
-
-
+    if (
+      inventory &&
+      inventory.by_scanning &&
+      inventory.by_scanning.includes("1")
+    ) {
+      setIsSwitchEnabled(true);
     } else {
-      // setIsSwitchEnabled(false);
+      setIsSwitchEnabled(false);
+    }
+
+    if (inventory && inventory.cost_method && isSwitchEnabledCost) {
+      setDisableCheckboxesCost(true);
+    } else {
+      setDisableCheckboxesCost(false);
+    }
+    if (
+      inventory &&
+      inventory.inv_setting &&
+      inventory.inv_setting.includes("2")
+    ) {
+      setInstantPos(true);
+    } else {
+      setInstantPos(false);
+    }
+    if (
+      inventory &&
+      inventory.inv_setting &&
+      inventory.inv_setting.includes("1")
+    ) {
+      setUpdateItemVendor(true);
+    } else {
+      setUpdateItemVendor(false);
+    }
+    if (
+      inventory &&
+      inventory.age_verify &&
+      inventory.age_verify.includes("1")
+    ) {
       setCheckBirthday(true);
-      setExpiration(true);
-    }
-  }, [inventory , isSwitchEnabled]);
-
- 
-
-  useEffect(() => {
-    if (inventory && inventory.by_scanning && isSwitchEnabled) {
-      setDisableCheckboxes(true);
-      
+      setIsSwitchEnabled(false);
+      setirthDayChecked(false);
     } else {
-      setDisableCheckboxes(false);
-      
+      setCheckBirthday(false);
     }
-  }, [inventory, isSwitchEnabled]);
-
+    if (
+      inventory &&
+      inventory.age_verify &&
+      inventory.age_verify.includes("2")
+    ) {
+      setExpiration(true);
+      setIsSwitchEnabled(false);
+      setExpirationIdChecked(false);
+    } else {
+      setExpiration(false);
+    }
+  }, [inventory, isSwitchEnabledCost]);
 
   const handleSave = () => {
     const data = {
-      merchant_id: "",
+      merchant_id: "MAL0100CA",
       cost_method: isSwitchEnabledCost ? "1" : "2",
-      age_verify: isCheckBirthday ? ["1"] : ["2"],
+      age_verify_birthday: isCheckBirthday ? "1" : "0",
+      age_verify_expiration: isExpiration ? "1" : "0",
+      inv_setting_update: isUpdateItem ? "1" : "0",
+      inv_setting_require: isInstantPos ? "1" : "0",
       by_scanning: isSwitchEnabled ? "1" : "0",
-      inv_setting: isUpdateItem ? ["1"] : ["2"],
       cost_per: inventory.cost_per,
     };
+
+    console.log(data);
     dispatch(updateInventoryData(data));
   };
 
@@ -249,7 +240,11 @@ const InventoryData = () => {
                 {...label}
                 name="cost_method"
                 checked={isSwitchEnabledCost}
-                onChange={() => setIsSwitchCost(!isSwitchEnabledCost)}
+                onChange={() => {
+                  setIsSwitchCost(!isSwitchEnabledCost);
+
+                  IsUpdatetoggleInput();
+                }}
               />
             </div>
           </h5>
@@ -265,7 +260,8 @@ const InventoryData = () => {
                 {...label}
                 name="by_scanning"
                 checked={isSwitchEnabled}
-                onChange={() => setIsSwitchEnabled(!isSwitchEnabled)}
+                // onChange={() => setIsSwitchEnabled(!isSwitchEnabled)}
+                onChange={handleEnablePickup}
               />
             </div>
           </h6>
@@ -277,15 +273,13 @@ const InventoryData = () => {
                 type="checkbox"
                 className="psize-input psize-input"
                 id="checkbox1"
-                name="age_verify[]"
-
-                // defaultChecked={isCheckBirthday}
-                // onChange={() => setCheckBirthday((prev) => !prev)}
-                defaultChecked={CheckBirthdayPrompt(1)}
+                name="age_verify_birthday"
                 value={isCheckBirthday}
+                // defaultChecked={!isSwitchEnabled && CheckBirthdayPrompt(1)}
+                checked={isCheckBirthday}
                 onChange={IsBirthdaytoggleInput}
-                // disabled={!isCheckBirthday}
-                disabled={disableCheckboxes}
+                // disabled={disableCheckboxes || isSwitchEnabled}
+                disabled={checkedBirthDayChecked}
               />
               <span className="qv_add_checkmark"></span>
             </label>
@@ -296,14 +290,13 @@ const InventoryData = () => {
               <input
                 type="checkbox"
                 id="checkbox2"
-                name="age_verify[]"
-                // defaultChecked={isExpiration}
-                // onChange={() => setExpiration((prev) => !prev)}
-                defaultChecked={CheckExpiration(2)}
+                name="age_verify_expiration"
+                // defaultChecked={!isSwitchEnabled && CheckExpiration(2)}
+                checked={isExpiration}
                 value={isExpiration}
                 onChange={IsExpirationtoggleInput}
-                // disabled = {!isExpiration}
-                disabled={disableCheckboxes}
+                // disabled={disableCheckboxes || isSwitchEnabled}
+                disabled={ExpirationIdChecked}
               />
               <span className="qv_add_checkmark"></span>
             </label>
@@ -318,18 +311,16 @@ const InventoryData = () => {
           <div className="qvrow chkpp">
             <div className="qv_checkbox">
               <label className="qv_checkbox_add_checkmark_label">
-                Update Item Vendor Cost from PO
+                Update Item Vendor Cost from POs
                 <input
                   type="checkbox"
                   className="psize-input psize-input"
                   id="inv_setting1"
-                  name="inv_setting[]"
-                  // defaultChecked={CheckUpdateItemVendor("1")}
-                  // onChange={handleUpdateItemChange}
-                  defaultChecked={CheckUpdateItemVendor(1)}
-                  value={isExpiration}
+                  name="inv_setting_update"
+                  defaultChecked={!isUpdateItem && CheckUpdateItemVendor(1)}
+                  value={isUpdateItem}
                   onChange={IsUpdatetoggleInput}
-                  disabled={isSwitchEnabledCost}
+                  disabled={disableCheckboxesCost || isSwitchEnabledCost}
                 />
                 <span className="qv_add_checkmark"></span>
               </label>
@@ -340,10 +331,8 @@ const InventoryData = () => {
                 <input
                   type="checkbox"
                   id="inv_setting2"
-                  name="inv_setting[]"
-                  // defaultChecked={CheckInstantPOs("2")}
-                  // onChange={handleInstantPosChange}
-                  defaultChecked={CheckInstantPOs(3)}
+                  name="inv_setting_require"
+                  defaultChecked={!isInstantPos}
                   value={isInstantPos}
                   onChange={IsInstanttoggleInput}
                 />

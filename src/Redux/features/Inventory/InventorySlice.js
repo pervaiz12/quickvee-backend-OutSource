@@ -36,7 +36,7 @@ export const fetchInventoryListData = createAsyncThunk('inventoryDataList/fetchI
   
         if (response.data.status === true) {
             // If the API response has a true status, return the data
-            console.log('AAAAAAAAAAAAAAAAAAAAA',response.data.data.age_verify.includes("1"))
+            // console.log('data is : ',response.data.data.age_verify.includes("1"))
             return response.data.data;
             
           } else {
