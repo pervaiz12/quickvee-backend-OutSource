@@ -58,9 +58,9 @@ const Permission = () => {
       function MyComponent(permissionList) {
       
             let index = 0;
-            console.log('aaa')
+            
             for (const key in permissionList) {
-                console.log('aaa')
+                
                 if (permissionList.hasOwnProperty(key)) {
                     // Create an object with a single key-value pair and push it to the array
                     const obj = {};
@@ -70,7 +70,7 @@ const Permission = () => {
                 }
             }
             setPermissionArray(permissionList_arr)
-            console.log(permissionList_arr)
+           
             return (
                 <div>
                    <h1>{JSON.stringify(permissionList_arr)} </h1> {JSON.stringify(permissionList_arr)}  {/* Just for demonstration */}
@@ -79,7 +79,7 @@ const Permission = () => {
         }
 
       useEffect(() => {
-      console.log(employeedata)
+    //   console.log(employeedata)
     //    console.log(permissionList)
        MyComponent(permissionList)
       }, [permissionList , employeedata])
@@ -188,12 +188,12 @@ const Permission = () => {
                 const idArray = values.permissions.split(',');
                
                 return (
-                    <div className='box_shadow_innerdiv'>
+                    <div key={key} className='box_shadow_innerdiv'>
                         <h2 className='heading_black'>{key}</h2>
                         
                         <div className="qvrow">
                         {item[key].map((subItem, subIndex) => (  
-                            <div className="col-qv-3">
+                            <div key={subIndex} className="col-qv-3">
                                 <div className='checkbox_space'>
                                     <div className="qv_checkbox">
                                         <label className="qv_checkbox_add_checkmark_label">{subItem.sub_permission}
@@ -270,11 +270,11 @@ const Permission = () => {
 
         <div className='qvrow'>
             <div className='col-qv-12'>
-                <div class="q-add-categories-section-middle-footer">
-                    <button class="quic-btn quic-btn-save"  onClick={handleEditEmpPermission} >Update</button>
+                <div className="q-add-categories-section-middle-footer">
+                    <button className="quic-btn quic-btn-save"  onClick={handleEditEmpPermission} >Update</button>
                     
                     <Link to={`/store-settings/addemployee`}>
-                    <button class="quic-btn quic-btn-cancle">Cancel</button>
+                    <button className="quic-btn quic-btn-cancle">Cancel</button>
                     </Link>
                 </div>
             </div>

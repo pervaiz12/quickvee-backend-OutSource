@@ -565,7 +565,7 @@ const Validation = () => {
 
     const isNumber = (fieldValue,fieldName, updatedErrors) => {
       if (fieldValue === '') {
-        updatedErrors[fieldName] = 'Please enter '+fieldName+' field ';
+        updatedErrors[fieldName] = 'This field is required';
       } else if (emoji.test(fieldValue)) {
         updatedErrors[fieldName] = 'Emoji not allowed';
       } else if (!Space.test(fieldValue)) {

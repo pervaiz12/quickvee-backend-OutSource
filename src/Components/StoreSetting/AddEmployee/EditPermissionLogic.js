@@ -68,7 +68,7 @@ const EditPermissionLogic = ({employeedata}) => {
                     permissionsArray.push(event.target.value);
                 }
                 const updatedPermissions = permissionsArray.join(',');
-                console.log(updatedPermissions);
+                // console.log(updatedPermissions);
                 setValues({
                     ...values, // Spread the existing state
                     permissions: updatedPermissions, // Update only the permissions property
@@ -88,15 +88,15 @@ const EditPermissionLogic = ({employeedata}) => {
 
 
       const handleEditEmpPermission = async (e) => {
-        console.log('222');
+        // console.log('222');
         e.preventDefault();
         let { errors } = values;
         await isNumber(values.break_allowed,'break_allowed', errors);
         await isNumber(values.break_time,'break_time', errors);
-        await isNumber(values.break_allpaid_breaksowed,'paid_breaks', errors);
+        await isNumber(values.paid_breaks,'paid_breaks', errors);
         await validateRadioBtn(values.role,errors);
     
-        if (errors.break_allowed === ""  ) {
+        if (errors.break_allowed === "" && errors.break_time === "" && errors.paid_breaks === "" && errors.role === ""  ) {
           const data = {
             "merchant_id":"MAL0100CA",
             "admin_id":"MAL0100CA",
@@ -108,23 +108,23 @@ const EditPermissionLogic = ({employeedata}) => {
             "permissions":values.permissions
 
           }
-          console.log(data);
+          // console.log(data);
           try {
             const response = await axios.post(BASE_URL + UPDATE_PERMISSION, data, { headers: { "Content-Type": "multipart/form-data" } })
-            console.log(response.data);
+            
             if ( response.data.status === true) {
               alert(response.data.message)
-              console.log('22311');
+              
             }
             else {
-              console.log('33');
+             
               alert(response.data.message)
             //   await handleScrollClick()
                setsubmitmessage(response.data.message);
                setShowModal(true)
             }
           } catch (error) {
-            console.log('33 catch err');
+            // console.log('33 catch err');
             return new Error(error)
           }
         }
