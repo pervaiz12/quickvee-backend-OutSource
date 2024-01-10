@@ -30,6 +30,12 @@ const DailyReportList = ({data}) => {
     return <div className="empty-div">No data available</div>;
   }
 
+  const formatDate = (dateString) => {
+    const options = { day: '2-digit', month: 'short', year: 'numeric' };
+    const formattedDate = new Date(dateString).toLocaleDateString('en-GB', options);
+    return formattedDate;
+  };
+
   const renderDataTable = () => {
     // console.log(dailyreport)
     if (
@@ -51,7 +57,7 @@ const DailyReportList = ({data}) => {
           {dailyreport.map((dailyreport, index) => (
             <div className="q-category-bottom-categories-listing" key={index}>
               <div className="q-category-bottom-categories-single-category">
-                <p className="report-sort">{dailyreport.merchant_time}</p>
+                <p className="report-sort">{formatDate(dailyreport.merchant_time)}</p>
                 <p className="report-title">{dailyreport.amt}</p>
               </div>
             </div>
