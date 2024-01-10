@@ -69,7 +69,6 @@ module.exports = Object.freeze({
     LIST_INVENTORY : 'api/Settings_api/inventory_list',
     UPDATE_INVENTORY : 'api/Settings_api/update_inventory_info',
 
-  });
 
     // get Store Setting alerts list api
     GET_STORE_ALERTS_DATA:"Store_setting_api/store_alerts_list",
