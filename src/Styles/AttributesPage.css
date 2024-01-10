@@ -99,13 +99,13 @@
     margin-left: 8px;
 }
 
-.q-attributes-bottom-attriButes-header {
+.q-daily-report-bottom-report-header {
     background: #253338;
     display: flex;
     padding: 10px 20px;
 }
 
-.q-attributes-bottom-attriButes-header p {
+.q-daily-report-bottom-report-header p {
     color: #FFFFFF;
     font-size: 15px;
     font-family: CircularSTDBook !important;

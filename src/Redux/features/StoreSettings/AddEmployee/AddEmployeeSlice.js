@@ -1,10 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
-import { BASE_URL, EMPLOYEE_LIST } from "../../../../Constants/Config";
+import { BASE_URL, DELETE_EMPLOYEE, EMPLOYEE_LIST ,EMPLOYEE_DATA ,PERMISSIONS_LIST, UPDATE_PERMISSION } from "../../../../Constants/Config";
 
 const initialState = {
     loading: false,
     employeelistData: [],
+    states:[],
+    employeeData:[],
+    permissionData:[],
     successMessage: "",
     error: '',
 }
@@ -14,10 +17,62 @@ const initialState = {
 export const fetchEmployeeListsData = createAsyncThunk('employeelist/fetchEmployeeListsData.', async (data) => {
     try {
         const response = await axios.post(BASE_URL + EMPLOYEE_LIST, data, { headers: { "Content-Type": "multipart/form-data" } })
+        // console.log(response)
         if (response.status === 200) {
-           return response.data.result
+           return response.data
         }
     } catch (error) {
+        throw new Error(error.response.data.message);
+    }
+})
+
+export const fetchEmployeeData = createAsyncThunk('employeelist/fetchEmployeeData.', async (data) => {
+    try {
+        const response = await axios.post(BASE_URL + EMPLOYEE_DATA, data, { headers: { "Content-Type": "multipart/form-data" } })
+        // console.log(response)
+        if (response.status === 200) {
+           return response.data
+        }
+    } catch (error) {
+        throw new Error(error.response.data.message);
+    }
+})
+
+export const fetchPermissionData = createAsyncThunk('employeelist/fetchPermissionData.', async () => {
+    try {
+        const response = await axios.post(BASE_URL + PERMISSIONS_LIST,  { headers: { "Content-Type": "multipart/form-data" } })
+        // console.log(response)
+        if (response.status === 200) {
+           return response.data
+        }
+    } catch (error) {
+        throw new Error(error.response.data.message);
+    }
+})
+
+// export const updateEmployeePermission = createAsyncThunk('employeelist/updateEmployeePermission.', async () => {
+//     try {
+//         const response = await axios.post(BASE_URL + UPDATE_PERMISSION,  { headers: { "Content-Type": "multipart/form-data" } })
+//         // console.log(response)
+//         if (response.status === 200) {
+//            return response.data
+//         }
+//     } catch (error) {
+//         throw new Error(error.response.data.message);
+//     }
+// })
+
+export const deleteEmployee = createAsyncThunk('employeeList/deleteEmployee',async(data) => {
+    try{
+        const response = await axios.post(BASE_URL + DELETE_EMPLOYEE , data , { headers:{"Content-Type":"multipart/form-data"} })
+        if(response.data.status === true){
+            const mydata = {
+                employee_id:data.employee_id,
+                message:response.data.message
+            }
+            return mydata
+        }
+    }catch(error) {
         throw new Error(error.response.data.message);
     }
 })
@@ -27,14 +82,24 @@ const AddEmployeeSlice = createSlice({
     name: 'employeelist',
     initialState,
     reducers: {
+        addToEmployeeList: (state, action) => {
+            state.employeelistData = [...state.employeelistData, action.payload];
+        },
         editEmployee: (state, action) => {
             state.employeelistData = state.employeelistData.map(employee => {
-                if (employee.id === action.payload.id) {
-
+                if (employee.id === action.payload.employee_id) {
                     return {
                         ...employee, // Spread syntax to copy existing properties
-                        title: action.payload.title, // Update the title
-                        old_title: action.payload.title
+                        f_name: action.payload.f_name, // Update the title
+                        l_name: action.payload.l_name,
+                        phone: action.payload.phone,
+                        email: action.payload.email,
+                        pin: action.payload.pin,
+                        wages_per_hr: action.payload.wages,
+                        address: action.payload.address_line_1,
+                        city: action.payload.city,
+                        zipcode: action.payload.zip,
+                        state: action.payload.state,
                     };
                 } else {
                     // This isn't the one we're looking for - leave it as is
@@ -49,7 +114,8 @@ const AddEmployeeSlice = createSlice({
         })
         builder.addCase(fetchEmployeeListsData.fulfilled, (state, action) => {
             state.loading = false;
-            state.employeelistData = action.payload;
+            state.employeelistData = action.payload.result;
+            state.states =  action.payload.states;
             state.error = '';
         })
         builder.addCase(fetchEmployeeListsData.rejected, (state, action) => {
@@ -58,10 +124,54 @@ const AddEmployeeSlice = createSlice({
             state.error = action.error.message;
         })
 
+        builder.addCase(fetchEmployeeData.pending, (state) => {
+            state.loading = true;
+        })
+        builder.addCase(fetchEmployeeData.fulfilled, (state, action) => {
+            state.loading = false;
+            state.employeeData = action.payload.result;
+            state.error = '';
+        })
+        builder.addCase(fetchEmployeeData.rejected, (state, action) => {
+            state.loading = false;
+            state.employeeData = {};
+            state.error = action.error.message;
+        })
+
+        builder.addCase(fetchPermissionData.pending, (state) => {
+            state.loading = true;
+        })
+        builder.addCase(fetchPermissionData.fulfilled, (state, action) => {
+            state.loading = false;
+            state.permissionData = action.payload.result;
+            state.error = '';
+        })
+        builder.addCase(fetchPermissionData.rejected, (state, action) => {
+            state.loading = false;
+            state.permissionData = {};
+            state.error = action.error.message;
+        })
+
+        
+        builder.addCase(deleteEmployee.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(deleteEmployee.fulfilled, (state, action) => {
+            state.loading = false;
+            state.successMessage = action.payload.message;
+            state.employeelistData = state.employeelistData.filter((item) => item && item.id !== action.payload.employee_id);
+
+            state.error = ''; // Reset the error message
+        });
+        builder.addCase(deleteEmployee.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+        });
+
       
 
     }
 })
 
-export const {  editEmployee} = AddEmployeeSlice.actions;
+export const { addToEmployeeList, editEmployee } = AddEmployeeSlice.actions;
 export default AddEmployeeSlice.reducer

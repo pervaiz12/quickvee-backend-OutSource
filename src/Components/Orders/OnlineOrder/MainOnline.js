@@ -1,35 +1,61 @@
-
 import React, { useState } from "react";
-import { AiOutlineSearch } from 'react-icons/ai';
-import { BsChevronDown } from 'react-icons/bs';
-
+import { AiOutlineSearch } from "react-icons/ai";
+import DownIcon from "../../../Assests/Dashboard/Down.svg";
 
 const MainOnline = () => {
   const [searchId, setSearchId] = useState(""); // State to track search ID
 
-  const handleFilter = (filterType) => {
-    console.log('Selected filter:', filterType);
-   
-  };
+  // const handleFilter = (filterType) => {
+  //   console.log('Selected filter:', filterType);
+
+  // };
 
   const handleSearch = () => {
     console.log("Search ID:", searchId);
-   
   };
-  const [selectedFilter, setSelectedFilter] = useState('');
+  const [selectedEmployee, setSelectedEmployee] = useState("All");
+  const [selectedTransaction, setSelectedTransaction] = useState("All");
+  const [selectedOrderStatus, setSelectedOrderStatus] = useState("All");
 
-  const handleFilterChange = (event, filterType) => {
-    // Clear selected filter for other options
-    document.getElementById('employeeFilter').selectedIndex = 0;
-    document.getElementById('transactionFilter').selectedIndex = 0;
-    document.getElementById('orderStatusFilter').selectedIndex = 0;
+  const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
+  const [transactionDropdownVisible, setTransactionDropdownVisible] =
+    useState(false);
+  const [orderStatusDropdownVisible, setOrderStatusDropdownVisible] =
+    useState(false);
 
-    // Set the selected filter for the current option
-    setSelectedFilter(filterType);
-
-    // Add any additional logic you need based on the selected filter
+  const toggleDropdown = (dropdown) => {
+    switch (dropdown) {
+      case "employee":
+        setEmployeeDropdownVisible(!employeeDropdownVisible);
+        break;
+      case "transaction":
+        setTransactionDropdownVisible(!transactionDropdownVisible);
+        break;
+      case "orderStatus":
+        setOrderStatusDropdownVisible(!orderStatusDropdownVisible);
+        break;
+      default:
+        break;
+    }
   };
 
+  const handleOptionClick = (option, dropdown) => {
+    switch (dropdown) {
+      case "employee":
+        setSelectedEmployee(option);
+        setEmployeeDropdownVisible(false);
+        break;
+      case "transaction":
+        setSelectedTransaction(option);
+        setTransactionDropdownVisible(false);
+      case "orderStatus":
+        setSelectedOrderStatus(option);
+        setOrderStatusDropdownVisible(false);
+        break;
+      default:
+        break;
+    }
+  };
 
   return (
     <>
@@ -52,54 +78,83 @@ const MainOnline = () => {
       </div>
 
       <div className="bg-white p-4 rounded-md">
-      <div className="mb-4">
-        <h3 className="text-[20px] font-normal opacity-100 text-black ml-4 admin_medium">Filter By</h3>
-      </div>
-
-      
-
-      <div className="flex flex-col sm:flex-row">
-    
-
-        <div className="flex-1 mb-2 sm:mb-0 sm:mr-2">
-          <label className="q_order_page_labal" htmlFor="transactionFilter">
-            Transaction 
-          </label>
-          <select
-            id="transactionFilter"
-            value={selectedFilter === 'transaction' ? 'allTransactions' : ''}
-            onChange={(e) => handleFilterChange(e, 'transaction')}
-            className="custom-text-input"
-          >
-            <option value="" disabled hidden>Select an option</option>
-            <option value="allTransactions">All Transactions</option>
-            {/* Add other options as needed */}
-          </select>
+        <div className="mb-4">
+          <h3 className="text-[20px] font-normal opacity-100 text-black ml-4 admin_medium">
+            Filter By
+          </h3>
         </div>
 
-        <div className="flex-1">
-          <label className="q_order_page_labal" htmlFor="orderStatusFilter">
-            Order Status
-          </label>
-          <select
-            id="orderStatusFilter"
-            value={selectedFilter === 'orderStatus' ? 'orderStatus' : ''}
-            onChange={(e) => handleFilterChange(e, 'orderStatus')}
-            className="custom-text-input"
-          >
-            <option value="" disabled hidden>Select an option</option>
-            <option value="orderStatus">Order Status</option>
-            {/* Add other options as needed */}
-          </select>
+        <div className="q-order-page-container ml-8">
+          {/* Employee Dropdown */}
+          <div className="q-order-page-filter">
+            <label className="q-details-page-label" htmlFor="employeeFilter">
+              Employee
+            </label>
+            <div className="custom-dropdown">
+              <div
+                className="custom-dropdown-header"
+                onClick={() => toggleDropdown("employee")}
+              >
+                <span className="selected-option mt-1">{selectedEmployee}</span>
+                <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
+              </div>
+              {employeeDropdownVisible && (
+                <div className="dropdown-content ml-2">
+                  <div onClick={() => handleOptionClick("All", "employee")}>
+                    All
+                  </div>
+                  <div
+                    onClick={() => handleOptionClick("employee1", "employee")}
+                  >
+                    employee1
+                  </div>
+                  <div
+                    onClick={() => handleOptionClick("employee2", "employee")}
+                  >
+                    employee2
+                  </div>
+                  {/* ... (other employee options) ... */}
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Transaction Dropdown */}
+          <div className="q-order-page-filter">
+            <label className="q-details-page-label" htmlFor="transactionFilter">
+              Transactions
+            </label>
+            <div className="custom-dropdown">
+              <div
+                className="custom-dropdown-header"
+                onClick={() => toggleDropdown("transaction")}
+              >
+                <span className="selected-option mt-1">
+                  {selectedTransaction}
+                </span>
+                <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
+              </div>
+              {transactionDropdownVisible && (
+                <div className="dropdown-content ml-2">
+                  <div onClick={() => handleOptionClick("All", "transaction")}>
+                    All
+                  </div>
+                  <div
+                    onClick={() =>
+                      handleOptionClick("transaction1", "transaction")
+                    }
+                  >
+                    transaction1
+                  </div>
+                  {/* ... (other transaction options) ... */}
+                </div>
+              )}
+            </div>
+          </div>
+          <div className="q-order-page-filter"></div>
         </div>
-        <div className="flex-1 mb-2 sm:mb-0 sm:mr-2">
-         
-         </div>
       </div>
-    </div>
-      <div>
-        
-      </div>
+      <div></div>
     </>
   );
 };
