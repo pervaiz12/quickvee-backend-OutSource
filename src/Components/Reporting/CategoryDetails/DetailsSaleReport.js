@@ -9,7 +9,7 @@ const DetailsSaleReport = () => {
   return (
     <>
       <div className="q-attributes-bottom-detail-section">
-        <div className="q-attributes-bottom-header-sticky">
+        <div className="">
           <div className="q-attributes-bottom-header">
             <span>Disposable Vapes</span>
           </div>
