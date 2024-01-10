@@ -7,9 +7,9 @@ const MainCatedetails = () => {
   return (
  <>
 
- <div className='q-order-main-page'>
+ {/* <div className='q-order-main-page'>
  <FilterCatDetails />
- </div>
+ </div> */}
  
  <div className='q-order-main-page'>
 <DateRange />
