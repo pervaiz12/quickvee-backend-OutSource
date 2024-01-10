@@ -64,6 +64,13 @@ module.exports = Object.freeze({
     UPDATE_SYSTEM_ACCESS : "api/Settings_api/update_system_access",
     END_DAY_ACTUAL_AMT:"api/Settings_api/day_end_actual_amt",
 
+
+    //Inventory
+    LIST_INVENTORY : 'api/Settings_api/inventory_list',
+    UPDATE_INVENTORY : 'api/Settings_api/update_inventory_info',
+
+  });
+
     // get Store Setting alerts list api
     GET_STORE_ALERTS_DATA:"Store_setting_api/store_alerts_list",
     
@@ -96,3 +103,4 @@ module.exports = Object.freeze({
 
     
   });
+

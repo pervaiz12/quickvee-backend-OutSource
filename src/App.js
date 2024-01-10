@@ -25,7 +25,12 @@ import MainAddEmployee from "./Components/StoreSetting/AddEmployee/MainAddEmploy
 import Permission from "./Components/StoreSetting/AddEmployee/Permission";
 import MainSyastemAccess from "./Components/StoreSetting/SystemAccess/MainSystemAccess";
 // import Info from "./Components/StoreSetting/SubSetting/Info";
+
+
+import MainInventory from "./Components/StoreSetting/Inventory/MainInventory";
+
 import MainTaxes from "./Components/StoreSetting/SubSetting/Taxes/MainTaxes";
+
 
 // import Info from "./Components/StoreSetting/SubSetting/Info";
 
@@ -91,6 +96,11 @@ function App() {
 
 
           <Route path="/store-settings/system-access"  element={<MainSyastemAccess />} />
+
+
+          {/* /store-settings/inventory */}
+          <Route path="/store-settings/inventory"  element={<MainInventory />} />
+
           <Route path="/store-settings/Alters"  element={<MainStoreAlters />} />
 
           <Route path="/store-settings/register" element={<MainResigtersetting />} />
@@ -103,6 +113,7 @@ function App() {
           <Route path="/store-settings/permission/:employee_id"  element={<Permission />} />
           {/* <Route path="/store-settings/system-access"  element={<MainSyastemAccess />} /> */}
           <Route path="/store-settings/id-verification" element={<CheckIDVerifyMain />}/>
+
           
 
         </Route>
