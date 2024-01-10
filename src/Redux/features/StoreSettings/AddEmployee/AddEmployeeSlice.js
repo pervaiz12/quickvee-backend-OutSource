@@ -1,11 +1,13 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
-import { BASE_URL, DELETE_EMPLOYEE, EMPLOYEE_LIST } from "../../../../Constants/Config";
+import { BASE_URL, DELETE_EMPLOYEE, EMPLOYEE_LIST ,EMPLOYEE_DATA ,PERMISSIONS_LIST, UPDATE_PERMISSION } from "../../../../Constants/Config";
 
 const initialState = {
     loading: false,
     employeelistData: [],
     states:[],
+    employeeData:[],
+    permissionData:[],
     successMessage: "",
     error: '',
 }
@@ -24,10 +26,45 @@ export const fetchEmployeeListsData = createAsyncThunk('employeelist/fetchEmploy
     }
 })
 
+export const fetchEmployeeData = createAsyncThunk('employeelist/fetchEmployeeData.', async (data) => {
+    try {
+        const response = await axios.post(BASE_URL + EMPLOYEE_DATA, data, { headers: { "Content-Type": "multipart/form-data" } })
+        // console.log(response)
+        if (response.status === 200) {
+           return response.data
+        }
+    } catch (error) {
+        throw new Error(error.response.data.message);
+    }
+})
+
+export const fetchPermissionData = createAsyncThunk('employeelist/fetchPermissionData.', async () => {
+    try {
+        const response = await axios.post(BASE_URL + PERMISSIONS_LIST,  { headers: { "Content-Type": "multipart/form-data" } })
+        // console.log(response)
+        if (response.status === 200) {
+           return response.data
+        }
+    } catch (error) {
+        throw new Error(error.response.data.message);
+    }
+})
+
+// export const updateEmployeePermission = createAsyncThunk('employeelist/updateEmployeePermission.', async () => {
+//     try {
+//         const response = await axios.post(BASE_URL + UPDATE_PERMISSION,  { headers: { "Content-Type": "multipart/form-data" } })
+//         // console.log(response)
+//         if (response.status === 200) {
+//            return response.data
+//         }
+//     } catch (error) {
+//         throw new Error(error.response.data.message);
+//     }
+// })
+
 export const deleteEmployee = createAsyncThunk('employeeList/deleteEmployee',async(data) => {
     try{
         const response = await axios.post(BASE_URL + DELETE_EMPLOYEE , data , { headers:{"Content-Type":"multipart/form-data"} })
-       console.log(response)
         if(response.data.status === true){
             const mydata = {
                 employee_id:data.employee_id,
@@ -87,6 +124,35 @@ const AddEmployeeSlice = createSlice({
             state.error = action.error.message;
         })
 
+        builder.addCase(fetchEmployeeData.pending, (state) => {
+            state.loading = true;
+        })
+        builder.addCase(fetchEmployeeData.fulfilled, (state, action) => {
+            state.loading = false;
+            state.employeeData = action.payload.result;
+            state.error = '';
+        })
+        builder.addCase(fetchEmployeeData.rejected, (state, action) => {
+            state.loading = false;
+            state.employeeData = {};
+            state.error = action.error.message;
+        })
+
+        builder.addCase(fetchPermissionData.pending, (state) => {
+            state.loading = true;
+        })
+        builder.addCase(fetchPermissionData.fulfilled, (state, action) => {
+            state.loading = false;
+            state.permissionData = action.payload.result;
+            state.error = '';
+        })
+        builder.addCase(fetchPermissionData.rejected, (state, action) => {
+            state.loading = false;
+            state.permissionData = {};
+            state.error = action.error.message;
+        })
+
+        
         builder.addCase(deleteEmployee.pending, (state) => {
             state.loading = true;
         });
@@ -107,5 +173,5 @@ const AddEmployeeSlice = createSlice({
     }
 })
 
-export const { addToEmployeeList, editEmployee} = AddEmployeeSlice.actions;
+export const { addToEmployeeList, editEmployee } = AddEmployeeSlice.actions;
 export default AddEmployeeSlice.reducer

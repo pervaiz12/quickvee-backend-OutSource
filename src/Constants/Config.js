@@ -36,7 +36,13 @@ module.exports = Object.freeze({
     ADDEDIT_EMPLOYEE:"Store_setting_api/addEdit_employee",
     DELETE_EMPLOYEE:"Store_setting_api/delete_employee",
 
-    EMPLOYEE_LIST:"App/employee_list",
+
+    // EMPLOYEE_LIST:"App/employee_list",
+
+    EMPLOYEE_DATA:"Store_setting_api/getEmployeeByEmpid",
+    PERMISSIONS_LIST:"Store_setting_api/permission_list",
+    UPDATE_PERMISSION:"Store_setting_api/update_Employee_permission",
+    // EMPLOYEE_LIST:"App/employee_list",
 
 
   
@@ -80,6 +86,9 @@ module.exports = Object.freeze({
       LIST_ALL_TAXES:"Taxesapi/Taxes_list",
       DELETE_SINGLE_TAXE: "Taxesapi/delete_tax",
       TAXE_CATEGORY_LIST: "Taxesapi/Taxes_category_list",
+
+      // All Reports API
+      CHECKID_VARIFICATION_REPORT_LIST:"ReportingReactapi/checkID_varification_report_list",
 
     
   });
