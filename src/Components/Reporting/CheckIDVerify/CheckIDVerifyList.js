@@ -11,22 +11,10 @@ const CheckIDVerifyList = (props) => {
     useEffect(() => {
         if (props && props.selectedDateRange) 
         {
-            const StartDateData = props.selectedDateRange.startDate.toLocaleDateString('en-GB', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-            });
-    
-            const EndDateData = props.selectedDateRange.endDate.toLocaleDateString('en-GB', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-            });
-
             let data = {
                 merchant_id: "MAL0100CA",
-                start_date: StartDateData,
-                end_date: EndDateData,
+                start_date: props.selectedDateRange.start_date,
+                end_date: props.selectedDateRange.end_date,
                 order_typ: props.OrderTypeData,
                 order_env: props.OrderSourceData,
             };
