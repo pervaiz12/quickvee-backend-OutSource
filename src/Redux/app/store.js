@@ -25,6 +25,7 @@ import settingstorealtersReducer from "../features/SettingStoreAlters/SettingSto
 import SettingReceiptReducer from "../features/StoreSettings/SettingsReceipt/SettingsReceiptSlice";
 import PurchaseOrderReducer from "../features/PurchaseOrder/purchaseOrderSlice"
 import CheckIDVerifyListReducer from "../features/Reports/CheckIDVerify/CheckIDVerifySlice";
+import DailyReportList from "../features/DailyReport/dailyreportSlice";
 
 const store = configureStore({
   reducer: {
@@ -51,6 +52,7 @@ const store = configureStore({
 
     SettingReceiptList: SettingReceiptReducer,
     CheckIDVerifyList:CheckIDVerifyListReducer,
+    dailyreport:DailyReportList,
 
    
 
