@@ -137,7 +137,7 @@
   background-color: #f4f4f8;
   /* top: 0; */
   overflow-y: auto;
-  height: 100vh;
+  height: 92vh;
   /* width: 16rem; */
   z-index: 9;
 }
@@ -145,6 +145,7 @@
 .main-content {
   overflow-y: auto;
   height: calc(100vh - 98px);
+  overflow-x: hidden;
 }
 
 .importBtn {
