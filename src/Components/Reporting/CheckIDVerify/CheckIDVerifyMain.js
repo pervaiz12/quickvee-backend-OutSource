@@ -25,7 +25,8 @@ const CheckIDVerifyMain = () => {
             <div className='q-order-main-page'>
                 <FilterCatDetails 
                     onFilterDataChange={handleFilterDataChange} 
-                    title={"Check ID Verification Report"}
+                    title={"Check ID Verification Report"} 
+                    showcat={"0"}
                 />
             </div>
             <div className="q-attributes-main-page">

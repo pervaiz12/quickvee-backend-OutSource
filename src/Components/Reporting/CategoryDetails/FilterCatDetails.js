@@ -1,7 +1,7 @@
 import React, { useState , useEffect } from "react";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
 
-const FilterCatDetails = ({onFilterDataChange, title}) => {
+const FilterCatDetails = ({onFilterDataChange, title, showcat}) => {
   const [selectedOrderSource, setSelectedOrderSource] = useState("All");
   const [selectedOrderType, setSelectedOrderType] = useState("All");
   const [selectedSelectCategory, setSelectedSelectCategory] = useState("All");
@@ -109,28 +109,30 @@ useEffect(() => {
           </div>
 
           {/* Select Category Dropdown */}
-          <div className="q-order-page-filter">
-            <label className="q-details-page-label" htmlFor="selectCategoryFilter">
-              Select Category
-            </label>
-            <div className="custom-dropdown">
-              <div
-                className="custom-dropdown-header"
-                onClick={() => toggleDropdown("selectCategory")}
-              >
-                <span className="selected-option mt-1">{selectedSelectCategory}</span>
-                <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-              </div>
-              {selectCategoryDropdownVisible && (
-                <div className="dropdown-content">
-                  <div onClick={() => handleOptionClick("All", "selectCategory")}>All</div>
-                  <div onClick={() => handleOptionClick("category1", "selectCategory")}>category1</div>
-                  <div onClick={() => handleOptionClick("category2", "selectCategory")}>category2</div>
-                  {/* ... (other select category options) ... */}
+          {showcat != 0 ? (
+            <div className="q-order-page-filter">
+              <label className="q-details-page-label" htmlFor="selectCategoryFilter">
+                Select Category
+              </label>
+              <div className="custom-dropdown">
+                <div
+                  className="custom-dropdown-header"
+                  onClick={() => toggleDropdown("selectCategory")}
+                >
+                  <span className="selected-option mt-1">{selectedSelectCategory}</span>
+                  <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
                 </div>
-              )}
+                {selectCategoryDropdownVisible && (
+                  <div className="dropdown-content">
+                    <div onClick={() => handleOptionClick("All", "selectCategory")}>All</div>
+                    <div onClick={() => handleOptionClick("category1", "selectCategory")}>category1</div>
+                    <div onClick={() => handleOptionClick("category2", "selectCategory")}>category2</div>
+                    {/* ... (other select category options) ... */}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          ): ''}
         </div>
       </div>
     </>
