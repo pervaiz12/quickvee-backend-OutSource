@@ -21,12 +21,21 @@ const DateRange = ({onDateRangeChange}) => {
 
   const handleSearch = () => {
     
-    console.log("Selected Start Date:", startDate);
-    console.log("Selected End Date:", endDate);
-    const dateRangeData = {
-      startDate,
-      endDate,
+      const formatDate = (date) => {
+      return new Intl.DateTimeFormat("en-CA", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).format(date);
     };
+    
+    const formattedStartDate = formatDate(startDate);
+    const formattedEndDate = formatDate(endDate);
+    const dateRangeData = {
+      start_date: formattedStartDate,
+      end_date: formattedEndDate,
+    };
+
     onDateRangeChange(dateRangeData);
   };
 
