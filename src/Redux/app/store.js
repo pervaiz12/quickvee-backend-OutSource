@@ -32,6 +32,8 @@ import CheckIDVerifyListReducer from "../features/Reports/CheckIDVerify/CheckIDV
 import DailyReportList from "../features/DailyReport/dailyreportSlice";
 import EmployeeListReducer from "../features/EmployeeList/EmployeeListSlice";
 
+import TopsallerReducer from "../features/TopSaller/topsallerSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -64,8 +66,14 @@ const store = configureStore({
     CheckIDVerifyList:CheckIDVerifyListReducer,
     dailyreport:DailyReportList,
 
+
+    topsaller:TopsallerReducer,
+
+   
+
    //Employee List Data
     employeeDataList :EmployeeListReducer,
+
 
   },
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),

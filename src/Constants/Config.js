@@ -99,6 +99,8 @@ module.exports = Object.freeze({
 
             // for daily Report 
             LIST_DAILY_REPORT : "ReportingReactapi/daily_total_report",
+    
+            TOP_SALLER_REPORT : "ReportingReactapi/top_seller_10",
 
 
       //Employee List
