@@ -31,6 +31,8 @@ import PurchaseOrderReducer from "../features/PurchaseOrder/purchaseOrderSlice"
 import CheckIDVerifyListReducer from "../features/Reports/CheckIDVerify/CheckIDVerifySlice";
 import DailyReportList from "../features/DailyReport/dailyreportSlice";
 
+import TopsallerReducer from "../features/TopSaller/topsallerSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -62,6 +64,8 @@ const store = configureStore({
     SettingReceiptList: SettingReceiptReducer,
     CheckIDVerifyList:CheckIDVerifyListReducer,
     dailyreport:DailyReportList,
+
+    topsaller:TopsallerReducer,
 
    
 
