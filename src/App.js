@@ -50,6 +50,7 @@ import "./Styles/MainOrderPage.css";
 import "./Styles/CouponDiscount.css";
 import "./Styles/ImportData.css";
 import "./Styles/DailyDaterange.css";
+// import "./Styles/EmployeeWorking.css";
 
 import "./Styles/ReceiptMainpage.css";
 import "./Styles/MainCatedetails.css";
@@ -58,11 +59,17 @@ import "./Styles/ResigterSettingdata.css";
 import ReceiptMainpage from "./Components/StoreSetting/Receipt/ReceiptMainpage";
 import DailyTtlReport from "./Components/Reporting/DailyReport/DailyTtlReport";
 import MainCatedetails from "./Components/Reporting/CategoryDetails/MainCatedetails";
+
+import InstantActvity from "./Components/Reporting/InstantPo/InstantActvity";
+import EmployeeWorking from "./Components/Reporting/EmployeeWorkingHours/EmployeeWorking";
+import MainSiftSummary from "./Components/Reporting/SiftSummary/MainSiftSummary";
+
 import CheckIDVerifyMain from "./Components/Reporting/CheckIDVerify/CheckIDVerifyMain";
 
 import TopSallerReport from "./Components/Reporting/TopSaller/TopSallerReport";
 
 import EmployeeList from "./Components/Reporting/Employelist/EmployeelistReport";
+
 
 
 
@@ -113,7 +120,14 @@ function App() {
           <Route path="/store-settings/daily-total-report" element={<DailyTtlReport />}/>
           <Route path="/store-settings/overall-top" element={<TopSallerReport />}/>
           <Route path="/store-settings/Details-category" element={<MainCatedetails />}/>
+
+          <Route path="/store-settings/instant-activity" element={<InstantActvity />} />
+          <Route path ="/store-settings/employee-working-hours" element={<EmployeeWorking />} />
+          <Route path ="/store-settings/shift-summary" element={<MainSiftSummary />} />
+         
+
           <Route path="/store-settings/employee-list" element={<EmployeeList />}/>
+
         
 
 
