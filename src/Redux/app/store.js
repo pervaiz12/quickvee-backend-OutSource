@@ -30,6 +30,7 @@ import SettingReceiptReducer from "../features/StoreSettings/SettingsReceipt/Set
 import PurchaseOrderReducer from "../features/PurchaseOrder/purchaseOrderSlice"
 import CheckIDVerifyListReducer from "../features/Reports/CheckIDVerify/CheckIDVerifySlice";
 import DailyReportList from "../features/DailyReport/dailyreportSlice";
+import EmployeeListReducer from "../features/EmployeeList/EmployeeListSlice";
 
 
 const store = configureStore({
@@ -63,7 +64,8 @@ const store = configureStore({
     CheckIDVerifyList:CheckIDVerifyListReducer,
     dailyreport:DailyReportList,
 
-   
+   //Employee List Data
+    employeeDataList :EmployeeListReducer,
 
   },
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),

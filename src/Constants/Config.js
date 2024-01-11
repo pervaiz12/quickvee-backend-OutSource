@@ -100,6 +100,10 @@ module.exports = Object.freeze({
             // for daily Report 
             LIST_DAILY_REPORT : "ReportingReactapi/daily_total_report",
 
+
+      //Employee List
+      
+      LIST_ALL_EMPLOYEE : "ReportingReactapi/employee_list",
     
   });
 
