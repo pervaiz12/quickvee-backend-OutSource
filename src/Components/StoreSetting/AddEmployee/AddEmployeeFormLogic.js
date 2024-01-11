@@ -1,17 +1,17 @@
-import React from "react";
+// import React from "react";
 import { useState , useRef } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
-import { fetchEmployeeListsData ,addToEmployeeList } from "../../../Redux/features/StoreSettings/AddEmployee/AddEmployeeSlice";
+import { addToEmployeeList } from "../../../Redux/features/StoreSettings/AddEmployee/AddEmployeeSlice";
 import Validation from "../../../Constants/Validation";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import { BASE_URL, ADDEDIT_EMPLOYEE } from "../../../Constants/Config";
 
 const AddEmployeeFormLogic = ({employeeList}) => {
   const dispatch = useDispatch();
     const {  validateFirstName, validateLastName, validateEmail, validatePhoneNumber, validatePinNumber, validateWages, Address_line_1 , validateCity, validateState, validateZipCode  } = Validation();
     const [submitmessage, setsubmitmessage] = useState("");
-    const Navigate = useNavigate();
+    // const Navigate = useNavigate();
     const scrollRef = useRef(null);
     const [showModal, setShowModal] = useState(false);
 

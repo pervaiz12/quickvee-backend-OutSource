@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
 
-const FilterCatDetails = () => {
+const FilterCatDetails = ({onFilterDataChange, title, showcat}) => {
   const [selectedOrderSource, setSelectedOrderSource] = useState("All");
   const [selectedOrderType, setSelectedOrderType] = useState("All");
   const [selectedSelectCategory, setSelectedSelectCategory] = useState("All");
@@ -45,12 +45,16 @@ const FilterCatDetails = () => {
     }
   };
 
+useEffect(() => {
+  onFilterDataChange(selectedOrderSource , selectedOrderType , selectedSelectCategory)
+}, [selectedOrderSource , selectedOrderType , selectedSelectCategory]);
+
   return (
     <>
       <div className="q-category-bottom-detail-section">
         <div className="q-category-bottom-header-sticky">
           <div className="q-category-bottom-header">
-            <div className='q_details_header ml-2'>Category Sale Report</div>
+            <div className='q_details_header ml-2'>{title}</div>
           </div>
           <div className='q_details_header ml-8'>Filter by</div>
         </div>
@@ -72,8 +76,8 @@ const FilterCatDetails = () => {
               {orderSourceDropdownVisible && (
                 <div className="dropdown-content ">
                   <div onClick={() => handleOptionClick("All", "orderSource")}>All</div>
-                  <div onClick={() => handleOptionClick("source1", "orderSource")}>source1</div>
-                  <div onClick={() => handleOptionClick("source2", "orderSource")}>source2</div>
+                  <div onClick={() => handleOptionClick("Online Order", "orderSource")}>Online Order</div>
+                  <div onClick={() => handleOptionClick("Store Order", "orderSource")}>Store Order</div>
                   {/* ... (other order source options) ... */}
                 </div>
               )}
@@ -96,8 +100,8 @@ const FilterCatDetails = () => {
               {orderTypeDropdownVisible && (
                 <div className="dropdown-content">
                   <div onClick={() => handleOptionClick("All", "orderType")}>All</div>
-                  <div onClick={() => handleOptionClick("type1", "orderType")}>type1</div>
-                  <div onClick={() => handleOptionClick("type2", "orderType")}>type2</div>
+                  <div onClick={() => handleOptionClick("Pickup", "orderType")}>Pickup</div>
+                  <div onClick={() => handleOptionClick("Delivery", "orderType")}>Delivery</div>
                   {/* ... (other order type options) ... */}
                 </div>
               )}
@@ -105,28 +109,30 @@ const FilterCatDetails = () => {
           </div>
 
           {/* Select Category Dropdown */}
-          <div className="q-order-page-filter">
-            <label className="q-details-page-label" htmlFor="selectCategoryFilter">
-              Select Category
-            </label>
-            <div className="custom-dropdown">
-              <div
-                className="custom-dropdown-header"
-                onClick={() => toggleDropdown("selectCategory")}
-              >
-                <span className="selected-option mt-1">{selectedSelectCategory}</span>
-                <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-              </div>
-              {selectCategoryDropdownVisible && (
-                <div className="dropdown-content">
-                  <div onClick={() => handleOptionClick("All", "selectCategory")}>All</div>
-                  <div onClick={() => handleOptionClick("category1", "selectCategory")}>category1</div>
-                  <div onClick={() => handleOptionClick("category2", "selectCategory")}>category2</div>
-                  {/* ... (other select category options) ... */}
+          {showcat != 0 ? (
+            <div className="q-order-page-filter">
+              <label className="q-details-page-label" htmlFor="selectCategoryFilter">
+                Select Category
+              </label>
+              <div className="custom-dropdown">
+                <div
+                  className="custom-dropdown-header"
+                  onClick={() => toggleDropdown("selectCategory")}
+                >
+                  <span className="selected-option mt-1">{selectedSelectCategory}</span>
+                  <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
                 </div>
-              )}
+                {selectCategoryDropdownVisible && (
+                  <div className="dropdown-content">
+                    <div onClick={() => handleOptionClick("All", "selectCategory")}>All</div>
+                    <div onClick={() => handleOptionClick("category1", "selectCategory")}>category1</div>
+                    <div onClick={() => handleOptionClick("category2", "selectCategory")}>category2</div>
+                    {/* ... (other select category options) ... */}
+                  </div>
+                )}
+              </div>
             </div>
-          </div>
+          ): ''}
         </div>
       </div>
     </>

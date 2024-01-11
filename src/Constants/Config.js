@@ -36,7 +36,13 @@ module.exports = Object.freeze({
     ADDEDIT_EMPLOYEE:"Store_setting_api/addEdit_employee",
     DELETE_EMPLOYEE:"Store_setting_api/delete_employee",
 
-    EMPLOYEE_LIST:"App/employee_list",
+
+    // EMPLOYEE_LIST:"App/employee_list",
+
+    EMPLOYEE_DATA:"Store_setting_api/getEmployeeByEmpid",
+    PERMISSIONS_LIST:"Store_setting_api/permission_list",
+    UPDATE_PERMISSION:"Store_setting_api/update_Employee_permission",
+    // EMPLOYEE_LIST:"App/employee_list",
 
 
   
@@ -57,6 +63,12 @@ module.exports = Object.freeze({
     LIST_ALL_SYSTEM_ACCESS : "api/Settings_api/system_access",
     UPDATE_SYSTEM_ACCESS : "api/Settings_api/update_system_access",
     END_DAY_ACTUAL_AMT:"api/Settings_api/day_end_actual_amt",
+
+
+    //Inventory
+    LIST_INVENTORY : 'api/Settings_api/inventory_list',
+    UPDATE_INVENTORY : 'api/Settings_api/update_inventory_info',
+
 
     // get Store Setting alerts list api
     GET_STORE_ALERTS_DATA:"Store_setting_api/store_alerts_list",
@@ -81,5 +93,19 @@ module.exports = Object.freeze({
       DELETE_SINGLE_TAXE: "Taxesapi/delete_tax",
       TAXE_CATEGORY_LIST: "Taxesapi/Taxes_category_list",
 
+      // All Reports API
+      CHECKID_VARIFICATION_REPORT_LIST:"ReportingReactapi/checkID_varification_report_list",
+
+
+            // for daily Report 
+            LIST_DAILY_REPORT : "ReportingReactapi/daily_total_report",
+    
+            TOP_SALLER_REPORT : "ReportingReactapi/top_seller_10",
+
+
+      //Employee List
+      
+      LIST_ALL_EMPLOYEE : "ReportingReactapi/employee_list",
     
   });
+

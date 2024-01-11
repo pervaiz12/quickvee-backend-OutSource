@@ -3,8 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FiCalendar } from "react-icons/fi";
 
-
-const DateRange = ({onDateRangeChange}) => {
+const DateRange = ({ onDateRangeChange }) => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
@@ -20,13 +19,21 @@ const DateRange = ({onDateRangeChange}) => {
   };
 
   const handleSearch = () => {
-    
-    console.log("Selected Start Date:", startDate);
-    console.log("Selected End Date:", endDate);
-    const dateRangeData = {
-      startDate,
-      endDate,
+    const formatDate = (date) => {
+      return new Intl.DateTimeFormat("en-CA", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).format(date);
     };
+
+    const formattedStartDate = formatDate(startDate);
+    const formattedEndDate = formatDate(endDate);
+    const dateRangeData = {
+      start_date: formattedStartDate,
+      end_date: formattedEndDate,
+    };
+
     onDateRangeChange(dateRangeData);
   };
 
@@ -39,8 +46,6 @@ const DateRange = ({onDateRangeChange}) => {
   const isActive = (option) => {
     return option === activeOption;
   };
-
-
 
   const setDatesBasedOnOption = (option) => {
     const today = new Date();
@@ -63,8 +68,12 @@ const DateRange = ({onDateRangeChange}) => {
 
         break;
       case "Last 30 days":
-        const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
-   
+        const firstDayOfMonth = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          1
+        );
+
         setStartDate(firstDayOfMonth);
         setEndDate(today);
         break;
@@ -82,9 +91,7 @@ const DateRange = ({onDateRangeChange}) => {
       <div className="q_dateRange_header">
         <div className="q-datarange-bottom-detail-section">
           <div className="q_datafilter_section">
-            <div className="q_details_header">
-              Date Range
-            </div>
+            <div className="q_details_header">Date Range</div>
 
             <div className="datarange_days_order">
               {["Today", "Yesterday", "Last 7 Days", "Last 30 days"].map(
@@ -95,8 +102,10 @@ const DateRange = ({onDateRangeChange}) => {
                       isActive(option) ? "text-blue-500" : "text-gray-600"
                     }`}
                     // onClick={() => setActive(option) }
-                    onClick={() => {  setActive(option);  setDatesBasedOnOption(option);  }}
-                    
+                    onClick={() => {
+                      setActive(option);
+                      setDatesBasedOnOption(option);
+                    }}
                   >
                     {isActive(option) && <div className="dot mr-2" />}
                     {option}

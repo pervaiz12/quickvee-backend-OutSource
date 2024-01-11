@@ -143,6 +143,7 @@
 }
 
 .main-content {
+  overflow-x: hidden;
   overflow-y: auto;
   height: calc(100vh - 98px);
   overflow-x: hidden;
@@ -590,6 +591,7 @@ margin-bottom: 10px;
 
 
 
+
 .q_order_page_labal{
   display: block;
   font-size: 16px;
@@ -608,6 +610,7 @@ margin-bottom: 10px;
   position: relative;
   top:14px;
 }
+
 
 
 
@@ -647,6 +650,7 @@ margin-bottom: 10px;
   background: #0A64F9; 
 }
 
+
 .arrow-up {
   width: 10px !important; 
   height: 10px!important; 
@@ -655,3 +659,10 @@ margin-bottom: 10px;
   
   border-bottom: 5px solid black;
 }
+
+.permiddion_heading{
+  width:100%;
+  height: auto;
+}
+
+
