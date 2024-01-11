@@ -19,7 +19,7 @@ const Employeedetails = () => {
           </div>
         </div>
         <div className="q-attributes-bottom-attriButes-listing">
-          <div className="q-attributes-bottom-attriButes-single-attributes">
+          <div className="q-employee-bottom-attriButes-single-attributes">
             <p className="q-employee-item">2023-12-01</p>
             <p className="q-employee-in">05:30:00</p>
             <p className="q-employee-out">17:00:00</p>
@@ -29,7 +29,7 @@ const Employeedetails = () => {
           </div>
         </div>
         <div className="q-attributes-bottom-attriButes-listing">
-          <div className="q-attributes-bottom-attriButes-single-attributes">
+        <div className="q-employee-bottom-attriButes-single-attributes">
             <p className="q-employee-item">2023-12-01</p>
             <p className="q-employee-in">05:30:00</p>
             <p className="q-employee-out">17:00:00</p>
@@ -39,7 +39,7 @@ const Employeedetails = () => {
           </div>
         </div>
         <div className="q-attributes-bottom-attriButes-listing">
-          <div className="q-attributes-bottom-attriButes-single-attributes">
+        <div className="q-employee-bottom-attriButes-single-attributes">
             <p className="q-employee-item">2023-12-01</p>
             <p className="q-employee-in">05:30:00</p>
             <p className="q-employee-out">17:00:00</p>
@@ -49,7 +49,7 @@ const Employeedetails = () => {
           </div>
         </div>
         <div className="q-attributes-bottom-attriButes-listing">
-          <div className="q-attributes-bottom-attriButes-single-attributes">
+        <div className="q-employee-bottom-attriButes-single-attributes">
             <p className="q-employee-item">2023-12-01</p>
             <p className="q-employee-in">05:30:00</p>
             <p className="q-employee-out">17:00:00</p>
@@ -60,7 +60,7 @@ const Employeedetails = () => {
         </div>
 
         <div className="q-attributes-bottom-attriButes-listing">
-          <div className="q-attributes-bottom-attriButes-single-attributes">
+        <div className="q-employee-bottom-attriButes-single-attributes">
             <p className="q-employee-total text-left">Total</p>
             
              <p className="q-employee-worked">11.5</p>

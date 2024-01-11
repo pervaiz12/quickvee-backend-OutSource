@@ -31,7 +31,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
   const location = useLocation();
   const currentUrl = location.pathname;
 
-  const [activeItem, setActiveItem] = useState(currentUrl); 
+  const [activeItem, setActiveItem] = useState(currentUrl);
   const navigate = useNavigate();
 
   const handleItemClick = (item) => {
@@ -310,8 +310,7 @@ const menuItems = [
         text: "Option",
         link: "/store-settings/options",
       },
-      { id: 63, text: "Options", link: "/store-settings/option" },
-      { id: 64, text: "Alters", link: "/store-settings/alters" },
+
       {
         id: 64,
         icon: (
@@ -423,6 +422,9 @@ const menuItems = [
         link: "/store-settings/employee-working-hours",
       },
       { id: 76, text: "Shift Summary", link: "/store-settings/shift-summary" },
+
+      { id: 77, text: " Item Sales ", link: "/store-settings/item-sales" },
+      { id: 77, text: " Payment Method Details", link: "/store-settings/payment-method-details" },
     ],
   },
 ];

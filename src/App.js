@@ -55,6 +55,8 @@ import DailyTtlReport from "./Components/Reporting/DailyReport/DailyTtlReport";
 import MainCatedetails from "./Components/Reporting/CategoryDetails/MainCatedetails";
 import InstantActvity from "./Components/Reporting/InstantPo/InstantActvity";
 import EmployeeWorking from "./Components/Reporting/EmployeeWorkingHours/EmployeeWorking";
+import MainSiftSummary from "./Components/Reporting/SiftSummary/MainSiftSummary";
+
 
 
 
@@ -99,6 +101,8 @@ function App() {
           <Route path="/store-settings/Details-category" element={<MainCatedetails />}/>
           <Route path="/store-settings/instant-activity" element={<InstantActvity />} />
           <Route path ="/store-settings/employee-working-hours" element={<EmployeeWorking />} />
+          <Route path ="/store-settings/shift-summary" element={<MainSiftSummary />} />
+         
         
 
         </Route>

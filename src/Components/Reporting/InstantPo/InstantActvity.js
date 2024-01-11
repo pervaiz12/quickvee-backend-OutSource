@@ -1,5 +1,6 @@
 import React from 'react'
 import DateRange from '../../Orders/InstoreOrder/DateRange'
+import MainInstantDetails from './MainInstantDetails'
 
 const InstantActvity = () => {
   return (
@@ -7,6 +8,10 @@ const InstantActvity = () => {
   <div className=''>
   <div className='q-order-main-page'>
 <DateRange />
+ </div>
+
+ <div className='q-order-main-page'>
+<MainInstantDetails />
  </div>
   </div>
   

@@ -149,7 +149,7 @@
     border-right: 1px solid #000;
 } */
 
-.q-attributes-bottom-attriButes-single-attributes {
+.q-employee-bottom-attriButes-single-attributes {
     display: flex;
     padding: 20px;
     border-bottom: 1px solid #E8E8E8;
@@ -157,13 +157,13 @@
     user-select: none;
 }
 
-.q-attributes-bottom-attriButes-single-attributes>.attriButes-title {
+.q-employee-bottom-attriButes-single-attributes>.attriButes-title {
     font-size: 16px;
     color: #000000;
     font-family: CircularSTDMedium !important;
 }
 
-.q-attributes-bottom-attriButes-single-attributes>.attriButes-items {
+.q-employee-bottom-attriButes-single-attributes>.attriButes-items {
     color: #0A64F9;
     /* cursor: pointer; */
     font-family: CircularSTDMedium !important;
@@ -171,7 +171,7 @@
     text-decoration: underline;
 }
 
-.q-attributes-bottom-attriButes-single-attributes>.attriButes-enable-disable {
+.q-employee-bottom-attriButes-single-attributes>.attriButes-enable-disable {
     display: flex;
     align-items: flex-start;
     justify-content:flex-end;
@@ -378,19 +378,19 @@
     user-select: none;
 }
 
-.q-attributes-bottom-attriButes-single-attributes>.q-catereport-item {
+.q-employee-bottom-attriButes-single-attributes>.q-catereport-item {
     font-size: 16px;
     color: #000000;
     font-family: CircularSTDMedium !important;
 }
 
-.q-attributes-bottom-attriButes-single-attributes>.q-catereport-quantity {
+.q-employee-bottom-attriButes-single-attributes>.q-catereport-quantity {
     font-size: 16px;
     color: #000000;
     font-family: CircularSTDMedium !important;
 }
 
-.q-attributes-bottom-attriButes-single-attributes>.q-catereport-amount {
+.q-employee-bottom-attriButes-single-attributes>.q-catereport-amount {
     font-size: 16px;
     color: #000000;
     font-family: CircularSTDMedium !important;
@@ -406,20 +406,22 @@
 
 /* Add these styles to your existing stylesheet or create a new one */
 
-.q-attributes-bottom-attriButes-single-attributes {
+.q-employee-bottom-attriButes-single-attributes {
     display: flex;
     padding: 0;
   }
   
-  .q-attributes-bottom-attriButes-single-attributes p {
-    border-right: 1px solid #ddd; /* Adjust the color and width as needed */
+  .q-employee-bottom-attriButes-single-attributes p {
+    border-right: 1px solid #E3E3E3; 
     padding: 20px;
-    margin: 0; /* Remove default margin to avoid extra spacing */
+    margin: -3.5px;
+    color:#818181;
    
   }
   
-  .q-attributes-bottom-attriButes-single-attributes p:last-child {
-    border-right: none; /* Remove the border on the last <p> element */
+  .q-employee-bottom-attriButes-single-attributes p:last-child {
+    border-right: none; 
+    color: #818181;
   }
   
 
