@@ -102,6 +102,10 @@ module.exports = Object.freeze({
     
             TOP_SALLER_REPORT : "ReportingReactapi/top_seller_10",
 
+
+      //Employee List
+      
+      LIST_ALL_EMPLOYEE : "ReportingReactapi/employee_list",
     
   });
 
