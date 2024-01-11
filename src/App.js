@@ -59,6 +59,7 @@ import ReceiptMainpage from "./Components/StoreSetting/Receipt/ReceiptMainpage";
 import DailyTtlReport from "./Components/Reporting/DailyReport/DailyTtlReport";
 import MainCatedetails from "./Components/Reporting/CategoryDetails/MainCatedetails";
 import CheckIDVerifyMain from "./Components/Reporting/CheckIDVerify/CheckIDVerifyMain";
+import EmployeeList from "./Components/Reporting/Employelist/EmployeelistReport";
 
 
 
@@ -107,6 +108,7 @@ function App() {
           <Route path="/store-settings/receipt" element={<ReceiptMainpage />} />
           <Route path="/store-settings/daily-total-report" element={<DailyTtlReport />}/>
           <Route path="/store-settings/Details-category" element={<MainCatedetails />}/>
+          <Route path="/store-settings/employee-list" element={<EmployeeList />}/>
         
 
 
