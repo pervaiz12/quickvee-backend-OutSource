@@ -1,10 +1,9 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FiCalendar } from "react-icons/fi";
 
-
-const DateRange = () => {
+const DateRange = ({ onDateRangeChange }) => {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
@@ -20,8 +19,22 @@ const DateRange = () => {
   };
 
   const handleSearch = () => {
-    console.log("Selected Start Date:", startDate);
-    console.log("Selected End Date:", endDate);
+    const formatDate = (date) => {
+      return new Intl.DateTimeFormat("en-CA", {
+        year: "numeric",
+        month: "2-digit",
+        day: "2-digit",
+      }).format(date);
+    };
+
+    const formattedStartDate = formatDate(startDate);
+    const formattedEndDate = formatDate(endDate);
+    const dateRangeData = {
+      start_date: formattedStartDate,
+      end_date: formattedEndDate,
+    };
+
+    onDateRangeChange(dateRangeData);
   };
 
   const [activeOption, setActiveOption] = useState("Today");
@@ -34,14 +47,51 @@ const DateRange = () => {
     return option === activeOption;
   };
 
+  const setDatesBasedOnOption = (option) => {
+    const today = new Date();
+    switch (option) {
+      case "Today":
+        setStartDate(today);
+        setEndDate(today);
+        break;
+      case "Yesterday":
+        const yesterday = new Date();
+        yesterday.setDate(today.getDate() - 1);
+        setStartDate(yesterday);
+        setEndDate(yesterday);
+        break;
+      case "Last 7 Days":
+        const last7Days = new Date();
+        last7Days.setDate(today.getDate() - 7);
+        setStartDate(last7Days);
+        setEndDate(today);
+
+        break;
+      case "Last 30 days":
+        const firstDayOfMonth = new Date(
+          today.getFullYear(),
+          today.getMonth(),
+          1
+        );
+
+        setStartDate(firstDayOfMonth);
+        setEndDate(today);
+        break;
+      default:
+        break;
+    }
+  };
+
+  useEffect(() => {
+    setDatesBasedOnOption(activeOption);
+  }, [activeOption]);
+
   return (
     <>
       <div className="q_dateRange_header">
         <div className="q-datarange-bottom-detail-section">
           <div className="q_datafilter_section">
-            <div className="text-black text-[18px] font-semibold leading-none mt-2">
-              Date Range
-            </div>
+            <div className="q_details_header">Date Range</div>
 
             <div className="datarange_days_order">
               {["Today", "Yesterday", "Last 7 Days", "Last 30 days"].map(
@@ -51,7 +101,11 @@ const DateRange = () => {
                     className={`order_Details_days ${
                       isActive(option) ? "text-blue-500" : "text-gray-600"
                     }`}
-                    onClick={() => setActive(option)}
+                    // onClick={() => setActive(option) }
+                    onClick={() => {
+                      setActive(option);
+                      setDatesBasedOnOption(option);
+                    }}
                   >
                     {isActive(option) && <div className="dot mr-2" />}
                     {option}
@@ -61,11 +115,11 @@ const DateRange = () => {
             </div>
           </div>
 
-          <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4 items-start mt-4 px-8 py-6">
+          <div className="q_daterange_details">
             {/* Start Date */}
             <div className="relative">
-              <div className="mb-2 text-[#818181]  Admin_std">Start Date</div>
-              <div className="lg:w-full sm:w-full md:h-full">
+              <div className="q_date_range_start ml-2">Start Date</div>
+              <div className="">
                 <DatePicker
                   selected={startDate}
                   onChange={(date) => setStartDate(date)}
@@ -77,7 +131,7 @@ const DateRange = () => {
                   timeIntervals={15}
                   timeCaption="Time"
                   dateFormat="MMMM d, yyyy h:mm aa"
-                  className="border rounded px-3 py-2 pr-10 mt-1 focus:outline-none focus:border-blue-500 w-auto  Admin_std"
+                  className="q_input_details"
                   ref={startDateRef}
                 />
                 <span
@@ -91,7 +145,7 @@ const DateRange = () => {
 
             {/* End Date */}
             <div className="relative mt-4 sm:mt-0">
-              <div className="mb-2 text-[#818181] Admin_std">End Date</div>
+              <div className="q_date_range_start ml-6">End Date</div>
               <DatePicker
                 selected={endDate}
                 onChange={(date) => setEndDate(date)}
@@ -104,7 +158,7 @@ const DateRange = () => {
                 timeIntervals={15}
                 timeCaption="Time"
                 dateFormat="MMMM d, yyyy h:mm aa"
-                className="border rounded px-3 py-2 pr-10 mt-1 focus:outline-none focus:border-blue-500 w-[350px]  Admin_std"
+                className="q_input_details ml-6"
                 ref={endDateRef}
               />
               <span
@@ -114,7 +168,7 @@ const DateRange = () => {
                 <FiCalendar className="text-black " />
               </span>
             </div>
-            <span className="search_btn">
+            <span className="search_btn ml-6">
               <button
                 onClick={handleSearch}
                 className="q-order-daterange-button"

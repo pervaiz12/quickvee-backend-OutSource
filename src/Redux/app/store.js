@@ -18,14 +18,25 @@ import systemAccessListingReducer from "../features/SystemAccess/systemAccessSli
 
 import couponListReducer from "../features/Coupon/couponSlice";
 
+
+import inventoryListingReducer from "../features/Inventory/InventorySlice";
+
+
 import taxesReducer from "../features/Taxes/taxesSlice"
 
 import settingstorealtersReducer from "../features/SettingStoreAlters/SettingStoreAltersSlice"
 
 import SettingReceiptReducer from "../features/StoreSettings/SettingsReceipt/SettingsReceiptSlice";
 import PurchaseOrderReducer from "../features/PurchaseOrder/purchaseOrderSlice"
+import CheckIDVerifyListReducer from "../features/Reports/CheckIDVerify/CheckIDVerifySlice";
+import DailyReportList from "../features/DailyReport/dailyreportSlice";
+import EmployeeListReducer from "../features/EmployeeList/EmployeeListSlice";
+
+import TopsallerReducer from "../features/TopSaller/topsallerSlice";
 
 import RegisterSettingReducer from "../features/StoreSettings/RegisterSettings/RegisterSettingsSlice";
+
+import NewItemCreatedBtnListReducer from "../features/Reports/NewItemCreatedBetweenSlice/NewItemCreatedBetweenSlice";
 
 const store = configureStore({
   reducer: {
@@ -46,14 +57,30 @@ const store = configureStore({
     taxes: taxesReducer,
 
     systemAccessList:systemAccessListingReducer,
+
+    inventoryDataList:inventoryListingReducer,
+
     settingstoreoption: settingstoreoptionReducer,
     settingstorealters: settingstorealtersReducer,
 
 
+
     SettingReceiptList: SettingReceiptReducer,
+    CheckIDVerifyList:CheckIDVerifyListReducer,
+    dailyreport:DailyReportList,
+
+
+    NewItemCreatedBtnList:NewItemCreatedBtnListReducer,
+
+
+    topsaller:TopsallerReducer,
 
     RegisterSettingsData: RegisterSettingReducer,
    
+
+   //Employee List Data
+    employeeDataList :EmployeeListReducer,
+
 
   },
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),

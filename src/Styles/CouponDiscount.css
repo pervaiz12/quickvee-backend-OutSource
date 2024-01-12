@@ -25,7 +25,7 @@
   
   .q-attributes-main-page {
     margin: 0px 40px;
-    background-color: #FFFFFF !important;
+    /* background-color: #FFFFFF !important; */
  
   }
   
@@ -92,8 +92,9 @@
   .q_main_section_coupon{
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
+    /* justify-content: space-between; */
     width: 100%;
+    margin-top: 2rem;
     /* gap: 1rem;  */
   }
   
@@ -127,7 +128,7 @@
   src: url("../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
 }
 
-.q-attributes-main-page {
+.q-coupon-main-page {
   margin: 0px 40px;
   background-color: #FFFFFF !important;
 
@@ -193,13 +194,13 @@
   background-color: #FFFFFF !important;
 
 }
-.q_main_section_coupon{
+/* .q_main_section_coupon{
   display: flex;
   flex-wrap: wrap;
   justify-content: space-between;
   width: 100%;
-  /* gap: 1rem;  */
-}
+
+} */
 
 .q-coupon-bottom-header span {
   color: #000000;
@@ -362,6 +363,7 @@ input:checked + .slider:before {
  
   border: 2px solid #ccc;
   background-color: #f9f9f9;
+  margin-bottom: 2rem;
 }
 
 /* Styles for the active state */
@@ -369,6 +371,9 @@ input:checked + .slider:before {
   border: 2px solid blue;
   background-color: white;
   box-shadow: 0px 0px 22px #8DB2FF7A;
+ 
+  margin-bottom: 2rem;
+
 }
 
 .q_coupon_status_btn .active .slider.round:checked {
