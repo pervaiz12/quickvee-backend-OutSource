@@ -25,7 +25,12 @@ import MainAddEmployee from "./Components/StoreSetting/AddEmployee/MainAddEmploy
 import Permission from "./Components/StoreSetting/AddEmployee/Permission";
 import MainSyastemAccess from "./Components/StoreSetting/SystemAccess/MainSystemAccess";
 // import Info from "./Components/StoreSetting/SubSetting/Info";
+
+
+import MainInventory from "./Components/StoreSetting/Inventory/MainInventory";
+
 import MainTaxes from "./Components/StoreSetting/SubSetting/Taxes/MainTaxes";
+
 
 // import Info from "./Components/StoreSetting/SubSetting/Info";
 
@@ -45,6 +50,7 @@ import "./Styles/MainOrderPage.css";
 import "./Styles/CouponDiscount.css";
 import "./Styles/ImportData.css";
 import "./Styles/DailyDaterange.css";
+// import "./Styles/EmployeeWorking.css";
 
 import "./Styles/ReceiptMainpage.css";
 import "./Styles/MainCatedetails.css";
@@ -53,8 +59,19 @@ import "./Styles/ResigterSettingdata.css";
 import ReceiptMainpage from "./Components/StoreSetting/Receipt/ReceiptMainpage";
 import DailyTtlReport from "./Components/Reporting/DailyReport/DailyTtlReport";
 import MainCatedetails from "./Components/Reporting/CategoryDetails/MainCatedetails";
+
+import InstantActvity from "./Components/Reporting/InstantPo/InstantActvity";
+import EmployeeWorking from "./Components/Reporting/EmployeeWorkingHours/EmployeeWorking";
+import MainSiftSummary from "./Components/Reporting/SiftSummary/MainSiftSummary";
+
 import CheckIDVerifyMain from "./Components/Reporting/CheckIDVerify/CheckIDVerifyMain";
 import NewItemCreatedBetweenMain from "./Components/Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain";
+
+import TopSallerReport from "./Components/Reporting/TopSaller/TopSallerReport";
+
+import EmployeeList from "./Components/Reporting/Employelist/EmployeelistReport";
+
+
 
 
 
@@ -92,19 +109,35 @@ function App() {
 
 
           <Route path="/store-settings/system-access"  element={<MainSyastemAccess />} />
+
+
+          {/* /store-settings/inventory */}
+          <Route path="/store-settings/inventory"  element={<MainInventory />} />
+
           <Route path="/store-settings/Alters"  element={<MainStoreAlters />} />
 
           <Route path="/store-settings/register" element={<MainResigtersetting />} />
           <Route path="/store-settings/receipt" element={<ReceiptMainpage />} />
           <Route path="/store-settings/daily-total-report" element={<DailyTtlReport />}/>
+          <Route path="/store-settings/overall-top" element={<TopSallerReport />}/>
           <Route path="/store-settings/Details-category" element={<MainCatedetails />}/>
+
+          <Route path="/store-settings/instant-activity" element={<InstantActvity />} />
+          <Route path ="/store-settings/employee-working-hours" element={<EmployeeWorking />} />
+          <Route path ="/store-settings/shift-summary" element={<MainSiftSummary />} />
+         
+
+          <Route path="/store-settings/employee-list" element={<EmployeeList />}/>
+
         
 
 
           <Route path="/store-settings/permission/:employee_id"  element={<Permission />} />
           {/* <Route path="/store-settings/system-access"  element={<MainSyastemAccess />} /> */}
           <Route path="/store-settings/id-verification" element={<CheckIDVerifyMain />}/>
+
           <Route path="/store-settings/item-create-between" element={<NewItemCreatedBetweenMain />}/>
+
           
 
         </Route>

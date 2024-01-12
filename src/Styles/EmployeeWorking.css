@@ -1,0 +1,427 @@
+@font-face {
+    font-family: CircularBold;
+    src: url("../Assests/Fonts/circular-bold.TTF");
+}
+
+@font-face {
+    font-family: CircularMedium;
+    src: url("../Assests/Fonts/circulur-medium.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDBlack;
+    src: url("../Assests/Fonts/circulur-std-black.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDBook;
+    src: url("../Assests/Fonts/circulur-std-book.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDMedium;
+    src: url("../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
+}
+
+
+
+
+
+
+
+.q-attributes-main-page {
+    margin: 0px 40px;
+}
+
+.q-attributes-top-detail-section {
+    padding: 20px;
+    background: #FFFFFF;
+    box-shadow: 0px 3px 6px #0000001F;
+    border-radius: 8px;
+    margin: 30px 0;
+}
+
+.q-attributes-top-detail-section li {
+    color: #818181;
+    list-style-type: none;
+    font-family: CircularSTDBook !important;
+    font-size: 14px;
+    position: relative;
+    padding-left: 20px;
+}
+
+.q-attributes-top-detail-section li::before {
+    content: '\2022';
+    color: #000;
+    position: absolute;
+    left: 0;
+    top: 0;
+}
+
+.q-attributes-bottom-detail-section {
+    width: 100%;
+    box-shadow: 0px 3px 6px #0000001F;
+    border-radius: 8px !important;
+}
+
+.q-attributes-bottom-header-sticky {
+    background: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    border-radius: 8px;
+}
+
+.q-attributes-bottom-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.q-attributes-bottom-header span {
+    color: #000000;
+    font-size: 18px;
+    font-family: CircularSTDMedium !important;
+}
+
+.q-attributes-bottom-header p {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0A64F9;
+    font-family: CircularSTDMedium !important;
+    font-size: 16px;
+}
+
+.q-attributes-bottom-header p img {
+    margin-left: 8px;
+}
+
+.q-daily-report-bottom-report-header {
+    background: #253338;
+    display: flex;
+    padding: 10px 20px;
+}
+
+.q-daily-report-bottom-report-header p {
+    color: #FFFFFF;
+    font-size: 15px;
+    font-family: CircularSTDBook !important;
+
+}
+
+.q-employee-item {
+    width: 20%;
+}
+
+.q-employee-in{
+    width: 20%;
+}
+.q-employee-out {
+    width: 20%;
+}
+.q-employee-worked{
+    width:20%;
+}
+.q-catereport-break{
+    width:20%;
+}
+.attriButes-title{
+    width: 20%;
+
+}
+.q-employee-total{
+    width: 60%;
+}
+
+
+.q-attributes-bottom-attriButes-listing {
+    width: 100%;
+    background: #fff;
+    border-radius: 8px;
+}
+/* .q-attributes-bottom-attriButes-listing p {
+    width: 100%;
+    background: #fff;
+ 
+    border-right: 1px solid #000;
+} */
+
+.q-employee-bottom-attriButes-single-attributes {
+    display: flex;
+    padding: 20px;
+    border-bottom: 1px solid #E8E8E8;
+    /* cursor: all-scroll; */
+    user-select: none;
+}
+
+.q-employee-bottom-attriButes-single-attributes>.attriButes-title {
+    font-size: 16px;
+    color: #000000;
+    font-family: CircularSTDMedium !important;
+}
+
+.q-employee-bottom-attriButes-single-attributes>.attriButes-items {
+    color: #0A64F9;
+    /* cursor: pointer; */
+    font-family: CircularSTDMedium !important;
+    font-size: 16px;
+    text-decoration: underline;
+}
+
+.q-employee-bottom-attriButes-single-attributes>.attriButes-enable-disable {
+    display: flex;
+    align-items: flex-start;
+    justify-content:flex-end;
+}
+
+.attributes-checkmark-div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 48%;
+}
+
+.attributes-checkmark-div .attributes-checkmark-label {
+    color: #000000;
+    font-family: CircularSTDMedium !important;
+    font-size: 16px;
+    display: block;
+    position: relative;
+    padding-left: 33px;
+    cursor: pointer;
+    font-size: 16px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.attributes-checkmark-div .attributes-checkmark-label input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+
+.attributes-checkmark {
+    position: absolute;
+    top: 2px;
+    left: 0;
+    height: 20px;
+    width: 20px;
+    background-color: #eee;
+    border-radius: 5px;
+}
+
+
+/* When the checkbox is checked, add a blue background */
+.attributes-checkmark-div .attributes-checkmark-label input:checked~.attributes-checkmark {
+    background-color: #1EC26B;
+    border-radius: 5px;
+}
+
+/* Create the checkmark/indicator (hidden when not checked) */
+.attributes-checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+
+
+
+
+
+.q-add-attriButes-section-middle-footer {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 20px;
+}
+
+.q-add-attriButes-section-middle-footer .quic-btn {
+    font-family: CircularSTDBook !important;
+    font-size: 16px;
+    color: #fff;
+    padding: 10px 40px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.q-add-attriButes-section-middle-footer .quic-btn-save {
+    background: #0A64F9;
+}
+
+.q-add-attriButes-section-middle-footer .quic-btn-cancle {
+    background: #878787;
+    margin-left: 10px;
+}
+
+
+.q-custom-modal-container {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 50;
+    overflow: auto;
+    background-color: #808080; /* Adjust the color as needed */
+    background-color: rgba(0, 0, 0, 0.75); /* Adjust the opacity as needed */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    
+  }
+  .q-custom-modal-content {
+    position: absolute;
+    top: 35%; /* Adjust the top position as needed */
+    left: 15.66666667%; /* Adjust the left position as needed */
+    width: 70%; /* Adjust the width as needed */
+    height: 262px; /* Adjust the height as needed */
+    background-color: #fff;
+    border-radius: 0.5rem; /* Adjust the border radius as needed */
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    padding: 1.5rem; /* Adjust the padding as needed */
+  }
+  .q-custom-modal-header{
+    font-size: 18px;
+    color: #000;
+    opacity: 1;
+    /* Add any specific styles for the Admin_std class */
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .q-custom-input-field {
+    width: 100%;
+    border: 1px solid #d1d5db; /* Adjust the color as needed */
+    border-radius: 0.375rem; /* Adjust the border radius as needed */
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+
+
+/* add by priya */
+
+.q_details_header{
+    font-size: 18px;
+    font-family:CircularSTDMedium !important ;
+    color: #000000;
+}
+
+
+.custom-dropdown {
+    position: relative;
+    margin-top: 8px;
+  }
+  
+  .custom-dropdown-header {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    border:1px solid #E1E1E1;
+    justify-content: space-between;
+    padding: 5px 10px;
+    border-radius: 4px;
+  }
+  
+  .dropdown-content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #ddd;
+    z-index: 1;
+    width: 100%;
+  }
+  
+  .dropdown-content div {
+    padding: 8px;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .dropdown-content div:last-child {
+    border-bottom: none;
+  }
+  .q-details-page-label{
+    color:#818181;
+    font-size: 15px;
+    font-family: CircularSTDBook !important;
+    opacity: 1;
+    margin-top:10px;
+ }
+
+
+ .q-order-bottom-oder-details-listing {
+    width: 100%;
+    background: #F5F5F5;
+    border-radius: 8px;
+}
+
+.q-order-bottom-order-details-single-attributes {
+    display: flex;
+    padding: 20px;
+    border-bottom: 1px solid #E8E8E8;
+    /* cursor: all-scroll; */
+    user-select: none;
+}
+
+.q-employee-bottom-attriButes-single-attributes>.q-catereport-item {
+    font-size: 16px;
+    color: #000000;
+    font-family: CircularSTDMedium !important;
+}
+
+.q-employee-bottom-attriButes-single-attributes>.q-catereport-quantity {
+    font-size: 16px;
+    color: #000000;
+    font-family: CircularSTDMedium !important;
+}
+
+.q-employee-bottom-attriButes-single-attributes>.q-catereport-amount {
+    font-size: 16px;
+    color: #000000;
+    font-family: CircularSTDMedium !important;
+}
+
+
+.q-order-bottom-order-details-single-attributes>.q-catereport-amount {
+    font-size: 16px;
+    color: #000000;
+    font-family: CircularSTDMedium !important;
+}
+
+
+/* Add these styles to your existing stylesheet or create a new one */
+
+.q-employee-bottom-attriButes-single-attributes {
+    display: flex;
+    padding: 0;
+  }
+  
+  .q-employee-bottom-attriButes-single-attributes p {
+    border-right: 1px solid #E3E3E3; 
+    padding: 20px;
+    margin: -3.5px;
+    color:#818181;
+   
+  }
+  
+  .q-employee-bottom-attriButes-single-attributes p:last-child {
+    border-right: none; 
+    color: #818181;
+  }
+  
+
