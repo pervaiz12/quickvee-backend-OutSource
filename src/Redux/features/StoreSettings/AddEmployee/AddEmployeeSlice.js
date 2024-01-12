@@ -50,18 +50,6 @@ export const fetchPermissionData = createAsyncThunk('employeelist/fetchPermissio
     }
 })
 
-// export const updateEmployeePermission = createAsyncThunk('employeelist/updateEmployeePermission.', async () => {
-//     try {
-//         const response = await axios.post(BASE_URL + UPDATE_PERMISSION,  { headers: { "Content-Type": "multipart/form-data" } })
-//         // console.log(response)
-//         if (response.status === 200) {
-//            return response.data
-//         }
-//     } catch (error) {
-//         throw new Error(error.response.data.message);
-//     }
-// })
-
 export const deleteEmployee = createAsyncThunk('employeeList/deleteEmployee',async(data) => {
     try{
         const response = await axios.post(BASE_URL + DELETE_EMPLOYEE , data , { headers:{"Content-Type":"multipart/form-data"} })

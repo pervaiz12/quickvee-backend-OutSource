@@ -42,9 +42,11 @@ module.exports = Object.freeze({
     EMPLOYEE_DATA:"Store_setting_api/getEmployeeByEmpid",
     PERMISSIONS_LIST:"Store_setting_api/permission_list",
     UPDATE_PERMISSION:"Store_setting_api/update_Employee_permission",
-    // EMPLOYEE_LIST:"App/employee_list",
+    
 
-
+    // Store Setting - RegisterSettings api
+    GET_REGISTER_SETTINGS_DATA:"Profile_setup/inventory_register_setting",
+    UPDATE_REGISTER_SETTINGS:"Profile_setup/register_setting",
   
     // Store Setting options api
     GET_STORE_OPTIONS_DATA:"Store_setting_api/get_store_options_data",
