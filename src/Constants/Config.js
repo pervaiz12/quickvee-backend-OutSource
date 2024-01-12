@@ -89,10 +89,11 @@ module.exports = Object.freeze({
 
       // All Reports API
       CHECKID_VARIFICATION_REPORT_LIST:"ReportingReactapi/checkID_varification_report_list",
-
-
-            // for daily Report 
-            LIST_DAILY_REPORT : "ReportingReactapi/daily_total_report",
-
+      
+      
+      // for daily Report 
+      LIST_DAILY_REPORT : "ReportingReactapi/daily_total_report",
+      
+      NEW_ITEM_CREATED_BETWEEN_LIST:"ReportingReactapi/new_item_created_between_list",
     
   });

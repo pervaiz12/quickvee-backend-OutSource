@@ -27,6 +27,8 @@ import PurchaseOrderReducer from "../features/PurchaseOrder/purchaseOrderSlice"
 import CheckIDVerifyListReducer from "../features/Reports/CheckIDVerify/CheckIDVerifySlice";
 import DailyReportList from "../features/DailyReport/dailyreportSlice";
 
+import NewItemCreatedBtnListReducer from "../features/Reports/NewItemCreatedBetweenSlice/NewItemCreatedBetweenSlice";
+
 const store = configureStore({
   reducer: {
     categories: categoriesReducer,
@@ -53,6 +55,8 @@ const store = configureStore({
     SettingReceiptList: SettingReceiptReducer,
     CheckIDVerifyList:CheckIDVerifyListReducer,
     dailyreport:DailyReportList,
+
+    NewItemCreatedBtnList:NewItemCreatedBtnListReducer,
 
    
 
