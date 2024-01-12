@@ -578,6 +578,20 @@ const Validation = () => {
       return updatedErrors;
     };
 
+    const isText = (fieldValue,fieldName, updatedErrors) => {
+      if (fieldValue === '') {
+        updatedErrors[fieldName] = 'Please enter'+fieldName+' field ';
+      } else if (emoji.test(fieldValue)) {
+        updatedErrors[fieldName] = 'Emoji not allowed';
+      } else if (!Space.test(fieldValue)) {
+        updatedErrors[fieldName] = 'Space is not allow';
+      } else if (!Nameval.test(fieldValue)) {
+        updatedErrors[fieldName] = 'Only contain alphabet';
+      } else {
+        updatedErrors[fieldName] = '';
+      }
+    };
+
     const validateRadioBtn = (value, updatedErrors) => {
       if (value === '') {
         updatedErrors.role = 'Please Select one option';
@@ -625,6 +639,7 @@ const Validation = () => {
       validateWages,
       Address_line_1,
       isNumber,
+      isText,
       validateRadioBtn
     };
   };
