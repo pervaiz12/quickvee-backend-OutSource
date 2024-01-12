@@ -101,6 +101,7 @@ module.exports = Object.freeze({
             LIST_DAILY_REPORT : "ReportingReactapi/daily_total_report",
     
             TOP_SALLER_REPORT : "ReportingReactapi/top_seller_10",
+            INSTANT_ACTIVITY_REPORT : "ReportingReactapi/instant_po_activity_report",
 
 
       //Employee List
