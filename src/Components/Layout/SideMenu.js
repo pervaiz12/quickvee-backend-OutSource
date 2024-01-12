@@ -386,6 +386,8 @@ const menuItems = [
     { id: 73, text: "New Item Created Between", link: "/store-settings/item-create-between" },
     { id: 74, text: "Reorder Inventory", link: "/store-settings/recorder-inventory" },
     { id: 75, text: "Shift Summary", link: "/store-settings/shift-summary" },
+    { id: 76, text: "Payment Method Detail", link: "/store-settings/payment-method-detail-report" },
+
   ]
   },
   

@@ -59,6 +59,8 @@ import ReceiptMainpage from "./Components/StoreSetting/Receipt/ReceiptMainpage";
 import DailyTtlReport from "./Components/Reporting/DailyReport/DailyTtlReport";
 import MainCatedetails from "./Components/Reporting/CategoryDetails/MainCatedetails";
 import CheckIDVerifyMain from "./Components/Reporting/CheckIDVerify/CheckIDVerifyMain";
+import PaymentMethodList from "./Components/Reporting/PaymentMehodDetail/PaymentMethodList";
+import PaymentMethodReport from "./Components/Reporting/PaymentMehodDetail/PaymentMethodReport";
 
 
 
@@ -113,6 +115,9 @@ function App() {
           <Route path="/store-settings/permission/:employee_id"  element={<Permission />} />
           {/* <Route path="/store-settings/system-access"  element={<MainSyastemAccess />} /> */}
           <Route path="/store-settings/id-verification" element={<CheckIDVerifyMain />}/>
+
+
+          <Route path="/store-settings/payment-method-detail-report" element={<PaymentMethodReport />}/>
 
           
 

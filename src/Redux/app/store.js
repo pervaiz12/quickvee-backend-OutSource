@@ -31,6 +31,8 @@ import PurchaseOrderReducer from "../features/PurchaseOrder/purchaseOrderSlice"
 import CheckIDVerifyListReducer from "../features/Reports/CheckIDVerify/CheckIDVerifySlice";
 import DailyReportList from "../features/DailyReport/dailyreportSlice";
 
+import PaymentMethodDetailReducer from "../features/PaymentMethodReport/PaymentMethodSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -63,7 +65,8 @@ const store = configureStore({
     CheckIDVerifyList:CheckIDVerifyListReducer,
     dailyreport:DailyReportList,
 
-   
+   //reducer for payment method  report
+   paymentDetailReport:PaymentMethodDetailReducer,
 
   },
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),
