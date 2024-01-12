@@ -65,6 +65,7 @@ import EmployeeWorking from "./Components/Reporting/EmployeeWorkingHours/Employe
 import MainSiftSummary from "./Components/Reporting/SiftSummary/MainSiftSummary";
 
 import CheckIDVerifyMain from "./Components/Reporting/CheckIDVerify/CheckIDVerifyMain";
+import NewItemCreatedBetweenMain from "./Components/Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain";
 
 import TopSallerReport from "./Components/Reporting/TopSaller/TopSallerReport";
 
@@ -134,6 +135,8 @@ function App() {
           <Route path="/store-settings/permission/:employee_id"  element={<Permission />} />
           {/* <Route path="/store-settings/system-access"  element={<MainSyastemAccess />} /> */}
           <Route path="/store-settings/id-verification" element={<CheckIDVerifyMain />}/>
+
+          <Route path="/store-settings/item-create-between" element={<NewItemCreatedBetweenMain />}/>
 
           
 

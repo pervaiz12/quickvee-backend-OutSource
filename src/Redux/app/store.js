@@ -35,6 +35,8 @@ import EmployeeListReducer from "../features/EmployeeList/EmployeeListSlice";
 import TopsallerReducer from "../features/TopSaller/topsallerSlice";
 
 
+import NewItemCreatedBtnListReducer from "../features/Reports/NewItemCreatedBetweenSlice/NewItemCreatedBetweenSlice";
+
 const store = configureStore({
   reducer: {
     categories: categoriesReducer,
@@ -67,7 +69,11 @@ const store = configureStore({
     dailyreport:DailyReportList,
 
 
+    NewItemCreatedBtnList:NewItemCreatedBtnListReducer,
+
+
     topsaller:TopsallerReducer,
+
 
    
 
