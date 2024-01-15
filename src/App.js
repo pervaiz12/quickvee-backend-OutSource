@@ -65,11 +65,16 @@ import EmployeeWorking from "./Components/Reporting/EmployeeWorkingHours/Employe
 import MainSiftSummary from "./Components/Reporting/SiftSummary/MainSiftSummary";
 
 import CheckIDVerifyMain from "./Components/Reporting/CheckIDVerify/CheckIDVerifyMain";
+
+import PaymentMethodList from "./Components/Reporting/PaymentMehodDetail/PaymentMethodList";
+import PaymentMethodReport from "./Components/Reporting/PaymentMehodDetail/PaymentMethodReport";
+
 import NewItemCreatedBetweenMain from "./Components/Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain";
 
 import TopSallerReport from "./Components/Reporting/TopSaller/TopSallerReport";
 
 import EmployeeList from "./Components/Reporting/Employelist/EmployeelistReport";
+
 
 
 
@@ -135,7 +140,12 @@ function App() {
           {/* <Route path="/store-settings/system-access"  element={<MainSyastemAccess />} /> */}
           <Route path="/store-settings/id-verification" element={<CheckIDVerifyMain />}/>
 
+
+
+          <Route path="/store-settings/payment-method-detail-report" element={<PaymentMethodReport />}/>
+
           <Route path="/store-settings/item-create-between" element={<NewItemCreatedBetweenMain />}/>
+
 
           
 

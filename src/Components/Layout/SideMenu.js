@@ -365,6 +365,30 @@ const menuItems = [
     text: "Reporting",
     link: "/reporting",
     className: "flex items-center gap-2",
+
+  dropdownItems: [
+
+    { id: 61, text: "Sales Report", link: "/store-settings/sales-report" },
+    { id: 62, text: "Daily Total Report", link: "/store-settings/daily-total-report" },
+    { id: 63, text: "Detailed Category Sale", link: "/store-settings/Details-category" },
+    { id: 64, text: "Report by Sales Person", link: "/store-settings/report-sales-person" },
+    { id: 65, text: "Check ID verification", link: "/store-settings/id-verification" },
+    { id: 66, text: "Vendor Sales Report", link: "/store-settings/vendors-sales-reports" },
+    { id: 67, text: "Credit Debit Sales Report", link: "/store-settings/credit-debit-sales" },
+    { id: 68, text: "Instant PO Activity Report", link: "/store-settings/instant-activity" },
+    { id: 69, text: "Top Seller - Overall Top 10", link: "/store-settings/overall-top" },
+    { id: 70, text: "Flash Report", link: "/store-settings/flash-resigter" },
+    { id: 71, text: "Vendor List", link: "/store-settings/vendors-list" },
+    { id: 72, text: "Employee List", link: "/store-settings/employee-list" },
+    { id: 73, text: "New Item Created Between", link: "/store-settings/item-create-between" },
+    { id: 74, text: "Reorder Inventory", link: "/store-settings/recorder-inventory" },
+    { id: 75, text: "Shift Summary", link: "/store-settings/shift-summary" },
+    { id: 76, text: "Payment Method Detail", link: "/store-settings/payment-method-detail-report" },
+
+  ]
+  },
+  
+
     dropdownItems: [
       { id: 61, text: "Sales Report", link: "/store-settings/sales-report" },
       {
@@ -420,6 +444,7 @@ const menuItems = [
         text: "Reorder Inventory",
         link: "/store-settings/recorder-inventory",
       },
+
 
       {
         id: 75,
