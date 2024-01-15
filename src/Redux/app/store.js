@@ -28,6 +28,7 @@ import CheckIDVerifyListReducer from "../features/Reports/CheckIDVerify/CheckIDV
 import DailyReportList from "../features/DailyReport/dailyreportSlice";
 
 import NewItemCreatedBtnListReducer from "../features/Reports/NewItemCreatedBetweenSlice/NewItemCreatedBetweenSlice";
+import ReorderInventoryListReducer from "../features/Reports/ReorderInventory/ReorderInventorySlice";
 
 const store = configureStore({
   reducer: {
@@ -57,6 +58,7 @@ const store = configureStore({
     dailyreport:DailyReportList,
 
     NewItemCreatedBtnList:NewItemCreatedBtnListReducer,
+    ReorderInventoryList:ReorderInventoryListReducer,
 
    
 

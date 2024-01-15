@@ -95,5 +95,6 @@ module.exports = Object.freeze({
       LIST_DAILY_REPORT : "ReportingReactapi/daily_total_report",
       
       NEW_ITEM_CREATED_BETWEEN_LIST:"ReportingReactapi/new_item_created_between_list",
+      GET_REORDER_INVENTORY_LIST:"ReportingReactapi/get_reorder_inventory_list",
     
   });
