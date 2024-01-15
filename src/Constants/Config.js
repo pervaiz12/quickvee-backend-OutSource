@@ -62,6 +62,19 @@ module.exports = Object.freeze({
   // get Store Setting alerts list api
   GET_STORE_ALERTS_DATA: "Store_setting_api/store_alerts_list",
 
+    EMPLOYEE_DATA:"Store_setting_api/getEmployeeByEmpid",
+    PERMISSIONS_LIST:"Store_setting_api/permission_list",
+    UPDATE_PERMISSION:"Store_setting_api/update_Employee_permission",
+    
+
+    // Store Setting - RegisterSettings api
+    GET_REGISTER_SETTINGS_DATA:"Profile_setup/inventory_register_setting",
+    UPDATE_REGISTER_SETTINGS:"Profile_setup/register_setting",
+  
+    // Store Setting options api
+    GET_STORE_OPTIONS_DATA:"Store_setting_api/get_store_options_data",
+
+
   // get Store Setting alerts list api
   UPDATE_STORE_ALERTS_DATA: "Store_setting_api/store_alerts_update",
 
@@ -88,6 +101,56 @@ module.exports = Object.freeze({
 
 
   //for Payment Method Daily Report 
+
+    // get Store Setting alerts list api
+    GET_STORE_ALERTS_DATA:"Store_setting_api/store_alerts_list",
+    
+    // get Store Setting alerts list api
+    UPDATE_STORE_ALERTS_DATA:"Store_setting_api/store_alerts_update",
+    
+    // Get Store Setting Receipt List and Update API
+    GET_STORE_RECEIPT_DATA:"Store_setting_api/get_receipt_list",
+    UPDATE_RECEIPT_INFO_DATA:"Store_setting_api/update_receipt_info_list",
+
+
+
+      // Purchase API Calls 
+      LIST_ALL_PARCHASE: "Purchase_ordersReactApi/purchase_order_list",
+
+
+      // Taxes API Calls 
+      ADD_TAXES:"Taxesapi/add_Tax",
+      UPDATE_TAXES:"Taxesapi/update_Tax",
+      LIST_ALL_TAXES:"Taxesapi/Taxes_list",
+      DELETE_SINGLE_TAXE: "Taxesapi/delete_tax",
+      TAXE_CATEGORY_LIST: "Taxesapi/Taxes_category_list",
+
+      // All Reports API
+      CHECKID_VARIFICATION_REPORT_LIST:"ReportingReactapi/checkID_varification_report_list",
+
+      
+      
+      // for daily Report 
+      LIST_DAILY_REPORT : "ReportingReactapi/daily_total_report",
+      
+      NEW_ITEM_CREATED_BETWEEN_LIST:"ReportingReactapi/new_item_created_between_list",
+
+
+
+            // for daily Report 
+            LIST_DAILY_REPORT : "ReportingReactapi/daily_total_report",
+    
+            TOP_SALLER_REPORT : "ReportingReactapi/top_seller_10",
+            INSTANT_ACTIVITY_REPORT : "ReportingReactapi/instant_po_activity_report",
+
+
+      //Employee List
+      
+      LIST_ALL_EMPLOYEE : "ReportingReactapi/employee_list",
+
+    
+  });
+
 
   LIST_PAYMENT_METHOD_REPORT : "ReportingReactapi/credit_card_sales_report",
 });

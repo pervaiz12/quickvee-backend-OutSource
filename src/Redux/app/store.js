@@ -30,8 +30,16 @@ import SettingReceiptReducer from "../features/StoreSettings/SettingsReceipt/Set
 import PurchaseOrderReducer from "../features/PurchaseOrder/purchaseOrderSlice"
 import CheckIDVerifyListReducer from "../features/Reports/CheckIDVerify/CheckIDVerifySlice";
 import DailyReportList from "../features/DailyReport/dailyreportSlice";
+import EmployeeListReducer from "../features/EmployeeList/EmployeeListSlice";
 
 import PaymentMethodDetailReducer from "../features/PaymentMethodReport/PaymentMethodSlice";
+
+import TopsallerReducer from "../features/TopSaller/topsallerSlice";
+import instantactivitySlice from "../features/InstantActivity/instantactivitySlice";
+
+import RegisterSettingReducer from "../features/StoreSettings/RegisterSettings/RegisterSettingsSlice";
+
+import NewItemCreatedBtnListReducer from "../features/Reports/NewItemCreatedBetweenSlice/NewItemCreatedBetweenSlice";
 
 
 const store = configureStore({
@@ -67,6 +75,21 @@ const store = configureStore({
 
    //reducer for payment method  report
    paymentDetailReport:PaymentMethodDetailReducer,
+
+
+    NewItemCreatedBtnList:NewItemCreatedBtnListReducer,
+
+
+    topsaller:TopsallerReducer,
+    instantactivity:instantactivitySlice,
+
+    RegisterSettingsData: RegisterSettingReducer,
+   
+
+
+   //Employee List Data
+    employeeDataList :EmployeeListReducer,
+
 
   },
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),
