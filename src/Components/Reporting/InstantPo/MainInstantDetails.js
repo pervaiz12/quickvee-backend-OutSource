@@ -146,14 +146,25 @@ const MainInstantDetails = ({ data }) => {
                       }
                     )}
                   </p>
-                  <p className="q-employee-in">{instantactivity.emp_name}</p>
+                  <p className="q-employee-in">
+                    {instantactivity.emp_name === null ||
+                    instantactivity.emp_name === ""
+                      ? "Online"
+                      : instantactivity.emp_name}
+                  </p>
                   <p className="q-employee-in">{instantactivity.title}</p>
                   <p className="q-employee-in">{instantactivity.variant}</p>
-                  <p className="q-employee-out">{instantactivity.current_qty}</p>
+                  <p className="q-employee-out">
+                    {instantactivity.current_qty}
+                  </p>
                   <p className="q-employee-worked">{instantactivity.qty}</p>
                   <p className="q-employee-out">{AfterAdjustQty}</p>
                   <p className="q-catereport-break">{instantactivity.price}</p>
-                  <p className="q-catereport-break">{calculatedTotal % 1 !== 0 ? calculatedTotal.toFixed(2) : calculatedTotal}</p>
+                  <p className="q-catereport-break">
+                    {calculatedTotal % 1 !== 0
+                      ? calculatedTotal.toFixed(2)
+                      : calculatedTotal}
+                  </p>
                 </div>
               </div>
             );
