@@ -33,6 +33,7 @@ import DailyReportList from "../features/DailyReport/dailyreportSlice";
 import EmployeeListReducer from "../features/EmployeeList/EmployeeListSlice";
 
 import TopsallerReducer from "../features/TopSaller/topsallerSlice";
+import instantactivitySlice from "../features/InstantActivity/instantactivitySlice";
 
 import RegisterSettingReducer from "../features/StoreSettings/RegisterSettings/RegisterSettingsSlice";
 
@@ -74,6 +75,7 @@ const store = configureStore({
 
 
     topsaller:TopsallerReducer,
+    instantactivity:instantactivitySlice,
 
     RegisterSettingsData: RegisterSettingReducer,
    
