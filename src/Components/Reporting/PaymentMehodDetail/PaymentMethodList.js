@@ -38,38 +38,93 @@ const PaymentMethodList = ({data}) => {
   
 
 
+  // const renderDataTable = () => {
+    
+    
+  //   if (
+  //       paymentReport.status === "Failed" &&
+  //       paymentReport.msg === "No Data found."
+  //   ) {
+  //       //  debugger;
+  //     return <div className="empty-div">No data available</div>;
+  //   } else if (myArray && myArray.length >= 1) {
+        
+  //     return (
+  //       <>
+  //         <div className="q-daily-report-bottom-report-header">
+  //           <p className="report-sort">Card type</p>
+  //           <p className="report-title">Total</p>
+  //         </div>
+  //         {myArray.map((paymentData, index) => (
+  //           <div className="q-category-bottom-categories-listing" key={index}>
+  //             <div className="q-category-bottom-categories-single-category">
+           
+  //               <p className="report-title">{paymentData.card_type}</p>
+  //               <p className="report-title">  {typeof paymentData.amt === 'number' ? `$${Number(paymentData.amt).toFixed(2)}` : 'N/A'}</p>
+  //               {/* <p className="report-title">${paymentData.amt.toFixed(2)}</p> */}
+  //             </div>
+  //           </div>
+  //         ))}
+
+  //       </>
+  //     );
+  //   }
+  // };
+
+
+
+
+
+
   const renderDataTable = () => {
-    
-    
+    let hasValidData = false;
+  
     if (
-        paymentReport.status === "Failed" &&
-        paymentReport.msg === "No Data found."
+      paymentReport.status === "Failed" &&
+      paymentReport.msg === "No Data found."
     ) {
-        //  debugger;
       return <div className="empty-div">No data available</div>;
     } else if (myArray && myArray.length >= 1) {
-        
       return (
         <>
           <div className="q-daily-report-bottom-report-header">
             <p className="report-sort">Card type</p>
             <p className="report-title">Total</p>
           </div>
-          {myArray.map((paymentData, index) => (
-            <div className="q-category-bottom-categories-listing" key={index}>
-              <div className="q-category-bottom-categories-single-category">
+          {myArray.map((paymentData, index) => {
+            if (
+             
            
-                <p className="report-title">{paymentData.card_type}</p>
-                <p className="report-title">  {typeof paymentData.amt === 'number' ? `$${Number(paymentData.amt).toFixed(2)}` : 'N/A'}</p>
-                {/* <p className="report-title">${paymentData.amt.toFixed(2)}</p> */}
-              </div>
-            </div>
-          ))}
-
+              paymentData.amt > 0
+            ) {
+              hasValidData = true;
+              return (
+                <div
+                  className="q-category-bottom-categories-listing"
+                  key={index}
+                >
+                  <div className="q-category-bottom-categories-single-category">
+                    <p className="report-title">{paymentData.card_type}</p>
+                    <p className="report-title">
+                      {typeof paymentData.amt != ""
+                        ? `$${Number(paymentData.amt).toFixed(2)}`
+                        : "N/A"}
+                    </p>
+                  </div>
+                </div>
+              );
+            } else {
+              return null; 
+            }
+          })}
+          {!hasValidData && (
+            <div className="empty-div">No data available</div>
+          )}
         </>
       );
     }
   };
+  
 
   return <>{renderDataTable()}</>;
 };
