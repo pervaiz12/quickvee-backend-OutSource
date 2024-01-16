@@ -6,7 +6,6 @@ const initialState = {
     loading: false,
     storealertsData: [],
     successMessage: "",
-    error: '',
 }
 
 // Generate pening , fulfilled and rejected action type

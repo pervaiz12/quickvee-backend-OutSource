@@ -45,19 +45,19 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
           isSticky ? "" : ""
         }`}
       >
-        <div className="flex items-center px-4 mx-2">
-          <BiMenu
-            className="text-black text-[30px]"
-            onClick={(e) => {
-              setIsMenuOpen(!isMenuOpen);
-            }}
-          />
+  <div className="flex items-center px-4 mx-2">
+  <BiMenu
+    className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out`}
+    onClick={(e) => {
+      setIsMenuOpen(!isMenuOpen);
+    }}
+  />
           <img src={Quick} alt="Logo" className="ml-6" />
 
           <div className="relative">
       {/* Button to toggle dropdown */}
       <div
-        className="flex items-center ml-6 px-3 py-1 text-black lg:text-[20px] admin_medium cursor-pointer sm:text-xs md:text-sm"
+        className="flex items-center ml-6 px-3 py-1 text-black lg:text-[20px] admin_medium cursor-pointer sm:text-[12px] md:text-[15px]"
         onClick={handleDropdownToggle}
       >
         Vape Store

@@ -65,7 +65,6 @@ const DateRange = ({ onDateRangeChange }) => {
         last7Days.setDate(today.getDate() - 7);
         setStartDate(last7Days);
         setEndDate(today);
-
         break;
       case "Last 30 days":
         const firstDayOfMonth = new Date(
@@ -90,6 +89,7 @@ const DateRange = ({ onDateRangeChange }) => {
     <>
       <div className="q_dateRange_header">
         <div className="q-datarange-bottom-detail-section">
+          {/* Date Range Section */}
           <div className="q_datafilter_section">
             <div className="q_details_header">Date Range</div>
 
@@ -101,7 +101,6 @@ const DateRange = ({ onDateRangeChange }) => {
                     className={`order_Details_days ${
                       isActive(option) ? "text-blue-500" : "text-gray-600"
                     }`}
-                    // onClick={() => setActive(option) }
                     onClick={() => {
                       setActive(option);
                       setDatesBasedOnOption(option);
@@ -115,70 +114,69 @@ const DateRange = ({ onDateRangeChange }) => {
             </div>
           </div>
 
-          <div className="q_daterange_details">
-            {/* Start Date */}
-            <div className="relative">
-              <div className="q_date_range_start ml-2">Start Date</div>
-              <div className="">
-                <DatePicker
-                  selected={startDate}
-                  onChange={(date) => setStartDate(date)}
-                  selectsStart
-                  startDate={startDate}
-                  endDate={endDate}
-                  showTimeSelect
-                  timeFormat="HH:mm"
-                  timeIntervals={15}
-                  timeCaption="Time"
-                  dateFormat="MMMM d, yyyy h:mm aa"
-                  className="q_input_details"
-                  ref={startDateRef}
-                />
-                <span
-                  className="absolute right-3 top-14 transform -translate-y-1/2 text-gray-400 cursor-pointer"
-                  onClick={handleStartDateIconClick}
-                >
-                  <FiCalendar className="text-black" />
-                </span>
-              </div>
-            </div>
+          {/* Date Picker Section */}
+          <div className="q_daterange_details flex flex-col md:flex-row">
+  {/* Start Date */}
+  <div className="relative mb-4 md:mb-0 md:mr-4">
+    <div className="q_date_range_start">Start Date</div>
+    <div className="flex items-center">
+      <DatePicker
+        selected={startDate}
+        onChange={(date) => setStartDate(date)}
+        selectsStart
+        startDate={startDate}
+        endDate={endDate}
+        dateFormat="MMMM d, yyyy"
+        className="q_input_details"
+        ref={startDateRef}
+        showPopperArrow={false}
+      />
+      <span
+        className="absolute right-3 top-14  transform -translate-y-1/2 text-gray-400 cursor-pointer"
+        onClick={handleStartDateIconClick}
+      >
+        <FiCalendar className="text-black" />
+      </span>
+    </div>
+  </div>
 
-            {/* End Date */}
-            <div className="relative mt-4 sm:mt-0">
-              <div className="q_date_range_start ml-6">End Date</div>
-              <DatePicker
-                selected={endDate}
-                onChange={(date) => setEndDate(date)}
-                selectsEnd
-                startDate={startDate}
-                endDate={endDate}
-                minDate={startDate}
-                showTimeSelect
-                timeFormat="HH:mm"
-                timeIntervals={15}
-                timeCaption="Time"
-                dateFormat="MMMM d, yyyy h:mm aa"
-                className="q_input_details ml-6"
-                ref={endDateRef}
-              />
-              <span
-                className="absolute right-3 top-14 transform -translate-y-1/2 text-gray-400 cursor-pointer"
-                onClick={handleEndDateIconClick}
-              >
-                <FiCalendar className="text-black " />
-              </span>
-            </div>
-            <span className="search_btn ml-6">
-              <button
-                onClick={handleSearch}
-                className="q-order-daterange-button"
-              >
-                Search
-              </button>
-            </span>
+  {/* End Date */}
+  <div className="relative">
+    <div className="q_date_range_start md:ml-6">End Date</div>
+    <div className="flex items-center">
 
-            {/* Search Button */}
-          </div>
+      <DatePicker
+        selected={endDate}
+        onChange={(date) => setEndDate(date)}
+        selectsEnd
+        startDate={startDate}
+        endDate={endDate}
+        minDate={startDate}
+        dateFormat="MMMM d, yyyy"
+        className="q_input_details ml-0 md:ml-6"
+        ref={endDateRef}
+        showPopperArrow={false}
+      />
+      <span
+        className="absolute right-3 top-14 transform -translate-y-1/2 text-gray-400 cursor-pointer"
+        onClick={handleEndDateIconClick}
+      >
+        <FiCalendar className="text-black " />
+      </span>
+    </div>
+  </div>
+
+  {/* Search Button */}
+  <span className="search_btn mt-4 md:mt-0 md:ml-6">
+    <button
+      onClick={handleSearch}
+      className="save_btn"
+    >
+      Search
+    </button>
+  </span>
+</div>
+
         </div>
       </div>
     </>

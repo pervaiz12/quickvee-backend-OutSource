@@ -48,7 +48,7 @@ const SiftSetting = () => {
                 <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
               </div>
               {employeeDropdownVisible && (
-                <div className="dropdown-content ml-2">
+                <div className="dropdown-content">
                   <div onClick={() => handleOptionClick("All", "employee")}>All</div>
                   <div onClick={() => handleOptionClick("employee1", "employee")}>employee1</div>
                   <div onClick={() => handleOptionClick("employee2", "employee")}>employee2</div>

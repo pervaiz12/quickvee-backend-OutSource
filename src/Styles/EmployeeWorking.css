@@ -408,13 +408,14 @@
 
 .q-employee-bottom-attriButes-single-attributes {
     display: flex;
-    padding: 0;
+
+    padding: 4px;
   }
   
   .q-employee-bottom-attriButes-single-attributes p {
     border-right: 1px solid #E3E3E3; 
     padding: 20px;
-    margin: -3.5px;
+    margin: -3.5px 3.5px;
     color:#818181;
    
   }
