@@ -11,7 +11,7 @@ node_modules
 
 # production
 /build
-
+/build.tar.gz
 # misc
 .DS_Store
 .env.local

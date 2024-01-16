@@ -16,33 +16,37 @@ const MainHeader = () => {
                   <thead>
                     <tr>
                       <th className="">
-                        <div className="text-[#707070]  lg:text-[18px] Admin_std font-normal">Gross salse</div>
-                        <div className="text-black text-[40px] font-normal  Admin_std mt-1 mb-1">462.00</div>
+                        <div className="text-[#707070]  lg:lg:text-[18px] sm:text-[12px] Admin_std font-normal">Gross salse</div>
+                        <div className="text-black lg:text-[40px] sm:text-[12px]  font-normal  Admin_std mt-1 mb-1">462.00</div>
+                        <div className="text-green-400 text-[14px]  mt-1 mb-1 Admin_std">+21.00%</div>
                        
                         
                       </th>
                       <td className="mt-5 text-[50px]">-</td>
                       <th>
-                        <div className="text-[#707070]  text-[18px] Admin_std font-normal">Return</div>
-                        <div className="text-black text-[40px] font-normal  Admin_std  mt-1 mb-1">0.00</div>
-                        <div className="text-green-400 text-[14px]  mt-1 mb-1 Admin_std">+21.00%</div>
+                        <div className="text-[#707070]  lg:text-[18px] sm:text-[12px] Admin_std font-normal">Return</div>
+                        <div className="text-black lg:text-[40px] sm:text-[12px]   font-normal  Admin_std  mt-1 mb-1">0.00</div>
+                        <div className="text-green-400 text-[14px]  mt-1 mb-1 Admin_std">NA</div>
                       </th>
                       <td className="mt-5 text-[50px]">-</td>
                       <th>
-                        <div className="text-[#707070]  text-[18px] Admin_std font-normal">Discount</div>
-                        <div className="text-black text-[40px] font-normal Admin_std mt-1 mb-1">27.00</div>
+                        <div className="text-[#707070]  lg:text-[18px] sm:text-[12px] Admin_std font-normal">Discount</div>
+                        <div className="text-black lg:text-[40px] sm:text-[12px] font-normal Admin_std mt-1 mb-1">27.00</div>
+                        <div className="text-green-400 text-[14px]  mt-1 mb-1 Admin_std">+21.00%</div>
                        
                       </th>
                       <td className="mt-5 text-[50px]">=</td>
                       <th>
-                        <div className="text-[#707070]  text-[18px] Admin_std font-normal">Net Sales</div>
-                        <div className="text-black text-[40px] font-normal  Admin_std  mt-1 mb-1">435.56</div>
+                        <div className="text-[#707070]  lg:text-[18px] sm:text-[12px] Admin_std font-normal">Net Sales</div>
+                        <div className="text-black lg:text-[40px] sm:text-[12px]   font-normal  Admin_std  mt-1 mb-1">435.56</div>
+                        <div className="text-green-400 text-[14px]  mt-1 mb-1 Admin_std">+21.00%</div>
                        
                       </th>
                       <td className="vl"></td>
                       <th>
-                        <div className="text-[#707070]  text-[18px] Admin_std font-normal">Sales Tax</div>
-                        <div className="text-black text-[40px] font-normal  Admin_std  mt-1 mb-1">47.56</div>
+                        <div className="text-[#707070]  lg:text-[18px] sm:text-[12px] Admin_std font-normal">Sales Tax</div>
+                        <div className="text-black lg:text-[40px] sm:text-[12px]   font-normal  Admin_std  mt-1 mb-1">47.56</div>
+                        <div className="text-green-400 text-[14px]  mt-1 mb-1 Admin_std">+21.00%</div>
                        
                       </th>
                     </tr>
