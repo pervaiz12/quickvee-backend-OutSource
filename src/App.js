@@ -71,6 +71,8 @@ import TopSallerReport from "./Components/Reporting/TopSaller/TopSallerReport";
 import EmployeeList from "./Components/Reporting/Employelist/EmployeelistReport";
 import MainItem from "./Components/Reporting/ItemType/MainItem";
 import MainItemSales from "./Components/Reporting/ItemSales/MainItemSales";
+import MainEmployeelist from "./Components/Reporting/Employelist/MainEmployeelist";
+import MainTaxesReport from "./Components/Reporting/Taxes/MainTaxesReport"
 
 
 
@@ -113,31 +115,32 @@ function App() {
 
 
           {/* /store-settings/inventory */}
-          <Route path="/store-settings/inventory"  element={<MainInventory />} />
+          <Route path="/store-reporting/inventory"  element={<MainInventory />} />
 
-          <Route path="/store-settings/Alters"  element={<MainStoreAlters />} />
+          <Route path="/store-reporting/Alters"  element={<MainStoreAlters />} />
 
-          <Route path="/store-settings/register" element={<MainResigtersetting />} />
-          <Route path="/store-settings/receipt" element={<ReceiptMainpage />} />
-          <Route path="/store-settings/daily-total-report" element={<DailyTtlReport />}/>
-          <Route path="/store-settings/overall-top" element={<TopSallerReport />}/>
-          <Route path="/store-settings/Details-category" element={<MainCatedetails />}/>
+          <Route path="/store-reporting/register" element={<MainResigtersetting />} />
+          <Route path="/store-reporting/receipt" element={<ReceiptMainpage />} />
+          <Route path="/store-reporting/daily-total-report" element={<DailyTtlReport />}/>
+          <Route path="/store-reporting/overall-top" element={<TopSallerReport />}/>
+          <Route path="/store-reporting/Details-category" element={<MainCatedetails />}/>
 
-          <Route path="/store-settings/instant-activity" element={<InstantActvity />} />
-          <Route path ="/store-settings/employee-working-hours" element={<EmployeeWorking />} />
-          <Route path ="/store-settings/shift-summary" element={<MainSiftSummary />} />
+          <Route path="/store-reporting/instant-activity" element={<InstantActvity />} />
+          <Route path ="/store-reporting/employee-working-hours" element={<EmployeeWorking />} />
+          <Route path ="/store-reporting/shift-summary" element={<MainSiftSummary />} />
          
 
-          <Route path="/store-settings/employee-list" element={<EmployeeList />}/>
+          <Route path="/store-reporting/employee-list" element={<MainEmployeelist />}/>
 
         
 
 
-          <Route path="/store-settings/permission/:employee_id"  element={<Permission />} />
-          {/* <Route path="/store-settings/system-access"  element={<MainSyastemAccess />} /> */}
-          <Route path="/store-settings/id-verification" element={<CheckIDVerifyMain />}/>
-          <Route path="/store-settings/order-type" element={<MainItem />} />
-          <Route path="/store-settings/item-sales" element={<MainItemSales />} />
+          <Route path="/store-reporting/permission/:employee_id"  element={<Permission />} />
+          {/* <Route path="/store-reporting/system-access"  element={<MainSyastemAccess />} /> */}
+          <Route path="/store-reporting/id-verification" element={<CheckIDVerifyMain />}/>
+          <Route path="/store-reporting/order-type" element={<MainItem />} />
+          <Route path="/store-reporting/item-sales" element={<MainItemSales />} />
+          <Route path="/store-reporting/taxes" element={<MainTaxesReport  />} />
 
           
 
