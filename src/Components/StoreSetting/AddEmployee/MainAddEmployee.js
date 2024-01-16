@@ -5,7 +5,7 @@ const MainAddEmployee = () => {
     return (
       <>
         <div className="q-attributes-main-page">
-        <EmployeeList></EmployeeList>
+        <EmployeeList/>
         </div>
       </>
     )

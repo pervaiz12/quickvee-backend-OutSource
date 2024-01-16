@@ -32,6 +32,9 @@
   font-family: admin_std_medium;
   src: url(./Assests//Fonts/FontsFree-Net-Circular-Std-Medium.ttf);
 }
+
+
+
 .qvrow{
   --bs-gutter-x: 1.5rem;
   --bs-gutter-y: 0;
@@ -619,11 +622,12 @@ margin-bottom: 10px;
 .q_sideMenu_layout_details{
   
   background-color: #334247;
-  padding: 1rem;
+  /* padding: 1rem; */
   box-shadow: #0000001f;
   width: 100%;
   text-align: center;
   z-index: 1;
+  font-size: 15px;
 }
 
 
@@ -665,4 +669,64 @@ margin-bottom: 10px;
   height: auto;
 }
 
+/* .react-datepicker-popper {
+  border: none;
+}
 
+.react-datepicker__triangle {
+  display: none;
+} */
+
+.q_sideMenu_layout_details a:active a:hover{
+  background-color: #0A64F9;
+  border: 1px solid #000;
+}
+
+
+
+    a.flex.text-center.submenu-item.text-gray-400.py-4.CircularSTDBook:active   {
+      border: 1px solid #334247;
+      background-color: #334247;
+      color: #FFC400;
+  }
+
+  a.flex.text-center.submenu-item.text-gray-400.py-4.CircularSTDBook:hover{
+    border: 1px solid #334247;
+      background-color: #334247;
+      color: #FFC400;
+
+  }
+
+
+  .submenu-item {
+    display: flex;
+  
+    background-color: #334247;
+    color: #808080; /* or any other color you prefer */
+    padding:1rem 2rem; /* Adjust the padding as needed */
+    font-family: 'CircularSTDBook', sans-serif;
+  }
+  
+  .submenu-item:hover {
+    /* Add hover styles if desired */
+    background-color: #2c3a47;
+    color:#FFC400;
+  }
+
+  .image-container {
+    position: relative;
+    display: inline-block;
+  }
+  
+  .hoverable-image {
+    transition: filter 0.3s ease;
+  }
+  
+  .hoverable-image:hover {
+    filter: brightness(0) saturate(100%) invert(71%) sepia(50%) saturate(886%) hue-rotate(359deg) brightness(102%) contrast(105%);
+    /* You can adjust the filter properties based on your desired effect */
+  }
+  .hoverable-image:active {
+    filter: brightness(0) saturate(100%) invert(71%) sepia(50%) saturate(886%) hue-rotate(359deg) brightness(102%) contrast(105%) !important;
+    /* You can adjust the filter properties based on your desired effect */
+  }

@@ -79,12 +79,12 @@ const MainOnline = () => {
 
       <div className="bg-white p-4 rounded-md">
         <div className="mb-4">
-          <h3 className="text-[20px] font-normal opacity-100 text-black ml-4 admin_medium">
+          <h3 className="text-[20px] font-normal opacity-100 text-black admin_medium">
             Filter By
           </h3>
         </div>
 
-        <div className="q-order-page-container ml-8">
+        <div className="q-order-page-container">
           {/* Employee Dropdown */}
           <div className="q-order-page-filter">
             <label className="q-details-page-label" htmlFor="employeeFilter">
@@ -99,7 +99,7 @@ const MainOnline = () => {
                 <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
               </div>
               {employeeDropdownVisible && (
-                <div className="dropdown-content ml-2">
+                <div className="dropdown-content">
                   <div onClick={() => handleOptionClick("All", "employee")}>
                     All
                   </div>
@@ -135,7 +135,7 @@ const MainOnline = () => {
                 <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
               </div>
               {transactionDropdownVisible && (
-                <div className="dropdown-content ml-2">
+                <div className="dropdown-content">
                   <div onClick={() => handleOptionClick("All", "transaction")}>
                     All
                   </div>

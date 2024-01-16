@@ -75,6 +75,8 @@ import ReorderInventoryMain from "./Components/Reporting/ReorderInventory/Reorde
 import TopSallerReport from "./Components/Reporting/TopSaller/TopSallerReport";
 
 import EmployeeList from "./Components/Reporting/Employelist/EmployeelistReport";
+import MainItem from "./Components/Reporting/ItemType/MainItem";
+import MainItemSales from "./Components/Reporting/ItemSales/MainItemSales";
 
 
 
@@ -140,6 +142,8 @@ function App() {
           <Route path="/store-settings/permission/:employee_id"  element={<Permission />} />
           {/* <Route path="/store-settings/system-access"  element={<MainSyastemAccess />} /> */}
           <Route path="/store-settings/id-verification" element={<CheckIDVerifyMain />}/>
+          <Route path="/store-settings/order-type" element={<MainItem />} />
+          <Route path="/store-settings/item-sales" element={<MainItemSales />} />
 
 
 

@@ -33,6 +33,7 @@ import timesheetblackIcon from "../../Assests/Dashboard/timesheetblackIcon.svg";
 import { useLocation } from "react-router-dom";
 
 const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
+    const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const location = useLocation();
   const currentUrl = location.pathname;
 
@@ -138,12 +139,12 @@ const DropdownMenuItem = ({ item }) => {
         </p>
       </div>
       {isDropdownOpen && (
-        <div className="q_sideMenu_layout_details">
+        <div className="q_sideMenu_layout_details CircularSTDBook">
           {item.dropdownItems.map((dropdownItem) => (
             <Link
               key={dropdownItem.id}
               to={dropdownItem.link}
-              className="flex text-center submenu-item text-gray-400 py-4 CircularSTDBook"
+              className="submenu-item"
             >
               {dropdownItem.text}
             </Link>
@@ -159,7 +160,7 @@ const menuItems = [
   {
     id: 1,
     icon: (
-      <img src={DashIcon} alt="Dashboard" className="h-6 w-10 mt-4 mb-4 " />
+      <img src={DashIcon} alt="Dashboard" className="h-6 w-10 mt-4 mb-4 hoverable-image" />
     ),
     activeIcon: (
       <img src={DashboardIcon} alt="Dashboard" className="h-6 w-10 mt-4 mb-4" />
@@ -171,7 +172,7 @@ const menuItems = [
   {
     id: 2,
     icon: (
-      <img src={ShoppingCartIcon} alt="Order" className="h-6 w-10 mt-4 mb-4" />
+      <img src={ShoppingCartIcon} alt="Order" className="h-6 w-10 mt-4 mb-4 hoverable-image" />
     ),
     activeIcon: (
       <img src={OrderYellow} alt="order" className="h-6 w-10 mt-4 mb-4 " />
@@ -182,7 +183,7 @@ const menuItems = [
   {
     id: 3,
     icon: (
-      <img src={CategoryIcon} alt="Category" className="h-6 w-10 mt-4 mb-4" />
+      <img src={CategoryIcon} alt="Category" className="h-6 w-10 mt-4 mb-4 hoverable-image" />
     ),
     activeIcon: (
       <img src={CatIcon} alt="Category" className="h-6 w-10 mt-4 mb-4 " />
@@ -193,7 +194,7 @@ const menuItems = [
   {
     id: 4,
     icon: (
-      <img src={ProductIcon} alt="Products" className="h-6 w-10 mt-4 mb-4" />
+      <img src={ProductIcon} alt="Products" className="h-6 w-10 mt-4 mb-4 hoverable-image" />
     ),
     activeIcon: (
       <img src={ProdIcon} alt="Products" className="h-6 w-10 mt-4 mb-4 " />
@@ -207,7 +208,7 @@ const menuItems = [
       <img
         src={AttributesIcon}
         alt="Attributes"
-        className="h-6 w-10 mt-4 mb-4"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
       />
     ),
     activeIcon: (
@@ -222,11 +223,11 @@ const menuItems = [
       <img
         src={PurchaseIcon}
         alt="Purchase Data"
-        className="h-6 w-10 mt-4 mb-4"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
       />
     ),
     activeIcon: (
-      <img src={PurIcon} alt="Purchase" className="h-6 w-10 mt-4 mb-4 " />
+      <img src={PurIcon} alt="Purchase" className="h-6 w-10 mt-4 mb-4" />
     ),
     text: "Purchase Orders",
     link: "/purchase-data",
@@ -234,7 +235,7 @@ const menuItems = [
   {
     id: 7,
     icon: (
-      <img src={VenderIcon} alt="Import Data" className="h-6 w-10 mt-4 mb-4" />
+      <img src={VenderIcon} alt="Import Data" className="h-6 w-10 mt-4 mb-4 hoverable-image" />
     ),
 
     text: "Import Data",
@@ -247,7 +248,7 @@ const menuItems = [
   },
   {
     id: 8,
-    icon: <img src={CouponIcon} alt="Coupons" className="h-6 w-10 mt-4 mb-4" />,
+    icon: <img src={CouponIcon} alt="Coupons" className="h-6 w-10 mt-4 mb-4 hoverable-image" />,
     text: "Coupons",
     link: "/coupons",
     activeIcon: (
@@ -258,7 +259,7 @@ const menuItems = [
   },
   {
     id: 9,
-    icon: <img src={VenIcon} alt="Vendors" className="h-6 w-10 mt-4 mb-4" />,
+    icon: <img src={VenIcon} alt="Vendors" className="h-6 w-10 mt-4 mb-4 hoverable-image" />,
     text: "Vendors",
     link: "/vendors",
     activeIcon: (
@@ -273,7 +274,7 @@ const menuItems = [
       <img
         src={timesheetblackIcon}
         alt="Timesheet"
-        className="h-6 w-10 mt-4 mb-4"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
       />
     ),
     text: "Timesheet",
@@ -290,7 +291,7 @@ const menuItems = [
   },
   {
     id: 11,
-    icon: <img src={StoreIcon} alt="store" className="h-6 w-10 mt-4 mb-4" />,
+    icon: <img src={StoreIcon} alt="store" className="h-6 w-10 mt-4 mb-4 hoverable-image" />,
     activeIcon: (
       <img
         src={SettingIcon}
@@ -354,7 +355,7 @@ const menuItems = [
 
   {
     id: 12,
-    icon: <img src={ReportIcon} alt="store" className="h-6 w-10 mt-4 mb-4" />,
+    icon: <img src={ReportIcon} alt="store" className="h-6 w-10 mt-4 mb-4 hoverable-image" />,
     activeIcon: (
       <img
         src={ResportIcons}
@@ -367,6 +368,11 @@ const menuItems = [
     className: "flex items-center gap-2",
 
   dropdownItems: [
+
+      { id: 77, text: " Item Sales ", link: "/store-settings/item-sales" },
+      { id: 78, text: " Payment Method Details", link: "/store-settings/payment-method-details" },
+      { id: 79, text: " Order Type ", link: "/store-settings/order-type" },
+    ],
 
     { id: 61, text: "Sales Report", link: "/store-settings/sales-report" },
     { id: 62, text: "Daily Total Report", link: "/store-settings/daily-total-report" },
@@ -386,6 +392,7 @@ const menuItems = [
     { id: 76, text: "Payment Method Detail", link: "/store-settings/payment-method-detail-report" },
     
   ]
+
   },
   
 
