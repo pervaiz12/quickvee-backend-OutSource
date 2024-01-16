@@ -52,7 +52,7 @@ useEffect(() => {
   return (
     <>
       <div className="q-category-bottom-detail-section">
-        <div className="q-category-bottom-header-sticky">
+        <div className="">
           <div className="q-category-bottom-header">
             <div className='q_details_header ml-2'>{title}</div>
           </div>

@@ -32,7 +32,15 @@ import CheckIDVerifyListReducer from "../features/Reports/CheckIDVerify/CheckIDV
 import DailyReportList from "../features/DailyReport/dailyreportSlice";
 import EmployeeListReducer from "../features/EmployeeList/EmployeeListSlice";
 
+import PaymentMethodDetailReducer from "../features/PaymentMethodReport/PaymentMethodSlice";
+
 import TopsallerReducer from "../features/TopSaller/topsallerSlice";
+import instantactivitySlice from "../features/InstantActivity/instantactivitySlice";
+
+import RegisterSettingReducer from "../features/StoreSettings/RegisterSettings/RegisterSettingsSlice";
+
+import NewItemCreatedBtnListReducer from "../features/Reports/NewItemCreatedBetweenSlice/NewItemCreatedBetweenSlice";
+import ReorderInventoryListReducer from "../features/Reports/ReorderInventory/ReorderInventorySlice";
 
 
 const store = configureStore({
@@ -66,10 +74,20 @@ const store = configureStore({
     CheckIDVerifyList:CheckIDVerifyListReducer,
     dailyreport:DailyReportList,
 
+   //reducer for payment method  report
+   paymentDetailReport:PaymentMethodDetailReducer,
+
+
+    NewItemCreatedBtnList:NewItemCreatedBtnListReducer,
+    ReorderInventoryList:ReorderInventoryListReducer,
+
 
     topsaller:TopsallerReducer,
+    instantactivity:instantactivitySlice,
 
+    RegisterSettingsData: RegisterSettingReducer,
    
+
 
    //Employee List Data
     employeeDataList :EmployeeListReducer,

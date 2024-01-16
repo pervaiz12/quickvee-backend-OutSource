@@ -124,7 +124,7 @@ const CategoryDetail = ({ seVisible }) => {
   return (
     <>
       <div className="q-category-bottom-detail-section">
-        <div className="q-category-bottom-header-sticky">
+        <div className="">
           <div className="q-category-bottom-header">
             <span>Category</span>
             <p onClick={() => seVisible("CategoryAlert")}>

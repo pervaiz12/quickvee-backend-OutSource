@@ -66,6 +66,12 @@ import MainSiftSummary from "./Components/Reporting/SiftSummary/MainSiftSummary"
 
 import CheckIDVerifyMain from "./Components/Reporting/CheckIDVerify/CheckIDVerifyMain";
 
+import PaymentMethodList from "./Components/Reporting/PaymentMehodDetail/PaymentMethodList";
+import PaymentMethodReport from "./Components/Reporting/PaymentMehodDetail/PaymentMethodReport";
+
+import NewItemCreatedBetweenMain from "./Components/Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain";
+import ReorderInventoryMain from "./Components/Reporting/ReorderInventory/ReorderInventoryMain";
+
 import TopSallerReport from "./Components/Reporting/TopSaller/TopSallerReport";
 
 import EmployeeList from "./Components/Reporting/Employelist/EmployeelistReport";
@@ -138,6 +144,17 @@ function App() {
           <Route path="/store-settings/id-verification" element={<CheckIDVerifyMain />}/>
           <Route path="/store-settings/order-type" element={<MainItem />} />
           <Route path="/store-settings/item-sales" element={<MainItemSales />} />
+
+
+
+          <Route path="/store-settings/payment-method-detail-report" element={<PaymentMethodReport />}/>
+
+          <Route path="/store-settings/item-create-between" element={<NewItemCreatedBetweenMain />}/>
+
+          <Route path="/store-settings/recorder-inventory" element={<ReorderInventoryMain />}/>
+
+
+
 
           
 
