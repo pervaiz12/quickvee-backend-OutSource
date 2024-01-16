@@ -70,6 +70,7 @@ import PaymentMethodList from "./Components/Reporting/PaymentMehodDetail/Payment
 import PaymentMethodReport from "./Components/Reporting/PaymentMehodDetail/PaymentMethodReport";
 
 import NewItemCreatedBetweenMain from "./Components/Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain";
+import ReorderInventoryMain from "./Components/Reporting/ReorderInventory/ReorderInventoryMain";
 
 import TopSallerReport from "./Components/Reporting/TopSaller/TopSallerReport";
 
@@ -145,6 +146,10 @@ function App() {
           <Route path="/store-settings/payment-method-detail-report" element={<PaymentMethodReport />}/>
 
           <Route path="/store-settings/item-create-between" element={<NewItemCreatedBetweenMain />}/>
+
+          <Route path="/store-settings/recorder-inventory" element={<ReorderInventoryMain />}/>
+
+
 
 
           

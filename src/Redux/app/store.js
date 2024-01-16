@@ -40,6 +40,7 @@ import instantactivitySlice from "../features/InstantActivity/instantactivitySli
 import RegisterSettingReducer from "../features/StoreSettings/RegisterSettings/RegisterSettingsSlice";
 
 import NewItemCreatedBtnListReducer from "../features/Reports/NewItemCreatedBetweenSlice/NewItemCreatedBetweenSlice";
+import ReorderInventoryListReducer from "../features/Reports/ReorderInventory/ReorderInventorySlice";
 
 
 const store = configureStore({
@@ -78,6 +79,7 @@ const store = configureStore({
 
 
     NewItemCreatedBtnList:NewItemCreatedBtnListReducer,
+    ReorderInventoryList:ReorderInventoryListReducer,
 
 
     topsaller:TopsallerReducer,

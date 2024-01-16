@@ -135,10 +135,14 @@ module.exports = Object.freeze({
       
       NEW_ITEM_CREATED_BETWEEN_LIST:"ReportingReactapi/new_item_created_between_list",
 
+      GET_REORDER_INVENTORY_LIST:"ReportingReactapi/get_reorder_inventory_list",
+
+
 
 
             // for daily Report 
             LIST_DAILY_REPORT : "ReportingReactapi/daily_total_report",
+
     
             TOP_SALLER_REPORT : "ReportingReactapi/top_seller_10",
             INSTANT_ACTIVITY_REPORT : "ReportingReactapi/instant_po_activity_report",
