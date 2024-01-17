@@ -52,7 +52,9 @@ const TaxesDetails = ({ data }) => {
                 key={index}
               >
                 <div className="q-employee-bottom-attriButes-single-attributes">
-                  <p className="q-employee-item">{key}</p>
+                  <p className="q-employee-item">
+                    {key === "Sale Tax" ? "Sales Tax" : key}
+                  </p>
                   <p className="q-employee-in">
                     {taxesreport.data3.tax_rate[key] &&
                     taxesreport.data3.tax_rate[key].percent
