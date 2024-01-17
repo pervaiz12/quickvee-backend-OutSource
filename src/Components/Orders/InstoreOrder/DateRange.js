@@ -85,6 +85,8 @@ const DateRange = ({ onDateRangeChange }) => {
     setDatesBasedOnOption(activeOption);
   }, [activeOption]);
 
+
+
   return (
     <>
       <div className="q_dateRange_header">
@@ -113,6 +115,34 @@ const DateRange = ({ onDateRangeChange }) => {
               )}
             </div>
           </div>
+          <div>
+      {/* Your other content goes here */}
+      
+        <div className="q_date_range_filter_details">
+          <select
+            className="border-2 border-customColor rounded px-4 py-2 mr-7 bg-white text-blue-500 text-[16px] Admin_std"
+            onChange={(e) => {
+              const selectedOption = e.target.value;
+              setActive(selectedOption);
+              setDatesBasedOnOption(selectedOption);
+            }}
+          >
+            {["Today", "Yesterday", "Last 7 Days", "Last 30 days"].map(
+              (option) => (
+                <option
+                  key={option}
+                  value={option}
+                  className={
+                    isActive(option) ? "text-blue-500" : "text-gray-600"
+                  }
+                >
+                  {option}
+                </option>
+              )
+            )}
+          </select>
+        </div>
+     </div>
 
           {/* Date Picker Section */}
           <div className="q_daterange_details flex flex-col md:flex-row">
@@ -142,7 +172,7 @@ const DateRange = ({ onDateRangeChange }) => {
 
   {/* End Date */}
   <div className="relative">
-    <div className="q_date_range_start md:ml-6">End Date</div>
+    <div className="q_date_range_start ">End Date</div>
     <div className="flex items-center">
 
       <DatePicker
@@ -153,7 +183,7 @@ const DateRange = ({ onDateRangeChange }) => {
         endDate={endDate}
         minDate={startDate}
         dateFormat="MMMM d, yyyy"
-        className="q_input_details ml-0 md:ml-6"
+        className="q_input_details ml-0 "
         ref={endDateRef}
         showPopperArrow={false}
       />

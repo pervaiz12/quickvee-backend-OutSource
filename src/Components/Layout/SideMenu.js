@@ -53,7 +53,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
         style={isMenuOpen ? { width: "16rem" } : { width: "6rem" }}
       >
         {/* Left Side Menu */}
-        <div className="flex-1 bg-[#253338] text-[#9E9E9E]">
+        <div className="">
           {isMenuOpen
             ? menuItems.map((item) => (
                 <div
