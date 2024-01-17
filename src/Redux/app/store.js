@@ -42,6 +42,8 @@ import RegisterSettingReducer from "../features/StoreSettings/RegisterSettings/R
 import NewItemCreatedBtnListReducer from "../features/Reports/NewItemCreatedBetweenSlice/NewItemCreatedBetweenSlice";
 import ReorderInventoryListReducer from "../features/Reports/ReorderInventory/ReorderInventorySlice";
 
+import OrderTypeReducer from "../features/OrderType/OrderTypeSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -92,6 +94,8 @@ const store = configureStore({
    //Employee List Data
     employeeDataList :EmployeeListReducer,
 
+    //Order Type
+    orderTypeList:OrderTypeReducer,
 
   },
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),

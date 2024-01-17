@@ -153,7 +153,14 @@ module.exports = Object.freeze({
       LIST_ALL_EMPLOYEE : "ReportingReactapi/employee_list",
 
       LIST_PAYMENT_METHOD_REPORT : "ReportingReactapi/credit_card_sales_report",
-  // });
+
+      //Order Type
+
+      LIST_ALL_ORDER_TYPE : "ReportingReactapi/order_type",
+
+
+
+  
 
 
   
