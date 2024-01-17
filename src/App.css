@@ -137,13 +137,15 @@
 
 .sidebar-menu {
   position: fixed;
-  background-color: #f4f4f8;
+  background-color: #253338;
   /* top: 0; */
   overflow-y: auto;
-  height: 92vh;
+  height: 94vh;
   /* width: 16rem; */
   z-index: 9;
+  color:#9E9E9E;
 }
+
 
 .main-content {
   overflow-x: hidden;
@@ -729,4 +731,19 @@ margin-bottom: 10px;
   .hoverable-image:active {
     filter: brightness(0) saturate(100%) invert(71%) sepia(50%) saturate(886%) hue-rotate(359deg) brightness(102%) contrast(105%) !important;
     /* You can adjust the filter properties based on your desired effect */
+  }
+
+  .q_date_range_filter_details {
+    display: none;
+  }
+  
+  @media screen and (max-width: 776px) and (min-width: 376px) {
+    .q_date_range_filter_details {
+      display: block; 
+      display: flex;
+    justify-content: end;
+    }
+    .order_Details_days{
+      display: none;
+    }
   }

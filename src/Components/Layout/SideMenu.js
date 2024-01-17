@@ -53,7 +53,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
         style={isMenuOpen ? { width: "16rem" } : { width: "6rem" }}
       >
         {/* Left Side Menu */}
-        <div className="flex-1 bg-[#253338] text-[#9E9E9E]">
+        <div className="">
           {isMenuOpen
             ? menuItems.map((item) => (
                 <div
@@ -127,6 +127,7 @@ const DropdownMenuItem = ({ item }) => {
   };
 
   return (
+    
     <div className="relative">
       <div className="flex items-center">
         {item.icon}
@@ -366,104 +367,75 @@ const menuItems = [
     text: "Reporting",
     link: "/reporting",
     className: "flex items-center gap-2",
+    dropdownItems: [
+      { id: 61, text: "Sales Report", link: "/store-reporting/sales-report" },
+      {
+        id: 62,
+        text: "Daily Total Report",
+        link: "/store-reporting/daily-total-report",
+      },
+      {
+        id: 63,
+        text: "Detailed Category Sale",
+        link: "/store-reporting/Details-category",
+      },
+      {
+        id: 64,
+        text: "Report by Sales Person",
+        link: "/store-reporting/report-sales-person",
+      },
+      {
+        id: 65,
+        text: "Check ID verification",
+        link: "/store-reporting/id-verification",
+      },
+      {
+        id: 66,
+        text: "Vendor Sales Report",
+        link: "/store-reporting/vendors-sales-reports",
+      },
+      {
+        id: 67,
+        text: "Credit Debit Sales Report",
+        link: "/store-reporting/credit-debit-sales",
+      },
+      {
+        id: 68,
+        text: "Instant PO Activity Report",
+        link: "/store-reporting/instant-activity",
+      },
+      {
+        id: 69,
+        text: "Top Seller - Overall Top 10",
+        link: "/store-reporting/overall-top",
+      },
+      { id: 70, text: "Flash Report", link: "/store-reporting/flash-resigter" },
+      { id: 71, text: "Vendor List", link: "/store-reporting/vendors-list" },
+      { id: 72, text: "Employee List", link: "/store-reporting/employee-list" },
+      {
+        id: 73,
+        text: "New Item Created Between",
+        link: "/store-reporting/item-create-between",
+      },
+      {
+        id: 74,
+        text: "Reorder Inventory",
+        link: "/store-reporting/recorder-inventory",
+      },
 
-  dropdownItems: [
+      {
+        id: 75,
+        text: " Employee Working Hours",
+        link: "/store-reporting/employee-working-hours",
+      },
+      { id: 76, text: "Shift Summary", link: "/store-reporting/shift-summary" },
 
-      { id: 77, text: " Item Sales ", link: "/store-settings/item-sales" },
-      { id: 78, text: " Payment Method Details", link: "/store-settings/payment-method-details" },
-      { id: 79, text: " Order Type ", link: "/store-settings/order-type" },
+      { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
+      { id: 78, text: " Payment Method Details", link: "/store-reporting/payment-method-details" },
+      { id: 79, text: " Order Type ", link: "/store-reporting/order-type" },
+      { id: 80, text: "Taxes ", link: "/store-reporting/taxes" },
     ],
-
-    { id: 61, text: "Sales Report", link: "/store-settings/sales-report" },
-    { id: 62, text: "Daily Total Report", link: "/store-settings/daily-total-report" },
-    { id: 63, text: "Detailed Category Sale", link: "/store-settings/Details-category" },
-    { id: 64, text: "Report by Sales Person", link: "/store-settings/report-sales-person" },
-    { id: 65, text: "Check ID verification", link: "/store-settings/id-verification" },
-    { id: 66, text: "Vendor Sales Report", link: "/store-settings/vendors-sales-reports" },
-    { id: 67, text: "Credit Debit Sales Report", link: "/store-settings/credit-debit-sales" },
-    { id: 68, text: "Instant PO Activity Report", link: "/store-settings/instant-activity" },
-    { id: 69, text: "Top Seller - Overall Top 10", link: "/store-settings/overall-top" },
-    { id: 70, text: "Flash Report", link: "/store-settings/flash-resigter" },
-    { id: 71, text: "Vendor List", link: "/store-settings/vendors-list" },
-    { id: 72, text: "Employee List", link: "/store-settings/employee-list" },
-    { id: 73, text: "New Item Created Between", link: "/store-settings/item-create-between" },
-    { id: 74, text: "Reorder Inventory", link: "/store-settings/recorder-inventory" },
-    { id: 75, text: "Shift Summary", link: "/store-settings/shift-summary" },
-    { id: 76, text: "Payment Method Detail", link: "/store-settings/payment-method-detail-report" },
-    
-  ]
-
   },
-  
-
-  //   dropdownItems: [
-  //     { id: 61, text: "Sales Report", link: "/store-settings/sales-report" },
-  //     {
-  //       id: 62,
-  //       text: "Daily Total Report",
-  //       link: "/store-settings/daily-total-report",
-  //     },
-  //     {
-  //       id: 63,
-  //       text: "Detailed Category Sale",
-  //       link: "/store-settings/Details-category",
-  //     },
-  //     {
-  //       id: 64,
-  //       text: "Report by Sales Person",
-  //       link: "/store-settings/report-sales-person",
-  //     },
-  //     {
-  //       id: 65,
-  //       text: "Check ID verification",
-  //       link: "/store-settings/id-verification",
-  //     },
-  //     {
-  //       id: 66,
-  //       text: "Vendor Sales Report",
-  //       link: "/store-settings/vendors-sales-reports",
-  //     },
-  //     {
-  //       id: 67,
-  //       text: "Credit Debit Sales Report",
-  //       link: "/store-settings/credit-debit-sales",
-  //     },
-  //     {
-  //       id: 68,
-  //       text: "Instant PO Activity Report",
-  //       link: "/store-settings/instant-activity",
-  //     },
-  //     {
-  //       id: 69,
-  //       text: "Top Seller - Overall Top 10",
-  //       link: "/store-settings/overall-top",
-  //     },
-  //     { id: 70, text: "Flash Report", link: "/store-settings/flash-resigter" },
-  //     { id: 71, text: "Vendor List", link: "/store-settings/vendors-list" },
-  //     { id: 72, text: "Employee List", link: "/store-settings/employee-list" },
-  //     {
-  //       id: 73,
-  //       text: "New Item Created Between",
-  //       link: "/store-settings/item-create-between",
-  //     },
-  //     {
-  //       id: 74,
-  //       text: "Reorder Inventory",
-  //       link: "/store-settings/recorder-inventory",
-  //     },
-
-
-  //     {
-  //       id: 75,
-  //       text: " Employee Working Hours",
-  //       link: "/store-settings/employee-working-hours",
-  //     },
-  //     { id: 76, text: "Shift Summary", link: "/store-settings/shift-summary" },
-
-  //     { id: 77, text: " Item Sales ", link: "/store-settings/item-sales" },
-  //     { id: 77, text: " Payment Method Details", link: "/store-settings/payment-method-details" },
-  //   ],
-  // },
 ];
 
 export default SideMenu;
