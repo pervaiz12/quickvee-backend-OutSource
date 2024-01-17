@@ -10,12 +10,8 @@ const MainItem = () => {
       <div className="q-order-main-page">
         <ItemsCategories />
       </div>
-      <div className="q-order-main-page">
-       <DateRange />
-      </div>
-      <div className="q-order-main-page">
-        <Itemdatadetails />
-      </div>
+      
+     
     </>
   );
 };
