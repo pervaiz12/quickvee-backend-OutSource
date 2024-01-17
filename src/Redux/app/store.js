@@ -42,6 +42,8 @@ import RegisterSettingReducer from "../features/StoreSettings/RegisterSettings/R
 import NewItemCreatedBtnListReducer from "../features/Reports/NewItemCreatedBetweenSlice/NewItemCreatedBetweenSlice";
 import ReorderInventoryListReducer from "../features/Reports/ReorderInventory/ReorderInventorySlice";
 
+import TaxesreportSliceReducer from "../features/TaxesReport/taxesreportSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -91,6 +93,8 @@ const store = configureStore({
 
    //Employee List Data
     employeeDataList :EmployeeListReducer,
+
+    taxesreport:TaxesreportSliceReducer
 
 
   },
