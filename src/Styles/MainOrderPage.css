@@ -382,6 +382,7 @@ display:flex;}
   @media (min-width: 640px) {
     .q_daterange_details {
       flex-direction: row;
+      flex-wrap: wrap;
       gap: 0;
     }
   }
@@ -416,4 +417,3 @@ margin-bottom: 3px;
     font-family: CircularSTDBook !important;
 
   }
-

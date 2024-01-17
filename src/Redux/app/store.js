@@ -42,7 +42,11 @@ import RegisterSettingReducer from "../features/StoreSettings/RegisterSettings/R
 import NewItemCreatedBtnListReducer from "../features/Reports/NewItemCreatedBetweenSlice/NewItemCreatedBetweenSlice";
 import ReorderInventoryListReducer from "../features/Reports/ReorderInventory/ReorderInventorySlice";
 
+
 import OrderTypeReducer from "../features/OrderType/OrderTypeSlice";
+
+import TaxesreportSliceReducer from "../features/TaxesReport/taxesreportSlice";
+
 
 
 const store = configureStore({
@@ -96,6 +100,9 @@ const store = configureStore({
 
     //Order Type
     orderTypeList:OrderTypeReducer,
+
+    taxesreport:TaxesreportSliceReducer
+
 
   },
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),
