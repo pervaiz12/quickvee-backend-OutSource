@@ -53,7 +53,7 @@ const TaxesDetails = ({ data }) => {
               >
                 <div className="q-employee-bottom-attriButes-single-attributes">
                   <p className="q-employee-item">{key}</p>
-                  <p className="q-employee-in"></p>
+                  <p className="q-employee-in">{taxesreport.data3.tax_rate[key].percent}%</p>
                   {taxesreport.data2.final_arr2[key] ? (
                     <p className="q-employee-in">
                       ${taxesreport.data2.final_arr2[key].toFixed(2)}
