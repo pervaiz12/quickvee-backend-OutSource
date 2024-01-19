@@ -45,6 +45,12 @@ import ReorderInventoryListReducer from "../features/Reports/ReorderInventory/Re
 import ItemSalesReportListReducer from "../features/Reports/ItemSales/ItemSalesSlice";
 
 
+import OrderTypeReducer from "../features/OrderType/OrderTypeSlice";
+
+import TaxesreportSliceReducer from "../features/TaxesReport/taxesreportSlice";
+
+
+
 const store = configureStore({
   reducer: {
     categories: categoriesReducer,
@@ -95,6 +101,12 @@ const store = configureStore({
     employeeDataList :EmployeeListReducer,
 
     ItemSalesReportList:ItemSalesReportListReducer
+
+    //Order Type
+    orderTypeList:OrderTypeReducer,
+
+    taxesreport:TaxesreportSliceReducer
+
 
 
   },
