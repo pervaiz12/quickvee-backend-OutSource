@@ -126,9 +126,6 @@ module.exports = Object.freeze({
       // for item sales report
       GET_ITEMWISE_SALE_LIST : "ReportingReactapi/get_itemwise_sale_list",
       
-});
-
-
       //Order Type
 
       LIST_ALL_ORDER_TYPE : "ReportingReactapi/order_type",
@@ -138,7 +135,8 @@ module.exports = Object.freeze({
   
 
       LIST_TAXES_REPORT: "ReportingReactapi/taxes_report",
-  });
+});
+
 
 
 

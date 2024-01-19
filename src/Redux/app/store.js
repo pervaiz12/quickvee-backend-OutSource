@@ -100,12 +100,12 @@ const store = configureStore({
    //Employee List Data
     employeeDataList :EmployeeListReducer,
 
-    ItemSalesReportList:ItemSalesReportListReducer
+    ItemSalesReportList:ItemSalesReportListReducer,
 
     //Order Type
     orderTypeList:OrderTypeReducer,
 
-    taxesreport:TaxesreportSliceReducer
+    taxesreport:TaxesreportSliceReducer,
 
 
 
