@@ -42,6 +42,8 @@ import RegisterSettingReducer from "../features/StoreSettings/RegisterSettings/R
 import NewItemCreatedBtnListReducer from "../features/Reports/NewItemCreatedBetweenSlice/NewItemCreatedBetweenSlice";
 import ReorderInventoryListReducer from "../features/Reports/ReorderInventory/ReorderInventorySlice";
 
+import ItemSalesReportListReducer from "../features/Reports/ItemSales/ItemSalesSlice";
+
 
 import OrderTypeReducer from "../features/OrderType/OrderTypeSlice";
 
@@ -99,10 +101,13 @@ const store = configureStore({
    //Employee List Data
     employeeDataList :EmployeeListReducer,
 
+    ItemSalesReportList:ItemSalesReportListReducer,
+
     //Order Type
     orderTypeList:OrderTypeReducer,
 
     taxesreport:TaxesreportSliceReducer,
+
 
 
     //Permission

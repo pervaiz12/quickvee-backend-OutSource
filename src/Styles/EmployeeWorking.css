@@ -424,5 +424,26 @@
     border-right: none; 
     color: #818181;
   }
+
+
+/* newcss Start */
+.item_sale_div p:last-child {
+    color:#2d2d2d;
+}
+
+.item_sale_div p {
+    padding: 10px;
+    color:#2d2d2d;
+    font-size: 16px;
+}
+
+.item_sale_div p:nth-child(2) {
+    width: 40%;
+}
+
+.item_sale_header_div p:nth-child(2) {
+    width: 40%;
+}
+/* newcss End */
   
 

@@ -79,7 +79,11 @@ import MainItem from "./Components/Reporting/ItemType/MainItem";
 import MainItemSales from "./Components/Reporting/ItemSales/MainItemSales";
 import MainEmployeelist from "./Components/Reporting/Employelist/MainEmployeelist";
 import MainTaxesReport from "./Components/Reporting/Taxes/MainTaxesReport"
+
 import MainPermission from "./Components/Permission/MainPermission";
+
+import MainSalesPerson from "./Components/Reporting/SalesByPerson/MainSalesPerson";
+
 
 
 
@@ -90,6 +94,7 @@ import MainPermission from "./Components/Permission/MainPermission";
 
 function App() {
   return (
+
  
        <Routes>
         <Route exact path="/" element={<Layout />}>
@@ -169,6 +174,118 @@ function App() {
         </Route>
       </Routes>
   
+=======
+    <Routes>
+      <Route exact path="/" element={<Layout />}>
+        {/* <Route exact path="/" element={<DashboardMain />} /> */}
+        <Route path="/dashboard" element={<DashboardMain />} />
+        <Route path="/order" element={<MainOrder />} />
+        <Route path="/category" element={<MainCategory />} />
+        <Route
+          path="/category/edit-category/:categoryCode"
+          element={<EditCategory />}
+        />
+        <Route path="/purchase-data" element={<MainPurchase />} />
+        <Route path="/products" element={<MainProducts />} />
+        <Route path="/attributes" element={<MainAttributes />} />
+        <Route path="/import-data" element={<MainImportData />} />
+        <Route path="/coupons" element={<MainCoupon />} />
+        <Route path="/vendors" element={<MainVendors />} />
+        <Route path="/timesheet" element={<MainTimesheet />} />
+        <Route exact path="/toptraders" element={<TopTenders />} />
+        <Route exact path="/productedit" element={<ProductEdit />} />
+        <Route exact path="/addpurchaseOrder" element={<AddPo />} />
+        <Route exact path="/addCoupon" element={<AddCoupon />} />
+        {/* <Route path ="/store-setting" element ={<MainStoreSetting />} /> */}
+        <Route path="/report" element={<MainReport />} />
+        <Route path="/store-settings/taxes" element={<MainTaxes />} />
+
+        {/* <Route path="/store-settings/info"  element={<MainStoreOption />} /> */}
+        <Route path="/store-settings/options" element={<MainStoreOption />} />
+        <Route
+          path="/store-settings/addemployee"
+          element={<MainAddEmployee />}
+        />
+
+        <Route
+          path="/store-settings/system-access"
+          element={<MainSyastemAccess />}
+        />
+
+        {/* /store-settings/inventory */}
+        <Route path="/store-reporting/inventory" element={<MainInventory />} />
+
+        <Route path="/store-reporting/Alters" element={<MainStoreAlters />} />
+
+        <Route
+          path="/store-reporting/register"
+          element={<MainResigtersetting />}
+        />
+        <Route path="/store-reporting/receipt" element={<ReceiptMainpage />} />
+        <Route
+          path="/store-reporting/daily-total-report"
+          element={<DailyTtlReport />}
+        />
+        <Route
+          path="/store-reporting/overall-top"
+          element={<TopSallerReport />}
+        />
+        <Route
+          path="/store-reporting/Details-category"
+          element={<MainCatedetails />}
+        />
+
+        <Route
+          path="/store-reporting/instant-activity"
+          element={<InstantActvity />}
+        />
+        <Route
+          path="/store-reporting/employee-working-hours"
+          element={<EmployeeWorking />}
+        />
+        <Route
+          path="/store-reporting/shift-summary"
+          element={<MainSiftSummary />}
+        />
+
+        <Route
+          path="/store-reporting/employee-list"
+          element={<MainEmployeelist />}
+        />
+
+        <Route
+          path="/store-reporting/permission/:employee_id"
+          element={<Permission />}
+        />
+        {/* <Route path="/store-reporting/system-access"  element={<MainSyastemAccess />} /> */}
+        <Route
+          path="/store-reporting/id-verification"
+          element={<CheckIDVerifyMain />}
+        />
+        <Route path="/store-reporting/order-type" element={<MainItem />} />
+        <Route path="/store-reporting/item-sales" element={<MainItemSales />} />
+        <Route path="/store-reporting/taxes" element={<MainTaxesReport />} />
+        <Route
+          path="/store-reporting/report-sales-person"
+          element={<MainSalesPerson />}
+        />
+
+        <Route
+          path="/store-settings/payment-method-detail-report"
+          element={<PaymentMethodReport />}
+        />
+
+        <Route
+          path="/store-settings/item-create-between"
+          element={<NewItemCreatedBetweenMain />}
+        />
+
+        <Route
+          path="/store-settings/recorder-inventory"
+          element={<ReorderInventoryMain />}
+        />
+      </Route>
+    </Routes>
   );
 }
 export default App;
