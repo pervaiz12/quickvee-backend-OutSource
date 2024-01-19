@@ -153,8 +153,9 @@ module.exports = Object.freeze({
       LIST_ALL_EMPLOYEE : "ReportingReactapi/employee_list",
 
       LIST_PAYMENT_METHOD_REPORT : "ReportingReactapi/credit_card_sales_report",
-  // });
-
-
-  
+      // });
+      
+      // for item sales report
+      GET_ITEMWISE_SALE_LIST : "ReportingReactapi/get_itemwise_sale_list",
+      
 });
