@@ -130,6 +130,14 @@ module.exports = Object.freeze({
   
 
       LIST_TAXES_REPORT: "ReportingReactapi/taxes_report",
+
+
+
+    //Super Admin - Permission
+    LIST_ALL_PERMISSION :"api/Create_permission_api/permission_list",
+    ADD_UPDATE_PERMISSION : "api/Create_permission_api/save_sub_permission",
+    DELETE_SINGLE_PERMISSION:"api/Create_permission_api/deleteperm",
+
   });
 
 

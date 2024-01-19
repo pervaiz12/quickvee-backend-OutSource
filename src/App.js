@@ -79,6 +79,7 @@ import MainItem from "./Components/Reporting/ItemType/MainItem";
 import MainItemSales from "./Components/Reporting/ItemSales/MainItemSales";
 import MainEmployeelist from "./Components/Reporting/Employelist/MainEmployeelist";
 import MainTaxesReport from "./Components/Reporting/Taxes/MainTaxesReport"
+import MainPermission from "./Components/Permission/MainPermission";
 
 
 
@@ -155,6 +156,10 @@ function App() {
           <Route path="/store-settings/item-create-between" element={<NewItemCreatedBetweenMain />}/>
 
           <Route path="/store-settings/recorder-inventory" element={<ReorderInventoryMain />}/>
+
+
+
+          <Route path="/permission" element={<MainPermission />}/>
 
 
 
