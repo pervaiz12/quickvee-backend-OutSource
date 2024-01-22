@@ -71,7 +71,7 @@ import TopSallerReport from "./Components/Reporting/TopSaller/TopSallerReport";
 
 import EmployeeList from "./Components/Reporting/Employelist/EmployeelistReport";
 
-
+import InventoryExport from "./Components/InventoryExport/MainInventoryExport";
 
 
 
@@ -137,7 +137,7 @@ function App() {
 
           <Route path="/store-settings/item-create-between" element={<NewItemCreatedBetweenMain />}/>
 
-          
+          <Route path="/inventory-export" element={<InventoryExport />} />
 
         </Route>
       </Routes>
