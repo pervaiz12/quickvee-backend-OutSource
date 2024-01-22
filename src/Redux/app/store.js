@@ -37,6 +37,7 @@ import TopsallerReducer from "../features/TopSaller/topsallerSlice";
 import RegisterSettingReducer from "../features/StoreSettings/RegisterSettings/RegisterSettingsSlice";
 
 import NewItemCreatedBtnListReducer from "../features/Reports/NewItemCreatedBetweenSlice/NewItemCreatedBetweenSlice";
+import ExportInventoryReducer from "../features/ExportInventory/ExportInventorySlice";
 
 const store = configureStore({
   reducer: {
@@ -80,6 +81,7 @@ const store = configureStore({
 
    //Employee List Data
     employeeDataList :EmployeeListReducer,
+    ExportInventoryData:ExportInventoryReducer,
 
 
   },

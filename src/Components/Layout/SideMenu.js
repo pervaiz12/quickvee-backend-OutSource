@@ -40,7 +40,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
   const navigate = useNavigate();
 
   const handleItemClick = (item) => {
-    console.log(item);
+    // console.log(item);
     setActiveItem(item.link);
     navigate(item.link);
   };
@@ -236,9 +236,6 @@ const menuItems = [
     icon: (
       <img src={VenderIcon} alt="Import Data" className="h-6 w-10 mt-4 mb-4" />
     ),
-
-    text: "Import Data",
-    link: "/import-data",
     activeIcon: (
       <img src={DataIcons} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
     ),
@@ -248,8 +245,6 @@ const menuItems = [
   {
     id: 8,
     icon: <img src={CouponIcon} alt="Coupons" className="h-6 w-10 mt-4 mb-4" />,
-    text: "Coupons",
-    link: "/coupons",
     activeIcon: (
       <img src={CouIcon} alt="Coupons" className="h-6 w-10 mt-4 mb-4 " />
     ),
@@ -259,8 +254,6 @@ const menuItems = [
   {
     id: 9,
     icon: <img src={VenIcon} alt="Vendors" className="h-6 w-10 mt-4 mb-4" />,
-    text: "Vendors",
-    link: "/vendors",
     activeIcon: (
       <img src={VenIcons} alt="Vendors" className="h-6 w-10 mt-4 mb-4 " />
     ),
@@ -276,8 +269,6 @@ const menuItems = [
         className="h-6 w-10 mt-4 mb-4"
       />
     ),
-    text: "Timesheet",
-    link: "/timesheet",
     activeIcon: (
       <img
         src={TimesheetsIcon}

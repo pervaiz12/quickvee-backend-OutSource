@@ -114,9 +114,9 @@ module.exports = Object.freeze({
 
 
       //Employee List
-      
       LIST_ALL_EMPLOYEE : "ReportingReactapi/employee_list",
-
+      //Merchant list 
+      LIST_ALL_MERCHANTS : "ExportInventory_api/merchants_list",     
     
   });
 

@@ -1,35 +1,42 @@
 import React from "react";
-import { Input } from "@material-tailwind/react";
-import { Select } from "@mui/material";
+import { useEffect} from "react";
+import { useDispatch } from "react-redux";
+import {fetchMerchantsList} from "../../Redux/features/ExportInventory/ExportInventorySlice";
+import { useSelector } from "react-redux";
+
 const MainInventoryExport =  () => {
+  const MerchantListData = useSelector((state) => state.MerchantListData);
+  console.log(MerchantListData);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchMerchantsList())
+  }, [])
+  
     return <>
-        <div className="q-resigtersetting-main-page">
-        <div className="q-resigtersetting-top-detail-section">
-          <div>
-            <div className="q-resigtersetting-bottom-section">
-            <div className="q_setting_main_Section">Quick Add</div>
-              <div className="q_setting_main_Section"></div>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="q_resigter_label">
-                  <label className="text-[#6A6A6A] ml-2" htmlFor="idlelogout">
-                    Idle Logout Minutes
-                  </label>
-                  <div className="w-full">
-                    <Select className="q_input_resigter" name="idel_logout"  placeholder="Enter idle logout">
-                        <option value={1}>store</option>
-                    </Select> 
-                    {/* onChange={handleRegisterSettingInput} value={values.idel_logout} */}
+        <div className="box_shadow_div">
+          <div className="qvrow">
+              <h5 className="box_shadow_heading">Inventory Export</h5>
+              <div className="col-qv-6">
+                  <div className="input_area">
+                      <label>Select Store Name</label>
+                      <select name="end_day_Allow" 
+                      // value={systemAccess.end_day_Allow || ''}
+                          // onChange={handleEndOfDayAllowanceChange}
+                      >
+                          <option value="1">Deny if staff clocked in</option>
+                          {/* selected={systemAccess.end_day_Allow==1} */}
+                          <option value="2" >Mass clock out staff clocked in</option>
+                          <option value="3" >Ignore Time Clock</option>
+                      </select>
                   </div>
-                  <span className="input-error">
-                    {/* {values.errors.idel_logout !== "" ? values.errors.idel_logout : ""} */}
-                  </span>
-                </div>
-               
               </div>
-            </div>
+          </div>
+          <div className="col-qv-12">
+              <button className="save_btn" >
+                  Export
+              </button>
           </div>
         </div>
-      </div>
     </>;
 }
 
