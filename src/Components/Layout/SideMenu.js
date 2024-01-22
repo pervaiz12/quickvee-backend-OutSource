@@ -319,6 +319,25 @@ const menuItems = [
     link: "/timesheet",
   },
   {
+    id: 13,
+    icon: (
+      <img
+        src={timesheetblackIcon}
+        alt="Timesheet"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={TimesheetsIcon}
+        alt="Timesheet"
+        className="h-6 w-10 mt-4 mb-4 "
+      />
+    ),
+    text: "Inventory Duplicate",
+    link: "/inventory-duplicates",
+  },
+  {
     id: 11,
     icon: (
       <img

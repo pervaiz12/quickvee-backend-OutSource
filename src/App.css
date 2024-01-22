@@ -737,3 +737,8 @@ a.flex.text-center.submenu-item.text-gray-400.py-4.CircularSTDBook:hover {
 .q-sales-total {
   width: 40%;
 }
+
+.inventory_btn{display: flex;
+flex-wrap: wrap;
+margin: 3.5rem 0;}
+
