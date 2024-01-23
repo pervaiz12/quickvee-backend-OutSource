@@ -1,12 +1,12 @@
-import React from 'react';
-import { useState, useEffect } from 'react';
-import Quick from '../../Assests/Dashboard/quickveeLG.png';
-import { BiMenu, BiChevronDown } from 'react-icons/bi';
+import React from "react";
+import { useState, useEffect } from "react";
+import Quick from "../../Assests/Dashboard/quickveeLG.png";
+import { BiMenu, BiChevronDown } from "react-icons/bi";
 
-import DownlIcon from '../../Assests/Dashboard/download.svg';
-import OnlineData from '../../Assests/Dashboard/online.svg';
-import SynkData from '../../Assests/Dashboard/sync.svg';
-import DownIcon from '../../Assests/Dashboard/Down.svg';
+import OnlineData from "../../Assests/Dashboard/store.svg";
+
+import DownIcon from "../../Assests/Dashboard/Down.svg";
+import UserIcon from "../../Assests/MultipleUserIcon/useractive.svg";
 
 const AllUserHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
@@ -27,9 +27,9 @@ const AllUserHeader = () => {
   };
 
   useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
     return () => {
-      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener("scroll", handleScroll);
     };
   }, []);
 
@@ -37,7 +37,7 @@ const AllUserHeader = () => {
     <>
       <div
         className={`sticky top-0 left-0 p-0 right-0 z-50 bg-white transition-all duration-300 h-[60px] shadow-md border-b-4 border-black ${
-          isSticky ? 'border-yellow-500' : '' // Add border color when sticky
+          isSticky ? "border-yellow-500" : ""
         }`}
       >
         <div className="flex items-center px-4 mx-2 mt-3">
@@ -50,22 +50,31 @@ const AllUserHeader = () => {
           <img src={Quick} alt="Logo" className="ml-6" />
 
           <div className="relative ml-auto">
-            {/* Button to toggle dropdown */}
+         
             <div
               className="flex items-center ml-6 px-3 py-1 text-black lg:text-[20px] admin_medium cursor-pointer sm:text-[12px] md:text-[15px]"
               onClick={handleDropdownToggle}
             >
+              <img src={UserIcon} alt="" className="w-6 h-6 mr-2" />
               Superadmin
-              <img src={DownIcon} alt="" className="w-4 h-4 ml-2" /> {/* Adjust icon size */}
+              <img src={DownIcon} alt="" className="w-8 h-8 ml-2" />
+              
             </div>
 
-            {/* Dropdown content */}
+         
             {showDropdown && (
-              <div className="absolute mt-2 bg-white border rounded shadow-lg">
-                <div className="p-4">
-                  <div>Store Setup</div>
-                  <div>Need Help</div>
-                  <div>Logout</div>
+              <div className="dropdown-content mt-5">
+                <div className="flex justify-items-start">
+                  <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />
+                  Store Setup
+                </div>
+                <div className="flex justify-items-start">
+                  <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />
+                  Need Help
+                </div>
+                <div className="flex justify-items-start">
+                  <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />
+                  Logout
                 </div>
               </div>
             )}

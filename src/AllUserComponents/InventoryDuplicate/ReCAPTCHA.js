@@ -30,7 +30,7 @@ const handleVerify = (success) => {
     onVerify(success);
   
     if (success) {
-      // Perform any additional actions after successful reCAPTCHA verification
+     
       console.log('reCAPTCHA Verified!');
     }
   };
