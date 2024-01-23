@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route, Switch, Link } from 'react-router-dom';
 import "./index.css";
-import { Layout } from "./Components/Layout/Index";
+import  Layout  from "./Components/Layout/Index";
 
 import DashboardMain from "./Components/Dashboard/DashboardMain";
 import MainOrder from "./Components/Orders/MainOrder";
@@ -57,8 +57,7 @@ import "./Styles/MainCatedetails.css";
 import MainResigtersetting from "./Components/StoreSetting/ResigterSetting/MainResigtersetting";
 import "./Styles/ResigterSettingdata.css";
 import ReceiptMainpage from "./Components/StoreSetting/Receipt/ReceiptMainpage";
-import DailyTtlReport from "./Components/Reporting/DailyReport/DailyTtlReport";
-import MainCatedetails from "./Components/Reporting/CategoryDetails/MainCatedetails";
+
 
 import InstantActvity from "./Components/Reporting/InstantPo/InstantActvity";
 import EmployeeWorking from "./Components/Reporting/EmployeeWorkingHours/EmployeeWorking";
@@ -66,15 +65,13 @@ import MainSiftSummary from "./Components/Reporting/SiftSummary/MainSiftSummary"
 
 import CheckIDVerifyMain from "./Components/Reporting/CheckIDVerify/CheckIDVerifyMain";
 
-import PaymentMethodList from "./Components/Reporting/PaymentMehodDetail/PaymentMethodList";
 import PaymentMethodReport from "./Components/Reporting/PaymentMehodDetail/PaymentMethodReport";
 
 import NewItemCreatedBetweenMain from "./Components/Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain";
 import ReorderInventoryMain from "./Components/Reporting/ReorderInventory/ReorderInventoryMain";
 
-import TopSallerReport from "./Components/Reporting/TopSaller/TopSallerReport";
 
-import EmployeeList from "./Components/Reporting/Employelist/EmployeelistReport";
+
 import MainItem from "./Components/Reporting/ItemType/MainItem";
 import MainItemSales from "./Components/Reporting/ItemSales/MainItemSales";
 import MainEmployeelist from "./Components/Reporting/Employelist/MainEmployeelist";
@@ -83,6 +80,8 @@ import MainTaxesReport from "./Components/Reporting/Taxes/MainTaxesReport"
 import MainPermission from "./Components/Permission/MainPermission";
 
 import MainSalesPerson from "./Components/Reporting/SalesByPerson/MainSalesPerson";
+// import MainInvDuplicates from "./Components/InventoryDuplicates/MainInvDuplicates";
+import Main from "./Main";
 
 
 
@@ -176,27 +175,106 @@ function App() {
   
 =======
     <Routes>
-      <Route exact path="/" element={<Layout />}>
+      <Route exact path="/" element={<Main />} />
+      {/* <Route exact path="/" element={<Layout />} /> */}
+      <Route exact path="/users/view/unapprove" element={<Main  visible={"multimerchant"} />} />
+      <Route exact path="/dashboard" element={<Main  visible={"dashboard"} />} />
+      <Route exact path="/order" element={<Main  visible={"order"} />} />
+      <Route exact path="/category" element={<Main  visible={"category"} />} />
+      <Route exact path="/products" element={<Main  visible={"products"} />} />
+      <Route exact path="/purchase-data" element={<Main  visible={"purchase-data"} />} />
+      <Route exact path="/attributes" element={<Main  visible={"attributes"} />} />
+      <Route exact path="/import-data" element={<Main  visible={"import-data"} />} />
+      <Route exact path="/coupons" element={<Main  visible={"coupons"} />} />
+      <Route exact path="/vendors" element={<Main  visible={"vendors"} />} />
+      <Route exact path="/category/edit-category/:categoryCode" element={<Main  visible={"category-edit-cat"} />} />
+      <Route exact path="/timesheet" element={<Main  visible={"timesheet"} />} />
+      <Route exact path="/toptraders" element={<Main  visible={"toptraders"} />} />
+      <Route exact path="/productedit" element={<Main  visible={"productedit"} />} />
+      <Route exact path="/productedit" element={<Main  visible={"productedit"} />} />
+      <Route exact path="/store-settings/info" element={<Main  visible={"info"} />} />
+      <Route exact path="/store-settings/setup" element ={<Main visible={"setup"} />} />
+   
+      <Route exact path="/store-settings/Alters" element ={<Main visible={"Alters"} />} />
+      <Route exact path="/store-settings/options" element ={<Main visible={"options"} />} />
+      <Route exact path="/store-settings/taxes" element ={<Main visible={"taxes"} />} />
+      <Route exact path="/store-settings/system-access" element ={<Main visible={"system-access"} />} />
+      <Route exact path="/store-settings/inventory" element ={<Main visible={"inventory"} />} />
+      <Route exact path="/store-reporting/register" element ={<Main visible={"register"} />} />
+      <Route exact path="/store-reporting/inventory" element ={<Main visible={"inventory"} />} />
+      <Route exact path="/store-reporting/daily-total-report" element ={<Main visible={"daily-total-report"} />} />
+     <Route exact path="/store-reporting/Details-category" element ={<Main visible={"Details-category"} />} />
+     <Route exact path="/store-reporting/report-sales-person" element ={<Main visible={"report-sales-person"} />} />
+     <Route exact path="/store-reporting/id-verification" element ={<Main visible={"id-verification"} />} />
+     
+     <Route exact path="store-reporting/credit-debit-sales" element ={<Main visible={"credit-debit-sales"} />} />
+     <Route exact path="/store-reporting/instant-activity" element ={<Main visible={"instant-activity"} />} />
+     <Route exact path="/store-reporting/overall-top" element ={<Main visible={"overall-top"} />} />
+     <Route exact path="/store-reporting/flash-resigter" element ={<Main visible={"flash-resigter"} />} />
+     <Route exact path="/store-reporting/vendors-list" element ={<Main visible={"vendors-list"} />} />
+     <Route exact path="/store-reporting/employee-list" element ={<Main visible={"employee-list"} />} />
+     
+     <Route exact path="/store-reporting/recorder-inventory" element ={<Main visible={"recorder-inventory"} />} />
+     
+     <Route exact path="/store-reporting/shift-summary" element ={<Main visible={"shift-summary"} />} />
+     <Route exact path="/store-settings/payment-method-detail-report" element={<Main visible={"payment-method-detail-report"} />} />
+     <Route exact path ="/store-reporting/order-type" element={<Main visible={"order-type"} />} />
+     <Route exact path="/store-reporting/taxes" element={<Main visible={"taxes"} />} />
+
+
+     {/* multiple users dashbaord */}
+
+     <Route exact path="/users/view/unapprove/label" element={<Main visible={"label"} />} />
+     <Route exact path ="/users/view/unapprove/newsletter" element={<Main visible={"newsletter"} />} />
+     <Route exact path="/users/view/unapprove/store-order" element={<Main visible={"store-order"} />} />
+     <Route exact path="/users/view/unapprove/order-count" element={<Main visible={"order-count"} />} />
+     <Route exact path="/users/view/unapprove/menu/defaults" element={<Main visible={"defaults"} />} />
+     <Route exact path="/users/view/unapprove/release_apk" element={<Main visible={"release_apk"} />} />
+     <Route exact path="/users/view/unapprove/inverntory-duplicate" element={<Main visible={"inverntory-duplicate"} />} />
+     <Route exact path="/users/view/unapprove/category-duplicate" element={<Main visible={"category-duplicate"} />} />
+     
+     <Route exact path="/users/view/unapprove/product-duplicate" element={<Main visible={"product-duplicate"} />} />
+     <Route exact path="/users/view/unapprove/permission" element={<Main visible={"permission"} />} />
+     <Route exact path="/users/view/unapprove/invertory-export" element={<Main visible={"invertory-export"} />} />
+     <Route exact path="/users/view/unapprove/merchant-details" element={<Main visible={"merchant-details"} />} />
+
+
+
+    
+     
+
+
+
+
+   
+
+     
+
+
+  
+  
+ 
+
+
+
+
+
+     
+
+
+
+      
+
+
+
+
+
+
+     
         {/* <Route exact path="/" element={<DashboardMain />} /> */}
-        <Route path="/dashboard" element={<DashboardMain />} />
-        <Route path="/order" element={<MainOrder />} />
-        <Route path="/category" element={<MainCategory />} />
-        <Route
-          path="/category/edit-category/:categoryCode"
-          element={<EditCategory />}
-        />
-        <Route path="/purchase-data" element={<MainPurchase />} />
-        <Route path="/products" element={<MainProducts />} />
-        <Route path="/attributes" element={<MainAttributes />} />
-        <Route path="/import-data" element={<MainImportData />} />
-        <Route path="/coupons" element={<MainCoupon />} />
-        <Route path="/vendors" element={<MainVendors />} />
-        <Route path="/timesheet" element={<MainTimesheet />} />
+    
         <Route exact path="/toptraders" element={<TopTenders />} />
-        <Route exact path="/productedit" element={<ProductEdit />} />
-        <Route exact path="/addpurchaseOrder" element={<AddPo />} />
-        <Route exact path="/addCoupon" element={<AddCoupon />} />
-        {/* <Route path ="/store-setting" element ={<MainStoreSetting />} /> */}
+   
         <Route path="/report" element={<MainReport />} />
         <Route path="/store-settings/taxes" element={<MainTaxes />} />
 
@@ -222,18 +300,8 @@ function App() {
           element={<MainResigtersetting />}
         />
         <Route path="/store-reporting/receipt" element={<ReceiptMainpage />} />
-        <Route
-          path="/store-reporting/daily-total-report"
-          element={<DailyTtlReport />}
-        />
-        <Route
-          path="/store-reporting/overall-top"
-          element={<TopSallerReport />}
-        />
-        <Route
-          path="/store-reporting/Details-category"
-          element={<MainCatedetails />}
-        />
+      
+  
 
         <Route
           path="/store-reporting/instant-activity"
@@ -257,7 +325,7 @@ function App() {
           path="/store-reporting/permission/:employee_id"
           element={<Permission />}
         />
-        {/* <Route path="/store-reporting/system-access"  element={<MainSyastemAccess />} /> */}
+      
         <Route
           path="/store-reporting/id-verification"
           element={<CheckIDVerifyMain />}
@@ -265,10 +333,7 @@ function App() {
         <Route path="/store-reporting/order-type" element={<MainItem />} />
         <Route path="/store-reporting/item-sales" element={<MainItemSales />} />
         <Route path="/store-reporting/taxes" element={<MainTaxesReport />} />
-        <Route
-          path="/store-reporting/report-sales-person"
-          element={<MainSalesPerson />}
-        />
+    
 
         <Route
           path="/store-settings/payment-method-detail-report"
@@ -284,7 +349,9 @@ function App() {
           path="/store-settings/recorder-inventory"
           element={<ReorderInventoryMain />}
         />
-      </Route>
+         
+     
+     
     </Routes>
   );
 }
