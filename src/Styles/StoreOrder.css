@@ -1,0 +1,61 @@
+@font-face {
+    font-family: CircularBold;
+    src: url("../Assests/Fonts/circular-bold.TTF");
+}
+
+@font-face {
+    font-family: CircularMedium;
+    src: url("../Assests/Fonts/circulur-medium.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDBlack;
+    src: url("../Assests/Fonts/circulur-std-black.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDBook;
+    src: url("../Assests/Fonts/circulur-std-book.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDMedium;
+    src: url("../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
+}
+
+.so_table {
+    width: 100%;
+}
+.so_table thead{
+    position: sticky;
+    top: 0px;
+    background: #253338;
+    color: #FFFFFF;
+    font-size: 15px;
+    text-align: left;
+    font-family: CircularSTDBook !important;
+}
+
+.so_table thead th{
+    padding: 10px;
+}
+.so_table tbody tr{
+    font-size: 16px;
+    border-bottom: 1px solid #E8E8E8;
+    text-align: left;
+}
+
+.so_table tbody tr td{
+    padding: 10px;
+}
+
+.store_order_div {
+    font-family: CircularSTDMedium !important;
+    font-size: 18px;
+    background: #FFFFFF;
+    color: #000000;
+}
+
+.store_order_div h4{
+    padding: 20px;
+}
