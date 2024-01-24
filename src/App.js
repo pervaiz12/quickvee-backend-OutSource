@@ -52,6 +52,8 @@ import "./Styles/ImportData.css";
 import "./Styles/DailyDaterange.css";
 // import "./Styles/EmployeeWorking.css";
 
+import "./Styles/DefaultsPage.css";
+
 import "./Styles/ReceiptMainpage.css";
 import "./Styles/MainCatedetails.css";
 import MainResigtersetting from "./Components/StoreSetting/ResigterSetting/MainResigtersetting";
@@ -79,6 +81,7 @@ import MainTaxesReport from "./Components/Reporting/Taxes/MainTaxesReport"
 import MainSalesPerson from "./Components/Reporting/SalesByPerson/MainSalesPerson";
 // import MainInvDuplicates from "./Components/InventoryDuplicates/MainInvDuplicates";
 import Main from "./Main";
+
 
 
 
@@ -144,6 +147,7 @@ function App() {
      <Route exact path="/users/view/unapprove/store-order" element={<Main visible={"store-order"} />} />
      <Route exact path="/users/view/unapprove/order-count" element={<Main visible={"order-count"} />} />
      <Route exact path="/users/view/unapprove/menu/defaults" element={<Main visible={"defaults"} />} />
+     <Route exact path="/users/view/unapprove/menu/defaults/edit-defaults/:defaultsCode" element={<Main  visible={"edit-defaults"} />} />
      <Route exact path="/users/view/unapprove/release_apk" element={<Main visible={"release_apk"} />} />
      <Route exact path="/users/view/unapprove/inverntory-duplicate" element={<Main visible={"inverntory-duplicate"} />} />
      <Route exact path="/users/view/unapprove/category-duplicate" element={<Main visible={"category-duplicate"} />} />

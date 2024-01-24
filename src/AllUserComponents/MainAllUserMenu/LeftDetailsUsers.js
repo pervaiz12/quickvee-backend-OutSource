@@ -13,6 +13,7 @@ import MainProduct  from "../ProductDuplicate/MainProduct";
 import MainPermission from "../Permission/MainPermission";
 import MainMerchantDetails from "../MerchantDetails/MainMerchantDetails";
 import  MainInventoryExport from "../InventoryExport/MainInventoryExport";
+import EditDefaults from "../Defaults/EditDefaults";
 
 
 
@@ -25,6 +26,8 @@ const LeftDetailsUsers = ({ visible }) => {
       {visible === "store-order" && <MainStoreOrder />}
       {visible === "order-count" && <OrderCount />}
       {visible === "defaults" && <MainDefaults />}
+      {visible === "edit-defaults" && <EditDefaults />}
+      
       {visible === "release_apk" && <MainReleaseApk />}
       {visible === "inverntory-duplicate" && <MainInvDuplicates/>}
       {visible === "category-duplicate" && <MainCateDuplicate/>}

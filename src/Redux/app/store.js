@@ -53,6 +53,8 @@ import PermissionListReducer from "../features/Permission/PermissionSlice";
 
 import StoreOrderSliceReducer from "../features/StoreOrder/StoreOrderSlice";
 
+import DefaultsSliceReducer from "../features/Defaults/defaultsSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -118,6 +120,8 @@ const store = configureStore({
 
 
     StoreOrderList:StoreOrderSliceReducer,
+
+    defaults: DefaultsSliceReducer,
 
   },
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),
