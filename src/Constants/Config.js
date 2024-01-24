@@ -144,9 +144,11 @@ module.exports = Object.freeze({
     ADD_UPDATE_PERMISSION : "api/Create_permission_api/save_sub_permission",
     DELETE_SINGLE_PERMISSION:"api/Create_permission_api/deleteperm",
 
-  });
+    // Store Order List API
+    GET_STORE_ORDER_DATA: "Store_order_api/get_store_order_data",
 
-});
+
+  });
 
 
 
