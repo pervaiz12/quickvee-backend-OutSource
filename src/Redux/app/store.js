@@ -51,6 +51,8 @@ import TaxesreportSliceReducer from "../features/TaxesReport/taxesreportSlice";
 
 import PermissionListReducer from "../features/Permission/PermissionSlice";
 
+import StoreOrderSliceReducer from "../features/StoreOrder/StoreOrderSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -113,6 +115,9 @@ const store = configureStore({
     //Permission
 
     permissionRed:PermissionListReducer,
+
+
+    StoreOrderList:StoreOrderSliceReducer,
 
   },
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),
