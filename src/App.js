@@ -155,37 +155,6 @@ function App() {
 
 
 
-    
-     
-
-
-
-
-   
-
-     
-
-
-  
-  
- 
-
-
-
-
-
-     
-
-
-
-      
-
-
-
-
-
-
-     
         {/* <Route exact path="/" element={<DashboardMain />} /> */}
     
         <Route exact path="/toptraders" element={<TopTenders />} />

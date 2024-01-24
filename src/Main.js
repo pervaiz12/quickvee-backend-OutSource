@@ -49,12 +49,6 @@ const Main = ({visible}) => {
 
  
 
-   
-
-
-   
-
-
 {/* multip user layout */}
     {visible === "multimerchant" && <IndexAllUsers />}
     {visible === "label" && <IndexAllUsers visible={visible} />}
@@ -71,9 +65,6 @@ const Main = ({visible}) => {
     {visible === "invertory-export" && <IndexAllUsers visible ={visible} />}
     {visible === "merchant-details" && <IndexAllUsers visible ={visible} />}
 
-
-
-    
 
 
    
