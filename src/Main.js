@@ -46,6 +46,7 @@ const Main = ({visible}) => {
    {visible === "shift-summary" && <Layout visible={visible} />}
    {visible === "payment-method-detail-report" && <Layout visible={visible} />}
    {visible === "order-type" && <Layout visible={visible} />}
+   {visible === "current-inventory-value" && <Layout visible={visible} />}
 
  
 

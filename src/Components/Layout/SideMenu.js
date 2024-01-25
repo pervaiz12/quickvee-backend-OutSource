@@ -487,6 +487,7 @@ const menuItems = [
       },
       { id: 79, text: " Order Type ", link: "/store-reporting/order-type" },
       { id: 80, text: "Taxes ", link: "/store-reporting/taxes" },
+      { id: 81, text: "Current Inventory Value ", link: "/store-reporting/current-inventory-value" },
     ],
   },
 ];

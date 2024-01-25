@@ -35,6 +35,7 @@ import MainSiftSummary from "../Reporting/SiftSummary/MainSiftSummary";
 import PaymentMethodReport from "../Reporting/PaymentMehodDetail/PaymentMethodReport";
 import MainItem from "../Reporting/ItemType/MainItem";
 import MainTaxesReport from "../Reporting/Taxes/MainTaxesReport";
+import CurrentInventoryValue from "../Reporting/CurrentInventoryValue/CurrentInventoryValue";
 // import MainInvDuplicates from '../InventoryDuplicates/MainInvDuplicates';
 
 const LeftSide = ({ visible }) => {
@@ -78,6 +79,7 @@ const LeftSide = ({ visible }) => {
           {visible === "payment-method-detail-report" && <PaymentMethodReport />}
           {visible === "order-type" && <MainItem />}
           {visible === "taxes" && <MainTaxesReport />}
+          {visible === "current-inventory-value" && <CurrentInventoryValue />}
 
 
          
