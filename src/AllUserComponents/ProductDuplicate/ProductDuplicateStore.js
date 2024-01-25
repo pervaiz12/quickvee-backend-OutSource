@@ -1,8 +1,12 @@
+
+
+
+
 import React, { useState } from "react";
 import Select from "react-select";
 import DownIcon from "../../Assests/Dashboard/Down.svg";
 import DeleteIcon from "../../Assests/Dashboard/cross.svg"
-const CateDuplicateStore = () => {
+const ProductDuplicateStore = () => {
   const [selectedEmployee, setSelectedEmployee] = useState("All");
   const [selectedOrderSource, setSelectedOrderSource] = useState("All");
   const [selectedCategories, setSelectedCategories] = useState([]);
@@ -43,9 +47,9 @@ const CateDuplicateStore = () => {
   };
 
   const categoryOptions = [
-    { value: "category1", label: "Category 1" },
-    { value: "category2", label: "Category 2" },
-    { value: "category3", label: "Category 3" },
+    { value: "product1", label: "product 1" },
+    { value: "product2", label: "product 2" },
+    { value: "product3", label: "product 3" },
   ];
   const [isSelectClicked, setIsSelectClicked] = useState(false);
 
@@ -76,7 +80,7 @@ const CateDuplicateStore = () => {
         <div className="q-add-categories-section">
           <div className="q-add-categories-section-header">
             <span>
-              <span>Category Duplicate</span>
+              <span>Product Duplicate</span>
             </span>
           </div>
 
@@ -113,7 +117,7 @@ const CateDuplicateStore = () => {
               {/* Multiple Select Categories */}
               <div className={`py-4 ${isSelectClicked ? 'select-clicked' : ''}`}>
       <label className="q-details-page-label mt-2" htmlFor="categoryFilter">
-        Select Categories
+        Select Product
       </label>
 
       <Select
@@ -189,7 +193,7 @@ const CateDuplicateStore = () => {
           <div className="q-add-inventory-section-header mx-2">
             <div class="qv_checkbox">
               <label class="qv_checkbox_add_checkmark_label">
-                Want to Replicate UPC's for inventory
+               Want to Replicate UPC's for inventory ?
                 <input
                   type="checkbox"
                   id="inv_setting2"
@@ -218,4 +222,4 @@ const CateDuplicateStore = () => {
   );
 };
 
-export default CateDuplicateStore;
+export default ProductDuplicateStore;

@@ -1,8 +1,15 @@
 import React from 'react'
+import ProductDuplicateStore from './ProductDuplicateStore'
 
 const MainProduct = () => {
   return (
-    <div>MainProduct</div>
+   <>
+   <div className='q-order-main-page'>
+
+    <ProductDuplicateStore />
+   </div>
+   
+   </>
   )
 }
 

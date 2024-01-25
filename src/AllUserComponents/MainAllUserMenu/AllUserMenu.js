@@ -419,6 +419,25 @@ const menuItems = [
     text: "Merchant Details ",
     link: "/users/view/unapprove/merchant-details",
   },
+  // {
+  //   id: 12,
+  //   icon: (
+  //     <img
+  //       src={MerchantIcon}
+  //       alt="labal"
+  //       className="h-6 w-10 mt-4 mb-4 hoverable-image"
+  //     />
+  //   ),
+  //   activeIcon: (
+  //     <img
+  //       src={MerchantActive}
+  //       alt="menu-defaults"
+  //       className="h-6 w-10 mt-4 mb-4"
+  //     />
+  //   ),
+  //   text: "Need Help ",
+  //   link: "/users/view/unapprove/need-help",
+  // },
 ];
 
 export default AllUserMenu;
