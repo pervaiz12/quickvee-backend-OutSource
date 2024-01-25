@@ -127,16 +127,8 @@ const MainInvDuplicates = () => {
             </div>
             <span class="search_btn mt-4 md:mt-0 md:ml-6"><button class="save_btn">Search</button></span>
           </div>
-
-          <label className="checkbox">
-            <input
-              type="checkbox"
-              checked={replicateUPCs}
-              onChange={handleCheckboxChange}
-              className="mx-8"
-            />
-            Want to replicate UPC's for inventory
-          </label>
+      
+        
 
           {/* Add Captcha component or placeholder here */}
 

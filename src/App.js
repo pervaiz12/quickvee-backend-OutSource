@@ -156,40 +156,12 @@ function App() {
      <Route exact path="/users/view/unapprove/permission" element={<Main visible={"permission"} />} />
      <Route exact path="/users/view/unapprove/invertory-export" element={<Main visible={"invertory-export"} />} />
      <Route exact path="/users/view/unapprove/merchant-details" element={<Main visible={"merchant-details"} />} />
-
-
-
-    
-     
-
-
-
-
+     <Route exact path="/users/view/unapprove/need-help" element={<Main visible={"need-help"} />} />
    
 
-     
-
-
-  
-  
- 
 
 
 
-
-
-     
-
-
-
-      
-
-
-
-
-
-
-     
         {/* <Route exact path="/" element={<DashboardMain />} /> */}
     
         <Route exact path="/toptraders" element={<TopTenders />} />

@@ -1,6 +1,6 @@
 import React from "react";
 
-import IndexAllUsers from "./IndexAllUsers";
+
 import MainLabel from "../Label/MainLabel";
 import MainNewsletter from "../Newsletter/MainNewsletter";
 import MainStoreOrder from "../StoreOrder/MainStoreOrder";
@@ -13,7 +13,11 @@ import MainProduct  from "../ProductDuplicate/MainProduct";
 import MainPermission from "../Permission/MainPermission";
 import MainMerchantDetails from "../MerchantDetails/MainMerchantDetails";
 import  MainInventoryExport from "../InventoryExport/MainInventoryExport";
+
+import MainNeedHelp from "../NeedHelp/MainNeedHelp";
+
 import EditDefaults from "../Defaults/EditDefaults";
+
 
 
 
@@ -36,6 +40,7 @@ const LeftDetailsUsers = ({ visible }) => {
       {visible === "permission" && <MainPermission />}
       {visible === "invertory-export" && <MainInventoryExport />}
       {visible === "merchant-details" && <MainMerchantDetails />}
+      {visible === "need-help" && <MainNeedHelp />}
 
       
 
