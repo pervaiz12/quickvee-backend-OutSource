@@ -18,6 +18,16 @@ module.exports = Object.freeze({
     EDIT_CATOGRY_DATA:"CategoryReactapi/category_data",
 
 
+
+     // Defaults API Calls 
+     LIST_ALL_Defaults : "DefaultReactapi/Default_list",
+     ADD_DEFAULTS : "DefaultReactapi/AddDefaultMenu",
+     EDIT_DEFAULTS : "DefaultReactapi/updateDefaultMenu",
+     DEFAULTDATA:"DefaultReactapi/DefaultData_list",
+     DELETE_SINGLE_DEFAULTS : "DefaultReactapi/deleteMenu",
+     DELETE_MULTI_DEFAULTS : "DefaultReactapi/deleteSelectedDefaults",
+
+
     //Attributes API Calls
     LIST_ALL_ATTRIBUTES:"Varientsapi/varients_list",
     ADD_ATTRIBUTE:"Varientsapi/add_varient",
@@ -105,13 +115,8 @@ module.exports = Object.freeze({
       
       NEW_ITEM_CREATED_BETWEEN_LIST:"ReportingReactapi/new_item_created_between_list",
 
-
-
-            // for daily Report 
-            LIST_DAILY_REPORT : "ReportingReactapi/daily_total_report",
-    
-            TOP_SALLER_REPORT : "ReportingReactapi/top_seller_10",
-            INSTANT_ACTIVITY_REPORT : "ReportingReactapi/instant_po_activity_report",
+      TOP_SALLER_REPORT : "ReportingReactapi/top_seller_10",
+      INSTANT_ACTIVITY_REPORT : "ReportingReactapi/instant_po_activity_report",
 
 
       //Employee List
@@ -135,8 +140,20 @@ module.exports = Object.freeze({
   
 
       LIST_TAXES_REPORT: "ReportingReactapi/taxes_report",
-});
 
+
+
+
+    //Super Admin - Permission
+    LIST_ALL_PERMISSION :"api/Create_permission_api/permission_list",
+    ADD_UPDATE_PERMISSION : "api/Create_permission_api/save_sub_permission",
+    DELETE_SINGLE_PERMISSION:"api/Create_permission_api/deleteperm",
+
+    // Store Order List API
+    GET_STORE_ORDER_DATA: "Store_order_api/get_store_order_data",
+
+
+  });
 
 
 

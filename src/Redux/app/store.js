@@ -49,6 +49,11 @@ import OrderTypeReducer from "../features/OrderType/OrderTypeSlice";
 
 import TaxesreportSliceReducer from "../features/TaxesReport/taxesreportSlice";
 
+import PermissionListReducer from "../features/Permission/PermissionSlice";
+
+import StoreOrderSliceReducer from "../features/StoreOrder/StoreOrderSlice";
+
+import DefaultsSliceReducer from "../features/Defaults/defaultsSlice";
 
 
 const store = configureStore({
@@ -108,6 +113,15 @@ const store = configureStore({
     taxesreport:TaxesreportSliceReducer,
 
 
+
+    //Permission
+
+    permissionRed:PermissionListReducer,
+
+
+    StoreOrderList:StoreOrderSliceReducer,
+
+    defaults: DefaultsSliceReducer,
 
   },
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),
