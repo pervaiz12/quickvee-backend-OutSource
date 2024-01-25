@@ -1,12 +1,28 @@
 import React from "react";
-import { useEffect} from "react";
+import { useState ,useEffect} from "react";
 import { useDispatch } from "react-redux";
 import {fetchMerchantsList} from "../../Redux/features/ExportInventory/ExportInventorySlice";
 import { useSelector } from "react-redux";
+import InventoryExportLogic from "./InventoryExportLogic";
 
 const MainInventoryExport =  () => {
-  const MerchantListData = useSelector((state) => state.MerchantListData);
-  console.log(MerchantListData);
+    const [MerchantList, setMerchantList] = useState()
+    const MerchantListData = useSelector((state) => state.ExportInventoryData);
+    //console.log(MerchantListData);
+    const {
+      handleStoreInput,
+      handleSubmit,
+      submitmessage,
+      setsubmitmessage,
+    } = InventoryExportLogic();
+
+  useEffect(() => {
+    if (!MerchantListData.loading && MerchantListData.MerchantListData) {
+        setMerchantList(MerchantListData.MerchantListData)
+        console.log(MerchantList)
+    }
+  }, [MerchantListData, MerchantListData.loading])
+
   const dispatch = useDispatch();
   useEffect(() => {
     dispatch(fetchMerchantsList())
@@ -19,20 +35,20 @@ const MainInventoryExport =  () => {
               <div className="col-qv-6">
                   <div className="input_area">
                       <label>Select Store Name</label>
-                      <select name="end_day_Allow" 
-                      // value={systemAccess.end_day_Allow || ''}
-                          // onChange={handleEndOfDayAllowanceChange}
+                      <select name="store_name" 
+                          onChange={handleStoreInput}
                       >
-                          <option value="1">Deny if staff clocked in</option>
-                          {/* selected={systemAccess.end_day_Allow==1} */}
-                          <option value="2" >Mass clock out staff clocked in</option>
-                          <option value="3" >Ignore Time Clock</option>
+                        <option value=''>--Select Store--</option>
+                       {MerchantList && MerchantList.length >= 1 && MerchantList.map(item => (
+                        <option key={item.id} value={item.merchant_id}>{item.name}-{item.merchant_id}</option>
+                         ))}
+                            
                       </select>
                   </div>
               </div>
           </div>
           <div className="col-qv-12">
-              <button className="save_btn" >
+              <button className="save_btn" onClick={handleSubmit}  >
                   Export
               </button>
           </div>
