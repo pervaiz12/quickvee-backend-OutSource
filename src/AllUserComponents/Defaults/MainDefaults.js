@@ -1,9 +1,21 @@
-import React from 'react'
+import React, { useState } from "react";
+
+import DefaultsDetail from "./DefaultsDetail";
+import AddDefaults from "./AddDefaults";
+import EditDefaults from "./EditDefaults";
 
 const MainDefaults = () => {
-  return (
-    <div>MainDefaults</div>
-  )
-}
+  const [visible, seVisible] = useState("DefaultsDetail");
 
-export default MainDefaults
+  return (
+    <>
+      <div className="q-category-main-page">
+        {visible === "DefaultsDetail" && <DefaultsDetail seVisible={seVisible} />}
+        {visible === "DefaultsAlert" && <AddDefaults seVisible={seVisible} />}
+       
+      </div>
+    </>
+  );
+};
+
+export default MainDefaults;
