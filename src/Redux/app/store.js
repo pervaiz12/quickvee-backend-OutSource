@@ -40,21 +40,6 @@ import instantactivitySlice from "../features/InstantActivity/instantactivitySli
 import RegisterSettingReducer from "../features/StoreSettings/RegisterSettings/RegisterSettingsSlice";
 
 import NewItemCreatedBtnListReducer from "../features/Reports/NewItemCreatedBetweenSlice/NewItemCreatedBetweenSlice";
-import ReorderInventoryListReducer from "../features/Reports/ReorderInventory/ReorderInventorySlice";
-
-import ItemSalesReportListReducer from "../features/Reports/ItemSales/ItemSalesSlice";
-
-
-import OrderTypeReducer from "../features/OrderType/OrderTypeSlice";
-
-import TaxesreportSliceReducer from "../features/TaxesReport/taxesreportSlice";
-
-import PermissionListReducer from "../features/Permission/PermissionSlice";
-
-import StoreOrderSliceReducer from "../features/StoreOrder/StoreOrderSlice";
-
-import DefaultsSliceReducer from "../features/Defaults/defaultsSlice";
-
 
 const store = configureStore({
   reducer: {
@@ -104,6 +89,7 @@ const store = configureStore({
 
    //Employee List Data
     employeeDataList :EmployeeListReducer,
+    ExportInventoryData:ExportInventoryReducer,
 
     ItemSalesReportList:ItemSalesReportListReducer,
 

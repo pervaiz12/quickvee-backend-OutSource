@@ -84,7 +84,7 @@ import Main from "./Main";
 
 
 
-
+import InventoryExport from "./Components/InventoryExport/MainInventoryExport";
 
 
 
@@ -231,19 +231,11 @@ function App() {
           element={<PaymentMethodReport />}
         />
 
-        <Route
-          path="/store-settings/item-create-between"
-          element={<NewItemCreatedBetweenMain />}
-        />
+          <Route path="/store-settings/item-create-between" element={<NewItemCreatedBetweenMain />}/>
 
-        <Route
-          path="/store-settings/recorder-inventory"
-          element={<ReorderInventoryMain />}
-        />
-         
-     
-     
-    </Routes>
+          
+      </Routes>
+  
   );
 }
 export default App;

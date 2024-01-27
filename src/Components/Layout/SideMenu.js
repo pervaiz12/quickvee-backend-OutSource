@@ -38,7 +38,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
   const navigate = useNavigate();
 
   const handleItemClick = (item) => {
-    console.log(item);
+    // console.log(item);
     setActiveItem(item.link);
     navigate(item.link);
   };
@@ -254,9 +254,6 @@ const menuItems = [
         className="h-6 w-10 mt-4 mb-4 hoverable-image"
       />
     ),
-
-    text: "Import Data",
-    link: "/import-data",
     activeIcon: (
       <img src={DataIcons} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
     ),
@@ -265,13 +262,7 @@ const menuItems = [
   },
   {
     id: 8,
-    icon: (
-      <img
-        src={CouponIcon}
-        alt="Coupons"
-        className="h-6 w-10 mt-4 mb-4 hoverable-image"
-      />
-    ),
+    icon: <img src={CouponIcon} alt="Coupons" className="h-6 w-10 mt-4 mb-4" />,
     text: "Coupons",
     link: "/coupons",
     activeIcon: (
@@ -282,13 +273,7 @@ const menuItems = [
   },
   {
     id: 9,
-    icon: (
-      <img
-        src={VenIcon}
-        alt="Vendors"
-        className="h-6 w-10 mt-4 mb-4 hoverable-image"
-      />
-    ),
+    icon: <img src={VenIcon} alt="Vendors" className="h-6 w-10 mt-4 mb-4" />,
     text: "Vendors",
     link: "/vendors",
     activeIcon: (
@@ -306,8 +291,6 @@ const menuItems = [
         className="h-6 w-10 mt-4 mb-4 hoverable-image"
       />
     ),
-    text: "Timesheet",
-    link: "/timesheet",
     activeIcon: (
       <img
         src={TimesheetsIcon}
@@ -488,6 +471,17 @@ const menuItems = [
       { id: 79, text: " Order Type ", link: "/store-reporting/order-type" },
       { id: 80, text: "Taxes ", link: "/store-reporting/taxes" },
     ],
+  },
+  {
+    id: 13,
+    icon: (
+      <img src={VenderIcon} alt="Import Data" className="h-6 w-10 mt-4 mb-4" />
+    ),
+    activeIcon: (
+      <img src={DataIcons} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
+    ),
+    text: "Inventory Export",
+    link: "/inventory-export",
   },
 ];
 
