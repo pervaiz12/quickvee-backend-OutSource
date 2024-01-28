@@ -44,12 +44,31 @@ const InventoryExportLogic = () => {
           const data = {
             "merchant_id": storename,
           }
-          // console.log(data);
+          console.log(data);
     
           try {
             const response = await axios.post(BASE_URL + INVENTORY_EXPORT, data, { headers: { "Content-Type": "multipart/form-data" } })
-    
+            // console.log(response.data)
+            const csvData = response.data;
+            // Convert the data to a Blob
+            const blob = new Blob([csvData], { type: 'text/csv' });
+
+            // Create a URL for the Blob
+            const fileUrl = URL.createObjectURL(blob);
+
+            // Create a temporary anchor element and trigger a download
+            const a = document.createElement("a");
+            a.href = fileUrl;
+            a.download = storename+".csv"; // Name of the downloaded file
+            document.body.appendChild(a);
+            a.click();
+
+            // Cleanup: remove the anchor element and revoke the Blob URL
+            document.body.removeChild(a);
+            URL.revokeObjectURL(fileUrl);
+
             if (response.data.status === true) {
+
               setsubmitmessage(response.data.message);
             }
             else {
