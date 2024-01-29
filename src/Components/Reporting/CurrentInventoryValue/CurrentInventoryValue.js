@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchcurrentInventoryreportData } from "../../../Redux/features/CurrentInventoryValue/currentInventoryValueSlice";
 import { useSelector, useDispatch } from "react-redux";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
+
 
 const CurrentInventoryValue = () => {
   const [currentInventory, setcurrentInventory] = useState([]);
@@ -84,17 +82,8 @@ const CurrentInventoryValue = () => {
                   <div className="text-[20px] font-bold mt-4">$ {formatNumber(currentInventory.total_cpi_price)}</div>
                 </div>
               </div>
-
             </div>
-
-
           </div>
-{/* 
-          <div className="q-category-bottom-categories-single-category">
-            <p className="report-title"><h1>Total Quantity</h1> <br /> {currentInventory.final_quantity}{" "}</p>
-            <p className="report-title"><h1>Total Selling Price</h1> <br /> $ {formatNumber(currentInventory.total_sale_price)}</p>
-            <p className="report-title"> <h1>Total Cost Per Item</h1> <br /> $ {formatNumber(currentInventory.total_cpi_price)}</p>
-          </div> */}
         </div>
       </div>
     </>
