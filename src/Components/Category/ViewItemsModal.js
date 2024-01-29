@@ -12,7 +12,10 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
   const [itemsData, setItemsData] = useState([]);
   const myStyles = {
     width: "50rem",
-    transform: "translate(18rem, 4.5rem)",
+    position: "absolute",
+    top: "18%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
   };
 
   const fetchCategoryProductData = async () => {
