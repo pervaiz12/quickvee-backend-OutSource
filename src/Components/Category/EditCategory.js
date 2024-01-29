@@ -4,16 +4,20 @@ import axios from "axios";
 
 import Upload from "../../Assests/Category/upload.svg";
 
-import {  BASE_URL,  EDIT_CATOGRY_DATA,  UPDATE_CATOGRY} from "../../Constants/Config";
+import {
+  BASE_URL,
+  EDIT_CATOGRY_DATA,
+  UPDATE_CATOGRY,
+} from "../../Constants/Config";
 
 import { Link, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { deleteCategorybanner } from "../../Redux/features/Categories/categoriesSlice";
+import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 
 import { useNavigate } from "react-router-dom";
 
 const EditCategory = () => {
-
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
@@ -173,16 +177,6 @@ const EditCategory = () => {
     if (selectedImage || (category && category.image)) {
       return (
         <>
-          <div className="remove-banner-button">
-            <button
-              onClick={(event) =>
-                handleRemoveBanner(event, category.collID, category.image)
-              }
-            >
-              Remove Banner
-            </button>
-          </div>
-
           <div className="add-category-checkmark-div">
             <label className="add-category-checkmark-label mt-2">
               Show Online ?
@@ -206,6 +200,7 @@ const EditCategory = () => {
   };
 
   const handleRemoveBanner = (event, id, removeitem) => {
+    event.stopPropagation();
     const data = {
       id: id,
       merchant_id: "MAL0100CA",
@@ -264,6 +259,17 @@ const EditCategory = () => {
     }
   };
 
+  const handleDeleteImage = (e) => {
+    e.stopPropagation();
+    setCategory((prevValue) => ({
+      ...prevValue,
+      image: {
+        file: null,
+        base64: null,
+      },
+    }));
+  };
+
   return (
     <div className="q-category-main-page">
       <div className="q-category-top-detail-section">
@@ -319,21 +325,86 @@ const EditCategory = () => {
             </div>
 
             <div
-              className={`h-1/2 w-full h-[100px] flex items-center justify-center border-2 border-dashed border-[#BFBFBF] bg-white rounded-lg mt-2 `}
-              style={{ cursor: "pointer" }}
+              className={`h-1/2  h-[100px] flex items-center justify-center border-2 border-dashed border-[#BFBFBF] bg-white rounded-lg mt-2 defaultDrag_div`}
               onDragOver={handleDragOver}
               onDrop={handleDrop}
               onClick={openFileInput}
+              style={{
+                cursor: "pointer",
+                position: "relative",
+                height: "auto",
+                padding: "10px",
+              }}
             >
-              <div className="flex-column ">
-                <img
-                  src={Upload}
-                  style={{ transform: "translate(2.5rem, 0px)" }}
-                  alt="Category Banner"
-                />
-                <span>Category Banner</span>
-              </div>
-
+              {category.image && category.image.base64 ? (
+                <>
+                  <span
+                    className="delete-image-icon img-DeleteIcon"
+                    onClick={handleDeleteImage}
+                    style={{
+                      position: "absolute",
+                      top: "7px",
+                      right: "7px",
+                    }}
+                  >
+                    <img src={DeleteIcon} alt="delete-icon" />
+                  </span>
+                  <img
+                    src={category.image.base64}
+                    alt="Preview"
+                    className="default-img"
+                    style={{
+                      height: "320px",
+                      objectFit: "contain",
+                      width: "100%",
+                    }}
+                  />
+                </>
+              ) : (
+                <>
+                  {category.image && category.image.length > 0 ? (
+                    <div className="flex-column">
+                      <img
+                        src={`${BASE_URL}/upload/banner/category_banners/${category.merchant_id}/${category.image}`}
+                        alt="Default"
+                        className="default-img"
+                        style={{
+                          height: "320px",
+                          objectFit: "contain",
+                          width: "100%",
+                        }}
+                      />
+                      <span
+                        className="delete-image-icon img-DeleteIcon"
+                        // onClick={handleDeleteImage}
+                        onClick={(event) =>
+                          handleRemoveBanner(
+                            event,
+                            category.collID,
+                            category.image
+                          )
+                        }
+                        style={{
+                          position: "absolute",
+                          top: "7px",
+                          right: "7px",
+                        }}
+                      >
+                        <img src={DeleteIcon} alt="delete-icon" />
+                      </span>
+                    </div>
+                  ) : (
+                    <div className="flex-column">
+                      <img
+                        src={Upload}
+                        style={{ transform: "translate(2.5rem, 0px)" }}
+                        alt="Default"
+                      />
+                      <span>Category Image</span>
+                    </div>
+                  )}
+                </>
+              )}
               <div className="q-add-categories-single-input">
                 <input
                   type="file"
@@ -341,26 +412,12 @@ const EditCategory = () => {
                   name="image"
                   accept="image/*"
                   ref={inputRef}
-                  style={{ display: "none", width: "100%" }}
+                  className="default-img-inputfield"
                   onChange={handleImageChange}
+                  style={{ display: "none" }}
                 />
               </div>
             </div>
-
-            {selectedImage && (
-              <div className="image-preview" key={selectedImage}>
-                <img src={selectedImage} alt="Preview" />
-              </div>
-            )}
-
-            {!selectedImage && category.image && (
-              <div className="image-preview">
-                <img
-                  src={`${BASE_URL}/upload/banner/category_banners/${category.merchant_id}/${category.image}`}
-                  alt="Preview"
-                />
-              </div>
-            )}
 
             {renderRemoveBannerButton()}
 
