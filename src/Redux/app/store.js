@@ -40,6 +40,15 @@ import instantactivitySlice from "../features/InstantActivity/instantactivitySli
 import RegisterSettingReducer from "../features/StoreSettings/RegisterSettings/RegisterSettingsSlice";
 
 import NewItemCreatedBtnListReducer from "../features/Reports/NewItemCreatedBetweenSlice/NewItemCreatedBetweenSlice";
+import ExportInventoryReducer from "../features/ExportInventory/ExportInventorySlice";
+import StoreOrderSliceReducer from "../features/StoreOrder/StoreOrderSlice";
+import ItemSalesReportListReducer from "../features/Reports/ItemSales/ItemSalesSlice";
+import OrderTypeReducer from "../features/OrderType/OrderTypeSlice";
+import TaxesreportSliceReducer from "../features/TaxesReport/taxesreportSlice";
+import PermissionListReducer from "../features/Permission/PermissionSlice";
+import ReorderInventoryListReducer from "../features/Reports/ReorderInventory/ReorderInventorySlice";
+
+
 
 const store = configureStore({
   reducer: {
@@ -107,7 +116,7 @@ const store = configureStore({
 
     StoreOrderList:StoreOrderSliceReducer,
 
-    defaults: DefaultsSliceReducer,
+    // defaults: DefaultsSliceReducer,
 
   },
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),
