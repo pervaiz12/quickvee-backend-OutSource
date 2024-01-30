@@ -445,18 +445,10 @@ function App() {
 
         {/* <Route exact path="/" element={<DashboardMain />} /> */}
     
-        <Route exact path="/toptraders" element={<TopTenders />} />
-   
-        <Route path="/report" element={<MainReport />} />
-        <Route path="/store-settings/taxes" element={<MainTaxes />} />
+    
 
         {/* <Route path="/store-settings/info"  element={<MainStoreOption />} /> */}
-        <Route path="/store-settings/options" element={<MainStoreOption />} />
-        <Route
-
-          path="/store-settings/addemployee"
-          element={<MainAddEmployee />}
-        /> */}
+        
 
       {/* /store-settings/inventory */}
       {/* <Route path="/store-reporting/inventory" element={<MainInventory />} /> */}
@@ -495,10 +487,7 @@ function App() {
         /> */}
     </Routes>
 
-          <Route path="/store-settings/item-create-between" element={<NewItemCreatedBetweenMain />}/>
 
-          
-      </Routes>
  
   );
 }
