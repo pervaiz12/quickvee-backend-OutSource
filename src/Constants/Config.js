@@ -122,6 +122,38 @@ module.exports = Object.freeze({
       //Employee List
       LIST_ALL_EMPLOYEE : "ReportingReactapi/employee_list",
 
+
+
+      LIST_PAYMENT_METHOD_REPORT : "ReportingReactapi/credit_card_sales_report",
+
+      // });
+      
+      // for item sales report
+      GET_ITEMWISE_SALE_LIST : "ReportingReactapi/get_itemwise_sale_list",
+      
+      //Order Type
+
+      LIST_ALL_ORDER_TYPE : "ReportingReactapi/order_type",
+
+
+
+  
+
+      LIST_TAXES_REPORT: "ReportingReactapi/taxes_report",
+
+
+
+
+    //Super Admin - Permission
+    LIST_ALL_PERMISSION :"api/Create_permission_api/permission_list",
+    ADD_UPDATE_PERMISSION : "api/Create_permission_api/save_sub_permission",
+    DELETE_SINGLE_PERMISSION:"api/Create_permission_api/deleteperm",
+
+    // Store Order List API
+    GET_STORE_ORDER_DATA: "Store_order_api/get_store_order_data",
     
+    // Export Order Count Data
+    EXPORT_ORDER_COUNT_DATA: "Store_order_api/export_order_count_data",
+
   });
 

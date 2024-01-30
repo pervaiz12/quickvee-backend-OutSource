@@ -4,7 +4,7 @@ import React from "react";
 import MainLabel from "../Label/MainLabel";
 import MainNewsletter from "../Newsletter/MainNewsletter";
 import MainStoreOrder from "../StoreOrder/MainStoreOrder";
-import OrderCount from "../OrderCount/OrderCount";
+import OrderCountMain from "../OrderCount/OrderCountMain";
 import MainDefaults from "../Defaults/MainDefaults";
 import MainReleaseApk from "../ReleaseApk/MainReleaseApk";
 import MainInvDuplicates from "../InventoryDuplicate/MainInventoryDuplicate";
@@ -28,7 +28,7 @@ const LeftDetailsUsers = ({ visible }) => {
       {visible === "label" && <MainLabel />}
       {visible === "newsletter" && <MainNewsletter />}
       {visible === "store-order" && <MainStoreOrder />}
-      {visible === "order-count" && <OrderCount />}
+      {visible === "order-count" && <OrderCountMain />}
       {visible === "defaults" && <MainDefaults />}
       {visible === "edit-defaults" && <EditDefaults />}
       
