@@ -122,6 +122,12 @@ module.exports = Object.freeze({
       //Employee List
       LIST_ALL_EMPLOYEE : "ReportingReactapi/employee_list",
 
+      
+      //INVENTORY_EXPORT
+      INVENTORY_EXPORT : "ExportInventory_api/exportCSV",
+      LIST_ALL_MERCHANTS : "ExportInventory_api/merchants_list",
+
+
 
 
       LIST_PAYMENT_METHOD_REPORT : "ReportingReactapi/credit_card_sales_report",

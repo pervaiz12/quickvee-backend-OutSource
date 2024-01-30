@@ -472,17 +472,7 @@ const menuItems = [
       { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
     ],
   },
-  {
-    id: 13,
-    icon: (
-      <img src={VenderIcon} alt="Import Data" className="h-6 w-10 mt-4 mb-4" />
-    ),
-    activeIcon: (
-      <img src={DataIcons} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
-    ),
-    text: "Inventory Export",
-    link: "/inventory-export",
-  },
+  
 ];
 
 export default SideMenu;
