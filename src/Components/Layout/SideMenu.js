@@ -50,7 +50,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
         style={isMenuOpen ? { width: "16rem" } : { width: "6rem" }}
       >
         {/* Left Side Menu */}
-        <div className="">
+        <div className="flex-1 bg-[#253338] text-[#9E9E9E]">
           {isMenuOpen
             ? menuItems.map((item) => (
                 <div
@@ -60,7 +60,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                   }`}
                 >
                   {item.dropdownItems ? (
-                    <DropdownMenuItem item={item} />
+                    <DropdownMenuItem item={item} isMenuOpen={isMenuOpen} />
                   ) : (
                     <div
                       className={`flex items-center ${
@@ -93,7 +93,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                   }`}
                 >
                   {item.dropdownItems ? (
-                    <DropdownMenuItem item={item} />
+                    <DropdownMenuItem item={item} isMenuOpen={isMenuOpen} />
                   ) : (
                     <div
                       className={`flex flex-col items-center ${
@@ -116,7 +116,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
   );
 };
 
-const DropdownMenuItem = ({ item }) => {
+const DropdownMenuItem = ({ item, isMenuOpen }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleToggleDropdown = () => {
@@ -124,9 +124,19 @@ const DropdownMenuItem = ({ item }) => {
   };
 
   return (
-    <div className="relative">
-      <div className="flex items-center">
-        {item.icon}
+    <div className="relative" style={{ width: isMenuOpen ? "16rem" : "6rem" }}>
+
+    <div className="flex items-center">
+      {isMenuOpen && (
+        <p
+          className="ml-2 cursor-pointer menu-item text-gray-400"
+          onClick={handleToggleDropdown}
+        >
+          {item.icon}
+        </p>
+      )}
+  
+      {isMenuOpen && (
         <p
           className="ml-2 cursor-pointer menu-item text-gray-400"
           onClick={handleToggleDropdown}
@@ -134,21 +144,25 @@ const DropdownMenuItem = ({ item }) => {
           {item.text}
           <FaChevronDown className="quickarrow_icon" />
         </p>
-      </div>
-      {isDropdownOpen && (
-        <div className="q_sideMenu_layout_details CircularSTDBook">
-          {item.dropdownItems.map((dropdownItem) => (
-            <Link
-              key={dropdownItem.id}
-              to={dropdownItem.link}
-              className="submenu-item"
-            >
-              {dropdownItem.text}
-            </Link>
-          ))}
-        </div>
       )}
     </div>
+  
+    {isDropdownOpen && (
+      <div className="absolute mt-0 bg-[#334247] p-4 shadow w-full text-center z-10">
+        {item.dropdownItems.map((dropdownItem) => (
+          <Link
+            key={dropdownItem.id}
+            to={dropdownItem.link}
+            className="flex text-center submenu-item text-gray-400 py-4"
+          >
+            {dropdownItem.text}
+          </Link>
+        ))}
+      </div>
+    )}
+  
+  </div>
+  
   );
 };
 
@@ -263,8 +277,6 @@ const menuItems = [
   {
     id: 8,
     icon: <img src={CouponIcon} alt="Coupons" className="h-6 w-10 mt-4 mb-4" />,
-    text: "Coupons",
-    link: "/coupons",
     activeIcon: (
       <img src={CouIcon} alt="Coupons" className="h-6 w-10 mt-4 mb-4 " />
     ),
@@ -274,8 +286,6 @@ const menuItems = [
   {
     id: 9,
     icon: <img src={VenIcon} alt="Vendors" className="h-6 w-10 mt-4 mb-4" />,
-    text: "Vendors",
-    link: "/vendors",
     activeIcon: (
       <img src={VenIcons} alt="Vendors" className="h-6 w-10 mt-4 mb-4 " />
     ),
