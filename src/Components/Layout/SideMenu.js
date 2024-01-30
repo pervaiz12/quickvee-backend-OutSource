@@ -455,12 +455,12 @@ const menuItems = [
       { id: 76, text: "Shift Summary", link: "/store-reporting/shift-summary" },
 
       // { id: 77, text: " Item Sales ", link: "/store-settings/item-sales" },
-      {
-        id: 78,
-        text: " Payment Method Details",
-        link: "/store-settings/payment-method-detail-report",
-      },
-      { id: 79, text: " Order Type ", link: "/store-settings/order-type" },
+      // {
+      //   id: 78,
+      //   text: " Payment Method Details",
+      //   link: "/store-settings/payment-method-detail-report",
+      // },
+      { id: 79, text: " Order Type ", link: "/store-reporting/order-type" },
 
       { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
       {
@@ -469,7 +469,7 @@ const menuItems = [
         link: "/store-reporting/payment-method-details",
       },
       { id: 79, text: " Order Type ", link: "/store-reporting/order-type" },
-      { id: 80, text: "Taxes ", link: "/store-reporting/taxes" },
+      { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
     ],
   },
   {
