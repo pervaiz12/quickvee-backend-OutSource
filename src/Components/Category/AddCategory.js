@@ -1,5 +1,5 @@
 import React, { useState, useRef } from "react";
-import AddNewCategory from "../../Assests/Category/addIcon.svg";
+import AddNewCategory from "../../Assests/Taxes/Left.svg";
 import axios from "axios";
 import { BASE_URL, ADD_CATOGRY } from "../../Constants/Config";
 import Upload from "../../Assests/Category/upload.svg";
@@ -36,19 +36,23 @@ const AddCategory = ({ seVisible }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        // const base64String = reader.result.split(',')[1];
-        setCategory((prevValue) => ({
-          ...prevValue,
-          image: {
-            file: file,
-            base64: reader.result,
-          },
-        }));
-        // console.log('Base64 Path:', `data:image/png;base64,${base64String}`);
-      };
-      reader.readAsDataURL(file);
+      const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+      if (allowedTypes.includes(file.type)) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setCategory((prevValue) => ({
+            ...prevValue,
+            image: {
+              file: file,
+              base64: reader.result,
+            },
+          }));
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert(`${file.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`);
+        e.target.value = null;
+      }
     }
   };
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import AddNewCategory from "../../Assests/Category/addIcon.svg";
+import AddNewCategory from "../../Assests/Taxes/Left.svg";
 import axios from "axios";
 
 import Upload from "../../Assests/Category/upload.svg";
@@ -99,18 +99,23 @@ const EditCategory = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setSelectedImage(reader.result);
-        setCategory((prevValue) => ({
-          ...prevValue,
-          image: {
-            file: file,
-            base64: reader.result,
-          },
-        }));
-      };
-      reader.readAsDataURL(file);
+      const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+      if (!allowedExtensions.exec(file.name)) {
+        alert(file.name + " is not an image. Only jpeg, png, jpg files can be uploaded.");
+      } else {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setSelectedImage(reader.result);
+          setCategory((prevValue) => ({
+            ...prevValue,
+            image: {
+              file: file,
+              base64: reader.result,
+            },
+          }));
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 
