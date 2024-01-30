@@ -1,8 +1,14 @@
 import React from 'react'
+import CateDuplicateStore from './CateDuplicateStore'
 
 const MainCateDuplicate = () => {
   return (
-    <div>MainCateDuplicate</div>
+    <>
+    <div className='q-order-main-page'>
+      <CateDuplicateStore />
+    </div>
+    
+    </>
   )
 }
 

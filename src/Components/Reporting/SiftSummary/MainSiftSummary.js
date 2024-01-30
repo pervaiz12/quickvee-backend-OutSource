@@ -1,6 +1,7 @@
 import React from 'react'
 import SiftSetting from './SiftSetting'
 import DateRange from '../../Orders/InstoreOrder/DateRange'
+import SiftSummaryDetails from './SiftSummaryDetails'
 
 const MainSiftSummary = () => {
   return (
@@ -13,6 +14,9 @@ const MainSiftSummary = () => {
     <DateRange />
  </div>
 
+<div className='q-order-main-page'>
+  <SiftSummaryDetails />
+</div>
 
 </>
   )

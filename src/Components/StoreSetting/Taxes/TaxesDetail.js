@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import SortIcon from "../../../../Assests/Dashboard/sort-arrows-icon.svg"
-import DeleteIcon from "../../../../Assests/Category/deleteIcon.svg"
+import SortIcon from "../../../Assests/Dashboard/sort-arrows-icon.svg"
+import DeleteIcon from "../../../Assests/Category/deleteIcon.svg"
 import AddTaxesModal from "./AddTaxesModal";
 import EditTaxesModal from "./EditTaxesModal";
 
-import { fetchtaxesData ,deleteTax } from "../../../../Redux/features/Taxes/taxesSlice"
+import { fetchtaxesData ,deleteTax } from "../../../Redux/features/Taxes/taxesSlice"
+
 
 import { useSelector, useDispatch } from 'react-redux';
 

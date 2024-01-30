@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 
 import { Box, Button, Modal } from "@mui/material";
-import AddIcon from "../../../../Assests/Category/addIcon.svg";
-import LeftIcon from "../../../../Assests/Taxes/Left.svg";
+import AddIcon from "../../../Assests/Category/addIcon.svg";
+import LeftIcon from "../../../Assests/Taxes/Left.svg";
 import axios from "axios";
-import { fetchtaxesData } from "../../../../Redux/features/Taxes/taxesSlice";
+import { fetchtaxesData } from "../../../Redux/features/Taxes/taxesSlice";
 import { useDispatch } from "react-redux";
 
-import { BASE_URL, ADD_TAXES } from "../../../../Constants/Config";
+import { BASE_URL, ADD_TAXES } from "../../../Constants/Config";
 
 const AddTaxesModal = () => {
   const [open, setOpen] = useState(false);

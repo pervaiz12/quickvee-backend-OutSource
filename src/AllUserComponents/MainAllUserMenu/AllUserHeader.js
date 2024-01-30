@@ -63,14 +63,16 @@ const AllUserHeader = () => {
 
          
             {showDropdown && (
-              <div className="dropdown-content mt-5">
+              <div className="dropdown-content w-full  mt-5">
                 <div className="flex justify-items-start">
-                  <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />
-                  Store Setup
+                 
+                <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />   <a href="/users/view/unapprove/" >Store Setup</a>
                 </div>
                 <div className="flex justify-items-start">
                   <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />
+                  <a href="/users/view/unapprove/need-help">
                   Need Help
+                  </a>
                 </div>
                 <div className="flex justify-items-start">
                   <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />

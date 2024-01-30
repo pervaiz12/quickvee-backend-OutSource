@@ -1,19 +1,14 @@
 import React, { useState } from "react";
+import Select from "react-select";
 import DownIcon from "../../Assests/Dashboard/Down.svg";
-import ReCAPTCHA from "./ReCAPTCHA";
-
-const StoreCateUser = () => {
+import CrossIcons from "../../Assests/MultipleUserIcon/crossIcons.svg"
+const CateDuplicateStore = () => {
   const [selectedEmployee, setSelectedEmployee] = useState("All");
   const [selectedOrderSource, setSelectedOrderSource] = useState("All");
-  const [selectedOrderType, setSelectedOrderType] = useState("All");
+  const [selectedCategories, setSelectedCategories] = useState([]);
 
   const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
-  const [orderSourceDropdownVisible, setOrderSourceDropdownVisible] =
-    useState(false);
-  const [orderTypeDropdownVisible, setOrderTypeDropdownVisible] =
-    useState(false);
-
-  const [replicateUPCs, setReplicateUPCs] = useState(false); // State for the checkbox
+  const [orderSourceDropdownVisible, setOrderSourceDropdownVisible] = useState(false);
 
   const toggleDropdown = (dropdown) => {
     switch (dropdown) {
@@ -23,16 +18,9 @@ const StoreCateUser = () => {
       case "orderSource":
         setOrderSourceDropdownVisible(!orderSourceDropdownVisible);
         break;
-      // Add cases for other dropdowns if needed
       default:
         break;
     }
-  };
-
-  const [isVerified, setVerified] = useState(false);
-
-  const handleVerify = (success) => {
-    setVerified(success);
   };
 
   const handleOptionClick = (option, dropdown) => {
@@ -45,15 +33,42 @@ const StoreCateUser = () => {
         setSelectedOrderSource(option);
         setOrderSourceDropdownVisible(false);
         break;
-      // Add cases for other dropdowns if needed
       default:
         break;
     }
   };
 
-  const handleCheckboxChange = () => {
-    setReplicateUPCs(!replicateUPCs);
+  const handleCategoryChange = (selectedOptions) => {
+    setSelectedCategories(selectedOptions);
   };
+
+  const categoryOptions = [
+    { value: "category1", label: "Category 1" },
+    { value: "category2", label: "Category 2" },
+    { value: "category3", label: "Category 3" },
+  ];
+  const [isSelectClicked, setIsSelectClicked] = useState(false);
+
+  
+
+
+  const handleSelectClick = () => {
+    setIsSelectClicked(true);
+  };
+
+  const handleSelectBlur = () => {
+    setIsSelectClicked(false);
+  };
+  // const handleCancelClick = () => {
+  //   setSelectedCategories([]);
+  // };
+  const handleCancelClick = (removedValue) => {
+    const newSelectedCategories = selectedCategories.filter(
+      (category) => category.value !== removedValue
+    );
+    setSelectedCategories(newSelectedCategories);
+  };
+
 
   return (
     <>
@@ -61,14 +76,13 @@ const StoreCateUser = () => {
         <div className="q-add-categories-section">
           <div className="q-add-categories-section-header">
             <span>
-              {/* <img src={()} alt="Add-New-Category" /> */}
-              <span>Inventory Duplicate</span>
+              <span>Category Duplicate</span>
             </span>
           </div>
 
           <div className="q-order-page-container ml-8 md:flex-col">
             {/* Employee Dropdown */}
-            <div className="q-order-page-filter mt-6">
+            <div className="col-qv-6 mt-6">
               <label className="q-details-page-label" htmlFor="employeeFilter">
                 Copy from this store
               </label>
@@ -87,24 +101,59 @@ const StoreCateUser = () => {
                     <div onClick={() => handleOptionClick("All", "employee")}>
                       All
                     </div>
-                    <div
-                      onClick={() => handleOptionClick("employee1", "employee")}
-                    >
+                    <div onClick={() => handleOptionClick("employee1", "employee")}>
                       employee1
                     </div>
-                    <div
-                      onClick={() => handleOptionClick("employee2", "employee")}
-                    >
+                    <div onClick={() => handleOptionClick("employee2", "employee")}>
                       employee2
                     </div>
                   </div>
                 )}
               </div>
-              <div className="mt-5">
-                <label
-                  className="q-details-page-label"
-                  htmlFor="orderSourceFilter"
-                >
+              {/* Multiple Select Categories */}
+              <div className={`py-4 ${isSelectClicked ? 'select-clicked' : ''}`}>
+      <label className="q-details-page-label mt-2" htmlFor="categoryFilter">
+        Select Categories
+      </label>
+
+      <Select
+        className="py-2"
+        isMulti
+        value={selectedCategories}
+        onChange={handleCategoryChange}
+        options={categoryOptions}
+        isCreatable={true}
+        onClick={handleSelectClick}
+        onBlur={handleSelectBlur}
+        components={{
+          MultiValue: ({ data, innerProps }) => (
+            <div className="css-wsp0cs-MultiValueGeneric" {...innerProps}>
+              {data.label}
+              <button
+                type="button"
+                className="cancel-button "
+                onClick={() => handleCancelClick(data.value)}
+              >
+             <img src={CrossIcons} alt="" className="w-4 h-4 ml-6 pt-1" />
+              </button>
+            </div>
+          ),
+          IndicatorsContainer: ({ children }) => (
+            <div className="css-1xc3v61-indicatorContainer">
+              {children}
+            </div>
+          ),
+          Control: ({ children, innerProps }) => (
+            <div className={`css-13cymwt-control ${isSelectClicked ? 'select-clicked' : ''}`} {...innerProps}>
+              {children}
+            </div>
+          ),
+        }}
+      />
+    </div>
+
+              <div className="">
+                <label className="q-details-page-label" htmlFor="orderSourceFilter">
                   Paste to this store
                 </label>
                 <div className="custom-dropdown">
@@ -119,23 +168,13 @@ const StoreCateUser = () => {
                   </div>
                   {orderSourceDropdownVisible && (
                     <div className="dropdown-content">
-                      <div
-                        onClick={() => handleOptionClick("All", "orderSource")}
-                      >
+                      <div onClick={() => handleOptionClick("All", "orderSource")}>
                         All
                       </div>
-                      <div
-                        onClick={() =>
-                          handleOptionClick("Source1", "orderSource")
-                        }
-                      >
+                      <div onClick={() => handleOptionClick("Source1", "orderSource")}>
                         Source1
                       </div>
-                      <div
-                        onClick={() =>
-                          handleOptionClick("Source2", "orderSource")
-                        }
-                      >
+                      <div onClick={() => handleOptionClick("Source2", "orderSource")}>
                         Source2
                       </div>
                     </div>
@@ -143,14 +182,14 @@ const StoreCateUser = () => {
                 </div>
               </div>
             </div>
-
-            <div className="q-order-page-filter mt-6"></div>
           </div>
+
+          <div className="q-order-page-filter mt-6"></div>
 
           <div className="q-add-inventory-section-header mx-2">
             <div class="qv_checkbox">
               <label class="qv_checkbox_add_checkmark_label">
-                Want to Replicated UPC's for inventory
+                Want to Replicate UPC's for inventory
                 <input
                   type="checkbox"
                   id="inv_setting2"
@@ -179,4 +218,4 @@ const StoreCateUser = () => {
   );
 };
 
-export default StoreCateUser;
+export default CateDuplicateStore;

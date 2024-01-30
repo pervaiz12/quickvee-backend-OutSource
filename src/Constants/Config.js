@@ -18,6 +18,16 @@ module.exports = Object.freeze({
     EDIT_CATOGRY_DATA:"CategoryReactapi/category_data",
 
 
+
+     // Defaults API Calls 
+     LIST_ALL_Defaults : "DefaultReactapi/Default_list",
+     ADD_DEFAULTS : "DefaultReactapi/AddDefaultMenu",
+     EDIT_DEFAULTS : "DefaultReactapi/updateDefaultMenu",
+     DEFAULTDATA:"DefaultReactapi/DefaultData_list",
+     DELETE_SINGLE_DEFAULTS : "DefaultReactapi/deleteMenu",
+     DELETE_MULTI_DEFAULTS : "DefaultReactapi/deleteSelectedDefaults",
+
+
     //Attributes API Calls
     LIST_ALL_ATTRIBUTES:"Varientsapi/varients_list",
     ADD_ATTRIBUTE:"Varientsapi/add_varient",
@@ -105,18 +115,13 @@ module.exports = Object.freeze({
       
       NEW_ITEM_CREATED_BETWEEN_LIST:"ReportingReactapi/new_item_created_between_list",
 
-
-
-            // for daily Report 
-            LIST_DAILY_REPORT : "ReportingReactapi/daily_total_report",
-    
-            TOP_SALLER_REPORT : "ReportingReactapi/top_seller_10",
-            INSTANT_ACTIVITY_REPORT : "ReportingReactapi/instant_po_activity_report",
+      TOP_SALLER_REPORT : "ReportingReactapi/top_seller_10",
+      INSTANT_ACTIVITY_REPORT : "ReportingReactapi/instant_po_activity_report",
 
 
       //Employee List
-      
       LIST_ALL_EMPLOYEE : "ReportingReactapi/employee_list",
+
 
 
       LIST_PAYMENT_METHOD_REPORT : "ReportingReactapi/credit_card_sales_report",
@@ -149,7 +154,6 @@ module.exports = Object.freeze({
     
     // Export Order Count Data
     EXPORT_ORDER_COUNT_DATA: "Store_order_api/export_order_count_data",
+
   });
-
-
 

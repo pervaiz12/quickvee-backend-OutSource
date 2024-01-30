@@ -1,6 +1,6 @@
 import React from "react";
 
-import IndexAllUsers from "./IndexAllUsers";
+
 import MainLabel from "../Label/MainLabel";
 import MainNewsletter from "../Newsletter/MainNewsletter";
 import MainStoreOrder from "../StoreOrder/MainStoreOrder";
@@ -14,6 +14,11 @@ import MainPermission from "../Permission/MainPermission";
 import MainMerchantDetails from "../MerchantDetails/MainMerchantDetails";
 import  MainInventoryExport from "../InventoryExport/MainInventoryExport";
 
+import MainNeedHelp from "../NeedHelp/MainNeedHelp";
+
+import EditDefaults from "../Defaults/EditDefaults";
+
+
 
 
 
@@ -25,6 +30,8 @@ const LeftDetailsUsers = ({ visible }) => {
       {visible === "store-order" && <MainStoreOrder />}
       {visible === "order-count" && <OrderCountMain />}
       {visible === "defaults" && <MainDefaults />}
+      {visible === "edit-defaults" && <EditDefaults />}
+      
       {visible === "release_apk" && <MainReleaseApk />}
       {visible === "inverntory-duplicate" && <MainInvDuplicates/>}
       {visible === "category-duplicate" && <MainCateDuplicate/>}
@@ -33,6 +40,7 @@ const LeftDetailsUsers = ({ visible }) => {
       {visible === "permission" && <MainPermission />}
       {visible === "invertory-export" && <MainInventoryExport />}
       {visible === "merchant-details" && <MainMerchantDetails />}
+      {visible === "need-help" && <MainNeedHelp />}
 
       
 
