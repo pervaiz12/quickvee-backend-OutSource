@@ -30,32 +30,41 @@ const MainInventoryExport =  () => {
   }, [])
   
     return <>
-        <div className="box_shadow_div">
-          <div className="qvrow">
-              <h5 className="box_shadow_heading">Inventory Export</h5>
+      <div className="q-order-main-page">
+        <div className="q-add-categories-section">
+          <div className="q-add-categories-section-header">
+            <span> {/* <img src={()} alt="Add-New-Category" /> */}
+              <span>Inventory Export</span>
+            </span>
+          </div>
+            <div className="q-order-page-container ml-8 md:flex-col">
               <div className="col-qv-6">
-                  <div className="input_area">
-                      <label>Select Store Name</label>
-                      <select name="store_name" 
-                          onChange={handleStoreInput}
-                      >
-                        <option value=''>--Select Store--</option>
-                       {MerchantList && MerchantList.length >= 1 && MerchantList.map(item => (
-                        <option key={item.id} value={item.merchant_id}>{item.name}-{item.merchant_id}</option>
-                         ))}
-                            
-                      </select>
-                  </div>
+                    <div className="input_area">
+                        <label>Select Store Name</label>
+                        <select name="store_name" 
+                            onChange={handleStoreInput}
+                        >
+                          <option value=''>--Select Store--</option>
+                        {MerchantList && MerchantList.length >= 1 && MerchantList.map(item => (
+                          <option key={item.id} value={item.merchant_id}>{item.name}-{item.merchant_id}</option>
+                          ))}
+                              
+                        </select>
+                    </div>
+                </div>
+                
               </div>
-          </div>
-          <div className="col-qv-12">
-              <button className="save_btn" onClick={handleSubmit}  >
-                  Export
-              </button>
-          </div>
+            
+              <div className="q-add-categories-section-middle-footer " style={{ justifyContent: "start" }}  >
+                <button className="save_btn" onClick={handleSubmit}  > Export </button>
+              </div>
+          
         </div>
+      </div>
+
+        
     </>;
 }
 
 export default MainInventoryExport;
-console.log('hii')
+// console.log('hii')
