@@ -146,8 +146,9 @@ module.exports = Object.freeze({
 
     // Store Order List API
     GET_STORE_ORDER_DATA: "Store_order_api/get_store_order_data",
-
-
+    
+    // Export Order Count Data
+    EXPORT_ORDER_COUNT_DATA: "Store_order_api/export_order_count_data",
   });
 
 
