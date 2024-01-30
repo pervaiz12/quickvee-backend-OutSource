@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 
 import { Box, Button, Modal } from "@mui/material";
-import EditIcon from "../../../../Assests/Category/editIcon.svg";
-import LeftIcon from "../../../../Assests/Taxes/Left.svg";
-import { fetchtaxesData  } from "../../../../Redux/features/Taxes/taxesSlice"
+import EditIcon from "../../../Assests/Category/editIcon.svg";
+import LeftIcon from "../../../Assests/Taxes/Left.svg";
+import { fetchtaxesData  } from "../../../Redux/features/Taxes/taxesSlice"
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { Form } from "react-bootstrap";
-import { BASE_URL, UPDATE_TAXES , TAXE_CATEGORY_LIST} from "../../../../Constants/Config";
+import { BASE_URL, UPDATE_TAXES , TAXE_CATEGORY_LIST} from "../../../Constants/Config";
 
 
 const EditTaxesModal = ({ selectedTaxe }) => {

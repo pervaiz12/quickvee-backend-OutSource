@@ -5,7 +5,8 @@
 import React, { useState } from "react";
 import Select from "react-select";
 import DownIcon from "../../Assests/Dashboard/Down.svg";
-import DeleteIcon from "../../Assests/Dashboard/cross.svg"
+
+import CrossIcons from "../../Assests/MultipleUserIcon/crossIcons.svg"
 const ProductDuplicateStore = () => {
   const [selectedEmployee, setSelectedEmployee] = useState("All");
   const [selectedOrderSource, setSelectedOrderSource] = useState("All");
@@ -138,7 +139,7 @@ const ProductDuplicateStore = () => {
                 className="cancel-button "
                 onClick={() => handleCancelClick(data.value)}
               >
-             <img src={DeleteIcon} alt="" className="w-4 h-4 ml-6" />
+             <img src={CrossIcons} alt="" className="w-4 h-4 ml-6 pt-1" />
               </button>
             </div>
           ),

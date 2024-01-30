@@ -49,7 +49,6 @@ import PermissionListReducer from "../features/Permission/PermissionSlice";
 import ReorderInventoryListReducer from "../features/Reports/ReorderInventory/ReorderInventorySlice";
 
 
-
 const store = configureStore({
   reducer: {
     categories: categoriesReducer,
