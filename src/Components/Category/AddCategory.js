@@ -1,8 +1,10 @@
 import React, { useState, useRef } from "react";
-import AddNewCategory from "../../Assests/Category/addIcon.svg";
+import AddNewCategory from "../../Assests/Taxes/Left.svg";
 import axios from "axios";
 import { BASE_URL, ADD_CATOGRY } from "../../Constants/Config";
 import Upload from "../../Assests/Category/upload.svg";
+
+import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 
 const AddCategory = ({ seVisible }) => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -34,19 +36,23 @@ const AddCategory = ({ seVisible }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        // const base64String = reader.result.split(',')[1];
-        setCategory((prevValue) => ({
-          ...prevValue,
-          image: {
-            file: file,
-            base64: reader.result,
-          },
-        }));
-        // console.log('Base64 Path:', `data:image/png;base64,${base64String}`);
-      };
-      reader.readAsDataURL(file);
+      const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+      if (allowedTypes.includes(file.type)) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setCategory((prevValue) => ({
+            ...prevValue,
+            image: {
+              file: file,
+              base64: reader.result,
+            },
+          }));
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert(`${file.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`);
+        e.target.value = null;
+      }
     }
   };
 
@@ -71,10 +77,10 @@ const AddCategory = ({ seVisible }) => {
       formData.append("filename", "");
     }
 
-
     try {
-
-      const res = await axios.post(BASE_URL + ADD_CATOGRY, formData, { headers: { "Content-Type": "multipart/form-data" } })
+      const res = await axios.post(BASE_URL + ADD_CATOGRY, formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
       const data = await res.data.status;
       // console.log(res.data);
@@ -98,11 +104,7 @@ const AddCategory = ({ seVisible }) => {
     } catch (error) {
       console.error("API Error:", error);
     }
-
-
   };
-
-
 
   // Function to prevent default behavior for drag over
   const inputRef = useRef(null);
@@ -112,13 +114,13 @@ const AddCategory = ({ seVisible }) => {
   };
 
   const handleDragOver = (event) => {
-    event.preventDefault()
-  }
+    event.preventDefault();
+  };
 
   // Function to handle image drop
   const handleDrop = (event) => {
-    event.preventDefault()
-    const file = event.dataTransfer.files[0]
+    event.preventDefault();
+    const file = event.dataTransfer.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
@@ -132,7 +134,18 @@ const AddCategory = ({ seVisible }) => {
       };
       reader.readAsDataURL(file);
     }
-  }
+  };
+
+  const handleDeleteImage = (e) => {
+    e.stopPropagation();
+    setCategory((prevValue) => ({
+      ...prevValue,
+      image: {
+        file: null,
+        base64: null,
+      },
+    }));
+  };
 
   return (
     <div className="q-add-categories-section">
@@ -173,41 +186,65 @@ const AddCategory = ({ seVisible }) => {
           </div>
 
 
-
-          <div className={`h-1/2 w-full h-[100px] flex items-center justify-center border-2 border-dashed border-[#BFBFBF] bg-white rounded-lg mt-2 `} style={{ cursor: 'pointer' }} onDragOver={handleDragOver}
+          <div
+            className={`h-1/2  h-[100px] flex items-center justify-center border-2 border-dashed border-[#BFBFBF] bg-white rounded-lg mt-2  defaultDrag_div`}
+            onDragOver={handleDragOver}
             onDrop={handleDrop}
-            onClick={openFileInput}>
-            <div className="flex-column ">
-
-              <img src={Upload} style={{ transform: 'translate(2.5rem, 0px)' }} alt="Category Banner" />
-              <span>Category Banner</span>
-            </div>
-
+            onClick={openFileInput}
+            style={{
+              cursor: "pointer",
+              position: "relative",
+              height: "auto",
+              padding: "10px",
+            }}
+          >
+            {category.image && category.image.base64 ? (
+              <>
+                <span
+                  className="delete-image-icon img-DeleteIcon"
+                  onClick={handleDeleteImage}
+                  style={{
+                    position: "absolute",
+                    top: "7px",
+                    right: "7px",
+                  }}
+                >
+                  <img src={DeleteIcon} alt="delete-icon" />
+                </span>
+                <img
+                  src={category.image.base64}
+                  alt="Preview"
+                  className="default-img"
+                  style={{
+                    height: "320px",
+                    objectFit: "contain",
+                    width: "100%",
+                  }}
+                />
+              </>
+            ) : (
+              <div className="flex-column">
+                <img
+                  src={Upload}
+                  style={{ transform: "translate(2.5rem, 0px)" }}
+                  alt="Default"
+                />
+                <span>Category Image</span>
+              </div>
+            )}
             <div className="q-add-categories-single-input">
-
               <input
                 type="file"
                 id="image"
                 name="image"
                 accept="image/*"
                 ref={inputRef}
-                style={{ display: 'none', width: '100%' }}
+                className="default-img-inputfield"
                 onChange={handleImageChange}
+                style={{ display: "none" }}
               />
             </div>
-
-
           </div>
-
-
-
-          {category.image && category.image.base64 && (
-            <div className="image-preview">
-              <img src={category.image.base64} alt="Preview" />
-            </div>
-          )}
-
-
 
 
           <div className="add-category-checkmark-div">
@@ -226,13 +263,12 @@ const AddCategory = ({ seVisible }) => {
               <span className="add-category-checkmark"></span>
             </label>
           </div>
-          <div className="row " style={myStyles} >
-
-
+          <div className="row " style={myStyles}>
             <div className="add-category-checkmark-div">
               <label className="add-category-checkmark-label mt-2">
                 Use Loyalty Point ?
-                <input type="checkbox"
+                <input
+                  type="checkbox"
                   checked={category.use_point === 1}
                   onChange={(e) =>
                     setCategory((prevValue) => ({
@@ -247,7 +283,8 @@ const AddCategory = ({ seVisible }) => {
             <div className="add-category-checkmark-div">
               <label className="add-category-checkmark-label mt-2">
                 Earn Loyalty Point ?
-                <input type="checkbox"
+                <input
+                  type="checkbox"
                   checked={category.earn_point === 1}
                   onChange={(e) =>
                     setCategory((prevValue) => ({
@@ -260,8 +297,6 @@ const AddCategory = ({ seVisible }) => {
               </label>
             </div>
           </div>
-
-
         </div>
 
         <div className="q-add-categories-section-middle-footer">
