@@ -147,6 +147,8 @@ module.exports = Object.freeze({
 
       LIST_TAXES_REPORT: "ReportingReactapi/taxes_report",
 
+      LIST_CURRENT_INVENTORY_REPORT: "ReportingReactapi/inventory_report",
+
 
 
 

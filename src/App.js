@@ -420,6 +420,7 @@ function App() {
      <Route exact path ="/store-reporting/order-type" element={<Main visible={"order-type"} />} />
      <Route exact path="/store-reporting/taxes" element={<Main visible={"taxes"} />} />
 
+     <Route exact path="/store-reporting/current-inventory-value" element={<Main visible={"current-inventory-value"} />} />
 
      {/* multiple users dashbaord */}
 

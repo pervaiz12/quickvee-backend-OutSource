@@ -34,6 +34,10 @@ import EmployeeWorking from "../Reporting/EmployeeWorkingHours/EmployeeWorking";
 import MainSiftSummary from "../Reporting/SiftSummary/MainSiftSummary";
 import PaymentMethodReport from "../Reporting/PaymentMehodDetail/PaymentMethodReport";
 import MainItem from "../Reporting/ItemType/MainItem";
+
+import MainTaxesReport from "../Reporting/Taxes/MainTaxesReport";
+import CurrentInventoryValue from "../Reporting/CurrentInventoryValue/CurrentInventoryValue";
+
 // import MainTaxesReport from "../Reporting/Taxes/MainTaxesReport";
 
 import MainTaxReporting from "../Reporting/Taxes/MainTaxReporting";
@@ -87,11 +91,16 @@ const LeftSide = ({ visible }) => {
           {visible === "shift-summary" && <MainSiftSummary />}
           {visible === "payment-method-details" && <PaymentMethodReport />}
           {visible === "order-type" && <MainItem />}
+
+          {visible === "taxes" && <MainTaxesReport />}
+          {visible === "current-inventory-value" && <CurrentInventoryValue />}
+
           {visible === "taxes-report" && <MainTaxReporting />}
           {visible === "addemployee" && <MainAddEmployee />}
           {visible === "receipt" && <ReceiptMainpage />}
           {visible === "item-sales" && <MainItemSales /> }
           {visible === "item-create-between" && <NewItemCreatedBetweenMain /> }
+
 
           
           {/* {visible === "vendors-sales-reports" && <VendorSalesReportMain />} */}

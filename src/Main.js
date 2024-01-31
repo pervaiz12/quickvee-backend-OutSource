@@ -47,14 +47,14 @@ const Main = ({visible}) => {
    {visible === "shift-summary" && <Layout visible={visible} />}
    {visible === "payment-method-details" && <Layout visible={visible} />}
    {visible === "order-type" && <Layout visible={visible} />}
+
+   {visible === "current-inventory-value" && <Layout visible={visible} />}
+
    {visible === "addemployee" && <Layout visible={visible} /> }
    {visible === "receipt" && <Layout visible={visible} />}
    {visible === "item-sales" && <Layout visible={visible} />}
 
   
-
-
- 
 
 {/* multip user layout */}
     {visible === "multimerchant" && <IndexAllUsers />}

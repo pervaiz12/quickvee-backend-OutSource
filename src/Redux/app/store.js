@@ -24,6 +24,8 @@ import inventoryListingReducer from "../features/Inventory/InventorySlice";
 
 import taxesReducer from "../features/Taxes/taxesSlice"
 
+import CurrentInventoryReducer from  "../features/CurrentInventoryValue/currentInventoryValueSlice"
+
 import settingstorealtersReducer from "../features/SettingStoreAlters/SettingStoreAltersSlice"
 
 import SettingReceiptReducer from "../features/StoreSettings/SettingsReceipt/SettingsReceiptSlice";
@@ -106,6 +108,7 @@ const store = configureStore({
     orderTypeList:OrderTypeReducer,
 
     taxesreport:TaxesreportSliceReducer,
+    currentInventoryreport:CurrentInventoryReducer,
 
 
 
