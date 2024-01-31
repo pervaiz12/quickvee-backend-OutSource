@@ -364,6 +364,7 @@ function App() {
         path="/users/view/unapprove/need-help"
         element={<Main visible={"need-help"} />}
       />
+        <Route exact path="/store-reporting/current-inventory-value" element={<Main visible={"current-inventory-value"} />} />
 
       {/* <Route exact path="/" element={<DashboardMain />} /> */}
 
@@ -420,7 +421,7 @@ function App() {
      <Route exact path ="/store-reporting/order-type" element={<Main visible={"order-type"} />} />
      <Route exact path="/store-reporting/taxes" element={<Main visible={"taxes"} />} />
 
-     <Route exact path="/store-reporting/current-inventory-value" element={<Main visible={"current-inventory-value"} />} />
+   
 
      {/* multiple users dashbaord */}
 
