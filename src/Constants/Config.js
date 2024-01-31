@@ -120,8 +120,14 @@ module.exports = Object.freeze({
 
 
       //Employee List
-      
       LIST_ALL_EMPLOYEE : "ReportingReactapi/employee_list",
+
+      
+      //INVENTORY_EXPORT
+      INVENTORY_EXPORT : "ExportInventory_api/exportCSV",
+      LIST_ALL_MERCHANTS : "ExportInventory_api/merchants_list",
+
+
 
 
       LIST_PAYMENT_METHOD_REPORT : "ReportingReactapi/credit_card_sales_report",
@@ -153,9 +159,9 @@ module.exports = Object.freeze({
 
     // Store Order List API
     GET_STORE_ORDER_DATA: "Store_order_api/get_store_order_data",
-
+    
+    // Export Order Count Data
+    EXPORT_ORDER_COUNT_DATA: "Store_order_api/export_order_count_data",
 
   });
-
-
 

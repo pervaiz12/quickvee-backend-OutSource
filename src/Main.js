@@ -25,10 +25,11 @@ const Main = ({visible}) => {
    {visible === "Alters" && <Layout visible={visible} />}
    {visible === "options" && <Layout visible={visible} />}
    {visible === "taxes" && <Layout visible={visible} />}
+   {visible === "taxes-report" && <Layout visible={visible} />}
    {visible === "system-access" && <Layout visible={visible} />}
    {visible === "inventory" && <Layout visible={visible} />}
    {visible === "register" && <Layout visible={visible} />}
-   {visible === "system-access" && <Layout visible={visible} /> }
+ 
    {visible === "daily-total-report" && <Layout visible={visible} />}
    {visible === "Details-category" && <Layout visible={visible} />}
    {visible === "report-sales-person" && <Layout visible={visible} />}
@@ -44,11 +45,16 @@ const Main = ({visible}) => {
    {visible === "recorder-inventory" && <Layout visible={visible} />}
    {visible === "employee-working-hours" && <Layout visible={visible} />}
    {visible === "shift-summary" && <Layout visible={visible} />}
-   {visible === "payment-method-detail-report" && <Layout visible={visible} />}
+   {visible === "payment-method-details" && <Layout visible={visible} />}
    {visible === "order-type" && <Layout visible={visible} />}
+
    {visible === "current-inventory-value" && <Layout visible={visible} />}
 
- 
+   {visible === "addemployee" && <Layout visible={visible} /> }
+   {visible === "receipt" && <Layout visible={visible} />}
+   {visible === "item-sales" && <Layout visible={visible} />}
+
+  
 
 {/* multip user layout */}
     {visible === "multimerchant" && <IndexAllUsers />}

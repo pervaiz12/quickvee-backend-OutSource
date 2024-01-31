@@ -141,19 +141,26 @@ const AddDefaults = ({ seVisible }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setDefaults((prevValue) => ({
-          ...prevValue,
-          image: {
-            file: file,
-            base64: reader.result,
-          },
-        }));
-      };
-      reader.readAsDataURL(file);
+      const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+      if (allowedTypes.includes(file.type)) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setDefaults((prevValue) => ({
+            ...prevValue,
+            image: {
+              file: file,
+              base64: reader.result,
+            },
+          }));
+        };
+        reader.readAsDataURL(file);
+      } else {
+        alert(`${file.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`);
+        e.target.value = null;
+      }
     }
   };
+
 
   const handleDeleteImage = (e) => {
     e.stopPropagation();
