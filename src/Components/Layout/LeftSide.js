@@ -94,8 +94,6 @@ const LeftSide = ({ visible }) => {
 
           {visible === "taxes-report" && <MainTaxesReport />}
           {visible === "current-inventory-value" && <CurrentInventoryValue />}
-
-          {visible === "taxes-report" && <MainTaxReporting />}
           {visible === "addemployee" && <MainAddEmployee />}
           {visible === "receipt" && <ReceiptMainpage />}
           {visible === "item-sales" && <MainItemSales /> }
