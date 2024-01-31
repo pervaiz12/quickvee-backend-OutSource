@@ -470,7 +470,6 @@ const menuItems = [
       //   text: " Payment Method Details",
       //   link: "/store-settings/payment-method-detail-report",
       // },
-      { id: 79, text: " Order Type ", link: "/store-reporting/order-type" },
 
       { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
       {
@@ -480,7 +479,6 @@ const menuItems = [
       },
       { id: 79, text: " Order Type ", link: "/store-reporting/order-type" },
 
-      { id: 80, text: "Taxes ", link: "/store-reporting/taxes" },
       { id: 81, text: "Current Inventory Value ", link: "/store-reporting/current-inventory-value" },
 
       { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },

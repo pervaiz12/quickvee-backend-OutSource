@@ -92,7 +92,7 @@ const LeftSide = ({ visible }) => {
           {visible === "payment-method-details" && <PaymentMethodReport />}
           {visible === "order-type" && <MainItem />}
 
-          {visible === "taxes" && <MainTaxesReport />}
+          {visible === "taxes-report" && <MainTaxesReport />}
           {visible === "current-inventory-value" && <CurrentInventoryValue />}
 
           {visible === "taxes-report" && <MainTaxReporting />}
