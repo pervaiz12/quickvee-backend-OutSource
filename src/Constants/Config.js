@@ -108,10 +108,10 @@ module.exports = Object.freeze({
 
 
             // for daily Report 
-            LIST_DAILY_REPORT : "ReportingReactapi/daily_total_report",
-    
-            TOP_SALLER_REPORT : "ReportingReactapi/top_seller_10",
-            INSTANT_ACTIVITY_REPORT : "ReportingReactapi/instant_po_activity_report",
+      LIST_DAILY_REPORT : "ReportingReactapi/daily_total_report",
+
+      TOP_SALLER_REPORT : "ReportingReactapi/top_seller_10",
+      INSTANT_ACTIVITY_REPORT : "ReportingReactapi/instant_po_activity_report",
 
 
       //Employee List
@@ -130,6 +130,25 @@ module.exports = Object.freeze({
   
 
       LIST_TAXES_REPORT: "ReportingReactapi/taxes_report",
+      // ---------------------
+      ADD_MERCHAN_EMPLOYEE:'UserController/add_admin',
+      GET_MERCHAN_STATE:'UserController/add',
+      GET_ADMIN_DATA:'UserController/get_user',// get merchant admin record
+      ADMIN_CHECK_USER:'UserController/check_user',// check email
+      ADMIN_GET_CUSTOMER:'UserController/get_customer',// get customer data
+      // GET_EDIT_CUSTOMER:'UserController/edit_customer',
+      // GET_EDIT_CUSTOMER:'UserController/edit_customer',
+      GET_MANAGER_RECORD:'UserController/maneger_view',// manager view
+      GET_ADMIN_RECORD:'UserController/admin_view',// admin view data
+      GET_MANAGER_MERCHANT:'UserController/get_manager_merchant',// get manager merchant
+      GET_ADMIN_MERCHANT:'UserController/get_merchant',// give admin merchant
+      GET_EDIT_ADMIN:'UserController/edit_admin',// edit admin
+      UPDATE_ADMIN_RECORD:'UserController/update_admin',//update admin
+      GET_EDIT_CUSTOMER:'UserController/edit',// adit customer
+      GET_UPDATE_CUSTOMER:'UserController/update',// update customer
+      GET_VERIFIED_MERCHANT:'UserController/getUnverifiedMerchant',//get verified and unverified merchant
+
+      // ---------------------
   });
 
 

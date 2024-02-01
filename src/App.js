@@ -79,7 +79,17 @@ import MainItem from "./Components/Reporting/ItemType/MainItem";
 import MainItemSales from "./Components/Reporting/ItemSales/MainItemSales";
 import MainEmployeelist from "./Components/Reporting/Employelist/MainEmployeelist";
 import MainTaxesReport from "./Components/Reporting/Taxes/MainTaxesReport"
-
+// -----
+import AddMerchan from './Components/User/addMerchantech'
+import Customer from './Components/User/customer/customer'
+import EditCustomer from './Components/User/customer/EditCustomer/editCustomer'
+import ManagerView from './Components/User/manager/managerView'
+import AdminView from './Components/User/admin/admin_view'
+import EditAdmin from './Components/User/admin/editAdmin/edit_admin'
+import Verified from './Components/User/varifiedMerchant/verified'
+import Unverified from './Components/User/varifiedMerchant/unverified'
+import EditMerchant from './Components/User/editMerchant/editMerchant'
+// -----
 
 
 
@@ -155,8 +165,20 @@ function App() {
           <Route path="/store-settings/item-create-between" element={<NewItemCreatedBetweenMain />}/>
 
           <Route path="/store-settings/recorder-inventory" element={<ReorderInventoryMain />}/>
+          {/* ------ */}
+          <Route path='user/merchan' element={<AddMerchan/>}/>
+          <Route path='user/customer' element={<Customer/>}/>
+          <Route path='user/editcustomer/:id' element={<EditCustomer/>}/>
+          <Route path='user/managerview' element={<ManagerView/>}/>
+          <Route path='user/adminview' element={<AdminView/>}/>
+          <Route path='user/editAdmin/:id' element={<EditAdmin/>}/>
+          <Route path='user/verified' element={<Verified/>}/>
+          <Route path='user/unverified' element={<Unverified/>}/>
+          <Route path='user/editmerchant' element={<EditMerchant/>}/>
+          {/* ------ */}
 
 
+          
 
 
           
