@@ -54,6 +54,7 @@ const Main = ({visible}) => {
    {visible === "receipt" && <Layout visible={visible} />}
    {visible === "item-sales" && <Layout visible={visible} />}
 
+
   
 
 {/* multip user layout */}
