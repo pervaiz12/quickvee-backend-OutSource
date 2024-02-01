@@ -174,7 +174,7 @@ function App() {
           <Route path='user/editAdmin/:id' element={<EditAdmin/>}/>
           <Route path='user/verified' element={<Verified/>}/>
           <Route path='user/unverified' element={<Unverified/>}/>
-          <Route path='user/editmerchant' element={<EditMerchant/>}/>
+          <Route path='user/editmerchant/:id' element={<EditMerchant/>}/>
           {/* ------ */}
 
 

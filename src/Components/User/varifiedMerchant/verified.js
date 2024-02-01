@@ -1,4 +1,11 @@
 import React,{useEffect} from 'react'
+import {
+  // BrowserRouter as Router,
+  Link,
+  // Route,
+  // Routes,
+  // useParams,
+} from "react-router-dom";
 
 import{getVerifiedMerchant} from '../../../Redux/features/user/verifiedMerchantSlice'
 import { useSelector, useDispatch } from 'react-redux'
@@ -56,7 +63,7 @@ export default function Verified() {
                           <p className='table5'>{result.paymentmode}</p>
                           <p className='table10'>{result.merchant_id}</p>
                           <p className='table5'>{result.ver_code}</p>
-                          <p className='table5'>{result.phone}</p>
+                          <p className='table5'><Link to={`/user/editmerchant/${result.id}`}>Action</Link></p>
                         </div>
 
                        )
