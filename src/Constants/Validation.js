@@ -600,6 +600,15 @@ const Validation = () => {
       }
       return updatedErrors;
     };
+
+    const validateDropdown = (fieldValue,fieldName, updatedErrors) => {
+      if (fieldValue === '') {
+        updatedErrors[fieldName] = 'This field is required';
+      } else {
+        updatedErrors[fieldName] = '';
+      }
+      return updatedErrors;
+    };
   
     return {
       handleGetVariData,
@@ -640,7 +649,8 @@ const Validation = () => {
       Address_line_1,
       isNumber,
       isText,
-      validateRadioBtn
+      validateRadioBtn,
+      validateDropdown
     };
   };
   

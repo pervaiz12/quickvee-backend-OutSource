@@ -128,6 +128,11 @@ module.exports = Object.freeze({
       LIST_ALL_MERCHANTS : "ExportInventory_api/merchants_list",
 
 
+      //INVENTORY_EXPORT
+      INVENTORY_DUPLICATE : "Inventory_duplicate_api/duplicate_inventory",
+      SETTINGS_DUPLICATE : "Inventory_duplicate_api/duplicate_setting",
+
+
 
 
       LIST_PAYMENT_METHOD_REPORT : "ReportingReactapi/credit_card_sales_report",
