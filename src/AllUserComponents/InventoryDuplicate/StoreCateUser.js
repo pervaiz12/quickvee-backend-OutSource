@@ -11,17 +11,7 @@ import InventoryExportLogic from "./InventoryDuplicatLogic";
 
 const StoreCateUser = () => {
   const [openAlert, setOpenAlert] = useState(true);
-  const [selectedEmployee, setSelectedEmployee] = useState("All");
-  const [selectedOrderSource, setSelectedOrderSource] = useState("All");
-  const [selectedOrderType, setSelectedOrderType] = useState("All");
 
-  const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
-  const [orderSourceDropdownVisible, setOrderSourceDropdownVisible] =
-    useState(false);
-  const [orderTypeDropdownVisible, setOrderTypeDropdownVisible] =
-    useState(false);
-
-  const [replicateUPCs, setReplicateUPCs] = useState(false); // State for the checkbox
   const goToTop = () => {
     setsubmitmessage()
   };
@@ -50,45 +40,6 @@ const StoreCateUser = () => {
     console.log(values);
   }, [])
 
-  const toggleDropdown = (dropdown) => {
-    switch (dropdown) {
-      case "employee":
-        setEmployeeDropdownVisible(!employeeDropdownVisible);
-        break;
-      case "orderSource":
-        setOrderSourceDropdownVisible(!orderSourceDropdownVisible);
-        break;
-      // Add cases for other dropdowns if needed
-      default:
-        break;
-    }
-  };
-
-  const [isVerified, setVerified] = useState(false);
-
-  const handleVerify = (success) => {
-    setVerified(success);
-  };
-
-  const handleOptionClick = (option, dropdown) => {
-    switch (dropdown) {
-      case "employee":
-        setSelectedEmployee(option);
-        setEmployeeDropdownVisible(false);
-        break;
-      case "orderSource":
-        setSelectedOrderSource(option);
-        setOrderSourceDropdownVisible(false);
-        break;
-      // Add cases for other dropdowns if needed
-      default:
-        break;
-    }
-  };
-
-  const handleCheckboxChange = () => {
-    setReplicateUPCs(!replicateUPCs);
-  };
 
   return (
     <>
