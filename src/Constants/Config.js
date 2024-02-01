@@ -125,5 +125,9 @@ module.exports = Object.freeze({
       //INVENTORY_EXPORT
       INVENTORY_EXPORT : "ExportInventory_api/exportCSV",
       LIST_ALL_MERCHANTS : "ExportInventory_api/merchants_list",
+
+      //INVENTORY_EXPORT
+      INVENTORY_DUPLICATE : "Inventory_duplicate_api/duplicate_inventory",
+      SETTINGS_DUPLICATE : "Inventory_duplicate_api/duplicate_setting",
   });
 
