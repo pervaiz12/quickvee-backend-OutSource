@@ -24,6 +24,8 @@ import inventoryListingReducer from "../features/Inventory/InventorySlice";
 
 import taxesReducer from "../features/Taxes/taxesSlice"
 
+import CurrentInventoryReducer from  "../features/CurrentInventoryValue/currentInventoryValueSlice"
+
 import settingstorealtersReducer from "../features/SettingStoreAlters/SettingStoreAltersSlice"
 
 import SettingReceiptReducer from "../features/StoreSettings/SettingsReceipt/SettingsReceiptSlice";
@@ -47,7 +49,7 @@ import OrderTypeReducer from "../features/OrderType/OrderTypeSlice";
 import TaxesreportSliceReducer from "../features/TaxesReport/taxesreportSlice";
 import PermissionListReducer from "../features/Permission/PermissionSlice";
 import ReorderInventoryListReducer from "../features/Reports/ReorderInventory/ReorderInventorySlice";
-
+import DefaultsSliceReducer from "../features/Defaults/defaultsSlice"
 
 
 const store = configureStore({
@@ -106,6 +108,7 @@ const store = configureStore({
     orderTypeList:OrderTypeReducer,
 
     taxesreport:TaxesreportSliceReducer,
+    currentInventoryreport:CurrentInventoryReducer,
 
 
 
@@ -116,7 +119,7 @@ const store = configureStore({
 
     StoreOrderList:StoreOrderSliceReducer,
 
-    // defaults: DefaultsSliceReducer,
+    defaults: DefaultsSliceReducer,
 
   },
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),

@@ -1,6 +1,6 @@
 import React from 'react'
 
-const OrderCount = () => {
+const ShiftSummarySlice = () => {
   return (
     <div>
       
@@ -8,4 +8,4 @@ const OrderCount = () => {
   )
 }
 
-export default OrderCount
+export default ShiftSummarySlice
