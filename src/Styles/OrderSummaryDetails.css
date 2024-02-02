@@ -1,0 +1,63 @@
+@font-face {
+    font-family: CircularBold;
+    src: url("../Assests/Fonts/circular-bold.TTF");
+}
+
+@font-face {
+    font-family: CircularMedium;
+    src: url("../Assests/Fonts/circulur-medium.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDBlack;
+    src: url("../Assests/Fonts/circulur-std-black.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDBook;
+    src: url("../Assests/Fonts/circulur-std-book.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDMedium;
+    src: url("../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
+}
+
+
+.q_order_bg_img_section {
+    background: url("../Assests/Dashboard/bgorder.png");
+    background-repeat: no-repeat;
+    background-repeat: no-repeat;
+    background-size: auto;
+    min-height: 450px;
+   
+}
+
+.content_order_main{
+margin: -6px;}
+/* .q_order_images_details>img{
+height: 450px;
+    width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;} */
+
+    .q_store_details{
+        font-size: 25px;
+        /* font-family:CircularSTDBlack !important ; */
+        font-weight: bold;
+        color: #000000;
+        opacity: 1;
+    }
+
+    .q_order_status_header_section{
+        width:100%;
+        display: flex;
+    }
+    .q_order_content_multistepform{
+        width:60%;
+    }
+    .q_order_summary_billing_page{
+        width:40%
+    }

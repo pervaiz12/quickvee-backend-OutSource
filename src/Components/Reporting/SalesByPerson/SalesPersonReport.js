@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSalePersonData } from "../../../Redux/features/SalesByPerson/SalesByPersonSlice";
 import { Link } from "react-router-dom";
+import OrderSummaryDetails from "./MainOrderSumaaryDetails/OrderSummaryDetails";
 
 const SalesPersonReport = (props) => {
   // console.log(props);
@@ -63,6 +64,7 @@ const SalesPersonReport = (props) => {
             <div key={index1} className="q-attributes-bottom-attriButes-listing ">
               <div className="q-employee-bottom-attriButes-single-attributes text-center ">
                 <Link to={`/store-reporting/order-summary/${SalesData.order_id}`}>
+                
                   <p className="q-sales-item">{SalesData.order_id}</p>
                 </Link>
                 <p className="q-sales-in">{SalesData.merchant_time}</p>

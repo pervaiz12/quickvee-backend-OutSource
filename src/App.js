@@ -82,6 +82,7 @@ import MainTaxesReport from "./Components/Reporting/Taxes/MainTaxesReport";
 import MainSalesPerson from "./Components/Reporting/SalesByPerson/MainSalesPerson";
 // import MainInvDuplicates from "./Components/InventoryDuplicates/MainInvDuplicates";
 import Main from "./Main";
+import "./Styles/OrderSummaryDetails.css";
 
 
 
@@ -172,10 +173,10 @@ function App() {
         />
 
 
-       {/* <Route
+        <Route
           path="/store-reporting/order-summary/:order_id"
           element={<Main visible={"order-summary"} />}
-        />  */}
+        />  
 
       
       <Route
@@ -218,6 +219,12 @@ function App() {
         path="/store-reporting/report-sales-person"
         element={<Main visible={"report-sales-person"} />}
       />
+         <Route
+        exact
+        path="/store-reporting/order-summary:Sales"
+        element={<Main visible={"order-summary"} />}
+      />
+
       <Route
         exact
         path="/store-reporting/id-verification"
