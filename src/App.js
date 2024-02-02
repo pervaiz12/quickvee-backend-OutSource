@@ -164,6 +164,20 @@ function App() {
         path="/store-settings/options"
         element={<Main visible={"options"} />}
       />
+     
+
+       <Route
+          path="/store-settings/permission/:employee_id"
+          element={<Main visible={"permission"} />}
+        />
+
+
+       {/* <Route
+          path="/store-reporting/order-summary/:order_id"
+          element={<Main visible={"order-summary"} />}
+        />  */}
+
+      
       <Route
         exact
         path="/store-settings/taxes"
@@ -346,8 +360,8 @@ function App() {
       />
       <Route
         exact
-        path="/users/view/unapprove/permission"
-        element={<Main visible={"permission"} />}
+        path="/users/view/unapprove/create_permission"
+        element={<Main visible={"create_permission"} />}
       />
       <Route
         exact

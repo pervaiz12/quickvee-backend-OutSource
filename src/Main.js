@@ -53,6 +53,8 @@ const Main = ({visible}) => {
    {visible === "addemployee" && <Layout visible={visible} /> }
    {visible === "receipt" && <Layout visible={visible} />}
    {visible === "item-sales" && <Layout visible={visible} />}
+   {visible === "permission" && <Layout visible={visible} />}
+   {/* {visible === "order-summary" && <Layout visible={visible} />} */}
 
 
   
@@ -69,7 +71,7 @@ const Main = ({visible}) => {
     {visible === "product-duplicate" && <IndexAllUsers visible ={visible} />}
     {visible === "category-duplicate" && <IndexAllUsers visible ={visible} />}
 
-    {visible === "permission" && <IndexAllUsers visible ={visible} />}
+    {visible === "create_permission" && <IndexAllUsers visible ={visible} />}
     {visible === "invertory-export" && <IndexAllUsers visible ={visible} />}
     {visible === "merchant-details" && <IndexAllUsers visible ={visible} />}
 
