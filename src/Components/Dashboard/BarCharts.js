@@ -79,7 +79,7 @@ const BarCharts = () => {
         <div className="flex items-center space-x-4 mt-4">
           {/* Add your filter component here */}
           <select
-            className="border-2 border-customColor rounded px-8 py-2 mr-7 bg-white text-blue-500 text-[16px] Admin_std"
+            className="border-2 border-customColor rounded px-8 py-2 ml-7 bg-white text-blue-500 text-[16px] Admin_std"
             value={selectedFilter}
             onChange={handleFilterChange} 
           >
