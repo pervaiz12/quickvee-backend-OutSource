@@ -377,7 +377,7 @@ const menuItems = [
       />
     ),
     text: "Permission",
-    link: "/users/view/unapprove/permission ",
+    link: "/users/view/unapprove/create_permission ",
   },
 
   {

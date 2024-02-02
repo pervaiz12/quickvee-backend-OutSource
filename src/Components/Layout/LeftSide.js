@@ -42,6 +42,8 @@ import ReceiptMainpage from "../StoreSetting/Receipt/ReceiptMainpage";
 import MainItemSales from "../Reporting/ItemSales/MainItemSales";
 import NewItemCreatedBetweenList from "../Reporting/NewItemCreatedBetween/NewItemCreatedBetweenList";
 import NewItemCreatedBetweenMain from "../Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain";
+import Permission from "../StoreSetting/AddEmployee/Permission";
+// import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
 
 // import MainEmployee from "../Reporting/EmployeeWorkingHours/MainEmployee";
 
@@ -92,6 +94,9 @@ const LeftSide = ({ visible }) => {
           {visible === "receipt" && <ReceiptMainpage />}
           {visible === "item-sales" && <MainItemSales /> }
           {visible === "item-create-between" && <NewItemCreatedBetweenMain /> }
+          {visible === "permission" && <Permission />}
+          {/* {visible === "order-summary" && <OrderSummeryPage />} */}
+          
 
           
           {/* {visible === "vendors-sales-reports" && <VendorSalesReportMain />} */}

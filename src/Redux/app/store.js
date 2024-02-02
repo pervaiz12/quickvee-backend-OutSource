@@ -48,6 +48,9 @@ import TaxesreportSliceReducer from "../features/TaxesReport/taxesreportSlice";
 import PermissionListReducer from "../features/Permission/PermissionSlice";
 import ReorderInventoryListReducer from "../features/Reports/ReorderInventory/ReorderInventorySlice";
 
+import SalesByPersonSliceReducer from "../features/SalesByPerson/SalesByPersonSlice";
+// import orderSummerySlice from "../features/orderSummeryHistory/orderSummerySlice";
+
 
 const store = configureStore({
   reducer: {
@@ -116,6 +119,10 @@ const store = configureStore({
     StoreOrderList:StoreOrderSliceReducer,
 
     // defaults: DefaultsSliceReducer,
+
+    SalesByPersonList:SalesByPersonSliceReducer,
+
+    // orderSummeryList:orderSummerySlice,
 
   },
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),

@@ -134,6 +134,7 @@ const EmployeeList = () => {
                         <div className="qvrow">
                             <div className="col-qv-4">
                                 <div>
+                              
                                     <Link to={`/store-settings/permission/${employee.id}`}>
                                       <img className="employeeicon" alt="Permission-icon" src={Permission}/>
                                     </Link>
