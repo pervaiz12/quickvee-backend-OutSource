@@ -37,7 +37,7 @@ const LeftDetailsUsers = ({ visible }) => {
       {visible === "category-duplicate" && <MainCateDuplicate/>}
     
       {visible === "product-duplicate" && <MainProduct />}
-      {visible === "permission" && <MainPermission />}
+      {visible === "create_permission" && <MainPermission />}
       {visible === "invertory-export" && <MainInventoryExport />}
       {visible === "merchant-details" && <MainMerchantDetails />}
       {visible === "need-help" && <MainNeedHelp />}

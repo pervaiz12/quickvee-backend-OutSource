@@ -168,5 +168,10 @@ module.exports = Object.freeze({
     // Export Order Count Data
     EXPORT_ORDER_COUNT_DATA: "Store_order_api/export_order_count_data",
 
+    // REPORT_BY_SALES_PERSON
+    REPORT_BY_SALES_PERSON:"ReportingReactapi/report_by_sales_person",
+
+    // GET_ORDER_SUMMERY_DETAILS:'Orders/order_details',
+
   });
 

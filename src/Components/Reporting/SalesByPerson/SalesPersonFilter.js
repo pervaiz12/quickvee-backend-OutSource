@@ -1,16 +1,18 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
+import { BASE_URL, EMPLOYEE_LIST } from "../../../Constants/Config";
+import axios from "axios";
 
-const SalesPersonFilter = () => {
+const SalesPersonFilter = ({onFilterDataChange}) => {
   const [selectedEmployee, setSelectedEmployee] = useState("All");
+  const [selectedEmployeeID, setSelectedEmployeeID] = useState("All");
   const [selectedOrderSource, setSelectedOrderSource] = useState("All");
   const [selectedOrderType, setSelectedOrderType] = useState("All");
 
   const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
-  const [orderSourceDropdownVisible, setOrderSourceDropdownVisible] =
-    useState(false);
-  const [orderTypeDropdownVisible, setOrderTypeDropdownVisible] =
-    useState(false);
+  const [orderSourceDropdownVisible, setOrderSourceDropdownVisible] = useState(false);
+  const [orderTypeDropdownVisible, setOrderTypeDropdownVisible] = useState(false);
+  const [filteredData, setFilteredData] = useState({ emp_id: "all" });
 
   const toggleDropdown = (dropdown) => {
     switch (dropdown) {
@@ -29,8 +31,30 @@ const SalesPersonFilter = () => {
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
       case "employee":
-        setSelectedEmployee(option);
-        setEmployeeDropdownVisible(false);
+        if (option === "All") {
+          setSelectedEmployee("All");
+          setSelectedEmployeeID("All");
+          setEmployeeDropdownVisible(false);
+          setFilteredData({
+            ...filteredData,
+            emp_id: "all",
+            merchant_id: "",
+            order_env: "",
+            limit: "",
+          });
+        } else {
+          const emp_id = option.id;
+          setSelectedEmployee(option.title);
+          setSelectedEmployeeID(option.id);
+          setEmployeeDropdownVisible(false);
+          setFilteredData({
+            ...filteredData,
+            emp_id,
+            merchant_id: "",
+            order_env: "",
+            limit: "",
+          });
+        }
         break;
       case "orderSource":
         setSelectedOrderSource(option);
@@ -42,6 +66,43 @@ const SalesPersonFilter = () => {
         break;
     }
   };
+
+  const [employeeList, setemployeeList] = useState([]);
+  const [loadingEmpList, setLoadingEmpList] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post(
+          BASE_URL + EMPLOYEE_LIST,
+          {
+            merchant_id: "MAL0100CA",
+          },
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+
+        // Assuming the API response has a data property containing the category list
+        const EmpList = response.data.result;
+
+        // Extracting category IDs and view titles
+        const mappedOptions = EmpList.map((empdata) => ({
+          id: empdata.id,
+          title: empdata.f_name+' '+empdata.l_name,
+        }));
+
+        setemployeeList(mappedOptions);
+        setLoadingEmpList(false);
+      } catch (error) {
+        console.error("Error fetching Employee List:", error);
+        setLoadingEmpList(false);
+      }
+    };
+    fetchData();
+  }, []); // Fetch categories only once when the component mounts
+
+  useEffect(() => {
+    onFilterDataChange(selectedOrderSource , selectedOrderType , selectedEmployeeID)
+  }, [selectedOrderSource , selectedOrderType , selectedEmployeeID]);
 
   return (
     <div>
@@ -67,21 +128,20 @@ const SalesPersonFilter = () => {
                 <span className="selected-option mt-1">{selectedEmployee}</span>
                 <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
               </div>
+
               {employeeDropdownVisible && (
                 <div className="dropdown-content">
                   <div onClick={() => handleOptionClick("All", "employee")}>
                     All
                   </div>
-                  <div
-                    onClick={() => handleOptionClick("employee1", "employee")}
-                  >
-                    employee1
-                  </div>
-                  <div
-                    onClick={() => handleOptionClick("employee2", "employee")}
-                  >
-                    employee2
-                  </div>
+                  {employeeList.map((option, key) => (
+                    <div
+                      key={key}
+                      onClick={() => handleOptionClick(option, "employee")}
+                    >
+                      {option.title}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
@@ -108,14 +168,14 @@ const SalesPersonFilter = () => {
                     All
                   </div>
                   <div
-                    onClick={() => handleOptionClick("Source1", "orderSource")}
+                    onClick={() => handleOptionClick("Online", "orderSource")}
                   >
-                    Source1
+                    Online
                   </div>
                   <div
-                    onClick={() => handleOptionClick("Source2", "orderSource")}
+                    onClick={() => handleOptionClick("Offline", "orderSource")}
                   >
-                    Source2
+                    Offline
                   </div>
                 </div>
               )}
@@ -142,11 +202,11 @@ const SalesPersonFilter = () => {
                   <div onClick={() => handleOptionClick("All", "orderType")}>
                     All
                   </div>
-                  <div onClick={() => handleOptionClick("Type1", "orderType")}>
-                    Type1
+                  <div onClick={() => handleOptionClick("Pickup", "orderType")}>
+                    Pickup
                   </div>
-                  <div onClick={() => handleOptionClick("Type2", "orderType")}>
-                    Type2
+                  <div onClick={() => handleOptionClick("Delivery", "orderType")}>
+                    Delivery
                   </div>
                 </div>
               )}
