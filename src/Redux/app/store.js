@@ -53,7 +53,13 @@ import DefaultsSliceReducer from "../features/Defaults/defaultsSlice"
 
 import SalesByPersonSliceReducer from "../features/SalesByPerson/SalesByPersonSlice";
 // import orderSummerySlice from "../features/orderSummeryHistory/orderSummerySlice";
-
+// ------------------------
+import CustomerSliceReducer from '../features/user/customerSlice';
+import ManagerSliceReducer from '../features/user/managerSlice';
+import AdminSliceReducer from '../features/user/adminSlice';
+import VerifiedMerchantSliceReducer from '../features/user/verifiedMerchantSlice';
+import UnVerifiedMerchantSliceReducer from '../features/user/unverifiedMerchantSlice'
+// ---------------------
 
 const store = configureStore({
   reducer: {
@@ -127,6 +133,13 @@ const store = configureStore({
     SalesByPersonList:SalesByPersonSliceReducer,
 
     // orderSummeryList:orderSummerySlice,
+    // ---------------------------------
+    customerRecord:CustomerSliceReducer,
+    managerRecord:ManagerSliceReducer,
+    adminRecord:AdminSliceReducer,
+    verifiedMerchantRecord:VerifiedMerchantSliceReducer,
+    unverifiedMerchantRecord:UnVerifiedMerchantSliceReducer,
+    // --------------------------------
 
   },
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),

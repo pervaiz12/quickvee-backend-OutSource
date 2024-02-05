@@ -78,6 +78,15 @@ const Main = ({visible}) => {
     {visible === "need-help" && <IndexAllUsers visible ={visible} />}
 
     {visible === "edit-defaults" && <IndexAllUsers visible ={visible} />}
+    {visible === "manager_view" && <IndexAllUsers visible ={visible} />}
+    {visible === "unverified" && <IndexAllUsers visible ={visible} />}
+    {visible === "customer" && <IndexAllUsers visible ={visible} />}
+    {visible === "admin" && <IndexAllUsers visible ={visible} />}
+    {visible === "verified" && <IndexAllUsers visible ={visible} />}
+    {visible === "editCustomer" && <IndexAllUsers visible ={visible} />}
+    {visible === "editAdmin" && <IndexAllUsers visible ={visible} />}
+    {visible === "addMerchant" && <IndexAllUsers visible ={visible} />}
+    
 
 
 

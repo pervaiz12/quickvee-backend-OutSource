@@ -1,0 +1,78 @@
+import React,{useState,useEffect}  from 'react'
+import {BASE_URL,ADMIN_GET_CUSTOMER} from '../../../Constants/Config'
+import axios from 'axios'
+import {useNavigate} from 'react-router-dom';
+// import {GET_EDIT_CUSTOMER,BASE_URL} from '../../../Constants/Config'
+
+// import { useNavigate,navigate } from "react-router-dom";
+
+ const CustomerFunction=()=>{
+   
+    
+    const[customerRecord,setCustomerRecord]=useState([])
+    const getCustomerData=async()=>{
+        let data={type:2}
+        await axios.post(BASE_URL+ADMIN_GET_CUSTOMER,data,{headers:{
+            "Content-Type":'multipart/form-data'
+          }}).then(result=>{
+            console.log(result)
+            if(result.data.status==200)
+            {
+                
+                setCustomerRecord(result.data.message)
+
+
+            }else{
+                setCustomerRecord([])
+            }
+
+        })
+        
+    }
+    
+    useEffect(()=>{
+        // alert('jdjd')
+        getCustomerData()
+
+    },[])
+    
+
+    // const handleEditCustomer = async (id) => {
+    //     try {
+    //       const response = await axios.post(BASE_URL + GET_EDIT_CUSTOMER, { id }, {
+    //         headers: {
+    //           "Content-Type": "multipart/form-data",
+    //         },
+    //       });
+      
+    //       if (response.data.status === 200) {
+    //         const { name, email, reSet, phone, user_type } = response.data.message;
+      
+    //         setCustomer((prevCustomerData) => ({
+    //           ...prevCustomerData,
+    //           username: name,
+    //         //   email,
+    //         //   reSet,
+    //         //   phone,
+    //         //   user_type,
+    //           // Add other properties as needed
+    //         }));
+    //     //   console.log(customerData.username)
+      
+    //         navigate('/user/editcustomer');
+    //       }
+    //     } catch (error) {
+    //       console.error("Error fetching customer data:", error);
+    //     }
+    //   };
+    
+
+    // const handleDeleteCustomer=(data)=>{
+    //     console.log(data)
+
+    // }
+    // return {customerRecord,handleEditCustomer,handleDeleteCustomer,customerData}
+    return { customerRecord };
+  
+}
+export default CustomerFunction
