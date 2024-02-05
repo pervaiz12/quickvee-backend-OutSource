@@ -40,8 +40,11 @@ const EditAdminFunctionality=()=>{
         }
         if (name === 'phone') {
             const numericValue = value.replace(/[^0-9]/g, '');
-    
-            if (numericValue.length !== 10) {
+             if(numericValue=="")
+             {
+              updatedErrors[name] = '';
+
+             }else if (numericValue.length !== 10) {
               updatedErrors[name] = 'Phone number must be 10 digits';
             } else {
               updatedErrors[name] = '';

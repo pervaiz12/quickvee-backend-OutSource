@@ -43,7 +43,7 @@ export default function AddMerchan() {
                         </div>
                         <label>{radioErros}</label>
                     </div>
-                    {/*  */}
+                    
                     {
                         !userRadio ? 
                         <div>
@@ -59,7 +59,7 @@ export default function AddMerchan() {
                                             onChange={handleChange}
                                         />
                                     </div>
-                                    {/* <label>{store.errors.storename  ? store.errors.storename:''}</label> */}
+                                    
                                     {store.errors.storename && <span>{store.errors.storename}</span>}
                                 </div>
                                 
@@ -207,8 +207,7 @@ export default function AddMerchan() {
                                             className=''
                                             type='text'
                                             name="storename"
-                                            // value={merchantStore.mer_store_name}
-                                            // onChange={handleChangeMerchant}
+                                            
                                             value={store.storename}
                                             onChange={handleChange}
                                         />
@@ -222,8 +221,7 @@ export default function AddMerchan() {
                                             className=''
                                             type='text'
                                             name="ownerName"
-                                            // value={merchantStore.mer_owner_name}
-                                            // onChange={handleChangeMerchant}
+                                           
                                             value={store.ownerName}
                                             onChange={handleChange}
                                         />
@@ -241,8 +239,7 @@ export default function AddMerchan() {
                                             name="email"
                                             onChange={handleChange}
                                             value={store.email}
-                                            // value={merchantStore.mer_email}
-                                            // onChange={handleChangeMerchant}
+                                            
                                         />
                                     </div>
                                     <label>{store.errors.email}</label>

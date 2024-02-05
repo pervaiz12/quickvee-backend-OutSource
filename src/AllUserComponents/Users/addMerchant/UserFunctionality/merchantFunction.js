@@ -121,23 +121,23 @@ const MerchantFunction=()=>{
             setUserRadioData(e.target.value)
             setAdminId('')
             setMerchantStore({pin:''})
-            // setStore({
-            //     ...store,
-            //     storename:'',
-            //     ownerName:'',
-            //     email:'',
-            //     password:'',
-            //     phone:'',
-            //     state:'',
-            //     errors:{
-            //         storename:'',
-            //         ownerName:'',
-            //         email:'',
-            //         password:'',
-            //         phone:'',
-            //         state:'',
-            //     }
-            // })
+            setStore({
+                ...store,
+                storename:'',
+                ownerName:'',
+                email:'',
+                password:'',
+                phone:'',
+                state:'',
+                errors:{
+                    storename:'',
+                    ownerName:'',
+                    email:'',
+                    password:'',
+                    phone:'',
+                    state:'',
+                }
+            })
 
         }else if((value.toLowerCase().trim())=='merchant')
         {
