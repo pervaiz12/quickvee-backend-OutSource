@@ -54,7 +54,8 @@ const Main = ({visible}) => {
    {visible === "receipt" && <Layout visible={visible} />}
    {visible === "item-sales" && <Layout visible={visible} />}
    {visible === "permission" && <Layout visible={visible} />}
-   {/* {visible === "order-summary" && <Layout visible={visible} />} */}
+    {visible === "order-summary" && <Layout visible={visible} />} 
+  
 
 
   
@@ -78,6 +79,7 @@ const Main = ({visible}) => {
     {visible === "need-help" && <IndexAllUsers visible ={visible} />}
 
     {visible === "edit-defaults" && <IndexAllUsers visible ={visible} />}
+   
 
 
 

@@ -49,7 +49,8 @@ import NewItemCreatedBetweenList from "../Reporting/NewItemCreatedBetween/NewIte
 import NewItemCreatedBetweenMain from "../Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain";
 import { useEffect } from "react";
 import Permission from "../StoreSetting/AddEmployee/Permission";
-// import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
+import OrderSummaryDetails from "../Reporting/SalesByPerson/MainOrderSumaaryDetails/OrderSummaryDetails";
+//  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
 
 
 // import MainEmployee from "../Reporting/EmployeeWorkingHours/MainEmployee";
@@ -114,6 +115,7 @@ const LeftSide = ({ visible }) => {
           {visible === "item-sales" && <MainItemSales /> }
           {visible === "item-create-between" && <NewItemCreatedBetweenMain /> }
           {visible === "permission" && <Permission />}
+          {visible === "order-summary" && <OrderSummaryDetails />}
           {/* {visible === "order-summary" && <OrderSummeryPage />} */}
           
 
