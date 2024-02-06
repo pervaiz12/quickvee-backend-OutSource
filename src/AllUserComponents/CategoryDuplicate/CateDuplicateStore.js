@@ -207,10 +207,45 @@ const CateDuplicateStore = () => {
     }
   };
 
+  const goToClose = () =>{
+    setOpenAlert(false)
+  }
+
   return (
     <>
       <div className="q-order-main-page">
         <div className="q-add-categories-section">
+          <div className="alert">
+          <Box
+               sx={{
+                  width: "100%",
+                  position: "relative",
+                  top: "2rem",
+                  marginLeft: "auto",
+                }}
+              >
+                <Collapse in={openAlert}>
+                  <Alert
+                    severity="warning"
+                    action={
+                      <IconButton
+                        className="info-close-icon "
+                        aria-label="close"
+                        color="secondary"
+                        size="small"
+                        onClick={goToClose}
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    }
+                    sx={{ mb: 2 }}
+                  >
+                    The existing Variants of the selected Store 2 Must be same as selected Store 1 Variants.
+                  </Alert>
+                </Collapse>
+              </Box>
+
+          </div>
           <div className="alert">
             {submitmessage && (
               <Box
