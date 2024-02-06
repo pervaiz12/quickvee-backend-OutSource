@@ -172,5 +172,10 @@ module.exports = Object.freeze({
     LIST_ALL_CATEGORIES_MECHANT_ID: "Category_duplicate_api/get_category",
     CATEGORY_INVENTORY_DUPLICATE : "Category_duplicate_api/category_inventory",
 
+    // REPORT_BY_SALES_PERSON
+    REPORT_BY_SALES_PERSON:"ReportingReactapi/report_by_sales_person",
+
+    // GET_ORDER_SUMMERY_DETAILS:'Orders/order_details',
+
   });
 

@@ -33,6 +33,10 @@
   src: url(./Assests//Fonts/FontsFree-Net-Circular-Std-Medium.ttf);
 }
 
+.main-page-home-dashboard{
+  overflow-x: hidden;
+}
+
 .qvrow {
   --bs-gutter-x: 1.5rem;
   --bs-gutter-y: 0;
@@ -143,7 +147,13 @@
   z-index: 9;
   color: #9e9e9e;
 }
-
+/* Media Queries for Responsive Font Sizes */
+@media (max-width: 840px) {
+  .q_sales_dashbaord{
+ display: flex;
+ flex-direction: column;
+}
+}
 .main-content {
   overflow-x: hidden;
   overflow-y: auto;
@@ -683,7 +693,7 @@ a.flex.text-center.submenu-item.text-gray-400.py-4.CircularSTDBook:hover {
 
   background-color: #334247;
   color: #808080; /* or any other color you prefer */
-  padding: 1rem 2rem; /* Adjust the padding as needed */
+  /* padding: 1rem 2rem;  */
   font-family: "CircularSTDBook", sans-serif;
 }
 

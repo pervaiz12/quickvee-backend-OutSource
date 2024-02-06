@@ -21,7 +21,7 @@ const SellItems = () => {
     <div className="mx-10 my-5">
       <div className="">
         <div className="container mx-auto">
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 mx-auto sm:mx-auto md:mx-auto lg:mx-auto xl:mx-auto">
+          <div className="grid grid-cols-1 gap-4 mx-auto sm:mx-auto md:mx-auto lg:mx-auto xl:mx-auto">
             <div className="gap-2 py-4 cursor-pointer bg-grayopacity bg-white px-0 mt-4 mx-0 shadow-md rounded-lg opacity-100 h-auto">
               <div className="flex items-center gap-2 py-1 cursor-pointer">
                 <div className="flex items-center gap-2">
