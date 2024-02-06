@@ -28,7 +28,7 @@ const [selectedAction, setSelectedAction] = useState('');
     const url=window.location.href
     
     if(urlParts[2]=="editAdmin"){
-        // console.log('hello')
+      
       navigate(`${selectedUrl}`);
      
     }else {
@@ -74,7 +74,7 @@ const [selectedAction, setSelectedAction] = useState('');
                                     >
                                     <option  value="" disabled hidden></option>
                                     <option value={`/users/editAdmin/${result.id}`}>Edit</option>
-                                    <option value={result.id}>Delete</option>
+                                    {/* <option value={result.id}>Delete</option> */}
                                 </select>
                                  
                                 </div>

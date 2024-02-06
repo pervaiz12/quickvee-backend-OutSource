@@ -372,7 +372,7 @@ const MerchantFunction=()=>{
         
         if((validateMerchant) && (isValidate))
         {
-            console.log("merchant")
+            console.log("merchant11")
             // const data={login_pin:merchantStore.pin,admin:adminId,storename:store.storename,
             //     ownerName:store.ownerName,email:store.email,password:store.password,phone:store.phone,
             //     state:store.state,created_by_user:'superadmin',

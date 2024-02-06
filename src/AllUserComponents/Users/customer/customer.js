@@ -37,6 +37,7 @@ const Customer=()=> {
   };
   // ----------------------------------
 
+ 
 
 
   // const{customerRecord,handleEditCustomer,handleDeleteCustomer}=CustomerFunction()
@@ -58,7 +59,7 @@ const Customer=()=> {
         <div className='table_body'>
           {
            Array.isArray(customerRecord && customerRecord.CustomerRecord) && customerRecord.CustomerRecord.map((result,index)=>{
-            // console.log(result.id)
+            console.log(result)
             return(
               <div className='table_row' key={index}>
                 <p className='table25'>{result.name}</p>
@@ -75,6 +76,7 @@ const Customer=()=> {
                   <option  value="" disabled hidden></option>
                   <option value={`/users/editCustomer/${result.id}`}>Edit</option>
                   <option value={`/users/deleteCustomer/${result.id}`}>Delete</option>
+                  
                   </select>
                 </div>
                    
