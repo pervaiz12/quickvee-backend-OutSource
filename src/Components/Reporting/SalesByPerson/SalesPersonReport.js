@@ -55,7 +55,7 @@ const SalesPersonReport = (props) => {
             <div className="q_details_header ml-2">Employee Name: {EmpData}</div>
           </div>
 
-          <div className="q-attributes-bottom-attriButes-header text-center">
+          <div className="q-attributes-bottom-attriButes-header">
             <p className="q-sales-item">Order ID</p>
             <p className="q-sales-in ">Date Time</p>
             <p className="q-sales-total ">Total</p>

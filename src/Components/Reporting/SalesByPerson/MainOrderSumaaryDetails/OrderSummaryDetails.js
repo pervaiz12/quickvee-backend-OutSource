@@ -9,9 +9,12 @@ const OrderSummaryDetails = () => {
   <MainHeaderOrder />
 
 
-  <div className='q-order-main-page'>
+  <div className='q-order-main-page mx-14'>
     <OrderStatusSummary />
   </div>
+
+
+  
   </>
   )
 }

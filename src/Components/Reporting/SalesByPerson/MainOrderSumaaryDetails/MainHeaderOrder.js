@@ -6,7 +6,7 @@ import LoactionIcone from "../../../../Assests/Dashboard/location.png";
 
 const MainHeaderOrder = () => {
   return (
-    <div className="content_order_main">
+    <div className="content_order_main bg-[#ffffff]">
       <div className="q_order_bg_img_section">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mx-auto sm:mx-auto md:mx-auto lg:mx-auto xl:mx-auto">
           <div className="q_order_images_details">
