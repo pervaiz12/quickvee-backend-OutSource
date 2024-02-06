@@ -206,7 +206,6 @@ const CateDuplicateStore = () => {
       }
     }
   };
-
   const goToClose = () =>{
     setOpenAlert(false)
   }
@@ -217,21 +216,22 @@ const CateDuplicateStore = () => {
         <div className="q-add-categories-section">
           <div className="alert">
           <Box
-               sx={{
+                sx={{
                   width: "100%",
                   position: "relative",
                   top: "2rem",
                   marginLeft: "auto",
                 }}
+
               >
                 <Collapse in={openAlert}>
                   <Alert
                     severity="warning"
                     action={
                       <IconButton
-                        className="info-close-icon "
+                        className="warning-close-icon "
                         aria-label="close"
-                        color="secondary"
+                        color="warning"
                         size="small"
                         onClick={goToClose}
                       >
@@ -259,12 +259,12 @@ const CateDuplicateStore = () => {
               >
                 <Collapse in={openAlert}>
                   <Alert
-                    severity="info"
+                    severity="success"
                     action={
                       <IconButton
                         className="info-close-icon"
                         aria-label="close"
-                        color="info"
+                        color="success"
                         size="small"
                         onClick={goToTop}
                       >
