@@ -172,6 +172,10 @@ module.exports = Object.freeze({
     LIST_ALL_CATEGORIES_MECHANT_ID: "Category_duplicate_api/get_category",
     CATEGORY_INVENTORY_DUPLICATE : "Category_duplicate_api/category_inventory",
 
+    // PRODUCT DUPLICATE
+    LIST_ALL_PRODUCTS: "Product_Duplicate_api/get_product",
+    PRODUCT_INVENTORY_DUPLICATE : "Product_Duplicate_api/product_inventory_duplicate",
+
     // REPORT_BY_SALES_PERSON
     REPORT_BY_SALES_PERSON:"ReportingReactapi/report_by_sales_person",
 
