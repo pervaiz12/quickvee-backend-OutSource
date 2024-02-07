@@ -2,46 +2,44 @@
 
 
 
-import React, { useState } from "react";
+import React, { useState ,useEffect } from "react";
 import Select from "react-select";
 import DownIcon from "../../Assests/Dashboard/Down.svg";
+import {fetchMerchantsList} from "../../Redux/features/ExportInventory/ExportInventorySlice";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import CrossIcons from "../../Assests/MultipleUserIcon/crossIcons.svg";
+import ProductDuplicateLogic from "./ProductDuplicateLogic";
 
-import CrossIcons from "../../Assests/MultipleUserIcon/crossIcons.svg"
 const ProductDuplicateStore = () => {
-  const [selectedEmployee, setSelectedEmployee] = useState("All");
-  const [selectedOrderSource, setSelectedOrderSource] = useState("All");
+  // const [selectedEmployee, setSelectedEmployee] = useState("Select Store");
+  // const [selectedOrderSource, setSelectedOrderSource] = useState("Select Store");
   const [selectedCategories, setSelectedCategories] = useState([]);
 
-  const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
-  const [orderSourceDropdownVisible, setOrderSourceDropdownVisible] = useState(false);
+  // const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
+  // const [orderSourceDropdownVisible, setOrderSourceDropdownVisible] = useState(false);
+  const {
+    handleStoreInput,
+    dupplicateInventory,
+    submitmessage,
+    setsubmitmessage,
+    values,
+    toggleDropdown,
+    employeeDropdownVisible,
+    setEmployeeDropdownVisible,
+    orderSourceDropdownVisible,
+    setOrderSourceDropdownVisible,
+    handleOptionClick,
+    selectedEmployee,
+    selectedOrderSource,
+  } = ProductDuplicateLogic();
 
-  const toggleDropdown = (dropdown) => {
-    switch (dropdown) {
-      case "employee":
-        setEmployeeDropdownVisible(!employeeDropdownVisible);
-        break;
-      case "orderSource":
-        setOrderSourceDropdownVisible(!orderSourceDropdownVisible);
-        break;
-      default:
-        break;
-    }
-  };
-
-  const handleOptionClick = (option, dropdown) => {
-    switch (dropdown) {
-      case "employee":
-        setSelectedEmployee(option);
-        setEmployeeDropdownVisible(false);
-        break;
-      case "orderSource":
-        setSelectedOrderSource(option);
-        setOrderSourceDropdownVisible(false);
-        break;
-      default:
-        break;
-    }
-  };
+  
+  const myStyles = {
+    height: "300px",
+    overflow: "auto",
+  }
+  
 
   const handleCategoryChange = (selectedOptions) => {
     setSelectedCategories(selectedOptions);
@@ -73,6 +71,22 @@ const ProductDuplicateStore = () => {
     );
     setSelectedCategories(newSelectedCategories);
   };
+  
+  const [MerchantList, setMerchantList] = useState()
+  const MerchantListData = useSelector((state) => state.ExportInventoryData);
+  const dispatch = useDispatch();
+  
+  useEffect(() => {
+    if (!MerchantListData.loading && MerchantListData.MerchantListData) {
+        setMerchantList(MerchantListData.MerchantListData)
+        console.log(MerchantList)
+    }
+  }, [MerchantListData, MerchantListData.loading])
+
+  useEffect(() => {
+    dispatch(fetchMerchantsList())
+    console.log(employeeDropdownVisible);
+  }, [])
 
 
   return (
@@ -87,6 +101,8 @@ const ProductDuplicateStore = () => {
 
           <div className="q-order-page-container ml-8 md:flex-col">
             {/* Employee Dropdown */}
+                
+
             <div className="col-qv-6 mt-6">
               <label className="q-details-page-label" htmlFor="employeeFilter">
                 Copy from this store
@@ -102,6 +118,15 @@ const ProductDuplicateStore = () => {
                   <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
                 </div>
                 {employeeDropdownVisible && (
+                  <div className="dropdown-content" style={myStyles}>
+                      {MerchantList && MerchantList.length >= 1 && MerchantList.map(item => (
+                      <div key={item.id} onClick={() => handleOptionClick(item.name, "employee")}>
+                        {item.name}
+                      </div>
+                      ))}
+                   </div>
+                )}
+                {/* {employeeDropdownVisible && (
                   <div className="dropdown-content">
                     <div onClick={() => handleOptionClick("All", "employee")}>
                       All
@@ -113,49 +138,49 @@ const ProductDuplicateStore = () => {
                       employee2
                     </div>
                   </div>
-                )}
+                )} */}
               </div>
               {/* Multiple Select Categories */}
               <div className={`py-4 ${isSelectClicked ? 'select-clicked' : ''}`}>
-      <label className="q-details-page-label mt-2" htmlFor="categoryFilter">
-        Select Product
-      </label>
+              <label className="q-details-page-label mt-2" htmlFor="categoryFilter">
+                Select Product
+              </label>
 
-      <Select
-        className="py-2"
-        isMulti
-        value={selectedCategories}
-        onChange={handleCategoryChange}
-        options={categoryOptions}
-        isCreatable={true}
-        onClick={handleSelectClick}
-        onBlur={handleSelectBlur}
-        components={{
-          MultiValue: ({ data, innerProps }) => (
-            <div className="css-wsp0cs-MultiValueGeneric" {...innerProps}>
-              {data.label}
-              <button
-                type="button"
-                className="cancel-button "
-                onClick={() => handleCancelClick(data.value)}
-              >
-             <img src={CrossIcons} alt="" className="w-4 h-4 ml-6 pt-1" />
-              </button>
+              <Select
+                className="py-2"
+                isMulti
+                value={selectedCategories}
+                onChange={handleCategoryChange}
+                options={categoryOptions}
+                isCreatable={true}
+                onClick={handleSelectClick}
+                onBlur={handleSelectBlur}
+                components={{
+                  MultiValue: ({ data, innerProps }) => (
+                    <div className="css-wsp0cs-MultiValueGeneric" {...innerProps}>
+                      {data.label}
+                      <button
+                        type="button"
+                        className="cancel-button "
+                        onClick={() => handleCancelClick(data.value)}
+                      >
+                    <img src={CrossIcons} alt="" className="w-4 h-4 ml-6 pt-1" />
+                      </button>
+                    </div>
+                  ),
+                  IndicatorsContainer: ({ children }) => (
+                    <div className="css-1xc3v61-indicatorContainer">
+                      {children}
+                    </div>
+                  ),
+                  Control: ({ children, innerProps }) => (
+                    <div className={`css-13cymwt-control ${isSelectClicked ? 'select-clicked' : ''}`} {...innerProps}>
+                      {children}
+                    </div>
+                  ),
+                }}
+              />
             </div>
-          ),
-          IndicatorsContainer: ({ children }) => (
-            <div className="css-1xc3v61-indicatorContainer">
-              {children}
-            </div>
-          ),
-          Control: ({ children, innerProps }) => (
-            <div className={`css-13cymwt-control ${isSelectClicked ? 'select-clicked' : ''}`} {...innerProps}>
-              {children}
-            </div>
-          ),
-        }}
-      />
-    </div>
 
               <div className="">
                 <label className="q-details-page-label" htmlFor="orderSourceFilter">
@@ -179,7 +204,7 @@ const ProductDuplicateStore = () => {
                       <div onClick={() => handleOptionClick("Source1", "orderSource")}>
                         Source1
                       </div>
-                      <div onClick={() => handleOptionClick("Source2", "orderSource")}>
+                      <div  onClick={() => handleOptionClick("Source2", "orderSource")}>
                         Source2
                       </div>
                     </div>

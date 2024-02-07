@@ -1,4 +1,5 @@
 import React from "react";
+
 import DashboardMain from "../Dashboard/DashboardMain";
 import MainOrder from "./../Orders/MainOrder";
 //import MainProduct from '../Category/MainCategory';
@@ -46,14 +47,27 @@ import ReceiptMainpage from "../StoreSetting/Receipt/ReceiptMainpage";
 import MainItemSales from "../Reporting/ItemSales/MainItemSales";
 import NewItemCreatedBetweenList from "../Reporting/NewItemCreatedBetween/NewItemCreatedBetweenList";
 import NewItemCreatedBetweenMain from "../Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain";
+import { useEffect } from "react";
 import Permission from "../StoreSetting/AddEmployee/Permission";
-// import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
+import OrderSummaryDetails from "../Reporting/SalesByPerson/MainOrderSumaaryDetails/OrderSummaryDetails";
+//  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
+
 
 // import MainEmployee from "../Reporting/EmployeeWorkingHours/MainEmployee";
 
 // import MainInvDuplicates from '../InventoryDuplicates/MainInvDuplicates';
 
 const LeftSide = ({ visible }) => {
+
+  useEffect(() => {
+    
+    console.log("hello")
+      return () => {
+       
+      }
+    }, )
+
+
   return (
     <>
       <div className="w-full">
@@ -101,6 +115,7 @@ const LeftSide = ({ visible }) => {
           {visible === "item-sales" && <MainItemSales /> }
           {visible === "item-create-between" && <NewItemCreatedBetweenMain /> }
           {visible === "permission" && <Permission />}
+          {visible === "order-summary" && <OrderSummaryDetails />}
           {/* {visible === "order-summary" && <OrderSummeryPage />} */}
           
 

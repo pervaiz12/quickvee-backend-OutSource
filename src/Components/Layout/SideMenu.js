@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import DashboardIcon from "../../Assests/Dashboard/dashboard.svg";
@@ -42,6 +42,14 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
     setActiveItem(item.link);
     navigate(item.link);
   };
+  useEffect(() => {
+    
+  console.log("hello")
+    return () => {
+     
+    }
+  }, )
+  
 
   return (
     <>

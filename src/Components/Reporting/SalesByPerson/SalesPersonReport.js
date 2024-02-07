@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSalePersonData } from "../../../Redux/features/SalesByPerson/SalesByPersonSlice";
 import { Link } from "react-router-dom";
+import OrderSummaryDetails from "./MainOrderSumaaryDetails/OrderSummaryDetails";
 
 const SalesPersonReport = (props) => {
   // console.log(props);
@@ -54,7 +55,7 @@ const SalesPersonReport = (props) => {
             <div className="q_details_header ml-2">Employee Name: {EmpData}</div>
           </div>
 
-          <div className="q-attributes-bottom-attriButes-header text-center">
+          <div className="q-attributes-bottom-attriButes-header">
             <p className="q-sales-item">Order ID</p>
             <p className="q-sales-in ">Date Time</p>
             <p className="q-sales-total ">Total</p>
@@ -63,6 +64,7 @@ const SalesPersonReport = (props) => {
             <div key={index1} className="q-attributes-bottom-attriButes-listing ">
               <div className="q-employee-bottom-attriButes-single-attributes text-center ">
                 <Link to={`/store-reporting/order-summary/${SalesData.order_id}`}>
+                
                   <p className="q-sales-item">{SalesData.order_id}</p>
                 </Link>
                 <p className="q-sales-in">{SalesData.merchant_time}</p>

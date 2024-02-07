@@ -168,6 +168,10 @@ module.exports = Object.freeze({
     // Export Order Count Data
     EXPORT_ORDER_COUNT_DATA: "Store_order_api/export_order_count_data",
 
+    // CATEGORY DUPLICATE
+    LIST_ALL_CATEGORIES_MECHANT_ID: "Category_duplicate_api/get_category",
+    CATEGORY_INVENTORY_DUPLICATE : "Category_duplicate_api/category_inventory",
+
     // REPORT_BY_SALES_PERSON
     REPORT_BY_SALES_PERSON:"ReportingReactapi/report_by_sales_person",
 
