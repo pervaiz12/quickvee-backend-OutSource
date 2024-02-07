@@ -17,6 +17,18 @@ import  MainInventoryExport from "../InventoryExport/MainInventoryExport";
 import MainNeedHelp from "../NeedHelp/MainNeedHelp";
 
 import EditDefaults from "../Defaults/EditDefaults";
+//import MainUsers from "../Users/MainUsers";
+import Manager from "../Users/Manager/manager";
+import Unverified from '../Users/UnverifeDetails/unverified'
+import Customer from '../Users/customer/customer'
+import Adminview from '../Users/admin/adminview'
+import Verified from  '../Users/UnverifeDetails/verified'
+import EditCustomer from "../Users/customer/EditCustomer/editCustomer";
+import EditAdmin from '../Users/admin/editAdmin/edit_admin'
+import AddMerchan from '../Users/addMerchant/addMerchantech'
+import EditMerchant from '../Users/merchantUpdate/editMerchant'
+// verified
+
 
 
 
@@ -41,6 +53,16 @@ const LeftDetailsUsers = ({ visible }) => {
       {visible === "invertory-export" && <MainInventoryExport />}
       {visible === "merchant-details" && <MainMerchantDetails />}
       {visible === "need-help" && <MainNeedHelp />}
+      {/* manager view */}
+      {visible ==="manager_view" && <Manager /> }
+      {visible ==="unverified" && <Unverified /> }
+      {visible ==="verified" && <Verified /> }
+      {visible ==="customer" && <Customer /> }
+      {visible ==="admin" && <Adminview /> }
+      {visible ==="editCustomer" && <EditCustomer /> }
+      {visible ==="editAdmin" && <EditAdmin /> }
+      {visible ==="addMerchant" && <AddMerchan /> }
+      {visible ==="editMerchant" && <EditMerchant /> }
 
       
 

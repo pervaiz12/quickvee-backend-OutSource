@@ -324,6 +324,54 @@ function App() {
         path="/users/view/unapprove/label"
         element={<Main visible={"label"} />}
       />
+
+{/* ---------------------------------------- */}
+      <Route 
+        exact
+        path="/users/manager_view"
+        element={<Main visible={"manager_view"} />}
+      />
+      <Route
+        exact
+        path="/users/unapprove"
+        element={<Main visible={"unverified"} />}
+      />
+       <Route
+        exact
+        path="/users/customer"
+        element={<Main visible={"customer"} />}
+      />
+      <Route
+        exact
+        path="/users/admin"
+        element={<Main visible={"admin"} />}
+      />
+         <Route
+        exact
+        path="/users/verified"
+        element={<Main visible={"verified"} />}
+      />
+       <Route
+        exact
+        path="/users/editCustomer/:id"
+        element={<Main visible={"editCustomer"} />}
+      />
+       <Route  
+        exact
+        path="/users/editAdmin/:id"
+        element={<Main visible={"editAdmin"} />}
+      />
+      <Route   
+        exact
+        path="/users/addMerchant"
+        element={<Main visible={"addMerchant"} />}
+      />
+      <Route   
+        exact
+        path="/users/editMerchant/:id"
+        element={<Main visible={"editMerchant"} />}
+      />
+      {/* ------------------------------------ */}
       <Route
         exact
         path="/users/view/unapprove/newsletter"
