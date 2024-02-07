@@ -37,6 +37,7 @@ const EditCustomerFunction=()=>{
                 if(response.data.status==200)
                 {
                     setCustomerData(response.data.message.row)
+                    // console.log(response.data.message.row.user_type)
 
                     if(response.data.message.row.user_type.toLowerCase()=="customer")
                     {
@@ -48,11 +49,12 @@ const EditCustomerFunction=()=>{
                         setStoreRadio(response.data.message.row.user_type)
                         setAdminRadio(true)
 
-                    }else if(response.data.message.user_type.toLowerCase()=="merchant"){
-                        setStoreRadio(response.data.message.row.user_type)
-                        setMerchantRadio(true)
-
                     }
+                    // else if(response.data.message.user_type.toLowerCase()=="merchant"){
+                    //     setStoreRadio(response.data.message.row.user_type)
+                    //     setMerchantRadio(true)
+
+                    // }
                     
                 }
               
@@ -123,9 +125,34 @@ const EditCustomerFunction=()=>{
               await axios.post(BASE_URL+GET_UPDATE_CUSTOMER,data,{headers:{
             "Content-Type":'multipart/form-data'
         }}).then(response=>{
+            console.log(response.data)
             if(response.data.status==200)
             {
                 setSuccessMessage(response.data.message)
+                if(response.data.record.user_type=='customer')
+                {
+                    console.log('1')
+                    setCustomerRadio(true)
+                    setMerchantRadio(false)
+                    setAdminRadio(false)
+
+                }else if(response.data.record.user_type=="admin")
+                {
+                    console.log('2')
+                    setAdminRadio(true)
+                    setMerchantRadio(false)
+                    setCustomerRadio(false)
+
+                }else if(response.data.record.user_type=="merchant")
+                {
+                    console.log('3')
+                    console.log(customerData.id)
+                    navigate(`/users/editMerchant/${customerData.id}`)
+                    // setAdminRadio(false)
+                    // setMerchantRadio(true)
+                    // setCustomerRadio(false)
+                   
+                }
 
             }
         })

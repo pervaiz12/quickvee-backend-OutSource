@@ -7,6 +7,7 @@ import {BASE_URL,ADD_MERCHAN_EMPLOYEE,GET_MERCHAN_STATE,GET_ADMIN_DATA,ADMIN_CHE
 
 const MerchantFunction=()=>{
      const navigate = useNavigate();
+                                                                     
     
     const [store,setStore]=useState({
         storename:'',
@@ -413,14 +414,36 @@ const MerchantFunction=()=>{
                 if(currentValidate)
                 {
                     console.log("admin1")
-                    // const data={storename:store.storename,ownerName:store.ownerName,email:store.email,password:store.password,phone:store.phone,state:store.state,created_by_user:'superadmin',
-                    // user_type:userRadioData
-                    // }
-                    // await axios.post(BASE_URL+ADD_MERCHAN_EMPLOYEE,data,
-                    //     { headers: { "Content-Type": "multipart/form-data" } }).then(result=>{
-                    //         console.log(result.data)
+                    const data={storename:store.storename,ownerName:store.ownerName,email:store.email,password:store.password,phone:store.phone,state:store.state,created_by_user:'superadmin',
+                    user_type:userRadioData
+                    }
+                    await axios.post(BASE_URL+ADD_MERCHAN_EMPLOYEE,data,
+                        { headers: { "Content-Type": "multipart/form-data" } }).then(result=>{
+                            // console.log(result.data.status==200)
+                            if(result.data.status==200)
+                            {
+                                setStore({   
+                                    storename:'',
+                                    ownerName:'',
+                                    email:'',
+                                    password:'',
+                                    phone:'',
+                                    state:'',
+                                    errors:{
+                                        storename:'',
+                                        ownerName:'',
+                                        email:'',
+                                        password:'',
+                                        phone:'',
+                                        state:'',
+                                     }              
+                                    })  
+                                navigate(`/users/editCustomer/${result.data.id}`)
+
+                            }
+                    
         
-                    // })
+                    })
 
                    
     

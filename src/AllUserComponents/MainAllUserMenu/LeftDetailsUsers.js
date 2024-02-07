@@ -26,6 +26,7 @@ import Verified from  '../Users/UnverifeDetails/verified'
 import EditCustomer from "../Users/customer/EditCustomer/editCustomer";
 import EditAdmin from '../Users/admin/editAdmin/edit_admin'
 import AddMerchan from '../Users/addMerchant/addMerchantech'
+import EditMerchant from '../Users/merchantUpdate/editMerchant'
 // verified
 
 
@@ -61,6 +62,7 @@ const LeftDetailsUsers = ({ visible }) => {
       {visible ==="editCustomer" && <EditCustomer /> }
       {visible ==="editAdmin" && <EditAdmin /> }
       {visible ==="addMerchant" && <AddMerchan /> }
+      {visible ==="editMerchant" && <EditMerchant /> }
 
       
 
