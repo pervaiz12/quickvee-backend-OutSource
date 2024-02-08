@@ -47,38 +47,6 @@ const AllUserMenu = ({ isMenuOpen, setIsMenuToggle }) => {
 
   return (
     <>
-    <div
-      className="sidebar-menu"
-      style={isMenuOpen ? { width: "16rem" } : { width: "6rem" }}
-    >
-      {/* Left Side Menu */}
-      <div className="flex-1 bg-[#253338] text-[#9E9E9E]">
-        {isMenuOpen
-          ? menuItems.map((item) => (
-              <div
-                key={item.id}
-                className={`mb-4 text-base ${
-                  activeItem === item.link ? "active" : ""
-                }`}
-              >
-                {item.dropdownItems ? (
-                  <DropdownMenuItem item={item} isMenuOpen={isMenuOpen} />
-                ) : (
-                  <div
-                    className={`flex items-center ${
-                      activeItem === item.link
-                        ? "bg-[#414F54] text-[#FFC400]"
-                        : ""
-                          ? "text-[#FFC400] active:bg-[#414F54] hover:bg-[#414F54] px-0"
-                          : ""
-                    }`}
-                  >
-                    {activeItem === item.link ? item.activeIcon : item.icon}
-                    <Link
-                      onClick={() => handleItemClick(item)}
-                      className={`ml-2 menu-item text-[18px] Admin_std ${
-                        activeItem === item.link ? "bg-[#414F54]" : ""
-
       <div
         className="sidebar-menu"
         style={isMenuOpen ? { width: "16rem" } : { width: "6rem" }}
@@ -134,101 +102,29 @@ const AllUserMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                         activeItem === item.link
                           ? "text-[#FFC400] active"
                           : "text-gray-400 hover-text-yellow"
-
                       }`}
-                      to={item.link}
+                      onClick={() => {
+                        handleItemClick(item);
+                      }}
                     >
-                      {item.text}
-                    </Link>
-                  </div>
-                )}
-              </div>
-            ))
-          : menuItems.map((item) => (
-              <div
-                key={item.id}
-                className={`mb-4 text-base cursor-pointer ${
-                  activeItem === item.link ? "active" : ""
-                }`}
-              >
-                {item.dropdownItems ? (
-                  <DropdownMenuItem item={item} isMenuOpen={isMenuOpen} />
-                ) : (
-                  <div
-                    className={`flex flex-col items-center ${
-                      activeItem === item.link
-                        ? "text-[#FFC400] active"
-                        : "text-gray-400 hover-text-yellow"
-                    }`}
-                    onClick={() => {
-                      handleItemClick(item);
-                    }}
-                  >
-                    {activeItem === item.id ? item.activeIcon : item.icon}
-                  </div>
-                )}
-              </div>
-            ))}
+                      {activeItem === item.id ? item.activeIcon : item.icon}
+                    </div>
+                  )}
+                </div>
+              ))}
+        </div>
       </div>
-    </div>
-  </>
-);
+    </>
+  );
 };
 
 const DropdownMenuItem = ({ item, isMenuOpen }) => {
-
-const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
+  const handleToggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
 
-const handleToggleDropdown = () => {
-  setIsDropdownOpen(!isDropdownOpen);
-};
-
-return (
-  <div className="relative" style={isMenuOpen ? { width: "16rem" } : { width: "6rem", marginLeft: "24px" }} >
-
-  <div className="flex items-center">
-  {item.icon}
-    {isMenuOpen && (
-      <p
-        className="cursor-pointer menu-item text-gray-400"
-        onClick={handleToggleDropdown}
-      >
-      
-      </p>
-    )}
-
-    {isMenuOpen && (
-      <p
-        className="ml-2 cursor-pointer menu-item text-gray-400"
-        onClick={handleToggleDropdown}
-      >
-        {item.text}
-        <FaChevronDown className="quickarrow_icon" />
-      </p>
-    )}
-  </div>
-
-  {isDropdownOpen && (
-    <div className="mt-0 bg-[#334247] p-4 shadow w-full text-center z-10">
-      {item.dropdownItems.map((dropdownItem) => (
-        <Link
-          key={dropdownItem.id}
-          to={dropdownItem.link}
-          className="flex text-center submenu-item text-gray-400 py-4"
-        >
-          {dropdownItem.text}
-        </Link>
-      ))}
-    </div>
-  )}
-
-</div>
-
-);
-=======
   return (
     <div className="relative" style={isMenuOpen ? { width: "16rem" } : { width: "6rem", marginLeft: "24px" }} >
 
@@ -303,11 +199,11 @@ const menuItems = [
       <img src={UserActive} alt="active store" className="h-6 w-10 mt-4 mb-4" />
     ),
     text: "Users",
-    link: "/users",
+    link: "/users/view/unapprove/users/add",
     className: "flex items-center gap-2",
     dropdownItems: [
-      { id: 21, text: " Add ", link: "/users/addMerchant" },
-      { id: 22, text: " Verified Merchant ", link: "/users/verified" },
+      { id: 21, text: " Add ", link: "/users/add" },
+      { id: 22, text: " Verified Merchant ", link: "users/view/approve" },
       {
         id: 23,
         icon: (
@@ -317,7 +213,7 @@ const menuItems = [
           <img src={CouIcon} alt="option" className="h-6 w-10 mt-4 mb-4 " />
         ),
         text: " Unverified Merchant ",
-        link: "/users/unapprove",
+        link: "users/view/unapprove",
       },
 
       { id: 26, text: " Customer ", link: "/users/customer" },
