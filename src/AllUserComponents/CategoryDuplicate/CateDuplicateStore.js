@@ -239,18 +239,7 @@ const CateDuplicateStore = () => {
             >
               <Collapse in={openAlert}>
                 <Alert
-                  severity="warning"
-                  action={
-                    <IconButton
-                      className="warning-close-icon "
-                      aria-label="close"
-                      color="warning"
-                      size="small"
-                      onClick={goToClose}
-                    >
-                      <CloseIcon />
-                    </IconButton>
-                  }
+                  severity="info"
                   sx={{ mb: 2 }}
                 >
                   The existing Variants of the selected Store 2 Must be same as
