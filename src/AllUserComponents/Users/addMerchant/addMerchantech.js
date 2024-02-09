@@ -43,6 +43,7 @@ export default function AddMerchan() {
                         </div>
                         <label>{radioErros}</label>
                     </div>
+                    <br/>
                     
                     {
                         !userRadio ? 
@@ -268,10 +269,13 @@ export default function AddMerchan() {
                                             name="phone"
                                             onChange={handleChange}
                                             value={store.phone}
+                                            maxLength={10}
+                                            onKeyPress={handleKeyPress}
                                             // value={merchantStore.mer_phone}
                                             // onChange={handleChangeMerchant}
                                         />
                                     </div>
+                                    <label>{store.errors.phone}</label>
                                 </div>
                                 <div className='col-qv-6'>
                                     <div className='input_area'>

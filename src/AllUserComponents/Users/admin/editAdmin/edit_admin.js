@@ -50,6 +50,7 @@ export default function EditAdmin() {
                                         onChange={handleChangeAdmin}
                                     />
                                 </div>
+                                <label>{errors.email}</label>
                                 
                             </div>
                         </div>
@@ -78,7 +79,6 @@ export default function EditAdmin() {
                                         value={editData.phone}
                                         onKeyPress={handleKeyPress}
                                         maxLength={10}
-                                        // value={customerData && customerData.phone}
                                         onChange={handleChangeAdmin}
                                     />
                                 </div>

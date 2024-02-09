@@ -98,6 +98,7 @@ const Main = ({visible}) => {
     {visible === "editAdmin" && <IndexAllUsers visible ={visible} />}
     {visible === "addMerchant" && <IndexAllUsers visible ={visible} />}
     {visible === "editMerchant" && <IndexAllUsers visible ={visible} />}
+    {visible === "addAdmin" && <IndexAllUsers visible ={visible} />}
 
    
    </>

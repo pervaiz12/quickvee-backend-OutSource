@@ -19,6 +19,7 @@ export default function Manager() {
     },[])
   return (
     <>
+    <div className='box'>
     <div className='box_shadow_div'>
       <div className='table_main_area'>
         <div className='table_header_sticky'>
@@ -54,6 +55,7 @@ export default function Manager() {
           </div>
       </div>
       
+    </div>
     </div>
     <ViewMerchant
     showMerchant={showMerchant}

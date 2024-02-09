@@ -356,7 +356,7 @@ function App() {
       />
 
       {/* ---------------------------------------- */}
-      <Route
+      <Route 
         exact
         path="/users/manager_view"
         element={<Main visible={"manager_view"} />}
@@ -366,7 +366,7 @@ function App() {
         path="/users/view/unapprove"
         element={<Main visible={"unverified"} />}
       />
-      <Route
+       <Route
         exact
         path="/users/customer"
         element={<Main visible={"customer"} />}
@@ -376,15 +376,35 @@ function App() {
         path="/users/admin"
         element={<Main visible={"admin"} />}
       />
-      <Route
+         <Route
         exact
         path="/users/view/approve"
         element={<Main visible={"verified"} />}
       />
-      <Route
+       <Route
         exact
         path="/users/editCustomer/:id"
         element={<Main visible={"editCustomer"} />}
+      />
+       <Route  
+        exact
+        path="/users/addAdmin"
+        element={<Main visible={"addAdmin"} />}
+      />
+       <Route  
+        exact
+        path="/users/editAdmin/:id"
+        element={<Main visible={"editAdmin"} />}
+      />
+      <Route   
+        exact
+        path="/users/addMerchant"
+        element={<Main visible={"addMerchant"} />}
+      />
+      <Route   
+        exact
+        path="/users/editMerchant/:id"
+        element={<Main visible={"editMerchant"} />}
       />
       <Route
         exact
