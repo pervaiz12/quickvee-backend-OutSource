@@ -56,8 +56,11 @@ const Main = ({visible}) => {
     {visible === "order-summary" && <Layout visible={visible} />} 
     {visible === "vendors-list" && <Layout visible={visible} />} 
     {visible === "order-refund-report" && <Layout visible={visible} />} 
+    {visible === "edit-vendor" && <Layout visible={visible} />} 
+    {visible === "vendor-details" && <Layout visible={visible} />} 
+    
 
-   
+    
 
 
    

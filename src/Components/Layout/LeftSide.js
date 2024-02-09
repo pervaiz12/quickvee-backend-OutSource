@@ -56,6 +56,8 @@ import VendorListMain  from "../Reporting/VendorList/VendorListMain";
 import VendorSalesReportMain from "../Reporting/VendorSalesReport/VendorSalesReportMain";
 import OrderRefundReportMain from "../Reporting/OrderRefundReport/OrderRefundReportMain";
 import ReorderInventoryMain from "../Reporting/ReorderInventory/ReorderInventoryMain";
+import EditVendors from "../Vendors/EditVendors";
+import SingleVendorsDetail from "../Vendors/SingleVendorsDetail";
 //  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
 
 
@@ -123,6 +125,11 @@ const LeftSide = ({ visible }) => {
           {visible === "permission" && <Permission />}
           {visible === "order-summary" && <OrderSummaryDetails />}
           {visible === "vendors-list" && <VendorListMain />}
+          {visible === "edit-vendor" && <EditVendors />}
+          {visible === "vendor-details" && <SingleVendorsDetail />}
+
+          
+          
           {/* {visible === "order-summary" && <OrderSummeryPage />} */}
           
 

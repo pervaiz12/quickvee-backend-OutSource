@@ -116,6 +116,9 @@ function App() {
         path="/attributes"
         element={<Main visible={"attributes"} />}
       />
+
+
+
       <Route
         exact
         path="/import-data"
@@ -123,6 +126,8 @@ function App() {
       />
       <Route exact path="/coupons" element={<Main visible={"coupons"} />} />
       <Route exact path="/vendors" element={<Main visible={"vendors"} />} />
+      <Route exact path="/vendors/edit-vendor/:code" element={<Main visible={"edit-vendor"} />} />
+      <Route exact path="/vendors/vendor-details/:code" element={<Main visible={"vendor-details"} />} />
       <Route
         exact
         path="/category/edit-category/:categoryCode"
@@ -402,6 +407,10 @@ function App() {
         path="/users/view/unapprove/newsletter"
         element={<Main visible={"newsletter"} />}
       />
+      
+
+
+
       <Route
         exact
         path="/users/view/unapprove/store-order"

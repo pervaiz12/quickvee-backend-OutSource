@@ -63,6 +63,7 @@ import VendorListReducer from "../features/Reports/VendorList/VendorListSlice";
 import VendorSalesListReducer from "../features/Reports/VendorSales/VendorSalesSlice";
 import OrderRefundListReducer from "../features/Reports/OrderRefundReport/OrderRefundReportSlice";
 import NewsLetterListReducer from "../../Redux/features/NewsLetter/NewsLetterSlice";
+import vendorReducer from "../features/VendorList/vListSlice";
 // ---------------------
 
 const store = configureStore({
@@ -70,7 +71,7 @@ const store = configureStore({
 
 
     VendorList:VendorListReducer,
-
+    vendors:vendorReducer,
 
 
 
