@@ -97,11 +97,11 @@ function App() {
       <Route exact path="/" element={<Main />} />
       {/* <Route exact path="/" element={<Layout />} /> */}
 
-      <Route
+      {/* <Route
         exact
         path="/users/view/unapprove"
         element={<Main visible={"multimerchant"} />}
-      />
+      /> */}
       <Route exact path="/dashboard" element={<Main visible={"dashboard"} />} />
       <Route exact path="/order" element={<Main visible={"order"} />} />
       <Route exact path="/category" element={<Main visible={"category"} />} />
@@ -358,7 +358,7 @@ function App() {
       />
       <Route
         exact
-        path="/users/unapprove"
+        path="/users/view/unapprove"
         element={<Main visible={"unverified"} />}
       />
       <Route
@@ -373,7 +373,7 @@ function App() {
       />
       <Route
         exact
-        path="/users/verified"
+        path="/users/view/approve"
         element={<Main visible={"verified"} />}
       />
       <Route
