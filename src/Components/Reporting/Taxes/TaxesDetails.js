@@ -51,7 +51,7 @@ const TaxesDetails = ({ data }) => {
                 className="q-attributes-bottom-attriButes-listing"
                 key={index}
               >
-                <div className="q-employee-bottom-attriButes-single-attributes">
+                <div className="q-employee-bottom-attriButes-single-attributes text-center">
                   <p className="q-employee-item">
                     {key === "Sale Tax" ? "Sales Tax" : key}
                   </p>
