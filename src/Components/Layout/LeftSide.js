@@ -50,6 +50,11 @@ import NewItemCreatedBetweenMain from "../Reporting/NewItemCreatedBetween/NewIte
 import { useEffect } from "react";
 import Permission from "../StoreSetting/AddEmployee/Permission";
 import OrderSummaryDetails from "../Reporting/SalesByPerson/MainOrderSumaaryDetails/OrderSummaryDetails";
+
+
+import VendorListMain  from "../Reporting/VendorList/VendorListMain";
+import VendorSalesReportMain from "../Reporting/VendorSalesReport/VendorSalesReportMain";
+import OrderRefundReportMain from "../Reporting/OrderRefundReport/OrderRefundReportMain";
 //  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
 
 
@@ -116,12 +121,14 @@ const LeftSide = ({ visible }) => {
           {visible === "item-create-between" && <NewItemCreatedBetweenMain /> }
           {visible === "permission" && <Permission />}
           {visible === "order-summary" && <OrderSummaryDetails />}
+          {visible === "vendors-list" && <VendorListMain />}
           {/* {visible === "order-summary" && <OrderSummeryPage />} */}
           
 
 
           
-          {/* {visible === "vendors-sales-reports" && <VendorSalesReportMain />} */}
+          {visible === "vendors-sales-reports" && <VendorSalesReportMain />}
+          {visible === "order-refund-report" && <OrderRefundReportMain />}
          
 
 

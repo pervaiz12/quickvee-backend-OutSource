@@ -200,8 +200,24 @@ module.exports = Object.freeze({
       GET_UPDATE_CUSTOMER:'UserController/update',// update customer
       GET_VERIFIED_MERCHANT:'UserController/getUnverifiedMerchant',//get verified and unverified merchant
 
-      // ---------------------
-    // =================
+
+      
+
+      // vendor Report List API
+      VENDORS_REPORT_LIST:"vendor_report_api/vendor_list",
+
+         // Vendors Sales List API
+      VENDORS_SALES_REPORT:"vendor_report_api/vendors_sales_report",
+
+      // Vendors List for sales report API
+      VENDORS_LIST:"vendor_report_api/get_vendor_list",
+
+      
+      // Order Refund Report
+      ORDER_REFUND_REPORT:"vendor_report_api/refund_report",
+
+       // NewsLetter List API
+       NEWS_LETTER_LIIST:"vendor_report_api/newsletter",
 
   });
 
