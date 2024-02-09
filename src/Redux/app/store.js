@@ -24,6 +24,8 @@ import inventoryListingReducer from "../features/Inventory/InventorySlice";
 
 import taxesReducer from "../features/Taxes/taxesSlice"
 
+import CurrentInventoryReducer from  "../features/CurrentInventoryValue/currentInventoryValueSlice"
+
 import settingstorealtersReducer from "../features/SettingStoreAlters/SettingStoreAltersSlice"
 
 import SettingReceiptReducer from "../features/StoreSettings/SettingsReceipt/SettingsReceiptSlice";
@@ -47,10 +49,32 @@ import OrderTypeReducer from "../features/OrderType/OrderTypeSlice";
 import TaxesreportSliceReducer from "../features/TaxesReport/taxesreportSlice";
 import PermissionListReducer from "../features/Permission/PermissionSlice";
 import ReorderInventoryListReducer from "../features/Reports/ReorderInventory/ReorderInventorySlice";
+import DefaultsSliceReducer from "../features/Defaults/defaultsSlice"
 
+import SalesByPersonSliceReducer from "../features/SalesByPerson/SalesByPersonSlice";
+// import orderSummerySlice from "../features/orderSummeryHistory/orderSummerySlice";
+// ------------------------
+import CustomerSliceReducer from '../features/user/customerSlice';
+import ManagerSliceReducer from '../features/user/managerSlice';
+import AdminSliceReducer from '../features/user/adminSlice';
+import VerifiedMerchantSliceReducer from '../features/user/verifiedMerchantSlice';
+import UnVerifiedMerchantSliceReducer from '../features/user/unverifiedMerchantSlice';
+import VendorListReducer from "../features/Reports/VendorList/VendorListSlice";
+import VendorSalesListReducer from "../features/Reports/VendorSales/VendorSalesSlice";
+import OrderRefundListReducer from "../features/Reports/OrderRefundReport/OrderRefundReportSlice";
+import NewsLetterListReducer from "../../Redux/features/NewsLetter/NewsLetterSlice";
+import vendorReducer from "../features/VendorList/vListSlice";
+// ---------------------
 
 const store = configureStore({
   reducer: {
+
+
+    VendorList:VendorListReducer,
+    vendors:vendorReducer,
+
+
+
     categories: categoriesReducer,
 
     attributes: attributesReducer,
@@ -94,6 +118,7 @@ const store = configureStore({
     RegisterSettingsData: RegisterSettingReducer,
    
 
+    NewsLetterList:NewsLetterListReducer,
 
    //Employee List Data
     employeeDataList :EmployeeListReducer,
@@ -105,7 +130,8 @@ const store = configureStore({
     orderTypeList:OrderTypeReducer,
 
     taxesreport:TaxesreportSliceReducer,
-
+    currentInventoryreport:CurrentInventoryReducer,
+    VendorSalesList:VendorSalesListReducer,
 
 
     //Permission
@@ -115,7 +141,19 @@ const store = configureStore({
 
     StoreOrderList:StoreOrderSliceReducer,
 
-    // defaults: DefaultsSliceReducer,
+    defaults: DefaultsSliceReducer,
+
+    SalesByPersonList:SalesByPersonSliceReducer,
+
+    // orderSummeryList:orderSummerySlice,
+    // ---------------------------------
+    customerRecord:CustomerSliceReducer,
+    managerRecord:ManagerSliceReducer,
+    adminRecord:AdminSliceReducer,
+    verifiedMerchantRecord:VerifiedMerchantSliceReducer,
+    unverifiedMerchantRecord:UnVerifiedMerchantSliceReducer,
+    OrderRefundList:OrderRefundListReducer,
+    // --------------------------------
 
   },
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),

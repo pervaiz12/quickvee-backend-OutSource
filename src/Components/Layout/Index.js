@@ -12,14 +12,18 @@ const Index = ({visible}) => {
 
   return (
     <>
-    <div className="bg-[#F9F9F9]">
+    <div className="bg-[#F9F9F9] main-page-home-dashboard">
       <Header isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
    
       <div>
+        {
+          visible === "order-summary" ? "" :
         <SideMenu isMenuOpen={isMenuOpen}  />
+
+        }
         <div
           className="main-content"
-          style={{ paddingLeft: isMenuOpen ? "16rem" : "6rem" }}
+          style={ visible === "order-summary" ? {} : { paddingLeft: isMenuOpen ? "16rem" : "6rem" }}
         >
          
           <Outlet />

@@ -1,4 +1,5 @@
 import React from "react";
+
 import DashboardMain from "../Dashboard/DashboardMain";
 import MainOrder from "./../Orders/MainOrder";
 //import MainProduct from '../Category/MainCategory';
@@ -34,6 +35,10 @@ import EmployeeWorking from "../Reporting/EmployeeWorkingHours/EmployeeWorking";
 import MainSiftSummary from "../Reporting/SiftSummary/MainSiftSummary";
 import PaymentMethodReport from "../Reporting/PaymentMehodDetail/PaymentMethodReport";
 import MainItem from "../Reporting/ItemType/MainItem";
+
+import MainTaxesReport from "../Reporting/Taxes/MainTaxesReport";
+import CurrentInventoryValue from "../Reporting/CurrentInventoryValue/CurrentInventoryValue";
+
 // import MainTaxesReport from "../Reporting/Taxes/MainTaxesReport";
 
 import MainTaxReporting from "../Reporting/Taxes/MainTaxReporting";
@@ -42,12 +47,35 @@ import ReceiptMainpage from "../StoreSetting/Receipt/ReceiptMainpage";
 import MainItemSales from "../Reporting/ItemSales/MainItemSales";
 import NewItemCreatedBetweenList from "../Reporting/NewItemCreatedBetween/NewItemCreatedBetweenList";
 import NewItemCreatedBetweenMain from "../Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain";
+import { useEffect } from "react";
+import Permission from "../StoreSetting/AddEmployee/Permission";
+import OrderSummaryDetails from "../Reporting/SalesByPerson/MainOrderSumaaryDetails/OrderSummaryDetails";
+
+
+import VendorListMain  from "../Reporting/VendorList/VendorListMain";
+import VendorSalesReportMain from "../Reporting/VendorSalesReport/VendorSalesReportMain";
+import OrderRefundReportMain from "../Reporting/OrderRefundReport/OrderRefundReportMain";
+import ReorderInventoryMain from "../Reporting/ReorderInventory/ReorderInventoryMain";
+import EditVendors from "../Vendors/EditVendors";
+import SingleVendorsDetail from "../Vendors/SingleVendorsDetail";
+//  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
+
 
 // import MainEmployee from "../Reporting/EmployeeWorkingHours/MainEmployee";
 
 // import MainInvDuplicates from '../InventoryDuplicates/MainInvDuplicates';
 
 const LeftSide = ({ visible }) => {
+
+  useEffect(() => {
+    
+    console.log("hello")
+      return () => {
+       
+      }
+    }, )
+
+
   return (
     <>
       <div className="w-full">
@@ -87,14 +115,29 @@ const LeftSide = ({ visible }) => {
           {visible === "shift-summary" && <MainSiftSummary />}
           {visible === "payment-method-details" && <PaymentMethodReport />}
           {visible === "order-type" && <MainItem />}
-          {visible === "taxes-report" && <MainTaxReporting />}
+
+          {visible === "taxes-report" && <MainTaxesReport />}
+          {visible === "current-inventory-value" && <CurrentInventoryValue />}
           {visible === "addemployee" && <MainAddEmployee />}
           {visible === "receipt" && <ReceiptMainpage />}
           {visible === "item-sales" && <MainItemSales /> }
           {visible === "item-create-between" && <NewItemCreatedBetweenMain /> }
+          {visible === "permission" && <Permission />}
+          {visible === "order-summary" && <OrderSummaryDetails />}
+          {visible === "vendors-list" && <VendorListMain />}
+          {visible === "edit-vendor" && <EditVendors />}
+          {visible === "vendor-details" && <SingleVendorsDetail />}
 
           
-          {/* {visible === "vendors-sales-reports" && <VendorSalesReportMain />} */}
+          
+          {/* {visible === "order-summary" && <OrderSummeryPage />} */}
+          
+
+          
+          {visible === "recorder-inventory" && <ReorderInventoryMain />}
+          
+          {visible === "vendors-sales-reports" && <VendorSalesReportMain />}
+          {visible === "order-refund-report" && <OrderRefundReportMain />}
          
 
 

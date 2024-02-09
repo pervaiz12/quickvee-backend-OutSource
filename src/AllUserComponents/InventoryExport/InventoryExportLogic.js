@@ -9,22 +9,7 @@ import axios from "axios";
 const InventoryExportLogic = () => {
 
     const [submitmessage, setsubmitmessage] = useState("");
-    // const [MerchantList, setMerchantList] = useState();
     const [storename,setStorename] = useState();
-    // const MerchantListData = useSelector((state) => state.ExportInventoryData);
-    // console.log(MerchantListData);
-    // useEffect(() => {
-    //   if (!MerchantListData.loading && MerchantListData.MerchantListData) {
-    //       setMerchantList(MerchantListData.MerchantListData)
-    //       console.log(MerchantList)
-    //   }
-    // }, [MerchantListData, MerchantListData.loading])
-  
-    // const dispatch = useDispatch();
-    // useEffect(() => {
-    //   dispatch(fetchMerchantsList())
-    // }, [])
-
     const handleStoreInput = async (event) => {
         const fieldValue = event.target.type === "checkbox" ? event.target.checked : event.target.value;
         // console.log(values.ebt_type)
@@ -34,9 +19,6 @@ const InventoryExportLogic = () => {
     
       const handleSubmit = async (e) => {
         e.preventDefault();
-        // console.log(storename);
-        // await isNumber(values.idel_logout, 'idel_logout', errors);
-        
         if (storename != "") {
           const data = {
             "merchant_id": storename,
@@ -73,11 +55,6 @@ const InventoryExportLogic = () => {
             return new Error(error)
           }
         }
-    
-        // setValues((prevState) => ({
-        //   ...prevState,
-        //   errors,
-        // }));
       };
 
     return {handleStoreInput, handleSubmit, submitmessage, setsubmitmessage};

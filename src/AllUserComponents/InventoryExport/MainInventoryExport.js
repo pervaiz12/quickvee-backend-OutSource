@@ -183,4 +183,3 @@ const MainInventoryExport =  () => {
 }
 
 export default MainInventoryExport;
-// console.log('hii')
