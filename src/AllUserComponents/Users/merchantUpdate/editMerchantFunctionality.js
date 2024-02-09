@@ -87,7 +87,6 @@ export default function EditMerchantFunctionality() {
 
         }
 
-
     }
     return {getEditMerchantData,getEditMerchant,handleChangePaymentMode,paymentModeOnline,paymentModeOffline
     ,paymentModeOnline,paymentModeOffline}
