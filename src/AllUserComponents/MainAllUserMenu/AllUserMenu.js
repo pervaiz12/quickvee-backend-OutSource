@@ -202,7 +202,7 @@ const menuItems = [
     link: "/users/view/unapprove/users/add",
     className: "flex items-center gap-2",
     dropdownItems: [
-      { id: 21, text: " Add ", link: "/users/add" },
+      { id: 21, text: " Add ", link: "/users/addmerchant" },
       { id: 22, text: " Verified Merchant ", link: "/users/view/approve" },
       {
         id: 23,

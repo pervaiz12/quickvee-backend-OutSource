@@ -219,5 +219,7 @@ module.exports = Object.freeze({
        // NewsLetter List API
        NEWS_LETTER_LIIST:"vendor_report_api/newsletter",
 
+       GET_REORDER_INVENTORY_LIST:"ReportingReactapi/get_reorder_inventory_list",
+
   });
 

@@ -55,6 +55,7 @@ import OrderSummaryDetails from "../Reporting/SalesByPerson/MainOrderSumaaryDeta
 import VendorListMain  from "../Reporting/VendorList/VendorListMain";
 import VendorSalesReportMain from "../Reporting/VendorSalesReport/VendorSalesReportMain";
 import OrderRefundReportMain from "../Reporting/OrderRefundReport/OrderRefundReportMain";
+import ReorderInventoryMain from "../Reporting/ReorderInventory/ReorderInventoryMain";
 //  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
 
 
@@ -125,7 +126,8 @@ const LeftSide = ({ visible }) => {
           {/* {visible === "order-summary" && <OrderSummeryPage />} */}
           
 
-
+          
+          {visible === "recorder-inventory" && <ReorderInventoryMain />}
           
           {visible === "vendors-sales-reports" && <VendorSalesReportMain />}
           {visible === "order-refund-report" && <OrderRefundReportMain />}
