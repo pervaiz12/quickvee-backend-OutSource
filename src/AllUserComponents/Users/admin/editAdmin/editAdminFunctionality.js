@@ -33,10 +33,17 @@ const EditAdminFunctionality=()=>{
     const handleChangeAdmin=(e)=>{
         const{name,value}=e.target
         let updatedErrors = { ...errors };
+        let emailRegex=/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
         // console.log(name)
       
         if (name === "owner_name") {
           updatedErrors[name] = value === "" ? `please fill the ${name} field` : '';
+        }
+        if(name=='email')
+        {
+          updatedErrors[name] = value === "" ? `Please fill the ${name} field` 
+          : !emailRegex.test(value)?'Please fill valid email':'';
+
         }
         if (name === 'phone') {
             const numericValue = value.replace(/[^0-9]/g, '');

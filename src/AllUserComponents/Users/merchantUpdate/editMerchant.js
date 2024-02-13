@@ -275,7 +275,7 @@ export default function EditMerchant() {
                                         type="radio"
                                         id="radio3"
                                         name="radio"
-                                        value="1" 
+                                        value="2" 
                                         onClick={handleChangePaymentMode}
                                         checked={paymentModeOnline}
                                     />
@@ -321,6 +321,7 @@ export default function EditMerchant() {
                         }
                       
                     </div>
+                    <br/>
                 
                 
                     <input 

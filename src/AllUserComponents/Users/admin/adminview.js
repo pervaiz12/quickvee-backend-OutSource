@@ -6,6 +6,8 @@ import AdminFunctionality from './adminFunctionality'
 import ViewAdmin from './viewAdminModal'
 import { useNavigate } from 'react-router-dom';
 
+import {Link} from 'react-router-dom'
+
 export default function AdminView() {
     const navigate = useNavigate();
     // const{setShowMerchant,showMerchant,handleViewAdmin,handleCloseMerchantModel,showMerchantData}=AdminFunctionality()
@@ -40,53 +42,60 @@ const [selectedAction, setSelectedAction] = useState('');
 
   return (
     <>
-    <div className='box_shadow_div'>
+   
+   <div className='box'>
+      <div className='box_shadow_div'>
+        <div className='btn-area'>
+          <Link to="/users/addAdmin" className='blue_btn'>ADD</Link>
+        </div>
         <div className='table_main_area'>
-        <div className='table_header_sticky'>
-            <div className='table_header_top'>
-            <h1>Table Area</h1>
-            </div>
-            <div className='table_header'>
-            <p className='table20'>Owner Name</p>
-            <p className='table20'>Name</p>
-            <p className='table20'>Email</p>
-            <p className='table20'>Phone</p>
-            <p className='table15'>View</p>
-            <p className='table5'>Action</p>
-            </div>
+          <div className='table_header_sticky'>
+              {/* <div className='table_header_top'>
+              <h1>Table Area</h1>
+              </div> */}
+              <div className='table_header'>
+              <p className='table20'>Owner Name</p>
+              <p className='table20'>Name</p>
+              <p className='table20'>Email</p>
+              <p className='table20'>Phone</p>
+              <p className='table15'>View</p>
+              <p className='table5'>Action</p>
+              </div>
+          </div>
+          <div className='table_body'>
+              {
+                  Array.isArray(AdminRecord && AdminRecord.AdminRecord) ?AdminRecord.AdminRecord.map(result=>{
+                      // console.log(result)
+                      return(
+                          
+                              <div className='table_row' key={result.id}>
+                                  <p className='table20 txt_ellipsis'>{result.owner_name}</p>
+                                  <p className='table20 txt_ellipsis'>{result.name}</p>
+                                  <p className='table20 txt_ellipsis'>{result.email}</p>
+                                  <p className='table20'>{result.phone}</p>
+                                  <p className='table15'onClick={()=>handleViewAdmin(result.email)}>view merchant</p>
+                                  <div className='table5' >
+                                  {/* <select
+                                      value={selectedAction}
+                                      onChange={handleSelectChange}
+                                      >
+                                      <option  value="" disabled hidden></option>
+                                      <option value={`/users/editAdmin/${result.id}`}>Edit</option> */}
+                                      {/* <option value={result.id}>Delete</option> */}
+                                  {/* </select> */}
+                                <div className='verifiedTableIcon'><Link to={`/users/editAdmin/${result.id}`}><img src="/static/media/editIcon.4dccb72a9324ddcac62b9a41d0a042db.svg"></img></Link> </div>
+                                  
+                                  </div>
+                              </div>
+              
+                              
+                          )
+                  }):[]
+              }
+          </div>
         </div>
-        <div className='table_body'>
-            {
-                Array.isArray(AdminRecord && AdminRecord.AdminRecord) ?AdminRecord.AdminRecord.map(result=>{
-                    // console.log(result)
-                    return(
-                        
-                            <div className='table_row' key={result.id}>
-                                <p className='table20'>{result.owner_name}</p>
-                                <p className='table20'>{result.name}</p>
-                                <p className='table20'>{result.email}</p>
-                                <p className='table20'>{result.phone}</p>
-                                <p className='table15'onClick={()=>handleViewAdmin(result.email)}>view merchant</p>
-                                <div className='table5' >
-                                <select
-                                    value={selectedAction}
-                                    onChange={handleSelectChange}
-                                    >
-                                    <option  value="" disabled hidden></option>
-                                    <option value={`/users/editAdmin/${result.id}`}>Edit</option>
-                                    {/* <option value={result.id}>Delete</option> */}
-                                </select>
-                                 
-                                </div>
-                            </div>
-            
-                            
-                        )
-                }):[]
-            }
-        </div>
-        </div>
-  </div>
+      </div>
+    </div>
   <ViewAdmin
     showAdmin={showAdmin}
     showMerchantData={showMerchantData}
