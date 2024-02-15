@@ -58,11 +58,23 @@ import CustomerSliceReducer from '../features/user/customerSlice';
 import ManagerSliceReducer from '../features/user/managerSlice';
 import AdminSliceReducer from '../features/user/adminSlice';
 import VerifiedMerchantSliceReducer from '../features/user/verifiedMerchantSlice';
-import UnVerifiedMerchantSliceReducer from '../features/user/unverifiedMerchantSlice'
+import UnVerifiedMerchantSliceReducer from '../features/user/unverifiedMerchantSlice';
+import VendorListReducer from "../features/Reports/VendorList/VendorListSlice";
+import VendorSalesListReducer from "../features/Reports/VendorSales/VendorSalesSlice";
+import OrderRefundListReducer from "../features/Reports/OrderRefundReport/OrderRefundReportSlice";
+import NewsLetterListReducer from "../../Redux/features/NewsLetter/NewsLetterSlice";
+import vendorReducer from "../features/VendorList/vListSlice";
 // ---------------------
 
 const store = configureStore({
   reducer: {
+
+
+    VendorList:VendorListReducer,
+    vendors:vendorReducer,
+
+
+
     categories: categoriesReducer,
 
     attributes: attributesReducer,
@@ -106,6 +118,7 @@ const store = configureStore({
     RegisterSettingsData: RegisterSettingReducer,
    
 
+    NewsLetterList:NewsLetterListReducer,
 
    //Employee List Data
     employeeDataList :EmployeeListReducer,
@@ -118,7 +131,7 @@ const store = configureStore({
 
     taxesreport:TaxesreportSliceReducer,
     currentInventoryreport:CurrentInventoryReducer,
-
+    VendorSalesList:VendorSalesListReducer,
 
 
     //Permission
@@ -139,6 +152,7 @@ const store = configureStore({
     adminRecord:AdminSliceReducer,
     verifiedMerchantRecord:VerifiedMerchantSliceReducer,
     unverifiedMerchantRecord:UnVerifiedMerchantSliceReducer,
+    OrderRefundList:OrderRefundListReducer,
     // --------------------------------
 
   },

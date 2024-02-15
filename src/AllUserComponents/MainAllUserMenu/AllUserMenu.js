@@ -202,8 +202,8 @@ const menuItems = [
     link: "/users/view/unapprove/users/add",
     className: "flex items-center gap-2",
     dropdownItems: [
-      { id: 21, text: " Add ", link: "/users/add" },
-      { id: 22, text: " Verified Merchant ", link: "users/view/approve" },
+      { id: 21, text: " Add ", link: "/users/addmerchant" },
+      { id: 22, text: " Verified Merchant ", link: "/users/view/approve" },
       {
         id: 23,
         icon: (
@@ -213,7 +213,7 @@ const menuItems = [
           <img src={CouIcon} alt="option" className="h-6 w-10 mt-4 mb-4 " />
         ),
         text: " Unverified Merchant ",
-        link: "users/view/unapprove",
+        link: "/users/view/unapprove",
       },
 
       { id: 26, text: " Customer ", link: "/users/customer" },
@@ -412,7 +412,7 @@ const menuItems = [
       />
     ),
     text: "Inventory Export ",
-    link: "/users/view/unapprove/invertory-export ",
+    link: "/users/view/unapprove/invertory-export",
   },
 
   {

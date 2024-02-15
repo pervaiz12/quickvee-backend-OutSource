@@ -2,7 +2,7 @@ import React from "react";
 
 
 import MainLabel from "../Label/MainLabel";
-import MainNewsletter from "../Newsletter/MainNewsletter";
+import NewsLetterMain from "../Newsletter/NewsLetterMain";
 import MainStoreOrder from "../StoreOrder/MainStoreOrder";
 import OrderCountMain from "../OrderCount/OrderCountMain";
 import MainDefaults from "../Defaults/MainDefaults";
@@ -27,6 +27,7 @@ import EditCustomer from "../Users/customer/EditCustomer/editCustomer";
 import EditAdmin from '../Users/admin/editAdmin/edit_admin'
 import AddMerchan from '../Users/addMerchant/addMerchantech'
 import EditMerchant from '../Users/merchantUpdate/editMerchant'
+import Add_Admin from '../Users/admin/addAdmin/add_admin'
 // verified
 
 
@@ -38,7 +39,7 @@ const LeftDetailsUsers = ({ visible }) => {
   return (
     <>
       {visible === "label" && <MainLabel />}
-      {visible === "newsletter" && <MainNewsletter />}
+      {visible === "newsletter" && <NewsLetterMain />}
       {visible === "store-order" && <MainStoreOrder />}
       {visible === "order-count" && <OrderCountMain />}
       {visible === "defaults" && <MainDefaults />}
@@ -63,7 +64,7 @@ const LeftDetailsUsers = ({ visible }) => {
       {visible ==="editAdmin" && <EditAdmin /> }
       {visible ==="addMerchant" && <AddMerchan /> }
       {visible ==="editMerchant" && <EditMerchant /> }
-
+      {visible ==="addAdmin" && <Add_Admin /> }
       
 
 

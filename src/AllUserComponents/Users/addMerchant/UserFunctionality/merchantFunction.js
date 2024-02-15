@@ -229,8 +229,11 @@ const MerchantFunction=()=>{
       if (name === 'phone') {
         // Validate and format the phone number (allow only numeric characters)
         const numericValue = value.replace(/[^0-9]/g, '');
-    
-        if (numericValue.length !== 10) {
+        if(numericValue=="")
+        {
+            updatedErrors[name]=""
+
+        }else if (numericValue.length !== 10) {
           updatedErrors[name] = 'Phone number must be 10 digits';
         } else {
           updatedErrors[name] = '';
@@ -369,21 +372,43 @@ const MerchantFunction=()=>{
         let validateMerchant=validateData()
         
         const isValidate=validate()
-        console.log('merchant')
+        // console.log('merchant')
         
         if((validateMerchant) && (isValidate))
         {
-            console.log("merchant11")
-            // const data={login_pin:merchantStore.pin,admin:adminId,storename:store.storename,
-            //     ownerName:store.ownerName,email:store.email,password:store.password,phone:store.phone,
-            //     state:store.state,created_by_user:'superadmin',
-            // user_type:userRadioData
-            // }
-            // await axios.post(BASE_URL+ADD_MERCHAN_EMPLOYEE,data,
-            //     { headers: { "Content-Type": "multipart/form-data" } }).then(result=>{
-            //         console.log(result)
+            // console.log("merchant11")
+            const data={login_pin:merchantStore.pin,admin:adminId,storename:store.storename,
+                ownerName:store.ownerName,email:store.email,password:store.password,phone:store.phone,
+                state:store.state,created_by_user:'superadmin',
+            user_type:userRadioData
+            }
+            await axios.post(BASE_URL+ADD_MERCHAN_EMPLOYEE,data,
+                { headers: { "Content-Type": "multipart/form-data" } }).then(result=>{
+                     if(result.data.status==200)
+                        {
+                            setUserRadioData('') 
+                            setUserRadio(false)
+                            setStore({   
+                                storename:'',
+                                ownerName:'',
+                                email:'',
+                                password:'',
+                                phone:'',
+                                state:'',
+                                errors:{
+                                    storename:'',
+                                    ownerName:'',
+                                    email:'',
+                                    password:'',
+                                    phone:'',
+                                    state:'',
+                                }              
+                                })  
+                            navigate(`/users/editMerchant/${result.data.id}`)
 
-            // })
+                        }
+
+            })
 
 
         }
@@ -422,6 +447,8 @@ const MerchantFunction=()=>{
                             // console.log(result.data.status==200)
                             if(result.data.status==200)
                             {
+                                setUserRadioData('') 
+                                setUserRadio(false)
                                 setStore({   
                                     storename:'',
                                     ownerName:'',

@@ -50,7 +50,13 @@ import NewItemCreatedBetweenMain from "../Reporting/NewItemCreatedBetween/NewIte
 import { useEffect } from "react";
 import Permission from "../StoreSetting/AddEmployee/Permission";
 import OrderSummaryDetails from "../Reporting/SalesByPerson/MainOrderSumaaryDetails/OrderSummaryDetails";
-import AddProducts from "../Products/AddProducts";
+import VendorListMain  from "../Reporting/VendorList/VendorListMain";
+import VendorSalesReportMain from "../Reporting/VendorSalesReport/VendorSalesReportMain";
+import OrderRefundReportMain from "../Reporting/OrderRefundReport/OrderRefundReportMain";
+import ReorderInventoryMain from "../Reporting/ReorderInventory/ReorderInventoryMain";
+import EditVendors from "../Vendors/EditVendors";
+import SingleVendorsDetail from "../Vendors/SingleVendorsDetail";
+import AddProducts from "../Products/AddProducts"
 //  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
 
 
@@ -121,12 +127,20 @@ const LeftSide = ({ visible }) => {
           {visible === "item-create-between" && <NewItemCreatedBetweenMain /> }
           {visible === "permission" && <Permission />}
           {visible === "order-summary" && <OrderSummaryDetails />}
+          {visible === "vendors-list" && <VendorListMain />}
+          {visible === "edit-vendor" && <EditVendors />}
+          {visible === "vendor-details" && <SingleVendorsDetail />}
+
+          
+          
           {/* {visible === "order-summary" && <OrderSummeryPage />} */}
           
 
-
           
-          {/* {visible === "vendors-sales-reports" && <VendorSalesReportMain />} */}
+          {visible === "recorder-inventory" && <ReorderInventoryMain />}
+          
+          {visible === "vendors-sales-reports" && <VendorSalesReportMain />}
+          {visible === "order-refund-report" && <OrderRefundReportMain />}
          
 
 

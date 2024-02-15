@@ -772,8 +772,7 @@ top:53%}
 
 .q-add-inventory-section-header{
 display: flex;
-    padding: 20px;
-  }
+    padding: 20px;}
   
   .q-attributes-top-detail-section li:before {
     color: #000;
@@ -875,8 +874,3 @@ border-bottom: 1px solid #000 !important;}
   height: 40px;
   width: 40px;
 }
-
-
-/* .react-datepicker-popper {
-  z-index: 2;
-} */

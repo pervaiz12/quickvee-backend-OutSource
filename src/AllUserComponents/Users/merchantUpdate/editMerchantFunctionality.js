@@ -33,24 +33,40 @@ export default function EditMerchantFunctionality() {
                         usa_pin:response.data.message.row.usa_pin,
                         states:response.data.message.states,
                     })
-
-
-                    if(response.data.message.Paymentmode !==null)
+                    // console.log(response.data.message.Paymentmode.cc_payment)
+                    if(response.data.message.Paymentmode==null)
                     {
-                        setPaymentModeRecord(response.data.message.Paymentmode.cc_payment)
-                 
-                    if(response.data.message.Paymentmode.cc_payment==2)
+                        setPaymentModeOffline(true)
+                        setPaymentModeOnline(false)
+
+                    }else if((response.data.message.Paymentmode.cc_payment ==null) || (response.data.message.Paymentmode.cc_payment==0  )){
+                        setPaymentModeOffline(true)
+                        setPaymentModeOnline(false)
+
+                    }else if((response.data.message.Paymentmode.cc_payment !==null)|| (response.data.message.Paymentmode.cc_payment==2))
                     {
                         setPaymentModeOnline(true)
                         setPaymentModeOffline(false)
 
-                    }else{
-                        setPaymentModeOffline(true)
-                        setPaymentModeOnline(false)
-
                     }
 
-                    }
+
+                    // if(response.data.message.Paymentmode !==null)
+                    // {
+                    //         setPaymentModeRecord(response.data.message.Paymentmode.cc_payment)
+                    
+                    //     if(response.data.message.Paymentmode.cc_payment==2)
+                    //     {
+                    //         setPaymentModeOnline(true)
+                    //         setPaymentModeOffline(false)
+
+                    //     }else {
+                    //         setPaymentModeOffline(true)
+                    //         setPaymentModeOnline(false)
+
+                    //     }
+
+                    // }
                     
                 }
             })
@@ -70,7 +86,6 @@ export default function EditMerchantFunctionality() {
             setPaymentModeOnline(false)
 
         }
-
 
     }
     return {getEditMerchantData,getEditMerchant,handleChangePaymentMode,paymentModeOnline,paymentModeOffline

@@ -14,6 +14,9 @@ import {
 } from "../../Constants/Config";
 
 const ProductDuplicateStore = () => {
+  const [storeFromError, setStoreFromError] = useState("");
+  const [storeToError, setStoreToError] = useState("");
+
   const [selectedStorefrom, setSelectedStorefrom] =
     useState("-- Select Store --");
   const [selectedStoreto, setSelectedStoreto] = useState("-- Select Store --");
@@ -79,6 +82,11 @@ const ProductDuplicateStore = () => {
             console.error("API Error:", error);
           }
         }
+        if (option.label == "-- Select Store --") {
+          setStoreFromError("This field is required");
+        } else {
+          setStoreFromError("");
+        }
         break;
       case "storeto":
         setSelectedStoreto(option.label);
@@ -86,7 +94,11 @@ const ProductDuplicateStore = () => {
         if (option.merchant_id !== "-- Select Store --") {
           setStoreto(option.merchant_id);
         }
-
+        if (option.label == "-- Select Store --") {
+          setStoreToError("This field is required");
+        } else {
+          setStoreToError("");
+        }
         break;
       default:
         break;
@@ -220,7 +232,7 @@ const ProductDuplicateStore = () => {
 
   return (
     <>
-      <div className="q-order-main-page">
+      <div className="">
         <div className="q-add-categories-section">
         <div className="alert">
             
@@ -368,6 +380,11 @@ const ProductDuplicateStore = () => {
                   </div>
                 )}
               </div>
+              <span className="input-error ">
+                  {storeFromError && (
+                    <span className="input-error ">{storeFromError}</span>
+                  )}
+                </span>
               {/* Multiple Select Categories */}
               <div
                 className={`py-4 ${isSelectClicked ? "select-clicked" : ""}`}
@@ -473,6 +490,11 @@ const ProductDuplicateStore = () => {
                     </div>
                   )}
                 </div>
+                <span className="input-error ">
+                  {storeToError && (
+                    <span className="input-error ">{storeToError}</span>
+                  )}
+                </span>
               </div>
             </div>
           </div>

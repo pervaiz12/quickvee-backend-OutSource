@@ -491,6 +491,7 @@ const menuItems = [
       { id: 81, text: "Current Inventory Value ", link: "/store-reporting/current-inventory-value" },
 
       { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
+      { id: 82, text: "Order Refund Report ", link: "/store-settings/order-refund-report" },
 
     ],
   },
