@@ -3,12 +3,16 @@ import React, { useState, useEffect } from "react";
 import { Box, Button, Modal } from "@mui/material";
 import EditIcon from "../../../Assests/Category/editIcon.svg";
 import LeftIcon from "../../../Assests/Taxes/Left.svg";
-import { fetchtaxesData  } from "../../../Redux/features/Taxes/taxesSlice"
+import DownIcon from "../../../Assests/Dashboard/Down.svg";
+import { fetchtaxesData } from "../../../Redux/features/Taxes/taxesSlice";
 import { useDispatch } from "react-redux";
 import axios from "axios";
 import { Form } from "react-bootstrap";
-import { BASE_URL, UPDATE_TAXES , TAXE_CATEGORY_LIST} from "../../../Constants/Config";
-
+import {
+  BASE_URL,
+  UPDATE_TAXES,
+  TAXE_CATEGORY_LIST,
+} from "../../../Constants/Config";
 
 const EditTaxesModal = ({ selectedTaxe }) => {
   const [open, setOpen] = useState(false);
@@ -19,17 +23,22 @@ const EditTaxesModal = ({ selectedTaxe }) => {
   const dispatch = useDispatch();
 
   const myStyles = {
-    width: "50rem",
-    transform: "translate(25rem, 4.5rem)",
-    maxHeight: "85vh", 
-    overflowY: "auto",  
+    width: "58rem",
+    position: "absolute",
+    top: "47%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
   };
-
+  const myDropStyles = {
+    width: "55.5rem",
+    overflowY: "scroll",
+    height:"185px"
+  }
 
   const mycur = {
     cursor: "pointer",
-    width: "fit-content"
-  }
+    width: "fit-content",
+  };
   const width = {
     width: "6.5rem",
   };
@@ -81,23 +90,22 @@ const EditTaxesModal = ({ selectedTaxe }) => {
     }
   };
 
-
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
+
     // Assuming you have the selected category ID stored in selectedCategory state
     const categoryId = selectedCategory;
     // console.log(categoryId);
-  
+
     if (applyToCategory && categoryId) {
       const formData = new FormData();
-  
+
       // Append your tax data
       formData.append("collID", taxes.collID);
       formData.append("title", taxes.title);
       formData.append("percent", taxes.percent);
       formData.append("merchant_id", taxes.merchant_id);
-  
+
       // Append additional data for applying tax to a category
       formData.append("applytaxtocat", applyToCategory ? 1 : 0);
       formData.append("taxchoice", updateTax ? 1 : 0); // 1 for updating tax, 0 for additional tax
@@ -105,15 +113,15 @@ const EditTaxesModal = ({ selectedTaxe }) => {
 
       try {
         // Make your API request with axios
-        const response = await axios.post(BASE_URL+UPDATE_TAXES, formData, {
+        const response = await axios.post(BASE_URL + UPDATE_TAXES, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-  
+
         // Handle the response as needed
-        const update_message = response.data.status
-        const msg = response.data.msg
+        const update_message = response.data.status;
+        const msg = response.data.msg;
         console.log(update_message);
-        if(update_message == "Success"){
+        if (update_message == "Success") {
           // alert(msg)
           let data = {
             merchant_id: "MAL0100CA",
@@ -121,15 +129,14 @@ const EditTaxesModal = ({ selectedTaxe }) => {
           if (data) {
             dispatch(fetchtaxesData(data));
           }
+          setCategory("--Select Category--");
           handleClose();
-        }else if(update_message == "Failed" && msg == "*Please enter Title"){
+        } else if (update_message == "Failed" && msg == "*Please enter Title") {
           setErrorMessage(msg);
-        }else if(update_message == "Failed" && msg == "Taxes Already Exist"){
+        } else if (update_message == "Failed" && msg == "Taxes Already Exist") {
           setErrorMessage(msg);
         }
 
-      
-  
         // Close the modal or perform any other actions
         handleClose();
       } catch (error) {
@@ -141,25 +148,23 @@ const EditTaxesModal = ({ selectedTaxe }) => {
       // setErrorMessage("Please select a category and choose a tax option.");
 
       const formData = new FormData();
-  
+
       // Append your tax data
       formData.append("collID", taxes.collID);
       formData.append("title", taxes.title);
       formData.append("percent", taxes.percent);
       formData.append("merchant_id", taxes.merchant_id);
 
-
       try {
         // Make your API request with axios
-        const response = await axios.post(BASE_URL+UPDATE_TAXES, formData, {
+        const response = await axios.post(BASE_URL + UPDATE_TAXES, formData, {
           headers: { "Content-Type": "multipart/form-data" },
         });
-  
         // Handle the response as needed
-        const update_message = response.data.status
-        const msg = response.data.msg
+        const update_message = response.data.status;
+        const msg = response.data.msg;
         console.log(update_message);
-        if(update_message == "Success"){
+        if (update_message == "Success") {
           // alert(msg)
           let data = {
             merchant_id: "MAL0100CA",
@@ -167,39 +172,36 @@ const EditTaxesModal = ({ selectedTaxe }) => {
           if (data) {
             dispatch(fetchtaxesData(data));
           }
+          setCategory("--Select Category--");
           handleClose();
-        }else if(update_message == "Failed" && msg == "*Please enter Title"){
+        } else if (update_message == "Failed" && msg == "*Please enter Title") {
           setErrorMessage(msg);
-        }else if(update_message == "Failed" && msg == "Taxes Already Exist"){
+        } else if (update_message == "Failed" && msg == "Taxes Already Exist") {
           setErrorMessage(msg);
         }
-  
+
         // Close the modal or perform any other actions
-     
       } catch (error) {
         console.error("Error submitting data:", error);
         // Handle errors as needed
       }
-
     }
   };
 
+  // for Apply tax to category
+  const [applyToCategory, setApplyToCategory] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [additionalTax, setAdditionalTax] = useState(false);
+  const [updateTax, setUpdateTax] = useState(false);
 
+  const [categoryOptions, setCategoryOptions] = useState([]);
+  const [loadingCategories, setLoadingCategories] = useState(true);
 
-   // for Apply tax to category
-   const [applyToCategory, setApplyToCategory] = useState(false);
-   const [selectedCategory, setSelectedCategory] = useState("");
-   const [additionalTax, setAdditionalTax] = useState(false);
-   const [updateTax, setUpdateTax] = useState(false);
- 
-   const [categoryOptions, setCategoryOptions] = useState([]);
-   const [loadingCategories, setLoadingCategories] = useState(true);
- 
-   useEffect(() => {
+  useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await axios.post(
-          BASE_URL+ TAXE_CATEGORY_LIST,
+          BASE_URL + TAXE_CATEGORY_LIST,
           {
             merchant_id: "MAL0100CA",
           },
@@ -226,12 +228,62 @@ const EditTaxesModal = ({ selectedTaxe }) => {
     fetchData();
   }, []); // Fetch categories only once when the component mounts
 
+
+  // for dropdown start
+
+  const [category,setCategory] = useState("--Select Category--");
+  const [categoryDropdownVisible, setCategoryDropdownVisible] = useState(false);
+  const [storeToError, setStoreToError] = useState("");
+
+  const toggleDropdown = (dropdown) => {
+    switch (dropdown) {
+      case "category":
+        setCategoryDropdownVisible(!categoryDropdownVisible);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const handleOptionClick = async (option, dropdown) => {
+    switch (dropdown) {
+      case "category":
+        if (option.label === "--Select Category--") {
+          setCategory("--Select Category--");
+          setCategoryDropdownVisible(false);
+        } else {
+          setCategory(option.label);
+          setCategoryDropdownVisible(false);
+        }
+        if (option.label == "--Select Category--") {
+          setStoreToError("This field is required");
+          setSelectedCategory("")
+        } else {
+          setStoreToError("");
+          const selId = option.id;
+          setSelectedCategory(selId)
+
+        }
+        break;
+
+      default:
+        break;
+    }
+  };
+
+
+  // for dropdown End
+
   return (
     <div>
-      <div className="flex justify-evenly categories-items categories-items-btn" onClick={handleOpen}>
-        <span  className="categories-items categories-items-btn"     >
-        <img src={EditIcon} alt="edit-icon" />{" "}
-      </span>
+      <div
+        className="flex justify-evenly categories-items categories-items-btn"
+        onClick={handleOpen}
+      >
+        <span className="categories-items categories-items-btn">
+          <img src={EditIcon} alt="edit-icon" />{" "}
+        </span>
       </div>
 
       <Modal
@@ -242,7 +294,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
       >
         <Box className="view-category-item-modal" style={myStyles}>
           {/* <div className='view-category-item-modal-header'> */}
-          <div className="q-add-categories-section-header" >
+          <div className="q-add-categories-section-header">
             <span onClick={() => handleClose()} style={width}>
               <img src={LeftIcon} alt="Add-New-Category" />
               <span>Edit Tax</span>
@@ -253,39 +305,45 @@ const EditTaxesModal = ({ selectedTaxe }) => {
           <div className="view-category-item-modal-header">
             <form onSubmit={handleSubmit} enctype="multipart/form-data">
               <div className="q-add-categories-section-middle-form">
-                
-               
-
-                {
-                  taxes.title === 'DefaultTax' ? (
-                    <>
+                {taxes.title === "DefaultTax" ? (
+                  <>
                     <div className="q-add-categories-single-input">
-                  <label for="title">Title</label>
+                      <label for="title">Title</label>
 
-                  <input type="text" id="title" name="title" value={taxes.title} disabled />
-                </div>
-                {errorMessage && (
-                  <span className="error-message" style={{ color: "red" }}>
-                    {errorMessage}
-                  </span>
-                )}
-
-                    </>
-                  ) : (
-                    <>
+                      <input
+                        type="text"
+                        id="title"
+                        name="title"
+                        value={taxes.title}
+                        disabled
+                      />
+                    </div>
+                    {errorMessage && (
+                      <span className="error-message" style={{ color: "red" }}>
+                        {errorMessage}
+                      </span>
+                    )}
+                  </>
+                ) : (
+                  <>
                     <div className="q-add-categories-single-input">
-                  <label for="title">Title</label>
+                      <label for="title">Title</label>
 
-                  <input type="text" id="title" onChange={inputChange} name="title" value={taxes.title} />
-                </div>
-                 {errorMessage && (
-                  <span className="error-message" style={{ color: "red" }}>
-                    {errorMessage}
-                  </span>
+                      <input
+                        type="text"
+                        id="title"
+                        onChange={inputChange}
+                        name="title"
+                        value={taxes.title}
+                      />
+                    </div>
+                    {errorMessage && (
+                      <span className="error-message" style={{ color: "red" }}>
+                        {errorMessage}
+                      </span>
+                    )}
+                  </>
                 )}
-                    </>
-                  )
-                }
 
                 <div className="q-add-categories-single-input">
                   <label for="Percentage">Percentage</label>
@@ -320,16 +378,19 @@ const EditTaxesModal = ({ selectedTaxe }) => {
 
                 {applyToCategory && (
                   <>
-                    <div className="q-add-categories-single-input mt-2">
+                    <div className="q-add-categories-single-input ">
                       {loadingCategories ? (
                         <p>Loading categories...</p>
                       ) : (
-                        <div className="q-add-categories-single-input">
+                        <>
+                        {/* <div className="q-add-categories-single-input">
                           <div className="flex-1 mb-2 sm:mb-0 sm:mr-2">
                             <select
                               id="categoryFilter"
                               className="w-full bg-white text-[#000000] text-[18px] Admin_std px-4 py-2 border border-gray-300 focus:outline-none rounded"
-                              onChange={(e)=>setSelectedCategory( e.target.value)}
+                              onChange={(e) =>
+                                setSelectedCategory(e.target.value)
+                              }
                             >
                               <option> Select Category</option>
                               {categoryOptions.map((option) => (
@@ -339,31 +400,65 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                               ))}
                             </select>
                           </div>
-                        </div>
+                        </div> */}
+                            <div className="custom-dropdown">
+                            <div
+                              className="custom-dropdown-header"
+                              onClick={() => toggleDropdown("category")}
+                            >
+                              <span className="selected-option mt-1">
+                                {category}
+                              </span>
+                              <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
+                            </div>
+                            {categoryDropdownVisible && (
+                              <div className="dropdown-content" style={myDropStyles}>
+                                <div
+                                  onClick={() => handleOptionClick({ label: "--Select Category--", id: null },"category") } >--Select Category--</div>
+                                {categoryOptions &&
+                                  categoryOptions.map((option) => (
+                                    <div
+                                      key={option.id}
+                                      onClick={() =>
+                                        handleOptionClick(
+                                          {
+                                            label: option.title,
+                                            id: option.id,
+                                          },
+                                          "category"
+                                        )
+                                      }
+                                    >
+                                      {option.title}
+                                    </div>
+                                  ))}
+                              </div>
+                            )}
+                          </div>
+
+                          <span className="input-error error-message" style={{ color: "red" }}>
+                  {storeToError && (
+                    <span className="input-error ">{storeToError}</span>
+                  )}
+                </span>
+                          </>
                       )}
                     </div>
 
-                    <div className="q-add-categories-single-input m-3">
-                      <Form.Check className="checkradio m-1">
-                        <Form.Check.Input type="radio" name="taxchoice" value="0" checked style={mycur}/>
-                        <Form.Check.Label className="pl-2">
-                          Apply additional tax to the chosen category?
-                        </Form.Check.Label>
-                      </Form.Check>
-                      <Form.Check className="checkradio m-1">
-                        <Form.Check.Input type="radio" name="taxchoice" value="1" style={mycur}/>
-                        <Form.Check.Label className="pl-2">
-                          Update the tax for the chosen category?
-                        </Form.Check.Label>
-                      </Form.Check>
+                    <div className="q-add-categories-single-input m-3 d-flex" style={{width: "fit-content" }}>
+                    <label className="q_receipt_page_main " >
+                      Apply additional tax to the chosen category?
+                      <input type="radio" name="taxchoice" value="0" checked />
+                      <span className="checkmark_section"></span>
+                    </label>
+                     <label className="q_receipt_page_main">
+                     Update the tax for the chosen category?
+                      <input type="radio" name="taxchoice" value="1" />
+                      <span className="checkmark_section"></span>
+                    </label>
                     </div>
                   </>
                 )}
-
-
-
-
-
               </div>
 
               <div className="q-add-categories-section-middle-footer">
