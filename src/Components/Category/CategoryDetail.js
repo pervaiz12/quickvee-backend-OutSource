@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import AddIcon from "../../Assests/Category/addIcon.svg";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import EditIcon from "../../Assests/Category/editIcon.svg";
+import SortIcon from "../../Assests/Category/Sorting.svg"
 import {
   fetchCategoriesData,
   deleteCategory,
@@ -147,7 +148,7 @@ const CategoryDetail = ({ seVisible }) => {
                 className="q-category-bottom-categories-single-category"
               >
                 <p className="categories-sort">
-                  <img src={AddIcon} alt="add-icon" />
+                  <img src={SortIcon} alt="add-icon" />
                 </p>
                 <p className="categories-title">{category.title}</p>
                 <p className="categories-items">
