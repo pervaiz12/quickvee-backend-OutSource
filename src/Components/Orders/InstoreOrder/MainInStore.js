@@ -53,7 +53,7 @@ const MainInStore = () => {
             >
               Online Orders
             </button>
-            <div className="border-b-2 text-[#CEE0FF]"></div>
+            <div className="border-b-2 text-[#EBF2FF]"></div>
           </div>
 
           <div className="">

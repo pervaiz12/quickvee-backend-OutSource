@@ -75,11 +75,11 @@ const VendorsDetail = ({ setVisible }) => {
             <p onClick={() => setVisible("AddVendors")}>Add Vendors <img src={AddIcon} alt="add-icon" /> </p>
           </div>
           <div className='q-category-bottom-categories-header'>
-            <p className='vendor-name' >Vendor Name</p>
-            <p className='vendor-payment'>Payment Count</p>
-            <p className='vendor-amount'>Amount</p>
-            <p className='vendor-transaction'>Recent Transaction</p>
-            <p className='vendor-status'>Status</p>
+            <p className='table20' >Vendor Name</p>
+            <p className='table15'>Payment Count</p>
+            <p className='table15'>Amount</p>
+            <p className='table30'>Recent Transaction</p>
+            <p className='table20'>Status</p>
           </div>
         </div>
         <div className='q-category-bottom-categories-listing'>
@@ -87,13 +87,13 @@ const VendorsDetail = ({ setVisible }) => {
           {
             allvendors && allvendors.length >= 1 && allvendors.map((singleVender, index) => (
               <div className='q-category-bottom-categories-single-category' key={index}>
-                <p className='vendor-name tdqv'>{singleVender.vendor_name}</p>
-                <p className='vendor-payment tdqv'>{singleVender.pay_count}</p>
-                <p className='vendor-amount tdqv'>
+                <p className='table20'>{singleVender.vendor_name}</p>
+                <p className='table15'>{singleVender.pay_count}</p>
+                <p className='table15'>
                   ${typeof singleVender.amount === 'number' ? singleVender.amount.toFixed(2) : parseFloat(singleVender.amount).toFixed(2)}
                 </p>
-                <p className='vendor-transaction tdqv'>{singleVender.recent_trans}</p>
-                <p className='vendor-status'>
+                <p className='table30'>{singleVender.recent_trans}</p>
+                <p className='table20'>
                   <div className='qvrow'>
                     <div className='col-qv-4'>
                       {/* Set the checked prop based on singleVender.enabled */}
