@@ -3,6 +3,7 @@ import DefaultPagination from "./DefaultPagination";
 import { fetchInStoreOrderData } from "../../../Redux/features/Orders/inStoreOrderSlice";
 import { useSelector, useDispatch } from "react-redux";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
+import { Link } from "react-router-dom";
 
 const InstoreTableViewData = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -102,7 +103,12 @@ const InstoreTableViewData = () => {
                 </div>
 
                 <div className="attriButes-details">
-                  <p className="table_view_details   ">View Details</p>
+                  <p className="table_view_details">
+                  <Link to={`/store-reporting/order-summary/${order.order_id}`}>
+                    View Details
+                  </Link>
+                    
+                  </p>
                 </div>
                 <div className="table_border_bottom"></div>
               </div>
