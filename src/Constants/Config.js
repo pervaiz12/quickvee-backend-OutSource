@@ -175,7 +175,9 @@ module.exports = Object.freeze({
     // REPORT_BY_SALES_PERSON
     REPORT_BY_SALES_PERSON:"ReportingReactapi/report_by_sales_person",
 
-    // GET_ORDER_SUMMERY_DETAILS:'Orders/order_details',
+    // GET_ORDER_SUMMERY_DETAILS
+
+    GET_ORDER_SUMMARY_DETAILS:"Orders/order_details",
 
   });
 

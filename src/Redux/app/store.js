@@ -52,7 +52,7 @@ import ReorderInventoryListReducer from "../features/Reports/ReorderInventory/Re
 import DefaultsSliceReducer from "../features/Defaults/defaultsSlice"
 
 import SalesByPersonSliceReducer from "../features/SalesByPerson/SalesByPersonSlice";
-// import orderSummerySlice from "../features/orderSummeryHistory/orderSummerySlice";
+import orderSummerySlice from "../features/OrderSummary/OrderSummarySlice";
 
 
 const store = configureStore({
@@ -126,7 +126,7 @@ const store = configureStore({
 
     SalesByPersonList:SalesByPersonSliceReducer,
 
-    // orderSummeryList:orderSummerySlice,
+    orderSummeryList:orderSummerySlice,
 
   },
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),
