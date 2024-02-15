@@ -187,7 +187,7 @@ const AddCategory = ({ seVisible }) => {
 
 
           <div
-            className={`h-1/2  h-[100px] flex items-center justify-center border-2 border-dashed border-[#BFBFBF] bg-white rounded-lg mt-2  defaultDrag_div`}
+            className={`h-[100px] flex items-center justify-center border-2 border-dashed border-[#BFBFBF] bg-white rounded-lg mt-2  defaultDrag_div`}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
             onClick={openFileInput}

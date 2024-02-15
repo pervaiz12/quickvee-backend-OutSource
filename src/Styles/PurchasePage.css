@@ -24,11 +24,6 @@
 }
 
 
-
-
-
-
-
 .q-category-main-page {
     margin: 0px 40px;
 }
@@ -320,4 +315,31 @@
 .q-add-categories-section-middle-footer .quic-btn-cancle {
     background: #878787;
     margin-left: 10px;
+}
+
+@media screen and (max-width: 950px) and (min-width: 376px) {
+
+    .q-category-bottom-categories-header p {
+        color: #FFFFFF;
+        font-size: 10px !important;
+        font-family: CircularSTDBook !important;
+    
+    }
+    
+ .categories-title>p{
+    font-size: 12px !important;
+    padding: 0;
+    margin: 0;
+ }
+.categories-sort>p{
+    font-size: 12 !important;
+    margin-left: 2px;
+    margin-right: 2px;
+}
+.q-category-bottom-categories-single-category>p {
+    font-size: 10px !important;
+    padding: 0;
+    margin: 0;
+
+}
 }

@@ -9,8 +9,9 @@
 .defaultDrag_div{
     cursor: pointer  ;
     position: relative;
-    height: auto;
-    padding: 10px;
+    height: 260px;
+    background-color: #f9f9f9;
+    overflow: hidden;
 }
 
 .default-img{

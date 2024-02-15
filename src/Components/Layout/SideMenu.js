@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import DashboardIcon from "../../Assests/Dashboard/dashboard.svg";
@@ -42,6 +42,14 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
     setActiveItem(item.link);
     navigate(item.link);
   };
+  useEffect(() => {
+    
+  console.log("hello")
+    return () => {
+     
+    }
+  }, )
+  
 
   return (
     <>
@@ -50,7 +58,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
         style={isMenuOpen ? { width: "16rem" } : { width: "6rem" }}
       >
         {/* Left Side Menu */}
-        <div className="">
+        <div className="flex-1 bg-[#253338] text-[#9E9E9E]">
           {isMenuOpen
             ? menuItems.map((item) => (
                 <div
@@ -60,7 +68,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                   }`}
                 >
                   {item.dropdownItems ? (
-                    <DropdownMenuItem item={item} />
+                    <DropdownMenuItem item={item} isMenuOpen={isMenuOpen} />
                   ) : (
                     <div
                       className={`flex items-center ${
@@ -93,7 +101,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                   }`}
                 >
                   {item.dropdownItems ? (
-                    <DropdownMenuItem item={item} />
+                    <DropdownMenuItem item={item} isMenuOpen={isMenuOpen} />
                   ) : (
                     <div
                       className={`flex flex-col items-center ${
@@ -116,7 +124,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
   );
 };
 
-const DropdownMenuItem = ({ item }) => {
+const DropdownMenuItem = ({ item, isMenuOpen }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   const handleToggleDropdown = () => {
@@ -124,9 +132,20 @@ const DropdownMenuItem = ({ item }) => {
   };
 
   return (
-    <div className="relative">
-      <div className="flex items-center">
-        {item.icon}
+    <div className="relative" style={isMenuOpen ? { width: "16rem" } : { width: "6rem", marginLeft: "24px" }} >
+
+    <div className="flex items-center">
+    {item.icon}
+      {isMenuOpen && (
+        <p
+          className="cursor-pointer menu-item text-gray-400"
+          onClick={handleToggleDropdown}
+        >
+        
+        </p>
+      )}
+  
+      {isMenuOpen && (
         <p
           className="ml-2 cursor-pointer menu-item text-gray-400"
           onClick={handleToggleDropdown}
@@ -134,21 +153,25 @@ const DropdownMenuItem = ({ item }) => {
           {item.text}
           <FaChevronDown className="quickarrow_icon" />
         </p>
-      </div>
-      {isDropdownOpen && (
-        <div className="q_sideMenu_layout_details CircularSTDBook">
-          {item.dropdownItems.map((dropdownItem) => (
-            <Link
-              key={dropdownItem.id}
-              to={dropdownItem.link}
-              className="submenu-item"
-            >
-              {dropdownItem.text}
-            </Link>
-          ))}
-        </div>
       )}
     </div>
+  
+    {isDropdownOpen && (
+      <div className="mt-0 bg-[#334247] p-4 shadow w-full text-center z-10">
+        {item.dropdownItems.map((dropdownItem) => (
+          <Link
+            key={dropdownItem.id}
+            to={dropdownItem.link}
+            className="flex text-center submenu-item text-gray-400 py-4"
+          >
+            {dropdownItem.text}
+          </Link>
+        ))}
+      </div>
+    )}
+  
+  </div>
+  
   );
 };
 
@@ -263,8 +286,6 @@ const menuItems = [
   {
     id: 8,
     icon: <img src={CouponIcon} alt="Coupons" className="h-6 w-10 mt-4 mb-4" />,
-    text: "Coupons",
-    link: "/coupons",
     activeIcon: (
       <img src={CouIcon} alt="Coupons" className="h-6 w-10 mt-4 mb-4 " />
     ),
@@ -274,8 +295,6 @@ const menuItems = [
   {
     id: 9,
     icon: <img src={VenIcon} alt="Vendors" className="h-6 w-10 mt-4 mb-4" />,
-    text: "Vendors",
-    link: "/vendors",
     activeIcon: (
       <img src={VenIcons} alt="Vendors" className="h-6 w-10 mt-4 mb-4 " />
     ),
@@ -455,12 +474,11 @@ const menuItems = [
       { id: 76, text: "Shift Summary", link: "/store-reporting/shift-summary" },
 
       // { id: 77, text: " Item Sales ", link: "/store-settings/item-sales" },
-      {
-        id: 78,
-        text: " Payment Method Details",
-        link: "/store-settings/payment-method-detail-report",
-      },
-      { id: 79, text: " Order Type ", link: "/store-settings/order-type" },
+      // {
+      //   id: 78,
+      //   text: " Payment Method Details",
+      //   link: "/store-settings/payment-method-detail-report",
+      // },
 
       { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
       {
@@ -469,20 +487,15 @@ const menuItems = [
         link: "/store-reporting/payment-method-details",
       },
       { id: 79, text: " Order Type ", link: "/store-reporting/order-type" },
-      { id: 80, text: "Taxes ", link: "/store-reporting/taxes" },
+
+      { id: 81, text: "Current Inventory Value ", link: "/store-reporting/current-inventory-value" },
+
+      { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
+      { id: 82, text: "Order Refund Report ", link: "/store-settings/order-refund-report" },
+
     ],
   },
-  {
-    id: 13,
-    icon: (
-      <img src={VenderIcon} alt="Import Data" className="h-6 w-10 mt-4 mb-4" />
-    ),
-    activeIcon: (
-      <img src={DataIcons} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
-    ),
-    text: "Inventory Export",
-    link: "/inventory-export",
-  },
+  
 ];
 
 export default SideMenu;

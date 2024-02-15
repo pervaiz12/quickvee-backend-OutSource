@@ -1,8 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Container, Row } from "react-bootstrap";
 import Calendar from "./Calender";
+import DownIcon from "../../Assests/Dashboard/Down.svg"
+
+
 const Welcome = () => {
   const [visibleCalendar, setVisibleCalendar] = useState(false);
+  const [selectedTransaction, setSelectedTransaction] = useState('All');
+  const [transactionDropdownVisible, setTransactionDropdownVisible] = useState(false);
   const calendarRef = useRef(null);
 
   useEffect(() => {
@@ -26,6 +31,21 @@ const Welcome = () => {
   const closeCalendar = () => {
     setVisibleCalendar(false);
   };
+
+
+  const toggleDropdown = (dropdownType) => {
+    if (dropdownType === 'transaction') {
+      setTransactionDropdownVisible((prevVisible) => !prevVisible);
+    }
+  };
+
+  const handleOptionClick = (option, dropdownType) => {
+    if (dropdownType === 'transaction') {
+      setSelectedTransaction(option);
+      setTransactionDropdownVisible(false);
+    }
+  
+  }
 
   return (
     <>
@@ -51,48 +71,93 @@ const Welcome = () => {
                   <div className="my-8">Select Option</div>
                   <div>
                     <ul className="flex space-x-8">
-                    <li
-          className="flex-1 border select_date_btn py-2 rounded active"
-          style={{ borderColor: '#0A64F9', color: '#0A64F9', boxShadow: '' }}
-        >
-          <a href="#"  className="days_filter">Today</a>
-        </li>
+                      <li
+                        className="flex-1 border select_date_btn py-2 rounded active"
+                        style={{
+                          borderColor: "#0A64F9",
+                          color: "#0A64F9",
+                          boxShadow: "",
+                        }}
+                      >
+                        <a href="#" className="days_filter">
+                          Today
+                        </a>
+                      </li>
                       <li className="flex-1 border select_date_btn py-2 rounded">
-                        <a href="#" className="days_filter">Yesterday</a>
+                        <a href="#" className="days_filter">
+                          Yesterday
+                        </a>
                       </li>
                     </ul>
                     <ul className="flex space-x-8 mt-4">
                       <li className="flex-1 border select_date_btn py-2 rounded">
-                        <a href="#" className="days_filter">Week to Date</a>
+                        <a href="#" className="days_filter">
+                          Week to Date
+                        </a>
                       </li>
                       <li className="flex-1 border select_date_btn py-2 rounded">
-                        <a href="#" className="days_filter">Last Week</a>
+                        <a href="#" className="days_filter">
+                          Last Week
+                        </a>
                       </li>
                     </ul>
                     <ul className="flex space-x-8 mt-4">
                       <li className="flex-1 border select_date_btn py-2 rounded">
-                        <a href="#" className="days_filter">Last 7 Days</a>
+                        <a href="#" className="days_filter">
+                          Last 7 Days
+                        </a>
                       </li>
                       <li className="flex-1 border select_date_btn py-2 rounded">
-                        <a href="#" className="days_filter">Month to Date</a>
+                        <a href="#" className="days_filter">
+                          Month to Date
+                        </a>
                       </li>
                     </ul>
                     <ul className="flex space-x-8 mt-4">
                       <li className="flex-1 border select_date_btn py-2 rounded">
-                        <a href="#" className="days_filter">Last 30 Days</a>
+                        <a href="#" className="days_filter">
+                          Last 30 Days
+                        </a>
                       </li>
                       <li className="flex-1 border select_date_btn py-2 rounded">
-                        <a href="#" className="days_filter">Last Month</a>
+                        <a href="#" className="days_filter">
+                          Last Month
+                        </a>
                       </li>
-                      </ul>
-                      <ul className="flex space-x-8 mt-4">
+                    </ul>
+                    <ul className="flex space-x-8 mt-4">
                       <li className="flex-1 border select_date_btn py-2 rounded">
-                        <a href="#" className="days_filter">This Years</a>
+                        <a href="#" className="days_filter">
+                          This Years
+                        </a>
                       </li>
                       <li className="flex-1 border select_date_btn py-2 rounded">
-                        <a href="#" className="days_filter">Last Last</a>
+                        <a href="#" className="days_filter">
+                          Last Last
+                        </a>
                       </li>
-                      </ul>
+                    </ul>
+                <div className="my-6">
+                <div className="q-order-page-filter">
+      <label className="q-details-page-label" htmlFor="transactionFilter">
+       compare to
+      </label>
+      <div className="custom-dropdown">
+        <div className="custom-dropdown-header" onClick={() => toggleDropdown('transaction')}>
+          <span className="selected-option mt-1">{selectedTransaction}</span>
+          <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
+        </div>
+        {transactionDropdownVisible && (
+          <div className="dropdown-content">
+            <div onClick={() => handleOptionClick('All', 'transaction')}>All</div>
+            <div onClick={() => handleOptionClick('last Wednesday', 'transaction')}>Last Wednesday</div>
+            <div onClick={() => handleOptionClick('tuesday' ,'last Wednesday')}>Tuesday</div>
+          
+          </div>
+        )}
+      </div>
+    </div>
+                </div>
                   </div>
                 </div>
 

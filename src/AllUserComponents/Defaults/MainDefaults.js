@@ -2,7 +2,6 @@ import React, { useState } from "react";
 
 import DefaultsDetail from "./DefaultsDetail";
 import AddDefaults from "./AddDefaults";
-import EditDefaults from "./EditDefaults";
 
 const MainDefaults = () => {
   const [visible, seVisible] = useState("DefaultsDetail");

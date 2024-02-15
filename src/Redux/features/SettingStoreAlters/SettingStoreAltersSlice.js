@@ -42,3 +42,9 @@ const SettingStoreAltersSlice = createSlice({
 })
 
 export default SettingStoreAltersSlice.reducer
+
+
+
+
+
+

@@ -182,17 +182,22 @@ const EditDefaults = () => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setDefaults((prevValue) => ({
-          ...prevValue,
-          image: {
-            file: file,
-            base64: reader.result,
-          },
-        }));
-      };
-      reader.readAsDataURL(file);
+      const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+      if (!allowedExtensions.exec(file.name)) {
+        alert(file.name + " is not an image. Only jpeg, png, jpg files can be uploaded.");
+      } else {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setDefaults((prevValue) => ({
+            ...prevValue,
+            image: {
+              file: file,
+              base64: reader.result,
+            },
+          }));
+        };
+        reader.readAsDataURL(file);
+      }
     }
   };
 
@@ -301,7 +306,7 @@ const EditDefaults = () => {
                       className="custom-dropdown-header"
                       onClick={() => toggleDropdown("category")}
                     >
-                      <span className="selected-option mt-1">
+                      <span className="selected-option ">
                         {selectedCatSource}
                       </span>
                       <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />

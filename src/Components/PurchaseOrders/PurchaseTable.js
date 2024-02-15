@@ -70,7 +70,7 @@ const PurchaseTable = ({ seVisible, searchId }) => {
               key={purchaseData.order}
             >
               <div className="q-category-bottom-categories-single-category">
-                <p className="categories-sort">
+                <p className="categories-sort sm:text-xs lg:text-[16px]">
                   <Link to=""> {purchaseData.po_number}</Link>
                 </p>
                 {purchaseData.is_void === "1" ? (
@@ -110,7 +110,7 @@ const PurchaseTable = ({ seVisible, searchId }) => {
                 )}
 
                 <p className="categories-sort">{purchaseData.total_qty}</p>
-                <p className="categories-title">{purchaseData.vendor_name}</p>
+                <p className="categories-title ">{purchaseData.vendor_name}</p>
                 <p className="categories-title">
                   {purchaseData.total_cost !== null
                     ? `$${Number(purchaseData.total_cost).toLocaleString(
