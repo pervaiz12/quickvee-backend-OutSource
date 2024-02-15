@@ -199,14 +199,15 @@ const CategoryDetail = ({ seVisible }) => {
                               ? "2"
                               : "0",
                             category
-                          )
+                          ) 
                         }
                       />
                       <span className="category-checkmark"></span>
                     </label>
                   </div>
+                      <div className=" w-40 " style={{display: "flex", justifyContent:"space-between"}}>
 
-                  <Link to={`/category/edit-category/${category.id}`}>
+                  <Link to={`/category/edit-category/${category.id}`} >
                      
                       <img
                         className='edit_center'
@@ -221,6 +222,7 @@ const CategoryDetail = ({ seVisible }) => {
                     alt="delete-icon"
                     onClick={() => handleDeleteCategory(category.id)}
                   />
+                      </div>
                 </p>
               </div>
             ))}

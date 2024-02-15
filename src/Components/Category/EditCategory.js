@@ -339,6 +339,9 @@ const EditCategory = () => {
                 position: "relative",
                 height: "auto",
                 padding: "10px",
+                height: "260px",
+                backgroundColor: "#f9f9f9",
+                overflow:"hidden"
               }}
             >
               {category.image && category.image.base64 ? (
@@ -424,9 +427,10 @@ const EditCategory = () => {
               </div>
             </div>
 
-            {renderRemoveBannerButton()}
+           
 
-            <div className="row " style={myStyles}>
+            <div className="row py-3" style={myStyles}>
+            {renderRemoveBannerButton()}
               <div className="add-category-checkmark-div">
                 <label className="add-category-checkmark-label mt-2">
                   Use Loyalty Point ?
