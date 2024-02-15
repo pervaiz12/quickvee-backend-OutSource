@@ -95,7 +95,7 @@ const InstoreTableViewData = () => {
                   <p className="table_amount_status">{order.order_status}</p>
                 </div>
                 <div className="table_view_items">
-                  <select className="table_status_selected">
+                  <select className="table_status_selected ">
                     <option value="day">{order.payment_result}</option>
                     {/* <option value="month">Rejected</option> */}
                     {/* Add more options as needed */}

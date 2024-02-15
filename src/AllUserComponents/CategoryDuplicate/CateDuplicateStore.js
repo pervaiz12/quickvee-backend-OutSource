@@ -39,6 +39,9 @@ const CateDuplicateStore = () => {
   const [storefrom, setStorefrom] = useState();
   const [storeto, setStoreto] = useState();
 
+  const [storeFromError, setStoreFromError] = useState("");
+  const [storeToError, setStoreToError] = useState("");
+
   const handleOptionClick = async (option, dropdown) => {
     switch (dropdown) {
       case "storefrom":
@@ -79,12 +82,23 @@ const CateDuplicateStore = () => {
             console.error("API Error:", error);
           }
         }
+        if (option.label == "-- Select Store --") {
+          setStoreFromError("This field is required");
+        } else {
+          setStoreFromError("");
+        }
         break;
       case "storeto":
         setSelectedStoreto(option.label);
         setStoreToDropdownVisible(false);
         if (option.merchant_id !== "-- Select Store --") {
           setStoreto(option.merchant_id);
+        }
+
+        if (option.label == "-- Select Store --") {
+          setStoreToError("This field is required");
+        } else {
+          setStoreToError("");
         }
 
         break;
@@ -206,11 +220,34 @@ const CateDuplicateStore = () => {
       }
     }
   };
+  const goToClose = () => {
+    setOpenAlert(false);
+  };
 
   return (
     <>
       <div className="q-order-main-page">
         <div className="q-add-categories-section">
+          <div className="alert">
+            <Box
+              sx={{
+                width: "100%",
+                position: "relative",
+                top: "2rem",
+                marginLeft: "auto",
+              }}
+            >
+              <Collapse in={openAlert}>
+                <Alert
+                  severity="info"
+                  sx={{ mb: 2 }}
+                >
+                  The existing Variants of the selected Store 2 Must be same as
+                  selected Store 1 Variants.
+                </Alert>
+              </Collapse>
+            </Box>
+          </div>
           <div className="alert">
             {submitmessage && (
               <Box
@@ -224,12 +261,12 @@ const CateDuplicateStore = () => {
               >
                 <Collapse in={openAlert}>
                   <Alert
-                    severity="info"
+                    severity="success"
                     action={
                       <IconButton
                         className="info-close-icon"
                         aria-label="close"
-                        color="info"
+                        color="success"
                         size="small"
                         onClick={goToTop}
                       >
@@ -299,6 +336,11 @@ const CateDuplicateStore = () => {
                   </div>
                 )}
               </div>
+                <span className="input-error ">
+                  {storeFromError && (
+                    <span className="input-error ">{storeFromError}</span>
+                  )}
+                </span>
               {/* Multiple Select Categories */}
               <div
                 className={`py-4 ${isSelectClicked ? "select-clicked" : ""}`}
@@ -404,11 +446,15 @@ const CateDuplicateStore = () => {
                     </div>
                   )}
                 </div>
+                <span className="input-error ">
+                  {storeToError && (
+                    <span className="input-error ">{storeToError}</span>
+                  )}
+                </span>
               </div>
             </div>
           </div>
 
-          <div className="q-order-page-filter mt-6"></div>
 
           <div className="q-add-inventory-section-header mx-2">
             <div className="qv_checkbox">

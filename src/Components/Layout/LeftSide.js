@@ -7,7 +7,7 @@ import MainPurchase from "../PurchaseOrders/MainPurchase";
 import MainAttributes from "../Attributes/MainAttributes";
 import MainCategory from "../Category/MainCategory";
 import MainCoupon from "../Coupons/MainCoupon";
-
+import ProductEdit from "../Products/ProductEdit";
 import MainVendors from "../Vendors/MainVendors";
 import MainTimesheet from "../Timesheet/MainTimesheet";
 import MainImportData from "../ImportData/MainImportData";
@@ -16,7 +16,7 @@ import MainProducts from "../Products/MainProducts";
 import MainStoreOption from "../StoreSetting/StoreOption/MainStoreOption";
 import EditCategory from "../Category/EditCategory";
 import TopTenders from "../Dashboard/TopTenders";
-import ProductEdit from "../Products/ProductEdit";
+
 import Info from "../StoreSetting/Info";
 import Setup from "../StoreSetting/Setup";
 import MainStoreAlters from "../StoreSetting/StoreAlters/MainStoreAlters";
@@ -50,6 +50,13 @@ import NewItemCreatedBetweenMain from "../Reporting/NewItemCreatedBetween/NewIte
 import { useEffect } from "react";
 import Permission from "../StoreSetting/AddEmployee/Permission";
 import OrderSummaryDetails from "../Reporting/SalesByPerson/MainOrderSumaaryDetails/OrderSummaryDetails";
+import VendorListMain  from "../Reporting/VendorList/VendorListMain";
+import VendorSalesReportMain from "../Reporting/VendorSalesReport/VendorSalesReportMain";
+import OrderRefundReportMain from "../Reporting/OrderRefundReport/OrderRefundReportMain";
+import ReorderInventoryMain from "../Reporting/ReorderInventory/ReorderInventoryMain";
+import EditVendors from "../Vendors/EditVendors";
+import SingleVendorsDetail from "../Vendors/SingleVendorsDetail";
+import AddProducts from "../Products/AddProducts"
 //  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
 
 
@@ -86,8 +93,12 @@ const LeftSide = ({ visible }) => {
           {visible === "store-setting" && <MainStoreOption />}
           {visible === "store-setting" && <MainStoreOption />}
           {visible === "category-edit-cat" && <EditCategory />}
+          {visible === "product-edit-cat" && <ProductEdit />}
+
           {visible === "toptraders" && <TopTenders />}
           {visible === "productedit" && <ProductEdit />}
+          {visible === "product-add" && <AddProducts />}
+
           {visible === "info" && <Info />}
           {visible === "setup" && <Setup />}
           {visible === "Alters" && <MainStoreAlters />}
@@ -116,12 +127,20 @@ const LeftSide = ({ visible }) => {
           {visible === "item-create-between" && <NewItemCreatedBetweenMain /> }
           {visible === "permission" && <Permission />}
           {visible === "order-summary" && <OrderSummaryDetails />}
+          {visible === "vendors-list" && <VendorListMain />}
+          {visible === "edit-vendor" && <EditVendors />}
+          {visible === "vendor-details" && <SingleVendorsDetail />}
+
+          
+          
           {/* {visible === "order-summary" && <OrderSummeryPage />} */}
           
 
-
           
-          {/* {visible === "vendors-sales-reports" && <VendorSalesReportMain />} */}
+          {visible === "recorder-inventory" && <ReorderInventoryMain />}
+          
+          {visible === "vendors-sales-reports" && <VendorSalesReportMain />}
+          {visible === "order-refund-report" && <OrderRefundReportMain />}
          
 
 

@@ -120,7 +120,7 @@ const DefaultsDetail = ({ seVisible }) => {
 
   return (
     <>
-      <div className="q-category-main-page ">
+      <div className=" ">
         <div className="q-category-bottom-detail-section">
           <div className="mt-10">
             <div className="q-category-bottom-header">
