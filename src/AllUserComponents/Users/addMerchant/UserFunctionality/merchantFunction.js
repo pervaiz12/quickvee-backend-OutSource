@@ -35,8 +35,8 @@ const MerchantFunction=()=>{
     const [stateList,setStateList]=useState([])
     const [adminList,setAdminList]=useState([])
     const [adminId,setAdminId]=useState()
-    const [errorAdminId,setErrorAdminId]=useState()
-    const [errorPin,setErrorPin]=useState()
+    const [errorAdminId,setErrorAdminId]=useState('')
+    const [errorPin,setErrorPin]=useState('')
     // ==================== get state and admin data---------
        const  getState=async()=>
        {
@@ -76,14 +76,16 @@ const MerchantFunction=()=>{
                     phone:result.data.phone,
                     ownerName:result.data.owner_name,
                     errors:{
+                        ...store.errors,
                         ownerName:'',
                         state:'',
                         storename:'',
-
+                        phone:'',
 
                     },
 
                 })
+                // setErrorPin('')
                 
                 if(result.data.login_pin !=="")
                 {
@@ -107,6 +109,54 @@ const MerchantFunction=()=>{
             }
             
        }
+    // const onChangeAdminId = async (e) => {
+    //     const { name, value } = e.target;
+    //     setAdminId(value);
+    
+    //     if (value === '') {
+    //         setErrorAdminId('Please select adminId field');
+    //         return; // No need to proceed further if value is empty
+    //     } else {
+    //         setErrorAdminId('');
+    //     }
+    
+    //     const data = { m_id: value };
+    
+    //     try {
+    //         const result = await axios.post(BASE_URL + GET_ADMIN_DATA, data, {
+    //             headers: {
+    //                 'Content-Type': 'multipart/form-data'
+    //             }
+    //         });
+    
+    //         setStore({
+    //             ...store,
+    //             storename: result.data.own_store,
+    //             state: result.data.a_state,
+    //             phone: result.data.phone,
+    //             ownerName: result.data.owner_name,
+    //             errors: {
+    //                 ownerName: '',
+    //                 state: '',
+    //                 storename: '',
+    //                 email: '',
+    //                 phone: '',
+    //                 password:''
+    //             }
+    //         });
+    
+    //         if (result.data.login_pin !== '') {
+    //             setMerchantStore({
+    //                 ...merchantStore,
+    //                 pin: result.data.login_pin
+    //             });
+    //             setErrorPin('');
+    //         }
+    //     } catch (error) {
+    //         console.error('Error fetching admin data:', error);
+    //         // Handle error if necessary
+    //     }
+    // };
     
    
      
@@ -153,46 +203,22 @@ const MerchantFunction=()=>{
     }
 // -------------------radio button end---------------------------
 
-    const handleChangeMerchant=(e)=>{
-        const{name,value}=e.target
-       
-        setMerchantStore({...merchantStore,
-            [name]:value
-        })
-        if(e.target.value=="")
-        {
-            setErrorPin('Please select pin field')
+    const handleChangeMerchant = (e) => {
+        const { name, value } = e.target;
 
-        }else if(merchantStore.pin.length !== 3)
-        {
-            setErrorPin('Please give proper length')
-            // error=true
+        setMerchantStore({
+            ...merchantStore,
+            [name]: value
+        });
 
+        if (value === "") {
+            setErrorPin('Please select pin field');
+        } else if (value.length < 4) { // Modified condition to check if length is less than 4
+            setErrorPin('Please give proper length');
+        } else {
+            setErrorPin('');
         }
-        else{
-            setErrorPin('')
-        }
-
     }
-    
-    const check_user_password=async()=>{
-        const data={email:merchantStore.mer_email,password:merchantStore.mer_password}
-        await axios.post(BASE_URL+ADMIN_CHECK_USER,data,{
-            headers: {
-                "Content-Type": "multipart/form-data"
-              },
-
-        }).then(result=>{
-            console.log(result)
-        })
-       
-    }
-    useEffect(() => {
-        if (merchantStore.mer_password !=="" && merchantStore.mer_email !=="") 
-        {
-            check_user_password()
-        }
-      }, [merchantStore.mer_password]);
 
     const handleChange=(e)=>{
        const{name,value}=e.target
@@ -203,8 +229,6 @@ const MerchantFunction=()=>{
        if (name === "storename") 
        {
         updatedErrors[name] = value === "" ? `Please fill the ${name} field`:''
-        // : value.length  < 4 ? 'Please fill more than character':'';
-        // handleChange12()
       }
       if(name=="ownerName")
       {
@@ -227,7 +251,6 @@ const MerchantFunction=()=>{
         : '';
       }
       if (name === 'phone') {
-        // Validate and format the phone number (allow only numeric characters)
         const numericValue = value.replace(/[^0-9]/g, '');
         if(numericValue=="")
         {
@@ -246,81 +269,107 @@ const MerchantFunction=()=>{
       });
     }
     const handleKeyPress = (e) => {
-        // Allow only numeric characters (key codes 48 to 57) and backspace (key code 8)
+        
         if ((e.charCode < 48 || e.charCode > 57) && e.charCode !== 8) {
           e.preventDefault();
         }
       };
 
 
-    const validateForm = errors => {
-        // console.log(errors)
-        if((errors.storename=="") && (errors.state=="")&& (errors.phone=="")&& (errors.password=="")
-        && (errors.ownerName=="")&& (errors.email==""))
+      const validateForm = (errors) => {
+        // console.log(errors);
+    
+        if (
+            errors.storename === '' &&
+            errors.state === '' &&
+            errors.phone === '' &&
+            errors.password === '' &&
+            errors.ownerName === '' &&
+            errors.email === ''
+        ) {
+            return true;
+        } else {
+            return false;
+        }
+    };
+    
+
+    const validateFormNew = (errors) => {
+        // console.log(errors.password)
+        if ((errors.storename === '')&&(errors.phone=="")&&(errors.state=="")&&( errors.email=="")
+        && (errors.ownerName=="")&&(errors.password=="")&&(errorPin==""))
         {
             return true
         }else{
             return false
         }
-      };
-    
+        
+    };
     // =====================================================
-    function validate()
+    const  validate=async()=>
     {
-
-        let error=false
-        let errorMessage=''
-        let errors= store.errors
-        if(userRadioData=="")
-        {
-            errorMessage="please fill the field"
-            error=true
-
-        }else if(userRadioData !=="")
-        {    
-            errorMessage=""
-            error=false
-
+        let error = false;
+        let errorMessage = '';
+        let errors = { ...store.errors };
+        if (userRadioData === '') {
+            errorMessage = 'Please fill the field';
+            error = true;
+        } else {
+            errorMessage = '';
+            error = false;
         }
-        // 
-        if((userRadioData=="") || (userRadioData=='admin')|| (userRadioData=='merchant'))
-        {
-            if(store.storename=="")
-            {
-                errors.storename="Please fill the store field"
-                error=true
     
+        if (userRadioData === '' || userRadioData === 'admin' || userRadioData === 'merchant') {
+            if (store.storename === '') {
+                errors.storename = 'Please fill the store field';
+                error = true;
             }
     
-            if(store.ownerName=="")
-            {
-                errors.ownerName="Please fill the store ownerName"
-                error=true
-    
+            if (store.ownerName === '') {
+                errors.ownerName = 'Please fill the store ownerName';
+                error = true;
             }
-            if(store.email=="")
-            {
-                errors.email="Please fill the store email"
-                error=true
     
+            if (store.email === '') {
+                errors.email = 'Please fill the store email';
+                error = true;
             }
-            if(store.password=="")
-            {
-                errors.password="Please fill the store password"
-                error=true
     
-            }
-            
-            if(store.state=="")
-            {
-                errors.state="Please fill the store state"
-                error=true
-    
-            }  
+            if (store.password === '') {
+                errors.password = 'Please fill the store password';
+                error = true;
+            } else {
+                try {
+                    // console.log('heloo password')
+                    if ((errors.password === '')&&(errors.email=="")) {
+                        
+                        const emailValid = await passwordValidate(store.email,store.password);
+                        if(emailValid==true)
+                        {
+                            
+                            errors.password = 'Password already exists';
+                            error = true;
+                        }else{
+                            errors.password = '';
+                            error = false;
 
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error validating email:', error);
+                    error = true; // You should handle this error case accordingly
+                }
+            }
+    
+            if (store.state === '') {
+                errors.state = 'Please fill the store state';
+                error = true;
+            }
         }
+    
         setRadioError(errorMessage)
         setStore({...store,errors})
+
         if(error==true)
         {
             return false
@@ -329,86 +378,140 @@ const MerchantFunction=()=>{
         } 
     
     }
+    const passwordValidate=async(email,password)=>
+    {
+        const dataNew = { email: email,password:password};
+       
+
+        try {
+                const response = await axios.post(BASE_URL+ADMIN_CHECK_USER, dataNew, {
+                headers: { "Content-Type": "multipart/form-data" },
+                });
+                
+                return response.data;
+            } catch (error) {
+                console.error("Error validating email:", error);
+                throw error;
+            }
+    }
+    // ------------------------
+    const handleBlur = async (name) => {
+        
+        if ((name === 'password')||(name === 'email')) {
+            
+          if((store.errors.password=="") && (store.errors.email==""))
+          {
+     
+            let result=await passwordValidate(store.email,store.password);
+            if(result==true)
+            {
+                setStore((prev) => ({
+                              ...prev,
+                              errors: {
+                                ...prev.errors,
+                                password: "Email already exists"
+                              }
+                            }))
+    
+            }else{
+                setStore((prev) => ({
+                ...prev,
+                errors: {
+                  ...prev.errors,
+                  password: ""
+                }
+              }))
+    
+            }
+    
+          }
+        }
+      };
+    // ------------------------
     function validateData()
     {
         let error=false
-        
+        // console.log(adminId)
         if(adminId==undefined)
         {
-            // setError({adminId:'Please select adminId field'})
-            setErrorAdminId('Please select adminId field')
-            // errors="Please select admin field"
-            error=true
+            setErrorAdminId('Please select admin field')
+            error=true;
+
+        }else if(adminId=="")
+        {
+            setErrorAdminId('Please select admin field')
+            error=true;
+
         }else{
             setErrorAdminId('')
-            error=false
+            error=false;
 
         }
         if(merchantStore.pin=="")
         {
             setErrorPin('Please select pin field')
-            error=true
-            
-        }
-        else{
+            error=true;
+        }else if((merchantStore.pin !=="") &&(errorPin==""))
+        {
             setErrorPin('')
-            error=false
+            error=false;
 
         }
-     
-
-        if(error==true){
+        if(error==true)
+        {
             return false
-
         }else{
             return true
         }
-       
-
     }
+ 
     const handleSubmitMerchant=async(e)=>
     {
         e.preventDefault()
         let validateMerchant=validateData()
-        
-        const isValidate=validate()
-        // console.log('merchant')
-        
-        if((validateMerchant) && (isValidate))
+        const currentValidate=validateFormNew(store.errors)
+        const isValidate= await validate()
+        if((isValidate)&&(validateMerchant))
         {
-            // console.log("merchant11")
-            const data={login_pin:merchantStore.pin,admin:adminId,storename:store.storename,
-                ownerName:store.ownerName,email:store.email,password:store.password,phone:store.phone,
-                state:store.state,created_by_user:'superadmin',
-            user_type:userRadioData
+            if(currentValidate)
+            {
+                console.log('merchantlogin')
+                const data={login_pin:merchantStore.pin,admin:adminId,storename:store.storename,
+                    ownerName:store.ownerName,email:store.email,password:store.password,phone:store.phone,
+                    state:store.state,created_by_user:'superadmin',
+                user_type:userRadioData
+                }
+               
+                
+                            await axios.post(BASE_URL+ADD_MERCHAN_EMPLOYEE,data,
+                                { headers: { "Content-Type": "multipart/form-data" } }).then(result=>{
+                                     if(result.data.status==200)
+                                        {
+                                            setUserRadioData('') 
+                                            setUserRadio(false)
+                                            setStore({   
+                                                storename:'',
+                                                ownerName:'',
+                                                email:'',
+                                                password:'',
+                                                phone:'',
+                                                state:'',
+                                                errors:{
+                                                    storename:'',
+                                                    ownerName:'',
+                                                    email:'',
+                                                    password:'',
+                                                    phone:'',
+                                                    state:'',
+                                                }              
+                                                })  
+                                            navigate(`/users/editMerchant/${result.data.id}`)
+
+                                        }
+
+                            })
+                        
             }
-            await axios.post(BASE_URL+ADD_MERCHAN_EMPLOYEE,data,
-                { headers: { "Content-Type": "multipart/form-data" } }).then(result=>{
-                     if(result.data.status==200)
-                        {
-                            setUserRadioData('') 
-                            setUserRadio(false)
-                            setStore({   
-                                storename:'',
-                                ownerName:'',
-                                email:'',
-                                password:'',
-                                phone:'',
-                                state:'',
-                                errors:{
-                                    storename:'',
-                                    ownerName:'',
-                                    email:'',
-                                    password:'',
-                                    phone:'',
-                                    state:'',
-                                }              
-                                })  
-                            navigate(`/users/editMerchant/${result.data.id}`)
-
-                        }
-
-            })
 
 
         }
@@ -420,7 +523,7 @@ const MerchantFunction=()=>{
     {
         e.preventDefault()
       
-        console.log('admin11')
+        
         // const data=[{name:'rinkekse',lastname:'yadav',}]
         
         // let id='123'
@@ -428,23 +531,22 @@ const MerchantFunction=()=>{
        
 
         // ====================================================
-        const isValidate=validate()
+        const isValidate=await validate()
         const currentValidate=validateForm(store.errors)
         if(userRadioData.toLowerCase()=="admin")
         {
             
             if(isValidate)
             {
-                
                 if(currentValidate)
                 {
-                    console.log("admin1")
+                    console.log('submit')
+                    
                     const data={storename:store.storename,ownerName:store.ownerName,email:store.email,password:store.password,phone:store.phone,state:store.state,created_by_user:'superadmin',
                     user_type:userRadioData
                     }
                     await axios.post(BASE_URL+ADD_MERCHAN_EMPLOYEE,data,
                         { headers: { "Content-Type": "multipart/form-data" } }).then(result=>{
-                            // console.log(result.data.status==200)
                             if(result.data.status==200)
                             {
                                 setUserRadioData('') 
@@ -484,7 +586,7 @@ const MerchantFunction=()=>{
    
     return {handleChange,store,handleSubmit,onClickUserRadio,userRadio,merchantStore,handleChangeMerchant
     ,radioErros,stateList,adminList,stateList,adminId,onChangeAdminId,handleSubmitMerchant,errorAdminId,
-    errorPin,handleKeyPress}
+    errorPin,handleKeyPress,handleBlur}
 
 }
 export default MerchantFunction
