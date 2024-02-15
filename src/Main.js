@@ -18,8 +18,11 @@ const Main = ({visible}) => {
    {visible === "vendors" && <Layout visible={visible} />}
    {visible === "timesheet" && <Layout visible={visible} />}
    {visible === "category-edit-cat" && <Layout visible={visible} />}
+   {/* {visible === "product-edit-cat" && <Layout visible={visible} />} */}
    {visible === "toptraders" && <Layout visible={visible} />}
    {visible === "productedit" && <Layout visible={visible} />}
+   {visible === "product-add" && <Layout visible={visible} />}
+
    {visible === "info" && <Layout visible={visible} />}
    {visible === "setup" && <Layout visible={visible} />}
    {visible === "Alters" && <Layout visible={visible} />}

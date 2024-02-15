@@ -10,7 +10,7 @@ const CardForm = () => {
             <div className="text-[#707070] font-normal lg:text-[18px]  sm:text-[14px] tracking-normal opacity-100 Admin_std">
               Transactions
             </div>
-            <div className="text-black text-[40px]  font-normal Admin_std mt-1 mb-1">20</div>
+            <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">20</div>
             <div className="flex items-center text-green-500">
               <BiCaretUp className="mr-1" />
               <span className="text-green-500 Admin_std">+21.00%</span>
@@ -25,7 +25,7 @@ const CardForm = () => {
             <div className="text-[#707070] font-normal  lg:text-[18px]  sm:text-[14px] tracking-normal opacity-100 Admin_std">
             Average Sale Value
             </div>
-            <div className="text-black text-[40px] font-normal Admin_std mt-1 mb-1">21.79</div>
+            <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">21.79</div>
             <div className="flex items-center text-green-500">
               <BiCaretUp className="mr-1" />
               <span className="text-green-500 Admin_std">+21.00%</span>
