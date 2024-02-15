@@ -9,7 +9,7 @@
 .defaultDrag_div{
     cursor: pointer  ;
     position: relative;
-    height: 260px;
+    height: 260px !important;
     background-color: #f9f9f9;
     overflow: hidden;
 }
