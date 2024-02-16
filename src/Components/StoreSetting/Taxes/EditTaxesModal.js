@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react";
 
-import { Box, Button, Modal } from "@mui/material";
+import { Box, Modal } from "@mui/material";
 import EditIcon from "../../../Assests/Category/editIcon.svg";
 import LeftIcon from "../../../Assests/Taxes/Left.svg";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import { fetchtaxesData } from "../../../Redux/features/Taxes/taxesSlice";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-import { Form } from "react-bootstrap";
+
 import {
   BASE_URL,
   UPDATE_TAXES,
@@ -32,13 +32,9 @@ const EditTaxesModal = ({ selectedTaxe }) => {
   const myDropStyles = {
     width: "55.5rem",
     overflowY: "scroll",
-    height:"185px"
-  }
-
-  const mycur = {
-    cursor: "pointer",
-    width: "fit-content",
+    height: "185px",
   };
+
   const width = {
     width: "6.5rem",
   };
@@ -95,7 +91,14 @@ const EditTaxesModal = ({ selectedTaxe }) => {
 
     // Assuming you have the selected category ID stored in selectedCategory state
     const categoryId = selectedCategory;
-    // console.log(categoryId);
+
+
+    if (applyToCategory && (!categoryId || categoryId === "--Select Category--")) {
+      setStoreToError("Please select a category");
+      return; // Prevent form submission
+    } else {
+      setStoreToError("");
+    }
 
     if (applyToCategory && categoryId) {
       const formData = new FormData();
@@ -191,7 +194,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
   // for Apply tax to category
   const [applyToCategory, setApplyToCategory] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
-  const [additionalTax, setAdditionalTax] = useState(false);
+
   const [updateTax, setUpdateTax] = useState(false);
 
   const [categoryOptions, setCategoryOptions] = useState([]);
@@ -210,7 +213,6 @@ const EditTaxesModal = ({ selectedTaxe }) => {
 
         // Assuming the API response has a data property containing the category list
         const categoryList = response.data.result;
-
         // Extracting category IDs and view titles
         const mappedOptions = categoryList.map((category) => ({
           id: category.id,
@@ -228,10 +230,9 @@ const EditTaxesModal = ({ selectedTaxe }) => {
     fetchData();
   }, []); // Fetch categories only once when the component mounts
 
-
   // for dropdown start
 
-  const [category,setCategory] = useState("--Select Category--");
+  const [category, setCategory] = useState("--Select Category--");
   const [categoryDropdownVisible, setCategoryDropdownVisible] = useState(false);
   const [storeToError, setStoreToError] = useState("");
 
@@ -258,12 +259,11 @@ const EditTaxesModal = ({ selectedTaxe }) => {
         }
         if (option.label == "--Select Category--") {
           setStoreToError("This field is required");
-          setSelectedCategory("")
+          setSelectedCategory("");
         } else {
           setStoreToError("");
           const selId = option.id;
-          setSelectedCategory(selId)
-
+          setSelectedCategory(selId);
         }
         break;
 
@@ -271,7 +271,6 @@ const EditTaxesModal = ({ selectedTaxe }) => {
         break;
     }
   };
-
 
   // for dropdown End
 
@@ -319,7 +318,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                       />
                     </div>
                     {errorMessage && (
-                      <span className="error-message" style={{ color: "red" }}>
+                      <span className="error-message" >
                         {errorMessage}
                       </span>
                     )}
@@ -383,25 +382,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                         <p>Loading categories...</p>
                       ) : (
                         <>
-                        {/* <div className="q-add-categories-single-input">
-                          <div className="flex-1 mb-2 sm:mb-0 sm:mr-2">
-                            <select
-                              id="categoryFilter"
-                              className="w-full bg-white text-[#000000] text-[18px] Admin_std px-4 py-2 border border-gray-300 focus:outline-none rounded"
-                              onChange={(e) =>
-                                setSelectedCategory(e.target.value)
-                              }
-                            >
-                              <option> Select Category</option>
-                              {categoryOptions.map((option) => (
-                                <option key={option.id} value={option.id}>
-                                  {option.title}
-                                </option>
-                              ))}
-                            </select>
-                          </div>
-                        </div> */}
-                            <div className="custom-dropdown">
+                          <div className="custom-dropdown">
                             <div
                               className="custom-dropdown-header"
                               onClick={() => toggleDropdown("category")}
@@ -409,12 +390,30 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                               <span className="selected-option mt-1">
                                 {category}
                               </span>
-                              <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
+                              <img
+                                src={DownIcon}
+                                alt="Down Icon"
+                                className="w-8 h-8"
+                              />
                             </div>
                             {categoryDropdownVisible && (
-                              <div className="dropdown-content" style={myDropStyles}>
+                              <div
+                                className="dropdown-content"
+                                style={myDropStyles}
+                              >
                                 <div
-                                  onClick={() => handleOptionClick({ label: "--Select Category--", id: null },"category") } >--Select Category--</div>
+                                  onClick={() =>
+                                    handleOptionClick(
+                                      {
+                                        label: "--Select Category--",
+                                        id: null,
+                                      },
+                                      "category"
+                                    )
+                                  }
+                                >
+                                  --Select Category--
+                                </div>
                                 {categoryOptions &&
                                   categoryOptions.map((option) => (
                                     <div
@@ -436,26 +435,36 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                             )}
                           </div>
 
-                          <span className="input-error error-message" style={{ color: "red" }}>
-                  {storeToError && (
-                    <span className="input-error ">{storeToError}</span>
-                  )}
-                </span>
-                          </>
+                          <span className="input-error error-message" >
+                            {storeToError && (
+                              <span className="input-error ">
+                                {storeToError}
+                              </span>
+                            )}
+                          </span>
+                        </>
                       )}
                     </div>
 
-                    <div className="q-add-categories-single-input m-3 d-flex" style={{width: "fit-content" }}>
-                    <label className="q_receipt_page_main " >
-                      Apply additional tax to the chosen category?
-                      <input type="radio" name="taxchoice" value="0" checked />
-                      <span className="checkmark_section"></span>
-                    </label>
-                     <label className="q_receipt_page_main">
-                     Update the tax for the chosen category?
-                      <input type="radio" name="taxchoice" value="1" />
-                      <span className="checkmark_section"></span>
-                    </label>
+                    <div
+                      className="q-add-categories-single-input mt-3 d-flex"
+                      style={{ width: "fit-content" }}
+                    >
+                      <label className="q_receipt_page_main ">
+                        Apply additional tax to the chosen category?
+                        <input
+                          type="radio"
+                          name="taxchoice"
+                          value="0"
+                          checked
+                        />
+                        <span className="checkmark_section"></span>
+                      </label>
+                      <label className="q_receipt_page_main">
+                        Update the tax for the chosen category?
+                        <input type="radio" name="taxchoice" value="1" />
+                        <span className="checkmark_section"></span>
+                      </label>
                     </div>
                   </>
                 )}
