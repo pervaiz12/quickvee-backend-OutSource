@@ -103,11 +103,11 @@ const InstoreTableViewData = () => {
                 </div> */}
 
                 <div className="table_view_items">
-      <div className="custom-dropdown">
+      <div className="drop_custom_border">
       
         <div className="drop_down">
-        <option value="day" className="mr-3">{order.payment_result}</option>
-        <img src={DownIcon} alt="Down Icon" className="w-6 h-6 ml-2" />
+        <option value="day" className="q_order_status_details">{order.payment_result}</option>
+        <img src={DownIcon} alt="Down Icon" className="w-6 h-6 ml-16" />
         </div>
       </div>
     </div>

@@ -586,22 +586,3 @@ select:active{
   border-radius: 4px;
   background-color: white;
 }
-
-.csv_btn{
-   background: #fff; 
-  font-family: CircularSTDBook !important;
-  font-size: 18px;
-  color: #0A64F9;
-  padding: 10px 40px;
-  border-radius: 4px;
-  cursor: pointer;
-border:1px solid #0A64F9 }
-
-
-.drop_down {
-  display: flex;
-  justify-content: space-between;
-  width: 131px;
-  padding: 10px;
-  border: 1px solid gray;
-}

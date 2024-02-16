@@ -270,4 +270,47 @@
   border-bottom: 2px solid #EBF2FF;
 }
 
+.drop_custom_border{
+  border: 1px solid #E1E1E1;
+  width: 207px;
+  border-radius: 4px;
+  background-color: #FFFFFF;
+}
 
+
+.csv_btn{
+  background: #fff; 
+ font-family: CircularSTDBook !important;
+ font-size: 18px;
+ color: #0A64F9;
+ padding: 10px 40px;
+ border-radius: 4px;
+ cursor: pointer;
+border:1px solid #0A64F9 }
+
+
+.drop_down {
+ display: flex;
+ justify-content: space-between;
+ width: 131px;
+ padding: 10px;
+
+ border-radius: 4px;
+}
+
+.q_order_status_details{
+  font-size: 18px;
+    font-family: 'CircularSTDBook';
+    margin-right: 12px;
+}
+
+.q_view_modal_details {
+  border: 1px solid #E2E2E2; /* Use your desired color for the border */
+  border-radius: 0.375rem; /* 6px border radius for rounded corners */
+  float: left;
+  padding: 0.5rem; /* 8px padding */
+  margin: 0.5rem; /* 8px margin */
+  color:#000000;
+  background-color:#FFFFFF;
+  font-family: CircularSTDBlack !important;
+}
