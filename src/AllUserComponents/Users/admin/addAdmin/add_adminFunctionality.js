@@ -61,10 +61,7 @@ export default function Add_adminFunctionality() {
     }
   };
   const handleBlur = async (name) => {
-    // console.log(addAdminData.errors)
-   
     if (name === 'email') {
-      // console.log(addAdminData.errors.email)
       if(addAdminData.errors.email=="")
       {
         let result=await emailValidate(addAdminData.email);
@@ -91,7 +88,6 @@ export default function Add_adminFunctionality() {
 
       }
     }
-    // Other fields validation can be done similarly
   };
 
   

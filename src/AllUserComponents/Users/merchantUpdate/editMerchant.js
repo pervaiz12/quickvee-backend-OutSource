@@ -9,7 +9,7 @@ import {
   } from "react-router-dom";
 
 export default function EditMerchant() {
-    const{getEditMerchantData,getEditMerchant,handleChangePaymentMode,paymentModeOnline,paymentModeOffline}=EditMerchantFunctionality()
+    const{getEditMerchantData,getEditMerchant,handleChangePaymentMode,paymentModeOnline,paymentModeOffline,handleUpdateMerchant,handleChangeMerchant}=EditMerchantFunctionality()
     const  {id}  = useParams();
     // console.log(id)
     useEffect(()=>{
@@ -31,9 +31,7 @@ export default function EditMerchant() {
                                     type='text'
                                     name="owner_name"
                                     value={getEditMerchant.username}
-                                    // value={editData.owner_name}
-                        
-                                    // onChange={handleChangeAdmin}
+                                    onChange={handleChangeMerchant}
                                 />
                             </div>
                             
@@ -47,7 +45,7 @@ export default function EditMerchant() {
                                     type='text'
                                     name="email"
                                     value={getEditMerchant.name}
-                                    // onChange={handleChangeAdmin}
+                                    onChange={handleChangeMerchant}
                                 />
                             </div>
                             {/* <label>{store.errors.ownerName}</label> */}
@@ -63,7 +61,7 @@ export default function EditMerchant() {
                                     name="password"
                                     value={getEditMerchant.merchant_id}
                                     // value={editData.password}
-                                    // onChange={handleChangeAdmin}
+                                    onChange={handleChangeMerchant}
                                     // value={store.email}
                                     disabled
                                 />
@@ -76,9 +74,9 @@ export default function EditMerchant() {
                                 <input 
                                     className=''
                                     type='text'
-                                    name="phone"
-                                    // value={editData.phone}
-                                    // onChange={handleChangeAdmin}
+                                    name="password"
+                                    value={getEditMerchant.password}
+                                    onChange={handleChangeMerchant}
                                 />
                             </div>
                             {/* <label>{store.errors.password}</label> */}
@@ -89,8 +87,9 @@ export default function EditMerchant() {
                                 <input 
                                     className=''
                                     type='text'
-                                    name="phone"
+                                    name="owner_name"
                                     value={getEditMerchant.owner_name}
+                                    onChange={handleChangeMerchant}
                                     // onChange={handleChangeAdmin}
                                 />
                             </div>
@@ -102,24 +101,14 @@ export default function EditMerchant() {
                             <div className='input_area'>
                                 <label>Account Type</label>
                                 <select 
-                                // value={adminId} 
-                                // onChange={onChangeAdminId}
+                                name="live_account"
+                                value={getEditMerchant.live_account} 
+                                onChange={handleChangeMerchant}
                                 >
-                                    {/* <option value="" >Select an Admin</option> */}
+                                   
                                     <option>Live Account</option>
                                     <option>Sand box Account</option>
-                                    {/* {
-                                    adminList.map((option) =>
-                                    {
                                     
-                                    return  (
-                                        <option></option>
-                                    // <option key={option.id} value={option.merchant_id}>
-                                    //     {option.name}
-                                    // </option>
-                                    )}
-                                    )
-                                    } */}
                                 </select>
                             </div>
                             {/* {errorAdminId && <span>{errorAdminId}</span>} */}
@@ -128,7 +117,7 @@ export default function EditMerchant() {
                             <div className='input_area'>
                                 <label>Inventory Approval</label>
                                 <input 
-                                    className=''
+                                    className=''    
                                     type='text'
                                     name="pin"
                                     // value={merchantStore.pin}
@@ -143,9 +132,9 @@ export default function EditMerchant() {
                                 <input 
                                     className=''
                                     type='text'
-                                    name="pin"
+                                    name="otp"
                                     value={getEditMerchant.otp}
-                                    // onChange={handleChangeMerchant}
+                                    onChange={handleChangeMerchant}
                                 />
                             </div>
                             {/* {errorPin && <span>{errorPin}</span>} */}
@@ -159,10 +148,9 @@ export default function EditMerchant() {
                                 <input 
                                     className=''
                                     type='text'
-                                    name="owner_name"
+                                    name="a_address_line_1"
                                     value={getEditMerchant.a_address_line_1}
-                        
-                                    // onChange={handleChangeAdmin}
+                                    onChange={handleChangeMerchant}
                                 />
                             </div>
                             
@@ -174,8 +162,9 @@ export default function EditMerchant() {
                                 <input 
                                     className=''
                                     type='text'
-                                    name="email"
+                                    name="a_address_line_2"
                                     value={getEditMerchant.a_address_line_2}
+                                    onChange={handleChangeMerchant}
                                     // onChange={handleChangeAdmin}
                                 />
                             </div>
@@ -187,8 +176,9 @@ export default function EditMerchant() {
                                 <input 
                                     className=''
                                     type='text'
-                                    name="email"
+                                    name="a_phone"
                                     value={getEditMerchant.a_phone}
+                                    onChange={handleChangeMerchant}
                                     // onChange={handleChangeAdmin}
                                 />
                             </div>
@@ -200,8 +190,9 @@ export default function EditMerchant() {
                                 <input 
                                     className=''
                                     type='text'
-                                    name="email"
+                                    name="a_city"
                                     value={getEditMerchant.a_city}
+                                    onChange={handleChangeMerchant}
                                     // onChange={handleChangeAdmin}
                                 />
                             </div>
@@ -213,8 +204,9 @@ export default function EditMerchant() {
                                 <input 
                                     className=''
                                     type='text'
-                                    name="email"
+                                    name="a_zip"
                                     value={getEditMerchant.a_zip}
+                                    onChange={handleChangeMerchant}
                                     // onChange={handleChangeAdmin}
                                 />
                             </div>
@@ -225,7 +217,7 @@ export default function EditMerchant() {
                                 <label>State</label>
                                 <select 
                                 value={getEditMerchant.a_state} 
-                                name="state"
+                                name="a_state"
                                 // onChange={handleChange}
                                 >
                                     <option value="" >Select States</option>
@@ -328,7 +320,7 @@ export default function EditMerchant() {
                         type='button'
                         className="blue_btn"
                         value="Submit"
-                        // onClick={handleSubmitAdmin}
+                        onClick={handleUpdateMerchant}
                     /> 
                 </div>
                 

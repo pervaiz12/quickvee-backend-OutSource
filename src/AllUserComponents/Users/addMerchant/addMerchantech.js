@@ -6,7 +6,7 @@ import MerchantFunction from './UserFunctionality/merchantFunction'
 
 
 export default function AddMerchan() {
-    const{handleChange,store,handleSubmit,onClickUserRadio,userRadio,handleChangeMerchant
+    const{handleChange,store,handleSubmit,onClickUserRadio,userRadio,handleChangeMerchant,handleBlur
         ,merchantStore,radioErros,stateList,adminList,adminId,onChangeAdminId,handleSubmitMerchant,errorAdminId,errorPin
     ,handleKeyPress}= MerchantFunction()
     
@@ -88,6 +88,7 @@ export default function AddMerchan() {
                                             name="email"
                                             onChange={handleChange}
                                             value={store.email}
+                                            onBlur={() => handleBlur('email')}
                                         />
                                     </div>
                                     <label>{store.errors.email}</label>
@@ -101,6 +102,7 @@ export default function AddMerchan() {
                                             name="password"
                                             onChange={handleChange}
                                             value={store.password}
+                                            onBlur={() => handleBlur('password')}
                                         
                                         />
                                     </div>
@@ -208,7 +210,6 @@ export default function AddMerchan() {
                                             className=''
                                             type='text'
                                             name="storename"
-                                            
                                             value={store.storename}
                                             onChange={handleChange}
                                         />
@@ -238,8 +239,10 @@ export default function AddMerchan() {
                                             className=''
                                             type='text'
                                             name="email"
-                                            onChange={handleChange}
                                             value={store.email}
+                                            onChange={handleChange}
+                                           
+                                            onBlur={() => handleBlur('email')}
                                             
                                         />
                                     </div>
@@ -252,8 +255,10 @@ export default function AddMerchan() {
                                             className=''
                                             type='text'
                                             name="password"
-                                            onChange={handleChange}
                                             value={store.password}
+                                            onChange={handleChange}
+                                           
+                                            onBlur={() => handleBlur('password')}
                                             // value={merchantStore.mer_password}
                                             // onChange={handleChangeMerchant}
                                         />

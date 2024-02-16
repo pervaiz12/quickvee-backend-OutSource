@@ -183,8 +183,8 @@ const Navigate = useNavigate()
   <br></br>
   <form onSubmit={handleFormSubmit}>
   <div className='q-add-categories-section'>
-    <div className='q-add-categories-section-header'>
-    <img onClick={() => { Navigate(-1)}} src={EditNewVendor} alt="Edit-New-Vendors" style={{"cursor":"pointer"}} />
+    <div onClick={() => { Navigate(-1)}} className='q-add-categories-section-header'>
+    <img  src={EditNewVendor} alt="Edit-New-Vendors" style={{"cursor":"pointer"}} />
         <span>Edit Vendors</span>
     </div>
     <div className='q-add-categories-section-middle-form'>
