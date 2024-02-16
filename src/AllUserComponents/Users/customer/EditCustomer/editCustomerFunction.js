@@ -13,8 +13,8 @@ const EditCustomerFunction=()=>{
         phone: '',
         id: '',
         user_type: '',
-        password:'',
         });
+    const[password,setpassword]=useState('')
 
     const[errors,setErrors]=useState({
         name:'',
@@ -36,7 +36,9 @@ const EditCustomerFunction=()=>{
               
                 if(response.data.status==200)
                 {
-                    setCustomerData(response.data.message.row)
+                    // setCustomerData(response.data.message.row)
+                    setCustomerData({...customerData,reSet:'',...response.data.message.row});
+
                     // console.log(response.data.message.row.user_type)
 
                     if(response.data.message.row.user_type.toLowerCase()=="customer")
@@ -80,12 +82,19 @@ const EditCustomerFunction=()=>{
         }
       
         setErrors(updatedErrors);
+        const trimmedValue = value.replace(/^\s+|\s+$/g, '')
       
         setCustomerData((prevCustomerData) => ({
           ...prevCustomerData,
-          [name]: value,
+          [name]: trimmedValue,
         }));
       };
+      const onhandlePassword=(e)=>{
+        setpassword({
+            password:e.target.value
+
+        })
+      }
       
     const handleKeyPress = (e) => {
         // Allow only numeric characters (key codes 48 to 57) and backspace (key code 8)
@@ -117,18 +126,20 @@ const EditCustomerFunction=()=>{
     }
     const handleSubmitCustomerRecord=async(e)=>{
         e.preventDefault();
-        const data={id:customerData.id,user_type:storeRadio,name:customerData.name,phone:customerData.phone,password:''}
-        let validate=Object.values(errors).filter(error => error !== '').length;
-        
+        // console.log(customerData.reSet)
+        const data={id:customerData.id,user_type:storeRadio,name:customerData.name,phone:customerData.phone,password:customerData.reSet,user_created:'superadmin'}
+    
+        let validate=Object.values(errors).filter(error => error !== '').length;  
         if(validate == 0)
         {
               await axios.post(BASE_URL+GET_UPDATE_CUSTOMER,data,{headers:{
             "Content-Type":'multipart/form-data'
         }}).then(response=>{
-            console.log(response.data)
+            
             if(response.data.status==200)
             {
                 setSuccessMessage(response.data.message)
+              
                 if(response.data.record.user_type=='customer')
                 {
                     console.log('1')
@@ -148,9 +159,7 @@ const EditCustomerFunction=()=>{
                     console.log('3')
                     console.log(customerData.id)
                     navigate(`/users/editMerchant/${customerData.id}`)
-                    // setAdminRadio(false)
-                    // setMerchantRadio(true)
-                    // setCustomerRadio(false)
+                   
                    
                 }
 
@@ -163,7 +172,7 @@ const EditCustomerFunction=()=>{
 
     }
     return {handleEditData,customerData,handleChange,customerRadio,AdminRadio,merchantRadio,
-        handleChangeRadio,handleSubmitCustomerRecord,successMessage,handleKeyPress,errors}
+        handleChangeRadio,handleSubmitCustomerRecord,successMessage,handleKeyPress,errors,onhandlePassword,password}
 
 }
 export default EditCustomerFunction

@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const EditAdminFunctionality=()=>{
     const navigate = useNavigate();
-    const[editData,setEditData]=useState({owner_name:'',email:'',password:'',phone:'',password:''})
+    const[editData,setEditData]=useState({owner_name:'',email:'',password1:'',phone:'',password:''})
     const[errors,setErrors]=useState({
       owner_name:'',
       phone:'',
@@ -22,7 +22,7 @@ const EditAdminFunctionality=()=>{
             if(response.data.status==200)
             {
               //  console.log(response.data.message[0])
-                setEditData(response.data.message[0])
+                setEditData({password1:'',...response.data.message[0]})
 
             }
 
@@ -77,9 +77,10 @@ const EditAdminFunctionality=()=>{
     };
 
     const handleSubmitAdmin=async(e)=>{
-        const data={admin_id:editData.id,name:editData.owner_name,owner_name:editData.owner_name,password:editData.password,phone:editData.phone,email:editData.email}
+        const data={admin_id:editData.id,name:editData.owner_name,owner_name:editData.owner_name,password:editData.password1,phone:editData.phone,email:editData.email}
        
         let validate=Object.values(errors).filter(error => error !== '').length;
+        console.log(data)
         
         if(validate == 0)
         {

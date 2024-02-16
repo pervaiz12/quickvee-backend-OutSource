@@ -88,6 +88,10 @@
     flex: 0 0 auto;
     width: 100%;
   }
+  .error{
+    color:red !important;
+    font-size: 12px !important;
+  }
 .box_shadow_div{
     width: 100%;
     height: auto;
@@ -341,6 +345,12 @@
 }
 .mt10{
   margin-top: 10px;
+}
+.mb10{
+  margin-bottom: 10px;
+}
+.mb20{
+  margin-bottom:20px;
 }
 .btn-area {
   display: inline-block;
