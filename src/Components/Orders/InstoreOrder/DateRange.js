@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FiCalendar } from "react-icons/fi";
+import CalendIcon from "../../../Assests/Filter/Calender.svg"
+import { padding } from "@mui/system";
 
 const DateRange = ({ onDateRangeChange }) => {
   const [startDate, setStartDate] = useState(new Date());
@@ -93,7 +95,7 @@ const DateRange = ({ onDateRangeChange }) => {
         <div className="q-datarange-bottom-detail-section">
           {/* Date Range Section */}
           <div className="q_datafilter_section">
-            <div className="q_details_header">Date Range</div>
+            <div className="q_details_header"><h1>Date Range</h1></div>
 
             <div className="datarange_days_order">
               {["Today", "Yesterday", "Last 7 Days", "Last 30 days"].map(
@@ -143,11 +145,11 @@ const DateRange = ({ onDateRangeChange }) => {
           </select>
         </div>
      </div>
-
-          {/* Date Picker Section */}
-          <div className="q_daterange_details flex flex-col md:flex-row">
+  <div className="q_main_data_range">
+          <div className="qvrow">
+         
   {/* Start Date */}
-  <div className="relative mb-4 md:mb-0 md:mr-4">
+  <div className="col-qv-4">
     <div className="q_date_range_start">Start Date</div>
     <div className="flex items-center">
       <DatePicker
@@ -162,16 +164,16 @@ const DateRange = ({ onDateRangeChange }) => {
         showPopperArrow={false}
       />
       <span
-        className="absolute right-3 top-14  transform -translate-y-1/2 text-gray-400 cursor-pointer"
+        className="q_cal_daterange"
         onClick={handleStartDateIconClick}
       >
-        <FiCalendar className="text-black" />
+      <img src ={CalendIcon} alt="" className="w-6 h-6" />
       </span>
     </div>
   </div>
 
   {/* End Date */}
-  <div className="relative">
+  <div className="col-qv-4">
     <div className="q_date_range_start ">End Date</div>
     <div className="flex items-center">
 
@@ -188,27 +190,35 @@ const DateRange = ({ onDateRangeChange }) => {
         showPopperArrow={false}
       />
       <span
-        className="absolute right-3 top-14 transform -translate-y-1/2 text-gray-400 cursor-pointer"
+        className="q_cal_daterange"
         onClick={handleEndDateIconClick}
       >
-        <FiCalendar className="text-black " />
+         <img src ={CalendIcon} alt="" className="w-6 h-6" />
       </span>
     </div>
   </div>
-
-  {/* Search Button */}
-  <span className="search_btn mt-4 md:mt-0 md:ml-6">
+  <div className="col-qv-4">
+ 
+  
+  <div className=" q_search_opcity"> Search</div>
     <button
       onClick={handleSearch}
       className="save_btn"
     >
       Search
     </button>
-  </span>
+  </div>
+  </div>
+  </div>
+  
+
+  {/* Search Button */}
+ 
+</div>
 </div>
 
-        </div>
-      </div>
+      
+    
     </>
   );
 };

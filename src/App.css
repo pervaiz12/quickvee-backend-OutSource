@@ -58,6 +58,9 @@
 }
 
 
+
+
+
 .main-page-home-dashboard{
   overflow-x: hidden;
 }
@@ -182,7 +185,7 @@
 .main-content {
   overflow-x: hidden;
   overflow-y: auto;
-  height: calc(100vh - 98px);
+  height: auto;
   overflow-x: hidden;
 }
 
@@ -474,6 +477,8 @@ select option {
   background-color: #f5f5f5;
   border-radius: 8px;
   flex-wrap: wrap;
+  font-size: 14px !important;
+  font-family: CircularSTDBook !important;
 }
 .datarange_days_order > * {
   margin-right: 1rem;
@@ -715,10 +720,18 @@ a.flex.text-center.submenu-item.text-gray-400.py-4.CircularSTDBook:hover {
 }
 
 .submenu-item:hover {
-  /* Add hover styles if desired */
-  background-color: #2c3a47;
+ 
+  
   color: #ffc400;
 }
+
+.submenu-item:active {
+ 
+  
+  color: #ffc400;
+}
+
+
 
 .image-container {
   position: relative;
@@ -873,4 +886,10 @@ border-bottom: 1px solid #000 !important;}
 .img-DeleteIcon img{
   height: 40px;
   width: 40px;
+}
+
+.css-19xm0h7-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected {
+  background-color: #F9F9F9 !important;
+  color: #0A64F9 !important;
+  border: 1px solid #0A64F9 !important;
 }

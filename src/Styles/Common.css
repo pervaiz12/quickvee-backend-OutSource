@@ -18,6 +18,7 @@
   font-family:qvstdmedium;
   src: url(../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf);
 }
+
 .box{
   width: 92%;
   height: auto;
@@ -559,4 +560,48 @@ min-height: 0px !important;}
   box-sizing: border-box;
   background-color: lightgray !important;
 margin: 2px !important;
+}
+
+.q_dashboard_welcom_msg>h1{
+  font-size: 24px;
+  font-family: qvmedium !important;
+
+}
+.q_dashbaord_netsales>h1{
+  font-size: 20px;
+  font-family: qvmedium !important;
+}
+
+select {
+  margin-top: -1rem;
+  border: 2px solid #0A64F9 !important;
+  padding: 10px 30px;
+  border-radius: 4px;
+  background-color: white;
+}
+select:active{
+  margin-top: -1rem;
+  border: 2px solid #0A64F9 !important;
+  padding: 10px 30px;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.csv_btn{
+   background: #fff; 
+  font-family: CircularSTDBook !important;
+  font-size: 18px;
+  color: #0A64F9;
+  padding: 10px 40px;
+  border-radius: 4px;
+  cursor: pointer;
+border:1px solid #0A64F9 }
+
+
+.drop_down {
+  display: flex;
+  justify-content: space-between;
+  width: 131px;
+  padding: 10px;
+  border: 1px solid gray;
 }

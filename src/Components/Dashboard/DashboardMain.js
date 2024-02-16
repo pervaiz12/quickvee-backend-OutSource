@@ -1,7 +1,7 @@
 import React from "react";
-import Container from 'react-bootstrap/Container';
-import Row from 'react-bootstrap/Row';
-import Col from 'react-bootstrap/Col';
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 import Welcome from "./Welcome";
 import NetSales from "./NetSales";
@@ -11,25 +11,24 @@ import CardForm from "./CardForm";
 
 const DashboardMain = () => {
   return (
-
-
-    <div className="mt-4 ml-4">
-      <Container>
-        <Row>
-          <Col>
-            <div
-              className="">
-                {/*  */}
+    <>
+    <div className="q-category-main-page">
+   
       <Welcome />
+      </div>
+      <div className="q-category-main-page">
       <MainHeader />
+      </div>
+      <div className="q-category-main-page">
       <CardForm />
-       <NetSales />
-      <SellItems /> 
-            </div>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+      </div>
+      <div className="q-category-main-page">
+      <NetSales />
+      </div>
+      <div className="q-category-main-page">
+      <SellItems />
+      </div>
+      </>
    
   );
 };

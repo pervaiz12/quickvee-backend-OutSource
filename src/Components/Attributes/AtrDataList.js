@@ -102,7 +102,7 @@ const AtrDataList = ({ seVisible }) => {
       {/* <div className="q-attributes-top-detail-section">
         <li>{submitmessage}</li>
       </div>      */}
-
+<div className="box">
       <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
           <div className="q-attributes-bottom-header">
@@ -187,6 +187,7 @@ const AtrDataList = ({ seVisible }) => {
         )}
 
        
+      </div>
       </div>
     </>
   );
