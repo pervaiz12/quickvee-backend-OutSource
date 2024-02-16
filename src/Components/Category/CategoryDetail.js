@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import AddIcon from "../../Assests/Category/addIcon.svg";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import EditIcon from "../../Assests/Category/editIcon.svg";
+import SortIcon from "../../Assests/Category/Sorting.svg"
 import {
   fetchCategoriesData,
   deleteCategory,
@@ -123,8 +124,9 @@ const CategoryDetail = ({ seVisible }) => {
 
   return (
     <>
+      <div className="box">
       <div className="q-category-bottom-detail-section">
-        <div className="q-category-bottom-header-sticky">
+        <div className="">
           <div className="q-category-bottom-header">
             <span>Category</span>
             <p onClick={() => seVisible("CategoryAlert")}>
@@ -147,7 +149,7 @@ const CategoryDetail = ({ seVisible }) => {
                 className="q-category-bottom-categories-single-category"
               >
                 <p className="categories-sort">
-                  <img src={AddIcon} alt="add-icon" />
+                  <img src={SortIcon} alt="add-icon" />
                 </p>
                 <p className="categories-title">{category.title}</p>
                 <p className="categories-items">
@@ -199,15 +201,14 @@ const CategoryDetail = ({ seVisible }) => {
                               ? "2"
                               : "0",
                             category
-                          ) 
+                          )
                         }
                       />
                       <span className="category-checkmark"></span>
                     </label>
                   </div>
-                      <div className=" w-40 " style={{display: "flex", justifyContent:"space-between"}}>
 
-                  <Link to={`/category/edit-category/${category.id}`} >
+                  <Link to={`/category/edit-category/${category.id}`}>
                      
                       <img
                         className='edit_center'
@@ -222,11 +223,11 @@ const CategoryDetail = ({ seVisible }) => {
                     alt="delete-icon"
                     onClick={() => handleDeleteCategory(category.id)}
                   />
-                      </div>
                 </p>
               </div>
             ))}
         </div>
+      </div>
       </div>
     </>
   );

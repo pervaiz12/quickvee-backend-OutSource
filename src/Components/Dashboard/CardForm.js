@@ -1,12 +1,17 @@
 import React from 'react';
 import { BiCaretUp } from 'react-icons/bi';
+import "../../Styles/Settings/Side.css";
+
+
+
 
 const CardForm = () => {
   return (
-    <div className="mx-10 my-5">
-      <div className="grid gap-3 grid-cols-4">
-        <div className="col-span-4 md:col-span-2 lg:col-span-1">
-          <div className="bg-white p-4 shadow-md rounded-lg opacity-100 h-40">
+    <div className="box">
+     
+      <div className="qvrow">
+        <div className="col-span-4 col-qv-3 lg:col-span-1">
+          <div className="box_shadow_div mt_card_header">
             <div className="text-[#707070] font-normal lg:text-[18px]  sm:text-[14px] tracking-normal opacity-100 Admin_std">
               Transactions
             </div>
@@ -18,10 +23,9 @@ const CardForm = () => {
           </div>
         </div>
 
-        {/* Add more cards as needed */}
-        {/* Example of a second card */}
-        <div className="col-span-4 md:col-span-2 lg:col-span-1">
-        <div className="bg-white p-4 shadow-md rounded-lg opacity-100 h-40">
+      
+        <div className="col-span-4 col-qv-3 lg:col-span-1">
+       <div className="box_shadow_div mt_card_header">
             <div className="text-[#707070] font-normal  lg:text-[18px]  sm:text-[14px] tracking-normal opacity-100 Admin_std">
             Average Sale Value
             </div>
@@ -34,8 +38,8 @@ const CardForm = () => {
         </div>
 
         {/* Example of a third card */}
-        <div className="col-span-4 md:col-span-2 lg:col-span-1">
-        <div className="bg-white p-4 shadow-md rounded-lg opacity-100 h-40">
+        <div className="col-span-4 col-qv-3 lg:col-span-1">
+       <div className="box_shadow_div mt_card_header ">
             <div className="text-[#707070] font-normal  lg:text-[18px]  sm:text-[14px] tracking-normal opacity-100 Admin_std">
             Average Item Sale
             </div>
@@ -48,8 +52,8 @@ const CardForm = () => {
         </div>
 
         {/* Example of a fourth card */}
-        <div className="col-span-4 md:col-span-2 lg:col-span-1">
-        <div className="bg-white p-4 shadow-md rounded-lg opacity-100 h-40">
+        <div className="col-span-4 col-qv-3 lg:col-span-1">
+       <div className="box_shadow_div mt_card_header">
             <div className="text-[#707070] font-normal  lg:text-[18px]  sm:text-[14px] tracking-normal opacity-100 Admin_std">
             Net COGS
             </div>
@@ -61,10 +65,10 @@ const CardForm = () => {
           </div>
         </div>
       </div>
-      <div className='mt-4'>
-      <div className="grid gap-3 grid-cols-4">
-        <div className="col-span-4 md:col-span-2 lg:col-span-1">
-          <div className="bg-white p-4 shadow-md rounded-lg opacity-100 h-40">
+      <div className=''>
+      <div className="qvrow">
+        <div className="col-span-4 col-qv-3 lg:col-span-1">
+         <div className="box_shadow_div mt_card_header">
             <div className="text-[#707070] font-normal text-[18px] tracking-normal opacity-100 Admin_std">
             Gross Margin
             </div>
@@ -78,8 +82,8 @@ const CardForm = () => {
 
         {/* Add more cards as needed */}
         {/* Example of a second card */}
-        <div className="col-span-4 md:col-span-2 lg:col-span-1">
-        <div className="bg-white p-4 shadow-md rounded-lg opacity-100 h-40">
+        <div className="col-span-4 col-qv-3 lg:col-span-1">
+       <div className="box_shadow_div mt_card_header">
             <div className="text-[#707070] font-normal text-[18px] tracking-normal opacity-100 Admin_std">
             Gross Profit
             </div>
@@ -92,8 +96,8 @@ const CardForm = () => {
         </div>
 
         {/* Example of a third card */}
-        <div className="col-span-4 md:col-span-2 lg:col-span-1">
-        <div className="bg-white p-4 shadow-md rounded-lg opacity-100 h-40">
+        <div className="col-span-4 col-qv-3 lg:col-span-1">
+       <div className="box_shadow_div mt_card_header">
             <div className="text-[#707070] font-normal text-[18px] tracking-normal opacity-100 Admin_std">
             Non-cash Gratuity
             </div>
@@ -106,8 +110,8 @@ const CardForm = () => {
         </div>
 
         {/* Example of a fourth card */}
-        <div className="col-span-4 md:col-span-2 lg:col-span-1">
-        <div className="bg-white p-4 shadow-md rounded-lg opacity-100 h-40">
+        <div className="col-span-4 col-qv-3 lg:col-span-1">
+        <div className="box_shadow_div mt_card_header">
             <div className="text-[#707070] font-normal text-[18px] tracking-normal opacity-100 Admin_std">
             # of Saved Sales
             </div>
@@ -121,6 +125,7 @@ const CardForm = () => {
       </div>
       </div>
     </div>
+   
   );
 };
 

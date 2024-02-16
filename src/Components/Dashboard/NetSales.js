@@ -6,11 +6,9 @@ const NetSales = () => {
 
   return (
     <>
-      <div className="">
+      <div className="box">
         <div
-          className="bg-white px-8 py-4 mt-4 mx-10 shadow-md rounded-lg opacity-100 h-auto"
-         
-        >
+          className="box_shadow_div mt_card_header">
           <BarCharts />
         </div>
       </div>
