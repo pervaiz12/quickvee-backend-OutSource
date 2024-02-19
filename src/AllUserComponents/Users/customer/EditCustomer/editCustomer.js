@@ -18,7 +18,7 @@ import {
 
 export default function EditCustomer() {
     const {handleEditData,customerData,handleChange,customerRadio,AdminRadio,merchantRadio,
-        handleChangeRadio,handleSubmitCustomerRecord,successMessage,handleKeyPress,errors}=EditCustomerFunction()
+        handleChangeRadio,handleSubmitCustomerRecord,successMessage,handleKeyPress,errors,onhandlePassword,password}=EditCustomerFunction()
     const  {id}  = useParams();
     useEffect(()=>{
          handleEditData(id)
@@ -45,7 +45,7 @@ export default function EditCustomer() {
                                     onChange={handleChange}
                                 />
                             </div>
-                            <label>{errors.name}</label>
+                            <label className='error'>{errors.name}</label>
                             
                         </div>
                         
@@ -71,9 +71,9 @@ export default function EditCustomer() {
                                 <input 
                                     className=''
                                     type='text'
-                                    name="password"
-                                    // onChange={handleChange}
-                                    // value={customerData.password}
+                                    name="reSet"
+                                    onChange={handleChange}
+                                    value={customerData.reSet}
                                 />
                             </div>
                             {/* <label>{store.errors.email}</label> */}
@@ -91,7 +91,7 @@ export default function EditCustomer() {
                                     maxLength={10}
                                 />
                             </div>
-                            <label>{errors.phone}</label>
+                            <label className='error'>{errors.phone}</label>
                         </div>
                     </div>
                    

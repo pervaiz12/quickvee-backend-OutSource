@@ -44,11 +44,12 @@ export default function Add_adminFunctionality() {
 
         }
       }
+      const trimmedValue = value.replace(/^\s+|\s+$/g, '')
   
       setAddAdminData((prev) => ({
           ...prev,
           errors: errors,
-          [name]: value,
+          [name]: trimmedValue,
       }));
 
       
@@ -195,7 +196,7 @@ const handleSubmit=async(e)=>
       if(CurrentValidate==true)
       {
         const packet={owner_name:addAdminData.owner_name,email:addAdminData.email,password:addAdminData.password,phone:addAdminData.phone}
-        console.log(packet)
+        // console.log(packet)
        
                       await axios.post(BASE_URL+GET_ADD_ADMIN,packet,{ headers: { "Content-Type": "multipart/form-data" }}).then(res=>{if(res.data.status==200){
                         setAddAdminData({owner_name:'',email:'',password:'',phone:'',

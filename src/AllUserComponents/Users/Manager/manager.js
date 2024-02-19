@@ -24,7 +24,7 @@ export default function Manager() {
       <div className='table_main_area'>
         <div className='table_header_sticky'>
           <div className='table_header_top'>
-            <h1>Table Area</h1>
+            {/* <h1>Table Area</h1> */}
           </div>
           <div className='table_header'>
             <p className='table25'>Name</p>
