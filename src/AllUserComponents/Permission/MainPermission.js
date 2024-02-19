@@ -1,9 +1,10 @@
 import React from 'react'
+import PermissionList from '../../Components/Permission/PermissionList'
 
 const MainPermission = () => {
   return (
-    <div>
-      
+    <div className="q-attributes-main-page">
+      <PermissionList />
     </div>
   )
 }

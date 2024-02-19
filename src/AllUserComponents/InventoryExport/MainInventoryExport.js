@@ -3,6 +3,7 @@ import { useState ,useEffect} from "react";
 import { useDispatch } from "react-redux";
 import { Box, Collapse, Alert, IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import DownIcon from "../../Assests/Dashboard/Down.svg";
 // import {fetchMerchantsList} from "../../Redux/features/ExportInventory/ExportInventorySlice";
 import { fetchMerchantsList } from "../../Redux/features/ExportInventory/ExportInventorySlice";
 import { useSelector } from "react-redux";
@@ -16,6 +17,49 @@ const MainInventoryExport =  () => {
     const goToTop = () => {
       setsubmitmessage()
     };
+    const [storeFromError, setStoreFromError] = useState("");
+    const [selectedStorefrom, setSelectedStorefrom] =
+    useState("-- Select Store --");
+  
+    const [storeFromDropdownVisible, setStoreFromDropdownVisible] =
+    useState(false);
+
+    const myStyles = {
+      height: "300px",
+      overflow: "auto",
+    };
+    
+    const toggleDropdown = (dropdown) => {
+      switch (dropdown) {
+        case "storefrom":
+          setStoreFromDropdownVisible(!storeFromDropdownVisible);
+          break;
+        default:
+          break;
+      }
+    };
+
+    const handleOptionClick = async (option, dropdown) => {
+      switch (dropdown) {
+        case "storefrom":
+          setSelectedStorefrom(option.label);
+          setStoreFromDropdownVisible(false);
+  
+          if (option.merchant_id !== null) {
+            handleStoreInput({
+              target: { name: "store_name_from", value: option.merchant_id },
+            });
+            setStoreFromError("");
+          } else {
+            setStoreFromError("This field is required");
+          }
+          
+          break;
+        default:
+          break;
+      }
+    };
+
     const {
       handleStoreInput,
       handleSubmit,
@@ -26,7 +70,7 @@ const MainInventoryExport =  () => {
   useEffect(() => {
     if (!MerchantListData.loading && MerchantListData.MerchantListData) {
         setMerchantList(MerchantListData.MerchantListData)
-        console.log(MerchantList)
+        // console.log(MerchantList)
     }
   }, [MerchantListData, MerchantListData.loading])
 
@@ -69,21 +113,61 @@ const MainInventoryExport =  () => {
             </span>
           </div>
           
-            <div className="q-order-page-container ml-8 md:flex-col">
-              <div className="col-qv-6">
-                    <div className="input_area">
-                        <label>Select Store Name</label>
-                        <select name="store_name" 
-                            onChange={handleStoreInput}
-                        >
-                          <option value=''>--Select Store--</option>
-                        {MerchantList && MerchantList.length >= 1 && MerchantList.map(item => (
-                          <option key={item.id} value={item.merchant_id}>{item.name}-{item.merchant_id}</option>
-                          ))}
-                              
-                        </select>
-                    </div>
+          <div className="q-order-page-container ml-8 md:flex-col">
+              
+            <div className="col-qv-6 mt-6">
+              <label className="q-details-page-label" htmlFor="storefromFilter">
+                Select Store Name
+              </label>
+              <div className="custom-dropdown">
+                <div
+                  className="custom-dropdown-header"
+                  onClick={() => toggleDropdown("storefrom")}
+                >
+                  <span className="selected-option mt-1">
+                    {selectedStorefrom}
+                  </span>
+                  <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
                 </div>
+                {storeFromDropdownVisible && (
+                  <div className="dropdown-content" style={myStyles}>
+                    <div
+                      onClick={() =>
+                        handleOptionClick(
+                          { label: "-- Select Store --", merchant_id: null },
+                          "storefrom"
+                        )
+                      }
+                    >
+                      -- Select Store --
+                    </div>
+                    {MerchantList &&
+                      MerchantList.map((merchant) => (
+                        <div
+                          key={merchant.id}
+                          onClick={() =>
+                            handleOptionClick(
+                              {
+                                label: merchant.name+'-'+merchant.merchant_id,
+                                merchant_id: merchant.merchant_id,
+                              },
+                              "storefrom"
+                            )
+                          }
+                        >
+                          {merchant.name}-{merchant.merchant_id}
+                        </div>
+                      ))}
+                  </div>
+                )}
+              </div>
+              <span className="input-error ">
+                {storeFromError && (
+                  <span className="input-error ">{storeFromError}</span>
+                )}
+              </span>
+            </div>
+             
                 
               </div>
             
@@ -99,4 +183,3 @@ const MainInventoryExport =  () => {
 }
 
 export default MainInventoryExport;
-// console.log('hii')

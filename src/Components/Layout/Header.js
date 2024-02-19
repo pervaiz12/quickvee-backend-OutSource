@@ -38,6 +38,9 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
     };
   }, []);
 
+
+  
+
   return (
     <>
       <div

@@ -1,3 +1,28 @@
+@font-face {
+  font-family:qvbold;
+  src: url(../Assests/Fonts/circular-bold.TTF);
+}
+@font-face {
+  font-family:qvmedium;
+  src: url(../Assests/Fonts/circulur-medium.TTF);
+}
+@font-face {
+  font-family:qvblack;
+  src: url(../Assests/Fonts/circulur-std-black.TTF);
+}
+@font-face {
+  font-family:qvbook;
+  src: url(../Assests/Fonts/circulur-std-book.TTF);
+}
+@font-face {
+  font-family:qvstdmedium;
+  src: url(../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf);
+}
+.box{
+  width: 92%;
+  height: auto;
+  margin: 0 auto;
+}
 .qvrow{
     --bs-gutter-x: 1.5rem;
     --bs-gutter-y: 0;
@@ -69,14 +94,25 @@
     box-shadow: 0 5px 10px 1px #ddd;
     margin: 30px 0px;
     border-radius: 8px;
-    padding: 20px;
     background-color:#FFF;
+    padding: 0px;
 }
+.heading{
+  color: #000000;
+  font-family:adminmedium;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+.pd_20{
+  padding:20px;
+}
+
 .box_shadow_div label{
     color: #818181;
     font-size: 14px;
-    font-family: CircularSTDBook !important;
+    font-family: qvbook !important;
     display: block;
+    margin: 0px;
 }
 .input_area{
     width: 100%;
@@ -84,7 +120,7 @@
     margin-bottom: 10px;
 }
 .input_area input{
-    font-family: CircularSTDBook !important;
+    font-family: qvmedium !important;
     color: #000000;
     font-size: 15px;
     outline: none;
@@ -97,7 +133,7 @@
     height: 40px;
 }
 .input_area textarea {
-    font-family: CircularSTDBook !important;
+    font-family: qvmedium !important;
     color: #000000;
     font-size: 15px;
     outline: none;
@@ -109,7 +145,7 @@
     width: 100%;
 }
 .input_area select{
-    font-family: CircularSTDBook !important;
+    font-family: qvmedium !important;
     color: #000000;
     font-size: 15px;
     outline: none;
@@ -124,8 +160,7 @@
 .box_shadow_heading{
     color: #000000;
     font-size: 18px;
-    font-family: CircularSTDMedium !important;
-    margin-bottom: 10px;
+    font-family: qvstdmedium !important;
 }
 
 .qv_checkbox {
@@ -133,8 +168,6 @@
     height: auto;
     float: left;
     display:inline-block;
-    margin-right: 24px;
-    margin-top: 10px;
 }
 
 .qv_checkbox .qv_checkbox_add_checkmark_label{
@@ -172,28 +205,19 @@
   width: 100%;
   height: auto;
   display: inline-block;
-  margin-top: 10px;
 }
-
-/* When the checkbox is checked, add a blue background */
 .qv_checkbox input:checked~.qv_add_checkmark {
     background-color: #1EC26B;
     border-radius: 5px;
 }
-
-/* Create the checkmark/indicator (hidden when not checked) */
 .qv_add_checkmark:after {
     content: "";
     position: absolute;
     display: none;
 }
-
-/* Show the checkmark when checked */
 .qv_checkbox input:checked~.qv_add_checkmark:after {
     display: block;
 }
-
-/* Style the checkmark/indicator */
 .qv_checkbox .qv_add_checkmark:after {
     left: 8px;
     top: 4px;
@@ -263,12 +287,12 @@
 .inputredio[type="radio"]:checked + label:after,
 .inputredio[type="radio"]:not(:checked) + label:after {
     content: '';
-    width: 12px;
-    height: 12px;
+    width: 14px;
+    height: 14px;
     background: #0A64F9;
     position: absolute;
-    top: 3px;
-    left: 3px;
+    top: 2px;
+    left: 2px;
     border-radius: 100%;
     -webkit-transition: all 0.2s ease;
     transition: all 0.2s ease;
@@ -280,8 +304,8 @@
 }
 .inputredio[type="radio"]:checked + label:after {
     opacity: 1;
-    -webkit-transform: scale(1);
-    transform: scale(1);
+    -webkit-transform: scale(0.8);
+    transform: scale(0.8);
 }
 
 .box_shadow_div_heading{
@@ -318,50 +342,181 @@
 .mt10{
   margin-top: 10px;
 }
-
-
-
-.css-wsp0cs-MultiValueGeneric {
+.btn-area {
+  display: inline-block;
+  width: 100%;
+  padding: 20px;
+}
+.blue_btn{
+  font-size: 16px;
+  background: #0a64f9;
+  color: #fff;
+  border-radius: 4px;
+  padding: 8px 25px;
+  width: auto;
+  cursor: pointer;
+  font-family: qvbook;
+}
+.blue_btn:hover, .black_btn:hover, .grey_btn:hover{
+  opacity: 0.8;
+}
+input.blue_btn{
+  margin: 0px;
+  background: #0a64f9;
+  width: auto;
+  padding: 8px 25px;
+  color: #fff;
+}
+.black_btn{
+  font-size: 16px;
+  background: #000;
+  color: #fff;
+  border-radius: 4px;
+  padding: 8px 25px;
+  width: auto;
+  cursor: pointer;
+  font-family: qvbook;
+}
+.grey_btn{
+  font-size: 16px;
+  background: #878787;
+  color: #fff;
+  border-radius: 4px;
+  padding: 8px 25px;
+  width: auto;
+  cursor: pointer;
+  font-family: qvbook;
+  margin-left:10px;
+}
+.btnsamewidth{
+  width: 120px;
+}
+.text_right{
+  text-align: right;
+}
+.table_main_area{
+  width: 100%;
+  height: auto;
+}
+.table_header{
+  background: #253338;
+  display: flex;
+  padding: 10px 20px;
+}
+.table_header p{
+  font-size:14px;
+  color: #FFF;
+  font-family:qvbook;
+}
+.table_body{
+  width: 100%;
+  height: auto;
+  display: inline-block;
+}
+.table_header_sticky{
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  border-radius: 8px;
+  background: #FFF;
+}
+.table_row{
+  display: flex;
+  padding: 10px 20px;
+  border-bottom: 1px solid #E8E8E8;
+}
+.table_row p{
+  color: #000;
+  font-size: 14px;
+  font-family:qvmedium;
+}
+.txt_ellipsis{
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
-  border-radius: 2px;
-  color: hsl(0, 0%, 20%);
-  font-size: 90% !important;
-  padding: 4px !important;
-  /* padding-left: 6px; */
-  box-sizing: border-box;
-  background-color: lightgray !important;
-margin: 2px !important;
+}
+.table5{
+  width:5%;
+}
+.table8{
+  width:8%;
+}
+.table10{
+  width:10%;
+}
+.table12{
+  width:12%;
+}
+.table15{
+  width:15%;
 }
 
-.css-1xc3v61-indicatorContainer {
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
-  display: flex;
-  -webkit-transition: color 150ms;
-  transition: color 150ms;
-  color: #000  !important;
-  padding: 9px !important;
-  box-sizing: border-box;
+.table18{
+  width:18%;
 }
-
-.css-b62m3t-container {
-  position: relative;
-  box-sizing: border-box;
- 
-  padding: 20px 0 !important;
+.table19{
+  width:19%;
 }
-.css-13cymwt-control {
-  -webkit-align-items: center;
-  -webkit-box-align: center;
-  -ms-flex-align: center;
-  align-items: center;
-  cursor: default;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: -ms-flexbox;
+.table20{
+  width:20%;
+}
+.table25{
+  width:25%;
+}
+.table30{
+  width:30%;
+}
+.table35{
+  width:35%;
+}
+.table40{
+  width:40%;
+}
+.table45{
+  width:45%;
+}
+.table50{
+  width:50%;
+}
+.table55{
+  width:55%;
+}
+.table60{
+  width:60%;
+}
+.table65{
+  width:65%;
+}
+.table70{
+  width:70%;
+}
+.table75{
+  width:75%;
+}
+.table80{
+  width:80%;
+}
+.table85{
+  width:85%;
+}
+.table90{
+  width:90%;
+}
+.table_header_top{
+  width: 100%;
+  height: auto;
+  padding: 10px 20px;
+}
+.table_header_top h1{
+  color: #000000;
+  font-family: adminmedium;
+  font-size: 18px;
+}
+.icon_img{
+  width: auto;
+  height: auto;
+  cursor: pointer;
+}
+.verifiedTableIcon{
   display: flex;
   -webkit-box-flex-wrap: wrap;
   -webkit-flex-wrap: wrap;
@@ -383,25 +538,25 @@ margin: 2px !important;
   box-sizing: border-box;
 min-height: 0px !important;}
 
-.css-t3ipsp-control{
-  min-height: 65px !important;
 
+.css-b62m3t-container {
+  position: relative;
+  box-sizing: border-box;
+ 
+  padding: 20px 0 !important;
 }
 
 
-.select-clicked {
-  border: 2px solid #000000; 
-  padding: 8px; 
+.css-wsp0cs-MultiValueGeneric {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-radius: 2px;
+  color: hsl(0, 0%, 20%);
+  font-size: 90% !important;
+  padding: 4px !important;
+  /* padding-left: 6px; */
+  box-sizing: border-box;
+  background-color: lightgray !important;
+margin: 2px !important;
 }
-
-
-
-.css-tj5bde-Svg {
-  display: inline-block;
-  fill: currentColor;
-  line-height: 1;
-  stroke: currentColor;
-  stroke-width: 0;
-  color: black;
-  width: 22px;
-  height: 22px;}
