@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import {
   ResponsiveContainer,
   BarChart,
@@ -10,6 +10,8 @@ import {
   Bar,
 } from "recharts";
 import Customtooltip from "./Customtooltip";
+import BlueArrowdown from '../../Assests/Filter/blueArrow.svg';
+import BlueArrowUp from '../../Assests/Filter/blueARROWup.svg';
 
 const dataByHourly = [
   { name: "9:00AM", pv: 2400, amt: 0 },
@@ -49,63 +51,87 @@ const dataByMonth = [
 ];
 
 const BarCharts = () => {
-  const [selectedFilter, setSelectedFilter] = useState("month");
+  const [selectedFilter, setSelectedFilter] = useState("Month");
+  const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const handleFilterChange = (e) => {
-    setSelectedFilter(e.target.value);
-  };
 
   const getChartData = () => {
     switch (selectedFilter) {
-      case "day":
+      case "days":
         return dataByDay;
-      case "month":
+      case "Month":
         return dataByMonth;
-      case "time":
+      case "Time":
         return dataByHourly;
       default:
         return dataByDay;
     }
   };
 
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+  const handleFilterChange = (filter) => {
+    setSelectedFilter(filter);
+    setDropdownOpen(false);
+  };
+ 
+
   const chartData = getChartData();
+
   return (
     <div className="w-full">
       <div className="flex justify-between items-center mb-10">
-        <h2 className="text-[20px] font-normal opacity-100 text-black ml-4 admin_medium">
-          Hourly Net Sales
-        </h2>
+        <div className="q_dashbaord_netsales">
+          <h1 className="">Hourly Net Sales</h1>
         
-        <div className="flex items-center space-x-4 mt-4">
-          {/* Add your filter component here */}
-          <select
-            className="border-2 border-customColor rounded px-8 py-2 mr-7 bg-white text-blue-500 text-[16px] Admin_std"
-            value={selectedFilter}
-            onChange={handleFilterChange} 
-          >
-            <option value="day">Days</option>
-            <option value="month">Months</option>
-            <option value="time">Time</option>
-            {/* Add more options as needed */}
-          </select>
+        </div>
+        <div className="flex items-center">
+          <div className="q-order-page-filter">
+        
+          <div className="custom-dropdown" onClick={() => setDropdownOpen(!dropdownOpen)}>
+  <div className="q_netsales_header">
+    <span className="selected-option q_drop_down_filter mt-1 mr-8">{selectedFilter}</span>
+    <img src={BlueArrowdown} alt="Down Icon" className={`w-4 h-4 ${dropdownOpen ? 'hidden' : ''}`} />
+    <img src={BlueArrowUp} alt="Up Icon" className={`w-4 h-4 ${dropdownOpen ? '' : 'hidden'}`} />
+  </div>
+  {dropdownOpen && (
+    <div className="dropdown-content">
+      <div className={selectedFilter === "Day" ? "selected" : ""} onClick={() => handleFilterChange("Day")}>Day</div>
+      <div className={selectedFilter === "Month" ? "selected" : ""} onClick={() => handleFilterChange("Month")}>Month</div>
+      <div className={selectedFilter === "Weeks" ? "selected" : ""} onClick={() => handleFilterChange("Weeks")}>Weeks</div>
+    </div>
+  )}
+</div>
+
+          </div>
         </div>
       </div>
-      {/* <div className="text-[16px] text-[#848484] admin_medium ml-4">
-        <span className=""></span>Oct 4, 2023 - Oct 4, 2023
-      </div> */}
       <div className="h-80">
-      <ResponsiveContainer width="100%" height="100%">
-        <BarChart data={chartData}>
-          <CartesianGrid stroke="#ccc" strokeDasharray="3 3" />
-          <XAxis dataKey="name" />
-          <YAxis />
-          <Tooltip content={<Customtooltip />} cursor={{ fill: 'rgba(0, 0, 0, 0.1)' }} />
-          <Legend />
-          <Bar dataKey="pv" fill="#438AFF" width={10} />
-          {/* Add more Bars as needed */}
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+        <ResponsiveContainer width="100%" height="100%">
+          <BarChart data={chartData}>
+            <CartesianGrid stroke="#ccc" strokeDasharray="3 3" />
+            <XAxis dataKey="name" />
+            <YAxis />
+            <Tooltip content={<Customtooltip />} cursor={{ fill: 'rgba(0, 0, 0, 0.1)' }} />
+            <Legend />
+            <Bar dataKey="pv" fill="#438AFF" width={10} />
+            {/* Add more Bars as needed */}
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
     </div>
   );
 };

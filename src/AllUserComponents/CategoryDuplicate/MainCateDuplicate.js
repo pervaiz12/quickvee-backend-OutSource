@@ -4,7 +4,7 @@ import CateDuplicateStore from './CateDuplicateStore'
 const MainCateDuplicate = () => {
   return (
     <>
-    <div className='q-order-main-page'>
+    <div className=''>
       <CateDuplicateStore />
     </div>
     

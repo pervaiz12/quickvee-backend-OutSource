@@ -1,133 +1,123 @@
-import React, { useEffect, useState } from 'react';
-import SortIcon from "../../../Assests/Dashboard/sort-arrows-icon.svg"
-import DeleteIcon from "../../../Assests/Category/deleteIcon.svg"
+import React, { useEffect, useState } from "react";
+import SortIcon from "../../../Assests/Dashboard/sort-arrows-icon.svg";
+import DeleteIcon from "../../../Assests/Category/deleteIcon.svg";
 import AddTaxesModal from "./AddTaxesModal";
 import EditTaxesModal from "./EditTaxesModal";
 
-import { fetchtaxesData ,deleteTax } from "../../../Redux/features/Taxes/taxesSlice"
+import {
+  fetchtaxesData,
+  deleteTax,
+} from "../../../Redux/features/Taxes/taxesSlice";
 
-
-import { useSelector, useDispatch } from 'react-redux';
-
+import { useSelector, useDispatch } from "react-redux";
 
 const TaxesDetail = () => {
+  const [alltaxes, setalltaxes] = useState([]);
 
-
-  const [alltaxes, setalltaxes] = useState([])
-
-  const AlltaxesDataState = useSelector((state) => state.taxes)
+  const AlltaxesDataState = useSelector((state) => state.taxes);
   const dispatch = useDispatch();
   useEffect(() => {
     let data = {
-      merchant_id: "MAL0100CA"
-    }
+      merchant_id: "MAL0100CA",
+    };
     if (data) {
-      dispatch(fetchtaxesData(data))
+      dispatch(fetchtaxesData(data));
     }
-
-  }, [])
+  }, []);
 
   useEffect(() => {
     if (!AlltaxesDataState.loading && AlltaxesDataState.taxesData) {
-      setalltaxes(AlltaxesDataState.taxesData)
+      setalltaxes(AlltaxesDataState.taxesData);
     }
-  }, [AlltaxesDataState, AlltaxesDataState.loading , AlltaxesDataState.taxesData])
+  }, [
+    AlltaxesDataState,
+    AlltaxesDataState.loading,
+    AlltaxesDataState.taxesData,
+  ]);
 
   const handleDeleteTax = (id) => {
     const data = {
       id: id,
-      merchant_id:"MAL0100CA"
+      merchant_id: "MAL0100CA",
     };
-    const userConfirmed = window.confirm("Are you sure you want to delete this tax?");
+    const userConfirmed = window.confirm(
+      "Are you sure you want to delete this tax?"
+    );
     if (userConfirmed) {
-
       if (id) {
         dispatch(deleteTax(data));
       }
     } else {
-
       console.log("Deletion canceled by user");
     }
   };
 
 
-  const myStyles = {
-    transform: "translate(-10px, 0px)"
-  };
-
   const mycur = {
-    cursor: "pointer"
+    cursor: "pointer",
   };
-
 
   return (
     <>
       <div className="q-category-bottom-detail-section mt-6">
         <div className="q-category-bottom-header-sticky ">
           <div className="q-category-bottom-header">
-            <span >Taxes</span>
-              <AddTaxesModal />
+            <span>Taxes</span>
+            <AddTaxesModal />
           </div>
-
         </div>
-      
-        <table className="w-full">
-            <thead>
-              <tr className="bg-[#253338] text-white">
-                <th className="p-3 text-left cursor-pointer" >Sort</th>
-                <th className="p-3 text-left">Title</th>
-                <th className="p-3 text-left">Percentage (%) </th>
-                <th className="p-3 text-right"> </th>
-              </tr>
-            </thead>
-            <tbody>
-            {
-            alltaxes && alltaxes.length >= 1 && alltaxes.map((taxes, index) => (
-              <tr key={index} className="text-black text-[18px] admin_medium border-b">
-                 <td className="p-3 "><img src={SortIcon} alt="sort-icon"  className="h-6 w-6"/></td>
-                 <td className="p-3">{taxes.title}</td>
-                  <td className="p-3 ">{taxes.percent}</td>
+
+        <div className="q-category-bottom-header-sticky">
+          <div className="q-category-bottom-categories-header">
+            <p className="categories-sort">Sort</p>
+            <p className="categories-title">Title</p>
+            <p className="categories-items">Percentage (%)</p>
+            <p className="categories-enable-disable"></p>
+          </div>
+        </div>
+        <div className="q-category-bottom-categories-listing">
+          {alltaxes &&
+            alltaxes.length >= 1 &&
+            alltaxes.map((taxes, index) => (
+              <div
+                key={index}
+                className="q-category-bottom-categories-single-category"
+              >
+                <p className="categories-sort">
+                  <img src={SortIcon} alt="sort-icon" className="h-4 w-5" />
+                </p>
+                <p className="categories-title">{taxes.title}</p>
+                <p className="categories-title">{taxes.percent}</p>
+
+                {taxes.title === "DefaultTax" ? (
+                  // Render only Edit when the title is 'defaulttax'
+                  <>
                   
-           
-                    {taxes.title === 'DefaultTax' ? (
-                      // Render only Edit when the title is 'defaulttax'
-                      <>
-                      <td className="p-3  flex justify-evenly mt-2  h-14"  style={myStyles}>
-                      <EditTaxesModal selectedTaxe={taxes} style={myStyles} /> 
-                      <span>   </span>
-                      </td>
-                      </>
-                    ) : (
-                      <>
-                       <td className="p-3  flex justify-evenly mt-2  h-14">
-                        <EditTaxesModal selectedTaxe={taxes} />
-                        <span>
-                          <img src={DeleteIcon} alt="Delete-icon" style={mycur} className="h-8 w-8" onClick={() => handleDeleteTax(taxes.id)} />
-                        </span>
-                        </td>
-                      </>
-                    )}
+                    <p className="categories_add_delete " style={{ width: '10rem', marginLeft: 'auto',display:"flex" }}>
+                      <EditTaxesModal selectedTaxe={taxes}  />
+                    </p>
+                  </>
+                ) : (
+                  <>
+                    <p className="categories_add_delete " style={{ width: '10rem', marginLeft: 'auto',display:"flex",justifyContent:"space-between" }}>
+                      <EditTaxesModal selectedTaxe={taxes} />
 
-
-                
-              </tr>
-
-              ))
-            }
-
-
-            </tbody>
-          </table>
-
-
-
+                      <img
+                        src={DeleteIcon}
+                        alt="Delete-icon"
+                        style={mycur}
+                        className="h-8 w-8"
+                        onClick={() => handleDeleteTax(taxes.id)}
+                      />
+                    </p>
+                  </>
+                )}
+              </div>
+            ))}
+        </div>
       </div>
     </>
   );
-
-
-
-
 };
 
 export default TaxesDetail;

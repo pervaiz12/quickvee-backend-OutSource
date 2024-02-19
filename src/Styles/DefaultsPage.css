@@ -1,5 +1,7 @@
+
 .error-message{
     color: red;
+    font-size: 13px !important;
 }
 
 .default-DeleteIcon{
@@ -31,4 +33,40 @@
 .img-DeleteIcon img{
     height: 40px;
     width: 40px;
+
+.error-message{
+    color: red;
+}
+
+.default-DeleteIcon{
+    display:flex;
+    justify-content: end;
+}
+.defaultDrag_div{
+    cursor: pointer  ;
+    position: relative;
+    height: 260px !important;
+    background-color: #f9f9f9;
+    overflow: hidden;
+}
+
+.default-img{
+    width: 100%;
+    height: 320px;
+    object-fit: contain;
+}
+.default-img-inputfield{
+    display: none;
+    width: 100%;
+}
+
+.img-DeleteIcon{
+    position: absolute;
+    top: 7px;
+    right: 7px;
+}
+.img-DeleteIcon img{
+    height: 40px;
+    width: 40px;
+
 }

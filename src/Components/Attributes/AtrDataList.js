@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { BASE_URL, ADD_ATTRIBUTE } from "../../Constants/Config";
 import AddIcon from "../../Assests/Category/addIcon.svg";
 import EditAttribute from "../Attributes/EditAttribute";
+import SortIcon from "../../Assests/Category/Sorting.svg"
 
 const AtrDataList = ({ seVisible }) => {
   const [showModal, setShowModal] = useState(false);
@@ -101,7 +102,7 @@ const AtrDataList = ({ seVisible }) => {
       {/* <div className="q-attributes-top-detail-section">
         <li>{submitmessage}</li>
       </div>      */}
-
+<div className="box">
       <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
           <div className="q-attributes-bottom-header">
@@ -125,7 +126,7 @@ const AtrDataList = ({ seVisible }) => {
                 className="q-attributes-bottom-attriButes-single-attributes"
               >
                 <p className="attriButes-sort">
-                  <img src={AddIcon} alt="add-icon" />
+                  <img src={SortIcon} alt="add-icon" />
                 </p>
                 <p className="attriButes-title">{attribute.title}</p>
 
@@ -186,6 +187,7 @@ const AtrDataList = ({ seVisible }) => {
         )}
 
        
+      </div>
       </div>
     </>
   );

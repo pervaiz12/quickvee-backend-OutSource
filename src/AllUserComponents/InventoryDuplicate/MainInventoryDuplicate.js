@@ -3,7 +3,7 @@ import StoreCateUser from './StoreCateUser'
 
 const MainInventoryDuplicate = () => {
   return (
-   <div className='q-category-main-page'>
+   <div className=''>
     <StoreCateUser />
 
    </div>

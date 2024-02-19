@@ -148,6 +148,8 @@ const AddCategory = ({ seVisible }) => {
   };
 
   return (
+    <>
+    <div className="box">
     <div className="q-add-categories-section">
       <form onSubmit={handleSubmit} enctype="multipart/form-data">
         <div className="q-add-categories-section-header">
@@ -187,15 +189,17 @@ const AddCategory = ({ seVisible }) => {
 
 
           <div
-            className={`h-1/2  h-[100px] flex items-center justify-center border-2 border-dashed border-[#BFBFBF] bg-white rounded-lg mt-2  defaultDrag_div`}
+            className={`h-[100px] flex items-center justify-center border-2 border-dashed border-[#BFBFBF] bg-white rounded-lg mt-2  defaultDrag_div`}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
             onClick={openFileInput}
             style={{
               cursor: "pointer",
               position: "relative",
-              height: "auto",
+              height: "260px",
               padding: "10px",
+              backgroundColor: "#f9f9f9",
+              overflow:"hidden"
             }}
           >
             {category.image && category.image.base64 ? (
@@ -216,7 +220,7 @@ const AddCategory = ({ seVisible }) => {
                   alt="Preview"
                   className="default-img"
                   style={{
-                    height: "320px",
+                    height: "auto",
                     objectFit: "contain",
                     width: "100%",
                   }}
@@ -229,7 +233,7 @@ const AddCategory = ({ seVisible }) => {
                   style={{ transform: "translate(2.5rem, 0px)" }}
                   alt="Default"
                 />
-                <span>Category Image</span>
+                <span style={{color:"#6A6A6A"}}>Category Image</span>
               </div>
             )}
             <div className="q-add-categories-single-input">
@@ -247,6 +251,8 @@ const AddCategory = ({ seVisible }) => {
           </div>
 
 
+       
+          <div className="row py-3" style={myStyles}>
           <div className="add-category-checkmark-div">
             <label className="add-category-checkmark-label mt-2">
               Show Online ?
@@ -263,7 +269,6 @@ const AddCategory = ({ seVisible }) => {
               <span className="add-category-checkmark"></span>
             </label>
           </div>
-          <div className="row " style={myStyles}>
             <div className="add-category-checkmark-div">
               <label className="add-category-checkmark-label mt-2">
                 Use Loyalty Point ?
@@ -310,6 +315,8 @@ const AddCategory = ({ seVisible }) => {
         </div>
       </form>
     </div>
+    </div>
+    </>
   );
 };
 

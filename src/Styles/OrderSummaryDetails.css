@@ -1,0 +1,184 @@
+@font-face {
+    font-family: CircularBold;
+    src: url("../Assests/Fonts/circular-bold.TTF");
+}
+
+@font-face {
+    font-family: CircularMedium;
+    src: url("../Assests/Fonts/circulur-medium.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDBlack;
+    src: url("../Assests/Fonts/circulur-std-black.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDBook;
+    src: url("../Assests/Fonts/circulur-std-book.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDMedium;
+    src: url("../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
+}
+
+
+.q_order_bg_img_section {
+    background: url("../Assests/Dashboard/bgorder.png");
+    background-repeat: no-repeat;
+    background-repeat: no-repeat;
+    background-size: auto;
+    min-height: 450px;
+   
+}
+
+.content_order_main{
+margin: -6px;}
+/* .q_order_images_details>img{
+height: 450px;
+    width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;} */
+
+    .q_store_details{
+        font-size: 25px;
+        /* font-family:CircularSTDBlack !important ; */
+        font-weight: bold;
+        color: #000000;
+        opacity: 1;
+      
+    }
+
+    .q_order_status_header_section{
+        width:100%;
+        display: flex;
+        margin-top: 5rem;
+    }
+    .q_order_content_multistepform{
+        width:60%;
+    }
+    .q_order_summary_billing_page{
+        width:40%
+    }
+    .q_accept_details{
+        display: flex;
+        justify-content: space-between;
+    }
+
+    .q_main_multistep_summary{
+        position: relative;
+        top:10%
+    }
+    .q-order-payement-stepper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+       
+        background: #F9F9F9 !important;
+        padding: 10px;
+    }
+
+    .q-order-payement-stepper>span {
+        color: #878787 !important;
+        font-family: QuicksandBold, 'Quicksand' !important;
+        font-size: 18px !important;
+        margin: 0 10px;
+        cursor: pointer;
+    }
+
+    .q-order-payement-stepper>.active-payment-stepper-status {
+        width: 10px;
+        height: 10px;
+        background-color: #0A64F9;
+        border-radius: 50%;
+        margin: 0px;}
+        .q-order-payement-stepper>hr {
+            width: 10%;
+            margin: 0px;
+            height: 2px;
+            background-color: #0A64F9 !important;
+            border: none;
+            transition: background-color 0.3s ease-out;
+        }
+        .q-order-payement-stepper>span {
+            color: #878787 !important;
+            font-family: QuicksandBold, 'Quicksand' !important;
+            font-size: 18px !important;
+            margin: 0 10px;
+            cursor: pointer;
+            text-align: -webkit-center;
+        }
+
+        .payment-page-wishlist-cart-items {
+            background: #FFFFFF;
+            border: 1px solid #E8E8E8;
+            border-radius: 4px;
+            display: flex;
+            align-items: flex-start;
+            padding: 10px;
+            margin: 0 0 15px 0;
+            width: 100%;
+        }
+        .quickvee-payment-component-content {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 30px 50px;
+            flex-wrap: wrap;
+        }
+        .payment-stepper-cart>.payment-stepper-wishlist-item {
+            width: 50%;
+            border-right: 1px solid #E8E8E8;
+            padding: 0 10px 0 20px;
+        }
+        .payment-stepper-cart>.payment-stepper-wishlist-item>.payment-all-cart-items {
+            margin: 20px 0;
+            overflow-y: scroll;
+            height: 63vh;
+            padding: 0 20px 0 0;
+        }
+        .payment-page-wishlist-cart-items {
+            background: #FFFFFF;
+            border: 1px solid #E8E8E8;
+            border-radius: 4px;
+            display: flex;
+            align-items: flex-start;
+            padding: 10px;
+            margin: 0 0 15px 0;
+            width: 100%;}
+
+            img.multiSVG{border: 1px solid #2EC278;
+            padding: 5px;
+            border-radius: 50%;
+            background-color: #2EC278;
+            color:white
+        }
+
+
+        .success_btn {
+            background: #2EC278;
+            font-family: CircularSTDBook !important;
+            font-size: 16px;
+            color: #fff;
+            padding: 5px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .payment-stepper-checkout-content{
+        display: flex;
+    flex-direction: column;}
+
+
+    .delivery_btn {
+        background: #D8D8D8;
+        font-family: CircularSTDBook !important;
+        font-size: 16px;
+        color: #000;
+        padding: 5px 15px;
+        border-radius: 8px;
+        cursor: pointer;
+    }

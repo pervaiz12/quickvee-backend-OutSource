@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import { Link, useNavigate } from "react-router-dom";
 import DashboardIcon from "../../Assests/Dashboard/dashboard.svg";
@@ -42,6 +42,14 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
     setActiveItem(item.link);
     navigate(item.link);
   };
+  useEffect(() => {
+    
+  console.log("hello")
+    return () => {
+     
+    }
+  }, )
+  
 
   return (
     <>
@@ -55,7 +63,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
             ? menuItems.map((item) => (
                 <div
                   key={item.id}
-                  className={`mb-4 text-base ${
+                  className={`mb-2 text-base ${
                     activeItem === item.link ? "active" : ""
                   }`}
                 >
@@ -88,7 +96,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
             : menuItems.map((item) => (
                 <div
                   key={item.id}
-                  className={`mb-4 text-base cursor-pointer ${
+                  className={`mb-2 text-base cursor-pointer ${
                     activeItem === item.link ? "active" : ""
                   }`}
                 >
@@ -124,15 +132,16 @@ const DropdownMenuItem = ({ item, isMenuOpen }) => {
   };
 
   return (
-    <div className="relative" style={{ width: isMenuOpen ? "16rem" : "6rem" }}>
+    <div className="relative" style={isMenuOpen ? { width: "16rem" } : { width: "6rem", marginLeft: "24px" }} >
 
     <div className="flex items-center">
+    {item.icon}
       {isMenuOpen && (
         <p
-          className="ml-2 cursor-pointer menu-item text-gray-400"
+          className="cursor-pointer menu-item text-gray-400"
           onClick={handleToggleDropdown}
         >
-          {item.icon}
+        
         </p>
       )}
   
@@ -148,7 +157,7 @@ const DropdownMenuItem = ({ item, isMenuOpen }) => {
     </div>
   
     {isDropdownOpen && (
-      <div className="absolute mt-0 bg-[#334247] p-4 shadow w-full text-center z-10">
+      <div className="mt-0 bg-[#334247] p-4 shadow w-full text-center z-10">
         {item.dropdownItems.map((dropdownItem) => (
           <Link
             key={dropdownItem.id}
@@ -482,6 +491,7 @@ const menuItems = [
       { id: 81, text: "Current Inventory Value ", link: "/store-reporting/current-inventory-value" },
 
       { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
+      { id: 82, text: "Order Refund Report ", link: "/store-settings/order-refund-report" },
 
     ],
   },
