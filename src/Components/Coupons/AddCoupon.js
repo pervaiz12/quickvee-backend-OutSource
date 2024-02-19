@@ -69,7 +69,9 @@ const AddCoupon = ({ seVisible }) => {
   
   return (
     <>
-      <div className="mt-10">
+   
+      <div className="box">
+      <div className="box_shadow_div">
         <div className="q-add-categories-section">
           <div className="q-add-categories-section-header">
             <span onClick={() => seVisible("CouponDiscount")}>
@@ -179,6 +181,7 @@ const AddCoupon = ({ seVisible }) => {
             </button>
           </div>
         </div>
+      </div>
       </div>
     </>
   );

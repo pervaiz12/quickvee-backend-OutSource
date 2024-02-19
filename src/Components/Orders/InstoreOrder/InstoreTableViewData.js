@@ -13,6 +13,19 @@ const InstoreTableViewData = () => {
   const AllInStoreDataState = useSelector((state) => state.inStoreOrder);
   const dispatch = useDispatch();
 
+  const [selectedValue, setSelectedValue] = useState(1);
+
+  const handleChange = (event) => {
+    setSelectedValue(parseInt(event.target.value));
+  };
+  const numberOptions = [];
+  for (let i = 1; i <= 50; i++) {
+    numberOptions.push(<option key={i} value={i}>{i}</option>);
+  }
+
+
+
+
   useEffect(() => {
     const fetchData = async () => {
       let data = {
@@ -45,13 +58,24 @@ const InstoreTableViewData = () => {
         <div className="q-attributes-bottom-header-sticky">
           <div className="q-attributes-bottom-header">
           <div className="flex">
-  <div className="q_show_data">Show</div>
-  <div className="q_entery_number">1
-  <img src={DownIcon} alt="" className="ml-5" /></div>
-  <div className="q_entery_data">Entries</div>
-</div>
+      <div className="q_show_data">Show</div>
+      <div className="">
+      <select
+  value={selectedValue}
+  onChange={handleChange}
+  className="ml-2 pagination_selected"
+  style={{
+   
+  }}
+>
+  {numberOptions}
+</select>
+        {/* <img src={DownIcon} alt="" className="ml-1" /> */}
+      </div>
+      <div className="q_entery_data">Entries</div>
+    </div>
 
-            
+
 
             <DefaultPagination
               totalEntries={100}
@@ -95,22 +119,26 @@ const InstoreTableViewData = () => {
                   <p className="table_Amount_details">${order.amt}</p>
                   <p className="table_amount_status">{order.order_status}</p>
                 </div>
-                {/* <div className="table_view_items">
+                <div className="table_view_items">
                   <select className="table_status_selected ">
-                    <option value="day">{order.payment_result}</option>
+                    <option className="drop_down" value="day">{order.payment_result}
+                    <img src={DownIcon} alt="Down Icon" className="w-6 h-6 ml-16" /></option>
                   
                   </select>
-                </div> */}
+                </div>
 
-                <div className="table_view_items">
+      
+                {/* <div className="table_view_items">
       <div className="drop_custom_border">
       
         <div className="drop_down">
         <option value="day" className="q_order_status_details">{order.payment_result}</option>
-        <img src={DownIcon} alt="Down Icon" className="w-6 h-6 ml-16" />
+  
+  
+        
         </div>
       </div>
-    </div>
+    </div> */}
 
                 <div className="attriButes-details">
                   <p className="table_view_details">

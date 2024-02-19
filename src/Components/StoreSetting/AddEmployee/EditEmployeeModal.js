@@ -35,6 +35,7 @@ const EditEmployeeModal =  ({employee, states , employeeList}) => {
 
     return <>
         <div>
+            <div className='box'>
         <span className='categories-items categories-items-btn' onClick={handleOpen}> <img src={EditIcon} alt="edit-icon" /> </span>
         {showModal && (
           <div className="q-custom-modal-container" id="addemployee">
@@ -244,6 +245,7 @@ const EditEmployeeModal =  ({employee, states , employeeList}) => {
           </div>
         )}
         
+        </div>
         </div>
     
     </>

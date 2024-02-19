@@ -278,6 +278,7 @@ const EditCategory = () => {
 
   return (
     <div className="q-category-main-page">
+      <div className="box">
       <div className="q-category-top-detail-section">
         <li>In order to use the Quickvee app one Category is required.</li>
         <li>
@@ -478,6 +479,7 @@ const EditCategory = () => {
           </div>
         </form>
       </div>
+    </div>
     </div>
   );
 };

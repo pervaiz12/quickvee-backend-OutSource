@@ -362,7 +362,7 @@ export default function SettingStoreAlters() {
 
     return (
         <>
-            <div className="mx-6 my-2">
+            <div className="box">
                 {/* Online Order Notifications */}
                 <div className="store-setting-main-div">
                     <h2 className="store-setting-h2"><b>Get Notification Via Email</b></h2>
