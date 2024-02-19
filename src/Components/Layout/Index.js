@@ -22,7 +22,7 @@ const Index = ({visible}) => {
     <>
     <div className="bg-[#F9F9F9] main-page-home-dashboard">
       <Header isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
-   
+  
       <div>
         {
           visible === "order-summary" ? "" :

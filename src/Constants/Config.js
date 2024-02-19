@@ -1,3 +1,4 @@
+
 // All api calls are initialized in this component for this application
 //remove unwanted and credentials of other app
 
@@ -230,11 +231,13 @@ module.exports = Object.freeze({
 
       STATUS_UPD_VENDORS:"Vendor_api/onlineAvail",
 
+ // GET_ORDER_SUMMERY_DETAILS
 
+    GET_ORDER_SUMMARY_DETAILS:"Orders/order_details",
+  
   // NewsLetter List API
   NEWS_LETTER_LIIST: "vendor_report_api/newsletter",
 
   GET_REORDER_INVENTORY_LIST: "ReportingReactapi/get_reorder_inventory_list",
 
 });
-

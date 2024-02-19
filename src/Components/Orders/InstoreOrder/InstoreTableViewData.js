@@ -3,6 +3,7 @@ import DefaultPagination from "./DefaultPagination";
 import { fetchInStoreOrderData } from "../../../Redux/features/Orders/inStoreOrderSlice";
 import { useSelector, useDispatch } from "react-redux";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
+import { Link } from "react-router-dom";
 
 const InstoreTableViewData = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -43,13 +44,14 @@ const InstoreTableViewData = () => {
       <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
           <div className="q-attributes-bottom-header">
-            <div className="flex justify-between mr-auto">
-              <div className="text-black">show </div>
-              <p className="q_order_border">
-                1 <img src={DownIcon} alt="" className="" />
-              </p>
-              <div className="text-black">entries</div>
-            </div>
+          <div className="flex">
+  <div className="q_show_data">Show</div>
+  <div className="q_entery_number">1
+  <img src={DownIcon} alt="" className="ml-5" /></div>
+  <div className="q_entery_data">Entries</div>
+</div>
+
+            
 
             <DefaultPagination
               totalEntries={100}
@@ -93,16 +95,30 @@ const InstoreTableViewData = () => {
                   <p className="table_Amount_details">${order.amt}</p>
                   <p className="table_amount_status">{order.order_status}</p>
                 </div>
-                <div className="table_view_items">
+                {/* <div className="table_view_items">
                   <select className="table_status_selected ">
                     <option value="day">{order.payment_result}</option>
-                    {/* <option value="month">Rejected</option> */}
-                    {/* Add more options as needed */}
+                  
                   </select>
-                </div>
+                </div> */}
+
+                <div className="table_view_items">
+      <div className="custom-dropdown">
+      
+        <div className="drop_down">
+        <option value="day" className="mr-3">{order.payment_result}</option>
+        <img src={DownIcon} alt="Down Icon" className="w-6 h-6 ml-2" />
+        </div>
+      </div>
+    </div>
 
                 <div className="attriButes-details">
-                  <p className="table_view_details   ">View Details</p>
+                  <p className="table_view_details">
+                  <Link to={`/store-reporting/order-summary/${order.order_id}`}>
+                    View Details
+                  </Link>
+                    
+                  </p>
                 </div>
                 <div className="table_border_bottom"></div>
               </div>
