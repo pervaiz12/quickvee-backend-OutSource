@@ -23,30 +23,57 @@ export default function AdminView() {
     },[])
 // ---------------------------
 const [selectedAction, setSelectedAction] = useState('');
+const [searchRecord,setSearchRecord]=useState('')
 
-  const handleSelectChange = (e) => {
-    const selectedUrl = e.target.value;
-    const urlParts = selectedUrl.split('/');
-    const url=window.location.href
+  // const handleSelectChange = (e) => {
+  //   const selectedUrl = e.target.value;
+  //   const urlParts = selectedUrl.split('/');
+  //   const url=window.location.href
     
-    if(urlParts[2]=="editAdmin"){
+  //   if(urlParts[2]=="editAdmin"){
       
-      navigate(`${selectedUrl}`);
+  //     navigate(`${selectedUrl}`);
      
-    }else {
-      console.log('hello delet')
-    }
-  };
+  //   }else {
+  //     console.log('hello delet')
+  //   }
+  // };
 
 // ---------------------------
+const handleSearchInputChange=(e)=>{
+  setSearchRecord(e.target.value)
+}
+const filteredAdminRecord = AdminRecord && AdminRecord.AdminRecord && Array.isArray(AdminRecord.AdminRecord) 
+? AdminRecord.AdminRecord.filter(result =>
+    (result.owner_name && result.owner_name.toLowerCase().includes(searchRecord.toLowerCase())) ||
+    (result.email && result.email.toLowerCase().includes(searchRecord.toLowerCase())) ||
+    (result.phone && result.phone.includes(searchRecord))
+  )
+: [];
+
 
   return (
     <>
    
    <div className='box'>
       <div className='box_shadow_div'>
-        <div className='btn-area'>
-          <Link to="/users/addAdmin" className='blue_btn'>ADD</Link>
+        <div className='qvrow'>
+          <div className='col-qv-8'>
+            <div className='btn-area'>
+              <Link to="/users/addAdmin" className='blue_btn'>ADD</Link>
+            </div>
+          </div>
+          <div className='col-qv-4'>
+            <div className='seacrh_area'>
+            <div className="input_area">
+              <input className="" type="text" value={searchRecord}
+               onInput={handleSearchInputChange}
+               placeholder="Search..."
+               autoComplete="off"
+               />
+            </div>
+            </div>
+          </div>
         </div>
         <div className='table_main_area'>
           <div className='table_header_sticky'>
@@ -64,8 +91,9 @@ const [selectedAction, setSelectedAction] = useState('');
           </div>
           <div className='table_body'>
               {
-                  Array.isArray(AdminRecord && AdminRecord.AdminRecord) ?AdminRecord.AdminRecord.map(result=>{
-                      // console.log(result)
+                  // Array.isArray(AdminRecord && AdminRecord.AdminRecord) ?AdminRecord.AdminRecord.map(result=>{
+                    Array.isArray(AdminRecord && AdminRecord.AdminRecord) ? filteredAdminRecord.map(result=>{
+                     
                       return(
                           
                               <div className='table_row' key={result.id}>

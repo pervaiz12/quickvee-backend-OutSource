@@ -58,7 +58,7 @@ export default function EditMerchant() {
                             <div className='input_area'>
                                 <label>Merchant ID</label>
                                 <input 
-                                    className=''
+                                    className='merchant-disabled'
                                     type='text'
                                     // name="password"
                                     value={getEditMerchant.merchant_id}
@@ -99,7 +99,7 @@ export default function EditMerchant() {
                         </div>
                     </div>
                     <div className='qvrow'>
-                        <div className='col-qv-6'>
+                        <div className='col-qv-4'>
                             <div className='input_area'>
                                 <label>Account Type</label>
                                 <select 
@@ -115,7 +115,7 @@ export default function EditMerchant() {
                             </div>
                             {/* {errorAdminId && <span>{errorAdminId}</span>} */}
                         </div>
-                        <div className='col-qv-3'>
+                        <div className='col-qv-4'>
                             <div className='input_area'>
                                 <label>Inventory Approval</label>
                                 <Switch
@@ -133,7 +133,7 @@ export default function EditMerchant() {
                             </div>
                             {/* {errorPin && <span>{errorPin}</span>} */}
                         </div>
-                        <div className='col-qv-3'>
+                        <div className='col-qv-4'>
                             <div className='input_area'>
                                 <label>Current OTP</label>
                                 <input 
@@ -323,8 +323,6 @@ export default function EditMerchant() {
                       
                     </div>
                     <br/>
-                
-                
                     <input 
                         type='button'
                         className="blue_btn"
@@ -332,9 +330,6 @@ export default function EditMerchant() {
                         onClick={handleUpdateMerchant}
                     /> 
                 </div>
-                
-        
-        
         </div>
         
         

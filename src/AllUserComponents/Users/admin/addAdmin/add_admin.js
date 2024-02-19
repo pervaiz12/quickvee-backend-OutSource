@@ -18,9 +18,9 @@ export default function Add_Admin() {
                                 value={addAdminData.owner_name}
                                 onChange={handleChange}
                             />
+                            {addAdminData.errors.owner_name && <span className='error'>{addAdminData.errors.owner_name}</span>}
                         </div>
                         
-                        {addAdminData.errors.owner_name && <span className='error'>{addAdminData.errors.owner_name}</span>}
                     </div>
                     
                     <div className='col-qv-6'>
@@ -32,12 +32,10 @@ export default function Add_Admin() {
                                 name="email"
                                 value={addAdminData.email}
                                 onChange={handleChange}
-                                onBlur={() => handleBlur('email')}
-                                
-                                
+                                onBlur={() => handleBlur('email')}   
                             />
+                            {addAdminData.errors.email && <span className='error'>{addAdminData.errors.email}</span>}
                         </div>
-                        {addAdminData.errors.email && <span className='error'>{addAdminData.errors.email}</span>}
                     </div>
                 </div>
                 <div className='qvrow'>
@@ -52,8 +50,8 @@ export default function Add_Admin() {
                                 onChange={handleChange}
                                 
                             />
+                            {addAdminData.errors.password && <span className='error'>{addAdminData.errors.password}</span>}
                         </div>
-                        {addAdminData.errors.password && <span className='error'>{addAdminData.errors.password}</span>}
                     </div>
                     <div className='col-qv-6'>
                         <div className='input_area'>
@@ -68,8 +66,8 @@ export default function Add_Admin() {
                                 onKeyPress={handleKeyPress}
                             
                             />
+                            <label className='error'>{addAdminData.errors.phone}</label>
                         </div>
-                        <label className='error'>{addAdminData.errors.phone}</label>
                     </div>
                 </div>  
                 <input 

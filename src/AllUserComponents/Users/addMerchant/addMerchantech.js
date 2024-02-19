@@ -59,10 +59,10 @@ export default function AddMerchan() {
                                             name="storename"
                                             value={store.storename}
                                             onChange={handleChange}
-                                        />
+                                            />
+                                            {store.errors.storename && <span className='error'>{store.errors.storename}</span>}
                                     </div>
                                     
-                                    {store.errors.storename && <span className='error'>{store.errors.storename}</span>}
                                 </div>
                                 
                                 <div className='col-qv-6'>
@@ -75,8 +75,9 @@ export default function AddMerchan() {
                                             value={store.ownerName}
                                             onChange={handleChange}
                                         />
+                                        <span className='error'>{store.errors.ownerName}</span>
                                     </div>
-                                    <span className='error'>{store.errors.ownerName}</span>
+                                    
                                 </div>
                             </div>
                             <div className='qvrow'>
@@ -91,8 +92,8 @@ export default function AddMerchan() {
                                             value={store.email}
                                             onBlur={() => handleBlur('email')}
                                         />
+                                        <span className='error'>{store.errors.email}</span>
                                     </div>
-                                    <span className='error'>{store.errors.email}</span>
                                 </div>
                                 <div className='col-qv-6'>
                                     <div className='input_area'>
@@ -106,8 +107,8 @@ export default function AddMerchan() {
                                             onBlur={() => handleBlur('password')}
                                         
                                         />
+                                        <span className='error'>{store.errors.password}</span>
                                     </div>
-                                    <span className='error'>{store.errors.password}</span>
                                 </div>
                             </div>
                             <div className='qvrow'>
@@ -124,8 +125,8 @@ export default function AddMerchan() {
                                             onKeyPress={handleKeyPress}
                                             // placeholder='First Name'
                                         />
+                                        <span className='error'>{store.errors.phone}</span>
                                     </div>
-                                    <span className='error'>{store.errors.phone}</span>
                                 </div>
                                 <div className='col-qv-6'>
                                     <div className='input_area'>
@@ -150,8 +151,8 @@ export default function AddMerchan() {
                                             }
                                         </select>
 
+                                        <label className='error'>{store.errors.state}</label>
                                     </div>
-                                    <label className='error'>{store.errors.state}</label>
                                 </div>
                             </div>
                             <input 
@@ -184,8 +185,8 @@ export default function AddMerchan() {
                                             )
                                             }
                                         </select>
+                                        {errorAdminId && <span className='error'>{errorAdminId}</span>}
                                     </div>
-                                    {errorAdminId && <span className='error'>{errorAdminId}</span>}
                                 </div>
                                 <div className='col-qv-6'>
                                     <div className='input_area'>
@@ -199,8 +200,8 @@ export default function AddMerchan() {
                                             maxLength={4}
                                             onKeyPress={handleKeyPress}
                                         />
+                                        {errorPin && <span className='error'>{errorPin}</span>}
                                     </div>
-                                    {errorPin && <span className='error'>{errorPin}</span>}
                                 </div>
                             </div>
                             <div className='qvrow'>
@@ -214,8 +215,8 @@ export default function AddMerchan() {
                                             value={store.storename}
                                             onChange={handleChange}
                                         />
+                                        {store.errors.storename && <span className='error'>{store.errors.storename}</span>}
                                     </div>
-                                    {store.errors.storename && <span className='error'>{store.errors.storename}</span>}
                                 </div>
                                 <div className='col-qv-6'>
                                     <div className='input_area'>
@@ -228,8 +229,8 @@ export default function AddMerchan() {
                                             value={store.ownerName}
                                             onChange={handleChange}
                                         />
+                                        <span className='error'>{store.errors.ownerName}</span>
                                     </div>
-                                    <span className='error'>{store.errors.ownerName}</span>
                                 </div>
                             </div>
                             <div className='qvrow'>
@@ -246,8 +247,8 @@ export default function AddMerchan() {
                                             onBlur={() => handleBlur('email')}
                                             
                                         />
+                                        <span className='error'>{store.errors.email}</span>
                                     </div>
-                                    <span className='error'>{store.errors.email}</span>
                                 </div>
                                 <div className='col-qv-6'>
                                     <div className='input_area'>
@@ -263,8 +264,8 @@ export default function AddMerchan() {
                                             // value={merchantStore.mer_password}
                                             // onChange={handleChangeMerchant}
                                         />
+                                        <span className='error'>{store.errors.password}</span>
                                     </div>
-                                    <span className='error'>{store.errors.password}</span>
                                 </div>
                                 <div className='col-qv-6'>
                                     <div className='input_area'>
@@ -280,8 +281,8 @@ export default function AddMerchan() {
                                             // value={merchantStore.mer_phone}
                                             // onChange={handleChangeMerchant}
                                         />
+                                        <span className='error'>{store.errors.phone}</span>
                                     </div>
-                                    <span className='error'>{store.errors.phone}</span>
                                 </div>
                                 <div className='col-qv-6'>
                                     <div className='input_area'>
@@ -305,8 +306,8 @@ export default function AddMerchan() {
                                             )
                                             }
                                         </select>
+                                        <span className='error'>{store.errors.state}</span>
                                     </div>
-                                    <span className='error'>{store.errors.state}</span>
                                 </div>
                                 <input 
                                     type='button'

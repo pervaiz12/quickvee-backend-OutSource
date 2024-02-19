@@ -1,4 +1,4 @@
-import React,{useEffect} from 'react'
+import React,{useEffect,useState} from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import{ManagerRecord} from '../../../Redux/features/user/managerSlice'
 import ManagerFunctionality from './managerFunctionality'
@@ -17,10 +17,44 @@ export default function Manager() {
         dispatch(ManagerRecord())
 
     },[])
+    // ====================================
+    const [searchRecord,setSearchRecord]=useState('')
+
+    const handleSearchInputChange=(e)=>{
+      setSearchRecord(e.target.value)
+    }
+    const filteredAdminRecord = managerList && managerList.ManagerRecord &&  Array.isArray(managerList.ManagerRecord)
+    ? managerList.ManagerRecord.filter(result =>
+        (result.name && result.name.toLowerCase().includes(searchRecord.toLowerCase())) ||
+        (result.email && result.email.toLowerCase().includes(searchRecord.toLowerCase())) ||
+        (result.phone && result.phone.includes(searchRecord))
+      )
+    : [];
+    // ====================================
+
   return (
     <>
     <div className='box'>
     <div className='box_shadow_div'>
+      <div className='qvrow'>
+          <div className='col-qv-8'>
+            {/* <div className='btn-area'>
+              <Link to="/users/addMerchant"className='blue_btn'>ADD</Link>
+            </div>  */}
+          </div>
+          <div className='col-qv-4'>
+              <div className='seacrh_area'>
+              <div className="input_area">
+                <input className="" type="text" value={searchRecord}
+                onInput={handleSearchInputChange}
+                placeholder="Search..."
+                autoComplete="off"
+                />
+              </div>
+              </div>
+          </div>
+
+      </div>
       <div className='table_main_area'>
         <div className='table_header_sticky'>
           <div className='table_header_top'>
@@ -35,14 +69,17 @@ export default function Manager() {
         </div>
           <div className='table_body'>
             {
-              managerList && Array.isArray(managerList.ManagerRecord) && managerList.ManagerRecord.map((result,index)=>{
+              // filteredAdminRecord
+              // managerList && Array.isArray(managerList.ManagerRecord) && managerList.ManagerRecord.map((result,index)=>{
+                managerList && Array.isArray(managerList.ManagerRecord) && filteredAdminRecord.map((result,index)=>{
+                
                 // console.log(result)
                 return(
                   <div className='table_row' key={index}>
                     <p className='table25'>{result.name}</p>
                     <p className='table30'>{result.email}</p>
                     <p className='table20'>{result.phone}</p>
-                    <p className='table20' onClick={()=>handleViewMerchant(result.merchant_id)} >View Merchant</p>
+                    <p className='table20' onClick={()=>handleViewMerchant(result.merchant_id)} ><span className="viewMerchant">View Merchant</span></p>
                    
                   </div>
   
