@@ -65,13 +65,12 @@ const OnlineTableViewData = () => {
       <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
           <div className="q-attributes-bottom-header">
-            <div className="flex justify-between mr-auto">
-              <div className="text-black">show </div>
-              <p className="q_order_border">
-                1 <img src={DownIcon} alt="" className="" />
-              </p>
-              <div className="text-black">entries</div>
-            </div>
+          <div className="flex">
+  <div className="q_show_data">Show</div>
+  <div className="q_entery_number">1
+  <img src={DownIcon} alt="" className="ml-5" /></div>
+  <div className="q_entery_data">Entries</div>
+</div>
 
             {/* Pagination component */}
             <DefaultPagination />

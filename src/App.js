@@ -94,6 +94,7 @@ import "./Styles/OrderSummaryDetails.css";
 function App() {
   return (
     <Routes>
+      
       <Route exact path="/" element={<Main />} />
       {/* <Route exact path="/" element={<Layout />} /> */}
 
@@ -131,8 +132,9 @@ function App() {
       <Route
         exact
         path="/category/edit-category/:categoryCode"
-        element={<Main visible={"category-edit-cat"} />}
-      />
+        element={<Main visible={"category-edit-cat"} />} />
+      
+     
       <Route exact path="/timesheet" element={<Main visible={"timesheet"} />} />
       <Route
         exact
@@ -144,11 +146,16 @@ function App() {
         path="/productedit"
         element={<Main visible={"productedit"} />}
       />
+      
       <Route
         exact
-        path="/productedit"
-        element={<Main visible={"productedit"} />}
+        path="/product-add"
+        element={<Main visible={"product-add"} />}
       />
+   
+   
+
+ 
       <Route
         exact
         path="/store-settings/info"

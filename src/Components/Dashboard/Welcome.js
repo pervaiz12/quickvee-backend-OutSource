@@ -49,19 +49,18 @@ const Welcome = () => {
 
   return (
     <>
-      <Container>
-        <Row>
-          <div className="flex justify-between mx-12 my-7 relative">
-            <div className="lg:text-[28px] text-[#000000] adminstd_medium opacity-100 leading-tight font-normal sm:text-sm md:text-sm">
-              Welcome Malik Saleh
+      <div className="box">
+          <div className="flex justify-between mb-10 mt-12 ">
+            <div className="q_dashboard_welcom_msg">
+              <h1>Welcome Malik Saleh</h1>
             </div>
             <div
               onClick={() => setVisibleCalendar((prevState) => !prevState)}
-              className={`lg:text-[28px] text-[#000000] adminstd_medium opacity-100 leading-tight font-normal sm:text-sm md:text-sm ${
+              className={`q_dashboard_welcom_msg ${
                 visibleCalendar ? "active" : ""
               }`}
             >
-              Oct 4, 2023 - Oct 4, 2023
+              <h1>Oct 4, 2023 - Oct 4, 2023</h1>
             </div>
             <div
               className={visibleCalendar ? "dataCalender" : "nonedatacalender"}
@@ -169,8 +168,7 @@ const Welcome = () => {
               </div>
             </div>
           </div>
-        </Row>
-      </Container>
+          </div>
     </>
   );
 };

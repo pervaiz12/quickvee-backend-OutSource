@@ -124,6 +124,7 @@ const CategoryDetail = ({ seVisible }) => {
 
   return (
     <>
+      <div className="box">
       <div className="q-category-bottom-detail-section">
         <div className="">
           <div className="q-category-bottom-header">
@@ -226,6 +227,7 @@ const CategoryDetail = ({ seVisible }) => {
               </div>
             ))}
         </div>
+      </div>
       </div>
     </>
   );

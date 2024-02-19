@@ -38,23 +38,23 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
     };
   }, []);
 
+
+  
+
   return (
     <>
-      <div
-        className={`sticky top-0 left-0 p-0 right-0 z-50 bg-white transition-all duration-300 h-18 shadow-md border-b-4 border-black ${
-          isSticky ? "" : ""
-        }`}
-      >
+    
+   <div className={`sticky bg-white transition-all duration-300 shadow-md border-b-4 border-black ${isSticky ? "sticky-header" : ""}`}>
   <div className="flex items-center px-4 mx-2">
-  <BiMenu
-    className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out`}
-    onClick={(e) => {
-      setIsMenuOpen(!isMenuOpen);
-    }}
-  />
-          <img src={Quick} alt="Logo" className="ml-6" />
+    <BiMenu
+      className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out`}
+      onClick={(e) => {
+        setIsMenuOpen(!isMenuOpen);
+      }}
+    />
+    <img src={Quick} alt="Logo" className="ml-6" />
 
-          <div className="relative">
+    <div className="relative">
       {/* Button to toggle dropdown */}
       <div
         className="flex items-center ml-6 px-3 py-1 text-black lg:text-[20px] admin_medium cursor-pointer sm:text-[12px] md:text-[15px]"
@@ -79,28 +79,28 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
       )}
     </div>
     <div className="flex items-center lg:text-[20px] text-black ml-auto sm:text-xs md:text-sm">
-  {/* Download App section */}
-  <div className="ml-12 flex items-center">
-    <img src={DownlIcon} alt="icon" className="ml-2" />
-    <p className="cursor-pointer ml-2  admin_medium">Download App</p>
-  </div>
+      {/* Download App section */}
+      <div className="ml-12 flex items-center">
+        <img src={DownlIcon} alt="icon" className="ml-2" />
+        <p className="cursor-pointer ml-2 admin_medium">Download App</p>
+      </div>
 
-  {/* Online Store and Sync Data section */}
-  <div className="ml-12 flex items-center">
-    <img src={OnlineData} alt="icon" className="ml-2" />
-    <p className="cursor-pointer ml-2 admin_medium">Online Store</p>
+      {/* Online Store and Sync Data section */}
+      <div className="ml-12 flex items-center">
+        <img src={OnlineData} alt="icon" className="ml-2" />
+        <p className="cursor-pointer ml-2 admin_medium">Online Store</p>
+      </div>
+      <div className="mx-12 flex items-center">
+        <img src={SynkData} alt="icon" className="ml-2" />
+        <p className="cursor-pointer ml-2 admin_medium">Sync Data</p>
+      </div>
+
+      {/* Vertical line separator */}
+      <div className="border-t-3 border-b-2 border-black bg-black mb-16"></div>
     </div>
-    <div className="mx-12 flex items-center">
-    <img src={SynkData} alt="icon" className="ml-2" />
-    <p className="cursor-pointer ml-2 admin_medium">Sync Data</p>
   </div>
-
-  {/* Vertical line separator */}
-  <div className="border-t-3 border-b-2 border-black bg-black mb-16"></div>
 </div>
 
-        </div>
-      </div>
     </>
   );
 }

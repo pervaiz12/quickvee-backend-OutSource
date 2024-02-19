@@ -63,7 +63,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
             ? menuItems.map((item) => (
                 <div
                   key={item.id}
-                  className={`mb-4 text-base ${
+                  className={`mb-2 text-base ${
                     activeItem === item.link ? "active" : ""
                   }`}
                 >
@@ -96,7 +96,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
             : menuItems.map((item) => (
                 <div
                   key={item.id}
-                  className={`mb-4 text-base cursor-pointer ${
+                  className={`mb-2 text-base cursor-pointer ${
                     activeItem === item.link ? "active" : ""
                   }`}
                 >

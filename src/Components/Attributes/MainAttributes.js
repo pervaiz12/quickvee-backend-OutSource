@@ -1,6 +1,7 @@
 
 import React, { useState } from "react";
 import AtrDataList from "./AtrDataList";
+import AttriContent from "./AttriContent";
 
 
 const MainCategory = () => {
@@ -8,9 +9,7 @@ const MainCategory = () => {
   return (
     <>
       <div className="q-attributes-main-page">
-        <div className="q-attributes-top-detail-section">
-          <li> The added Attributes cannot be deleted.</li>
-        </div>
+      <AttriContent />
         {visible === "AtrDataList" && <AtrDataList seVisible={seVisible} />}
       
       </div>
