@@ -31,6 +31,7 @@ const MainResigtersetting = () => {
     <>
       {/* resigter method */}
       <div className="q-resigtersetting-main-page">
+        <div className="box">
         <div className="q-resigtersetting-top-detail-section">
           <div className=''>
             <div className="q-resigtersetting-bottom-section">
@@ -76,10 +77,12 @@ const MainResigtersetting = () => {
           </div>
         </div>
       </div>
+      </div>
 
       {/* payment method */}
 
       <div className="q-resigtersetting-main-page">
+      <div className="box">
         <div className="q-resigtersetting-top-detail-section">
           <div>
             <div className="q-resigtersetting-bottom-section">
@@ -109,9 +112,11 @@ const MainResigtersetting = () => {
           </div>
         </div>
       </div>
+      </div>
 
       {/* discount promote */}
       <div className="q-resigtersetting-main-page">
+      <div className="box">
         <div className="q-resigtersetting-top-detail-section">
           <div>
             <div className="">
@@ -187,8 +192,10 @@ const MainResigtersetting = () => {
           </div>
         </div>
       </div>
+      </div>
       {/* quick add */}
       <div className="q-resigtersetting-main-page">
+      <div className="box">
         <div className="q-resigtersetting-top-detail-section">
           <div className=''>
             <div className="q-resigtersetting-bottom-section">
@@ -227,9 +234,11 @@ const MainResigtersetting = () => {
           </div>
         </div>
       </div>
+      </div>
       {/* device  section */}
 
       <div className="q-resigtersetting-main-page">
+      <div className="box">
         <div className="q-resigtersetting-top-detail-section">
           <div>
             <div className="q-resigtersetting-bottom-section">
@@ -262,14 +271,16 @@ const MainResigtersetting = () => {
           </div>
         </div>
       </div>
+      </div>
 
 
 
 
       {/* customer loyalty promote */}
       <div className="q-resigtersetting-main-page">
+      <div className="box">
         <div className="q-resigtersetting-top-detail-section">
-          <div className=''>
+       
             <div className="q-resigtersetting-bottom-section">
 
               <div className='q_setting_main_Section'>
@@ -298,6 +309,7 @@ const MainResigtersetting = () => {
 
 
             </div>
+          </div>
           </div>
 
           <div className="q-resigtersetting-bottom-section text-center mt-12">
@@ -329,7 +341,7 @@ const MainResigtersetting = () => {
             )}
           </div>
         </div>
-      </div>
+      
 
     </>
   );

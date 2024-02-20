@@ -97,7 +97,8 @@ const EmployeeList = () => {
       }
 
     return <>
-       <div className="q-attributes-bottom-detail-section">
+    <div className="box">
+       <div className="box_shadow_div">
         <div className="q-attributes-bottom-header-sticky">
           <div className="q-attributes-bottom-header">
             <span>Employee</span>
@@ -369,6 +370,7 @@ const EmployeeList = () => {
             </div>
           </div>
         )}
+        </div>
         </div>
     </>
 }

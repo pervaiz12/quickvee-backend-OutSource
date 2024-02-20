@@ -310,7 +310,8 @@ const handleStartDateChange = (e) => {
 
   return (
     <>
-      <div className="box_shadow_div">
+    <div className="box">
+      <div className="box_shadow_div" style={{padding:"20px"}}>
         <div className="qvrow">
           <div className="col-qv-6">
             <div className="input_area">
@@ -360,7 +361,9 @@ const handleStartDateChange = (e) => {
           </div>
         </div>
       </div>
-      <div className="box_shadow_div">
+      </div>
+      <div className="box">
+      <div className="box_shadow_div" style={{padding:"20px"}}>
         <div className="qvrow">
           <h5 className="box_shadow_heading">Time Clock</h5>
           <div className="col-qv-6">
@@ -414,8 +417,9 @@ const handleStartDateChange = (e) => {
         )}
         
       </div>
-
-      <div className="box_shadow_div">
+      </div>
+      <div className="box">
+      <div className="box_shadow_div" style={{padding:"20px"}}>
         <div className="qvrow">
           <h5 className="box_shadow_heading">
             Default Reporting Start & End Date/Time
@@ -487,8 +491,9 @@ const handleStartDateChange = (e) => {
           </div>
         </div>
       </div>
-
-      <div className="box_shadow_div">
+</div>
+<div className="box">
+      <div className="box_shadow_div" style={{padding:"20px"}}>
         <div className="qvrow">
           <h5 className="box_shadow_heading">
             Viewable Sales Report History
@@ -534,6 +539,7 @@ const handleStartDateChange = (e) => {
             </button>
           </div>
         </div>
+      </div>
       </div>
 
       {showModal && (
@@ -582,6 +588,7 @@ const handleStartDateChange = (e) => {
             </div>
           </div>
         </div>
+        
       )}
     </>
   );

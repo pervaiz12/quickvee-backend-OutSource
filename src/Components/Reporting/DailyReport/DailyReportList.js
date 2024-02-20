@@ -58,7 +58,7 @@ const DailyReportList = ({data}) => {
             <div className="q-category-bottom-categories-listing" key={index}>
               <div className="q-category-bottom-categories-single-category">
                 <p className="report-sort">{formatDate(dailyreport.merchant_time)}</p>
-                <p className="report-title">{dailyreport.amt}</p>
+                <p className="report-title">${dailyreport.amt}</p>
               </div>
             </div>
           ))}

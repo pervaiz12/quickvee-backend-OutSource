@@ -193,7 +193,9 @@ const InventoryData = () => {
 
   return (
     <>
-      <div className="box_shadow_div">
+    <div className="box">
+      <div className="box_shadow_div" style={{padding:"20px"}}>
+        
         <div className="qvrow">
           <h5 className="box_shadow_heading">
             Average Cost Method
@@ -208,7 +210,7 @@ const InventoryData = () => {
           </h5>
         </div>
       </div>
-      <div className="box_shadow_div">
+      <div className="box_shadow_div" style={{padding:"20px"}}>
         <div className="qvrow">
           <h5 className="box_shadow_heading">Future Order</h5>
           <h6 className="box_shadow_heading">
@@ -256,8 +258,7 @@ const InventoryData = () => {
           </div>
         </div>
       </div>
-
-      <div className="box_shadow_div">
+      <div className="box_shadow_div" style={{padding:"20px"}}>
         <div className="qvrow">
           <h5 className="box_shadow_heading">Inventory Setting</h5>
 
@@ -319,6 +320,8 @@ const InventoryData = () => {
           </div>
         </div>
       </div>
+      </div>
+     
     </>
   );
 };

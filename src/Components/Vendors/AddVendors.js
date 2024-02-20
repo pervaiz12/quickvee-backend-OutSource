@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
-import AddNewVendors from "../../Assests/Category/addIcon.svg"
+import AddNewVendors from "../../Assests/Dashboard/Left.svg"
 import { fetchVendorsListData } from "../../Redux/features/VendorList/vListSlice";
 import Chip from '@mui/material/Chip';
 import { useSelector, useDispatch } from 'react-redux';
@@ -182,6 +182,8 @@ const inputChange = (e) => {
   
 
   return (
+    <>
+    <div className='box'>
   <form onSubmit={handleSubmit}>
   <div className='q-add-categories-section'>
     <div className='q-add-categories-section-header'>
@@ -194,7 +196,7 @@ const inputChange = (e) => {
       <div className='qvrowmain'>
         <div className='qvrow'>
           <div className='col-qv-4'>
-            <div className='q-add-categories-single-input'>
+            <div className='input_area'>
               <label htmlFor="vendorName">Vendor Name</label>
               <Autocomplete
                   multiple
@@ -216,13 +218,13 @@ const inputChange = (e) => {
             </div>
           </div>
           <div className='col-qv-4'>
-            <div className='q-add-categories-single-input'>
+            <div className='input_area'>
               <label htmlFor="email">Email Address</label>
               <input type="email" id="email" name="email" value={vendor.email } autocomplete="off" placeholder='Email Address' required  onChange={(e) => handleEmailChange(e.target.value)} />
             </div>
           </div>
           <div className='col-qv-4'>
-            <div className='q-add-categories-single-input'>
+            <div className='input_area'>
               <label htmlFor="phone">Phone Number</label>
               <input type="text" id="phone" name="phone" value={vendor.phone} autocomplete="off" placeholder='Phone Number' minlength="10" maxlength="10" pattern="[0-9]*" inputmode="numeric" required  onChange={(e) => handlePhoneChange(e.target.value)} />
             </div>
@@ -232,7 +234,7 @@ const inputChange = (e) => {
       <div className='qvrowmain'>
         <div className='qvrow'>
           <div className='col-qv-12'>
-            <div className='q-add-categories-single-input'>
+            <div className='input_area'>
               <label htmlFor="address">Address</label>
               <input type="text" id="address" name="full_address" value={vendor.full_address}  onChange={inputChange}  placeholder='Address Line 1' />
             </div>
@@ -241,13 +243,13 @@ const inputChange = (e) => {
         {/* <input type="hidden" id="address" name="merchant_id" value={'MAL0100CA'}  onChange={inputChange}   /> */}
         <div className='qvrow'>
           <div className='col-qv-4'>
-            <div className='q-add-categories-single-input'>
+            <div className='input_area'>
               <label htmlFor="city">City</label>
               <input type="text" id="city" name="city" value={vendor.city}   onChange={(e) => handleCityChange(e.target.value)} placeholder='City' />
             </div>
           </div>
           <div className='col-qv-4'>
-            <div className='q-add-categories-single-input'>
+            <div className='input_area'>
               <label htmlFor="zip">Zip</label>
               <input type="text" id="zip" name="zip_code" value={vendor.zip_code} minlength="5" maxlength="5" onChange={(e) => handleZipChange(e.target.value)}    placeholder='Zip' />
             </div>
@@ -285,6 +287,8 @@ const inputChange = (e) => {
     </div>
   </div>
 </form>
+</div>
+</>
 
   )
   
