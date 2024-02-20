@@ -130,8 +130,6 @@ export default function EditMerchantFunctionality() {
 
     const handleUpdateMerchant=async(e)=>{
         e.preventDefault();
-        
-
         const packet={
             id:getEditMerchant.id,
             username:getEditMerchant.username,
@@ -140,7 +138,6 @@ export default function EditMerchantFunctionality() {
             name:getEditMerchant.name,
             merchant_id:getEditMerchant.merchant_id,
             ownername:getEditMerchant.owner_name,
-            // =="" ||getEditMerchant.owner_name==null ?'':getEditMerchant.owner_name,
             password:getEditMerchant.password,address:{address1:getEditMerchant.a_address_line_1,address2:getEditMerchant.a_address_line_2,
                 phoneNumber:getEditMerchant.a_phone,
                 city:getEditMerchant.a_city,
@@ -149,24 +146,22 @@ export default function EditMerchantFunctionality() {
                 cc_payment:paymentModeRecord,
                 account_type:0,
                 merchant_token: getEditMerchant.merchant_token,
-                // ==''|| getEditMerchant.merchant_token ==null ?'': getEditMerchant.merchant_token,
                 usa_pin:getEditMerchant.usa_pin,
             }
-                // ==''|| getEditMerchant.usa_pin==null ?'':getEditMerchant.usa_pin}
                 console.log(packet)  
-        // try {
-        //     let response=await axios.post(BASE_URL+GET_UPDATE_MERCHANT,packet,{headers:{
-        //         "Content-Type":'multipart/form-data'
-        //     }})
+        try {
+            let response=await axios.post(BASE_URL+GET_UPDATE_MERCHANT,packet,{headers:{
+                "Content-Type":'multipart/form-data'
+            }})
            
-        //     if(response.data.status==200)
-        //     {
-        //         navigate(`/users/editMerchant/${getEditMerchant.id}`)
-        //     }
+            if(response.data.status==200)
+            {
+                navigate(`/users/editMerchant/${getEditMerchant.id}`)
+            }
             
-        // } catch (e) {
-        //    console.log('Exception',e)
-        // }
+        } catch (e) {
+           console.log('Exception',e)
+        }
 
     }
     return {getEditMerchantData,getEditMerchant,handleChangePaymentMode,paymentModeOnline,paymentModeOffline

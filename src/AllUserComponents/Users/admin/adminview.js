@@ -10,14 +10,11 @@ import {Link} from 'react-router-dom'
 
 export default function AdminView() {
     const navigate = useNavigate();
-    // const{setShowMerchant,showMerchant,handleViewAdmin,handleCloseMerchantModel,showMerchantData}=AdminFunctionality()
     const {handleCloseAdminModel,handleViewAdmin,showAdmin,showMerchantData}=AdminFunctionality()
     const dispatch = useDispatch();
     const AdminRecord = useSelector(
         (state) => state.adminRecord,
       );
-    //   console.log(AdminRecord.AdminRecord)
-
     useEffect(()=>{
         dispatch(AdminFunction())
     },[])
@@ -46,7 +43,7 @@ const handleSearchInputChange=(e)=>{
 const filteredAdminRecord = AdminRecord && AdminRecord.AdminRecord && Array.isArray(AdminRecord.AdminRecord) 
 ? AdminRecord.AdminRecord.filter(result =>
     (result.owner_name && result.owner_name.toLowerCase().includes(searchRecord.toLowerCase())) ||
-    (result.email && result.email.toLowerCase().includes(searchRecord.toLowerCase())) ||
+    (result.email && result.email.toLowerCase().includes(searchRecord.toLowerCase())) ||(result.name && result.name.toLowerCase().includes(searchRecord.toLowerCase())) ||
     (result.phone && result.phone.includes(searchRecord))
   )
 : [];

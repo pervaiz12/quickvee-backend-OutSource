@@ -60,11 +60,7 @@ export default function EditMerchant() {
                                 <input 
                                     className='merchant-disabled'
                                     type='text'
-                                    // name="password"
                                     value={getEditMerchant.merchant_id}
-                                    // value={editData.password}
-                                    // onChange={handleChangeMerchant}
-                                    // value={store.email}
                                     disabled
                                 />
                             </div>
