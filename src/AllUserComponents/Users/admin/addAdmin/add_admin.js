@@ -20,7 +20,7 @@ export default function Add_Admin() {
                             />
                         </div>
                         
-                        {addAdminData.errors.owner_name && <span>{addAdminData.errors.owner_name}</span>}
+                        {addAdminData.errors.owner_name && <span className='error'>{addAdminData.errors.owner_name}</span>}
                     </div>
                     
                     <div className='col-qv-6'>
@@ -37,7 +37,7 @@ export default function Add_Admin() {
                                 
                             />
                         </div>
-                        {addAdminData.errors.email && <span>{addAdminData.errors.email}</span>}
+                        {addAdminData.errors.email && <span className='error'>{addAdminData.errors.email}</span>}
                     </div>
                 </div>
                 <div className='qvrow'>
@@ -53,7 +53,7 @@ export default function Add_Admin() {
                                 
                             />
                         </div>
-                        {addAdminData.errors.password && <span>{addAdminData.errors.password}</span>}
+                        {addAdminData.errors.password && <span className='error'>{addAdminData.errors.password}</span>}
                     </div>
                     <div className='col-qv-6'>
                         <div className='input_area'>
@@ -69,7 +69,7 @@ export default function Add_Admin() {
                             
                             />
                         </div>
-                        <label>{addAdminData.errors.phone}</label>
+                        <label className='error'>{addAdminData.errors.phone}</label>
                     </div>
                 </div>  
                 <input 

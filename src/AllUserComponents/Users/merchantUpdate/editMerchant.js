@@ -1,5 +1,6 @@
 import React,{useEffect} from 'react'
 import EditMerchantFunctionality from './editMerchantFunctionality'
+import Switch from '@mui/material/Switch';
 import {
     BrowserRouter as Router,
     Link,
@@ -9,13 +10,14 @@ import {
   } from "react-router-dom";
 
 export default function EditMerchant() {
-    const{getEditMerchantData,getEditMerchant,handleChangePaymentMode,paymentModeOnline,paymentModeOffline,handleUpdateMerchant,handleChangeMerchant}=EditMerchantFunctionality()
+    const{getEditMerchantData,getEditMerchant,handleChangePaymentMode,paymentModeOnline,paymentModeOffline,handleUpdateMerchant,handleChangeMerchant,paymentCredits,setEditMerchant}=EditMerchantFunctionality()
     const  {id}  = useParams();
     // console.log(id)
     useEffect(()=>{
         // console.log(id)
         getEditMerchantData(id)
    },[id])
+
   return (
     <div className='box'>
     <div className='box_shadow_div'>
@@ -58,10 +60,10 @@ export default function EditMerchant() {
                                 <input 
                                     className=''
                                     type='text'
-                                    name="password"
+                                    // name="password"
                                     value={getEditMerchant.merchant_id}
                                     // value={editData.password}
-                                    onChange={handleChangeMerchant}
+                                    // onChange={handleChangeMerchant}
                                     // value={store.email}
                                     disabled
                                 />
@@ -88,7 +90,7 @@ export default function EditMerchant() {
                                     className=''
                                     type='text'
                                     name="owner_name"
-                                    value={getEditMerchant.owner_name}
+                                    value={getEditMerchant.owner_name !==""?getEditMerchant.owner_name:''}
                                     onChange={handleChangeMerchant}
                                     // onChange={handleChangeAdmin}
                                 />
@@ -116,13 +118,18 @@ export default function EditMerchant() {
                         <div className='col-qv-3'>
                             <div className='input_area'>
                                 <label>Inventory Approval</label>
-                                <input 
+                                <Switch
+                                // onChange={(event) => handleUpdateStatus(event, label, singleVender.vendor_id)}
+                                // {...label}
+                                // defaultChecked={singleVender.enabled === "1"}
+                                 />
+                                {/* <input 
                                     className=''    
                                     type='text'
                                     name="pin"
                                     // value={merchantStore.pin}
                                     // onChange={handleChangeMerchant}
-                                />
+                                /> */}
                             </div>
                             {/* {errorPin && <span>{errorPin}</span>} */}
                         </div>
@@ -216,9 +223,9 @@ export default function EditMerchant() {
                             <div className='input_area'>
                                 <label>State</label>
                                 <select 
-                                value={getEditMerchant.a_state} 
+                                value={getEditMerchant.a_state !==""? getEditMerchant.a_state:''} 
                                 name="a_state"
-                                // onChange={handleChange}
+                                onChange={handleChangeMerchant}
                                 >
                                     <option value="" >Select States</option>
                                     {
@@ -237,7 +244,9 @@ export default function EditMerchant() {
                             </div>
                             {/* <label>{store.errors.ownerName}</label> */}
                         </div>
+                        
                         <div className='col-qv-12'>
+                            <div className='mb20'>
                             <div className='input_rediobutton_area'>
                                     <input
                                         className='inputredio'
@@ -245,7 +254,8 @@ export default function EditMerchant() {
                                         id="radio1"
                                         name="radio" 
                                         value="1"
-                                        onClick={handleChangePaymentMode}
+                                        onChange={handleChangePaymentMode}
+                                        checked={paymentCredits}
                                     />
                                     <label htmlFor="radio1">CREDITS CARDS ONLY</label>
                             </div>
@@ -256,7 +266,7 @@ export default function EditMerchant() {
                                         id="radio2"
                                         name="radio"
                                         value="0" 
-                                        onClick={handleChangePaymentMode}
+                                        onChange={handleChangePaymentMode}
                                         checked={paymentModeOffline}
                                     />
                                     <label htmlFor="radio2">CASH ONLY</label>
@@ -268,15 +278,16 @@ export default function EditMerchant() {
                                         id="radio3"
                                         name="radio"
                                         value="2" 
-                                        onClick={handleChangePaymentMode}
+                                        onChange={handleChangePaymentMode}
                                         checked={paymentModeOnline}
                                     />
                                     <label htmlFor="radio3">CASH AND CREDITS CARDS ONLY</label>
                             </div>
                             {/* <label>{radioErros}</label> */}
+                            </div>
                         </div>
                         {
-                            paymentModeOnline ?
+                            paymentModeOnline || paymentCredits ?
                             <div className='qvrow'>
                                 <div className='col-qv-6'>
                                     <div className='input_area'>
@@ -284,11 +295,9 @@ export default function EditMerchant() {
                                         <input 
                                             className=''
                                             type='text'
-                                            name="owner_name"
+                                            name="merchant_token"
                                             value={getEditMerchant.merchant_token}
-                                            // value={editData.owner_name}
-                                
-                                            // onChange={handleChangeAdmin}
+                                            onChange={handleChangeMerchant}
                                         />
                                     </div>
                                     
@@ -300,9 +309,9 @@ export default function EditMerchant() {
                                         <input 
                                             className=''
                                             type='text'
-                                            name="email"
+                                            name="usa_pin"
                                             value={getEditMerchant.usa_pin}
-                                            // onChange={handleChangeAdmin}
+                                            onChange={handleChangeMerchant}
                                         />
                                     </div>
                                     {/* <label>{store.errors.ownerName}</label> */}
@@ -319,7 +328,7 @@ export default function EditMerchant() {
                     <input 
                         type='button'
                         className="blue_btn"
-                        value="Submit"
+                        value="Update"
                         onClick={handleUpdateMerchant}
                     /> 
                 </div>
