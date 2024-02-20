@@ -1,6 +1,8 @@
 import React,{useEffect} from 'react'
 import EditMerchantFunctionality from './editMerchantFunctionality'
 import Switch from '@mui/material/Switch';
+import Alert from '@mui/material/Alert';
+import CheckIcon from '@mui/icons-material/Check';
 import {
     BrowserRouter as Router,
     Link,
@@ -10,7 +12,7 @@ import {
   } from "react-router-dom";
 
 export default function EditMerchant() {
-    const{getEditMerchantData,getEditMerchant,handleChangePaymentMode,paymentModeOnline,paymentModeOffline,handleUpdateMerchant,handleChangeMerchant,paymentCredits,setEditMerchant}=EditMerchantFunctionality()
+    const{getEditMerchantData,getEditMerchant,handleChangePaymentMode,paymentModeOnline,paymentModeOffline,handleUpdateMerchant,handleChangeMerchant,paymentCredits,setEditMerchant,message,successMessagehandle}=EditMerchantFunctionality()
     const  {id}  = useParams();
     // console.log(id)
     useEffect(()=>{
@@ -22,6 +24,15 @@ export default function EditMerchant() {
     <div className='box'>
     <div className='box_shadow_div'>
         <div className='pd_20'>
+            {/* {
+                message ? <p>{message}</p>:"" icon={<CheckIcon fontSize="inherit" />}
+            } */}
+            {
+                successMessagehandle ?<Alert severity="success">
+                {message}
+               </Alert>:''
+            }
+             
             <h1 className='heading'>Edit Merchant</h1>
                 <div>
                     <div className='qvrow'>

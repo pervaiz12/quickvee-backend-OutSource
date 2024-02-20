@@ -12,6 +12,14 @@ export default function EditMerchantFunctionality() {
     const[paymentModeOffline,setPaymentModeOffline]=useState(false)
     const[paymentCredits,setPaymentCredits]=useState(false)
     const[paymentModeRecord,setPaymentModeRecord]=useState('')
+    const[message,setMessage]=useState('')
+    const[successMessagehandle,setSuccessMessageHandle]=useState(true)
+    const handleSuccessMessage=()=>{
+        setTimeout(()=> {
+            setSuccessMessageHandle(false)
+           
+         }, 3000)
+    }
    
     const getEditMerchantData=async(data)=>{
         const dataNew={id:data}
@@ -35,8 +43,6 @@ export default function EditMerchantFunctionality() {
                     const otp=response.data.message.row.ver_code !==null ?response.data.message.row.ver_code:''
                     const a_address_line_1=response.data.message.row.a_address_line_1 !==null ?response.data.message.row.a_address_line_1:''
                     const a_address_line_2=response.data.message.row.a_address_line_2 !==null ? response.data.message.row.a_address_line_2:''
-
-
                     setEditMerchant({
                         id:data,
                         password:'',
@@ -49,7 +55,6 @@ export default function EditMerchantFunctionality() {
                         a_address_line_2:a_address_line_2,
                         a_phone:Phone,
                         a_city:City,
-                        // a_zip:response.data.message.row.a_zip,
                         a_zip:a_zipCode,
                         a_state:State,
                         merchant_token:Merchant_token,
@@ -156,6 +161,10 @@ export default function EditMerchantFunctionality() {
            
             if(response.data.status==200)
             {
+                // console.log(response.data)
+                setMessage(response.data.message)
+                setSuccessMessageHandle(true)
+                handleSuccessMessage()
                 navigate(`/users/editMerchant/${getEditMerchant.id}`)
             }
             
@@ -165,5 +174,5 @@ export default function EditMerchantFunctionality() {
 
     }
     return {getEditMerchantData,getEditMerchant,handleChangePaymentMode,paymentModeOnline,paymentModeOffline
-    ,paymentModeOnline,paymentModeOffline,handleUpdateMerchant,handleChangeMerchant,paymentCredits,setEditMerchant}
+    ,paymentModeOnline,paymentModeOffline,handleUpdateMerchant,handleChangeMerchant,paymentCredits,setEditMerchant,message,successMessagehandle}
 }

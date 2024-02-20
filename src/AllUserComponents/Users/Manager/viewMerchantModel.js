@@ -33,6 +33,8 @@ function ViewMerchant(props) {
           </Button>
         </Modal.Footer>
       </Modal> */}
+     
+      <hr/>
       {
         props.showMerchant ?
           <div className="q-custom-modal-container" id="addtributes_">
@@ -41,7 +43,7 @@ function ViewMerchant(props) {
             {/* Your modal content */}
             <div className="">
               <p className="q-custom-modal-header ">
-                Add New Attribute
+              {props.name}
               
               </p>
             </div>

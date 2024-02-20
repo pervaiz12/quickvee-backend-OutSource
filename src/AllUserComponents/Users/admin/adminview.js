@@ -10,7 +10,7 @@ import {Link} from 'react-router-dom'
 
 export default function AdminView() {
     const navigate = useNavigate();
-    const {handleCloseAdminModel,handleViewAdmin,showAdmin,showMerchantData}=AdminFunctionality()
+    const {handleCloseAdminModel,handleViewAdmin,showAdmin,showMerchantData,adminName}=AdminFunctionality()
     const dispatch = useDispatch();
     const AdminRecord = useSelector(
         (state) => state.adminRecord,
@@ -98,7 +98,7 @@ const filteredAdminRecord = AdminRecord && AdminRecord.AdminRecord && Array.isAr
                                   <p className='table20 txt_ellipsis'>{result.name}</p>
                                   <p className='table20 txt_ellipsis'>{result.email}</p>
                                   <p className='table20'>{result.phone}</p>
-                                  <p className='table15'onClick={()=>handleViewAdmin(result.email)}>view merchant</p>
+                                  <p className='table15'onClick={()=>handleViewAdmin(result.email,result.name)}><span className="viewMerchant">view merchant</span></p>
                                   <div className='table5' >
                                   {/* <select
                                       value={selectedAction}
@@ -124,6 +124,7 @@ const filteredAdminRecord = AdminRecord && AdminRecord.AdminRecord && Array.isAr
   <ViewAdmin
     showAdmin={showAdmin}
     showMerchantData={showMerchantData}
+    adminName={adminName}
     handleCloseAdminModel={handleCloseAdminModel}
     
     />

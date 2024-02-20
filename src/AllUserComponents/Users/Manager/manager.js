@@ -6,7 +6,7 @@ import ViewMerchant from './viewMerchantModel'
 
 
 export default function Manager() {
-  const{setShowMerchant,showMerchant,handleViewMerchant,handleCloseMerchantModel,showMerchantData}=ManagerFunctionality()
+  const{setShowMerchant,showMerchant,handleViewMerchant,handleCloseMerchantModel,showMerchantData,name}=ManagerFunctionality()
     const dispatch = useDispatch()
     const managerList = useSelector(
       (state) => state.managerRecord,
@@ -79,7 +79,7 @@ export default function Manager() {
                     <p className='table25'>{result.name}</p>
                     <p className='table30'>{result.email}</p>
                     <p className='table20'>{result.phone}</p>
-                    <p className='table20' onClick={()=>handleViewMerchant(result.merchant_id)} ><span className="viewMerchant">View Merchant</span></p>
+                    <p className='table20' onClick={()=>handleViewMerchant(result.merchant_id,result.name)} ><span className="viewMerchant">View Merchant</span></p>
                    
                   </div>
   
@@ -97,6 +97,7 @@ export default function Manager() {
     <ViewMerchant
     showMerchant={showMerchant}
     showMerchantData={showMerchantData}
+    name={name}
     handleCloseMerchantModel={handleCloseMerchantModel}
     
     />
