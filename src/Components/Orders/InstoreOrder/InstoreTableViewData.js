@@ -102,9 +102,9 @@ const InstoreTableViewData = () => {
               >
                 <div className="table_view_sort">
                   <p className="table_user_details"> {order.name} </p>
-                  {/* <p className="table_Existing_customer">Existing Customer</p> */}
+                
                   <p className="table_phone_details">{order.delivery_phn} </p>
-                  {/* <p className="table_email_details">vijay@imerchantech.com</p> */}
+                  
                 </div>
 
                 <div className="table_view_title">
@@ -120,12 +120,12 @@ const InstoreTableViewData = () => {
                   <p className="table_amount_status">{order.order_status}</p>
                 </div>
                 <div className="table_view_items">
-                  <select className="table_status_selected ">
-                    <option className="drop_down" value="day">{order.payment_result}
+                  <select className="table_status_selected" style={{padding:"13px 41px"}}>
+                    <option className="dropdown-content" value="day">{order.payment_result}
                     <img src={DownIcon} alt="Down Icon" className="w-6 h-6 ml-16" /></option>
                   
                   </select>
-                </div>
+</div>
 
       
                 {/* <div className="table_view_items">

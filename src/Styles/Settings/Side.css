@@ -334,9 +334,11 @@ border:1px solid #0A64F9 }
  padding: auto;
   border-radius: 4px;
   background-color: #FFFFFF;
-  margin-top: 2%;
+  margin-top: 2px;
   position: relative;
-    right: 63px;
+  right: 63px;
+  font-size: 16px;
+  font-family:CircularSTDBook !important ;
 }
 
 .drop_down {
@@ -345,4 +347,13 @@ border:1px solid #0A64F9 }
   width: 131px;
   padding: 10px;
   border-radius: 4px;
+}
+.table_status_selected>select{
+  border: 1px solid #E1E1E1 !important;
+ padding: auto;
+  border-radius: 4px;
+  background-color: #FFFFFF;
+  /* margin-top: 2%; */
+  position: relative;
+  right: 63px;
 }
