@@ -3,7 +3,7 @@ import InventoryView from './InventoryView'
 function MainInventory() {
   return (
     <>
-      <div className="q-attributes-main-page">
+      <div className="q-category-main-page">
         <InventoryView />
         </div>
     </>

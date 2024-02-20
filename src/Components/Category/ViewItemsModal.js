@@ -66,7 +66,7 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
           aria-describedby="modal-modal-description"
         >
           <Box className="view-category-item-modal" style={myStyles}>
-            <div className="q-add-categories-section-header" style={{ justifyContent:"space-between"}}>
+            <div className="q-add-categories-section-header text-[18px]" style={{ justifyContent:"space-between" ,fontFamily:"CircularSTDBook" }}>
               <span>
                 <span>{selectedView.title}</span>
               </span>
@@ -86,7 +86,7 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
                     {itemsData.map((item, index) => (
                       <>
                         <p 
-                          className="border border-dark-subtle float-left rounded-2 p-2 m-2"
+                          className="q_view_modal_details"
                           key={index}
                           style={{fontFamily: "CircularSTDMedium !important"}}
                         >
@@ -104,7 +104,7 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
             <div className="q-add-categories-section-middle-footer">
               <button
                 onClick={() => handleClose()}
-                className="quic-btn quic-btn-cancle"
+                className="save_btn"
               >
                 Ok{" "}
               </button>

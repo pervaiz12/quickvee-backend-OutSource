@@ -62,7 +62,7 @@ const Welcome = () => {
             >
               <h1>Oct 4, 2023 - Oct 4, 2023</h1>
             </div>
-            <div
+            {/* <div
               className={visibleCalendar ? "dataCalender" : "nonedatacalender"}
             >
               <div className="flex mx-auto w-full">
@@ -166,7 +166,7 @@ const Welcome = () => {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
           </div>
           </div>
     </>

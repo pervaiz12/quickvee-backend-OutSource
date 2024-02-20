@@ -109,9 +109,9 @@ const BarCharts = () => {
   </div>
   {dropdownOpen && (
     <div className="dropdown-content">
-      <div className={selectedFilter === "Day" ? "selected" : ""} onClick={() => handleFilterChange("Day")}>Day</div>
-      <div className={selectedFilter === "Month" ? "selected" : ""} onClick={() => handleFilterChange("Month")}>Month</div>
-      <div className={selectedFilter === "Weeks" ? "selected" : ""} onClick={() => handleFilterChange("Weeks")}>Weeks</div>
+      <div className={selectedFilter === "Day" ? "selected" : "noselect"} onClick={() => handleFilterChange("Day")}>Day</div>
+      <div className={selectedFilter === "Month" ? "selected" : "noselect"} onClick={() => handleFilterChange("Month")}>Month</div>
+      <div className={selectedFilter === "Weeks" ? "selected" : "noselect"} onClick={() => handleFilterChange("Weeks")}>Weeks</div>
     </div>
   )}
 </div>

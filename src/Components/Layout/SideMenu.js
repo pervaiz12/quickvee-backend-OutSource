@@ -63,7 +63,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
             ? menuItems.map((item) => (
                 <div
                   key={item.id}
-                  className={`mb-2 text-base ${
+                  className={`text-[#9E9E9E] active:bg-[#414F54] hover:bg-[#414F54] hover:text-[#FFC400] px-0 ${
                     activeItem === item.link ? "active" : ""
                   }`}
                 >
@@ -72,6 +72,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                   ) : (
                     <div
                       className={`flex items-center ${
+                        
                         activeItem === item.link
                           ? "bg-[#414F54] text-[#FFC400]"
                           : ""
@@ -107,7 +108,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                       className={`flex flex-col items-center ${
                         activeItem === item.link
                           ? "text-[#FFC400] active"
-                          : "text-gray-400 hover-text-yellow"
+                          : "text-gray-400 hover-text-yellow hover:bg-[#414F54] px-0"
                       }`}
                       onClick={() => {
                         handleItemClick(item);

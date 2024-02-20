@@ -44,7 +44,7 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
   return (
     <>
     
-   <div className={`sticky bg-white transition-all duration-300 shadow-md border-b-4 border-black ${isSticky ? "sticky-header" : ""}`}>
+   <div className={`q_header_section sticky bg-white  border-b-4 border-black ${isSticky ? "sticky-header" : ""}`}>
   <div className="flex items-center px-4 mx-2">
     <BiMenu
       className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out`}

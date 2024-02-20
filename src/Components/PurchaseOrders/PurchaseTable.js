@@ -40,6 +40,7 @@ const PurchaseTable = ({ seVisible, searchId }) => {
 
   return (
     <>
+    <div className="box">
       <div className="q-category-bottom-detail-section">
         <div className="q-category-bottom-header-sticky">
           <div className="q-category-bottom-header">
@@ -153,6 +154,7 @@ const PurchaseTable = ({ seVisible, searchId }) => {
               </div>
             </div>
           ))}
+      </div>
       </div>
     </>
   );

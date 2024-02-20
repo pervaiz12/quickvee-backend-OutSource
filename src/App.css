@@ -62,8 +62,17 @@
 
 
 .main-page-home-dashboard{
-  overflow-x: hidden;
+  width: 100%;
+  height: auto;
+  display: inline-block;
 }
+
+.q_header_section{
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
 
 .qvrow {
   --bs-gutter-x: 1.5rem;
@@ -175,6 +184,31 @@
   z-index: 9;
   color: #9e9e9e;
 }
+
+
+
+.header_sticky_main{
+  display: inline-block;
+  width: 100%;
+  margin: auto;
+  height: auto;
+}
+
+.header_sticky_section{
+  position: sticky;
+  top: 0;
+  right: 0;
+  left: 0;
+  z-index: 999;
+  
+}
+.boder_bottom_line{
+  border-bottom: 3px solid #000;
+  background-color: #000;
+  margin-bottom: 16px;
+}
+
+
 /* Media Queries for Responsive Font Sizes */
 @media (max-width: 840px) {
   .q_sales_dashbaord{
@@ -892,4 +926,8 @@ border-bottom: 1px solid #000 !important;}
   background-color: #F9F9F9 !important;
   color: #0A64F9 !important;
   border: 1px solid #0A64F9 !important;
+  padding: 19px 15px;
+}
+.css-19xm0h7-MuiButtonBase-root-MuiPaginationItem-root{
+  padding: 19px 15px !important; 
 }

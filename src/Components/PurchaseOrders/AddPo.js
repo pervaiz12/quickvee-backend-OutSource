@@ -35,10 +35,9 @@ const AddPo = () => {
 
   return (
     <>
-    <div className="mx-2 my-2">
+    <div className="box">
       <div
-        className="box-content w-70 p-4 border-4 border-white bg-white rounded-xl opacity-100 my-9 mx-8"
-        style={{ boxShadow: "0px 3px 6px #0000001F" }}
+        className="box_shadow_div"
       >
         <div className="flex justify-between gap-2 mx-6 my-2">
           <div className="text-[18px] Admin_std leading-0 text-black admin_medium font-semibold opacity-100">

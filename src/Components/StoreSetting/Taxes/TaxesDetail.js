@@ -59,6 +59,7 @@ const TaxesDetail = () => {
 
   return (
     <>
+    <div className='box'>
       <div className="q-category-bottom-detail-section mt-6">
         <div className="q-category-bottom-header-sticky ">
           <div className="q-category-bottom-header">
@@ -115,6 +116,7 @@ const TaxesDetail = () => {
               </div>
             ))}
         </div>
+      </div>
       </div>
     </>
   );
