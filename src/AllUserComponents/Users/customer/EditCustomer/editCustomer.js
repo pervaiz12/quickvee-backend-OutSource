@@ -44,8 +44,8 @@ export default function EditCustomer() {
                                     value={customerData.name}
                                     onChange={handleChange}
                                 />
+                                <label className='error'>{errors.name}</label>
                             </div>
-                            <label className='error'>{errors.name}</label>
                             
                         </div>
                         
@@ -90,8 +90,8 @@ export default function EditCustomer() {
                                     onKeyPress={handleKeyPress}
                                     maxLength={10}
                                 />
+                                <label className='error'>{errors.phone}</label>
                             </div>
-                            <label className='error'>{errors.phone}</label>
                         </div>
                     </div>
                    
@@ -144,13 +144,8 @@ export default function EditCustomer() {
                         </div>
                         {/* <label>{radioErros}</label> */}
                     </div>
-                </div>
-                
-          
-          
+                </div>   
         </div>
-        
-        
     </div>  
         
 

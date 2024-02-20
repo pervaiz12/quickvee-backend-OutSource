@@ -31,8 +31,8 @@ export default function EditAdmin() {
                                         // value={customerData && customerData.name}value={editData.owner_name}
                                         onChange={handleChangeAdmin}
                                     />
+                                    <label className='error'>{errors.owner_name}</label>
                                 </div>
-                                <label className='error'>{errors.owner_name}</label>
                                 {/* <label>{errors.owner_name}</label> */}
                                 
                             </div>
@@ -49,8 +49,8 @@ export default function EditAdmin() {
                                         // value={store.ownerName}
                                         onChange={handleChangeAdmin}
                                     />
+                                    <label className='error'>{errors.email}</label>
                                 </div>
-                                <label className='error'>{errors.email}</label>
                                 
                             </div>
                         </div>
@@ -81,8 +81,8 @@ export default function EditAdmin() {
                                         maxLength={10}
                                         onChange={handleChangeAdmin}
                                     />
+                                    <label className='error'>{errors.phone}</label>
                                 </div>
-                                <label className='error'>{errors.phone}</label>
                             </div>
                         </div>
                     

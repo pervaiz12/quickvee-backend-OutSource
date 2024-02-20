@@ -1,13 +1,5 @@
-import React,{useEffect} from 'react'
+import React,{useEffect,useState} from 'react'
 import{Link} from "react-router-dom"
-// import {
-//   // BrowserRouter as Router,
-//   Link,
-//   // Route,
-//   // Routes,
-//   // useParams,
-// } from "react-router-dom";
-
 import{getVerifiedMerchant} from '../../../Redux/features/user/verifiedMerchantSlice'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -22,9 +14,42 @@ export default function Verified() {
         dispatch(getVerifiedMerchant(data))
 
     },[])
+     // ====================================
+     const [searchRecord,setSearchRecord]=useState('')
+
+     const handleSearchInputChange=(e)=>{
+       setSearchRecord(e.target.value)
+     }
+     const filteredAdminRecord = VerifiedMerchantList &&  Array.isArray(VerifiedMerchantList)
+     ? VerifiedMerchantList.filter(result =>
+        (result.owner_name && result.owner_name.toLowerCase().includes(searchRecord.toLowerCase()))||(result.name && result.name.toLowerCase().includes(searchRecord.toLowerCase())) ||
+         (result.email && result.email.toLowerCase().includes(searchRecord.toLowerCase())) ||
+         (result.phone && result.phone.includes(searchRecord))|| (result.a_state && result.a_state.includes(searchRecord))
+       )
+     : [];
+     // ====================================
   return (
     <div className='box'>
     <div className='box_shadow_div'>
+      <div className='qvrow'>
+            <div className='col-qv-8'>
+              <div className='btn-area'>
+                <Link to="/users/addMerchant"className='blue_btn'>ADD</Link>
+              </div> 
+            </div>
+            <div className='col-qv-4'>
+                <div className='seacrh_area'>
+                <div className="input_area">
+                  <input className="" type="text" value={searchRecord}
+                  onInput={handleSearchInputChange}
+                  placeholder="Search..."
+                  autoComplete="off"
+                  />
+                </div>
+                </div>
+            </div>
+
+      </div>
       <div className='table_main_area'>
         <div className='table_header_sticky'>
           <div className='table_header_top'>
@@ -44,8 +69,8 @@ export default function Verified() {
         </div>
           <div className='table_body'>
             {
-               Array.isArray(VerifiedMerchantList)&& VerifiedMerchantList && VerifiedMerchantList.map((result,index)=>{
-                // console.log(result.id)
+               Array.isArray(VerifiedMerchantList)&& VerifiedMerchantList && filteredAdminRecord.map((result,index)=>{
+                // console.log(result.a_state)
                        return(
                         <div className='table_row' key={index}>
                           <p className='table12'>{result.owner_name}</p>

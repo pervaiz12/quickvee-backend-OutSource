@@ -12,6 +12,14 @@ export default function EditMerchantFunctionality() {
     const[paymentModeOffline,setPaymentModeOffline]=useState(false)
     const[paymentCredits,setPaymentCredits]=useState(false)
     const[paymentModeRecord,setPaymentModeRecord]=useState('')
+    const[message,setMessage]=useState('')
+    const[successMessagehandle,setSuccessMessageHandle]=useState(true)
+    const handleSuccessMessage=()=>{
+        setTimeout(()=> {
+            setSuccessMessageHandle(false)
+           
+         }, 3000)
+    }
    
     const getEditMerchantData=async(data)=>{
         const dataNew={id:data}
@@ -35,8 +43,6 @@ export default function EditMerchantFunctionality() {
                     const otp=response.data.message.row.ver_code !==null ?response.data.message.row.ver_code:''
                     const a_address_line_1=response.data.message.row.a_address_line_1 !==null ?response.data.message.row.a_address_line_1:''
                     const a_address_line_2=response.data.message.row.a_address_line_2 !==null ? response.data.message.row.a_address_line_2:''
-
-
                     setEditMerchant({
                         id:data,
                         password:'',
@@ -49,7 +55,6 @@ export default function EditMerchantFunctionality() {
                         a_address_line_2:a_address_line_2,
                         a_phone:Phone,
                         a_city:City,
-                        // a_zip:response.data.message.row.a_zip,
                         a_zip:a_zipCode,
                         a_state:State,
                         merchant_token:Merchant_token,
@@ -130,8 +135,6 @@ export default function EditMerchantFunctionality() {
 
     const handleUpdateMerchant=async(e)=>{
         e.preventDefault();
-        
-
         const packet={
             id:getEditMerchant.id,
             username:getEditMerchant.username,
@@ -140,7 +143,6 @@ export default function EditMerchantFunctionality() {
             name:getEditMerchant.name,
             merchant_id:getEditMerchant.merchant_id,
             ownername:getEditMerchant.owner_name,
-            // =="" ||getEditMerchant.owner_name==null ?'':getEditMerchant.owner_name,
             password:getEditMerchant.password,address:{address1:getEditMerchant.a_address_line_1,address2:getEditMerchant.a_address_line_2,
                 phoneNumber:getEditMerchant.a_phone,
                 city:getEditMerchant.a_city,
@@ -149,26 +151,28 @@ export default function EditMerchantFunctionality() {
                 cc_payment:paymentModeRecord,
                 account_type:0,
                 merchant_token: getEditMerchant.merchant_token,
-                // ==''|| getEditMerchant.merchant_token ==null ?'': getEditMerchant.merchant_token,
                 usa_pin:getEditMerchant.usa_pin,
             }
-                // ==''|| getEditMerchant.usa_pin==null ?'':getEditMerchant.usa_pin}
                 console.log(packet)  
-        // try {
-        //     let response=await axios.post(BASE_URL+GET_UPDATE_MERCHANT,packet,{headers:{
-        //         "Content-Type":'multipart/form-data'
-        //     }})
+        try {
+            let response=await axios.post(BASE_URL+GET_UPDATE_MERCHANT,packet,{headers:{
+                "Content-Type":'multipart/form-data'
+            }})
            
-        //     if(response.data.status==200)
-        //     {
-        //         navigate(`/users/editMerchant/${getEditMerchant.id}`)
-        //     }
+            if(response.data.status==200)
+            {
+                // console.log(response.data)
+                setMessage(response.data.message)
+                setSuccessMessageHandle(true)
+                handleSuccessMessage()
+                navigate(`/users/editMerchant/${getEditMerchant.id}`)
+            }
             
-        // } catch (e) {
-        //    console.log('Exception',e)
-        // }
+        } catch (e) {
+           console.log('Exception',e)
+        }
 
     }
     return {getEditMerchantData,getEditMerchant,handleChangePaymentMode,paymentModeOnline,paymentModeOffline
-    ,paymentModeOnline,paymentModeOffline,handleUpdateMerchant,handleChangeMerchant,paymentCredits,setEditMerchant}
+    ,paymentModeOnline,paymentModeOffline,handleUpdateMerchant,handleChangeMerchant,paymentCredits,setEditMerchant,message,successMessagehandle}
 }

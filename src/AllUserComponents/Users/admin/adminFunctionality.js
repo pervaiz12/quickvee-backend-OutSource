@@ -6,9 +6,11 @@ import axios from 'axios';
 export default function AdminFunctionality() {
     const[showAdmin,setShowAdmin]=useState(false)
     const[showMerchantData,setShowMerchantData]=useState([])
+    const [adminName,setAdminName]=useState('')
 
-    const handleViewAdmin=async(data)=>
+    const handleViewAdmin=async(data,name)=>
     {
+        setAdminName(name)
         // "kaushal123@imerchantech.com"
         const datarecord={email:data}
         await axios.post(BASE_URL+GET_ADMIN_MERCHANT,datarecord,{ headers: { "Content-Type": "multipart/form-data" }}).then(response=>{
@@ -34,6 +36,6 @@ export default function AdminFunctionality() {
     }
 // setShowMerchant,showMerchant,,showMerchantData
 
-    return {handleCloseAdminModel,handleViewAdmin,showAdmin,showMerchantData}
+    return {handleCloseAdminModel,handleViewAdmin,showAdmin,showMerchantData,adminName}
    
 }
