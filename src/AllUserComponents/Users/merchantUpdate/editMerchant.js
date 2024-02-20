@@ -42,7 +42,7 @@ export default function EditMerchant() {
                                 <input 
                                     className=''
                                     type='text'
-                                    name="owner_name"
+                                    name="username"
                                     value={getEditMerchant.username}
                                     onChange={handleChangeMerchant}
                                 />
@@ -56,7 +56,7 @@ export default function EditMerchant() {
                                 <input 
                                     className=''
                                     type='text'
-                                    name="email"
+                                    name="name"
                                     value={getEditMerchant.name}
                                     onChange={handleChangeMerchant}
                                 />

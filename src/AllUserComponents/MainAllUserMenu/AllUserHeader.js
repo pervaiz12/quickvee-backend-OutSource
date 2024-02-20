@@ -36,8 +36,8 @@ const AllUserHeader = () => {
   return (
     <>
       <div
-        className={`sticky top-0 left-0 p-0 right-0 z-50 bg-white transition-all duration-300 h-[60px] shadow-md border-b-4 border-black ${
-          isSticky ? "border-yellow-500" : ""
+        className={` q_header_section sticky top-0 left-0 p-0 right-0 z-50 bg-white transition-all duration-300 h-[60px] shadow-md border-b-4 border-black ${
+          isSticky ? "sticky-header" : ""
         }`}
       >
         <div className="flex items-center px-4 mx-2 mt-3">

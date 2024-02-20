@@ -107,7 +107,7 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
 
                 className="quic-btn quic-btn-ok"
 
-                className="save_btn"
+               
 
               >
                 Ok{" "}
