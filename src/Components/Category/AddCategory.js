@@ -190,7 +190,9 @@ const AddCategory = ({ seVisible }) => {
 
   return (
     <>
-   
+
+    <div className="box">
+
     <div className="q-add-categories-section">
       <form onSubmit={handleSubmit} enctype="multipart/form-data">
         <div className="q-add-categories-section-header">
@@ -370,6 +372,8 @@ const AddCategory = ({ seVisible }) => {
         </div>
       </form>
     </div>
+    </div>
+
     </>
   );
 };

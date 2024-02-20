@@ -68,6 +68,7 @@ const VendorsDetail = ({ setVisible }) => {
 
   return (
     <>
+    <div className='box'>
       <div className='q-category-bottom-detail-section'>
         <div className='q-category-bottom-header-sticky'>
           <div className='q-category-bottom-header'>
@@ -139,6 +140,7 @@ const VendorsDetail = ({ setVisible }) => {
 
         </div>
 
+      </div>
       </div>
 
     </>

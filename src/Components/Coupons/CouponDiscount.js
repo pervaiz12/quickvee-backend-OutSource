@@ -79,7 +79,9 @@ const CouponDiscount = ({ seVisible }) => {
 
   return (
     <>
-      <div className="mt-10">
+      
+      <div className="box">
+      <div className="box_shadow_div">
         <div className="q-coupon-bottom-detail-section">
           <div className="q-coupon-bottom-header">
             <span>Coupon</span>
@@ -127,6 +129,7 @@ const CouponDiscount = ({ seVisible }) => {
           </div>
 
         </div>
+      </div>
       </div>
     </>
   );

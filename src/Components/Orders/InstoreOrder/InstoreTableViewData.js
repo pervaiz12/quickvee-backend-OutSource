@@ -13,6 +13,19 @@ const InstoreTableViewData = () => {
   const AllInStoreDataState = useSelector((state) => state.inStoreOrder);
   const dispatch = useDispatch();
 
+  const [selectedValue, setSelectedValue] = useState(1);
+
+  const handleChange = (event) => {
+    setSelectedValue(parseInt(event.target.value));
+  };
+  const numberOptions = [];
+  for (let i = 1; i <= 50; i++) {
+    numberOptions.push(<option key={i} value={i}>{i}</option>);
+  }
+
+
+
+
   useEffect(() => {
     const fetchData = async () => {
       let data = {
@@ -44,13 +57,25 @@ const InstoreTableViewData = () => {
       <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
           <div className="q-attributes-bottom-header">
-            <div className="flex justify-between mr-auto">
-              <div className="text-black">show </div>
-              <p className="q_order_border">
-                1 <img src={DownIcon} alt="" className="" />
-              </p>
-              <div className="text-black">entries</div>
-            </div>
+          <div className="flex">
+      <div className="q_show_data">Show</div>
+      <div className="">
+      <select
+  value={selectedValue}
+  onChange={handleChange}
+  className="ml-2 pagination_selected"
+  style={{
+   
+  }}
+>
+  {numberOptions}
+</select>
+        {/* <img src={DownIcon} alt="" className="ml-1" /> */}
+      </div>
+      <div className="q_entery_data">Entries</div>
+    </div>
+
+
 
             <DefaultPagination
               totalEntries={100}
@@ -77,9 +102,9 @@ const InstoreTableViewData = () => {
               >
                 <div className="table_view_sort">
                   <p className="table_user_details"> {order.name} </p>
-                  {/* <p className="table_Existing_customer">Existing Customer</p> */}
+                
                   <p className="table_phone_details">{order.delivery_phn} </p>
-                  {/* <p className="table_email_details">vijay@imerchantech.com</p> */}
+                  
                 </div>
 
                 <div className="table_view_title">
@@ -95,12 +120,25 @@ const InstoreTableViewData = () => {
                   <p className="table_amount_status">{order.order_status}</p>
                 </div>
                 <div className="table_view_items">
-                  <select className="table_status_selected ">
-                    <option value="day">{order.payment_result}</option>
-                    {/* <option value="month">Rejected</option> */}
-                    {/* Add more options as needed */}
+                  <select className="table_status_selected" style={{padding:"13px 41px"}}>
+                    <option className="dropdown-content" value="day">{order.payment_result}
+                    <img src={DownIcon} alt="Down Icon" className="w-6 h-6 ml-16" /></option>
+                  
                   </select>
-                </div>
+</div>
+
+      
+                {/* <div className="table_view_items">
+      <div className="drop_custom_border">
+      
+        <div className="drop_down">
+        <option value="day" className="q_order_status_details">{order.payment_result}</option>
+  
+  
+        
+        </div>
+      </div>
+    </div> */}
 
                 <div className="attriButes-details">
                   <p className="table_view_details">

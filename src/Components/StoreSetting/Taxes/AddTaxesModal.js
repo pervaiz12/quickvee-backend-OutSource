@@ -17,10 +17,11 @@ const AddTaxesModal = () => {
   const dispatch = useDispatch();
 
   const myStyles = {
-    width: "50rem",
-    transform: "translate(25rem, 4.5rem)",
-    maxHeight: "85vh",
-    overflowY: "auto",
+    width: "58rem",
+    position: "absolute",
+    top: "47%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
   };
   const width = {
     width: "6.5rem",

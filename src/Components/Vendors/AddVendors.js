@@ -182,6 +182,8 @@ const inputChange = (e) => {
   
 
   return (
+    <>
+    <div className='box'>
   <form onSubmit={handleSubmit}>
   <div className='q-add-categories-section'>
     <div className='q-add-categories-section-header'>
@@ -285,6 +287,8 @@ const inputChange = (e) => {
     </div>
   </div>
 </form>
+</div>
+</>
 
   )
   

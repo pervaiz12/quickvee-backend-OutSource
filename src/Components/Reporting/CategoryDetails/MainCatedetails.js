@@ -6,16 +6,16 @@ import DetailsSaleReport from './DetailsSaleReport'
 const MainCatedetails = () => {
   return (
     <>
-    <div className='q-order-main-page'>
+    <div className='q-category-main-page'>
 <FilterCatDetails />
 </div> 
 
-<div className='q-order-main-page'>
+<div className='q-category-main-page'>
 <DateRange />
 </div>
 
 
-<div className='q-order-main-page'>
+<div className='q-category-main-page'>
 <DetailsSaleReport />
 </div>
     

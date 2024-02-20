@@ -101,12 +101,12 @@ const FileUpload = () => {
   return (
     
 
-    <div className="mx-4 mt-2">     
+    <div className="box">     
      
       <div
         onDragEnter={handleDrag}
         onSubmit={(e) => e.preventDefault()}
-        className="box-content h-[300px] p-4 border-4 border-white bg-white rounded-xl opacity-100 mt-9 flex justify-between mx-8 my-2 importBtn" // Added 'relative' class
+        className="box-content h-[300px] p-4 border-4 border-white bg-white rounded-xl opacity-100 mt-9 flex justify-between  my-2 importBtn" // Added 'relative' class
         style={{ boxShadow: "0px 3px 6px #0000001F" }}
       >
         {alertmsg &&

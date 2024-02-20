@@ -6,11 +6,11 @@ import {BiCaretUp} from 'react-icons/bi'
 
 const MainHeader = () => {
   return (
-    <div className="">
-      <Container>
-        <Row>
-          <Col>
-            <div className="bg-white px-8 py-4 mt-4 mx-10 shadow-md rounded-lg opacity-100 h-40">
+    <>
+    <div className="box">
+      <div className='box_shadow_div mt_card_header'>
+    
+            
               <div className="table-responsive">
                 <table className="w-full" style={{ width: '100%' }}>
                   <thead>
@@ -54,10 +54,10 @@ const MainHeader = () => {
                 </table>
               </div>
             </div>
-          </Col>
-        </Row>
-      </Container>
-    </div>
+            </div>
+         
+  
+    </>
   );
 };
 

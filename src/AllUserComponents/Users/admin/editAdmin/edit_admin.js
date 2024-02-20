@@ -32,7 +32,7 @@ export default function EditAdmin() {
                                         onChange={handleChangeAdmin}
                                     />
                                 </div>
-                                <label>{errors.owner_name}</label>
+                                <label className='error'>{errors.owner_name}</label>
                                 {/* <label>{errors.owner_name}</label> */}
                                 
                             </div>
@@ -50,7 +50,7 @@ export default function EditAdmin() {
                                         onChange={handleChangeAdmin}
                                     />
                                 </div>
-                                <label>{errors.email}</label>
+                                <label className='error'>{errors.email}</label>
                                 
                             </div>
                         </div>
@@ -61,9 +61,9 @@ export default function EditAdmin() {
                                     <input 
                                         className=''
                                         type='text'
-                                        name="password"
-                                        // value={editData.password}
-                                        // onChange={handleChangeAdmin}
+                                        name="password1"
+                                        value={editData.password1}
+                                        onChange={handleChangeAdmin}
                                         // value={store.email}
                                     />
                                 </div>
@@ -82,7 +82,7 @@ export default function EditAdmin() {
                                         onChange={handleChangeAdmin}
                                     />
                                 </div>
-                                <label>{errors.phone}</label>
+                                <label className='error'>{errors.phone}</label>
                             </div>
                         </div>
                     
