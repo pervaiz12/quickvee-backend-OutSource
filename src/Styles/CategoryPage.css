@@ -405,3 +405,13 @@ cursor:  pointer !important;
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
 }
+
+
+.quic-btn-ok{
+    background: #0A64F9;
+    margin-left: 10px;
+}
+
+.suggestlist_input fieldset{
+    border: 1px solid #E1E1E1 !important;
+}   

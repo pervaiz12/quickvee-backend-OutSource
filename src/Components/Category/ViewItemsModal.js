@@ -104,7 +104,7 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
             <div className="q-add-categories-section-middle-footer">
               <button
                 onClick={() => handleClose()}
-                className="quic-btn quic-btn-cancle"
+                className="quic-btn quic-btn-ok"
               >
                 Ok{" "}
               </button>
