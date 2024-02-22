@@ -4,6 +4,11 @@ import { fetchInStoreOrderData } from "../../../Redux/features/Orders/inStoreOrd
 import { useSelector, useDispatch } from "react-redux";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import { Link } from "react-router-dom";
+import { renderToString } from 'react-dom/server';
+
+
+import $ from 'jquery'
+import 'datatables.net-dt/css/jquery.dataTables.min.css';
 
 const InstoreTableViewData = () => {
   const [currentPage, setCurrentPage] = useState(1);
@@ -20,11 +25,12 @@ const InstoreTableViewData = () => {
   };
   const numberOptions = [];
   for (let i = 1; i <= 50; i++) {
-    numberOptions.push(<option key={i} value={i}>{i}</option>);
+    numberOptions.push(
+      <option key={i} value={i}>
+        {i}
+      </option>
+    );
   }
-
-
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,114 +58,61 @@ const InstoreTableViewData = () => {
     setCurrentPage(newPage);
   };
 
+  // for table start
+
+  $.DataTable = require('datatables.net') 
+
+  useEffect(() => {
+    const modifiedData = inStoreOrder.map(data => ({
+      "Customer": `${data.name || ""}<br>${data.delivery_phn || ""}`,
+      "Order": `${data.order_id || ""}<br>${data.merchant_time || ""}<br>${data.order_method || ""}`,
+      "Amount": `${data.amt || ""}<br>${data.order_status || ""}`,
+      "Status": `${data.payment_result || ""}`,
+      "View": `<a href="/store-reporting/order-summary/${data.order_id}">View Details</a>`,
+  }));
+  
+
+    const table = $('#InstoreTable').DataTable({
+      data: modifiedData,
+      columns: [
+        { title: "Customer", data: "Customer", orderable: false },
+        { title: "Order", data: "Order", orderable: false },
+        { title: "Amount", data: "Amount", orderable: false },
+        { title: "Status", data: "Status", orderable: false },
+        { title: " ", data:"View", orderable: false },
+      ],
+      destroy: true,
+      searching: true,
+      dom: "<'row 'l<'col-sm-12'b>><'row'<'col-sm-7 mt-5'p><'col-sm-5'>>",
+      lengthMenu: [ 10, 20, 50],
+      lengthChange: true,
+      ordering: false,
+      language: {
+        paginate: {
+          previous: '<',
+          next: '>'
+        }
+      }
+    });
+
+    $('#searchInput').on('input', function () {
+      table.search(this.value).draw();
+    });
+
+    return () => {
+      table.destroy();
+    }
+  }, [inStoreOrder]);
+
+  // for table End
+
   return (
     <>
       <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
-          <div className="q-attributes-bottom-header">
-          <div className="flex">
-      <div className="q_show_data">Show</div>
-      <div className="">
-      <select
-  value={selectedValue}
-  onChange={handleChange}
-  className="ml-2 pagination_selected"
-  style={{
-   
-  }}
->
-  {numberOptions}
-</select>
-        {/* <img src={DownIcon} alt="" className="ml-1" /> */}
-      </div>
-      <div className="q_entery_data">Entries</div>
-    </div>
 
+            <table className="" id="InstoreTable"></table>
 
-
-            <DefaultPagination
-              totalEntries={100}
-              entriesPerPage={10}
-              page={currentPage}
-              onChange={handlePageChange}
-            />
-          </div>
-          <div className="q-attributes-bottom-attriButes-header">
-            <p className="table_view_sort">Customer</p>
-            <p className="table_view_title">Order</p>
-            <p className="table_view_amount">Amount</p>
-            <p className="table_view_items">Status</p>
-          </div>
-        </div>
-
-        <div className="q-attributes-bottom-attriButes-listing">
-          {inStoreOrder &&
-            inStoreOrder.length >= 1 &&
-            inStoreOrder.map((order, index) => (
-              <div
-                key={index}
-                className="q-attributes-bottom-attriButes-single-attributes"
-              >
-                <div className="table_view_sort">
-                  <p className="table_user_details"> {order.name} </p>
-                
-                  <p className="table_phone_details">{order.delivery_phn} </p>
-                  
-                </div>
-
-                <div className="table_view_title">
-                  <p className="table_order_details">{order.order_id}</p>
-                  <p className="table_order_datedetails">
-                    {order.merchant_time}
-                  </p>
-                  <p className="table_order_delivery">{order.order_method}</p>
-                </div>
-
-                <div className="table_view_amount">
-                  <p className="table_Amount_details">${order.amt}</p>
-                  <p className="table_amount_status">{order.order_status}</p>
-                </div>
-                <div className="table_view_items">
-                  <select className="table_status_selected" style={{padding:"13px 41px"}}>
-                    <option className="dropdown-content" value="day">{order.payment_result}
-                    <img src={DownIcon} alt="Down Icon" className="w-6 h-6 ml-16" /></option>
-                  
-                  </select>
-</div>
-
-      
-                {/* <div className="table_view_items">
-      <div className="drop_custom_border">
-      
-        <div className="drop_down">
-        <option value="day" className="q_order_status_details">{order.payment_result}</option>
-  
-  
-        
-        </div>
-      </div>
-    </div> */}
-
-                <div className="attriButes-details">
-                  <p className="table_view_details">
-                  <Link to={`/store-reporting/order-summary/${order.order_id}`}>
-                    View Details
-                  </Link>
-                    
-                  </p>
-                </div>
-                <div className="table_border_bottom"></div>
-              </div>
-            ))}
-
-          <div className="py-8">
-            <DefaultPagination
-              totalEntries={100}
-              entriesPerPage={10}
-              page={currentPage}
-              onChange={handlePageChange}
-            />
-          </div>
         </div>
       </div>
     </>

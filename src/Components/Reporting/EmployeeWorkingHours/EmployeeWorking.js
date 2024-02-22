@@ -14,7 +14,9 @@ const EmployeeWorking = () => {
       </div>
 
       <div className='q-order-main-page'>
+        <div className='box'>
        <DateRange />
+      </div>
       </div>
 
       <div className='q-order-main-page'>

@@ -40,7 +40,7 @@ const AllUserHeader = () => {
           isSticky ? "sticky-header" : ""
         }`}
       >
-        <div className="flex items-center px-4 mx-2 mt-3">
+        <div className="flex items-center px-4 mx-2">
           <BiMenu
             className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out`}
             onClick={(e) => {

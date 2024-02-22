@@ -180,6 +180,7 @@ const Navigate = useNavigate()
   return (
     
 <div className='q-category-main-page'>
+  <div className='box'>
   <br></br>
   <form onSubmit={handleFormSubmit}>
   <div className='q-add-categories-section'>
@@ -268,6 +269,7 @@ const Navigate = useNavigate()
     </div>
   </div>
 </form>
+</div>
 </div>
   )
   

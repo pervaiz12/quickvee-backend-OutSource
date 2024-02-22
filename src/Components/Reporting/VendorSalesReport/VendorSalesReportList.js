@@ -62,6 +62,7 @@ const VendorSalesReportList = (props) => {
 
             {allVendorData && Object.keys(allVendorData).length >= 1 ? (
                 <>
+                <div className="box">
                     <div className="q-category-bottom-categories-listing">
                         {Object.keys(allVendorData).map((vendorName, vendorIndex) => (
                             <React.Fragment key={vendorName}>
@@ -89,11 +90,14 @@ const VendorSalesReportList = (props) => {
                             </React.Fragment>
                         ))}
                     </div>
+                    </div>
 
                 </>
             ) : (
+                <div className="box">
                 <div className="q-category-bottom-categories-single-category">
                     <p>No data found</p>
+                </div>
                 </div>
             )}
 

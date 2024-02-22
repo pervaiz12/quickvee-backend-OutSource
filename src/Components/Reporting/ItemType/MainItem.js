@@ -8,7 +8,9 @@ const MainItem = () => {
     <>
    
       <div className="q-order-main-page">
+        <div className="box">
         <ItemsCategories />
+      </div>
       </div>
       
      

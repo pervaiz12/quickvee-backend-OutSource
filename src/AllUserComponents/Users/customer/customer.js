@@ -53,6 +53,7 @@ const Customer=()=> {
 
   // const{customerRecord,handleEditCustomer,handleDeleteCustomer}=CustomerFunction()
   return (
+    <div className='q-order-main-page'>
     <div className='box'>
     <div className='box_shadow_div'>
       <div className='qvrow'>
@@ -126,6 +127,7 @@ const Customer=()=> {
             
           </div>
       </div>
+    </div>
     </div>
     </div>
   )

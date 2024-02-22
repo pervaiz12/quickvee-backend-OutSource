@@ -142,16 +142,14 @@ const OnlineTableViewData = () => {
                   </select>
                 </div> */}
 
+                     <div className="table_view_items">
+                  <select className="table_status_selected">
+                    <option className="dropdown-content" value="day">{order.payment_result}
+                    <img src={DownIcon} alt="Down Icon" className="w-6 h-6 ml-16" /></option>
+                  
+                  </select>
+                     </div>
 
-                <div className="table_view_items">
-      <div className="drop_custom_border">
-      
-        <div className="drop_down">
-        <option value="day" className="q_order_status_details">Accept{order.payment_result}</option>
-        <img src={DownIcon} alt="Down Icon" className="w-6 h-6 ml-16" />
-        </div>
-      </div>
-    </div>
 
                 <div className="attriButes-details">
                   <p className="table_view_details   ">View Details</p>

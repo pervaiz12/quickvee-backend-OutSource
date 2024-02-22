@@ -91,6 +91,7 @@ const MainTaxesReport = () => {
   <>
 
   <div className='q-order-main-page'>
+    <div className="box">
     <div className="q-category-bottom-detail-section">
         <div className="">
           <div className="q-category-bottom-header">
@@ -183,6 +184,7 @@ const MainTaxesReport = () => {
   <div className='q-order-main-page'>
     <TaxesDetails data={filteredData}  />
 
+  </div>
   </div>
   </>
   )

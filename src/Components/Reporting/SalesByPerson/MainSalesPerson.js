@@ -28,18 +28,22 @@ const MainSalesPerson = () => {
       </div>
 
       <div className='q-order-main-page'>
+        <div className='box'>
         <DateRange 
           onDateRangeChange={handleDateRangeChange}
         />
       </div>
+      </div>
 
       <div className='q-order-main-page'>
+        <div className='box'>
         <SalesPersonReport 
           selectedDateRange={selectedDateRange} 
           OrderSourceData={OrderSourceData} 
           OrderTypeData={OrderTypeData} 
           SelectEmpListData={SelectEmpListData} 
         />
+      </div>
       </div>
     </>
   )

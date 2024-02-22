@@ -10,6 +10,7 @@ const MainCategory = () => {
         <>
 
             <div className='q-category-main-page'>
+            
                 {/* <div className='q-category-top-detail-section'>
                     <li>In order to use the Quickvee app one Category is required.</li>
                     <li>If you make changes to the Category, the Category status will be pending until the admin approves it.</li>
@@ -21,6 +22,7 @@ const MainCategory = () => {
                 {visible === "EditVendors" && <EditVendors setVisible={setVisible} />}
                 {visible === "SingleVendorsDetail" && <SingleVendorsDetail setVisible={setVisible} />}
             </div>
+           
         </>
     )
 }
