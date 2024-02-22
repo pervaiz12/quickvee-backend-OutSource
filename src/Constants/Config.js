@@ -240,4 +240,8 @@ module.exports = Object.freeze({
 
   GET_REORDER_INVENTORY_LIST: "ReportingReactapi/get_reorder_inventory_list",
 
+  // PRODUCTS
+  PRODUCTS_LIST: "Product_api_react/Products_list",
+  PRODUCT_DEFAULT_IMAGE : this.BASE_URL+"upload/products/MaskGroup4542.png",
+  
 });

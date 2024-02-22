@@ -45,6 +45,7 @@ import OrderRefundListReducer from "../features/Reports/OrderRefundReport/OrderR
 import NewsLetterListReducer from "../../Redux/features/NewsLetter/NewsLetterSlice";
 import vendorReducer from "../features/VendorList/vListSlice";
 import orderSummerySlice from "../features/OrderSummary/OrderSummarySlice";
+import productsReducer from "../features/Product/ProductSlice";
 
 const store = configureStore({
   reducer: {
@@ -116,6 +117,7 @@ const store = configureStore({
     verifiedMerchantRecord:VerifiedMerchantSliceReducer,
     unverifiedMerchantRecord:UnVerifiedMerchantSliceReducer,
     OrderRefundList:OrderRefundListReducer,
+    productsListData: productsReducer,
 
   },
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),
