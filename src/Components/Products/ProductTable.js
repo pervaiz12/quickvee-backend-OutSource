@@ -25,7 +25,7 @@ const ProductTable = ({  }) => {
           </div>
           <div className="q-category-bottom-detail-section">
         <div className="q-category-bottom-header-sticky">
-          <div className="q-category-bottom-header">
+        <div className="q-category-bottom-categories-header">
             <p className="categories-sort">Sort</p>
             <p className="categories-title">Title</p>
             <p className="categories-sort"></p>

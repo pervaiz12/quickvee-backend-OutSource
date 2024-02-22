@@ -62,11 +62,13 @@ const CategoryDetail = ({ seVisible }) => {
 
   // for  Category Status update
   const handleToggleStatus = async (id, status) => {
+    console.log("jkj");
     const data = {
       id: id,
       status: status,
       merchant_id: "MAL0100CA",
     };
+    
 
     const rep = await dispatch(updateCategoryStatus(data));
     if (rep.payload === "Success") {

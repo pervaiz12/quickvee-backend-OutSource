@@ -8,6 +8,7 @@
   font-size: 40px;
 }
 
+
 @font-face {
   font-family: adminbold;
   src: url(./Assests/Fonts/circular-bold.TTF);
@@ -56,7 +57,6 @@
   font-family: CircularSTDMedium;
   src: url("./Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
 }
-
 
 
 

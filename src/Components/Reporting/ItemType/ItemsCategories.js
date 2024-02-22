@@ -115,6 +115,8 @@ const ItemsCategories = () => {
               )}
             </div>
           </div>
+          <div className="q-order-page-filter"></div>
+          <div className="q-order-page-filter"></div>
         </div>
       </div>
       </div>

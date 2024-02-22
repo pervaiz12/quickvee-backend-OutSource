@@ -55,7 +55,7 @@ import "./Styles/CouponDiscount.css";
 import "./Styles/ImportData.css";
 import "./Styles/DailyDaterange.css";
 // import "./Styles/EmployeeWorking.css";
-
+import "./Styles/Table.css";
 import "./Styles/DefaultsPage.css";
 
 import "./Styles/ReceiptMainpage.css";
