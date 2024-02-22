@@ -36,6 +36,9 @@ module.exports = Object.freeze({
   //Importdata API Calls
   IMPORT_DATA: "Import_data_api/import",
 
+  //Loyalty Program
+  LOYALTY_PROGRAM_LIST: "LoyaltyProgramReactAPI/loyalty_program_list",
+
   // Order API Calls (Offline and Online)
   LIST_ALL_IN_STORE_ORDER: "api/orderoffline",
   LIST_ALL_ONLINE_STORE_ORDER: 'api/newOrder',

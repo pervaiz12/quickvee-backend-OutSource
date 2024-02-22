@@ -57,6 +57,7 @@ import ReorderInventoryMain from "../Reporting/ReorderInventory/ReorderInventory
 import EditVendors from "../Vendors/EditVendors";
 import SingleVendorsDetail from "../Vendors/SingleVendorsDetail";
 import AddProducts from "../Products/AddProducts"
+import MainLoayalty from "../LoyaltyProgram/MainLoayalty";
 //  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
 
 
@@ -90,6 +91,7 @@ const LeftSide = ({ visible }) => {
           {visible === "vendors" && <MainVendors />}
           {visible === "timesheet" && <MainTimesheet />}
           {visible === "import-data" && <MainImportData />}
+          {visible === "loyalty-program" && <MainLoayalty />}
           {visible === "store-setting" && <MainStoreOption />}
           {visible === "store-setting" && <MainStoreOption />}
           {visible === "category-edit-cat" && <EditCategory />}

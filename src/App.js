@@ -83,7 +83,7 @@ import MainSalesPerson from "./Components/Reporting/SalesByPerson/MainSalesPerso
 // import MainInvDuplicates from "./Components/InventoryDuplicates/MainInvDuplicates";
 import Main from "./Main";
 import "./Styles/OrderSummaryDetails.css";
-
+import "./Styles/Table.css"
 
 
 // import InventoryExport from "./Components/InventoryExport/MainInventoryExport";
@@ -124,6 +124,11 @@ function App() {
         exact
         path="/import-data"
         element={<Main visible={"import-data"} />}
+      />
+      <Route
+        exact
+        path="/loyalty-program"
+        element={<Main visible={"loyalty-program"} />}
       />
       <Route exact path="/coupons" element={<Main visible={"coupons"} />} />
       <Route exact path="/vendors" element={<Main visible={"vendors"} />} />
