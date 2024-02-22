@@ -5,11 +5,11 @@ const ReorderInventoryMain = () => {
 
     return (
         <>
-            <div className='mt-10'>
-                <div className="q-attributes-main-page">
+            
+                <div className="q-order-main-page">
                     <ReorderInventoryList />
                 </div>
-            </div>
+            
         </>
     )
 }

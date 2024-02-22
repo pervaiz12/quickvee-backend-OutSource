@@ -931,3 +931,11 @@ border-bottom: 1px solid #000 !important;}
 .css-19xm0h7-MuiButtonBase-root-MuiPaginationItem-root{
   padding: 19px 15px !important; 
 }
+
+.table_status_selected>select{
+  border:1px solid #000;
+  padding: 5px 10px;
+  border-radius: 4px;
+  width: 100%;
+  height: auto;
+}

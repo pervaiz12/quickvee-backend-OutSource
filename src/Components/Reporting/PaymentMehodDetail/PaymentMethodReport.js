@@ -73,6 +73,7 @@ import DownIcon from "../../../Assests/Dashboard/Down.svg";
     return (
       <>
           <div className="q-order-main-page">
+            <div className="box">
         <div className="q-category-bottom-detail-section">
             <div className="q-category-bottom-header-sticky">
               <div className="q-category-bottom-header">
@@ -124,6 +125,7 @@ import DownIcon from "../../../Assests/Dashboard/Down.svg";
             </div>
           </div>
         </div>
+        </div>
   
         <style>
           {`
@@ -133,14 +135,16 @@ import DownIcon from "../../../Assests/Dashboard/Down.svg";
           `}
         </style>
   
-        <div className="q-attributes-main-page">
+        <div className="q-order-main-page">
           <div className="dailytotoalReport">
+            <div className="box">
             <DateRange onDateRangeChange={handleDataFiltered} />
           </div>
         </div>
+        </div>
   
         <div className="mt-10">
-          <div className="q-attributes-main-page">
+          <div className="q-order-main-page">
             <PaymentMethodList data={filteredData} />
           </div>
         </div>

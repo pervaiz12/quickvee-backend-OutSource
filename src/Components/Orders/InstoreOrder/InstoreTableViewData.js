@@ -120,7 +120,7 @@ const InstoreTableViewData = () => {
                   <p className="table_amount_status">{order.order_status}</p>
                 </div>
                 <div className="table_view_items">
-                  <select className="table_status_selected" style={{padding:"13px 41px"}}>
+                  <select className="table_status_selected">
                     <option className="dropdown-content" value="day">{order.payment_result}
                     <img src={DownIcon} alt="Down Icon" className="w-6 h-6 ml-16" /></option>
                   

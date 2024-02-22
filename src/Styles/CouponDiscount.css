@@ -754,15 +754,15 @@ svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-i4bv87-MuiSvgIcon-root {
 
  .date_selected>img{
   position: relative;
-  left: 252px;
+  left: 195px;
   top: 10px;
   z-index: 1;
 }
 
 img.clock_design{
   position: relative;
-  left: 180px;
-  bottom: 38px;
+  left: 100px;
+  bottom: 40px;
 }
 
 .MuiFormControl-root.MuiTextField-root.input_label_section.css-z3c6am-MuiFormControl-root-MuiTextField-root {

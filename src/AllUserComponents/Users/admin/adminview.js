@@ -51,7 +51,7 @@ const filteredAdminRecord = AdminRecord && AdminRecord.AdminRecord && Array.isAr
 
   return (
     <>
-   
+     <div className='q-order-main-page'>
    <div className='box'>
       <div className='box_shadow_div'>
         <div className='qvrow'>
@@ -120,6 +120,7 @@ const filteredAdminRecord = AdminRecord && AdminRecord.AdminRecord && Array.isAr
           </div>
         </div>
       </div>
+    </div>
     </div>
   <ViewAdmin
     showAdmin={showAdmin}

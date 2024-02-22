@@ -163,9 +163,13 @@
     text-align: center;
 }
 
+
+
 .store-setting-checkmark-td input{
     width: 20px;
     height: 20px;
+    accent-color: #3ea63e;
+  
 }
 
 .store-setting-flex {

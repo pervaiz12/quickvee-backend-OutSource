@@ -9,8 +9,9 @@ const ProductTable = ({  }) => {
 
   return (
     <>
+    <div className="box">
       <div className="q-category-bottom-detail-section">
-        <div className="">
+      <div className="q-category-bottom-header-sticky">
           <div className="q-category-bottom-header">
             <span>Products</span>
             <p className="">
@@ -267,6 +268,7 @@ const ProductTable = ({  }) => {
 </p>
             <p className=""><img src={DeleteIcon} alt=" " className="w-16 h-16"  /></p>
           </div>
+        </div>
         </div>
         </div>
         </div>

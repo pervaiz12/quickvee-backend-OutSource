@@ -69,6 +69,7 @@ const OrderRefundReportList = (props) => {
 
 
                 {isAllOrderDataValid && (
+                    <div className="box">
                     <div className="q-daily-report-bottom-report-header">
                         <p className="report-sort">Order ID</p>
                         <p className="report-sort">Date</p>
@@ -82,6 +83,7 @@ const OrderRefundReportList = (props) => {
                         <p className="report-sort">TIP</p>
                         <p className="report-sort">Total</p>
                         {/* <p className="report-sort">NCA</p> */}
+                    </div>
                     </div>
                 )}
 
@@ -110,6 +112,7 @@ const OrderRefundReportList = (props) => {
                             // const formattedRefundQty = parseFloat(CheckData.refund_qty).toFixed(2);
 
                             return (
+                                <div className="box">
                                 <div key={index} className="q-category-bottom-categories-listing">
                                     <div className="q-category-bottom-categories-single-category">
                                         <p className="report-title">{CheckData.order_id}</p>
@@ -126,10 +129,12 @@ const OrderRefundReportList = (props) => {
 
                                     </div>
                                 </div>
+                                </div>
                             );
                         })}
 
                         {/* Grand Total Row */}
+                        <div className="box">
                         <div className="q-category-bottom-categories-listing">
                             <div className="q-category-bottom-categories-single-category">
                                 <p className="report-title"></p>
@@ -141,10 +146,13 @@ const OrderRefundReportList = (props) => {
 
                             </div>
                         </div>
+                        </div>
                     </>
                 ) : (
+                    <div className="box">
                     <div className="q-category-bottom-categories-single-category">
                         <p>No data found</p>
+                    </div>
                     </div>
                 )}
 

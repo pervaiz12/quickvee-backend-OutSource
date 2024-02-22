@@ -52,6 +52,7 @@ const CurrentInventoryValue = () => {
   return (
     <>
       <div className="q-order-main-page">
+        <div className="box">
         <div className="q-category-bottom-categories-listing">
           <div className="q-category-bottom-detail-section">
             <div className="q-category-bottom-header">
@@ -85,6 +86,7 @@ const CurrentInventoryValue = () => {
             </div>
           </div>
         </div>
+      </div>
       </div>
     </>
   );

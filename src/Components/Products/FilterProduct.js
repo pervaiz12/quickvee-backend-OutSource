@@ -71,8 +71,9 @@ const FilterProduct = () => {
 
   return (
     <>
+    <div className="box">
      <div className="q-attributes-bottom-detail-section bg-white">
-      <div className=" p-4 mb-3  rounded-md">
+      <div className=" p-4 mb-3 rounded-md">
         <div className="flex border  rounded-md overflow-hidden mt-6 mr-9">
           <input
             type="text"
@@ -183,7 +184,7 @@ const FilterProduct = () => {
                 <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
               </div>
               {listingTypesDropdownVisible && (
-                <div className="dropdown-content ">
+                <div className="dropdown-content">
                   <div onClick={() => handleOptionClick("All", "listingtype")}>All</div>
                   <div onClick={() => handleOptionClick("listing1", "listingtype")}>status1</div>
                   <div onClick={() => handleOptionClick("listing2", "listingtype")}>status2</div>
@@ -196,6 +197,7 @@ const FilterProduct = () => {
     </div>
       <div>
         
+      </div>
       </div>
       </div>
     </>

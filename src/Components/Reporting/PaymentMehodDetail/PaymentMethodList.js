@@ -87,9 +87,11 @@ const PaymentMethodList = ({data}) => {
     } else if (myArray && myArray.length >= 1) {
       return (
         <>
+        <div className="box">
           <div className="q-daily-report-bottom-report-header">
             <p className="report-sort">Card type</p>
             <p className="report-title">Total</p>
+          </div>
           </div>
           {myArray.map((paymentData, index) => {
             if (
@@ -99,6 +101,7 @@ const PaymentMethodList = ({data}) => {
             ) {
               hasValidData = true;
               return (
+                <div className="box">
                 <div
                   className="q-category-bottom-categories-listing"
                   key={index}
@@ -112,13 +115,16 @@ const PaymentMethodList = ({data}) => {
                     </p>
                   </div>
                 </div>
+                </div>
               );
             } else {
               return null; 
             }
           })}
           {!hasValidData && (
+            <div className="box">
             <div className="empty-div">No data available</div>
+            </div>
           )}
         </>
       );

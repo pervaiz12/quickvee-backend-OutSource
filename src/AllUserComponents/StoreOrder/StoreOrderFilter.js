@@ -44,6 +44,7 @@ const StoreOrderFilter = ({onFilterDataChange}) => {
 
     return (
         <>
+        <div className="box">
             <div className="q-category-bottom-detail-section">
                 <div className="">
                     <div className="q-category-bottom-header">
@@ -97,6 +98,7 @@ const StoreOrderFilter = ({onFilterDataChange}) => {
                     </div>
 
                 </div>
+            </div>
             </div>
         </>
     )

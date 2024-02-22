@@ -37,6 +37,7 @@ const FilterVendorList = ({title,onVendorChange}) => {
 
   return (
     <>
+    <div className="box">
       <div className="q-category-bottom-detail-section">
         <div className="q-category-bottom-header-sticky">
           <div className="q-category-bottom-header">
@@ -65,6 +66,7 @@ const FilterVendorList = ({title,onVendorChange}) => {
 
           
         </div>
+      </div>
       </div>
     </>
   );

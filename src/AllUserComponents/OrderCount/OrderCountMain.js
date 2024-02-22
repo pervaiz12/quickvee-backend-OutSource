@@ -6,9 +6,12 @@ const OrderCountMain = () => {
     <>
       <div className='mt-10'>
         <div className="q-attributes-main-page">
+          <div className='box'></div>
           <OrderCountList />
         </div>
       </div>
+      
+
     </>
   )
 }

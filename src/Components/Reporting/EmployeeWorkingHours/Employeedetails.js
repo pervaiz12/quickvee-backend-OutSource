@@ -4,6 +4,7 @@ import "../../../Styles/EmployeeWorking.css";
 const Employeedetails = () => {
   return (
     <>
+    <div className="box">
       <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
           <div className="q-attributes-bottom-header">
@@ -69,6 +70,8 @@ const Employeedetails = () => {
           </div>
         </div>
       </div>
+      
+</div>
     </>
   );
 };

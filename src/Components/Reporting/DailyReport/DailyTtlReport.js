@@ -94,6 +94,7 @@ const DailyTtlReport = () => {
   return (
     <>
         <div className="q-order-main-page">
+          <div className="box">
       <div className="q-category-bottom-detail-section">
           <div className="q-category-bottom-header-sticky">
             <div className="q-category-bottom-header">
@@ -183,6 +184,7 @@ const DailyTtlReport = () => {
           </div>
         </div>
       </div>
+      </div>
 
       <style>
         {`
@@ -192,17 +194,21 @@ const DailyTtlReport = () => {
         `}
       </style>
 
-      <div className="q-attributes-main-page">
+      <div className="q-order-main-page">
         <div className="dailytotoalReport">
+          <div className="box">
           <DateRange onDateRangeChange={handleDataFiltered} />
         </div>
       </div>
-
-      <div className="mt-10">
-        <div className="q-attributes-main-page">
-          <DailyReportList data={filteredData} />
-        </div>
       </div>
+
+     
+        <div className="q-order-main-page">
+          
+          <DailyReportList data={filteredData} />
+       
+      </div>
+     
     </>
   );
 };

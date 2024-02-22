@@ -34,6 +34,7 @@ export default function Manager() {
 
   return (
     <>
+    <div className='q-order-main-page'>
     <div className='box'>
     <div className='box_shadow_div'>
       <div className='qvrow'>
@@ -92,6 +93,7 @@ export default function Manager() {
           </div>
       </div>
       
+    </div>
     </div>
     </div>
     <ViewMerchant
