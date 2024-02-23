@@ -1,34 +1,30 @@
-import React, { useState } from "react";
-// import { AiOutlineSearch } from "react-icons/ai";
+import React ,{useState} from "react";
 import AddNewCategory from "../../Assests/Dashboard/Left.svg";
-// import DownIcon from "../../Assests/Dashboard/Down.svg";
 import Select from "react-select";
 import makeAnimated from "react-select/animated";
 import { colourOptions } from "../Products/data";
 import VariantAttributes from "./VariantAttributes";
-import SearchIcon from "../../Assests/Filter/Search.svg";
+import UploadIMG from "../../Assests/Filter/imgupload.svg";
+import GeneratePUC from "./GeneratePUC";
 
 const AddProducts = () => {
-  const [searchId, setSearchId] = useState(""); // State to track search ID
-
-  const handleSearch = () => {
-    console.log("Search ID:", searchId);
-  };
-  const myStyles = {
-    height: "300px",
-    overflow: "auto",
-  };
-
   const animatedComponents = makeAnimated();
+  const [productImage, setProductImage] = useState(null);
+
+  const handleImageChange = (event) => {
+    const selectedFile = event.target.files[0];
+    // You can perform additional validation here if needed
+    setProductImage(URL.createObjectURL(selectedFile));
+  };
 
   return (
-    <>
+    <div className="box">
       <div className="q-attributes-main-page">
         <div className="q-add-categories-section">
           <div className="q-add-categories-section-header">
             <span>
               <img src={AddNewCategory} alt="Add-New-Category" />
-              <span>Add Product</span>
+              <span style={{width:"153px"}}>Add Product</span>
             </span>
           </div>
           <div className="q-add-categories-section-middle-form">
@@ -46,57 +42,94 @@ const AddProducts = () => {
                 cols="50"
               ></textarea>
             </div>
+            <div className="">
+              <div className="q-add-categories-single-input">
+                <label htmlFor="tax">Category</label>
+                <Select
+                  closeMenuOnSelect={false}
+                  components={{ ...animatedComponents }}
+                  defaultValue={{}}
+                  isMulti
+                  options={colourOptions}
+                />
+              </div>
+            </div>
 
             <div className="q-add-categories-single-input">
-              <label htmlFor="category">Category</label>
-              <div
-                className=""
-                style={{ border: "1px solid #818181", borderRadius: "4px" }}
-              >
-                <input
-                  type="text"
-                  id="title"
-                  name="title"
-                  style={{ border: "none", width: "100%" }}
-                />
+              <label htmlFor="tax">Taxes</label>
+              <Select
+                closeMenuOnSelect={false}
+                components={animatedComponents}
+                defaultValue={colourOptions}
+                isMulti
+                options={colourOptions}
+              />
+            </div>
 
-                <div className="relative">
-                  <input
-                    type="text"
-                    id="title"
-                    name="title"
-                    placeholder="Search orders by order ID, last 4 digits on payment card, or invoice ID"
-                    value={searchId}
-                    onChange={(e) => setSearchId(e.target.value)}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-blue-500"
-                  />
-                  <img
-                    src={SearchIcon}
-                    alt="Search"
-                    className="absolute right-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400"
-                  />
+            <div className="q-add-categories-single-input">
+              <label htmlFor="related-product">Related Products</label>
+              <Select
+                closeMenuOnSelect={false}
+                components={animatedComponents}
+                defaultValue={{}}
+                isMulti
+                options={colourOptions}
+              />
+            </div>
+
+            <div className="q-add-categories-single-input">
+              <div className="q_dashbaord_netsales">
+              <h1>Product Image</h1>
+              </div>
+          
+              <label>
+                Select Default Image if in case some color image is not available.
+              </label>
+              <div className="q_border_product">
+                <div className="px-8 py-10" style={{border:"2px solid #0A64F9", width:"20%"}}>
+                  <div className="" style={{display:"flex", flexDirection:"column", alignItems:"center"}}>
+                    <img
+                      src={UploadIMG}
+                      alt="Default"
+                      className="w-6 h-6 text-center"
+                    />
+                    <span style={{color:"#0A64F9", fontSize:"12px"}}>Choose Files</span>
+                  </div>
+                  <div className="q-add-categories-single-input">
+                    <input
+                      type="file"
+                      id="image"
+                      name="image"
+                      accept="image/*"
+                      className="default-img-inputfield"
+                      onChange={handleImageChange}
+                    />
+                  </div>
                 </div>
-               
+              </div>
+            </div>
+
+
+            <div className="mt_card_header">
+              <VariantAttributes />
+            </div>
+
+            <div className="mt_card_header">
+             <GeneratePUC />
+            </div>
+
+
+
+            <div className="q-add-categories-section-middle-footer">
+              <div className="q-category-bottom-header-sticky">
+                <button className="quic-btn quic-btn-save">Update</button>
+                <button className="quic-btn quic-btn-cancle">Cancel</button>
               </div>
             </div>
           </div>
         </div>
-      
-      {/* 
-          <div className="">
-            <VariantAttributes />
-          </div> */}
-
-      <div className="q-add-categories-section-middle-footer">
-        <div className="q-category-bottom-header-sticky">
-          <button className="quic-btn quic-btn-save">Update</button>
-          <button className="quic-btn quic-btn-cancle">Cancel</button>
-        </div>
       </div>
-      </div>
-      
-     
-    </>
+    </div>
   );
 };
 
