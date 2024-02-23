@@ -37,6 +37,7 @@ const ReorderInventoryList = (props) => {
 
     return (
         <>
+        <div className="box">
             <div className="q-daily-report-bottom-report-header">
                 <p className="report-sort">Item Name</p>
                 <p className="report-sort">Variant</p>
@@ -47,10 +48,13 @@ const ReorderInventoryList = (props) => {
                 <p className="report-sort">Reorder Level</p>
                 <p className="report-sort">Reorder Quantity</p>
             </div>
+            </div>
 
             {allReorderInventoryData && allReorderInventoryData.length >= 1 ? (
                 allReorderInventoryData.map((InvData, index) => (
-                    <div key={index} className="q-category-bottom-categories-listing">
+                    <div className="box">
+                    <div key={index} className="q-category-bottom-categories-listing" style={{borderRadius:"unset"}}>
+                       
                         <div className="q-category-bottom-categories-single-category">
                             <p className="report-title">{InvData.item_name}</p>
                             <p className="report-title">{InvData.variant}</p>
@@ -61,6 +65,7 @@ const ReorderInventoryList = (props) => {
                             <p className="report-title">{InvData.reorder_level}</p>
                             <p className="report-title">{InvData.reorder_qty}</p>
                         </div>
+                    </div>
                     </div>
                 ))
             ) : (

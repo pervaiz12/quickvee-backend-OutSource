@@ -1,4 +1,5 @@
 
+
 :root {
     --blue: #0A64F9;
     --background: #EBEBEB;
@@ -22,10 +23,21 @@
 }
 .dataTables_wrapper{
     padding: 1rem 0rem;
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    background: #EBEBEB !important ;
+}
+.dataTable{
+    width: 100% !important;
+}
+.dataTables_wrapper{
+    padding: 1rem;
+
     margin-bottom: 1rem;
 }
 
 .dataTables_length{
+
     padding: 1rem;
 }
 
@@ -34,6 +46,9 @@
 }
 .dataTables_length label{
     color: var(--black) !important;
+
+    padding: 1rem 0rem;
+
 }
 table.dataTable>thead>tr>th, table.dataTable>thead>tr>td {
     padding: 10px;
@@ -44,12 +59,17 @@ table.dataTable thead th, table.dataTable tfoot th {
     font-weight: normal;
 }
 table.dataTable>thead>tr>th {
+
     background: var(--tableHeaderBG) !important;
+
+    background: #253338 !important;
+
     color: #FFFFFF;
 }
 table.dataTable.no-footer {
     border-bottom: none;
 }
+
 
 table.dataTable tbody td {
     padding: 1rem;
@@ -97,4 +117,25 @@ table.dataTable tbody td {
     width: 20rem;
     padding: 0.5rem 1rem;
     color: #000000;
+
+
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+    color: #0A64F9 !important;
+    border: 1px solid #0A64F9 !important;
+    border-radius: 4px;
+}
+
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:active {
+    color: #0A64F9 !important;
+    border: 1px solid #0A64F9 !important;
+    border-radius: 4px;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current{
+    color: #646464 !important;
+    border: 1px solid #EBEBEB !important;
+    border-radius: 4px;
+
 }

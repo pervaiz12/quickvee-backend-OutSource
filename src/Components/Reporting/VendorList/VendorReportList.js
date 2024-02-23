@@ -46,14 +46,17 @@ const VendorReportList = (props) => {
 
       return (
         <>
+        <div className="box">
             <div className="q-daily-report-bottom-report-header">
                 <p className="report-sort">Vendor Name</p>
                 <p className="report-sort">Contact</p>
                 <p className="report-sort">Email</p>
                 <p className="report-sort">Address</p>
             </div>
+            </div>
 
             {allVendorData && allVendorData.length >= 1 && allVendorData.map((CheckData, index) => (
+  <div className="box">
                 <div key={index} className="q-category-bottom-categories-listing">
                     <div className="q-category-bottom-categories-single-category">
                         <p className="report-title">{CheckData.name}</p>
@@ -62,6 +65,7 @@ const VendorReportList = (props) => {
                         <p className="report-title">{CheckData.full_address}</p>
                         {/* <p className="report-title">{CheckData.name}</p> */}
                     </div>
+                </div>
                 </div>
             ))}
         </>

@@ -50,6 +50,7 @@ const DailyReportList = ({data}) => {
       );
       return (
         <>
+        <div className="box">
           <div className="q-daily-report-bottom-report-header">
             <p className="report-sort">Date</p>
             <p className="report-title">Total</p>
@@ -67,6 +68,7 @@ const DailyReportList = ({data}) => {
               <p className="report-sort">Grand Total</p>
               <p className="report-title">${totalAmt.toFixed(2)}</p>
             </div>
+          </div>
           </div>
         </>
       );

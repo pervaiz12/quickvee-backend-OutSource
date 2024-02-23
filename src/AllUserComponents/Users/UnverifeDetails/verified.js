@@ -29,6 +29,7 @@ export default function Verified() {
      : [];
      // ====================================
   return (
+    <div className='q-order-main-page'>
     <div className='box'>
     <div className='box_shadow_div'>
       <div className='qvrow'>
@@ -92,6 +93,7 @@ export default function Verified() {
             }
           </div>
       </div>
+    </div>
     </div>
     </div>
   )

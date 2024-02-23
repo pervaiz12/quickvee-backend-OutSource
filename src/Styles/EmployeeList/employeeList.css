@@ -37,3 +37,8 @@
     cursor: not-allowed;
   }
   
+
+  .q-add-categories-single-input {
+    display: flex;
+    flex-direction: column;
+}

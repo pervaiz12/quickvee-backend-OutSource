@@ -41,15 +41,17 @@ const NewItemCreatedBetweenList = (props) => {
 
     return (
         <>
-            <div className="q-daily-report-bottom-report-header">
+        <div className="box">
+            <div className="q-daily-report-bottom-report-header" style={{borderRadius:"unset"}}>
                 <p className="report-sort">Date</p>
                 <p className="report-sort">Category</p>
                 <p className="report-sort">Item name</p>
                 <p className="report-sort">Cost</p>
             </div>
-
+            </div>
             {allNewItemData && allNewItemData.length >= 1 ? (
                 allNewItemData.map((ItemData, index) => (
+                    <div className="box">
                     <div key={index} className="q-category-bottom-categories-listing">
                         <div className="q-category-bottom-categories-single-category">
                             <p className="report-title">{ItemData.created_on}</p>
@@ -58,9 +60,12 @@ const NewItemCreatedBetweenList = (props) => {
                             <p className="report-title">{ItemData.price}</p>
                         </div>
                     </div>
+                    </div>
                 ))
             ) : (
+                <div className="box">
                 <div className="empty-div">No data available</div>
+                </div>
             )}
         </>
     );

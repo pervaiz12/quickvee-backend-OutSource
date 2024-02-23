@@ -3,6 +3,7 @@ import React from "react";
 const SiftSummaryDetails = () => {
   return (
     <>
+    <div className="box">
       <div className="q-daily-report-bottom-report-header">
         <p className="report-sort">Date</p>
         <p className="report-sort">Station Name</p>
@@ -19,6 +20,7 @@ const SiftSummaryDetails = () => {
           <p className="report-sort">hello</p>
           <p className="report-sort">hello</p>
         </div>
+      </div>
       </div>
     </>
   );

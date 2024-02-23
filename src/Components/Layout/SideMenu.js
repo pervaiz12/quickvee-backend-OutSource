@@ -33,7 +33,7 @@ import LoyaltIcon from '../../Assests/Taxes/loyaltyactive.svg'
 import { useLocation } from "react-router-dom";
 
 const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const location = useLocation();
   const currentUrl = location.pathname;
 
@@ -45,13 +45,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
     setActiveItem(item.link);
     navigate(item.link);
   };
-  useEffect(() => {
-    
-  console.log("hello")
-    return () => {
-     
-    }
-  }, )
+
   
 
   return (
@@ -129,11 +123,38 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
 };
 
 const DropdownMenuItem = ({ item, isMenuOpen }) => {
+  const location = useLocation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const currentUrl = location.pathname;
+  const [activeItem, setActiveItem] = useState(currentUrl);
+
+  const   handleToggleDropdownItems= (link) => {
+    setActiveItem(link)
+
+    for (let obj of item.dropdownItems) {
+     
+      if (obj.link === activeItem) {
+        setIsDropdownOpen(true)
+      }
+      else{
+    setIsDropdownOpen(false)
+
+      }
+    }
+  }
 
   const handleToggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+   console.log("calling")
+    setIsDropdownOpen(!isDropdownOpen)
+  
+  }
+
+
+  useEffect(() => {
+    console.log("Calling from useeffect" , isDropdownOpen , currentUrl)
+  }, [isDropdownOpen , currentUrl])
+  
+
 
   return (
     <div className="relative" style={isMenuOpen ? { width: "16rem" } : { width: "6rem", marginLeft: "24px" }} >
@@ -164,6 +185,7 @@ const DropdownMenuItem = ({ item, isMenuOpen }) => {
       <div className="mt-0 bg-[#334247] p-4 shadow w-full text-center z-10">
         {item.dropdownItems.map((dropdownItem) => (
           <Link
+onClick={handleToggleDropdownItems}
             key={dropdownItem.id}
             to={dropdownItem.link}
             className="flex text-center submenu-item text-gray-400 py-4"
@@ -377,12 +399,12 @@ const menuItems = [
       {
         id: 64,
         icon: (
-          <img src={CouponIcon} alt="Alters" className="h-6 w-10 mt-4 mb-4" />
+          <img src={CouponIcon} alt=" Alerts " className="h-6 w-10 mt-4 mb-4" />
         ),
         activeIcon: (
-          <img src={CouIcon} alt="Alters" className="h-6 w-10 mt-4 mb-4 " />
+          <img src={CouIcon} alt=" Alerts " className="h-6 w-10 mt-4 mb-4 " />
         ),
-        text: "Alters",
+        text: " Alerts ",
         link: "/store-settings/Alters",
       },
       { id: 65, text: "Taxes", link: "/store-settings/taxes" },

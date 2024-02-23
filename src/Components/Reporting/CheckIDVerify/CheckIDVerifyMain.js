@@ -30,9 +30,11 @@ const CheckIDVerifyMain = () => {
                 />
             </div>
             <div className="q-attributes-main-page">
+                <div className='box'>
                 <DateRange 
                     onDateRangeChange={handleDateRangeChange}
                 />
+            </div>
             </div>
             <div className='mt-10'>
                 <div className="q-attributes-main-page">

@@ -44,6 +44,7 @@ const OrderRefundFilter = ({title,onCategoryChange,onReasonChange}) => {
 
   return (
     <>
+    <div className="box">
       <div className="q-category-bottom-detail-section">
         <div className="q-category-bottom-header-sticky">
           <div className="q-category-bottom-header">
@@ -86,8 +87,12 @@ const OrderRefundFilter = ({title,onCategoryChange,onReasonChange}) => {
             </div>
           </div>
 
+
+          
+
           
         </div>
+      </div>
       </div>
     </>
   );

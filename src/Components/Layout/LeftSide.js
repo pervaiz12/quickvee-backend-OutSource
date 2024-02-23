@@ -67,13 +67,13 @@ import MainLoayalty from "../LoyaltyProgram/MainLoayalty";
 
 const LeftSide = ({ visible }) => {
 
-  useEffect(() => {
+  // useEffect(() => {
     
-    console.log("hello")
-      return () => {
+  //   console.log("hello")
+  //     return () => {
        
-      }
-    }, )
+  //     }
+  //   }, )
 
 
   return (

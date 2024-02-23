@@ -13,6 +13,7 @@ export default function AddMerchan() {
      
   return (
     <>
+    <div className='q-order-main-page'>
         <div className='box'>
             <div className='box_shadow_div'>
                 <div className='pd_20'>
@@ -331,6 +332,7 @@ export default function AddMerchan() {
             </div>  
                 
 
+        </div>
         </div>
       
     </>

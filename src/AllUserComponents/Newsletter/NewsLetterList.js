@@ -28,11 +28,13 @@ const NewsLetterList = (props) => {
 
     const renderItems = () => {
         return currentItems.map((NewsData, index) => (
+            <div className="box">
             <div key={index} className="q-category-bottom-categories-listing">
                 <div className="q-category-bottom-categories-single-category">
                     <p className="report-title">{NewsData.id}</p>
                     <p className="report-title">{NewsData.email}</p>
                 </div>
+            </div>
             </div>
         ));
     };
@@ -42,20 +44,24 @@ const NewsLetterList = (props) => {
 
     return (
         <>
+        <div className="box">
             <div className="q-daily-report-bottom-report-header">
                 <p className="report-sort">ID</p>
                 <p className="report-sort">Email</p>
+            </div>
             </div>
 
             {renderItems()}
 
             {/* Pagination controls */}
+            <div className="box">
             <div className="pagination">
                 {Array.from({ length: Math.ceil(allNewsData.length / itemsPerPage) }).map((_, index) => (
                     <button key={index} onClick={() => paginate(index + 1)}>
                         {index + 1}
                     </button>
                 ))}
+            </div>
             </div>
         </>
     );
