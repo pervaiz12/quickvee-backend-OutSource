@@ -59,7 +59,7 @@ const LoyaltyProgramList = () => {
           next: '<img src="'+Right+'" alt="right" />',
         },
         search: '_INPUT_',
-          searchPlaceholder: ' Search'
+          searchPlaceholder: ' Search...'
       }
     });
 

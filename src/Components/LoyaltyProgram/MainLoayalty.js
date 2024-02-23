@@ -4,7 +4,7 @@ import LoayaltyProgramlist from "./LoayaltyProgramlist";
 const MainLoayalty = () => {
   return (
     <>
-      <div className="">
+      <div className="q-category-main-page">
             <LoayaltyProgramlist />
       </div>
     </>
