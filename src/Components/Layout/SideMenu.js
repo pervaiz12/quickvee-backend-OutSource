@@ -27,6 +27,9 @@ import PurIcon from "../../Assests/Dashboard/purchaseY.svg";
 import SettingIcon from "../../Assests/Dashboard/settingY.svg";
 import ResportIcons from "../../Assests/Dashboard/reports.svg";
 import timesheetblackIcon from "../../Assests/Dashboard/timesheetblackIcon.svg";
+import Loyalty from '../../Assests/Taxes/Loyalty Program.svg'
+import LoyaltIcon from '../../Assests/Taxes/loyaltyactive.svg'
+
 import { useLocation } from "react-router-dom";
 
 const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
@@ -305,6 +308,21 @@ const menuItems = [
     ),
     text: "Import Data",
     link: "/import-data",
+  },
+  {
+    id: 83,
+    icon: (
+      <img
+        src={Loyalty}
+        alt="Loyalty Porogram"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img src={LoyaltIcon} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
+    ),
+    text: "Loyalty Porogram",
+    link: "/loyalty-program",
   },
   {
     id: 8,
