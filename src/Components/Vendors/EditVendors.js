@@ -237,7 +237,7 @@ const Navigate = useNavigate()
           </div>
          
           <div className='col-qv-4'>
-            <div className='q-add-categories-single-input qv_input'>
+            <div className=' qv_input'>
               <label htmlFor="State">State</label>
               <Autocomplete
                   value={vendorData.vendor_data?.[0]?.state || null}
@@ -249,9 +249,11 @@ const Navigate = useNavigate()
                     setInputValue(newInputValue);
                   }}
                   id="controllable-states-demo"
+                  size="small"
                   options={states}
-                  sx={{ width: 300 }}
-                  renderInput={(params) => <TextField {...params} />}
+                  renderInput={(params) => <TextField {...params}  sx={{
+                    margin: "1rem 0rem",
+                  }} />}
                 />
 
             </div>
