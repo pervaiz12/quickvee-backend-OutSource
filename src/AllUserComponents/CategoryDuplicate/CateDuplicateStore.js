@@ -227,6 +227,7 @@ const CateDuplicateStore = () => {
   return (
     <>
       <div className="q-order-main-page">
+        <div className="box">
         <div className="q-add-categories-section">
           <div className="alert">
             <Box
@@ -478,6 +479,7 @@ const CateDuplicateStore = () => {
             </button>
           </div>
         </div>
+      </div>
       </div>
     </>
   );

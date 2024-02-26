@@ -130,6 +130,7 @@ const StoreCateUser = () => {
   return (
     <>
       <div className="q-order-main-page">
+        <div className="box">
         <div className="q-add-categories-section">
           <div className="alert">
             {submitmessage && (
@@ -323,6 +324,7 @@ const StoreCateUser = () => {
               Duplicate setting
             </button>
           </div>
+        </div>
         </div>
       </div>
     </>

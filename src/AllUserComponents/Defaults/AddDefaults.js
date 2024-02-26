@@ -231,7 +231,7 @@ const AddDefaults = ({ seVisible }) => {
 
   return (
     <>
-      <div className=" ">
+      <div className="box">
         <div className="q-add-categories-section">
           <div className="mt-10">
             <form onSubmit={handleSubmit} enctype="multipart/form-data">

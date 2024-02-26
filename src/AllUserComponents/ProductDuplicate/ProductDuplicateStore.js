@@ -232,7 +232,7 @@ const ProductDuplicateStore = () => {
 
   return (
     <>
-      <div className="">
+      <div className="box">
         <div className="q-add-categories-section">
         <div className="alert">
             

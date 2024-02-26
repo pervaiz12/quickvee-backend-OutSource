@@ -2352,3 +2352,34 @@ margin: 5px 0 15px 0;
   .q_proudct_setting_section label{
     color:#000
   }
+
+  .variant-attributes-container {
+    position: relative;
+    min-height: 50vh; /* Ensures that the container takes at least the full height of the viewport */
+  }
+  
+  .q-add-categories-section-middle-footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background-color: #fff; 
+    padding: 20px;
+    box-shadow: 0px -2px 4px rgba(0, 0, 0, 0.1);
+  }
+  .q-category-bottom-header {
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+/* .quic-btn .{
+    margin-left: 10px; 
+  }  */
+  
+
+  .q_product_modal{color: #000;
+  font-weight: 600;
+  font-size: 18px;
+  margin-left: 23px;
+  
+  }
