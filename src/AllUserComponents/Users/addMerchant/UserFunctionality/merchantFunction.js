@@ -262,10 +262,11 @@ const MerchantFunction=()=>{
           updatedErrors[name] = '';
         }
       }
+      const trimmedValue = value.replace(/^\s+|\s+$/g, '')
       setStore({
         ...store,
         errors: updatedErrors,
-        [name]: value
+        [name]: trimmedValue
       });
     }
     const handleKeyPress = (e) => {
