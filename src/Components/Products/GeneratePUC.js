@@ -1,14 +1,14 @@
 import React from "react";
 import AddIcon from "../../Assests/Category/addIcon.svg";
 
-const GeneratePUC = ({ seVisible }) => {
+const GeneratePUC = () => {
   return (
     <>
       <div className="mx-0">
         <div className="q-add-categories-single-input">
           <div className="q-category-bottom-header">
             <span>Pax 3</span>
-            <p onClick={() => seVisible("CategoryAlert")}>
+            <p>
               Generate UPC
               {/* <img src={AddIcon} alt="add-icon" />{" "} */}
             </p>

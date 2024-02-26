@@ -81,6 +81,7 @@ const MainInventoryExport =  () => {
   
     return <>
       <div className="q-order-main-page">
+        <div className="box">
         <div className="q-add-categories-section">
           <div className="alert">
               {submitmessage && (
@@ -175,6 +176,7 @@ const MainInventoryExport =  () => {
                 <button className="save_btn" onClick={handleSubmit}  > Export </button>
               </div>
           
+        </div>
         </div>
       </div>
 

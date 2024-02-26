@@ -72,8 +72,10 @@ const Permission = () => {
             setPermissionArray(permissionList_arr)
            
             return (
+                <div className='box'>
                 <div>
                    <h1>{JSON.stringify(permissionList_arr)} </h1> {JSON.stringify(permissionList_arr)}  {/* Just for demonstration */}
+                </div>\
                 </div>
             );
         }
@@ -85,6 +87,7 @@ const Permission = () => {
       }, [permissionList , employeedata])
       
   return (
+    <div className='box'>
     <div className='q-attributes-main-page'>
         <div className="box_shadow_div_heading">
             <div className='page_heading_area'>
@@ -280,7 +283,7 @@ const Permission = () => {
             </div>
         </div>
 
-
+        </div>
     </div>
   );
 };

@@ -119,13 +119,18 @@ const AddProducts = () => {
             </div>
 
 
+             <div className="box">
+            <div className="variant-attributes-container">
+      {/* Your existing JSX for variant attributes */}
 
-            <div className="q-add-categories-section-middle-footer">
-              <div className="q-category-bottom-header-sticky">
-                <button className="quic-btn quic-btn-save">Update</button>
-                <button className="quic-btn quic-btn-cancle">Cancel</button>
-              </div>
-            </div>
+      <div className="q-add-categories-section-middle-footer">
+        <div className="q-category-bottom-header" style={{marginRight:"67px"}}>
+          <button className="quic-btn quic-btn-save">Update</button>
+          <button className="quic-btn quic-btn-cancle">Cancel</button>
+        </div>
+      </div>
+    </div>
+    </div>
           </div>
         </div>
       </div>

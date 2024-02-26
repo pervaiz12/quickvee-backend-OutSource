@@ -69,6 +69,7 @@ const PermissionList = () => {
 
   return (
     <>
+   
       <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
         <div className="q-attributes-bottom-header">
@@ -113,6 +114,7 @@ const PermissionList = () => {
           </div>
         </div>
       </div>
+    
     </>
   );
 };
