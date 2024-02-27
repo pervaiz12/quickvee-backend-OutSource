@@ -13,7 +13,7 @@ export default function EditMerchantFunctionality() {
     const[paymentCredits,setPaymentCredits]=useState(false)
     const[paymentModeRecord,setPaymentModeRecord]=useState('')
     const[message,setMessage]=useState('')
-    const[successMessagehandle,setSuccessMessageHandle]=useState(true)
+    const[successMessagehandle,setSuccessMessageHandle]=useState(false)
     const handleSuccessMessage=()=>{
         setTimeout(()=> {
             setSuccessMessageHandle(false)
