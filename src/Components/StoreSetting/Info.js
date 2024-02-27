@@ -5,9 +5,9 @@ import InfoFunction from './infoFunctionality/infoFunction'
 import Alert from '@mui/material/Alert';
 
 const Info = () => {
-const{handleSubmitInfo,imageBanner,image,handleDelete,handleEditRecord,infoRecord,onChangeHandle,imageBoolean,BannersBoolean,successsMessage,hideSucess,errors}=InfoFunction()
+const{handleSubmitInfo,imageBanner,image,handleDelete,handleEditRecord,infoRecord,onChangeHandle,imageBoolean,BannersBoolean,successsMessage,hideSucess,errors,handleKeyPress}=InfoFunction()
 let data={
-  id:100
+  id:100 //dynamic id give here
 }
 useEffect(()=>{
   handleEditRecord(data)
@@ -24,11 +24,11 @@ useEffect(()=>{
           <div className='infoheader'>
             <div className='qvrow'>
               <div className='col-qv-6'>
-                <h1>{infoRecord.store}</h1>   
+                <p className='store-name'>{infoRecord.store}</p>   
               </div>
               <div className='col-qv-6'>
                 <div className='infoheader-left'>
-                  <h4 >{infoRecord.email}</h4>
+                  <p className='inforecord-email'>{infoRecord.email}</p>
                 </div>
               </div>
             </div>
@@ -38,25 +38,25 @@ useEffect(()=>{
           <div className='infoheader'>
             <div className='qvrow'>
               <div className='col-qv-12'>
-                  <ul className='info-unorder'>
+                  <ul className='info-unorder inforecord-email'>
                     <li>Pick an easy to remember name and verify if it's available to be used for your store</li>
                     <li>Please enter your store name in the input field above so that we can create a menu link for your store</li>
                     <li>If you select "abcstore" as the name, the URL or website address for your store will be abcstore.quickvee.com</li>
                   </ul>
-                  <div>
+                  <div className='info-menu info-menu-margin'>
                     <h1>Menu Link</h1>
                   </div>
                   <div className='qvrow'>
                     <div className='col-qv-6'>
                       <div className="input_area">
-                        <input className='infoInput merchant-disabled' type="text" name="menuLink" value={infoRecord.menuLink} disabled/>
-                        <span className="info-span">@.com</span>
+                        <input className='infoInput store-info merchant-disabled' type="text" name="menuLink" value={infoRecord.menuLink} disabled/>
+                        <span className="info-span store-info">@.com</span>
                       </div>
                     </div>
                     <div className='col-qv-6'>
                       <div className="input_area">
-                        <input className='infoInput' type="text" name="domain" value={infoRecord.domain} onChange={onChangeHandle}/>
-                        <span className="info-span">@.com</span>
+                        <input className='infoInput store-info' type="text" name="domain" value={infoRecord.domain} onChange={onChangeHandle}/>
+                        <span className="info-span store-info">@.com</span>
                       </div>
                     </div>
 
@@ -72,7 +72,7 @@ useEffect(()=>{
             <div className='qvrow'>
               <div className='col-qv-12'>
                
-                <h1>Logo & Banner</h1>
+                <h1 className='info-menu info-menu-margin'>Logo & Banner</h1>
                   <div className={'info-banner'} style={{
                       backgroundImage: !BannersBoolean ? `url('https://sandbox.quickvee.com/upload/banner/${infoRecord.banners ? infoRecord.banners : ''}')`:`url('${infoRecord.banners}')`,
                       backgroundSize: 'cover'
@@ -105,7 +105,7 @@ useEffect(()=>{
                             
                               <img src={infoImage} alt="Upload Image" className='info-image-icon'/>
                               <div className='info-image-logo-position'>
-                              <p>Add Logo</p>
+                              <p className='inforecord-email'>Add Logo</p>
                             </div>
                           
                           
@@ -115,19 +115,16 @@ useEffect(()=>{
                           </>
                           :
                           <>
-                         
-                          <label htmlFor="file-input2" className='file-input1'>
-                          {infoRecord.image && <img src={!imageBoolean?`https://sandbox.quickvee.com/upload/`+infoRecord.image : infoRecord.image} alt="Preview" className='info-image' />}
+                           <label htmlFor="file-input2" className='file-input1 info-background' style={{ backgroundImage: `url(${!imageBoolean ? 'https://sandbox.quickvee.com/upload/' + infoRecord.image : infoRecord.image})` }}>
                           </label>
-                          <input id="file-input2" name='image' style={{ visibility: 'hidden' }} type="file"
-                          onChange={onChangeHandle}/>
+                          <input id="file-input2" name='image' style={{ display: 'none' }} type="file" onChange={onChangeHandle} />
                           </>
 
                         }  
                       </div>
                   </div>
                   <div className='info-upload-image-button'>
-                    <label htmlFor="fileInput3">Add Banner</label>
+                    <label htmlFor="fileInput3" className='inforecord-email'>Add Banner</label>
                     <input
                       type="file"
                       id="fileInput3"
@@ -152,12 +149,12 @@ useEffect(()=>{
         {/* ========== */}
         <div className='box_shadow_div'>
           <div className='infoheader'>
-            <h1>Address</h1>
+            <h1 className='info-menu'>Address</h1>
               <div className='qvrow'>
                 <div className='col-qv-12'>
                     <div className='input_area'>
                       <input 
-                          className=''
+                          className='store-info'
                           type='text'
                           name="address_1"
                           placeholder='Address Line1'
@@ -169,7 +166,7 @@ useEffect(()=>{
                     <div className='input_area'>
                       {/* <label>Owner Name</label> */}
                       <input 
-                          className=''
+                          className='store-info'
                           type='text'
                           name="address_2"
                           placeholder='Address Line2'
@@ -186,7 +183,7 @@ useEffect(()=>{
                       <div className='input_area'>
                         {/* <label>Owner Name</label> */}
                         <input 
-                            className=''
+                            className='store-info'
                             type='text'
                             name="city"
                             placeholder='City'
@@ -200,7 +197,7 @@ useEffect(()=>{
                     <div className='col-qv-3'>
                     <div className='input_area'>
                         <input 
-                            className=''
+                            className='store-info'
                             type='text'
                             name="zip"
                             placeholder='zip'
@@ -215,7 +212,7 @@ useEffect(()=>{
                     <div className='input_area'>
                         {/* <label>Owner Name</label> */}
                         <input 
-                            className=''
+                            className='store-info'
                             type='text'
                             name="state"
                             placeholder='State'
@@ -229,13 +226,16 @@ useEffect(()=>{
                     <div className='col-qv-3'>
                     <div className='input_area'>
                         <input 
-                            className=''
+                            className='store-info'
                             type='text'
                             name="phone"
                             placeholder='Phone'
                             value={infoRecord.phone}
+                            maxLength={10}
+                            onKeyPress={handleKeyPress}
                             onChange={onChangeHandle}
                         />
+                        <span className='error'>{errors.phoneError}</span><br/>
                                           {/* <span className='error'>{store.errors.ownerName}</span> */}
                       </div>
 
@@ -254,7 +254,7 @@ useEffect(()=>{
                       <div className='info-update'>
                         <input 
                           type='button'
-                          className="blue_btn"
+                          className="blue_btn inforecord-email"
                           value="Update"
                           onClick={handleSubmitInfo}
                         />

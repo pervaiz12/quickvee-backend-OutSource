@@ -30,6 +30,7 @@
   
   .info-unorder {
     list-style-type: unset;
+    margin-left: 20px;
   }
   .infoInput{
       width: 70% !important;
@@ -37,6 +38,8 @@
       border-right: none;
       border-radius: 8px 0px 0px 8px;
       margin-top: 0px !important;
+    
+
   }
   .info-span{
       display: inline-block;
@@ -49,7 +52,7 @@
   .info-banner{
   width: 100%;
   background: #f2f6ff;
-  height: 30vh;
+  height: 210px;
   border-radius: 8px 8px 8px 8px;
   position: relative;
   padding: 15px 0px;
@@ -63,11 +66,11 @@
   .info-file-upload{
     position: relative;
     display: inline-block;
-    width: 20%;
+    width: 180px;
   }
   .file-input1{
     width: 100%;
-    height: 25vh;
+    height: 180px;
     position: relative;
     background: #ffffff no-repeat padding-box;
     box-shadow: 0px 3px 22px #00000017;
@@ -102,7 +105,7 @@
   .info-delete{
     position: absolute;
     z-index: 1;
-    left: 18%;
+    left: 170px;
     color:#ff0000;
     top: 20px;
   }
@@ -121,6 +124,35 @@
   }
   .info-update{
     float: right;
+  }
+  .store-name{
+    font-size: 22px;
+    font-family:qvbold;
+  }
+  .inforecord-email{
+    font-size: 16px;
+    font-family:qvbook;
+
+  }
+  .info-menu{
+    font-size: 18px;
+    font-family:qvstdmedium;
+    
+  }
+  .info-menu-margin{
+    padding: 20px 0px;
+  }
+  .store-info{
+    font-size: 15px;
+    font-family:qvbook;
+  }
+  .info-address{
+    font-size: 18px;
+    font-family:qvmedium;
+  }
+  .info-background{
+    background-size:cover;
+    background-repeat: no-repeat;
   }
  
   /* =============== */

@@ -44,7 +44,7 @@ export default function Add_Admin() {
                             <label>Password</label>
                             <input 
                                 className=''
-                                type='text'
+                                type='password'
                                 name="password"
                                 value={addAdminData.password}
                                 onChange={handleChange}

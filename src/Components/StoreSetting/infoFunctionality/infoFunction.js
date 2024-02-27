@@ -22,7 +22,7 @@ export default function InfoFunction() {
         state:'',
         phone:'',
     })
-    const [errors,setErrors]=useState({imageErrors:'',bannerErrors:''})
+    const [errors,setErrors]=useState({imageErrors:'',bannerErrors:'',phoneError:''})
     const [imageBoolean,setImageBoolean]=useState(false)
     const [BannersBoolean,setBannersBoolean]=useState(false)
     const [approve,setApprove]=useState('')
@@ -151,12 +151,35 @@ export default function InfoFunction() {
       }
 
     }
+    if(name=='phone')
+    {
+      if(value !=="")
+      {
+        // console.log(value.length)
+        if(value.length !==10)
+        {
+          errorMeesage.phoneError="Please fill proper number"
+        }else{
+          errorMeesage.phoneError=""
+        }
+      }else{
+        errorMeesage.phoneError=""
+        
+      }
+
+    }
     setErrors(errorMeesage)
     setInfoRecord({...infoRecord,
       [name]:value
     })
 
   }
+  const handleKeyPress = (e) => {
+    // Allow only numeric characters (key codes 48 to 57) and backspace (key code 8)
+    if ((e.charCode < 48 || e.charCode > 57) && e.charCode !== 8) {
+      e.preventDefault();
+    }
+  };
   const handleSuccessMessage=()=>{
     setTimeout(()=> {
       setSuccessMessage('')
@@ -164,20 +187,35 @@ export default function InfoFunction() {
        
      }, 3000)
 }
-  const handleSubmitInfo=async(e)=>{
+let CurrentValidate=(error)=>{
+  if(error.imageErrors=='' && error.bannerErrors=="" && error.phoneError=="")
+  {
+    return true
+  }else{
+    return false
+  }
+}
+  const handleSubmitInfo=async(e)=>
+  {
     e.preventDefault();
     let validateData=validate();
+    let currentValidate=CurrentValidate(errors)
     if(validateData==true)
     {
-      const packect={merchant_id:infoRecord.merchant_id,banners:infoRecord.banners,image:infoRecord.image,address_1:infoRecord.address_1,address_2:infoRecord.address_2,phone:infoRecord.phone,zip:infoRecord.zip,city:infoRecord.city,state:infoRecord.state,domain:infoRecord.domain,imageBanner:imageBanner,original_name:image,approve:approve}
-      let response=await axios.post(BASE_URL+UPDATE_STORE_INFO,packect,{ headers: { "Content-Type": "multipart/form-data" }})
-      if(response.status==200)
+      if(currentValidate==true)
       {
-        setSuccessMessage(response.data.message)
-        setHideSuccess(true)
-        handleSuccessMessage();
+        const packect={merchant_id:infoRecord.merchant_id,banners:infoRecord.banners,image:infoRecord.image,address_1:infoRecord.address_1,address_2:infoRecord.address_2,phone:infoRecord.phone,zip:infoRecord.zip,city:infoRecord.city,state:infoRecord.state,domain:infoRecord.domain,imageBanner:imageBanner,original_name:image,approve:approve}
+        let response=await axios.post(BASE_URL+UPDATE_STORE_INFO,packect,{ headers: { "Content-Type": "multipart/form-data" }})
+        if(response.status==200)
+        {
+          setSuccessMessage(response.data.message)
+          setHideSuccess(true)
+          handleSuccessMessage();
+        }
+
       }
+     
     }
   }
-  return{handleSubmitInfo,imageBanner,image,handleDelete,handleEditRecord,infoRecord,onChangeHandle,imageBoolean,BannersBoolean,successsMessage,hideSucess,errors}
+  return{handleSubmitInfo,imageBanner,image,handleDelete,handleEditRecord,infoRecord,onChangeHandle,imageBoolean,BannersBoolean,successsMessage,hideSucess,errors,handleKeyPress}
 }
