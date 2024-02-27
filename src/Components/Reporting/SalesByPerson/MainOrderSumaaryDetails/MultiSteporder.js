@@ -13,12 +13,13 @@ const MultiSteporder = () => {
    
         <div class="q-order-payement-stepper">
             <span className="active-payment-component"><img src={AcceptIcon} className="w-10 h-10 text-center multiSVG "/>Accepts</span>
-               <p className="active-payment-stepper-status">
-                </p><hr className="" />
+               {/* <p className="active-payment-stepper-status"></p> */}
+               <hr className="" />
                 <span className="active-payment-component"><img src={ProcessingIcon} className="w-10 h-10 text-center multiSVG"/>Processing</span>
             <p className=""></p><hr className="" />
             <span className="active-payment-component"><img src={DeliveryIcon} className="w-10 h-10 text-center multiSVG"/>Out for Delivery</span>
             <p className=""></p><hr className="" />
+            <p class="active-payment-stepper-status"></p>
             <span className="active-payment-component"><img src={CompleteIcon} className="w-10 h-10 text-center multiSVG"/>Delivered</span>
           
     

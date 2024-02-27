@@ -24,7 +24,7 @@ const SiftSetting = () => {
     };
   return (
     <div>
-      
+      <div className="box">
       <div className="q-category-bottom-detail-section">
         <div className="">
           <div className="q-category-bottom-header">
@@ -69,6 +69,7 @@ const SiftSetting = () => {
           </div>
         </div>
       </div>
+    </div>
     </div>
   )
 }

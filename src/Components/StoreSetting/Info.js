@@ -14,6 +14,7 @@ useEffect(()=>{
 
 },[])
   return (
+
     <div className='box'>
         <div className='box_shadow_div'>
         {
@@ -146,7 +147,7 @@ useEffect(()=>{
 
           </div>
         </div>
-        {/* ========== */}
+  
         <div className='box_shadow_div'>
           <div className='infoheader'>
             <h1 className='info-menu'>Address</h1>
@@ -264,13 +265,17 @@ useEffect(()=>{
                   </div>
 
                 </div>
-                {/* --------- */}
+        
                
               </div>
           </div>
         </div>
-        {/* =========== */}
+      
     </div>
+
+    
+    <div>Info</div>
+
   )
 }
 

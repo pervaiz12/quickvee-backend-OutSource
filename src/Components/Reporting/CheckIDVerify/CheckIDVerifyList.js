@@ -43,6 +43,7 @@ const CheckIDVerifyList = (props) => {
 
     return (
         <>
+        <div className="box">
             <div className="q-daily-report-bottom-report-header">
                 <p className="report-sort">Date</p>
                 <p className="report-sort">Time</p>
@@ -50,9 +51,11 @@ const CheckIDVerifyList = (props) => {
                 <p className="report-sort">Order ID</p>
                 <p className="report-sort">Item Name</p>
             </div>
+            </div>
 
             {allCheckIDVerifyData && allCheckIDVerifyData.length >= 1 && allCheckIDVerifyData.map((CheckData, index) => (
-                <div key={index} className="q-category-bottom-categories-listing">
+                <div className="box">
+                <div key={index} className="q-category-bottom-categories-listing" style={{borderRadius:"unset"}}>
                     <div className="q-category-bottom-categories-single-category">
                         <p className="report-title">{CheckData.merchant_date}</p>
                         <p className="report-title">{CheckData.merchant_time}</p>
@@ -61,6 +64,8 @@ const CheckIDVerifyList = (props) => {
                         <p className="report-title">{CheckData.name}</p>
                     </div>
                 </div>
+                </div>
+                
             ))}
         </>
     );

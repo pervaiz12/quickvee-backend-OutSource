@@ -56,7 +56,7 @@ import "./Styles/CouponDiscount.css";
 import "./Styles/ImportData.css";
 import "./Styles/DailyDaterange.css";
 // import "./Styles/EmployeeWorking.css";
-
+import "./Styles/Table.css";
 import "./Styles/DefaultsPage.css";
 
 import "./Styles/ReceiptMainpage.css";
@@ -84,7 +84,7 @@ import MainSalesPerson from "./Components/Reporting/SalesByPerson/MainSalesPerso
 // import MainInvDuplicates from "./Components/InventoryDuplicates/MainInvDuplicates";
 import Main from "./Main";
 import "./Styles/OrderSummaryDetails.css";
-
+import "./Styles/Table.css"
 
 
 // import InventoryExport from "./Components/InventoryExport/MainInventoryExport";
@@ -95,6 +95,7 @@ import "./Styles/OrderSummaryDetails.css";
 function App() {
   return (
     <Routes>
+      
       <Route exact path="/" element={<Main />} />
       {/* <Route exact path="/" element={<Layout />} /> */}
 
@@ -125,6 +126,11 @@ function App() {
         path="/import-data"
         element={<Main visible={"import-data"} />}
       />
+      <Route
+        exact
+        path="/loyalty-program"
+        element={<Main visible={"loyalty-program"} />}
+      />
       <Route exact path="/coupons" element={<Main visible={"coupons"} />} />
       <Route exact path="/vendors" element={<Main visible={"vendors"} />} />
       <Route exact path="/vendors/edit-vendor/:code" element={<Main visible={"edit-vendor"} />} />
@@ -132,8 +138,9 @@ function App() {
       <Route
         exact
         path="/category/edit-category/:categoryCode"
-        element={<Main visible={"category-edit-cat"} />}
-      />
+        element={<Main visible={"category-edit-cat"} />} />
+      
+     
       <Route exact path="/timesheet" element={<Main visible={"timesheet"} />} />
       <Route
         exact
@@ -145,11 +152,16 @@ function App() {
         path="/productedit"
         element={<Main visible={"productedit"} />}
       />
+      
       <Route
         exact
-        path="/productedit"
-        element={<Main visible={"productedit"} />}
+        path="/product-add"
+        element={<Main visible={"product-add"} />}
       />
+   
+   
+
+ 
       <Route
         exact
         path="/store-settings/info"

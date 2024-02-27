@@ -11,18 +11,20 @@ const NewItemCreatedBetweenMain = () => {
 
     return (
         <>
-            <div className="q-attributes-main-page">
+            <div className="q-order-main-page">
+                <div className='box'>
                 <DateRange 
                     onDateRangeChange={handleDateRangeChange}
                 />
             </div>
-            <div className='mt-10'>
-                <div className="q-attributes-main-page">
+            </div>
+            
+                <div className="q-order-main-page">
                     <NewItemCreatedBetweenList 
                         selectedDateRange={selectedDateRange} 
                     />
                 </div>
-            </div>
+           
         </>
     )
 }

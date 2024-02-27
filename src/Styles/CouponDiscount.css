@@ -523,16 +523,15 @@ font-size: 18px;
  border: 1px solid #0000001F;
     padding: 10x 0;
     width:100%;
-border: 1px solid #0000001F;
-  padding: 10x 0;
-  width:100%;
+border-radius: 4px;
 }
 
 
-.bl{border-left: 2px solid #0000001f;
+.bl
+{border-left: 1px solid #0000001f;
 height: 27px;
-margin-top: 13px;
-margin-left: auto;
+margin-top: 10px;
+margin-left:62px;
 }
 .q_time_display{
 margin-left: 11%;
@@ -585,11 +584,11 @@ padding-right: 0;
 
 
 
-.bl{border-left: 2px solid #0000001f;
+/* .bl{border-left: 2px solid #0000001f;
 height: 27px;
 margin-top: 13px;
 margin-left: auto;
-}
+} */
 .q_time_display{
   margin-left: 11%;
 }
@@ -738,3 +737,34 @@ padding-top: 50px;
 width:20%;
 border: none;
 display: none;}
+
+
+svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-i4bv87-MuiSvgIcon-root {
+
+  position: relative;
+    right: 58px;
+    top: 4px;
+    color: #ffffff;
+
+}
+
+.css-1yq5fb3-MuiButtonBase-root-MuiIconButton-root:hover {
+  background-color: #ffffff;
+}
+
+ .date_selected>img{
+  position: relative;
+  left: 195px;
+  top: 10px;
+  z-index: 1;
+}
+
+img.clock_design{
+  position: relative;
+  left: 100px;
+  bottom: 40px;
+}
+
+.MuiFormControl-root.MuiTextField-root.input_label_section.css-z3c6am-MuiFormControl-root-MuiTextField-root {
+  margin-left: -39px;
+}

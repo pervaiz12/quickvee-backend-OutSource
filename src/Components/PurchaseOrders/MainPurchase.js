@@ -18,6 +18,7 @@ const MainPurchase = () => {
   return (
     <>
       <div className="q-category-main-page">
+        <div className="box">
         <div className="q-category-top-detail-section">
          <div className="bg-white p-4 mb-3 rounded-md">
         <div className="flex border border-[#E1E1E1] rounded-md overflow-hidden">
@@ -37,8 +38,9 @@ const MainPurchase = () => {
         </div>
       </div>
         </div>
+        </div>
         {visible === "PurchaseTable" && <PurchaseTable seVisible={seVisible} searchId={searchId}/>}
-        {visible === "AddPo" && <AddPo seVisible={seVisible} />}
+        {/* {visible === "AddPo" && <AddPo seVisible={seVisible} />} */}
       </div>
     </>
   );

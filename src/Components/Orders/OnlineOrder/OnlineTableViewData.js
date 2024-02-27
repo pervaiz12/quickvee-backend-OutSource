@@ -8,6 +8,7 @@ import DownIcon from "../../../Assests/Dashboard/Down.svg";
 
 const OnlineTableViewData = () => {
   const [activePage, setActivePage] = useState(1);
+  const [selectedValue, setSelectedValue] = useState(1);
   const entriesPerPage = 10;
 
   const startIndex = (activePage - 1) * entriesPerPage;
@@ -60,18 +61,39 @@ const OnlineTableViewData = () => {
   // }
   // console.log('gdgfdgfdgfdgfdgfdgfd',AllOnlineStoreDataState)
 
+  const handleChange = (event) => {
+    setSelectedValue(parseInt(event.target.value));
+  };
+  const numberOptions = [];
+  for (let i = 1; i <= 50; i++) {
+    numberOptions.push(<option key={i} value={i}>{i}</option>);
+  }
+
+
+
   return (
     <>
       <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
           <div className="q-attributes-bottom-header">
-            <div className="flex justify-between mr-auto">
-              <div className="text-black">show </div>
-              <p className="q_order_border">
-                1 <img src={DownIcon} alt="" className="" />
-              </p>
-              <div className="text-black">entries</div>
-            </div>
+          <div className="flex">
+      <div className="q_show_data">Show</div>
+      <div className="">
+      <select
+  value={selectedValue}
+  onChange={handleChange}
+  className="ml-2 pagination_selected"
+  style={{
+   
+  }}
+>
+  {numberOptions}
+</select>
+        {/* <img src={DownIcon} alt="" className="ml-1" /> */}
+      </div>
+      <div className="q_entery_data">Entries</div>
+    </div>
+
 
             {/* Pagination component */}
             <DefaultPagination />
@@ -113,13 +135,21 @@ const OnlineTableViewData = () => {
                   <p className="table_Amount_details">${order.amt}</p>
                   <p className="table_amount_status">{order.order_status}</p>
                 </div>
-                <div className="table_view_items">
+                {/* <div className="table_view_items">
                   <select className="table_status_selected">
                     <option value="day">{order.payment_result}</option>
-                    {/* <option value="month">Rejected</option> */}
-                    {/* Add more options as needed */}
+                   
                   </select>
-                </div>
+                </div> */}
+
+                     <div className="table_view_items">
+                  <select className="table_status_selected">
+                    <option className="dropdown-content" value="day">{order.payment_result}
+                    <img src={DownIcon} alt="Down Icon" className="w-6 h-6 ml-16" /></option>
+                  
+                  </select>
+                     </div>
+
 
                 <div className="attriButes-details">
                   <p className="table_view_details   ">View Details</p>

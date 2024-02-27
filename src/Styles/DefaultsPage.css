@@ -1,5 +1,7 @@
+
 .error-message{
     color: red;
+    font-size: 13px !important;
 }
 
 .default-DeleteIcon{
@@ -30,5 +32,78 @@
 }
 .img-DeleteIcon img{
     height: 40px;
+    width: 40px; }
+
+.error-message{
+    color: red;
+}
+
+.default-DeleteIcon{
+    display:flex;
+    justify-content: end;
+}
+.defaultDrag_div{
+    cursor: pointer  ;
+    position: relative;
+    height: 260px !important;
+    background-color: #f9f9f9;
+    overflow: hidden;
+}
+
+.default-img{
+    width: 100%;
+    height: 320px;
+    object-fit: contain;
+}
+.default-img-inputfield{
+    display: none;
+    width: 100%;
+}
+
+.img-DeleteIcon{
+    position: absolute;
+    top: 7px;
+    right: 7px;
+}
+.img-DeleteIcon img{
+    height: 40px;
     width: 40px;
+
+}
+
+.vander_name_auto {
+    margin-top: 1rem;
+}
+.vander_name_auto .MuiOutlinedInput-notchedOutline{
+    border-color:  #E1E1E1 !important;
+    outline: none;
+}
+.vander_name_auto .MuiAutocomplete-tag {
+    margin: 0px !important;
+    height: auto;
+}
+
+.vander_name_auto svg.MuiSvgIcon-root.MuiSvgIcon-fontSizeMedium.css-i4bv87-MuiSvgIcon-root {
+     position: relative; 
+    right: 0px !important; 
+    top: 0px !important; 
+    color: rgba(0, 0, 0, 0.26) !important;
+}   
+.vander_name{
+    margin-top: 10px !important;
+}
+.vander_name  .MuiOutlinedInput-root{
+    padding: 3px !important;
+
+}
+.vander_state .MuiInputBase-root:hover{
+    border: none !important;
+    outline: none;
+}
+.vander_state fieldset{
+    border: 1px solid #E1E1E1;
+    outline: none;
+}
+.css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline{
+    border: 1px solid #E1E1E1 !important;
 }

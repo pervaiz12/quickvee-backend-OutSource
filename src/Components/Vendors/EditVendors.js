@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from "axios";
-import AddNewVendors from "../../Assests/Category/addIcon.svg"
+import EditNewVendor from "../../Assests/Dashboard/Left.svg"
 import { fetchVendorsListData } from "../../Redux/features/VendorList/vListSlice";
 import Chip from '@mui/material/Chip';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -180,33 +180,32 @@ const Navigate = useNavigate()
   return (
     
 <div className='q-category-main-page'>
+  <div className='box'>
   <br></br>
   <form onSubmit={handleFormSubmit}>
   <div className='q-add-categories-section'>
-    <div className='q-add-categories-section-header'>
-      <Link to={'/vendors'}>
-        <img src={AddNewVendors} alt="Add-New-Vendors" />
+    <div onClick={() => { Navigate(-1)}} className='q-add-categories-section-header'>
+    <img  src={EditNewVendor} alt="Edit-New-Vendors" style={{"cursor":"pointer"}} />
         <span>Edit Vendors</span>
-      </Link>
     </div>
     <div className='q-add-categories-section-middle-form'>
       <div className='qvrowmain'>
         <div className='qvrow'>
           <div className='col-qv-4'>
-            <div className='q-add-categories-single-input'>
+            <div className='input_area'>
               <label htmlFor="vendorName">Vendor Name</label>
               <input type="text" id="name" name="name"  value={vendorData.vendor_data?.[0]?.name}  onChange={handleNameChange} autocomplete="off" placeholder='' required  />
               {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
             </div>
           </div>
           <div className='col-qv-4'>
-            <div className='q-add-categories-single-input'>
+            <div className='input_area'>
               <label htmlFor="email">Email Address</label>
               <input type="email" id="email" name="email" value={vendorData.vendor_data?.[0]?.email} onChange={handleEmailChange} autocomplete="off" placeholder='' required   />
             </div>
           </div>
           <div className='col-qv-4'>
-            <div className='q-add-categories-single-input'>
+            <div className='input_area'>
               <label htmlFor="phone">Phone Number</label>
               <input type="text" id="phone" name="phone" value={vendorData.vendor_data?.[0]?.phone} onChange={handlePhoneChange}  autocomplete="off" placeholder='' minlength="10" maxlength="10" pattern="[0-9]*" inputmode="numeric" required   />
             </div>
@@ -216,7 +215,7 @@ const Navigate = useNavigate()
       <div className='qvrowmain'>
         <div className='qvrow'>
           <div className='col-qv-12'>
-            <div className='q-add-categories-single-input'>
+            <div className='input_area'>
               <label htmlFor="address">Address</label>
               <input type="text" id="address" name="full_address" value={vendorData.vendor_data?.[0]?.full_address} onChange={handleAddressChange}    placeholder='' />
             </div>
@@ -225,20 +224,20 @@ const Navigate = useNavigate()
         {/* <input type="hidden" id="address" name="merchant_id" value={'MAL0100CA'}  onChange={inputChange}   /> */}
         <div className='qvrow'>
           <div className='col-qv-4'>
-            <div className='q-add-categories-single-input'>
+            <div className='input_area'>
               <label htmlFor="city">City</label>
               <input type="text" id="city" name="city" value={vendorData.vendor_data?.[0]?.city} onChange={handleCityChange}    placeholder='' />
             </div>
           </div>
           <div className='col-qv-4'>
-            <div className='q-add-categories-single-input'>
+            <div className='input_area'>
               <label htmlFor="zip">Zip</label>
               <input type="text" id="zip" name="zip_code" value={vendorData.vendor_data?.[0]?.zip_code}  minlength="5" maxlength="5" onChange={handleZipChange}    placeholder='' />
             </div>
           </div>
          
           <div className='col-qv-4'>
-            <div className='q-add-categories-single-input qv_input'>
+            <div className=' qv_input'>
               <label htmlFor="State">State</label>
               <Autocomplete
                   value={vendorData.vendor_data?.[0]?.state || null}
@@ -250,9 +249,11 @@ const Navigate = useNavigate()
                     setInputValue(newInputValue);
                   }}
                   id="controllable-states-demo"
+                  size="small"
                   options={states}
-                  sx={{ width: 300 }}
-                  renderInput={(params) => <TextField {...params} />}
+                  renderInput={(params) => <TextField {...params}  sx={{
+                    margin: "1rem 0rem",
+                  }} />}
                 />
 
             </div>
@@ -270,6 +271,7 @@ const Navigate = useNavigate()
     </div>
   </div>
 </form>
+</div>
 </div>
   )
   

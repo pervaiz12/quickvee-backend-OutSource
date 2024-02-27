@@ -10,7 +10,7 @@ const IndexAllUsers = ({visible}) => {
     const [isMenuOpen, setIsMenuOpen] = useState(true);
   return (
 <>
-    <div className="bg-[#F9F9F9]">
+    <div className="bg-[#F9F9F9] main-page-home-dashboard">
       <AllUserHeader isMenuOpen={isMenuOpen} setIsMenuOpen={setIsMenuOpen} />
       
       <div>

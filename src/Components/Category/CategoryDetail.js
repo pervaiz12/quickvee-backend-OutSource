@@ -62,11 +62,13 @@ const CategoryDetail = ({ seVisible }) => {
 
   // for  Category Status update
   const handleToggleStatus = async (id, status) => {
+    console.log("jkj");
     const data = {
       id: id,
       status: status,
       merchant_id: "MAL0100CA",
     };
+    
 
     const rep = await dispatch(updateCategoryStatus(data));
     if (rep.payload === "Success") {
@@ -124,6 +126,7 @@ const CategoryDetail = ({ seVisible }) => {
 
   return (
     <>
+      <div className="box">
       <div className="q-category-bottom-detail-section">
         <div className="">
           <div className="q-category-bottom-header">
@@ -226,6 +229,7 @@ const CategoryDetail = ({ seVisible }) => {
               </div>
             ))}
         </div>
+      </div>
       </div>
     </>
   );

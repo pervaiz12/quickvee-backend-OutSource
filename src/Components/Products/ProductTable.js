@@ -1,125 +1,278 @@
-import React, { useState } from "react";
-import { FaPencilAlt } from "react-icons/fa";
-import CrossIcon from "../../Assests/Dashboard/cross.svg";
-import SortIcon from "../../Assests/Dashboard/sort-arrows-icon.svg"
-import DeletIcon from "../../Assests/Dashboard/sdfdf.svg"
+import React, { useEffect, useState } from "react";
+import AddIcon from "../../Assests/Category/addIcon.svg";
 import { Link } from "react-router-dom";
+import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
+// import EditIcon from "../../Assests/Category/editIcon.svg";
+ import SortIcon from "../../Assests/Category/Sorting.svg";
+const ProductTable = ({  }) => {
 
-const ProductTable = () => {
-  const [items, setItems] = useState([
-    { id: "1", sort: {SortIcon}, title: "Mobile", category: "Electronics, Music", image: "*", onlineOrdering: true, action: {DeletIcon} },
-    { id: "2", sort: {SortIcon} , title: "Mobile", category: "Electronics, Music", image:"*", onlineOrdering: true, action: {DeletIcon} },
-    { id: "3", sort: {SortIcon}, title: "Mobile", category: "Electronics, Music", image:"*", onlineOrdering: true, action: {DeletIcon} },
-    { id: "4", sort: {SortIcon}, title: "Mobile",category: "Electronics, Music",  image:"*", onlineOrdering: true, action: {DeletIcon} },
-    { id: "5", sort: {SortIcon}, title: "Mobile", category: "Electronics, Music", image:"*", onlineOrdering: true, action: {DeletIcon} },
-    { id: "6", sort: {SortIcon}, title: "Mobile", category: "Electronics, Music", image:"*", onlineOrdering: true, action: {DeletIcon} },
-    // Add more data as needed
-  ]);
-  const [showModal, setShowModal] = useState(false);
-  const [newAttribute, setNewAttribute] = useState("");
 
-  const sortBy = (key) => {
-    const sortedItems = [...items].sort((a, b) => {
-      return a[key].localeCompare(b[key], undefined, { numeric: true });
-    });
-    setItems(sortedItems);
-  };
-
-  const handleAddAttribute = () => {
-    const newItem = {
-      id: (items.length + 1).toString(),
-      sort: (items.length + 1).toString(),
-      title: newAttribute,
-      category: "Electronics, Music",
-      image: "*",
-      onlineOrdering: false,
-      action: <FaPencilAlt />,
-    };
-    setItems([...items, newItem]);
-    setShowModal(false);
-    setNewAttribute("");
-  };
   return (
     <>
-      <div className="mx-2 my-4">
-        <div
-          className="box-content h-auto w-70 p-2 border-4 border-white bg-white rounded-xl opacity-100 mt-9 mx-8"
-          style={{ boxShadow: "0px 3px 6px #0000001F" }}
-        >
-          <div>
-            <div className="flex justify-between gap-2 mx-6 my-6">
-              <div className="text-[18px] Admin_std leading-0 text-black admin_medium font-semibold opacity-100">
-              Products
-              </div>
-              <div>
-               
-                <div className="text-[18px] Admin_std leading-0 text-blue-500 admin_medium font-semibold opacity-100">
-                <Link 
-                  to="/productedit"
-                  >
-                Add New Product
-                 
-                  <button
-                
-                    className="text-[18px] text-blue-500 ml-1 focus:outline-none"
-                    
-                  >
-                    +
-                  </button>
-                  </Link>
-                </div>
-              
-              </div>
-            </div>
+    <div className="box">
+      <div className="q-category-bottom-detail-section">
+      <div className="q-category-bottom-header-sticky">
+          <div className="q-category-bottom-header">
+            <span>Products</span>
+            <p className="">
+            <Link to="/product-add">
+              Add New Product
+              </Link>
+              <Link to="/product-add">
+                <img src={AddIcon} alt="add-icon" />
+              </Link>
+            </p>
           </div>
+          <div className="q-category-bottom-detail-section">
+        <div className="q-category-bottom-header-sticky">
+        <div className="q-category-bottom-categories-header">
+            <p className="categories-sort">Sort</p>
+            <p className="categories-title">Title</p>
+            <p className="categories-sort"></p>
+            <p className="categories-items">Category</p>
+            <p className="categories-sort"></p>
+            <p className="categories-enable-disable" style={{width:"71%"}}>Enable online ordering?</p>
+            <p className="categories-items" style={{width:"50%"}}>Images</p>
+            <p className=""></p>
+          </div>
+          <div className="q-attributes-bottom-attriButes-single-attributes">
+            <p className="categories-sort"><img src={SortIcon} alt="" className="" /></p>
+            <p className="categories-title">Mobile</p>
+            <p className="categories-sort"></p>
+            <p className="categories-title">product</p>
+            <p className="categories-sort"></p>
+            <p className="categories-enable-disable" style={{width:"71%"}}>
+              <div className="flex flex-col">
+            <div className="qv_checkbox">
+              <label className="qv_checkbox_add_checkmark_label">
+              Delivery
+                <input
+                  type="checkbox"
+                  id="inv_setting2"
+                  name="inv_setting_require"
+                  checked= {{}}
+                  value={{}}
+                  onChange={{}}
+                />
+                <span className="qv_add_checkmark"></span>
+              </label>
+            </div>
+            <div className="qv_checkbox">
+              <label className="qv_checkbox_add_checkmark_label">
+              Pickup
+                <input
+                  type="checkbox"
+                  id="inv_setting2"
+                  name="inv_setting_require"
+                  checked={{}}
+                  value={{}}
+                  onChange={{}}
+                />
+                <span className="qv_add_checkmark"></span>
+              </label>
+            </div>
+            </div>
+            </p>
+            <p className="categories-items" style={{width:"50%"}}>
 
-          <div className="">
-        <table className="w-full">
-          <thead>
-            <tr className="bg-black text-white">
-              <th
-                className="p-3 text-left cursor-pointer"
-                onClick={() => sortBy("sort")}
-              >
-                Sort
-              </th>
-              <th className="p-3 text-left">Title</th>
-              <th className="p-3 text-left">Category</th>
-              <th className="p-3 text-left">Enable online ordering</th>
-              <th className="p-3 text-left">Image</th>
-              <th className="p-3 text-left">Delete</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items.map((item, index) => (
-              <tr
-                key={index}
-                className="text-black text-[16px] admin_medium border-b"
-              >
-                <td className="p-3 h-14"><img src={SortIcon}  className="h-6 w-6"/></td>
-                <td className="p-3">{item.title}</td>
-                <td className="p-3">{item.category}</td>
-                <td className="p-3">
-                  <input
-                    type="checkbox"
-                    checked={item.onlineOrdering}
-                    readOnly
-                  />
-                </td>
-                <td className="p-3">{item.image}</td>
-                <td className="p-3 text-left flex justify-start mt-2">
-                <img src={DeletIcon} alt="" className="" />
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+
+            <div class="flex items-center space-x-2 text-base">
+   
+  </div>
+  <div class="mt-3 flex -space-x-2 overflow-hidden">
+    <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+    <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+    <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80" alt=""/>
+    <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+    <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+  </div>
+  <div class="mt-3 text-sm font-medium">
+    <a href="#" class="text-blue-500">+ 198 others</a>
+  </div>
+
+            </p>
+            <p className=""><img src={DeleteIcon} alt=" " className="w-16 h-16" /></p>
+          </div>
+          <div className="q-category-bottom-categories-single-category">
+            <p className="categories-sort"><img src={SortIcon} alt="" className="" /></p>
+            <p className="categories-title">Mobile</p>
+            <p className="categories-sort"></p>
+            <p className="categories-title">product</p>
+            <p className="categories-sort"></p>
+            <p className="categories-enable-disable" style={{width:"71%"}}>
+              <div className="flex flex-col">
+            <div className="qv_checkbox">
+              <label className="qv_checkbox_add_checkmark_label">
+              Delivery
+                <input
+                  type="checkbox"
+                  id="inv_setting2"
+                  name="inv_setting_require"
+                  checked= {{}}
+                  value={{}}
+                  onChange={{}}
+                />
+                <span className="qv_add_checkmark"></span>
+              </label>
+            </div>
+            <div className="qv_checkbox">
+              <label className="qv_checkbox_add_checkmark_label">
+              Pickup
+                <input
+                  type="checkbox"
+                  id="inv_setting2"
+                  name="inv_setting_require"
+                  checked={{}}
+                  value={{}}
+                  onChange={{}}
+                />
+                <span className="qv_add_checkmark"></span>
+              </label>
+            </div>
+            </div>
+            </p>
+            <p className="categories-items" style={{width:"50%"}}>
+
+
+            <div class="flex items-center space-x-2 text-base">
+   
+  </div>
+  <div class="mt-3 flex -space-x-2 overflow-hidden">
+    <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+    <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+    <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80" alt=""/>
+    <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+    <img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+  </div>
+  <div class="mt-3 text-sm font-medium">
+    <a href="#" class="text-blue-500">+ 198 others</a>
+  </div>
+
+            </p>
+            <p className=""><img src={DeleteIcon} alt=" " className="w-16 h-16"  /></p>
+          </div>
+        
+          <div className="q-category-bottom-categories-single-category">
+            <p className="categories-sort"><img src={SortIcon} alt="" className="" /></p>
+            <p className="categories-title">Mobile</p>
+            <p className="categories-sort"></p>
+            <p className="categories-title">product</p>
+            <p className="categories-sort"></p>
+            <p className="categories-enable-disable" style={{width:"71%"}}>
+              <div className="flex flex-col">
+            <div className="qv_checkbox">
+              <label className="qv_checkbox_add_checkmark_label">
+              Delivery
+                <input
+                  type="checkbox"
+                  id="inv_setting2"
+                  name="inv_setting_require"
+                  checked= {{}}
+                  value={{}}
+                  onChange={{}}
+                />
+                <span className="qv_add_checkmark"></span>
+              </label>
+            </div>
+            <div className="qv_checkbox">
+              <label className="qv_checkbox_add_checkmark_label">
+              Pickup
+                <input
+                  type="checkbox"
+                  id="inv_setting2"
+                  name="inv_setting_require"
+                  checked={{}}
+                  value={{}}
+                  onChange={{}}
+                />
+                <span className="qv_add_checkmark"></span>
+              </label>
+            </div>
+            </div>
+            </p>
+            <p className="categories-items" style={{width:"50%"}}>
+
+
+<div class="flex items-center space-x-2 text-base">
+
+</div>
+<div class="mt-3 flex -space-x-2 overflow-hidden">
+<img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+<img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+<img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80" alt=""/>
+<img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+<img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+</div>
+<div class="mt-3 text-sm font-medium">
+<a href="#" class="text-blue-500">+ 198 others</a>
+</div>
+
+</p>
+            <p className=""><img src={DeleteIcon} alt=" " className="w-16 h-16"  /></p>
+          </div>
+          <div className="q-attributes-bottom-attriButes-single-attributes">
+            <p className="categories-sort"><img src={SortIcon} alt="" className="" /></p>
+            <p className="categories-title">Mobile</p>
+            <p className="categories-sort"></p>
+            <p className="categories-title">product</p>
+            <p className="categories-sort"></p>
+            <p className="categories-enable-disable" style={{width:"71%"}}>
+              <div className="flex flex-col">
+            <div className="qv_checkbox">
+              <label className="qv_checkbox_add_checkmark_label">
+              Delivery
+                <input
+                  type="checkbox"
+                  id="inv_setting2"
+                  name="inv_setting_require"
+                  checked= {{}}
+                  value={{}}
+                  onChange={{}}
+                />
+                <span className="qv_add_checkmark"></span>
+              </label>
+            </div>
+            <div className="qv_checkbox">
+              <label className="qv_checkbox_add_checkmark_label">
+              Pickup
+                <input
+                  type="checkbox"
+                  id="inv_setting2"
+                  name="inv_setting_require"
+                  checked={{}}
+                  value={{}}
+                  onChange={{}}
+                />
+                <span className="qv_add_checkmark"></span>
+              </label>
+            </div>
+            </div>
+            </p>
+            <p className="categories-items" style={{width:"50%"}}>
+
+
+<div class="flex items-center space-x-2 text-base">
+
+</div>
+<div class="mt-3 flex -space-x-2 overflow-hidden">
+<img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+<img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+<img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2.25&w=256&h=256&q=80" alt=""/>
+<img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+<img class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src="https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80" alt=""/>
+</div>
+<div class="mt-3 text-sm font-medium">
+<a href="#" class="text-blue-500">+ 198 others</a>
+</div>
+
+</p>
+            <p className=""><img src={DeleteIcon} alt=" " className="w-16 h-16"  /></p>
+          </div>
         </div>
         </div>
-      </div>
-
-      {/* Modal for adding new attribute */}
-     
+        </div>
+        </div>
+        </div>
     </>
   );
 };

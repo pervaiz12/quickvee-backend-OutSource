@@ -32,7 +32,7 @@ const VendorListMain = () => {
                 />
             </div> */}
             <div className='mt-10'>
-                <div className="q-attributes-main-page">
+                <div className="q-order-main-page">
                     <VendorReportList 
                         // selectedDateRange={selectedDateRange} 
                         // VendorIdData={VendorIdData} 

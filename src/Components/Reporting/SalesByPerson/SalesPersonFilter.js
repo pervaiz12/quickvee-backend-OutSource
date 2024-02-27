@@ -105,7 +105,8 @@ const SalesPersonFilter = ({onFilterDataChange}) => {
   }, [selectedOrderSource , selectedOrderType , selectedEmployeeID]);
 
   return (
-    <div>
+    <>
+    <div className="box">
       <div className="q-category-bottom-detail-section">
         <div className="">
           <div className="q-category-bottom-header">
@@ -215,6 +216,7 @@ const SalesPersonFilter = ({onFilterDataChange}) => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

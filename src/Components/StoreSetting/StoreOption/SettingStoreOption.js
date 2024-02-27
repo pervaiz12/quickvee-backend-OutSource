@@ -200,7 +200,7 @@ export default function SettingStoreOption() {
 
     return (
       <>
-      <div className="mx-6 my-2">
+      <div className="box">
         <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4 store-setting-mx-10 store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
           <h2 className="store-setting-h1 store-setting-inline-block"><b>Enable Order Number</b></h2>
           <span className="store-setting-switch">

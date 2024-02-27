@@ -1,10 +1,19 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import AddNewCategory from "../../Assests/Taxes/Left.svg";
 import axios from "axios";
-import { BASE_URL, ADD_CATOGRY } from "../../Constants/Config";
+import {
+  BASE_URL,
+  ADD_CATOGRY,
+  LIST_ALL_Defaults,
+} from "../../Constants/Config";
 import Upload from "../../Assests/Category/upload.svg";
 
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
+
+import Autocomplete from "@mui/material/Autocomplete";
+import TextField from "@mui/material/TextField";
+
+
 
 const AddCategory = ({ seVisible }) => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -18,6 +27,7 @@ const AddCategory = ({ seVisible }) => {
     earn_point: 0,
     image: "", // New property for the image file
   });
+  // const []
 
   const myStyles = {
     display: "flex",
@@ -50,7 +60,9 @@ const AddCategory = ({ seVisible }) => {
         };
         reader.readAsDataURL(file);
       } else {
-        alert(`${file.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`);
+        alert(
+          `${file.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`
+        );
         e.target.value = null;
       }
     }
@@ -147,7 +159,40 @@ const AddCategory = ({ seVisible }) => {
     }));
   };
 
+  // for Default Category list start
+  const [defaultList, setDefaultList] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post(BASE_URL + LIST_ALL_Defaults, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+
+        if (response.data.status === "Success") {
+          setDefaultList(response.data.result);
+        } else if (
+          response.data.status === "Failed" &&
+          response.data.msg === "No. Data found."
+        ) {
+          setDefaultList([]);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
+
+
+  
+
+  // for Default Category list End
+
   return (
+    <>
+
+    <div className="box">
+
     <div className="q-add-categories-section">
       <form onSubmit={handleSubmit} enctype="multipart/form-data">
         <div className="q-add-categories-section-header">
@@ -157,23 +202,40 @@ const AddCategory = ({ seVisible }) => {
           </span>
         </div>
         <div className="q-add-categories-section-middle-form">
-          <div className="q-add-categories-single-input">
-            <label for="title">Title</label>
-            <input
-              type="text"
-              id="title"
-              name="title"
-              value={category.title}
-              onChange={inputChange}
-            />
-            {errorMessage && (
+          
+          <div
+            className="q-add-categories-single-input mb-2"
+            style={{ position: "relative" }}
+          >
+
+          <label for="title">Title</label>
+          </div>
+          <Autocomplete
+            id="size-small-standard"
+            size="small"
+            options={defaultList}
+            freeSolo
+            getOptionLabel={(option) => option.name}
+    
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                variant="outlined"
+                className="suggestlist_input"
+                name="title"
+                value={category.title}
+                onChange={inputChange}
+              />
+            )}
+          />
+          {errorMessage && (
               <span className="error-message" style={{ color: "red" }}>
                 {errorMessage}
               </span>
             )}
-          </div>
 
-          <div className="q-add-categories-single-input">
+
+          <div className="q-add-categories-single-input mt-2">
             <label for="description">Description</label>
             <textarea
               id="description"
@@ -185,7 +247,6 @@ const AddCategory = ({ seVisible }) => {
             ></textarea>
           </div>
 
-
           <div
             className={`h-1/2  h-[100px] flex items-center justify-center border-2 border-dashed border-[#BFBFBF] bg-white rounded-lg mt-2  defaultDrag_div`}
             onDragOver={handleDragOver}
@@ -194,8 +255,10 @@ const AddCategory = ({ seVisible }) => {
             style={{
               cursor: "pointer",
               position: "relative",
-              height: "auto",
+              height: "260px",
               padding: "10px",
+              backgroundColor: "#f9f9f9",
+              overflow: "hidden",
             }}
           >
             {category.image && category.image.base64 ? (
@@ -216,7 +279,7 @@ const AddCategory = ({ seVisible }) => {
                   alt="Preview"
                   className="default-img"
                   style={{
-                    height: "320px",
+                    height: "auto",
                     objectFit: "contain",
                     width: "100%",
                   }}
@@ -229,7 +292,7 @@ const AddCategory = ({ seVisible }) => {
                   style={{ transform: "translate(2.5rem, 0px)" }}
                   alt="Default"
                 />
-                <span>Category Image</span>
+                <span style={{ color: "#6A6A6A" }}>Category Image</span>
               </div>
             )}
             <div className="q-add-categories-single-input">
@@ -246,24 +309,23 @@ const AddCategory = ({ seVisible }) => {
             </div>
           </div>
 
-
-          <div className="add-category-checkmark-div">
-            <label className="add-category-checkmark-label mt-2">
-              Show Online ?
-              <input
-                type="checkbox"
-                checked={category.online === 1}
-                onChange={(e) =>
-                  setCategory((prevValue) => ({
-                    ...prevValue,
-                    online: e.target.checked ? 1 : 0,
-                  }))
-                }
-              />
-              <span className="add-category-checkmark"></span>
-            </label>
-          </div>
-          <div className="row " style={myStyles}>
+          <div className="row py-3" style={myStyles}>
+            <div className="add-category-checkmark-div">
+              <label className="add-category-checkmark-label mt-2">
+                Show Online ?
+                <input
+                  type="checkbox"
+                  checked={category.online === 1}
+                  onChange={(e) =>
+                    setCategory((prevValue) => ({
+                      ...prevValue,
+                      online: e.target.checked ? 1 : 0,
+                    }))
+                  }
+                />
+                <span className="add-category-checkmark"></span>
+              </label>
+            </div>
             <div className="add-category-checkmark-div">
               <label className="add-category-checkmark-label mt-2">
                 Use Loyalty Point ?
@@ -310,6 +372,9 @@ const AddCategory = ({ seVisible }) => {
         </div>
       </form>
     </div>
+    </div>
+
+    </>
   );
 };
 

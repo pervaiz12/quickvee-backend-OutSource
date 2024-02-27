@@ -8,6 +8,7 @@ import React from "react";
 const DetailsSaleReport = () => {
   return (
     <>
+    <div className="box">
       <div className="q-attributes-bottom-detail-section">
         <div className="">
           <div className="q-attributes-bottom-header">
@@ -68,6 +69,7 @@ const DetailsSaleReport = () => {
             <p className="q-catereport-amount">$160.00</p>
           </div>
         </div>
+      </div>
       </div>
     </>
   );

@@ -124,11 +124,12 @@ const ReceiptMainpage = () => {
    <>
    
     <div className="q-reciptpage-main-page">
+      <div className="box">
         <div className="q-reciptpage-top-detail-section">
         <div className=''>
         <div className="q-reciptpage-bottom-section">
 
-          <div className='q_setting_main_Section mb-12'>Receipt</div>
+          <div className='q_setting_main_Section mb-5'>Receipt</div>
           <div className='text-black mt-12 q_receipt_size_page'>Receipt Size</div>
           <div className="q_resigter flex-wrap mt-8">
             <ul className="custom-checkbox-list flex space-x-5">
@@ -359,7 +360,8 @@ const ReceiptMainpage = () => {
       </div>
 
         {/* Receipt Copies */}
-        <div className="q-resigtersetting-main-page">
+      
+          <div className="box">
         <div className="q-resigtersetting-top-detail-section">
         <div>
       <div className="q-resigtersetting-bottom-section">
@@ -399,6 +401,7 @@ const ReceiptMainpage = () => {
     </div>
         </div>
       </div>
+      </div>
 
       <div className='q-add-categories-section-middle-footer'>
         <button 
@@ -407,6 +410,7 @@ const ReceiptMainpage = () => {
         >Update
         </button>
       </div>
+    
 
    
    

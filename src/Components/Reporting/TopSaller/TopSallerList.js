@@ -34,21 +34,26 @@ const TopSallerList = ({data}) => {
 
           return (
             <>
+            <div className="box">
               <div className="q-daily-report-bottom-report-header">
                 <p className="report-sort">Product Name</p>
                 <p className="report-sort">Category</p>
                 <p className="report-sort">Varient Name</p>
                 <p className="report-sort">Quantity Sold</p>
               </div>
+              </div>
               {topsaller.map((topsaller, index) => (
+                <div className="box">
                 <div className="q-category-bottom-categories-listing" key={index}>
                   <div className="q-category-bottom-categories-single-category">
                     <p className="report-sort">{topsaller.real_name}</p>
                     <p className="report-sort">{topsaller.categoryss}</p>
-                    <p className="report-title">{topsaller.variant}</p>
-                    <p className="report-title">{topsaller.total_sold}</p>
+                    <p className="report-sort">{topsaller.variant}</p>
+                    <p className="report-sort">{topsaller.total_sold}</p>
                   </div>
                 </div>
+                </div>
+               
               ))}
 
             </>

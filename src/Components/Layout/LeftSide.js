@@ -7,7 +7,7 @@ import MainPurchase from "../PurchaseOrders/MainPurchase";
 import MainAttributes from "../Attributes/MainAttributes";
 import MainCategory from "../Category/MainCategory";
 import MainCoupon from "../Coupons/MainCoupon";
-
+import ProductEdit from "../Products/ProductEdit";
 import MainVendors from "../Vendors/MainVendors";
 import MainTimesheet from "../Timesheet/MainTimesheet";
 import MainImportData from "../ImportData/MainImportData";
@@ -16,7 +16,7 @@ import MainProducts from "../Products/MainProducts";
 import MainStoreOption from "../StoreSetting/StoreOption/MainStoreOption";
 import EditCategory from "../Category/EditCategory";
 import TopTenders from "../Dashboard/TopTenders";
-import ProductEdit from "../Products/ProductEdit";
+
 import Info from "../StoreSetting/Info";
 import Setup from "../StoreSetting/Setup";
 import MainStoreAlters from "../StoreSetting/StoreAlters/MainStoreAlters";
@@ -50,14 +50,14 @@ import NewItemCreatedBetweenMain from "../Reporting/NewItemCreatedBetween/NewIte
 import { useEffect } from "react";
 import Permission from "../StoreSetting/AddEmployee/Permission";
 import OrderSummaryDetails from "../Reporting/SalesByPerson/MainOrderSumaaryDetails/OrderSummaryDetails";
-
-
 import VendorListMain  from "../Reporting/VendorList/VendorListMain";
 import VendorSalesReportMain from "../Reporting/VendorSalesReport/VendorSalesReportMain";
 import OrderRefundReportMain from "../Reporting/OrderRefundReport/OrderRefundReportMain";
 import ReorderInventoryMain from "../Reporting/ReorderInventory/ReorderInventoryMain";
 import EditVendors from "../Vendors/EditVendors";
 import SingleVendorsDetail from "../Vendors/SingleVendorsDetail";
+import AddProducts from "../Products/AddProducts"
+import MainLoayalty from "../LoyaltyProgram/MainLoayalty";
 //  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
 
 
@@ -67,13 +67,13 @@ import SingleVendorsDetail from "../Vendors/SingleVendorsDetail";
 
 const LeftSide = ({ visible }) => {
 
-  useEffect(() => {
+  // useEffect(() => {
     
-    console.log("hello")
-      return () => {
+  //   console.log("hello")
+  //     return () => {
        
-      }
-    }, )
+  //     }
+  //   }, )
 
 
   return (
@@ -91,11 +91,16 @@ const LeftSide = ({ visible }) => {
           {visible === "vendors" && <MainVendors />}
           {visible === "timesheet" && <MainTimesheet />}
           {visible === "import-data" && <MainImportData />}
+          {visible === "loyalty-program" && <MainLoayalty />}
           {visible === "store-setting" && <MainStoreOption />}
           {visible === "store-setting" && <MainStoreOption />}
           {visible === "category-edit-cat" && <EditCategory />}
+          {visible === "product-edit-cat" && <ProductEdit />}
+
           {visible === "toptraders" && <TopTenders />}
           {visible === "productedit" && <ProductEdit />}
+          {visible === "product-add" && <AddProducts />}
+
           {visible === "info" && <Info />}
           {visible === "setup" && <Setup />}
           {visible === "Alters" && <MainStoreAlters />}

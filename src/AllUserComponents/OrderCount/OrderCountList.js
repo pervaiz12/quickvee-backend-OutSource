@@ -116,6 +116,7 @@ const OrderCountList = () => {
 
     return (
         <>
+        <div className="box">
             <div className="q-category-bottom-detail-section">
                 <div className="">
                     <div className="q-category-bottom-header">
@@ -248,6 +249,7 @@ const OrderCountList = () => {
                         Export
                     </button>
                 </div>
+            </div>
             </div>
         </>
     );

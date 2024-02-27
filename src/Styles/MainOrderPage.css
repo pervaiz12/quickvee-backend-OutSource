@@ -383,7 +383,7 @@ display:flex;}
     .q_daterange_details {
       flex-direction: row;
       flex-wrap: wrap;
-      gap: 0;
+     
     }
   }
   

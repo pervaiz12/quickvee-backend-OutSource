@@ -27,10 +27,13 @@ import PurIcon from "../../Assests/Dashboard/purchaseY.svg";
 import SettingIcon from "../../Assests/Dashboard/settingY.svg";
 import ResportIcons from "../../Assests/Dashboard/reports.svg";
 import timesheetblackIcon from "../../Assests/Dashboard/timesheetblackIcon.svg";
+import Loyalty from '../../Assests/Taxes/Loyalty Program.svg'
+import LoyaltIcon from '../../Assests/Taxes/loyaltyactive.svg'
+
 import { useLocation } from "react-router-dom";
 
 const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const location = useLocation();
   const currentUrl = location.pathname;
 
@@ -42,13 +45,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
     setActiveItem(item.link);
     navigate(item.link);
   };
-  useEffect(() => {
-    
-  console.log("hello")
-    return () => {
-     
-    }
-  }, )
+
   
 
   return (
@@ -63,7 +60,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
             ? menuItems.map((item) => (
                 <div
                   key={item.id}
-                  className={`mb-4 text-base ${
+                  className={`text-[#9E9E9E] active:bg-[#414F54] hover:bg-[#414F54] hover:text-[#FFC400] px-0 ${
                     activeItem === item.link ? "active" : ""
                   }`}
                 >
@@ -72,6 +69,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                   ) : (
                     <div
                       className={`flex items-center ${
+                        
                         activeItem === item.link
                           ? "bg-[#414F54] text-[#FFC400]"
                           : ""
@@ -82,7 +80,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                       {activeItem === item.link ? item.activeIcon : item.icon}
                       <Link
                         onClick={() => handleItemClick(item)}
-                        className={`ml-2 menu-item text-[18px] Admin_std ${
+                        className={`ml-2 menu-item text-[14px] Admin_std ${
                           activeItem === item.link ? "bg-[#414F54]" : ""
                         }`}
                         to={item.link}
@@ -96,7 +94,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
             : menuItems.map((item) => (
                 <div
                   key={item.id}
-                  className={`mb-4 text-base cursor-pointer ${
+                  className={`mb-1 text-base cursor-pointer ${
                     activeItem === item.link ? "active" : ""
                   }`}
                 >
@@ -107,7 +105,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                       className={`flex flex-col items-center ${
                         activeItem === item.link
                           ? "text-[#FFC400] active"
-                          : "text-gray-400 hover-text-yellow"
+                          : "text-gray-400 hover-text-yellow hover:bg-[#414F54] px-0"
                       }`}
                       onClick={() => {
                         handleItemClick(item);
@@ -125,11 +123,38 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
 };
 
 const DropdownMenuItem = ({ item, isMenuOpen }) => {
+  const location = useLocation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const currentUrl = location.pathname;
+  const [activeItem, setActiveItem] = useState(currentUrl);
+
+  const   handleToggleDropdownItems= (link) => {
+    setActiveItem(link)
+
+    for (let obj of item.dropdownItems) {
+     
+      if (obj.link === activeItem) {
+        setIsDropdownOpen(true)
+      }
+      else{
+    setIsDropdownOpen(false)
+
+      }
+    }
+  }
 
   const handleToggleDropdown = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
+   console.log("calling")
+    setIsDropdownOpen(!isDropdownOpen)
+  
+  }
+
+
+  useEffect(() => {
+    console.log("Calling from useeffect" , isDropdownOpen , currentUrl)
+  }, [isDropdownOpen , currentUrl])
+  
+
 
   return (
     <div className="relative" style={isMenuOpen ? { width: "16rem" } : { width: "6rem", marginLeft: "24px" }} >
@@ -147,7 +172,7 @@ const DropdownMenuItem = ({ item, isMenuOpen }) => {
   
       {isMenuOpen && (
         <p
-          className="ml-2 cursor-pointer menu-item text-gray-400"
+          className="ml-2 menu-item text-[14px] Admin_std"
           onClick={handleToggleDropdown}
         >
           {item.text}
@@ -160,9 +185,10 @@ const DropdownMenuItem = ({ item, isMenuOpen }) => {
       <div className="mt-0 bg-[#334247] p-4 shadow w-full text-center z-10">
         {item.dropdownItems.map((dropdownItem) => (
           <Link
+onClick={handleToggleDropdownItems}
             key={dropdownItem.id}
             to={dropdownItem.link}
-            className="flex text-center submenu-item text-gray-400 py-4"
+            className="flex text-center submenu-item text-gray-400 py-4 text-[14px]"
           >
             {dropdownItem.text}
           </Link>
@@ -284,6 +310,21 @@ const menuItems = [
     link: "/import-data",
   },
   {
+    id: 83,
+    icon: (
+      <img
+        src={Loyalty}
+        alt="Loyalty Porogram"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img src={LoyaltIcon} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
+    ),
+    text: "Loyalty Porogram",
+    link: "/loyalty-program",
+  },
+  {
     id: 8,
     icon: <img src={CouponIcon} alt="Coupons" className="h-6 w-10 mt-4 mb-4" />,
     activeIcon: (
@@ -358,12 +399,12 @@ const menuItems = [
       {
         id: 64,
         icon: (
-          <img src={CouponIcon} alt="Alters" className="h-6 w-10 mt-4 mb-4" />
+          <img src={CouponIcon} alt=" Alerts " className="h-6 w-10 mt-4 mb-4" />
         ),
         activeIcon: (
-          <img src={CouIcon} alt="Alters" className="h-6 w-10 mt-4 mb-4 " />
+          <img src={CouIcon} alt=" Alerts " className="h-6 w-10 mt-4 mb-4 " />
         ),
-        text: "Alters",
+        text: " Alerts ",
         link: "/store-settings/Alters",
       },
       { id: 65, text: "Taxes", link: "/store-settings/taxes" },

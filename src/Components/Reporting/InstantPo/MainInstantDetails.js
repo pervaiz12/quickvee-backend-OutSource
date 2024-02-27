@@ -30,12 +30,13 @@ const MainInstantDetails = ({ data }) => {
   if (!data || data.length === 0) {
     return (
       <>
+    <div className="box">
         <div className="q-attributes-bottom-header-sticky">
           <div className="q-attributes-bottom-header">
             <span>Instant PO Activity Report</span>
           </div>
 
-          <div className="q-attributes-bottom-attriButes-header text-center">
+          <div className="q-attributes-bottom-attriButes-header text-center" style={{borderRadius:"unset"}}>
             <p className="q-employee-item ">Date</p>
             <p className="q-employee-in ">Time </p>
             <p className="q-employee-in ">Source</p>
@@ -53,6 +54,7 @@ const MainInstantDetails = ({ data }) => {
             </div>
           </div>
         </div>
+        </div>
       </>
     );
   }
@@ -65,6 +67,7 @@ const MainInstantDetails = ({ data }) => {
     ) {
       return (
         <>
+         <div className="box">
           <div className="q-attributes-bottom-header-sticky">
             <div className="q-attributes-bottom-header">
               <span>Instant PO Activity Report</span>
@@ -87,11 +90,13 @@ const MainInstantDetails = ({ data }) => {
               </div>
             </div>
           </div>
+          </div>
         </>
       );
     } else if (instantactivity && instantactivity.length >= 1) {
       return (
         <>
+        <div className="box">
           <div className="q-attributes-bottom-detail-section">
             <div className="q-attributes-bottom-header-sticky">
               <div className="q-attributes-bottom-header">
@@ -111,6 +116,7 @@ const MainInstantDetails = ({ data }) => {
               </div>
             </div>
           </div>
+          </div>
           {instantactivity.map((instantactivity, index) => {
             const AfterAdjustQty =
               parseInt(instantactivity.current_qty, 10) +
@@ -120,6 +126,7 @@ const MainInstantDetails = ({ data }) => {
               parseFloat(instantactivity.price);
 
             return (
+              <div className="box">
               <div
                 className="q-attributes-bottom-attriButes-listing "
                 key={index}
@@ -166,6 +173,7 @@ const MainInstantDetails = ({ data }) => {
                       : calculatedTotal}
                   </p>
                 </div>
+              </div>
               </div>
             );
           })}

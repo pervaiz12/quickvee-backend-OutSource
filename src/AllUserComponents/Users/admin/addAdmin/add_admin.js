@@ -4,6 +4,7 @@ import Add_adminFunctionality from './add_adminFunctionality'
 export default function Add_Admin() {
     const {handleChange,addAdminData,handleSubmit,handleBlur,handleKeyPress}=Add_adminFunctionality()
   return (
+    <div className='q-order-min-page'>
     <div className='box'>
         <div className='box_shadow_div'>
             <div className='pd_20'>
@@ -79,6 +80,7 @@ export default function Add_Admin() {
             </div>
         </div>
       
+    </div>
     </div>
   )
 }
