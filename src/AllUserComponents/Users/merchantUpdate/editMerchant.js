@@ -24,9 +24,7 @@ export default function EditMerchant() {
     <div className='box'>
     <div className='box_shadow_div'>
         <div className='pd_20'>
-            {/* {
-                message ? <p>{message}</p>:"" icon={<CheckIcon fontSize="inherit" />}
-            } */}
+           
             {
                 successMessagehandle ?<Alert severity="success">
                 {message}

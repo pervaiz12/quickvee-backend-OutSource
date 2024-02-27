@@ -1,10 +1,11 @@
 import React,{useEffect,useState} from 'react'
-import{Link} from "react-router-dom"
+import{Link,useNavigate } from "react-router-dom"
 import{getVerifiedMerchant} from '../../../Redux/features/user/verifiedMerchantSlice'
 import { useSelector, useDispatch } from 'react-redux'
 
 export default function Verified() {
     const dispatch = useDispatch()
+    const navigate = useNavigate();
     const VerifiedMerchantList = useSelector(
         (state) => state.
             verifiedMerchantRecord.verifiedMerchantData,
@@ -28,6 +29,15 @@ export default function Verified() {
        )
      : [];
      // ====================================
+     const handleEditMerchant = (data) => {
+      // console.log(data)
+      // console.log(`/users/editMerchant/${data}`)
+      // Assuming 'result' is the data you want to pass to the editMerchant route
+      // Navigate to the editMerchant route and pass 'result' as state
+      navigate(`/users/editMerchant/${data}`);
+    };
+  
+    //  ====================================
   return (
     <div className='box'>
     <div className='box_shadow_div'>
@@ -82,7 +92,10 @@ export default function Verified() {
                           <p className='table10'>{result.merchant_id}</p>
                           <p className='table10'>{result.ver_code}</p>
                           
-                          <div className='table10'><div className='verifiedTableIcon'><Link to={`/users/editMerchant/${result.id}`}><img src="/static/media/editIcon.4dccb72a9324ddcac62b9a41d0a042db.svg"></img></Link> <Link><img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img></Link></div></div>
+                          <div className='table10'><div className='verifiedTableIcon'><div 
+                          onClick={()=>handleEditMerchant(result.id)}
+                          // to={`/users/editMerchant/${result.id}`} 
+                          ><img src="/static/media/editIcon.4dccb72a9324ddcac62b9a41d0a042db.svg"></img></div> <Link><img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img></Link></div></div>
                           {/* <p className='table5'><Link to={`/user/editmerchant/${result.id}`}>Action</Link></p> */}
                         </div>
 
