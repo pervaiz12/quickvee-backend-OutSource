@@ -7,7 +7,7 @@ import Alert from '@mui/material/Alert';
 const Info = () => {
 const{handleSubmitInfo,imageBanner,image,handleDelete,handleEditRecord,infoRecord,onChangeHandle,imageBoolean,BannersBoolean,successsMessage,hideSucess,errors,handleKeyPress}=InfoFunction()
 let data={
-  id:100 //dynamic id give here
+  id:100 //dynamic id give
 }
 useEffect(()=>{
   handleEditRecord(data)
