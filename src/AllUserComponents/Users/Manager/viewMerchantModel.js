@@ -53,7 +53,6 @@ function ViewMerchant(props) {
                     return(
                         <div key={index}>
                             <p>{result.name}</p>
-                          
                         </div>
                     )
                 })
