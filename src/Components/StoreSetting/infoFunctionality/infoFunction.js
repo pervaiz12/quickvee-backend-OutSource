@@ -67,7 +67,6 @@ export default function InfoFunction() {
   const handleEditRecord=async(dataRecord)=>{
     // console.log(data.id) datat
     let data={id:dataRecord.id}
-    // console.log(BASE_URL+GET_Edit_STORE_INFO,data,{ headers: { "Content-Type": "multipart/form-data" } })
     let response=await axios.post(BASE_URL+GET_Edit_STORE_INFO,data,{ headers: { "Content-Type": "multipart/form-data" } })
     if(response.data.status==200)
     {

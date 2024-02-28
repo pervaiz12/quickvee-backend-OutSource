@@ -180,7 +180,8 @@ export default function EditMerchantFunctionality() {
                 account_type:getEditMerchant.live_account,
                 merchant_token: getEditMerchant.merchant_token,
                 usa_pin:getEditMerchant.usa_pin,
-            }       
+            } 
+            console.log(packet)      
         try {
             let response=await axios.post(BASE_URL+GET_UPDATE_MERCHANT,packet,{headers:{
                 "Content-Type":'multipart/form-data'
