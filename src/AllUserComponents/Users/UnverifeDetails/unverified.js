@@ -1,9 +1,10 @@
 import React,{useEffect,useState} from 'react'
 import{getUnVerifiedMerchant} from '../../../Redux/features/user/unverifiedMerchantSlice'
 import { useSelector, useDispatch } from 'react-redux'
-import{Link} from "react-router-dom"
+import{Link,useNavigate} from "react-router-dom"
 export default function Unverified() {
   const dispatch = useDispatch()
+  const navigate = useNavigate();
   const UnVerifiedMerchantList = useSelector(
     (state) =>state.unverifiedMerchantRecord.unverifiedMerchantData,
   );
@@ -26,6 +27,16 @@ export default function Unverified() {
      )
    : [];
    // ====================================
+    // ====================================
+    const handleEditMerchant = (data) => {
+      // console.log(data)
+      // console.log(`/users/editMerchant/${data}`)
+      // Assuming 'result' is the data you want to pass to the editMerchant route
+      // Navigate to the editMerchant route and pass 'result' as state
+      navigate(`/users/editMerchant/${data}`);
+    };
+  
+    //  ====================================
   return (
     <div className='q-order-main-page'>
     <div className='box'>
@@ -80,7 +91,10 @@ export default function Unverified() {
                     {/* <p className='table5'>{result.phone}</p> */}
                     <p className='table10'>{result.merchant_id}</p>
                     <p className='table5'>{result.ver_code}</p>
-                    <div className='table10'><div className='verifiedTableIcon'><Link to={`/users/editMerchant/${result.id}`}><img src="/static/media/editIcon.4dccb72a9324ddcac62b9a41d0a042db.svg"></img></Link> <Link><img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img></Link></div>
+                    <div className='table10'><div className='verifiedTableIcon'><div 
+                    // to={`/users/editMerchant/${result.id}`}
+                    onClick={()=>handleEditMerchant(result.id)}
+                    ><img src="/static/media/editIcon.4dccb72a9324ddcac62b9a41d0a042db.svg"></img></div> <Link><img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img></Link></div>
                     </div>
                   </div>
 

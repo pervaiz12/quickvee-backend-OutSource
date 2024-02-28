@@ -12,7 +12,7 @@ import {
   } from "react-router-dom";
 
 export default function EditMerchant() {
-    const{getEditMerchantData,getEditMerchant,handleChangePaymentMode,paymentModeOnline,paymentModeOffline,handleUpdateMerchant,handleChangeMerchant,paymentCredits,setEditMerchant,message,successMessagehandle}=EditMerchantFunctionality()
+    const{getEditMerchantData,getEditMerchant,handleChangePaymentMode,paymentModeOnline,paymentModeOffline,handleUpdateMerchant,handleChangeMerchant,paymentCredits,setEditMerchant,message,successMessagehandle,handleKeyPress,inventory,inventoryApprove}=EditMerchantFunctionality()
     const  {id}  = useParams();
     // console.log(id)
     useEffect(()=>{
@@ -113,8 +113,8 @@ export default function EditMerchant() {
                                 onChange={handleChangeMerchant}
                                 >
                                    
-                                    <option>Live Account</option>
-                                    <option>Sand box Account</option>
+                                    <option value='0'>Live Account</option>
+                                    <option value='1'>Sand box Account</option>
                                     
                                 </select>
                             </div>
@@ -124,6 +124,8 @@ export default function EditMerchant() {
                             <div className='input_area'>
                                 <label>Inventory Approval</label>
                                 <Switch
+                                checked={inventory}
+                                onChange={inventoryApprove}
                                 // onChange={(event) => handleUpdateStatus(event, label, singleVender.vendor_id)}
                                 // {...label}
                                 // defaultChecked={singleVender.enabled === "1"}
@@ -142,11 +144,12 @@ export default function EditMerchant() {
                             <div className='input_area'>
                                 <label>Current OTP</label>
                                 <input 
-                                    className=''
+                                     className='merchant-disabled'
                                     type='text'
                                     name="otp"
                                     value={getEditMerchant.otp}
-                                    onChange={handleChangeMerchant}
+                                    disabled
+                                    // onChange={handleChangeMerchant}
                                 />
                             </div>
                             {/* {errorPin && <span>{errorPin}</span>} */}
@@ -191,6 +194,7 @@ export default function EditMerchant() {
                                     name="a_phone"
                                     value={getEditMerchant.a_phone}
                                     onChange={handleChangeMerchant}
+                                    onKeyPress={handleKeyPress}
                                     // onChange={handleChangeAdmin}
                                 />
                             </div>
