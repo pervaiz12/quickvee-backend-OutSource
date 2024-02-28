@@ -357,3 +357,16 @@ border:1px solid #0A64F9 }
   position: relative;
   right: 63px;
 }
+
+
+.day-container {
+  padding: 15px 30px;
+}
+
+.odd {
+  background-color: #F6F6F6; /* Light gray background for odd days */
+}
+
+.even {
+  background-color: #ffffff; /* White background for even days */
+}

@@ -1,0 +1,59 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .box {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    width: 400px;
+  }
+  
+  .box_shadow_div {
+    padding: 20px;
+  }
+  
+  .qvrow {
+    margin-bottom: 10px;
+  }
+  
+  .box_shadow_heading {
+    font-size: 18px;
+    margin: 0;
+  }
+  
+  .working_hours_section {
+    margin-top: 20px;
+  }
+  
+  .day_heading {
+    margin-bottom: 10px;
+  }
+  
+  .switch_section {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+  
+  .switch_section span {
+    margin-left: 10px;
+  }
+  
+  .time_section {
+    display: flex;
+    align-items: center;
+  }
+  
+  .time_input {
+    margin-right: 20px;
+  }
+  
+  .to_text {
+    margin: 0 10px;
+  }
+  
