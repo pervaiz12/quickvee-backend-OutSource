@@ -87,6 +87,7 @@ const VendorsDetail = ({ setVisible }) => {
 
           {
             allvendors && allvendors.length >= 1 && allvendors.map((singleVender, index) => (
+              <Link to={`/vendors/vendor-details/${singleVender.vendor_name}?vendorId=${singleVender.vendor_id}`}>
               <div className='q-category-bottom-categories-single-category' key={index}>
                 <p className='table20'>{singleVender.vendor_name}</p>
                 <p className='table15'>{singleVender.pay_count}</p>
@@ -106,6 +107,15 @@ const VendorsDetail = ({ setVisible }) => {
                       />
 
                     </div>
+                      <div className='col-qv-4'>
+                    {/* <Link to={`/vendors/vendor-details/${singleVender.vendor_name}?vendorId=${singleVender.vendor_id}`}>
+                      <img 
+                          className='view_arrow' 
+                          src={Viewarrow} 
+                          alt="View" 
+                      />
+                      </Link> */}
+                    </div>
                     
                     <div className='col-qv-4'>
                     <Link to={`/vendors/edit-vendor/${singleVender.vendor_name}?vendorId=${singleVender.vendor_id}`}>
@@ -119,7 +129,7 @@ const VendorsDetail = ({ setVisible }) => {
                       />
                     </Link></div>
 
-                    <div className='col-qv-4'>
+                    {/* <div className='col-qv-4'>
                     <Link to={`/vendors/vendor-details/${singleVender.vendor_name}?vendorId=${singleVender.vendor_id}`}>
                       <img 
                           className='view_arrow' 
@@ -127,12 +137,15 @@ const VendorsDetail = ({ setVisible }) => {
                           alt="View" 
                       />
                       </Link>
-                    </div>
+                    </div> */}
                   </div>
                 </p>
               </div>
+              </Link>
             ))
           }
+
+
 
 
 

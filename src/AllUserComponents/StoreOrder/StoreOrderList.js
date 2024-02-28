@@ -43,6 +43,7 @@ const StoreOrderList = (props) => {
     return (
         <>
         <div className="box">
+            <div className="box_shadow_div">
             <div className="store_order_div">
                 <h4>Store Order</h4>
                 <table className="so_table">
@@ -76,6 +77,7 @@ const StoreOrderList = (props) => {
                         </tbody>
                     ))}
                 </table>
+            </div>
             </div>
             </div>
         </>

@@ -76,7 +76,7 @@ const AllUserMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                       {activeItem === item.link ? item.activeIcon : item.icon}
                       <Link
                         onClick={() => handleItemClick(item)}
-                        className={`ml-2 menu-item text-[18px] Admin_std ${
+                        className={`ml-2 menu-item text-[14px] Admin_std ${
                           activeItem === item.link ? "bg-[#414F54]" : ""
                         }`}
                         to={item.link}
@@ -141,7 +141,7 @@ const DropdownMenuItem = ({ item, isMenuOpen }) => {
   
       {isMenuOpen && (
         <p
-          className="ml-2 cursor-pointer menu-item text-gray-400"
+          className="ml-2 cursor-pointer menu-item text-gray-400 text-[14px]"
           onClick={handleToggleDropdown}
         >
           {item.text}
@@ -156,7 +156,7 @@ const DropdownMenuItem = ({ item, isMenuOpen }) => {
           <Link
             key={dropdownItem.id}
             to={dropdownItem.link}
-            className="flex text-center submenu-item text-gray-400 py-4"
+            className="flex text-center submenu-item text-gray-400 py-4 text-[14px]"
           >
             {dropdownItem.text}
           </Link>

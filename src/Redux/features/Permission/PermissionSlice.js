@@ -16,7 +16,7 @@ export const fetchPermissionData = createAsyncThunk('permission/fetchPermissionD
         const response = await axios.post(BASE_URL + LIST_ALL_PERMISSION, data, { headers: { "Content-Type": "multipart/form-data" } })
 
         if (response.data.status === "success") {
-            // console.log(response.data.data)
+            console.log(response.data.data)
            return response.data.data
         }
     } catch (error) {

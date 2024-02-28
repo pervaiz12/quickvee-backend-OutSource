@@ -150,52 +150,42 @@ const DropdownMenuItem = ({ item, isMenuOpen }) => {
   }
 
 
-  useEffect(() => {
-    console.log("Calling from useeffect" , isDropdownOpen , currentUrl)
-  }, [isDropdownOpen , currentUrl])
+  // useEffect(() => {
+  //   console.log("Calling from useeffect" , isDropdownOpen , currentUrl)
+  // }, [isDropdownOpen , currentUrl])
   
 
 
   return (
-    <div className="relative" style={isMenuOpen ? { width: "16rem" } : { width: "6rem", marginLeft: "24px" }} >
-
+    <div
+    className="relative"
+    style={isMenuOpen ? { width: "16rem" } : { width: "6rem", marginLeft: "24px" }}
+    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+  >
     <div className="flex items-center">
-    {item.icon}
+      {item.icon}
       {isMenuOpen && (
-        <p
-          className="cursor-pointer menu-item text-gray-400"
-          onClick={handleToggleDropdown}
-        >
-        
-        </p>
-      )}
-  
-      {isMenuOpen && (
-        <p
-          className="ml-2 menu-item text-[14px] Admin_std"
-          onClick={handleToggleDropdown}
-        >
+        <p className="ml-2 menu-item text-[14px] Admin_std">
           {item.text}
           <FaChevronDown className="quickarrow_icon" />
         </p>
       )}
     </div>
-  
+
     {isDropdownOpen && (
       <div className="mt-0 bg-[#334247] p-4 shadow w-full text-center z-10">
         {item.dropdownItems.map((dropdownItem) => (
           <Link
-onClick={handleToggleDropdownItems}
             key={dropdownItem.id}
             to={dropdownItem.link}
             className="flex text-center submenu-item text-gray-400 py-4 text-[14px]"
+            onClick={() => handleToggleDropdownItems(dropdownItem.link)}
           >
             {dropdownItem.text}
           </Link>
         ))}
       </div>
     )}
-  
   </div>
   
   );
