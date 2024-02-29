@@ -243,4 +243,9 @@ module.exports = Object.freeze({
 
   GET_REORDER_INVENTORY_LIST: "ReportingReactapi/get_reorder_inventory_list",
 
+
+  //shiftsummary api
+
+  GET_SHIFT_SUMMARY_LIST: "ReportingReactapi_pcr/shift_summary_report_list",
+
 });

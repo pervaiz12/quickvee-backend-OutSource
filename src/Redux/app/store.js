@@ -46,6 +46,8 @@ import NewsLetterListReducer from "../../Redux/features/NewsLetter/NewsLetterSli
 import vendorReducer from "../features/VendorList/vListSlice";
 import orderSummerySlice from "../features/OrderSummary/OrderSummarySlice";
 import loyaltyprogramSlice from "../features/LoyaltyProgram/loyaltyprogramSlice";
+import SettingSetupSlice from "../features/SettingSetup/SettingSetupSlice";
+import ShiftSummarySlice from "../features/Reports/ShiftSummary/ShiftSummarySlice";
 
 const store = configureStore({
   reducer: {
@@ -119,8 +121,15 @@ const store = configureStore({
     OrderRefundList:OrderRefundListReducer,
 
     loyaltyprogram: loyaltyprogramSlice,
+    ShiftSummarylist: ShiftSummarySlice,
 
   },
+
+      //setting setup 
+
+   //ShiftSummarySlice
+
+
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),
 });
 
