@@ -39,6 +39,7 @@ import MainTaxes from "./Components/StoreSetting/Taxes/MainTaxes";
 // import Info from "./Components/StoreSetting/SubSetting/Info";
 
 // import Info from "./Components/StoreSetting/SubSetting/Info";
+import "./Styles/storeSettingInfo.css"
 
 import "./Styles/AttributesPage.css";
 

@@ -13,24 +13,37 @@ export default function EditMerchantFunctionality() {
     const[paymentCredits,setPaymentCredits]=useState(false)
     const[paymentModeRecord,setPaymentModeRecord]=useState('')
     const[message,setMessage]=useState('')
-    const[successMessagehandle,setSuccessMessageHandle]=useState(true)
+    const[successMessagehandle,setSuccessMessageHandle]=useState(false)
+    const[inventory,setInventory]=useState(false)
     const handleSuccessMessage=()=>{
         setTimeout(()=> {
             setSuccessMessageHandle(false)
-           
          }, 3000)
     }
-   
+   const inventoryApprove=(e)=>{
+    // console.log(e.target)
+    setInventory(!inventory)
+
+   }
     const getEditMerchantData=async(data)=>{
         const dataNew={id:data}
             await axios.post(BASE_URL+GET_EDIT_CUSTOMER,dataNew,{headers:{
                 "Content-Type":'multipart/form-data'
             }}).then(response=>{
-                // console.log(response.data.message)
-                // console.log(response.data.message.row)
+                console.log(response.data)
+                console.log(response.data.message.row.flag)
                 if(response.data.status==200)
                 {
+                    const inventory=response.data.message.inventory !==null && response.data.message.inventory!==''? response.data.message.inventory:'0'
+                    if(inventory==0)
+                    {
+                        setInventory(false)
+                    }else{
+                        setInventory(true)
+                    }
+                    // console.log(inventory)
                     const a_zipCode = response.data.message.row.a_zip !== null ? response.data.message.row.a_zip : '';
+                    const account_Type=response.data.message.row.flag !==null && response.data.message.row.flag!==""?response.data.message.row.flag:'0'
                     const Ownername = response.data.message.row.owner_name !== null ? response.data.message.row.owner_name : '';
                     const City = response.data.message.row.a_city !== null ? response.data.message.row.a_city: '';
                     const username =response.data.message.row.email !== null ? response.data.message.row.email: '';
@@ -43,8 +56,10 @@ export default function EditMerchantFunctionality() {
                     const otp=response.data.message.row.ver_code !==null ?response.data.message.row.ver_code:''
                     const a_address_line_1=response.data.message.row.a_address_line_1 !==null ?response.data.message.row.a_address_line_1:''
                     const a_address_line_2=response.data.message.row.a_address_line_2 !==null ? response.data.message.row.a_address_line_2:''
+                    
                     setEditMerchant({
                         id:data,
+                        live_account:account_Type,
                         password:'',
                         username:username,
                         name:name,
@@ -97,6 +112,12 @@ export default function EditMerchantFunctionality() {
         
     }
 
+    const handleKeyPress = (e) => {
+        // Allow only numeric characters (key codes 48 to 57) and backspace (key code 8)
+        if ((e.charCode < 48 || e.charCode > 57) && e.charCode !== 8) {
+          e.preventDefault();
+        }
+      };
     const handleChangeMerchant=(e)=>{
         const {name,value}=e.target
         const trimmedValue = value.replace(/^\s+|\s+$/g, '')
@@ -110,7 +131,7 @@ export default function EditMerchantFunctionality() {
     
 
     const handleChangePaymentMode=(e)=>{
-        console.log(e.target.value)
+        // console.log(e.target.value)
         setPaymentModeRecord(e.target.value)
         if(e.target.value==1)
         {
@@ -135,11 +156,18 @@ export default function EditMerchantFunctionality() {
 
     const handleUpdateMerchant=async(e)=>{
         e.preventDefault();
+        let inventoryNew=0;
+        if(inventory==true)
+        {
+            inventoryNew=1
+
+        }
         const packet={
             id:getEditMerchant.id,
             username:getEditMerchant.username,
-            user_type:getEditMerchant.user_type
-            ,mer_id:getEditMerchant.id,
+            user_type:getEditMerchant.user_type,
+            inventory:inventoryNew,
+            mer_id:getEditMerchant.id,
             name:getEditMerchant.name,
             merchant_id:getEditMerchant.merchant_id,
             ownername:getEditMerchant.owner_name,
@@ -149,11 +177,11 @@ export default function EditMerchantFunctionality() {
                 a_zip:getEditMerchant.a_zip,
                 state:getEditMerchant.a_state},
                 cc_payment:paymentModeRecord,
-                account_type:0,
+                account_type:getEditMerchant.live_account,
                 merchant_token: getEditMerchant.merchant_token,
                 usa_pin:getEditMerchant.usa_pin,
-            }
-                console.log(packet)  
+            } 
+            console.log(packet)      
         try {
             let response=await axios.post(BASE_URL+GET_UPDATE_MERCHANT,packet,{headers:{
                 "Content-Type":'multipart/form-data'
@@ -174,5 +202,5 @@ export default function EditMerchantFunctionality() {
 
     }
     return {getEditMerchantData,getEditMerchant,handleChangePaymentMode,paymentModeOnline,paymentModeOffline
-    ,paymentModeOnline,paymentModeOffline,handleUpdateMerchant,handleChangeMerchant,paymentCredits,setEditMerchant,message,successMessagehandle}
+    ,paymentModeOnline,paymentModeOffline,handleUpdateMerchant,handleChangeMerchant,paymentCredits,setEditMerchant,message,successMessagehandle,handleKeyPress,inventory,inventoryApprove}
 }

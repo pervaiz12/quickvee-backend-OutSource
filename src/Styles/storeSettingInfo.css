@@ -1,0 +1,158 @@
+@font-face {
+    font-family:qvbold;
+    src: url(../Assests/Fonts/circular-bold.TTF);
+  }
+  @font-face {
+    font-family:qvmedium;
+    src: url(../Assests/Fonts/circulur-medium.TTF);
+  }
+  @font-face {
+    font-family:qvblack;
+    src: url(../Assests/Fonts/circulur-std-black.TTF);
+  }
+  @font-face {
+    font-family:qvbook;
+    src: url(../Assests/Fonts/circulur-std-book.TTF);
+  }
+  @font-face {
+    font-family:qvstdmedium;
+    src: url(../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf);
+  }
+  /* ============== */
+.infoheader{
+    width: 95%;
+    margin: 5px auto;
+    padding: 10px 5px;
+  }
+  .infoheader-left{
+    float: right;
+  }
+  
+  .info-unorder {
+    list-style-type: unset;
+    margin-left: 20px;
+  }
+  .infoInput{
+      width: 70% !important;
+      float: left;
+      border-right: none;
+      border-radius: 8px 0px 0px 8px;
+      margin-top: 0px !important;
+    
+
+  }
+  .info-span{
+      display: inline-block;
+      width: 30% !important;
+      background-color: #cccccc;
+      text-align: center;
+      line-height: 40px;
+      border-radius: 0px 8px 8px 0px;
+  }
+  .info-banner{
+  width: 100%;
+  background: #f2f6ff;
+  height: 210px;
+  border-radius: 8px 8px 8px 8px;
+  position: relative;
+  padding: 15px 0px;
+  }
+  .info-banner-image-div{
+    width: 95%;
+    margin: 0 auto;
+    height: auto;
+  }
+  
+  .info-file-upload{
+    position: relative;
+    display: inline-block;
+    width: 180px;
+  }
+  .file-input1{
+    width: 100%;
+    height: 180px;
+    position: relative;
+    background: #ffffff no-repeat padding-box;
+    box-shadow: 0px 3px 22px #00000017;
+    border-radius: 8px;
+    opacity: 1;
+  }
+  .info-image-icon{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+  }
+  .info-upload-image-button{
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    background: #ffffff no-repeat ;
+    box-shadow: 0px 3px 22px #00000017;
+    border-radius: 2px;
+    opacity: 1;
+  }
+  .info-upload-image-button label{
+    padding: 5px 15px;
+  }
+  .info-image{
+    width: 100%;
+    height: 25vh;
+    background-size: cover;
+    border-radius: 4px;
+  
+  }
+  .info-delete{
+    position: absolute;
+    z-index: 1;
+    left: 170px;
+    color:#ff0000;
+    top: 20px;
+  }
+  .info-delete-banner{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+  .info-image-logo-position{
+   
+    position: absolute;
+    bottom: 20%;
+    right: 50%; /* Change to 50% */
+    transform: translateX(50%);
+    transform-origin: center;
+  }
+  .info-update{
+    float: right;
+  }
+  .store-name{
+    font-size: 22px;
+    font-family:qvbold;
+  }
+  .inforecord-email{
+    font-size: 16px;
+    font-family:qvbook;
+
+  }
+  .info-menu{
+    font-size: 18px;
+    font-family:qvstdmedium;
+    
+  }
+  .info-menu-margin{
+    padding: 20px 0px;
+  }
+  .store-info{
+    font-size: 15px;
+    font-family:qvbook;
+  }
+  .info-address{
+    font-size: 18px;
+    font-family:qvmedium;
+  }
+  .info-background{
+    background-size:cover;
+    background-repeat: no-repeat;
+  }
+ 
+  /* =============== */
