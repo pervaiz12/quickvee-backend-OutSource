@@ -274,7 +274,6 @@ useEffect(()=>{
     </div>
 
     
-    <div>Info</div>
 
   )
 }
