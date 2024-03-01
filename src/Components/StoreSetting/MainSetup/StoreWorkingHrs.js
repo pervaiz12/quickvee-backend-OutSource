@@ -1,57 +1,65 @@
 import React, { useState } from "react";
 import Switch from "@mui/material/Switch";
-import DeleteIcon from "../../../Assests/Filter/DeleteSetup.svg";
-import AddIcon from "../../../Assests/Filter/AddSetup.svg";
+import AddIcon from "../../../Assests/Filter/DeleteSetup.svg";
+import DeleteIcon from "../../../Assests/Filter/AddSetup.svg";
+import CustomItem from "./CustomItem";
+
 
 const StoreWorkingHrs = () => {
-
-  const [newDayAdded, setnewDayAdded] = useState(false)
+  const [newDayAdded, setNewDayAdded] = useState(false);
+  const [selectedTime, setSelectedTime] = useState(new Date());
+  const [selectedRow, setSelectedRow] = useState(null);
   // State and handlers for each day
   const [days, setDays] = useState([
     {
       name: "Sunday",
       open: true,
       startTime: "",
-      endTime: ""
+      endTime: "",
+      className:"day_0_0 day_count_0"
     },
     {
       name: "Monday",
       open: true,
       startTime: "",
-      endTime: ""
+      endTime: "",
+      className:"day_1_0 day_count_1"
     },
     {
       name: "Tuesday",
       open: true,
       startTime: "",
-      endTime: ""
+      endTime: "",
+      className:"day_2_0 day_count_2"
     },
     {
       name: "Wednesday",
       open: true,
       startTime: "",
-      endTime: ""
+      endTime: "",
+      className:"day_3_0 day_count_3"
     },
     {
       name: "Thursday",
       open: false,
       startTime: "",
-      endTime: ""
+      endTime: "",
+      className:"day_4_0 day_count_4"
     },
     {
       name: "Friday",
       open: false,
       startTime: "",
-      endTime: ""
+      endTime: "",
+      className:"day_5_0 day_count_5"
     },
     {
       name: "Saturday",
       open: false,
       startTime: "",
-      endTime: ""
+      endTime: "",
+      className:"day_6_0 day_count_6"
     },
-   
-
   ]);
 
   const handleSwitchChange = (index) => {
@@ -64,6 +72,7 @@ const StoreWorkingHrs = () => {
 
   const handleStartTimeChange = (index, e) => {
     const { value } = e.target;
+
     setDays((prevDays) => {
       const updatedDays = [...prevDays];
       updatedDays[index].startTime = value;
@@ -79,34 +88,44 @@ const StoreWorkingHrs = () => {
       return updatedDays;
     });
   };
-
-  const handleDeleteDay = (index , itemtype) => {
-    if(itemtype === "new"){
+  const handleDeleteDay = (index, itemtype) => {
+    if (itemtype === "new") {
       setDays((prevDays) => {
         const updatedDays = [...prevDays];
         updatedDays.splice(index, 1);
         return updatedDays;
       });
-    }
-    else{
+    } else {
       setDays((prevDays) => {
         const updatedDays = [...prevDays];
-        updatedDays[index].open = "Closed";
+        if (updatedDays[index]) {
+          updatedDays[index].open = "Closed";
+        }
         return updatedDays;
       });
     }
-  };
+  }
 
-  const handleAddDay = () => {
-    setnewDayAdded(true)
-    const newDay = {
-      name: "",
-      open: false,
-      startTime: "",
-      endTime: ""
-    };
-    setDays((prevDays) => [...prevDays, newDay]);
+
+
+
+const handleAddDay = (index) => {
+  setSelectedRow(index);
+  setNewDayAdded(true);
+  const newDay = {
+    name: "",
+    open: false,
+    startTime: "",
+    endTime: "",
+    className:"day_0_1 day_count_0"
   };
+  
+  setDays((prevDays) => {
+    const updatedDays = [...prevDays];
+    updatedDays.splice(index + 1, 0, newDay); 
+    return updatedDays;
+  });
+};
 
   return (
     <div className="box_shadow_div">
@@ -116,7 +135,10 @@ const StoreWorkingHrs = () => {
         </h5>
 
         {days.map((day, index) => (
-          <div key={index} className={`flex day-container ${index % 2 === 0 ? 'even' : 'odd'}`}>
+          <div
+            key={index}
+            className={`flex day-container ${day.className} ${index % 2 === 0 ? "even" : "odd"}`}
+          >
             <div style={{ width: "15%" }}>{day.name}</div>
             <div style={{ width: "15%" }}>
               <Switch
@@ -126,45 +148,40 @@ const StoreWorkingHrs = () => {
               {day.open ? "Open" : "Closed"}
             </div>
             <div className="flex" style={{ width: "45%" }}>
-              <div className="input_area">
-                <input
-                  type="time"
-                  value={day.startTime}
-                  onChange={(e) => handleStartTimeChange(index, e)}
-                  disabled={!day.open}
-                />
+              <div className="">
+                <CustomItem />
               </div>
               <div className="q_store_working_section">
                 <div className="text-center">To</div>
               </div>
-              <div className="input_area">
-                <input
-                  type="time"
-                  value={day.endTime}
-                  onChange={(e) => handleEndTimeChange(index, e)}
-                  disabled={!day.open}
-                />
+              <div className="">
+              <CustomItem />
               </div>
+             
             </div>
-            <div style={{ width: "5%" }}>
 
-              
+
+            <div style={{ width: "5%" }}>
               <div className="flex justify-between">
+                <img
+                  src={DeleteIcon}
+                  alt=""
+                  className="ml-6 mt-2"
+                  onClick={() =>
+                    handleDeleteDay(
+                      index,
+                      index === days.length - 1 && newDayAdded ? "new" : ""
+                    )
+                  }
+                />
                 <img
                   src={AddIcon}
                   alt=""
                   className="ml-6 mt-2"
-                  onClick={() => handleDeleteDay(index, index === days.length - 1 && newDayAdded  ? "new" : "old")}
+                  onClick={() => handleAddDay(index)}
                 />
-                {index === days.length - 1 && (
-                  <img
-                    src={DeleteIcon}
-                    alt=""
-                    className="ml-6 mt-2"
-                    onClick={handleAddDay}
-                  />
-                )}
               </div>
+             
             </div>
           </div>
         ))}
