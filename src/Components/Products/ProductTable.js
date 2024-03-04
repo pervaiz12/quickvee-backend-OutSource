@@ -5,15 +5,20 @@ import { Link } from "react-router-dom";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 // import EditIcon from "../../Assests/Category/editIcon.svg";
 import SortIcon from "../../Assests/Category/Sorting.svg";
-import {fetchProductsData} from "../../Redux/features/Product/ProductSlice";
+import { fetchProductsData } from "../../Redux/features/Product/ProductSlice";
 import { BASE_URL } from "../../Constants/Config";
+import InfiniteScroll from "react-infinite-scroll-component";
+import ProductRow from "./ProductRow";
+
 const ProductTable = () => {
 
   const [productsList, setproductsList] = useState([]);
   const ProductsListDataState = useSelector((state) => state.productsListData);
-  
+  const { hasMore } = useSelector((state) => state.productsListData);
   useEffect(()=> {
-    console.log(ProductsListDataState);
+    console.log(ProductsListDataState.hasMore);
+    console.log(productsList);
+    console.log(ProductsListDataState.page);
   });
   useEffect(() => {
     if (
@@ -32,11 +37,12 @@ const ProductTable = () => {
   useEffect(() => {
     let data = {
       merchant_id: "MAL0100CA",
-      category_id:'all',
-      show_status:'all',
-      listing_type:0,
-      offset:0,
-      limit:10,
+      category_id: 'all',
+      show_status: 'all',
+      listing_type: 0,
+      // offset: 0,
+      limit: 10,
+      page: 0
     };
     if (data) {
       dispatch(fetchProductsData(data));
@@ -44,20 +50,20 @@ const ProductTable = () => {
   }, []);
 
   const [count, setCount] = useState(0);
-  const defaultUrl = BASE_URL+'upload/products/MaskGroup4542.png';
+  const defaultUrl = BASE_URL + 'upload/products/MaskGroup4542.png';
   const handleError = (e) => {
     e.target.src = defaultUrl;
   };
 
-  const checkStatus  = (status) =>{
+  const checkStatus = (status) => {
     switch (status) {
       case "1":
         return "Approved"
         break;
-        case "2":
+      case "2":
         return "Rejected"
         break;
-        case "0":
+      case "0":
         return "Pending"
         break;
       default:
@@ -66,20 +72,58 @@ const ProductTable = () => {
     }
   }
 
-  const Avail_Online= (id,val) => {
-    console.log(id);
-    console.log(val);
+  const Avail_Online = (event) => {
+    console.log(event.target.id);
+    console.log(event.target.name);
   }
+  
+  const [items, setItems] = useState(Array.from({ length: 10 }));
+  const style = {
+    height: 30,
+    border: "1px solid green",
+    margin: 6,
+    padding: 8
+  };
+  const fetchMoreData = () => {
+    let page = 0;
+    if(productsList.length > 0 )
+    {
+       page = productsList.length / 10 ;
+    }
+    //let page = productsList.length / 10 + 1 ;
+    console.log(page+'page');
+    console.log(productsList);
+    let data1 = {
+      merchant_id: "MAL0100CA",
+      format:"json",
+      category_id: 'all',
+      show_status: 'all',
+      listing_type: 0,
+      limit: 10,
+      page : page
+    };
+    if (data1) {
+      dispatch(fetchProductsData(data1));
+      console.log(productsList);
+    }
+    // setTimeout(() => {
+    //   setproductsList(productsList.concat(ProductsListDataState.productsData));
+    // }, 150);
+    setTimeout(() => {
+      setItems(items.concat(Array.from({ length: 15 })));
+    }, 150);
+  };
+
 
   return (
     <>
-      <div className="q-category-bottom-detail-section">
+      <div className="q-category-bottom-detail-section" id='123'>
         <div className="">
           <div className="q-category-bottom-header">
             <span>Products</span>
             <p className="">
-            <Link to="/product-add">
-              Add New Product
+              <Link to="/product-edit">
+                Add New Product
               </Link>
               <Link to="/product-add">
                 <img src={AddIcon} alt="add-icon" />
@@ -87,95 +131,101 @@ const ProductTable = () => {
             </p>
           </div>
           <div className="q-category-bottom-detail-section">
-        <div className="q-category-bottom-header-sticky">
-        <div className="q-category-bottom-categories-header">
-            <p className="categories-sort">Sort</p>
-            <p className="categories-title">Title</p>
-            <p className="categories-sort"></p>
-            <p className="categories-items">Category</p>
-            <p className="categories-sort"></p>
-            <p className="categories-enable-disable" >Enable online ordering?</p>
-            <p className="categories-items">Product Status</p>
-            <p className="categories-sort"></p>
-            <p className="categories-items" style={{width:"50%"}}>Images</p>
-            <p className=""></p>
-          </div>
-
-          {productsList &&
-            productsList.length >= 1 &&
-            productsList.map((product, index) => (
-          <div key={index} className="q-attributes-bottom-attriButes-single-attributes">
-            <p className="categories-sort"><img src={SortIcon} alt="" className="" /></p>
-            <p className="categories-title">{product.title}</p>
-            <p className="categories-sort"></p>
-            <p className="categories-title">{product.category_name}</p>
-            <p className="categories-sort"></p>
-            <p className="categories-enable-disable" >
-              <div className="flex flex-col">
-            <div className="qv_checkbox">
-              <label className="qv_checkbox_add_checkmark_label">
-              Delivery
-                <input
-                  type="checkbox"
-                  id={"delivery_check"+product.id}
-                  name="delivery_check"
-                  checked= {(product.show_type == 0 || product.show_type == 2) ? true : false}
-                  value="2"
-                  onChange={() => {Avail_Online(product.id,2);}}
-                />
-                <span className="qv_add_checkmark"></span>
-              </label>
-            </div>
-            <div className="qv_checkbox">
-              <label className="qv_checkbox_add_checkmark_label">
-              Pickup
-                <input
-                  type="checkbox"
-                  id="pickup_check"
-                  name="pickup_check"
-                  checked= {{}}
-                  value={{}}
-                  onClick={() => { console.log('Clicked'); }}
-                />
-                <span className="qv_add_checkmark"></span>
-              </label>
-            </div>
-            </div>
-            </p>
-            <p className="categories-title">{checkStatus(product.show_status)}    </p>
-            <p className="categories-sort"></p>
-            <p className="categories-items" style={{width:"50%"}}>
-
-
-            <div class="flex items-center space-x-2 text-base">
-   
-            </div>
-            <div class="mt-3 flex -space-x-2 overflow-hidden">
-              { 
-               product.media.split(",").slice(0, 4).map((item, index) => (
+            <div className="q-category-bottom-header-sticky">
+              <div className="q-category-bottom-categories-header" style={{ position: "sticky" , top : "0px" }} >
+                <p className="categories-sort">Sort</p>
+                <p className="categories-title">Title</p>
+                <p className="categories-sort"></p>
+                <p className="categories-items">Category</p>
+                <p className="categories-sort"></p>
+                <p className="categories-enable-disable" >Enable online ordering?</p>
+                <p className="categories-items">Product Status</p>
+                <p className="categories-sort"></p>
+                <p className="categories-items" >Images</p>
+                <p className=""></p>
+              </div>
+          
+              <div  id="scrollableDiv" style={{ height: 300 , overflow: "auto" }}>
+                <InfiniteScroll 
+                  dataLength={productsList.length}
+                  next={fetchMoreData}
+                  hasMore={hasMore}
+                  loader={<h4>Loading...</h4>}
+                  scrollableTarget="scrollableDiv" 
+                  endMessage = {<h3>ALl products have been listed above</h3>}
+                  >
+                  {
+                  productsList?.length >= 1 &&
+                  productsList.map((product, index) => (
                   
-                  <img key={index} class="inline-block h-12 w-12 rounded-full ring-2 ring-white" src={BASE_URL+"upload/products/MAL0100CA/"+item} onError={handleError}  alt=""/>
-                ))}
+                  // add function in below object 
+                  <ProductRow {...{ Avail_Online, index, product, checkStatus, handleError }} />
+
+                // <div key={index} className="q-attributes-bottom-attriButes-single-attributes">
+                //   <p className="categories-sort"><img src={SortIcon} alt="" className="" /></p>
+                //   <p className="categories-title">{product.title}</p>
+                //   <p className="categories-sort"></p>
+                //   <p className="categories-title">{product.category_name}</p>
+                //   <p className="categories-sort"></p>
+                  
+                //   <div className="categories-title">
+                //   <div className="flex flex-wrap gap-3 ">
+                //     <label className="q_resigter_setting_section" style={{color:"#000",fontSize:"18px"}}>Delivery
+                //       <input type="checkbox"  
+                //               id={"delivery_check"+product.id}
+                //               name="delivery_check"
+                //               checked= {(product.show_type == 0 || product.show_type == 2) ? true : false}
+                //               value="2"
+                //               onChange={(event) => {Avail_Online(event);}} 
+                //       />
+                //       <span className="checkmark"></span></label>
+                //     <label className="q_resigter_setting_section" style={{color:"#000",fontSize:"18px"}}>Pickup
+                //       <input type="checkbox"
+                //             id={"pickup_check"+product.id}
+                //             name="pickup_check"
+                //             checked= {(product.show_type == 0 || product.show_type == 1) ? true : false}
+                //             value="1"
+                //             onChange={(event) => {Avail_Online(event);}} 
+                //       />
+                //       <span className="checkmark"></span></label>
+                //   </div>
+                //   </div>
+                //   <p className="categories-sort"></p>
+                //   <p className="categories-title">{checkStatus(product.show_status)}    </p>
+                //   <p className="categories-sort"></p>
+                //   <div className="categories-items" style={{width:"50%"}}>
+
+
+                //   <div className="flex items-center space-x-2 text-base">
+        
+                //   </div>
+                //   <div className="mt-3 flex -space-x-2 overflow-hidden">
+                //     { 
+                //     product?.media?.split(",").slice(0, 4).map((item, index) => (
+                        
+                //         <img key={index} className="inline-block h-12 w-12 rounded-full ring-2 ring-white" src={BASE_URL+"upload/products/MAL0100CA/"+item} onError={handleError}  alt=""/>
+                //       ))}
+                //   </div>
+                //   {( product?.media?.split(",").length>4) ? (
+                //       <div className="mt-3 text-sm font-medium">
+                //         <a href="#" className="text-blue-500">+ {product.media.split(",").length - 4 } others</a>
+                //       </div>
+                //     ): ''
+                //   }
+                  
+                  
+
+                //   </div>
+                //   <p className=""><img src={DeleteIcon} alt=" " className="w-16 h-16" /></p>
+                // </div>
+                )
+                )}
+                </InfiniteScroll>
+              </div>
             </div>
-            {( product.media.split(",").length>4) ? (
-                <div class="mt-3 text-sm font-medium">
-                  <a href="#" class="text-blue-500">+ {product.media.split(",").length - 4 } others</a>
-                </div>
-              ): ''
-            }
-             
-            
-
-            </p>
-            <p className=""><img src={DeleteIcon} alt=" " className="w-16 h-16" /></p>
           </div>
-          ))}
-
-
         </div>
-        </div>
-        </div>
-        </div>
+      </div>
     </>
   );
 };

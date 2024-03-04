@@ -5,6 +5,8 @@ import { BASE_URL, PRODUCTS_LIST } from "../../../Constants/Config";
 const initialState = {
     loading: false,
     productsData: [],
+    page: 0,
+    hasMore: true,
     successMessage: "",
     error: '',
 }
@@ -15,7 +17,7 @@ export const fetchProductsData = createAsyncThunk('products/fetchProductsData.',
     try {
         const response = await axios.post(BASE_URL + PRODUCTS_LIST, data, { headers: { "Content-Type": "multipart/form-data" } })
         // console.log(response)
-        if (response.status === 200) {
+        if (response.status === 200) {                          
            return response.data;
         }
     } catch (error) {
@@ -52,7 +54,19 @@ const productsSlice = createSlice({
         })
         builder.addCase(fetchProductsData.fulfilled, (state, action) => {
             state.loading = false;
-            state.productsData = action.payload;
+            // state.productsData = action.payload;
+            // state.productsData = [...state.productsData, ...action.payload];
+            // Ensure productsData is always treated as an array
+            if (!Array.isArray(state.productsData)) {
+                state.productsData = [];
+            }
+            console.log(state.productsData);
+            // Append new items to the productsData array
+            state.productsData.push(...action.payload);
+           
+            state.page += 1;
+             console.log(state.page);
+            state.hasMore = action.payload.length > 0;
             state.error = '';
         })
         builder.addCase(fetchProductsData.rejected, (state, action) => {
