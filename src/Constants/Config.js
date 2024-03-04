@@ -75,6 +75,9 @@ module.exports = Object.freeze({
   COUPON_STATUS_UPDATE: "Couponapi/show_online",
   COUPON_DELETE: "Couponapi/delete_coupon",
   COUPON_TITLE_CHECK: "Couponapi/check_coupon_title",
+  COUPON_DETAILS_ID_CHECK: "Couponapi/get_edit_coupon_details",
+  EDIT_COUPON: "Couponapi/edit_coupon",
+  ADD_COUPON: "Couponapi/add_coupon",
 
   // System Access API Calls Listing and Update
   LIST_ALL_SYSTEM_ACCESS: "api/Settings_api/system_access",
