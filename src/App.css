@@ -8,7 +8,6 @@
   font-size: 40px;
 }
 
-
 @font-face {
   font-family: adminbold;
   src: url(./Assests/Fonts/circular-bold.TTF);
@@ -335,20 +334,26 @@ select option {
   }
 }
 
+
+
+
 .dataCalender {
   background-color: #fff;
   z-index: 5;
-  right: -0.5rem;
-  top: 3.5rem;
+  top: 13.5rem;
+  bottom: 3px;
+  z-index: 5;
+right: 6.5rem;
+  top: 11.5rem;
   bottom: 3px;
 
   position: absolute;
-  display: flex;
+  /* display: flex; */
   transition:
-    width 2s,
+    width 5s,
     height 4s;
   height: 550px;
-  width: 90%;
+   width: 70%; 
   padding: 12px;
   box-shadow: 0px 3px 6px #0000001f;
   border-radius: 8px;
@@ -359,7 +364,7 @@ select option {
   width: 0px;
   height: 0px;
   display: none;
-}
+} */
 
 .days_btn {
   border-width: 1px;
@@ -367,6 +372,13 @@ select option {
   padding-right: 3.5rem;
   padding-top: 1rem;
   padding-bottom: 1rem;
+}
+
+
+
+ul li .q_filter_data_days{
+  display: flex;
+  flex-direction: row;
 }
 
 .pagination {
@@ -414,11 +426,12 @@ select option {
 .active_link_pagination {
   color: #fff;
 }
-
-.select_date_btn {
-  padding-left: 2rem;
-  padding-right: 4rem;
-}
+ .select_date_btn {
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 10px 40px;
+  width: 90%;
+} 
 
 .days_filter {
   color: #707070;
@@ -428,6 +441,10 @@ select option {
   font-weight: normal;
 }
 
+a.days_filter {
+  display: flex;
+  justify-content: space-between;
+}
 .main_blocks {
   margin-right: -2.4rem;
   margin-left: -2.4rem;

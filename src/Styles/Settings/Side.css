@@ -370,3 +370,10 @@ border:1px solid #0A64F9 }
 .even {
   background-color: #ffffff; /* White background for even days */
 }
+
+
+/* ul{
+  padding-right: 0px;
+  width: calc(100% + 0px);
+  height: 250px;
+} */

@@ -2355,7 +2355,7 @@ margin: 5px 0 15px 0;
 
   .variant-attributes-container {
     position: relative;
-    min-height: 50vh; /* Ensures that the container takes at least the full height of the viewport */
+    /* min-height: 50vh;  */
   }
   
   /* .q-add-categories-section-middle-footer {
