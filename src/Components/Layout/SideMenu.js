@@ -38,6 +38,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
   const currentUrl = location.pathname;
 
   const [activeItem, setActiveItem] = useState(currentUrl);
+  
   const navigate = useNavigate();
 
   const handleItemClick = (item) => {
@@ -67,6 +68,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                   {item.dropdownItems ? (
                     <DropdownMenuItem item={item} isMenuOpen={isMenuOpen} />
                   ) : (
+                    
                     <div
                       className={`flex items-center ${
                         
@@ -87,6 +89,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                       >
                         {item.text}
                       </Link>
+                     
                     </div>
                   )}
                 </div>
@@ -115,6 +118,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                     </div>
                   )}
                 </div>
+                
               ))}
         </div>
       </div>
@@ -144,7 +148,7 @@ const DropdownMenuItem = ({ item, isMenuOpen }) => {
   }
 
   const handleToggleDropdown = () => {
-   console.log("calling")
+  //  console.log("calling")
     setIsDropdownOpen(!isDropdownOpen)
   
   }

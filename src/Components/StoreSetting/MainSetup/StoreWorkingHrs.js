@@ -3,12 +3,15 @@ import Switch from "@mui/material/Switch";
 import AddIcon from "../../../Assests/Filter/DeleteSetup.svg";
 import DeleteIcon from "../../../Assests/Filter/AddSetup.svg";
 import CustomItem from "./CustomItem";
+import ClockIcon from "../../../Assests/Filter/Clock.svg"
 
 
 const StoreWorkingHrs = () => {
   const [newDayAdded, setNewDayAdded] = useState(false);
   const [selectedTime, setSelectedTime] = useState(new Date());
   const [selectedRow, setSelectedRow] = useState(null);
+  const [classItem, setClassItem] = useState(1)
+  
   // State and handlers for each day
   const [days, setDays] = useState([
     {
@@ -41,26 +44,27 @@ const StoreWorkingHrs = () => {
     },
     {
       name: "Thursday",
-      open: false,
+      open: true,
       startTime: "",
       endTime: "",
       className:"day_4_0 day_count_4"
     },
     {
       name: "Friday",
-      open: false,
+      open: true,
       startTime: "",
       endTime: "",
       className:"day_5_0 day_count_5"
     },
     {
       name: "Saturday",
-      open: false,
+      open: true,
       startTime: "",
       endTime: "",
       className:"day_6_0 day_count_6"
     },
   ]);
+
 
   const handleSwitchChange = (index) => {
     setDays((prevDays) => {
@@ -70,56 +74,31 @@ const StoreWorkingHrs = () => {
     });
   };
 
-  const handleStartTimeChange = (index, e) => {
-    const { value } = e.target;
 
+  const handleDeleteDay = (index) => {
     setDays((prevDays) => {
       const updatedDays = [...prevDays];
-      updatedDays[index].startTime = value;
+      updatedDays.splice(index, 1); 
       return updatedDays;
     });
   };
 
-  const handleEndTimeChange = (index, e) => {
-    const { value } = e.target;
-    setDays((prevDays) => {
-      const updatedDays = [...prevDays];
-      updatedDays[index].endTime = value;
-      return updatedDays;
-    });
-  };
-  const handleDeleteDay = (index, itemtype) => {
-    if (itemtype === "new") {
-      setDays((prevDays) => {
-        const updatedDays = [...prevDays];
-        updatedDays.splice(index, 1);
-        return updatedDays;
-      });
-    } else {
-      setDays((prevDays) => {
-        const updatedDays = [...prevDays];
-        if (updatedDays[index]) {
-          updatedDays[index].open = "Closed";
-        }
-        return updatedDays;
-      });
-    }
-  }
-
-
+  
 
 
 const handleAddDay = (index) => {
   setSelectedRow(index);
   setNewDayAdded(true);
+  
+  
   const newDay = {
     name: "",
-    open: false,
+    open: "",
     startTime: "",
     endTime: "",
-    className:"day_0_1 day_count_0"
+    className: `day_0_${classItem} day_count_0`
   };
-  
+  setClassItem(classItem+1)
   setDays((prevDays) => {
     const updatedDays = [...prevDays];
     updatedDays.splice(index + 1, 0, newDay); 
@@ -135,56 +114,55 @@ const handleAddDay = (index) => {
         </h5>
 
         {days.map((day, index) => (
-          <div
-            key={index}
-            className={`flex day-container ${day.className} ${index % 2 === 0 ? "even" : "odd"}`}
-          >
-            <div style={{ width: "15%" }}>{day.name}</div>
-            <div style={{ width: "15%" }}>
-              <Switch
-                checked={day.open}
-                onChange={() => handleSwitchChange(index)}
-              />
-              {day.open ? "Open" : "Closed"}
-            </div>
-            <div className="flex" style={{ width: "45%" }}>
-              <div className="">
-                <CustomItem />
-              </div>
-              <div className="q_store_working_section">
-                <div className="text-center">To</div>
-              </div>
-              <div className="">
-              <CustomItem />
-              </div>
-             
-            </div>
+  <div
+    key={index}
+    className={`flex day-container ${day.className} ${index % 2 === 0 ? "even" : "odd"}`}
+  >
+    <div style={{ width: "15%" }}>{day.name}</div>
+    <div style={{ width: "15%" }}>
+      {day.open === "" ? "" : <Switch checked={day.open} onChange={() => handleSwitchChange(index)} />}
+    </div>
+    <div className="flex" style={{ width: "45%" }}>
+      {day.open  ? <CustomItem /> : null}
+      {/* <CustomItem /> */}
+    </div>
+    <div style={{ width: "5%", zIndex: "999" }}>
+      <div className="flex justify-between">
+        {day.name === "" ? (
+          <img
+            src={DeleteIcon}
+            alt=""
+            className="ml-6 mt-2"
+            onClick={() => handleDeleteDay(index)}
+          />
+        ) : (
+          ""
+        )}
+        {day.open ? (
+          <img
+            src={AddIcon}
+            alt=""
+            className="ml-6 mt-2"
+            onClick={() => handleAddDay(index)}
+          />
+        ) : (
+         <>
+         
+         {day.open ? <img
+              src={AddIcon}
+              alt=""
+              className="ml-6 mt-2"
+              onClick={() => handleAddDay(index)}
+            /> : null}
+         </>
 
+          
+        )}
+      </div>
+    </div>
+  </div>
+))}
 
-            <div style={{ width: "5%" }}>
-              <div className="flex justify-between">
-                <img
-                  src={DeleteIcon}
-                  alt=""
-                  className="ml-6 mt-2"
-                  onClick={() =>
-                    handleDeleteDay(
-                      index,
-                      index === days.length - 1 && newDayAdded ? "new" : ""
-                    )
-                  }
-                />
-                <img
-                  src={AddIcon}
-                  alt=""
-                  className="ml-6 mt-2"
-                  onClick={() => handleAddDay(index)}
-                />
-              </div>
-             
-            </div>
-          </div>
-        ))}
       </div>
     </div>
   );
