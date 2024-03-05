@@ -5,7 +5,8 @@ import axios from "axios";
 import {
   BASE_URL,
   COUPON_DETAILS_ID_CHECK,
-  COUPON_TITLE_CHECK, EDIT_COUPON
+  COUPON_TITLE_CHECK,
+  EDIT_COUPON,
 } from "../../Constants/Config";
 import Switch from "@mui/material/Switch";
 import Grid from "@mui/material/Grid";
@@ -84,7 +85,6 @@ const EditCoupon = () => {
           time_expire: res[0].time_expire,
           count_limit: res[0].count_limit,
           flag: res[0].flag,
-
         });
 
         setCouponStates({
@@ -189,7 +189,6 @@ const EditCoupon = () => {
     });
   };
 
-
   const navigate = useNavigate();
 
   const [minOrderAmountError, setMinOrderAmountError] = useState("");
@@ -204,8 +203,8 @@ const EditCoupon = () => {
 
     if (parseFloat(coupon.min_amount) <= parseFloat(coupon.discount)) {
       alert("Minimum order amount must be greater than the discount amount.");
-      setCoupon({ ...coupon, discount: '' });
-      setDiscountError("Discount Amount is required")
+      setCoupon({ ...coupon, discount: "" });
+      setDiscountError("Discount Amount is required");
       return; // Stop further execution
     }
     if (!coupon.date_valid || !coupon.date_expire) {
@@ -225,7 +224,7 @@ const EditCoupon = () => {
       setDiscountError("Discount Amount is required");
       return; // Stop further execution
     } else if (coupon.discount === "") {
-      return
+      return;
     } else {
       setDiscountError("");
     }
@@ -239,7 +238,6 @@ const EditCoupon = () => {
     } else {
       setDateMaxDisAMTError("");
     }
-
 
     if (!coupon.date_valid) {
       setDateStartError("Start Date is required");
@@ -322,7 +320,6 @@ const EditCoupon = () => {
     }
   };
 
-
   const handleStartTimeChange = (newTime) => {
     setCoupon({
       ...coupon,
@@ -336,7 +333,6 @@ const EditCoupon = () => {
     });
   };
 
-
   const handleStartDateChange = (newDate) => {
     const formattedStartDate = newDate.format("YYYY-MM-DD");
     if (formattedStartDate === coupon.date_expire) {
@@ -345,17 +341,20 @@ const EditCoupon = () => {
         ...coupon,
         date_valid: "",
       });
+      setDateStartError("Start Date is required");
     } else if (dayjs(formattedStartDate).isAfter(dayjs(coupon.date_expire))) {
       alert("Start date cannot be greater than the end date");
       setCoupon({
         ...coupon,
         date_valid: "",
       });
+      setDateStartError("Start Date is required");
     } else {
       setCoupon({
         ...coupon,
         date_valid: formattedStartDate,
       });
+      setDateStartError("");
     }
   };
 
@@ -368,65 +367,65 @@ const EditCoupon = () => {
         ...coupon,
         date_expire: "",
       });
+      setDateEndError("End Date is required");
       return; // Do not update the state
-
     } else if (dayjs(formattedEndDate).isBefore(dayjs(coupon.date_valid))) {
       alert("End date cannot be less than the start date");
       setCoupon({
         ...coupon,
         date_expire: "",
       });
+      setDateEndError("End Date is required");
     } else {
       setCoupon({
         ...coupon,
         date_expire: formattedEndDate,
       });
+      setDateEndError("");
     }
   };
 
   const handleMinAmountChange = (e) => {
     const inputValue = e.target.value;
-    if (inputValue.trim() === '') {
-      setMinOrderAmountError('Minimum Order Amount is required');
-      setCoupon({ ...coupon, min_amount: '' });
+    if (inputValue.trim() === "") {
+      setMinOrderAmountError("Minimum Order Amount is required");
+      setCoupon({ ...coupon, min_amount: "" });
     } else {
       setCoupon({ ...coupon, min_amount: inputValue });
-      setMinOrderAmountError('');
+      setMinOrderAmountError("");
     }
   };
   const handleDiscountAmountChange = (e) => {
     const inputValue = e.target.value;
-    if (inputValue.trim() === '') {
-      setDiscountError('Discount Amount is required');
-      setCoupon({ ...coupon, discount: '' });
+    if (inputValue.trim() === "") {
+      setDiscountError("Discount Amount is required");
+      setCoupon({ ...coupon, discount: "" });
     } else {
       setCoupon({ ...coupon, discount: inputValue });
-      setDiscountError('');
+      setDiscountError("");
     }
   };
   const handleDiscountPercentChange = (e) => {
     const inputValue = e.target.value;
-    if (inputValue.trim() === '') {
-      setDiscountError('Discount Percentage is required');
-      setCoupon({ ...coupon, discount: '' });
+    if (inputValue.trim() === "") {
+      setDiscountError("Discount Percentage is required");
+      setCoupon({ ...coupon, discount: "" });
     } else {
       setCoupon({ ...coupon, discount: inputValue });
-      setDiscountError('');
+      setDiscountError("");
     }
   };
 
   const handleMaxDiscountChange = (e) => {
     const inputValue = e.target.value;
-    if (inputValue.trim() === '') {
-      setDateMaxDisAMTError('Maximum Discount Amount is required');
-      setCoupon({ ...coupon, maximum_discount: '' });
+    if (inputValue.trim() === "") {
+      setDateMaxDisAMTError("Maximum Discount Amount is required");
+      setCoupon({ ...coupon, maximum_discount: "" });
     } else {
       setCoupon({ ...coupon, maximum_discount: inputValue });
-      setDateMaxDisAMTError('');
+      setDateMaxDisAMTError("");
     }
   };
-
-
 
   return (
     <>
@@ -443,9 +442,8 @@ const EditCoupon = () => {
                 </Link>
               </div>
               <div className="q-add-categories-section-middle-form">
-
                 <div className="q_coupon_Add_status_btn">
-                  <p>show online</p>
+                  <p>Show Online</p>
                   <Switch
                     name="online"
                     id="online"
@@ -540,7 +538,6 @@ const EditCoupon = () => {
                                 name="discount"
                                 placeholder="Enter Discount Percentage"
                                 value={coupon.discount}
-
                                 onChange={(e) => handleDiscountPercentChange(e)}
                               />
                               {discountError && (
@@ -554,20 +551,22 @@ const EditCoupon = () => {
                             <Grid container>
                               <Grid item xs={6}>
                                 <div
-                                  className={`cursor-pointer amt_btn text-center   ${activeTab === "amount"
-                                    ? "bg-[#0A64F9] text-white radius-4"
-                                    : ""
-                                    }`}
+                                  className={`cursor-pointer amt_btn text-center   ${
+                                    activeTab === "amount"
+                                      ? "bg-[#0A64F9] text-white radius-4"
+                                      : ""
+                                  }`}
                                 >
                                   Amount ($)
                                 </div>
                               </Grid>
                               <Grid item xs={6}>
                                 <div
-                                  className={`cursor-pointer amt_btn text-center  ${activeTab === "percentage"
-                                    ? "bg-[#0A64F9] text-white radius-4"
-                                    : ""
-                                    }`}
+                                  className={`cursor-pointer amt_btn text-center  ${
+                                    activeTab === "percentage"
+                                      ? "bg-[#0A64F9] text-white radius-4"
+                                      : ""
+                                  }`}
                                 >
                                   Percentage (%)
                                 </div>
@@ -588,7 +587,6 @@ const EditCoupon = () => {
                       type="number"
                       id="maximum_discount"
                       name="maximum_discount"
-
                       placeholder="Enter Maximum Discount Amount"
                       value={coupon.maximum_discount}
                       onChange={(e) => handleMaxDiscountChange(e)}
@@ -620,13 +618,21 @@ const EditCoupon = () => {
                               className="date-provider"
                             >
                               <DatePicker
-                                label="Start date"
+                                slotProps={{ textField: { placeholder: 'Start Date' } }}
                                 minDate={dayjs(new Date())}
-                                value={dayjs(new Date(Date.parse(coupon.date_valid)))}
-                                onChange={(newDate) => handleStartDateChange(newDate)}
-                                shouldDisableDate={(date) => date.format("YYYY-MM-DD") === coupon.date_valid}
+                                value={dayjs(
+                                  new Date(Date.parse(coupon.date_valid))
+                                )}
+                                onChange={(newDate) =>
+                                  handleStartDateChange(newDate)
+                                }
+                                shouldDisableDate={(date) =>
+                                  date.format("YYYY-MM-DD") ===
+                                  coupon.date_valid
+                                }
+                                format={"DD-MM-YYYY"}
                                 disablePast
-                                views={['year', 'month', 'day']}
+                                views={["year", "month", "day"]}
                                 renderInput={() => (
                                   <input
                                     name="start_date"
@@ -640,22 +646,22 @@ const EditCoupon = () => {
                                   ),
                                 }}
                               />
-
-
                             </LocalizationProvider>
                             {dateStartError && (
-                              <p className="error-message">{dateStartError}</p>
+                              <p className="error-message date_error">{dateStartError}</p>
                             )}
                             <div className="dividersss" />
                             <div className="q_time_display">
                               <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <TimePicker
-                                  label="Start Time"
+                                  slotProps={{ textField: { placeholder: 'Start Time' } }}
                                   className="input_label_section"
                                   name="start_tym"
                                   id="start_tym"
-                                  value={dayjs(coupon.time_valid, 'HH:mm:ss')}
-                                  onChange={(newTime) => handleStartTimeChange(newTime)}
+                                  value={dayjs(coupon.time_valid, "HH:mm:ss")}
+                                  onChange={(newTime) =>
+                                    handleStartTimeChange(newTime)
+                                  }
                                   components={{
                                     OpenPickerIcon: () => (
                                       <img src={TimeIcon} alt="time-icon" />
@@ -685,14 +691,23 @@ const EditCoupon = () => {
                               className="date-provider"
                             >
                               <DatePicker
-
-                                label="End date"
+                                slotProps={{
+                                  textField: { placeholder: "End Date" },
+                                }}
                                 minDate={dayjs(new Date())}
-                                value={dayjs(new Date(Date.parse(coupon.date_expire)))}
-                                onChange={(newDate) => handleEndDateChange(newDate)}
-                                shouldDisableDate={(date) => date.format("YYYY-MM-DD") === coupon.date_expire}
+                                value={dayjs(
+                                  new Date(Date.parse(coupon.date_expire))
+                                )}
+                                onChange={(newDate) =>
+                                  handleEndDateChange(newDate)
+                                }
+                                shouldDisableDate={(date) =>
+                                  date.format("YYYY-MM-DD") ===
+                                  coupon.date_expire
+                                }
+                                format={"DD-MM-YYYY"}
                                 disablePast
-                                views={['year', 'month', 'day']}
+                                views={["year", "month", "day"]}
                                 renderInput={() => (
                                   <input
                                     name="end_date"
@@ -707,19 +722,23 @@ const EditCoupon = () => {
                                 }}
                               />
                               {dateEndError && (
-                                <p className="error-message">{dateEndError}</p>
+                                <p className="error-message date_error">{dateEndError}</p>
                               )}
                             </LocalizationProvider>
                             <div className="dividersss" />
                             <div className="q_time_display">
                               <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <TimePicker
-                                  label="End Time"
+                                  slotProps={{
+                                    textField: { placeholder: "End Time" },
+                                  }}
                                   className="input_label_section"
                                   name="end_tym"
                                   id="end_tym"
-                                  value={dayjs(coupon.time_expire, 'HH:mm:ss')}
-                                  onChange={(newTime) => handleEndTimeChange(newTime)}
+                                  value={dayjs(coupon.time_expire, "HH:mm:ss")}
+                                  onChange={(newTime) =>
+                                    handleEndTimeChange(newTime)
+                                  }
                                   components={{
                                     OpenPickerIcon: () => (
                                       <img src={TimeIcon} alt="time-icon" />
@@ -764,7 +783,12 @@ const EditCoupon = () => {
                       name="count_limit"
                       min={1}
                       max={999}
-                      value={coupon.count_limit === null || coupon.count_limit === "0" ? 1 : Math.min(coupon.count_limit, 999)}
+                      value={
+                        coupon.count_limit === null ||
+                        coupon.count_limit === "0"
+                          ? 1
+                          : Math.min(coupon.count_limit, 999)
+                      }
                       onChange={(e) =>
                         setCoupon({
                           ...coupon,
@@ -773,11 +797,15 @@ const EditCoupon = () => {
                       }
                     />
                   </div>
-
                 )}
 
                 <div className="q-add-categories-section-middle-footer">
-                  <button className="quic-btn quic-btn-save" onClick={handleSave}>Save</button>
+                  <button
+                    className="quic-btn quic-btn-save"
+                    onClick={handleSave}
+                  >
+                    Save
+                  </button>
 
                   <Link to={`/coupons`}>
                     <button className="quic-btn quic-btn-cancle">Cancel</button>

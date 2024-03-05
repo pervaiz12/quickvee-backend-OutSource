@@ -915,3 +915,9 @@ img.clock_design{
   justify-content: center;
   align-items: center;
 }
+
+.date_error{
+  position: absolute;
+  transform: translate(0px, 3rem);
+
+}
