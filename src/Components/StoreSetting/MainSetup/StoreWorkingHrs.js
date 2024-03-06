@@ -114,55 +114,63 @@ const handleAddDay = (index) => {
         </h5>
 
         {days.map((day, index) => (
-  <div
-    key={index}
-    className={`flex day-container ${day.className} ${index % 2 === 0 ? "even" : "odd"}`}
-  >
-    <div style={{ width: "15%" }}>{day.name}</div>
-    <div style={{ width: "15%" }}>
-      {day.open === "" ? "" : <Switch checked={day.open} onChange={() => handleSwitchChange(index)} />}
-    </div>
-    <div className="flex" style={{ width: "45%" }}>
-      {day.open  ? <CustomItem /> : null}
-      {/* <CustomItem /> */}
-    </div>
-    <div style={{ width: "5%", zIndex: "999" }}>
-      <div className="flex justify-between">
-        {day.name === "" ? (
-          <img
-            src={DeleteIcon}
-            alt=""
-            className="ml-6 mt-2"
-            onClick={() => handleDeleteDay(index)}
-          />
-        ) : (
-          ""
-        )}
-        {day.open ? (
-          <img
-            src={AddIcon}
-            alt=""
-            className="ml-6 mt-2"
-            onClick={() => handleAddDay(index)}
-          />
-        ) : (
-         <>
-         
-         {day.open ? <img
-              src={AddIcon}
-              alt=""
-              className="ml-6 mt-2"
-              onClick={() => handleAddDay(index)}
-            /> : null}
-         </>
+          <div
+            key={index}
+            className={`flex day-container ${day.className} ${index % 2 === 0 ? "even" : "odd"}`}
+          >
+            <div style={{ width: "15%" }}>{day.name}</div>
+            <div style={{ width: "15%" }}>
+  {
+    day.open === "" ? "" : (
+      <>
+        <Switch
+          checked={day.open}
+          onChange={() => handleSwitchChange(index)}
+        />
+        <span>Open</span>
+      </>
+    )
+  }
+</div>
+       
+            <div className="flex" style={{ width: "45%" }}>
+              <div className="">
+                <CustomItem />
+                
+              </div>
+              {/* <div className="q_store_working_section">
+                <div className="text-center">To</div>
+              </div> */}
+              {/* <div className="">
+              <CustomItem />
+              <img src={ClockIcon} alt="" className="w-6 h-6 ml-auto relative bottom-9 right-2" />
+              </div> */}
+             
+            </div>
 
-          
-        )}
-      </div>
-    </div>
-  </div>
-))}
 
+            <div style={{ width: "5%", zIndex:"999" }}>
+              <div className="flex justify-between" >
+                {
+                 
+                  day.name === "" ? <img
+                  src={DeleteIcon}
+                  alt=""
+                  className="ml-6 mt-2 "
+                  onClick={() => handleDeleteDay(index)}
+                /> : ""
+                } 
+                <img
+                  src={AddIcon}
+                  alt=""
+                  className="ml-6 mt-2"
+                  onClick={() => handleAddDay(index)}
+                />
+              </div>
+             
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
