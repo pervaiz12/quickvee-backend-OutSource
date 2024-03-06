@@ -460,12 +460,12 @@ const EditCoupon = () => {
                   />
                 </div>
                 <div className="q-add-coupon-single-input">
-                  <label for="coupon_name">Coupon Code</label>
+                  <label htmlFor="coupon_name">Coupon Code</label>
                   <input
                     type="text"
                     id="coupon_name"
                     name="coupon_name"
-                    maxlength="11"
+                    maxLength="11"
                     value={inputValue || coupon.name}
                     readOnly
                     onChange={handleInputChange}
@@ -476,7 +476,7 @@ const EditCoupon = () => {
                 </div>
 
                 <div className="q-add-coupon-single-input">
-                  <label for="description">Description</label>
+                  <label htmlFor="description">Description</label>
                   <textarea
                     id="description"
                     name="description"
@@ -580,7 +580,7 @@ const EditCoupon = () => {
                 </Grid>
                 {activeTab === "percentage" && (
                   <div className="q_coupon_minium input_area">
-                    <label for="maximum_discount">
+                    <label htmlFor="maximum_discount">
                       Maximum Discount Amount
                     </label>
                     <input
@@ -598,7 +598,7 @@ const EditCoupon = () => {
                 )}
 
                 <div className="q_coupon_minium my-4">
-                  <label for="coupon">Date & Time</label>
+                  <label htmlFor="coupon">Date & Time</label>
                   <div className="flex flex-row gap-5">
                     <Grid container spacing={2}>
                       <Grid item xs={6}>
