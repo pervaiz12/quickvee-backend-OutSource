@@ -39,7 +39,7 @@ const TaxesDetails = ({ data }) => {
       return (
         <>
           <div className="q-attributes-bottom-detail-section">
-            <div className="q-attributes-bottom-attriButes-header text-center">
+            <div className="q-attributes-bottom-attriButes-header text-center" style={{borderRadius:" 8px 8px 0px 0px"}}>
               <p className="q-employee-item">Tax or Fee</p>
               <p className="q-employee-in">Tax Rate or Fee</p>
               <p className="q-employee-in"> Tax or Fee Refunded</p>
