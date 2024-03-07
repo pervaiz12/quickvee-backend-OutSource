@@ -2,26 +2,31 @@ import React, { useState, useEffect, useRef } from "react";
 import SearchIcon from "../../../Assests/Filter/Search.svg"
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
 
-const MainOnline = () => {
+const MainOnline = ({onFilterDataChange}) => {
   const [searchId, setSearchId] = useState(""); // State to track search ID
 
   const handleSearch = () => {
     console.log("Search ID:", searchId);
   };
 
-  const [selectedEmployee, setSelectedEmployee] = useState("All");
-  const [selectedTransaction, setSelectedTransaction] = useState("All");
+  // const [selectedEmployee, setSelectedEmployee] = useState("All");
+  const [selectedTransaction, setSelectedTransaction] = useState("Both");
+  const [selectedOrderStatus, setSelectedOrderStatus] = useState("New");
 
-  const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
+  // const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
   const [transactionDropdownVisible, setTransactionDropdownVisible] = useState(false);
+  const [orderStatusDropdownVisible, setOrderStatusDropdownVisible] = useState(false);
 
   const toggleDropdown = (dropdown) => {
     switch (dropdown) {
-      case "employee":
-        setEmployeeDropdownVisible(!employeeDropdownVisible);
-        break;
+      // case "employee":
+      //   setEmployeeDropdownVisible(!employeeDropdownVisible);
+      //   break;
       case "transaction":
         setTransactionDropdownVisible(!transactionDropdownVisible);
+        break;
+      case "orderStatus":
+        setOrderStatusDropdownVisible(!orderStatusDropdownVisible);
         break;
       default:
         break;
@@ -30,14 +35,18 @@ const MainOnline = () => {
 
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
-      case "employee":
-        setSelectedEmployee(option);
-        setEmployeeDropdownVisible(false);
-        break;
+      // case "employee":
+      //   setSelectedEmployee(option);
+      //   setEmployeeDropdownVisible(false);
+      //   break;
       case "transaction":
         setSelectedTransaction(option);
         setTransactionDropdownVisible(false);
         break;
+      case "orderStatus":
+          setSelectedOrderStatus(option);
+          setOrderStatusDropdownVisible(false); 
+          break;
       default:
         break;
     }
@@ -48,8 +57,8 @@ const MainOnline = () => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setEmployeeDropdownVisible(false);
-        setTransactionDropdownVisible(false);
+        // setEmployeeDropdownVisible(false);
+        // setTransactionDropdownVisible(false);
       }
     };
 
@@ -59,6 +68,10 @@ const MainOnline = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  useEffect(() => {
+    onFilterDataChange(selectedTransaction , selectedOrderStatus)
+  }, [selectedTransaction , selectedOrderStatus]);
 
   return (
     <>
@@ -88,7 +101,7 @@ const MainOnline = () => {
 
         <div className="qvrow">
           {/* Employee Dropdown */}
-          <div className="col-qv-4">
+          {/* <div className="col-qv-4">
             <label htmlFor="employeeFilter">
               Employee
             </label>
@@ -108,7 +121,7 @@ const MainOnline = () => {
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
 
           {/* Transaction Dropdown */}
           <div className="col-qv-4">
@@ -125,10 +138,34 @@ const MainOnline = () => {
               </div>
               {transactionDropdownVisible && (
                 <div className="dropdown-content">
-                  <div className="all" onClick={() => handleOptionClick("All", "transaction")}>All</div>
-                  <div className="all" onClick={() => handleOptionClick("transaction1", "transaction")}>transaction1</div>
+                  <div className="all" onClick={() => handleOptionClick("Both", "transaction")}>Both</div>
+                  <div className="all" onClick={() => handleOptionClick("Cash", "transaction")}>Cash</div>
+                  <div className="all" onClick={() => handleOptionClick("Online", "transaction")}>Online</div>
                 </div>
                 
+              )}
+            </div>
+          </div>
+
+          {/* Order Status Dropdown */}
+          <div className="col-qv-4">
+            <label htmlFor="orderStatusFilter">
+              Order Status
+            </label>
+            <div className="custom-dropdown input_area" ref={dropdownRef}>
+              <div
+                className="custom-dropdown-header"
+                onClick={() => toggleDropdown("orderStatus")}
+              >
+                <span className="selected-option mt-1">{selectedOrderStatus}</span>
+                <img src={DownIcon} alt="Down Icon" className="w-6 h-6" />
+              </div>
+              {orderStatusDropdownVisible && (
+                <div className="dropdown-content">
+                  <div className="all" onClick={() => handleOptionClick("New", "orderStatus")}>New</div>
+                  <div className="all" onClick={() => handleOptionClick("Closed", "orderStatus")}>Closed</div>
+                  <div className="all" onClick={() => handleOptionClick("Failed", "orderStatus")}>Failed</div>
+                </div>
               )}
             </div>
           </div>

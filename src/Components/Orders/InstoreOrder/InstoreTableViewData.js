@@ -10,15 +10,13 @@ import { renderToString } from 'react-dom/server';
 import $ from 'jquery'
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
 
-const InstoreTableViewData = () => {
+const InstoreTableViewData = (props) => {
+  // console.log(props)
   const [currentPage, setCurrentPage] = useState(1);
-
   const [inStoreOrder, setAllInStoreOrders] = useState([]);
-
   const AllInStoreDataState = useSelector((state) => state.inStoreOrder);
-  const dispatch = useDispatch();
-
   const [selectedValue, setSelectedValue] = useState(1);
+  const dispatch = useDispatch();
 
   const handleChange = (event) => {
     setSelectedValue(parseInt(event.target.value));
@@ -34,19 +32,25 @@ const InstoreTableViewData = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      let data = {
-        merchant_id: "MAL0100CA",
-        page: currentPage,
-        entriesPerPage: 10,
-      };
-
-      if (data) {
-        dispatch(fetchInStoreOrderData(data));
+      if (props?.selectedDateRange?.start_date)
+      {
+        let data = {
+          merchant_id: "MAL0100CA",
+          order_type: "Offline",
+          trans_type: props.OrderSourceData,
+          start_date: props.selectedDateRange?.start_date,
+          end_date: props.selectedDateRange?.end_date,
+          emp_id: props?.EmployeeIDData,
+          // page: currentPage,
+          // entriesPerPage: 10,
+        };
+        if (data) {
+          dispatch(fetchInStoreOrderData(data));
+        }
       }
     };
-
     fetchData();
-  }, [dispatch, currentPage]);
+  }, [dispatch, props]);
 
   useEffect(() => {
     if (!AllInStoreDataState.loading && AllInStoreDataState.inStoreOrderData) {
@@ -59,7 +63,6 @@ const InstoreTableViewData = () => {
   };
 
   // for table start
-
   $.DataTable = require('datatables.net') 
 
   useEffect(() => {
@@ -69,8 +72,7 @@ const InstoreTableViewData = () => {
       "Amount": `${data.amt || ""}<br>${data.order_status || ""}`,
       "Status": `${data.payment_result || ""}`,
       "View": `<a href="/store-reporting/order-summary/${data.order_id}">View Details</a>`,
-  }));
-  
+    }));
 
     const table = $('#InstoreTable').DataTable({
       data: modifiedData,
@@ -110,9 +112,7 @@ const InstoreTableViewData = () => {
     <>
       <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
-
-            <table className="" id="InstoreTable"></table>
-
+          <table className="" id="InstoreTable"></table>
         </div>
       </div>
     </>
