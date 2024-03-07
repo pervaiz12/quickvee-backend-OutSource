@@ -182,7 +182,7 @@ const StoreWorkingHrs = () => {
                       </div>
 
                     </div>
-                    <div style={{ width: "5%", zIndex: "999" }}>
+                    <div style={{ width: "5%" }}>
                       <div className="flex justify-between" >
                         {
                           day?.timeSlot?.length <= 0 ?
