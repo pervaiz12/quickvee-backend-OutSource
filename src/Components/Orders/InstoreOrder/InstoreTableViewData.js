@@ -69,7 +69,7 @@ const InstoreTableViewData = (props) => {
     const modifiedData = inStoreOrder.map(data => ({
       "Customer": `${data.name || ""}<br>${data.delivery_phn || ""}`,
       "Order": `${data.order_id || ""}<br>${data.merchant_time || ""}<br>${data.order_method || ""}`,
-      "Amount": `${data.amt || ""}<br>${data.order_status || ""}`,
+      "Amount": `${data.amt || ""}<br><div className="order_status_details_quivkwee">${data.order_status || ""}</div>`,
       "Status": `${data.payment_result || ""}`,
       "View": `<a href="/store-reporting/order-summary/${data.order_id}">View Details</a>`,
     }));

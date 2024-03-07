@@ -21,22 +21,7 @@ const CustomTimePicker = () => {
     return options;
   };
 
-  // Generate end time options with a minimum 1-hour gap from the start time
-  const generateEndTimeOptions = () => {
-    const options = [];
-    if(startTime !== "") {
-      const startHour = parseInt(startTime.split(":")[0]);
-      for (let hour = startHour + 1; hour < 24; hour++) {
-        for (let minute = 0; minute < 60; minute += 15) {
-          const hour12 = (hour % 12) || 12; 
-          const period = hour < 12 ? 'AM' : 'PM'; 
-          const time = `${hour12.toString().padStart(2, "0")}:${minute.toString().padStart(2, "0")} ${period}`;
-          options.push(time);
-        }
-      }
-    }
-    return options;
-  };
+
 
 
   const handleStartTimeChange = (event) => {
@@ -66,8 +51,8 @@ const CustomTimePicker = () => {
       </div>
       <Select value={endTime} onChange={handleEndTimeChange} style={{  width: "200px",  backgroundColor:"#fff", height:"50px"}}>
         <MenuItem value=""></MenuItem>
-        {generateEndTimeOptions().map((time) => (
-          <MenuItem key={time} value={time}>{time}</MenuItem>
+        {generateTimeOptions().map((time) => (
+          <MenuItem className="customedateselector" key={time} value={time}>{time}</MenuItem>
         ))}
       </Select>
     </div>

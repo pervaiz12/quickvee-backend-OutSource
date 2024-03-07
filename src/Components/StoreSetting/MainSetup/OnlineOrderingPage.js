@@ -1,7 +1,31 @@
+
+
+import { useState,useEffect} from "react";
 import React from "react";
 import Switch from "@mui/material/Switch";
+import { useDispatch } from "react-redux";
+import {fetchStoreSettingSetupData} from '../../../Redux/features/SettingSetup/SettingSetupSlice'
 
 const OnlineOrderingPage = () => {
+
+  const [isEnableOrderNumber, setisEnableOrderNumber] = useState(true);
+  const dispatch = useDispatch();
+
+  const handleCheckedSwitch=(e)=>{
+    setisEnableOrderNumber(!isEnableOrderNumber)
+  }
+
+
+
+  const data={
+    merchant_id:'MAL0100CA'
+  }
+
+  useEffect(() => {
+    dispatch(fetchStoreSettingSetupData(data))
+  
+  }, [])
+  
   return (
     <>
       <div className="box">
@@ -23,8 +47,8 @@ const OnlineOrderingPage = () => {
                 <Switch
                   // {...label}
                   name="cost_method"
-                  checked={{}}
-                  onChange={{}}
+                  onChange={handleCheckedSwitch}
+                  checked={isEnableOrderNumber}
                 />
               </div>
             </div>
