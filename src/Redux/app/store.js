@@ -122,6 +122,7 @@ const store = configureStore({
 
     loyaltyprogram: loyaltyprogramSlice,
     ShiftSummarylist: ShiftSummarySlice,
+    StoreSetupList: SettingSetupSlice,
 
   },
 

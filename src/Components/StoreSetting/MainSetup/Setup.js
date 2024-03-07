@@ -4,6 +4,10 @@ import StoreWorkingHrs from "./StoreWorkingHrs";
 import PickupDeliveryDetails from "./PickupDeliveryDetails";
 import FlatDelivery from "./FlatDelivery";
 import DelveryPickupDetails from "./DelveryPickupDetails";
+import { fetchStoreSettingSetupData } from "../../../Redux/features/SettingSetup/SettingSetupSlice";
+
+
+
 
 const Setup = () => {
   const [updateDetails, setUpdateDetails] = useState(true);
@@ -16,7 +20,7 @@ const Setup = () => {
   return (
     <>
       <div className="q-order-main-page">
-        <OnlineOrderingPage />
+        <OnlineOrderingPage  />
       </div>
 
       <div className="q-order-main-page">

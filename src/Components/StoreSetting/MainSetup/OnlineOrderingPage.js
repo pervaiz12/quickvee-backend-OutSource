@@ -1,7 +1,20 @@
+
+
+import { useState } from "react";
 import React from "react";
 import Switch from "@mui/material/Switch";
 
 const OnlineOrderingPage = () => {
+
+  const [isEnableOrderNumber, setisEnableOrderNumber] = useState(false);
+
+
+
+
+  // useEffect(() => {
+  
+  // }, [third])
+  
   return (
     <>
       <div className="box">
