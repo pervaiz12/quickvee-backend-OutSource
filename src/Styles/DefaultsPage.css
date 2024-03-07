@@ -107,3 +107,9 @@
 .css-154xyx0-MuiInputBase-root-MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline{
     border: 1px solid #E1E1E1 !important;
 }
+
+
+
+.instantPOReport .react-datepicker-popper {
+    z-index: 2;
+}
