@@ -43,6 +43,7 @@ module.exports = Object.freeze({
   // Order API Calls (Offline and Online)
   LIST_ALL_IN_STORE_ORDER: "api/orderoffline",
   LIST_ALL_ONLINE_STORE_ORDER: 'api/newOrder',
+  LIST_ALL_STORE_ORDER_LIST:"Order_list_api/all_order_list",
 
 
   //Storesettings API Calls

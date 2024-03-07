@@ -9,21 +9,44 @@ import MainOnline from "../OnlineOrder/MainOnline";
 const MainInStore = () => {
   const [activeTab, setActiveTab] = useState("offline");
 
+  const [OrderSourceData, setOrderSourceData] = useState(null);
+  const [OrderTypeData, setOrderTypeData] = useState(null);
+  const [EmployeeIDData, setEmployeeIDData] = useState(null);
+
+  const [selectedDateRange, setSelectedDateRange] = useState(null);
+  const handleDateRangeChange = (dateRange) => {
+      setSelectedDateRange(dateRange);
+  };
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
+  };
+
+  const handleFilterDataChange = (OrderSource , OrderType) => {
+    setOrderSourceData(OrderSource);
+    setOrderTypeData(OrderType);
+  };
+
+  const handleFilterEmpDataChange = (OrderSource , EmployeeID) => {
+    setOrderSourceData(OrderSource);
+    setEmployeeIDData(EmployeeID);
   };
 
   const renderInStoreContent = () => {
     if (activeTab === "online") {
       return (
         <>
-          <MainOnline />
+          <MainOnline 
+            onFilterDataChange={handleFilterDataChange} 
+          />
         </>
       );
     } else if (activeTab === "offline") {
       return (
         <>
-          <FilterEmp />
+          <FilterEmp 
+            onFilterEmpDataChange={handleFilterEmpDataChange} 
+          />
         </>
       );
     }
@@ -64,7 +87,9 @@ const MainInStore = () => {
             </div>
           </div>
           <div className="q_dateRange_header">
-            <DateRange />
+            <DateRange 
+              onDateRangeChange={handleDateRangeChange}
+            />
           </div>
           <div className="q_dateRange_header">
             <ContentList />
@@ -72,9 +97,17 @@ const MainInStore = () => {
 
           <div className="q_dateRange_header">
             {activeTab === "offline" ? (
-              <InstoreTableViewData />
+              <InstoreTableViewData 
+                OrderSourceData={OrderSourceData} 
+                EmployeeIDData={EmployeeIDData} 
+                selectedDateRange={selectedDateRange} 
+              />
             ) : (
-              <OnlineTableViewData />
+              <OnlineTableViewData
+                OrderSourceData={OrderSourceData} 
+                OrderTypeData={OrderTypeData} 
+                selectedDateRange={selectedDateRange} 
+              />
             )}
           </div>
         </div>

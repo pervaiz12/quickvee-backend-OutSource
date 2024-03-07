@@ -1,166 +1,115 @@
 import "../../../Styles/TableOrderPage.css";
 import React, { useEffect, useState } from "react";
 // import Pagination from "react-js-pagination";
-import DefaultPagination from "../InstoreOrder/DefaultPagination";
+// import DefaultPagination from "../onlineStoreOrder/DefaultPagination";
 import { fetchOnlieStoreOrderData } from "../../../Redux/features/Orders/onlineStoreOrderSlice";
 import { useSelector, useDispatch } from "react-redux";
-import DownIcon from "../../../Assests/Dashboard/Down.svg";
+// import DownIcon from "../../../Assests/Dashboard/Down.svg";
 
-const OnlineTableViewData = () => {
-  const [activePage, setActivePage] = useState(1);
-  const [selectedValue, setSelectedValue] = useState(1);
-  const entriesPerPage = 10;
+import $ from 'jquery'
+import 'datatables.net-dt/css/jquery.dataTables.min.css';
 
-  const startIndex = (activePage - 1) * entriesPerPage;
-  const endIndex = startIndex + entriesPerPage;
-
-  const handlePageChange = (pageNumber) => {
-    setActivePage(pageNumber);
-  };
-  console.log();
-
-  const [onlineStoreOrder, setallOnlineStoreOrders] = useState([]);
-
-  const AllOnlineStoreDataState = useSelector(
-    (state) => state.onlineStoreOrder
-  );
+const OnlineTableViewData = (props) => {
+  // console.log(props)
+  const [allOnlineStoreOrder, setAllOnlineStoreOrders] = useState([]);
+  const AllInStoreDataState = useSelector((state) => state.onlineStoreOrder);
   const dispatch = useDispatch();
+
   useEffect(() => {
-    let data = {
-      merchant_id: "MAL0100CA",
+    const fetchData = async () => {
+      if (props?.OrderTypeData) 
+      {
+        let data = {
+          merchant_id: "MAL0100CA",
+          order_type: props.OrderTypeData,
+          trans_type: props.OrderSourceData,
+          start_date: props.selectedDateRange?.start_date,
+          end_date: props.selectedDateRange?.end_date,
+          customer_id: "0",
+        };
+        if (data) {
+          dispatch(fetchOnlieStoreOrderData(data));
+        }
+      }
     };
-    if (data) {
-      dispatch(fetchOnlieStoreOrderData(data));
-    }
-  }, []);
+    fetchData();
+  }, [dispatch, props]);
 
   useEffect(() => {
-    if (
-      !AllOnlineStoreDataState.loading &&
-      AllOnlineStoreDataState.onlineStoreOrderData
-    ) {
-      setallOnlineStoreOrders(AllOnlineStoreDataState.onlineStoreOrderData);
+    if (!AllInStoreDataState.loading && AllInStoreDataState.onlineStoreOrderData) {
+      setAllOnlineStoreOrders(AllInStoreDataState.onlineStoreOrderData);
     }
-  }, [
-    AllOnlineStoreDataState,
-    AllOnlineStoreDataState.loading,
-    AllOnlineStoreDataState.inStoreOrderData,
-  ]);
+  }, [AllInStoreDataState.loading, AllInStoreDataState.onlineStoreOrderData]);
 
+  $.DataTable = require('datatables.net') 
+  
   useEffect(() => {
-    console.log(onlineStoreOrder);
-  }, [onlineStoreOrder]);
+    const modifiedData = Object.entries(allOnlineStoreOrder).map(([key, data], i) => {
+      let status = "";
+      if (props?.OrderTypeData == 'Failed') {
+        if (data.is_tried == '0') {
+          status = "Incomplete order";
+        } else {
+          status = "Failed payment";
+        }
+      } else {
+        if (data.payment_id === 'Cash') {
+          if (data.m_status === '4') {
+            status = "Cash-Paid";
+          } else {
+            status = "Cash-Pending";
+          }
+        } else {
+          status = "Online-Paid";
+        }
+      }
 
-  // const handleDeleteCategory = (id) => {
-  //   const data = {
-  //     id: id
-  //   }
-  //   if(id){
-  //     dispatch(deleteCategory(data))
-  //   }
-  // }
-  // console.log('gdgfdgfdgfdgfdgfdgfd',AllOnlineStoreDataState)
+      return {
+        "Customer": `${data.name || ""}<br>${data.delivery_phn || ""}`,
+        "Order": `${data.order_id || ""}<br>${data.merchant_time || ""}<br>${data.order_method || ""}`,
+        "Amount": `${"$"+data.amt || ""}<br>${data.order_status || ""}`,
+        "Status": status,
+        "View": `<a href="/store-reporting/order-summary/${data.order_id}">View Details</a>`,
+      };
+    });
 
-  const handleChange = (event) => {
-    setSelectedValue(parseInt(event.target.value));
-  };
-  const numberOptions = [];
-  for (let i = 1; i <= 50; i++) {
-    numberOptions.push(<option key={i} value={i}>{i}</option>);
-  }
+    const table = $('#OnlineStoreTable').DataTable({
+      data: modifiedData,
+      columns: [
+        { title: "Customer", data: "Customer", orderable: false },
+        { title: "Order", data: "Order", orderable: false },
+        { title: "Amount", data: "Amount", orderable: false },
+        { title: "Status", data: "Status", orderable: false },
+        { title: " ", data:"View", orderable: false },
+      ],
+      destroy: true,
+      searching: true,
+      dom: "<'row 'l<'col-sm-12'b>><'row'<'col-sm-7 mt-5'p><'col-sm-5'>>",
+      lengthMenu: [ 10, 20, 50],
+      lengthChange: true,
+      ordering: false,
+      language: {
+        paginate: {
+          previous: '<',
+          next: '>'
+        }
+      }
+    });
 
+    $('#searchInput').on('input', function () {
+      table.search(this.value).draw();
+    });
 
+    return () => {
+      table.destroy();
+    }
+  }, [allOnlineStoreOrder, props]);
 
   return (
     <>
       <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
-          <div className="q-attributes-bottom-header">
-          <div className="flex">
-      <div className="q_show_data">Show</div>
-      <div className="">
-      <select
-  value={selectedValue}
-  onChange={handleChange}
-  className="ml-2 pagination_selected"
-  style={{
-   
-  }}
->
-  {numberOptions}
-</select>
-        {/* <img src={DownIcon} alt="" className="ml-1" /> */}
-      </div>
-      <div className="q_entery_data">Entries</div>
-    </div>
-
-
-            {/* Pagination component */}
-            <DefaultPagination />
-          </div>
-          <div className="q-attributes-bottom-attriButes-header">
-            <p className="table_view_sort">Customer</p>
-            <p className="table_view_title">Order</p>
-            <p className="table_view_amount">Amount</p>
-            <p className="table_view_items">Status</p>
-          </div>
-        </div>
-
-        <div className="q-attributes-bottom-attriButes-listing">
-          {onlineStoreOrder &&
-            onlineStoreOrder.length >= 1 &&
-            onlineStoreOrder.map((order, index) => (
-              <div
-                key={index}
-                className="q-attributes-bottom-attriButes-single-attributes"
-              >
-                <div className="table_view_sort">
-                  <p className="table_user_details"> {order.users_name} </p>
-                  <p className="table_Existing_customer">
-                    {order.customer_type}
-                  </p>
-                  <p className="table_phone_details">{order.delivery_phn} </p>
-                  <p className="table_email_details">{order.users_email}</p>
-                </div>
-
-                <div className="table_view_title">
-                  <p className="table_order_details">{order.order_id}</p>
-                  <p className="table_order_datedetails">
-                    {order.merchant_time}
-                  </p>
-                  <p className="table_order_delivery">{order.order_method}</p>
-                </div>
-
-                <div className="table_view_amount">
-                  <p className="table_Amount_details">${order.amt}</p>
-                  <p className="table_amount_status">{order.order_status}</p>
-                </div>
-                {/* <div className="table_view_items">
-                  <select className="table_status_selected">
-                    <option value="day">{order.payment_result}</option>
-                   
-                  </select>
-                </div> */}
-
-                     <div className="table_view_items">
-                  <select className="table_status_selected">
-                    <option className="dropdown-content" value="day">{order.payment_result}
-                    <img src={DownIcon} alt="Down Icon" className="w-6 h-6 ml-16" /></option>
-                  
-                  </select>
-                     </div>
-
-
-                <div className="attriButes-details">
-                  <p className="table_view_details   ">View Details</p>
-                </div>
-                <div className="table_border_bottom"></div>
-              </div>
-            ))}
-
-          <div className="py-8">
-            <DefaultPagination />
-          </div>
+          <table className="" id="OnlineStoreTable"></table>
         </div>
       </div>
     </>

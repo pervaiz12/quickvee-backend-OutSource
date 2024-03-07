@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import { AiOutlineSearch } from 'react-icons/ai';
+// import { AiOutlineSearch } from 'react-icons/ai';
 import DownIcon from '../../../Assests/Dashboard/Down.svg';
 import SearchIcon from "../../../Assests/Filter/Search.svg"
+import { BASE_URL, EMPLOYEE_LIST } from "../../../Constants/Config";
+import axios from "axios";
 
-const FilterEmp = () => {
+const FilterEmp = ({onFilterEmpDataChange}) => {
   const [searchId, setSearchId] = useState(""); // State to track search ID
 
   // const handleFilter = (filterType) => {
@@ -15,12 +17,15 @@ const FilterEmp = () => {
   };
 
   const [selectedEmployee, setSelectedEmployee] = useState("All");
-  const [selectedTransaction, setSelectedTransaction] = useState("All");
-  const [selectedOrderStatus, setSelectedOrderStatus] = useState("All");
+  const [selectedEmployeeID, setSelectedEmployeeID] = useState("All");
+  const [filteredData, setFilteredData] = useState({ emp_id: "all" });
+  
+  const [selectedTransaction, setSelectedTransaction] = useState("Both");
+  // const [selectedOrderStatus, setSelectedOrderStatus] = useState("All");
 
   const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
   const [transactionDropdownVisible, setTransactionDropdownVisible] = useState(false);
-  const [orderStatusDropdownVisible, setOrderStatusDropdownVisible] = useState(false);
+  // const [orderStatusDropdownVisible, setOrderStatusDropdownVisible] = useState(false);
 
   const toggleDropdown = (dropdown) => {
     switch (dropdown) {
@@ -30,9 +35,9 @@ const FilterEmp = () => {
       case "transaction":
         setTransactionDropdownVisible(!transactionDropdownVisible);
         break;
-      case "orderStatus":
-        setOrderStatusDropdownVisible(!orderStatusDropdownVisible);
-        break;
+      // case "orderStatus":
+      //   setOrderStatusDropdownVisible(!orderStatusDropdownVisible);
+      //   break;
       default:
         break;
     }
@@ -41,17 +46,39 @@ const FilterEmp = () => {
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
       case "employee":
-        setSelectedEmployee(option);
-        setEmployeeDropdownVisible(false); 
+        if (option === "All") {
+          setSelectedEmployee("All");
+          setSelectedEmployeeID("All");
+          setEmployeeDropdownVisible(false);
+          setFilteredData({
+            ...filteredData,
+            emp_id: "all",
+            merchant_id: "",
+            order_env: "",
+            limit: "",
+          });
+        } else {
+          const emp_id = option.id;
+          setSelectedEmployee(option.title);
+          setSelectedEmployeeID(option.id);
+          setEmployeeDropdownVisible(false);
+          setFilteredData({
+            ...filteredData,
+            emp_id,
+            merchant_id: "",
+            order_env: "",
+            limit: "",
+          });
+        }
         break;
       case "transaction":
         setSelectedTransaction(option);
         setTransactionDropdownVisible(false); 
         break;
-      case "orderStatus":
-        setSelectedOrderStatus(option);
-        setOrderStatusDropdownVisible(false); 
-        break;
+      // case "orderStatus":
+      //   setSelectedOrderStatus(option);
+      //   setOrderStatusDropdownVisible(false); 
+      //   break;
       default:
         break;
     }
@@ -62,9 +89,9 @@ const FilterEmp = () => {
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        setEmployeeDropdownVisible(false);
-        setTransactionDropdownVisible(false);
-        setOrderStatusDropdownVisible(false);
+        // setEmployeeDropdownVisible(false);
+        // setTransactionDropdownVisible(false);
+        // setOrderStatusDropdownVisible(false);
       }
     };
 
@@ -74,6 +101,43 @@ const FilterEmp = () => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, []);
+
+  const [employeeList, setemployeeList] = useState([]);
+  const [loadingEmpList, setLoadingEmpList] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post(
+          BASE_URL + EMPLOYEE_LIST,
+          {
+            merchant_id: "MAL0100CA",
+          },
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+
+        // Assuming the API response has a data property containing the category list
+        const EmpList = response.data.result;
+
+        // Extracting category IDs and view titles
+        const mappedOptions = EmpList.map((empdata) => ({
+          id: empdata.id,
+          title: empdata.f_name+' '+empdata.l_name,
+        }));
+
+        setemployeeList(mappedOptions);
+        setLoadingEmpList(false);
+      } catch (error) {
+        console.error("Error fetching Employee List:", error);
+        setLoadingEmpList(false);
+      }
+    };
+    fetchData();
+  }, []); // Fetch categories only once when the component mounts
+
+  useEffect(() => {
+    onFilterEmpDataChange(selectedTransaction , selectedEmployeeID)
+  }, [selectedTransaction , selectedEmployeeID]);
 
   return (
     <>
@@ -116,9 +180,17 @@ const FilterEmp = () => {
               </div>
               {employeeDropdownVisible && (
                 <div className="dropdown-content">
-                  <div className="all" onClick={() => handleOptionClick("All", "employee")}>All</div>
-                  <div className="all" onClick={() => handleOptionClick("employee1", "employee")}>employee1</div>
-                  <div className="all" onClick={() => handleOptionClick("employee2", "employee")}>employee2</div>
+                  <div onClick={() => handleOptionClick("All", "employee")}>
+                    All
+                  </div>
+                  {employeeList.map((option, key) => (
+                    <div
+                      key={key}
+                      onClick={() => handleOptionClick(option, "employee")}
+                    >
+                      {option.title}
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
@@ -139,15 +211,16 @@ const FilterEmp = () => {
               </div>
               {transactionDropdownVisible && (
                 <div className="dropdown-content">
-                  <div className="all" onClick={() => handleOptionClick("All", "transaction1")}>All</div>
-                  <div className="all" onClick={() => handleOptionClick("transaction1", "transaction")}>transaction1</div>
+                  <div className="all" onClick={() => handleOptionClick("Both", "transaction")}>Both</div>
+                  <div className="all" onClick={() => handleOptionClick("Cash", "transaction")}>Cash</div>
+                  <div className="all" onClick={() => handleOptionClick("Online", "transaction")}>Online</div>
                 </div>
               )}
             </div>
           </div>
 
           {/* Order Status Dropdown */}
-          <div className="col-qv-4">
+          {/* <div className="col-qv-4">
             <label htmlFor="orderStatusFilter">
               Order Status
             </label>
@@ -167,7 +240,7 @@ const FilterEmp = () => {
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
         </div>
 
       </div>
