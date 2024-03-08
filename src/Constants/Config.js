@@ -188,6 +188,8 @@ module.exports = Object.freeze({
   // REPORT_BY_SALES_PERSON
   REPORT_BY_SALES_PERSON: "ReportingReactapi/report_by_sales_person",
 
+  DETAIL_CATEGORY_SALE_REPORT:"vendor_report_api/detailed_category_sale",
+
   // GET_ORDER_SUMMERY_DETAILS:'Orders/order_details',
 
   // -------------------------
