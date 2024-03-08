@@ -14,13 +14,18 @@ const initialState = {
 export const fetchStoreSettingSetupData = createAsyncThunk('SettingSetupSlice/fetchStoreSettingSetupData.', async (data) => {
     try {
         const response = await axios.post(BASE_URL + GET_STORE_SETUP_LIST, data, { headers: { "Content-Type": "multipart/form-data" } })
-        if (response.status === 200) {
-           return response.data
+        // console.log(response)
+        if (response.data.status === true) {
+           return response.data.result
         }
     } catch (error) {
         throw new Error(error.response.data.message);
     }
 })
+
+
+
+
 
 const SettingSetupSlice = createSlice({
     name: 'StoreSettingsetupList',

@@ -30,6 +30,7 @@ const SystemAccessData = () => {
     setShowModal(false);
   };
 
+  // console.log(SystemAccessData);
   const [systemAccess, setallSystemAccess] = useState({
     default_cash_drawer: "",
     clock_in: false,
@@ -468,7 +469,7 @@ const handleStartDateChange = (e) => {
               <input
                 type="time"
                 name="start_time"
-                value={systemAccess.start_time || ""}
+                value={systemAccess.deliver_min_time}
                 id="start_tym"
                 required
                 onChange={handleStartTimeChange}

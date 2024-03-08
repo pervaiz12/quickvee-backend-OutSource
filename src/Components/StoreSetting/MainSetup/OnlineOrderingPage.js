@@ -3,8 +3,7 @@
 import { useState,useEffect} from "react";
 import React from "react";
 import Switch from "@mui/material/Switch";
-import { useDispatch } from "react-redux";
-import {fetchStoreSettingSetupData} from '../../../Redux/features/SettingSetup/SettingSetupSlice'
+import { useDispatch , useSelector} from "react-redux";
 
 const OnlineOrderingPage = () => {
 
@@ -16,15 +15,13 @@ const OnlineOrderingPage = () => {
   }
 
 
+  const setupDataState = useSelector((state)=>state?.StoreSetupList?.storesetupData)
 
-  const data={
-    merchant_id:'MAL0100CA'
-  }
+useEffect(() => {
+ console.log(setupDataState?.clover_customer_id)
+}, [setupDataState])
 
-  useEffect(() => {
-    dispatch(fetchStoreSettingSetupData(data))
-  
-  }, [])
+
   
   return (
     <>
@@ -42,6 +39,7 @@ const OnlineOrderingPage = () => {
                   available.
                 </label>
               </div>
+            
 
               <div className="fr">
                 <Switch

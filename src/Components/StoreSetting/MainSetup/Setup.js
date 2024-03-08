@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState , useEffect } from "react";
 import OnlineOrderingPage from "./OnlineOrderingPage";
 import StoreWorkingHrs from "./StoreWorkingHrs";
 import PickupDeliveryDetails from "./PickupDeliveryDetails";
 import FlatDelivery from "./FlatDelivery";
 import DelveryPickupDetails from "./DelveryPickupDetails";
+import { useDispatch } from "react-redux";
 import { fetchStoreSettingSetupData } from "../../../Redux/features/SettingSetup/SettingSetupSlice";
 
 
@@ -11,6 +12,17 @@ import { fetchStoreSettingSetupData } from "../../../Redux/features/SettingSetup
 
 const Setup = () => {
   const [updateDetails, setUpdateDetails] = useState(true);
+
+const dispatch = useDispatch();
+
+  const data={
+    merchant_id:'MAL0100CA'
+  }
+
+  useEffect(() => {
+    dispatch(fetchStoreSettingSetupData(data))
+  
+  }, [])
 
   const handleUpdateClick = () => {
     const details = "updated details";
