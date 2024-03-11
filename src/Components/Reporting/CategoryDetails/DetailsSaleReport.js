@@ -24,12 +24,14 @@ const DetailsSaleReport = ({ data }) => {
     ) {
       setdetailCategorySale(detailCategorySaleDataState.detailCategorySaleData);
     }
-  }, [
-    detailCategorySaleDataState,
-    detailCategorySaleDataState.loading,
-    detailCategorySaleDataState.detailCategorySaleData,
-  ]);
+  }, [detailCategorySaleDataState]);
 
+  if (!detailCategorySale || Object.keys(detailCategorySale).length === 0) {
+    return <div className="box">No. Data found.</div>;
+  }
+
+  console.log(detailCategorySale)
+  
 
 
   const grandTotal = detailCategorySale
@@ -46,10 +48,10 @@ const DetailsSaleReport = ({ data }) => {
   return (
     <>
       {Object.entries(detailCategorySale).map(([category, items]) => (
-        <div className="box">
-          <div className="q-attributes-bottom-detail-section bg-[#ffffff]">
-            <div className="mt-6" key={category}>
-              <div className="q-attributes-bottom-header ">
+        <div className="box" key={category}>
+          <div className="q-attributes-bottom-detail-section ">
+            <div className="mt-6" >
+              <div className="q-attributes-bottom-header bg-[#ffffff]">
                 <span>{category}</span>
               </div>
               <div className="q-attributes-bottom-attriButes-header">
@@ -95,7 +97,7 @@ const DetailsSaleReport = ({ data }) => {
             <div className="q-order-bottom-order-details-single-attributes">
               <p className="q-catereport-item">Grand Total</p>
               <p className="q-catereport-quantity"></p>
-              <p className="q-catereport-amount">$ {grandTotal.toFixed(2)}</p>
+              <p className="q-catereport-amount">${grandTotal.toFixed(2)}</p>
             </div>
           </div>
         </div>
