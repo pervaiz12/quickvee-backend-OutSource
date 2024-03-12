@@ -10,7 +10,11 @@ const TopSallerList = ({data}) => {
     const topsallerDataState = useSelector((state) => state.topsaller);
 
     useEffect(() => {
+      if(!data.merchant_id){
+          console.log("empty")
+      }else{
         dispatch(fetchtopsallerData(data));
+      }
       }, [dispatch, data]);
 
     useEffect(() => {
