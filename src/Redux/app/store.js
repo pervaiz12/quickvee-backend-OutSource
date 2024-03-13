@@ -48,6 +48,7 @@ import orderSummerySlice from "../features/OrderSummary/OrderSummarySlice";
 import loyaltyprogramSlice from "../features/LoyaltyProgram/loyaltyprogramSlice";
 import SettingSetupSlice from "../features/SettingSetup/SettingSetupSlice";
 import ShiftSummarySlice from "../features/Reports/ShiftSummary/ShiftSummarySlice";
+import DetailCategorySaleSliceReducer from "../features/DetailCategorySale/detailCategorySaleSlice";
 
 const store = configureStore({
   reducer: {
@@ -70,6 +71,8 @@ const store = configureStore({
     SettingReceiptList: SettingReceiptReducer,
     CheckIDVerifyList:CheckIDVerifyListReducer,
     dailyreport:DailyReportList,
+    detailCategorySale:DetailCategorySaleSliceReducer,
+
 
    //reducer for payment method  report
    paymentDetailReport:PaymentMethodDetailReducer,
