@@ -54,7 +54,7 @@ const OnlineTableViewData = (props) => {
       if (target.classList.contains("custom-selecttable")) {
         const orderId = target.getAttribute("data-order-id");
         const selectedOption = target.value;
-        // console.log(`Order ID: ${orderId}, Selected Option: ${selectedOption}`);
+        console.log(`Order ID: ${orderId}, Selected Option: ${selectedOption}`);
         var success = window.confirm("Are you sure you want to change status");
         if (success == true) {
           const FormData = {
