@@ -259,6 +259,8 @@ module.exports = Object.freeze({
 
   GET_STORE_SETUP_LIST: "Settingapi/store_details",
 
+  UPDATE_ORDER_STATUS: "Order_list_api/changeStatus_api",
+
 });
 
 
