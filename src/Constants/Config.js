@@ -256,8 +256,11 @@ module.exports = Object.freeze({
   GET_SHIFT_SUMMARY_LIST: "ReportingReactapi_pcr/shift_summary_report_list",
 
   //StoreSetup details  api
-
+  
   GET_STORE_SETUP_LIST: "Settingapi/store_details",
+  
+  //All Orders API
+  UPDATE_ORDER_STATUS: "Order_list_api/changeStatus_api",
 
 });
 
