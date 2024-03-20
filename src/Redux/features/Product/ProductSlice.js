@@ -6,6 +6,8 @@ const initialState = {
     loading: false,
     productsData: [],
     page: 0,
+    offset:0,
+    limit:10,
     hasMore: true,
     successMessage: "",
     error: '',
@@ -32,6 +34,13 @@ const productsSlice = createSlice({
     name: 'products',
     initialState,
     reducers: {
+        emptyProduct: (state,action) => {
+            state.productsData= action.payload
+            state.offset = 0
+            state.limit = 10
+            state.hasMore = true
+            state.page = 0
+        },
         editProduct: (state, action) => {
             state.productsData = state.productsData.map(product => {
                 if (product.id === action.payload.id) {
@@ -60,12 +69,9 @@ const productsSlice = createSlice({
             if (!Array.isArray(state.productsData)) {
                 state.productsData = [];
             }
-            console.log(state.productsData);
             // Append new items to the productsData array
             state.productsData.push(...action.payload);
-           
-            state.page += 1;
-             console.log(state.page);
+            state.offset += 10;
             state.hasMore = action.payload.length > 0;
             state.error = '';
         })
@@ -93,5 +99,5 @@ const productsSlice = createSlice({
     }
 })
 
-export const {  editProduct} = productsSlice.actions;
+export const {  editProduct,emptyProduct} = productsSlice.actions;
 export default productsSlice.reducer

@@ -1,73 +1,27 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineSearch } from 'react-icons/ai';
- import DownIcon from "../../Assests/Dashboard/Down.svg"
+import DownIcon from "../../Assests/Dashboard/Down.svg"
+import CategoryListDropDown from "../../CommonComponents/CategoryListDropDown";
 
-
-const FilterProduct = () => {
+const FilterProduct = ({handleOptionClick, toggleDropdown,selectedEmployee,employeeDropdownVisible,selectedTransaction,
+  transactionDropdownVisible,selectedCategory,categoryDropdownVisible,selectedListingType,listingTypesDropdownVisible,allcategories,handleCategoryChange}) => {
   const [searchId, setSearchId] = useState(""); // State to track search ID
 
   const handleFilter = (filterType) => {
     console.log('Selected filter:', filterType);
    
   };
+  
 
   const handleSearch = () => {
     console.log("Search ID:", searchId);
    
   };
-  const [selectedEmployee, setSelectedEmployee] = useState("All");
-  const [selectedTransaction, setSelectedTransaction] = useState("All");
-  const [selectedOrderStatus, setSelectedOrderStatus] = useState("All");
   
-  const [selectedListingType, setSelectedListingType] = useState("All");
-
-  const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
-  const [transactionDropdownVisible, setTransactionDropdownVisible] = useState(false);
-  const [orderStatusDropdownVisible, setOrderStatusDropdownVisible] = useState(false);
-  const [listingTypesDropdownVisible, setlistingTypesDropdownVisible] = useState(false);
-
-  const toggleDropdown = (dropdown) => {
-    switch (dropdown) {
-      case "employee":
-        setEmployeeDropdownVisible(!employeeDropdownVisible);
-        break;
-      case "transaction":
-        setTransactionDropdownVisible(!transactionDropdownVisible);
-        break;
-      case "orderStatus":
-        setOrderStatusDropdownVisible(!orderStatusDropdownVisible);
-        break;
-     
-        case "listingType":
-          setlistingTypesDropdownVisible(!listingTypesDropdownVisible);
-          break;
-      default:
-        break;
-    }
-  };
-
-  const handleOptionClick = (option, dropdown) => {
-    switch (dropdown) {
-      case "employee":
-        setSelectedEmployee(option);
-        setEmployeeDropdownVisible(false); 
-        break;
-      case "transaction":
-        setSelectedTransaction(option);
-        setTransactionDropdownVisible(false); 
-      case "orderStatus":
-        setSelectedOrderStatus(option);
-        setOrderStatusDropdownVisible(false); 
-        break;
-        case "listingType":
-          setSelectedListingType(option);
-          setlistingTypesDropdownVisible(false); 
-          break;
-      default:
-        break;
-    }
-  };
-
+  useEffect(()=> {
+    console.log(allcategories);
+  });
+  
 
   return (
     <>
@@ -147,28 +101,31 @@ const FilterProduct = () => {
           </div>
 
           {/* Order Status Dropdown */}
-          <div className="q-order-page-filter">
-            <label className="q-details-page-label" htmlFor="orderStatusFilter">
-            Order Status
+          <CategoryListDropDown type="category" onCategoryChange={handleCategoryChange} />
+          {/* <div className="q-order-page-filter">
+            <label className="q-details-page-label" htmlFor="categoryFilter">
+            Category
             </label>
             <div className="custom-dropdown">
               <div
                 className="custom-dropdown-header"
-                onClick={() => toggleDropdown("orderStatus")}
+                onClick={() => toggleDropdown("category")}
               >
-                <span className="selected-option mt-1">{selectedOrderStatus}</span>
+                <span className="selected-option mt-1">{selectedCategory}</span>
                 <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
               </div>
-              {orderStatusDropdownVisible && (
+              {categoryDropdownVisible && (
                 <div className="dropdown-content ">
-                  <div onClick={() => handleOptionClick("All", "orderStatus")}>All</div>
-                  <div onClick={() => handleOptionClick("status1", "orderStatus")}>status1</div>
-                  <div onClick={() => handleOptionClick("status2", "orderStatus")}>status2</div>
-                  {/* ... (other order status options) ... */}
+                  <div onClick={() => handleOptionClick("All", "category")}>All</div>
+                  { allcategories?.map((category, index) => (
+                  <div  key={index} onClick={() => handleOptionClick(category.id, "category")}>{category.title}</div>
+                 
+                  ))}
+                  
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
         </div>
         <div className="q-order-page-filter w-[31.2%]">
             <label className="q-details-page-label" htmlFor="ListingFilter">
@@ -184,9 +141,9 @@ const FilterProduct = () => {
               </div>
               {listingTypesDropdownVisible && (
                 <div className="dropdown-content ">
-                  <div onClick={() => handleOptionClick("All", "listingtype")}>All</div>
-                  <div onClick={() => handleOptionClick("listing1", "listingtype")}>status1</div>
-                  <div onClick={() => handleOptionClick("listing2", "listingtype")}>status2</div>
+                  {/* <div onClick={() => handleOptionClick("All", "listingtype")}>All</div> */}
+                  <div onClick={() => handleOptionClick(0, "listingType")}>Product listing</div>
+                  <div onClick={() => handleOptionClick(1, "listingType")}>Variant listing</div>
                   {/* ... (other order status options) ... */}
                 </div>
               )}

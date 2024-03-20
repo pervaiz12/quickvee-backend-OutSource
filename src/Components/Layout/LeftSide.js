@@ -48,6 +48,7 @@ import MainItemSales from "../Reporting/ItemSales/MainItemSales";
 import NewItemCreatedBetweenList from "../Reporting/NewItemCreatedBetween/NewItemCreatedBetweenList";
 import NewItemCreatedBetweenMain from "../Reporting/NewItemCreatedBetween/NewItemCreatedBetweenMain";
 import { useEffect } from "react";
+import { useDispatch } from "react-redux";
 import Permission from "../StoreSetting/AddEmployee/Permission";
 import OrderSummaryDetails from "../Reporting/SalesByPerson/MainOrderSumaaryDetails/OrderSummaryDetails";
 import VendorListMain  from "../Reporting/VendorList/VendorListMain";
@@ -58,16 +59,12 @@ import EditVendors from "../Vendors/EditVendors";
 import SingleVendorsDetail from "../Vendors/SingleVendorsDetail";
 import AddProducts from "../Products/AddProducts"
 //  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
-
-
 // import MainEmployee from "../Reporting/EmployeeWorkingHours/MainEmployee";
-
 // import MainInvDuplicates from '../InventoryDuplicates/MainInvDuplicates';
 
 const LeftSide = ({ visible }) => {
 
   useEffect(() => {
-    
     console.log("hello")
       return () => {
        

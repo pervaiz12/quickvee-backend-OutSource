@@ -10,15 +10,15 @@ import { BASE_URL } from "../../Constants/Config";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ProductRow from "./ProductRow";
 
-const ProductTable = () => {
-
-  const [productsList, setproductsList] = useState([]);
+const ProductTable = ({selectedListingType,productsList,setproductsList,categoryId}) => 
+{
+  let listing_type = 0;
   const ProductsListDataState = useSelector((state) => state.productsListData);
-  const { hasMore } = useSelector((state) => state.productsListData);
+  const { hasMore,offset,limit } = useSelector((state) => state.productsListData);
+  
   useEffect(()=> {
-    console.log(ProductsListDataState.hasMore);
-    console.log(productsList);
-    console.log(ProductsListDataState.page);
+    console.log(categoryId+'asdasd')
+    console.log('product tables');
   });
   useEffect(() => {
     if (
@@ -39,8 +39,8 @@ const ProductTable = () => {
       merchant_id: "MAL0100CA",
       category_id: 'all',
       show_status: 'all',
-      listing_type: 0,
-      // offset: 0,
+      listing_type: selectedListingType,
+      offset: 0,
       limit: 10,
       page: 0
     };
@@ -90,21 +90,28 @@ const ProductTable = () => {
     {
        page = productsList.length / 10 ;
     }
+    
+    if(selectedListingType == 'Variant listing'){
+       listing_type = 1;
+    }else{
+      listing_type = 0;
+    }
     //let page = productsList.length / 10 + 1 ;
     console.log(page+'page');
     console.log(productsList);
     let data1 = {
       merchant_id: "MAL0100CA",
       format:"json",
-      category_id: 'all',
+      category_id: categoryId,
       show_status: 'all',
-      listing_type: 0,
+      listing_type: listing_type,
+      offset: offset,
       limit: 10,
       page : page
     };
     if (data1) {
       dispatch(fetchProductsData(data1));
-      console.log(productsList);
+      // console.log(productsList);
     }
     // setTimeout(() => {
     //   setproductsList(productsList.concat(ProductsListDataState.productsData));
@@ -152,14 +159,14 @@ const ProductTable = () => {
                   hasMore={hasMore}
                   loader={<h4>Loading...</h4>}
                   scrollableTarget="scrollableDiv" 
-                  endMessage = {<h3>ALl products have been listed above</h3>}
+                  endMessage = {<h3>ALL products have been listed above</h3>}
                   >
                   {
                   productsList?.length >= 1 &&
                   productsList.map((product, index) => (
                   
                   // add function in below object 
-                  <ProductRow {...{ Avail_Online, index, product, checkStatus, handleError }} />
+                  <ProductRow key={index} {...{ Avail_Online, index, product, checkStatus, handleError }} />
 
                 // <div key={index} className="q-attributes-bottom-attriButes-single-attributes">
                 //   <p className="categories-sort"><img src={SortIcon} alt="" className="" /></p>
