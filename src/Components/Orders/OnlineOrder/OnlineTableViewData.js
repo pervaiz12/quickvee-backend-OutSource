@@ -1,5 +1,6 @@
 import "../../../Styles/TableOrderPage.css";
 import React, { useEffect, useState } from "react";
+import CrossIcon from "../../../Assests/Dashboard/cross.svg";
 // import Pagination from "react-js-pagination";
 // import DefaultPagination from "../onlineStoreOrder/DefaultPagination";
 import {
@@ -9,6 +10,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 // import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import axios from "axios";
+import { BASE_URL, CLOSE_ORDER_COLLECT_CASH } from "../../../Constants/Config";
 
 import $ from "jquery";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
@@ -48,6 +50,7 @@ const OnlineTableViewData = (props) => {
     }
   }, [AllInStoreDataState.loading, AllInStoreDataState.onlineStoreOrderData]);
 
+  // for New order dropdown start.
   useEffect(() => {
     const handleSelectChange = (event) => {
       const target = event.target;
@@ -69,7 +72,6 @@ const OnlineTableViewData = (props) => {
         }
       }
     };
-
     const onlineStoreTable = document.getElementById("OnlineStoreTable");
     onlineStoreTable.addEventListener("change", handleSelectChange);
 
@@ -77,9 +79,77 @@ const OnlineTableViewData = (props) => {
       onlineStoreTable.removeEventListener("change", handleSelectChange);
     };
   }, []);
+  // for New order dropdown end.
+
+  const [showPriceModal, setShowPricModal] = useState(false);
+  const [newReceivingAmount, setNewReceivingAmount] = useState("");
+  const [newOrderId, setNewOrderId] = useState("");
+  const [newOrderAmount, setNewOrderAmount] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  // const openPricModal = () => {
+  //   setShowPricModal(true);
+  // };
+
+  const closePricModal = () => {
+    setErrorMessage("");
+    setNewReceivingAmount("");
+    setShowPricModal(false);
+  };
+
+  // for closed order edit button start.
+  useEffect(() => {
+    const handleSelectclick = (event) => {
+      const target = event.target;
+      if (target.classList.contains("edit_center")) {
+        const NeworderId = target.getAttribute("order-id");
+        const Neworderamt = target.getAttribute("order-amt");
+        setShowPricModal(true);
+        setNewOrderId(NeworderId);
+        setNewOrderAmount(Neworderamt);
+      }
+    };
+    const onlineStoreTable = document.getElementById("OnlineStoreTable");
+    onlineStoreTable.addEventListener("click", handleSelectclick);
+
+    return () => {
+      onlineStoreTable.removeEventListener("click", handleSelectclick);
+    };
+  }, []);
+  // for closed order edit button end.
+
+  const changeReceivingAmount = (event) => {
+    const inputValue = event.target.value;
+    setNewReceivingAmount(inputValue);
+  };
+
+  const handleAddReceivingAmount = async () => {
+    const newItem = {
+      merchant_id: "MAL0100CA",
+      order_id: newOrderId,
+      cash_collected: newReceivingAmount,
+      order_amt: newOrderAmount,
+    };
+    const data = newItem;
+    console.log(data);
+    const response = await axios.post(
+      BASE_URL + CLOSE_ORDER_COLLECT_CASH,
+      data,
+      {
+        headers: { "Content-Type": "multipart/form-data" },
+      }
+    );
+    console.log(response);
+
+    if (response?.data?.status == false) {
+      setErrorMessage(response.data.message);
+    } else {
+      setErrorMessage("");
+      setShowPricModal(false);
+    }
+  };
 
   $.DataTable = require("datatables.net");
-  
 
   useEffect(() => {
     const modifiedData = Object.entries(allOnlineStoreOrder).map(
@@ -120,7 +190,9 @@ const OnlineTableViewData = (props) => {
             parseFloat(data?.cash_collected)?.toFixed(2) !=
               parseFloat(data?.amt)?.toFixed(2)
           ) {
-            PayStatus = "Edit";
+            PayStatus = `<a href="#">
+            <img class="edit_center" order-id="${data.order_id}" order-amt="${data.amt}" src="/static/media/editIcon.4dccb72a9324ddcac62b9a41d0a042db.svg" alt="Edit">
+            </a>`;
           } else if (OrderStatus == "Cancelled") {
             PayStatus = "Cancelled";
           } else {
@@ -188,21 +260,6 @@ const OnlineTableViewData = (props) => {
       },
     });
 
-    // $("#OnlineStoreTable").on("change", ".custom-selecttable", function () {
-    //   const orderId = $(this).data("order-id");
-    //   const selectedOption = $(this).val();
-    //   console.log(`Order ID: ${orderId}, Selected Option: ${selectedOption}`);
-
-    //   var success = window.confirm('Are you sure want to change the Dropdown ????');
-    //   if (success == true) {
-    //     alert('Changed');
-    //     console.log(`Order ID: ${orderId}, Selected Option: ${selectedOption}`);
-    //   }
-    //   else {
-    //     alert('Not changed');
-    //   }
-    // });
-
     $("#searchInput").on("input", function () {
       table.search(this.value).draw();
     });
@@ -219,6 +276,51 @@ const OnlineTableViewData = (props) => {
           <table className="" id="OnlineStoreTable"></table>
         </div>
       </div>
+
+      {showPriceModal && (
+        <div className="q-custom-modal-container" id="addtributes_">
+          {/* Your modal JSX */}
+          <div className="q-custom-modal-content">
+            {/* Your modal content */}
+            <div className="">
+              <p className="q-custom-modal-header ">
+                Cash Recieving
+                <img
+                  src={CrossIcon}
+                  alt="icon"
+                  className="ml-auto mb-4"
+                  onClick={closePricModal}
+                />
+              </p>
+            </div>
+            {/* ... other modal content ... */}
+            <input
+              type="number"
+              placeholder="Enter Amount"
+              className="q-custom-input-field"
+              value={newReceivingAmount}
+              onChange={changeReceivingAmount}
+            />
+            <span className="input-error text-[#cc0000] text-[14px]">
+              {errorMessage !== "" ? errorMessage : ""}
+            </span>
+            <div className="q-add-categories-section-middle-footer">
+              <button
+                onClick={handleAddReceivingAmount}
+                className="quic-btn quic-btn-save"
+              >
+                Save
+              </button>
+              <button
+                onClick={closePricModal}
+                className="quic-btn quic-btn-cancle"
+              >
+                Cancel
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };

@@ -44,6 +44,7 @@ module.exports = Object.freeze({
   LIST_ALL_IN_STORE_ORDER: "api/orderoffline",
   LIST_ALL_ONLINE_STORE_ORDER: 'api/newOrder',
   LIST_ALL_STORE_ORDER_LIST:"Order_list_api/all_order_list",
+  CLOSE_ORDER_COLLECT_CASH:"Order_list_api/close_order_collectCash",
 
 
   //Storesettings API Calls
