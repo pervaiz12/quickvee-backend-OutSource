@@ -3,8 +3,8 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import DownIcon from "../../Assests/Dashboard/Down.svg"
 import CategoryListDropDown from "../../CommonComponents/CategoryListDropDown";
 
-const FilterProduct = ({handleOptionClick, toggleDropdown,selectedEmployee,employeeDropdownVisible,selectedTransaction,
-  transactionDropdownVisible,selectedCategory,categoryDropdownVisible,selectedListingType,listingTypesDropdownVisible,allcategories,handleCategoryChange}) => {
+const FilterProduct = ({handleOptionClick, toggleDropdown,selectedEmployee,employeeDropdownVisible,selectedStatus,selectedStatusValue,
+  transactionDropdownVisible,selectedCategory,categoryDropdownVisible,selectedListingType,listingTypesDropdownVisible,handleCategoryChange}) => {
   const [searchId, setSearchId] = useState(""); // State to track search ID
 
   const handleFilter = (filterType) => {
@@ -18,9 +18,9 @@ const FilterProduct = ({handleOptionClick, toggleDropdown,selectedEmployee,emplo
    
   };
   
-  useEffect(()=> {
-    console.log(allcategories);
-  });
+  // useEffect(()=> {
+  //   console.log('sa');
+  // });
   
 
   return (
@@ -77,24 +77,26 @@ const FilterProduct = ({handleOptionClick, toggleDropdown,selectedEmployee,emplo
             </div>
           </div>
 
-          {/* Transaction Dropdown */}
+          {/* status Dropdown */}
           <div className="q-order-page-filter">
-            <label className="q-details-page-label" htmlFor="transactionFilter">
-            Transactions
+            <label className="q-details-page-label" htmlFor="statusFilter">
+            Product Status
             </label>
             <div className="custom-dropdown">
               <div
                 className="custom-dropdown-header"
-                onClick={() => toggleDropdown("transaction")}
+                onClick={() => toggleDropdown("status")}
               >
-                <span className="selected-option mt-1">{selectedTransaction}</span>
+                <span className="selected-option mt-1">{selectedStatusValue === 'all' ? 'ALL' : selectedStatusValue}</span>
                 <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
               </div>
               {transactionDropdownVisible && (
                 <div className="dropdown-content ">
-                  <div onClick={() => handleOptionClick("All", "transaction")}>All</div>
-                  <div onClick={() => handleOptionClick("transaction1", "transaction")}>transaction1</div>
-                  {/* ... (other transaction options) ... */}
+                  <div onClick={() => handleOptionClick("all", "status","All")}>All</div>
+                  <div onClick={() => handleOptionClick("1", "status","Approved")}>Approved</div>
+                  <div onClick={() => handleOptionClick("0", "status","Pending")}>Pending</div>
+                  <div onClick={() => handleOptionClick("2", "status","Rejected")}>Rejected</div>
+                  {/* ... (other status options) ... */}
                 </div>
               )}
             </div>
@@ -102,30 +104,7 @@ const FilterProduct = ({handleOptionClick, toggleDropdown,selectedEmployee,emplo
 
           {/* Order Status Dropdown */}
           <CategoryListDropDown type="category" onCategoryChange={handleCategoryChange} />
-          {/* <div className="q-order-page-filter">
-            <label className="q-details-page-label" htmlFor="categoryFilter">
-            Category
-            </label>
-            <div className="custom-dropdown">
-              <div
-                className="custom-dropdown-header"
-                onClick={() => toggleDropdown("category")}
-              >
-                <span className="selected-option mt-1">{selectedCategory}</span>
-                <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-              </div>
-              {categoryDropdownVisible && (
-                <div className="dropdown-content ">
-                  <div onClick={() => handleOptionClick("All", "category")}>All</div>
-                  { allcategories?.map((category, index) => (
-                  <div  key={index} onClick={() => handleOptionClick(category.id, "category")}>{category.title}</div>
-                 
-                  ))}
-                  
-                </div>
-              )}
-            </div>
-          </div> */}
+          
         </div>
         <div className="q-order-page-filter w-[31.2%]">
             <label className="q-details-page-label" htmlFor="ListingFilter">
@@ -142,8 +121,8 @@ const FilterProduct = ({handleOptionClick, toggleDropdown,selectedEmployee,emplo
               {listingTypesDropdownVisible && (
                 <div className="dropdown-content ">
                   {/* <div onClick={() => handleOptionClick("All", "listingtype")}>All</div> */}
-                  <div onClick={() => handleOptionClick(0, "listingType")}>Product listing</div>
-                  <div onClick={() => handleOptionClick(1, "listingType")}>Variant listing</div>
+                  <div onClick={() => handleOptionClick(0, "listingType","Product listing")}>Product listing</div>
+                  <div onClick={() => handleOptionClick(1, "listingType","Variant listing")}>Variant listing</div>
                   {/* ... (other order status options) ... */}
                 </div>
               )}

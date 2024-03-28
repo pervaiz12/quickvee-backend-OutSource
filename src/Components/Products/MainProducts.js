@@ -12,9 +12,11 @@ const MainProducts = () => {
   const [offset, setoffset] = useState(0);
   const [limit, setlimit] = useState(10);
   const [selectedEmployee, setSelectedEmployee] = useState("All");
-  const [selectedTransaction, setSelectedTransaction] = useState("All");
+  const [selectedStatus, setSelectedStatus] = useState("All");
+  const [selectedStatusValue, setSelectedStatusValue] = useState("all");
  
   const [selectedListingType, setSelectedListingType] = useState("Select listing");
+  const [selectedListingTypeValue, setSelectedListingTypeValue] = useState("0");
 
   const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
   const [transactionDropdownVisible, setTransactionDropdownVisible] = useState(false);
@@ -25,7 +27,6 @@ const MainProducts = () => {
   // Function to update the category ID, which will be passed to the child
   const handleCategoryChange = (catId) => {
     setCategoryId(catId);
-    console.log(catId+'catid')
   };
 
   const toggleDropdown = (dropdown) => {
@@ -33,7 +34,7 @@ const MainProducts = () => {
       case "employee":
         setEmployeeDropdownVisible(!employeeDropdownVisible);
         break;
-      case "transaction":
+      case "status":
         setTransactionDropdownVisible(!transactionDropdownVisible);
         break;
       // case "category":
@@ -47,7 +48,7 @@ const MainProducts = () => {
     }
   };
 
-  const handleOptionClick = (option, dropdown) => {
+  const handleOptionClick = (option, dropdown, value) => {
 
    
     switch (dropdown) {
@@ -55,13 +56,25 @@ const MainProducts = () => {
         setSelectedEmployee(option);
         setEmployeeDropdownVisible(false); 
         break;
-      case "transaction":
-        setSelectedTransaction(option);
+      case "status":
+        setSelectedStatus(option);
+        setSelectedStatusValue(value);
         setTransactionDropdownVisible(false); 
-      // case "category":
-      //   setSelectedCategory(option);
-      //   setCategoryDropdownVisible(false); 
-      //   break;
+        dispatch(emptyProduct([]))
+        let status_data = {
+          merchant_id: "MAL0100CA",
+          category_id: categoryId,
+          show_status: option,
+          listing_type: selectedListingTypeValue,
+          offset: 0,
+          limit: 10,
+          page: 0
+        };
+        if (status_data) {
+          dispatch(fetchProductsData(status_data));
+        }
+        setlistingTypesDropdownVisible(false); 
+        break;
       case "listingType":
           dispatch(emptyProduct([]))
           if(option === 0)
@@ -71,17 +84,18 @@ const MainProducts = () => {
           {
             setSelectedListingType("Variant listing");
           }
-          let data = {
+          setSelectedListingTypeValue(option)
+          let listing_data = {
             merchant_id: "MAL0100CA",
-            category_id: 'all',
-            show_status: 'all',
+            category_id: categoryId,
+            show_status: selectedStatus,
             listing_type: option,
             offset: 0,
             limit: 10,
             page: 0
           };
-          if (data) {
-            dispatch(fetchProductsData(data));
+          if (listing_data) {
+            dispatch(fetchProductsData(listing_data));
           }
           setlistingTypesDropdownVisible(false); 
           break;
@@ -93,14 +107,14 @@ const MainProducts = () => {
   return (
     <>
       <div className="q-attributes-main-page">
-        <FilterProduct {...{ handleOptionClick, toggleDropdown,selectedEmployee,employeeDropdownVisible,selectedTransaction,
-                        transactionDropdownVisible,selectedListingType,listingTypesDropdownVisible,handleCategoryChange}} />
+        <FilterProduct {...{ handleOptionClick, toggleDropdown,selectedEmployee,employeeDropdownVisible,selectedStatus,
+                        transactionDropdownVisible,selectedListingType,selectedListingTypeValue,listingTypesDropdownVisible,handleCategoryChange,selectedStatusValue}} />
       </div>
       <div className="q-attributes-main-page">
         <ProductContent />
       </div>
       <div className="q-attributes-main-page">
-        <ProductTable {...{selectedListingType,productsList,setproductsList,offset,setoffset,limit,setlimit,categoryId}} />
+        <ProductTable {...{selectedListingType,productsList,setproductsList,offset,setoffset,limit,setlimit,categoryId,selectedListingTypeValue,selectedStatus}} />
       </div>
      
     </>

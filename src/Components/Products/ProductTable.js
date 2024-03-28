@@ -10,16 +10,16 @@ import { BASE_URL } from "../../Constants/Config";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ProductRow from "./ProductRow";
 
-const ProductTable = ({selectedListingType,productsList,setproductsList,categoryId}) => 
+const ProductTable = ({selectedListingType,productsList,setproductsList,categoryId,selectedStatus,selectedStatusValue}) => 
 {
   let listing_type = 0;
   const ProductsListDataState = useSelector((state) => state.productsListData);
   const { hasMore,offset,limit } = useSelector((state) => state.productsListData);
   
-  useEffect(()=> {
-    console.log(categoryId+'asdasd')
-    console.log('product tables');
-  });
+  // useEffect(()=> {
+  //   console.log(categoryId+'asdasd')
+  //   console.log('product tables');
+  // });
   useEffect(() => {
     if (
       !ProductsListDataState.loading &&
@@ -37,8 +37,8 @@ const ProductTable = ({selectedListingType,productsList,setproductsList,category
   useEffect(() => {
     let data = {
       merchant_id: "MAL0100CA",
-      category_id: 'all',
-      show_status: 'all',
+      category_id: categoryId,
+      show_status: selectedStatus,
       listing_type: selectedListingType,
       offset: 0,
       limit: 10,
@@ -103,7 +103,7 @@ const ProductTable = ({selectedListingType,productsList,setproductsList,category
       merchant_id: "MAL0100CA",
       format:"json",
       category_id: categoryId,
-      show_status: 'all',
+      show_status: selectedStatus,
       listing_type: listing_type,
       offset: offset,
       limit: 10,
