@@ -1,23 +1,107 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { fetchshiftsummaryData } from "../../../Redux/features/Reports/ShiftSummary/ShiftSummarySlice";
 
-const SiftSummaryDetails = () => {
+const SiftSummaryDetails = (props) => {
+  const dispatch = useDispatch();
+  const [allshiftsummary, setAllShiftSummary] = useState([]);
+  const allshiftsummaryDataState = useSelector(
+    (state) => state.ShiftSummarylist
+  );
+
+  useEffect(() => {
+    if (props && props.selectedDateRange) {
+      let data = {
+        merchant_id: "MAL0100CA",
+        start_date: props.selectedDateRange.start_date,
+        end_date: props.selectedDateRange.end_date,
+        shift_assign: props.SelectEmpListData,
+      };
+      if (data) {
+        dispatch(fetchshiftsummaryData(data));
+      }
+    }
+  }, [props]);
+
+  useEffect(() => {
+    if (
+      !allshiftsummaryDataState?.loading &&
+      allshiftsummaryDataState?.shiftsummaryData
+    ) {
+      setAllShiftSummary(allshiftsummaryDataState.shiftsummaryData);
+    }
+  }, [allshiftsummaryDataState]);
+  console.log(allshiftsummary);
+
   return (
     <>
-      <div className="q-daily-report-bottom-report-header">
-        <p className="report-sort">Date</p>
-        <p className="report-sort">Station Name</p>
-        <p className="report-sort"> Employee Name</p>
-        <p className="report-sort"> Expected Cash ($)</p>
-        <p className="report-sort"> Actual Cash ($)</p>
-      </div>
-
-      <div className="q-category-bottom-categories-listing">
-        <div className="q-category-bottom-categories-single-category">
-          <p className="report-sort">hello</p>
-          <p className="report-sort">hello</p>
-          <p className="report-sort">hello</p>
-          <p className="report-sort">hello</p>
-          <p className="report-sort">hello</p>
+      <div className="box">
+        <div className="q-daily-report-bottom-report-header">
+          <p className="report-sort">Cashier/Station Name</p>
+          <p className="report-sort">Open Time</p>
+          <p className="report-sort">Close Time</p>
+          <p className="report-sort">Open Drawer ($)</p>
+          <p className="report-sort">Total Sale ($)</p>
+          <p className="report-sort">Total Refund ($)</p>
+          <p className="report-sort">Total Tip ($)</p>
+          <p className="report-sort">Total Vendor Payout ($)</p>
+          <p className="report-sort">Cash Drop ($)</p>
+          <p className="report-sort">Total Cash Sale ($)</p>
+          <p className="report-sort">Total Debit+Credit Sale ($)</p>
+          <p className="report-sort">Expected Cash ($)</p>
+          <p className="report-sort">Drawer Over/Short ($)</p>
+          <p className="report-sort">Actual Cash Deposited ($)</p>
+        </div>
+        <div>
+          {Object.keys(allshiftsummary).map((date) => (
+            <div key={date}>
+              {/* <h2>{date}</h2> */}
+              {allshiftsummary[date] &&
+                allshiftsummary[date].length >= 1 &&
+                allshiftsummary[date].map((shift, index) => (
+                  <div key={index} className="q-category-bottom-categories-listing">
+                    {shift.map((shiftDetail, shiftIndex) => (
+                      <div key={shiftIndex} className="q-category-bottom-categories-single-category">
+                         <p className="report-sort">{shiftDetail.device_name}</p>
+                         <p className="report-sort">{shiftDetail.in_time}</p>
+                         <p className="report-sort">{shiftDetail.out_time}</p>
+                     <p className="report-sort">{shiftDetail.drawer_cash}</p>
+                        <p className="report-sort">{shiftDetail.expected_amt}</p>
+                        <p className="report-sort">{shiftDetail.actual_amt}</p>
+                        <p className="report-sort">{shiftDetail.drop_cash}</p>
+                       
+                      
+                        <p className="report-sort">{shiftDetail.shift_type}</p>
+                      
+                        <p className="report-sort">
+                          {shiftDetail.total_refund}
+                        </p>
+                        
+                        <p className="report-sort">
+                          {shiftDetail.total_vendor_payout}
+                        </p>
+                        <p className="report-sort">{shiftDetail.total_sale}</p>
+                        <p className="report-sort">
+                          {shiftDetail.refunds}
+                        </p>
+                        <p className="report-sort">
+                          {shiftDetail.tip}
+                        </p>
+                        <p className="report-sort">
+                          {shiftDetail.card_collected_wr}
+                        </p>
+                        <p className="report-sort">
+                          {shiftDetail.cash_collected_wr}
+                        </p>
+                        <p className="report-sort">
+                          {shiftDetail.cash_drop}
+                        </p>
+                      </div>
+                    ))}
+                  </div>
+                ))}
+            </div>
+          ))}
         </div>
       </div>
     </>
@@ -25,3 +109,5 @@ const SiftSummaryDetails = () => {
 };
 
 export default SiftSummaryDetails;
+
+

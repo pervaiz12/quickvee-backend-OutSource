@@ -3,6 +3,7 @@ import SalesPersonFilter from './SalesPersonFilter'
 import DateRange from '../../Orders/InstoreOrder/DateRange'
 import SalesPersonReport from './SalesPersonReport'
 
+
 const MainSalesPerson = () => {
 
   const [selectedDateRange, setSelectedDateRange] = useState(null);
@@ -28,18 +29,22 @@ const MainSalesPerson = () => {
       </div>
 
       <div className='q-order-main-page'>
+        <div className='box'>
         <DateRange 
           onDateRangeChange={handleDateRangeChange}
         />
       </div>
+      </div>
 
       <div className='q-order-main-page'>
+        <div className='box'>
         <SalesPersonReport 
           selectedDateRange={selectedDateRange} 
           OrderSourceData={OrderSourceData} 
           OrderTypeData={OrderTypeData} 
           SelectEmpListData={SelectEmpListData} 
         />
+      </div>
       </div>
     </>
   )

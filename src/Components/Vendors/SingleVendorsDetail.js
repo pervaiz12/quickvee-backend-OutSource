@@ -247,6 +247,7 @@ const SingleVendorsDetail = ({ setVisible }) => {
    
   return (
 <div className='q-category-main-page'>
+  <div className='box'>
 <br></br>
   <form >
   <div className='q-add-categories-section'>
@@ -444,6 +445,7 @@ const SingleVendorsDetail = ({ setVisible }) => {
       
   </div>
 </form>
+</div>
 </div>
   )
   

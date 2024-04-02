@@ -4,6 +4,7 @@ import Add_adminFunctionality from './add_adminFunctionality'
 export default function Add_Admin() {
     const {handleChange,addAdminData,handleSubmit,handleBlur,handleKeyPress}=Add_adminFunctionality()
   return (
+    <div className='q-order-min-page'>
     <div className='box'>
         <div className='box_shadow_div'>
             <div className='pd_20'>
@@ -18,9 +19,9 @@ export default function Add_Admin() {
                                 value={addAdminData.owner_name}
                                 onChange={handleChange}
                             />
+                            {addAdminData.errors.owner_name && <span className='error'>{addAdminData.errors.owner_name}</span>}
                         </div>
                         
-                        {addAdminData.errors.owner_name && <span>{addAdminData.errors.owner_name}</span>}
                     </div>
                     
                     <div className='col-qv-6'>
@@ -32,12 +33,10 @@ export default function Add_Admin() {
                                 name="email"
                                 value={addAdminData.email}
                                 onChange={handleChange}
-                                onBlur={() => handleBlur('email')}
-                                
-                                
+                                onBlur={() => handleBlur('email')}   
                             />
+                            {addAdminData.errors.email && <span className='error'>{addAdminData.errors.email}</span>}
                         </div>
-                        {addAdminData.errors.email && <span>{addAdminData.errors.email}</span>}
                     </div>
                 </div>
                 <div className='qvrow'>
@@ -46,14 +45,14 @@ export default function Add_Admin() {
                             <label>Password</label>
                             <input 
                                 className=''
-                                type='text'
+                                type='password'
                                 name="password"
                                 value={addAdminData.password}
                                 onChange={handleChange}
                                 
                             />
+                            {addAdminData.errors.password && <span className='error'>{addAdminData.errors.password}</span>}
                         </div>
-                        {addAdminData.errors.password && <span>{addAdminData.errors.password}</span>}
                     </div>
                     <div className='col-qv-6'>
                         <div className='input_area'>
@@ -68,8 +67,8 @@ export default function Add_Admin() {
                                 onKeyPress={handleKeyPress}
                             
                             />
+                            <label className='error'>{addAdminData.errors.phone}</label>
                         </div>
-                        <label>{addAdminData.errors.phone}</label>
                     </div>
                 </div>  
                 <input 
@@ -81,6 +80,7 @@ export default function Add_Admin() {
             </div>
         </div>
       
+    </div>
     </div>
   )
 }

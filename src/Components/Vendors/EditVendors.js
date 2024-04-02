@@ -180,11 +180,12 @@ const Navigate = useNavigate()
   return (
     
 <div className='q-category-main-page'>
+  <div className='box'>
   <br></br>
   <form onSubmit={handleFormSubmit}>
   <div className='q-add-categories-section'>
-    <div className='q-add-categories-section-header'>
-    <img onClick={() => { Navigate(-1)}} src={EditNewVendor} alt="Edit-New-Vendors" style={{"cursor":"pointer"}} />
+    <div onClick={() => { Navigate(-1)}} className='q-add-categories-section-header'>
+    <img  src={EditNewVendor} alt="Edit-New-Vendors" style={{"cursor":"pointer"}} />
         <span>Edit Vendors</span>
     </div>
     <div className='q-add-categories-section-middle-form'>
@@ -236,7 +237,7 @@ const Navigate = useNavigate()
           </div>
          
           <div className='col-qv-4'>
-            <div className='q-add-categories-single-input qv_input'>
+            <div className=' qv_input'>
               <label htmlFor="State">State</label>
               <Autocomplete
                   value={vendorData.vendor_data?.[0]?.state || null}
@@ -248,9 +249,11 @@ const Navigate = useNavigate()
                     setInputValue(newInputValue);
                   }}
                   id="controllable-states-demo"
+                  size="small"
                   options={states}
-                  sx={{ width: 300 }}
-                  renderInput={(params) => <TextField {...params} />}
+                  renderInput={(params) => <TextField {...params}  sx={{
+                    margin: "1rem 0rem",
+                  }} />}
                 />
 
             </div>
@@ -268,6 +271,7 @@ const Navigate = useNavigate()
     </div>
   </div>
 </form>
+</div>
 </div>
   )
   

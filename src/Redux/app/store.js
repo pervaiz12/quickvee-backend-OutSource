@@ -45,7 +45,14 @@ import OrderRefundListReducer from "../features/Reports/OrderRefundReport/OrderR
 import NewsLetterListReducer from "../../Redux/features/NewsLetter/NewsLetterSlice";
 import vendorReducer from "../features/VendorList/vListSlice";
 import orderSummerySlice from "../features/OrderSummary/OrderSummarySlice";
+
 import productsReducer from "../features/Product/ProductSlice";
+
+import loyaltyprogramSlice from "../features/LoyaltyProgram/loyaltyprogramSlice";
+import SettingSetupSlice from "../features/SettingSetup/SettingSetupSlice";
+import ShiftSummarySlice from "../features/Reports/ShiftSummary/ShiftSummarySlice";
+import DetailCategorySaleSliceReducer from "../features/DetailCategorySale/detailCategorySaleSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -68,6 +75,8 @@ const store = configureStore({
     SettingReceiptList: SettingReceiptReducer,
     CheckIDVerifyList:CheckIDVerifyListReducer,
     dailyreport:DailyReportList,
+    detailCategorySale:DetailCategorySaleSliceReducer,
+
 
    //reducer for payment method  report
    paymentDetailReport:PaymentMethodDetailReducer,
@@ -119,7 +128,17 @@ const store = configureStore({
     OrderRefundList:OrderRefundListReducer,
     productsListData: productsReducer,
 
+    loyaltyprogram: loyaltyprogramSlice,
+    ShiftSummarylist: ShiftSummarySlice,
+    StoreSetupList: SettingSetupSlice,
+
   },
+
+      //setting setup 
+
+   //ShiftSummarySlice
+
+
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),
 });
 

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect, useRef } from "react";
 import AddNewCategory from "../../Assests/Taxes/Left.svg";
 import axios from "axios";
@@ -277,6 +278,7 @@ const EditCategory = () => {
 
   return (
     <div className="q-category-main-page">
+      <div className="box">
       <div className="q-category-top-detail-section">
         <li>In order to use the Quickvee app one Category is required.</li>
         <li>
@@ -339,6 +341,9 @@ const EditCategory = () => {
                 position: "relative",
                 height: "auto",
                 padding: "10px",
+                height: "260px",
+                backgroundColor: "#f9f9f9",
+                overflow:"hidden"
               }}
             >
               {category.image && category.image.base64 ? (
@@ -424,9 +429,10 @@ const EditCategory = () => {
               </div>
             </div>
 
-            {renderRemoveBannerButton()}
+           
 
-            <div className="row " style={myStyles}>
+            <div className="row py-3" style={myStyles}>
+            {renderRemoveBannerButton()}
               <div className="add-category-checkmark-div">
                 <label className="add-category-checkmark-label mt-2">
                   Use Loyalty Point ?
@@ -473,6 +479,7 @@ const EditCategory = () => {
           </div>
         </form>
       </div>
+    </div>
     </div>
   );
 };

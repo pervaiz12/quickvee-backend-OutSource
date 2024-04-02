@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
-import { BASE_URL, LIST_ALL_IN_STORE_ORDER} from "../../../Constants/Config"
+import { BASE_URL, LIST_ALL_STORE_ORDER_LIST} from "../../../Constants/Config"
 
 const initialState = {
     loading: false,
@@ -13,10 +13,10 @@ const initialState = {
 // Generate pening , fulfilled and rejected action type
 export const fetchInStoreOrderData = createAsyncThunk('inStoreOrder/fetchInStoreOrderData.', async (data) => {
     try {
-        const response = await axios.post(BASE_URL + LIST_ALL_IN_STORE_ORDER, data, { headers: { "Content-Type": "multipart/form-data" } })
+        const response = await axios.post(BASE_URL + LIST_ALL_STORE_ORDER_LIST, data, { headers: { "Content-Type": "multipart/form-data" } })
         // console.log(response)
         if (response.data.status === true) {
-           return response.data.data
+           return response.data.order_data
         }
     } catch (error) {
         throw new Error(error.response.data.message);

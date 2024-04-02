@@ -18,7 +18,7 @@ import {
 
 export default function EditCustomer() {
     const {handleEditData,customerData,handleChange,customerRadio,AdminRadio,merchantRadio,
-        handleChangeRadio,handleSubmitCustomerRecord,successMessage,handleKeyPress,errors}=EditCustomerFunction()
+        handleChangeRadio,handleSubmitCustomerRecord,successMessage,handleKeyPress,errors,onhandlePassword,password}=EditCustomerFunction()
     const  {id}  = useParams();
     useEffect(()=>{
          handleEditData(id)
@@ -44,8 +44,8 @@ export default function EditCustomer() {
                                     value={customerData.name}
                                     onChange={handleChange}
                                 />
+                                <label className='error'>{errors.name}</label>
                             </div>
-                            <label>{errors.name}</label>
                             
                         </div>
                         
@@ -71,9 +71,9 @@ export default function EditCustomer() {
                                 <input 
                                     className=''
                                     type='text'
-                                    name="password"
-                                    // onChange={handleChange}
-                                    // value={customerData.password}
+                                    name="reSet"
+                                    onChange={handleChange}
+                                    value={customerData.reSet}
                                 />
                             </div>
                             {/* <label>{store.errors.email}</label> */}
@@ -90,8 +90,8 @@ export default function EditCustomer() {
                                     onKeyPress={handleKeyPress}
                                     maxLength={10}
                                 />
+                                <label className='error'>{errors.phone}</label>
                             </div>
-                            <label>{errors.phone}</label>
                         </div>
                     </div>
                    
@@ -144,13 +144,8 @@ export default function EditCustomer() {
                         </div>
                         {/* <label>{radioErros}</label> */}
                     </div>
-                </div>
-                
-          
-          
+                </div>   
         </div>
-        
-        
     </div>  
         
 

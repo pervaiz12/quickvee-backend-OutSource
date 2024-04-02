@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const EditAdminFunctionality=()=>{
     const navigate = useNavigate();
-    const[editData,setEditData]=useState({owner_name:'',email:'',password:'',phone:'',password:''})
+    const[editData,setEditData]=useState({owner_name:'',email:'',password1:'',phone:'',password:''})
     const[errors,setErrors]=useState({
       owner_name:'',
       phone:'',
@@ -22,7 +22,7 @@ const EditAdminFunctionality=()=>{
             if(response.data.status==200)
             {
               //  console.log(response.data.message[0])
-                setEditData(response.data.message[0])
+                setEditData({password1:'',...response.data.message[0]})
 
             }
 
@@ -60,9 +60,10 @@ const EditAdminFunctionality=()=>{
         }
        
         setErrors(updatedErrors);
+        const trimmedValue = value.replace(/^\s+|\s+$/g, '')
         setEditData((prevCustomerData) => ({
           ...prevCustomerData,
-          [name]: value,
+          [name]: trimmedValue,
         }));
         
         // setEditData({...editData,[name]:value})
@@ -75,25 +76,51 @@ const EditAdminFunctionality=()=>{
         e.preventDefault();
       }
     };
+    const validateForm=()=>{
+      let error=false
+      let updatedErrors = { ...errors };
+      if(editData.owner_name=="")
+      {
+        updatedErrors.owner_name="`please fill the owner_name field"
+        error=true
+      }
+      if(editData.email=="")
+      {
+        updatedErrors.email="`please fill the email field"
+        error=true
+
+      }
+      setErrors({...errors,updatedErrors})
+      if(error==true)
+      {
+        return false
+      }else{
+        return true
+      }
+
+    }
 
     const handleSubmitAdmin=async(e)=>{
-        const data={admin_id:editData.id,name:editData.owner_name,owner_name:editData.owner_name,password:editData.password,phone:editData.phone,email:editData.email}
+        const data={admin_id:editData.id,name:editData.owner_name,owner_name:editData.owner_name,password:editData.password1,phone:editData.phone,email:editData.email}
+        // console.log(data)
        
         let validate=Object.values(errors).filter(error => error !== '').length;
-        
-        if(validate == 0)
+        const validateBlank=validateForm()
+        if(validateBlank)
         {
-          await axios.post(BASE_URL+UPDATE_ADMIN_RECORD,data,{headers:{
-            "Content-Type":'multipart/form-data'
-          }}).then(result=>{
-            setEditData({owner_name:'',email:'',password:'',phone:'',password:''})
-            navigate('/users/admin')
-          })
+          if(validate == 0)
+          {
+            await axios.post(BASE_URL+UPDATE_ADMIN_RECORD,data,{headers:{
+              "Content-Type":'multipart/form-data'
+            }}).then(result=>{
+              setEditData({owner_name:'',email:'',password:'',phone:'',password:''})
+              navigate('/users/admin')
+            })
+
+          }
+        
 
         }
-
-        
-
     }
     return{handleEditAdmin,editData,handleChangeAdmin,handleSubmitAdmin,errors,handleKeyPress}
 

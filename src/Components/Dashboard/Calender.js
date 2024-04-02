@@ -45,10 +45,10 @@ export default function Calendar() {
       <DateCalendar />
     </LocalizationProvider>
     
-  <div className='flex justify-between w-full'>
+  <div className='flex justify-between w-full gap-2'>
     <div className="relative">
               <div className="mb-2 text-[#818181]  Admin_std">Start Date</div>
-              <div className="lg:w-full sm:w-full md:h-full mx-2">
+              <div className="lg:w-full sm:w-full md:h-full">
               <DatePicker
         selected={startDate}
         onChange={(date) => setStartDate(date)}
@@ -70,6 +70,7 @@ export default function Calendar() {
             </div>
             <div className="relative mt-4 sm:mt-0">
               <div className="mb-2 text-[#818181] Admin_std">End Date</div>
+              <div className="lg:w-full sm:w-full md:h-full">
               <DatePicker
         selected={endDate}
         onChange={(date) => setEndDate(date)}
@@ -82,6 +83,7 @@ export default function Calendar() {
         ref={endDateRef}
         showPopperArrow={false}
       />
+      </div>
               <span
                 className="absolute right-3 top-14 transform -translate-y-1/2 text-gray-400 cursor-pointer"
                 onClick={handleEndDateIconClick}
@@ -90,7 +92,7 @@ export default function Calendar() {
               </span>
             </div>
             </div>
-            <div className="q-add-categories-section-middle-footer">
+            <div className="q-add-categories-section-middle-footer" style={{display:"flex", justifyContent:'flex-start'}}>
        
         <button className="quic-btn quic-btn-cancle mr-2">Cancel</button>
         <button className="quic-btn quic-btn-save">Retrive</button>

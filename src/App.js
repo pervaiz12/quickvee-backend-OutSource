@@ -39,6 +39,7 @@ import MainTaxes from "./Components/StoreSetting/Taxes/MainTaxes";
 // import Info from "./Components/StoreSetting/SubSetting/Info";
 
 // import Info from "./Components/StoreSetting/SubSetting/Info";
+import "./Styles/storeSettingInfo.css"
 
 import "./Styles/AttributesPage.css";
 
@@ -55,7 +56,7 @@ import "./Styles/CouponDiscount.css";
 import "./Styles/ImportData.css";
 import "./Styles/DailyDaterange.css";
 // import "./Styles/EmployeeWorking.css";
-
+import "./Styles/Table.css";
 import "./Styles/DefaultsPage.css";
 
 import "./Styles/ReceiptMainpage.css";
@@ -83,7 +84,7 @@ import MainSalesPerson from "./Components/Reporting/SalesByPerson/MainSalesPerso
 // import MainInvDuplicates from "./Components/InventoryDuplicates/MainInvDuplicates";
 import Main from "./Main";
 import "./Styles/OrderSummaryDetails.css";
-
+import "./Styles/Table.css"
 
 
 // import InventoryExport from "./Components/InventoryExport/MainInventoryExport";
@@ -125,7 +126,16 @@ function App() {
         path="/import-data"
         element={<Main visible={"import-data"} />}
       />
+      <Route
+        exact
+        path="/loyalty-program"
+        element={<Main visible={"loyalty-program"} />}
+      />
       <Route exact path="/coupons" element={<Main visible={"coupons"} />} />
+      <Route
+        exact
+        path="/coupons/edit-coupons/:couponsCode"
+        element={<Main visible={"coupons-edit-cop"} />} />
       <Route exact path="/vendors" element={<Main visible={"vendors"} />} />
       <Route exact path="/vendors/edit-vendor/:code" element={<Main visible={"edit-vendor"} />} />
       <Route exact path="/vendors/vendor-details/:code" element={<Main visible={"vendor-details"} />} />

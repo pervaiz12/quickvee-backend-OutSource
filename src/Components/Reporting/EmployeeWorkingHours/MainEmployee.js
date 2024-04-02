@@ -30,6 +30,7 @@ const MainEmployee = () => {
 
   return (
     <>
+    <div className="box">
       <div className="q-category-bottom-detail-section">
         <div className="">
           <div className="q-category-bottom-header">
@@ -79,6 +80,7 @@ const MainEmployee = () => {
 
           <div className="q-order-page-filter"></div>
         </div>
+      </div>
       </div>
     </>
   );

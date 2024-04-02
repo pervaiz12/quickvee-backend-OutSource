@@ -10,7 +10,11 @@ const TopSallerList = ({data}) => {
     const topsallerDataState = useSelector((state) => state.topsaller);
 
     useEffect(() => {
+      if(!data.merchant_id){
+          console.log("empty")
+      }else{
         dispatch(fetchtopsallerData(data));
+      }
       }, [dispatch, data]);
 
     useEffect(() => {
@@ -29,26 +33,31 @@ const TopSallerList = ({data}) => {
             topsaller.status === "Failed" &&
             topsaller.msg === "No. Data found."
         ) {
-          return <div className="empty-div">No data available</div>;
+          return <div className="empty-div box" >No data available</div>;
         } else if (topsaller && topsaller.length >= 1) {
 
           return (
             <>
+            <div className="box">
               <div className="q-daily-report-bottom-report-header">
-                <p className="report-sort">Product Name</p>
-                <p className="report-sort">Category</p>
-                <p className="report-sort">Varient Name</p>
-                <p className="report-sort">Quantity Sold</p>
+                <p className="report-title">Product Name</p>
+                <p className="report-title">Category</p>
+                <p className="report-title">Varient Name</p>
+                <p className="report-title">Quantity Sold</p>
+              </div>
               </div>
               {topsaller.map((topsaller, index) => (
-                <div className="q-category-bottom-categories-listing" key={index}>
-                  <div className="q-category-bottom-categories-single-category">
-                    <p className="report-sort">{topsaller.real_name}</p>
-                    <p className="report-sort">{topsaller.categoryss}</p>
+                <div className="box mb-4">
+                <div className="q-category-bottom-categories-listing " key={index}>
+                  <div className="q-category-bottom-categories-single-category ">
+                    <p className="report-title ">{topsaller.real_name}</p>
+                    <p className="report-title">{topsaller.categoryss}</p>
                     <p className="report-title">{topsaller.variant}</p>
                     <p className="report-title">{topsaller.total_sold}</p>
                   </div>
                 </div>
+                </div>
+               
               ))}
 
             </>

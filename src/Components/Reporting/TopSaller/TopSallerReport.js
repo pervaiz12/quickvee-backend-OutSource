@@ -167,6 +167,7 @@ const TopSallerReport = () => {
   return (
     <>
       <div className="q-order-main-page">
+        <div className="box">
         <div className="q-category-bottom-detail-section">
           <div className="q-category-bottom-header-sticky">
             <div className="q-category-bottom-header">
@@ -288,7 +289,7 @@ const TopSallerReport = () => {
           </div>
         </div>
       </div>
-
+      </div>
       <style>
         {`
           .dailytotoalReport .q_dateRange_header{
@@ -299,8 +300,10 @@ const TopSallerReport = () => {
 
       <div className="q-attributes-main-page">
         <div className="dailytotoalReport">
+          <div className="box">
           <DateRange onDateRangeChange={handleDataFiltered} />
         </div>
+      </div>
       </div>
 
       <div className="mt-10">
@@ -308,6 +311,7 @@ const TopSallerReport = () => {
           <TopSallerList data={filteredData} />
         </div>
       </div>
+      
     </>
   );
 };

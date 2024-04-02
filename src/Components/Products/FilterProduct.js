@@ -25,8 +25,9 @@ const FilterProduct = ({handleOptionClick, toggleDropdown,selectedEmployee,del_p
 
   return (
     <>
+    <div className="box">
      <div className="q-attributes-bottom-detail-section bg-white">
-      <div className=" p-4 mb-3  rounded-md">
+      <div className=" p-4 mb-3 rounded-md">
         <div className="flex border  rounded-md overflow-hidden mt-6 mr-9">
           <input
             type="text"
@@ -121,6 +122,7 @@ const FilterProduct = ({handleOptionClick, toggleDropdown,selectedEmployee,del_p
                 <span className="selected-option mt-1">{selectedEmployee}</span>
                 <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
               </div>
+
               {del_picDropdownVisible && (
                 <div className="dropdown-content ">
                   <div onClick={() => handleOptionClick("1", "del_pic","Enable All")}>Enable All</div>
@@ -130,6 +132,14 @@ const FilterProduct = ({handleOptionClick, toggleDropdown,selectedEmployee,del_p
                   <div onClick={() => handleOptionClick("6", "del_pic","Disable Delivery All")}>Disable Delivery All</div>
                   <div onClick={() => handleOptionClick("4", "del_pic","Disable All")}>Disable All</div>
                   {/* ... (other employee options) ... */}
+
+              {listingTypesDropdownVisible && (
+                <div className="dropdown-content">
+                  <div onClick={() => handleOptionClick("All", "listingtype")}>All</div>
+                  <div onClick={() => handleOptionClick("listing1", "listingtype")}>status1</div>
+                  <div onClick={() => handleOptionClick("listing2", "listingtype")}>status2</div>
+                  {/* ... (other order status options) ... */}
+
                 </div>
               )}
             </div>
@@ -143,6 +153,7 @@ const FilterProduct = ({handleOptionClick, toggleDropdown,selectedEmployee,del_p
     </div>
       <div>
         
+      </div>
       </div>
       </div>
     </>

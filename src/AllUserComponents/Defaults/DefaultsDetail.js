@@ -120,16 +120,17 @@ const DefaultsDetail = ({ seVisible }) => {
 
   return (
     <>
-      <div className=" ">
+      <div className="box">
         <div className="q-category-bottom-detail-section">
           <div className="mt-10">
+            <div className="q-category-bottom-header-sticky">
+
             <div className="q-category-bottom-header">
               <span>Default</span>
               <p onClick={() => seVisible("DefaultsAlert")}>
                 Add Default <img src={AddIcon} alt="add-icon" />
               </p>
             </div>
-
             <div className="q-category-bottom-categories-header ">
               <p className="categories-sort">
                 <div className="category-checkmark-div">
@@ -156,6 +157,8 @@ const DefaultsDetail = ({ seVisible }) => {
                 <img src={DeleteIconAll} alt="delete-icon" onClick={() => handleDeleteDefaultSelected()}/>
               </p>
             </div>
+            </div>
+
 
             {defaults.map((defaultsdata, index) => (
               <div

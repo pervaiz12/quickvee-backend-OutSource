@@ -182,6 +182,8 @@ const inputChange = (e) => {
   
 
   return (
+    <>
+    <div className='box'>
   <form onSubmit={handleSubmit}>
   <div className='q-add-categories-section'>
     <div className='q-add-categories-section-header'>
@@ -194,11 +196,13 @@ const inputChange = (e) => {
       <div className='qvrowmain'>
         <div className='qvrow'>
           <div className='col-qv-4'>
-            <div className='input_area'>
+            <div className=''>
               <label htmlFor="vendorName">Vendor Name</label>
               <Autocomplete
                   multiple
-                  id="tags-filled"
+                  id="size-small-standard"
+                  size="small"
+                  className='vander_name_auto'
                   options={allvendors.map((option) => option.name)}
                   value={selectedVendor}
                   freeSolo
@@ -209,7 +213,7 @@ const inputChange = (e) => {
                     ))
                   }
                   renderInput={(params) => (
-                    <TextField {...params} variant="filled" label="" placeholder="Vendor Name" />
+                    <TextField {...params} variant="outlined" label="" placeholder="Vendor Name" />
                   )}
                 />
 
@@ -254,7 +258,7 @@ const inputChange = (e) => {
           </div>
          
           <div className='col-qv-4'>
-            <div className='q-add-categories-single-input qv_input'>
+            <div className=' qv_input'>
               <label htmlFor="State">State</label>
               <Autocomplete
                 value={value}
@@ -266,9 +270,12 @@ const inputChange = (e) => {
                   setInputValue(newInputValue);
                 }}
                 id="controllable-states-demo"
+                className="vander_state"
                 options={states}
-                sx={{ width: 300 }}
-                renderInput={(params) => <TextField {...params}  />}
+                size="small"
+                renderInput={(params) => <TextField {...params}  sx={{
+                  margin: "1rem 0rem",
+                }}  />}
               />
             </div>
           </div>
@@ -285,6 +292,8 @@ const inputChange = (e) => {
     </div>
   </div>
 </form>
+</div>
+</>
 
   )
   

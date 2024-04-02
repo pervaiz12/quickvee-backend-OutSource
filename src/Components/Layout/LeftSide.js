@@ -18,7 +18,7 @@ import EditCategory from "../Category/EditCategory";
 import TopTenders from "../Dashboard/TopTenders";
 
 import Info from "../StoreSetting/Info";
-import Setup from "../StoreSetting/Setup";
+import Setup from "../StoreSetting/MainSetup/Setup";
 import MainStoreAlters from "../StoreSetting/StoreAlters/MainStoreAlters";
 import MainTaxes from "../StoreSetting/Taxes/MainTaxes";
 import MainInventory from "../StoreSetting/Inventory/MainInventory";
@@ -58,18 +58,27 @@ import ReorderInventoryMain from "../Reporting/ReorderInventory/ReorderInventory
 import EditVendors from "../Vendors/EditVendors";
 import SingleVendorsDetail from "../Vendors/SingleVendorsDetail";
 import AddProducts from "../Products/AddProducts"
+import MainLoayalty from "../LoyaltyProgram/MainLoayalty";
+import EditCoupon from "../Coupons/EditCoupon";
 //  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
 // import MainEmployee from "../Reporting/EmployeeWorkingHours/MainEmployee";
 // import MainInvDuplicates from '../InventoryDuplicates/MainInvDuplicates';
 
 const LeftSide = ({ visible }) => {
 
+
   useEffect(() => {
     console.log("hello")
       return () => {
+
+  // useEffect(() => {
+    
+  //   console.log("hello")
+  //     return () => {
+
        
-      }
-    }, )
+  //     }
+  //   }, )
 
 
   return (
@@ -84,9 +93,11 @@ const LeftSide = ({ visible }) => {
           {visible === "products" && <MainProducts />}
 
           {visible === "coupons" && <MainCoupon />}
+          {visible === "coupons-edit-cop" && <EditCoupon />}
           {visible === "vendors" && <MainVendors />}
           {visible === "timesheet" && <MainTimesheet />}
           {visible === "import-data" && <MainImportData />}
+          {visible === "loyalty-program" && <MainLoayalty />}
           {visible === "store-setting" && <MainStoreOption />}
           {visible === "store-setting" && <MainStoreOption />}
           {visible === "category-edit-cat" && <EditCategory />}

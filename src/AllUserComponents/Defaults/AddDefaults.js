@@ -231,7 +231,7 @@ const AddDefaults = ({ seVisible }) => {
 
   return (
     <>
-      <div className=" ">
+      <div className="box">
         <div className="q-add-categories-section">
           <div className="mt-10">
             <form onSubmit={handleSubmit} enctype="multipart/form-data">
@@ -275,7 +275,7 @@ const AddDefaults = ({ seVisible }) => {
                       className="custom-dropdown-header"
                       onClick={() => toggleDropdown("category")}
                     >
-                      <span className="selected-option mt-1">
+                      <span className="selected-option ">
                         {selectedCatSource}
                       </span>
                       <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />

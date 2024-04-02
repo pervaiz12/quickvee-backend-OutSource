@@ -39,8 +39,7 @@ function ViewAdmin(props) {
             {/* Your modal content */}
             <div className="">
               <p className="q-custom-modal-header ">
-                Add New Attribute
-              
+                {props.adminName}
               </p>
             </div>
             {/* ... other modal content ... */}

@@ -16,7 +16,9 @@ const InstantActvity = () => {
     <>
       <div className="">
         <div className="q-order-main-page">
+          <div className="box instantPOReport">
           <DateRange onDateRangeChange={handleDataFiltered} />
+          </div>
         </div>
 
         <div className="q-order-main-page">

@@ -6,6 +6,7 @@ import axios from 'axios';
 export default function ManagerFunctionality() {
     const[showMerchant,setShowMerchant]=useState(false)
     const[showMerchantData,setShowMerchantData]=useState([])
+    const[name,setName]=useState('')
 
     // const handleViewMerchant=(data)=>{
     //     // console.log('hello')
@@ -41,7 +42,9 @@ export default function ManagerFunctionality() {
     //      console.log(sports)
          
     // }
-    const handleViewMerchant = async (data) => {
+    const handleViewMerchant = async (data,name) => {
+        // console.log(name)
+        setName(name)
         const dataArray = data.split(',');
         const sports = [];
         // console.log(dataArray)
@@ -54,6 +57,8 @@ export default function ManagerFunctionality() {
                     const response = await axios.post(BASE_URL + GET_MANAGER_MERCHANT, postData, { headers: { "Content-Type": "multipart/form-data" } });
     
                     if (response.data.status === 200) {
+                        console.log(response.data)
+                        
                         sports.push(response.data.message[0]);
                       
                     }
@@ -75,6 +80,6 @@ export default function ManagerFunctionality() {
     }
 
 
-    return {setShowMerchant,showMerchant,handleViewMerchant,handleCloseMerchantModel,showMerchantData}
+    return {setShowMerchant,showMerchant,handleViewMerchant,handleCloseMerchantModel,showMerchantData,name}
    
 }

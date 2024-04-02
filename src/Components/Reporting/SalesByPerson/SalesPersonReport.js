@@ -49,6 +49,7 @@ const SalesPersonReport = (props) => {
 
   return (
     <>
+    
       {allSalesByPersonData && Object.keys(allSalesByPersonData).map((EmpData, index) => (
         <div key={index} className="q-attributes-bottom-detail-section">
           <div className="q-category-bottom-header">

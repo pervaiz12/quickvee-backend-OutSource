@@ -4,7 +4,7 @@ import EmployeeList from "./EmployeeList";
 const MainAddEmployee = () => {
     return (
       <>
-        <div className="q-attributes-main-page">
+        <div className="q-category-main-page">
         <EmployeeList/>
         </div>
       </>

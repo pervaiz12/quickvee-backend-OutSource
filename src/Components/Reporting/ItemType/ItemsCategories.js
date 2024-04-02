@@ -69,6 +69,7 @@ const ItemsCategories = () => {
 
   return (
     <>
+    <div className="box">
       <div className="q-category-bottom-detail-section">
         <div className="">
           <div className="q-category-bottom-header">
@@ -114,7 +115,10 @@ const ItemsCategories = () => {
               )}
             </div>
           </div>
+          <div className="q-order-page-filter"></div>
+          <div className="q-order-page-filter"></div>
         </div>
+      </div>
       </div>
      
 
@@ -128,12 +132,14 @@ const ItemsCategories = () => {
 
       <div className="mt-10">
         <div className="dailytotoalReport">
+          <div className="box">
           <DateRange onDateRangeChange={handleDataFiltered} />
         </div>
       </div>
+      </div>
 
       <div className="mt-10">
-        <div className="">
+        <div className="box">
           <Itemdatadetails data={filteredData} />
         </div>
       </div>
