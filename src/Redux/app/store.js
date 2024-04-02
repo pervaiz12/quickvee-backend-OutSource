@@ -45,10 +45,14 @@ import OrderRefundListReducer from "../features/Reports/OrderRefundReport/OrderR
 import NewsLetterListReducer from "../../Redux/features/NewsLetter/NewsLetterSlice";
 import vendorReducer from "../features/VendorList/vListSlice";
 import orderSummerySlice from "../features/OrderSummary/OrderSummarySlice";
+
+import productsReducer from "../features/Product/ProductSlice";
+
 import loyaltyprogramSlice from "../features/LoyaltyProgram/loyaltyprogramSlice";
 import SettingSetupSlice from "../features/SettingSetup/SettingSetupSlice";
 import ShiftSummarySlice from "../features/Reports/ShiftSummary/ShiftSummarySlice";
 import DetailCategorySaleSliceReducer from "../features/DetailCategorySale/detailCategorySaleSlice";
+
 
 const store = configureStore({
   reducer: {
@@ -122,6 +126,7 @@ const store = configureStore({
     verifiedMerchantRecord:VerifiedMerchantSliceReducer,
     unverifiedMerchantRecord:UnVerifiedMerchantSliceReducer,
     OrderRefundList:OrderRefundListReducer,
+    productsListData: productsReducer,
 
     loyaltyprogram: loyaltyprogramSlice,
     ShiftSummarylist: ShiftSummarySlice,

@@ -252,6 +252,12 @@ module.exports = Object.freeze({
   GET_REORDER_INVENTORY_LIST: "ReportingReactapi/get_reorder_inventory_list",
 
 
+  // PRODUCTS
+  PRODUCTS_LIST: "Product_api_react/Products_list",
+  PRODUCT_DEFAULT_IMAGE : this.BASE_URL+"upload/products/MaskGroup4542.png",
+  UPDATE_TYPE : "Product_api_react/update_type",
+
+
   //shiftsummary api
 
   GET_SHIFT_SUMMARY_LIST: "ReportingReactapi_pcr/shift_summary_report_list",
@@ -262,6 +268,7 @@ module.exports = Object.freeze({
   
   //All Orders API
   UPDATE_ORDER_STATUS: "Order_list_api/changeStatus_api",
+
 
 });
 
