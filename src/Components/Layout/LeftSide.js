@@ -155,7 +155,6 @@ const LeftSide = ({ visible }) => {
         </div>
       </div>
     </>
-  );
-};
+ 
 
-export default LeftSide;
+   
