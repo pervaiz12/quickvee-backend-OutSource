@@ -3,9 +3,9 @@ import { AiOutlineSearch } from 'react-icons/ai';
 import DownIcon from "../../Assests/Dashboard/Down.svg"
 import CategoryListDropDown from "../../CommonComponents/CategoryListDropDown";
 
-const FilterProduct = ({handleOptionClick, toggleDropdown,selectedEmployee,employeeDropdownVisible,selectedStatus,selectedStatusValue,
-  transactionDropdownVisible,selectedCategory,categoryDropdownVisible,selectedListingType,listingTypesDropdownVisible,handleCategoryChange}) => {
-  const [searchId, setSearchId] = useState(""); // State to track search ID
+const FilterProduct = ({handleOptionClick, toggleDropdown,selectedEmployee,del_picDropdownVisible,selectedStatus,selectedStatusValue,
+  transactionDropdownVisible,selectedCategory,categoryDropdownVisible,selectedListingType,listingTypesDropdownVisible,handleCategoryChange,handleSearch,searchId,setSearchId}) => {
+  
 
   const handleFilter = (filterType) => {
     console.log('Selected filter:', filterType);
@@ -13,10 +13,10 @@ const FilterProduct = ({handleOptionClick, toggleDropdown,selectedEmployee,emplo
   };
   
 
-  const handleSearch = () => {
-    console.log("Search ID:", searchId);
+  // const handleSearch = () => {
+  //   console.log("Search ID:", searchId);
    
-  };
+  // };
   
   // useEffect(()=> {
   //   console.log('sa');
@@ -53,29 +53,8 @@ const FilterProduct = ({handleOptionClick, toggleDropdown,selectedEmployee,emplo
       
 
       <div className="q-order-page-container">
-          {/* Employee Dropdown */}
-          <div className="q-order-page-filter">
-            <label className="q-details-page-label" htmlFor="employeeFilter">
-            Employee
-            </label>
-            <div className="custom-dropdown">
-              <div
-                className="custom-dropdown-header"
-                onClick={() => toggleDropdown("employee")}
-              >
-                <span className="selected-option mt-1">{selectedEmployee}</span>
-                <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-              </div>
-              {employeeDropdownVisible && (
-                <div className="dropdown-content ">
-                  <div onClick={() => handleOptionClick("All", "employee")}>All</div>
-                  <div onClick={() => handleOptionClick("employee1", "employee")}>employee1</div>
-                  <div onClick={() => handleOptionClick("employee2", "employee")}>employee2</div>
-                  {/* ... (other employee options) ... */}
-                </div>
-              )}
-            </div>
-          </div>
+          
+          <CategoryListDropDown type="category" onCategoryChange={handleCategoryChange} />
 
           {/* status Dropdown */}
           <div className="q-order-page-filter">
@@ -87,7 +66,7 @@ const FilterProduct = ({handleOptionClick, toggleDropdown,selectedEmployee,emplo
                 className="custom-dropdown-header"
                 onClick={() => toggleDropdown("status")}
               >
-                <span className="selected-option mt-1">{selectedStatusValue === 'all' ? 'ALL' : selectedStatusValue}</span>
+                <span className="selected-option mt-1">{selectedStatusValue === 'all' ? 'All' : selectedStatusValue}</span>
                 <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
               </div>
               {transactionDropdownVisible && (
@@ -103,10 +82,7 @@ const FilterProduct = ({handleOptionClick, toggleDropdown,selectedEmployee,emplo
           </div>
 
           {/* Order Status Dropdown */}
-          <CategoryListDropDown type="category" onCategoryChange={handleCategoryChange} />
-          
-        </div>
-        <div className="q-order-page-filter w-[31.2%]">
+          <div className="q-order-page-filter w-[31.2%]">
             <label className="q-details-page-label" htmlFor="ListingFilter">
             Listing Type
             </label>
@@ -128,7 +104,42 @@ const FilterProduct = ({handleOptionClick, toggleDropdown,selectedEmployee,emplo
               )}
             </div>
           </div>
-     
+          
+        </div>
+          
+        <div className="q-order-page-container">
+          {/* Employee Dropdown */}
+          <div className="q-order-page-filter">
+            <label className="q-details-page-label" htmlFor="employeeFilter">
+            Enable Product for Delivery/Pickup
+            </label>
+            <div className="custom-dropdown">
+              <div
+                className="custom-dropdown-header"
+                onClick={() => toggleDropdown("del_pic")}
+              >
+                <span className="selected-option mt-1">{selectedEmployee}</span>
+                <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
+              </div>
+              {del_picDropdownVisible && (
+                <div className="dropdown-content ">
+                  <div onClick={() => handleOptionClick("1", "del_pic","Enable All")}>Enable All</div>
+                  <div onClick={() => handleOptionClick("2", "del_pic","Enable Pickup All")}>Enable Pickup All</div>
+                  <div onClick={() => handleOptionClick("5", "del_pic","Disable Pickup All")}>Disable Pickup All</div>
+                  <div onClick={() => handleOptionClick("3", "del_pic","Enable Delivery All")}>Enable Delivery All</div>
+                  <div onClick={() => handleOptionClick("6", "del_pic","Disable Delivery All")}>Disable Delivery All</div>
+                  <div onClick={() => handleOptionClick("4", "del_pic","Disable All")}>Disable All</div>
+                  {/* ... (other employee options) ... */}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className="q-order-page-filter"></div>
+          <div className="q-order-page-filter"></div>
+
+        </div>
+        
     </div>
       <div>
         

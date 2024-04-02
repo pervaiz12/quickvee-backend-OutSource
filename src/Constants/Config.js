@@ -243,5 +243,6 @@ module.exports = Object.freeze({
   // PRODUCTS
   PRODUCTS_LIST: "Product_api_react/Products_list",
   PRODUCT_DEFAULT_IMAGE : this.BASE_URL+"upload/products/MaskGroup4542.png",
-  
+  UPDATE_TYPE : "Product_api_react/update_type",
+
 });

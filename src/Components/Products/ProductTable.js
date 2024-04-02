@@ -10,7 +10,7 @@ import { BASE_URL } from "../../Constants/Config";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ProductRow from "./ProductRow";
 
-const ProductTable = ({selectedListingType,productsList,setproductsList,categoryId,selectedStatus,selectedStatusValue}) => 
+const ProductTable = ({selectedListingType,selectedListingTypeValue,productsList,setproductsList,categoryId,selectedStatus,selectedStatusValue}) => 
 {
   let listing_type = 0;
   const ProductsListDataState = useSelector((state) => state.productsListData);
@@ -38,8 +38,8 @@ const ProductTable = ({selectedListingType,productsList,setproductsList,category
     let data = {
       merchant_id: "MAL0100CA",
       category_id: categoryId,
-      show_status: selectedStatus,
-      listing_type: selectedListingType,
+      show_status: selectedStatusValue,
+      listing_type: selectedListingTypeValue,
       offset: 0,
       limit: 10,
       page: 0
@@ -103,8 +103,8 @@ const ProductTable = ({selectedListingType,productsList,setproductsList,category
       merchant_id: "MAL0100CA",
       format:"json",
       category_id: categoryId,
-      show_status: selectedStatus,
-      listing_type: listing_type,
+      show_status: selectedStatusValue,
+      listing_type: selectedListingTypeValue,
       offset: offset,
       limit: 10,
       page : page
@@ -141,14 +141,18 @@ const ProductTable = ({selectedListingType,productsList,setproductsList,category
             <div className="q-category-bottom-header-sticky">
               <div className="q-category-bottom-categories-header" style={{ position: "sticky" , top : "0px" }} >
                 <p className="categories-sort">Sort</p>
+                <p className="categories-sort"></p>
                 <p className="categories-title">Title</p>
                 <p className="categories-sort"></p>
                 <p className="categories-items">Category</p>
                 <p className="categories-sort"></p>
                 <p className="categories-enable-disable" >Enable online ordering?</p>
+                <p className="categories-sort"></p>
                 <p className="categories-items">Product Status</p>
                 <p className="categories-sort"></p>
                 <p className="categories-items" >Images</p>
+                <p className="categories-sort"></p>
+                <p className="categories-items" >Delete</p>
                 <p className=""></p>
               </div>
           

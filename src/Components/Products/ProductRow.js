@@ -13,6 +13,7 @@ const ProductRow= ({product ,index,Avail_Online,checkStatus,handleError})=>{
     return <>
      <div key={index} className="q-attributes-bottom-attriButes-single-attributes">
                   <p className="categories-sort"><img src={SortIcon} alt="" className="" /></p>
+                  <p className="categories-sort"></p>
                   <p className="categories-title"><Link to="/product-add">{product.title}</Link></p>
                   <p className="categories-sort"></p>
                   <p className="categories-title">{product.category_name}</p>

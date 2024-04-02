@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
-import { BASE_URL, PRODUCTS_LIST } from "../../../Constants/Config";
+import { BASE_URL, PRODUCTS_LIST ,UPDATE_TYPE } from "../../../Constants/Config";
 
 const initialState = {
     loading: false,
@@ -27,6 +27,17 @@ export const fetchProductsData = createAsyncThunk('products/fetchProductsData.',
     }
 })
 
+export const updateProductsType = createAsyncThunk('products/updateProductsType.', async (data) => {
+    try {
+        const response = await axios.post(BASE_URL + UPDATE_TYPE, data, { headers: { "Content-Type": "multipart/form-data" } })
+        // console.log(response)
+        if (response.status === 200) {                          
+           return response.data;
+        }
+    } catch (error) {
+        throw new Error(error.response.data.message);
+    }
+})
 
 
 
@@ -70,6 +81,7 @@ const productsSlice = createSlice({
                 state.productsData = [];
             }
             // Append new items to the productsData array
+            console.log(state);
             state.productsData.push(...action.payload);
             state.offset += 10;
             state.hasMore = action.payload.length > 0;
@@ -81,7 +93,21 @@ const productsSlice = createSlice({
             state.error = action.error.message;
         })
 
-       /* builder.addCase(addToWishlist.pending, (state) => {
+        builder.addCase(updateProductsType.pending,(state) => {
+            state.loading = true;
+        })
+        builder.addCase(updateProductsType.fulfilled,(state,action)=>{
+            state.loading = false;
+            console.log(action);
+            console.log(state.productsData);
+        })
+        builder.addCase(updateProductsType.rejected,(state,action) => {
+            state.loading = false;
+            state.productsData = {};
+            state.error = action.error.message;
+        })
+
+    /*  builder.addCase(addToWishlist.pending, (state) => {
             state.loading = true;
         });
         builder.addCase(addToWishlist.fulfilled, (state, action) => {
@@ -93,7 +119,7 @@ const productsSlice = createSlice({
             state.loading = false;
             state.error = action.error.message;
         });
-*/
+    */
 
 
     }
