@@ -18,7 +18,7 @@ import EditCategory from "../Category/EditCategory";
 import TopTenders from "../Dashboard/TopTenders";
 
 import Info from "../StoreSetting/Info";
-import Setup from "../StoreSetting/MainSetup/Setup";
+import Setup from "../StoreSetting/Info";
 import MainStoreAlters from "../StoreSetting/StoreAlters/MainStoreAlters";
 import MainTaxes from "../StoreSetting/Taxes/MainTaxes";
 import MainInventory from "../StoreSetting/Inventory/MainInventory";
@@ -51,34 +51,25 @@ import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import Permission from "../StoreSetting/AddEmployee/Permission";
 import OrderSummaryDetails from "../Reporting/SalesByPerson/MainOrderSumaaryDetails/OrderSummaryDetails";
-import VendorListMain  from "../Reporting/VendorList/VendorListMain";
+import VendorListMain from "../Reporting/VendorList/VendorListMain";
 import VendorSalesReportMain from "../Reporting/VendorSalesReport/VendorSalesReportMain";
 import OrderRefundReportMain from "../Reporting/OrderRefundReport/OrderRefundReportMain";
 import ReorderInventoryMain from "../Reporting/ReorderInventory/ReorderInventoryMain";
 import EditVendors from "../Vendors/EditVendors";
 import SingleVendorsDetail from "../Vendors/SingleVendorsDetail";
 import AddProducts from "../Products/AddProducts"
-import MainLoayalty from "../LoyaltyProgram/MainLoayalty";
-import EditCoupon from "../Coupons/EditCoupon";
 //  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
 // import MainEmployee from "../Reporting/EmployeeWorkingHours/MainEmployee";
 // import MainInvDuplicates from '../InventoryDuplicates/MainInvDuplicates';
 
 const LeftSide = ({ visible }) => {
 
-
   useEffect(() => {
     console.log("hello")
-      return () => {
+    return () => {
 
-  // useEffect(() => {
-    
-  //   console.log("hello")
-  //     return () => {
-
-       
-  //     }
-  //   }, )
+    }
+  },)
 
 
   return (
@@ -93,11 +84,9 @@ const LeftSide = ({ visible }) => {
           {visible === "products" && <MainProducts />}
 
           {visible === "coupons" && <MainCoupon />}
-          {visible === "coupons-edit-cop" && <EditCoupon />}
           {visible === "vendors" && <MainVendors />}
           {visible === "timesheet" && <MainTimesheet />}
           {visible === "import-data" && <MainImportData />}
-          {visible === "loyalty-program" && <MainLoayalty />}
           {visible === "store-setting" && <MainStoreOption />}
           {visible === "store-setting" && <MainStoreOption />}
           {visible === "category-edit-cat" && <EditCategory />}
@@ -131,25 +120,25 @@ const LeftSide = ({ visible }) => {
           {visible === "current-inventory-value" && <CurrentInventoryValue />}
           {visible === "addemployee" && <MainAddEmployee />}
           {visible === "receipt" && <ReceiptMainpage />}
-          {visible === "item-sales" && <MainItemSales /> }
-          {visible === "item-create-between" && <NewItemCreatedBetweenMain /> }
+          {visible === "item-sales" && <MainItemSales />}
+          {visible === "item-create-between" && <NewItemCreatedBetweenMain />}
           {visible === "permission" && <Permission />}
           {visible === "order-summary" && <OrderSummaryDetails />}
           {visible === "vendors-list" && <VendorListMain />}
           {visible === "edit-vendor" && <EditVendors />}
           {visible === "vendor-details" && <SingleVendorsDetail />}
 
-          
-          
-          {/* {visible === "order-summary" && <OrderSummeryPage />} */}
-          
 
-          
+
+          {/* {visible === "order-summary" && <OrderSummeryPage />} */}
+
+
+
           {visible === "recorder-inventory" && <ReorderInventoryMain />}
-          
+
           {visible === "vendors-sales-reports" && <VendorSalesReportMain />}
           {visible === "order-refund-report" && <OrderRefundReportMain />}
-         
+
 
 
         </div>
