@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
 
-const MainEmployee = () => {
-  const [selectedEmployee, setSelectedEmployee] = useState("All");
+const MainEmployee = ({ onFilterDataChange }) => {
 
+  const [selectedEmployee, setSelectedEmployee] = useState("All");
   const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
 
   const toggleDropdown = (dropdown) => {
@@ -11,23 +11,16 @@ const MainEmployee = () => {
       case "employee":
         setEmployeeDropdownVisible(!employeeDropdownVisible);
         break;
-
       default:
         break;
     }
   };
 
-  const handleOptionClick = (option, dropdown) => {
-    switch (dropdown) {
-      case "employee":
-        setSelectedEmployee(option);
-        setEmployeeDropdownVisible(false);
-        break;
-      default:
-        break;
-    }
+  const handleOptionClick = (option, value) => {
+    setSelectedEmployee(option);
+    setEmployeeDropdownVisible(false);
+    onFilterDataChange(value);
   };
-
   return (
     <>
     <div className="box">
