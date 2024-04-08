@@ -123,7 +123,9 @@ const ProductTable = ({ selectedListingType, selectedListingTypeValue, productsL
 
   return (
     <>
+
     <div className="box">
+
       <div className="q-category-bottom-detail-section" id='123'>
         <div className="">
           <div className="q-category-bottom-header">
@@ -237,7 +239,9 @@ const ProductTable = ({ selectedListingType, selectedListingTypeValue, productsL
           </div>
         </div>
       </div>
+
       </div>
+
     </>
   );
 };
