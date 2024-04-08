@@ -25,6 +25,10 @@ const FilterProduct = ({ handleOptionClick, toggleDropdown, selectedEmployee, de
 
   return (
     <>
+
+
+    <div className="box">
+
       <div className="q-attributes-bottom-detail-section bg-white">
         <div className=" p-4 mb-3  rounded-md">
           <div className="flex border  rounded-md overflow-hidden mt-6 mr-9">
@@ -145,6 +149,9 @@ const FilterProduct = ({ handleOptionClick, toggleDropdown, selectedEmployee, de
 
         </div>
       </div>
+
+      </div>
+
     </>
   );
 };
