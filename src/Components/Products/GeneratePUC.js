@@ -1,97 +1,144 @@
 import React from "react";
 import AddIcon from "../../Assests/Category/addIcon.svg";
+import { formData } from "./data";
 
-const GeneratePUC = () => {
+const GeneratePUC = ({
+  handleVarientTitleBasedItemList,
+  handleOnChange,
+  formValue,
+  handleGenerateUPC,
+}) => {
+  const varientList = handleVarientTitleBasedItemList();
+
   return (
     <>
       <div className="mx-0">
         <div className="q-add-categories-single-input">
           <div className="q-category-bottom-header">
             <span>Pax 3</span>
-            <p>
+            <p onClick={() => handleGenerateUPC(20)}>
               Generate UPC
               {/* <img src={AddIcon} alt="add-icon" />{" "} */}
             </p>
           </div>
-          <div className="mx-4 my-4">Pax - 3 - Small</div>
-          <div className="qvrow">
-            <div className="col-qv-3">
-              <div className="q-add-categories-single-input">
-                <label>Price</label>
-                <div className="input_area">
-                  <input class="" type="text" name="storename" value="" />
-                </div>
-              </div>
-            </div>
-            <div className="col-qv-3">
-              <div className="q-add-categories-single-input">
-                <label>Compare At Price</label>
-                <div className="input_area">
-                  <input class="" type="text" name="storename" value="" />
-                </div>
-              </div>
-            </div>
-            <div className="col-qv-3">
-              <div className="q-add-categories-single-input">
-                <label>Cost per item</label>
-                <div className="input_area">
-                  <input class="" type="text" name="storename" value="" />
-                </div>
-              </div>
-            </div>
-            <div className="col-qv-3">
-              <div className="q-add-categories-single-input">
-                <label>Profit ($)</label>
-                <div className="input_area">
-                  <input class="" type="text" name="storename" value="" />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="qvrow">
-            <div className="col-qv-3">
-              <div className="q-add-categories-single-input">
-                <label>QTY</label>
-                <div className="input_area">
-                  <input class="" type="text" name="storename" value="" />
-                </div>
-              </div>
-            </div>
-            <div className="col-qv-3">
-              <div className="q-add-categories-single-input">
-                <label>UPC Code</label>
-                <div className="input_area">
-                  <input class="" type="text" name="storename" value="" />
-                </div>
-              </div>
-            </div>
-            <div className="col-qv-3">
-              <div className="q-add-categories-single-input">
-                <label>Custom Code</label>
-                <div className="input_area">
-                  <input class="" type="text" name="storename" value="" />
-                </div>
-              </div>
-            </div>
-            <div className="col-qv-3">
-              <div className="q-add-categories-single-input">
-                <label>Reorder Level</label>
-                <div className="input_area">
-                  <input class="" type="text" name="storename" value="" />
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-          <div className="flex flex-wrap gap-3 ">
-          <label class="q_resigter_setting_section" style={{color:"#000",fontSize:"18px"}}>Track Quantity<input type="checkbox" name="ebt_type[]" value="1" /><span class="checkmark"></span></label>
-          <label class="q_resigter_setting_section" style={{color:"#000",fontSize:"18px"}}>Continue selling when out of stock<input type="checkbox" name="ebt_type[]" value="1" /><span class="checkmark"></span></label>
-          <label class="q_resigter_setting_section" style={{color:"#000",fontSize:"18px"}}>Check ID<input type="checkbox" name="ebt_type[]" value="1" /><span class="checkmark"></span></label>
-          <label class="q_resigter_setting_section" style={{color:"#000",fontSize:"18px"}}>Disable<input type="checkbox" name="ebt_type[]" value="1" /><span class="checkmark"></span></label>
-          <label class="q_resigter_setting_section" style={{color:"#000",fontSize:"18px"}}>Create this item for all linked locations<input type="checkbox" name="ebt_type[]" value="1" /><span class="checkmark"></span></label>
-
-          </div>
+          {varientList?.length
+            ? varientList?.map((_, index) => {
+                return (
+                  <div className="qvrow">
+                    <div className="mx-4 my-4">{varientList[index]}</div>
+                    {formData?.length
+                      ? formData?.map((inp, i) => {
+                          return (
+                            <div className="col-qv-3" key={i}>
+                              <div className="q-add-categories-single-input">
+                                <label>{inp?.label}</label>
+                                <div className="input_area">
+                                  <input
+                                    class=""
+                                    type={inp?.type}
+                                    name={inp?.name}
+                                    value={formValue?.[index]?.[inp?.name]}
+                                    placeholder={inp?.placeholder}
+                                    onChange={(e) => handleOnChange(e, index)}
+                                  />
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })
+                      : ""}
+                    <div className="flex flex-wrap gap-3 ">
+                      <label
+                        class="q_resigter_setting_section"
+                        style={{ color: "#000", fontSize: "18px" }}
+                      >
+                        Track Quantity
+                        <input
+                          type="checkbox"
+                          name="trackQuantity"
+                          value={formValue?.[index]?.["trackQuantity"]}
+                          onChange={(e) => handleOnChange(e, index)}
+                          checked={
+                            formValue?.[index]?.["trackQuantity"] ? true : false
+                          }
+                        />
+                        <span class="checkmark"></span>
+                      </label>
+                      <label
+                        class="q_resigter_setting_section"
+                        style={{ color: "#000", fontSize: "18px" }}
+                      >
+                        Continue selling when out of stock
+                        <input
+                          type="checkbox"
+                          name="sellOutOfStock"
+                          value={formValue?.[index]?.["sellOutOfStock"]}
+                          onChange={(e) => handleOnChange(e, index)}
+                          checked={
+                            formValue?.[index]?.["sellOutOfStock"]
+                              ? true
+                              : false
+                          }
+                        />
+                        <span class="checkmark"></span>
+                      </label>
+                      <label
+                        class="q_resigter_setting_section"
+                        style={{ color: "#000", fontSize: "18px" }}
+                      >
+                        Check ID
+                        <input
+                          type="checkbox"
+                          name="checkId"
+                          value={formValue?.[index]?.["checkId"]}
+                          onChange={(e) => handleOnChange(e, index)}
+                          checked={
+                            formValue?.[index]?.["checkId"] ? true : false
+                          }
+                        />
+                        <span class="checkmark"></span>
+                      </label>
+                      <label
+                        class="q_resigter_setting_section"
+                        style={{ color: "#000", fontSize: "18px" }}
+                      >
+                        Disable
+                        <input
+                          type="checkbox"
+                          name="disable"
+                          value={formValue?.[index]?.["disable"]}
+                          onChange={(e) => handleOnChange(e, index)}
+                          checked={
+                            formValue?.[index]?.["disable"] ? true : false
+                          }
+                        />
+                        <span class="checkmark"></span>
+                      </label>
+                      <label
+                        class="q_resigter_setting_section"
+                        style={{ color: "#000", fontSize: "18px" }}
+                      >
+                        Create this item for all linked locations
+                        <input
+                          type="checkbox"
+                          name="itemForAllLinkedLocation"
+                          value={
+                            formValue?.[index]?.["itemForAllLinkedLocation"]
+                          }
+                          onChange={(e) => handleOnChange(e, index)}
+                          checked={
+                            formValue?.[index]?.["itemForAllLinkedLocation"]
+                              ? true
+                              : false
+                          }
+                        />
+                        <span class="checkmark"></span>
+                      </label>
+                    </div>
+                  </div>
+                );
+              })
+            : ""}
         </div>
       </div>
     </>

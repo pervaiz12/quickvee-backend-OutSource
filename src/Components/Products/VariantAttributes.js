@@ -4,13 +4,15 @@ import DownArrow from "../../Assests/Dashboard/Down.svg";
 import { FaPencilAlt } from "react-icons/fa";
 import CrossIcon from "../../Assests/Dashboard/cross.svg";
 import SortIcon from "../../Assests/Dashboard/sort-arrows-icon.svg";
+import Chip from "@mui/material/Chip";
 
 import Select from "react-select";
+import CreatableSelect from "react-select/creatable";
 import makeAnimated from "react-select/animated";
-import { colourOptions } from "../Products/data";
+import { colourOptions, optionList } from "../Products/data";
+import { ListItem, Stack } from "@mui/material";
 
-const VariantAttributes = () => {
-  const [items, setItems] = useState([]);
+const VariantAttributes = ({ handleSetItem, items, addNewVarient }) => {
   const [variantValue, setVariantValue] = useState("");
   const [showAttributes, setShowAttributes] = useState(false);
 
@@ -18,12 +20,12 @@ const VariantAttributes = () => {
     const updatedItems = items.map((item) =>
       item.id === itemId ? { ...item, title: event.target.value } : item
     );
-    setItems(updatedItems);
+    handleSetItem(updatedItems);
   };
 
-  const handleDeleteClick = (itemId) => {
-    const updatedItems = items.filter((item) => item.id !== itemId);
-    setItems(updatedItems);
+  const handleDeleteClick = () => {
+    const updatedItems = items.filter((_, i) => i !== items.length - 1);
+    handleSetItem(updatedItems);
   };
 
   const [showModal, setShowModal] = useState(false);
@@ -34,7 +36,11 @@ const VariantAttributes = () => {
     const sortedItems = [...items].sort((a, b) => {
       return a[key].localeCompare(b[key], undefined, { numeric: true });
     });
-    setItems(sortedItems);
+    handleSetItem(sortedItems);
+  };
+
+  const handlechange = (value) => {
+    setOptions(value);
   };
 
   const handleAddAttribute = () => {
@@ -45,7 +51,7 @@ const VariantAttributes = () => {
       action: <FaPencilAlt />,
       options: options.map((option) => option.value),
     };
-    setItems([...items, newItem]);
+    addNewVarient(newItem);
     setShowModal(false);
     setNewAttribute("");
     setOptions([]);
@@ -53,6 +59,21 @@ const VariantAttributes = () => {
   };
 
   const animatedComponents = makeAnimated();
+
+  const handleDeleteOption = (option, index) => () => {
+    // const updateObj = items?.map((item, i) => {
+    //   if (i === index) {
+    //     return {
+    //       ...item,
+    //       ["options"]: items[index]?.options?.filter((item) => item !== option),
+    //     };
+    //   }
+    //   return item;
+    // });
+    // handleSetItem(updateObj);
+  };
+
+  console.log("items list", items);
 
   return (
     <>
@@ -66,30 +87,48 @@ const VariantAttributes = () => {
           </div>
 
           <div className="my-4">
-            {items.map((item) => (
-              <div key={item.id} className="flex items-center my-2" style={{border:"1px solid #E1E1E1", borderRadius:"4px", padding:"10px"}}>
+            {items.map((item, secIndex) => (
+              <div
+                key={item.id}
+                className="flex items-center my-2"
+                style={{
+                  border: "1px solid #E1E1E1",
+                  borderRadius: "4px",
+                  padding: "10px",
+                }}
+              >
                 <div
                   className="q_product_modal"
                   onChange={(event) => handleInputChange(event, item.id)}
                 >
-                  {item.title} -
+                  {item.title?.label} -
                 </div>
 
                 <div className="ml-2 flex">
                   {item.options.map((option, index) => (
                     <React.Fragment key={option}>
-                      <div>{option} </div>
-                      {index !== item.options.length - 1 && <div>,</div>}
+                      {/* <div>{option} </div>
+                      {index !== item.options.length - 1 && <div>,</div>} */}
+                      <Stack direction="row" spacing={1}>
+                        <Chip
+                          label={option}
+                          onDelete={handleDeleteOption(option, secIndex)}
+                          // style={{ top: "0px", left: "0px" }}
+                        />
+                      </Stack>
                     </React.Fragment>
                   ))}
                 </div>
-
-                <button
-                  onClick={() => handleDeleteClick(item.id)}
-                  className="ml-auto"
-                >
-                  <img src={DeleteIcon} alt="" className="w-6 h-6 ml-auto" />
-                </button>
+                {items[items.length - 1]?.id === item?.id ? (
+                  <button
+                    onClick={() => handleDeleteClick()}
+                    className="ml-auto"
+                  >
+                    <img src={DeleteIcon} alt="" className="w-6 h-6 ml-auto" />
+                  </button>
+                ) : (
+                  ""
+                )}
               </div>
             ))}
           </div>
@@ -154,25 +193,36 @@ const VariantAttributes = () => {
               <div class="col-qv-12">
                 <div class="input_area">
                   <label>Attribute</label>
-                  <input
+                  {/* <input
                     className=""
                     type="text"
                     name="owner_name"
                     value={newAttribute}
                     onChange={(e) => setNewAttribute(e.target.value)}
+                  /> */}
+                  <Select
+                    closeMenuOnSelect={true}
+                    components={{ ...animatedComponents }}
+                    value={options?.value}
+                    onChange={(selectedOptions) =>
+                      setNewAttribute(selectedOptions)
+                    }
+                    options={optionList}
+                    isSearchable
+                    isClearable
                   />
                 </div>
               </div>
               <div class="col-qv-12">
                 <div class="input_area">
                   <label>Options</label>
-                  <Select
-                    closeMenuOnSelect={false}
+                  <CreatableSelect
+                    closeMenuOnSelect={true}
                     components={{ ...animatedComponents }}
                     value={options}
-                    onChange={(selectedOptions) => setOptions(selectedOptions)}
+                    onChange={handlechange}
                     isMulti
-                    options={colourOptions}
+                    // options={colourOptions}
                   />
                 </div>
               </div>
