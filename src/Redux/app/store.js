@@ -52,6 +52,7 @@ import loyaltyprogramSlice from "../features/LoyaltyProgram/loyaltyprogramSlice"
 import SettingSetupSlice from "../features/SettingSetup/SettingSetupSlice";
 import ShiftSummarySlice from "../features/Reports/ShiftSummary/ShiftSummarySlice";
 import DetailCategorySaleSliceReducer from "../features/DetailCategorySale/detailCategorySaleSlice";
+import EmployeeWorkinghrsSlice from "../features/Reports/EmployeeWorkinghrs/EmployeeWorkinghrsSlice";
 
 
 const store = configureStore({
@@ -131,6 +132,7 @@ const store = configureStore({
     loyaltyprogram: loyaltyprogramSlice,
     ShiftSummarylist: ShiftSummarySlice,
     StoreSetupList: SettingSetupSlice,
+    EmpWorkinghrsList:EmployeeWorkinghrsSlice,
 
   },
 

@@ -269,6 +269,10 @@ module.exports = Object.freeze({
   //All Orders API
   UPDATE_ORDER_STATUS: "Order_list_api/changeStatus_api",
 
+  // Employee work hours API
+  // EMPLOYEE_WORK_HOURS: "Report_api/employee_work_hours1",
+  EMPLOYEE_WORK_HOURS: "Report_api/employee_work_hours1_api",
+
 
 });
 

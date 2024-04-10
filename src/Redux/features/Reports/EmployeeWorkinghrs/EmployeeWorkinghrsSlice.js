@@ -1,26 +1,25 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
-import { BASE_URL, LIST_DAILY_REPORT} from "../../../Constants/Config"
+import { BASE_URL, EMPLOYEE_WORK_HOURS} from '../../../../Constants/Config';
 
 
 const initialState = {
     loading: false,
-    dailyreportData: [],
+    employeewrkhrstData: [],
     successMessage: "",
     error: '',
 }
 
 
 // Generate pening , fulfilled and rejected action type
-export const fetchemployeewrkhrs = createAsyncThunk('dailyreport/fetchemployeewrkhrs.', async (data) => {
+export const fetchemployeewrkhrs = createAsyncThunk('EmployeeWorkinghrsSlice/fetchemployeewrkhrs.', async (data) => {
     try {
-        const response = await axios.post(BASE_URL + LIST_DAILY_REPORT, data, { headers: { "Content-Type": "multipart/form-data" } })
-        if (response.data.status === "Success") {
-
-           return response.data.result
-        }else if(response.data.status === "Failed" && response.data.msg === "No. Data found."){
-            return response.data
+        const response = await axios.post(BASE_URL + EMPLOYEE_WORK_HOURS, data, { headers: { "Content-Type": "multipart/form-data" } })
+        if (response?.data?.status === true) {
+            return response?.data?.report_data
+        }else{
+            return response?.data
         }
     } catch (error) {
         throw new Error(error.response.data.message);
@@ -31,8 +30,9 @@ export const fetchemployeewrkhrs = createAsyncThunk('dailyreport/fetchemployeewr
 
 
 
+
 const EmployeeWorkinghrsSlice = createSlice({
-    name: 'dailyreport',
+    name: 'EmployeeWorkinghrsSlice',
     initialState,
     extraReducers: (builder) => {
         builder.addCase(fetchemployeewrkhrs.pending, (state) => {
@@ -43,9 +43,9 @@ const EmployeeWorkinghrsSlice = createSlice({
             state.employeewrkhrstData = action.payload;
             state.error = '';
         })
-        builder.addCase(fetchemployeewrkhrstData.rejected, (state, action) => {
+        builder.addCase(fetchemployeewrkhrs.rejected, (state, action) => {
             state.loading = false;
-            state.employeewrkhrsData = {};
+            state.employeewrkhrstData = {};
             state.error = action.error.message;
         })
 
