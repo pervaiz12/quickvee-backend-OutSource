@@ -39,22 +39,31 @@ const Employeedetails = (props) => {
     AllEmpWorkingHrsDataState.loading,
     AllEmpWorkingHrsDataState.ItemSalesData,
   ]);
-  // console.log(allEmpWorkingHrsData.length);
+  console.log("hahaha", allEmpWorkingHrsData);
 
   const calTotalWork = (totalworkdata) => {
+    if (!Array.isArray(totalworkdata)) {
+      return 0;
+    }
     return totalworkdata.reduce((total, workData) => total + parseFloat(workData.total_seconds_worked), 0);
   };
   const calTotalBreak = (totalbreakdata) => {
+    if (!Array.isArray(totalbreakdata)) {
+      return 0;
+    }
     return totalbreakdata.reduce((total, workData) => total + parseFloat(workData.total_seconds_break), 0);
   };
   const calTotalActualWork = (totalactualworkdata) => {
+    if (!Array.isArray(totalactualworkdata)) {
+      return 0;
+    }
     return totalactualworkdata.reduce((total, workData) => total + parseFloat(workData.effective_seconds_worked), 0);
   };
 
   return (
     <>
       <div className="box">
-        {Object.keys(allEmpWorkingHrsData).map((employeeName, index) => (
+        {allEmpWorkingHrsData && Object.keys(allEmpWorkingHrsData).map((employeeName, index) => (
           <div key={index} className="q-attributes-bottom-detail-section mb-3">
             <div className="q-attributes-bottom-header-sticky">
               <div className="q-attributes-bottom-header">
@@ -69,7 +78,7 @@ const Employeedetails = (props) => {
                 <p className="attriButes-title">Actual Worked (Hr)</p>
               </div>
             </div>
-            {allEmpWorkingHrsData[employeeName].map((workData, dataIndex) =>  (
+            {Array.isArray(allEmpWorkingHrsData[employeeName]) && allEmpWorkingHrsData[employeeName].map((workData, dataIndex) =>  (
               <div key={dataIndex} className="q-attributes-bottom-attriButes-listing">
                 <div className="q-employee-bottom-attriButes-single-attributes">
                   <p className="q-employee-item">{workData.work_date}</p>
