@@ -3,13 +3,16 @@ import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import { BASE_URL, EMPLOYEE_LIST } from "../../../Constants/Config";
 import axios from "axios";
 
+
 const MainEmployee = ({ onFilterDataChange }) => {
+
   const [selectedEmployee, setSelectedEmployee] = useState("All");
-  const [employeeList, setemployeeList] = useState([]);
-  const [loadingEmpList, setLoadingEmpList] = useState(true);
+
   const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
   const [selectedEmployeeID, setSelectedEmployeeID] = useState("All");
   const [filteredEmpData, setFilteredEmpData] = useState({ category_id: "all" });
+  const [employeeList, setemployeeList] = useState([]);
+  const [loadingEmpList, setLoadingEmpList] = useState(true);
 
   const toggleDropdown = (dropdown) => {
     switch (dropdown) {
@@ -87,6 +90,8 @@ const MainEmployee = ({ onFilterDataChange }) => {
   useEffect(() => {
     onFilterDataChange(selectedEmployeeID)
   }, [selectedEmployeeID]);
+
+
 
   return (
     <>

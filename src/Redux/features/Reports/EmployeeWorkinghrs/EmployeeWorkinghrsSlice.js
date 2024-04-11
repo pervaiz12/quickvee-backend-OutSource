@@ -16,10 +16,10 @@ const initialState = {
 export const fetchemployeewrkhrs = createAsyncThunk('EmployeeWorkinghrsSlice/fetchemployeewrkhrs.', async (data) => {
     try {
         const response = await axios.post(BASE_URL + EMPLOYEE_WORK_HOURS, data, { headers: { "Content-Type": "multipart/form-data" } })
-        if (response?.data?.status === true) {
-            return response?.data?.report_data
+        if (response.data.status === true) {
+            return response.data.report_data
         }else{
-            return response?.data
+            return response.data.report_data
         }
     } catch (error) {
         throw new Error(error.response.data.message);
