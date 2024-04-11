@@ -19,7 +19,7 @@ import EditCategory from "../Category/EditCategory";
 import TopTenders from "../Dashboard/TopTenders";
 
 import Info from "../StoreSetting/Info";
-import Setup from "../StoreSetting/Info";
+import Setup from "../StoreSetting/MainSetup/Setup";
 import MainStoreAlters from "../StoreSetting/StoreAlters/MainStoreAlters";
 import MainTaxes from "../StoreSetting/Taxes/MainTaxes";
 import MainInventory from "../StoreSetting/Inventory/MainInventory";
