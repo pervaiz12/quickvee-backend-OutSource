@@ -6,6 +6,7 @@ import CalendIcon from "../../../Assests/Filter/Calender.svg"
 import { padding } from "@mui/system";
 
 const DateRange = ({ onDateRangeChange }) => {
+  const [isTablet, setIsTablet] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
@@ -87,6 +88,23 @@ const DateRange = ({ onDateRangeChange }) => {
     setDatesBasedOnOption(activeOption);
   }, [activeOption]);
 
+  useEffect(() => {
+    const handleResize = () => {
+      setIsTablet(window.innerWidth <= 995); // Assuming tablet width as 768px
+    };
+
+    // Initial check
+    handleResize();
+
+    // Event listener for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
 
 
   return (
@@ -96,7 +114,7 @@ const DateRange = ({ onDateRangeChange }) => {
         <div className="q-datarange-bottom-detail-section">
           {/* Date Range Section */}
           <div className="q_datafilter_section">
-            <div className="q_details_header"><h1>Date Range</h1></div>
+            <div className="q_details_header" style={{marginLeft:"-15px"}}><h1>Date Range</h1></div>
 
             <div className="datarange_days_order">
               {["Today", "Yesterday", "Last 7 Days", "Last 30 days"].map(
@@ -150,9 +168,9 @@ const DateRange = ({ onDateRangeChange }) => {
           <div className="qvrow">
          
   {/* Start Date */}
-  <div className="col-qv-4">
+  <div className={`Card_admin ${isTablet ? 'col-qv-12' : 'col-qv-4'}`}>
     <div className="q_date_range_start">Start Date</div>
-    <div className="flex items-center">
+    <div className="relative">
       <DatePicker
         selected={startDate}
         onChange={(date) => setStartDate(date)}
@@ -174,9 +192,9 @@ const DateRange = ({ onDateRangeChange }) => {
   </div>
 
   {/* End Date */}
-  <div className="col-qv-4">
+              <div className={`Card_admin ${isTablet ? 'col-qv-12' : 'col-qv-4'}`}>
     <div className="q_date_range_start ">End Date</div>
-    <div className="flex items-center">
+    <div className="relative">
 
       <DatePicker
         selected={endDate}
@@ -198,7 +216,7 @@ const DateRange = ({ onDateRangeChange }) => {
       </span>
     </div>
   </div>
-  <div className="col-qv-4">
+              <div className={`Card_admin ${isTablet ? 'col-qv-12' : 'col-qv-4'}`}>
  
   
   <div className=" q_search_opcity"> Search</div>

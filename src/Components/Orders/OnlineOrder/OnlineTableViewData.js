@@ -11,6 +11,9 @@ import { useSelector, useDispatch } from "react-redux";
 // import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import axios from "axios";
 import { BASE_URL, CLOSE_ORDER_COLLECT_CASH } from "../../../Constants/Config";
+import DownIcon from "../../../Assests/Dashboard/Down.svg";
+
+import UpArrow from "../../../Assests/Dashboard/Up.svg";
 
 import $ from "jquery";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
@@ -20,6 +23,7 @@ const OnlineTableViewData = (props) => {
   const [allOnlineStoreOrder, setAllOnlineStoreOrders] = useState([]);
   const AllInStoreDataState = useSelector((state) => state.onlineStoreOrder);
   const dispatch = useDispatch();
+  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -151,6 +155,7 @@ const OnlineTableViewData = (props) => {
 
   $.DataTable = require("datatables.net");
 
+
   useEffect(() => {
     const modifiedData = Object.entries(allOnlineStoreOrder).map(
       ([key, data], i) => {
@@ -204,7 +209,7 @@ const OnlineTableViewData = (props) => {
             cancelOption = `<option value="5">Cancel</option>`;
           }
           if (data.order_method == "pickup") {
-            PayStatus = `<select class="custom-selecttable" data-order-id="${data.order_id}">
+            PayStatus = `<select class="custom-selecttable w-52" data-order-id="${data.order_id}">
               <option value="1">Accepted</option>
               <option value="2">Packing</option>
               <option value="3">Ready</option>
@@ -212,7 +217,7 @@ const OnlineTableViewData = (props) => {
               ${cancelOption}
             </select>`;
           } else {
-            PayStatus = `<select class="custom-selecttable" data-order-id="${data.order_id}">
+            PayStatus = `<select class="custom-selecttable w-52" data-order-id="${data.order_id}">
               <option value="1">Accepted</option>
               <option value="2">Packing</option>
               <option value="6">Ready</option>

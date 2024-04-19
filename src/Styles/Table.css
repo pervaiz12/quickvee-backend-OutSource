@@ -48,6 +48,7 @@ table.dataTable.no-footer {
 table.dataTable tbody td {
     padding: 1rem;
     border-bottom: 1px solid var(--borderColor);
+    width:18% ;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button {
     margin-left: 10px;
@@ -69,7 +70,7 @@ table.dataTable tbody td {
     border: 1px solid var(--borderColor) !important;
     border-radius: 3px;    
     background-color: var(--white);
-    padding: 8px;    
+    padding: 8px 30px 8px 8px;    
     color: #646464;    
     margin: 0px 6px 0px;
     outline: none;
@@ -86,4 +87,15 @@ table.dataTable tbody td {
     padding: 0.5rem 1rem;
     color: #000000;
     border: 1px solid #E1E1E1;
+}
+
+/* Hide the default dropdown arrow */
+
+.custom-selecttable>select{
+     width: 200px !important;
+}
+
+.view_details{
+
+    color: #0A64F9;
 }

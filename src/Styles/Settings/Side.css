@@ -24,8 +24,8 @@
 }
 
 .mt_card_header {
-  margin-top: 10px !important;
-  margin-bottom: 10px !important;
+  margin-top: 9px !important;
+  margin-bottom: 5px !important;
 }
 
 .box_shadow_div.mt_card_header {
@@ -233,9 +233,10 @@
 }
 
 .q_cal_daterange>img {
-  position: relative;
-  right: 2rem;
-  top: -5px;
+    position: absolute;
+    right: 12px;
+    top: 12px;
+
 }
 
 .q_search_opcity {
@@ -377,3 +378,103 @@ border:1px solid #0A64F9 }
   width: calc(100% + 0px);
   height: 250px;
 } */
+
+
+
+
+.dropdown_active{
+  background-color: #F5F9FF;
+  color: #000000;
+}
+
+
+.dropdown-content div:hover {
+  background-color: #F5F9FF;
+  color: #000000;
+}
+
+
+
+.dropdown-content div:focus-visible {
+  background-color: #F5F9FF;
+  color: #000000;
+  outline: none; 
+}
+
+
+.css-dplwbx-MuiPickersCalendarHeader-label {
+    margin-right: 6px;
+    font-size: 20px;
+    font-family: 'CircularSTDBook';
+}
+.css-9reuh9-MuiPickersArrowSwitcher-root {
+  display: flex !important;
+  font-size: 24px;
+}
+.css-rhmlg1-MuiTypography-root-MuiDayCalendar-weekDayLabel{
+  font-size: 20px  !important;
+  color: #000  !important;
+  font-family: 'CircularSTDBook';  
+}
+
+.css-1u23akw-MuiButtonBase-root-MuiPickersDay-root {
+ font-size: 18px !important;
+    font-family: qvmedium !important;
+  width:45px;
+height:45px;}
+
+    /* add order filter */
+
+    
+
+   .orderfilter {
+      padding: 13px 25px;
+    font-size:18px;
+   border-radius: 8px 8px 0px 0px;
+    }
+
+    .font-circular-bold {
+    font-family: CircularBold !important;
+}
+
+.scrollable div{
+
+padding: 8px;
+    border-bottom: 1px solid #ddd;}
+.scrollable{
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    border: 1px solid #e1e1e1;
+    z-index: 1;
+    width: 100%;
+    color: #000000;
+    font-size: 12px;
+    cursor: pointer;
+   max-height: 200px; 
+  overflow-y: auto;}
+
+  .css-jgls56-MuiButtonBase-root-MuiPickersDay-root:not(.Mui-selected) {
+    border: 1px solid #438AFF;
+    background-color: #438AFF;
+    color:white;
+}
+
+
+  .css-jgls56-MuiButtonBase-root-MuiPickersDay-root:not(.Mui-selected):hover {
+    border: 1px solid #438AFF;
+    background-color: #438AFF;
+    color:white;
+}
+
+.q-add-categories-section-middle-footer .filter_btn {
+    font-family: CircularSTDBook !important;
+    font-size: 16px;
+    color: #fff;
+    padding: 10px 80px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+

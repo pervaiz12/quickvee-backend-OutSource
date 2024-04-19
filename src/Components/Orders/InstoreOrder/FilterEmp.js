@@ -1,33 +1,27 @@
 import React, { useState, useEffect, useRef } from "react";
-// import { AiOutlineSearch } from 'react-icons/ai';
-import DownIcon from '../../../Assests/Dashboard/Down.svg';
-import SearchIcon from "../../../Assests/Filter/Search.svg"
-import UpArrow from "../../../Assests/Dashboard/Up.svg"
+import DownIcon from "../../../Assests/Dashboard/Down.svg";
+import SearchIcon from "../../../Assests/Filter/Search.svg";
+import UpArrow from "../../../Assests/Dashboard/Up.svg";
 import { BASE_URL, EMPLOYEE_LIST } from "../../../Constants/Config";
 import axios from "axios";
 
-const FilterEmp = ({onFilterEmpDataChange}) => {
-  const [searchId, setSearchId] = useState(""); // State to track search ID
-
-  // const handleFilter = (filterType) => {
-  //   console.log('Selected filter:', filterType);
-  // };
-
-  const handleSearch = () => {
-    console.log("Search ID:", searchId);
-  };
+const FilterEmp = ({ onFilterEmpDataChange}) => {
+  const [searchId, setSearchId] = useState("");
+  const [isTablet, setIsTablet] = useState(false);
+  //const [selectedEmployee, setSelectedEmployee] = useState("All");
 
   const [selectedEmployee, setSelectedEmployee] = useState("All");
   const [selectedEmployeeID, setSelectedEmployeeID] = useState("All");
   const [filteredData, setFilteredData] = useState({ emp_id: "all" });
-  
+
   const [selectedTransaction, setSelectedTransaction] = useState("Both");
   // const [selectedOrderStatus, setSelectedOrderStatus] = useState("All");
 
   const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
   const [transactionDropdownVisible, setTransactionDropdownVisible] = useState(false);
-  // const [orderStatusDropdownVisible, setOrderStatusDropdownVisible] = useState(false);
-
+  const handleSearch = () => {
+    console.log("Search ID:", searchId);
+  };
   const toggleDropdown = (dropdown) => {
     switch (dropdown) {
       case "employee":
@@ -36,13 +30,16 @@ const FilterEmp = ({onFilterEmpDataChange}) => {
       case "transaction":
         setTransactionDropdownVisible(!transactionDropdownVisible);
         break;
-      // case "orderStatus":
-      //   setOrderStatusDropdownVisible(!orderStatusDropdownVisible);
-      //   break;
       default:
         break;
     }
   };
+
+  const dropdownContentClass = Object.values(filteredData.emp_id).length > 2 ? "dropdown-content scrollable" : "dropdown-content";
+  const lengthOfArray = Object.values(filteredData.emp_id).length;
+  // console.log("Length of array:", lengthOfArray);
+
+  console.log((filteredData.emp_id).lengt)
 
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
@@ -74,7 +71,7 @@ const FilterEmp = ({onFilterEmpDataChange}) => {
         break;
       case "transaction":
         setSelectedTransaction(option);
-        setTransactionDropdownVisible(false); 
+        setTransactionDropdownVisible(false);
         break;
       // case "orderStatus":
       //   setSelectedOrderStatus(option);
@@ -82,24 +79,43 @@ const FilterEmp = ({onFilterEmpDataChange}) => {
       //   break;
       default:
         break;
+        
     }
   };
 
+
+
   const dropdownRef = useRef(null);
+  const transactionRef = useRef(null)
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleOutsideClick = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        // setEmployeeDropdownVisible(false);
-        // setTransactionDropdownVisible(false);
-        // setOrderStatusDropdownVisible(false);
+        setEmployeeDropdownVisible(false);
+      }
+    
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
+
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (transactionRef.current && !transactionRef.current.contains(event.target)) {
+        setTransactionDropdownVisible(false);
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleOutsideClick);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
 
@@ -111,19 +127,15 @@ const FilterEmp = ({onFilterEmpDataChange}) => {
       try {
         const response = await axios.post(
           BASE_URL + EMPLOYEE_LIST,
-          {
-            merchant_id: "MAL0100CA",
-          },
+          { merchant_id: "MAL0100CA" },
           { headers: { "Content-Type": "multipart/form-data" } }
         );
 
-        // Assuming the API response has a data property containing the category list
         const EmpList = response.data.result;
 
-        // Extracting category IDs and view titles
         const mappedOptions = EmpList.map((empdata) => ({
           id: empdata.id,
-          title: empdata.f_name+' '+empdata.l_name,
+          title: empdata.f_name + " " + empdata.l_name,
         }));
 
         setemployeeList(mappedOptions);
@@ -134,11 +146,25 @@ const FilterEmp = ({onFilterEmpDataChange}) => {
       }
     };
     fetchData();
-  }, []); // Fetch categories only once when the component mounts
+  }, []);
 
   useEffect(() => {
-    onFilterEmpDataChange(selectedTransaction , selectedEmployeeID)
-  }, [selectedTransaction , selectedEmployeeID]);
+    onFilterEmpDataChange(selectedTransaction, selectedEmployeeID);
+  }, [selectedTransaction, selectedEmployeeID]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsTablet(window.innerWidth <= 995);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <>
@@ -166,9 +192,13 @@ const FilterEmp = ({onFilterEmpDataChange}) => {
         </div>
 
         <div className="qvrow">
-          {/* Employee Dropdown */}
-          <div className="col-qv-4">
-            <label htmlFor="employeeFilter">
+          <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
+            <label
+              htmlFor="employeeFilter"
+              onClick={() =>
+                setEmployeeDropdownVisible(!employeeDropdownVisible)
+              }
+            >
               Employee
             </label>
             <div className="custom-dropdown input_area" ref={dropdownRef}>
@@ -178,13 +208,13 @@ const FilterEmp = ({onFilterEmpDataChange}) => {
               >
                 <span className="selected-option mt-1">{selectedEmployee}</span>
                 <img
-                  src={transactionDropdownVisible ? UpArrow : DownIcon}
+                  src={employeeDropdownVisible ? UpArrow : DownIcon}
                   alt="Dropdown Icon"
-                  className="w-8 h-8"
+                  className="w-6 h-6"
                 />
               </div>
               {employeeDropdownVisible && (
-                <div className="dropdown-content">
+                <div className={dropdownContentClass}>
                   <div onClick={() => handleOptionClick("All", "employee")}>
                     All
                   </div>
@@ -201,53 +231,54 @@ const FilterEmp = ({onFilterEmpDataChange}) => {
             </div>
           </div>
 
-          {/* Transaction Dropdown */}
-          <div className="col-qv-4">
-            <label htmlFor="transactionFilter">
+          <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
+            <label
+              htmlFor="transactionFilter"
+              onClick={() =>
+                setTransactionDropdownVisible(!transactionDropdownVisible)
+              }
+            >
               Transactions
             </label>
-            <div className="custom-dropdown input_area" ref={dropdownRef}>
+            <div className="custom-dropdown input_area" ref={transactionRef}>
               <div
                 className="custom-dropdown-header"
                 onClick={() => toggleDropdown("transaction")}
               >
-                <span className="selected-option mt-1">{selectedTransaction}</span>
-                <img src={DownIcon} alt="Down Icon" className="w-6 h-6" />
+                <span className="selected-option mt-1">
+                  {selectedTransaction}
+                </span>
+                <img
+                  src={transactionDropdownVisible ? UpArrow : DownIcon}
+                  alt="Dropdown Icon"
+                  className="w-6 h-6"
+                />
               </div>
               {transactionDropdownVisible && (
                 <div className="dropdown-content">
-                  <div className="all" onClick={() => handleOptionClick("Both", "transaction")}>Both</div>
-                  <div className="all" onClick={() => handleOptionClick("Cash", "transaction")}>Cash</div>
-                  <div className="all" onClick={() => handleOptionClick("Online", "transaction")}>Online</div>
+                  <div
+                    className="all"
+                    onClick={() => handleOptionClick("Both", "transaction")}
+                  >
+                    Both
+                  </div>
+                  <div
+                    className="all"
+                    onClick={() => handleOptionClick("Cash", "transaction")}
+                  >
+                    Cash
+                  </div>
+                  <div
+                    className="all"
+                    onClick={() => handleOptionClick("Online", "transaction")}
+                  >
+                    Online
+                  </div>
                 </div>
               )}
             </div>
           </div>
-
-          {/* Order Status Dropdown */}
-          {/* <div className="col-qv-4">
-            <label htmlFor="orderStatusFilter">
-              Order Status
-            </label>
-            <div className="custom-dropdown input_area" ref={dropdownRef}>
-              <div
-                className="custom-dropdown-header"
-                onClick={() => toggleDropdown("orderStatus")}
-              >
-                <span className="selected-option mt-1">{selectedOrderStatus}</span>
-                <img src={DownIcon} alt="Down Icon" className="w-6 h-6" />
-              </div>
-              {orderStatusDropdownVisible && (
-                <div className="dropdown-content">
-                  <div className="all" onClick={() => handleOptionClick("All", "orderStatus")}>All</div>
-                  <div className="all" onClick={() => handleOptionClick("status1", "orderStatus")}>status1</div>
-                  <div className="all" onClick={() => handleOptionClick("status2", "orderStatus")}>status2</div>
-                </div>
-              )}
-            </div>
-          </div> */}
         </div>
-
       </div>
     </>
   );

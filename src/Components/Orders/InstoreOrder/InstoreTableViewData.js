@@ -70,7 +70,7 @@ const InstoreTableViewData = (props) => {
       "Customer": `${data.name || ""}<br>${data.delivery_phn || ""}`,
       "Order": `${data.order_id || ""}<br>${data.merchant_time || ""}<br>${data.order_method || ""}`,
       "Amount": `${data.amt || ""}<br><div className="order_status_details_quivkwee">${data.order_status || ""}</div>`,
-      "Status": `${data.payment_result || ""}`,
+      "Status": `${data.order_status || ""}`,
       "View": `<a href="/store-reporting/order-summary/${data.order_id}">View Details</a>`,
     }));
 
