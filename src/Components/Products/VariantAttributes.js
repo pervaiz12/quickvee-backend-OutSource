@@ -11,6 +11,7 @@ import CreatableSelect from "react-select/creatable";
 import makeAnimated from "react-select/animated";
 import { colourOptions, optionList } from "../Products/data";
 import { ListItem, Stack } from "@mui/material";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const VariantAttributes = ({ handleSetItem, items, addNewVarient }) => {
   const [variantValue, setVariantValue] = useState("");
@@ -61,19 +62,22 @@ const VariantAttributes = ({ handleSetItem, items, addNewVarient }) => {
   const animatedComponents = makeAnimated();
 
   const handleDeleteOption = (option, index) => () => {
-    // const updateObj = items?.map((item, i) => {
-    //   if (i === index) {
-    //     return {
-    //       ...item,
-    //       ["options"]: items[index]?.options?.filter((item) => item !== option),
-    //     };
-    //   }
-    //   return item;
-    // });
-    // handleSetItem(updateObj);
-  };
+    const updateObj = items?.map((item, i) => {
+      if (item?.id == index) {
+        return {
+          ...item,
+          options: item?.options?.filter((item) => item !== option),
+        };
+      }
+      return item;
+    });
 
-  console.log("items list", items);
+    const filterItems = updateObj.filter((item) => {
+      return item?.options?.length > 0;
+    });
+
+    handleSetItem(filterItems);
+  };
 
   return (
     <>
@@ -106,14 +110,23 @@ const VariantAttributes = ({ handleSetItem, items, addNewVarient }) => {
 
                 <div className="ml-2 flex">
                   {item.options.map((option, index) => (
-                    <React.Fragment key={option}>
+                    <React.Fragment key={index}>
                       {/* <div>{option} </div>
                       {index !== item.options.length - 1 && <div>,</div>} */}
                       <Stack direction="row" spacing={1}>
                         <Chip
                           label={option}
-                          onDelete={handleDeleteOption(option, secIndex)}
-                          // style={{ top: "0px", left: "0px" }}
+                          onDelete={handleDeleteOption(option, secIndex + 1)}
+                          deleteIcon={
+                            <CancelIcon
+                              style={{
+                                top: "0px",
+                                right: "0px",
+                                fontSize: "22px",
+                              }}
+                            />
+                          }
+                          style={{ marginLeft: "7px", fontWeight: 500 }}
                         />
                       </Stack>
                     </React.Fragment>

@@ -7,9 +7,30 @@ const GeneratePUC = ({
   handleOnChange,
   formValue,
   handleGenerateUPC,
+  handleBlur,
 }) => {
   const varientList = handleVarientTitleBasedItemList();
 
+  const setInputMaxLength = (fieldname) => {
+    switch (fieldname) {
+      case "costPerItem":
+      case "compareAtPrice":
+      case "price":
+      case "Profit":
+      case "margin":
+        return 9;
+      case "reorderQty":
+      case "qty":
+      case "reorderLevel":
+        return 6;
+      case "upcCode":
+      case "customCode":
+        return 20;
+      default:
+        return 9;
+    }
+  };
+  const disabledFields = ["margin", "Profit"];
   return (
     <>
       <div className="mx-0">
@@ -34,12 +55,17 @@ const GeneratePUC = ({
                                 <label>{inp?.label}</label>
                                 <div className="input_area">
                                   <input
-                                    class=""
+                                    class="varient-input-field"
                                     type={inp?.type}
                                     name={inp?.name}
                                     value={formValue?.[index]?.[inp?.name]}
                                     placeholder={inp?.placeholder}
                                     onChange={(e) => handleOnChange(e, index)}
+                                    onBlur={(e) => handleBlur(e, index)}
+                                    maxLength={setInputMaxLength(inp?.name)}
+                                    disabled={disabledFields.includes(
+                                      inp?.name
+                                    )}
                                   />
                                 </div>
                               </div>

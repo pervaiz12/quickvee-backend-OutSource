@@ -15,7 +15,6 @@ const Index = ({visible}) => {
     if (typeof window !== 'undefined') {
       setIsMenuOpen(window.matchMedia('(max-width: 768px)').matches ? false : true);
     }
-    console.log(window);
   }, []);
 
   return (

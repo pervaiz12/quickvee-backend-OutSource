@@ -1,4 +1,3 @@
-
 import React from "react";
 
 import DashboardMain from "../Dashboard/DashboardMain";
@@ -58,20 +57,15 @@ import OrderRefundReportMain from "../Reporting/OrderRefundReport/OrderRefundRep
 import ReorderInventoryMain from "../Reporting/ReorderInventory/ReorderInventoryMain";
 import EditVendors from "../Vendors/EditVendors";
 import SingleVendorsDetail from "../Vendors/SingleVendorsDetail";
-import AddProducts from "../Products/AddProducts"
+import AddProducts from "../Products/AddProducts";
 //  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
 // import MainEmployee from "../Reporting/EmployeeWorkingHours/MainEmployee";
 // import MainInvDuplicates from '../InventoryDuplicates/MainInvDuplicates';
 
 const LeftSide = ({ visible }) => {
-
   useEffect(() => {
-    console.log("hello")
-    return () => {
-
-    }
-  },)
-
+    return () => {};
+  });
 
   return (
     <>
@@ -129,26 +123,16 @@ const LeftSide = ({ visible }) => {
           {visible === "edit-vendor" && <EditVendors />}
           {visible === "vendor-details" && <SingleVendorsDetail />}
 
-
-
           {/* {visible === "order-summary" && <OrderSummeryPage />} */}
-
-
 
           {visible === "recorder-inventory" && <ReorderInventoryMain />}
 
           {visible === "vendors-sales-reports" && <VendorSalesReportMain />}
           {visible === "order-refund-report" && <OrderRefundReportMain />}
-
-
-
         </div>
       </div>
     </>
   );
 };
 
-
 export default LeftSide;
-
-
