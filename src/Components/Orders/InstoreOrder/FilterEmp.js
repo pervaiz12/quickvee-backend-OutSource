@@ -7,6 +7,10 @@ import axios from "axios";
 
 const FilterEmp = ({ onFilterEmpDataChange}) => {
   const [searchId, setSearchId] = useState("");
+  const [selected, setSelected] = useState(false);
+
+
+
   const [isTablet, setIsTablet] = useState(false);
   //const [selectedEmployee, setSelectedEmployee] = useState("All");
 
@@ -39,7 +43,7 @@ const FilterEmp = ({ onFilterEmpDataChange}) => {
   const lengthOfArray = Object.values(filteredData.emp_id).length;
   // console.log("Length of array:", lengthOfArray);
 
-  console.log((filteredData.emp_id).lengt)
+  // console.log((filteredData.emp_id).lengt)
 
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
@@ -59,6 +63,7 @@ const FilterEmp = ({ onFilterEmpDataChange}) => {
           const emp_id = option.id;
           setSelectedEmployee(option.title);
           setSelectedEmployeeID(option.id);
+          setSelected(true);
           setEmployeeDropdownVisible(false);
           setFilteredData({
             ...filteredData,
@@ -206,7 +211,7 @@ const FilterEmp = ({ onFilterEmpDataChange}) => {
                 className="custom-dropdown-header"
                 onClick={() => toggleDropdown("employee")}
               >
-                <span className="selected-option mt-1">{selectedEmployee}</span>
+                <span className="selected-option mt-1" >{selectedEmployee}</span>
                 <img
                   src={employeeDropdownVisible ? UpArrow : DownIcon}
                   alt="Dropdown Icon"
@@ -214,19 +219,38 @@ const FilterEmp = ({ onFilterEmpDataChange}) => {
                 />
               </div>
               {employeeDropdownVisible && (
+                // <div className={dropdownContentClass}>
+                //   <div onClick={() => handleOptionClick("All", "employee")}>
+                //     All
+                //   </div>
+                //   {employeeList.map((option, key) => (
+                //     <div
+                //       key={key}
+                //       onClick={() => handleOptionClick(option, "employee")}
+                //     >
+                //       {option.title}
+                //     </div>
+                //   ))}
+                // </div>
+
                 <div className={dropdownContentClass}>
-                  <div onClick={() => handleOptionClick("All", "employee")}>
+                  <div
+                    className={selectedEmployee === "All" ? "dropdown-item active" : "dropdown-item"}
+                    onClick={() => handleOptionClick("All", "employee")}
+                  >
                     All
                   </div>
                   {employeeList.map((option, key) => (
                     <div
                       key={key}
+                      className={selectedEmployee === option.title ? "dropdown-item active" : "dropdown-item"}
                       onClick={() => handleOptionClick(option, "employee")}
                     >
                       {option.title}
                     </div>
                   ))}
                 </div>
+    
               )}
             </div>
           </div>
@@ -255,26 +279,28 @@ const FilterEmp = ({ onFilterEmpDataChange}) => {
                 />
               </div>
               {transactionDropdownVisible && (
-                <div className="dropdown-content">
-                  <div
-                    className="all"
-                    onClick={() => handleOptionClick("Both", "transaction")}
-                  >
-                    Both
-                  </div>
-                  <div
-                    className="all"
-                    onClick={() => handleOptionClick("Cash", "transaction")}
-                  >
-                    Cash
-                  </div>
-                  <div
-                    className="all"
-                    onClick={() => handleOptionClick("Online", "transaction")}
-                  >
-                    Online
-                  </div>
-                </div>
+               <div className="dropdown-content">
+  <div
+    className={selectedTransaction === "Both" ? "dropdown-item active" : "dropdown-item"} 
+    onClick={() => handleOptionClick("Both", "transaction")}
+  >
+    Both
+  </div>
+  <div
+    className={selectedTransaction === "Cash" ? "dropdown-item active" : "dropdown-item"}
+    onClick={() => handleOptionClick("Cash", "transaction")}
+  >
+    Cash
+  </div>
+  <div
+    className={selectedTransaction === "Online" ? "dropdown-item active" : "dropdown-item"}
+    onClick={() => handleOptionClick("Online", "transaction")}
+  >
+    Online
+  </div>
+</div>
+
+
               )}
             </div>
           </div>

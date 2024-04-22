@@ -99,3 +99,10 @@ table.dataTable tbody td {
 
     color: #0A64F9;
 }
+
+.view_details_order{
+    border-bottom: 1px solid #0A64F9;
+    color:#0A64F9;
+    font-family: CircularSTDBook !important;
+    font-size: 15px;;
+}

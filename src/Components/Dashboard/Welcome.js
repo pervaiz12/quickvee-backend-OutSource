@@ -99,9 +99,10 @@ const Welcome = ({ isOpen, onClose, children }) => {
           </div>
           <div
             onClick={openCalendar}
-            className={`q_dashboard_welcom_msg cursor-pointer ${visibleCalendar ? "active" : ""
-              }`}
-          // Assigning the ref to the wrapper div
+            className={`q_dashboard_welcom_msg cursor-pointer ${
+              visibleCalendar ? "active" : ""
+            }`}
+            // Assigning the ref to the wrapper div
           >
             <h1>Oct 4, 2023 - Oct 4, 2023</h1>
 
@@ -111,7 +112,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
             >
               <div className="flex mx-auto">
                 <div className="col-qv-6 border-r border-[#ccc] p-4">
-                  <div className="my-2 q-details-page-label ">
+                  <div className="my-2 q-details-page-label_dasbaord">
                     Select Option
                   </div>
                   <div>
@@ -121,11 +122,16 @@ const Welcome = ({ isOpen, onClose, children }) => {
                           <div className="col-12">
                             <ul className="flex space-x-8 mb-4">
                               <li
-                                className={`select_date_btn ${daysFilter === "today" ? "active" : ""
-                                  }`}
+                                className={`select_date_btn ${
+                                  daysFilter === "today" ? "active" : ""
+                                }`}
                                 style={{
-                                  borderColor: daysFilter === "today" ? "#0A64F9" : "",
-                                  color: daysFilter === "today" ? "#0A64F9" : "#707070",
+                                  borderColor:
+                                    daysFilter === "today" ? "#0A64F9" : "",
+                                  color:
+                                    daysFilter === "today"
+                                      ? "#0A64F9"
+                                      : "#707070",
                                   boxShadow: daysFilter === "today" ? "" : "",
                                 }}
                                 onClick={() => handleClick("today")}
@@ -144,20 +150,27 @@ const Welcome = ({ isOpen, onClose, children }) => {
                                 </a>
                               </li>
                               <li
-                                className={`select_date_btn ${daysFilter === "yesterday" ? "active" : ""
-                                  }`}
+                                className={`select_date_btn ${
+                                  daysFilter === "yesterday" ? "active" : ""
+                                }`}
                                 style={{
                                   borderColor:
                                     daysFilter === "yesterday" ? "#0A64F9" : "",
-                                  color: daysFilter === "yesterday" ? "#0A64F9" : "",
-                                  boxShadow: daysFilter === "yesterday" ? "" : "",
+                                  color:
+                                    daysFilter === "yesterday" ? "#0A64F9" : "",
+                                  boxShadow:
+                                    daysFilter === "yesterday" ? "" : "",
                                 }}
                                 onClick={() => handleClick("yesterday")}
                               >
                                 <a href="#" className="days_filter">
                                   Yesterday
                                   {daysFilter === "yesterday" && (
-                                    <img src={CheckIcon} alt="Checkmark" className="" />
+                                    <img
+                                      src={CheckIcon}
+                                      alt="Checkmark"
+                                      className=""
+                                    />
                                   )}
                                 </a>
                               </li>
@@ -165,131 +178,173 @@ const Welcome = ({ isOpen, onClose, children }) => {
                             {/* weeks days details */}
                             <ul className="flex space-x-8 mb-6">
                               <li
-                                className={`select_date_btn ${daysFilter === "week_days" ? "active" : ""
-                                  }`}
+                                className={`select_date_btn ${
+                                  daysFilter === "week_days" ? "active" : ""
+                                }`}
                                 style={{
                                   borderColor:
                                     daysFilter === "week_days" ? "#0A64F9" : "",
-                                  color: daysFilter === "week_days" ? "#0A64F9" : "",
-                                  boxShadow: daysFilter === "week_days" ? "" : "",
+                                  color:
+                                    daysFilter === "week_days" ? "#0A64F9" : "",
+                                  boxShadow:
+                                    daysFilter === "week_days" ? "" : "",
                                 }}
                                 onClick={() => handleClick("week_days")}
                               >
                                 <a href="#" className="days_filter">
                                   Week to Date
                                   {daysFilter === "week_days" && (
-                                    <img src={CheckIcon} alt="Checkmark" className="" />
+                                    <img
+                                      src={CheckIcon}
+                                      alt="Checkmark"
+                                      className=""
+                                    />
                                   )}
                                 </a>
                               </li>
                               <li
-                                className={`select_date_btn ${daysFilter === "Last days" ? "active" : ""
-                                  }`}
+                                className={`select_date_btn ${
+                                  daysFilter === "Last days" ? "active" : ""
+                                }`}
                                 style={{
                                   borderColor:
                                     daysFilter === "Last days" ? "#0A64F9" : "",
-                                  color: daysFilter === "Last days" ? "#0A64F9" : "",
-                                  boxShadow: daysFilter === "Last days" ? "" : "",
+                                  color:
+                                    daysFilter === "Last days" ? "#0A64F9" : "",
+                                  boxShadow:
+                                    daysFilter === "Last days" ? "" : "",
                                 }}
                                 onClick={() => handleClick("Last days")}
                               >
                                 <a href="#" className="days_filter">
                                   Last Week
                                   {daysFilter === "Last days" && (
-                                    <img src={CheckIcon} alt="Checkmark" className="" />
+                                    <img
+                                      src={CheckIcon}
+                                      alt="Checkmark"
+                                      className=""
+                                    />
                                   )}
                                 </a>
                               </li>
                             </ul>
 
-
                             <ul className="flex space-x-8 mb-4">
                               <li
-                                className={`select_date_btn ${daysFilter === "Last Month" ? "active" : ""
-                                  }`}
+                                className={`select_date_btn ${
+                                  daysFilter === "Last Month" ? "active" : ""
+                                }`}
                                 style={{
                                   borderColor:
                                     daysFilter === "Las7days" ? "#0A64F9" : "",
-                                  color: daysFilter === "Las7days" ? "#0A64F9" : "",
-                                  boxShadow: daysFilter === "Las7days" ? "" : "",
+                                  color:
+                                    daysFilter === "Las7days" ? "#0A64F9" : "",
+                                  boxShadow:
+                                    daysFilter === "Las7days" ? "" : "",
                                 }}
                                 onClick={() => handleClick("Las7days")}
                               >
                                 <a href="#" className="days_filter">
                                   Last 7 days
                                   {daysFilter === "Las7days" && (
-                                    <img src={CheckIcon} alt="Checkmark" className="" />
+                                    <img
+                                      src={CheckIcon}
+                                      alt="Checkmark"
+                                      className=""
+                                    />
                                   )}
                                 </a>
                               </li>
                               <li
-                                className={`select_date_btn ${daysFilter === "Mont_date" ? "active" : ""
-                                  }`}
+                                className={`select_date_btn ${
+                                  daysFilter === "Mont_date" ? "active" : ""
+                                }`}
                                 style={{
                                   borderColor:
                                     daysFilter === "Mont_date" ? "#0A64F9" : "",
-                                  color: daysFilter === "Mont_date" ? "#0A64F9" : "",
-                                  boxShadow: daysFilter === "Mont_date" ? "" : "",
+                                  color:
+                                    daysFilter === "Mont_date" ? "#0A64F9" : "",
+                                  boxShadow:
+                                    daysFilter === "Mont_date" ? "" : "",
                                 }}
                                 onClick={() => handleClick("Mont_date")}
                               >
                                 <a href="#" className="days_filter">
                                   Month To Date
                                   {daysFilter === "Mont_date" && (
-                                    <img src={CheckIcon} alt="Checkmark" className="" />
+                                    <img
+                                      src={CheckIcon}
+                                      alt="Checkmark"
+                                      className=""
+                                    />
                                   )}
                                 </a>
                               </li>
                             </ul>
                             <ul className="flex space-x-8 mb-4">
                               <li
-                                className={`select_date_btn ${daysFilter === "This Month" ? "active" : ""
-                                  }`}
+                                className={`select_date_btn ${
+                                  daysFilter === "This Month" ? "active" : ""
+                                }`}
                                 style={{
                                   borderColor:
-                                    daysFilter === "This Month" ? "#0A64F9" : "",
-                                  color: daysFilter === "This Month" ? "#0A64F9" : "",
-                                  boxShadow: daysFilter === "This Month" ? "" : "",
+                                    daysFilter === "This Month"
+                                      ? "#0A64F9"
+                                      : "",
+                                  color:
+                                    daysFilter === "This Month"
+                                      ? "#0A64F9"
+                                      : "",
+                                  boxShadow:
+                                    daysFilter === "This Month" ? "" : "",
                                 }}
                                 onClick={() => handleClick("This Month")}
                               >
                                 <a href="#" className="days_filter">
                                   This Month
                                   {daysFilter === "This Month" && (
-                                    <img src={CheckIcon} alt="Checkmark" className="" />
+                                    <img
+                                      src={CheckIcon}
+                                      alt="Checkmark"
+                                      className=""
+                                    />
                                   )}
                                 </a>
                               </li>
                               <li
-                                className={`select_date_btn ${daysFilter === "This Year" ? "active" : ""
-                                  }`}
+                                className={`select_date_btn ${
+                                  daysFilter === "This Year" ? "active" : ""
+                                }`}
                                 style={{
                                   borderColor:
                                     daysFilter === "This Year" ? "#0A64F9" : "",
-                                  color: daysFilter === "This Year" ? "#0A64F9" : "",
-                                  boxShadow: daysFilter === "This Year" ? "" : "",
+                                  color:
+                                    daysFilter === "This Year" ? "#0A64F9" : "",
+                                  boxShadow:
+                                    daysFilter === "This Year" ? "" : "",
                                 }}
                                 onClick={() => handleClick("This Year")}
                               >
                                 <a href="#" className="days_filter">
                                   This Year
                                   {daysFilter === "This Year" && (
-                                    <img src={CheckIcon} alt="Checkmark" className="" />
+                                    <img
+                                      src={CheckIcon}
+                                      alt="Checkmark"
+                                      className=""
+                                    />
                                   )}
                                 </a>
                               </li>
                             </ul>
-
                           </div>
                         </div>
                       </div>
-
                     </div>
 
                     <div className="" ref={dropdownRef}>
                       <label
-                        className="q-details-page-label"
-
+                        className="q-details-page-label_dasbaord"
                         htmlFor="transactionFilter"
                         onClick={() =>
                           setTransactionDropdownVisible(
@@ -311,15 +366,15 @@ const Welcome = ({ isOpen, onClose, children }) => {
                               </span>
                               <img
                                 src={
-                                  transactionDropdownVisible ? UpArrow : DownIcon
+                                  transactionDropdownVisible
+                                    ? UpArrow
+                                    : DownIcon
                                 }
                                 alt="Dropdown Icon"
                                 className="w-8 h-8"
                               />
-
                             </div>
-                            <div className="custom-dropdown" >
-
+                            <div className="custom-dropdown">
                               {transactionDropdownVisible && (
                                 <div className="dropdown-content">
                                   <div
@@ -345,9 +400,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
                           </div>
                         </div>
                       </div>
-
                     </div>
-
                   </div>
                 </div>
 
@@ -364,10 +417,15 @@ const Welcome = ({ isOpen, onClose, children }) => {
 
                   <div className="container">
                     <div className="row">
-                      <div className="flex justify-between gap-6" style={{ marginTop: "-47px" }}>
+                      <div
+                        className="flex justify-between gap-6"
+                        style={{ marginTop: "-47px" }}
+                      >
                         <div className="col-6">
-                          <FormControl  >
-                            <div className="q-details-page-label">Start Date</div>
+                          <FormControl>
+                            <div className="q-details-page-label_dasbaord">
+                              Start Date
+                            </div>
                             <DatePicker
                               selected={startDate}
                               onChange={(date) => setStartDate(date)}
@@ -378,7 +436,6 @@ const Welcome = ({ isOpen, onClose, children }) => {
                               className="q_input_details "
                               ref={startDateRef}
                               showPopperArrow={false}
-
                             />
                             <span
                               className="cursor-pointer"
@@ -388,7 +445,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
                         </div>
                         <div className="col-6">
                           <FormControl>
-                            <div className="q-details-page-label">End Date</div>
+                            <div className="q-details-page-label_dasbaord">End Date</div>
                             <DatePicker
                               selected={endDate}
                               onChange={(date) => setEndDate(date)}
@@ -411,12 +468,35 @@ const Welcome = ({ isOpen, onClose, children }) => {
                     </div>
                   </div>
 
+                  <div className="conatiner">
+                    <div className="row" style={{display:"flex" , justifyContent:"space-between" , gap:"6"}}>
+                      <div className="col-qv-6">
+                        <div className="q-add-categories-section-middle-footer">
+                          <button
+                            className="filter_btn quic-btn-cancle "
+                            onClick={closeCalendar}
+                          >
+                            Cancel
+                          </button>
+                        </div>
+                      </div>
+                      <div className="col-qv-6">
+                        <div className="q-add-categories-section-middle-footer ">
+                          <button
+                            className="filter_btn quic-btn-save"
+                            onClick={handleRetrieve}
+                          >
+                            Retrieve
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
 
-                                      
-                  <div className="container">
+                  {/* <div className="container">
                     <div className="row">
                       <div className="flex justify-between gap-6">
-                        <div className="col-6">
+                        <div className="col-12">
                           <div
                             className="q-add-categories-section-middle-footer flex justify-between gap-6 px-0"
 
@@ -430,7 +510,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
 
                           </div>
                         </div>
-                        <div className="col-6">
+                        <div className="col-12">
                           <div className="q-add-categories-section-middle-footer flex justify-between gap-6 px-0">
                             <button
                               className="filter_btn quic-btn-save"
@@ -443,9 +523,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
                         </div>
                       </div>
                     </div>
-                  </div>
-
-
+                  </div> */}
                 </div>
               </div>
             </div>

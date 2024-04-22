@@ -236,7 +236,7 @@ const OnlineTableViewData = (props) => {
           Amount: `${"$" + data.amt || ""}<br>${data.order_status || ""}`,
           Status: status,
           OrderStatus: PayStatus,
-          View: `<ahref="/store-reporting/order-summary/${data.order_id}">View Details</ahref=>`,
+          View: `<ahref="/store-reporting/order-summary/${data.order_id}" class="view_details_order">View Details</ahref=>`,
         };
       }
     );

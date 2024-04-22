@@ -159,19 +159,19 @@ const MainOnline = ({ onFilterDataChange }) => {
               {transactionDropdownVisible && (
                 <div className="dropdown-content">
                   <div
-                    className="all"
+                    className={selectedTransaction === "Both" ? "dropdown-item active" : "dropdown-item"}
                     onClick={() => handleOptionClick("Both", "transaction")}
                   >
                     Both
                   </div>
                   <div
-                    className="all"
+                    className={selectedTransaction === "Cash" ? "dropdown-item active" : "dropdown-item"}
                     onClick={() => handleOptionClick("Cash", "transaction")}
                   >
                     Cash
                   </div>
                   <div
-                    className="all"
+                    className={selectedTransaction === "Online" ? "dropdown-item active" : "dropdown-item"}
                     onClick={() => handleOptionClick("Online", "transaction")}
                   >
                     Online
@@ -203,19 +203,20 @@ const MainOnline = ({ onFilterDataChange }) => {
               {orderStatusDropdownVisible && (
                 <div className="dropdown-content">
                   <div
-                    className="all"
+                    className={selectedOrderStatus === "New" ? "dropdown-item active" : "dropdown-item"}
+                    
                     onClick={() => handleOptionClick("New", "orderStatus")}
                   >
                     New
                   </div>
                   <div
-                    className="all"
+                    className={selectedOrderStatus === "Closed" ? "dropdown-item active" : "dropdown-item"}
                     onClick={() => handleOptionClick("Closed", "orderStatus")}
                   >
                     Closed
                   </div>
                   <div
-                    className="all"
+                    className={selectedOrderStatus === "Failed" ? "dropdown-item active" : "dropdown-item"}
                     onClick={() => handleOptionClick("Failed", "orderStatus")}
                   >
                     Failed

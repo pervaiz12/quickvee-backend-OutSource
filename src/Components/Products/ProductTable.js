@@ -135,22 +135,22 @@ const ProductTable = ({ selectedListingType, selectedListingTypeValue, productsL
             </p>
           </div>
           <div className="q-category-bottom-detail-section">
-            <div className="q-category-bottom-header-sticky">
+            {/* <div className="q-category-bottom-header-sticky"> */}
               <div className="q-category-bottom-categories-header" style={{ position: "sticky", top: "0px" }} >
-                <p className="categories-sort">Sort</p>
-                <p className="categories-sort"></p>
-                <p className="categories-title">Title</p>
-                <p className="categories-sort"></p>
-                <p className="categories-items">Category</p>
-                <p className="categories-sort"></p>
-                <p className="categories-enable-disable" >Enable online ordering?</p>
-                <p className="categories-sort"></p>
-                <p className="categories-items">Product Status</p>
-                <p className="categories-sort"></p>
-                <p className="categories-items" >Images</p>
-                <p className="categories-sort"></p>
-                <p className="categories-items" >Delete</p>
-                <p className=""></p>
+                <p className="product-table-sort">Sort</p>
+              
+                <p className="product-table-title">Title</p>
+                
+                <p className="product-table-items">Category</p>
+               
+                <p className="product-table-enable-disable" >Enable online ordering?</p>
+              
+                <p className="product-table-title">Product Status</p>
+                
+                <p className="product-table-items " >Images</p>
+                
+                <p className="product-table-btn " >Delete</p>
+              
               </div>
 
               <div id="scrollableDiv" style={{ height: 300, overflow: "auto" }}>
@@ -179,7 +179,7 @@ const ProductTable = ({ selectedListingType, selectedListingTypeValue, productsL
         </div>
       </div>
 
-      </div>
+      
 
     </>
   );

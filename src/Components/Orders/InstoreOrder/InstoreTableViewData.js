@@ -71,7 +71,7 @@ const InstoreTableViewData = (props) => {
       "Order": `${data.order_id || ""}<br>${data.merchant_time || ""}<br>${data.order_method || ""}`,
       "Amount": `${data.amt || ""}<br><div className="order_status_details_quivkwee">${data.order_status || ""}</div>`,
       "Status": `${data.order_status || ""}`,
-      "View": `<a href="/store-reporting/order-summary/${data.order_id}">View Details</a>`,
+      "View": `<a href="/store-reporting/order-summary/${data.order_id}" class="view_details_order">View Details</a>`,
     }));
 
     const table = $('#InstoreTable').DataTable({

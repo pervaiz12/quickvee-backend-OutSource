@@ -131,26 +131,30 @@
 
 }
 
-.categories-sort {
-    width: 12%;
+.product-table-sort {
+    width: 10%;
 }
 
-.categories-title {
+.product-table-title {
     width: 20%;
 
 }
 
-.categories-items {
-    width: 20%;
+.product-table-items {
+    width: 25%;
 }
 .categories-items-btn{
 width: auto !important;
 cursor:  pointer !important;
 }
-.categories-enable-disable {
-    width: calc(100% - 52%);
+.product-table-enable-disable {
+    width: calc(100% - 60%);
 }
 
+
+.product-table-btn {
+    width: 8%;
+}
 
 .q-category-bottom-categories-listing {
     width: 100%;

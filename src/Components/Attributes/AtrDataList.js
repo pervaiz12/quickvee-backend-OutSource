@@ -7,6 +7,7 @@ import { BASE_URL, ADD_ATTRIBUTE } from "../../Constants/Config";
 import AddIcon from "../../Assests/Category/addIcon.svg";
 import EditAttribute from "../Attributes/EditAttribute";
 import SortIcon from "../../Assests/Category/Sorting.svg"
+import EditIcon from "../../Assests/Category/editIcon.svg";
 
 const AtrDataList = ({ seVisible }) => {
   const [showModal, setShowModal] = useState(false);
@@ -130,7 +131,7 @@ const AtrDataList = ({ seVisible }) => {
                 </p>
                 <p className="attriButes-title">{attribute.title}</p>
 
-                <p className="attriButes-enable-disable">
+                <p className="attriButes-enable-disable" style={{ width: "calc(100% - 32%)" }}>
                   {/* onClick={()=>openEditModal(attribute)} */}
                   {/* <img src={DeleteIcon} alt="delete-icon" /> */}
                   <EditAttribute

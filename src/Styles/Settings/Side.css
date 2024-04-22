@@ -393,12 +393,10 @@ border:1px solid #0A64F9 }
   color: #000000;
 }
 
-
-
-.dropdown-content div:focus-visible {
-  background-color: #F5F9FF;
-  color: #000000;
-  outline: none; 
+.selected-item {
+  /* Styles when dropdown item is selected */
+  color: white;
+  background-color: blue;
 }
 
 
@@ -473,8 +471,72 @@ padding: 8px;
     font-family: CircularSTDBook !important;
     font-size: 16px;
     color: #fff;
-    padding: 10px 80px;
+        padding: 0.75rem 5.5rem;
     border-radius: 4px;
     cursor: pointer;
 }
 
+@media only screen and (max-width: 1366px) and (min-width: 640px) {
+    .q-add-categories-section-middle-footer .filter_btn {
+        padding: 10px 40px; 
+    }
+}
+@media only screen and (max-width: 1184px) and (min-width: 640px) {
+    .q-add-categories-section-middle-footer .filter_btn {
+        padding: 10px 30px; 
+    }
+}
+
+@media only screen and (max-width: 768px) and (min-width: 376px) {
+  .flex.space-x-8.mb-4 {
+    flex-wrap: wrap;
+    justify-content: center; /* Align items at the center */
+  }
+
+  .select_date_btn {
+    width: 100%; 
+    text-align: center;
+    margin-bottom: 10px; 
+  }
+}
+
+
+
+
+/* Default styles for dropdown items */
+.dropdown-item {
+  padding: 8px 16px;
+  cursor: pointer;
+}
+
+/* Styles for active dropdown item */
+.dropdown-item.active {
+  background-color: #0A64F9;
+  color: white;
+}
+
+.custom-boxes {
+  padding: 1rem; /* Equivalent to p-4 */
+ 
+}
+
+.Card_admin.col-qv-4 {
+  margin-top: 3px;
+}
+
+
+/* cate css */
+
+.q_cat_del_edit_img{
+  display: flex;
+  justify-content: space-between;
+  width: 12%;
+}
+
+@media only screen and (max-width: 1060px) and (min-width:768px) {
+.q_cat_del_edit_img{
+  display: flex;
+  justify-content: space-between;
+  width: 15%;
+}
+}

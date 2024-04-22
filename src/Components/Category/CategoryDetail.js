@@ -210,22 +210,25 @@ const CategoryDetail = ({ seVisible }) => {
                     </label>
                   </div>
 
+                 
+                </p>
+                <div className="q_cat_del_edit_img">
                   <Link to={`/category/edit-category/${category.id}`}>
-                     
-                      <img
-                        className='edit_center'
-                        selectedCategory={category}
-                        src={EditIcon}
-                        alt="Edit"
-                      />
-                    </Link> 
+
+                    <img
+                      className='edit_center'
+                      selectedCategory={category}
+                      src={EditIcon}
+                      alt="Edit"
+                    />
+                  </Link>
 
                   <img
                     src={DeleteIcon}
                     alt="delete-icon"
                     onClick={() => handleDeleteCategory(category.id)}
                   />
-                </p>
+                  </div>
               </div>
             ))}
         </div>

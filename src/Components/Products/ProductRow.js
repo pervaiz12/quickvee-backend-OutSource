@@ -11,16 +11,18 @@ import { BASE_URL } from "../../Constants/Config";
 
 const ProductRow= ({product ,index,Avail_Online,checkStatus,handleError})=>{
     return <>
+      <div className="q-category-bottom-detail-section">
      <div key={index} className="q-attributes-bottom-attriButes-single-attributes">
-                  <p className="categories-sort"><img src={SortIcon} alt="" className="" /></p>
-                  <p className="categories-sort"></p>
-                  <p className="categories-title"><Link to="/product-add">{product.title}</Link></p>
-                  <p className="categories-sort"></p>
-                  <p className="categories-title">{product.category_name}</p>
-                  <p className="categories-sort"></p>
+        
+        <p className="product-table-sort"><img src={SortIcon} alt="" className="" /></p>
+                 
+        <p className="product-table-title"><Link to="/product-add">{product.title}</Link></p>
+               
+        <p className="product-table-items">{product.category_name}</p>
+               
                   
-                  <div className="categories-title">
-                  <div className="flex flex-wrap gap-3 ">
+        <div className="product-table-enable-disable">
+                  <div className="">
                     <label className="q_resigter_setting_section" style={{color:"#000",fontSize:"18px"}}>Delivery
                       <input type="checkbox"  
                               id={"delivery_check"+product.id}
@@ -41,10 +43,10 @@ const ProductRow= ({product ,index,Avail_Online,checkStatus,handleError})=>{
                       <span className="checkmark"></span></label>
                   </div>
                   </div>
-                  <p className="categories-sort"></p>
-                  <p className="categories-title">{checkStatus(product.show_status)}    </p>
-                  <p className="categories-sort"></p>
-                  <div className="categories-items" style={{width:"50%"}}>
+                  
+        <p className="product-table-title">{checkStatus(product.show_status)}    </p>
+                 
+        <div className="product-table-items ">
 
 
                   <div className="flex items-center space-x-2 text-base">
@@ -67,8 +69,9 @@ const ProductRow= ({product ,index,Avail_Online,checkStatus,handleError})=>{
                   
 
                   </div>
-                  <p className=""><img src={DeleteIcon} alt=" " className="w-16 h-16" /></p>
+        <p className="product-table-btn "><img src={DeleteIcon} alt=" " className="w-10 h-10" /></p>
                 </div>
+      </div>
     </>
 }   
 

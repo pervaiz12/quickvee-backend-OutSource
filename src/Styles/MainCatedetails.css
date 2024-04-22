@@ -347,6 +347,14 @@
  }
 
 
+  .q-details-page-label_dasbaord{
+    color:#818181;
+    font-size: 12px;
+    font-family: CircularSTDBook !important;
+    opacity: 1;
+    margin-top:10px;
+ }
+
  .q-order-bottom-oder-details-listing {
     width: 100%;
     background: #F5F5F5;
