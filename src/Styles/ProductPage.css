@@ -145,8 +145,6 @@
 .image-upload-gallery {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
-  /* gap: 10px; */
 }
 
 .image-upload-gallery .image-display {
@@ -169,4 +167,21 @@
   box-sizing: border-box;
   cursor: pointer;
   margin: 4px 4px 0px 0px;
+}
+
+.image-upload-gallery .image-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+}
+
+/* varient add section */
+.varientAddSection {
+  display: flex;
+  align-items: center;
+}
+
+.custom-dropdown-control .Dropdown-arrow {
+  display: none;
 }

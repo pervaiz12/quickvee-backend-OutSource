@@ -6,7 +6,7 @@ import { colourOptions } from "../Products/data";
 import VariantAttributes from "./VariantAttributes";
 import UploadIMG from "../../Assests/Filter/imgupload.svg";
 import GeneratePUC from "./GeneratePUC";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addProduct,
   fetchCategoryList,
@@ -15,6 +15,7 @@ import {
   fetchTaxList,
   fetchVarientList,
   getInventorySetting,
+  updateVarientTitleItems,
 } from "../../Redux/features/Product/ProductSlice";
 import { type } from "@testing-library/user-event/dist/type";
 import Upload from "../../Assests/Category/upload.svg";
@@ -28,7 +29,6 @@ const AddProducts = () => {
   const fileUploadRef = useRef();
   const dispatch = useDispatch();
   const animatedComponents = makeAnimated();
-  const [items, setItems] = useState([]);
   const [formValue, setFormValue] = useState([]);
   const [productInfo, setProductInfo] = useState({
     title: "",
@@ -39,6 +39,16 @@ const AddProducts = () => {
     frequentlyBought: [],
     image: [],
   });
+  const [isMultipleVarient, setIsMultipleVaient] = useState(true);
+  const [varientLength, setVarientLength] = useState([
+    { id: 1, varientName: "", varientAttributeList: [] },
+  ]);
+
+  const [varientError, setVarientError] = useState({
+    error: "",
+    errorIndex: null,
+  });
+  // const [varientTitleList, setVarientTitleList] = useState([]);
 
   const [dropdownData, setDropdowndata] = useState({
     varientList: [],
@@ -49,6 +59,44 @@ const AddProducts = () => {
   });
 
   // const [productImage, setProductImage] = useState(null);
+
+  const toggleVarientSection = () => {
+    if (!isMultipleVarient) {
+      setIsMultipleVaient((prev) => {
+        return !prev;
+      });
+      setFormValue([]);
+    } else {
+      setIsMultipleVaient((prev) => {
+        return !prev;
+      });
+      setFormValue([
+        {
+          costPerItem: "",
+          compareAtPrice: "",
+          price: "",
+          margin: "",
+          Profit: "",
+          qty: "",
+          upcCode: "",
+          customCode: "",
+          reorderQty: "",
+          reorderLevel: "",
+          trackQuantity: true,
+          sellOutOfStock: true,
+          checkId: false,
+          disable: false,
+          itemForAllLinkedLocation: false,
+        },
+      ]);
+    }
+  };
+
+  const handleOnBlurAttributes = (e) => {
+    if (e.key === "Enter" || e.key === "Tab") {
+      handleVarientTitleBasedItemList();
+    }
+  };
 
   const handleSelectProductOptions = (value, name) => {
     setProductInfo((prev) => ({
@@ -75,15 +123,47 @@ const AddProducts = () => {
     }));
   };
 
-  const handleDeleteSelectedImage = (img) => {
-    const deleteImage = productInfo?.image?.filter((img) => {
-      return String(img?.base64) !== String(img?.base64);
+  const handleSetVarientLength = (updatedVarient) => {
+    setVarientLength(updatedVarient);
+  };
+
+  let varientTitle = [];
+  const addMoreVarientItems = () => {
+    const checkEmpty = varientLength?.map((item, i) => {
+      if (!item?.varientAttributeList?.length) {
+        setVarientError({
+          error: "Please enter option values.",
+          errorIndex: i,
+        });
+        return false;
+      } else {
+        setVarientError({
+          error: "",
+          errorIndex: null,
+        });
+        return true;
+      }
     });
-    console.log(deleteImage, productInfo, img);
-    // setProductInfo((prev) => ({
-    //   ...prev,
-    //   ["image"]: deleteImage,
-    // }));
+    if (checkEmpty.every((i) => Boolean(i))) {
+      setVarientLength((prev) => [
+        ...prev,
+        {
+          id: prev?.length + 1,
+          varientName: "",
+          varientAttributeList: [],
+        },
+      ]);
+    }
+  };
+
+  const handleDeleteSelectedImage = (imageToDelete) => {
+    const deleteImage = productInfo?.image?.filter((img) => {
+      return img?.file?.name !== imageToDelete?.file?.name;
+    });
+    setProductInfo((prev) => ({
+      ...prev,
+      ["image"]: deleteImage,
+    }));
   };
   // const []
   const [costPer, setCostPer] = useState(null);
@@ -98,8 +178,6 @@ const AddProducts = () => {
     "reorderLevel",
   ];
 
-  let varientTitle = [];
-
   // react-selected item style
   const customStyles = {
     multiValue: (provided, state) => ({
@@ -112,14 +190,6 @@ const AddProducts = () => {
       paddingLeft: "7px",
       boxSizing: "border-box",
     }),
-  };
-
-  const handleSetItem = (data) => {
-    setItems(data);
-  };
-
-  const addNewVarient = (newItem) => {
-    setItems([...items, newItem]);
   };
 
   const openFileInput = () => {
@@ -200,13 +270,27 @@ const AddProducts = () => {
     });
   }, []);
 
+  // useEffect(() => {
+  //   if (dropdownData?.varientList?.length > 0) {
+  //     const filteredOptions = dropdownData?.varientList?.filter((option) => {
+  //       // Check if the option's title exists in varient
+  //       return varientLength.map(
+  //         (variant) => variant.varientName !== option.title
+  //       );
+  //     });
+  //     setDropdowndata((prev) => ({
+  //       ...prev,
+  //       ["varientList"]: filteredOptions,
+  //     }));
+  //   }
+  // }, [varientLength]);
+
   // const handleImageChange = (event) => {
   //   const selectedFile = event.target.files[0];
   //   // You can perform additional validation here if needed
   //   setProductImage(URL.createObjectURL(selectedFile));
   // };
 
-  console.log(productInfo);
   const handleImageChange = (e) => {
     let files = [];
     files = [...e?.target?.files];
@@ -479,22 +563,38 @@ const AddProducts = () => {
   };
 
   const handleVarientTitleBasedItemList = () => {
-    if (items.length) {
-      if (items?.length === 1) {
-        for (let i of items[0]?.options) {
-          varientTitle.push(i);
+    if (varientLength.length) {
+      if (
+        varientLength?.length === 1 &&
+        varientLength[0]?.varientAttributeList?.length
+      ) {
+        for (let i of varientLength[0]?.varientAttributeList) {
+          console.log("one");
+          varientTitle.push(i?.label);
         }
-      } else if (items?.length === 2) {
-        for (let i of items[0]?.options) {
-          for (let j of items[1]?.options) {
-            varientTitle.push(i + "/" + j);
+      } else if (
+        varientLength?.length === 2 &&
+        varientLength[0]?.varientAttributeList?.length &&
+        varientLength[1]?.varientAttributeList?.length
+      ) {
+        for (let i of varientLength[0]?.varientAttributeList) {
+          for (let j of varientLength[1]?.varientAttributeList) {
+            console.log("two");
+
+            varientTitle.push(i?.label + "/" + j?.label);
           }
         }
-      } else {
-        for (let i of items[0]?.options) {
-          for (let j of items[1]?.options) {
-            for (let k of items[2]?.options) {
-              varientTitle.push(i + "/" + j + "/" + k);
+      } else if (
+        varientLength?.length === 3 &&
+        varientLength[0]?.varientAttributeList?.length &&
+        varientLength[1]?.varientAttributeList?.length &&
+        varientLength[2]?.varientAttributeList?.length
+      ) {
+        for (let i of varientLength[0]?.varientAttributeList) {
+          for (let j of varientLength[1]?.varientAttributeList) {
+            for (let k of varientLength[2]?.varientAttributeList) {
+              console.log("three");
+              varientTitle.push(i.label + "/" + j.label + "/" + k.label);
             }
           }
         }
@@ -504,9 +604,12 @@ const AddProducts = () => {
     return [...new Set(varientTitle)];
   };
 
+  // console.log(varientTitle);
+
   useEffect(() => {
-    if (items?.length > 0) {
+    if (varientLength?.length > 0 && isMultipleVarient) {
       handleVarientTitleBasedItemList();
+      // console.log("varientTitle inside effect", varientTitle);
       setFormValue(
         varientTitle?.length > 0
           ? [...new Set(varientTitle)]?.map((_) => ({
@@ -528,8 +631,28 @@ const AddProducts = () => {
             }))
           : []
       );
+    } else if (!isMultipleVarient) {
+      setFormValue([
+        {
+          costPerItem: "",
+          compareAtPrice: "",
+          price: "",
+          margin: "",
+          Profit: "",
+          qty: "",
+          upcCode: "",
+          customCode: "",
+          reorderQty: "",
+          reorderLevel: "",
+          trackQuantity: true,
+          sellOutOfStock: true,
+          checkId: false,
+          disable: false,
+          itemForAllLinkedLocation: false,
+        },
+      ]);
     }
-  }, [items]);
+  }, [varientLength]);
 
   const characters = "0123456789";
   function generateString(length) {
@@ -700,6 +823,8 @@ const AddProducts = () => {
                     border: "2px solid #0A64F9",
                     width: "20%",
                     cursor: "pointer",
+                    display: "grid",
+                    placeContent: "center",
                   }}
                   onDragOver={handleDragOver}
                   onDrop={handleDrop}
@@ -711,6 +836,7 @@ const AddProducts = () => {
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
+                      width: "200px",
                     }}
                   >
                     <img
@@ -736,53 +862,60 @@ const AddProducts = () => {
                   </div>
                 </div>
 
-                {productInfo?.image?.length
-                  ? productInfo?.image?.map((img, index) => {
-                      return (
-                        <div
-                          className="py-10 image-display"
-                          style={{
-                            border: "2px solid #0A64F9",
-                            width: "20%",
-                            cursor: "pointer",
-                          }}
-                          key={index}
-                        >
-                          <>
-                            <span
-                              className="delete-image-icon img-DeleteIcon"
-                              // onClick={handleDeleteImage}
-                              style={{
-                                position: "absolute",
-                                top: "7px",
-                                right: "7px",
-                              }}
-                            >
+                <div class="image-list">
+                  {productInfo?.image?.length
+                    ? productInfo?.image?.map((img, index) => {
+                        return (
+                          <div
+                            className="py-10 image-display"
+                            style={{
+                              border: "2px solid #0A64F9",
+                              // width: "20%",
+                              cursor: "pointer",
+                            }}
+                            key={index}
+                          >
+                            <>
+                              <span
+                                className="delete-image-icon img-DeleteIcon"
+                                // onClick={handleDeleteImage}
+                                style={{
+                                  position: "absolute",
+                                  top: "7px",
+                                  right: "7px",
+                                }}
+                              >
+                                <img
+                                  src={CloseIcon}
+                                  className="delete-image"
+                                  onClick={() => handleDeleteSelectedImage(img)}
+                                />
+                              </span>
                               <img
-                                src={CloseIcon}
-                                className="delete-image"
-                                onClick={() => handleDeleteSelectedImage(img)}
+                                src={img?.base64}
+                                alt="Preview"
+                                className="default-img"
                               />
-                            </span>
-                            <img
-                              src={img?.base64}
-                              alt="Preview"
-                              className="default-img"
-                            />
-                          </>
-                        </div>
-                      );
-                    })
-                  : ""}
+                            </>
+                          </div>
+                        );
+                      })
+                    : ""}
+                </div>
               </div>
               {}
             </div>
 
             <div className="mt_card_header">
               <VariantAttributes
-                handleSetItem={handleSetItem}
-                items={items}
-                addNewVarient={addNewVarient}
+                varientDropdownList={dropdownData?.varientList}
+                varientError={varientError}
+                toggleVarientSection={toggleVarientSection}
+                isMultipleVarient={isMultipleVarient}
+                handleOnBlurAttributes={handleOnBlurAttributes}
+                varientLength={varientLength}
+                handleSetVarientLength={handleSetVarientLength}
+                addMoreVarientItems={addMoreVarientItems}
               />
             </div>
 
@@ -795,6 +928,7 @@ const AddProducts = () => {
                 handleOnChange={handleOnChange}
                 formValue={formValue}
                 handleBlur={handleBlur}
+                isMultipleVarient={isMultipleVarient}
               />
             </div>
 

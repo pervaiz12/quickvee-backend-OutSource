@@ -8,9 +8,10 @@ const GeneratePUC = ({
   formValue,
   handleGenerateUPC,
   handleBlur,
+  isMultipleVarient,
 }) => {
-  const varientList = handleVarientTitleBasedItemList();
-
+  const varientTitleList = handleVarientTitleBasedItemList();
+  console.log("varientTitleList", varientTitleList);
   const setInputMaxLength = (fieldname) => {
     switch (fieldname) {
       case "costPerItem":
@@ -42,11 +43,11 @@ const GeneratePUC = ({
               {/* <img src={AddIcon} alt="add-icon" />{" "} */}
             </p>
           </div>
-          {varientList?.length
-            ? varientList?.map((_, index) => {
+          {varientTitleList?.length && isMultipleVarient
+            ? varientTitleList?.map((_, index) => {
                 return (
                   <div className="qvrow">
-                    <div className="mx-4 my-4">{varientList[index]}</div>
+                    <div className="mx-4 my-4">{varientTitleList[index]}</div>
                     {formData?.length
                       ? formData?.map((inp, i) => {
                           return (
@@ -165,6 +166,113 @@ const GeneratePUC = ({
                 );
               })
             : ""}
+          {!isMultipleVarient ? (
+            <div className="qvrow">
+              <div className="mx-4 my-4">{varientTitleList[0]}</div>
+              {formData?.length
+                ? formData?.map((inp, i) => {
+                    return (
+                      <div className="col-qv-3" key={i}>
+                        <div className="q-add-categories-single-input">
+                          <label>{inp?.label}</label>
+                          <div className="input_area">
+                            <input
+                              class="varient-input-field"
+                              type={inp?.type}
+                              name={inp?.name}
+                              value={formValue?.[0]?.[inp?.name]}
+                              placeholder={inp?.placeholder}
+                              onChange={(e) => handleOnChange(e, 0)}
+                              onBlur={(e) => handleBlur(e, 0)}
+                              maxLength={setInputMaxLength(inp?.name)}
+                              disabled={disabledFields.includes(inp?.name)}
+                            />
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  })
+                : ""}
+              <div className="flex flex-wrap gap-3 ">
+                <label
+                  class="q_resigter_setting_section"
+                  style={{ color: "#000", fontSize: "18px" }}
+                >
+                  Track Quantity
+                  <input
+                    type="checkbox"
+                    name="trackQuantity"
+                    value={formValue?.[0]?.["trackQuantity"]}
+                    onChange={(e) => handleOnChange(e, 0)}
+                    checked={formValue?.[0]?.["trackQuantity"] ? true : false}
+                  />
+                  <span class="checkmark"></span>
+                </label>
+                <label
+                  class="q_resigter_setting_section"
+                  style={{ color: "#000", fontSize: "18px" }}
+                >
+                  Continue selling when out of stock
+                  <input
+                    type="checkbox"
+                    name="sellOutOfStock"
+                    value={formValue?.[0]?.["sellOutOfStock"]}
+                    onChange={(e) => handleOnChange(e, 0)}
+                    checked={formValue?.[0]?.["sellOutOfStock"] ? true : false}
+                  />
+                  <span class="checkmark"></span>
+                </label>
+                <label
+                  class="q_resigter_setting_section"
+                  style={{ color: "#000", fontSize: "18px" }}
+                >
+                  Check ID
+                  <input
+                    type="checkbox"
+                    name="checkId"
+                    value={formValue?.[0]?.["checkId"]}
+                    onChange={(e) => handleOnChange(e, 0)}
+                    checked={formValue?.[0]?.["checkId"] ? true : false}
+                  />
+                  <span class="checkmark"></span>
+                </label>
+                <label
+                  class="q_resigter_setting_section"
+                  style={{ color: "#000", fontSize: "18px" }}
+                >
+                  Disable
+                  <input
+                    type="checkbox"
+                    name="disable"
+                    value={formValue?.[0]?.["disable"]}
+                    onChange={(e) => handleOnChange(e, 0)}
+                    checked={formValue?.[0]?.["disable"] ? true : false}
+                  />
+                  <span class="checkmark"></span>
+                </label>
+                <label
+                  class="q_resigter_setting_section"
+                  style={{ color: "#000", fontSize: "18px" }}
+                >
+                  Create this item for all linked locations
+                  <input
+                    type="checkbox"
+                    name="itemForAllLinkedLocation"
+                    value={formValue?.[0]?.["itemForAllLinkedLocation"]}
+                    onChange={(e) => handleOnChange(e, 0)}
+                    checked={
+                      formValue?.[0]?.["itemForAllLinkedLocation"]
+                        ? true
+                        : false
+                    }
+                  />
+                  <span class="checkmark"></span>
+                </label>
+              </div>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
       </div>
     </>

@@ -15,6 +15,7 @@ const initialState = {
   hasMore: true,
   successMessage: "",
   error: "",
+  varientList: [],
 };
 
 // Generate pening , fulfilled and rejected action type
@@ -68,57 +69,83 @@ export const getInventorySetting = createAsyncThunk(
   }
 );
 
-export const addProduct = createAsyncThunk("products/addProduct", async(payload)=>{
-  try{
-    const response = await axios.post(
-      BASE_URL + "Product_api_react/add_product",
-      payload
-    );
+export const addProduct = createAsyncThunk(
+  "products/addProduct",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/add_product",
+        payload
+      );
 
-    console.log('product response', response);
-    return response;
-  }catch(error){
-    throw new Error(error.response.data.message)
+      console.log("product response", response);
+      return response;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
   }
-})
-
+);
 
 // dropdown content
-export const fetchVarientList = createAsyncThunk("products/fetchVarientList", async(payload)=>{
-  try{
-    const response = await axios.post(BASE_URL + 'Varientsapi/varients_list', payload); 
-    return response?.data;
-  }catch(error){
-    throw new Error(error.response.data.message)
+export const fetchVarientList = createAsyncThunk(
+  "products/fetchVarientList",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Varientsapi/varients_list",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
   }
-})
+);
 
-export const fetchCategoryList = createAsyncThunk("products/fetchCategoryList", async(payload)=>{
-  try{
-    const response = await axios.post(BASE_URL + 'Categoryapi/category_list', payload); 
-    return response?.data;
-  }catch(error){
-    throw new Error(error.response.data.message)
+export const fetchCategoryList = createAsyncThunk(
+  "products/fetchCategoryList",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Categoryapi/category_list",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
   }
-})
+);
 
-export const fetchTaxList = createAsyncThunk("products/fetchTaxList", async(payload)=>{
-  try{
-    const response = await axios.post(BASE_URL + 'Settingapi/tax_list', payload); 
-    return response?.data;
-  }catch(error){
-    throw new Error(error.response.data.message)
+export const fetchTaxList = createAsyncThunk(
+  "products/fetchTaxList",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Settingapi/tax_list",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
   }
-})
+);
 
-export const fetchProductList = createAsyncThunk("products/fetchProductList", async(payload)=>{
-  try{
-    const response = await axios.post(BASE_URL + 'Productapi/products_list', payload); 
-    return response?.data;
-  }catch(error){
-    throw new Error(error.response.data.message)
+export const fetchProductList = createAsyncThunk(
+  "products/fetchProductList",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Productapi/products_list",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
   }
-})
+);
 
 const productsSlice = createSlice({
   name: "products",
