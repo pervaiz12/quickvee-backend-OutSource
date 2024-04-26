@@ -197,7 +197,7 @@ const AddCategory = ({ seVisible }) => {
       <form onSubmit={handleSubmit} enctype="multipart/form-data">
         <div className="q-add-categories-section-header">
           <span onClick={() => seVisible("CategoryDetail")}>
-            <img src={AddNewCategory} alt="Add-New-Category" />
+            <img src={AddNewCategory} alt="Add-New-Category"  className="w-6 h-6"/>
             <span>Add New Category</span>
           </span>
         </div>
@@ -210,6 +210,7 @@ const AddCategory = ({ seVisible }) => {
 
           <label for="title">Title</label>
           </div>
+          
           <Autocomplete
             id="size-small-standard"
             size="small"
@@ -221,10 +222,16 @@ const AddCategory = ({ seVisible }) => {
               <TextField
                 {...params}
                 variant="outlined"
-                className="suggestlist_input"
+                className="suggestlist_input MuiAutocomplete-option"
                 name="title"
                 value={category.title}
                 onChange={inputChange}
+                style={{
+
+                }}
+
+                
+                
               />
             )}
           />
@@ -248,7 +255,7 @@ const AddCategory = ({ seVisible }) => {
           </div>
 
           <div
-            className={`h-1/2  h-[100px] flex items-center justify-center border-2 border-dashed border-[#BFBFBF] bg-white rounded-lg mt-2  defaultDrag_div`}
+            className={`h-[100px] flex items-center justify-center border-2 border-dashed border-[#BFBFBF] bg-white rounded-lg mt-2  defaultDrag_div`}
             onDragOver={handleDragOver}
             onDrop={handleDrop}
             onClick={openFileInput}

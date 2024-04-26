@@ -110,13 +110,16 @@ const DateRange = ({ onDateRangeChange }) => {
   return (
     <>
     
-      <div className="q_dateRange_header">
+   
         <div className="q-datarange-bottom-detail-section">
           {/* Date Range Section */}
           <div className="q_datafilter_section">
-            <div className="q_details_header" style={{marginLeft:"-15px"}}><h1>Date Range</h1></div>
+            {/* <div className="q_details_header" style={{marginLeft:"-15px"}}><h1>Date Range</h1></div> */}
+            <div className="mt_card_header q_dashbaord_netsales">
+              <h1 className="">Date Range</h1>
+            </div>
 
-            <div className="datarange_days_order">
+            <div className="datarange_days_order px-6">
               {["Today", "Yesterday", "Last 7 Days", "Last 30 days"].map(
                 (option) => (
                   <div
@@ -129,7 +132,7 @@ const DateRange = ({ onDateRangeChange }) => {
                       setDatesBasedOnOption(option);
                     }}
                   >
-                    {isActive(option) && <div className="dot mr-2" />}
+                    {isActive(option) && <div className="dot mr-1" />}
                     {option}
                   </div>
                 )
@@ -178,7 +181,7 @@ const DateRange = ({ onDateRangeChange }) => {
         startDate={startDate}
         endDate={endDate}
         dateFormat="MMMM d, yyyy"
-        className="q_input_details"
+                    className="q_input_details"
         ref={startDateRef}
         showPopperArrow={false}
       />
@@ -234,7 +237,7 @@ const DateRange = ({ onDateRangeChange }) => {
   {/* Search Button */}
  
 </div>
-</div>
+
 
 
       

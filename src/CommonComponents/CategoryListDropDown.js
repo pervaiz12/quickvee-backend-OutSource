@@ -104,11 +104,11 @@ const CategoryListDropDown = ({type, onCategoryChange }) => {
 
   const dropdownContentClass = Object.values(fetchProductsData).length > 2 ? "dropdown-content scrollable" : "dropdown-content";
   const lengthOfArray = Object.values(fetchProductsData).length;
-  console.log(lengthOfArray);
+  //console.log(lengthOfArray);
 
     return <>
       <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
-            <label className="q-details-page-label" htmlFor="categoryFilter">
+            <label htmlFor="categoryFilter">
             Category
             </label>
         <div className="custom-dropdown input_area" ref={dropdownRef}>

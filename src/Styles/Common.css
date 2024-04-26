@@ -235,15 +235,7 @@
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
 }
-.save_btn{
-    background: #0A64F9;
-    font-family: CircularSTDBook !important;
-    font-size: 16px;
-    color: #fff;
-    padding: 10px 40px;
-    border-radius: 4px;
-    cursor: pointer;
-}
+
 .input_area .css-4jnixx-MuiStack-root{
   padding-top: 0px;
 }
@@ -781,15 +773,7 @@ input.blue_btn{
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
 }
-.save_btn{
-    background: #0A64F9;
-    font-family: CircularSTDBook !important;
-    font-size: 16px;
-    color: #fff;
-    padding: 10px 40px;
-    border-radius: 4px;
-    cursor: pointer;
-}
+
 .input_area .css-4jnixx-MuiStack-root{
   padding-top: 0px;
 }
@@ -1103,7 +1087,7 @@ margin: 2px !important;
   font-family: qvmedium !important;
 }
 
-select {
+/* select {
   margin-top: -1rem;
   border: 2px solid #0A64F9 !important;
   padding: 10px 30px;
@@ -1116,7 +1100,7 @@ select:active{
   padding: 10px 30px;
   border-radius: 4px;
   background-color: white;
-}
+} */
 
 .pagination_selected{
   padding:6px 12px;
@@ -1368,15 +1352,7 @@ select:active{
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
 }
-.save_btn{
-    background: #0A64F9;
-    font-family: CircularSTDBook !important;
-    font-size: 16px;
-    color: #fff;
-    padding: 10px 40px;
-    border-radius: 4px;
-    cursor: pointer;
-}
+
 .input_area .css-4jnixx-MuiStack-root{
   padding-top: 0px;
 }
@@ -1898,15 +1874,7 @@ input.blue_btn{
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
 }
-.save_btn{
-    background: #0A64F9;
-    font-family: CircularSTDBook !important;
-    font-size: 16px;
-    color: #fff;
-    padding: 10px 40px;
-    border-radius: 4px;
-    cursor: pointer;
-}
+
 .input_area .css-4jnixx-MuiStack-root{
   padding-top: 0px;
 }
@@ -2215,30 +2183,17 @@ margin: 2px !important;
   font-family: qvmedium !important;
 }
 
-select {
-  margin-top: -1rem;
-  border: 2px solid #0A64F9 !important;
-  padding: 10px 30px;
-  border-radius: 4px;
-  background-color: white;
-}
-select:active{
-  margin-top: -1rem;
-  border: 2px solid #0A64F9 !important;
-  padding: 10px 30px;
-  border-radius: 4px;
-  background-color: white;
-}
+
 
 .csv_btn{
    background: #fff; 
-  font-family: CircularSTDBook !important;
-  font-size: 18px;
+  font-family: qvbook !important;
+  font-size: 16px;
   color: #0A64F9;
-  padding: 10px 40px;
+  padding: 10px 20px;
   border-radius: 4px;
   cursor: pointer;
-border:1px solid #0A64F9 }
+border:2px solid #0A64F9 }
 
 
 .drop_down {

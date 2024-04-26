@@ -147,9 +147,11 @@ const AtrDataList = ({ seVisible }) => {
             {/* Your modal JSX */}
             <div className="q-custom-modal-content">
               {/* Your modal content */}
-              <div className="">
+             
                 <p className="q-custom-modal-header ">
-                  Add New Attribute
+                    <div className="mt_card_header q_dashbaord_netsales">
+                    <h1 className="">Add New Attribute</h1> 
+                    </div>
                   <img
                     src={CrossIcon}
                     alt="icon"
@@ -157,18 +159,23 @@ const AtrDataList = ({ seVisible }) => {
                     onClick={closeModal}
                   />
                 </p>
-              </div>
-              {/* ... other modal content ... */}
+             <div className="my-2">
+                  <div className="border-b border-[#ccc]"></div>
+             </div>
+               
+            <div className="title_attributes_section">
+              <label>Title</label>
               <input
                 type="text"
                 placeholder="Enter attribute title"
-                className="q-custom-input-field"
+                className="q-custom-input-field mt-2"
                 value={newAttribute}
                 onChange={changeTittleHandler}
               />
               <span className="input-error">
                 {errorMessage !== "" ? errorMessage : ""}
               </span>
+              </div>
               <div className="q-add-categories-section-middle-footer">
                 <button
                   onClick={handleAddAttribute}

@@ -165,8 +165,9 @@ const MainProducts = () => {
   return (
     <>
       <div className="q-attributes-main-page">
-        <FilterProduct {...{ handleOptionClick, toggleDropdown,selectedEmployee,del_picDropdownVisible,selectedStatus,
-                        transactionDropdownVisible,selectedListingType,selectedListingTypeValue,listingTypesDropdownVisible,handleCategoryChange,selectedStatusValue,handleSearch,searchId,setSearchId}} />
+        <FilterProduct {...{
+          handleOptionClick, toggleDropdown, selectedEmployee, del_picDropdownVisible, setdel_picDropdownVisible, selectedStatus, setTransactionDropdownVisible,
+          transactionDropdownVisible, selectedListingType, setSelectedListingType, selectedListingTypeValue, listingTypesDropdownVisible, setlistingTypesDropdownVisible,handleCategoryChange,selectedStatusValue,handleSearch,searchId,setSearchId}} />
       </div>
       <div className="q-attributes-main-page">
         <ProductContent />

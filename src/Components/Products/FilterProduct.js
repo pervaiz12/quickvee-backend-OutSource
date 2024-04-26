@@ -4,8 +4,8 @@ import DownIcon from "../../Assests/Dashboard/Down.svg"
 import CategoryListDropDown from "../../CommonComponents/CategoryListDropDown";
 import UpArrow from "../../Assests/Dashboard/Up.svg";
 
-const FilterProduct = ({ handleOptionClick, toggleDropdown, selectedEmployee, del_picDropdownVisible, selectedStatus, selectedStatusValue,
-  transactionDropdownVisible, setTransactionDropdownVisible, selectedCategory, categoryDropdownVisible, selectedListingType, listingTypesDropdownVisible, setlistingTypesDropdownVisible ,handleCategoryChange, handleSearch, searchId, setSearchId }) => {
+const FilterProduct = ({ handleOptionClick, toggleDropdown, selectedEmployee, del_picDropdownVisible, setdel_picDropdownVisible, selectedStatus, selectedStatusValue,
+  transactionDropdownVisible, setTransactionDropdownVisible, selectedCategory, categoryDropdownVisible, selectedListingType, setSelectedListingType, listingTypesDropdownVisible, setlistingTypesDropdownVisible,handleCategoryChange, handleSearch, searchId, setSearchId }) => {
 
   
   const handleFilter = (filterType) => {
@@ -43,10 +43,27 @@ const FilterProduct = ({ handleOptionClick, toggleDropdown, selectedEmployee, de
   // });
 
  
-const prodcutstatus = useState(null);
+  const prodcutstatus = useRef(null);
   useEffect(() => {
     const handleOutsideClick = (event) => {
       if (prodcutstatus.current && !prodcutstatus.current.contains(event.target)) {
+        setTransactionDropdownVisible(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
+
+  // listing
+  const listingtype = useRef(null);
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (listingtype.current && !listingtype.current.contains(event.target)) {
         setlistingTypesDropdownVisible(false);
       }
     };
@@ -58,21 +75,41 @@ const prodcutstatus = useState(null);
     };
   }, []);
   
+
+  // 
+  const delpicstatus = useRef(null);
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (delpicstatus.current && !listingtype.current.contains(event.target)) {
+        setdel_picDropdownVisible(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
+
   return (
     <>
 
 
     <div className="box">
-
-      <div className="q-attributes-bottom-detail-section bg-white">
+       
+       
+        <div className="box_shadow_input">
           <div className="q_main_data_range">
-            <div className="mt-3 mx-6 overflow-hidden bg-[#FFFFFF]" style={{ display: "flex", border:"1px solid #E1E1E1", borderRadius:"4px"}}>
+            <div className="q_searchBar">
+            <div className="flex border  rounded-md overflow-hidden">
             <input
               type="text"
               placeholder="Search orders by order ID, last 4 digits on payment card, or invoice ID"
               value={searchId}
               onChange={(e) => setSearchId(e.target.value)}
-              className="w-full px-4 py-2 border-none focus:outline-none"
+                className="w-full px-4 py-2 border-none focus:outline-none place_text_search"
             />
 
             <button
@@ -82,7 +119,9 @@ const prodcutstatus = useState(null);
               <AiOutlineSearch className="h- w-8  text-[#231F20]" />
             </button>
           </div>
-            <div className="mt_card_header q_dashbaord_netsales mx-6">
+          </div>
+          
+            <div className="mt_card_header q_dashbaord_netsales">
               <h1 className="">Filter By</h1>
           
 
@@ -92,9 +131,9 @@ const prodcutstatus = useState(null);
 
                 {/* status Dropdown */}
               <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
-                  <label className="q-details-page-label" htmlFor="statusFilter"
+                  <label htmlFor="statusFilter"
                     onClick={() =>
-                      selectedStatusValue(!selectedStatus)
+                      setTransactionDropdownVisible(!transactionDropdownVisible)
                     }>
                     Product Status
                   </label>
@@ -123,11 +162,11 @@ const prodcutstatus = useState(null);
 
                 {/* Order Status Dropdown */}
               <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
-                  <label className="q-details-page-label" htmlFor="ListingFilter"
+                  <label htmlFor="ListingFilter"
                     onClick={() => setlistingTypesDropdownVisible(!listingTypesDropdownVisible)} >
                     Listing Type
                   </label>
-                  <div className="custom-dropdown input_area">
+                  <div className="custom-dropdown input_area" ref={listingtype}>
                     <div
                       className="custom-dropdown-header"
                       onClick={() => toggleDropdown("listingType")}
@@ -141,26 +180,22 @@ const prodcutstatus = useState(null);
                     </div>
                     {listingTypesDropdownVisible && (
                       <div className="dropdown-content ">
-                        {/* <div onClick={() => handleOptionClick("All", "listingtype")}>All</div> */}
-                        <div  onClick={() => handleOptionClick(0, "listingType", "Product listing")}>Product listing</div>
-                        <div onClick={() => handleOptionClick(1, "listingType", "Variant listing")}>Variant listing</div>
-                        {/* ... (other order status options) ... */}
+                        
+                        <div className={selectedListingType === 0 ? "dropdown-item active" : "dropdown-item"} onClick={() => handleOptionClick(0, "listingType", "Product listing")}>Product listing</div>
+                        <div className={selectedListingType === 1 ? "dropdown-item active" : "dropdown-item"} onClick={() => handleOptionClick(1, "listingType", "Variant listing")}>Variant listing</div>
+                      
                       </div>
                     )}
                   </div>
                 </div>
                 {/* Employee Dropdown */}
                 <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
-                  <label className="q-details-page-label" htmlFor="employeeFilter">
-                    
+                  <label  htmlFor="employeeFilter" onClick={() => setdel_picDropdownVisible(!del_picDropdownVisible)}>
                     Enable Product for Delivery/Pickup
                   </label>
                   <div className="custom-dropdown input_area">
-                    <div
-                      className="custom-dropdown-header"
-                      onClick={() => toggleDropdown("del_pic")}
-                    >
-                      <span className="selected-option mt-1">{selectedEmployee}</span>
+                    <div className="custom-dropdown-header" onClick={() => toggleDropdown("del_pic")}>
+                      <span className="selected-option mt-1" >{selectedEmployee}</span>
                       <img
                         src={del_picDropdownVisible ? UpArrow : DownIcon}
                         alt="Dropdown Icon"
@@ -168,18 +203,19 @@ const prodcutstatus = useState(null);
                       />
                     </div>
                     {del_picDropdownVisible && (
-                      <div className="dropdown-content ">
-                        <div onClick={() => handleOptionClick("1", "del_pic", "Enable All")}>Enable All</div>
-                        <div onClick={() => handleOptionClick("2", "del_pic", "Enable Pickup All")}>Enable Pickup All</div>
-                        <div onClick={() => handleOptionClick("5", "del_pic", "Disable Pickup All")}>Disable Pickup All</div>
-                        <div onClick={() => handleOptionClick("3", "del_pic", "Enable Delivery All")}>Enable Delivery All</div>
-                        <div onClick={() => handleOptionClick("6", "del_pic", "Disable Delivery All")}>Disable Delivery All</div>
-                        <div onClick={() => handleOptionClick("4", "del_pic", "Disable All")}>Disable All</div>
-                        {/* ... (other employee options) ... */}
+                      <div className="dropdown-content">
+                        <div  className={selectedEmployee === "1" ? "dropdown-item active" : "dropdown-item"}  onClick={() => handleOptionClick("1", "del_pic", "Enable All")}>Enable All</div>
+                        <div className={selectedEmployee === "2" ? "dropdown-item active" : "dropdown-item"} onClick={() => handleOptionClick("2", "del_pic", "Enable Pickup All")}>Enable Pickup All</div>
+                        <div className={selectedEmployee === "5" ? "dropdown-item active" : "dropdown-item"} onClick={() => handleOptionClick("5", "del_pic", "Disable Pickup All")}>Disable Pickup All</div>
+                        <div className={selectedEmployee === "3" ? "dropdown-item active" : "dropdown-item"} onClick={() => handleOptionClick("3", "del_pic", "Enable Delivery All")}>Enable Delivery All</div>
+                        <div className={selectedEmployee === "6" ? "dropdown-item active" : "dropdown-item"} onClick={() => handleOptionClick("6", "del_pic", "Disable Delivery All")}>Disable Delivery All</div>
+                        <div className={selectedEmployee === "4" ? "dropdown-item active" : "dropdown-item"} onClick={() => handleOptionClick("4", "del_pic", "Disable All")}>Disable All</div>
+                       
                       </div>
                     )}
                   </div>
                 </div>
+
 
               </div>
 

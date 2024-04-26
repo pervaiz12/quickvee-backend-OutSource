@@ -35,6 +35,22 @@ const Welcome = ({ isOpen, onClose, children }) => {
     };
   }, []);
 
+
+
+
+  // useEffect(() => {
+  //   const handleOutsideClick = (event) => {
+  //     if (dataCalender.current && !dataCalender.current.contains(event.target)) {
+  //       setVisibleCalendar(false);
+  //     }
+  //   };
+
+  //   document.addEventListener("mousedown", handleOutsideClick);
+
+  //   return () => {
+  //     document.removeEventListener("mousedown", handleOutsideClick);
+  //   };
+  // }, []);
   const openCalendar = () => {
     if (!visibleCalendar) {
       setVisibleCalendar(true);
@@ -98,7 +114,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
             <h1>Welcome Malik Saleh</h1>
           </div>
           <div
-            onClick={openCalendar}
+            onClick={openCalendar} 
             className={`q_dashboard_welcom_msg cursor-pointer ${
               visibleCalendar ? "active" : ""
             }`}
@@ -111,8 +127,8 @@ const Welcome = ({ isOpen, onClose, children }) => {
               ref={dataCalender}
             >
               <div className="flex mx-auto">
-                <div className="col-qv-6 border-r border-[#ccc] p-4">
-                  <div className="my-2 q-details-page-label_dasbaord">
+                <div className="col-qv-6 py-2 px-6">
+                  <div className="my-0 q-details-page-label_dasbaord py-1">
                     Select Option
                   </div>
                   <div>
@@ -120,7 +136,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
                       <div className="container">
                         <div className="row">
                           <div className="col-12">
-                            <ul className="flex space-x-8 mb-4">
+                            <ul className="flex space-x-4 mb-4">
                               <li
                                 className={`select_date_btn ${
                                   daysFilter === "today" ? "active" : ""
@@ -176,7 +192,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
                               </li>
                             </ul>
                             {/* weeks days details */}
-                            <ul className="flex space-x-8 mb-6">
+                            <ul className="flex space-x-4 mb-4">
                               <li
                                 className={`select_date_btn ${
                                   daysFilter === "week_days" ? "active" : ""
@@ -229,7 +245,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
                               </li>
                             </ul>
 
-                            <ul className="flex space-x-8 mb-4">
+                            <ul className="flex space-x-4 mb-4">
                               <li
                                 className={`select_date_btn ${
                                   daysFilter === "Last Month" ? "active" : ""
@@ -281,7 +297,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
                                 </a>
                               </li>
                             </ul>
-                            <ul className="flex space-x-8 mb-4">
+                            <ul className="flex space-x-4 mb-4">
                               <li
                                 className={`select_date_btn ${
                                   daysFilter === "This Month" ? "active" : ""
@@ -342,7 +358,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
                       </div>
                     </div>
 
-                    <div className="" ref={dropdownRef}>
+                    <div className="mt-20" ref={dropdownRef} >
                       <label
                         className="q-details-page-label_dasbaord"
                         htmlFor="transactionFilter"
@@ -374,17 +390,17 @@ const Welcome = ({ isOpen, onClose, children }) => {
                                 className="w-8 h-8"
                               />
                             </div>
-                            <div className="custom-dropdown">
+                            <div className="custom-dropdown input_area" ref={dataCalender}>
                               {transactionDropdownVisible && (
                                 <div className="dropdown-content">
-                                  <div
+                                  <div className={selectedTransaction === "All" ? "dropdown-item active" : "dropdown-item"}
                                     onClick={() =>
                                       handleOptionClick("All", "transaction")
                                     }
                                   >
                                     All
                                   </div>
-                                  <div
+                                  <div className={selectedTransaction === "last Wednesday" ? "dropdown-item active" : "dropdown-item"}
                                     onClick={() =>
                                       handleOptionClick(
                                         "last Wednesday",
@@ -404,28 +420,29 @@ const Welcome = ({ isOpen, onClose, children }) => {
                   </div>
                 </div>
 
+                <div className="border-r border-[#ccc] px-1"></div>
                 <div className="col-qv-6 p-4">
-                  <div className="container">
+                   <div className="container input_cal_section">
                     <div className="row">
-                      <div className="col-12">
+                      <div className="col-qv-12">
                         <LocalizationProvider dateAdapter={AdapterDayjs}>
                           <DateCalendar />
                         </LocalizationProvider>
                       </div>
                     </div>
-                  </div>
+                  </div> 
 
-                  <div className="container">
+                  <div className="container" style={{marginTop:"20px"}}>
                     <div className="row">
                       <div
-                        className="flex justify-between gap-6"
-                        style={{ marginTop: "-47px" }}
+                        className="date_cal_selector px-4"
+                        style={{ }}
                       >
-                        <div className="col-6">
+                        <div className="col-qv-6">
                           <FormControl>
-                            <div className="q-details-page-label_dasbaord">
+                            <label className="q-details-page-label_dasbaord">
                               Start Date
-                            </div>
+                            </label>
                             <DatePicker
                               selected={startDate}
                               onChange={(date) => setStartDate(date)}
@@ -433,7 +450,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
                               startDate={startDate}
                               endDate={endDate}
                               dateFormat="MMMM d, yyyy"
-                              className="q_input_details "
+                              className="select_date_btn "
                               ref={startDateRef}
                               showPopperArrow={false}
                             />
@@ -443,7 +460,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
                             ></span>
                           </FormControl>
                         </div>
-                        <div className="col-6">
+                        <div className="col-qv-6">
                           <FormControl>
                             <div className="q-details-page-label_dasbaord">End Date</div>
                             <DatePicker
@@ -454,7 +471,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
                               endDate={endDate}
                               minDate={startDate}
                               dateFormat="MMMM d, yyyy"
-                              className="q_input_details  "
+                              className="select_date_btn "
                               ref={endDateRef}
                               showPopperArrow={false}
                             />
@@ -468,37 +485,43 @@ const Welcome = ({ isOpen, onClose, children }) => {
                     </div>
                   </div>
 
-                  <div className="conatiner">
-                    <div className="row" style={{display:"flex" , justifyContent:"space-between" , gap:"6"}}>
-                      <div className="col-qv-6">
-                        <div className="q-add-categories-section-middle-footer">
+                  <div className="">
+
+                  </div>
+  {/* button section add  */}
+
+  <div className="container">
+    <div className="qvrow">
+                      <div className="col-qv-12">
+        <div className="flex justify-between ">
                           <button
-                            className="filter_btn quic-btn-cancle "
+                            className="btn-dashboard-section-cncl"
                             onClick={closeCalendar}
                           >
                             Cancel
                           </button>
-                        </div>
-                      </div>
-                      <div className="col-qv-6">
-                        <div className="q-add-categories-section-middle-footer ">
                           <button
-                            className="filter_btn quic-btn-save"
+                            className="btn-dashboard-section-save"
                             onClick={handleRetrieve}
                           >
                             Retrieve
                           </button>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+        </div>
+        
 
-                  {/* <div className="container">
+      </div>
+    </div>
+  </div>
+                 
+                    </div>
+                  </div>  
+
+                     {/* <div className="container">
                     <div className="row">
-                      <div className="flex justify-between gap-6">
-                        <div className="col-12">
+                      <div className="flex justify-between gap-0">
+                        <div className="col-6">
                           <div
-                            className="q-add-categories-section-middle-footer flex justify-between gap-6 px-0"
+                            className="q-add-categories-section-middle-footer flex justify-between "
 
                           >
                             <button
@@ -510,8 +533,8 @@ const Welcome = ({ isOpen, onClose, children }) => {
 
                           </div>
                         </div>
-                        <div className="col-12">
-                          <div className="q-add-categories-section-middle-footer flex justify-between gap-6 px-0">
+                        <div className="col-6">
+                          <div className="q-add-categories-section-middle-footer flex justify-between">
                             <button
                               className="filter_btn quic-btn-save"
                               onClick={handleRetrieve}
@@ -523,13 +546,12 @@ const Welcome = ({ isOpen, onClose, children }) => {
                         </div>
                       </div>
                     </div>
-                  </div> */}
+                  </div>    */}
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        
     </>
   );
 };

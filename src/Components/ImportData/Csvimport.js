@@ -8,6 +8,13 @@ import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
 
+import Modal from '@mui/material/Modal';
+// import Box from '@mui/material/Box';
+// import Collapse from '@mui/material/Collapse';
+// import Alert from '@mui/material/Alert';
+// import IconButton from '@mui/material/IconButton';
+// import CloseIcon from '@mui/icons-material/Close';
+
 const FileUpload = () => {
   const [dragActive, setDragActive] = useState(false);
   const [fileData, setFileData] = useState(null);
@@ -98,6 +105,18 @@ const FileUpload = () => {
     // For example, you can send the data to a server
   };
 
+
+  const [openModal, setOpenModal] = useState(false);
+
+  // Function to handle closing modal
+  const handleCloseModal = () => {
+    setOpenModal(false);
+  };
+
+  // Function to handle opening modal
+  const handleOpenModal = () => {
+    setOpenModal(true);
+  };
   return (
     
 
@@ -106,11 +125,11 @@ const FileUpload = () => {
       <div
         onDragEnter={handleDrag}
         onSubmit={(e) => e.preventDefault()}
-        className="box-content h-[300px] p-4 border-4 border-white bg-white rounded-xl opacity-100 mt-9 flex justify-between  my-2 importBtn" // Added 'relative' class
+        className="importBtn" 
         style={{ boxShadow: "0px 3px 6px #0000001F" }}
       >
         {alertmsg &&
-          <Box sx={{ width: '50%', position: 'absolute'}}   className={alertmsg ? "form-submit-info-message" : ""}  >    
+          <Box sx={{ width: '50%', position: 'absolute' , top: '0' , bottom:'0'}}   className={alertmsg ? "form-submit-info-message" : ""}  >    
             {
                alertmsg &&       
                   <Collapse in={openAlert}>
@@ -135,6 +154,11 @@ const FileUpload = () => {
             }
           </Box>
         }
+        {/* <button onClick={handleOpenModal}>Open Modal</button> */}
+
+        {/* Modal */}
+     
+
         <input
           ref={inputRef}
           type="file"
@@ -146,7 +170,7 @@ const FileUpload = () => {
         />
         <label
           htmlFor="input-file-upload"
-          className={`h-1/2 w-full flex items-center justify-center border-2 border-dashed border-[#BFBFBF] bg-white rounded-lg mt-24 ${
+          className={`import_container ${
             dragActive ? "bg-gray-100" : ""
           }`}
           onDragEnter={handleDrag}
@@ -155,11 +179,11 @@ const FileUpload = () => {
           onDrop={handleDrop}
         >
           <div>
-            <p className="mb-2 text-[15px] text-black Admin_std font-bold">
+            <p className="import_text">
               Only CSV file import
             </p>
             <button
-              className="px-4 py-2 border-[#0A64F9] text-blue text-[#0A64F9] border-2 rounded-md opacity-100 mt-3 flex items-center"
+              className="importcsvbutton"
               onClick={onButtonClick}
             >
               Choose Files
@@ -180,13 +204,16 @@ const FileUpload = () => {
         )}
 
         {/* Moved "Import" button below border-dashed */}
-        <div className='absolute bottom-4 '>
-  <button
-    onClick={handleSubmit}
-    className="bg-[#0A64F9] text-white px-4 py-2 rounded hover:bg-[#0A64F9]"
-  >
-    Import
-  </button>
+        <div className="mb-14">
+          <button
+            onClick={() => {
+              handleSubmit();
+              handleOpenModal();
+            }}
+            className="imp_btn"
+          >
+            Import
+          </button>
 </div>
 
       </div>

@@ -59,27 +59,24 @@ const MainInStore = () => {
         <div className="box">
           <div className="box_shadow_div" style={{overflow:"unset"}}>
             <div className="mb6_border">
-              <button
+              <div
                 onClick={() => handleTabClick("offline")}
-                className={`${
-                  activeTab === "offline"
-                  ? "bg-[#EBF2FF] text-[#0A64F9] font-circular-bold "
+                className={`${activeTab === "offline"
+                    ? "bg-[#EBF2FF] text-[#0A64F9] font-circular-bold relative"
                     : "bg-white text-[#6A6A6A]"
-                } orderfilter`}
+                  } orderfilter`}
               >
                 In-Store Orders
-              </button>
-              <button
+              </div>
+              <div
                 onClick={() => handleTabClick("online")}
-                className={`${
-                  activeTab === "online"
-                  ? "bg-[#EBF2FF] text-[#0A64F9]  font-circular-bold"
+                className={`${activeTab === "online"
+                    ? "bg-[#EBF2FF] text-[#0A64F9]  font-circular-bold relative"
                     : "bg-white text-[#6A6A6A]"
-                } orderfilter`}
+                  } orderfilter`}
               >
                 Online Orders
-              </button>
-              
+              </div>
             </div>
 
             <div className="">

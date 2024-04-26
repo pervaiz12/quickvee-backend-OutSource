@@ -23,7 +23,6 @@ const OnlineTableViewData = (props) => {
   const [allOnlineStoreOrder, setAllOnlineStoreOrders] = useState([]);
   const AllInStoreDataState = useSelector((state) => state.onlineStoreOrder);
   const dispatch = useDispatch();
-  
 
   useEffect(() => {
     const fetchData = async () => {
@@ -154,7 +153,9 @@ const OnlineTableViewData = (props) => {
   };
 
   $.DataTable = require("datatables.net");
-
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
   useEffect(() => {
     const modifiedData = Object.entries(allOnlineStoreOrder).map(
@@ -229,12 +230,22 @@ const OnlineTableViewData = (props) => {
         }
 
         return {
-          Customer: `${data.name || ""}<br>${data.delivery_phn || ""}`,
-          Order: `${data.order_id || ""}<br>${data.merchant_time || ""}<br>${
+          Customer: `<span class="text-[#000000] order_method">${
+            data.name || ""
+          }</span><br>${data.delivery_phn || ""}`,
+          Order: `<span class="text-[#000000] order_method">${
+            data.order_id || ""
+          }</span><br><span class="text-[#818181]">${
+            data.merchant_time || ""
+          }</span><br><span class="text-[#818181] order_method">${
             data.order_method || ""
-          }`,
-          Amount: `${"$" + data.amt || ""}<br>${data.order_status || ""}`,
-          Status: status,
+          }</span>`,
+          Amount: `${
+            "$" + data.amt || ""
+          }<br><span class="text-[#1EC26B]">${capitalizeFirstLetter(
+            data.order_status || ""
+          )}</span>`,
+          // Status: status,
           OrderStatus: PayStatus,
           View: `<ahref="/store-reporting/order-summary/${data.order_id}" class="view_details_order">View Details</ahref=>`,
         };
@@ -247,7 +258,7 @@ const OnlineTableViewData = (props) => {
         { title: "Customer", data: "Customer", orderable: false },
         { title: "Order", data: "Order", orderable: false },
         { title: "Amount", data: "Amount", orderable: false },
-        { title: "Status", data: "Status", orderable: false },
+        // { title: "Status", data: "Status", orderable: false },
         { title: "Order Status", data: "OrderStatus", orderable: false },
         { title: " ", data: "View", orderable: false },
       ],
