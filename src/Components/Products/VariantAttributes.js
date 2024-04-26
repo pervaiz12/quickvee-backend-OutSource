@@ -1,19 +1,13 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
-import DownArrow from "../../Assests/Dashboard/Down.svg";
-import { FaPencilAlt } from "react-icons/fa";
-import CrossIcon from "../../Assests/Dashboard/cross.svg";
-import SortIcon from "../../Assests/Dashboard/sort-arrows-icon.svg";
-import Chip from "@mui/material/Chip";
 
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
 import makeAnimated from "react-select/animated";
-import { colourOptions, optionList } from "../Products/data";
-import { ListItem, Stack } from "@mui/material";
-import CancelIcon from "@mui/icons-material/Cancel";
 
 const VariantAttributes = ({
+  filterOptionList,
+  handleFilterDropdownOption,
   varientDropdownList,
   varientError,
   toggleVarientSection,
@@ -23,8 +17,9 @@ const VariantAttributes = ({
   handleSetVarientLength,
   addMoreVarientItems,
 }) => {
-  console.log(varientDropdownList, varientLength);
   const [showAttributes, setShowAttributes] = useState(false);
+  const animatedComponents = makeAnimated();
+
   const handleDeleteClick = (id) => {
     const deleteSelected = varientLength?.filter((item) => {
       return item?.id !== id;
@@ -48,7 +43,42 @@ const VariantAttributes = ({
     handleSetVarientLength(updateVarientLength);
   };
 
-  const animatedComponents = makeAnimated();
+  useEffect(() => {
+    const filterItems = varientDropdownList?.filter(
+      (opt) =>
+        !varientLength
+          ?.map((item) => item?.varientName?.value)
+          .includes(opt?.title)
+    );
+    handleFilterDropdownOption(filterItems);
+  }, [varientLength, varientDropdownList]);
+
+  // if varientName is empty set defaultValue dropdown first item. only for the first dropwdown for fill the value.
+  useEffect(() => {
+    if (varientLength?.length && varientDropdownList?.length) {
+      const setDefaultValue = varientLength?.map((sec, index) => {
+        return {
+          ...sec,
+          varientName: !!sec?.varientName
+            ? sec?.varientName
+            : {
+                value: varientDropdownList[0]?.title,
+                label: varientDropdownList[0]?.title,
+              },
+        };
+      });
+      handleSetVarientLength(setDefaultValue);
+    }
+  }, [varientDropdownList]);
+
+  const filterDefaultvalue = () => {
+    if (filterOptionList?.length > 0) {
+      return filterOptionList?.map((option) => ({
+        value: option?.title,
+        label: option?.title,
+      }));
+    }
+  };
 
   return (
     <>
@@ -87,7 +117,7 @@ const VariantAttributes = ({
             {varientLength.length > 0
               ? varientLength?.map((varient, index) => {
                   return (
-                    <div class="qvrow varientAddSection" key={index}>
+                    <div class="qvrow varientAddSection" key={index + 1}>
                       <div class="col-qv-5">
                         <div class="input_area">
                           {/* <input
@@ -97,19 +127,22 @@ const VariantAttributes = ({
                     value={newAttribute}
                     onChange={(e) => setNewAttribute(e.target.value)}
                   /> */}
+
                           <Select
                             closeMenuOnSelect={true}
                             components={{ ...animatedComponents }}
-                            value={varient[index]?.varientName}
+                            value={varient?.varientName}
                             onChange={(e) =>
                               handlechange(e, index, "varientName")
                             }
-                            options={varientDropdownList.map((option) => ({
-                              value: option?.title,
-                              label: option?.title,
-                            }))}
+                            options={filterDefaultvalue()}
                             isSearchable
                             isClearable
+                            // defaultValue={{
+                            //   value: varientDropdownList[0]?.title,
+                            //   label: varientDropdownList[0]?.title,
+                            // }}
+                            isDisabled={index + 1 < varientLength?.length}
                           />
                         </div>
                       </div>
@@ -118,10 +151,10 @@ const VariantAttributes = ({
                           <CreatableSelect
                             closeMenuOnSelect={true}
                             components={{ ...animatedComponents }}
-                            value={varientLength[index]?.varientAttributeList}
-                            onChange={(e) =>
-                              handlechange(e, index, "varientAttributeList")
-                            }
+                            value={varientLength?.varientAttributeList}
+                            onChange={(e) => {
+                              handlechange(e, index, "varientAttributeList");
+                            }}
                             onKeyDown={handleOnBlurAttributes}
                             isMulti
 

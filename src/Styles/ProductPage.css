@@ -151,11 +151,17 @@
   border: 1px solid #ececec !important;
   padding: 5px;
   position: relative;
+  margin-left: 15px;
+}
+
+.image-upload-gallery .image-display:first-child {
+  margin-left: 0px;
 }
 
 .image-upload-gallery .image-display img {
-  height: 100%;
-  width: 100%;
+  width: 190px;
+  max-width: 180px;
+  height: 170px;
   object-fit: cover;
 }
 .image-display .delete-image-icon .delete-image {
@@ -174,6 +180,7 @@
   flex-direction: row;
   flex-wrap: nowrap;
   overflow-x: auto;
+  margin-left: 6px;
 }
 
 /* varient add section */

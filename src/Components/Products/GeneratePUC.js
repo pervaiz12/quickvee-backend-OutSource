@@ -1,5 +1,4 @@
 import React from "react";
-import AddIcon from "../../Assests/Category/addIcon.svg";
 import { formData } from "./data";
 
 const GeneratePUC = ({
@@ -9,9 +8,9 @@ const GeneratePUC = ({
   handleGenerateUPC,
   handleBlur,
   isMultipleVarient,
+  productInfo,
 }) => {
-  const varientTitleList = handleVarientTitleBasedItemList();
-  console.log("varientTitleList", varientTitleList);
+  const varientTitle = handleVarientTitleBasedItemList();
   const setInputMaxLength = (fieldname) => {
     switch (fieldname) {
       case "costPerItem":
@@ -36,18 +35,36 @@ const GeneratePUC = ({
     <>
       <div className="mx-0">
         <div className="q-add-categories-single-input">
-          <div className="q-category-bottom-header">
-            <span>Pax 3</span>
-            <p onClick={() => handleGenerateUPC(20)}>
-              Generate UPC
-              {/* <img src={AddIcon} alt="add-icon" />{" "} */}
-            </p>
-          </div>
-          {varientTitleList?.length && isMultipleVarient
-            ? varientTitleList?.map((_, index) => {
+          {formValue?.length ? (
+            <div className="q-category-bottom-header">
+              <span>
+                {isMultipleVarient
+                  ? "Variants"
+                  : productInfo?.title
+                    ? productInfo?.title
+                    : "ProductName"}
+              </span>
+              <p onClick={() => handleGenerateUPC(20)}>
+                Generate UPC
+                {/* <img src={AddIcon} alt="add-icon" />{" "} */}
+              </p>
+            </div>
+          ) : (
+            ""
+          )}
+          {varientTitle?.length && isMultipleVarient
+            ? varientTitle?.map((_, index) => {
                 return (
                   <div className="qvrow">
-                    <div className="mx-4 my-4">{varientTitleList[index]}</div>
+                    {isMultipleVarient ? (
+                      <div className="mx-4 my-4">
+                        {productInfo?.title
+                          ? productInfo?.title + "  -  " + varientTitle[index]
+                          : varientTitle[index]}
+                      </div>
+                    ) : (
+                      ""
+                    )}
                     {formData?.length
                       ? formData?.map((inp, i) => {
                           return (
@@ -168,7 +185,7 @@ const GeneratePUC = ({
             : ""}
           {!isMultipleVarient ? (
             <div className="qvrow">
-              <div className="mx-4 my-4">{varientTitleList[0]}</div>
+              <div className="mx-4 my-4">{varientTitle[0]}</div>
               {formData?.length
                 ? formData?.map((inp, i) => {
                     return (

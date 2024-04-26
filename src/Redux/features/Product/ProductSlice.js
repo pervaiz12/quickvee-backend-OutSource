@@ -15,7 +15,7 @@ const initialState = {
   hasMore: true,
   successMessage: "",
   error: "",
-  varientList: [],
+  formData: [],
 };
 
 // Generate pening , fulfilled and rejected action type
@@ -172,6 +172,10 @@ const productsSlice = createSlice({
         }
       });
     },
+    updateFormValue: (state, action) => {
+      console.log("action", action);
+      state.formData = action?.payload;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchProductsData.pending, (state) => {
@@ -228,5 +232,6 @@ const productsSlice = createSlice({
   },
 });
 
-export const { editProduct, emptyProduct } = productsSlice.actions;
+export const { editProduct, emptyProduct, updateFormValue } =
+  productsSlice.actions;
 export default productsSlice.reducer;

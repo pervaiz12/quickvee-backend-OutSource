@@ -1,35 +1,27 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import AddNewCategory from "../../Assests/Dashboard/Left.svg";
-import Select from "react-select";
-import makeAnimated from "react-select/animated";
-import { colourOptions } from "../Products/data";
 import VariantAttributes from "./VariantAttributes";
 import UploadIMG from "../../Assests/Filter/imgupload.svg";
 import GeneratePUC from "./GeneratePUC";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import {
   addProduct,
   fetchCategoryList,
-  fetchDropdownContentByCategory,
   fetchProductList,
   fetchTaxList,
   fetchVarientList,
   getInventorySetting,
-  updateVarientTitleItems,
+  updateFormValue,
 } from "../../Redux/features/Product/ProductSlice";
-import { type } from "@testing-library/user-event/dist/type";
-import Upload from "../../Assests/Category/upload.svg";
-import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import SearchableDropdown from "../../CommonComponents/SearchableDropdown";
 import "../../Styles/ProductPage.css";
-import { Swiper, SwiperSlide } from "swiper/react";
 import CloseIcon from "../../Assests/Dashboard/cross.svg";
 
 const AddProducts = () => {
   const fileUploadRef = useRef();
   const dispatch = useDispatch();
-  const animatedComponents = makeAnimated();
   const [formValue, setFormValue] = useState([]);
+  const [filterOptionList, setFilterOptionList] = useState([]);
   const [productInfo, setProductInfo] = useState({
     title: "",
     description: "",
@@ -39,6 +31,9 @@ const AddProducts = () => {
     frequentlyBought: [],
     image: [],
   });
+  const [costPer, setCostPer] = useState(null);
+  // const [varientTitle, setVarientTitle] = useState([]);
+  let varientTitle = [];
   const [isMultipleVarient, setIsMultipleVaient] = useState(true);
   const [varientLength, setVarientLength] = useState([
     { id: 1, varientName: "", varientAttributeList: [] },
@@ -48,7 +43,6 @@ const AddProducts = () => {
     error: "",
     errorIndex: null,
   });
-  // const [varientTitleList, setVarientTitleList] = useState([]);
 
   const [dropdownData, setDropdowndata] = useState({
     varientList: [],
@@ -58,13 +52,23 @@ const AddProducts = () => {
     frequentlyBroughtList: [],
   });
 
-  // const [productImage, setProductImage] = useState(null);
-
   const toggleVarientSection = () => {
     if (!isMultipleVarient) {
       setIsMultipleVaient((prev) => {
         return !prev;
       });
+      setVarientLength([
+        {
+          id: 1,
+          varientName: dropdownData?.varientList?.length
+            ? {
+                value: dropdownData?.varientList[0]?.title,
+                label: dropdownData?.varientList[0]?.title,
+              }
+            : "",
+          varientAttributeList: [],
+        },
+      ]);
       setFormValue([]);
     } else {
       setIsMultipleVaient((prev) => {
@@ -123,16 +127,17 @@ const AddProducts = () => {
     }));
   };
 
+  console.log(varientLength, formValue);
+
   const handleSetVarientLength = (updatedVarient) => {
+    console.log("updatedVarient==>", updatedVarient);
     setVarientLength(updatedVarient);
   };
-
-  let varientTitle = [];
   const addMoreVarientItems = () => {
     const checkEmpty = varientLength?.map((item, i) => {
-      if (!item?.varientAttributeList?.length) {
+      if (!item?.varientAttributeList?.length || !item?.varientName) {
         setVarientError({
-          error: "Please enter option values.",
+          error: "Please enter the both option values.",
           errorIndex: i,
         });
         return false;
@@ -149,7 +154,12 @@ const AddProducts = () => {
         ...prev,
         {
           id: prev?.length + 1,
-          varientName: "",
+          varientName: filterOptionList?.length
+            ? {
+                value: filterOptionList[0]?.title,
+                label: filterOptionList[0]?.title,
+              }
+            : "",
           varientAttributeList: [],
         },
       ]);
@@ -165,9 +175,6 @@ const AddProducts = () => {
       ["image"]: deleteImage,
     }));
   };
-  // const []
-  const [costPer, setCostPer] = useState(null);
-
   const nameArray = ["costPerItem", "upcCode", "customCode"];
 
   const notAllowDecimalValue = [
@@ -177,20 +184,6 @@ const AddProducts = () => {
     "reorderQty",
     "reorderLevel",
   ];
-
-  // react-selected item style
-  const customStyles = {
-    multiValue: (provided, state) => ({
-      ...provided,
-      backgroundColor: "#e1e1e1", // Customize background color
-      color: "black",
-      fontWeight: 400,
-      borderRadius: "50px",
-      overflow: "hidden",
-      paddingLeft: "7px",
-      boxSizing: "border-box",
-    }),
-  };
 
   const openFileInput = () => {
     fileUploadRef.current.click();
@@ -270,26 +263,9 @@ const AddProducts = () => {
     });
   }, []);
 
-  // useEffect(() => {
-  //   if (dropdownData?.varientList?.length > 0) {
-  //     const filteredOptions = dropdownData?.varientList?.filter((option) => {
-  //       // Check if the option's title exists in varient
-  //       return varientLength.map(
-  //         (variant) => variant.varientName !== option.title
-  //       );
-  //     });
-  //     setDropdowndata((prev) => ({
-  //       ...prev,
-  //       ["varientList"]: filteredOptions,
-  //     }));
-  //   }
-  // }, [varientLength]);
-
-  // const handleImageChange = (event) => {
-  //   const selectedFile = event.target.files[0];
-  //   // You can perform additional validation here if needed
-  //   setProductImage(URL.createObjectURL(selectedFile));
-  // };
+  const handleFilterDropdownOption = (updatedDropdownList) => {
+    setFilterOptionList(updatedDropdownList);
+  };
 
   const handleImageChange = (e) => {
     let files = [];
@@ -565,23 +541,24 @@ const AddProducts = () => {
   const handleVarientTitleBasedItemList = () => {
     if (varientLength.length) {
       if (
-        varientLength?.length === 1 &&
-        varientLength[0]?.varientAttributeList?.length
+        (varientLength?.length === 1 &&
+          varientLength[0]?.varientAttributeList?.length) ||
+        (varientLength?.length === 2 &&
+          !varientLength[1]?.varientAttributeList?.length)
       ) {
         for (let i of varientLength[0]?.varientAttributeList) {
-          console.log("one");
-          varientTitle.push(i?.label);
+          varientTitle.push(i.label);
         }
       } else if (
-        varientLength?.length === 2 &&
-        varientLength[0]?.varientAttributeList?.length &&
-        varientLength[1]?.varientAttributeList?.length
+        (varientLength?.length === 2 &&
+          varientLength[0]?.varientAttributeList?.length &&
+          varientLength[1]?.varientAttributeList?.length) ||
+        (varientLength?.length === 3 &&
+          !varientLength[2]?.varientAttributeList?.length)
       ) {
         for (let i of varientLength[0]?.varientAttributeList) {
           for (let j of varientLength[1]?.varientAttributeList) {
-            console.log("two");
-
-            varientTitle.push(i?.label + "/" + j?.label);
+            varientTitle.push(i.label + "/" + j.label);
           }
         }
       } else if (
@@ -593,25 +570,21 @@ const AddProducts = () => {
         for (let i of varientLength[0]?.varientAttributeList) {
           for (let j of varientLength[1]?.varientAttributeList) {
             for (let k of varientLength[2]?.varientAttributeList) {
-              console.log("three");
               varientTitle.push(i.label + "/" + j.label + "/" + k.label);
             }
           }
         }
       }
+      return [...new Set(varientTitle)];
+      // setVarientTitle(newVarientTitle);
     }
-
-    return [...new Set(varientTitle)];
   };
-
-  // console.log(varientTitle);
 
   useEffect(() => {
     if (varientLength?.length > 0 && isMultipleVarient) {
       handleVarientTitleBasedItemList();
-      // console.log("varientTitle inside effect", varientTitle);
       setFormValue(
-        varientTitle?.length > 0
+        varientTitle?.length
           ? [...new Set(varientTitle)]?.map((_) => ({
               costPerItem: "",
               compareAtPrice: "",
@@ -821,7 +794,8 @@ const AddProducts = () => {
                   className="py-10"
                   style={{
                     border: "2px solid #0A64F9",
-                    width: "20%",
+                    width: "180px",
+                    height: "180px",
                     cursor: "pointer",
                     display: "grid",
                     placeContent: "center",
@@ -910,9 +884,11 @@ const AddProducts = () => {
               <VariantAttributes
                 varientDropdownList={dropdownData?.varientList}
                 varientError={varientError}
+                filterOptionList={filterOptionList}
                 toggleVarientSection={toggleVarientSection}
                 isMultipleVarient={isMultipleVarient}
                 handleOnBlurAttributes={handleOnBlurAttributes}
+                handleFilterDropdownOption={handleFilterDropdownOption}
                 varientLength={varientLength}
                 handleSetVarientLength={handleSetVarientLength}
                 addMoreVarientItems={addMoreVarientItems}
@@ -929,6 +905,7 @@ const AddProducts = () => {
                 formValue={formValue}
                 handleBlur={handleBlur}
                 isMultipleVarient={isMultipleVarient}
+                productInfo={productInfo}
               />
             </div>
 
