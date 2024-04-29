@@ -204,7 +204,7 @@ const FileUpload = () => {
         )}
 
         {/* Moved "Import" button below border-dashed */}
-        <div className="mb-14">
+        <div className=" mb-4">
           <button
             onClick={() => {
               handleSubmit();

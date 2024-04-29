@@ -39,6 +39,27 @@ const AddVendors = ({ setVisible }) => {
 
   }
 
+  const handleFilter = (filterType) => {
+    console.log('Selected filter:', filterType);
+
+  };
+
+  const [isTablet, setIsTablet] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsTablet(window.innerWidth <= 995);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
 
    
   const [vendor, setVendor] = useState({
@@ -195,7 +216,7 @@ const inputChange = (e) => {
     <div className='q-add-categories-section-middle-form'>
       <div className='qvrowmain'>
         <div className='qvrow'>
-          <div className='col-qv-4'>
+                  <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
             <div className=''>
               <label htmlFor="vendorName">Vendor Name</label>
               <Autocomplete
@@ -219,7 +240,7 @@ const inputChange = (e) => {
 
             </div>
           </div>
-          <div className='col-qv-4'>
+           <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
             <div className='input_area'>
               <label htmlFor="email">Email Address</label>
               <input type="email" id="email" name="email" value={vendor.email } autocomplete="off" placeholder='Email Address' required  onChange={(e) => handleEmailChange(e.target.value)} />

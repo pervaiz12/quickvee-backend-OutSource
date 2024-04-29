@@ -127,7 +127,7 @@
 .q-category-bottom-categories-listing {
     width: 100%;
     background: #fff;
-    border-radius: 8px;
+    border-radius: 0px !important;
 }
 
 .q-category-bottom-categories-single-category {
@@ -341,3 +341,7 @@
 
 }
 }
+
+
+
+

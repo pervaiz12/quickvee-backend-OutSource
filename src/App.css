@@ -227,8 +227,9 @@
 .main-content {
 	overflow-x: hidden;
 	overflow-y: auto;
-	height: auto;
+height: 100vh;
 	overflow-x: hidden;
+	/* height: 100vh; */
 }
 
 .importBtn {
@@ -761,7 +762,7 @@ a.days_filter {
 
 /* width */
 ::-webkit-scrollbar {
-	width: 5px;
+	width: 2px;
 	height: auto;
 }
 
@@ -1016,4 +1017,11 @@ div.q_label_details::after {
 /* date range css  */
 .react-datepicker-popper {
 	z-index: 2 !important;
+}
+
+.qvrowmain label{
+	color: #818181;
+    font-size: 14px;
+    font-family: CircularSTDBook !important;
+    display: block;
 }

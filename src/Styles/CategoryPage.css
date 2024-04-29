@@ -324,17 +324,19 @@ cursor:  pointer !important;
 
 }
 
-.q-add-categories-section-middle-footer {
+
+
+.q-add-categories-section-middles-footer {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 20px 0px !important;
+    padding: 20px 15px !important;
 }
 
-button.quic-btn.quic-btn-save {
+/* button.quic-btn.quic-btn-save {
     width: 12%;
-}
-.q-add-categories-section-middle-footer .quic-btn {
+} */
+.q-add-categories-section-middles-footer .quic-btn {
     font-family: CircularSTDBook !important;
     font-size: 16px;
     color: #fff;
@@ -348,6 +350,27 @@ button.quic-btn.quic-btn-save {
 }
 
 .q-add-categories-section-middle-footer .quic-btn-cancle {
+    background: #878787;
+    margin-left: 10px;
+}
+
+/* css for coupon add and cancel button */
+
+
+.q-add-categories-section-footer .quic-btn {
+    font-family: CircularSTDBook !important;
+    font-size: 16px;
+    color: #fff;
+    padding: 10px 40px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.q-add-categories-section-footer .quic-btn-save {
+    background: #0A64F9;
+}
+
+.q-add-categories-section-footer .quic-btn-cancle {
     background: #878787;
     margin-left: 10px;
 }

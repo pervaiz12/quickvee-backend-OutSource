@@ -128,6 +128,7 @@
 
 .product-table-items {
   width: 20%;
+  height: 0;
 }
 .product-table-title{
     width:20%
@@ -220,7 +221,7 @@
 .category-checkmark-div
   .category-checkmark-label
   input:checked
-  ~ .category-checkmark {
+  .category-checkmark {
   background-color: #1ec26b;
   border-radius: 5px;
 }
@@ -410,7 +411,7 @@ margin-bottom: 3px;
 }
 
 .import_container {
-  height: calc(50% - 2px); 
+  height: calc(50% - -10px);
   width: 100%; 
   display: flex; 
   align-items: center; 

@@ -66,7 +66,7 @@ const PurchaseTable = ({ seVisible, searchId }) => {
           filteredPurchase.length >= 1 &&
           filteredPurchase.map((purchaseData, index) => (
             <div
-              className="q-category-bottom-categories-listing"
+             className={` q-category-bottom-categories-listing purchase-item ${index % 2 === 0 ? 'even' : 'odd'}`}
               key={purchaseData.order}
             >
               <div className="q-category-bottom-categories-single-category">

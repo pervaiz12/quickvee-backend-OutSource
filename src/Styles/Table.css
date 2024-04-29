@@ -12,8 +12,9 @@
 }
 .dataTables_info{
     padding-left: 1rem;
-    color: var(--black) !important;
+    /* color: var(--black) !important; */
     font-family: CircularSTDBook !important;
+    color:#0A64F9 !important;
 }
 .dataTables_wrapper .dataTables_paginate .paginate_button {
     background: var(--background) !important ;

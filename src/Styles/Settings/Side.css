@@ -436,8 +436,8 @@ border:2px solid #0A64F9 } */
 .css-1u23akw-MuiButtonBase-root-MuiPickersDay-root {
 	font-size: 18px !important;
 	font-family: qvmedium !important;
-	width: 51px !important;
-	height: 51px !important;
+	width: 45px !important;
+	height: 45px !important;
 	margin: unset !important;
 }
 
@@ -662,7 +662,7 @@ select.custom-selecttable.w-52 {
 
 .importBtn {
 	box-sizing: content-box;
-	height: 300px;
+	height: 230px;
 	padding: 1rem;
 	border-width: 4px;
 	border-style: solid;
@@ -675,6 +675,11 @@ select.custom-selecttable.w-52 {
 	justify-content: space-between;
 	box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.12156862745098039);
 	position: relative;
+	box-shadow: rgba(0, 0, 0, 0.12) 0px 3px 6px;
+	
+	align-items: center;
+	flex-direction: column;
+	
 }
 
 .purchaseData {
@@ -691,7 +696,7 @@ select.custom-selecttable.w-52 {
 .btn-dashboard-section-cncl {
 	width: 46%;
 	padding: 10px;
-	margin: 46px 17px;
+	margin: 46px 5px;
 	border: 1px solid #878787;
 	border-radius: 4px;
 	background-color: #878787;
@@ -704,7 +709,7 @@ select.custom-selecttable.w-52 {
 .btn-dashboard-section-save {
 	width: 46%;
 	padding: 10px;
-	margin: 46px 16px;
+	margin: 46px 25px;
 	border: 1px solid #0a64f9;
 	border-radius: 4px;
 	background-color: #0a64f9;
@@ -807,7 +812,75 @@ select.custom-selecttable.w-52 {
   position: relative;
   top:0;
   bottom:0;
+  left:1.5rem;
   display: flex;
   justify-content: space-evenly;
+
+}
+
+.btn-dashboard-section-cncl:hover,
+.btn-dashboard-section-save:hover {
+  opacity: 0.8;
+}
+
+
+/* add css for taxes table */
+
+.taxes-sort{
+	width:12%
+}
+.taxes-title{
+	 width: 12%;
+}
+.taxes-items{
+	width: 15%;
+}
+
+.taxes-enable-disable{
+	width: calc(100% - 52%)
+
+}
+
+.q-category-bottom-categories-single-category {
+    display: flex;
+    padding: 20px;
+    border-bottom: 1px solid #E8E8E8;
+    /* cursor: all-scroll; */
+    user-select: none;
+}
+
+.q-category-bottom-categories-single-category>.taxes-title {
+    font-size: 16px;
+    color: #000000;
+    font-family: CircularSTDMedium !important;
+    text-transform: capitalize;
+}
+
+.q-category-bottom-categories-single-category>.taxes-data-items  {
+    color: #0A64F9;
+    /* cursor: pointer; */
+    font-family: CircularSTDMedium !important;
+    font-size: 16px;
+    text-decoration: underline;
+}
+
+.q-category-bottom-categories-single-category>.taxes-enable-disable {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+}
+
+.purchase-item.odd {
+  background-color: #f1f1f1; }
+.purchase-item.even {
+  background-color: #ffffff; 
+}
+
+.q-category-bottom-categories-single-category>p{
+	font-family:CircularSTDBook !important;
+
+}
+.q-attributes-bottom-attriButes-listing>p{
+	font-family:CircularSTDBook !important;
 
 }

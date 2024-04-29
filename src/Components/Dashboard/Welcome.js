@@ -420,7 +420,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
                   </div>
                 </div>
 
-                <div className="border-r border-[#ccc] px-1"></div>
+                <div className="border-r border-[#ccc] px-1 mt-8 h-[415px]"></div>
                 <div className="col-qv-6 p-4">
                    <div className="container input_cal_section">
                     <div className="row">
@@ -432,10 +432,10 @@ const Welcome = ({ isOpen, onClose, children }) => {
                     </div>
                   </div> 
 
-                  <div className="container" style={{marginTop:"20px"}}>
+                  <div className="container" style={{marginTop:"18px"}}>
                     <div className="row">
                       <div
-                        className="date_cal_selector px-4"
+                        className="date_cal_selector"
                         style={{ }}
                       >
                         <div className="col-qv-6">
@@ -450,7 +450,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
                               startDate={startDate}
                               endDate={endDate}
                               dateFormat="MMMM d, yyyy"
-                              className="select_date_btn "
+                              className="select_date_btn"
                               ref={startDateRef}
                               showPopperArrow={false}
                             />
@@ -471,7 +471,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
                               endDate={endDate}
                               minDate={startDate}
                               dateFormat="MMMM d, yyyy"
-                              className="select_date_btn "
+                              className="select_date_btn"
                               ref={endDateRef}
                               showPopperArrow={false}
                             />
@@ -493,7 +493,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
   <div className="container">
     <div className="qvrow">
                       <div className="col-qv-12">
-        <div className="flex justify-between ">
+                        <div className="date_cal_selector">
                           <button
                             className="btn-dashboard-section-cncl"
                             onClick={closeCalendar}

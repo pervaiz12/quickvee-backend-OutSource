@@ -164,7 +164,7 @@ const FilterProduct = ({ handleOptionClick, toggleDropdown, selectedEmployee, de
               <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
                   <label htmlFor="ListingFilter"
                     onClick={() => setlistingTypesDropdownVisible(!listingTypesDropdownVisible)} >
-                    Listing Type
+                    Listing Type {selectedListingType}
                   </label>
                   <div className="custom-dropdown input_area" ref={listingtype}>
                     <div
@@ -181,8 +181,8 @@ const FilterProduct = ({ handleOptionClick, toggleDropdown, selectedEmployee, de
                     {listingTypesDropdownVisible && (
                       <div className="dropdown-content ">
                         
-                        <div className={selectedListingType === 0 ? "dropdown-item active" : "dropdown-item"} onClick={() => handleOptionClick(0, "listingType", "Product listing")}>Product listing</div>
-                        <div className={selectedListingType === 1 ? "dropdown-item active" : "dropdown-item"} onClick={() => handleOptionClick(1, "listingType", "Variant listing")}>Variant listing</div>
+                        <div className={selectedListingType === "Product listing" ? "dropdown-item active" : "dropdown-item"} onClick={() => handleOptionClick(0, "listingType", "Product listing")}>Product listing</div>
+                        <div className={selectedListingType === "Variant listing" ? "dropdown-item active" : "dropdown-item"} onClick={() => handleOptionClick(1, "listingType", "Variant listing")}>Variant listing</div>
                       
                       </div>
                     )}
@@ -191,7 +191,7 @@ const FilterProduct = ({ handleOptionClick, toggleDropdown, selectedEmployee, de
                 {/* Employee Dropdown */}
                 <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
                   <label  htmlFor="employeeFilter" onClick={() => setdel_picDropdownVisible(!del_picDropdownVisible)}>
-                    Enable Product for Delivery/Pickup
+                    Enable Product for Delivery/Pickup 
                   </label>
                   <div className="custom-dropdown input_area">
                     <div className="custom-dropdown-header" onClick={() => toggleDropdown("del_pic")}>
