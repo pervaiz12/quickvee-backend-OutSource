@@ -5,7 +5,7 @@ import React from "react";
 import Switch from "@mui/material/Switch";
 import { useDispatch , useSelector} from "react-redux";
 
-const OnlineOrderingPage = () => {
+const OnlineOrderingPage = ({onlineorderstatus}) => {
 
   const [isEnableOrderNumber, setisEnableOrderNumber] = useState(true);
   const dispatch = useDispatch();
@@ -17,9 +17,10 @@ const OnlineOrderingPage = () => {
 
   const setupDataState = useSelector((state)=>state?.StoreSetupList?.storesetupData)
 
-useEffect(() => {
- console.log(setupDataState?.clover_customer_id)
-}, [setupDataState])
+  useEffect(() => {
+    // console.log(setupDataState?.clover_customer_id)
+    onlineorderstatus(isEnableOrderNumber);
+  }, [setupDataState, isEnableOrderNumber])
 
 
   

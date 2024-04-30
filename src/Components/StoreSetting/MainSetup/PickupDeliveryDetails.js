@@ -9,25 +9,31 @@ import ClockIcon from "../../../Assests/Filter/Clock.svg";
 import { MobileTimePicker } from "@mui/x-date-pickers/MobileTimePicker";
 import { useDispatch, useSelector } from "react-redux";
 import { TimePicker } from '@mui/x-date-pickers/TimePicker';
+import { event } from "jquery";
 
-const PickupDeliveryDetails = () => {
+const PickupDeliveryDetails = ({pickupdeliverydata}) => {
   const setupDataState = useSelector((state) => state?.StoreSetupList?.storesetupData)
 
   const [isEnableOrderNumber, setisEnableOrderNumber] = useState(true);
   const [isDelveryEnbale, setIsDelveryEnbale] = useState(true);
   const [minTime, setMinTime] = useState();
-  const [maxtimechange, setMaxtimechange] = useState();
   const [convenience, SetConvenience] = useState();
   const [conveniencepik, SetConveniencepik] = useState();
   const [amountdelivery, setAmountdelivery] = useState();
   const [rateDelivery, SetRateDelivery] = useState();
+  const [MinPickupTime, setMinPickupTime] = useState();
+  const [MaxPickupTime, setMaxPickupTime] = useState();
+  const [MinDeliveryTime, setMinDeliveryTime] = useState();
+  const [MaxDeliveryTime, setMaxDeliveryTime] = useState();
+  const [MinAmountdelivery, setMinAmountdelivery] = useState();
+
   const dispatch = useDispatch();
-  const [timeValues, setTimeValues] = useState({
-    minPickupTime:"",
-    maxPickupTime:"",
-    minDeliveryTime:`00:${setupDataState.deliver_min_time}` ?? "",
-    maxDeliveryTime:setupDataState?.deliver_max_time ?? "",
-  })
+  // const [timeValues, setTimeValues] = useState({
+  //   minPickupTime:"",
+  //   maxPickupTime:"",
+  //   minDeliveryTime:`00:${setupDataState.deliver_min_time}` ?? "",
+  //   maxDeliveryTime:setupDataState?.deliver_max_time ?? "",
+  // })
 
   const handleCheckedSwitch = (e) => {
     setisEnableOrderNumber(!isEnableOrderNumber)
@@ -40,17 +46,6 @@ const PickupDeliveryDetails = () => {
 
   //const [minTime, setMinTime] = useState();
 
-  const handleInputChange = (newValue) => {
-    setTimeValues({
-      ...timeValues,
-      minDeliveryTime: newValue,
-    });
-  };
-
-
-  const handleMaxtimeChange = (event) => {
-    setMaxtimechange(event.target.value);
-  };
   const handleConvenChange = (event) => {
     SetConvenience(event.target.value)
   }
@@ -76,8 +71,8 @@ const PickupDeliveryDetails = () => {
     if (setupDataState?.cfee_pik) {
       SetConvenience(setupDataState.cfee_pik);
     }
-    if (setupDataState?.delivery_fee) {
-      setAmountdelivery(setupDataState.delivery_fee);
+    if (setupDataState?.min_delivery_amt) {
+      setMinAmountdelivery(setupDataState.min_delivery_amt);
     }
 
     if (setupDataState?.rate_per_miles) {
@@ -87,9 +82,49 @@ const PickupDeliveryDetails = () => {
     if (setupDataState?.cfee_del) {
       SetConveniencepik(setupDataState.cfee_del);
     }
+
+    if (setupDataState?.pickup_min_time) {
+      setMinPickupTime(setupDataState.pickup_min_time);
+    }
+    if (setupDataState?.pickup_max_time) {
+      setMaxPickupTime(setupDataState.pickup_max_time);
+    }
+    if (setupDataState?.deliver_min_time) {
+      setMinDeliveryTime(setupDataState.deliver_min_time);
+    }
+    if (setupDataState?.deliver_max_time) {
+      setMaxDeliveryTime(setupDataState.deliver_max_time);
+    }
+
+    if (setupDataState?.max_delivery_radius) {
+      SetRateDelivery(setupDataState.max_delivery_radius);
+    }
   }, [setupDataState])
 
+  const handleMinPickupTime = (event) => {
+    setMinPickupTime(event.target.value);
+  }
+  const handleMaxPickupTime = (event) => {
+    setMaxPickupTime(event.target.value);
+  }
+  const handleMinDeliveryTime = (event) => {
+    setMinDeliveryTime(event.target.value);
+  }
+  const handleMaxDeliveryTime = (event) => {
+    setMaxDeliveryTime(event.target.value);
+  }
+  const handleMinAmountdelivery = (event) => {
+    setMinAmountdelivery(event.target.value);
+  }
 
+  useEffect(() => {
+    pickupdeliverydata(isEnableOrderNumber, MinPickupTime, MaxPickupTime, convenience, isDelveryEnbale, MinAmountdelivery, rateDelivery, MinDeliveryTime, MaxDeliveryTime, conveniencepik)
+  },
+  [
+    isEnableOrderNumber, MinPickupTime, MaxPickupTime, convenience, isDelveryEnbale,
+    MinAmountdelivery, rateDelivery, MinDeliveryTime, MaxDeliveryTime, conveniencepik
+  ])
+  
   return (
     <>
       <div className="box">
@@ -123,29 +158,12 @@ const PickupDeliveryDetails = () => {
               <div className="col-qv-3">
                 <div className="input_area">
                   <label>Minimum Time:</label>
-                  
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={["MobileTimePicker"]}>
-                      <DemoItem>
-                        <MobileTimePicker
-                         inputFormat="mm a"
-                         value={timeValues?.minDeliveryTime}
-                         onChange={handleInputChange}
-                        //  renderInput={(params) => <input {...params} />}
-                        />
-                      </DemoItem>
-                    </DemoContainer>
-                  </LocalizationProvider>
-                  <div
-                    className=""
-                    style={{
-                      position: "relative",
-                      bottom: "2rem",
-                      right: "4px",
-                    }}
-                  >
-                    <img src={ClockIcon} alt="" className="w-6 h-6 ml-auto" />
-                  </div>
+                  <input
+                    type="number"
+                    value={MinPickupTime}
+                    required
+                    onChange={handleMinPickupTime}
+                  />
                 </div>
               </div>
 
@@ -154,12 +172,12 @@ const PickupDeliveryDetails = () => {
                 <div className="input_area">
                   <label>Maximum Time</label>
                   <input
-                    type="time"
-                    name="start_time"
-                    value={setupDataState.deliver_max_time}
-                    id="start_tym"
+                    type="number"
+                    // name="start_time"
+                    value={MaxPickupTime}
+                    // id="start_tym"
                     required
-                    onChange={handleMaxtimeChange}
+                    onChange={handleMaxPickupTime}
                   />
                   {/* <span>{formatTime(systemAccess.start_time)}</span> */}
                 </div>
@@ -214,8 +232,8 @@ const PickupDeliveryDetails = () => {
                     maxlength="8"
                     name="default_cash_drawer"
                     id="cash_drawer"
-                    value={amountdelivery}
-                    onChange={handleAmountdel}
+                    value={MinAmountdelivery}
+                    onChange={handleMinAmountdelivery}
                   />
                 </div>
               </div>
@@ -241,12 +259,12 @@ const PickupDeliveryDetails = () => {
                 <div className="input_area">
                   <label> Delivery Time (Min)</label>
                   <input
-                    type="time"
-                    name="start_time"
-                    value={setupDataState.deliver_min_time}
-                    id="start_tym"
+                    type="number"
+                    // name="start_time"
+                    value={MinDeliveryTime}
+                    // id="start_tym"
                     required
-                    onChange={handleInputChange}
+                    onChange={handleMinDeliveryTime}
                   />
                   {/* <span>{formatTime(systemAccess.start_time)}</span> */}
                 </div>
@@ -256,12 +274,12 @@ const PickupDeliveryDetails = () => {
                 <div className="input_area">
                   <label>Delivery Time (Max)</label>
                   <input
-                    type="time"
-                    name="start_time"
-                    value={setupDataState.deliver_max_time}
-                    id="start_tym"
+                    type="number"
+                    // name="start_time"
+                    value={MaxDeliveryTime}
+                    // id="start_tym"
                     required
-                    onChange={handleMaxtimeChange}
+                    onChange={handleMaxDeliveryTime}
                   />
                   {/* <span>{formatTime(systemAccess.start_time)}</span> */}
                 </div>

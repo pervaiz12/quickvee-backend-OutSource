@@ -3,8 +3,11 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import '../../../Styles/EmployeeList/customeitem.css';
 
-const CustomTimePicker = () => {
-  const [startTime, setStartTime] = useState("");
+const CustomTimePicker = ({OpenTime, CloseTime}) => {
+  console.log("OpenTime", OpenTime)
+  console.log("CloseTime", CloseTime)
+
+  const [startTime, setStartTime] = useState("12:00 AM");
   const [endTime, setEndTime] = useState("");
 
   // Generate time options with 15-minute intervals
@@ -26,15 +29,20 @@ const CustomTimePicker = () => {
 
   const handleStartTimeChange = (event) => {
     const value = event.target.value;
+    console.log(value)
     setStartTime(value);
- 
+    
     if (endTime !== "" && value >= endTime) {
       setEndTime("");
     }
   };
-
+  
   const handleEndTimeChange = (event) => {
     setEndTime(event.target.value);
+    if (startTime == event.target.value) {
+      alert("The end time cannot be the same as the start time")
+      setEndTime("");
+    }
   };
 
   return (

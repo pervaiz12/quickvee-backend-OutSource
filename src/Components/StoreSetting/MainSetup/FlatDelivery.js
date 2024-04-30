@@ -2,13 +2,13 @@ import { event } from "jquery";
 import React, { useState ,useEffect} from "react";
 import { useDispatch , useSelector} from "react-redux";
 
-const FlatDelivery = () => {
+const FlatDelivery = ({DeliveryFeeData}) => {
 const [deleveryChange , setDelveryChange] = useState();
 const [delveryRates , setDeleveryRate] = useState();
 
   const dispatch = useDispatch();
   // State to keep track of the active tab
-  const [activeTab, setActiveTab] = useState("delivery");
+  const [activeTab, setActiveTab] = useState("0");
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -28,15 +28,21 @@ const [delveryRates , setDeleveryRate] = useState();
   const setupDataState = useSelector((state)=>state?.StoreSetupList?.storesetupData)
 
   useEffect(() => {
-  //console.log(setupDataState?.deliver_min_time)
-  if (setupDataState?.delivery_fee) {
-    setDelveryChange(setupDataState.delivery_fee);
-  }
-  if (setupDataState?.rate_per_miles){
-    setDeleveryRate(setupDataState.rate_per_miles);
-  }
-}, [setupDataState])
+    // console.log(setupDataState?.float_delivery)
+    if (setupDataState?.delivery_fee) {
+      setDelveryChange(setupDataState.delivery_fee);
+    }
+    if (setupDataState?.rate_per_miles){
+      setDeleveryRate(setupDataState.rate_per_miles);
+    }
+    if (setupDataState?.float_delivery){
+      setActiveTab(setupDataState.float_delivery);
+    }
+  }, [setupDataState])
 
+  useEffect(() => {
+    DeliveryFeeData(activeTab, deleveryChange, delveryRates)
+  }, [activeTab, deleveryChange, delveryRates])
 
   return (
     <>
@@ -51,9 +57,9 @@ const [delveryRates , setDeleveryRate] = useState();
                   {/* delivery tab */}
                   <div
                     className={`cursor-pointer px-12 rounded py-2 text-[14px]  ${
-                      activeTab === "delivery" ? "bg-[#0A64F9] text-white" : "bg-[#F5F5F5] text-[#6A6A6A]"
+                      activeTab === "0" ? "bg-[#0A64F9] text-white" : "bg-[#F5F5F5] text-[#6A6A6A]"
                     }`}
-                    onClick={() => handleTabClick("delivery")}
+                    onClick={() => handleTabClick("0")}
                   >
                     Flat Delivery Fee
                   </div>
@@ -61,9 +67,9 @@ const [delveryRates , setDeleveryRate] = useState();
                   {/* miledelivery tab */}
                   <div
                     className={`cursor-pointer px-12 rounded py-2  text-[14px]  ${
-                      activeTab === "miledelivery" ? "bg-[#0A64F9] text-white" : "bg-[#F5F5F5] text-[#6A6A6A]"
+                      activeTab === "1" ? "bg-[#0A64F9] text-white" : "bg-[#F5F5F5] text-[#6A6A6A]"
                     }`}
-                    onClick={() => handleTabClick("miledelivery")}
+                    onClick={() => handleTabClick("1")}
                   >
                   Per Mile Delivery Fee
                   </div>
@@ -72,7 +78,7 @@ const [delveryRates , setDeleveryRate] = useState();
             </div>
 
             {/* Conditionally render rows based on activeTab */}
-            {activeTab === "delivery" && (
+            {activeTab === "0" && (
                 <div className="mt-5">
               <div className="qvrow">
                 <div className="col-qv-6">
@@ -100,7 +106,7 @@ const [delveryRates , setDeleveryRate] = useState();
               </div>
             )}
 
-            {activeTab === "miledelivery" && (
+            {activeTab === "1" && (
                  <div className="mt-5">
               <div className="qvrow">
                 <div className="col-qv-6">
