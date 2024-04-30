@@ -3,7 +3,7 @@ import Switch from "@mui/material/Switch";
 import { useDispatch , useSelector} from "react-redux";
 
 
-const DelveryPickupDetails = () => {
+const DelveryPickupDetails = ({DeliveryPickupData}) => {
   const dispatch = useDispatch();
   const [delverypickup, setDelverypickup] = useState(true);
   const [pickupDefaultTip, setPickupDefaultTip] = useState("");
@@ -17,24 +17,29 @@ const DelveryPickupDetails = () => {
   const setupDataState = useSelector((state)=>state?.StoreSetupList?.storesetupData)
 
   useEffect(() => {
-   //console.log(setupDataState?.deliver_min_time)
+    // console.log(setupDataState?.deliver_min_time)
+    if (setupDataState?.default_tip_d) {
+      setDeliveryDefaultTip(setupDataState.default_tip_d);
+    }
+    if (setupDataState?.default_tip_p) {
+      setPickupDefaultTip(setupDataState.default_tip_p);
+    }
   }, [setupDataState])
 
 
 
-  const handlePickupDefaultTipChange = (e) => {
-
-    const { name, value } = e.target;
-    setupDataState((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-    // setPickupDefaultTip(e.target.value);
+  const handlePickupDefaultTipChange = (event) => {
+    setPickupDefaultTip(event.target.value);
   };
 
-  const handleDeliveryDefaultTipChange = (e) => {
-    setDeliveryDefaultTip(e.target.value);
+  const handleDeliveryDefaultTipChange = (event) => {
+    setDeliveryDefaultTip(event.target.value);
   };
+
+  useEffect(() => {
+    DeliveryPickupData(delverypickup, pickupDefaultTip, deliveryDefaultTip)
+  }, [delverypickup, pickupDefaultTip, deliveryDefaultTip])
+
   return (
    <>
  <div className="box">
@@ -69,22 +74,22 @@ const DelveryPickupDetails = () => {
 
                  <select
                 name="default_tip_d"
-                value={setupDataState.default_tip_d || ""}
+                value={pickupDefaultTip}
                 onChange={handlePickupDefaultTipChange}
               >
-                <option value="1" selected={setupDataState.default_tip_d == 1}>
+                <option value="0" selected={pickupDefaultTip == 0}>
                  None
                 </option>
-                <option value="2" selected={setupDataState.default_tip_d == 2}>
+                <option value="10" selected={pickupDefaultTip == 10}>
                   10%
                 </option>
-                <option value="3" selected={setupDataState.default_tip_d == 3}>
+                <option value="15" selected={pickupDefaultTip == 15}>
                  15%
                 </option>
-                <option value="3" selected={setupDataState.default_tip_d == 3}>
+                <option value="20" selected={pickupDefaultTip == 20}>
                  20%
                 </option>
-                <option value="3" selected={setupDataState.default_tip_d == 3}>
+                <option value="25" selected={pickupDefaultTip == 25}>
                  25%
                 </option>
               </select>
@@ -96,22 +101,22 @@ const DelveryPickupDetails = () => {
 
                  <select
                 name="end_day_Allow"
-                value={setupDataState.default_tip_p || ""}
+                value={deliveryDefaultTip}
                 onChange={handleDeliveryDefaultTipChange}
               >
-                <option value="1" selected={setupDataState.default_tip_p == 1}>
+                <option value="0" selected={deliveryDefaultTip == 0}>
                  None
                 </option>
-                <option value="2" selected={setupDataState.default_tip_p == 2}>
+                <option value="10" selected={deliveryDefaultTip == 10}>
                   10%
                 </option>
-                <option value="3" selected={setupDataState.default_tip_p == 3}>
+                <option value="15" selected={deliveryDefaultTip == 15}>
                 15%
                 </option>
-                <option value="3" selected={setupDataState.default_tip_d == 3}>
-                25%
+                <option value="20" selected={deliveryDefaultTip == 20}>
+                20%
                 </option>
-                <option value="3" selected={setupDataState.default_tip_d == 3}>
+                <option value="25" selected={deliveryDefaultTip == 25}>
                 25%
                 </option>
               </select>
