@@ -210,7 +210,7 @@ const OnlineTableViewData = (props) => {
             cancelOption = `<option value="5">Cancel</option>`;
           }
           if (data.order_method == "pickup") {
-            PayStatus = `<select class="custom-selecttable w-52" data-order-id="${data.order_id}">
+            PayStatus = `<select class="custom-selecttable w-52 cursor-pointer" data-order-id="${data.order_id}">
               <option value="1">Accepted</option>
               <option value="2">Packing</option>
               <option value="3">Ready</option>
@@ -218,7 +218,7 @@ const OnlineTableViewData = (props) => {
               ${cancelOption}
             </select>`;
           } else {
-            PayStatus = `<select class="custom-selecttable w-52" data-order-id="${data.order_id}">
+            PayStatus = `<select class="custom-selecttable w-52 cursor-pointer" data-order-id="${data.order_id}">
               <option value="1">Accepted</option>
               <option value="2">Packing</option>
               <option value="6">Ready</option>

@@ -1,5 +1,5 @@
 import React, { useEffect, useState , useRef} from "react";
-import { AiOutlineSearch } from 'react-icons/ai';
+import SearchIcon from "../../Assests/Filter/Search.svg";
 import DownIcon from "../../Assests/Dashboard/Down.svg"
 import CategoryListDropDown from "../../CommonComponents/CategoryListDropDown";
 import UpArrow from "../../Assests/Dashboard/Up.svg";
@@ -116,7 +116,7 @@ const FilterProduct = ({ handleOptionClick, toggleDropdown, selectedEmployee, de
               onClick={handleSearch}
               className="text-black px-4 py-2 focus:outline-none text-2xl"
             >
-              <AiOutlineSearch className="h- w-8  text-[#231F20]" />
+                  <img src={SearchIcon} alt="" className="w-6 h-6" />
             </button>
           </div>
           </div>

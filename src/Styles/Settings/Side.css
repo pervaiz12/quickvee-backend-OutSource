@@ -203,6 +203,7 @@
 	font-size: 14px;
 	font-family: 'CircularSTDBook';
 	color: #7B7B7B;
+	cursor: pointer;
 }
 
 .q_details_header>h1 {
@@ -224,7 +225,7 @@
 	font-size: 15px;
 	outline: none;
 	background: #FFFFFF;
-
+    cursor: pointer;
 	padding: 8px;
 	margin: 5px 0 15px 0;
 	border: 1px solid #e2e8f0;
