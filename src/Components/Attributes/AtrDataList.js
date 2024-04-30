@@ -7,6 +7,7 @@ import { BASE_URL, ADD_ATTRIBUTE } from "../../Constants/Config";
 import AddIcon from "../../Assests/Category/addIcon.svg";
 import EditAttribute from "../Attributes/EditAttribute";
 import SortIcon from "../../Assests/Category/Sorting.svg"
+import EditIcon from "../../Assests/Category/editIcon.svg";
 
 const AtrDataList = ({ seVisible }) => {
   const [showModal, setShowModal] = useState(false);
@@ -130,7 +131,7 @@ const AtrDataList = ({ seVisible }) => {
                 </p>
                 <p className="attriButes-title">{attribute.title}</p>
 
-                <p className="attriButes-enable-disable">
+                <p className="attriButes-enable-disable" style={{ width: "calc(100% - 32%)" }}>
                   {/* onClick={()=>openEditModal(attribute)} */}
                   {/* <img src={DeleteIcon} alt="delete-icon" /> */}
                   <EditAttribute
@@ -146,9 +147,11 @@ const AtrDataList = ({ seVisible }) => {
             {/* Your modal JSX */}
             <div className="q-custom-modal-content">
               {/* Your modal content */}
-              <div className="">
+             
                 <p className="q-custom-modal-header ">
-                  Add New Attribute
+                    <div className="mt_card_header q_dashbaord_netsales">
+                    <h1 className="">Add New Attribute</h1> 
+                    </div>
                   <img
                     src={CrossIcon}
                     alt="icon"
@@ -156,18 +159,23 @@ const AtrDataList = ({ seVisible }) => {
                     onClick={closeModal}
                   />
                 </p>
-              </div>
-              {/* ... other modal content ... */}
+             <div className="my-2">
+                  <div className="border-b border-[#ccc]"></div>
+             </div>
+               
+            <div className="title_attributes_section">
+              <label>Title</label>
               <input
                 type="text"
                 placeholder="Enter attribute title"
-                className="q-custom-input-field"
+                className="q-custom-input-field mt-2"
                 value={newAttribute}
                 onChange={changeTittleHandler}
               />
               <span className="input-error">
                 {errorMessage !== "" ? errorMessage : ""}
               </span>
+              </div>
               <div className="q-add-categories-section-middle-footer">
                 <button
                   onClick={handleAddAttribute}

@@ -62,7 +62,7 @@
     width: 100%;
     background: #FFFFFF;
     box-shadow: 0px 3px 6px #0000001F;
-    border-radius: 8px !important;
+    border-radius: 4px !important;
 }
 
 .q-category-bottom-header-sticky {
@@ -113,16 +113,16 @@
 
 }
 
-.categories-sort {
+.categories-data-sort {
     width: 12%;
 }
 
-.categories-title {
-    width: 20%;
+.categories-data-title {
+    width: 12%;
 
 }
 
-.categories-items {
+.categories-data-items {
     width: 20%;
 }
 .categories-items-btn{
@@ -155,7 +155,7 @@ cursor:  pointer !important;
     text-transform: capitalize;
 }
 
-.q-category-bottom-categories-single-category>.categories-items {
+.q-category-bottom-categories-single-category>.categories-data-items  {
     color: #0A64F9;
     /* cursor: pointer; */
     font-family: CircularSTDMedium !important;
@@ -176,6 +176,8 @@ cursor:  pointer !important;
     width: 200px;
 }
 
+
+
 .category-checkmark-div .category-checkmark-label {
     color: #000000;
     font-family: CircularSTDMedium !important;
@@ -190,6 +192,27 @@ cursor:  pointer !important;
     -ms-user-select: none;
     user-select: none;
 }
+
+
+/* responsive css */
+/* @media only screen and (max-width: 1060px) and (min-width:768px) {
+.category-checkmark-div .category-checkmark-label{
+   color: #000000 !important;
+    font-family: CircularSTDMedium !important;
+    font-size: 12px !important;
+    display: block;
+    position: relative;
+    padding-left: 33px;
+    cursor: pointer;
+    font-size: 16px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+} */
+
+
 
 .category-checkmark-div .category-checkmark-label input {
     position: absolute;
@@ -301,14 +324,19 @@ cursor:  pointer !important;
 
 }
 
-.q-add-categories-section-middle-footer {
+
+
+.q-add-categories-section-middles-footer {
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    padding: 20px;
+    padding: 20px 15px !important;
 }
 
-.q-add-categories-section-middle-footer .quic-btn {
+/* button.quic-btn.quic-btn-save {
+    width: 12%;
+} */
+.q-add-categories-section-middles-footer .quic-btn {
     font-family: CircularSTDBook !important;
     font-size: 16px;
     color: #fff;
@@ -322,6 +350,27 @@ cursor:  pointer !important;
 }
 
 .q-add-categories-section-middle-footer .quic-btn-cancle {
+    background: #878787;
+    margin-left: 10px;
+}
+
+/* css for coupon add and cancel button */
+
+
+.q-add-categories-section-footer .quic-btn {
+    font-family: CircularSTDBook !important;
+    font-size: 16px;
+    color: #fff;
+    padding: 10px 40px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.q-add-categories-section-footer .quic-btn-save {
+    background: #0A64F9;
+}
+
+.q-add-categories-section-footer .quic-btn-cancle {
     background: #878787;
     margin-left: 10px;
 }
@@ -343,7 +392,7 @@ cursor:  pointer !important;
 }
 
 .add-category-checkmark-div .add-category-checkmark-label {
-    color: #818181;
+    color: #000000;
     font-size: 14px;
     font-family: CircularSTDBook !important;
     display: block;
@@ -414,4 +463,16 @@ cursor:  pointer !important;
 
 .suggestlist_input fieldset{
     border: 1px solid #E1E1E1 !important;
+    border-bottom: 1px solid #000;
 }   
+
+.css-gdh49b-MuiAutocomplete-listbox .MuiAutocomplete-option[aria-selected="true"].Mui-focused {
+    background-color: #0A64F9 !important;
+    color:#ffffff !important;
+     border-bottom: 1px solid #000;
+}
+
+
+.css-1xnbq41-MuiAutocomplete-root .MuiOutlinedInput-root.MuiInputBase-sizeSmall .MuiAutocomplete-input {
+    
+}

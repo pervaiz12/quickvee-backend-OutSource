@@ -70,10 +70,10 @@ const TaxesDetail = () => {
 
         <div className="q-category-bottom-header-sticky">
           <div className="q-category-bottom-categories-header">
-            <p className="categories-sort">Sort</p>
-            <p className="categories-title">Title</p>
-            <p className="categories-items">Percentage (%)</p>
-            <p className="categories-enable-disable"></p>
+            <p className="taxes-sort">Sort</p>
+            <p className="taxes-title">Title</p>
+            <p className="taxes-items">Percentage (%)</p>
+            <p className="taxes-enable-disable"></p>
           </div>
         </div>
         <div className="q-category-bottom-categories-listing">
@@ -84,23 +84,23 @@ const TaxesDetail = () => {
                 key={index}
                 className="q-category-bottom-categories-single-category"
               >
-                <p className="categories-sort">
+                <p className="taxes-sort">
                   <img src={SortIcon} alt="sort-icon" className="h-4 w-5" />
                 </p>
-                <p className="categories-title">{taxes.title}</p>
-                <p className="categories-title">{taxes.percent}</p>
+                <p className="taxes-title">{taxes.title}</p>
+                <p className="taxes-title">{taxes.percent}</p>
 
                 {taxes.title === "DefaultTax" ? (
                   // Render only Edit when the title is 'defaulttax'
                   <>
                   
-                    <p className="categories_add_delete " style={{ width: '10rem', marginLeft: 'auto',display:"flex" }}>
+                    <p className="categories_add_delete " style={{ width: '6rem', marginLeft: 'auto',display:"flex" }}>
                       <EditTaxesModal selectedTaxe={taxes}  />
                     </p>
                   </>
                 ) : (
                   <>
-                    <p className="categories_add_delete " style={{ width: '10rem', marginLeft: 'auto',display:"flex",justifyContent:"space-between" }}>
+                    <p className="categories_add_delete " style={{ width: '6rem', marginLeft: 'auto',display:"flex",justifyContent:"space-between" }}>
                       <EditTaxesModal selectedTaxe={taxes} />
 
                       <img

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import AddIcon from "../../Assests/Category/addIcon.svg";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import EditIcon from "../../Assests/Category/editIcon.svg";
-import SortIcon from "../../Assests/Category/Sorting.svg"
+import SortIcon from "../../Assests/Category/Sorting.svg";
 import {
   fetchCategoriesData,
   deleteCategory,
@@ -11,8 +11,7 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import ViewItemsModal from "./ViewItemsModal";
 
-
-import { Link } from 'react-router-dom';
+import { Link } from "react-router-dom";
 
 const CategoryDetail = ({ seVisible }) => {
   const [allcategories, setallcategories] = useState([]);
@@ -45,19 +44,17 @@ const CategoryDetail = ({ seVisible }) => {
     const data = {
       id: id,
     };
-   
 
-    const userConfirmed = window.confirm("Are you sure you want to delete this Category?");
+    const userConfirmed = window.confirm(
+      "Are you sure you want to delete this Category?"
+    );
     if (userConfirmed) {
-
       if (id) {
         dispatch(deleteCategory(data));
       }
     } else {
-
       console.log("Deletion canceled by user");
     }
-
   };
 
   // for  Category Status update
@@ -68,7 +65,6 @@ const CategoryDetail = ({ seVisible }) => {
       status: status,
       merchant_id: "MAL0100CA",
     };
-    
 
     const rep = await dispatch(updateCategoryStatus(data));
     if (rep.payload === "Success") {
@@ -120,116 +116,115 @@ const CategoryDetail = ({ seVisible }) => {
   };
 
   // for viewmodal
-  const handleViewItemsClick = (selectedView) => {
-
-  };
+  const handleViewItemsClick = (selectedView) => {};
 
   return (
     <>
       <div className="box">
-      <div className="q-category-bottom-detail-section">
-        <div className="">
-          <div className="q-category-bottom-header">
-            <span>Category</span>
-            <p onClick={() => seVisible("CategoryAlert")}>
-              Add Category <img src={AddIcon} alt="add-icon" />{" "}
-            </p>
+        <div className="q-category-bottom-detail-section">
+          <div className="">
+            <div className="q-category-bottom-header">
+              <span>Category</span>
+              <p onClick={() => seVisible("CategoryAlert")}>
+                Add Category <img src={AddIcon} alt="add-icon" />{" "}
+              </p>
+            </div>
+            <div className="q-category-bottom-categories-header">
+              <p className="categories-data-sort">Sort</p>
+              <p className="categories-data-title">Title</p>
+              <p className="categories-data-items">Items</p>
+              <p className="categories-enable-disable">Enable/Disable</p>
+            </div>
           </div>
-          <div className="q-category-bottom-categories-header">
-            <p className="categories-sort">Sort</p>
-            <p className="categories-title">Title</p>
-            <p className="categories-items">Items</p>
-            <p className="categories-enable-disable">Enable/Disable</p>
-          </div>
-        </div>
-        <div className="q-category-bottom-categories-listing">
-          {allcategories &&
-            allcategories.length >= 1 &&
-            allcategories.map((category, index) => (
-              <div
-                key={index}
-                className="q-category-bottom-categories-single-category"
-              >
-                <p className="categories-sort">
-                  <img src={SortIcon} alt="add-icon" />
-                </p>
-                <p className="categories-title">{category.title}</p>
-                <p className="categories-items">
-                  <ViewItemsModal
-                    selectedView={category}
-                    onViewClick={handleViewItemsClick}
-                  />
-                </p>
-                <p className="categories-enable-disable">
-                  <div className="category-checkmark-div">
-                    <label className="category-checkmark-label">
-                      Online
-                      <input
-                        type="checkbox"
-                        checked={
-                          category.cat_show_status === "0" ||
-                          category.cat_show_status === "1"
-                            ? true
-                            : false
-                        }
-                        onChange={() =>
-                          handleOnlineChange(
-                            category.id,
+          <div className="q-category-bottom-categories-listing">
+            {allcategories &&
+              allcategories.length >= 1 &&
+              allcategories.map((category, index) => (
+                <div
+                  key={index}
+                  className="q-category-bottom-categories-single-category"
+                >
+                  <p className="categories-data-sort">
+                    <img src={SortIcon} alt="add-icon" />
+                  </p>
+                  <p className="categories-data-title">{category.title}</p>
+                  <p className="categories-data-items">
+                    <ViewItemsModal
+                      selectedView={category}
+                      onViewClick={handleViewItemsClick}
+                    />
+                  </p>
+                  <p className="categories-enable-disable">
+                    <div className="category-checkmark-div">
+                      <label className="category-checkmark-label">
+                        Online
+                        <input
+                          type="checkbox"
+                          checked={
                             category.cat_show_status === "0" ||
-                              category.cat_show_status === "1"
-                              ? "1"
-                              : "0",
-                            category
-                          )
-                        }
-                      />
-                      <span className="category-checkmark"></span>
-                    </label>
-                    <label className="category-checkmark-label">
-                      Register
-                      <input
-                        type="checkbox"
-                        checked={
-                          category.cat_show_status === "0" ||
-                          category.cat_show_status === "2"
-                            ? true
-                            : false
-                        }
-                        onChange={() =>
-                          handleRegisterChange(
-                            category.id,
+                            category.cat_show_status === "1"
+                              ? true
+                              : false
+                          }
+                          onChange={() =>
+                            handleOnlineChange(
+                              category.id,
+                              category.cat_show_status === "0" ||
+                                category.cat_show_status === "1"
+                                ? "1"
+                                : "0",
+                              category
+                            )
+                          }
+                        />
+                        <span className="category-checkmark"></span>
+                      </label>
+                      <label className="category-checkmark-label">
+                        Register
+                        <input
+                          type="checkbox"
+                          checked={
                             category.cat_show_status === "0" ||
-                              category.cat_show_status === "2"
-                              ? "2"
-                              : "0",
-                            category
-                          )
-                        }
-                      />
-                      <span className="category-checkmark"></span>
-                    </label>
-                  </div>
-
-                  <Link to={`/category/edit-category/${category.id}`}>
-                     
+                            category.cat_show_status === "2"
+                              ? true
+                              : false
+                          }
+                          onChange={() =>
+                            handleRegisterChange(
+                              category.id,
+                              category.cat_show_status === "0" ||
+                                category.cat_show_status === "2"
+                                ? "2"
+                                : "0",
+                              category
+                            )
+                          }
+                        />
+                        <span className="category-checkmark"></span>
+                      </label>
+                    </div>
+                  </p>
+                  <div className="q_cat_del_edit_img">
+                    <Link to={`/category/edit-category/${category.id}`}>
                       <img
-                        className='edit_center'
+                        className="edit_center w-8 h-8"
                         selectedCategory={category}
                         src={EditIcon}
                         alt="Edit"
                       />
-                    </Link> 
+                    </Link>
 
-                  <img
-                    src={DeleteIcon}
-                    alt="delete-icon"
-                    onClick={() => handleDeleteCategory(category.id)}
-                  />
-                </p>
-              </div>
-            ))}
+                    <img
+                      className="edit_center w-8 h-8"
+                      src={DeleteIcon}
+                      alt="delete-icon"
+                      onClick={() => handleDeleteCategory(category.id)}
+                    />
+                  </div>
+                </div>
+              ))}
+          </div>
         </div>
-      </div>
       </div>
     </>
   );

@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { editAttribute } from "../../Redux/features/Attributes/attributesSlice";
 import CrossIcon from "../../Assests/Dashboard/cross.svg";
 import { BASE_URL, ADD_ATTRIBUTE } from "../../Constants/Config";
-import editIcon from "../../Assests/Dashboard/edit.svg"
+import EditIcon from "../../Assests/Category/editIcon.svg";
 
 const EditDeliveryAddress = ({attribute , allattributes}) => {
    
@@ -78,7 +78,7 @@ const EditDeliveryAddress = ({attribute , allattributes}) => {
         <>
           <div>
        <Button className="modal-main-button edit-delivery-address-button" onClick={openModal}>
-       {/* <img src={Edit}  alt="edit" /> */}<img src={editIcon} alt="" className="" />
+            {/* <img src={Edit}  alt="edit" /> */}<img src={EditIcon} alt="" className="" />
        </Button>
        {showModal && (
         <div className="q-custom-modal-container" id="addtributes_">

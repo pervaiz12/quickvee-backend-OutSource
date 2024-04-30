@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from "react";
-import DownIcon from "../../src/Assests/Dashboard/Down.svg"
+import React, { useEffect, useState, useRef } from "react";
+
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCategoriesData } from "../Redux/features/Categories/categoriesSlice";
 import { fetchProductsData ,emptyProduct } from "../Redux/features/Product/ProductSlice";
+import UpArrow from "../Assests/Dashboard/Up.svg";
+import DownIcon from "../Assests/Dashboard/Down.svg"
 
 const CategoryListDropDown = ({type, onCategoryChange }) => {
     let listing_type = 0;
@@ -12,6 +14,7 @@ const CategoryListDropDown = ({type, onCategoryChange }) => {
     const [offset, setoffset] = useState(0);
     const [limit, setlimit] = useState(10);
     const AllCategoriesDataState = useSelector((state) => state.categories);
+  const [isTablet, setIsTablet] = useState(false);
     const dispatch = useDispatch();
     useEffect(() => {
         let cat_data = {
@@ -68,25 +71,65 @@ const CategoryListDropDown = ({type, onCategoryChange }) => {
             break;
         }
       };
+  useEffect(() => {
+    const handleResize = () => {
+      setIsTablet(window.innerWidth <= 995);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const dropdownRef = useRef(null);
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setCategoryDropdownVisible(false);
+      }
+
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
+
+  const dropdownContentClass = Object.values(fetchProductsData).length > 2 ? "dropdown-content scrollable" : "dropdown-content";
+  const lengthOfArray = Object.values(fetchProductsData).length;
+  //console.log(lengthOfArray);
 
     return <>
-        <div className="q-order-page-filter">
-            <label className="q-details-page-label" htmlFor="categoryFilter">
+      <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
+            <label htmlFor="categoryFilter">
             Category
             </label>
-            <div className="custom-dropdown">
+        <div className="custom-dropdown input_area" ref={dropdownRef}>
               <div
                 className="custom-dropdown-header"
                 onClick={() => toggleDropdown("category")}
               >
                 <span className="selected-option mt-1">{selectedCategory}</span>
-                <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
+            <img
+              src={categoryDropdownVisible ? UpArrow : DownIcon}
+              alt="Dropdown Icon"
+              className="w-6 h-6"
+            />
               </div>
               {categoryDropdownVisible && (
-                <div className="dropdown-content ">
-                  <div onClick={() => handleOptionClick("all", "category","All")}>All</div>
+            <div className={dropdownContentClass}>
+              <div className={selectedCategory === "All" ? "dropdown-item active" : "dropdown-item"}
+                  onClick={() => handleOptionClick("all", "category","All")}>All</div>
                   { allcategories?.map((category, index) => (
-                  <div  key={index} onClick={() => handleOptionClick(category.id, "category",category.title)}>{category.title}</div>
+                    <div className={selectedCategory === category.title ? "dropdown-item active" : "dropdown-item"}
+                   key={index} onClick={() => handleOptionClick(category.id, "category",category.title)}>{category.title}</div>
                  
                   ))}
                  

@@ -30,6 +30,7 @@ const InstoreTableViewData = (props) => {
     );
   }
 
+  
   useEffect(() => {
     const fetchData = async () => {
       if (props?.selectedDateRange?.start_date)
@@ -67,11 +68,13 @@ const InstoreTableViewData = (props) => {
 
   useEffect(() => {
     const modifiedData = inStoreOrder.map(data => ({
-      "Customer": `${data.name || ""}<br>${data.delivery_phn || ""}`,
-      "Order": `${data.order_id || ""}<br>${data.merchant_time || ""}<br>${data.order_method || ""}`,
-      "Amount": `${data.amt || ""}<br><div className="order_status_details_quivkwee">${data.order_status || ""}</div>`,
-      "Status": `${data.payment_result || ""}`,
-      "View": `<a href="/store-reporting/order-summary/${data.order_id}">View Details</a>`,
+      "Customer": `<span class="text-[#000000] order_method">${data.name || ""}</span><br><span class="text-[#818181]">${data.delivery_phn || ""}</span>`,
+      "Order": `<span class="text-[#000000] order_method">${data.order_id || ""}</span><br><span class="text-[#818181]">${data.merchant_time || ""}</span><br><span class="text-[#818181]">${data.order_method || ""}</span>`,
+      "Amount": `${data.amt || ""}<br><span class="text-[#1EC26B]">${capitalizeFirstLetter(data.order_status || "")}</span>`,
+    
+
+      // "Status": `<span class="text-[#000000]">${data.order_status || ""}</span>`,
+      "View": `<a href="/store-reporting/order-summary/${data.order_id}" class="view_details_order">View Details</a>`,
     }));
 
     const table = $('#InstoreTable').DataTable({
@@ -80,7 +83,7 @@ const InstoreTableViewData = (props) => {
         { title: "Customer", data: "Customer", orderable: false },
         { title: "Order", data: "Order", orderable: false },
         { title: "Amount", data: "Amount", orderable: false },
-        { title: "Status", data: "Status", orderable: false },
+        // { title: "Status", data: "Status", orderable: false },
         { title: " ", data:"View", orderable: false },
       ],
       destroy: true,
@@ -108,6 +111,9 @@ const InstoreTableViewData = (props) => {
 
   // for table End
 
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
   return (
     <>
       <div className="q-attributes-bottom-detail-section">

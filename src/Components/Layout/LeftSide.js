@@ -59,6 +59,7 @@ import ReorderInventoryMain from "../Reporting/ReorderInventory/ReorderInventory
 import EditVendors from "../Vendors/EditVendors";
 import SingleVendorsDetail from "../Vendors/SingleVendorsDetail";
 import AddProducts from "../Products/AddProducts"
+import MainLoayalty from "../LoyaltyProgram/MainLoayalty";
 //  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
 // import MainEmployee from "../Reporting/EmployeeWorkingHours/MainEmployee";
 // import MainInvDuplicates from '../InventoryDuplicates/MainInvDuplicates';
@@ -66,7 +67,7 @@ import AddProducts from "../Products/AddProducts"
 const LeftSide = ({ visible }) => {
 
   useEffect(() => {
-    console.log("hello")
+    // console.log("hello")
     return () => {
 
     }
@@ -128,6 +129,7 @@ const LeftSide = ({ visible }) => {
           {visible === "vendors-list" && <VendorListMain />}
           {visible === "edit-vendor" && <EditVendors />}
           {visible === "vendor-details" && <SingleVendorsDetail />}
+          {visible === "loyalty-program" && <MainLoayalty />}
 
 
 

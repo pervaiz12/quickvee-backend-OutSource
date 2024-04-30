@@ -40,8 +40,7 @@ const PurchaseTable = ({ seVisible, searchId }) => {
 
   return (
     <>
-    <div className="box">
-      <div className="q-category-bottom-detail-section">
+      <div className="box_shadow_div">
         <div className="q-category-bottom-header-sticky">
           <div className="q-category-bottom-header">
             <span>Purchase Order</span>
@@ -50,16 +49,16 @@ const PurchaseTable = ({ seVisible, searchId }) => {
             </p>
           </div>
           <div className="q-category-bottom-categories-header">
-            <p className="categories-sort">Order#</p>
-            <p className="categories-sort">Status</p>
-            <p className="categories-sort">Received</p>
+            <p className="purchase-data-sort ">Order#</p>
+            <p className="purchase-data-sort " >Status</p>
+            <p className="purchase-data-sort ">Received</p>
 
-            <p className="categories-sort">Total Qty</p>
-            <p className="categories-title">Vender Name</p>
-            <p className="categories-items">Total Cost</p>
-            <p className="categories-items">Due</p>
-            <p className="categories-items">Last Update</p>
-            <p className="categories-items">Received At</p>
+            <p className="purchase-data-sort ">Total Qty</p>
+            <p className="purchase-data-title">Vender Name</p>
+            <p className="purchase-data-items">Total Cost</p>
+            <p className="purchase-data-items">Due</p>
+            <p className="purchase-data-items">Last Update</p>
+            <p className="purchase-data-items">Received At</p>
           </div>
         </div>
 
@@ -67,52 +66,52 @@ const PurchaseTable = ({ seVisible, searchId }) => {
           filteredPurchase.length >= 1 &&
           filteredPurchase.map((purchaseData, index) => (
             <div
-              className="q-category-bottom-categories-listing"
+             className={` q-category-bottom-categories-listing purchase-item ${index % 2 === 0 ? 'even' : 'odd'}`}
               key={purchaseData.order}
             >
               <div className="q-category-bottom-categories-single-category">
-                <p className="categories-sort sm:text-xs lg:text-[16px]">
+                <p className="purchase-data-sort purchaseData">
                   <Link to=""> {purchaseData.po_number}</Link>
                 </p>
                 {purchaseData.is_void === "1" ? (
-                  <p className="categories-sort text-[#F90A0A]">Void</p>
+                  <p className="purchase-data-sort  text-[#F90A0A]">Void</p>
                 ) : purchaseData.is_draft === "1" ? (
-                  <p className="categories-sort text-[#646464]">Draft</p>
+                    <p className="purchase-data-sort  text-[#646464]">Draft</p>
                 ) : purchaseData.received_status === "0" ? (
-                  <p className="categories-sort text-[#0A64F9]">Active</p>
+                      <p className="purchase-data-sort  text-[#0A64F9]">Active</p>
                 ) : purchaseData.received_status === "1" ? (
-                  <p className="categories-sort text-[#FF8800]">Partial</p>
+                        <p className="purchase-data-sort  text-[#FF8800]">Partial</p>
                 ) : purchaseData.received_status === "2" ? (
-                  <p className="categories-sort text-[#17B11D]">Received</p>
+                          <p className="purchase-data-sort  text-[#17B11D]">Received</p>
                 ) : (
-                  <p className="categories-sort text-[#0A64F9]">Active</p>
+                            <p className="purchase-data-sort   text-[#0A64F9]">Active</p>
                 )}
 
                 {purchaseData.is_void === "1" ? (
-                  <p className="categories-sort "></p>
+                  <p className="purchase-data-sort "></p>
                 ) : purchaseData.is_draft === "1" ? (
-                  <p className="categories-sort "></p>
+                  <p className="purchase-data-sort "></p>
                 ) : purchaseData.received_status === "0" ? (
-                  <p className="categories-sort ">
+                  <p className="purchase-data-sort ">
                     <img src={ActiveIcon} alt="Active" />
                   </p>
                 ) : purchaseData.received_status === "1" ? (
-                  <p className="categories-sort ">
+                  <p className="purchase-data-sort ">
                     <img src={VoicIcon} alt="Partial" />
                   </p>
                 ) : purchaseData.received_status === "2" ? (
-                  <p className="categories-sort ">
+                  <p className="purchase-data-sort ">
                     <img src={ResciveIcon} alt="ResciveIcon" />
                   </p>
                 ) : (
-                  <p className="categories-sort ">
+                  <p className="purchase-data-sort ">
                     <img src={ActiveIcon} alt="ActiveIcon" />
                   </p>
                 )}
 
-                <p className="categories-sort">{purchaseData.total_qty}</p>
-                <p className="categories-title ">{purchaseData.vendor_name}</p>
-                <p className="categories-title">
+                <p className="purchase-data-sort purchaseData">{purchaseData.total_qty}</p>
+                <p className="purchase-data-title  purchaseData">{purchaseData.vendor_name}</p>
+                <p className="purchase-data-title purchaseData ">
                   {purchaseData.total_cost !== null
                     ? `$${Number(purchaseData.total_cost).toLocaleString(
                         "en-US",
@@ -124,7 +123,7 @@ const PurchaseTable = ({ seVisible, searchId }) => {
                     : "$0.00"}
                 </p>
 
-                <p className="categories-title">
+                <p className="purchase-data-title purchaseData">
                   {purchaseData.stock_date === "0000-00-00"
                     ? "-"
                     : new Date(purchaseData.stock_date).toLocaleDateString(
@@ -132,7 +131,7 @@ const PurchaseTable = ({ seVisible, searchId }) => {
                       )}{" "}
                 </p>
 
-                <p className="categories-title">
+                <p className="purchase-data-title purchaseData">
                   {purchaseData.updated_at === "0000-00-00 00:00:00"
                     ? new Date(purchaseData.created_at).toLocaleDateString(
                         "en-US"
@@ -142,7 +141,7 @@ const PurchaseTable = ({ seVisible, searchId }) => {
                       )}
                 </p>
 
-                <p className="categories-title">
+                <p className="purchase-data-title purchaseData">
                   {purchaseData.received_status === "2"
                     ? purchaseData.received_at !== "0000-00-00 00:00:00"
                       ? new Date(purchaseData.received_at).toLocaleDateString(
@@ -154,7 +153,6 @@ const PurchaseTable = ({ seVisible, searchId }) => {
               </div>
             </div>
           ))}
-      </div>
       </div>
     </>
   );

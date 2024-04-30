@@ -11,6 +11,9 @@ import { useSelector, useDispatch } from "react-redux";
 // import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import axios from "axios";
 import { BASE_URL, CLOSE_ORDER_COLLECT_CASH } from "../../../Constants/Config";
+import DownIcon from "../../../Assests/Dashboard/Down.svg";
+
+import UpArrow from "../../../Assests/Dashboard/Up.svg";
 
 import $ from "jquery";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
@@ -150,6 +153,9 @@ const OnlineTableViewData = (props) => {
   };
 
   $.DataTable = require("datatables.net");
+  function capitalizeFirstLetter(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
 
   useEffect(() => {
     const modifiedData = Object.entries(allOnlineStoreOrder).map(
@@ -204,7 +210,7 @@ const OnlineTableViewData = (props) => {
             cancelOption = `<option value="5">Cancel</option>`;
           }
           if (data.order_method == "pickup") {
-            PayStatus = `<select class="custom-selecttable" data-order-id="${data.order_id}">
+            PayStatus = `<select class="custom-selecttable w-52" data-order-id="${data.order_id}">
               <option value="1">Accepted</option>
               <option value="2">Packing</option>
               <option value="3">Ready</option>
@@ -212,7 +218,7 @@ const OnlineTableViewData = (props) => {
               ${cancelOption}
             </select>`;
           } else {
-            PayStatus = `<select class="custom-selecttable" data-order-id="${data.order_id}">
+            PayStatus = `<select class="custom-selecttable w-52" data-order-id="${data.order_id}">
               <option value="1">Accepted</option>
               <option value="2">Packing</option>
               <option value="6">Ready</option>
@@ -224,14 +230,24 @@ const OnlineTableViewData = (props) => {
         }
 
         return {
-          Customer: `${data.name || ""}<br>${data.delivery_phn || ""}`,
-          Order: `${data.order_id || ""}<br>${data.merchant_time || ""}<br>${
+          Customer: `<span class="text-[#000000] order_method">${
+            data.name || ""
+          }</span><br>${data.delivery_phn || ""}`,
+          Order: `<span class="text-[#000000] order_method">${
+            data.order_id || ""
+          }</span><br><span class="text-[#818181]">${
+            data.merchant_time || ""
+          }</span><br><span class="text-[#818181] order_method">${
             data.order_method || ""
-          }`,
-          Amount: `${"$" + data.amt || ""}<br>${data.order_status || ""}`,
-          Status: status,
+          }</span>`,
+          Amount: `${
+            "$" + data.amt || ""
+          }<br><span class="text-[#1EC26B]">${capitalizeFirstLetter(
+            data.order_status || ""
+          )}</span>`,
+          // Status: status,
           OrderStatus: PayStatus,
-          View: `<ahref="/store-reporting/order-summary/${data.order_id}">View Details</ahref=>`,
+          View: `<ahref="/store-reporting/order-summary/${data.order_id}" class="view_details_order">View Details</ahref=>`,
         };
       }
     );
@@ -242,7 +258,7 @@ const OnlineTableViewData = (props) => {
         { title: "Customer", data: "Customer", orderable: false },
         { title: "Order", data: "Order", orderable: false },
         { title: "Amount", data: "Amount", orderable: false },
-        { title: "Status", data: "Status", orderable: false },
+        // { title: "Status", data: "Status", orderable: false },
         { title: "Order Status", data: "OrderStatus", orderable: false },
         { title: " ", data: "View", orderable: false },
       ],

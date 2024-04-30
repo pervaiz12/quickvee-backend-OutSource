@@ -17,7 +17,7 @@ const IndexAllUsers = ({visible}) => {
         <AllUserMenu isMenuOpen={isMenuOpen}  />
         <div
           className="main-content"
-          style={{ paddingLeft: isMenuOpen ? "16rem" : "6rem" }}
+          style={{ paddingLeft: isMenuOpen ? "16rem" : "6rem"}}
         >
        
           <Outlet />

@@ -106,6 +106,7 @@ const EditCoupon = () => {
     fetchDataAndUpdateState();
   }, [params.couponsCode]);
 
+  
   const [inputValue, setInputValue] = useState("");
   const [isUnique, setIsUnique] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
@@ -551,22 +552,20 @@ const EditCoupon = () => {
                             <Grid container>
                               <Grid item xs={6}>
                                 <div
-                                  className={`cursor-pointer amt_btn text-center   ${
-                                    activeTab === "amount"
+                                  className={`cursor-pointer amt_btn text-center   ${activeTab === "amount"
                                       ? "bg-[#0A64F9] text-white radius-4"
                                       : ""
-                                  }`}
+                                    }`}
                                 >
                                   Amount ($)
                                 </div>
                               </Grid>
                               <Grid item xs={6}>
                                 <div
-                                  className={`cursor-pointer amt_btn text-center  ${
-                                    activeTab === "percentage"
+                                  className={`cursor-pointer amt_btn text-center  ${activeTab === "percentage"
                                       ? "bg-[#0A64F9] text-white radius-4"
                                       : ""
-                                  }`}
+                                    }`}
                                 >
                                   Percentage (%)
                                 </div>
@@ -785,7 +784,7 @@ const EditCoupon = () => {
                       max={999}
                       value={
                         coupon.count_limit === null ||
-                        coupon.count_limit === "0"
+                          coupon.count_limit === "0"
                           ? 1
                           : Math.min(coupon.count_limit, 999)
                       }

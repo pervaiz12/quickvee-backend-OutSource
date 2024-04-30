@@ -303,10 +303,10 @@ font-weight: 400;}
 
 
   .q_receipt_page_main .checkmark_section:after {
-    top: 3px;
-    left: 4px;
-    width: 13PX;
-    height: 13PX;
+       top: 3px;
+    left: 2.5px;
+    width: 14PX;
+    height: 14PX;
     border: 1px solid #0A64F9;
     border-radius: 50%;
     background: #0A64F9;

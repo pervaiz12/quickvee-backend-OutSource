@@ -12,13 +12,13 @@ const InventoryData = () => {
   const label = { inputProps: { "aria-label": "Switch demo" } };
 
   const [isSwitchEnabledCost, setIsSwitchCost] = useState(false);
-  //=============================================
+
   const [isSwitchEnabled, setIsSwitchEnabled] = useState(false);
   const [isCheckBirthday, setCheckBirthday] = useState(false);
   const [isExpiration, setExpiration] = useState(false);
   const [checkedBirthDayChecked, setirthDayChecked] = useState(false);
   const [ExpirationIdChecked, setExpirationIdChecked] = useState(false);
-  // =========================================================
+ 
   const [isUpdateItem, setUpdateItemVendor] = useState(false);
   // Require Description for Instant POs
   const [isInstantPos, setInstantPos] = useState(false);

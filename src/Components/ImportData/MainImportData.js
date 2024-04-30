@@ -5,10 +5,10 @@ import Csvimport from './Csvimport'
 const MainImportData = () => {
   return (
    <>
-   <div className='q-category-main-page'>
+      <div className='q-order-main-page'>
    <ImportData />
    </div>
-   <div className='q-category-main-page'>
+      <div className='q-order-main-page'>
    <Csvimport />
    </div>
 

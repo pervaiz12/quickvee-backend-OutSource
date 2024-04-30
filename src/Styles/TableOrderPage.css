@@ -230,7 +230,7 @@
 
 .q-attributes-bottom-attriButes-single-attributes {
     display: flex;
-    padding: 20px;
+    /* padding: 20px; */
     border-bottom: 1px solid #E8E8E8;
     /* cursor: all-scroll; */
     user-select: none;
@@ -470,6 +470,7 @@ appearance:none;
       margin-right: 2rem;
     }
   }
+
   
   /* Styles for the label */
   .q-order-page-label {
