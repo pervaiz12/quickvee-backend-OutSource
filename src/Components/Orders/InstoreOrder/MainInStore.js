@@ -63,7 +63,7 @@ const MainInStore = () => {
                 onClick={() => handleTabClick("offline")}
                 className={`${
                   activeTab === "offline"
-                    ? "bg-[#EBF2FF] text-[#0A64F9] font-bold"
+                    ? "bg-[#EBF2FF] text-[#0A64F9] "
                     : "bg-white text-[#6A6A6A]"
                 } px-12 py-2 rounded  lg:text-[20px] md:text-[14px] sm:text-[12px] focus:outline-none`}
               >
@@ -73,7 +73,7 @@ const MainInStore = () => {
                 onClick={() => handleTabClick("online")}
                 className={`${
                   activeTab === "online"
-                    ? "bg-[#EBF2FF] text-[#0A64F9] font-bold"
+                    ? "bg-[#EBF2FF] text-[#0A64F9] "
                     : "bg-white text-[#6A6A6A]"
                 } px-12 py-2 rounded focus:outline-none lg:text-[20px] md:text-[14px] sm:text-[12px]`}
               >

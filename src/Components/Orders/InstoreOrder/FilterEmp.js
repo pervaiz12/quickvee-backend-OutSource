@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 // import { AiOutlineSearch } from 'react-icons/ai';
 import DownIcon from '../../../Assests/Dashboard/Down.svg';
 import SearchIcon from "../../../Assests/Filter/Search.svg"
+import UpArrow from "../../../Assests/Dashboard/Up.svg"
 import { BASE_URL, EMPLOYEE_LIST } from "../../../Constants/Config";
 import axios from "axios";
 
@@ -176,7 +177,11 @@ const FilterEmp = ({onFilterEmpDataChange}) => {
                 onClick={() => toggleDropdown("employee")}
               >
                 <span className="selected-option mt-1">{selectedEmployee}</span>
-                <img src={DownIcon} alt="Down Icon" className="w-6 h-6" />
+                <img
+                  src={transactionDropdownVisible ? UpArrow : DownIcon}
+                  alt="Dropdown Icon"
+                  className="w-8 h-8"
+                />
               </div>
               {employeeDropdownVisible && (
                 <div className="dropdown-content">

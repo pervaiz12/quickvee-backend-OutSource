@@ -15,10 +15,7 @@ const ProductTable = ({ selectedListingType, selectedListingTypeValue, productsL
   const ProductsListDataState = useSelector((state) => state.productsListData);
   const { hasMore, offset, limit } = useSelector((state) => state.productsListData);
 
-  // useEffect(()=> {
-  //   console.log(categoryId+'asdasd')
-  //   console.log('product tables');
-  // });
+
   useEffect(() => {
     if (
       !ProductsListDataState.loading &&
@@ -110,11 +107,9 @@ const ProductTable = ({ selectedListingType, selectedListingTypeValue, productsL
     };
     if (data1) {
       dispatch(fetchProductsData(data1));
-      // console.log(productsList);
+     
     }
-    // setTimeout(() => {
-    //   setproductsList(productsList.concat(ProductsListDataState.productsData));
-    // }, 150);
+  
     setTimeout(() => {
       setItems(items.concat(Array.from({ length: 15 })));
     }, 150);
@@ -131,9 +126,9 @@ const ProductTable = ({ selectedListingType, selectedListingTypeValue, productsL
           <div className="q-category-bottom-header">
             <span>Products</span>
             <p className="">
-              <Link to="/product-edit">
+              
                 Add New Product
-              </Link>
+             
               <Link to="/product-add">
                 <img src={AddIcon} alt="add-icon" />
               </Link>
@@ -171,66 +166,10 @@ const ProductTable = ({ selectedListingType, selectedListingTypeValue, productsL
                     productsList?.length >= 1 &&
                     productsList.map((product, index) => (
 
-                      // add function in below object 
+                     
                       <ProductRow key={index} {...{ Avail_Online, index, product, checkStatus, handleError }} />
 
-                      // <div key={index} className="q-attributes-bottom-attriButes-single-attributes">
-                      //   <p className="categories-sort"><img src={SortIcon} alt="" className="" /></p>
-                      //   <p className="categories-title">{product.title}</p>
-                      //   <p className="categories-sort"></p>
-                      //   <p className="categories-title">{product.category_name}</p>
-                      //   <p className="categories-sort"></p>
-
-                      //   <div className="categories-title">
-                      //   <div className="flex flex-wrap gap-3 ">
-                      //     <label className="q_resigter_setting_section" style={{color:"#000",fontSize:"18px"}}>Delivery
-                      //       <input type="checkbox"  
-                      //               id={"delivery_check"+product.id}
-                      //               name="delivery_check"
-                      //               checked= {(product.show_type == 0 || product.show_type == 2) ? true : false}
-                      //               value="2"
-                      //               onChange={(event) => {Avail_Online(event);}} 
-                      //       />
-                      //       <span className="checkmark"></span></label>
-                      //     <label className="q_resigter_setting_section" style={{color:"#000",fontSize:"18px"}}>Pickup
-                      //       <input type="checkbox"
-                      //             id={"pickup_check"+product.id}
-                      //             name="pickup_check"
-                      //             checked= {(product.show_type == 0 || product.show_type == 1) ? true : false}
-                      //             value="1"
-                      //             onChange={(event) => {Avail_Online(event);}} 
-                      //       />
-                      //       <span className="checkmark"></span></label>
-                      //   </div>
-                      //   </div>
-                      //   <p className="categories-sort"></p>
-                      //   <p className="categories-title">{checkStatus(product.show_status)}    </p>
-                      //   <p className="categories-sort"></p>
-                      //   <div className="categories-items" style={{width:"50%"}}>
-
-
-                      //   <div className="flex items-center space-x-2 text-base">
-
-                      //   </div>
-                      //   <div className="mt-3 flex -space-x-2 overflow-hidden">
-                      //     { 
-                      //     product?.media?.split(",").slice(0, 4).map((item, index) => (
-
-                      //         <img key={index} className="inline-block h-12 w-12 rounded-full ring-2 ring-white" src={BASE_URL+"upload/products/MAL0100CA/"+item} onError={handleError}  alt=""/>
-                      //       ))}
-                      //   </div>
-                      //   {( product?.media?.split(",").length>4) ? (
-                      //       <div className="mt-3 text-sm font-medium">
-                      //         <a href="#" className="text-blue-500">+ {product.media.split(",").length - 4 } others</a>
-                      //       </div>
-                      //     ): ''
-                      //   }
-
-
-
-                      //   </div>
-                      //   <p className=""><img src={DeleteIcon} alt=" " className="w-16 h-16" /></p>
-                      // </div>
+                     
                     )
                     )}
                 </InfiniteScroll>
