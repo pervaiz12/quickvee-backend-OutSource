@@ -24,6 +24,7 @@ const VariantAttributes = ({
     const deleteSelected = varientLength?.filter((item) => {
       return item?.id !== id;
     });
+
     handleSetVarientLength(deleteSelected);
   };
 

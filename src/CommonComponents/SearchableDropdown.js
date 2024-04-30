@@ -102,24 +102,25 @@ const SearchableDropdown = ({
               ? changeFilterableList()?.map((opt) => {
                   if (typeof opt === "string") {
                     return <p>{opt}</p>;
+                  } else if (opt?.id) {
+                    return (
+                      <span
+                        className={
+                          selectedOption.includes(opt)
+                            ? "item active-item"
+                            : "item"
+                        }
+                        key={opt?.id}
+                        onClick={() =>
+                          selectedOption?.includes(opt)
+                            ? handleDeleteSelectedOption(opt?.id, keyName)
+                            : handleSelectProductOptions(opt, keyName)
+                        }
+                      >
+                        {opt?.title}
+                      </span>
+                    );
                   }
-                  return (
-                    <span
-                      className={
-                        selectedOption.includes(opt)
-                          ? "item active-item"
-                          : "item"
-                      }
-                      key={opt?.id}
-                      onClick={() =>
-                        selectedOption?.includes(opt)
-                          ? handleDeleteSelectedOption(opt?.id, keyName)
-                          : handleSelectProductOptions(opt, keyName)
-                      }
-                    >
-                      {opt?.title}
-                    </span>
-                  );
                 })
               : ""}
           </div>

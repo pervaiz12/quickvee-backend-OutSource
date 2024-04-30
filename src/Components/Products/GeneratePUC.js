@@ -162,6 +162,22 @@ const GeneratePUC = ({
                         class="q_resigter_setting_section"
                         style={{ color: "#000", fontSize: "18px" }}
                       >
+                        Food Stampable
+                        <input
+                          type="checkbox"
+                          name="isFoodStamble"
+                          value={formValue?.[index]?.["isFoodStamble"]}
+                          onChange={(e) => handleOnChange(e, index)}
+                          checked={
+                            formValue?.[index]?.["isFoodStamble"] ? true : false
+                          }
+                        />
+                        <span class="checkmark"></span>
+                      </label>
+                      {/* <label
+                        class="q_resigter_setting_section"
+                        style={{ color: "#000", fontSize: "18px" }}
+                      >
                         Create this item for all linked locations
                         <input
                           type="checkbox"
@@ -177,7 +193,7 @@ const GeneratePUC = ({
                           }
                         />
                         <span class="checkmark"></span>
-                      </label>
+                      </label> */}
                     </div>
                   </div>
                 );
@@ -271,6 +287,20 @@ const GeneratePUC = ({
                   class="q_resigter_setting_section"
                   style={{ color: "#000", fontSize: "18px" }}
                 >
+                  Food Stampable
+                  <input
+                    type="checkbox"
+                    name="isFoodStamble"
+                    value={formValue?.[0]?.["isFoodStamble"]}
+                    onChange={(e) => handleOnChange(e, 0)}
+                    checked={formValue?.[0]?.["isFoodStamble"] ? true : false}
+                  />
+                  <span class="checkmark"></span>
+                </label>
+                {/* <label
+                  class="q_resigter_setting_section"
+                  style={{ color: "#000", fontSize: "18px" }}
+                >
                   Create this item for all linked locations
                   <input
                     type="checkbox"
@@ -284,7 +314,7 @@ const GeneratePUC = ({
                     }
                   />
                   <span class="checkmark"></span>
-                </label>
+                </label> */}
               </div>
             </div>
           ) : (

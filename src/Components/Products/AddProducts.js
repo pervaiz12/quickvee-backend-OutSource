@@ -16,6 +16,7 @@ import {
 import SearchableDropdown from "../../CommonComponents/SearchableDropdown";
 import "../../Styles/ProductPage.css";
 import CloseIcon from "../../Assests/Dashboard/cross.svg";
+import { event } from "jquery";
 
 const AddProducts = () => {
   const fileUploadRef = useRef();
@@ -29,7 +30,7 @@ const AddProducts = () => {
     taxes: [],
     relatedProduct: [],
     frequentlyBought: [],
-    image: [],
+    files: [],
   });
   const [costPer, setCostPer] = useState(null);
   // const [varientTitle, setVarientTitle] = useState([]);
@@ -38,6 +39,8 @@ const AddProducts = () => {
   const [varientLength, setVarientLength] = useState([
     { id: 1, varientName: "", varientAttributeList: [] },
   ]);
+
+  const [uploadImage, setUploadImage] = useState([]);
 
   const [varientError, setVarientError] = useState({
     error: "",
@@ -127,17 +130,14 @@ const AddProducts = () => {
     }));
   };
 
-  console.log(varientLength, formValue);
-
   const handleSetVarientLength = (updatedVarient) => {
-    console.log("updatedVarient==>", updatedVarient);
     setVarientLength(updatedVarient);
   };
   const addMoreVarientItems = () => {
     const checkEmpty = varientLength?.map((item, i) => {
       if (!item?.varientAttributeList?.length || !item?.varientName) {
         setVarientError({
-          error: "Please enter the both option values.",
+          error: "Please enter the option values.",
           errorIndex: i,
         });
         return false;
@@ -167,12 +167,12 @@ const AddProducts = () => {
   };
 
   const handleDeleteSelectedImage = (imageToDelete) => {
-    const deleteImage = productInfo?.image?.filter((img) => {
+    const deleteImage = productInfo?.files?.filter((img) => {
       return img?.file?.name !== imageToDelete?.file?.name;
     });
     setProductInfo((prev) => ({
       ...prev,
-      ["image"]: deleteImage,
+      ["files"]: deleteImage,
     }));
   };
   const nameArray = ["costPerItem", "upcCode", "customCode"];
@@ -206,8 +206,8 @@ const AddProducts = () => {
           reader.onloadend = () => {
             setProductInfo((prevValue) => ({
               ...prevValue,
-              ["image"]: [
-                ...prevValue["image"],
+              ["files"]: [
+                ...prevValue["files"],
                 { file: img, base64: reader.result },
               ],
             }));
@@ -268,6 +268,7 @@ const AddProducts = () => {
   };
 
   const handleImageChange = (e) => {
+    setUploadImage(e.target.files);
     let files = [];
     files = [...e?.target?.files];
     if (files?.length) {
@@ -278,8 +279,8 @@ const AddProducts = () => {
           reader.onloadend = () => {
             setProductInfo((prevValue) => ({
               ...prevValue,
-              ["image"]: [
-                ...prevValue["image"],
+              ["files"]: [
+                ...prevValue["files"],
                 { file: img, base64: reader.result },
               ],
             }));
@@ -583,27 +584,33 @@ const AddProducts = () => {
   useEffect(() => {
     if (varientLength?.length > 0 && isMultipleVarient) {
       handleVarientTitleBasedItemList();
-      setFormValue(
-        varientTitle?.length
-          ? [...new Set(varientTitle)]?.map((_) => ({
-              costPerItem: "",
-              compareAtPrice: "",
-              price: "",
-              margin: "",
-              Profit: "",
-              qty: "",
-              upcCode: "",
-              customCode: "",
-              reorderQty: "",
-              reorderLevel: "",
-              trackQuantity: true,
-              sellOutOfStock: true,
-              checkId: false,
-              disable: false,
-              itemForAllLinkedLocation: false,
-            }))
-          : []
-      );
+
+      console.log(varientLength?.length);
+      /// when adding new varient in in form keep previous fill form data in fields and add new
+      setFormValue((prevFormValue) => {
+        const newFormValue = [...new Set(varientTitle)].map((_, index) => {
+          const previousData = prevFormValue[index] || {};
+          return {
+            costPerItem: previousData.costPerItem || "",
+            compareAtPrice: previousData.compareAtPrice || "",
+            price: previousData.price || "",
+            margin: previousData.margin || "",
+            Profit: previousData.Profit || "",
+            qty: previousData.qty || "",
+            upcCode: previousData.upcCode || "",
+            customCode: previousData.customCode || "",
+            reorderQty: previousData.reorderQty || "",
+            reorderLevel: previousData.reorderLevel || "",
+            trackQuantity: previousData.trackQuantity || true,
+            sellOutOfStock: previousData.sellOutOfStock || true,
+            checkId: previousData.checkId || false,
+            disable: previousData.disable || false,
+            itemForAllLinkedLocation:
+              previousData.itemForAllLinkedLocation || false,
+          };
+        });
+        return newFormValue;
+      });
     } else if (!isMultipleVarient) {
       setFormValue([
         {
@@ -621,6 +628,7 @@ const AddProducts = () => {
           sellOutOfStock: true,
           checkId: false,
           disable: false,
+          isFoodStamble: false,
           itemForAllLinkedLocation: false,
         },
       ]);
@@ -649,56 +657,134 @@ const AddProducts = () => {
 
   const handleSubmitForm = () => {
     const data = {
+      /// single varient payload
       merchant_id: "MAL0100CA",
       title: productInfo?.title,
       description: productInfo?.description,
-      price: "",
-      compare_price: "",
-      costperItem: "",
-      margin: "",
-      profit: "",
-      ischargeTax: "",
+      price: !isMultipleVarient ? formValue[0]?.price : "",
+      compare_price: !isMultipleVarient ? formValue[0]?.compareAtPrice : "",
+      costperItem: !isMultipleVarient ? formValue[0]?.costPerItem : "",
+      margin: !isMultipleVarient ? formValue[0]?.margin : "",
+      profit: !isMultipleVarient ? formValue[0]?.Profit : "",
+      ischargeTax: 0,
       //sku:
       //barcode:
-      trackqnty: "",
-      isstockcontinue: "",
-      quantity: "",
+      trackqnty: !isMultipleVarient ? +formValue[0]?.trackQuantity : "",
+      isstockcontinue: !isMultipleVarient ? +formValue[0]?.sellOutOfStock : "",
+      disable: !isMultipleVarient ? +formValue[0]?.disable : "",
+      is_tobacco: !isMultipleVarient ? +formValue[0]?.checkId : "",
+      food_stampable: !isMultipleVarient ? +formValue[0]?.isFoodStamble : "",
+      quantity: !isMultipleVarient ? formValue[0]?.qty : "",
+      reorder_level: !isMultipleVarient ? formValue[0]?.reorderLevel : "",
+      upc: !isMultipleVarient ? formValue[0]?.upcCode : "",
+      custom_code: !isMultipleVarient ? formValue[0]?.customCode : "",
+      reorder_qty: !isMultipleVarient ? formValue[0]?.reorderQty : "",
+      // reorder_cost: !isMultipleVarient ? formValue[0]?.reorderQty : "",
       //ispysical_product:
       //country_region:
-      collection: 5377,
+      collection: productInfo?.category?.map((item) => item?.id).toString(),
+      other_taxes: productInfo?.taxes?.map((item) => item?.id).toString(),
+      featured_product: productInfo?.relatedProduct
+        ?.map((item) => item?.id)
+        .toString(),
+      bought_product: productInfo?.frequentlyBought
+        ?.map((item) => item?.id)
+        .toString(),
+      files: productInfo?.files?.map((file) => file[0]),
+      // files: productInfo?.files?.map((file) => file?.base64),
       //HS_code:
-      isvarient: 1,
+      isvarient: +isMultipleVarient,
+
+      /// multiple varient payload start from here...
       //featured_product:1,2
       //multiplefiles[]:product2.png
       //img_color_lbl:
       //created_on:
       //productid:111
-      optionarray: "size",
-      optionarray1: "material",
-      optionvalue: "small,large",
-      optionvalue1: "glass,wood",
-      varvarient: "small/glass",
-      varprice: [34, 45],
-      varquantity: [30, 20, 30, 40],
-      varsku: "redsku,bluesku,sku3,sku4",
+      optionarray: isMultipleVarient
+        ? varientLength[0]?.varientName?.value
+        : "",
+      optionarray1: isMultipleVarient
+        ? varientLength[1]?.varientName?.value
+        : "",
+      optionvalue: isMultipleVarient
+        ? varientLength[0]?.varientAttributeList
+            ?.map((item) => item)
+            ?.map((i) => i?.value)
+            ?.toString()
+        : "",
+      optionvalue1: isMultipleVarient
+        ? varientLength[1]?.varientAttributeList
+            ?.map((item) => item)
+            ?.map((i) => i?.value)
+            ?.toString()
+        : "",
+      varvarient: isMultipleVarient
+        ? varientTitle.filter(Boolean)?.toString()
+        : "",
+      varprice: isMultipleVarient
+        ? formValue?.map((i) => i?.price).join(",")
+        : "",
+      varquantity: isMultipleVarient
+        ? formValue?.map((i) => i?.qty).join(",")
+        : "",
+      // varsku: formValue?.map((i) => i),
       //varbarcode[]:123321,5456464
       //optionarray2:Material
       //optionvalue2:glass
       //upc:abcupc
-      varupc: "qqup1,qqup2,upc3,upc4",
-      varcustomcode: "c1,c2,c3,c4",
-      varcostperitem: [20, 30, 20, 20],
-      vartrackqnty: [1, 1, 1, 0],
-      varcontinue_selling: [1, 1, 1, 1],
-      varcheckid: [1, 1, 1, 1],
-      vardisable: [0, 0, 0, 1],
-      varmargin: [10, 10, 10, 10],
-      varprofit: [20, 20, 20, 20],
-      varreorder_qty: [2, 2, 4, 4],
-      reorder_level: [4, 4, 5, 5],
-      reorder_cost: [10, 10, 10, 10],
+      varupc: isMultipleVarient
+        ? formValue?.map((i) => (!!i?.upcCode ? i?.upcCode : "")).join(",")
+        : "",
+      varcustomcode: isMultipleVarient
+        ? formValue
+            ?.map((i) => (!!i?.customCode ? i?.customCode : ""))
+            .join(",")
+        : "",
+      varcostperitem: isMultipleVarient
+        ? formValue
+            ?.map((i) => (!!i?.costPerItem ? i?.costPerItem : ""))
+            .join(",")
+        : "",
+      vartrackqnty: isMultipleVarient
+        ? formValue?.map((i) => +i?.trackQuantity)?.toString()
+        : "",
+      varcontinue_selling: isMultipleVarient
+        ? formValue?.map((i) => +i?.sellOutOfStock)?.toString()
+        : "",
+      varcheckid: isMultipleVarient
+        ? formValue?.map((i) => +i?.checkId)?.toString()
+        : "",
+      vardisable: isMultipleVarient
+        ? formValue?.map((i) => +i?.disable)?.toString()
+        : "",
+      varfood_stampable: isMultipleVarient
+        ? formValue?.map((i) => +i?.isFoodStamble)?.toString()
+        : "",
+      varmargin: isMultipleVarient
+        ? formValue?.map((i) => i?.margin).join(",")
+        : "",
+      varprofit: isMultipleVarient
+        ? formValue?.map((i) => i?.Profit).join(",")
+        : "",
+      varreorder_qty: isMultipleVarient
+        ? formValue?.map((i) => i?.reorderQty).join(",")
+        : "",
+      varreorder_level: isMultipleVarient
+        ? formValue?.map((i) => i?.reorderLevel).join(",")
+        : "",
+      // reorder_cost: [10, 10, 10, 10],
     };
-    dispatch(addProduct(data));
+    const formdata = new FormData();
+    for (let i in data) {
+      if (i !== "files") {
+        formdata.append(i, data[i]);
+      }
+    }
+    for (let i = 0; i < uploadImage.length; i++) {
+      formdata.append("files[]", uploadImage[i]);
+    }
+    dispatch(addProduct(formdata));
   };
 
   return (
@@ -826,7 +912,7 @@ const AddProducts = () => {
                     <input
                       type="file"
                       id="image"
-                      name="image"
+                      name="files"
                       accept="image/*"
                       ref={fileUploadRef}
                       multiple
@@ -837,8 +923,8 @@ const AddProducts = () => {
                 </div>
 
                 <div class="image-list">
-                  {productInfo?.image?.length
-                    ? productInfo?.image?.map((img, index) => {
+                  {productInfo?.files?.length
+                    ? productInfo?.files?.map((img, index) => {
                         return (
                           <div
                             className="py-10 image-display"
