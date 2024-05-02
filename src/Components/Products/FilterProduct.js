@@ -1,3 +1,6 @@
+import React, { useEffect, useState } from "react";
+import { AiOutlineSearch } from "react-icons/ai";
+import DownIcon from "../../Assests/Dashboard/Down.svg";
 import React, { useEffect, useState , useRef} from "react";
 import { AiOutlineSearch } from 'react-icons/ai';
 import DownIcon from "../../Assests/Dashboard/Down.svg"
@@ -9,8 +12,7 @@ const FilterProduct = ({ handleOptionClick, toggleDropdown, selectedEmployee, de
 
   
   const handleFilter = (filterType) => {
-    console.log('Selected filter:', filterType);
-
+    console.log("Selected filter:", filterType);
   };
   
   const [isTablet, setIsTablet] = useState(false);
@@ -95,7 +97,36 @@ const FilterProduct = ({ handleOptionClick, toggleDropdown, selectedEmployee, de
 
   return (
     <>
+      <div className="box">
+        <div className="q-attributes-bottom-detail-section bg-white">
+          <Grid container className="px-4">
+            <Grid item xs={12} className="mt-5 px-5">
+              <InputTextSearch
+                placeholder="Search orders by order ID, last 4 digits on payment card, or invoice ID"
+                value={searchId}
+                handleChange={setSearchId}
+                handleSearchButton={handleSearch}
+              />
+            </Grid>
+          </Grid>
+          {/* <div className=" p-4 mb-3  rounded-md">
+            <div className="flex border  rounded-md overflow-hidden mt-6 mr-9">
+              <input
+                type="text"
+                placeholder="Search orders by order ID, last 4 digits on payment card, or invoice ID"
+                value={searchId}
+                onChange={(e) => setSearchId(e.target.value)}
+                className="w-full px-4 py-2 border-none focus:outline-none"
+              />
 
+              <button
+                onClick={handleSearch}
+                className="text-black px-4 py-2 focus:outline-none text-2xl"
+              >
+                <AiOutlineSearch className="h- w-8  text-[#231F20]" />
+              </button>
+            </div>
+          </div> */}
 
     <div className="box">
        
