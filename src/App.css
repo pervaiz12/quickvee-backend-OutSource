@@ -216,6 +216,21 @@
 	margin-bottom: 16px;
 }
 
+/* add error msg css */
+.input-error{
+	color: #fa0000 !important;
+    font-family: QuicksandSemiBold, Quicksand !important;
+    font-size: 16px !important;
+    margin: 3px !important;
+    padding: 0 !important;
+	/* bottom: -17px;
+    height: 15px;
+    left: 10px;
+    position: absolute; */
+}
+
+
+
 /* Media Queries for Responsive Font Sizes */
 @media (max-width: 840px) {
 	.q_sales_dashbaord {

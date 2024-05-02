@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import CrossIcon from "../../Assests/Dashboard/cross.svg";
@@ -28,6 +29,7 @@ const AtrDataList = ({ seVisible }) => {
   const closeModal = () => {
     setNewAttribute("");
     setShowModal(false);
+    setErrorMessage();
   };
 
   //sachin code start
@@ -73,6 +75,10 @@ const AtrDataList = ({ seVisible }) => {
     if (nameExists) {
       return false;
     }
+    if (!newAttribute.trim()) { // Check if newAttribute is empty or only contains whitespace
+      setErrorMessage("Please enter attributes title");
+      return;
+    }
     const newItem = {
       merchant_id: "MAL0100CA",
       title: newAttribute,
@@ -82,7 +88,7 @@ const AtrDataList = ({ seVisible }) => {
       headers: { "Content-Type": "multipart/form-data" },
     });
     if (response) {
-     
+
       setShowModal(false);
       setNewAttribute("");
       let merchantdata = {
@@ -97,61 +103,61 @@ const AtrDataList = ({ seVisible }) => {
     }
   };
 
-  
+
   return (
     <>
       {/* <div className="q-attributes-top-detail-section">
         <li>{submitmessage}</li>
       </div>      */}
-<div className="box">
-      <div className="q-attributes-bottom-detail-section">
-        <div className="q-attributes-bottom-header-sticky">
-          <div className="q-attributes-bottom-header">
-            <span>Attributes</span>
+      <div className="box">
+        <div className="q-attributes-bottom-detail-section">
+          <div className="q-attributes-bottom-header-sticky">
+            <div className="q-attributes-bottom-header">
+              <span>Attributes</span>
 
-            <p className="" onClick={openModal}>
-              Add Attribute <img src={AddIcon} alt="add-icon" />
-            </p>
+              <p className="" onClick={openModal}>
+                Add Attribute <img src={AddIcon} alt="add-icon" />
+              </p>
+            </div>
+            <div className="q-attributes-bottom-attriButes-header">
+              <p className="attriButes-sort">Sort</p>
+              <p className="attriButes-title">Title</p>
+            </div>
           </div>
-          <div className="q-attributes-bottom-attriButes-header">
-            <p className="attriButes-sort">Sort</p>
-            <p className="attriButes-title">Title</p>
-          </div>
-        </div>
-        <div className="q-attributes-bottom-attriButes-listing">
-          {allattributes &&
-            allattributes.length >= 1 &&
-            allattributes.map((attribute, index) => (
-              <div
-                key={index}
-                className="q-attributes-bottom-attriButes-single-attributes"
-              >
-                <p className="attriButes-sort">
-                  <img src={SortIcon} alt="add-icon" />
-                </p>
-                <p className="attriButes-title">{attribute.title}</p>
+          <div className="q-attributes-bottom-attriButes-listing">
+            {allattributes &&
+              allattributes.length >= 1 &&
+              allattributes.map((attribute, index) => (
+                <div
+                  key={index}
+                  className="q-attributes-bottom-attriButes-single-attributes"
+                >
+                  <p className="attriButes-sort">
+                    <img src={SortIcon} alt="add-icon" />
+                  </p>
+                  <p className="attriButes-title">{attribute.title}</p>
 
-                <p className="attriButes-enable-disable" style={{ width: "calc(100% - 32%)" }}>
-                  {/* onClick={()=>openEditModal(attribute)} */}
-                  {/* <img src={DeleteIcon} alt="delete-icon" /> */}
-                  <EditAttribute
-                    attribute={attribute}
-                    allattributes={allattributes}
-                  />
-                </p>
-              </div>
-            ))}
-        </div>
-        {showModal && (
-          <div className="q-custom-modal-container" id="addtributes_">
-            {/* Your modal JSX */}
-            <div className="q-custom-modal-content">
-              {/* Your modal content */}
-             
+                  <p className="attriButes-enable-disable" style={{ width: "calc(100% - 32%)" }}>
+                    {/* onClick={()=>openEditModal(attribute)} */}
+                    {/* <img src={DeleteIcon} alt="delete-icon" /> */}
+                    <EditAttribute
+                      attribute={attribute}
+                      allattributes={allattributes}
+                    />
+                  </p>
+                </div>
+              ))}
+          </div>
+          {showModal && (
+            <div className="q-custom-modal-container" id="addtributes_">
+              {/* Your modal JSX */}
+              <div className="q-custom-modal-content">
+                {/* Your modal content */}
+
                 <p className="q-custom-modal-header ">
-                    <div className="mt_card_header q_dashbaord_netsales">
-                    <h1 className="">Add New Attribute</h1> 
-                    </div>
+                  <div className="mt_card_header q_dashbaord_netsales">
+                    <h1 className="">Add New Attribute</h1>
+                  </div>
                   <img
                     src={CrossIcon}
                     alt="icon"
@@ -159,43 +165,43 @@ const AtrDataList = ({ seVisible }) => {
                     onClick={closeModal}
                   />
                 </p>
-             <div className="my-2">
+                <div className="my-2">
                   <div className="border-b border-[#ccc]"></div>
-             </div>
-               
-            <div className="title_attributes_section">
-              <label>Title</label>
-              <input
-                type="text"
-                placeholder="Enter attribute title"
-                className="q-custom-input-field mt-2"
-                value={newAttribute}
-                onChange={changeTittleHandler}
-              />
-              <span className="input-error">
-                {errorMessage !== "" ? errorMessage : ""}
-              </span>
-              </div>
-              <div className="q-add-categories-section-middle-footer">
-                <button
-                  onClick={handleAddAttribute}
-                  className="quic-btn quic-btn-save"
-                >
-                  Add
-                </button>
-                <button
-                  onClick={closeModal}
-                  className="quic-btn quic-btn-cancle"
-                >
-                  Cancel
-                </button>
+                </div>
+
+                <div className="title_attributes_section">
+                  <label>Title</label>
+                  <input
+                    type="text"
+                    placeholder="Enter attribute title"
+                    className="q-custom-input-field mt-2"
+                    value={newAttribute}
+                    onChange={changeTittleHandler}
+                  />
+                  <span className="input-error">
+                    {errorMessage !== "" ? errorMessage : ""}
+                  </span>
+                </div>
+                <div className="q-add-categories-section-middle-footer">
+                  <button
+                    onClick={handleAddAttribute}
+                    className="quic-btn quic-btn-save"
+                  >
+                    Add
+                  </button>
+                  <button
+                    onClick={closeModal}
+                    className="quic-btn quic-btn-cancle"
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
-       
-      </div>
+
+        </div>
       </div>
     </>
   );

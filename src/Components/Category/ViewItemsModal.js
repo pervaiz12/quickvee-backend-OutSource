@@ -13,7 +13,7 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
 
   const [itemsData, setItemsData] = useState([]);
   const myStyles = {
-    width: "58rem",
+    width: "60%",
     position: "absolute",
     top: "47%",
     left: "50%",
@@ -71,12 +71,20 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
                 <span>{selectedView.title}</span>
               </span>
               <div>
+                <div className="flex justify-between gap-4">
+                  <select className="custom-selecter cursor-pointer">
+                    <option>Recently Added</option>
+                    <option> Month</option>
+                    <option>Weeks</option>
+                  </select>
+                
               <img
                     src={CrossIcon}
                     alt="icon"
-                    className="  quic-btn-cancle"
+                    className="  quic-btn-cancle w-6 h-6"
                     onClick={() => handleClose()}
                   />
+                </div>
               </div>
             </div>
             <div className="view-category-item-modal-header">
@@ -102,7 +110,7 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
             </div>
 
             <div className="q-add-categories-section-middles-footer">
-              <button
+              {/* <button
                 onClick={() => handleClose()}
 
                 className="quic-btn quic-btn-ok"
@@ -111,7 +119,7 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
 
               >
                 Ok{" "}
-              </button>
+              </button> */}
             </div>
           </Box>
         </Modal>

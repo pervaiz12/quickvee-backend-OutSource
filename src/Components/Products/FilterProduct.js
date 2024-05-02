@@ -1,9 +1,15 @@
+
 import React, { useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import DownIcon from "../../Assests/Dashboard/Down.svg";
 import { useRef } from "react";
 import Grid from "@mui/system/Unstable_Grid/Grid";
 import InputTextSearch from "../../reuseableComponents/InputTextSearch";
+
+import React, { useEffect, useState , useRef} from "react";
+import SearchIcon from "../../Assests/Filter/Search.svg";
+import DownIcon from "../../Assests/Dashboard/Down.svg"
+
 import CategoryListDropDown from "../../CommonComponents/CategoryListDropDown";
 import UpArrow from "../../Assests/Dashboard/Up.svg";
 
@@ -163,6 +169,17 @@ const FilterProduct = ({
                 </button>
               </div>
             </div>
+
+
+            <button
+              onClick={handleSearch}
+              className="text-black px-4 py-2 focus:outline-none text-2xl"
+            >
+                  <img src={SearchIcon} alt="" className="w-6 h-6" />
+            </button>
+          </div>
+          </div>
+          
 
             <div className="mt_card_header q_dashbaord_netsales">
               <h1 className="">Filter By</h1>

@@ -277,6 +277,10 @@ module.exports = Object.freeze({
   EMPLOYEE_WORK_HOURS: "Report_api/employee_work_hours1_api",
 
 
+  // info   
+
+  GET_Edit_STORE_INFO: 'UserController/store_info',
+
 });
 
 

@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
-import SearchIcon from "../../../Assests/Filter/Search.svg";
+
 import UpArrow from "../../../Assests/Dashboard/Up.svg";
 import { BASE_URL, EMPLOYEE_LIST } from "../../../Constants/Config";
 import axios from "axios";
+
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
 import Container from "react-bootstrap/Container";
@@ -26,6 +27,12 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
   const [searchId, setSearchId] = useState("");
   const [selected, setSelected] = useState(false);
 
+import $ from "jquery";
+import SearchBar from "../SearchBar";
+
+const FilterEmp = ({ onFilterEmpDataChange }) => {
+  const [selected, setSelected] = useState(false);
+
   const [isTablet, setIsTablet] = useState(false);
   //const [selectedEmployee, setSelectedEmployee] = useState("All");
 
@@ -40,9 +47,13 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
   const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
   const [transactionDropdownVisible, setTransactionDropdownVisible] =
     useState(false);
+
   const handleSearch = () => {
     console.log("Search ID:", searchId);
   };
+
+
+
   const toggleDropdown = (dropdown) => {
     switch (dropdown) {
       case "employee":
@@ -193,6 +204,7 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
 
   return (
     <>
+
       <Grid container className="">
         <Grid item xs={12}>
           <Grid container className="mt-5">
@@ -234,6 +246,142 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
           </Grid>
         </Grid>
       </Grid>
+
+      <div className="q_main_data_range">
+        <SearchBar />
+
+        <div className="mt_card_header q_dashbaord_netsales">
+          <h1 className="">Filter By</h1>
+        </div>
+
+        <div className="qvrow">
+          <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
+            <label
+              htmlFor="employeeFilter"
+              onClick={() =>
+                setEmployeeDropdownVisible(!employeeDropdownVisible)
+              }
+            >
+              Employee
+            </label>
+            <div className="custom-dropdown input_area" ref={dropdownRef}>
+              <div
+                className="custom-dropdown-header"
+                onClick={() => toggleDropdown("employee")}
+              >
+                <span className="selected-option mt-1">{selectedEmployee}</span>
+                <img
+                  src={employeeDropdownVisible ? UpArrow : DownIcon}
+                  alt="Dropdown Icon"
+                  className="w-6 h-6"
+                />
+              </div>
+              {employeeDropdownVisible && (
+                // <div className={dropdownContentClass}>
+                //   <div onClick={() => handleOptionClick("All", "employee")}>
+                //     All
+                //   </div>
+                //   {employeeList.map((option, key) => (
+                //     <div
+                //       key={key}
+                //       onClick={() => handleOptionClick(option, "employee")}
+                //     >
+                //       {option.title}
+                //     </div>
+                //   ))}
+                // </div>
+
+                <div className={dropdownContentClass}>
+                  <div
+                    className={
+                      selectedEmployee === "All"
+                        ? "dropdown-item active"
+                        : "dropdown-item"
+                    }
+                    onClick={() => handleOptionClick("All", "employee")}
+                  >
+                    All
+                  </div>
+                  {employeeList.map((option, key) => (
+                    <div
+                      key={key}
+                      className={
+                        selectedEmployee === option.title
+                          ? "dropdown-item active"
+                          : "dropdown-item"
+                      }
+                      onClick={() => handleOptionClick(option, "employee")}
+                    >
+                      {option.title}
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+
+          <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
+            <label
+              htmlFor="transactionFilter"
+              onClick={() =>
+                setTransactionDropdownVisible(!transactionDropdownVisible)
+              }
+            >
+              Transactions
+            </label>
+            <div className="custom-dropdown input_area" ref={transactionRef}>
+              <div
+                className="custom-dropdown-header"
+                onClick={() => toggleDropdown("transaction")}
+              >
+                <span className="selected-option mt-1">
+                  {selectedTransaction}
+                </span>
+                <img
+                  src={transactionDropdownVisible ? UpArrow : DownIcon}
+                  alt="Dropdown Icon"
+                  className="w-6 h-6"
+                />
+              </div>
+              {transactionDropdownVisible && (
+                <div className="dropdown-content">
+                  <div
+                    className={
+                      selectedTransaction === "Both"
+                        ? "dropdown-item active"
+                        : "dropdown-item"
+                    }
+                    onClick={() => handleOptionClick("Both", "transaction")}
+                  >
+                    Both
+                  </div>
+                  <div
+                    className={
+                      selectedTransaction === "Cash"
+                        ? "dropdown-item active"
+                        : "dropdown-item"
+                    }
+                    onClick={() => handleOptionClick("Cash", "transaction")}
+                  >
+                    Cash
+                  </div>
+                  <div
+                    className={
+                      selectedTransaction === "Online"
+                        ? "dropdown-item active"
+                        : "dropdown-item"
+                    }
+                    onClick={() => handleOptionClick("Online", "transaction")}
+                  >
+                    Online
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
     </>
   );
 };

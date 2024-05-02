@@ -60,6 +60,7 @@ import EditVendors from "../Vendors/EditVendors";
 import SingleVendorsDetail from "../Vendors/SingleVendorsDetail";
 import AddProducts from "../Products/AddProducts"
 import MainLoayalty from "../LoyaltyProgram/MainLoayalty";
+import MainEmployeelist from "../Reporting/Employelist/MainEmployeelist";
 //  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
 // import MainEmployee from "../Reporting/EmployeeWorkingHours/MainEmployee";
 // import MainInvDuplicates from '../InventoryDuplicates/MainInvDuplicates';
@@ -121,6 +122,7 @@ const LeftSide = ({ visible }) => {
           {visible === "taxes-report" && <MainTaxesReport />}
           {visible === "current-inventory-value" && <CurrentInventoryValue />}
           {visible === "addemployee" && <MainAddEmployee />}
+          {visible === "employee-list" && <MainEmployeelist />}
           {visible === "receipt" && <ReceiptMainpage />}
           {visible === "item-sales" && <MainItemSales />}
           {visible === "item-create-between" && <NewItemCreatedBetweenMain />}
