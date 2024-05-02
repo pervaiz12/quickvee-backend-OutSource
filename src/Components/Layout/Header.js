@@ -52,8 +52,11 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
         setIsMenuOpen(!isMenuOpen);
       }}
     />
-    <img src={Quick} alt="Logo" className="ml-6" />
+    <a href="/dashboard">
+            <img src={Quick} alt="Logo" className="ml-6" />
 
+    </a>
+    
     <div className="relative">
       {/* Button to toggle dropdown */}
       <div

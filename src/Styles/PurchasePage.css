@@ -344,4 +344,22 @@
 
 
 
+.q-category-purchase-header span {
+    color: #000000;
+    font-size: 18px;
+    font-family: CircularSTDMedium !important;
+    display: flex;
+}
+.q-category-purchase-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.q-add-categories-section-header {
+    display: flex;
+    padding: 20px;
+        border-bottom: 1px solid #e8e8e8;
+}
 
