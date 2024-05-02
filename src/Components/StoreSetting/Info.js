@@ -13,6 +13,7 @@ useEffect(()=>{
   handleEditRecord(data)
 
 },[])
+  console.log("infoRecord" ,infoRecord.store);
   return (
 
     <div className='box'>

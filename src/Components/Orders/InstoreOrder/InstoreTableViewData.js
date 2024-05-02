@@ -10,7 +10,7 @@ import { renderToString } from 'react-dom/server';
 import $ from 'jquery'
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
 
-const InstoreTableViewData = (props) => {
+const InstoreTableViewData = (props, searchId) => {
   // console.log(props)
   const [currentPage, setCurrentPage] = useState(1);
   const [inStoreOrder, setAllInStoreOrders] = useState([]);
@@ -51,7 +51,7 @@ const InstoreTableViewData = (props) => {
       }
     };
     fetchData();
-  }, [dispatch, props]);
+  }, [dispatch, props, searchId]);
 
   useEffect(() => {
     if (!AllInStoreDataState.loading && AllInStoreDataState.inStoreOrderData) {

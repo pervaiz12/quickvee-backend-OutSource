@@ -75,6 +75,7 @@ table.dataTable tbody td {
     color: #646464;    
     margin: 0px 6px 0px;
     outline: none;
+    cursor: pointer;
 } 
 #loyaltyProgramTable_previous,#loyaltyProgramTable_next{
     transform: translate(0px, 14px);
