@@ -6,12 +6,10 @@ function SearchBar({ onSearch }) {
     const [searchId, setSearchId] = useState("");
 
     const handleSearch = () => {
-        // Check if searchId is not empty before triggering search
-        if (searchId.trim() !== "") {
-            onSearch(searchId.trim()); // Pass searchId to the parent component
-        } else {
+        
+        
             console.log("Please enter a valid ID");
-        }
+        
     };
 
     return (

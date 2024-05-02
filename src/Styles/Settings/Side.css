@@ -326,9 +326,10 @@ border:2px solid #0A64F9 } */
 	float: left;
 	padding: 0.5rem;
 	margin: 0.5rem;
+	font-size: 16px;
 	color: #000000;
 	background-color: #FFFFFF;
-	font-family: CircularSTDBlack !important;
+	font-family: CircularBold !important;
 }
 
 .all:hover {
@@ -884,4 +885,26 @@ select.custom-selecttable.w-52 {
 .q-attributes-bottom-attriButes-listing>p{
 	font-family:CircularSTDBook !important;
 
+}
+
+
+/* add css categories   */
+.custom-selecter{
+
+background: url('../../Assests//Dashboard/Down.svg');
+    background-repeat: no-repeat;
+    position: relative;
+    border: 1px solid #9E9E9E !important;
+    margin-top: 0rem;
+    padding: 5px 35px 5px 10px !important;
+    color:#6A6A6A;
+    border-radius: 4px;
+    background-color: white;
+    background-position: 95% 50%;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    text-indent: 1px;
+    text-overflow: '';
+	font-size: 14px;
+	font-family:CircularSTDBook !important;
 }
