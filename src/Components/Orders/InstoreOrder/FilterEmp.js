@@ -1,12 +1,29 @@
 import React, { useState, useEffect, useRef } from "react";
 // import { AiOutlineSearch } from 'react-icons/ai';
-import DownIcon from '../../../Assests/Dashboard/Down.svg';
-import SearchIcon from "../../../Assests/Filter/Search.svg"
-import UpArrow from "../../../Assests/Dashboard/Up.svg"
+import DownIcon from "../../../Assests/Dashboard/Down.svg";
+import SearchIcon from "../../../Assests/Filter/Search.svg";
+import UpArrow from "../../../Assests/Dashboard/Up.svg";
 import { BASE_URL, EMPLOYEE_LIST } from "../../../Constants/Config";
 import axios from "axios";
+import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
+import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
+import { Grid } from "@mui/material";
+const FilterEmp = ({ onFilterEmpDataChange }) => {
+  const transactionsList = [
+    {
+      title:"Both"
+    },
+    {
+      title:"Cash"
+    },
+    {
+      title:"Online"
+    }
+  ]
 
-const FilterEmp = ({onFilterEmpDataChange}) => {
   const [searchId, setSearchId] = useState(""); // State to track search ID
 
   // const handleFilter = (filterType) => {
@@ -18,14 +35,16 @@ const FilterEmp = ({onFilterEmpDataChange}) => {
   };
 
   const [selectedEmployee, setSelectedEmployee] = useState("All");
+  console.log("Selected employee", selectedEmployee);
   const [selectedEmployeeID, setSelectedEmployeeID] = useState("All");
   const [filteredData, setFilteredData] = useState({ emp_id: "all" });
-  
+
   const [selectedTransaction, setSelectedTransaction] = useState("Both");
   // const [selectedOrderStatus, setSelectedOrderStatus] = useState("All");
 
   const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
-  const [transactionDropdownVisible, setTransactionDropdownVisible] = useState(false);
+  const [transactionDropdownVisible, setTransactionDropdownVisible] =
+    useState(false);
   // const [orderStatusDropdownVisible, setOrderStatusDropdownVisible] = useState(false);
 
   const toggleDropdown = (dropdown) => {
@@ -45,9 +64,12 @@ const FilterEmp = ({onFilterEmpDataChange}) => {
   };
 
   const handleOptionClick = (option, dropdown) => {
+    // console.log("handleOptionClick", e.target.value);
+
     switch (dropdown) {
       case "employee":
         if (option === "All") {
+          console.log("handleOptionClick ", option);
           setSelectedEmployee("All");
           setSelectedEmployeeID("All");
           setEmployeeDropdownVisible(false);
@@ -73,12 +95,12 @@ const FilterEmp = ({onFilterEmpDataChange}) => {
         }
         break;
       case "transaction":
-        setSelectedTransaction(option);
-        setTransactionDropdownVisible(false); 
+        setSelectedTransaction(option.title);
+        setTransactionDropdownVisible(false);
         break;
       // case "orderStatus":
       //   setSelectedOrderStatus(option);
-      //   setOrderStatusDropdownVisible(false); 
+      //   setOrderStatusDropdownVisible(false);
       //   break;
       default:
         break;
@@ -123,7 +145,7 @@ const FilterEmp = ({onFilterEmpDataChange}) => {
         // Extracting category IDs and view titles
         const mappedOptions = EmpList.map((empdata) => ({
           id: empdata.id,
-          title: empdata.f_name+' '+empdata.l_name,
+          title: empdata.f_name + " " + empdata.l_name,
         }));
 
         setemployeeList(mappedOptions);
@@ -137,13 +159,50 @@ const FilterEmp = ({onFilterEmpDataChange}) => {
   }, []); // Fetch categories only once when the component mounts
 
   useEffect(() => {
-    onFilterEmpDataChange(selectedTransaction , selectedEmployeeID)
-  }, [selectedTransaction , selectedEmployeeID]);
+    onFilterEmpDataChange(selectedTransaction, selectedEmployeeID);
+  }, [selectedTransaction, selectedEmployeeID]);
 
   return (
     <>
+      <Grid container className="mt-5 px-5" >
+        <Grid item xs={12} className="">
+          <InputTextSearch
+            placeholder="Search orders by order ID, last 4 digits on payment card, or invoice ID"
+            value={searchId}
+            handleChange={setSearchId}
+            handleSearchButton={handleSearch}
+          />
+        </Grid>
+      </Grid>
+      <Grid container className="mt-5 px-5">
+        <Grid item className="mt_card_header q_dashbaord_netsales ">
+          <h1 className="">Filter By</h1>
+        </Grid>
+      </Grid>
+      <Grid container spacing={3}  className="px-5">
+        <Grid item xs={4}>
+        <label htmlFor="employeeFilter">Employee</label>
+          <SelectDropDown
+            heading={"All"}
+            listItem={employeeList}
+            onClickHandler={handleOptionClick}
+            selectedOption={selectedEmployee}
+            dropdownFor={"employee"}
+          />
+        </Grid>
+        <Grid item xs={4}>
+        <label htmlFor="transactionFilter">Transactions</label>
+          <SelectDropDown
+            heading={''}
+            listItem={transactionsList}
+            onClickHandler={handleOptionClick}
+            selectedOption={selectedTransaction}
+            dropdownFor={"transaction"}
+          />
+        </Grid>
+      </Grid>
       <div className="q_main_data_range">
-        <div className="q_searchBar">
+        {/* <div className="q_searchBar">
           <div className="flex border  rounded-md overflow-hidden">
             <input
               type="text"
@@ -159,18 +218,15 @@ const FilterEmp = ({onFilterEmpDataChange}) => {
               <img src={SearchIcon} alt="" className="w-6 h-6" />
             </button>
           </div>
-        </div>
+        </div> */}
 
-        <div className="mt_card_header q_dashbaord_netsales">
+        {/* <div className="mt_card_header q_dashbaord_netsales">
           <h1 className="">Filter By</h1>
-        </div>
-
+        </div> */}
+       
         <div className="qvrow">
-          {/* Employee Dropdown */}
-          <div className="col-qv-4">
-            <label htmlFor="employeeFilter">
-              Employee
-            </label>
+          {/* <div className="col-qv-4">
+            <label htmlFor="employeeFilter">Employee</label>
             <div className="custom-dropdown input_area" ref={dropdownRef}>
               <div
                 className="custom-dropdown-header"
@@ -199,30 +255,45 @@ const FilterEmp = ({onFilterEmpDataChange}) => {
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
 
-          {/* Transaction Dropdown */}
-          <div className="col-qv-4">
-            <label htmlFor="transactionFilter">
-              Transactions
-            </label>
+  
+          {/* <div className="col-qv-4">
+            <label htmlFor="transactionFilter">Transactions</label>
             <div className="custom-dropdown input_area" ref={dropdownRef}>
               <div
                 className="custom-dropdown-header"
                 onClick={() => toggleDropdown("transaction")}
               >
-                <span className="selected-option mt-1">{selectedTransaction}</span>
+                <span className="selected-option mt-1">
+                  {selectedTransaction}
+                </span>
                 <img src={DownIcon} alt="Down Icon" className="w-6 h-6" />
               </div>
               {transactionDropdownVisible && (
                 <div className="dropdown-content">
-                  <div className="all" onClick={() => handleOptionClick("Both", "transaction")}>Both</div>
-                  <div className="all" onClick={() => handleOptionClick("Cash", "transaction")}>Cash</div>
-                  <div className="all" onClick={() => handleOptionClick("Online", "transaction")}>Online</div>
+                  <div
+                    className="all"
+                    onClick={() => handleOptionClick("Both", "transaction")}
+                  >
+                    Both
+                  </div>
+                  <div
+                    className="all"
+                    onClick={() => handleOptionClick("Cash", "transaction")}
+                  >
+                    Cash
+                  </div>
+                  <div
+                    className="all"
+                    onClick={() => handleOptionClick("Online", "transaction")}
+                  >
+                    Online
+                  </div>
                 </div>
               )}
             </div>
-          </div>
+          </div> */}
 
           {/* Order Status Dropdown */}
           {/* <div className="col-qv-4">
@@ -247,7 +318,6 @@ const FilterEmp = ({onFilterEmpDataChange}) => {
             </div>
           </div> */}
         </div>
-
       </div>
     </>
   );

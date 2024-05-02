@@ -3,7 +3,7 @@ import DownIcon from "../../src/Assests/Dashboard/Down.svg"
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCategoriesData } from "../Redux/features/Categories/categoriesSlice";
 import { fetchProductsData ,emptyProduct } from "../Redux/features/Product/ProductSlice";
-
+import SelectDropDown from "../reuseableComponents/SelectDropDown";
 const CategoryListDropDown = ({type, onCategoryChange }) => {
     let listing_type = 0;
     const [selectedCategory, setSelectedCategory] = useState("All");
@@ -70,6 +70,7 @@ const CategoryListDropDown = ({type, onCategoryChange }) => {
       };
 
     return <>
+     
         <div className="q-order-page-filter">
             <label className="q-details-page-label" htmlFor="categoryFilter">
             Category
