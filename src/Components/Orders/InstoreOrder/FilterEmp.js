@@ -244,7 +244,7 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
         </Grid>
       </Grid>
 
-      <div className="q_main_data_range">
+      {/* <div className="q_main_data_range">
         <SearchBar />
 
         <div className="mt_card_header q_dashbaord_netsales">
@@ -377,7 +377,7 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
 
     </>
   );
