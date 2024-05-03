@@ -12,6 +12,7 @@ import DownIcon from "../../Assests/Dashboard/Down.svg"
 
 import CategoryListDropDown from "../../CommonComponents/CategoryListDropDown";
 import UpArrow from "../../Assests/Dashboard/Up.svg";
+import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 
 const FilterProduct = ({
   handleOptionClick,
@@ -34,6 +35,35 @@ const FilterProduct = ({
   searchId,
   setSearchId,
 }) => {
+  const productStatusList = [
+    {
+      id: "all",
+      title: "All",
+    },
+    {
+      id: "0",
+      title: "Pending",
+    },
+    {
+      id: "1",
+      title: "Approved",
+    },
+    {
+      id: "2",
+      title: "Rejected",
+    },
+  ];
+
+  const listingTypeList = [
+    {
+      id: 0,
+      title: "Product listing",
+    },
+    {
+      id: 1,
+      title: "Variant listing",
+    },
+  ];
   const handleFilter = (filterType) => {
     console.log("Selected filter:", filterType);
   };
@@ -115,7 +145,7 @@ const FilterProduct = ({
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
-
+  console.log("selectedStatusValue ", selectedStatusValue);
   return (
     <>
       {/* <div className=" p-4 mb-3  rounded-md">
@@ -138,20 +168,53 @@ const FilterProduct = ({
           </div> */}
 
       <div className="box">
-        <Grid container className="px-4">
-          <Grid item xs={12} className="mt-5 px-5">
-            <InputTextSearch
-              placeholder="Search orders by order ID, last 4 digits on payment card, or invoice ID"
-              value={searchId}
-              handleChange={setSearchId}
-              handleSearchButton={handleSearch}
-            />
-          </Grid>
-        </Grid>
-
         <div className="box_shadow_input">
           <div className="q_main_data_range">
-            <div className="q_searchBar">
+            <Grid container>
+              <Grid item xs={12} className="px-5">
+                <InputTextSearch
+                  placeholder="Search orders by order ID, last 4 digits on payment card, or invoice ID"
+                  value={searchId}
+                  handleChange={setSearchId}
+                  handleSearchButton={handleSearch}
+                />
+              </Grid>
+            </Grid>
+            <Grid container>
+              <Grid item className="mt-5" xs={12}>
+                <h1 className="text-xl font-medium">Filter By</h1>
+              </Grid>
+            </Grid>
+            <Grid container spacing={2}>
+              <Grid item xs={3}>
+                <CategoryListDropDown
+                  type="category"
+                  onCategoryChange={handleCategoryChange}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <label>Product Status</label>
+                <SelectDropDown
+                  heading={null}
+                  listItem={productStatusList}
+                  selectedOption={selectedStatusValue}
+                  onClickHandler={handleOptionClick}
+                  dropdownFor={"status"}
+                />
+              </Grid>
+              <Grid item xs={3}>
+                <label>Listing Type {selectedListingType}</label>
+                <SelectDropDown 
+                heading={"Select listing"}
+                listItem={listingTypeList}
+                selectedOption={selectedListingType}
+                onClickHandler={handleOptionClick}
+                dropdownFor={"listingType"}
+                />
+              </Grid>
+            </Grid>
+
+            {/* <div className="q_searchBar">
               <div className="flex border  rounded-md overflow-hidden">
                 <input
                   type="text"
@@ -168,7 +231,7 @@ const FilterProduct = ({
                   <AiOutlineSearch className="h- w-8  text-[#231F20]" />
                 </button>
               </div>
-            </div>
+            </div> */}
 
 
             <button
@@ -366,7 +429,7 @@ const FilterProduct = ({
                       onClick={() => toggleDropdown("del_pic")}
                     >
                       <span className="selected-option mt-1">
-                        {selectedEmployee}
+                        {selectedEmployee} 
                       </span>
                       <img
                         src={del_picDropdownVisible ? UpArrow : DownIcon}

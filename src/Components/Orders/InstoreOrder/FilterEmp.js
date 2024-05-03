@@ -156,6 +156,7 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
   }, []);
 
   const [employeeList, setemployeeList] = useState([]);
+  console.log("employeeList ,",employeeList)
   const [loadingEmpList, setLoadingEmpList] = useState(true);
 
   useEffect(() => {
@@ -204,8 +205,7 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
 
   return (
     <>
-
-      <Grid container className="">
+      <Grid container className="px-5">
         <Grid item xs={12}>
           <Grid container className="mt-5">
             <Grid item xs={12} className="">
@@ -236,7 +236,7 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
             <Grid item xs={4}>
               <label htmlFor="transactionFilter">Transactions</label>
               <SelectDropDown
-                heading={""}
+                heading={null}
                 listItem={transactionsList}
                 onClickHandler={handleOptionClick}
                 selectedOption={selectedTransaction}

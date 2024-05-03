@@ -3,8 +3,39 @@ import React, { useState, useEffect, useRef } from "react";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import UpArrow from "../../../Assests/Dashboard/Up.svg";
 import SearchBar from "../SearchBar";
-
+import { Grid } from "@mui/material";
+import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
+import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 const MainOnline = ({ onFilterDataChange }) => {
+  const transactionsList = [
+    {
+      title: "Both",
+    },
+    {
+      title: "Cash",
+    },
+    {
+      title: "Online",
+    },
+  ];
+
+  const orderStatusList = [
+    {
+      title: "New",
+    },
+    {
+      title: "Closed",
+    },
+    {
+      title: "Failed",
+    },
+  ];
+
+  const [searchId, setSearchId] = useState("");
+  const handleSearch = () => {
+    console.log("Search ID:", searchId);
+  };
+
   const [isTablet, setIsTablet] = useState(false);
   // const [selectedEmployee, setSelectedEmployee] = useState("All");
   const [selectedTransaction, setSelectedTransaction] = useState("Both");
@@ -35,11 +66,11 @@ const MainOnline = ({ onFilterDataChange }) => {
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
       case "transaction":
-        setSelectedTransaction(option);
+        setSelectedTransaction(option.title);
         setTransactionDropdownVisible(false);
         break;
       case "orderStatus":
-        setSelectedOrderStatus(option);
+        setSelectedOrderStatus(option.title);
         setOrderStatusDropdownVisible(false);
         break;
       default:
@@ -90,7 +121,6 @@ const MainOnline = ({ onFilterDataChange }) => {
 
     handleResize();
 
-    // Event listener for window resize
     window.addEventListener("resize", handleResize);
 
     // Cleanup
@@ -101,15 +131,64 @@ const MainOnline = ({ onFilterDataChange }) => {
 
   return (
     <>
-      <div className="q_main_data_range">
-        <SearchBar />
+      <Grid container className="px-5">
+        <Grid item xs={12}>
+          <Grid container className="mt-5">
+            <Grid item xs={12} className="">
+              <InputTextSearch
+                placeholder="Search orders by order ID, last 4 digits on payment card, or invoice ID"
+                value={searchId}
+                handleChange={setSearchId}
+                handleSearchButton={handleSearch}
+              />
+            </Grid>
+          </Grid>
+          <Grid container className="mt-5 ">
+            <Grid item className="mt_card_header q_dashbaord_netsales ">
+              <h1 className="">Filter By</h1>
+            </Grid>
+          </Grid>
+          <Grid container spacing={2}>
+            <Grid item xs={4}>
+              <label htmlFor="transactionFilter">Transactions</label>
+              <SelectDropDown
+                heading={""}
+                listItem={transactionsList}
+                onClickHandler={handleOptionClick}
+                selectedOption={selectedTransaction}
+                dropdownFor={"transaction"}
+              />
+            </Grid>
+            <Grid item xs={4}>
+              <label htmlFor="orderStatusFilter">Order Status</label>
+              <SelectDropDown
+                heading={""}
+                listItem={orderStatusList}
+                onClickHandler={handleOptionClick}
+                selectedOption={selectedOrderStatus}
+                dropdownFor={"orderStatus"}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      {/* <div className="q_main_data_range">
+        <div className="q_searchBar">
+          <div className="flex border  rounded-md overflow-hidden">
+            <input
+              type="text"
+              placeholder="Search orders by order ID, last 4 digits on payment card, or invoice ID"
+              value={searchId}
+              onChange={(e) => setSearchId(e.target.value)}
+              className="w-full px-4 py-2 border-none focus:outline-none place_text_search"
+            />
 
         <div className="mt_card_header q_dashbaord_netsales">
           <h1 className="">Filter By</h1>
         </div>
 
         <div className="qvrow">
-          {/* Transaction Dropdown */}
+    
           <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
             <label
               htmlFor="transactionFilter"
@@ -127,7 +206,7 @@ const MainOnline = ({ onFilterDataChange }) => {
                 <span className="selected-option mt-1">
                   {selectedTransaction}
                 </span>
-                {/* <img src={DownIcon} alt="Down Icon" className="w-6 h-6" /> */}
+              
                 <img
                   src={transactionDropdownVisible ? UpArrow : DownIcon}
                   alt="Dropdown Icon"
@@ -171,7 +250,7 @@ const MainOnline = ({ onFilterDataChange }) => {
             </div>
           </div>
 
-          {/* Order Status Dropdown */}
+       
           <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
             <label
               htmlFor="orderStatusFilter"
@@ -232,7 +311,7 @@ const MainOnline = ({ onFilterDataChange }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

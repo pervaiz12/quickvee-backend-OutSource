@@ -28,21 +28,23 @@ const SelectDropDown = ({
   selectedOption,
   dropdownFor,
 }) => {
-
-  console.log("Select ", listItem)
+  console.log("selectedOption ",heading);
   return (
     <>
       <FormControl fullWidth>
         <ThemeProvider theme={theme}>
           <Select value={selectedOption} displayEmpty>
-            <MenuItem
-              onClick={(e) => {
-                onClickHandler(heading, dropdownFor);
-              }}
-              value={heading}
-            >
-              {heading}
-            </MenuItem>
+            {heading  && (
+              <MenuItem
+                onClick={(e) => {
+                  onClickHandler(heading, dropdownFor);
+                }}
+                value={heading }
+              >
+                {heading}
+              </MenuItem>
+            )}
+
             {listItem?.map((item) => (
               <MenuItem
                 onClick={(e) => {
