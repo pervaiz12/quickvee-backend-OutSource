@@ -4,7 +4,7 @@
 //remove unwanted and credentials of other app
 
 module.exports = Object.freeze({
-  BASE_URL: 'https://quickvee.net/',
+  BASE_URL: 'https://sandbox.quickvee.net/',
 
 
 
@@ -276,10 +276,6 @@ module.exports = Object.freeze({
   // EMPLOYEE_WORK_HOURS: "Report_api/employee_work_hours1",
   EMPLOYEE_WORK_HOURS: "Report_api/employee_work_hours1_api",
 
-
-  // info   
-
-  GET_Edit_STORE_INFO: 'UserController/store_info',
 
 });
 

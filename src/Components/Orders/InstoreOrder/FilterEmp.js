@@ -11,6 +11,15 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Grid } from "@mui/material";
+
+import SearchBar from "../SearchBar";
+
+  
+
+
+
+
+
 const FilterEmp = ({ onFilterEmpDataChange }) => {
   const transactionsList = [
     {
@@ -23,14 +32,7 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
       title: "Online",
     },
   ];
-
   const [searchId, setSearchId] = useState("");
-  const [selected, setSelected] = useState(false);
-
-import $ from "jquery";
-import SearchBar from "../SearchBar";
-
-const FilterEmp = ({ onFilterEmpDataChange }) => {
   const [selected, setSelected] = useState(false);
 
   const [isTablet, setIsTablet] = useState(false);
