@@ -6,9 +6,9 @@ import { useRef } from "react";
 import Grid from "@mui/system/Unstable_Grid/Grid";
 import InputTextSearch from "../../reuseableComponents/InputTextSearch";
 
-import React, { useEffect, useState , useRef} from "react";
+
 import SearchIcon from "../../Assests/Filter/Search.svg";
-import DownIcon from "../../Assests/Dashboard/Down.svg"
+
 
 import CategoryListDropDown from "../../CommonComponents/CategoryListDropDown";
 import UpArrow from "../../Assests/Dashboard/Up.svg";
@@ -471,10 +471,7 @@ const FilterProduct = ({
               </div>
             </div>
           </div>
-        </div>
-      </div>
-
-      <div></div>
+       
     </>
   );
 };
