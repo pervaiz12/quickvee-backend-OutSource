@@ -3,7 +3,7 @@ import Select from "react-select";
 import "../Styles/ProductPage.css";
 import DownArrow from "../Assests/Dashboard/Down.svg";
 import CloseIcon from "../Assests/Dashboard/cross.svg";
-import { useTransition } from "react";
+import Validation from "../Constants/Validation";
 
 const SearchableDropdown = ({
   title,
@@ -12,7 +12,10 @@ const SearchableDropdown = ({
   handleSelectProductOptions,
   handleDeleteSelectedOption,
   selectedOption,
+  error,
+  handleUpdateError,
 }) => {
+  const { checkLength } = Validation();
   const [filterOptions, setFilterOptions] = useState(optionList);
   const handleFilterOptions = (e) => {
     const { value } = e.target;
@@ -43,6 +46,12 @@ const SearchableDropdown = ({
       prev: !prev ? true : false,
     }));
   };
+
+  const handleBlurOption = async () => {
+    await checkLength(keyName, selectedOption, error);
+    handleUpdateError(error);
+  };
+
   return (
     <>
       <div className="title-area">
@@ -51,10 +60,12 @@ const SearchableDropdown = ({
       <div
         className="dropdownBox"
         style={{ padding: showOptions ? "10px" : "7px 8px 0px 8px" }}
+        onBlur={keyName === "category" ? handleBlurOption : null}
       >
         <div
           className="search-area"
           style={{ borderBottom: showOptions ? "1px solid #ececec" : "" }}
+          onBlur={keyName === "category" ? handleBlurOption : null}
         >
           <div className="search-selected-item" onClick={handleFocus}>
             <div className="selected-item">
@@ -128,6 +139,11 @@ const SearchableDropdown = ({
           ""
         )}
       </div>
+      {error[keyName] ? (
+        <span className="error-alert">{error[keyName]}</span>
+      ) : (
+        ""
+      )}
     </>
   );
 };

@@ -16,6 +16,10 @@ const initialState = {
   successMessage: "",
   error: "",
   formData: [],
+
+  // for add product varient
+  isLoading: false,
+  isError: false,
 };
 
 // Generate pening , fulfilled and rejected action type
@@ -229,6 +233,20 @@ const productsSlice = createSlice({
             state.error = action.error.message;
         });
     */
+
+    // add product varient
+    builder.addCase(addProduct.pending, (state) => {
+      state.isLoading = true;
+      state.isError = false;
+    });
+    builder.addCase(addProduct.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isError = false;
+    });
+    builder.addCase(addProduct.rejected, (state, action) => {
+      state.loading = false;
+      state.isError = true;
+    });
   },
 });
 

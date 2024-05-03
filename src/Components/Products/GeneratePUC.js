@@ -9,6 +9,7 @@ const GeneratePUC = ({
   handleBlur,
   isMultipleVarient,
   productInfo,
+  error,
 }) => {
   const varientTitle = handleVarientTitleBasedItemList();
   const setInputMaxLength = (fieldname) => {
@@ -85,6 +86,18 @@ const GeneratePUC = ({
                                       inp?.name
                                     )}
                                   />
+
+                                  {error[`formValue[${index}].${inp?.name}`] ? (
+                                    <span className="error-alert">
+                                      {
+                                        error[
+                                          `formValue[${index}].${inp?.name}`
+                                        ]
+                                      }
+                                    </span>
+                                  ) : (
+                                    ""
+                                  )}
                                 </div>
                               </div>
                             </div>
@@ -220,6 +233,13 @@ const GeneratePUC = ({
                               maxLength={setInputMaxLength(inp?.name)}
                               disabled={disabledFields.includes(inp?.name)}
                             />
+                            {error[`formValue[0].${inp?.name}`] ? (
+                              <span className="error-alert">
+                                {error[`formValue[0].${inp?.name}`]}
+                              </span>
+                            ) : (
+                              ""
+                            )}
                           </div>
                         </div>
                       </div>

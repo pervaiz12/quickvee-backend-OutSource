@@ -3,7 +3,7 @@ import AddNewCategory from "../../Assests/Dashboard/Left.svg";
 import VariantAttributes from "./VariantAttributes";
 import UploadIMG from "../../Assests/Filter/imgupload.svg";
 import GeneratePUC from "./GeneratePUC";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   addProduct,
   fetchCategoryList,
@@ -13,14 +13,24 @@ import {
   getInventorySetting,
   updateFormValue,
 } from "../../Redux/features/Product/ProductSlice";
+import Validation from "../../Constants/Validation";
 import SearchableDropdown from "../../CommonComponents/SearchableDropdown";
 import "../../Styles/ProductPage.css";
 import CloseIcon from "../../Assests/Dashboard/cross.svg";
 import { event } from "jquery";
+import CircularProgress from "@mui/material/CircularProgress";
+import { Box } from "@mui/material";
+import * as yup from "yup";
 
 const AddProducts = () => {
   const fileUploadRef = useRef();
   const dispatch = useDispatch();
+  const { isLoading, isError } = useSelector(
+    (state) => state?.productsListData
+  );
+
+  const { validatTitle, validatDescription, addVarientFormValidation } =
+    Validation();
   const [formValue, setFormValue] = useState([]);
   const [filterOptionList, setFilterOptionList] = useState([]);
   const [productInfo, setProductInfo] = useState({
@@ -32,13 +42,89 @@ const AddProducts = () => {
     frequentlyBought: [],
     files: [],
   });
-  const [costPer, setCostPer] = useState(null);
-  // const [varientTitle, setVarientTitle] = useState([]);
-  let varientTitle = [];
-  const [isMultipleVarient, setIsMultipleVaient] = useState(true);
+
   const [varientLength, setVarientLength] = useState([
     { id: 1, varientName: "", varientAttributeList: [] },
   ]);
+  let varientTitle = [];
+  const [error, setError] = useState({
+    title: "",
+    description: "",
+    category: "",
+    taxes: "",
+    relatedProduct: "",
+    frequentlyBought: "",
+    files: "",
+    formValue: [],
+  });
+
+  const formSchema = yup.object().shape({
+    title: yup
+      .string()
+      .required("This Field is Required")
+      .matches(/^[^\d]*$/, "title only contains alphabet"),
+    // description: yup.string().required("This Field is Required"),
+    category: yup.array().min(1, "select option").required("select option"),
+    // taxes: yup.array().min(1, "select option").required("select option"),
+    // relatedProduct: yup
+    //   .array()
+    //   .min(1, "select option")
+    //   .required("select option"),
+    // frequentlyBought: yup
+    //   .array()
+    //   .min(1, "select option")
+    //   .required("select option"),
+    // files: yup
+    //   .array()
+    //   .min(1, "please upload image..")
+    //   .required("please upload image.."),
+    formValue: yup.array(
+      yup.object({
+        // costPerItem: yup.string().required("This Field is Required"),
+        // compareAtPrice: yup.string().required("This Field is Required"),
+        price: yup.string().required("This Field is Required"),
+        // margin: yup.string().required("This Field is Required"),
+        // Profit: yup.string().required("This Field is Required"),
+        qty: yup.string().required("This Field is Required"),
+        upcCode: yup.string().required("This Field is Required"),
+        // customCode: yup.string().required("This Field is Required"),
+        // reorderQty: yup.string().required("This Field is Required"),
+        // reorderLevel: yup.string().required("This Field is Required"),
+      })
+    ),
+  });
+
+  // add varient form validation fetch previous and add new updated object
+  // useEffect(() => {
+  //   setError((prevState) => ({
+  //     ...prevState,
+  //     formValue: formValue.map((_, index) => {
+  //       const previousData = prevState?.formValue[index] || {};
+  //       return {
+  //         costPerItem: previousData.costPerItem || "",
+  //         compareAtPrice: previousData.compareAtPrice || "",
+  //         price: previousData.price || "",
+  //         margin: previousData.margin || "",
+  //         Profit: previousData.Profit || "",
+  //         qty: previousData.qty || "",
+  //         upcCode: previousData.upcCode || "",
+  //         customCode: previousData.customCode || "",
+  //         reorderQty: previousData.reorderQty || "",
+  //         reorderLevel: previousData.reorderLevel || "",
+  //         trackQuantity: previousData.trackQuantity || true,
+  //         sellOutOfStock: previousData.sellOutOfStock || true,
+  //         checkId: previousData.checkId || false,
+  //         disable: previousData.disable || false,
+  //         itemForAllLinkedLocation:
+  //           previousData.itemForAllLinkedLocation || false,
+  //       };
+  //     }),
+  //   }));
+  // }, [formValue]);
+
+  const [costPer, setCostPer] = useState(null);
+  // const [varientTitle, setVarientTitle] = useState([]);
+  const [isMultipleVarient, setIsMultipleVaient] = useState(true);
 
   const [uploadImage, setUploadImage] = useState([]);
 
@@ -73,6 +159,26 @@ const AddProducts = () => {
         },
       ]);
       setFormValue([]);
+      setProductInfo({
+        title: "",
+        description: "",
+        category: [],
+        taxes: [],
+        relatedProduct: [],
+        frequentlyBought: [],
+        files: [],
+      });
+      setError({
+        title: "",
+        description: "",
+        category: "",
+        taxes: "",
+        relatedProduct: "",
+        frequentlyBought: "",
+        files: "",
+        varientLength: "",
+        formValue: [],
+      });
     } else {
       setIsMultipleVaient((prev) => {
         return !prev;
@@ -96,6 +202,26 @@ const AddProducts = () => {
           itemForAllLinkedLocation: false,
         },
       ]);
+      setProductInfo({
+        title: "",
+        description: "",
+        category: [],
+        taxes: [],
+        relatedProduct: [],
+        frequentlyBought: [],
+        files: [],
+      });
+      setError({
+        title: "",
+        description: "",
+        category: "",
+        taxes: "",
+        relatedProduct: "",
+        frequentlyBought: "",
+        files: "",
+        varientLength: "",
+        formValue: [],
+      });
     }
   };
 
@@ -122,8 +248,19 @@ const AddProducts = () => {
     }));
   };
 
-  const handleProductInfo = (e) => {
-    const { name, value, type } = e.target;
+  const handleProductInfo = async (e) => {
+    const { name, value } = e.target;
+    switch (name) {
+      case "title":
+        await validatTitle(value, error);
+        break;
+      // case "description":
+      //   await validatDescription(value, error);
+      //   break;
+      default:
+        break;
+    }
+    handleUpdateError(error);
     setProductInfo((prev) => ({
       ...prev,
       [name]: value,
@@ -297,6 +434,9 @@ const AddProducts = () => {
   const handleBlur = (e, i) => {
     const { name, value, type } = e.target;
     // margin and profit calculation
+    // varient form onchange validation function
+    // handleFormDuplicateFormValidation(name, value, i);
+
     let totalPriceValue;
     let marginValue;
     let profitValue;
@@ -376,7 +516,34 @@ const AddProducts = () => {
         value &&
         !!formValue[i]["compareAtPrice"]
       ) {
+        console.log(index, i);
         if (+value > +formValue[i]["compareAtPrice"]) {
+          alert("Compare Price must be greater than price.");
+          return {
+            ...item,
+            [name]: value,
+            ["compareAtPrice"]: "",
+          };
+        } else {
+          return {
+            ...item,
+            [name]: value,
+          };
+        }
+      }
+
+      //show alert when
+      // WOrk in progress here..................????????
+      // only not working in section first
+      // when compareAtPrice and price value is already exist and when costPerItem is try to change then we run this condition.
+      else if (
+        (index === i || i === 0) &&
+        name === "costPerItem" &&
+        value &&
+        !!formValue[i]["compareAtPrice"] &&
+        !!formValue[i]["price"]
+      ) {
+        if (+formValue[i]["compareAtPrice"] < +formValue[i]["price"]) {
           alert("Compare Price must be greater than price.");
           return {
             ...item,
@@ -398,8 +565,10 @@ const AddProducts = () => {
           [name]: value,
         };
       }
+      console.log("index=>", index, i, index === i);
       return item;
     });
+
     setFormValue(updatedFormValue);
   };
 
@@ -583,34 +752,67 @@ const AddProducts = () => {
 
   useEffect(() => {
     if (varientLength?.length > 0 && isMultipleVarient) {
+      const varientItemSecondInputLength =
+        varientLength[1]?.varientAttributeList?.length;
+      const varientItemThirdInputLength =
+        varientLength[2]?.varientAttributeList?.length;
       handleVarientTitleBasedItemList();
-
-      console.log(varientLength?.length);
       /// when adding new varient in in form keep previous fill form data in fields and add new
-      setFormValue((prevFormValue) => {
-        const newFormValue = [...new Set(varientTitle)].map((_, index) => {
-          const previousData = prevFormValue[index] || {};
-          return {
-            costPerItem: previousData.costPerItem || "",
-            compareAtPrice: previousData.compareAtPrice || "",
-            price: previousData.price || "",
-            margin: previousData.margin || "",
-            Profit: previousData.Profit || "",
-            qty: previousData.qty || "",
-            upcCode: previousData.upcCode || "",
-            customCode: previousData.customCode || "",
-            reorderQty: previousData.reorderQty || "",
-            reorderLevel: previousData.reorderLevel || "",
-            trackQuantity: previousData.trackQuantity || true,
-            sellOutOfStock: previousData.sellOutOfStock || true,
-            checkId: previousData.checkId || false,
-            disable: previousData.disable || false,
-            itemForAllLinkedLocation:
-              previousData.itemForAllLinkedLocation || false,
-          };
+      if (
+        varientLength?.length > 1 &&
+        (varientLength[1]?.varientAttributeList?.length === 1 ||
+          varientLength[2]?.varientAttributeList?.length === 1)
+      ) {
+        setFormValue((_) => {
+          const newFormValue = [...new Set(varientTitle)].map((_, index) => {
+            return {
+              costPerItem: "",
+              compareAtPrice: "",
+              price: "",
+              margin: "",
+              Profit: "",
+              qty: "",
+              upcCode: "",
+              customCode: "",
+              reorderQty: "",
+              reorderLevel: "",
+              trackQuantity: true,
+              sellOutOfStock: true,
+              checkId: false,
+              disable: false,
+              itemForAllLinkedLocation: false,
+            };
+            // }
+          });
+          return newFormValue;
         });
-        return newFormValue;
-      });
+      } else {
+        setFormValue((prevFormValue) => {
+          const newFormValue = [...new Set(varientTitle)].map((_, index) => {
+            const previousData = prevFormValue[index] || {};
+            return {
+              costPerItem: previousData.costPerItem || "",
+              compareAtPrice: previousData.compareAtPrice || "",
+              price: previousData.price || "",
+              margin: previousData.margin || "",
+              Profit: previousData.Profit || "",
+              qty: previousData.qty || "",
+              upcCode: previousData.upcCode || "",
+              customCode: previousData.customCode || "",
+              reorderQty: previousData.reorderQty || "",
+              reorderLevel: previousData.reorderLevel || "",
+              trackQuantity: previousData.trackQuantity || true,
+              sellOutOfStock: previousData.sellOutOfStock || true,
+              checkId: previousData.checkId || false,
+              disable: previousData.disable || false,
+              itemForAllLinkedLocation:
+                previousData.itemForAllLinkedLocation || false,
+            };
+            // }
+          });
+          return newFormValue;
+        });
+      }
     } else if (!isMultipleVarient) {
       setFormValue([
         {
@@ -655,7 +857,8 @@ const AddProducts = () => {
     setFormValue(updatedUpcData);
   };
 
-  const handleSubmitForm = () => {
+  const handleSubmitForm = async (e) => {
+    e.preventDefault();
     const data = {
       /// single varient payload
       merchant_id: "MAL0100CA",
@@ -775,17 +978,76 @@ const AddProducts = () => {
         : "",
       // reorder_cost: [10, 10, 10, 10],
     };
-    const formdata = new FormData();
-    for (let i in data) {
-      if (i !== "files") {
-        formdata.append(i, data[i]);
+
+    let checkEmpty;
+    if (isMultipleVarient) {
+      checkEmpty = varientLength?.map((item, i) => {
+        if (!item?.varientAttributeList?.length || !item?.varientName) {
+          setVarientError({
+            error: "Please enter the option values.",
+            errorIndex: i,
+          });
+          return false;
+        } else {
+          setVarientError({
+            error: "",
+            errorIndex: null,
+          });
+          return true;
+        }
+      });
+    } else {
+      checkEmpty = [true];
+    }
+    try {
+      const response = await formSchema.validate(
+        { ...productInfo, formValue },
+        {
+          abortEarly: false,
+        }
+      );
+      setError({});
+      console.log(checkEmpty.every((i) => Boolean(i)) && !!response);
+      if (checkEmpty.every((i) => Boolean(i)) && !!response) {
+        const formdata = new FormData();
+        for (let i in data) {
+          if (i !== "files") {
+            formdata.append(i, data[i]);
+          }
+        }
+        for (let i = 0; i < uploadImage.length; i++) {
+          formdata.append("files[]", uploadImage[i]);
+        }
+        console.log("product added success");
+        // dispatch(addProduct(formdata));
       }
+    } catch (err) {
+      let errorsList = {};
+      setError({});
+      if (err && err.inner) {
+        err?.inner?.forEach((error) => {
+          if (error?.path) {
+            errorsList[error.path] = error.message;
+          }
+        });
+      }
+      setError(errorsList);
     }
-    for (let i = 0; i < uploadImage.length; i++) {
-      formdata.append("files[]", uploadImage[i]);
-    }
-    dispatch(addProduct(formdata));
   };
+
+  const handleUpdateError = (updatedErrorValue) => {
+    setError((prev) => ({
+      ...prev,
+      ...updatedErrorValue,
+    }));
+  };
+
+  // varient form onchange validation function
+
+  // const handleFormDuplicateFormValidation = async (name, value, index) => {
+  //   await addVarientFormValidation(name, value, index, error);
+  //   handleUpdateError(error);
+  // };
 
   return (
     <div className="box">
@@ -807,6 +1069,11 @@ const AddProducts = () => {
                 value={productInfo?.title}
                 onChange={handleProductInfo}
               />
+              {error?.title ? (
+                <span className="error-alert">{error?.title}</span>
+              ) : (
+                ""
+              )}
             </div>
 
             <div className="q-add-categories-single-input">
@@ -819,6 +1086,11 @@ const AddProducts = () => {
                 value={productInfo?.description}
                 onChange={handleProductInfo}
               ></textarea>
+              {error?.description ? (
+                <span className="error-alert">{error?.description}</span>
+              ) : (
+                ""
+              )}
             </div>
             <div className="">
               <div className="q-add-categories-single-input">
@@ -829,6 +1101,8 @@ const AddProducts = () => {
                   handleSelectProductOptions={handleSelectProductOptions}
                   handleDeleteSelectedOption={handleDeleteSelectedOption}
                   selectedOption={productInfo?.category}
+                  error={error}
+                  handleUpdateError={handleUpdateError}
                 />
               </div>
             </div>
@@ -841,6 +1115,8 @@ const AddProducts = () => {
                 handleSelectProductOptions={handleSelectProductOptions}
                 handleDeleteSelectedOption={handleDeleteSelectedOption}
                 selectedOption={productInfo?.taxes}
+                error={error}
+                // handleUpdateError={handleUpdateError}
               />
             </div>
 
@@ -852,6 +1128,8 @@ const AddProducts = () => {
                 handleSelectProductOptions={handleSelectProductOptions}
                 handleDeleteSelectedOption={handleDeleteSelectedOption}
                 selectedOption={productInfo?.relatedProduct}
+                error={error}
+                // handleUpdateError={handleUpdateError}
               />
             </div>
 
@@ -863,6 +1141,8 @@ const AddProducts = () => {
                 handleSelectProductOptions={handleSelectProductOptions}
                 handleDeleteSelectedOption={handleDeleteSelectedOption}
                 selectedOption={productInfo?.frequentlyBought}
+                error={error}
+                // handleUpdateError={handleUpdateError}
               />
             </div>
 
@@ -963,6 +1243,11 @@ const AddProducts = () => {
                     : ""}
                 </div>
               </div>
+              {error["files"] ? (
+                <span className="error-alert">{error["files"]}</span>
+              ) : (
+                ""
+              )}
               {}
             </div>
 
@@ -986,6 +1271,7 @@ const AddProducts = () => {
                 handleVarientTitleBasedItemList={
                   handleVarientTitleBasedItemList
                 }
+                error={error}
                 handleGenerateUPC={handleGenerateUPC}
                 handleOnChange={handleOnChange}
                 formValue={formValue}
@@ -1007,8 +1293,18 @@ const AddProducts = () => {
                     <button
                       className="quic-btn quic-btn-save"
                       onClick={handleSubmitForm}
+                      disabled={isLoading}
+                      style={{
+                        backgroundColor: isLoading ? "#878787" : "#0A64F9",
+                      }}
                     >
-                      Update
+                      {isLoading ? (
+                        <Box className="loader-box">
+                          <CircularProgress />
+                        </Box>
+                      ) : (
+                        "Add"
+                      )}
                     </button>
                     <button className="quic-btn quic-btn-cancle">Cancel</button>
                   </div>

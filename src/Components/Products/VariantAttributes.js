@@ -4,6 +4,7 @@ import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
 import makeAnimated from "react-select/animated";
+import Validation from "../../Constants/Validation";
 
 const VariantAttributes = ({
   filterOptionList,
@@ -18,6 +19,12 @@ const VariantAttributes = ({
   addMoreVarientItems,
 }) => {
   const [showAttributes, setShowAttributes] = useState(false);
+  const [varientPreviousLength, setVarientPreviousLength] = useState();
+
+  // useEffect(()=>{
+
+  // })
+  console.log("varientPreviousLength", varientPreviousLength);
   const animatedComponents = makeAnimated();
 
   const handleDeleteClick = (id) => {
@@ -29,6 +36,7 @@ const VariantAttributes = ({
   };
 
   const handlechange = (value, index, name) => {
+    console.log("length", varientLength[1]?.varientAttributeList?.length);
     let updateVarientLength = [...varientLength];
     if (name == "varientName") {
       updateVarientLength[index] = {
@@ -163,9 +171,13 @@ const VariantAttributes = ({
                           />
                         </div>
                         {!!varientError?.error &&
-                        +varientError?.errorIndex === index
-                          ? varientError?.error
-                          : ""}
+                        +varientError?.errorIndex === index ? (
+                          <span className="error-alert">
+                            {varientError?.error}
+                          </span>
+                        ) : (
+                          ""
+                        )}
                       </div>
                       <div className="col-qv-2">
                         {varientLength[varientLength?.length - 1]?.id ===

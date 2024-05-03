@@ -62,7 +62,8 @@
     "styled-components": "^6.1.1",
     "swiper": "^11.1.1",
     "tailwindcss": "^3.3.5",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yup": "^1.4.0"
   },
   "scripts": {
     "start": "react-scripts start",
