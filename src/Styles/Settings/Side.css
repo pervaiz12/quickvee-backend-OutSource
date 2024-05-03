@@ -696,9 +696,9 @@ select.custom-selecttable.w-52 {
 }
 
 .btn-dashboard-section-cncl {
-	width: 46%;
+	width:100%;
 	padding: 10px;
-	margin: 46px 5px;
+	/* margin: 46px 5px; */
 	border: 1px solid #878787;
 	border-radius: 4px;
 	background-color: #878787;
@@ -709,9 +709,9 @@ select.custom-selecttable.w-52 {
 }
 
 .btn-dashboard-section-save {
-	width: 46%;
+	width: 100%;
 	padding: 10px;
-	margin: 46px 25px;
+	/* margin: 46px 25px; */
 	border: 1px solid #0a64f9;
 	border-radius: 4px;
 	background-color: #0a64f9;
@@ -763,7 +763,7 @@ select.custom-selecttable.w-52 {
 
 .input_cal_section {
 	position: relative;
-	top: 8px;
+	/* top: 8px; */
 }
 
 .css-1vooibu-MuiSvgIcon-root {
@@ -811,12 +811,12 @@ select.custom-selecttable.w-52 {
 
 
 .date_cal_selector{
-  position: relative;
+  /* position: relative;
   top:0;
   bottom:0;
   left:1.5rem;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-evenly; */
 
 }
 

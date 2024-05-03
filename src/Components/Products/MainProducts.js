@@ -12,6 +12,7 @@ const MainProducts = () => {
   const [offset, setoffset] = useState(0);
   const [limit, setlimit] = useState(10);
   const [selectedEmployee, setSelectedEmployee] = useState("Select");
+  console.log("setSelectedEmployee ", selectedEmployee )
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [selectedStatusValue, setSelectedStatusValue] = useState("All");
  
@@ -74,14 +75,14 @@ const MainProducts = () => {
    
     switch (dropdown) {
       case "del_pic":
-        setSelectedEmployee(value);
+        setSelectedEmployee(option.title);
         setdel_picDropdownVisible(false); 
         if (window.confirm("Are you sure you want to update?")) {
           console.log('yes');
           dispatch(emptyProduct([]));
           let type_date = {
             merchant_id: "MAL0100CA",
-            id: option,
+            id: option.id,
           }
           if (type_date) {
             dispatch(updateProductsType(type_date)).then(actionResult => {

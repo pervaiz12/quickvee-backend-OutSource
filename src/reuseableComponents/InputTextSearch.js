@@ -16,12 +16,12 @@ const InputTextSearch = ({ placeholder, value,handleChange,handleSearchButton })
         <OutlinedInput
           placeholder={placeholder}
           value={value}
-          onChange={(e) => handleChange(e.target.value)}
+          onChange={ handleChange}
           id="outlined-adornment-password"
           endAdornment={
             <InputAdornment position="end">
               <IconButton
-              onClick={handleSearchButton}
+              onClick={() =>{ handleSearchButton && handleSearchButton()}}
               >
                 <img src={SearchIcon} />
               </IconButton>

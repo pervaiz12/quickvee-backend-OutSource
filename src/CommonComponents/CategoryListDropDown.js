@@ -53,8 +53,8 @@ const CategoryListDropDown = ({ type, onCategoryChange }) => {
   const handleOptionClick = (option, dropdown, value) => {
     switch (dropdown) {
       case "category":
-        setSelectedCategory(value);
-        onCategoryChange(option);
+        setSelectedCategory(option === "All" ? "All" : option.title);
+        onCategoryChange(option === "All" ? "all" : option.id);
         setCategoryDropdownVisible(false);
         dispatch(emptyProduct([]));
         let data1 = {
@@ -113,8 +113,15 @@ const CategoryListDropDown = ({ type, onCategoryChange }) => {
 
   return (
     <>
-    
-      <div
+      <label htmlFor="categoryFilter">Category</label>
+      <SelectDropDown
+        heading={"All"}
+        listItem={allcategories}
+        selectedOption={selectedCategory}
+        onClickHandler={handleOptionClick}
+        dropdownFor={"category"}
+      />
+      {/* <div
       // className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}
       >
         <label htmlFor="categoryFilter">Category</label>
@@ -160,7 +167,7 @@ const CategoryListDropDown = ({ type, onCategoryChange }) => {
             </div>
           )}
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

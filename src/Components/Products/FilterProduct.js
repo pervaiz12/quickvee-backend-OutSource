@@ -7,7 +7,6 @@ import InputTextSearch from "../../reuseableComponents/InputTextSearch";
 
 import SearchIcon from "../../Assests/Filter/Search.svg";
 
-
 import CategoryListDropDown from "../../CommonComponents/CategoryListDropDown";
 import UpArrow from "../../Assests/Dashboard/Up.svg";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
@@ -60,6 +59,34 @@ const FilterProduct = ({
     {
       id: 1,
       title: "Variant listing",
+    },
+  ];
+
+  const deliveryPickupList = [
+    {
+      id: "1",
+      title: "Enable All",
+    },
+    {
+      id: "2",
+      title: "Enable Pickup All",
+    },
+    {
+      id: "5",
+      title: "Disable Pickup All",
+    },
+    {
+      id: "3",
+      title: "Enable Delivery All",
+    },
+    {
+      id: "6",
+      title: "Disable Delivery All",
+    },
+
+    {
+      id: "4",
+      title: "Disable All",
     },
   ];
   const handleFilter = (filterType) => {
@@ -184,13 +211,13 @@ const FilterProduct = ({
               </Grid>
             </Grid>
             <Grid container spacing={2}>
-              <Grid item xs={3}>
+              <Grid item xs={4}>
                 <CategoryListDropDown
                   type="category"
                   onCategoryChange={handleCategoryChange}
                 />
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={4}>
                 <label>Product Status</label>
                 <SelectDropDown
                   heading={null}
@@ -200,7 +227,7 @@ const FilterProduct = ({
                   dropdownFor={"status"}
                 />
               </Grid>
-              <Grid item xs={3}>
+              <Grid item xs={4}>
                 <label>Listing Type {selectedListingType}</label>
                 <SelectDropDown
                   heading={"Select listing"}
@@ -208,6 +235,17 @@ const FilterProduct = ({
                   selectedOption={selectedListingType}
                   onClickHandler={handleOptionClick}
                   dropdownFor={"listingType"}
+                
+                />
+              </Grid>
+              <Grid item xs={4}>
+                <label style={{whiteSpace:'nowrap'}}>Enable Product for Delivery/Pickup</label>
+                <SelectDropDown
+                  heading={"Select"}
+                  listItem={deliveryPickupList}
+                  selectedOption={selectedEmployee}
+                  onClickHandler={handleOptionClick}
+                  dropdownFor={"del_pic"}
                 />
               </Grid>
             </Grid>
@@ -231,26 +269,25 @@ const FilterProduct = ({
               </div>
             </div> */}
 
-            <button
+            {/* <button
               onClick={handleSearch}
               className="text-black px-4 py-2 focus:outline-none text-2xl"
             >
               <img src={SearchIcon} alt="" className="w-6 h-6" />
-            </button>
+            </button> */}
           </div>
         </div>
 
-        <div className="mt_card_header q_dashbaord_netsales">
-          <h1 className="">Filter By</h1>
+        {/* <div className="mt_card_header q_dashbaord_netsales"> */}
+          {/* <h1 className="">Filter By</h1> */}
 
-          <div className="qvrow">
-            <CategoryListDropDown
+          {/* <div className="qvrow"> */}
+            {/* <CategoryListDropDown
               type="category"
               onCategoryChange={handleCategoryChange}
-            />
+            /> */}
 
-            {/* status Dropdown */}
-            <div
+            {/* <div
               className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}
             >
               <label
@@ -328,10 +365,10 @@ const FilterProduct = ({
                   </div>
                 )}
               </div>
-            </div>
+            </div> */}
 
             {/* Order Status Dropdown */}
-            <div
+            {/* <div
               className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}
             >
               <label
@@ -385,9 +422,9 @@ const FilterProduct = ({
                   </div>
                 )}
               </div>
-            </div>
+            </div> */}
             {/* Employee Dropdown */}
-            <div
+            {/* <div
               className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}
             >
               <label
@@ -493,10 +530,10 @@ const FilterProduct = ({
                   </div>
                 )}
               </div>
-            </div>
-          </div>
-       </div>
-       </div>
+            </div> */}
+          {/* </div> */}
+        {/* </div> */}
+      </div>
     </>
   );
 };

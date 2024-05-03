@@ -10,7 +10,7 @@ import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
-import { FormControl } from "@mui/material";
+import { FormControl, Grid } from "@mui/material";
 const Welcome = ({ isOpen, onClose, children }) => {
   const [visibleCalendar, setVisibleCalendar] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState("All");
@@ -34,9 +34,6 @@ const Welcome = ({ isOpen, onClose, children }) => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
-
-
-
 
   // useEffect(() => {
   //   const handleOutsideClick = (event) => {
@@ -105,7 +102,32 @@ const Welcome = ({ isOpen, onClose, children }) => {
   const handleRetrieve = () => {
     alert("Retrieve button clicked");
   };
-
+  const daysList = [
+    {
+      title: "Today",
+    },
+    {
+      title: "Yesterday",
+    },
+    {
+      title: "Week to Date",
+    },
+    {
+      title: "Last Week",
+    },
+    {
+      title: "Last 7 days",
+    },
+    {
+      title: "Month To Date",
+    },
+    {
+      title: "This Month",
+    },
+    {
+      title: "This Year",
+    },
+  ];
   return (
     <>
       <div className="box" ref={dropdownRef}>
@@ -115,324 +137,386 @@ const Welcome = ({ isOpen, onClose, children }) => {
           </div>
           <div
             onClick={openCalendar}
-            className={`q_dashboard_welcom_msg cursor-pointer ${visibleCalendar ? "active" : ""
-              }`}
-          // Assigning the ref to the wrapper div
+            className={`q_dashboard_welcom_msg cursor-pointer ${
+              visibleCalendar ? "active" : ""
+            }`}
+            // Assigning the ref to the wrapper div
           >
             <h1>Oct 4, 2023 - Oct 4, 2023</h1>
             <div className="container">
               <div className="row">
                 <div className="col-qv-12">
                   <div
-                    className={visibleCalendar ? "dataCalender" : "nonedatacalender"}
+                    className={
+                      visibleCalendar ? "dataCalender" : "nonedatacalender"
+                    }
                     ref={dataCalender}
                   >
-                    <div className="flex mx-auto">
-                      <div className="col-qv-6 py-2 px-6">
-                        <div className="my-0 q-details-page-label_dasbaord py-1">
-                          Select Option
-                        </div>
-                        <div>
-                          <div>
-                            <div className="container">
-                              <div className="row">
-                                <div className="col-12">
-                                  <ul className="flex space-x-4 mb-4">
-                                    <li
-                                      className={`select_date_btn ${daysFilter === "today" ? "active" : ""
-                                        }`}
-                                      style={{
-                                        borderColor:
-                                          daysFilter === "today" ? "#0A64F9" : "",
-                                        color:
-                                          daysFilter === "today"
-                                            ? "#0A64F9"
-                                            : "#707070",
-                                        boxShadow: daysFilter === "today" ? "" : "",
-                                      }}
-                                      onClick={() => handleClick("today")}
-                                    >
-                                      <a href="#" className="days_filter">
-                                        Today
-                                        {daysFilter === "today" && (
-                                          <>
-                                            <img
-                                              src={CheckIcon}
-                                              alt="Checkmark"
-                                              className=""
-                                            />
-                                          </>
-                                        )}
-                                      </a>
-                                    </li>
-                                    <li
-                                      className={`select_date_btn ${daysFilter === "yesterday" ? "active" : ""
-                                        }`}
-                                      style={{
-                                        borderColor:
-                                          daysFilter === "yesterday" ? "#0A64F9" : "",
-                                        color:
-                                          daysFilter === "yesterday" ? "#0A64F9" : "",
-                                        boxShadow:
-                                          daysFilter === "yesterday" ? "" : "",
-                                      }}
-                                      onClick={() => handleClick("yesterday")}
-                                    >
-                                      <a href="#" className="days_filter">
-                                        Yesterday
-                                        {daysFilter === "yesterday" && (
-                                          <img
-                                            src={CheckIcon}
-                                            alt="Checkmark"
-                                            className=""
-                                          />
-                                        )}
-                                      </a>
-                                    </li>
-                                  </ul>
-                                  {/* weeks days details */}
-                                  <ul className="flex space-x-4 mb-4">
-                                    <li
-                                      className={`select_date_btn ${daysFilter === "week_days" ? "active" : ""
-                                        }`}
-                                      style={{
-                                        borderColor:
-                                          daysFilter === "week_days" ? "#0A64F9" : "",
-                                        color:
-                                          daysFilter === "week_days" ? "#0A64F9" : "",
-                                        boxShadow:
-                                          daysFilter === "week_days" ? "" : "",
-                                      }}
-                                      onClick={() => handleClick("week_days")}
-                                    >
-                                      <a href="#" className="days_filter">
-                                        Week to Date
-                                        {daysFilter === "week_days" && (
-                                          <img
-                                            src={CheckIcon}
-                                            alt="Checkmark"
-                                            className=""
-                                          />
-                                        )}
-                                      </a>
-                                    </li>
-                                    <li
-                                      className={`select_date_btn ${daysFilter === "Last days" ? "active" : ""
-                                        }`}
-                                      style={{
-                                        borderColor:
-                                          daysFilter === "Last days" ? "#0A64F9" : "",
-                                        color:
-                                          daysFilter === "Last days" ? "#0A64F9" : "",
-                                        boxShadow:
-                                          daysFilter === "Last days" ? "" : "",
-                                      }}
-                                      onClick={() => handleClick("Last days")}
-                                    >
-                                      <a href="#" className="days_filter">
-                                        Last Week
-                                        {daysFilter === "Last days" && (
-                                          <img
-                                            src={CheckIcon}
-                                            alt="Checkmark"
-                                            className=""
-                                          />
-                                        )}
-                                      </a>
-                                    </li>
-                                  </ul>
-
-                                  <ul className="flex space-x-4 mb-4">
-                                    <li
-                                      className={`select_date_btn ${daysFilter === "Last Month" ? "active" : ""
-                                        }`}
-                                      style={{
-                                        borderColor:
-                                          daysFilter === "Las7days" ? "#0A64F9" : "",
-                                        color:
-                                          daysFilter === "Las7days" ? "#0A64F9" : "",
-                                        boxShadow:
-                                          daysFilter === "Las7days" ? "" : "",
-                                      }}
-                                      onClick={() => handleClick("Las7days")}
-                                    >
-                                      <a href="#" className="days_filter">
-                                        Last 7 days
-                                        {daysFilter === "Las7days" && (
-                                          <img
-                                            src={CheckIcon}
-                                            alt="Checkmark"
-                                            className=""
-                                          />
-                                        )}
-                                      </a>
-                                    </li>
-                                    <li
-                                      className={`select_date_btn ${daysFilter === "Mont_date" ? "active" : ""
-                                        }`}
-                                      style={{
-                                        borderColor:
-                                          daysFilter === "Mont_date" ? "#0A64F9" : "",
-                                        color:
-                                          daysFilter === "Mont_date" ? "#0A64F9" : "",
-                                        boxShadow:
-                                          daysFilter === "Mont_date" ? "" : "",
-                                      }}
-                                      onClick={() => handleClick("Mont_date")}
-                                    >
-                                      <a href="#" className="days_filter">
-                                        Month To Date
-                                        {daysFilter === "Mont_date" && (
-                                          <img
-                                            src={CheckIcon}
-                                            alt="Checkmark"
-                                            className=""
-                                          />
-                                        )}
-                                      </a>
-                                    </li>
-                                  </ul>
-                                  <ul className="flex space-x-4 mb-4">
-                                    <li
-                                      className={`select_date_btn ${daysFilter === "This Month" ? "active" : ""
-                                        }`}
-                                      style={{
-                                        borderColor:
-                                          daysFilter === "This Month"
-                                            ? "#0A64F9"
-                                            : "",
-                                        color:
-                                          daysFilter === "This Month"
-                                            ? "#0A64F9"
-                                            : "",
-                                        boxShadow:
-                                          daysFilter === "This Month" ? "" : "",
-                                      }}
-                                      onClick={() => handleClick("This Month")}
-                                    >
-                                      <a href="#" className="days_filter">
-                                        This Month
-                                        {daysFilter === "This Month" && (
-                                          <img
-                                            src={CheckIcon}
-                                            alt="Checkmark"
-                                            className=""
-                                          />
-                                        )}
-                                      </a>
-                                    </li>
-                                    <li
-                                      className={`select_date_btn ${daysFilter === "This Year" ? "active" : ""
-                                        }`}
-                                      style={{
-                                        borderColor:
-                                          daysFilter === "This Year" ? "#0A64F9" : "",
-                                        color:
-                                          daysFilter === "This Year" ? "#0A64F9" : "",
-                                        boxShadow:
-                                          daysFilter === "This Year" ? "" : "",
-                                      }}
-                                      onClick={() => handleClick("This Year")}
-                                    >
-                                      <a href="#" className="days_filter">
-                                        This Year
-                                        {daysFilter === "This Year" && (
-                                          <img
-                                            src={CheckIcon}
-                                            alt="Checkmark"
-                                            className=""
-                                          />
-                                        )}
-                                      </a>
-                                    </li>
-                                  </ul>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-
-                          <div className="mt-20" ref={dropdownRef} >
-                            <label
-                              className="q-details-page-label_dasbaord"
-                              htmlFor="transactionFilter"
-                              onClick={() =>
-                                setTransactionDropdownVisible(
-                                  !transactionDropdownVisible
-                                )
-                              }
-                            >
-                              Compare to
-                            </label>
-                            <div className="container">
-                              <div className="row">
-                                <div className="col-12">
-                                  <div
-                                    className="custom-dropdown-header"
-                                    onClick={() => toggleDropdown("transaction")}
+                    <Grid container>
+                      <Grid item xs={12} className="">
+                        <Grid container spacing={2}>
+                          <Grid item xs={5.5}>
+                            <Grid container>
+                              <Grid className="my-0 q-details-page-label_dasbaord py-1">
+                                Select Option
+                              </Grid>
+                            </Grid>
+                            <Grid container>
+                              <Grid item xs={12} className="">
+                                <ul className="flex space-x-4 mb-4">
+                                  <li
+                                    className={`select_date_btn ${
+                                      daysFilter === "today" ? "active" : ""
+                                    }`}
+                                    style={{
+                                      borderColor:
+                                        daysFilter === "today" ? "#0A64F9" : "",
+                                      color:
+                                        daysFilter === "today"
+                                          ? "#0A64F9"
+                                          : "#707070",
+                                      boxShadow:
+                                        daysFilter === "today" ? "" : "",
+                                    }}
+                                    onClick={() => handleClick("today")}
                                   >
-                                    <span className="selected-option mt-1">
-                                      {selectedTransaction}
-                                    </span>
-                                    <img
-                                      src={
-                                        transactionDropdownVisible
-                                          ? UpArrow
-                                          : DownIcon
-                                      }
-                                      alt="Dropdown Icon"
-                                      className="w-8 h-8"
-                                    />
-                                  </div>
-                                  <div className="custom-dropdown input_area" ref={dataCalender}>
-                                    {transactionDropdownVisible && (
-                                      <div className="dropdown-content">
-                                        <div className={selectedTransaction === "All" ? "dropdown-item active" : "dropdown-item"}
-                                          onClick={() =>
-                                            handleOptionClick("All", "transaction")
+                                    <a href="#" className="days_filter">
+                                      Today
+                                      {daysFilter === "today" && (
+                                        <>
+                                          <img
+                                            src={CheckIcon}
+                                            alt="Checkmark"
+                                            className=""
+                                          />
+                                        </>
+                                      )}
+                                    </a>
+                                  </li>
+                                  <li
+                                    className={`select_date_btn ${
+                                      daysFilter === "yesterday" ? "active" : ""
+                                    }`}
+                                    style={{
+                                      borderColor:
+                                        daysFilter === "yesterday"
+                                          ? "#0A64F9"
+                                          : "",
+                                      color:
+                                        daysFilter === "yesterday"
+                                          ? "#0A64F9"
+                                          : "",
+                                      boxShadow:
+                                        daysFilter === "yesterday" ? "" : "",
+                                    }}
+                                    onClick={() => handleClick("yesterday")}
+                                  >
+                                    <a href="#" className="days_filter">
+                                      Yesterday
+                                      {daysFilter === "yesterday" && (
+                                        <img
+                                          src={CheckIcon}
+                                          alt="Checkmark"
+                                          className=""
+                                        />
+                                      )}
+                                    </a>
+                                  </li>
+                                </ul>
+                                {/* weeks days details */}
+                                <ul className="flex space-x-4 mb-4">
+                                  <li
+                                    className={`select_date_btn ${
+                                      daysFilter === "week_days" ? "active" : ""
+                                    }`}
+                                    style={{
+                                      borderColor:
+                                        daysFilter === "week_days"
+                                          ? "#0A64F9"
+                                          : "",
+                                      color:
+                                        daysFilter === "week_days"
+                                          ? "#0A64F9"
+                                          : "",
+                                      boxShadow:
+                                        daysFilter === "week_days" ? "" : "",
+                                    }}
+                                    onClick={() => handleClick("week_days")}
+                                  >
+                                    <a href="#" className="days_filter">
+                                      Week to Date
+                                      {daysFilter === "week_days" && (
+                                        <img
+                                          src={CheckIcon}
+                                          alt="Checkmark"
+                                          className=""
+                                        />
+                                      )}
+                                    </a>
+                                  </li>
+                                  <li
+                                    className={`select_date_btn ${
+                                      daysFilter === "Last days" ? "active" : ""
+                                    }`}
+                                    style={{
+                                      borderColor:
+                                        daysFilter === "Last days"
+                                          ? "#0A64F9"
+                                          : "",
+                                      color:
+                                        daysFilter === "Last days"
+                                          ? "#0A64F9"
+                                          : "",
+                                      boxShadow:
+                                        daysFilter === "Last days" ? "" : "",
+                                    }}
+                                    onClick={() => handleClick("Last days")}
+                                  >
+                                    <a href="#" className="days_filter">
+                                      Last Week
+                                      {daysFilter === "Last days" && (
+                                        <img
+                                          src={CheckIcon}
+                                          alt="Checkmark"
+                                          className=""
+                                        />
+                                      )}
+                                    </a>
+                                  </li>
+                                </ul>
+
+                                <ul className="flex space-x-4 mb-4">
+                                  <li
+                                    className={`select_date_btn ${
+                                      daysFilter === "Last Month"
+                                        ? "active"
+                                        : ""
+                                    }`}
+                                    style={{
+                                      borderColor:
+                                        daysFilter === "Las7days"
+                                          ? "#0A64F9"
+                                          : "",
+                                      color:
+                                        daysFilter === "Las7days"
+                                          ? "#0A64F9"
+                                          : "",
+                                      boxShadow:
+                                        daysFilter === "Las7days" ? "" : "",
+                                    }}
+                                    onClick={() => handleClick("Las7days")}
+                                  >
+                                    <a href="#" className="days_filter">
+                                      Last 7 days
+                                      {daysFilter === "Las7days" && (
+                                        <img
+                                          src={CheckIcon}
+                                          alt="Checkmark"
+                                          className=""
+                                        />
+                                      )}
+                                    </a>
+                                  </li>
+                                  <li
+                                    className={`select_date_btn ${
+                                      daysFilter === "Mont_date" ? "active" : ""
+                                    }`}
+                                    style={{
+                                      borderColor:
+                                        daysFilter === "Mont_date"
+                                          ? "#0A64F9"
+                                          : "",
+                                      color:
+                                        daysFilter === "Mont_date"
+                                          ? "#0A64F9"
+                                          : "",
+                                      boxShadow:
+                                        daysFilter === "Mont_date" ? "" : "",
+                                    }}
+                                    onClick={() => handleClick("Mont_date")}
+                                  >
+                                    <a href="#" className="days_filter">
+                                      Month To Date
+                                      {daysFilter === "Mont_date" && (
+                                        <img
+                                          src={CheckIcon}
+                                          alt="Checkmark"
+                                          className=""
+                                        />
+                                      )}
+                                    </a>
+                                  </li>
+                                </ul>
+                                <ul className="flex space-x-4 mb-4">
+                                  <li
+                                    className={`select_date_btn ${
+                                      daysFilter === "This Month"
+                                        ? "active"
+                                        : ""
+                                    }`}
+                                    style={{
+                                      borderColor:
+                                        daysFilter === "This Month"
+                                          ? "#0A64F9"
+                                          : "",
+                                      color:
+                                        daysFilter === "This Month"
+                                          ? "#0A64F9"
+                                          : "",
+                                      boxShadow:
+                                        daysFilter === "This Month" ? "" : "",
+                                    }}
+                                    onClick={() => handleClick("This Month")}
+                                  >
+                                    <a href="#" className="days_filter">
+                                      This Month
+                                      {daysFilter === "This Month" && (
+                                        <img
+                                          src={CheckIcon}
+                                          alt="Checkmark"
+                                          className=""
+                                        />
+                                      )}
+                                    </a>
+                                  </li>
+                                  <li
+                                    className={`select_date_btn ${
+                                      daysFilter === "This Year" ? "active" : ""
+                                    }`}
+                                    style={{
+                                      borderColor:
+                                        daysFilter === "This Year"
+                                          ? "#0A64F9"
+                                          : "",
+                                      color:
+                                        daysFilter === "This Year"
+                                          ? "#0A64F9"
+                                          : "",
+                                      boxShadow:
+                                        daysFilter === "This Year" ? "" : "",
+                                    }}
+                                    onClick={() => handleClick("This Year")}
+                                  >
+                                    <a href="#" className="days_filter">
+                                      This Year
+                                      {daysFilter === "This Year" && (
+                                        <img
+                                          src={CheckIcon}
+                                          alt="Checkmark"
+                                          className=""
+                                        />
+                                      )}
+                                    </a>
+                                  </li>
+                                </ul>
+                              </Grid>
+                            </Grid>
+                            <Grid container>
+                              <Grid
+                                item
+                                xs={12}
+                                className="mt-20"
+                                ref={dropdownRef}
+                              >
+                                <label
+                                  className="q-details-page-label_dasbaord"
+                                  htmlFor="transactionFilter"
+                                  onClick={() =>
+                                    setTransactionDropdownVisible(
+                                      !transactionDropdownVisible
+                                    )
+                                  }
+                                >
+                                  Compare to
+                                </label>
+                                <div className="container">
+                                  <div className="row">
+                                    <div className="col-12">
+                                      <div
+                                        className="custom-dropdown-header"
+                                        onClick={() =>
+                                          toggleDropdown("transaction")
+                                        }
+                                      >
+                                        <span className="selected-option mt-1">
+                                          {selectedTransaction}
+                                        </span>
+                                        <img
+                                          src={
+                                            transactionDropdownVisible
+                                              ? UpArrow
+                                              : DownIcon
                                           }
-                                        >
-                                          All
-                                        </div>
-                                        <div className={selectedTransaction === "last Wednesday" ? "dropdown-item active" : "dropdown-item"}
-                                          onClick={() =>
-                                            handleOptionClick(
-                                              "last Wednesday",
-                                              "transaction"
-                                            )
-                                          }
-                                        >
-                                          Last Wednesday
-                                        </div>
+                                          alt="Dropdown Icon"
+                                          className="w-8 h-8"
+                                        />
                                       </div>
-                                    )}
+                                      <div
+                                        className="custom-dropdown input_area"
+                                        ref={dataCalender}
+                                      >
+                                        {transactionDropdownVisible && (
+                                          <div className="dropdown-content">
+                                            <div
+                                              className={
+                                                selectedTransaction === "All"
+                                                  ? "dropdown-item active"
+                                                  : "dropdown-item"
+                                              }
+                                              onClick={() =>
+                                                handleOptionClick(
+                                                  "All",
+                                                  "transaction"
+                                                )
+                                              }
+                                            >
+                                              All
+                                            </div>
+                                            <div
+                                              className={
+                                                selectedTransaction ===
+                                                "last Wednesday"
+                                                  ? "dropdown-item active"
+                                                  : "dropdown-item"
+                                              }
+                                              onClick={() =>
+                                                handleOptionClick(
+                                                  "last Wednesday",
+                                                  "transaction"
+                                                )
+                                              }
+                                            >
+                                              Last Wednesday
+                                            </div>
+                                          </div>
+                                        )}
+                                      </div>
+                                    </div>
                                   </div>
                                 </div>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
+                              </Grid>
+                            </Grid>
+                          </Grid>
 
-                      <div className="border-r border-[#ccc] px-1 mt-8 h-[415px]"></div>
-                      <div className="col-qv-6 p-4">
-                        <div className="container input_cal_section">
-                          <div className="row">
-                            <div className="col-qv-12">
-                              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                                <DateCalendar />
-                              </LocalizationProvider>
-                            </div>
-                          </div>
-                        </div>
-
-                        <div className="container" style={{ marginTop: "18px" }}>
-                          <div className="row">
-                            <div
-                              className="date_cal_selector"
-                              style={{}}
-                            >
-                              <div className="col-qv-6">
-                                <FormControl>
+                          <Grid
+                            item
+                            style={{ marginTop: "25px" }}
+                            xs={0.1}
+                            className="border-r border-[#ccc] px-1 mt-12 h-[415px]"
+                          ></Grid>
+                          <Grid item xs={6}>
+                            <Grid container>
+                              <Grid item xs={12}>
+                                <LocalizationProvider
+                                  dateAdapter={AdapterDayjs}
+                                >
+                                  <DateCalendar />
+                                </LocalizationProvider>
+                              </Grid>
+                            </Grid>
+                            <Grid container className="" spacing={2}>
+                              <Grid className="mx-3" item xs={6}>
+                                <FormControl fullWidth>
                                   <label className="q-details-page-label_dasbaord">
                                     Start Date
                                   </label>
@@ -452,10 +536,12 @@ const Welcome = ({ isOpen, onClose, children }) => {
                                     onClick={handleStartDateIconClick}
                                   ></span>
                                 </FormControl>
-                              </div>
-                              <div className="col-qv-6">
-                                <FormControl>
-                                  <div className="q-details-page-label_dasbaord">End Date</div>
+                              </Grid>
+                              <Grid item xs={6}>
+                                <FormControl fullWidth>
+                                  <div className="q-details-page-label_dasbaord">
+                                    End Date
+                                  </div>
                                   <DatePicker
                                     selected={endDate}
                                     onChange={(date) => setEndDate(date)}
@@ -473,41 +559,39 @@ const Welcome = ({ isOpen, onClose, children }) => {
                                     onClick={handleEndDateIconClick}
                                   ></span>
                                 </FormControl>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
+                              </Grid>
+                            </Grid>
 
-                        <div className="">
-
-                        </div>
-                        {/* button section add  */}
-
-                        <div className="container ">
-                          <div className="qvrow">
-                            <div className="col-qv-12">
-                              <div className="date_cal_selector">
+                            <Grid
+                              container
+                              spacing={2}
+                              style={{ marginTop: "15px" }}
+                            >
+                              <Grid
+                                item
+                                xs={6}
+                                className="date_cal_selector mt-6"
+                              >
                                 <button
                                   className="btn-dashboard-section-cncl"
                                   onClick={closeCalendar}
                                 >
                                   Cancel
                                 </button>
+                              </Grid>
+                              <Grid item xs={6} className="date_cal_selector">
                                 <button
                                   className="btn-dashboard-section-save"
                                   onClick={handleRetrieve}
                                 >
                                   Retrieve
                                 </button>
-                              </div>
-
-
-                            </div>
-                          </div>
-                        </div>
-
-                      </div>
-                    </div>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                    </Grid>
 
                     {/* <div className="container">
                     <div className="row">
@@ -542,18 +626,12 @@ const Welcome = ({ isOpen, onClose, children }) => {
                   </div>    */}
                   </div>
                 </div>
-
               </div>
             </div>
-         
 
-          <div>
-            
-          </div>
           </div>
         </div>
       </div>
-
     </>
   );
 };
