@@ -72,11 +72,11 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
               </span>
               <div>
                 <div className="flex justify-between gap-4">
-                  <select className="custom-selecter cursor-pointer">
+                  {/* <select className="custom-selecter cursor-pointer">
                     <option>Recently Added</option>
                     <option> Month</option>
                     <option>Weeks</option>
-                  </select>
+                  </select> */}
                 
               <img
                     src={CrossIcon}

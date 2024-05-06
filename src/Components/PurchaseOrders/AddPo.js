@@ -5,21 +5,19 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 
-
 const AddPo = () => {
   const [issueDate, setIssueDate] = useState(null);
   const [stockDate, setStockDate] = useState(null);
-const temarray =[
-  {
-    title :"gfgk",
-   },
+  const temarray = [
+    {
+      title: "gfgk",
+      name: "priya"
+    },
+  ];
 
-]
-
-
-  const handleVendorClick = () =>{
-    console.log("hello")
-  }
+  const handleVendorClick = () => {
+    console.log("hello");
+  };
   const handleIssueDateChange = (date) => {
     setIssueDate(date);
   };
@@ -31,7 +29,7 @@ const temarray =[
   return (
     <>
       <div className="box">
-        <div className="box_shadow_div" style={{height:"300px"}}>
+        <div className="box_shadow_div" style={{ height: "300px" }}>
           <div className="q-add-categories-section-header">
             <span>
               <span>Create Purchase Order</span>
@@ -43,26 +41,20 @@ const temarray =[
             <Grid container spacing={2}>
               <Grid item xs={4}>
                 <label>vendor</label>
-                <SelectDropDown 
-                heading={null}
+                <SelectDropDown
+                  heading={null}
                   listItem={temarray}
                   onClickHandler={handleVendorClick}
                 />
+              </Grid>
+                <Grid item xs={4}>
+                  <label>Issued Date</label>
 
-                {/* <TextField select fullWidth>
-                  <MenuItem value="hello">Hello</MenuItem>
-                </TextField> */}
-              </Grid>
-              <Grid item xs={4}>
-                <label>Issued Date</label>  
-                <TextField fullWidth 
-                
-                
-                />
-              </Grid>
+                  <TextField fullWidth />
+                </Grid>
               <Grid item xs={4}>
                 <label>Stock Due</label>
-               
+
                 <TextField fullWidth />
               </Grid>
               <Grid item xs={6}>

@@ -88,7 +88,7 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
               {/* Your modal content */}
               <div className="">
                 <p className="q-custom-modal-header ">Update Attribute
-                  <img src={CrossIcon} alt="icon" className="ml-auto mb-4" onClick={closeModal} /></p>
+                  <img src={CrossIcon} alt="icon" className="ml-auto mb-4 cursor-pointer" onClick={closeModal} /></p>
               </div>
               {/* ... other modal content ... */}
               <input
