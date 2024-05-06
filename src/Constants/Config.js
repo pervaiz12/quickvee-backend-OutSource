@@ -4,7 +4,7 @@
 //remove unwanted and credentials of other app
 
 module.exports = Object.freeze({
-  BASE_URL: 'https://sandbox.quickvee.com/',
+  BASE_URL: 'https://sandbox.quickvee.net/',
 
 
 

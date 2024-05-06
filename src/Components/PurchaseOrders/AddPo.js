@@ -31,7 +31,7 @@ const temarray =[
   return (
     <>
       <div className="box">
-        <div className="box_shadow_div">
+        <div className="box_shadow_div" style={{height:"300px"}}>
           <div className="q-add-categories-section-header">
             <span>
               <span>Create Purchase Order</span>
