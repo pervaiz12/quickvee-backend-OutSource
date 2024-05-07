@@ -19,7 +19,7 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import caleIcon from "../../Assests/Filter/Calender.svg";
 import TimeIcon from "../../Assests/Filter/Clock.svg";
 import dayjs, { Dayjs } from "dayjs";
-
+import BasicTextFields from "../../reuseableComponents/TextInputField";
 const AddCoupon = ({ seVisible }) => {
   const [activeTab, setActiveTab] = useState("amount");
 
@@ -83,13 +83,13 @@ const AddCoupon = ({ seVisible }) => {
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-    setDateMaxDisAMTError("")
-    setDiscountError("")
+    setDateMaxDisAMTError("");
+    setDiscountError("");
   };
 
   const minutes = Math.round(dayjs().minute() / 15) * 15;
   const roundedTime = dayjs().minute(minutes).second(0);
-  console.log(roundedTime)
+  console.log(roundedTime);
 
   const [coupon, setCoupon] = useState({
     merchant_id: "MAL0100CA",
@@ -130,7 +130,6 @@ const AddCoupon = ({ seVisible }) => {
       setCoupon({
         ...coupon,
         date_valid: null,
-
       });
       setDateStartError("Start Date is required");
     } else if (dayjs(formattedStartDate).isAfter(dayjs(coupon.date_expire))) {
@@ -148,7 +147,6 @@ const AddCoupon = ({ seVisible }) => {
       setDateStartError("");
     }
   };
-
 
   const handleEndDateChange = (newDate) => {
     const formattedEndDate = newDate.format("YYYY-MM-DD");
@@ -234,13 +232,11 @@ const AddCoupon = ({ seVisible }) => {
         setDateMaxDisAMTError("");
       }
       if (!coupon.discount == null || coupon.discount === "") {
-        setDiscountError("Discount Amount Percentage is required")
+        setDiscountError("Discount Amount Percentage is required");
       } else {
-        setDiscountError("")
+        setDiscountError("");
       }
     }
-
-
 
     if (!coupon.date_valid) {
       //  alert("Start Date are required.");
@@ -252,7 +248,6 @@ const AddCoupon = ({ seVisible }) => {
       setDateEndError("End Date is required");
       // return; // Stop further execution
     }
-
 
     const formData = new FormData();
     formData.append("merchant_id", coupon.merchant_id);
@@ -309,8 +304,16 @@ const AddCoupon = ({ seVisible }) => {
       dayjs(coupon.time_expire, "HH:mm:ss").format("hh:mm A")
     );
 
-
-    if (errorMessage === "Coupon name already exists" || inputValue === "" || minOrderAmountError === "Minimum Order Amount is required" || discountError === "Discount Amount is required" || discountError === "Discount Amount Percentage is required" || dateStartError === "Start Date is required" || dateEndError === "End Date is required" || dateMaxDisAMTError === "Maximum Discount Amount is required") {
+    if (
+      errorMessage === "Coupon name already exists" ||
+      inputValue === "" ||
+      minOrderAmountError === "Minimum Order Amount is required" ||
+      discountError === "Discount Amount is required" ||
+      discountError === "Discount Amount Percentage is required" ||
+      dateStartError === "Start Date is required" ||
+      dateEndError === "End Date is required" ||
+      dateMaxDisAMTError === "Maximum Discount Amount is required"
+    ) {
       return;
     }
 
@@ -331,9 +334,6 @@ const AddCoupon = ({ seVisible }) => {
     for (const [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
     }
-
-
-
 
     try {
       const res = await axios.post(BASE_URL + ADD_COUPON, formData, {
@@ -439,17 +439,23 @@ const AddCoupon = ({ seVisible }) => {
                     }}
                   />
                 </div>
-                <div className="q-add-coupon-single-input">
+
+                <div className="q-add-coupon-single-input mb-5">
                   <label htmlFor="coupon_name">Coupon Code</label>
-                  <input
+                  <BasicTextFields
+                    type={"text"}
+                    value={inputValue}
+                    maxLength={11}
+                    onChangeFun={handleInputChange}
+                  />
+                  {/* <input
                     type="text"
                     id="coupon_name"
                     name="coupon_name"
                     maxLength="11"
                     value={inputValue}
-
                     onChange={handleInputChange}
-                  />
+                  /> */}
                   {errorMessage && (
                     <p className="error-message">{errorMessage}</p>
                   )}
@@ -479,7 +485,6 @@ const AddCoupon = ({ seVisible }) => {
                         name="minorder_amt"
                         value={coupon.min_amount}
                         onChange={(e) => handleMinAmountChange(e)}
-
                         placeholder="Enter Minimum Order Amount"
                       />
                       {minOrderAmountError && (
@@ -493,7 +498,9 @@ const AddCoupon = ({ seVisible }) => {
                         <Grid item xs={6}>
                           {activeTab === "amount" && (
                             <div className="q_coupon_minium input_area">
-                              <label htmlFor="discount_amt">Discount Amount</label>
+                              <label htmlFor="discount_amt">
+                                Discount Amount
+                              </label>
                               <input
                                 type="number"
                                 id="discount_amt"
@@ -501,7 +508,6 @@ const AddCoupon = ({ seVisible }) => {
                                 placeholder="Enter Discount Amount"
                                 value={coupon.discount}
                                 onChange={(e) => handleDiscountAmountChange(e)}
-
                               />
                               {discountError && (
                                 <p className="error-message">{discountError}</p>
@@ -519,7 +525,6 @@ const AddCoupon = ({ seVisible }) => {
                                 name="discount"
                                 placeholder="Enter Discount Percentage"
                                 value={coupon.discount}
-
                                 onChange={(e) => handleDiscountPercentChange(e)}
                               />
                               {discountError && (
@@ -533,10 +538,11 @@ const AddCoupon = ({ seVisible }) => {
                             <Grid container>
                               <Grid item xs={6}>
                                 <div
-                                  className={`cursor-pointer amt_btn text-center   ${activeTab === "amount"
+                                  className={`cursor-pointer amt_btn text-center   ${
+                                    activeTab === "amount"
                                       ? "bg-[#0A64F9] text-white radius-4"
                                       : ""
-                                    }`}
+                                  }`}
                                   onClick={() => handleTabChange("amount")}
                                 >
                                   Amount ($)
@@ -544,10 +550,11 @@ const AddCoupon = ({ seVisible }) => {
                               </Grid>
                               <Grid item xs={6}>
                                 <div
-                                  className={`cursor-pointer amt_btn text-center  ${activeTab === "percentage"
+                                  className={`cursor-pointer amt_btn text-center  ${
+                                    activeTab === "percentage"
                                       ? "bg-[#0A64F9] text-white radius-4"
                                       : ""
-                                    }`}
+                                  }`}
                                   onClick={() => handleTabChange("percentage")}
                                 >
                                   Percentage (%)
@@ -562,7 +569,9 @@ const AddCoupon = ({ seVisible }) => {
                 </Grid>
                 {activeTab === "percentage" && (
                   <div className="q_coupon_minium input_area">
-                    <label htmlFor="maximum_discount">Maximum Discount Amount</label>
+                    <label htmlFor="maximum_discount">
+                      Maximum Discount Amount
+                    </label>
                     <input
                       type="number"
                       id="maximum_discount"
@@ -603,30 +612,32 @@ const AddCoupon = ({ seVisible }) => {
                                 }
                                 size="medium"
                                 shouldDisableDate={(date) =>
-                                  date.format("YYYY-MM-DD") === coupon.date_valid
+                                  date.format("YYYY-MM-DD") ===
+                                  coupon.date_valid
                                 }
                                 format={"DD-MM-YYYY"}
                                 disablePast
                                 views={["year", "month", "day"]}
-
-                                slotProps={{ textField: { placeholder: 'Start Date' } }}
+                                slotProps={{
+                                  textField: { placeholder: "Start Date" },
+                                }}
                                 components={{
                                   OpenPickerIcon: () => (
                                     <img src={caleIcon} alt="calendar-icon" />
                                   ),
                                 }}
                                 className="custom-datepicker"
-
                               />
                             </LocalizationProvider>
                             {dateStartError && (
-                              <p className="error-message date_error">{dateStartError}</p>
+                              <p className="error-message date_error">
+                                {dateStartError}
+                              </p>
                             )}
                             <div className="dividersss" />
                             <div className="q_time_display">
                               <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <TimePicker
-
                                   className="input_label_section"
                                   name="start_tym"
                                   id="start_tym"
@@ -634,7 +645,9 @@ const AddCoupon = ({ seVisible }) => {
                                   onChange={(newTime) =>
                                     handleStartTimeChange(newTime)
                                   }
-                                  slotProps={{ textField: { placeholder: 'Start Time' } }}
+                                  slotProps={{
+                                    textField: { placeholder: "Start Time" },
+                                  }}
                                   components={{
                                     OpenPickerIcon: () => (
                                       <img src={TimeIcon} alt="time-icon" />
@@ -668,13 +681,15 @@ const AddCoupon = ({ seVisible }) => {
                                   handleEndDateChange(newDate)
                                 }
                                 shouldDisableDate={(date) =>
-                                  date.format("YYYY-MM-DD") === coupon.date_expire
+                                  date.format("YYYY-MM-DD") ===
+                                  coupon.date_expire
                                 }
-
                                 format={"DD-MM-YYYY"}
                                 disablePast
                                 views={["year", "month", "day"]}
-                                slotProps={{ textField: { placeholder: 'End Date' } }}
+                                slotProps={{
+                                  textField: { placeholder: "End Date" },
+                                }}
                                 components={{
                                   OpenPickerIcon: () => (
                                     <img src={caleIcon} alt="calendar-icon" />
@@ -682,7 +697,9 @@ const AddCoupon = ({ seVisible }) => {
                                 }}
                               />
                               {dateEndError && (
-                                <p className="error-message date_error">{dateEndError}</p>
+                                <p className="error-message date_error">
+                                  {dateEndError}
+                                </p>
                               )}
                             </LocalizationProvider>
                             <div className="dividersss" />
@@ -696,7 +713,9 @@ const AddCoupon = ({ seVisible }) => {
                                   onChange={(newTime) =>
                                     handleEndTimeChange(newTime)
                                   }
-                                  slotProps={{ textField: { placeholder: 'End Time' } }}
+                                  slotProps={{
+                                    textField: { placeholder: "End Time" },
+                                  }}
                                   components={{
                                     OpenPickerIcon: () => (
                                       <img src={TimeIcon} alt="time-icon" />
@@ -758,11 +777,7 @@ const AddCoupon = ({ seVisible }) => {
               </div>
 
               <div className="q-add-categories-section-middle-footer">
-                <button
-                  className="quic-btn quic-btn-save"
-                >
-                  Add
-                </button>
+                <button className="quic-btn quic-btn-save">Add</button>
                 <button
                   onClick={() => seVisible("CouponDiscount")}
                   className="quic-btn quic-btn-cancle"

@@ -11,13 +11,11 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Grid } from "@mui/material";
+
 import $ from "jquery";
 import SearchBar from "../SearchBar";
 
 const FilterEmp = ({ onFilterEmpDataChange }) => {
-  
-  const [searchId, setSearchId] = useState("");
-  const [selected, setSelected] = useState(false);
   const transactionsList = [
     {
       title: "Both",
@@ -29,7 +27,8 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
       title: "Online",
     },
   ];
-
+  const [searchId, setSearchId] = useState("");
+  const [selected, setSelected] = useState(false);
 
   const [isTablet, setIsTablet] = useState(false);
   //const [selectedEmployee, setSelectedEmployee] = useState("All");
@@ -49,8 +48,6 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
   const handleSearch = () => {
     console.log("Search ID:", searchId);
   };
-
-
 
   const toggleDropdown = (dropdown) => {
     switch (dropdown) {
@@ -154,6 +151,7 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
   }, []);
 
   const [employeeList, setemployeeList] = useState([]);
+  console.log("employeeList ,", employeeList);
   const [loadingEmpList, setLoadingEmpList] = useState(true);
 
   useEffect(() => {
@@ -202,8 +200,7 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
 
   return (
     <>
-
-      <Grid container className="">
+      <Grid container className="px-5">
         <Grid item xs={12}>
           <Grid container className="mt-5">
             <Grid item xs={12} className="">
@@ -234,7 +231,7 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
             <Grid item xs={4}>
               <label htmlFor="transactionFilter">Transactions</label>
               <SelectDropDown
-                heading={""}
+                heading={null}
                 listItem={transactionsList}
                 onClickHandler={handleOptionClick}
                 selectedOption={selectedTransaction}
@@ -245,7 +242,7 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
         </Grid>
       </Grid>
 
-      <div className="q_main_data_range">
+      {/* <div className="q_main_data_range">
         <SearchBar />
 
         <div className="mt_card_header q_dashbaord_netsales">
@@ -378,8 +375,7 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
             </div>
           </div>
         </div>
-      </div>
-
+      </div> */}
     </>
   );
 };

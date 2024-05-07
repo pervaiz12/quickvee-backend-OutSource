@@ -474,7 +474,7 @@ ul li .q_filter_data_days {
 	border: 1px solid #ccc;
 	border-radius: 4px;
 	padding: 10px 10px;
-	width: 90%;
+	width: 100%;
 }
 
 @media screen and (min-width: 640px) and (max-width: 1080px) {

@@ -478,7 +478,8 @@ font-size: 18px;
       border: 1px solid #E1E1E1;
       border-radius: 4px;
       padding: 8px;
-      margin: 5px 0 15px 0;}
+      /* margin: 5px 0 15px 0; */
+    }
 
       .q_coupon_calculation_amount>label {
           color: #818181;
