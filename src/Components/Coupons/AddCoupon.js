@@ -461,7 +461,7 @@ const AddCoupon = ({ seVisible }) => {
                   )}
                 </div>
 
-                <div className="q-add-coupon-single-input">
+                <div className="q-add-coupon-single-input mb-5">
                   <label htmlFor="description">Description</label>
                   <textarea
                     id="description"
@@ -479,14 +479,20 @@ const AddCoupon = ({ seVisible }) => {
                   <Grid item md={6} xs={12}>
                     <div className="q_coupon_minium input_area">
                       <label htmlFor="minorder_amt">Minimum Order Amount</label>
-                      <input
+                      <BasicTextFields
+                        type={"number"}
+                        value={coupon.min_amount}
+                        onChangeFun={handleMinAmountChange}
+                        placeholder="Enter Minimum Order Amount"
+                      />
+                      {/* <input
                         type="number"
                         id="minorder_amt"
                         name="minorder_amt"
                         value={coupon.min_amount}
                         onChange={(e) => handleMinAmountChange(e)}
                         placeholder="Enter Minimum Order Amount"
-                      />
+                      /> */}
                       {minOrderAmountError && (
                         <p className="error-message">{minOrderAmountError}</p>
                       )}
@@ -501,14 +507,20 @@ const AddCoupon = ({ seVisible }) => {
                               <label htmlFor="discount_amt">
                                 Discount Amount
                               </label>
-                              <input
+                              <BasicTextFields
+                                type={"number"}
+                                value={coupon.discount}
+                                placeholder="Enter Discount Amount"
+                                onChangeFun={handleDiscountAmountChange}
+                              />
+                              {/* <input
                                 type="number"
                                 id="discount_amt"
                                 name="discount"
                                 placeholder="Enter Discount Amount"
                                 value={coupon.discount}
                                 onChange={(e) => handleDiscountAmountChange(e)}
-                              />
+                              /> */}
                               {discountError && (
                                 <p className="error-message">{discountError}</p>
                               )}
@@ -519,6 +531,12 @@ const AddCoupon = ({ seVisible }) => {
                               <label htmlFor="discount_per">
                                 Discount Percentage
                               </label>
+                              <BasicTextFields
+                                type={"number"}
+                                value={coupon.discount}
+                                placeholder="Enter Discount Percentage"
+                                onChangeFun={handleDiscountPercentChange}
+                              />
                               <input
                                 type="number"
                                 id="discount_per"
