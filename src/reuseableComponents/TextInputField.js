@@ -6,7 +6,7 @@ export default function BasicTextFields({
   maxLength,
   onChangeFun,
   type,
-  placeholder
+  placeholder,
 }) {
   return (
     <FormControl fullWidth>
@@ -14,10 +14,12 @@ export default function BasicTextFields({
         id="outlined-basic"
         value={value}
         inputProps={{ maxLength: maxLength, type: type }}
-        onChange={(e)=>{onChangeFun(e)}}
+        onChange={(e) => {
+          onChangeFun(e);
+        }}
         variant="outlined"
         size="small"
-        placeholder= {placeholder}
+        placeholder={placeholder}
       />
     </FormControl>
   );

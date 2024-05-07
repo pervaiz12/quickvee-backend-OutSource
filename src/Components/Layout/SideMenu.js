@@ -159,7 +159,7 @@ const DropdownMenuItem = ({ item, isMenuOpen }) => {
   // }, [isDropdownOpen , currentUrl])
   
 
-
+  console.log("Calling from item" , item)
   return (
     <div
     className="relative"
@@ -210,7 +210,7 @@ const menuItems = [
       <img src={DashboardIcon} alt="Dashboard" className="h-6 w-10 mt-4 mb-4" />
     ),
     text: "Dashboard",
-    link: "/dashboard",
+    link: "/",
   },
 
   {

@@ -45,8 +45,9 @@ const SelectDropDown = ({
               </MenuItem>
             )}
 
-            {listItem?.map((item) => (
+            {listItem?.map((item,index) => (
               <MenuItem
+              key={index}
                 onClick={(e) => {
                   onClickHandler(item, dropdownFor);
                 }}

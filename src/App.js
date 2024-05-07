@@ -104,7 +104,7 @@ function App() {
         path="/users/view/unapprove"
         element={<Main visible={"multimerchant"} />}
       /> */}
-      <Route exact path="/dashboard" element={<Main visible={"dashboard"} />} />
+      <Route index path="/" element={<Main visible={"dashboard"} />} />
       <Route exact path="/order" element={<Main visible={"order"} />} />
       <Route exact path="/category" element={<Main visible={"category"} />} />
       <Route exact path="/products" element={<Main visible={"products"} />} />

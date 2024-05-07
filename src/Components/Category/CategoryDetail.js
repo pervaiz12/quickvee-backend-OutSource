@@ -14,6 +14,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
 
 import { Link } from "react-router-dom";
+import CheckBoxField from "../../reuseableComponents/CheckBoxField";
 
 const CategoryDetail = ({ seVisible }) => {
   const [allcategories, setallcategories] = useState([]);
@@ -62,7 +63,7 @@ const CategoryDetail = ({ seVisible }) => {
 
   // for  Category Status update
   const handleToggleStatus = async (id, status) => {
-    console.log("jkj");
+    console.log("category id and status: " + id , status);
     const data = {
       id: id,
       status: status,
@@ -81,7 +82,14 @@ const CategoryDetail = ({ seVisible }) => {
     }
   };
 
-  const handleOnlineChange = (id, status, category) => {
+  const handleOnlineChange = (category) => {
+    let status =
+    category.cat_show_status === "0" ||
+    category.cat_show_status === "1"
+    ? "1"
+    : "0"
+   console.log("category status: " + category)
+   console.log("category Custom status: " + status)
     const isOnlineChecked =
       category.cat_show_status === "0" || category.cat_show_status === "1";
     const isRegisterChecked =
@@ -97,7 +105,7 @@ const CategoryDetail = ({ seVisible }) => {
     } else if (isOnlineChecked && isRegisterChecked) {
       status = 2;
     }
-    handleToggleStatus(id, status, category);
+    handleToggleStatus(category.id, status, category);
   };
 
   const handleRegisterChange = (id, status, category) => {
@@ -301,6 +309,7 @@ const CategoryDetail = ({ seVisible }) => {
                               <div className="category-checkmark-div">
                                 <label className="category-checkmark-label">
                                   Online
+                                 
                                   <input
                                     type="checkbox"
                                     checked={
@@ -309,11 +318,11 @@ const CategoryDetail = ({ seVisible }) => {
                                     }
                                     onChange={() =>
                                       handleOnlineChange(
-                                        category.id,
-                                        category.cat_show_status === "0" ||
-                                          category.cat_show_status === "1"
-                                          ? "1"
-                                          : "0",
+                                        // category.id,
+                                        // category.cat_show_status === "0" ||
+                                        //   category.cat_show_status === "1"
+                                        //   ? "1"
+                                        //   : "0",
                                         category
                                       )
                                     }

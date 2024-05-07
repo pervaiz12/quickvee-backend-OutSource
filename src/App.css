@@ -7,14 +7,7 @@
 	color: blue;
 	font-size: 40px;
 }
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-	-ms-appearance: none;
-	-o-appearance: none;
-	-moz-appearance: none;
-  margin: 0;
-}
+
 @font-face {
 	font-family: adminbold;
 	src: url(./Assests/Fonts/circular-bold.TTF);
@@ -418,7 +411,7 @@ select option {
 	display: none;
 }
 
-*/ .days_btn {
+.days_btn {
 	border-width: 1px;
 	padding-left: 3.5rem;
 	padding-right: 3.5rem;
