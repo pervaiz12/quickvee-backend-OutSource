@@ -1,13 +1,16 @@
-
 import React, { useState } from "react";
 import { Grid, TextField } from "@mui/material";
 import SearchIcon from "../../Assests/Filter/Search.svg";
 import DeleteIcon from "../../Assests/Dashboard/deleteIcon.svg";
+import InputTextSearch from "../../reuseableComponents/InputTextSearch";
+import { FormControl } from "@mui/material";  
 
-const AutoPo = ({ handleCheckSearchValue }) => {
+const AutoPo = ({ value, maxLength, onChangeFun, type }) => {
   const [searchId, setSearchId] = useState("");
   const [products, setProducts] = useState([]);
   const [showProductList, setShowProductList] = useState(false);
+
+
 
   const handleSearch = () => {
     if (searchId.trim() !== "") {
@@ -68,39 +71,104 @@ const AutoPo = ({ handleCheckSearchValue }) => {
     },
     {
       id: 5,
-      name: "Purchase Product",
+      name: "Monster Bong - v200",
       description: "8”/Pink",
-      qty: 10,
-      costPerUnit: 50.0,
-      total: 500.0,
-      upc: "GHI789"
+      qty: 15,
+      costPerUnit: 100.0,
+      total: 1500.0,
+      upc: "HHJJ78789"
     },
     {
       id: 6,
-      name: "Purchase Product",
+      name: "Monster Bong - v200",
       description: "8”/Pink",
-      qty: 10,
-      costPerUnit: 50.0,
-      total: 500.0,
-      upc: "GHI789"
-    }
-    ,
+      qty: 15,
+      costPerUnit: 100.0,
+      total: 1500.0,
+      upc: "HHJJ78789"
+    },
     {
       id: 7,
-      name: "Purchase Product",
+      name: "Monster Bong - v200",
       description: "8”/Pink",
-      qty: 10,
-      costPerUnit: 50.0,
-      total: 500.0,
-      upc: "GHI789"
-    }
+      qty: 15,
+      costPerUnit: 100.0,
+      total: 1500.0,
+      upc: "HHJJ78789"
+    },
+    {
+      id: 8,
+      name: "Monster Bong - v200",
+      description: "8”/Pink",
+      qty: 15,
+      costPerUnit: 100.0,
+      total: 1500.0,
+      upc: "HHJJ78789"
+    },
+    {
+      id: 8,
+      name: "Monster Bong - v200",
+      description: "8”/Pink",
+      qty: 15,
+      costPerUnit: 100.0,
+      total: 1500.0,
+      upc: "HHJJ78789"
+    },
+    {
+      id: 8,
+      name: "Monster Bong - v200",
+      description: "8”/Pink",
+      qty: 15,
+      costPerUnit: 100.0,
+      total: 1500.0,
+      upc: "HHJJ78789"
+    },
+    {
+      id: 8,
+      name: "Monster Bong - v200",
+      description: "8”/Pink",
+      qty: 15,
+      costPerUnit: 100.0,
+      total: 1500.0,
+      upc: "HHJJ78789"
+    },
+    {
+      id: 8,
+      name: "Monster Bong - v200",
+      description: "8”/Pink",
+      qty: 15,
+      costPerUnit: 100.0,
+      total: 1500.0,
+      upc: "HHJJ78789"
+    },
+    {
+      id: 8,
+      name: "Monster Bong - v200",
+      description: "8”/Pink",
+      qty: 15,
+      costPerUnit: 100.0,
+      total: 1500.0,
+      upc: "HHJJ78789"
+    }, {
+      id: 8,
+      name: "Monster Bong - v200",
+      description: "8”/Pink",
+      qty: 15,
+      costPerUnit: 100.0,
+      total: 1500.0,
+      upc: "HHJJ78789"
+    },
   ];
+
+
+
+
 
 
   const handleInputChange = (event) => {
     setSearchId(event.target.value);
-    handleCheckSearchValue(event.target.value)
     handleSearch();
+
   };
 
   const handleCancel = () => {
@@ -123,92 +191,117 @@ const AutoPo = ({ handleCheckSearchValue }) => {
     e.preventDefault();
   };
 
+
+  const handleAutoPoClick = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+  };
   return (
-    <div className="box">
-      <div className="box_shadow_div">
-        <div className="my-4 px-6">
-          <div className="q_searchBar">
-            <div className="flex border rounded-md overflow-hidden">
-              <button
-                onClick={handleSearch}
-                className="text-black px-4 py-2 focus:outline-none text-2xl"
-              >
-                <img src={SearchIcon} alt="" className="w-6 h-6" />
-              </button>
-              <input
-                type="text"
-                placeholder="Start typing SKU or Product Name"
-                value={searchId}
-                onChange={handleInputChange}
-                className="w-full px-4 py-2 border-none focus:outline-none place_text_search  cursor-pointer"
-              />
+    <div className="auto-po-container">
+      <div className="box">
+        <div className="box_shadow_div">
+          <div className="my-4 px-6">
+            <div className="q_searchBar sticky" onClick={handleAutoPoClick}>
+              <div className="flex border rounded-md overflow-hidden">
+                <button
+                  onClick={handleSearch}
+                  className="text-black px-4 py-2 focus:outline-none text-2xl"
+                >
+                  <img src={SearchIcon} alt="" className="w-6 h-6" />
+                </button>
+                <input
+                  type="text"
+                  placeholder="Start typing SKU or Product Name"
+                  value={searchId}
+                  onChange={handleInputChange}
+                  className="w-full px-4 py-2 border-none focus:outline-none place_text_search  cursor-pointer"
+                />
+              </div>
             </div>
           </div>
+             
+           
+          {showProductList && (
+            <div className="q-category-bottom-detail-section" onClick={handleContainerClick}>
+              <div className="q-add-purchase-section-header">
+                <p className="purchase-data-item">Item Name</p>
+                <p className="purchase-data-qty">Qty</p>
+                <p className="purchase-data-after">After</p>
+                <p className="purchase-data-unit">Cost Per Unit</p>
+                <p className="purchase-data-total">Total</p>
+                <p className="purchase-data-upc">UPC</p>
+                <p className="purchase-data-delete"></p>
+              </div>
+              {products.map((product, index) => (
+                <div
+                  key={product.id}
+                  className={`q-category-bottom-categories-single-category  purchase-addpo ${index % 2 === 0 ? 'even' : 'odd'}`}
+                >
+                  <p className="purchase-data-item text-[18px]">
+                    {product.name}
+                    <br />
+                    <span className="text-[12px]">{product.description}</span>
+                    <br />
+                    <a href="" className="add_notes_purchase_data">
+                      Add Note
+                    </a>
+                  </p>
+                  <p className="purchase-data-qty">
+                    <Grid container>
+                      <Grid item xs={10}>
+                        <FormControl fullWidth>
+                          <TextField
+                            id="outlined-basic"
+                            value={value}
+                            inputProps={{ maxLength: maxLength, type: type }}
+                            onChange={onChangeFun}
+                            variant="outlined" size="small" />
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+                  </p>
+                  <p className="purchase-data-after mt-3">{product.qty}</p>
+                  <p className="purchase-data-unit">
+                    <Grid container>
+                      <Grid item xs={10}>
+                        <FormControl fullWidth>
+                          <TextField
+                            id="outlined-basic"
+                            value={value}
+                            inputProps={{ maxLength: maxLength, type: type }}
+                            onChange={onChangeFun}
+                            variant="outlined" size="small" />
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+                  </p>
+                  <p className="purchase-data-total mt-3">${product.total.toFixed(2)}</p>
+                  <p className="purchase-data-upc mt-3">{product.upc}</p>
+                  <p className="purchase-data-delete">
+                    <img
+                      src={DeleteIcon}
+                      alt=""
+                      className="w-8 h-8 cursor-pointer"
+                      onClick={() => handleDelete(product.id)}
+                    />
+                  </p>
+                </div>
+              ))}
+              <div className="flex justify-between py-4 px-4">
+                <div className="button-container start gap-4">
+                  <button className="quic-btn quic-btn-add">Auto PO</button>
+                  <button className="quic-btn quic-btn-draft">Save as Draft</button>
+                </div>
+                <div className="button-container end gap-4">
+                  <button className="quic-btn quic-btn-save">Create</button>
+                  <button onClick={handleCancel} className="quic-btn quic-btn-cancle">Cancel</button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-        {showProductList && (
-          <div className="q-category-bottom-detail-section" onClick={handleContainerClick}>
-            <div className="q-add-purchase-section-header">
-              <p className="purchase-data-item">Item Name</p>
-              <p className="purchase-data-qty">Qty</p>
-              <p className="purchase-data-after">After</p>
-              <p className="purchase-data-unit">Cost Per Unit</p>
-              <p className="purchase-data-total">Total</p>
-              <p className="purchase-data-upc">UPC</p>
-              <p className="purchase-data-delete"></p>
-            </div>
-            {products.map((product, index) => (
-              <div
-                key={product.id}
-                className={`q-category-bottom-categories-single-category  purchase-addpo ${index % 2 === 0 ? 'even' : 'odd'}`}
-              >
-                <p className="purchase-data-item text-[18px]">
-                  {product.name}
-                  <br />
-                  <span className="text-[12px]">{product.description}</span>
-                  <br />
-                  <a href="" className="add_notes_purchase_data">
-                    Add Note
-                  </a>
-                </p>
-                <p className="purchase-data-qty">
-                  <Grid container>
-                    <Grid item xs={10}>
-                      <TextField fullWidth />
-                    </Grid>
-                  </Grid>
-                </p>
-                <p className="purchase-data-after mt-3">{product.qty}</p>
-                <p className="purchase-data-unit">
-                  <Grid container>
-                    <Grid item xs={10}>
-                      <TextField fullWidth />
-                    </Grid>
-                  </Grid>
-                </p>
-                <p className="purchase-data-total mt-3">${product.total.toFixed(2)}</p>
-                <p className="purchase-data-upc mt-3">{product.upc}</p>
-                <p className="purchase-data-delete">
-                  <img
-                    src={DeleteIcon}
-                    alt=""
-                    className="w-8 h-8 cursor-pointer"
-                    onClick={() => handleDelete(product.id)}
-                  />
-                </p>
-              </div>
-            ))}
-            <div className="flex justify-between py-4 px-4">
-              <div className="button-container start gap-4">
-                <button className="quic-btn quic-btn-add">Auto PO</button>
-                <button className="quic-btn quic-btn-draft">Save as Draft</button>
-              </div>
-              <div className="button-container end gap-4">
-                <button className="quic-btn quic-btn-save">Create</button>
-                <button onClick={handleCancel} className="quic-btn quic-btn-cancle">Cancel</button>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );

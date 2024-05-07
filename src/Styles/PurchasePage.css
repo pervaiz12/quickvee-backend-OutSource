@@ -125,11 +125,7 @@
 }
 
 
-fieldset.MuiOutlinedInput-notchedOutline.css-1d3z3hw-MuiOutlinedInput-notchedOutline {
-    border-radius: 8px;
-    border:1px solid #D0D0D0;
-    background-color: #FFFFFF;
-}
+
 
 
 
@@ -447,3 +443,28 @@ width:35%;
 /* .MuiGrid-root.MuiGrid-container.css-11lq3yg-MuiGrid-root {
     margin-top: 4px;
 } */
+
+.auto-po-container {
+ position: relative !important;
+
+
+  overflow: hidden;
+  overflow-y: scroll;
+}
+
+.q_searchBar {
+  position: sticky;
+  top: 0;
+  z-index: 1000; 
+  background-color: white; 
+}
+
+.q-category-bottom-detail-section {
+  overflow-y: auto;
+  max-height: calc(100vh - 60px); /* Adjust height as needed */
+}
+
+.product-list {
+  overflow-y: auto;
+  max-height: calc(100vh - 100px); /* Adjust height as needed */
+}
