@@ -28,18 +28,18 @@ const SelectDropDown = ({
   selectedOption,
   dropdownFor,
 }) => {
-  console.log("selectedOption ",selectedOption);
+  console.log("selectedOption ", selectedOption);
   return (
     <>
       <FormControl fullWidth>
         <ThemeProvider theme={theme}>
           <Select size="small" value={selectedOption} displayEmpty>
-            {heading  && (
+            {heading && (
               <MenuItem
                 onClick={(e) => {
                   onClickHandler(heading, dropdownFor);
                 }}
-                value={heading }
+                value={heading}
               >
                 {heading}
               </MenuItem>

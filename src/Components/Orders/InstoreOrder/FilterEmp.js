@@ -12,7 +12,6 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Grid } from "@mui/material";
 
-
 import $ from "jquery";
 import SearchBar from "../SearchBar";
 
@@ -49,8 +48,6 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
   const handleSearch = () => {
     console.log("Search ID:", searchId);
   };
-
-
 
   const toggleDropdown = (dropdown) => {
     switch (dropdown) {
@@ -154,7 +151,7 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
   }, []);
 
   const [employeeList, setemployeeList] = useState([]);
-  console.log("employeeList ,",employeeList)
+  console.log("employeeList ,", employeeList);
   const [loadingEmpList, setLoadingEmpList] = useState(true);
 
   useEffect(() => {
@@ -379,7 +376,6 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
           </div>
         </div>
       </div> */}
-
     </>
   );
 };

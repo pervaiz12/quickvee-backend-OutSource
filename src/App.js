@@ -162,6 +162,12 @@ function App() {
         path="/product-add"
         element={<Main visible={"product-add"} />}
       />
+
+      <Route
+        exact
+        path="/add-po"
+        element={<Main visible={"add-po"} />}
+      />
    
    
 

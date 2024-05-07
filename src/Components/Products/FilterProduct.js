@@ -235,11 +235,12 @@ const FilterProduct = ({
                   selectedOption={selectedListingType}
                   onClickHandler={handleOptionClick}
                   dropdownFor={"listingType"}
-                
                 />
               </Grid>
               <Grid item xs={4}>
-                <label style={{whiteSpace:'nowrap'}}>Enable Product for Delivery/Pickup</label>
+                <label style={{ whiteSpace: "nowrap" }}>
+                  Enable Product for Delivery/Pickup
+                </label>
                 <SelectDropDown
                   heading={"Select"}
                   listItem={deliveryPickupList}
@@ -279,15 +280,15 @@ const FilterProduct = ({
         </div>
 
         {/* <div className="mt_card_header q_dashbaord_netsales"> */}
-          {/* <h1 className="">Filter By</h1> */}
+        {/* <h1 className="">Filter By</h1> */}
 
-          {/* <div className="qvrow"> */}
-            {/* <CategoryListDropDown
+        {/* <div className="qvrow"> */}
+        {/* <CategoryListDropDown
               type="category"
               onCategoryChange={handleCategoryChange}
             /> */}
 
-            {/* <div
+        {/* <div
               className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}
             >
               <label
@@ -367,8 +368,8 @@ const FilterProduct = ({
               </div>
             </div> */}
 
-            {/* Order Status Dropdown */}
-            {/* <div
+        {/* Order Status Dropdown */}
+        {/* <div
               className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}
             >
               <label
@@ -423,8 +424,8 @@ const FilterProduct = ({
                 )}
               </div>
             </div> */}
-            {/* Employee Dropdown */}
-            {/* <div
+        {/* Employee Dropdown */}
+        {/* <div
               className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}
             >
               <label
@@ -531,7 +532,7 @@ const FilterProduct = ({
                 )}
               </div>
             </div> */}
-          {/* </div> */}
+        {/* </div> */}
         {/* </div> */}
       </div>
     </>
