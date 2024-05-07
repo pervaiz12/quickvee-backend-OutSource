@@ -33,7 +33,7 @@ const SelectDropDown = ({
     <>
       <FormControl fullWidth>
         <ThemeProvider theme={theme}>
-          <Select value={selectedOption} displayEmpty>
+          <Select size="small" value={selectedOption} displayEmpty>
             {heading  && (
               <MenuItem
                 onClick={(e) => {
