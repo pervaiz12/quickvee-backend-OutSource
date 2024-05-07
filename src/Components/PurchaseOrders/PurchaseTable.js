@@ -44,13 +44,15 @@ const PurchaseTable = ({ seVisible, searchId }) => {
         <div className="q-category-bottom-header-sticky">
           <div className="q-category-bottom-header">
             <span>Purchase Order</span>
-            <p onClick={() => seVisible("CategoryAlert")}>
-              Add New PO <img src={AddIcon} alt="add-icon" />{" "}
-            </p>
+            <Link to="/add-po">
+              <p>
+                Add New PO <img src={AddIcon} alt="add-icon" />{" "}
+              </p>
+            </Link>
           </div>
           <div className="q-category-bottom-categories-header">
             <p className="purchase-data-sort ">Order#</p>
-            <p className="purchase-data-sort " >Status</p>
+            <p className="purchase-data-sort ">Status</p>
             <p className="purchase-data-sort ">Received</p>
 
             <p className="purchase-data-sort ">Total Qty</p>
@@ -66,7 +68,9 @@ const PurchaseTable = ({ seVisible, searchId }) => {
           filteredPurchase.length >= 1 &&
           filteredPurchase.map((purchaseData, index) => (
             <div
-             className={` q-category-bottom-categories-listing purchase-item ${index % 2 === 0 ? 'even' : 'odd'}`}
+              className={` q-category-bottom-categories-listing purchase-item ${
+                index % 2 === 0 ? "even" : "odd"
+              }`}
               key={purchaseData.order}
             >
               <div className="q-category-bottom-categories-single-category">
@@ -76,15 +80,15 @@ const PurchaseTable = ({ seVisible, searchId }) => {
                 {purchaseData.is_void === "1" ? (
                   <p className="purchase-data-sort  text-[#F90A0A]">Void</p>
                 ) : purchaseData.is_draft === "1" ? (
-                    <p className="purchase-data-sort  text-[#646464]">Draft</p>
+                  <p className="purchase-data-sort  text-[#646464]">Draft</p>
                 ) : purchaseData.received_status === "0" ? (
-                      <p className="purchase-data-sort  text-[#0A64F9]">Active</p>
+                  <p className="purchase-data-sort  text-[#0A64F9]">Active</p>
                 ) : purchaseData.received_status === "1" ? (
-                        <p className="purchase-data-sort  text-[#FF8800]">Partial</p>
+                  <p className="purchase-data-sort  text-[#FF8800]">Partial</p>
                 ) : purchaseData.received_status === "2" ? (
-                          <p className="purchase-data-sort  text-[#17B11D]">Received</p>
+                  <p className="purchase-data-sort  text-[#17B11D]">Received</p>
                 ) : (
-                            <p className="purchase-data-sort   text-[#0A64F9]">Active</p>
+                  <p className="purchase-data-sort   text-[#0A64F9]">Active</p>
                 )}
 
                 {purchaseData.is_void === "1" ? (
@@ -109,8 +113,12 @@ const PurchaseTable = ({ seVisible, searchId }) => {
                   </p>
                 )}
 
-                <p className="purchase-data-sort purchaseData">{purchaseData.total_qty}</p>
-                <p className="purchase-data-title  purchaseData">{purchaseData.vendor_name}</p>
+                <p className="purchase-data-sort purchaseData">
+                  {purchaseData.total_qty}
+                </p>
+                <p className="purchase-data-title  purchaseData">
+                  {purchaseData.vendor_name}
+                </p>
                 <p className="purchase-data-title purchaseData ">
                   {purchaseData.total_cost !== null
                     ? `$${Number(purchaseData.total_cost).toLocaleString(

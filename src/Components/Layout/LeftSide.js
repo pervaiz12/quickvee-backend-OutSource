@@ -61,6 +61,7 @@ import SingleVendorsDetail from "../Vendors/SingleVendorsDetail";
 import AddProducts from "../Products/AddProducts"
 import MainLoayalty from "../LoyaltyProgram/MainLoayalty";
 import MainEmployeelist from "../Reporting/Employelist/MainEmployeelist";
+import AddPo from "../PurchaseOrders/AddPo";
 //  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
 // import MainEmployee from "../Reporting/EmployeeWorkingHours/MainEmployee";
 // import MainInvDuplicates from '../InventoryDuplicates/MainInvDuplicates';
@@ -98,6 +99,7 @@ const LeftSide = ({ visible }) => {
           {visible === "toptraders" && <TopTenders />}
           {visible === "productedit" && <ProductEdit />}
           {visible === "product-add" && <AddProducts />}
+          {visible === "add-po" && <AddPo />}
 
           {visible === "info" && <Info />}
           {visible === "setup" && <Setup />}

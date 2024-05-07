@@ -161,7 +161,7 @@ const AtrDataList = ({ seVisible }) => {
                   <img
                     src={CrossIcon}
                     alt="icon"
-                    className="ml-auto mb-4"
+                    className="ml-auto mb-4 cursor-pointer"
                     onClick={closeModal}
                   />
                 </p>
