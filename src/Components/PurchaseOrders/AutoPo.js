@@ -1,9 +1,10 @@
+
 import React, { useState } from "react";
 import { Grid, TextField } from "@mui/material";
 import SearchIcon from "../../Assests/Filter/Search.svg";
 import DeleteIcon from "../../Assests/Dashboard/deleteIcon.svg";
 
-const AutoPo = () => {
+const AutoPo = ({ handleCheckSearchValue }) => {
   const [searchId, setSearchId] = useState("");
   const [products, setProducts] = useState([]);
   const [showProductList, setShowProductList] = useState(false);
@@ -64,12 +65,41 @@ const AutoPo = () => {
       costPerUnit: 50.0,
       total: 500.0,
       upc: "GHI789"
+    },
+    {
+      id: 5,
+      name: "Purchase Product",
+      description: "8”/Pink",
+      qty: 10,
+      costPerUnit: 50.0,
+      total: 500.0,
+      upc: "GHI789"
+    },
+    {
+      id: 6,
+      name: "Purchase Product",
+      description: "8”/Pink",
+      qty: 10,
+      costPerUnit: 50.0,
+      total: 500.0,
+      upc: "GHI789"
+    }
+    ,
+    {
+      id: 7,
+      name: "Purchase Product",
+      description: "8”/Pink",
+      qty: 10,
+      costPerUnit: 50.0,
+      total: 500.0,
+      upc: "GHI789"
     }
   ];
 
 
   const handleInputChange = (event) => {
     setSearchId(event.target.value);
+    handleCheckSearchValue(event.target.value)
     handleSearch();
   };
 

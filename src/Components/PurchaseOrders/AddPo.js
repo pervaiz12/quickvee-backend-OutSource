@@ -6,6 +6,7 @@ import "react-datepicker/dist/react-datepicker.css";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 
 const AddPo = () => {
+  const [isHide, setIsHide] = useState(false);
   const [issueDate, setIssueDate] = useState(null);
   const [stockDate, setStockDate] = useState(null);
   const temarray = [
@@ -26,9 +27,21 @@ const AddPo = () => {
     setStockDate(date);
   };
 
+  const handleCheckSearchValue=(data)=>{
+    console.log('data', data)
+    if(!!data){
+      setIsHide(true)
+    }else{
+      setIsHide(false)
+    }
+  }
+  console.log('isHide', isHide)
+
   return (
     <>
       <div className="box">
+        {
+          !isHide  ? 
         <div className="box_shadow_div" style={{ height: "300px" }}>
           <div className="q-add-categories-section-header">
             <span>
@@ -67,10 +80,11 @@ const AddPo = () => {
               </Grid>
             </Grid>
           </div>
-        </div>
+        </div>:""
+        }
       </div>
       <div className="">
-        <AutoPo />
+        <AutoPo  handleCheckSearchValue={handleCheckSearchValue}/>
       </div>
     </>
   );
