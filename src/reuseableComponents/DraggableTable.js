@@ -35,6 +35,7 @@ const DraggableTable = ({
   tableRow,
   setFunction,
   viewSelectedOption = false,
+  
   handleViewItemsClick,
 }) => {
   const reorder = (list, startIndex, endIndex) => {
