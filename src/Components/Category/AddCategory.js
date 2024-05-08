@@ -166,7 +166,10 @@ const AddCategory = ({ seVisible }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post(BASE_URL + LIST_ALL_Defaults, {
+        let data = {
+          merchant_id: "MAL0100CA",
+        };
+        const response = await axios.post(BASE_URL + LIST_ALL_Defaults,data, {
           headers: { "Content-Type": "multipart/form-data" },
         });
 
