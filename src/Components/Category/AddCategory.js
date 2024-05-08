@@ -25,9 +25,9 @@ const AddCategory = ({ seVisible }) => {
     online: 0,
     use_point: 0,
     earn_point: 0,
-    image: "", 
+    image: "",
   });
- 
+
   const myStyles = {
     display: "flex",
   };
@@ -320,7 +320,7 @@ const AddCategory = ({ seVisible }) => {
                     <CheckBoxField
                       checked={category.online === 1}
                       onChangeFun={setCategory}
-                      categoryType={'online'}
+                      categoryType={"online"}
                     />
                   </label>
                 </div>
@@ -330,10 +330,8 @@ const AddCategory = ({ seVisible }) => {
                     <CheckBoxField
                       checked={category.use_point === 1}
                       onChangeFun={setCategory}
-                      categoryType={'use_point'}
+                      categoryType={"use_point"}
                     />
-                   
-                    <span className="add-category-checkmark"></span>
                   </label>
                 </div>
                 <div className="add-category-checkmark-div">
@@ -342,10 +340,8 @@ const AddCategory = ({ seVisible }) => {
                     <CheckBoxField
                       checked={category.earn_point === 1}
                       onChangeFun={setCategory}
-                      categoryType={'earn_point'}
+                      categoryType={"earn_point"}
                     />
-                    
-                    <span className="add-category-checkmark"></span>
                   </label>
                 </div>
               </div>

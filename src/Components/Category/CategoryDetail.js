@@ -15,6 +15,7 @@ import { SortableContainer, SortableElement } from "react-sortable-hoc";
 
 import { Link } from "react-router-dom";
 import CheckBoxField from "../../reuseableComponents/CheckBoxField";
+import DraggableTable from "../../reuseableComponents/DraggableTable";
 
 const CategoryDetail = ({ seVisible }) => {
   const [allcategories, setallcategories] = useState([]);
@@ -173,6 +174,13 @@ const CategoryDetail = ({ seVisible }) => {
                 Add Category <img src={AddIcon} alt="add-icon" />{" "}
               </p>
             </div>
+            <DraggableTable 
+                tableHead={["Sort","Title","Items","Enable/Disable"]}
+                tableRow = {allcategories}
+                setFunction={setallcategories}
+                viewSelectedOption = {true}
+                viewSelectedOptionFun = {handleViewItemsClick}
+            />
             <div className="q-category-bottom-categories-header">
               <p className="categories-data-sort">Sort</p>
               <p className="categories-data-title">Title</p>
