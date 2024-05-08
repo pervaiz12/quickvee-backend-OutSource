@@ -7,6 +7,7 @@ import { editAttribute } from "../../Redux/features/Attributes/attributesSlice";
 import CrossIcon from "../../Assests/Dashboard/cross.svg";
 import { BASE_URL, ADD_ATTRIBUTE } from "../../Constants/Config";
 import EditIcon from "../../Assests/Category/editIcon.svg";
+import BasicTextFields from "../../reuseableComponents/TextInputField";
 
 const EditDeliveryAddress = ({ attribute, allattributes }) => {
 
@@ -84,23 +85,36 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
         {showModal && (
           <div className="q-custom-modal-container" id="addtributes_">
             {/* Your modal JSX */}
-            <div className="q-custom-modal-content">
+            <div className="q-custom-modal-content" style={{height:"max-content",top:"unset"}}>
               {/* Your modal content */}
-              <div className="">
-                <p className="q-custom-modal-header ">Update Attribute
-                  <img src={CrossIcon} alt="icon" className="ml-auto mb-4 cursor-pointer" onClick={closeModal} /></p>
+              <div className="q-custom-modal-header">
+                  <div className="mt_card_header q_dashbaord_netsales">
+                    <h1 className="">Update Attribute</h1>
+                  </div>
+                  <img src={CrossIcon} alt="icon" className="ml-auto mb-4 cursor-pointer" onClick={closeModal} />
               </div>
+                <div className="my-2">
+                  <div className="border-b border-[#ccc]"></div>
+                </div>
               {/* ... other modal content ... */}
-              <input
+              <div className="title_attributes_section">
+              <label className="mb-2">Title</label>
+              {/* <input
                 type="text"
                 placeholder="Enter attribute title"
                 className="q-custom-input-field"
                 value={newAttribute}
                 onChange={changeTittleHandler}
-              />
+              /> */}
+              <BasicTextFields
+                    value={newAttribute}
+                    onChangeFun={changeTittleHandler}
+                    placeholder="Enter attribute title"
+                  />
               <span className="input-error">
                 {errorMessage !== "" ? errorMessage : ""}
               </span>
+              </div>
               <div className='q-add-categories-section-middle-footer'>
                 <button onClick={(handleEditAttribute)} className='quic-btn quic-btn-save'>
                   Update

@@ -1040,3 +1040,9 @@ div.q_label_details::after {
     font-family: CircularSTDBook !important;
     display: block;
 }
+
+.vender_list svg{
+	right: 0px !important;
+	top: 0px !important;
+	color: rgba(0, 0, 0, 0.26) !important;
+}
