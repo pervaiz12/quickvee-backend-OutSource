@@ -16,6 +16,7 @@ import { SortableContainer, SortableElement } from "react-sortable-hoc";
 import { Link } from "react-router-dom";
 import CheckBoxField from "../../reuseableComponents/CheckBoxField";
 import DraggableTable from "../../reuseableComponents/DraggableTable";
+import RadioSelect from "./RadioSelect";
 
 const CategoryDetail = ({ seVisible }) => {
   const [allcategories, setallcategories] = useState([]);
@@ -64,7 +65,7 @@ const CategoryDetail = ({ seVisible }) => {
 
   // for  Category Status update
   const handleToggleStatus = async (id, status) => {
-    console.log("category id and status: " + id , status);
+    console.log("category id and status: " + id, status);
     const data = {
       id: id,
       status: status,
@@ -85,12 +86,11 @@ const CategoryDetail = ({ seVisible }) => {
 
   const handleOnlineChange = (category) => {
     let status =
-    category.cat_show_status === "0" ||
-    category.cat_show_status === "1"
-    ? "1"
-    : "0"
-   console.log("category status: " + category)
-   console.log("category Custom status: " + status)
+      category.cat_show_status === "0" || category.cat_show_status === "1"
+        ? "1"
+        : "0";
+    console.log("category status: " + category);
+    console.log("category Custom status: " + status);
     const isOnlineChecked =
       category.cat_show_status === "0" || category.cat_show_status === "1";
     const isRegisterChecked =
@@ -174,19 +174,29 @@ const CategoryDetail = ({ seVisible }) => {
                 Add Category <img src={AddIcon} alt="add-icon" />{" "}
               </p>
             </div>
-            <DraggableTable 
-                tableHead={["Sort","Title","Items","Enable/Disable"]}
-                tableRow = {allcategories}
-                setFunction={setallcategories}
-                viewSelectedOption = {true}
-                viewSelectedOptionFun = {handleViewItemsClick}
+            <DraggableTable
+              tableHead={["Sort", "Title", "Items", "Enable/Disable", "", ""]}
+              tableRow={allcategories}
+              setFunction={setallcategories}
+              viewSelectedOption={{
+                viewSelectedOptionEnable: true,
+                fun1: handleOnlineChange,
+                fun2: handleRegisterChange,
+              }}
+              viewSelectedOptionFun={handleViewItemsClick}
+              radioButtonComponent={true}
+              editBtnCategory={true}
+              deleteButton={{
+                deleteButtonEnable: true,
+                deleteButtonFun: handleDeleteCategory,
+              }}
             />
-            <div className="q-category-bottom-categories-header">
+            {/* <div className="q-category-bottom-categories-header">
               <p className="categories-data-sort">Sort</p>
               <p className="categories-data-title">Title</p>
               <p className="categories-data-items">Items</p>
               <p className="categories-enable-disable">Enable/Disable</p>
-            </div>
+            </div> */}
           </div>
           {/* <div className="q-category-bottom-categories-listing">
             
@@ -278,7 +288,7 @@ const CategoryDetail = ({ seVisible }) => {
               ))}
           </div> */}
 
-          <DragDropContext onDragEnd={onDragEnd}>
+          {/* <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="droppable">
               {(provided) => (
                 <div
@@ -317,7 +327,6 @@ const CategoryDetail = ({ seVisible }) => {
                               <div className="category-checkmark-div">
                                 <label className="category-checkmark-label">
                                   Online
-                                 
                                   <input
                                     type="checkbox"
                                     checked={
@@ -389,7 +398,7 @@ const CategoryDetail = ({ seVisible }) => {
                 </div>
               )}
             </Droppable>
-          </DragDropContext>
+          </DragDropContext> */}
         </div>
       </div>
     </>

@@ -27,8 +27,8 @@ import PurIcon from "../../Assests/Dashboard/purchaseY.svg";
 import SettingIcon from "../../Assests/Dashboard/settingY.svg";
 import ResportIcons from "../../Assests/Dashboard/reports.svg";
 import timesheetblackIcon from "../../Assests/Dashboard/timesheetblackIcon.svg";
-import Loyalty from '../../Assests/Taxes/Loyalty Program.svg'
-import LoyaltIcon from '../../Assests/Taxes/loyaltyactive.svg'
+import Loyalty from "../../Assests/Taxes/Loyalty Program.svg";
+import LoyaltIcon from "../../Assests/Taxes/loyaltyactive.svg";
 
 import { useLocation } from "react-router-dom";
 
@@ -38,7 +38,9 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
   const currentUrl = location.pathname;
 
   const [activeItem, setActiveItem] = useState(currentUrl);
+
   
+
   const navigate = useNavigate();
 
   const handleItemClick = (item) => {
@@ -46,9 +48,7 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
     setActiveItem(item.link);
     navigate(item.link);
   };
-
   
-
   return (
     <>
       <div
@@ -68,10 +68,10 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                   {item.dropdownItems ? (
                     <DropdownMenuItem item={item} isMenuOpen={isMenuOpen} />
                   ) : (
-                    
                     <div
+                      onClick={() => handleItemClick(item)}
+                      
                       className={`flex items-center ${
-                        
                         activeItem === item.link
                           ? "bg-[#414F54] text-[#FFC400]"
                           : ""
@@ -81,7 +81,6 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                     >
                       {activeItem === item.link ? item.activeIcon : item.icon}
                       <Link
-                        onClick={() => handleItemClick(item)}
                         className={`ml-2 menu-item text-[14px] Admin_std ${
                           activeItem === item.link ? "bg-[#414F54]" : ""
                         }`}
@@ -89,7 +88,6 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                       >
                         {item.text}
                       </Link>
-                     
                     </div>
                   )}
                 </div>
@@ -118,7 +116,6 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                     </div>
                   )}
                 </div>
-                
               ))}
         </div>
       </div>
@@ -132,66 +129,61 @@ const DropdownMenuItem = ({ item, isMenuOpen }) => {
   const currentUrl = location.pathname;
   const [activeItem, setActiveItem] = useState(currentUrl);
 
-  const   handleToggleDropdownItems= (link) => {
-    setActiveItem(link)
+  const handleToggleDropdownItems = (link) => {
+    setActiveItem(link);
 
     for (let obj of item.dropdownItems) {
-     
       if (obj.link === activeItem) {
-        setIsDropdownOpen(true)
-      }
-      else{
-    setIsDropdownOpen(false)
-
+        setIsDropdownOpen(true);
+      } else {
+        setIsDropdownOpen(false);
       }
     }
-  }
+  };
 
   const handleToggleDropdown = () => {
-  //  console.log("calling")
-    setIsDropdownOpen(!isDropdownOpen)
-  
-  }
-
+    //  console.log("calling")
+    setIsDropdownOpen(!isDropdownOpen);
+  };
 
   // useEffect(() => {
   //   console.log("Calling from useeffect" , isDropdownOpen , currentUrl)
   // }, [isDropdownOpen , currentUrl])
-  
 
-  console.log("Calling from item" , item)
+  console.log("Calling from item", item);
   return (
     <div
-    className="relative"
-    style={isMenuOpen ? { width: "16rem" } : { width: "6rem", marginLeft: "24px" }}
-    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-  >
-    <div className="flex items-center">
-      {item.icon}
-      {isMenuOpen && (
-        <p className="ml-2 menu-item text-[14px] Admin_std">
-          {item.text}
-          <FaChevronDown className="quickarrow_icon" />
-        </p>
+      className="relative"
+      style={
+        isMenuOpen ? { width: "16rem" } : { width: "6rem", marginLeft: "24px" }
+      }
+      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+    >
+      <div className="flex items-center">
+        {item.icon}
+        {isMenuOpen && (
+          <p className="ml-2 menu-item text-[14px] Admin_std">
+            {item.text}
+            <FaChevronDown className="quickarrow_icon" />
+          </p>
+        )}
+      </div>
+
+      {isDropdownOpen && (
+        <div className="mt-0 bg-[#334247] p-4 shadow w-full text-center z-10">
+          {item.dropdownItems.map((dropdownItem) => (
+            <Link
+              key={dropdownItem.id}
+              to={dropdownItem.link}
+              className="flex text-center submenu-item text-gray-400 py-4 text-[14px]"
+              onClick={() => handleToggleDropdownItems(dropdownItem.link)}
+            >
+              {dropdownItem.text}
+            </Link>
+          ))}
+        </div>
       )}
     </div>
-
-    {isDropdownOpen && (
-      <div className="mt-0 bg-[#334247] p-4 shadow w-full text-center z-10">
-        {item.dropdownItems.map((dropdownItem) => (
-          <Link
-            key={dropdownItem.id}
-            to={dropdownItem.link}
-            className="flex text-center submenu-item text-gray-400 py-4 text-[14px]"
-            onClick={() => handleToggleDropdownItems(dropdownItem.link)}
-          >
-            {dropdownItem.text}
-          </Link>
-        ))}
-      </div>
-    )}
-  </div>
-  
   );
 };
 
@@ -523,14 +515,20 @@ const menuItems = [
       },
       { id: 79, text: " Order Type ", link: "/store-reporting/order-type" },
 
-      { id: 81, text: "Current Inventory Value ", link: "/store-reporting/current-inventory-value" },
+      {
+        id: 81,
+        text: "Current Inventory Value ",
+        link: "/store-reporting/current-inventory-value",
+      },
 
       { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
-      { id: 82, text: "Order Refund Report ", link: "/store-settings/order-refund-report" },
-
+      {
+        id: 82,
+        text: "Order Refund Report ",
+        link: "/store-settings/order-refund-report",
+      },
     ],
   },
-  
 ];
 
 export default SideMenu;

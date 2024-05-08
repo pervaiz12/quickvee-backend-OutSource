@@ -9,7 +9,11 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
 import SortIcon from "../Assests/Category/Sorting.svg";
+import EditIcon from "../Assests/Category/editIcon.svg";
+import DeleteIcon from "../Assests/Category/deleteIcon.svg";
 import ViewItemsModal from "../Components/Category/ViewItemsModal";
+import RadioSelect from "../Components/Category/RadioSelect";
+import { Link } from "react-router-dom";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -35,9 +39,12 @@ const DraggableTable = ({
   tableRow,
   setFunction,
   viewSelectedOption = false,
-  
-  handleViewItemsClick,
+  viewSelectedOptionFun,
+  editBtnCategory,
+  deleteButton,
 }) => {
+  const { viewSelectedOptionEnable, fun1, fun2 } = viewSelectedOption;
+  const { deleteButtonEnable, deleteButtonFun } = deleteButton;
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
@@ -104,11 +111,43 @@ const DraggableTable = ({
                               <img src={SortIcon} alt="add-icon" />
                             </StyledTableCell>
                             <StyledTableCell>{item.title}</StyledTableCell>
-                            {}
+                            {viewSelectedOption && (
+                              <StyledTableCell>
+                                <ViewItemsModal
+                                  selectedView={item}
+                                  onViewClick={viewSelectedOptionFun}
+                                />
+                              </StyledTableCell>
+                            )}
+                            {viewSelectedOptionEnable && (
+                              <StyledTableCell>
+                                <RadioSelect
+                                  item={item}
+                                  handleOnlineChange={fun1}
+                                  handleRegisterChange={fun2}
+                                />
+                              </StyledTableCell>
+                            )}
+                            {editBtnCategory && (
+                              <StyledTableCell>
+                                <Link to={`/category/edit-category/${item.id}`}>
+                                  <img
+                                    // className="edit_center w-8 h-8"
+                                    selectedCategory={item}
+                                    src={EditIcon}
+                                    alt="Edit"
+                                  />
+                                </Link>
+                              </StyledTableCell>
+                            )}
                             <StyledTableCell>
-                              <ViewItemsModal
-                                selectedView={item}
-                                onViewClick={handleViewItemsClick}
+                            <img
+                                // className="edit_center w-8 h-8"
+                                src={DeleteIcon}
+                                alt="delete-icon"
+                                onClick={() =>
+                                  deleteButtonFun(item.id)
+                                }
                               />
                             </StyledTableCell>
                           </StyledTableRow>
