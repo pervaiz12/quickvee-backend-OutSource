@@ -240,11 +240,11 @@
 }
 
 .main-content {
-	overflow-x: hidden;
+	overflow-x: auto;
 	overflow-y: auto;
 height: 100vh;
 	overflow-x: hidden;
-	/* height: 100vh; */
+	position: relative;
 }
 
 .importBtn {

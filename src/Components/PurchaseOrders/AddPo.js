@@ -8,9 +8,15 @@ import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+import BasicTextFields from "../../reuseableComponents/TextInputField";
+import AddNewCategory from '../../Assests/Dashboard/Left.svg'
 
-const AddPo = ({ value, maxLength, onChangeFun, type }) => {
+import { Link } from "react-router-dom";
+import { event } from "jquery";
+
+const AddPo = () => {
   // const [isHide, setIsHide] = useState(false);
+  const [visible, seVisible] = useState("MainPurchase");
   const [issueDate, setIssueDate] = useState(null);
   const [stockDate, setStockDate] = useState(null);
   const temarray = [
@@ -41,14 +47,23 @@ const AddPo = ({ value, maxLength, onChangeFun, type }) => {
   // }
   // console.log('isHide', isHide)
 
+  const onChangeFun =(event)=>{
+    setIssueDate(event.target.value);
+  }
+  console.log("hello", issueDate)
   return (
     <>
+     
       <div className="box">
     
           
         <div className="box_shadow_div" style={{ height: "300px" }}>
           <div className="q-add-categories-section-header">
             <span>
+              <span onClick={() => seVisible("MainPurchase")}>
+                  <img src={AddNewCategory} alt="Add New Category" className="w-6 h-6" />
+                
+              </span>
               <span>Create Purchase Order</span>
             </span>
           </div>
@@ -84,34 +99,36 @@ const AddPo = ({ value, maxLength, onChangeFun, type }) => {
               </Grid>
               <Grid item xs={6}>
                 <label>Reference</label>
-                    <FormControl fullWidth>
-                      <TextField
-                        id="outlined-basic"
-                        value={value}
-                        inputProps={{ maxLength: maxLength, type: type }}
-                        onChange={onChangeFun}
-                        variant="outlined" size="small" />
-                    </FormControl>
+                 
+                      <BasicTextFields
+                  value={issueDate}
+                    onChangeFun={onChangeFun}
+                    type={"text"}
+                      />
+                    
+                  
               </Grid>
               <Grid item xs={6}>
                 <label>Vendor Email</label>
-                    <FormControl fullWidth>
-                      <TextField
-                        id="outlined-basic"
-                        value={value}
-                        inputProps={{ maxLength: maxLength, type: type }}
-                        onChange={onChangeFun}
-                        variant="outlined" size="small" />
-                    </FormControl>
+                <BasicTextFields
+                  value={issueDate}
+                  onChangeFun={onChangeFun}
+                  type={"email"}
+                />
+                  
               </Grid>
             </Grid>
           </div>
         </div>
      
       </div>
+     
+        <div className="second-component">
+          <AutoPo />
+      </div>
+       
       
-        <AutoPo />
-    
+   
     </>
   );
 };

@@ -12,7 +12,7 @@ const MainPurchase = () => {
   const [searchId, setSearchId] = useState(""); // State to track search ID
 
   const inputChange = (e) => {
-    setSearchId(e.target.value);
+    
     // console.log(searchId)
   };
 
@@ -26,7 +26,7 @@ const MainPurchase = () => {
                 <InputTextSearch 
                   placeholder="Search Purchase Order"
                   value={searchId}
-                  handleChange={inputChange}
+                  handleChange={setSearchId}
                   // handleSearchButton={''}
                 />
               </Grid>
