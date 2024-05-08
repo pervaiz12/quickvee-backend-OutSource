@@ -17,14 +17,10 @@ const VariantAttributes = ({
   varientLength,
   handleSetVarientLength,
   addMoreVarientItems,
+  handleClearFormData,
 }) => {
   const [showAttributes, setShowAttributes] = useState(false);
-  const [varientPreviousLength, setVarientPreviousLength] = useState();
 
-  // useEffect(()=>{
-
-  // })
-  console.log("varientPreviousLength", varientPreviousLength);
   const animatedComponents = makeAnimated();
 
   const handleDeleteClick = (id) => {
@@ -32,11 +28,72 @@ const VariantAttributes = ({
       return item?.id !== id;
     });
 
-    handleSetVarientLength(deleteSelected);
+    // change varientItem id => if id is 1 keep 1 or change deleteSelected[0]?.id - 1
+    const updatedData = deleteSelected.map((item) => ({
+      ...item,
+      id: item?.id === 1 ? 1 : item?.id - 1,
+    }));
+
+    handleSetVarientLength(updatedData);
+  };
+
+  const filterVarientListIfAllItemsDelete = (index, value) => {
+    if (index === 0) {
+      if (
+        varientLength?.length > 1 &&
+        value < varientLength[0]?.varientAttributeList?.length
+      ) {
+        handleDeleteClick(varientLength[0]?.id);
+        return true;
+      }
+    } else if (index === 1) {
+      if (
+        varientLength?.length > 2 &&
+        value < varientLength[1]?.varientAttributeList?.length
+      ) {
+        handleDeleteClick(varientLength[1]?.id);
+        return true;
+      }
+    }
+    return false;
   };
 
   const handlechange = (value, index, name) => {
-    console.log("length", varientLength[1]?.varientAttributeList?.length);
+    // validation for add varient item => only ' is allowed and " is not allowed in varient item text
+    console.log("val", value);
+    // WIP =>
+    const filterValue = value?.map((item) => {
+      const checkValidate =
+        item?.label
+          ?.split("")
+          .map((p) => p === "'")
+          .filter(Boolean)?.length > 1 || item?.label?.includes(`"`);
+      if (checkValidate) {
+        return item;
+      } else {
+        return item;
+      }
+    });
+
+    console.log("filterValue", filterValue);
+
+    // clear the all input fields value when add new varient first item
+    // here using varientLength length and value is less that current varientLength
+    if (index > 0) {
+      if (
+        value?.length === 1 &&
+        value > varientLength[index]?.varientAttributeList
+      ) {
+        handleClearFormData(true);
+      } else {
+        handleClearFormData(false);
+      }
+    }
+
+    if (filterVarientListIfAllItemsDelete(index, value)) {
+      return;
+    }
+
     let updateVarientLength = [...varientLength];
     if (name == "varientName") {
       updateVarientLength[index] = {
@@ -160,7 +217,7 @@ const VariantAttributes = ({
                           <CreatableSelect
                             closeMenuOnSelect={true}
                             components={{ ...animatedComponents }}
-                            value={varientLength?.varientAttributeList}
+                            value={varient?.varientAttributeList}
                             onChange={(e) => {
                               handlechange(e, index, "varientAttributeList");
                             }}

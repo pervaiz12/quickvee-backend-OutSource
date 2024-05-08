@@ -58,6 +58,12 @@ const AddProducts = () => {
     formValue: [],
   });
 
+  const [clearInput, setClearInput] = useState(false);
+
+  const handleClearFormData = (value) => {
+    setClearInput(value);
+  };
+
   const formSchema = yup.object().shape({
     title: yup
       .string()
@@ -437,6 +443,14 @@ const AddProducts = () => {
     // varient form onchange validation function
     // handleFormDuplicateFormValidation(name, value, i);
 
+    console.log(
+      "outside stuf:",
+      +value,
+      +formValue[i]["compareAtPrice"],
+      +value < +formValue[i]["compareAtPrice"],
+      i
+    );
+
     let totalPriceValue;
     let marginValue;
     let profitValue;
@@ -516,12 +530,19 @@ const AddProducts = () => {
         value &&
         !!formValue[i]["compareAtPrice"]
       ) {
-        console.log(index, i);
+        // console.log(
+        //   "here boolean",
+        //   +value,
+        //   +formValue[i]["compareAtPrice"],
+        //   +value < +formValue[i]["compareAtPrice"],
+        //   index,
+        //   i
+        // );
         if (+value > +formValue[i]["compareAtPrice"]) {
           alert("Compare Price must be greater than price.");
           return {
             ...item,
-            [name]: value,
+            // [name]: value,
             ["compareAtPrice"]: "",
           };
         } else {
@@ -547,7 +568,7 @@ const AddProducts = () => {
           alert("Compare Price must be greater than price.");
           return {
             ...item,
-            [name]: value,
+            // [name]: value,
             ["compareAtPrice"]: "",
           };
         } else {
@@ -565,7 +586,7 @@ const AddProducts = () => {
           [name]: value,
         };
       }
-      console.log("index=>", index, i, index === i);
+
       return item;
     });
 
@@ -587,8 +608,8 @@ const AddProducts = () => {
       let inputStr = fieldValue.replace(/\D/g, "");
       inputStr = inputStr.replace(/^0+/, "");
 
-      if (inputStr.length === 0) {
-        // fieldValue = "0.00";
+      if (inputStr.length == "") {
+        fieldValue = "";
       } else if (inputStr.length === 1) {
         fieldValue = "0.0" + inputStr;
       } else if (inputStr.length === 2) {
@@ -607,8 +628,12 @@ const AddProducts = () => {
         .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
 
       let inputStr = fieldValue.replace(/\D/g, "");
-      inputStr = inputStr.replace(/^0+/, "");
-      fieldValue = inputStr;
+      // inputStr = inputStr.replace(/^+/, "");
+      if (inputStr == "0") {
+        fieldValue = "0";
+      } else {
+        fieldValue = inputStr;
+      }
     }
 
     // margin and profit calculation
@@ -752,17 +777,11 @@ const AddProducts = () => {
 
   useEffect(() => {
     if (varientLength?.length > 0 && isMultipleVarient) {
-      const varientItemSecondInputLength =
-        varientLength[1]?.varientAttributeList?.length;
-      const varientItemThirdInputLength =
-        varientLength[2]?.varientAttributeList?.length;
       handleVarientTitleBasedItemList();
-      /// when adding new varient in in form keep previous fill form data in fields and add new
-      if (
-        varientLength?.length > 1 &&
-        (varientLength[1]?.varientAttributeList?.length === 1 ||
-          varientLength[2]?.varientAttributeList?.length === 1)
-      ) {
+      // console.log("inside", varientLength[1]?.varientAttributeList[0]);
+      // when adding new varient in in form keep previous fill form data in fields and add new
+      // when adding new varient and add first item in varient then clear all the form input value
+      if (clearInput) {
         setFormValue((_) => {
           const newFormValue = [...new Set(varientTitle)].map((_, index) => {
             return {
@@ -1007,7 +1026,6 @@ const AddProducts = () => {
         }
       );
       setError({});
-      console.log(checkEmpty.every((i) => Boolean(i)) && !!response);
       if (checkEmpty.every((i) => Boolean(i)) && !!response) {
         const formdata = new FormData();
         for (let i in data) {
@@ -1263,6 +1281,7 @@ const AddProducts = () => {
                 varientLength={varientLength}
                 handleSetVarientLength={handleSetVarientLength}
                 addMoreVarientItems={addMoreVarientItems}
+                handleClearFormData={handleClearFormData}
               />
             </div>
 
