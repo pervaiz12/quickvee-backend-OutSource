@@ -168,6 +168,7 @@ const AddCategory = ({ seVisible }) => {
       try {
         let data = {
           merchant_id: "MAL0100CA",
+          
         };
         const response = await axios.post(BASE_URL + LIST_ALL_Defaults,data, {
           headers: { "Content-Type": "multipart/form-data" },
