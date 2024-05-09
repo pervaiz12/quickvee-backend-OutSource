@@ -87,7 +87,7 @@ const DraggableTable = ({
         <Table sx={{ minWidth: 500 }}>
           <TableHead>
             <TableRow>
-              {tableHead.map((item, index) => (
+              {tableHead && tableHead.map((item, index) => (
                 <StyledTableCell>{item}</StyledTableCell>
               ))}
             </TableRow>
