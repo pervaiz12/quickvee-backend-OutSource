@@ -4,8 +4,10 @@ import "react-datepicker/dist/react-datepicker.css";
 import { FiCalendar } from "react-icons/fi";
 import CalendIcon from "../../../Assests/Filter/Calender.svg"
 import { padding } from "@mui/system";
+import dayjs from 'dayjs';
 
 const DateRange = ({ onDateRangeChange }) => {
+  const today = dayjs();
   const [isTablet, setIsTablet] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
@@ -70,19 +72,16 @@ const DateRange = ({ onDateRangeChange }) => {
         setEndDate(today);
         break;
       case "Last 30 days":
-        const firstDayOfMonth = new Date(
-          today.getFullYear(),
-          today.getMonth(),
-          1
-        );
-
-        setStartDate(firstDayOfMonth);
-        setEndDate(today);
+        const thirtyDaysAgo = new Date(today); 
+        thirtyDaysAgo.setDate(today.getDate() - 30); 
+        setStartDate(thirtyDaysAgo); 
+        setEndDate(today); 
         break;
       default:
         break;
     }
   };
+
 
   useEffect(() => {
     setDatesBasedOnOption(activeOption);
@@ -199,18 +198,21 @@ const DateRange = ({ onDateRangeChange }) => {
     <div className="q_date_range_start ">End Date</div>
     <div className="relative">
 
-      <DatePicker
-        selected={endDate}
-        onChange={(date) => setEndDate(date)}
-        selectsEnd
-        startDate={startDate}
-        endDate={endDate}
-        minDate={startDate}
-        dateFormat="MMMM d, yyyy"
-        className="q_input_details ml-0 "
-        ref={endDateRef}
-        showPopperArrow={false}
-      />
+                <DatePicker
+                  selected={endDate}
+                  onChange={(date) => setEndDate(date)}
+                  selectsEnd
+                  startDate={startDate}
+                  endDate={endDate}
+                  minDate={startDate}
+                  maxDate={new Date()} // Set maxDate to today's date
+                  dateFormat="MMMM d, yyyy"
+                  className="q_input_details ml-0"
+                  ref={endDateRef}
+                  showPopperArrow={false}
+                  defaultValue={today}
+                />
+
       <span
         className="q_cal_daterange"
         onClick={handleEndDateIconClick}

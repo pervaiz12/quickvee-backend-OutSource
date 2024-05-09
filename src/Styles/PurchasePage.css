@@ -53,10 +53,10 @@
     top: 0;
 }
 
-.q-category-bottom-detail-section {
-    width: 100%;
+.q-category-autopo-detail-section {
+   
     background: #FFFFFF;
-    box-shadow: 0px 3px 6px #0000001F;
+    /* box-shadow: 0px 3px 6px #0000001F; */
     border-radius: 4px !important;
 }
 
@@ -438,6 +438,42 @@ width:35%;
         width:25%
 
     }
-/* .MuiGrid-root.MuiGrid-container.css-11lq3yg-MuiGrid-root {
-    margin-top: 4px;
+
+.app-container {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+
+.second-component {
+  position: sticky;
+  top: 0;
+  z-index: 999; 
+ 
+}
+
+
+
+ /* .auto-po-container {
+  position: relative;
+  overflow: hidden;
+}
+
+.q_searchBar {
+  position: sticky;
+  top: 0;
+  z-index: 1000; 
+  background-color: white;
+}
+
+.q-category-bottom-detail-section {
+  overflow-y: auto;
+  max-height: calc(100vh - 60px); 
+}
+
+.product-list {
+  overflow-y: auto;
+  max-height: calc(100vh - 100px); 
 } */
