@@ -13,9 +13,9 @@ const initialState = {
 
 
 // Generate pening , fulfilled and rejected action type
-export const fetchdefaultsData = createAsyncThunk('defaults/fetchdefaultsData', async () => {
+export const fetchdefaultsData = createAsyncThunk('defaults/fetchdefaultsData', async (data) => {
     try {
-        const response = await axios.post(BASE_URL + LIST_ALL_Defaults, { headers: { "Content-Type": "multipart/form-data" } })
+        const response = await axios.post(BASE_URL + LIST_ALL_Defaults,data, { headers: { "Content-Type": "multipart/form-data" } })
         if (response.data.status === "Success") {
 
            return response.data.result

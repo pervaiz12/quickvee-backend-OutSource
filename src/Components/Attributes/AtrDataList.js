@@ -9,6 +9,7 @@ import AddIcon from "../../Assests/Category/addIcon.svg";
 import EditAttribute from "../Attributes/EditAttribute";
 import SortIcon from "../../Assests/Category/Sorting.svg"
 import EditIcon from "../../Assests/Category/editIcon.svg";
+import BasicTextFields from "../../reuseableComponents/TextInputField";
 
 const AtrDataList = ({ seVisible }) => {
   const [showModal, setShowModal] = useState(false);
@@ -151,7 +152,7 @@ const AtrDataList = ({ seVisible }) => {
           {showModal && (
             <div className="q-custom-modal-container" id="addtributes_">
               {/* Your modal JSX */}
-              <div className="q-custom-modal-content">
+              <div className="q-custom-modal-content" style={{height:"max-content",top:"unset"}}>
                 {/* Your modal content */}
 
                 <p className="q-custom-modal-header ">
@@ -170,14 +171,21 @@ const AtrDataList = ({ seVisible }) => {
                 </div>
 
                 <div className="title_attributes_section">
-                  <label>Title</label>
-                  <input
+                  <label className="mb-2">Title</label>
+                  {/* <input
                     type="text"
                     placeholder="Enter attribute title"
                     className="q-custom-input-field mt-2"
                     value={newAttribute}
                     onChange={changeTittleHandler}
+                  /> */}
+
+                  <BasicTextFields
+                    value={newAttribute}
+                    onChangeFun={changeTittleHandler}
+                    placeholder="Enter attribute title"
                   />
+
                   <span className="input-error">
                     {errorMessage !== "" ? errorMessage : ""}
                   </span>

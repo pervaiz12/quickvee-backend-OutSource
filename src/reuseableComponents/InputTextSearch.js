@@ -1,9 +1,7 @@
 import * as React from "react";
 import FormControl, { useFormControl } from "@mui/material/FormControl";
 import OutlinedInput from "@mui/material/OutlinedInput";
-import FormHelperText from "@mui/material/FormHelperText";
-
-import { IconButton, TextField } from "@mui/material";
+import { IconButton } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "../Assests/Filter/Search.svg";
 const InputTextSearch = ({
@@ -16,7 +14,6 @@ const InputTextSearch = ({
     <>
       <FormControl fullWidth>
         <OutlinedInput
-          size="small"
           placeholder={placeholder}
           value={value}
           onChange={(e) => {

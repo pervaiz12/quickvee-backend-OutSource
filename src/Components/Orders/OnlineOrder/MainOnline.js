@@ -3,7 +3,7 @@ import React, { useState, useEffect, useRef } from "react";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import UpArrow from "../../../Assests/Dashboard/Up.svg";
 import SearchBar from "../SearchBar";
-import { Grid } from "@mui/material";
+import { Grid, TextField } from "@mui/material";
 import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 const MainOnline = ({ onFilterDataChange }) => {
@@ -33,7 +33,6 @@ const MainOnline = ({ onFilterDataChange }) => {
 
   const [searchId, setSearchId] = useState("");
   const handleSearch = () => {
-  
     console.log("Search ID:", searchId);
   };
 
@@ -183,132 +182,135 @@ const MainOnline = ({ onFilterDataChange }) => {
               onChange={(e) => setSearchId(e.target.value)}
               className="w-full px-4 py-2 border-none focus:outline-none place_text_search"
             />
-
-        <div className="mt_card_header q_dashbaord_netsales">
-          <h1 className="">Filter By</h1>
-        </div>
-
-        <div className="qvrow">
-    
-          <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
-            <label
-              htmlFor="transactionFilter"
-              onClick={() =>
-                setTransactionDropdownVisible(!transactionDropdownVisible)
-              }
-            >
-              Transactions
-            </label>
-            <div className="custom-dropdown input_area" ref={dropdownRef}>
-              <div
-                className="custom-dropdown-header"
-                onClick={() => toggleDropdown("transaction")}
-              >
-                <span className="selected-option mt-1">
-                  {selectedTransaction}
-                </span>
-              
-                <img
-                  src={transactionDropdownVisible ? UpArrow : DownIcon}
-                  alt="Dropdown Icon"
-                  className="w-6 h-6"
-                />
-              </div>
-              {transactionDropdownVisible && (
-                <div className="dropdown-content">
-                  <div
-                    className={
-                      selectedTransaction === "Both"
-                        ? "dropdown-item active"
-                        : "dropdown-item"
-                    }
-                    onClick={() => handleOptionClick("Both", "transaction")}
-                  >
-                    Both
-                  </div>
-                  <div
-                    className={
-                      selectedTransaction === "Cash"
-                        ? "dropdown-item active"
-                        : "dropdown-item"
-                    }
-                    onClick={() => handleOptionClick("Cash", "transaction")}
-                  >
-                    Cash
-                  </div>
-                  <div
-                    className={
-                      selectedTransaction === "Online"
-                        ? "dropdown-item active"
-                        : "dropdown-item"
-                    }
-                    onClick={() => handleOptionClick("Online", "transaction")}
-                  >
-                    Online
-                  </div>
-                </div>
-              )}
-            </div>
+          </div>
+          <div className="mt_card_header q_dashbaord_netsales">
+            <h1 className="">Filter By</h1>
           </div>
 
-       
-          <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
-            <label
-              htmlFor="orderStatusFilter"
-              onClick={() =>
-                setOrderStatusDropdownVisible(!orderStatusDropdownVisible)
-              }
+          <div className="qvrow">
+            <div
+              className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}
             >
-              Order Status
-            </label>
-            <div className="custom-dropdown input_area" ref={orderStatus}>
-              <div
-                className="custom-dropdown-header"
-                onClick={() => toggleDropdown("orderStatus")}
+              <label
+                htmlFor="transactionFilter"
+                onClick={() =>
+                  setTransactionDropdownVisible(!transactionDropdownVisible)
+                }
               >
-                <span className="selected-option mt-1">
-                  {selectedOrderStatus}
-                </span>
-                <img
-                  src={orderStatusDropdownVisible ? UpArrow : DownIcon}
-                  alt="Dropdown Icon"
-                  className="w-6 h-6"
-                />
-              </div>
-              {orderStatusDropdownVisible && (
-                <div className="dropdown-content">
-                  <div
-                    className={
-                      selectedOrderStatus === "New"
-                        ? "dropdown-item active"
-                        : "dropdown-item"
-                    }
-                    onClick={() => handleOptionClick("New", "orderStatus")}
-                  >
-                    New
-                  </div>
-                  <div
-                    className={
-                      selectedOrderStatus === "Closed"
-                        ? "dropdown-item active"
-                        : "dropdown-item"
-                    }
-                    onClick={() => handleOptionClick("Closed", "orderStatus")}
-                  >
-                    Closed
-                  </div>
-                  <div
-                    className={
-                      selectedOrderStatus === "Failed"
-                        ? "dropdown-item active"
-                        : "dropdown-item"
-                    }
-                    onClick={() => handleOptionClick("Failed", "orderStatus")}
-                  >
-                    Failed
-                  </div>
+                Transactions
+              </label>
+              <div className="custom-dropdown input_area" ref={dropdownRef}>
+                <div
+                  className="custom-dropdown-header"
+                  onClick={() => toggleDropdown("transaction")}
+                >
+                  <span className="selected-option mt-1">
+                    {selectedTransaction}
+                  </span>
+
+                  <img
+                    src={transactionDropdownVisible ? UpArrow : DownIcon}
+                    alt="Dropdown Icon"
+                    className="w-6 h-6"
+                  />
                 </div>
-              )}
+                {transactionDropdownVisible && (
+                  <div className="dropdown-content">
+                    <div
+                      className={
+                        selectedTransaction === "Both"
+                          ? "dropdown-item active"
+                          : "dropdown-item"
+                      }
+                      onClick={() => handleOptionClick("Both", "transaction")}
+                    >
+                      Both
+                    </div>
+                    <div
+                      className={
+                        selectedTransaction === "Cash"
+                          ? "dropdown-item active"
+                          : "dropdown-item"
+                      }
+                      onClick={() => handleOptionClick("Cash", "transaction")}
+                    >
+                      Cash
+                    </div>
+                    <div
+                      className={
+                        selectedTransaction === "Online"
+                          ? "dropdown-item active"
+                          : "dropdown-item"
+                      }
+                      onClick={() => handleOptionClick("Online", "transaction")}
+                    >
+                      Online
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+
+            <div
+              className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}
+            >
+              <label
+                htmlFor="orderStatusFilter"
+                onClick={() =>
+                  setOrderStatusDropdownVisible(!orderStatusDropdownVisible)
+                }
+              >
+                Order Status
+              </label>
+              <div className="custom-dropdown input_area" ref={orderStatus}>
+                <div
+                  className="custom-dropdown-header"
+                  onClick={() => toggleDropdown("orderStatus")}
+                >
+                  <span className="selected-option mt-1">
+                    {selectedOrderStatus}
+                  </span>
+                  <img
+                    src={orderStatusDropdownVisible ? UpArrow : DownIcon}
+                    alt="Dropdown Icon"
+                    className="w-6 h-6"
+                  />
+                </div>
+                {orderStatusDropdownVisible && (
+                  <div className="dropdown-content">
+                    <div
+                      className={
+                        selectedOrderStatus === "New"
+                          ? "dropdown-item active"
+                          : "dropdown-item"
+                      }
+                      onClick={() => handleOptionClick("New", "orderStatus")}
+                    >
+                      New
+                    </div>
+                    <div
+                      className={
+                        selectedOrderStatus === "Closed"
+                          ? "dropdown-item active"
+                          : "dropdown-item"
+                      }
+                      onClick={() => handleOptionClick("Closed", "orderStatus")}
+                    >
+                      Closed
+                    </div>
+                    <div
+                      className={
+                        selectedOrderStatus === "Failed"
+                          ? "dropdown-item active"
+                          : "dropdown-item"
+                      }
+                      onClick={() => handleOptionClick("Failed", "orderStatus")}
+                    >
+                      Failed
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           </div>
         </div>
