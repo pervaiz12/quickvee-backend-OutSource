@@ -20,6 +20,7 @@ import caleIcon from "../../Assests/Filter/Calender.svg";
 import TimeIcon from "../../Assests/Filter/Clock.svg";
 import dayjs, { Dayjs } from "dayjs";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
+import SwitchLabel from "../../reuseableComponents/SwitchLabel";
 const AddCoupon = ({ seVisible }) => {
   const [activeTab, setActiveTab] = useState("amount");
 
@@ -424,7 +425,11 @@ const AddCoupon = ({ seVisible }) => {
               <div className="q-add-categories-section-middle-form">
                 <div className="q_coupon_Add_status_btn">
                   <p>Show Online</p>
-                  <Switch
+                  <SwitchLabel 
+                    checked={couponStates.online}
+                    onChangeFun={handleCheckboxChange("online")}
+                  />
+                  {/* <Switch
                     name="online"
                     id="online"
                     checked={couponStates.online}
@@ -437,7 +442,7 @@ const AddCoupon = ({ seVisible }) => {
                         backgroundColor: "#0A64F9",
                       },
                     }}
-                  />
+                  /> */}
                 </div>
 
                 <div className="q-add-coupon-single-input mb-5">
@@ -461,7 +466,7 @@ const AddCoupon = ({ seVisible }) => {
                   )}
                 </div>
 
-                <div className="q-add-coupon-single-input">
+                <div className="q-add-coupon-single-input mb-5">
                   <label htmlFor="description">Description</label>
                   <textarea
                     id="description"
@@ -474,19 +479,25 @@ const AddCoupon = ({ seVisible }) => {
                     }
                   ></textarea>
                 </div>
-
+                    
                 <Grid container spacing={2}>
                   <Grid item md={6} xs={12}>
                     <div className="q_coupon_minium input_area">
                       <label htmlFor="minorder_amt">Minimum Order Amount</label>
-                      <input
+                      <BasicTextFields
+                        type={"number"}
+                        value={coupon.min_amount}
+                        onChangeFun={handleMinAmountChange}
+                        placeholder="Enter Minimum Order Amount"
+                      />
+                      {/* <input
                         type="number"
                         id="minorder_amt"
                         name="minorder_amt"
                         value={coupon.min_amount}
                         onChange={(e) => handleMinAmountChange(e)}
                         placeholder="Enter Minimum Order Amount"
-                      />
+                      /> */}
                       {minOrderAmountError && (
                         <p className="error-message">{minOrderAmountError}</p>
                       )}
@@ -495,20 +506,26 @@ const AddCoupon = ({ seVisible }) => {
                   <Grid item md={6} xs={12}>
                     <div className="q_coupon_minium  dicount_per_amo">
                       <Grid container>
-                        <Grid item xs={6}>
+                        <Grid item xs={5}>
                           {activeTab === "amount" && (
                             <div className="q_coupon_minium input_area">
                               <label htmlFor="discount_amt">
                                 Discount Amount
                               </label>
-                              <input
+                              <BasicTextFields
+                                type={"number"}
+                                value={coupon.discount}
+                                placeholder="Enter Discount Amount"
+                                onChangeFun={handleDiscountAmountChange}
+                              />
+                              {/* <input
                                 type="number"
                                 id="discount_amt"
                                 name="discount"
                                 placeholder="Enter Discount Amount"
                                 value={coupon.discount}
                                 onChange={(e) => handleDiscountAmountChange(e)}
-                              />
+                              /> */}
                               {discountError && (
                                 <p className="error-message">{discountError}</p>
                               )}
@@ -519,21 +536,27 @@ const AddCoupon = ({ seVisible }) => {
                               <label htmlFor="discount_per">
                                 Discount Percentage
                               </label>
-                              <input
+                              <BasicTextFields
+                                type={"number"}
+                                value={coupon.discount}
+                                placeholder="Enter Discount Percentage"
+                                onChangeFun={handleDiscountPercentChange}
+                              />
+                              {/* <input
                                 type="number"
                                 id="discount_per"
                                 name="discount"
                                 placeholder="Enter Discount Percentage"
                                 value={coupon.discount}
                                 onChange={(e) => handleDiscountPercentChange(e)}
-                              />
+                              /> */}
                               {discountError && (
                                 <p className="error-message">{discountError}</p>
                               )}
                             </div>
                           )}
                         </Grid>
-                        <Grid item xs={6}>
+                        <Grid item xs={7}>
                           <div className="AMT_PER_button">
                             <Grid container>
                               <Grid item xs={6}>
@@ -555,6 +578,7 @@ const AddCoupon = ({ seVisible }) => {
                                       ? "bg-[#0A64F9] text-white radius-4"
                                       : ""
                                   }`}
+                                  style={{whiteSpace: "nowrap"}}
                                   onClick={() => handleTabChange("percentage")}
                                 >
                                   Percentage (%)
@@ -734,7 +758,11 @@ const AddCoupon = ({ seVisible }) => {
                 <div className="q-add-coupon-single-input">
                   <div className="q_coupon_Add_status_btn">
                     <p>Enable Redemption Limit?</p>
-                    <Switch
+                    <SwitchLabel 
+                      checked={couponStates.enable_limit}
+                      onChangeFun={handleCheckboxChange("enable_limit")}
+                    />
+                    {/* <Switch
                       name="enable_limit"
                       id="enable_limit"
                       checked={couponStates.enable_limit}
@@ -747,7 +775,7 @@ const AddCoupon = ({ seVisible }) => {
                           backgroundColor: "#0A64F9", // Change background color of the track
                         },
                       }}
-                    />
+                    /> */}
                   </div>
                 </div>
 
