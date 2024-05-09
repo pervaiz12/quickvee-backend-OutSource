@@ -14,9 +14,10 @@ import DeleteIcon from "../Assests/Category/deleteIcon.svg";
 import ViewItemsModal from "../Components/Category/ViewItemsModal";
 import RadioSelect from "../Components/Category/RadioSelect";
 import { Link } from "react-router-dom";
+import EditDeliveryAddress from "../Components/Attributes/EditAttribute";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: "#253338",
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
@@ -40,11 +41,14 @@ const DraggableTable = ({
   setFunction,
   viewSelectedOption = false,
   viewSelectedOptionFun,
-  editBtnCategory,
-  deleteButton,
+  editBtnCategory = false ,
+  deleteButton =false,
+  editAttributeObj = false
 }) => {
   const { viewSelectedOptionEnable, fun1, fun2 } = viewSelectedOption;
-  const { deleteButtonEnable, deleteButtonFun } = deleteButton;
+  const {  deleteButtonEnable, deleteButtonFun } = deleteButton;
+  const { editButtonEnable, editButtonurl } = editBtnCategory;
+
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
     const [removed] = result.splice(startIndex, 1);
@@ -59,7 +63,7 @@ const DraggableTable = ({
       alert("You can't drop outside the list!");
       return;
     }
-
+    
     // Check if the item was dropped at the same position
     if (result.destination.index === result.source.index) {
       alert("You haven't moved the item!");
@@ -128,9 +132,9 @@ const DraggableTable = ({
                                 />
                               </StyledTableCell>
                             )}
-                            {editBtnCategory && (
+                            {editButtonEnable && (
                               <StyledTableCell>
-                                <Link to={`/category/edit-category/${item.id}`}>
+                                <Link to={`${editButtonurl}${item.id}`}>
                                   <img
                                     // className="edit_center w-8 h-8"
                                     selectedCategory={item}
@@ -140,16 +144,33 @@ const DraggableTable = ({
                                 </Link>
                               </StyledTableCell>
                             )}
-                            <StyledTableCell>
-                            <img
-                                // className="edit_center w-8 h-8"
-                                src={DeleteIcon}
-                                alt="delete-icon"
-                                onClick={() =>
-                                  deleteButtonFun(item.id)
-                                }
-                              />
+                            {
+                              deleteButton && (
+                              <StyledTableCell>
+                                
+                              <img
+                                  // className="edit_center w-8 h-8"
+                                  src={DeleteIcon}
+                                  alt="delete-icon"
+                                  onClick={() =>
+                                    deleteButtonFun(item.id)
+                                  }
+                                />
+                              </StyledTableCell>
+                              )
+                            }
+                            {
+                              editAttributeObj && (
+
+                            <StyledTableCell align="right">
+                             <EditDeliveryAddress 
+                              attribute={item}
+                              allattributes={tableRow}
+
+                             />
                             </StyledTableCell>
+                              )
+                            }
                           </StyledTableRow>
                         )}
                       </Draggable>

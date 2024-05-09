@@ -65,6 +65,7 @@ import AddPo from "../PurchaseOrders/AddPo";
 //  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
 // import MainEmployee from "../Reporting/EmployeeWorkingHours/MainEmployee";
 // import MainInvDuplicates from '../InventoryDuplicates/MainInvDuplicates';
+import EditCoupon from "../Coupons/EditCoupon";
 
 const LeftSide = ({ visible }) => {
 
@@ -88,6 +89,7 @@ const LeftSide = ({ visible }) => {
           {visible === "products" && <MainProducts />}
 
           {visible === "coupons" && <MainCoupon />}
+          {visible === "coupons-edit-cop" && <EditCoupon />}
           {visible === "vendors" && <MainVendors />}
           {visible === "timesheet" && <MainTimesheet />}
           {visible === "import-data" && <MainImportData />}

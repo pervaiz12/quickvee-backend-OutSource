@@ -13,6 +13,7 @@ export const fetchCouponList = createAsyncThunk('couponList/fetchCouponList.', a
     try {
         const response = await axios.post(BASE_URL + COUPON_LIST, data, { headers: { "Content-Type": "multipart/form-data" } })
         if (response.status === 200) {
+            console.log( response)
            return response.data.result
         }
     } catch (error) {
@@ -39,7 +40,7 @@ const couponListSlice = createSlice({
     reducers:{
         updateStatus: (state, action) => 
         {
-            state.couponData = state.couponData.map(coupon => {
+            state.couponData = Object.values(state.couponData).map(coupon => {
                 if (coupon.id === action.payload.coupon_id) {
 
                     return {

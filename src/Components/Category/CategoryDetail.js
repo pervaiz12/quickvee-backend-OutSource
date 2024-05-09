@@ -185,11 +185,12 @@ const CategoryDetail = ({ seVisible }) => {
               }}
               viewSelectedOptionFun={handleViewItemsClick}
               radioButtonComponent={true}
-              editBtnCategory={true}
+              editBtnCategory={{editButtonEnable:true,editButtonurl:'/category/edit-category/'}}
               deleteButton={{
                 deleteButtonEnable: true,
                 deleteButtonFun: handleDeleteCategory,
               }}
+              className="q-category-bottom-categories-single-category"
             />
             {/* <div className="q-category-bottom-categories-header">
               <p className="categories-data-sort">Sort</p>

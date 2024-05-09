@@ -273,12 +273,15 @@
 
 .q-add-categories-section-header > span {
   display: flex;
-  width: 225px;
+  width: auto;
   justify-content: space-between;
   cursor: pointer;
   color: #000000;
   font-size: 18px;
   font-family: CircularSTDMedium !important;
+}
+.q-add-categories-section-header > span img{
+  margin-right: 10px;
 }
 
 .q-add-categories-section-middle-form {

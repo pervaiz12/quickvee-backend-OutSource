@@ -39,7 +39,6 @@ const EditCoupon = () => {
 
   const [activeTab, setActiveTab] = useState("");
   
-  console.log(params.couponsCode) 
 
   const params = useParams();
   async function fetchData() {
@@ -72,7 +71,6 @@ const EditCoupon = () => {
     // Fetch data when the component mounts
     const fetchDataAndUpdateState = async () => {
       const res = await fetchData();
-      console.log(params.couponsCode);
 
       if (res) {
         setCoupon({

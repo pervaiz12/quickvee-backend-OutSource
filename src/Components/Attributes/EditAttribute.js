@@ -8,6 +8,7 @@ import CrossIcon from "../../Assests/Dashboard/cross.svg";
 import { BASE_URL, ADD_ATTRIBUTE } from "../../Constants/Config";
 import EditIcon from "../../Assests/Category/editIcon.svg";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
+import { Box, Modal } from '@mui/material';
 
 const EditDeliveryAddress = ({ attribute, allattributes }) => {
 
@@ -76,17 +77,35 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
   setTimeout(() => {
     setsubmitmessage("")
   }, 4000);
+
+
+  const handleOpen = () => setShowModal(true);
+  const handleClose = () => setShowModal(false);
+
+  const myStyles = {
+    width: "60%",
+    position: "absolute",
+    top: "47%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    fontFamily: "'CircularSTDMedium', sans-serif !important",
+  };
+
   return (
     <>
       <div>
         <Button className="modal-main-button edit-delivery-address-button" onClick={openModal}>
           {/* <img src={Edit}  alt="edit" /> */}<img src={EditIcon} alt="" className="" />
         </Button>
-        {showModal && (
+        {/* {showModal && (
+          <Modal
+          open={showModal}
+          onClose={closeModal}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+      >
           <div className="q-custom-modal-container" id="addtributes_">
-            {/* Your modal JSX */}
             <div className="q-custom-modal-content" style={{height:"max-content",top:"unset"}}>
-              {/* Your modal content */}
               <div className="q-custom-modal-header">
                   <div className="mt_card_header q_dashbaord_netsales">
                     <h1 className="">Update Attribute</h1>
@@ -96,16 +115,8 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
                 <div className="my-2">
                   <div className="border-b border-[#ccc]"></div>
                 </div>
-              {/* ... other modal content ... */}
               <div className="title_attributes_section">
               <label className="mb-2">Title</label>
-              {/* <input
-                type="text"
-                placeholder="Enter attribute title"
-                className="q-custom-input-field"
-                value={newAttribute}
-                onChange={changeTittleHandler}
-              /> */}
               <BasicTextFields
                     value={newAttribute}
                     onChangeFun={changeTittleHandler}
@@ -125,7 +136,53 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
               </div>
             </div>
           </div>
-        )}
+          </Modal>
+        )} */}
+
+
+
+
+
+        <Modal
+          open={showModal}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box className="view-category-item-modal" style={myStyles}>
+          <div className="q-add-categories-section-header text-[18px]" style={{ justifyContent:"space-between" ,fontFamily:"CircularSTDBook" }}>
+              <span>
+                <span>Update Attribute</span>
+              </span>
+              <div>
+              <img src={CrossIcon} alt="icon" className="  quic-btn-cancle w-6 h-6" onClick={() => handleClose()} />
+              </div>
+            </div>
+
+            <div className="view-category-item-modal-header">
+            <div className="title_attributes_section" style={{margin: "1rem 1rem"}}>
+              <label className="mb-2">Title</label>
+              <BasicTextFields
+                    value={newAttribute}
+                    onChangeFun={changeTittleHandler}
+                    placeholder="Enter attribute title"
+                  />
+              <span className="input-error">
+                {errorMessage !== "" ? errorMessage : ""}
+              </span>
+              </div>
+            </div>
+
+            <div className="q-add-categories-section-middle-footer">
+              <button onClick={(handleEditAttribute)} className='quic-btn quic-btn-save'>
+                  Update
+                </button>
+                <button onClick={(closeModal)} className='quic-btn quic-btn-cancle'>
+                  Cancel
+                </button>
+            </div>
+          </Box>
+        </Modal>
 
       </div>
     </>
