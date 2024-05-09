@@ -41,7 +41,7 @@ const DraggableTable = ({
   viewSelectedOption = false,
   viewSelectedOptionFun,
   editBtnCategory,
-  deleteButton,
+  deleteButton = false,
 }) => {
   const { viewSelectedOptionEnable, fun1, fun2 } = viewSelectedOption;
   const { deleteButtonEnable, deleteButtonFun } = deleteButton;
@@ -83,7 +83,7 @@ const DraggableTable = ({
         <Table sx={{ minWidth: 500 }}>
           <TableHead>
             <TableRow>
-              {tableHead.map((item, index) => (
+              {tableHead && tableHead.map((item, index) => (
                 <StyledTableCell>{item}</StyledTableCell>
               ))}
             </TableRow>
