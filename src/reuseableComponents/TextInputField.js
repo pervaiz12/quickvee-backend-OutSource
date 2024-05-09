@@ -6,6 +6,7 @@ export default function BasicTextFields({value,maxLength,onChangeFun,type,placeh
     <FormControl fullWidth>
       <TextField 
       id="outlined-basic" 
+      name= {value}
       value={value}
       inputProps={{ maxLength: maxLength,type: type, readOnly:readOnly }}
       onChange={onChangeFun}

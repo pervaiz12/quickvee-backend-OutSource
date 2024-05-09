@@ -27,13 +27,14 @@ const SelectDropDown = ({
   onClickHandler,
   selectedOption,
   dropdownFor,
+  title
 }) => {
   console.log("selectedOption ", selectedOption);
   return (
     <>
       <FormControl fullWidth>
         <ThemeProvider theme={theme}>
-          <Select size="small" value={selectedOption} displayEmpty>
+          <Select size="small" displayEmpty>
             {heading && (
               <MenuItem
                 onClick={(e) => {
@@ -41,7 +42,7 @@ const SelectDropDown = ({
                 }}
                 value={heading}
               >
-                {heading}
+                {selectedOption}
               </MenuItem>
             )}
 
@@ -51,9 +52,9 @@ const SelectDropDown = ({
                 onClick={(e) => {
                   onClickHandler(item, dropdownFor);
                 }}
-                value={item.title}
+                value={item[title]}
               >
-                {item.title}
+                {item[title]}
               </MenuItem>
             ))}
           </Select>

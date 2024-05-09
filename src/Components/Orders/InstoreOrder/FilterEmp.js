@@ -219,7 +219,7 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
           </Grid>
           <Grid container spacing={2} className="">
             <Grid item xs={4}>
-              <label htmlFor="employeeFilter">Employee</label>
+              <label>Employee</label>
               <SelectDropDown
                 heading={"All"}
                 listItem={employeeList}

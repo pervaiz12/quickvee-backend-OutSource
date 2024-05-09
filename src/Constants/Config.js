@@ -276,6 +276,10 @@ module.exports = Object.freeze({
   // EMPLOYEE_WORK_HOURS: "Report_api/employee_work_hours1",
   EMPLOYEE_WORK_HOURS: "Report_api/employee_work_hours1_api",
 
+  // Add Po
+
+  ADD_PO_LIST: "Purchase_orders_api/po_list",
+
 
 });
 

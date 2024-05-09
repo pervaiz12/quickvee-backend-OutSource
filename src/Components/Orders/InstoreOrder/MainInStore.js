@@ -57,7 +57,7 @@ const MainInStore = () => {
     <>
       <div className="q-order-main-page">
         <div className="box">
-          <div className="box_shadow_div" style={{overflow:"unset"}}>
+          <div className="box_shadow_div_order" style={{overflow:"unset"}}>
             <div className="mb6_border">
               <div
                 onClick={() => handleTabClick("offline")}
