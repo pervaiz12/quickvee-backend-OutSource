@@ -29,17 +29,16 @@ import ResportIcons from "../../Assests/Dashboard/reports.svg";
 import timesheetblackIcon from "../../Assests/Dashboard/timesheetblackIcon.svg";
 import Loyalty from "../../Assests/Taxes/Loyalty Program.svg";
 import LoyaltIcon from "../../Assests/Taxes/loyaltyactive.svg";
-
+import { useSelector } from "react-redux";
 import { useLocation } from "react-router-dom";
 
-const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
+const SideMenu = () => {
   // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const location = useLocation();
   const currentUrl = location.pathname;
-
+  const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
   const [activeItem, setActiveItem] = useState(currentUrl);
-
-  
+  const [hoveredItem, setHoveredItem] = useState(null);
 
   const navigate = useNavigate();
 
@@ -48,16 +47,16 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
     setActiveItem(item.link);
     navigate(item.link);
   };
-  
+
   return (
     <>
       <div
         className="sidebar-menu"
-        style={isMenuOpen ? { width: "16rem" } : { width: "6rem" }}
+        style={{ width: isMenuOpenRedux ? "16rem" : "4rem", marginTop: "68px" }}
       >
         {/* Left Side Menu */}
         <div className="flex-1 bg-[#253338] text-[#9E9E9E]">
-          {isMenuOpen
+          {isMenuOpenRedux
             ? menuItems.map((item) => (
                 <div
                   key={item.id}
@@ -66,11 +65,16 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                   }`}
                 >
                   {item.dropdownItems ? (
-                    <DropdownMenuItem item={item} isMenuOpen={isMenuOpen} />
+                    <DropdownMenuItem
+                      item={item}
+                      isMenuOpenRedux={isMenuOpenRedux}
+                    />
                   ) : (
                     <div
+                      onMouseEnter={() => setHoveredItem(item.id)}
+                      onMouseLeave={() => setHoveredItem(null)}
                       onClick={() => handleItemClick(item)}
-                      
+                      style={{ cursor: "pointer" }}
                       className={`flex items-center ${
                         activeItem === item.link
                           ? "bg-[#414F54] text-[#FFC400]"
@@ -79,7 +83,8 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                             : ""
                       }`}
                     >
-                      {activeItem === item.link ? item.activeIcon : item.icon}
+                      {/* {activeItem === item.link ? item.activeIcon : item.icon} */}
+                      {activeItem === item.link || hoveredItem === item.id ? item.activeIcon : item.icon}
                       <Link
                         className={`ml-2 menu-item text-[14px] Admin_std ${
                           activeItem === item.link ? "bg-[#414F54]" : ""
@@ -100,7 +105,10 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                   }`}
                 >
                   {item.dropdownItems ? (
-                    <DropdownMenuItem item={item} isMenuOpen={isMenuOpen} />
+                    <DropdownMenuItem
+                      item={item}
+                      isMenuOpenRedux={isMenuOpenRedux}
+                    />
                   ) : (
                     <div
                       className={`flex flex-col items-center ${
@@ -123,52 +131,62 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
   );
 };
 
-const DropdownMenuItem = ({ item, isMenuOpen }) => {
+const DropdownMenuItem = ({ item, isMenuOpenRedux }) => {
   const location = useLocation();
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const currentUrl = location.pathname;
   const [activeItem, setActiveItem] = useState(currentUrl);
 
-  const handleToggleDropdownItems = (link) => {
+  const handleToggleDropdownItems = (link, e) => {
     setActiveItem(link);
 
     for (let obj of item.dropdownItems) {
       if (obj.link === activeItem) {
         setIsDropdownOpen(true);
-      } else {
-        setIsDropdownOpen(false);
       }
+      // else {
+      //   setIsDropdownOpen(false);
+      // }
     }
   };
 
   const handleToggleDropdown = () => {
-    //  console.log("calling")
     setIsDropdownOpen(!isDropdownOpen);
   };
 
   // useEffect(() => {
   //   console.log("Calling from useeffect" , isDropdownOpen , currentUrl)
   // }, [isDropdownOpen , currentUrl])
+  const HandleDropdownClick = () => {
+    console.log("calling HandleDropdownClick");
+    setIsDropdownOpen(!isDropdownOpen);
 
-  console.log("Calling from item", item);
+    // setIsMenuOpen(!isMenuOpen);
+  };
+
   return (
-    <div
-      className="relative"
-      style={
-        isMenuOpen ? { width: "16rem" } : { width: "6rem", marginLeft: "24px" }
-      }
-      onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-    >
-      <div className="flex items-center">
-        {item.icon}
-        {isMenuOpen && (
-          <p className="ml-2 menu-item text-[14px] Admin_std">
-            {item.text}
-            <FaChevronDown className="quickarrow_icon" />
-          </p>
-        )}
+    <>
+      <div
+        className="relative"
+        style={
+          isMenuOpenRedux
+            ? { width: "16rem" }
+            : { width: "6rem", marginLeft: "10px" }
+        }
+        onClick={() => {
+          HandleDropdownClick();
+        }}
+      >
+        <div className="flex items-center">
+          {item.icon}
+          {isMenuOpenRedux && (
+            <p className="ml-2 menu-item text-[14px] Admin_std">
+              {item.text}
+              <FaChevronDown className="quickarrow_icon" />
+            </p>
+          )}
+        </div>
       </div>
-
       {isDropdownOpen && (
         <div className="mt-0 bg-[#334247] p-4 shadow w-full text-center z-10">
           {item.dropdownItems.map((dropdownItem) => (
@@ -176,14 +194,17 @@ const DropdownMenuItem = ({ item, isMenuOpen }) => {
               key={dropdownItem.id}
               to={dropdownItem.link}
               className="flex text-center submenu-item text-gray-400 py-4 text-[14px]"
-              onClick={() => handleToggleDropdownItems(dropdownItem.link)}
+              onClick={(e) => {
+                handleToggleDropdownItems(dropdownItem.link, e);
+                e.stopPropagation();
+              }}
             >
               {dropdownItem.text}
             </Link>
           ))}
         </div>
       )}
-    </div>
+    </>
   );
 };
 

@@ -189,7 +189,8 @@
 	background-color: #253338;
 	/* top: 0; */
 	overflow-y: auto;
-	height: 94vh;
+	overflow-x: hidden;
+	height: 100vh;
 	/* width: 16rem; */
 	z-index: 9;
 	color: #9e9e9e;
@@ -1045,4 +1046,8 @@ div.q_label_details::after {
 	right: 0px !important;
 	top: 0px !important;
 	color: rgba(0, 0, 0, 0.26) !important;
+}
+
+.q-attributes-main-page {
+    margin: 0px 0px;
 }

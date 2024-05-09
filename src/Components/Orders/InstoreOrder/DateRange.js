@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FiCalendar } from "react-icons/fi";
-import CalendIcon from "../../../Assests/Filter/Calender.svg"
+import CalendIcon from "../../../Assests/Filter/Calender.svg";
 import { padding } from "@mui/system";
 
 const DateRange = ({ onDateRangeChange }) => {
@@ -97,151 +97,139 @@ const DateRange = ({ onDateRangeChange }) => {
     handleResize();
 
     // Event listener for window resize
-    window.addEventListener('resize', handleResize);
+    window.addEventListener("resize", handleResize);
 
     // Cleanup
     return () => {
-      window.removeEventListener('resize', handleResize);
+      window.removeEventListener("resize", handleResize);
     };
   }, []);
 
-
-
   return (
     <>
-    
-   
-        <div className="q-datarange-bottom-detail-section">
-          {/* Date Range Section */}
-          <div className="q_datafilter_section">
-            {/* <div className="q_details_header" style={{marginLeft:"-15px"}}><h1>Date Range</h1></div> */}
-            <div className="mt_card_header q_dashbaord_netsales">
-              <h1 className="">Date Range</h1>
-            </div>
-
-            <div className="datarange_days_order px-6">
-              {["Today", "Yesterday", "Last 7 Days", "Last 30 days"].map(
-                (option) => (
-                  <div
-                    key={option}
-                    className={`order_Details_days ${
-                      isActive(option) ? "text-blue-500" : "text-gray-600"
-                    }`}
-                    onClick={() => {
-                      setActive(option);
-                      setDatesBasedOnOption(option);
-                    }}
-                  >
-                    {isActive(option) && <div className="dot mr-1" />}
-                    {option}
-                  </div>
-                )
-              )}
-            </div>
+      <div className="q-datarange-bottom-detail-section">
+        {/* Date Range Section */}
+        <div className="q_datafilter_section">
+          {/* <div className="q_details_header" style={{marginLeft:"-15px"}}><h1>Date Range</h1></div> */}
+          <div className="mt_card_header q_dashbaord_netsales">
+            <h1 className="">Date Range</h1>
           </div>
-          <div>
-      {/* Your other content goes here */}
-      
-        <div className="q_date_range_filter_details">
-          <select
-            className="border-2 border-customColor rounded px-4 py-2 mr-7 bg-white text-blue-500 text-[16px] Admin_std"
-            onChange={(e) => {
-              const selectedOption = e.target.value;
-              setActive(selectedOption);
-              setDatesBasedOnOption(selectedOption);
-            }}
-          >
+
+          <div className="datarange_days_order px-6">
             {["Today", "Yesterday", "Last 7 Days", "Last 30 days"].map(
               (option) => (
-                <option
+                <div
                   key={option}
-                  value={option}
-                  className={
+                  className={`order_Details_days ${
                     isActive(option) ? "text-blue-500" : "text-gray-600"
-                  }
+                  }`}
+                  onClick={() => {
+                    setActive(option);
+                    setDatesBasedOnOption(option);
+                  }}
                 >
+                  {isActive(option) && <div className="dot mr-1" />}
                   {option}
-                </option>
+                </div>
               )
             )}
-          </select>
+          </div>
         </div>
-     </div>
-  <div className="q_main_data_range">
+        <div>
+          {/* Your other content goes here */}
+
+          <div className="q_date_range_filter_details">
+            <select
+              className="border-2 border-customColor rounded px-4 py-2 mr-7 bg-white text-blue-500 text-[16px] Admin_std"
+              onChange={(e) => {
+                const selectedOption = e.target.value;
+                setActive(selectedOption);
+                setDatesBasedOnOption(selectedOption);
+              }}
+            >
+              {["Today", "Yesterday", "Last 7 Days", "Last 30 days"].map(
+                (option) => (
+                  <option
+                    key={option}
+                    value={option}
+                    className={
+                      isActive(option) ? "text-blue-500" : "text-gray-600"
+                    }
+                  >
+                    {option}
+                  </option>
+                )
+              )}
+            </select>
+          </div>
+        </div>
+        <div className="q_main_data_range">
           <div className="qvrow">
-         
-  {/* Start Date */}
-  <div className={`Card_admin ${isTablet ? 'col-qv-12' : 'col-qv-4'}`}>
-    <div className="q_date_range_start">Start Date</div>
-    <div className="relative">
-      <DatePicker
-        selected={startDate}
-        onChange={(date) => setStartDate(date)}
-        selectsStart
-        startDate={startDate}
-        endDate={endDate}
-        dateFormat="MMMM d, yyyy"
-                    className="q_input_details"
-        ref={startDateRef}
-        showPopperArrow={false}
-      />
-      <span
-        className="q_cal_daterange"
-        onClick={handleStartDateIconClick}
-      >
-      <img src ={CalendIcon} alt="" className="w-6 h-6" />
-      </span>
-    </div>
-  </div>
+            {/* Start Date */}
+            <div
+              className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}
+            >
+              <div className="q_date_range_start">Start Date</div>
+              <div className="relative">
+                <DatePicker
+                  selected={startDate}
+                  onChange={(date) => setStartDate(date)}
+                  selectsStart
+                  startDate={startDate}
+                  endDate={endDate}
+                  dateFormat="MMMM d, yyyy"
+                  className="q_input_details"
+                  ref={startDateRef}
+                  showPopperArrow={false}
+                />
+                <span
+                  className="q_cal_daterange"
+                  onClick={handleStartDateIconClick}
+                >
+                  <img src={CalendIcon} alt="" className="w-6 h-6" />
+                </span>
+              </div>
+            </div>
 
-  {/* End Date */}
-              <div className={`Card_admin ${isTablet ? 'col-qv-12' : 'col-qv-4'}`}>
-    <div className="q_date_range_start ">End Date</div>
-    <div className="relative">
+            {/* End Date */}
+            <div
+              className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}
+            >
+              <div className="q_date_range_start ">End Date</div>
+              <div className="relative">
+                <DatePicker
+                  selected={endDate}
+                  onChange={(date) => setEndDate(date)}
+                  selectsEnd
+                  startDate={startDate}
+                  endDate={endDate}
+                  minDate={startDate}
+                  dateFormat="MMMM d, yyyy"
+                  className="q_input_details ml-0 "
+                  ref={endDateRef}
+                  showPopperArrow={false}
+                />
+                <span
+                  className="q_cal_daterange"
+                  onClick={handleEndDateIconClick}
+                >
+                  <img src={CalendIcon} alt="" className="w-6 h-6" />
+                </span>
+              </div>
+            </div>
+            <div
+              className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}
+            >
+              <div className=" q_search_opcity"> Search</div>
+              <button onClick={handleSearch} className="save_btn">
+                Search
+              </button>
+            </div>
+          </div>
+        </div>
 
-      <DatePicker
-        selected={endDate}
-        onChange={(date) => setEndDate(date)}
-        selectsEnd
-        startDate={startDate}
-        endDate={endDate}
-        minDate={startDate}
-        dateFormat="MMMM d, yyyy"
-        className="q_input_details ml-0 "
-        ref={endDateRef}
-        showPopperArrow={false}
-      />
-      <span
-        className="q_cal_daterange"
-        onClick={handleEndDateIconClick}
-      >
-         <img src ={CalendIcon} alt="" className="w-6 h-6" />
-      </span>
-    </div>
-  </div>
-              <div className={`Card_admin ${isTablet ? 'col-qv-12' : 'col-qv-4'}`}>
- 
-  
-  <div className=" q_search_opcity"> Search</div>
-    <button
-      onClick={handleSearch}
-      className="save_btn"
-    >
-      Search
-    </button>
-  </div>
-  </div>
-  </div>
-  
-
-  {/* Search Button */}
- 
-</div>
-
-
-
-      
-    
+        {/* Search Button */}
+      </div>
     </>
   );
 };
