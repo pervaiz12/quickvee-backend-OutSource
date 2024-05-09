@@ -12,12 +12,11 @@ import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
-
-
+import CheckBoxField from "../../reuseableComponents/CheckBoxField";
 
 const AddCategory = ({ seVisible }) => {
   const [errorMessage, setErrorMessage] = useState("");
-  const [value, setValue] = useState(null)
+  const [value, setValue] = useState(null);
 
   const [category, setCategory] = useState({
     title: "",
@@ -26,9 +25,8 @@ const AddCategory = ({ seVisible }) => {
     online: 0,
     use_point: 0,
     earn_point: 0,
-    image: "", // New property for the image file
+    image: "",
   });
-  // const []
 
   const myStyles = {
     display: "flex",
@@ -90,7 +88,7 @@ const AddCategory = ({ seVisible }) => {
       formData.append("image", "");
       formData.append("filename", "");
     }
-    console.log(category)
+    console.log(category);
 
     try {
       const res = await axios.post(BASE_URL + ADD_CATOGRY, formData, {
@@ -122,7 +120,6 @@ const AddCategory = ({ seVisible }) => {
     }
   };
 
-
   // Function to prevent default behavior for drag over
   const inputRef = useRef(null);
 
@@ -143,7 +140,7 @@ const AddCategory = ({ seVisible }) => {
       reader.onloadend = () => {
         setCategory((prevValue) => ({
           ...prevValue,
-          image: value
+          image: value,
         }));
       };
       reader.readAsDataURL(file);
@@ -189,31 +186,28 @@ const AddCategory = ({ seVisible }) => {
     fetchData();
   }, []);
 
-
-
-
   // for Default Category list End
 
   return (
     <>
-
       <div className="box">
-
         <div className="q-add-categories-section">
           <form onSubmit={handleSubmit} enctype="multipart/form-data">
             <div className="q-add-categories-section-header">
               <span onClick={() => seVisible("CategoryDetail")}>
-                <img src={AddNewCategory} alt="Add-New-Category" className="w-6 h-6" />
+                <img
+                  src={AddNewCategory}
+                  alt="Add-New-Category"
+                  className="w-6 h-6"
+                />
                 <span>Add New Category</span>
               </span>
             </div>
             <div className="q-add-categories-section-middle-form">
-
               <div
                 className="q-add-categories-single-input mb-2"
                 style={{ position: "relative" }}
               >
-
                 <label for="title">Title</label>
               </div>
 
@@ -227,10 +221,10 @@ const AddCategory = ({ seVisible }) => {
                 onChange={(newValue) => {
                   console.log(newValue);
                   setCategory((priviousValue) => ({
-                    ...priviousValue, title: newValue.target.textContent
+                    ...priviousValue,
+                    title: newValue.target.textContent,
                   }));
                 }}
-
                 renderInput={(params) => (
                   <TextField
                     {...params}
@@ -239,12 +233,7 @@ const AddCategory = ({ seVisible }) => {
                     name="title"
                     value={category.title}
                     onChange={inputChange}
-                    style={{
-
-                    }}
-
-
-
+                    style={{}}
                   />
                 )}
               />
@@ -253,7 +242,6 @@ const AddCategory = ({ seVisible }) => {
                   {errorMessage}
                 </span>
               )}
-
 
               <div className="q-add-categories-single-input mt-2">
                 <label for="description">Description</label>
@@ -333,49 +321,31 @@ const AddCategory = ({ seVisible }) => {
                 <div className="add-category-checkmark-div">
                   <label className="add-category-checkmark-label mt-2">
                     Show Online ?
-                    <input
-                      type="checkbox"
+                    <CheckBoxField
                       checked={category.online === 1}
-                      onChange={(e) =>
-                        setCategory((prevValue) => ({
-                          ...prevValue,
-                          online: e.target.checked ? 1 : 0,
-                        }))
-                      }
+                      onChangeFun={setCategory}
+                      categoryType={"online"}
                     />
-                    <span className="add-category-checkmark"></span>
                   </label>
                 </div>
                 <div className="add-category-checkmark-div">
                   <label className="add-category-checkmark-label mt-2">
                     Use Loyalty Point ?
-                    <input
-                      type="checkbox"
+                    <CheckBoxField
                       checked={category.use_point === 1}
-                      onChange={(e) =>
-                        setCategory((prevValue) => ({
-                          ...prevValue,
-                          use_point: e.target.checked ? 1 : 0,
-                        }))
-                      }
+                      onChangeFun={setCategory}
+                      categoryType={"use_point"}
                     />
-                    <span className="add-category-checkmark"></span>
                   </label>
                 </div>
                 <div className="add-category-checkmark-div">
                   <label className="add-category-checkmark-label mt-2">
                     Earn Loyalty Point ?
-                    <input
-                      type="checkbox"
+                    <CheckBoxField
                       checked={category.earn_point === 1}
-                      onChange={(e) =>
-                        setCategory((prevValue) => ({
-                          ...prevValue,
-                          earn_point: e.target.checked ? 1 : 0,
-                        }))
-                      }
+                      onChangeFun={setCategory}
+                      categoryType={"earn_point"}
                     />
-                    <span className="add-category-checkmark"></span>
                   </label>
                 </div>
               </div>
@@ -393,7 +363,6 @@ const AddCategory = ({ seVisible }) => {
           </form>
         </div>
       </div>
-
     </>
   );
 };

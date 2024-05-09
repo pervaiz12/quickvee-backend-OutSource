@@ -411,7 +411,7 @@ select option {
 	display: none;
 }
 
-*/ .days_btn {
+.days_btn {
 	border-width: 1px;
 	padding-left: 3.5rem;
 	padding-right: 3.5rem;

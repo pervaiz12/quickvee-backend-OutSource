@@ -14,6 +14,9 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { SortableContainer, SortableElement } from "react-sortable-hoc";
 
 import { Link } from "react-router-dom";
+import CheckBoxField from "../../reuseableComponents/CheckBoxField";
+import DraggableTable from "../../reuseableComponents/DraggableTable";
+import RadioSelect from "./RadioSelect";
 
 const CategoryDetail = ({ seVisible }) => {
   const [allcategories, setallcategories] = useState([]);
@@ -62,7 +65,7 @@ const CategoryDetail = ({ seVisible }) => {
 
   // for  Category Status update
   const handleToggleStatus = async (id, status) => {
-    console.log("jkj");
+    console.log("category id and status: " + id, status);
     const data = {
       id: id,
       status: status,
@@ -81,7 +84,13 @@ const CategoryDetail = ({ seVisible }) => {
     }
   };
 
-  const handleOnlineChange = (id, status, category) => {
+  const handleOnlineChange = (category) => {
+    let status =
+      category.cat_show_status === "0" || category.cat_show_status === "1"
+        ? "1"
+        : "0";
+    console.log("category status: " + category);
+    console.log("category Custom status: " + status);
     const isOnlineChecked =
       category.cat_show_status === "0" || category.cat_show_status === "1";
     const isRegisterChecked =
@@ -97,7 +106,7 @@ const CategoryDetail = ({ seVisible }) => {
     } else if (isOnlineChecked && isRegisterChecked) {
       status = 2;
     }
-    handleToggleStatus(id, status, category);
+    handleToggleStatus(category.id, status, category);
   };
 
   const handleRegisterChange = (id, status, category) => {
@@ -165,12 +174,29 @@ const CategoryDetail = ({ seVisible }) => {
                 Add Category <img src={AddIcon} alt="add-icon" />{" "}
               </p>
             </div>
-            <div className="q-category-bottom-categories-header">
+            <DraggableTable
+              tableHead={["Sort", "Title", "Items", "Enable/Disable", "", ""]}
+              tableRow={allcategories}
+              setFunction={setallcategories}
+              viewSelectedOption={{
+                viewSelectedOptionEnable: true,
+                fun1: handleOnlineChange,
+                fun2: handleRegisterChange,
+              }}
+              viewSelectedOptionFun={handleViewItemsClick}
+              radioButtonComponent={true}
+              editBtnCategory={true}
+              deleteButton={{
+                deleteButtonEnable: true,
+                deleteButtonFun: handleDeleteCategory,
+              }}
+            />
+            {/* <div className="q-category-bottom-categories-header">
               <p className="categories-data-sort">Sort</p>
               <p className="categories-data-title">Title</p>
               <p className="categories-data-items">Items</p>
               <p className="categories-enable-disable">Enable/Disable</p>
-            </div>
+            </div> */}
           </div>
           {/* <div className="q-category-bottom-categories-listing">
             
@@ -262,7 +288,7 @@ const CategoryDetail = ({ seVisible }) => {
               ))}
           </div> */}
 
-          <DragDropContext onDragEnd={onDragEnd}>
+          {/* <DragDropContext onDragEnd={onDragEnd}>
             <Droppable droppableId="droppable">
               {(provided) => (
                 <div
@@ -309,11 +335,11 @@ const CategoryDetail = ({ seVisible }) => {
                                     }
                                     onChange={() =>
                                       handleOnlineChange(
-                                        category.id,
-                                        category.cat_show_status === "0" ||
-                                          category.cat_show_status === "1"
-                                          ? "1"
-                                          : "0",
+                                        // category.id,
+                                        // category.cat_show_status === "0" ||
+                                        //   category.cat_show_status === "1"
+                                        //   ? "1"
+                                        //   : "0",
                                         category
                                       )
                                     }
@@ -372,7 +398,7 @@ const CategoryDetail = ({ seVisible }) => {
                 </div>
               )}
             </Droppable>
-          </DragDropContext>
+          </DragDropContext> */}
         </div>
       </div>
     </>
