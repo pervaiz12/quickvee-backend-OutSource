@@ -226,16 +226,17 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
                 onClickHandler={handleOptionClick}
                 selectedOption={selectedEmployee}
                 dropdownFor={"employee"}
+                title={"title"}
               />
             </Grid>
             <Grid item xs={4}>
               <label htmlFor="transactionFilter">Transactions</label>
               <SelectDropDown
-                heading={null}
                 listItem={transactionsList}
                 onClickHandler={handleOptionClick}
                 selectedOption={selectedTransaction}
                 dropdownFor={"transaction"}
+                title={"title"}
               />
             </Grid>
           </Grid>

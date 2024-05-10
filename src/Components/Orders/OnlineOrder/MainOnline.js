@@ -154,6 +154,7 @@ const MainOnline = ({ onFilterDataChange }) => {
               <SelectDropDown
                 heading={""}
                 listItem={transactionsList}
+                title={'title'}
                 onClickHandler={handleOptionClick}
                 selectedOption={selectedTransaction}
                 dropdownFor={"transaction"}
@@ -164,6 +165,7 @@ const MainOnline = ({ onFilterDataChange }) => {
               <SelectDropDown
                 heading={""}
                 listItem={orderStatusList}
+                title={'title'}
                 onClickHandler={handleOptionClick}
                 selectedOption={selectedOrderStatus}
                 dropdownFor={"orderStatus"}

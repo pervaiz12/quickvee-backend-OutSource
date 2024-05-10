@@ -34,7 +34,7 @@ const SelectDropDown = ({
     <>
       <FormControl fullWidth>
         <ThemeProvider theme={theme}>
-          <Select size="small" displayEmpty>
+          <Select size="small" value={selectedOption} displayEmpty>
             {heading && (
               <MenuItem
                 onClick={(e) => {
@@ -42,7 +42,7 @@ const SelectDropDown = ({
                 }}
                 value={heading}
               >
-                {selectedOption}
+                {heading}
               </MenuItem>
             )}
 
