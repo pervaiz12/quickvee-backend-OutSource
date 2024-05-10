@@ -554,17 +554,9 @@ a.days_filter {
 	}
 }
 
-.quickarrow_icon {
-	margin-left: 7.25rem;
-	/* display: flex; */
-	/* justify-content: space-between; */
-	margin-top: -1rem;
-}
 
-/* .error-close-icon {
-  color: #000 !important;
-  background-color: #fff !important;
-} */
+
+
 
 .q-custom-modal-content.modal_custom {
 	height: auto !important;
@@ -844,9 +836,13 @@ a.flex.text-center.submenu-item.text-gray-400.py-4.CircularSTDBook:hover {
 	color: #ffc400;
 }
 
-.submenu-item:active {
+.submenu-item.active {
 	color: #ffc400;
 }
+.DropDown-memu.activeTab {
+	color: #ffc400;
+}
+
 
 .image-container {
 	position: relative;

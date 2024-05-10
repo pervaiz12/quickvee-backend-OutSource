@@ -4,8 +4,7 @@ import Select from "@mui/material/Select";
 import '../../../Styles/EmployeeList/customeitem.css';
 
 const CustomTimePicker = ({OpenTime, CloseTime}) => {
-  console.log("OpenTime", OpenTime)
-  console.log("CloseTime", CloseTime)
+
 
   const [startTime, setStartTime] = useState("12:00 AM");
   const [endTime, setEndTime] = useState("");
