@@ -221,6 +221,7 @@ const FilterProduct = ({
                 <label>Product Status</label>
                 <SelectDropDown
                   heading={null}
+                  title={"title"}
                   listItem={productStatusList}
                   selectedOption={selectedStatusValue}
                   onClickHandler={handleOptionClick}
@@ -231,6 +232,7 @@ const FilterProduct = ({
                 <label>Listing Type {selectedListingType}</label>
                 <SelectDropDown
                   heading={"Select listing"}
+                  title={"title"}
                   listItem={listingTypeList}
                   selectedOption={selectedListingType}
                   onClickHandler={handleOptionClick}
@@ -243,6 +245,7 @@ const FilterProduct = ({
                 </label>
                 <SelectDropDown
                   heading={"Select"}
+                  title={"title"}
                   listItem={deliveryPickupList}
                   selectedOption={selectedEmployee}
                   onClickHandler={handleOptionClick}

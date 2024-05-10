@@ -18,6 +18,7 @@ module.exports = Object.freeze({
   CATEGORIE_STATUS: "CategoryReactapi/categoryapi_status",
   CATEGORIE_BANNER_REMOVE: "CategoryReactapi/delete_banner_image",
   EDIT_CATOGRY_DATA: "CategoryReactapi/category_data",
+  SORT_CATOGRY_DATA: "CategoryReactapi/SaveSizeSorting",
 
 
 

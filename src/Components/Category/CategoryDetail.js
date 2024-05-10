@@ -17,6 +17,7 @@ import { Link } from "react-router-dom";
 import CheckBoxField from "../../reuseableComponents/CheckBoxField";
 import DraggableTable from "../../reuseableComponents/DraggableTable";
 import RadioSelect from "./RadioSelect";
+import { BASE_URL,  SORT_CATOGRY_DATA } from "../../Constants/Config";
 
 const CategoryDetail = ({ seVisible }) => {
   const [allcategories, setallcategories] = useState([]);
@@ -162,6 +163,9 @@ const CategoryDetail = ({ seVisible }) => {
     alert("Are you sure you want to sort item!");
     //console.log(result);
   };
+ 
+  const Dragrow = allcategories.filter((item) => item.alternateName !==  AllCategoriesDataState.categoriesData.map((item)=> item.alternateName))
+  console.log('upda table',Dragrow)
 
   return (
     <>
@@ -190,6 +194,8 @@ const CategoryDetail = ({ seVisible }) => {
                 deleteButtonEnable: true,
                 deleteButtonFun: handleDeleteCategory,
               }}
+              sortAPI={SORT_CATOGRY_DATA}
+              table={"collection"}
               className="q-category-bottom-categories-single-category"
             />
             {/* <div className="q-category-bottom-categories-header">

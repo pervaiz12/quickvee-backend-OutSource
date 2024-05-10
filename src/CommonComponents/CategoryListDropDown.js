@@ -116,6 +116,7 @@ const CategoryListDropDown = ({ type, onCategoryChange }) => {
       <label htmlFor="categoryFilter">Category</label>
       <SelectDropDown
         heading={"All"}
+        title={"title"}
         listItem={allcategories}
         selectedOption={selectedCategory}
         onClickHandler={handleOptionClick}

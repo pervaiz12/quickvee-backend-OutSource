@@ -15,6 +15,7 @@ import ViewItemsModal from "../Components/Category/ViewItemsModal";
 import RadioSelect from "../Components/Category/RadioSelect";
 import { Link } from "react-router-dom";
 import EditDeliveryAddress from "../Components/Attributes/EditAttribute";
+import axios from "axios";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
@@ -43,7 +44,9 @@ const DraggableTable = ({
   viewSelectedOptionFun,
   editBtnCategory = false ,
   deleteButton =false,
-  editAttributeObj = false
+  editAttributeObj = false,
+  sortAPI,
+  table
 }) => {
   const { viewSelectedOptionEnable, fun1, fun2 } = viewSelectedOption;
   const {  deleteButtonEnable, deleteButtonFun } = deleteButton;
@@ -57,7 +60,7 @@ const DraggableTable = ({
     return result;
   };
 
-  const onDragEnd = (result) => {
+  const onDragEnd = async (result) => {
     // Check if the drag ended outside of the droppable area
     if (!result.destination) {
       alert("You can't drop outside the list!");
@@ -70,16 +73,50 @@ const DraggableTable = ({
       return;
     }
 
+    // const reorderedItems = reorder(
+    //   tableRow,
+    //   result.source.index,
+    //   result.destination.index
+    // );
+    const sourceIndex = result.source.index;
+    const targetIndex = result.destination.index;
+
     const reorderedItems = reorder(
       tableRow,
-      result.source.index,
-      result.destination.index
+      sourceIndex,
+      targetIndex
     );
 
-    setFunction(reorderedItems);
+    const alternameList = {};
+    let AT = "";
+    reorderedItems.forEach((category) => {
+      alternameList[`values[${category.id}]`] = category.alternateName;
+    });
 
-    alert("Are you sure you want to sort item!");
-    //console.log(result);
+    
+    let data = {
+      table:table,
+      merchant_id: "MAL0100CA",
+    }
+
+    console.log('update Altername',alternameList)
+
+    const userConfirmed = window.confirm("Are you sure you want to sort items?");
+    if (userConfirmed) {
+      try {
+        const response = await axios.post('YOUR_API_ENDPOINT'+ sortAPI, {...alternameList, ...data});
+        console.log("API response:", response.data);
+      } catch (error) {
+        console.error("API call failed:", error);
+      }
+    } else {
+      console.log("Sorting canceled by user");
+    }
+
+
+
+    setFunction(reorderedItems);
+    console.log('hvbxzcd',reorderedItems)
   };
   return (
     <>
