@@ -72,9 +72,18 @@ const DateRange = ({ onDateRangeChange }) => {
         setEndDate(today);
         break;
       case "Last 30 days":
+        // const thirtyDaysAgo = new Date(today);
+        // thirtyDaysAgo.setDate(today.getDate() - 30);
+        // setStartDate(thirtyDaysAgo);
+        // setEndDate(today);
         const thirtyDaysAgo = new Date(today);
         thirtyDaysAgo.setDate(today.getDate() - 30);
-        setStartDate(thirtyDaysAgo);
+        if (thirtyDaysAgo.getMonth() === today.getMonth()) {
+          setStartDate(thirtyDaysAgo);
+        } else {
+          const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+          setStartDate(firstDayOfMonth);
+        }
         setEndDate(today);
         break;
       default:
