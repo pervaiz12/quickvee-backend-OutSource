@@ -55,6 +55,7 @@ import DetailCategorySaleSliceReducer from "../features/DetailCategorySale/detai
 import EmployeeWorkinghrsSlice from "../features/Reports/EmployeeWorkinghrs/EmployeeWorkinghrsSlice";
 import AddpurchaseOrderSliceReducer from "../features/PurchaseOrder/AddpurchaseOrderSlice";
 import MenuSlice from "../features/NavBar/MenuSlice";
+import LoginSliceReducer from '../features/Authentication/loginSlice'
 
 const store = configureStore({
   reducer: {
@@ -135,9 +136,8 @@ const store = configureStore({
     StoreSetupList: SettingSetupSlice,
     EmpWorkinghrsList:EmployeeWorkinghrsSlice,
     Addpolist: AddpurchaseOrderSliceReducer,
+    loginAuthentication:LoginSliceReducer,
     
-
-
     NavBarToggle: MenuSlice
   },
 

@@ -283,6 +283,12 @@ module.exports = Object.freeze({
   // Add Po
 
   ADD_PO_LIST: "Purchase_orders_api/po_list",
+  // -----------------
+   
+  LOGIN_AUTHENICATE_API:"LoginApiReact/chk_merchant",
+  LOGIN_AUTHENICATE2_API:"LoginApiReact/send_otp_session",//
+  LOGIN_OTP_AUTHENTICATION:"LoginApiReact/chk_otp",//
+  LOGIN_OTP_SUBMIT_AUTHENTICATION:"LoginApiReact/create_session",//
 
 
 });
