@@ -82,7 +82,7 @@ import MainEmployeelist from "./Components/Reporting/Employelist/MainEmployeelis
 import MainTaxesReport from "./Components/Reporting/Taxes/MainTaxesReport";
 import MainSalesPerson from "./Components/Reporting/SalesByPerson/MainSalesPerson";
 import Login from './Components/Authenticate/login'
-import StoreList from './Components/StoreRcord/storeList'
+// import StoreList from './Components/StoreRcord/storeList'
 // import MainInvDuplicates from "./Components/InventoryDuplicates/MainInvDuplicates";
 import Main from "./Main";
 import "./Styles/OrderSummaryDetails.css";
@@ -123,13 +123,9 @@ function App() {
         path="/login"
         element={< Login visible={"login"} />}
       />
-      <Route
-        exact
-        path="/store"
-        element={< StoreList visible={"storelist"} />}
-      />
       <Route index path="/" element={<Main visible={"dashboard"} />} />
       <Route exact path="/order" element={<Main visible={"order"} />} />
+      <Route exact path="/store" element={<Main visible={"store"} />} />
       <Route exact path="/category" element={<Main visible={"category"} />} />
       <Route exact path="/products" element={<Main visible={"products"} />} />
       <Route
@@ -140,6 +136,7 @@ function App() {
       <Route
         exact
         path="/attributes"
+
         element={<Main visible={"attributes"} />}
       />
 
