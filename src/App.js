@@ -81,6 +81,8 @@ import MainItemSales from "./Components/Reporting/ItemSales/MainItemSales";
 import MainEmployeelist from "./Components/Reporting/Employelist/MainEmployeelist";
 import MainTaxesReport from "./Components/Reporting/Taxes/MainTaxesReport";
 import MainSalesPerson from "./Components/Reporting/SalesByPerson/MainSalesPerson";
+import Login from './Components/Authenticate/login'
+import StoreList from './Components/StoreRcord/storeList'
 // import MainInvDuplicates from "./Components/InventoryDuplicates/MainInvDuplicates";
 import Main from "./Main";
 import "./Styles/OrderSummaryDetails.css";
@@ -104,6 +106,16 @@ function App() {
         path="/users/view/unapprove"
         element={<Main visible={"multimerchant"} />}
       /> */}
+        <Route
+        exact
+        path="/login"
+        element={< Login visible={"login"} />}
+      />
+      <Route
+        exact
+        path="/store"
+        element={< StoreList visible={"storelist"} />}
+      />
       <Route index path="/" element={<Main visible={"dashboard"} />} />
       <Route exact path="/order" element={<Main visible={"order"} />} />
       <Route exact path="/category" element={<Main visible={"category"} />} />

@@ -54,6 +54,7 @@ import ShiftSummarySlice from "../features/Reports/ShiftSummary/ShiftSummarySlic
 import DetailCategorySaleSliceReducer from "../features/DetailCategorySale/detailCategorySaleSlice";
 import EmployeeWorkinghrsSlice from "../features/Reports/EmployeeWorkinghrs/EmployeeWorkinghrsSlice";
 import AddpurchaseOrderSliceReducer from "../features/PurchaseOrder/AddpurchaseOrderSlice";
+import LoginSliceReducer from '../features/Authentication/loginSlice'
 
 const store = configureStore({
   reducer: {
@@ -134,9 +135,8 @@ const store = configureStore({
     StoreSetupList: SettingSetupSlice,
     EmpWorkinghrsList:EmployeeWorkinghrsSlice,
     Addpolist: AddpurchaseOrderSliceReducer,
+    loginAuthentication:LoginSliceReducer,
     
-
-
   },
 
       //setting setup 

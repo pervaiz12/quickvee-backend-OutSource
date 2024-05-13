@@ -1,0 +1,112 @@
+@font-face {
+    font-family: CircularBold;
+    src: url("../Assests/Fonts/circular-bold.TTF");
+}
+
+@font-face {
+    font-family: CircularMedium;
+    src: url("../Assests/Fonts/circulur-medium.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDBlack;
+    src: url("../Assests/Fonts/circulur-std-black.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDBook;
+    src: url("../Assests/Fonts/circulur-std-book.TTF");
+}
+
+@font-face {
+    font-family: CircularSTDMedium;
+    src: url("../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
+}
+.login-customer-form>h1{
+    color:#222 !important;
+    font-family: CicularBold;
+    font-size: 20px;
+    margin-bottom:20px ;
+}
+.quickvee-logo-authentication{
+    margin: 0 0 30px;
+    width: 200px;
+}
+.customer-btn{
+  background-color: #0a64f9;
+  font-size: 16px !important;
+  height: 44px;
+  margin: 20px 0 !important;
+  text-transform: capitalize !important;
+  width: 300px;
+}
+.input-error{
+  color: #fa0000;
+  font-family:CircularMedium ;
+  font-size: 12px;
+  display: flex;
+  justify-content: flex-start;
+  /* padding: 0; */
+}
+.main-authentication-component{
+    align-items:center;
+    display:flex;
+    flex-direction: row;
+    justify-content: center;
+    padding:15px;
+
+}
+.login-customer-form{
+    align-items:center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: auto;
+    text-align: center;
+}
+.wrapper {
+    width: 55%;
+    /* margin-left: auto; */
+    border-radius: 15px;
+    /* background: url('../Assets/LoginScreen/LoginBanner1.1.png');
+     */
+     background:url('../Assests//LoginScreen/LoginBanner1.1.png');
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+    justify-self: stretch;
+    height: 95vh;
+    animation: slider 10s infinite;
+  }
+  @keyframes slider {
+    0% {
+      /* background: url('../Assets/LoginScreen/LoginBanner1.1.png');
+       */
+       background:url('../Assests/LoginScreen/LoginBanner1.1.png');
+      background-size: cover;
+      background-position: center;
+    }
+  
+    30% {
+      /* background: url('../Assets/LoginScreen/LoginBanner2.1.png');
+       */
+       background:url('../Assests//LoginScreen/LoginBanner2.1.png');
+      background-size: cover;
+      background-position: center;
+    }
+  
+    60% {
+      /* background: url('../Assets/LoginScreen/LoginBanner3.1.png'); */
+      background:url('../Assests/LoginScreen/LoginBanner3.1.png');
+      background-size: cover;
+      background-position: center;
+    }
+  
+    100% {
+      /* background: url('../Assets/LoginScreen/LoginBanner1.1.png');
+       */
+       background:url('../Assests/LoginScreen/LoginBanner1.1.png');
+      background-size: cover;
+      background-position: center;
+    }
+  }
