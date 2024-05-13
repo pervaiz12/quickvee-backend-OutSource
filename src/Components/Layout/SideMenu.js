@@ -41,8 +41,9 @@ const SideMenu = () => {
   const [activeItem, setActiveItem] = useState(currentUrl);
   const [hoveredItem, setHoveredItem] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [currentDropDownItem, activeDropDownItem] = useState(null)
   const navigate = useNavigate();
-  console.log("activeItem: ", activeItem);
+
   const handleItemClick = (item) => {
     // console.log(item);
     setActiveItem(item.link);
@@ -79,6 +80,8 @@ const SideMenu = () => {
                       hoveredItem={hoveredItem}
                       isDropdownOpen={isDropdownOpen}
                       setIsDropdownOpen={setIsDropdownOpen}
+                      currentDropDownItem={currentDropDownItem}
+                      activeDropDownItem={activeDropDownItem}
                     />
                   ) : (
                     <div
@@ -127,6 +130,8 @@ const SideMenu = () => {
                       hoveredItem={hoveredItem}
                       isDropdownOpen={isDropdownOpen}
                       setIsDropdownOpen={setIsDropdownOpen}
+                      currentDropDownItem={currentDropDownItem}
+                      activeDropDownItem={activeDropDownItem}
                     />
                   ) : (
                     <div
@@ -164,14 +169,15 @@ const DropdownMenuItem = ({
   hoveredItem,
   isDropdownOpen,
   setIsDropdownOpen,
+  activeDropDownItem,
+  currentDropDownItem
 }) => {
   const dispatch = useDispatch();
   const location = useLocation();
 
-  const currentUrl = location.pathname;
   const [dropDownItem, setDropDownItem] = useState(null);
   const isTabletNav = useMediaQuery("(max-width:1024px)");
-
+  console.log("currentDropDownItem", currentDropDownItem)
   useEffect(() => {
     isTabletNav && setIsDropdownOpen(false);
   }, [isTabletNav]);
@@ -192,10 +198,12 @@ const DropdownMenuItem = ({
     setIsDropdownOpen(true);
   };
 
-  const HandleDropdownClick = () => {
-    console.log("HandleDropdownClick");
+  const HandleDropdownClick = (event,id) => {
+    event.preventDefault();
+    console.log("id of item ",id , "item clicked id", item.id)
+   
     setIsDropdownOpen(!isDropdownOpen);
-
+    activeDropDownItem(id)
     // setIsMenuOpen(!isMenuOpen);
   };
 
@@ -215,7 +223,7 @@ const DropdownMenuItem = ({
           {isMenuOpenRedux ? (
             <div
               onClick={(e) => {
-                HandleDropdownClick();
+                HandleDropdownClick(e,item.id);
                 e.stopPropagation();
               }}
               className="w-full flex items-center "
@@ -227,6 +235,7 @@ const DropdownMenuItem = ({
                 className={`ml-2 menu-item DropDown-memu text-[14px] flex-auto Admin_std ${
                   activeItem === dropDownItem ? "activeTab" : ""
                 }`}
+              
               >
                 {item.text}
               </p>
@@ -239,6 +248,7 @@ const DropdownMenuItem = ({
                 onClick={(e) => {
                   handleToggleSideBar();
                   e.stopPropagation();
+                 
                 }}
               >
                 {activeItem === dropDownItem || hoveredItem === item.id
@@ -249,11 +259,12 @@ const DropdownMenuItem = ({
           )}
         </div>
       </div>
-      {isDropdownOpen && (
+      {isDropdownOpen && currentDropDownItem === item.id && (
         <div
-        onMouseEnter={() => setHoveredItem(item.id)}
-        onMouseLeave={() => setHoveredItem(null)}
-        className="mt-0 bg-[#334247] p-4 shadow w-full text-center z-10">
+          onMouseEnter={(e) => {setHoveredItem(item.id); e.stopPropagation();} }
+          onMouseLeave={(e) => {setHoveredItem(null); e.stopPropagation();}}
+          className="mt-0 bg-[#334247] p-4 shadow w-full text-center z-10"
+        >
           {item.dropdownItems.map((dropdownItem) => (
             <Link
               key={dropdownItem.id}
