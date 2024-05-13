@@ -79,7 +79,7 @@ const couponListSlice = createSlice({
         builder.addCase(deleteCoupon.fulfilled, (state, action) => {
             state.loading = false;
             state.successMessage = action.payload.message;
-            state.couponData = state.couponData.filter((item) => item && item.id !== action.payload.couponId);
+            state.couponData = Object.values(state.couponData).filter((item) => item && item.id !== action.payload.couponId);
             state.error = ''; // Reset the error message
         });
         builder.addCase(deleteCoupon.rejected, (state, action) => {

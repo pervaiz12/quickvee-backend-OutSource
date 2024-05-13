@@ -1,5 +1,6 @@
 import React from "react";
 import { BsDot } from "react-icons/bs";
+import { BASE_URL } from "../../Constants/Config";
 
 const ImportData = () => {
   return (
@@ -23,7 +24,7 @@ const ImportData = () => {
       onClick={() => {
         // Handle the download functionality here
         window.location.href =
-          "https://sandbox.quickvee.com/upload/SampleCSV/SampleProductsCSVnew.csv";
+          BASE_URL+"upload/SampleCSV/SampleProductsCSVnew.csv";
       }}
     >
       Sample CSV Download

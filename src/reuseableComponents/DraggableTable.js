@@ -16,6 +16,10 @@ import RadioSelect from "../Components/Category/RadioSelect";
 import { Link } from "react-router-dom";
 import EditDeliveryAddress from "../Components/Attributes/EditAttribute";
 import axios from "axios";
+import { BASE_URL , SORT_CATOGRY_DATA } from "../Constants/Config";
+import { useDispatch } from "react-redux";
+import { fetchCategoriesData } from "../Redux/features/Categories/categoriesSlice";
+import { fetchAttributesData } from "../Redux/features/Attributes/attributesSlice";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
@@ -45,9 +49,9 @@ const DraggableTable = ({
   editBtnCategory = false ,
   deleteButton =false,
   editAttributeObj = false,
-  sortAPI,
   table
 }) => {
+  const dispatch = useDispatch();
   const { viewSelectedOptionEnable, fun1, fun2 } = viewSelectedOption;
   const {  deleteButtonEnable, deleteButtonFun } = deleteButton;
   const { editButtonEnable, editButtonurl } = editBtnCategory;
@@ -87,24 +91,52 @@ const DraggableTable = ({
       targetIndex
     );
 
+  const draggedAlternateName = reorderedItems[sourceIndex].alternateName;
+  const destinationAlternateName = reorderedItems[targetIndex].alternateName;
+
+    // Create a new array with updated alternateName values
+    const updatedItems = reorderedItems.map((item, index) => {
+      /* if (index === sourceIndex) {
+        return { ...item, alternateName: destinationAlternateName };
+      }
+      if (index === targetIndex) {
+        return { ...item, alternateName: draggedAlternateName };
+      } */
+
+      return item;
+    });
+    console.log('update Row of Category',updatedItems)
+
     const alternameList = {};
-    let AT = "";
-    reorderedItems.forEach((category) => {
-      alternameList[`values[${category.id}]`] = category.alternateName;
+    updatedItems.forEach((category,index) => {
+      alternameList[`values[${category.id}]`] = tableRow[index].alternateName;
     });
 
-    
     let data = {
       table:table,
-      merchant_id: "MAL0100CA",
+      merchant_id:"MAL0100CA",
     }
-
-    console.log('update Altername',alternameList)
 
     const userConfirmed = window.confirm("Are you sure you want to sort items?");
     if (userConfirmed) {
+      setFunction(updatedItems);
       try {
-        const response = await axios.post('YOUR_API_ENDPOINT'+ sortAPI, {...alternameList, ...data});
+        const response = await axios.post(BASE_URL  + SORT_CATOGRY_DATA, {...data, ...alternameList}, {
+          headers: { "Content-Type": "multipart/form-data" },
+        });
+        let data_merchant_id = {
+          merchant_id: "MAL0100CA",
+        };
+        if(table === "collection"){
+          if (data_merchant_id) {
+            dispatch(fetchCategoriesData(data_merchant_id));
+          }
+        }
+        if(table === "varients"){
+          if (data_merchant_id) {
+            dispatch(fetchAttributesData(data_merchant_id));
+          }
+        }
         console.log("API response:", response.data);
       } catch (error) {
         console.error("API call failed:", error);
@@ -112,11 +144,6 @@ const DraggableTable = ({
     } else {
       console.log("Sorting canceled by user");
     }
-
-
-
-    setFunction(reorderedItems);
-    console.log('hvbxzcd',reorderedItems)
   };
   return (
     <>

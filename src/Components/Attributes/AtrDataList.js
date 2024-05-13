@@ -144,6 +144,7 @@ const AtrDataList = ({ seVisible }) => {
             tableRow={allattributes}
             setFunction={setallattributes}
             editAttributeObj={true}
+            table={"varients"}
           />
 
           {/* <div className="q-attributes-bottom-attriButes-listing">

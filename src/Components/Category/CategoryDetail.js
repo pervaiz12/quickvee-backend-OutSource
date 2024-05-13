@@ -164,8 +164,6 @@ const CategoryDetail = ({ seVisible }) => {
     //console.log(result);
   };
  
-  const Dragrow = allcategories.filter((item) => item.alternateName !==  AllCategoriesDataState.categoriesData.map((item)=> item.alternateName))
-  console.log('upda table',Dragrow)
 
   return (
     <>
@@ -194,7 +192,6 @@ const CategoryDetail = ({ seVisible }) => {
                 deleteButtonEnable: true,
                 deleteButtonFun: handleDeleteCategory,
               }}
-              sortAPI={SORT_CATOGRY_DATA}
               table={"collection"}
               className="q-category-bottom-categories-single-category"
             />

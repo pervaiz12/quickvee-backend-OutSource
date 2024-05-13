@@ -4,6 +4,7 @@ import infoImage from '../../image/Group 196.svg'
 import InfoFunction from './infoFunctionality/infoFunction'
 import Alert from '@mui/material/Alert';
 
+import { BASE_URL } from '../../Constants/Config';
 const Info = () => {
 const{handleSubmitInfo,imageBanner,image,handleDelete,handleEditRecord,infoRecord,onChangeHandle,imageBoolean,BannersBoolean,successsMessage,hideSucess,errors,handleKeyPress}=InfoFunction()
 let data={
@@ -76,7 +77,7 @@ useEffect(()=>{
                
                 <h1 className='info-menu info-menu-margin'>Logo & Banner</h1>
                   <div className={'info-banner'} style={{
-                      backgroundImage: !BannersBoolean ? `url('https://sandbox.quickvee.com/upload/banner/${infoRecord.banners ? infoRecord.banners : ''}')`:`url('${infoRecord.banners}')`,
+                      backgroundImage: !BannersBoolean ? `url('${BASE_URL}upload/banner/${infoRecord.banners ? infoRecord.banners : ''}')`:`url('${infoRecord.banners}')`,
                       backgroundSize: 'cover'
                   }}>
                   {infoRecord.banners ?
@@ -117,7 +118,7 @@ useEffect(()=>{
                           </>
                           :
                           <>
-                           <label htmlFor="file-input2" className='file-input1 info-background' style={{ backgroundImage: `url(${!imageBoolean ? 'https://sandbox.quickvee.com/upload/' + infoRecord.image : infoRecord.image})` }}>
+                           <label htmlFor="file-input2" className='file-input1 info-background' style={{ backgroundImage: `url(${!imageBoolean ? BASE_URL+'upload/' + infoRecord.image : infoRecord.image})` }}>
                           </label>
                           <input id="file-input2" name='image' style={{ display: 'none' }} type="file" onChange={onChangeHandle} />
                           </>

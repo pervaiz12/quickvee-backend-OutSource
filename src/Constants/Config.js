@@ -216,6 +216,8 @@ module.exports = Object.freeze({
       GET_VERIFIED_MERCHANT:'UserController/getUnverifiedMerchant',//get verified and unverified merchant
       GET_ADD_ADMIN:'UserController/insert_admin',//add admin
       GET_UPDATE_MERCHANT:'UserController/merchant_update',
+      GET_Edit_STORE_INFO:'UserController/store_info',
+      UPDATE_STORE_INFO:'UserController/createMenuLink',
 
 
 

@@ -54,7 +54,7 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
     <>
       <div>
         <span
-          className="categories-items categories-items-btn"
+          className="categories-items categories-items-btn viewModal-Btn"
           onClick={handleClick}
         >
           View Items
@@ -87,7 +87,7 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
                 </div>
               </div>
             </div>
-            <div className="view-category-item-modal-header">
+            <div className="view-category-item-modal-header viewModal-width">
             {itemsData && itemsData.length >= 1 ? (
                 <Table striped >
                   <div className="  p-2 my-2">
