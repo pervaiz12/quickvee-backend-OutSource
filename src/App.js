@@ -116,6 +116,8 @@ function App() {
         path="/users/view/unapprove"
         element={<Main visible={"multimerchant"} />}
       /> */}
+        <Route exact path= "/store" element={<Main visible={"store"} />} />
+        <Route exact path= "/manager" element={<Main visible={"manager"} />} />
         <Route
         exact
         path="/login"

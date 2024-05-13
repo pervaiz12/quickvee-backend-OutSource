@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="17.997" height="17.997" viewBox="0 0 17.997 17.997">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="path837" d="M0-682.665H18v18H0Z" transform="translate(377.67 832.666)" fill="none" stroke="#707070" stroke-width="1.333"/>
+    </clipPath>
+  </defs>
+  <g id="Mask_Group_4777" data-name="Mask Group 4777" transform="translate(-377.67 -150.001)" clip-path="url(#clip-path)">
+    <g id="Mail" transform="translate(379.586 153.598)">
+      <path id="Path_8310" data-name="Path 8310" d="M31.764,86.8H22.4A2.4,2.4,0,0,1,20,84.4v-6A2.4,2.4,0,0,1,22.4,76h9.364a2.4,2.4,0,0,1,2.4,2.4v6A2.4,2.4,0,0,1,31.764,86.8Z" transform="translate(-20 -76)" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Path_8311" data-name="Path 8311" d="M100,156l3.833,3.953a1.2,1.2,0,0,0,1.7,0L109.364,156" transform="translate(-97.599 -153.599)" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <line id="Line_826" data-name="Line 826" y1="2.933" x2="2.933" transform="translate(2.322 5.468)" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <line id="Line_827" data-name="Line 827" x2="2.933" y2="2.933" transform="translate(8.922 5.468)" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>

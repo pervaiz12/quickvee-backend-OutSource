@@ -67,6 +67,7 @@ import AddPo from "../PurchaseOrders/AddPo";
 // import MainInvDuplicates from '../InventoryDuplicates/MainInvDuplicates';
 import EditCoupon from "../Coupons/EditCoupon";
 import StorePage from "../Store/MerchantStore";
+import ManagerStore from "../Store/ManagerStore";
 
 const LeftSide = ({ visible }) => {
 
@@ -89,6 +90,7 @@ const LeftSide = ({ visible }) => {
           {visible === "attributes" && <MainAttributes />}
           {visible === "products" && <MainProducts />}
           {visible === "store" && <StorePage />}
+          {visible === "manager" && <ManagerStore />}
           {visible === "coupons" && <MainCoupon />}
           {visible === "coupons-edit-cop" && <EditCoupon />}
           {visible === "vendors" && <MainVendors />}
