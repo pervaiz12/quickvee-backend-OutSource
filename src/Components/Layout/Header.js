@@ -1,22 +1,18 @@
 // import * as React from "react";
 import { useState, useEffect } from "react";
-import Quick from "../../Assests/Dashboard/quickveeLG.png"
-import {
-  BiMenu,
-  BiChevronDown,
- 
-} from "react-icons/bi";
+import Quick from "../../Assests/Dashboard/quickveeLG.png";
+import { BiMenu, BiChevronDown } from "react-icons/bi";
+import { useSelector, useDispatch } from "react-redux";
+import DownlIcon from "../../Assests/Dashboard/download.svg";
+import OnlineData from "../../Assests/Dashboard/online.svg";
+import SynkData from "../../Assests/Dashboard/sync.svg";
+import DownIcon from "../../Assests/Dashboard/Down.svg";
+import { setMenuOpen } from "../../Redux/features/NavBar/MenuSlice";
 
-import DownlIcon from '../../Assests/Dashboard/download.svg';
-import OnlineData from '../../Assests/Dashboard/online.svg';
-import SynkData from '../../Assests/Dashboard/sync.svg';
-import DownIcon from '../../Assests/Dashboard/Down.svg'
-
-
-
-export default function Header({ isMenuOpen, setIsMenuOpen }) {
+export default function Header() {
+  const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
   const [showDropdown, setShowDropdown] = useState(false);
-
+  const dispatch = useDispatch();
   const handleDropdownToggle = () => {
     setShowDropdown(!showDropdown);
   };
@@ -38,72 +34,71 @@ export default function Header({ isMenuOpen, setIsMenuOpen }) {
     };
   }, []);
 
-
-  
-
   return (
     <>
-    
-   <div className={`q_header_section sticky bg-white  border-b-4 border-black ${isSticky ? "sticky-header" : ""}`}>
-  <div className="flex items-center px-4 mx-2">
-    <BiMenu
-      className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out`}
-      onClick={(e) => {
-        setIsMenuOpen(!isMenuOpen);
-      }}
-    />
-    <a href="/dashboard">
-            <img src={Quick} alt="Logo" className="ml-6" />
-
-    </a>
-    
-    <div className="relative">
-      {/* Button to toggle dropdown */}
       <div
-        className="flex items-center ml-6 px-3 py-1 text-black lg:text-[20px] admin_medium cursor-pointer sm:text-[12px] md:text-[15px]"
-        onClick={handleDropdownToggle}
+        className={`q_header_section sticky bg-white  border-b-4 border-black ${
+          isSticky ? "sticky-header" : ""
+        }`}
       >
-        Vape Store
-        <img src={DownIcon} alt="" className="w-8 h-10 ml-2" />
-      </div>
+        <div className="flex items-center px-4 mx-2">
+          <BiMenu
+            className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out`}
+            onClick={(e) => {
+              // setIsMenuOpen(!isMenuOpen);
+              dispatch(setMenuOpen(!isMenuOpenRedux));
+            }}
+          />
+          <a href="/dashboard">
+            <img src={Quick} alt="Logo" className="ml-6" />
+          </a>
 
-      {/* Dropdown content */}
-      {showDropdown && (
-        <div className="absolute mt-2 bg-white border rounded shadow-lg">
-          {/* Your dropdown content goes here */}
-          <div className="p-4">
-            {/* Dropdown items */}
-            {/* <div>Category 1</div>
+          <div className="relative">
+            {/* Button to toggle dropdown */}
+            <div
+              className="flex items-center ml-6 px-3 py-1 text-black lg:text-[20px] admin_medium cursor-pointer sm:text-[12px] md:text-[15px]"
+              onClick={handleDropdownToggle}
+            >
+              Vape Store
+              <img src={DownIcon} alt="" className="w-8 h-10 ml-2" />
+            </div>
+
+            {/* Dropdown content */}
+            {showDropdown && (
+              <div className="absolute mt-2 bg-white border rounded shadow-lg">
+                {/* Your dropdown content goes here */}
+                <div className="p-4">
+                  {/* Dropdown items */}
+                  {/* <div>Category 1</div>
             <div>Category 2</div>
             <div>Category 3</div> */}
-            {/* Add more items as needed */}
+                  {/* Add more items as needed */}
+                </div>
+              </div>
+            )}
+          </div>
+          <div className="flex items-center lg:text-[20px] text-black ml-auto sm:text-xs md:text-sm">
+            {/* Download App section */}
+            <div className="ml-12 flex items-center">
+              <img src={DownlIcon} alt="icon" className="ml-2" />
+              <p className="cursor-pointer ml-2 admin_medium">Download App</p>
+            </div>
+
+            {/* Online Store and Sync Data section */}
+            <div className="ml-12 flex items-center">
+              <img src={OnlineData} alt="icon" className="ml-2" />
+              <p className="cursor-pointer ml-2 admin_medium">Online Store</p>
+            </div>
+            <div className="mx-12 flex items-center">
+              <img src={SynkData} alt="icon" className="ml-2" />
+              <p className="cursor-pointer ml-2 admin_medium">Sync Data</p>
+            </div>
+
+            {/* Vertical line separator */}
+            <div className="border-t-3 border-b-2 border-black bg-black mb-16"></div>
           </div>
         </div>
-      )}
-    </div>
-    <div className="flex items-center lg:text-[20px] text-black ml-auto sm:text-xs md:text-sm">
-      {/* Download App section */}
-      <div className="ml-12 flex items-center">
-        <img src={DownlIcon} alt="icon" className="ml-2" />
-        <p className="cursor-pointer ml-2 admin_medium">Download App</p>
       </div>
-
-      {/* Online Store and Sync Data section */}
-      <div className="ml-12 flex items-center">
-        <img src={OnlineData} alt="icon" className="ml-2" />
-        <p className="cursor-pointer ml-2 admin_medium">Online Store</p>
-      </div>
-      <div className="mx-12 flex items-center">
-        <img src={SynkData} alt="icon" className="ml-2" />
-        <p className="cursor-pointer ml-2 admin_medium">Sync Data</p>
-      </div>
-
-      {/* Vertical line separator */}
-      <div className="border-t-3 border-b-2 border-black bg-black mb-16"></div>
-    </div>
-  </div>
-</div>
-
     </>
   );
 }

@@ -189,7 +189,8 @@
 	background-color: #253338;
 	/* top: 0; */
 	overflow-y: auto;
-	height: 94vh;
+	overflow-x: hidden;
+	height: 100vh;
 	/* width: 16rem; */
 	z-index: 9;
 	color: #9e9e9e;
@@ -553,17 +554,9 @@ a.days_filter {
 	}
 }
 
-.quickarrow_icon {
-	margin-left: 7.25rem;
-	/* display: flex; */
-	/* justify-content: space-between; */
-	margin-top: -1rem;
-}
 
-/* .error-close-icon {
-  color: #000 !important;
-  background-color: #fff !important;
-} */
+
+
 
 .q-custom-modal-content.modal_custom {
 	height: auto !important;
@@ -843,9 +836,13 @@ a.flex.text-center.submenu-item.text-gray-400.py-4.CircularSTDBook:hover {
 	color: #ffc400;
 }
 
-.submenu-item:active {
+.submenu-item.active {
 	color: #ffc400;
 }
+.DropDown-memu.activeTab {
+	color: #ffc400;
+}
+
 
 .image-container {
 	position: relative;
@@ -1045,4 +1042,36 @@ div.q_label_details::after {
 	right: 0px !important;
 	top: 0px !important;
 	color: rgba(0, 0, 0, 0.26) !important;
+}
+
+.q-attributes-main-page {
+    margin: 0px 0px;
+}
+
+.store-items-list{
+	margin-top: 10px !important;
+}
+
+.store-items{
+	padding-top: unset !important;
+}
+.store-item-card{
+	display: flex;
+	box-shadow: 0px 3px 6px #0000001F;
+	border-radius: 8px;
+}
+
+.store-items-address{
+	font-style: Circular Std Medium, Regular !important;
+}
+
+.store-items-store-name{
+font-size: 18px !important;
+font-family: admin_std_medium;
+}
+
+.store-items-store-name-address{
+	font-family: adminstdbook;
+color: #7B7B7B;
+font-size: 14px;
 }

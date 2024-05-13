@@ -54,6 +54,7 @@ import ShiftSummarySlice from "../features/Reports/ShiftSummary/ShiftSummarySlic
 import DetailCategorySaleSliceReducer from "../features/DetailCategorySale/detailCategorySaleSlice";
 import EmployeeWorkinghrsSlice from "../features/Reports/EmployeeWorkinghrs/EmployeeWorkinghrsSlice";
 import AddpurchaseOrderSliceReducer from "../features/PurchaseOrder/AddpurchaseOrderSlice";
+import MenuSlice from "../features/NavBar/MenuSlice";
 
 const store = configureStore({
   reducer: {
@@ -137,6 +138,7 @@ const store = configureStore({
     
 
 
+    NavBarToggle: MenuSlice
   },
 
       //setting setup 
