@@ -119,6 +119,7 @@ function App() {
         <Route exact path="/category" element={<Main visible={"category"} />} />
         <Route exact path="/products" element={<Main visible={"products"} />} />
         <Route exact path= "/store" element={<Main visible={"store"} />} />
+        <Route exact path= "/manager" element={<Main visible={"manager"} />} />
         <Route
           exact
           path="/purchase-data"
