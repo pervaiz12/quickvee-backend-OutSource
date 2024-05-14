@@ -408,8 +408,8 @@ border:2px solid #0A64F9 } */
 
 .selected-item {
 	/* Styles when dropdown item is selected */
-	color: white;
-	background-color: blue;
+	/* color: white;
+	background-color: blue; */
 }
 
 
