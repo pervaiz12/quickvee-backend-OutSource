@@ -4,10 +4,13 @@ import VariantAttributes from "./VariantAttributes";
 import UploadIMG from "../../Assests/Filter/imgupload.svg";
 import GeneratePUC from "./GeneratePUC";
 import { useDispatch, useSelector } from "react-redux";
+import htmlToFormattedText from "html-to-formatted-text";
 import {
   addProduct,
   fetchCategoryList,
   fetchProductList,
+  fetchProductsData,
+  fetchProductsDataById,
   fetchTaxList,
   fetchVarientList,
   getInventorySetting,
@@ -21,6 +24,10 @@ import { event } from "jquery";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Box } from "@mui/material";
 import * as yup from "yup";
+import AlertModal from "../../CommonComponents/AlertModal";
+import { useNavigate, useParams } from "react-router-dom";
+import { BASE_URL } from "../../Constants/Config";
+import EditPage from "./EditPage";
 
 const AddProducts = () => {
   const fileUploadRef = useRef();
@@ -28,6 +35,13 @@ const AddProducts = () => {
   const { isLoading, isError } = useSelector(
     (state) => state?.productsListData
   );
+  const navigate = useNavigate();
+
+  // find add or edit url
+  const pageUrl = window.location.pathname?.split("/")[1];
+
+  // find productId from Url
+  const productId = useParams();
 
   const { validatTitle, validatDescription, addVarientFormValidation } =
     Validation();
@@ -43,9 +57,25 @@ const AddProducts = () => {
     files: [],
   });
 
+  // modal of bulk varientedit states
+  const [editVarient, setEditVarient] = useState({
+    costPerItem: "",
+    compareAtPrice: "",
+    price: "",
+    reorderQty: "",
+    reorderLevel: "",
+  });
+
+  //fetch data states
+  const [productData, setProductData] = useState({});
+  const [options, setOptions] = useState({});
+  const [varientData, setVarientData] = useState([]);
+
   const [varientLength, setVarientLength] = useState([
     { id: 1, varientName: "", varientAttributeList: [] },
   ]);
+
+  /// varientTitle combination list
   let varientTitle = [];
   const [error, setError] = useState({
     title: "",
@@ -59,11 +89,24 @@ const AddProducts = () => {
   });
 
   const [clearInput, setClearInput] = useState(false);
+  const [openAlertModal, setOpenAlertModal] = useState(false);
+  const [openEditModal, setOpenEditModal] = useState(false);
 
+  // close alert
+  const handleCloseAlertModal = () => {
+    setOpenAlertModal((prev) => !prev);
+  };
+
+  const handleCloseEditModal = () => {
+    setOpenEditModal((prev) => !prev);
+  };
+
+  // clear all form input value
   const handleClearFormData = (value) => {
     setClearInput(value);
   };
 
+  // formschema for validation
   const formSchema = yup.object().shape({
     title: yup
       .string()
@@ -147,33 +190,12 @@ const AddProducts = () => {
     frequentlyBroughtList: [],
   });
 
+  // toggle multiple or single varient attribute option
   const toggleVarientSection = () => {
     if (!isMultipleVarient) {
       setIsMultipleVaient((prev) => {
         return !prev;
       });
-      setVarientLength([
-        {
-          id: 1,
-          varientName: dropdownData?.varientList?.length
-            ? {
-                value: dropdownData?.varientList[0]?.title,
-                label: dropdownData?.varientList[0]?.title,
-              }
-            : "",
-          varientAttributeList: [],
-        },
-      ]);
-      setFormValue([]);
-      setProductInfo({
-        title: "",
-        description: "",
-        category: [],
-        taxes: [],
-        relatedProduct: [],
-        frequentlyBought: [],
-        files: [],
-      });
       setError({
         title: "",
         description: "",
@@ -185,38 +207,34 @@ const AddProducts = () => {
         varientLength: "",
         formValue: [],
       });
+      if (pageUrl !== "product-edit") {
+        setVarientLength([
+          {
+            id: 1,
+            varientName: dropdownData?.varientList?.length
+              ? {
+                  value: dropdownData?.varientList[0]?.title,
+                  label: dropdownData?.varientList[0]?.title,
+                }
+              : "",
+            varientAttributeList: [],
+          },
+        ]);
+        setFormValue([]);
+        setProductInfo({
+          title: "",
+          description: "",
+          category: [],
+          taxes: [],
+          relatedProduct: [],
+          frequentlyBought: [],
+          files: [],
+        });
+      }
     } else {
       setIsMultipleVaient((prev) => {
         return !prev;
       });
-      setFormValue([
-        {
-          costPerItem: "",
-          compareAtPrice: "",
-          price: "",
-          margin: "",
-          Profit: "",
-          qty: "",
-          upcCode: "",
-          customCode: "",
-          reorderQty: "",
-          reorderLevel: "",
-          trackQuantity: true,
-          sellOutOfStock: true,
-          checkId: false,
-          disable: false,
-          itemForAllLinkedLocation: false,
-        },
-      ]);
-      setProductInfo({
-        title: "",
-        description: "",
-        category: [],
-        taxes: [],
-        relatedProduct: [],
-        frequentlyBought: [],
-        files: [],
-      });
       setError({
         title: "",
         description: "",
@@ -228,6 +246,37 @@ const AddProducts = () => {
         varientLength: "",
         formValue: [],
       });
+      if (pageUrl !== "product-edit") {
+        setFormValue([
+          {
+            costPerItem: "",
+            compareAtPrice: "",
+            price: "",
+            margin: "",
+            Profit: "",
+            qty: "",
+            upcCode: "",
+            customCode: "",
+            reorderQty: "",
+            reorderLevel: "",
+            trackQuantity: true,
+            sellOutOfStock: true,
+            checkId: false,
+            disable: false,
+            // itemForAllLinkedLocation: false,
+            isFoodStamble: false,
+          },
+        ]);
+        setProductInfo({
+          title: "",
+          description: "",
+          category: [],
+          taxes: [],
+          relatedProduct: [],
+          frequentlyBought: [],
+          files: [],
+        });
+      }
     }
   };
 
@@ -309,10 +358,17 @@ const AddProducts = () => {
     }
   };
 
-  const handleDeleteSelectedImage = (imageToDelete) => {
-    const deleteImage = productInfo?.files?.filter((img) => {
-      return img?.file?.name !== imageToDelete?.file?.name;
-    });
+  const handleDeleteSelectedImage = (type, imageToDelete) => {
+    let deleteImage;
+    if (type === "string") {
+      deleteImage = productInfo?.files?.filter((img) => {
+        return img?.file?.name !== imageToDelete?.file?.name;
+      });
+    } else {
+      deleteImage = productInfo?.files?.filter((img) => {
+        return img?.file?.name !== imageToDelete?.file?.name;
+      });
+    }
     setProductInfo((prev) => ({
       ...prev,
       ["files"]: deleteImage,
@@ -443,14 +499,6 @@ const AddProducts = () => {
     // varient form onchange validation function
     // handleFormDuplicateFormValidation(name, value, i);
 
-    console.log(
-      "outside stuf:",
-      +value,
-      +formValue[i]["compareAtPrice"],
-      +value < +formValue[i]["compareAtPrice"],
-      i
-    );
-
     let totalPriceValue;
     let marginValue;
     let profitValue;
@@ -481,36 +529,17 @@ const AddProducts = () => {
 
     // when remove focus on input value
     const updatedFormValue = formValue.map((item, index) => {
-      // if section is 0 and field is 1 and fielname is costPerItem and value is more than 0 / null / undefined => onblur
-      if (i == 0 && name === "costPerItem" && value) {
-        return {
-          ...item,
-          [name]:
-            type === "checkbox" ? (value === "true" ? false : true) : value,
-          ["costPerItem"]: value,
-          ["price"]: price_total_value ? price_total_value?.toFixed(2) : "",
-          ["margin"]: !isNaN(marginValue) ? marginValue : "",
-          ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-        };
-      }
-      // when section is 0 and price field value is change manually and costPerItem field value is not empty => onchange
-      else if (i === 0 && name === "price" && !!formValue[i]["costPerItem"]) {
-        return {
-          ...item,
-          ["price"]: value ? value : "",
-          ["margin"]: !isNaN(marginValue) ? marginValue : "",
-          ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-        };
-      }
+      // here.... index => each section index
+      // i => each input field index inside section
       // show alert "Compare Price must be greater than price." when compare value < price && price > compare value / when compareAtPrice field value change manually
-      else if (
+      if (
         (index === i || i === 0) &&
         name === "compareAtPrice" &&
         value &&
         !!formValue[i]["price"]
       ) {
         if (+value < +formValue[i]["price"]) {
-          alert("Compare Price must be greater than price.");
+          setOpenAlertModal(true);
           return {
             ...item,
             ["compareAtPrice"]: "",
@@ -530,33 +559,53 @@ const AddProducts = () => {
         value &&
         !!formValue[i]["compareAtPrice"]
       ) {
-        // console.log(
-        //   "here boolean",
-        //   +value,
-        //   +formValue[i]["compareAtPrice"],
-        //   +value < +formValue[i]["compareAtPrice"],
-        //   index,
-        //   i
-        // );
         if (+value > +formValue[i]["compareAtPrice"]) {
-          alert("Compare Price must be greater than price.");
+          setOpenAlertModal(true);
           return {
             ...item,
-            // [name]: value,
+            [name]: value,
             ["compareAtPrice"]: "",
+            ["margin"]: !isNaN(marginValue) ? marginValue : "",
+            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
           };
         } else {
           return {
             ...item,
             [name]: value,
+            ["margin"]: !isNaN(marginValue) ? marginValue : "",
+            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
           };
         }
       }
 
-      //show alert when
-      // WOrk in progress here..................????????
-      // only not working in section first
+      /// if price value change manually and onblur and not depennd on compareAtPrice is empty or not
+      else if (i === 0 && name === "price" && value) {
+        if (!formValue[i]["costPerItem"] || !formValue[i]["price"]) {
+          return {
+            ...item,
+            [name]: value,
+          };
+        }
+        return {
+          ...item,
+          [name]: value,
+          ["margin"]: !isNaN(marginValue) ? marginValue : "",
+          ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+        };
+      }
+
+      // when onchange price value and leave price input empty then clear margin/profit fields value
+      else if (i === 0 && name === "price" && !value) {
+        return {
+          ...item,
+          [name]: value,
+          ["margin"]: "",
+          ["Profit"]: "",
+        };
+      }
+
       // when compareAtPrice and price value is already exist and when costPerItem is try to change then we run this condition.
+      // here compareAtPrice and price value need to not empty
       else if (
         (index === i || i === 0) &&
         name === "costPerItem" &&
@@ -565,18 +614,32 @@ const AddProducts = () => {
         !!formValue[i]["price"]
       ) {
         if (+formValue[i]["compareAtPrice"] < +formValue[i]["price"]) {
-          alert("Compare Price must be greater than price.");
+          setOpenAlertModal(true);
           return {
             ...item,
-            // [name]: value,
+            [name]: value,
             ["compareAtPrice"]: "",
           };
         } else {
           return {
             ...item,
             [name]: value,
+            ["margin"]: !isNaN(marginValue) ? marginValue : "",
+            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
           };
         }
+      }
+
+      // when costPerItem value is change manually and not depend on compareAtPrice empty or not
+      else if (i === 0 && name === "costPerItem" && value) {
+        return {
+          ...item,
+          [name]: value,
+          ["compareAtPrice"]: "",
+          ["price"]: price_total_value ? price_total_value?.toFixed(2) : "",
+          ["margin"]: !isNaN(marginValue) ? marginValue : "",
+          ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+        };
       }
 
       // when section is only 0 and name of field is any but not costPerItem => onblur
@@ -778,7 +841,6 @@ const AddProducts = () => {
   useEffect(() => {
     if (varientLength?.length > 0 && isMultipleVarient) {
       handleVarientTitleBasedItemList();
-      // console.log("inside", varientLength[1]?.varientAttributeList[0]);
       // when adding new varient in in form keep previous fill form data in fields and add new
       // when adding new varient and add first item in varient then clear all the form input value
       if (clearInput) {
@@ -799,7 +861,8 @@ const AddProducts = () => {
               sellOutOfStock: true,
               checkId: false,
               disable: false,
-              itemForAllLinkedLocation: false,
+              // itemForAllLinkedLocation: false,
+              isFoodStamble: false,
             };
             // }
           });
@@ -824,8 +887,9 @@ const AddProducts = () => {
               sellOutOfStock: previousData.sellOutOfStock || true,
               checkId: previousData.checkId || false,
               disable: previousData.disable || false,
-              itemForAllLinkedLocation:
-                previousData.itemForAllLinkedLocation || false,
+              // itemForAllLinkedLocation:
+              //   previousData.itemForAllLinkedLocation || false,
+              isFoodStamble: previousData?.isFoodStamble || false,
             };
             // }
           });
@@ -850,11 +914,168 @@ const AddProducts = () => {
           checkId: false,
           disable: false,
           isFoodStamble: false,
-          itemForAllLinkedLocation: false,
+          // itemForAllLinkedLocation: false,
         },
       ]);
     }
   }, [varientLength]);
+
+  useEffect(() => {
+    // called fetchproduct data api based on id
+    if (pageUrl === "product-edit") {
+      const formData = new FormData();
+      formData.append("merchant_id", "MAL0100CA");
+      formData.append("id", productId?.id);
+      if (!!productId?.id) {
+        dispatch(fetchProductsDataById(formData)).then((res) => {
+          if (res?.payload?.message === "Success") {
+            setProductData(res?.payload?.productdata);
+            setOptions(res?.payload?.options);
+            setVarientData(res?.payload?.varients);
+          }
+        });
+      } else {
+        navigate("/products");
+      }
+    }
+  }, [pageUrl]);
+
+  const selectedItemsFromdata = (items, filterListName) => {
+    const arr = items?.map((i) => {
+      return dropdownData?.[filterListName]?.filter((o) => +o?.id === +i);
+    });
+
+    return arr?.[0]?.length ? arr : [];
+  };
+
+  useEffect(() => {
+    if (pageUrl === "product-edit") {
+      // fill data fields after fetcing data
+      setProductInfo({
+        title: productData?.title,
+        description: htmlToFormattedText(productData?.description),
+        category: selectedItemsFromdata(
+          productData?.cotegory?.split(","),
+          "categoryList"
+        )?.map((i) => i[0]),
+        taxes: selectedItemsFromdata(
+          productData?.other_taxes?.split(","),
+          "taxList"
+        )?.map((i) => i[0]),
+        relatedProduct: selectedItemsFromdata(
+          productData?.featured_product?.split(","),
+          "relatedProducttList"
+        )?.map((i) => i[0]),
+        frequentlyBought: selectedItemsFromdata(
+          productData?.featured_product?.split(","),
+          "frequentlyBroughtList"
+        )?.map((i) => i[0]),
+        files: !!productData?.media
+          ? productData?.media?.split(",")?.map((img) => img)
+          : [],
+      });
+
+      // fill the varient options data
+      // varientData structure below
+      // const [varientLength, setVarientLength] = useState([
+      //   { id: 1, varientName: "", varientAttributeList: [] },
+      // ]);
+
+      const varientOptions = [];
+      // if first varient values only exist
+      if (!!options?.options3 && !!options?.optionsvl3) {
+        for (let i = 1; i < 4; i++) {
+          const varientName = "options" + [i];
+          const varientAttribute = "optionsvl" + [i];
+          if (options[varientName]) {
+            varientOptions.push({
+              id: i,
+              varientName: {
+                value: options[varientName],
+                label: options[varientName],
+              },
+              varientAttributeList: options[varientAttribute]
+                ?.split(",")
+                ?.map((i) => ({
+                  label: i,
+                  value: i,
+                })),
+            });
+          }
+        }
+      }
+      // if second varient values only exist
+      else if (!!options?.options2 && !!options?.optionsvl2) {
+        for (let i = 1; i < 3; i++) {
+          const varientName = "options" + [i];
+          const varientAttribute = "optionsvl" + [i];
+          if (options[varientName]) {
+            varientOptions.push({
+              id: i,
+              varientName: {
+                value: options[varientName],
+                label: options[varientName],
+              },
+              varientAttributeList: options[varientAttribute]
+                ?.split(",")
+                ?.map((i) => ({
+                  label: i,
+                  value: i,
+                })),
+            });
+          }
+        }
+      }
+      // if third varient values only exist
+      else if (!!options?.options1 && !!options?.optionsvl1) {
+        for (let i = 1; i < 2; i++) {
+          const varientName = "options" + [i];
+          const varientAttribute = "optionsvl" + [i];
+          if (options[varientName]) {
+            varientOptions.push({
+              id: i,
+              varientName: {
+                value: options[varientName],
+                label: options[varientName],
+              },
+              varientAttributeList: options[varientAttribute]
+                ?.split(",")
+                ?.map((i) => ({
+                  label: i,
+                  value: i,
+                })),
+            });
+          }
+        }
+      }
+      setVarientLength([...new Set(varientOptions)]);
+
+      setFormValue((_) => {
+        const newFormValue = varientData.map((val, index) => {
+          return {
+            costPerItem: val?.costperItem || "",
+            compareAtPrice: val?.compare_price || "",
+            price: val?.price || "",
+            margin: val?.margin || "",
+            Profit: val?.profit || "",
+            qty: val?.quantity || "",
+            upcCode: val?.upc || "",
+            customCode: val?.custom_code || "",
+            reorderQty: val?.reorder_qty || "",
+            reorderLevel: val?.reorder_level || "",
+            trackQuantity: Boolean(+val?.trackqnty) || true,
+            sellOutOfStock: Boolean(+val?.isstockcontinue) || true,
+            checkId: Boolean(+val?.is_tobacco) || false,
+            disable: Boolean(+val?.disable) || false,
+            // itemForAllLinkedLocation: val?.,
+            isFoodStamble: Boolean(+val?.food_stampable) || false,
+          };
+          // }
+        });
+        return newFormValue;
+      });
+    }
+  }, [productData, dropdownData, options]);
 
   const characters = "0123456789";
   function generateString(length) {
@@ -1067,8 +1288,24 @@ const AddProducts = () => {
   //   handleUpdateError(error);
   // };
 
+  console.log("formvalue", formValue);
+
   return (
     <div className="box">
+      {/* edit modal */}
+      <EditPage
+        openEditModal={openEditModal}
+        handleCloseEditModal={handleCloseEditModal}
+        editVarient={editVarient}
+        formData={formValue}
+        handleVarientTitleBasedItemList={handleVarientTitleBasedItemList}
+      />
+      {/* alert modal */}
+      <AlertModal
+        openAlertModal={openAlertModal}
+        handleCloseAlertModal={handleCloseAlertModal}
+        text="Compare Price must be greater than price."
+      />
       <div className="q-attributes-main-page">
         <div className="q-add-categories-section">
           <div className="q-add-categories-section-header">
@@ -1115,6 +1352,7 @@ const AddProducts = () => {
                 <SearchableDropdown
                   title="Category"
                   keyName="category"
+                  name="title"
                   optionList={dropdownData?.categoryList}
                   handleSelectProductOptions={handleSelectProductOptions}
                   handleDeleteSelectedOption={handleDeleteSelectedOption}
@@ -1129,6 +1367,7 @@ const AddProducts = () => {
               <SearchableDropdown
                 title="Taxes"
                 keyName="taxes"
+                name="title"
                 optionList={dropdownData?.taxList}
                 handleSelectProductOptions={handleSelectProductOptions}
                 handleDeleteSelectedOption={handleDeleteSelectedOption}
@@ -1142,6 +1381,7 @@ const AddProducts = () => {
               <SearchableDropdown
                 title="Related Products"
                 keyName="relatedProduct"
+                name="title"
                 optionList={dropdownData?.relatedProducttList}
                 handleSelectProductOptions={handleSelectProductOptions}
                 handleDeleteSelectedOption={handleDeleteSelectedOption}
@@ -1155,6 +1395,7 @@ const AddProducts = () => {
               <SearchableDropdown
                 title="Frequently Bought Together"
                 keyName="frequentlyBought"
+                name="title"
                 optionList={dropdownData?.frequentlyBroughtList}
                 handleSelectProductOptions={handleSelectProductOptions}
                 handleDeleteSelectedOption={handleDeleteSelectedOption}
@@ -1223,6 +1464,50 @@ const AddProducts = () => {
                 <div class="image-list">
                   {productInfo?.files?.length
                     ? productInfo?.files?.map((img, index) => {
+                        // if img type is string
+                        if (typeof img === "string") {
+                          return (
+                            <div
+                              className="py-10 image-display"
+                              style={{
+                                border: "2px solid #0A64F9",
+                                // width: "20%",
+                                cursor: "pointer",
+                              }}
+                              key={index}
+                            >
+                              <>
+                                <span
+                                  className="delete-image-icon img-DeleteIcon"
+                                  // onClick={handleDeleteImage}
+                                  style={{
+                                    position: "absolute",
+                                    top: "7px",
+                                    right: "7px",
+                                  }}
+                                >
+                                  <img
+                                    src={CloseIcon}
+                                    className="delete-image"
+                                    onClick={() =>
+                                      handleDeleteSelectedImage("string", img)
+                                    }
+                                  />
+                                </span>
+                                <img
+                                  src={
+                                    BASE_URL +
+                                    `/upload/products/MAL0100CA/` +
+                                    img
+                                  }
+                                  alt="Preview"
+                                  className="default-img"
+                                />
+                              </>
+                            </div>
+                          );
+                        }
+                        // if img type is object
                         return (
                           <div
                             className="py-10 image-display"
@@ -1246,7 +1531,9 @@ const AddProducts = () => {
                                 <img
                                   src={CloseIcon}
                                   className="delete-image"
-                                  onClick={() => handleDeleteSelectedImage(img)}
+                                  onClick={() =>
+                                    handleDeleteSelectedImage("object", img)
+                                  }
                                 />
                               </span>
                               <img
@@ -1304,27 +1591,61 @@ const AddProducts = () => {
               <div className="variant-attributes-container">
                 {/* Your existing JSX for variant attributes */}
 
-                <div className="q-add-categories-section-middle-footer">
+                <div className="q-add-categories-section-middle-footer  ">
+                  {pageUrl === "product-edit" ? (
+                    <div
+                      className="q-category-bottom-header"
+                      style={{ marginRight: "67px" }}
+                    >
+                      <button
+                        className="quic-btn quic-btn-bulk-edit"
+                        onClick={() => handleCloseEditModal()}
+                      >
+                        Bulk Edit
+                      </button>
+                    </div>
+                  ) : (
+                    ""
+                  )}
                   <div
                     className="q-category-bottom-header"
                     style={{ marginRight: "67px" }}
                   >
-                    <button
-                      className="quic-btn quic-btn-save"
-                      onClick={handleSubmitForm}
-                      disabled={isLoading}
-                      style={{
-                        backgroundColor: isLoading ? "#878787" : "#0A64F9",
-                      }}
-                    >
-                      {isLoading ? (
-                        <Box className="loader-box">
-                          <CircularProgress />
-                        </Box>
-                      ) : (
-                        "Add"
-                      )}
-                    </button>
+                    {pageUrl !== "product-edit" ? (
+                      <button
+                        className="quic-btn quic-btn-save"
+                        onClick={handleSubmitForm}
+                        disabled={isLoading}
+                        style={{
+                          backgroundColor: isLoading ? "#878787" : "#0A64F9",
+                        }}
+                      >
+                        {isLoading ? (
+                          <Box className="loader-box">
+                            <CircularProgress />
+                          </Box>
+                        ) : (
+                          "Insert"
+                        )}
+                      </button>
+                    ) : (
+                      <button
+                        className="quic-btn quic-btn-update"
+                        // onClick={handleSubmitForm}
+                        disabled={isLoading}
+                        style={{
+                          backgroundColor: isLoading ? "#878787" : "#0A64F9",
+                        }}
+                      >
+                        {isLoading ? (
+                          <Box className="loader-box">
+                            <CircularProgress />
+                          </Box>
+                        ) : (
+                          "Update"
+                        )}
+                      </button>
+                    )}
                     <button className="quic-btn quic-btn-cancle">Cancel</button>
                   </div>
                 </div>

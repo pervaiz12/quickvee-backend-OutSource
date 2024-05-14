@@ -23,7 +23,9 @@ const VariantAttributes = ({
 
   const animatedComponents = makeAnimated();
 
-  const handleDeleteClick = (id) => {
+  const handleDeleteClick = (category, id) => {
+    // when varientList item is deleted through delete icon click then catgeory is null
+    // if someone deleted all items of varient item then category is apply.
     const deleteSelected = varientLength?.filter((item) => {
       return item?.id !== id;
     });
@@ -31,7 +33,7 @@ const VariantAttributes = ({
     // change varientItem id => if id is 1 keep 1 or change deleteSelected[0]?.id - 1
     const updatedData = deleteSelected.map((item) => ({
       ...item,
-      id: item?.id === 1 ? 1 : item?.id - 1,
+      id: category ? (item?.id === 1 ? 1 : item?.id - 1) : item?.id,
     }));
 
     handleSetVarientLength(updatedData);
@@ -43,7 +45,7 @@ const VariantAttributes = ({
         varientLength?.length > 1 &&
         value < varientLength[0]?.varientAttributeList?.length
       ) {
-        handleDeleteClick(varientLength[0]?.id);
+        handleDeleteClick("conditionally-delete", varientLength[0]?.id);
         return true;
       }
     } else if (index === 1) {
@@ -51,7 +53,7 @@ const VariantAttributes = ({
         varientLength?.length > 2 &&
         value < varientLength[1]?.varientAttributeList?.length
       ) {
-        handleDeleteClick(varientLength[1]?.id);
+        handleDeleteClick("conditionally-delete", varientLength[1]?.id);
         return true;
       }
     }
@@ -60,29 +62,33 @@ const VariantAttributes = ({
 
   const handlechange = (value, index, name) => {
     // validation for add varient item => only ' is allowed and " is not allowed in varient item text
-    console.log("val", value);
-    // WIP =>
-    const filterValue = value?.map((item) => {
-      const checkValidate =
-        item?.label
-          ?.split("")
-          .map((p) => p === "'")
-          .filter(Boolean)?.length > 1 || item?.label?.includes(`"`);
-      if (checkValidate) {
-        return item;
-      } else {
-        return item;
-      }
-    });
+    let filterValue;
+    // if value comes from createble varient
+    if (Array.isArray(value)) {
+      filterValue = value?.filter((item) => {
+        let checkValidation =
+          !(item?.label?.split("").filter((p) => p === "'")?.length > 1) &&
+          !item?.label?.includes(`"`);
 
-    console.log("filterValue", filterValue);
+        if (!checkValidation) {
+          alert("special character is not allowed.");
+        }
+        return (
+          !(item?.label?.split("").filter((p) => p === "'")?.length > 1) &&
+          !item?.label?.includes(`"`)
+        );
+      });
+    } else {
+      // when value comes from varient title dropdown
+      filterValue = value;
+    }
 
     // clear the all input fields value when add new varient first item
     // here using varientLength length and value is less that current varientLength
     if (index > 0) {
       if (
-        value?.length === 1 &&
-        value > varientLength[index]?.varientAttributeList
+        filterValue?.length === 1 &&
+        filterValue > varientLength[index]?.varientAttributeList
       ) {
         handleClearFormData(true);
       } else {
@@ -90,7 +96,7 @@ const VariantAttributes = ({
       }
     }
 
-    if (filterVarientListIfAllItemsDelete(index, value)) {
+    if (filterVarientListIfAllItemsDelete(index, filterValue)) {
       return;
     }
 
@@ -98,12 +104,12 @@ const VariantAttributes = ({
     if (name == "varientName") {
       updateVarientLength[index] = {
         ...updateVarientLength[index],
-        varientName: value,
+        varientName: filterValue,
       };
     } else if (name == "varientAttributeList") {
       updateVarientLength[index] = {
         ...updateVarientLength[index],
-        varientAttributeList: value,
+        varientAttributeList: filterValue,
       };
     }
     handleSetVarientLength(updateVarientLength);
@@ -240,7 +246,7 @@ const VariantAttributes = ({
                         {varientLength[varientLength?.length - 1]?.id ===
                           varient?.id && varient?.id !== 1 ? (
                           <button
-                            onClick={() => handleDeleteClick(varient?.id)}
+                            onClick={() => handleDeleteClick(null, varient?.id)}
                             className="ml-auto"
                           >
                             <img

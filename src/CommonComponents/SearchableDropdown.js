@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Select from "react-select";
 import "../Styles/ProductPage.css";
 import DownArrow from "../Assests/Dashboard/Down.svg";
@@ -14,11 +14,14 @@ const SearchableDropdown = ({
   selectedOption,
   error,
   handleUpdateError,
+  name,
 }) => {
   const { checkLength } = Validation();
   const [filterOptions, setFilterOptions] = useState(optionList);
+  const [filterValue, setFilterValue] = useState("");
   const handleFilterOptions = (e) => {
     const { value } = e.target;
+    setFilterValue(value);
     const filterList = optionList.filter((item) => {
       return item.title.toLowerCase().includes(value.toLowerCase());
     });
@@ -29,7 +32,18 @@ const SearchableDropdown = ({
   const [showOptions, setShowOptions] = useState(false);
   const ref = useRef();
 
+  useEffect(() => {
+    // check is frequentlyBought selected item length is 2 or not
+    if (keyName == "frequentlyBought" && selectedOption?.length === 2) {
+      setShowOptions(false);
+      setFilterValue("You can only select 2 items.");
+    } else {
+      setFilterValue("");
+    }
+  }, [selectedOption]);
+
   const changeFilterableList = () => {
+    // filter incoming optionList items when onchange run
     if (filterOptions.length) {
       return filterOptions;
     }
@@ -37,19 +51,32 @@ const SearchableDropdown = ({
   };
 
   const toggleOption = () => {
+    // toggle optionsPanel
     setShowOptions(!showOptions);
   };
 
-  const handleFocus = () => {
+  const handleFocus = (e) => {
+    const { name } = e.target;
     ref.current.focus();
-    setShowOptions((prev) => ({
-      prev: !prev ? true : false,
-    }));
+    // check is frequentlyBought length is 2 or not
+    if (selectedOption?.length === 2 && keyName === "frequentlyBought") {
+      setShowOptions(false);
+    } else {
+      setShowOptions(true);
+    }
   };
 
-  const handleBlurOption = async () => {
-    await checkLength(keyName, selectedOption, error);
-    handleUpdateError(error);
+  const handleBlurOption = async (e) => {
+    const { name } = e.target;
+    if (name === "category") {
+      await checkLength(keyName, selectedOption, error);
+      handleUpdateError(error);
+    }
+
+    // work in progress
+    // if (showOptions) {
+    //   setShowOptions(false);
+    // }
   };
 
   return (
@@ -60,12 +87,14 @@ const SearchableDropdown = ({
       <div
         className="dropdownBox"
         style={{ padding: showOptions ? "10px" : "7px 8px 0px 8px" }}
-        onBlur={keyName === "category" ? handleBlurOption : null}
+        onBlur={handleBlurOption}
+        name={keyName}
       >
         <div
           className="search-area"
           style={{ borderBottom: showOptions ? "1px solid #ececec" : "" }}
-          onBlur={keyName === "category" ? handleBlurOption : null}
+          name={keyName}
+          onBlur={handleBlurOption}
         >
           <div className="search-selected-item" onClick={handleFocus}>
             <div className="selected-item">
@@ -73,7 +102,7 @@ const SearchableDropdown = ({
                 ? selectedOption?.map((option) => {
                     return (
                       <div className="item" key={option?.id}>
-                        {option?.title}
+                        {option?.[name]}
                         <img
                           src={CloseIcon}
                           className="cancel-image"
@@ -90,21 +119,30 @@ const SearchableDropdown = ({
               ref={ref}
               type="text"
               placeholder="Enter category Name"
+              name={keyName}
               className="search-item"
+              value={filterValue}
               onFocus={handleFocus}
               onChange={handleFilterOptions}
+              disabled={
+                selectedOption?.length === 2 && keyName === "frequentlyBought"
+              }
             />
           </div>
           <div className="toggle-btn">
-            <img
-              src={DownArrow}
-              className={
-                showOptions
-                  ? "down-arrow-image rotate-dropdpown"
-                  : "down-arrow-image remove-rotate-dropdown"
-              }
-              onClick={toggleOption}
-            />
+            {selectedOption?.length === 2 && keyName === "frequentlyBought" ? (
+              ""
+            ) : (
+              <img
+                src={DownArrow}
+                className={
+                  showOptions
+                    ? "down-arrow-image rotate-dropdpown"
+                    : "down-arrow-image remove-rotate-dropdown"
+                }
+                onClick={toggleOption}
+              />
+            )}
           </div>
         </div>
         {showOptions ? (
@@ -117,7 +155,7 @@ const SearchableDropdown = ({
                     return (
                       <span
                         className={
-                          selectedOption.includes(opt)
+                          selectedOption?.includes(opt)
                             ? "item active-item"
                             : "item"
                         }

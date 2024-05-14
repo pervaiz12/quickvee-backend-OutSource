@@ -1,0 +1,20 @@
+.alertModal {
+  width: 500px;
+  background: #ffffff;
+  padding: 14px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  margin: 0 auto;
+  padding-top: 22px;
+}
+
+.alertModal button {
+  margin-top: 20px;
+  background-color: #2776ff;
+  color: #fff;
+  font-weight: 600;
+}
+
+.alertModal button:hover {
+  background-color: #2776ff;
+}

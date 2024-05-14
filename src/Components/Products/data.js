@@ -18,10 +18,10 @@ export const colourOptions = [
 
 export const formData = [
   {
-    name: "costPerItem",
+    name: "price",
     placeholder: "",
     type: "text",
-    label: "Cost per item",
+    label: "Price",
   },
   {
     name: "compareAtPrice",
@@ -30,11 +30,12 @@ export const formData = [
     label: "Compare At Price",
   },
   {
-    name: "price",
+    name: "costPerItem",
     placeholder: "",
     type: "text",
-    label: "Price",
+    label: "Cost per item",
   },
+
   {
     name: "margin",
     placeholder: "",
@@ -66,16 +67,49 @@ export const formData = [
     label: "Custom Code",
   },
   {
+    name: "reorderLevel",
+    placeholder: "",
+    type: "text",
+    label: "Reorder Level",
+  },
+  {
     name: "reorderQty",
     placeholder: "",
     type: "text",
-    label: "Reorder Qty",
+    label: "Reorder Cost",
+  },
+];
+
+export const bulkVarientEdit = [
+  {
+    name: "compareAtPrice",
+    placeholder: "",
+    type: "text",
+    label: "Compare At Price",
+  },
+  {
+    name: "costPerItem",
+    placeholder: "",
+    type: "text",
+    label: "Cost per item",
+  },
+  {
+    name: "price",
+    placeholder: "",
+    type: "text",
+    label: "Price",
   },
   {
     name: "reorderLevel",
     placeholder: "",
     type: "text",
     label: "Reorder Level",
+  },
+  {
+    name: "reorderQty",
+    placeholder: "",
+    type: "text",
+    label: "Reorder Cost",
   },
 ];
 

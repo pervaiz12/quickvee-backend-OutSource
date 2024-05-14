@@ -151,6 +151,22 @@ export const fetchProductList = createAsyncThunk(
   }
 );
 
+export const fetchProductsDataById = createAsyncThunk(
+  "products/fetchProductData",
+  async (payload) => {
+    console.log(payload);
+    try {
+      const response = await axios.post(
+        BASE_URL + "Productapi/get_productdata_ById",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
 const productsSlice = createSlice({
   name: "products",
   initialState,

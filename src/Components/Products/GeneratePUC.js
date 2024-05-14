@@ -11,6 +11,8 @@ const GeneratePUC = ({
   productInfo,
   error,
 }) => {
+  const pageUrl = window.location.pathname?.split("/")[1];
+  console.log("pageurl", pageUrl);
   const varientTitle = handleVarientTitleBasedItemList();
   const setInputMaxLength = (fieldname) => {
     switch (fieldname) {
@@ -32,6 +34,7 @@ const GeneratePUC = ({
     }
   };
   const disabledFields = ["margin", "Profit"];
+  const disabledFieldsOnEdit = ["margin", "Profit", "qty"];
   return (
     <>
       <div className="mx-0">
@@ -56,7 +59,7 @@ const GeneratePUC = ({
           {varientTitle?.length && isMultipleVarient
             ? varientTitle?.map((_, index) => {
                 return (
-                  <div className="qvrow">
+                  <div className="qvrow" key={index}>
                     {isMultipleVarient ? (
                       <div className="mx-4 my-4">
                         {productInfo?.title
@@ -82,9 +85,13 @@ const GeneratePUC = ({
                                     onChange={(e) => handleOnChange(e, index)}
                                     onBlur={(e) => handleBlur(e, index)}
                                     maxLength={setInputMaxLength(inp?.name)}
-                                    disabled={disabledFields.includes(
-                                      inp?.name
-                                    )}
+                                    disabled={
+                                      pageUrl !== "product-edit"
+                                        ? disabledFields.includes(inp?.name)
+                                        : disabledFieldsOnEdit.includes(
+                                            inp?.name
+                                          )
+                                    }
                                   />
 
                                   {error[`formValue[${index}].${inp?.name}`] ? (
