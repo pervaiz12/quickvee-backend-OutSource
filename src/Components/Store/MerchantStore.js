@@ -117,7 +117,6 @@ const StorePage = () => {
         {
           Array.isArray(AdminRocord?.data?.stores) &&
           AdminRocord?.data?.stores.map((store,Index) => {
-            console.log(store)
             return(
              
                   <Grid item className="store-items " xs={12} sm={6}  key={Index}>
@@ -149,7 +148,78 @@ const StorePage = () => {
         }
       </Grid>
       </>
-      :''
+      :
+      AdminRocord?.data?.login_type=="merchant"?
+      <Grid container className="store-items-list" spacing={2}>
+        {
+            Array.isArray(AdminRocord?.data?.stores) &&
+            AdminRocord?.data?.stores.map((store,Index) => {
+              return(
+                <Grid item className="store-items " xs={12} sm={6}  key={Index}>
+                  <Link to={`/?m_id=${store?.merchant_id}`}>
+                <div className="store-item-card border my-2 p-2">
+                  <div className="me-5">
+                    <img src={store.img || storeDefaultImage} alt="store_image" />
+                  </div>
+                  <div className="grid content-center store-items-address">
+                    <p className="store-items-store-name">{store.name}</p>
+                    <p className="store-items-store-name-address">
+                      {[
+                        store.a_address_line_1,
+                        store.a_address_line_2,
+                        store.a_city,
+                        store.a_state,
+                        store.a_zip,
+                      ]
+                        .filter((part) => part !== null && part !== "")
+                        .join(", ")}
+                    </p>
+                  </div>
+                </div>
+                </Link>
+              </Grid>
+              )
+              
+              
+            })
+        }
+      </Grid>
+      :
+      AdminRocord?.data?.login_type=="manager"?
+      <Grid container className="store-items-list" spacing={2}>
+        {
+            Array.isArray(AdminRocord?.data?.stores) &&
+            AdminRocord?.data?.stores.map((store,Index) => {
+              return(
+                <Grid item className="store-items " xs={12} sm={6}  key={Index}>
+                   <Link to={`/?m_id=${store?.merchant_id}`}>
+                <div className="store-item-card border my-2 p-2">
+                  <div className="me-5">
+                    <img src={store.img || storeDefaultImage} alt="store_image" />
+                  </div>
+                  <div className="grid content-center store-items-address">
+                    <p className="store-items-store-name">{store.name}</p>
+                    <p className="store-items-store-name-address">
+                      {[
+                        store.a_address_line_1,
+                        store.a_address_line_2,
+                        store.a_city,
+                        store.a_state,
+                        store.a_zip,
+                      ]
+                        .filter((part) => part !== null && part !== "")
+                        .join(", ")}
+                    </p>
+                  </div>
+                </div>
+                </Link>
+              </Grid>
+              )
+              
+              
+            })
+        }
+      </Grid>:''
     }
       {/* <Grid container className="store-items-list" spacing={2}>
         {storeList.map((store, Index) => (

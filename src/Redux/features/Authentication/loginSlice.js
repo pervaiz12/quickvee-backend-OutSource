@@ -153,11 +153,11 @@ export const handleUserType = createAsyncThunk('LoginAuth/handleUserType', async
             Cookies.set('loginDetails', encryptedData);
 
             // Store user authentication record in local storage
-            localStorage.setItem('user_auth_record', JSON.stringify(data));
+            Cookies.set('user_auth_record', JSON.stringify(data));
 
             return response.data;
         } 
-    } catch (error) {
+    } catch (error) {  
         console.error("Error validating email:", error.message);
         throw error;
     }
