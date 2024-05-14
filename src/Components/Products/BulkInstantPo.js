@@ -9,8 +9,21 @@ const BulkInstantPo = ({ formData, handleVarientTitleBasedItemList }) => {
       <div>
         <div class="bulk-instant-po">
           <div class="varient-form">
-            {varientTitle?.map((pro, index) => {
-              return <></>;
+            {varientTitle?.map((varient, index) => {
+              return (
+                <div class="varient-container">
+                  <div class="varientform">
+                    <p>{varient}</p>
+                    <div class="form">
+                      {formData?.length
+                        ? formData?.map((form, index) => {
+                            return <>hellow</>;
+                          })
+                        : ""}
+                    </div>
+                  </div>
+                </div>
+              );
             })}
           </div>
         </div>
