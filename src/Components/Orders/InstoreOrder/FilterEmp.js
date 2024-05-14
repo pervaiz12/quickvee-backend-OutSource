@@ -34,7 +34,7 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
   //const [selectedEmployee, setSelectedEmployee] = useState("All");
 
   const [selectedEmployee, setSelectedEmployee] = useState("All");
-  console.log("Selected employee", selectedEmployee);
+  // console.log("Selected employee", selectedEmployee);
   const [selectedEmployeeID, setSelectedEmployeeID] = useState("All");
   const [filteredData, setFilteredData] = useState({ emp_id: "all" });
 
@@ -46,7 +46,7 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
     useState(false);
 
   const handleSearch = () => {
-    console.log("Search ID:", searchId);
+    // console.log("Search ID:", searchId);
   };
 
   const toggleDropdown = (dropdown) => {
@@ -77,7 +77,7 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
     switch (dropdown) {
       case "employee":
         if (option === "All") {
-          console.log("handleOptionClick ", option);
+          // console.log("handleOptionClick ", option);
           setSelectedEmployee("All");
           setSelectedEmployeeID("All");
           setEmployeeDropdownVisible(false);
@@ -151,7 +151,7 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
   }, []);
 
   const [employeeList, setemployeeList] = useState([]);
-  console.log("employeeList ,", employeeList);
+  // console.log("employeeList ,", employeeList);
   const [loadingEmpList, setLoadingEmpList] = useState(true);
 
   useEffect(() => {
@@ -181,8 +181,8 @@ const FilterEmp = ({ onFilterEmpDataChange }) => {
   }, []);
 
   useEffect(() => {
-    onFilterEmpDataChange(selectedTransaction, selectedEmployeeID);
-  }, [selectedTransaction, selectedEmployeeID]);
+    onFilterEmpDataChange(selectedTransaction, selectedEmployeeID, searchId);
+  }, [selectedTransaction, selectedEmployeeID, searchId]);
 
   useEffect(() => {
     const handleResize = () => {

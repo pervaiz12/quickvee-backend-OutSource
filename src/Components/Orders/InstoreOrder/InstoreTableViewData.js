@@ -42,6 +42,7 @@ const InstoreTableViewData = (props, searchId) => {
           start_date: props.selectedDateRange?.start_date,
           end_date: props.selectedDateRange?.end_date,
           emp_id: props?.EmployeeIDData,
+          search_by: props?.OffSearchIdData,
           // page: currentPage,
           // entriesPerPage: 10,
         };
@@ -65,10 +66,10 @@ const InstoreTableViewData = (props, searchId) => {
 
   // for table start
   $.DataTable = require('datatables.net') 
-
+  // console.log(inStoreOrder)
   useEffect(() => {
     const modifiedData = inStoreOrder.map(data => ({
-      "Customer": `<span class="text-[#000000] order_method">${data.name || ""}</span><br><span class="text-[#818181]">${data.delivery_phn || ""}</span>`,
+      "Customer": `<span class="text-[#000000] order_method">${data.billing_name || ""}</span><br><span class="text-[#818181]">${data.delivery_phn || ""}</span>`,
       "Order": `<span class="text-[#000000] order_method">${data.order_id || ""}</span><br><span class="text-[#818181]">${data.merchant_time || ""}</span><br><span class="text-[#818181]">${data.order_method || ""}</span>`,
       "Amount": `${data.amt || ""}<br><span class="text-[#1EC26B]">${capitalizeFirstLetter(data.order_status || "")}</span>`,
     
