@@ -59,7 +59,7 @@ const ManagerStore = () => {
       <Grid container className="store-items-list" spacing={2}>
         {managerStore.map((item, Index) => (
           <Grid item className="store-items " xs={12} sm={6} key={Index}>
-            <div className="store-item-card border my-2 p-4">
+            <div className="store-item-card-manager border my-2 p-4">
               <div className="flex">
                 <div className="me-5 flex items-start">
                   <img src={item.img || storeDefaultImage} alt="store_image" />
