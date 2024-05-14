@@ -6,13 +6,13 @@ import TimesheetListing from './TimesheetListing'
 const MainTimesheet = () => {
 
   const [filteredData, setFilteredData] = useState([]);
-  const [selectedEmployee, setSelectedEmployee] = useState("All");
+  const [selectedEmployeeID, setSelectedEmployeeID] = useState("all");
 
   const handleDataFiltered = (data) => {
     const updatedData = {
         ...data,
         merchant_id: "MAL0100CA",
-        employee_id:selectedEmployee,
+        employee_id:selectedEmployeeID,
       };
       setFilteredData(updatedData);
   }
@@ -22,7 +22,7 @@ const MainTimesheet = () => {
   return (
    <>
     <div className='q-category-main-page'>
-      <FilterTimesheet selectedEmployee={selectedEmployee} setSelectedEmployee={setSelectedEmployee} />
+      <FilterTimesheet selectedEmployeeID={selectedEmployeeID} setSelectedEmployeeID={setSelectedEmployeeID} />
     </div>
       <div className='q-category-main-page'>
         <div className='q-category-main-page'>

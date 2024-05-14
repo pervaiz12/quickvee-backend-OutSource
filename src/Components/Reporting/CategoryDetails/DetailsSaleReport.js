@@ -77,17 +77,6 @@ const DetailsSaleReport = ({ data }) => {
                 <span>{category}</span>
                 <img src={SortIcon} alt="" className="" />
               </div>
-              <style>
-                {`.q-catereport-quantity,.attriButes-title{
-                    display: flex !important;
-                    cursor:pointer;
-                  }
-                  .q-catereport-quantity span, .attriButes-title span{
-                    padding-left: 0.75rem;
-                  }
-                  
-                  `}
-              </style>
               <div className="q-attributes-bottom-attriButes-header">
                 <p className="q-catereport-item">Item Name</p>
                 <p

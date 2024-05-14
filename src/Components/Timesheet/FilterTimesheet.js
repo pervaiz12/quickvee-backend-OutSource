@@ -4,13 +4,13 @@ import { Grid } from '@mui/material';
 import axios from "axios";
 import { BASE_URL, EMPLOYEE_LIST } from '../../Constants/Config';
 
-const FilterTimesheet = ({ onClickHandler, listItem, selectedEmployee,setSelectedEmployee  }) => {
+const FilterTimesheet = ({ onClickHandler, listItem, selectedEmployeeID,setSelectedEmployeeID  }) => {
 
     const [employeeList, setemployeeList] = useState([]);
     const [loadingEmpList, setLoadingEmpList] = useState(true);
 
-    // const [selectedEmployee, setSelectedEmployee] = useState("All");
-    const [selectedEmployeeID, setSelectedEmployeeID] = useState("All");
+     const [selectedEmployee, setSelectedEmployee] = useState("All");
+   // const [selectedEmployeeID, setSelectedEmployeeID] = useState("All");
     const [filteredData, setFilteredData] = useState({ emp_id: "all" });
     const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
     const [selected, setSelected] = useState(false);
@@ -47,10 +47,10 @@ const FilterTimesheet = ({ onClickHandler, listItem, selectedEmployee,setSelecte
     
         switch (dropdown) {
           case "employee":
-            if (option === "All") {
+            if (option === "all") {
               console.log("handleOptionClick ", option);
-              setSelectedEmployee("All");
-              setSelectedEmployeeID("All");
+              setSelectedEmployee("all");
+              setSelectedEmployeeID("all");
               setEmployeeDropdownVisible(false);
               setFilteredData({
                 ...filteredData,
@@ -83,9 +83,11 @@ const FilterTimesheet = ({ onClickHandler, listItem, selectedEmployee,setSelecte
             <div className='px-6 py-6 my-6'>
                   <Grid container>
                       <Grid item className="mt-5" xs={12}>
-                          <h1 className="text-xl font-medium">Filter By</h1>
+                          <h1 className=" text-xl font-medium q_details_header ">Timesheet</h1>
+                          <h1 className="text-xl font-medium q_details_header">Filter By</h1>
                       </Grid>
                   </Grid>
+
 
                   <Grid container spacing={4} className="">
                       <Grid item xs={4}>

@@ -2361,6 +2361,35 @@ margin: 5px 0 15px 0;
 }
 
 
+.q-catereport-quantity,.attriButes-title{
+  display: flex !important;
+  cursor:pointer;
+}
+.q-catereport-quantity span, .attriButes-title span{
+  padding-left: 0.75rem;
+}
+
+.timesheet{
+  padding: 0px !important;
+  text-align: center;
+}
+.borderRight{
+  border-right: 1px solid #000000;
+  padding: 0rem 0.5rem;
+}
+.viewbreak{
+  color: #6A6A6A;
+}
+.viewTextBark{
+  color: #000000;
+  font-weight: 500;
+}
+.viewTaleBreak{
+  display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 2rem;
+}
+
 
 
 
