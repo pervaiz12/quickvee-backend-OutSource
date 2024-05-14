@@ -24,15 +24,37 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
 import { Box, Modal } from "@mui/material";
+import { fetchtimeSheetData } from "../../Redux/features/Timesheet/timesheetSlice";
 
-const TimesheetListing = (data) => {
+const TimesheetListing = ({ data }) => {
 
-    const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
   const [timesheet, settimesheet] = useState([]);
+
+
+  const timeSheetDataState = useSelector((state) => state.timeSheet);
+
+  useEffect(() => {
+    dispatch(fetchtimeSheetData(data));
+  }, [dispatch, data]);
+
+  useEffect(() => {
+    if (!timeSheetDataState.loading && timeSheetDataState.timeSheetData) {
+      settimesheet(timeSheetDataState.timeSheetData);
+    }
+  }, [
+    timeSheetDataState,
+    timeSheetDataState.loading,
+    timeSheetDataState.timeSheetData,
+  ]);
+
+  // if (!data || data.length === 0) {
+  //   return <div className="empty-div box">No data available</div>;
+  // }
   
 
-  console.log(data)
+  console.log("timesheet",data)
 
   const [showModal, setShowModal] = useState(false);
   const handleOpen = () => setShowModal(true);
@@ -181,7 +203,7 @@ const TimesheetListing = (data) => {
             <div className="mt-6 ">
               <div className="q-attributes-bottom-header bg-[#ffffff] ">
                 <span>Kalpesh</span>
-                <p onClick={openModal} > Add Clock-in/Clocl-out<img src={AddIcon} alt="add-icon" />{" "}</p>
+                <p onClick={openModal} > Add Clock-in/ClocK-out<img src={AddIcon} alt="add-icon" />{" "}</p>
               </div>
               <div className="q-attributes-bottom-attriButes-header">
                 <p className="q-catereport-item">Date Worked</p>
@@ -191,7 +213,7 @@ const TimesheetListing = (data) => {
                 <p className="q-catereport-item" ></p>
               </div>
                 <div  className="q-attributes-bottom-attriButes-listing" >
-                  <div className="q-attributes-bottom-attriButes-single-attributes " onClick={openModalViewBreak}>
+                  <div className="q-attributes-bottom-attriButes-single-attributes TimesheetRow cursor-pointer" onClick={openModalViewBreak} >
                     <p className="q-catereport-item">05/10/2023</p>
                     <p className="q-catereport-item">$60</p>
                     <p className="q-catereport-item ">9:50 AM</p>
@@ -216,7 +238,7 @@ const TimesheetListing = (data) => {
 
         {/* Modal for Add Clock-in/ClocK-out start  */}
 
-        {/* <Modal
+        <Modal
           open={showModal}
           onClose={handleClose}
           aria-labelledby="modal-modal-title"
@@ -232,32 +254,19 @@ const TimesheetListing = (data) => {
                 />
                 <span>Kalpesh</span>
               </span>
-              <p>Clock-in/Clocl-out</p>
+              <p className="viewTextBark">Clock-in/Clock-out</p>
             </div>
 
             <div className="view-category-item-modal-header">
               <div className="title_attributes_section " style={{margin: "1rem 1rem"}}>
 
-              <div className="q_coupon_minium my-4">
-                  <label htmlFor="coupon mt-2">Date & Time</label>
-                  <div className="flex flex-row gap-5">
-                    <Grid container spacing={2}>
-                      <Grid item xs={6}>
-                        <div className="">
-                          <div
-                            style={{
-                              display: "flex",
-                              // gap: "1rem",
-                              border: "1px solid #E3E3E3",
-                              borderRadius: "4px",
-                              height: "45px",
-                            }}
-                            className="date_selected"
-                          >
-                            <LocalizationProvider
+                    <Grid container spacing={3}>
+                      <Grid item md={6} xs={6}>
+                          <LocalizationProvider
                               dateAdapter={AdapterDayjs}
                               className="date-provider"
                             >
+                              <label htmlFor=" " className="pb-1">Select In Date*</label>
                               <DatePicker
                                 onChange={(newDate) =>
                                   handleStartDateChange(newDate)
@@ -278,7 +287,7 @@ const TimesheetListing = (data) => {
                                     <img src={caleIcon} alt="calendar-icon" />
                                   ),
                                 }}
-                                className="custom-datepicker"
+                                sx={{ width: '100%' }}
                               />
                             </LocalizationProvider>
                             {dateStartError && (
@@ -286,17 +295,14 @@ const TimesheetListing = (data) => {
                                 {dateStartError}
                               </p>
                             )}
-                            <div className="dividersss" />
-                            <div className="q_time_display">
-                              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      </Grid>
+
+                      <Grid item md={6} xs={6}>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <label htmlFor=" " className="pb-1">Clock In Time*</label>
                                 <TimePicker
-                                  className="input_label_section"
-                                  name="start_tym"
-                                  id="start_tym"
-                                  value={dayjs(addtimebreak.add_clocked_in, "HH:mm:ss")}
-                                  onChange={(newTime) =>
-                                    handleStartTimeChange(newTime)
-                                  }
+                                  name="clock_in"
+                                  id="clock_in"
                                   slotProps={{
                                     textField: { placeholder: "Start Time" },
                                   }}
@@ -305,83 +311,70 @@ const TimesheetListing = (data) => {
                                       <img src={TimeIcon} alt="time-icon" />
                                     ),
                                   }}
+                                  sx={{ width: '100%' }}
                                 />
-                              </LocalizationProvider>
-                            </div>
-                          </div>
-                        </div>
+                          </LocalizationProvider>
                       </Grid>
-                      <Grid item xs={6}>
-                        <div className="">
-                          <div
-                            style={{
-                              display: "flex",
-                              // gap: "1rem",
-                              margin: "0px",
-                              border: "1px solid #E3E3E3",
-                              borderRadius: "4px",
-                              height: "45px",
-                            }}
-                            className="date_selected"
-                          >
-                            <LocalizationProvider
+                     
+                    </Grid>
+
+                    <Grid container spacing={3}>
+                      <Grid item md={6} xs={6}>
+                          <LocalizationProvider
                               dateAdapter={AdapterDayjs}
                               className="date-provider"
                             >
+                              <label htmlFor=" " className="pb-1">Select Out Date*</label>
                               <DatePicker
                                 onChange={(newDate) =>
-                                  handleEndDateChange(newDate)
+                                  handleStartDateChange(newDate)
                                 }
+                                size="medium"
                                 shouldDisableDate={(date) =>
                                   date.format("YYYY-MM-DD") ===
-                                  addtimebreak.add_out_date
+                                  addtimebreak.add_clocked_out
                                 }
                                 format={"DD-MM-YYYY"}
                                 disablePast
                                 views={["year", "month", "day"]}
                                 slotProps={{
-                                  textField: { placeholder: "End Date" },
+                                  textField: { placeholder: "Start Date" },
                                 }}
                                 components={{
                                   OpenPickerIcon: () => (
                                     <img src={caleIcon} alt="calendar-icon" />
                                   ),
                                 }}
+                                sx={{ width: '100%' }}
                               />
-                              {dateEndError && (
+                            </LocalizationProvider>
+                            {dateEndError && (
                                 <p className="error-message date_error">
                                   {dateEndError}
                                 </p>
                               )}
-                            </LocalizationProvider>
-                            <div className="dividersss" />
-                            <div className="q_time_display">
-                              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                      </Grid>
+
+                      <Grid item md={6} xs={6}>
+                      <LocalizationProvider dateAdapter={AdapterDayjs}>
+                              <label htmlFor=" " className="pb-1">Clock Out Time*</label>
                                 <TimePicker
-                                  className="input_label_section"
-                                  name="end_tym"
-                                  id="end_tym"
-                                  value={dayjs(addtimebreak.add_clocked_out, "HH:mm:ss")}
-                                  onChange={(newTime) =>
-                                    handleEndTimeChange(newTime)
-                                  }
+                                  name="break_in"
+                                  id="break_in"
                                   slotProps={{
-                                    textField: { placeholder: "End Time" },
+                                    textField: { placeholder: "Start Time" },
                                   }}
                                   components={{
                                     OpenPickerIcon: () => (
                                       <img src={TimeIcon} alt="time-icon" />
                                     ),
                                   }}
+                                  sx={{ width: '100%' }}
                                 />
-                              </LocalizationProvider>
-                            </div>
-                          </div>
-                        </div>
+                          </LocalizationProvider>
                       </Grid>
+                     
                     </Grid>
-                  </div>
-                </div>
 
                  
                   <span className="input-error">
@@ -395,7 +388,7 @@ const TimesheetListing = (data) => {
                   <button onClick={closeModal} className="quic-btn quic-btn-cancle">Cancel</button>
             </div>
           </Box>
-        </Modal> */}
+        </Modal>
 
         {/* Modal for Add Clock-in/ClocK-out End  */}
 
@@ -407,7 +400,8 @@ const TimesheetListing = (data) => {
         aria-describedby="modal-modal-description"
          >
           <Box className="view-category-item-modal" style={myStyles}>
-            <div className="q-add-categories-section-header text-[18px]" style={{ justifyContent:"space-between" ,fontFamily:"CircularSTDBook" }}>
+            <div className="q-add-categories-section-header text-[18px]" 
+            style={{ justifyContent:"space-between" ,fontFamily:"CircularSTDBook" }}>
               <span onClick={() => handleCloseBreak()}>
                 <img
                   src={AddNewCategory}
@@ -416,7 +410,9 @@ const TimesheetListing = (data) => {
                 />
                 <span>Kalpesh</span>
               </span>
-              <p>05/10/2023 | Break-in/Break-out</p>
+              <div className="viewTextBark">
+              <span className="borderRight ">05/10/2023</span> <span className="pl-1"> Break-in/Break-out</span>
+              </div>
             </div>
 
             <div className="view-category-item-modal-header" >
@@ -424,7 +420,7 @@ const TimesheetListing = (data) => {
                     <Grid container spacing={3}>
                       <Grid item md={6} xs={6}>
                          <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <label htmlFor=" ">Break In Time*</label>
+                              <label  className="pb-1">Break In Time*</label>
                                 <TimePicker
                                   name="break_in"
                                   id="break_in"
@@ -443,7 +439,7 @@ const TimesheetListing = (data) => {
 
                       <Grid item md={6} xs={6}>
                           <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <label htmlFor=" ">Break In Out*</label>
+                          <label className="pb-1">Break Out Time*</label>
                                 <TimePicker
                                   name="break_out"
                                   id="break_out"
@@ -483,7 +479,8 @@ const TimesheetListing = (data) => {
         aria-describedby="modal-modal-description"
          >
           <Box className="view-category-item-modal" style={myStyles}>
-            <div className="q-add-categories-section-header text-[18px]" style={{ justifyContent:"space-between" ,fontFamily:"CircularSTDBook" }}>
+            <div className="q-add-categories-section-header text-[18px]" 
+            style={{ justifyContent:"space-between" ,fontFamily:"CircularSTDBook" ,padding:"1rem 1.90rem" }}>
               <span onClick={() => closeModalViewBreak()}>
                 <img
                   src={AddNewCategory}
@@ -492,7 +489,7 @@ const TimesheetListing = (data) => {
                 />
                 <span>Kalpesh</span>
               </span>
-              <p><img src={DeleteIcon} alt="delete-icon" className="cursor-pointer" /></p>
+              <p className="pr-1"><img src={DeleteIcon} alt="delete-icon" className="cursor-pointer" /></p>
             </div>
 
             <div className="view-category-item-modal-header" >
@@ -509,12 +506,23 @@ const TimesheetListing = (data) => {
                   <p>Breaked Out</p>
                   <p></p>
                 </div>
-              
+                <div className="viewTaleBreak viewTableRow ">
+                  <p>Break 1</p>
+                  <p >4:05 PM</p>
+                  <p >4:35 PM</p>
+                  <p ><img src={DeleteIcon} alt="delete-icon" className="cursor-pointer" /></p>
+                </div>
+                <div className="viewTaleBreak viewTableRow ">
+                  <p>Break 2</p>
+                  <p >8:15 PM</p>
+                  <p >8:25 PM</p>
+                  <p ><img src={DeleteIcon} alt="delete-icon" className="cursor-pointer" /></p>
+                </div>
 
             </div>
 
             <div className="q-add-categories-section-middle-footer">
-                <button  className="quic-btn quic-btn-save"  onClick={closeModalViewBreak} >OK</button>
+                <button  className="quic-btn quic-btn-save mr-4"  onClick={closeModalViewBreak} >OK</button>
             </div>
           </Box>
         </Modal>

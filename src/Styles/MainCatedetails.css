@@ -391,4 +391,6 @@
     font-family: CircularSTDMedium !important;
 }
 
-
+.TimesheetRow {
+    padding: 1rem !important;
+  }

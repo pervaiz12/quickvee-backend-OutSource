@@ -2389,6 +2389,13 @@ margin: 5px 0 15px 0;
     justify-content: space-between;
     padding: 0.5rem 2rem;
 }
+.viewTaleBreak p{
+  padding: 4px;
+  font-size: 16px;
+}
+.viewTableRow{
+  border-bottom: 1px solid #E8E8E8;
+}
 
 
 
