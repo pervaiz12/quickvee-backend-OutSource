@@ -9,10 +9,27 @@ import { useSelector, useDispatch } from "react-redux";
 import '../../Styles/loginAuth.css'
 // import Quickvee from "../../../Assets/LoginScreen/quickveeLogo.svg";handleSubmitFormPlace
 import Quickvee from '../../Assests/LoginScreen/quickveeLogo.svg'
+// import { useLocation } from 'react-router-dom';
 
 export default function Login() {
     // const{handleChangeLogin,handleSubmitForm,formData,errors,handleBlur,authEmailValidate,errorMessage}=LoginLogic();
+    // const location = useLocation();
+    // const errorMessageState = location?.state?.msg;
+    
+    const [errorMessage,setErrorMessage]=useState("")
+    const errorMessageRecord=useSelector((state)=>state?.loginAuthentication?.errors)
     const{handleChangeLogin,handleSubmitForm,formData,errors,handleBlur}=LoginLogic();
+    const handleHideErrorMessage=()=>{
+        setErrorMessage(errorMessageRecord)
+        setTimeout(()=>{
+            setErrorMessage("")
+
+        },2000)
+    }
+    useEffect(()=>{
+        handleHideErrorMessage()
+    },[])
+   
     
     
   return (
@@ -29,9 +46,7 @@ export default function Login() {
                 </Link>
                 <form className="login-customer-form">
                     <h1>Merchant Login</h1>
-                    {/* {
-                        <span>{errorMessage}</span>
-                    } */}
+                    <span>{errorMessage}</span>
                     <div
                         style={{
                         width: '300px',

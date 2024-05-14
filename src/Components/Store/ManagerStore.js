@@ -8,6 +8,8 @@ import { useSelector, useDispatch} from "react-redux";//,localAuthCheck
 import {getAuthSessionRecord } from "../../Redux/features/Authentication/loginSlice";
 import CryptoJS from 'crypto-js';
 import Cookies from 'js-cookie'; 
+import AddIcon from "../../Assests/Category/addIcon.svg";
+import AddManagerFormModel from "./AddManagerFormModel";
 
 const managerStore = [
   {
@@ -41,6 +43,11 @@ const managerStore = [
     stores: ["Store Name-1", "Store Name-Lorem 2", "Store 3"],
   },
 ];
+const stores = [
+  { id: 1,value: 'chocolate', title: 'Chocolate' },
+  { id: 2,value: 'strawberry', title: 'Strawberry' },
+  { id: 3,value: 'vanilla', title: 'Vanilla' },
+];
 
 
 const ManagerStore = () => {
@@ -64,13 +71,24 @@ const ManagerStore = () => {
   let getSingleStore = (result) => {
     const matchedStorenew = AdminRocord?.data?.stores?.find(store => store?.merchant_id === result);
     if (matchedStorenew) {
-        console.log("Matched store:", matchedStorenew); // Check if the matched store is correct
+        // console.log("Matched store:", matchedStorenew); // Check if the matched store is correct
         return <span onClick={()=>handleGetRecord(matchedStorenew?.merchant_id)} key={matchedStorenew?.id}>{matchedStorenew.name}</span>;
     }
 }
   return (
     <>
    
+   <Grid container-fluid className="managerStore-title-main border">
+        <Grid item xs={12}>
+          <div className="flex justify-between  m-3">
+            <p className="managerStore-title select-none">Manager</p>
+            <div className="flex items-center cursor-pointer">
+              {/* <p className="me-3 select-none managerStore-btn" style={{whiteSpace:"nowrap"}}>Add Manager</p> <img src={AddIcon} /> */}
+              <AddManagerFormModel stores={AdminRocord} />
+            </div>
+          </div>
+        </Grid>
+      </Grid>
         <Grid container className="store-items-list" spacing={2}>
             {
                 AdminRocord?.data?.login_type=="admin"?
@@ -79,7 +97,7 @@ const ManagerStore = () => {
                     // console.log(result)
                     return(
                         <Grid item className="store-items " xs={12} sm={6} key={Index}>
-                            <div className="store-item-card border my-2 p-4">
+                            <div className="store-item-card-manager border my-2 p-4">
                             <div className="flex">
                                 <div className="me-5 flex items-start">
                                 <img src={item.img || storeDefaultImage} alt="store_image" />

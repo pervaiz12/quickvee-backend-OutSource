@@ -92,8 +92,11 @@ import SideMenu from "./Components/Layout/SideMenu";
 import { useEffect,useState } from "react";
 import { useMediaQuery } from "@mui/material";
 // import InventoryExport from "./Components/InventoryExport/MainInventoryExport";
+import { useHistory ,useLocation } from 'react-router-dom';
 
 function App() {
+  const location = useLocation()
+  // console.log(location.pathname=='/login')
 
   const isTabletNav = useMediaQuery("(max-width:1024px)");
   const [isMenuOpen, setIsMenuOpen] = useState(!isTabletNav);
@@ -106,7 +109,10 @@ function App() {
 
   return (
     <>
-      <SideMenu setIsMenuOpen={setIsMenuOpen} isTabletNav={isTabletNav} isMenuOpen={isMenuOpen}/>
+      {
+      location.pathname !=='/login' ?
+      <SideMenu setIsMenuOpen={setIsMenuOpen} isTabletNav={isTabletNav} isMenuOpen={isMenuOpen}/>:''
+      }
       <Routes>
         {/* <Route exact path="/" element={<Main />} /> */}
         {/* <Route exact path="/" element={<Layout />} /> */}

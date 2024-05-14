@@ -33,8 +33,35 @@ import { useLocation } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
 import { setMenuOpen } from "../../Redux/features/NavBar/MenuSlice";
 import { useSelector, useDispatch } from "react-redux";
-const SideMenu = () => {
+import CryptoJS from 'crypto-js';
+import Cookies from 'js-cookie'; 
+
+
+
+const SideMenu =() => {
   // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  // const AdminRocordNew=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.getUserRecord, 'secret key').toString(CryptoJS.enc.Utf8));
+  // const AdminRocord= AdminRocordNew !=="" ?JSON.parse(AdminRocordNew):[]
+  let AuthSessionRecord=Cookies.get('loginDetails') !==undefined ? Cookies.get('loginDetails') :[]
+let AuthDecryptData=CryptoJS.AES.decrypt(AuthSessionRecord, 'secret key').toString(CryptoJS.enc.Utf8);
+const AdminRocord= AuthDecryptData !=="" ?JSON.parse(AuthDecryptData):[]
+console.log(AdminRocord)
+  useEffect(()=>{
+
+    console.log('hehhehehe')
+    console.log(AdminRocord)
+
+  },[AuthSessionRecord])
+
+  const temp = {
+    "superadmin": menuItems,
+    "admin" : merchant,
+    "manager" : ManagerLink,
+    "merchant":MerchantLink,
+   
+  }
+  
+
   const location = useLocation();
   const currentUrl = location.pathname;
   const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
@@ -63,7 +90,7 @@ const SideMenu = () => {
         {/* Left Side Menu */}
         <div className="flex-1 bg-[#253338] text-[#9E9E9E]">
           {isMenuOpenRedux
-            ? menuItems.map((item) => (
+            ? temp[AdminRocord?.data?.login_type]?.map((item) => (
                 <div
                   key={item.id}
                   className={`text-[#9E9E9E] active:bg-[#414F54] hover:bg-[#414F54] hover:text-[#FFC400] px-0 ${
@@ -287,6 +314,8 @@ const DropdownMenuItem = ({
 };
 
 // Define menu items with icons and text
+// {AdminRocord?.data?.login_type!==("admin" &&"manager"&& "merchant") 
+
 const menuItems = [
   {
     id: 1,
@@ -629,5 +658,36 @@ const menuItems = [
     ],
   },
 ];
+
+const merchant =[
+    {
+      id: 82,
+      text: "Store",
+      link: "/store",
+  },
+  {
+    id: 82,
+    text: "Manager",
+    link: "/manager",
+},
+  
+]
+const ManagerLink =[
+  {
+    id: 82,
+    text: "Store",
+    link: "/store",
+},
+  
+]
+const MerchantLink =[
+  {
+    id: 82,
+    text: "Store",
+    link: "/store",
+},
+  
+]
+// }MerchantLink
 
 export default SideMenu;

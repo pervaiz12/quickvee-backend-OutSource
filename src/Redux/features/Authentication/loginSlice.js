@@ -133,6 +133,7 @@ import Cookies from 'js-cookie';
 import CryptoJS from 'crypto-js';
 import axios from 'axios';
 import {BASE_URL,LOGIN_OTP_SUBMIT_AUTHENTICATION} from '../../../Constants/Config'
+import { useNavigate } from 'react-router-dom';
 
 const initialState = {
     loading: false,
@@ -153,10 +154,29 @@ export const handleUserType = createAsyncThunk('LoginAuth/handleUserType', async
             Cookies.set('loginDetails', encryptedData);
 
             // Store user authentication record in local storage
-            Cookies.set('user_auth_record', JSON.stringify(data));
+            const encoded = btoa(JSON.stringify(data));
+            Cookies.set('user_auth_record', encoded);
 
             return response.data;
         } 
+    } catch (error) {  
+        console.error("Error validating email:", error.message);
+        throw error;
+    }
+});
+
+export const handleGetStoreRecord = createAsyncThunk('LoginAuth/handleGetStoreRecord', async (data) => {
+    
+    console.log(BASE_URL + LOGIN_OTP_SUBMIT_AUTHENTICATION)
+    try {
+        const response = await axios.post(BASE_URL + LOGIN_OTP_SUBMIT_AUTHENTICATION, data, {
+            headers: { "Content-Type": "multipart/form-data" },
+        });
+        if (response.data.status === true) {
+            const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(response?.data), 'secret key').toString();
+            Cookies.set('token_data', encryptedData);
+        }
+        return response.data
     } catch (error) {  
         console.error("Error validating email:", error.message);
         throw error;
@@ -170,8 +190,11 @@ const LoginSlice = createSlice({
         getAuthSessionRecord(state, action) {
             state.getUserRecord = action.payload;
         },
+        getAuthInvalidMessage(state, action) {
+            state.errors = action.payload;
+        },
     },
 });
 
-export const { getAuthSessionRecord } = LoginSlice.actions;
+export const { getAuthSessionRecord ,getAuthInvalidMessage} = LoginSlice.actions;
 export default LoginSlice.reducer;

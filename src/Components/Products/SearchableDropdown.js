@@ -14,13 +14,17 @@ const SearchableDropdown = ({
   selectedOption,
   error,
   handleUpdateError,
+  name
 }) => {
   const { checkLength } = Validation();
   const [filterOptions, setFilterOptions] = useState(optionList);
+
   const handleFilterOptions = (e) => {
     const { value } = e.target;
+
     const filterList = optionList.filter((item) => {
-      return item.title.toLowerCase().includes(value.toLowerCase());
+      // console.log(item)
+      return item.name.toLowerCase().includes(value.toLowerCase());
     });
     setFilterOptions(
       filterList?.length ? filterList : ["No Search Result Found"]
@@ -73,7 +77,7 @@ const SearchableDropdown = ({
                 ? selectedOption?.map((option) => {
                     return (
                       <div className="item" key={option?.id}>
-                        {option?.title}
+                        {option[name]}
                         <img
                           src={CloseIcon}
                           className="cancel-image"
@@ -128,7 +132,7 @@ const SearchableDropdown = ({
                             : handleSelectProductOptions(opt, keyName)
                         }
                       >
-                        {opt?.title}
+                        {opt?.name}
                       </span>
                     );
                   }

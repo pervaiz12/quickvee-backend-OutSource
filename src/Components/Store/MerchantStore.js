@@ -3,9 +3,10 @@ import { Grid } from "@mui/material";
 import {Link} from 'react-router-dom'
 import { useSelector, useDispatch} from "react-redux";//,localAuthCheck 
 import storeDefaultImage from "../../Assests/Vendors/DefaultStore.svg";
-import {getAuthSessionRecord } from "../../Redux/features/Authentication/loginSlice";
+import {getAuthSessionRecord,handleGetStoreRecord,getAuthInvalidMessage} from "../../Redux/features/Authentication/loginSlice";
 import CryptoJS from 'crypto-js';
 import Cookies from 'js-cookie'; 
+import { useNavigate } from 'react-router-dom';
 const storeList = [
   {
     a_address_line_1: "230 dr suit",
@@ -81,7 +82,14 @@ const storeList = [
 
 const StorePage = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   let AuthSessionRecord=Cookies.get('loginDetails') !==undefined ? Cookies.get('loginDetails') :[]
+  let UserLoginDataStringFy=Cookies.get('user_auth_record') !==undefined ? Cookies.get('user_auth_record') :[]
+  const getUserLoginAuth = atob(UserLoginDataStringFy);
+  const GetSessionLogin=getUserLoginAuth !==""? JSON.parse(getUserLoginAuth):[]
+  console.log(GetSessionLogin)
+
+
   // const {handleGetStoreData}=StoreListLogic()
   const AdminRocordNew=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.getUserRecord, 'secret key').toString(CryptoJS.enc.Utf8));
   const AdminRocord= AdminRocordNew !=="" ?JSON.parse(AdminRocordNew):[]
@@ -104,9 +112,27 @@ const StorePage = () => {
   let getSingleStore = (result) => {
     const matchedStorenew = AdminRocord?.data?.stores?.find(store => store?.merchant_id === result);
     if (matchedStorenew) {
-        console.log("Matched store:", matchedStorenew); // Check if the matched store is correct
+        console.log("Matched store:", matchedStorenew); // Check if the matched store is correct GetSessionLogin.username
         return <span onClick={()=>handleGetRecord(matchedStorenew?.merchant_id)} key={matchedStorenew?.id}>{matchedStorenew.name}</span>;
     }
+}
+const handleSubmitStoreRecord=(merchant_id)=>{
+  const data={username:GetSessionLogin?.username,password:GetSessionLogin.password,login_type:AdminRocord?.data?.login_type,merchant_id:merchant_id}
+  console.log(data)
+  dispatch(handleGetStoreRecord(data)).then(result=>{
+    if(result?.payload?.status==true)
+      {
+        navigate(`/`)
+      }else{
+          Cookies.remove('loginDetails');
+          Cookies.remove('user_auth_record');
+          // navigate('/login'), { state: {msg: result?.payload?.msg} }
+          dispatch(getAuthInvalidMessage(result?.payload?.msg))
+          navigate('/login')
+
+      }
+  })
+ 
 }
   return (
     <>
@@ -120,13 +146,13 @@ const StorePage = () => {
             return(
              
                   <Grid item className="store-items " xs={12} sm={6}  key={Index}>
-                    <Link to={`/?m_id=${store?.merchant_id}`}>
-                      <div className="store-item-card border my-2 p-2">
+                    {/* <Link to={`/?m_id=${store?.merchant_id}`}> */}
+                      <div className="store-item-card border my-2 p-2"  onClick={()=>handleSubmitStoreRecord(store?.merchant_id)}>
                         <div className="me-5">
                         <img src={store.img || storeDefaultImage} alt="store_image" />
                         </div>
                           <div className="grid content-center store-items-address">
-                            <p className="store-items-store-name">{store.name}</p>
+                            <p className="store-items-store-name" >{store.name}</p>
                             <p className="store-items-store-name-address">
                               {[
                               store.a_address_line_1,
@@ -140,7 +166,7 @@ const StorePage = () => {
                             </p>
                           </div>
                       </div>
-                    </Link>
+                    {/* </Link> */}
                   </Grid>
          
           )
@@ -192,7 +218,7 @@ const StorePage = () => {
             AdminRocord?.data?.stores.map((store,Index) => {
               return(
                 <Grid item className="store-items " xs={12} sm={6}  key={Index}>
-                   <Link to={`/?m_id=${store?.merchant_id}`}>
+                   {/* <Link to={`/?m_id=${store?.merchant_id}`}> */}
                 <div className="store-item-card border my-2 p-2">
                   <div className="me-5">
                     <img src={store.img || storeDefaultImage} alt="store_image" />
@@ -212,7 +238,7 @@ const StorePage = () => {
                     </p>
                   </div>
                 </div>
-                </Link>
+                {/* </Link> */}
               </Grid>
               )
               
