@@ -11,6 +11,8 @@ const MainInStore = () => {
 
   const [OrderSourceData, setOrderSourceData] = useState(null);
   const [OrderTypeData, setOrderTypeData] = useState(null);
+  const [OnlSearchIdData, setOnlSearchIdData] = useState(null);
+  const [OffSearchIdData, setOffSearchIdData] = useState(null);
   const [EmployeeIDData, setEmployeeIDData] = useState(null);
 
   const [selectedDateRange, setSelectedDateRange] = useState(null);
@@ -22,14 +24,16 @@ const MainInStore = () => {
     setActiveTab(tab);
   };
 
-  const handleFilterDataChange = (OrderSource , OrderType) => {
+  const handleFilterDataChange = (OrderSource , OrderType, SearchId) => {
     setOrderSourceData(OrderSource);
     setOrderTypeData(OrderType);
+    setOnlSearchIdData(SearchId);
   };
 
-  const handleFilterEmpDataChange = (OrderSource , EmployeeID) => {
+  const handleFilterEmpDataChange = (OrderSource , EmployeeID, SearchId) => {
     setOrderSourceData(OrderSource);
     setEmployeeIDData(EmployeeID);
+    setOffSearchIdData(SearchId);
   };
 
   const renderInStoreContent = () => {
@@ -97,12 +101,14 @@ const MainInStore = () => {
               <InstoreTableViewData 
                 OrderSourceData={OrderSourceData} 
                 EmployeeIDData={EmployeeIDData} 
+                OffSearchIdData={OffSearchIdData} 
                 selectedDateRange={selectedDateRange} 
               />
             ) : (
               <OnlineTableViewData
                 OrderSourceData={OrderSourceData} 
                 OrderTypeData={OrderTypeData} 
+                OnlSearchIdData={OnlSearchIdData} 
                 selectedDateRange={selectedDateRange} 
               />
             )}

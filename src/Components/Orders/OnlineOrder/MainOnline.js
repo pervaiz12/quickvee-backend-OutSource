@@ -33,7 +33,7 @@ const MainOnline = ({ onFilterDataChange }) => {
 
   const [searchId, setSearchId] = useState("");
   const handleSearch = () => {
-    console.log("Search ID:", searchId);
+    // console.log("Search ID:", searchId);
   };
 
   const [isTablet, setIsTablet] = useState(false);
@@ -111,8 +111,8 @@ const MainOnline = ({ onFilterDataChange }) => {
   }, []);
 
   useEffect(() => {
-    onFilterDataChange(selectedTransaction, selectedOrderStatus);
-  }, [selectedTransaction, selectedOrderStatus]);
+    onFilterDataChange(selectedTransaction, selectedOrderStatus, searchId);
+  }, [selectedTransaction, selectedOrderStatus, searchId]);
 
   useEffect(() => {
     const handleResize = () => {

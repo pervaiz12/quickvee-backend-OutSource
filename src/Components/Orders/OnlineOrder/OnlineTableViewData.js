@@ -34,6 +34,7 @@ const OnlineTableViewData = (props) => {
           start_date: props.selectedDateRange?.start_date,
           end_date: props.selectedDateRange?.end_date,
           customer_id: "0",
+          search_by: props?.OnlSearchIdData,
         };
 
         if (data) {
@@ -60,7 +61,7 @@ const OnlineTableViewData = (props) => {
       if (target.classList.contains("custom-selecttable")) {
         const orderId = target.getAttribute("data-order-id");
         const selectedOption = target.value;
-        console.log(`Order ID: ${orderId}, Selected Option: ${selectedOption}`);
+        // console.log(`Order ID: ${orderId}, Selected Option: ${selectedOption}`);
         var success = window.confirm("Are you sure you want to change status");
         if (success == true) {
           const FormData = {
@@ -134,7 +135,7 @@ const OnlineTableViewData = (props) => {
       order_amt: newOrderAmount,
     };
     const data = newItem;
-    console.log(data);
+    // console.log(data);
     const response = await axios.post(
       BASE_URL + CLOSE_ORDER_COLLECT_CASH,
       data,
@@ -142,7 +143,7 @@ const OnlineTableViewData = (props) => {
         headers: { "Content-Type": "multipart/form-data" },
       }
     );
-    console.log(response);
+    // console.log(response);
 
     if (response?.data?.status == false) {
       setErrorMessage(response.data.message);
@@ -156,7 +157,7 @@ const OnlineTableViewData = (props) => {
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
-
+  // console.log(allOnlineStoreOrder);
   useEffect(() => {
     const modifiedData = Object.entries(allOnlineStoreOrder).map(
       ([key, data], i) => {
@@ -207,23 +208,23 @@ const OnlineTableViewData = (props) => {
         } else if (props?.OrderTypeData == "New") {
           let cancelOption = "";
           if (data.payment_id === "Cash") {
-            cancelOption = `<option value="5">Cancel</option>`;
+            cancelOption = `<option value="5" ${data.m_status == "5" ? `selected` : ""}>Cancel</option>`;
           }
           if (data.order_method == "pickup") {
             PayStatus = `<select class="custom-selecttable w-52 cursor-pointer" data-order-id="${data.order_id}">
-              <option value="1">Accepted</option>
-              <option value="2">Packing</option>
-              <option value="3">Ready</option>
-              <option value="4">Completed</option>
+              <option value="1" ${data.m_status == "1" ? `selected` : ""}>Accepted</option>
+              <option value="2" ${data.m_status == "2" ? `selected` : ""}>Packing</option>
+              <option value="3" ${data.m_status == "3" ? `selected` : ""}>Ready</option>
+              <option value="4" ${data.m_status == "4" ? `selected` : ""}>Completed</option>
               ${cancelOption}
             </select>`;
           } else {
             PayStatus = `<select class="custom-selecttable w-52 cursor-pointer" data-order-id="${data.order_id}">
-              <option value="1">Accepted</option>
-              <option value="2">Packing</option>
-              <option value="6">Ready</option>
-              <option value="3">Out for Delivery</option>
-              <option value="4">Delivered</option>
+              <option value="1" ${data.m_status == "1" ? `selected` : ""}>Accepted</option>
+              <option value="2" ${data.m_status == "2" ? `selected` : ""}>Packing</option>
+              <option value="6" ${data.m_status == "6" ? `selected` : ""}>Ready</option>
+              <option value="3" ${data.m_status == "3" ? `selected` : ""}>Out for Delivery</option>
+              <option value="4" ${data.m_status == "4" ? `selected` : ""}>Delivered</option>
               ${cancelOption}
             </select>`;
           }
@@ -231,7 +232,7 @@ const OnlineTableViewData = (props) => {
 
         return {
           Customer: `<span class="text-[#000000] order_method">${
-            data.name || ""
+            data.deliver_name || ""
           }</span><br>${data.delivery_phn || ""}`,
           Order: `<span class="text-[#000000] order_method">${
             data.order_id || ""
