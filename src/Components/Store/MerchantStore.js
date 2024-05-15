@@ -102,31 +102,37 @@ const StorePage = () => {
     
   },[AuthSessionRecord])
 
-  const handleGetRecord=(merchantId)=>{
-    console.log(merchantId)
+  // const handleGetRecord=(merchantId)=>{
+  //   console.log(merchantId)
 
-  }
+  // }
 
   
 
-  let getSingleStore = (result) => {
-    const matchedStorenew = AdminRocord?.data?.stores?.find(store => store?.merchant_id === result);
-    if (matchedStorenew) {
-        console.log("Matched store:", matchedStorenew); // Check if the matched store is correct GetSessionLogin.username
-        return <span onClick={()=>handleGetRecord(matchedStorenew?.merchant_id)} key={matchedStorenew?.id}>{matchedStorenew.name}</span>;
-    }
-}
+//   let getSingleStore = (result) => {
+//     const matchedStorenew = AdminRocord?.data?.stores?.find(store => store?.merchant_id === result);
+//     if (matchedStorenew) {
+//         console.log("Matched store:", matchedStorenew); // Check if the matched store is correct GetSessionLogin.username
+//         return <span onClick={()=>handleGetRecord(matchedStorenew?.merchant_id)} key={matchedStorenew?.id}>{matchedStorenew.name}</span>;
+//     }GetSessionLogin?.username
+// }
 const handleSubmitStoreRecord=(merchant_id)=>{
   const data={username:GetSessionLogin?.username,password:GetSessionLogin.password,login_type:AdminRocord?.data?.login_type,merchant_id:merchant_id}
   console.log(data)
   dispatch(handleGetStoreRecord(data)).then(result=>{
     if(result?.payload?.status==true)
       {
-        navigate(`/`)
+        if(result?.payload?.final_login==1)
+          {
+            navigate(`/`)
+          }else{
+            console.log("store page called")
+          }
+ 
       }else{
           Cookies.remove('loginDetails');
           Cookies.remove('user_auth_record');
-          // navigate('/login'), { state: {msg: result?.payload?.msg} }
+          Cookies.remove('token_data');
           dispatch(getAuthInvalidMessage(result?.payload?.msg))
           navigate('/login')
 
@@ -183,7 +189,7 @@ const handleSubmitStoreRecord=(merchant_id)=>{
               return(
                 <Grid item className="store-items " xs={12} sm={6}  key={Index}>
                   <Link to={`/?m_id=${store?.merchant_id}`}>
-                <div className="store-item-card border my-2 p-2">
+                <div className="store-item-card border my-2 p-2" onClick={()=>handleSubmitStoreRecord(store?.merchant_id)}>
                   <div className="me-5">
                     <img src={store.img || storeDefaultImage} alt="store_image" />
                   </div>
@@ -219,7 +225,7 @@ const handleSubmitStoreRecord=(merchant_id)=>{
               return(
                 <Grid item className="store-items " xs={12} sm={6}  key={Index}>
                    {/* <Link to={`/?m_id=${store?.merchant_id}`}> */}
-                <div className="store-item-card border my-2 p-2">
+                <div className="store-item-card border my-2 p-2" onClick={()=>handleSubmitStoreRecord(store?.merchant_id)}>
                   <div className="me-5">
                     <img src={store.img || storeDefaultImage} alt="store_image" />
                   </div>

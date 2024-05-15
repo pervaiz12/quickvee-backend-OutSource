@@ -5,11 +5,12 @@ import EmailLogo from "../../Assests/Vendors/EmailLogo.svg";
 import PhoneLogo from "../../Assests/Vendors/PhoneLogo.svg";
 import {Link} from 'react-router-dom'
 import { useSelector, useDispatch} from "react-redux";//,localAuthCheck 
-import {getAuthSessionRecord } from "../../Redux/features/Authentication/loginSlice";
 import CryptoJS from 'crypto-js';
 import Cookies from 'js-cookie'; 
 import AddIcon from "../../Assests/Category/addIcon.svg";
+import {getAuthSessionRecord,handleGetStoreRecord,getAuthInvalidMessage} from "../../Redux/features/Authentication/loginSlice";
 import AddManagerFormModel from "./AddManagerFormModel";
+import { useNavigate } from 'react-router-dom';
 
 const managerStore = [
   {
@@ -52,9 +53,13 @@ const stores = [
 
 const ManagerStore = () => {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     let AuthSessionRecord=Cookies.get('loginDetails') !==undefined ? Cookies.get('loginDetails') :[]
     const AdminRocordNew=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.getUserRecord, 'secret key').toString(CryptoJS.enc.Utf8));
     const AdminRocord= AdminRocordNew !=="" ?JSON.parse(AdminRocordNew):[]
+    let UserLoginDataStringFy=Cookies.get('user_auth_record') !==undefined ? Cookies.get('user_auth_record') :[]
+    const getUserLoginAuth = atob(UserLoginDataStringFy);
+    const GetSessionLogin=getUserLoginAuth !==""? JSON.parse(getUserLoginAuth):[]
     useEffect(()=>{
       if( AuthSessionRecord !=="")
         {
@@ -63,18 +68,43 @@ const ManagerStore = () => {
       
     },[AuthSessionRecord])
     
-    const handleGetRecord=(merchantId)=>{
-        console.log(merchantId)
-  
+      const handleSubmitStoreRecord=(merchant_id)=>{
+        const data={username:GetSessionLogin?.username,password:GetSessionLogin.password,login_type:AdminRocord?.data?.login_type,merchant_id:merchant_id}
+        dispatch(handleGetStoreRecord(data)).then(result=>{
+          if(result?.payload?.status==true)
+            {
+              console.log(result?.payload)
+              console.log(result?.payload?.final_login)
+              if(result?.payload?.final_login==1)
+                {
+                  navigate(`/`)
+                 
+                }else{
+                  console.log("store page called")
+                }
+              
+              
+            }else{
+                Cookies.remove('loginDetails');
+                Cookies.remove('user_auth_record');
+                // navigate('/login'), { state: {msg: result?.payload?.msg} }
+                dispatch(getAuthInvalidMessage(result?.payload?.msg))
+                navigate('/login')
+      
+            }
+        })
+      
       }
     
   let getSingleStore = (result) => {
     const matchedStorenew = AdminRocord?.data?.stores?.find(store => store?.merchant_id === result);
     if (matchedStorenew) {
         // console.log("Matched store:", matchedStorenew); // Check if the matched store is correct
-        return <span onClick={()=>handleGetRecord(matchedStorenew?.merchant_id)} key={matchedStorenew?.id}>{matchedStorenew.name}</span>;
+        return <p className="p-1 border me-3 store-items-store-names" onClick={()=>handleSubmitStoreRecord(matchedStorenew?.merchant_id)} key={matchedStorenew?.id}>{matchedStorenew.name}</p>;
     }
 }
+
+
   return (
     <>
    
@@ -125,7 +155,7 @@ const ManagerStore = () => {
                                           const matchedStore = AdminRocord?.data?.stores?.find(store => store?.merchant_id === merchantData)
                                           if (matchedStore) {
                                             // console.log(handleGetStoreData)
-                                              return <p key={index} className="p-1 border me-3 store-items-store-names">{matchedStore.name}</p>;
+                                              return <p onClick={()=>handleSubmitStoreRecord(matchedStore?.merchant_id)} key={index} className="p-1 border me-3 store-items-store-names">{matchedStore.name}</p>;
                                           }
                                       
                                       })
