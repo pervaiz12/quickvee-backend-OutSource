@@ -33,24 +33,27 @@ import { useLocation } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
 import { setMenuOpen } from "../../Redux/features/NavBar/MenuSlice";
 import { useSelector, useDispatch } from "react-redux";
+import { setIsDropdownOpen } from "../../Redux/features/NavBar/MenuSlice";
 const SideMenu = () => {
   // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const location = useLocation();
   const currentUrl = location.pathname;
   const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
+  const isDropdownOpen = useSelector((state) => state.NavBarToggle.isDropdownOpen);
   const [activeItem, setActiveItem] = useState(currentUrl);
   const [hoveredItem, setHoveredItem] = useState(null);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [currentDropDownItem, activeDropDownItem] = useState(null)
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const handleItemClick = (item) => {
     // console.log(item);
     setActiveItem(item.link);
     navigate(item.link);
-    setIsDropdownOpen(false);
+    // setIsDropdownOpen(false);
+    dispatch(setIsDropdownOpen(false));
   };
-
+  console.log("isDropdownOpen", isDropdownOpen);
   return (
     <>
       <div
@@ -177,14 +180,13 @@ const DropdownMenuItem = ({
 
   const [dropDownItem, setDropDownItem] = useState(null);
   const isTabletNav = useMediaQuery("(max-width:1024px)");
-  console.log("currentDropDownItem", currentDropDownItem)
   useEffect(() => {
-    isTabletNav && setIsDropdownOpen(false);
+    isTabletNav && dispatch(setIsDropdownOpen(false));
   }, [isTabletNav]);
 
   const handleToggleDropdownItems = (link, e) => {
     if (isTabletNav) {
-      setIsDropdownOpen(false);
+      dispatch(setIsDropdownOpen(false));
     }
     setActiveItem(link);
     setDropDownItem(link);
@@ -195,14 +197,14 @@ const DropdownMenuItem = ({
 
   const handleToggleSideBar = () => {
     dispatch(setMenuOpen(!isMenuOpenRedux));
-    setIsDropdownOpen(true);
+    dispatch(setIsDropdownOpen(true));
   };
 
   const HandleDropdownClick = (event,id) => {
     event.preventDefault();
-    console.log("id of item ",id , "item clicked id", item.id)
+
    
-    setIsDropdownOpen(!isDropdownOpen);
+    dispatch(setIsDropdownOpen(!isDropdownOpen));
     activeDropDownItem(id)
     // setIsMenuOpen(!isMenuOpen);
   };

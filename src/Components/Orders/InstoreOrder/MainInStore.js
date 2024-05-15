@@ -14,23 +14,23 @@ const MainInStore = () => {
   const [OnlSearchIdData, setOnlSearchIdData] = useState(null);
   const [OffSearchIdData, setOffSearchIdData] = useState(null);
   const [EmployeeIDData, setEmployeeIDData] = useState(null);
-
+  const [searchId, setSearchId] = useState("");
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const handleDateRangeChange = (dateRange) => {
-      setSelectedDateRange(dateRange);
+    setSelectedDateRange(dateRange);
   };
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
 
-  const handleFilterDataChange = (OrderSource , OrderType, SearchId) => {
+  const handleFilterDataChange = (OrderSource, OrderType, SearchId) => {
     setOrderSourceData(OrderSource);
     setOrderTypeData(OrderType);
     setOnlSearchIdData(SearchId);
   };
 
-  const handleFilterEmpDataChange = (OrderSource , EmployeeID, SearchId) => {
+  const handleFilterEmpDataChange = (OrderSource, EmployeeID, SearchId) => {
     setOrderSourceData(OrderSource);
     setEmployeeIDData(EmployeeID);
     setOffSearchIdData(SearchId);
@@ -40,16 +40,20 @@ const MainInStore = () => {
     if (activeTab === "online") {
       return (
         <>
-          <MainOnline 
-            onFilterDataChange={handleFilterDataChange} 
+          <MainOnline
+            onFilterDataChange={handleFilterDataChange}
+            searchId={searchId}
+            setSearchId={setSearchId}
           />
         </>
       );
     } else if (activeTab === "offline") {
       return (
         <>
-          <FilterEmp 
-            onFilterEmpDataChange={handleFilterEmpDataChange} 
+          <FilterEmp
+            onFilterEmpDataChange={handleFilterEmpDataChange}
+            searchId={searchId}
+            setSearchId={setSearchId}
           />
         </>
       );
@@ -61,23 +65,25 @@ const MainInStore = () => {
     <>
       <div className="q-order-main-page">
         <div className="box">
-          <div className="box_shadow_div_order" style={{overflow:"unset"}}>
+          <div className="box_shadow_div_order" style={{ overflow: "unset" }}>
             <div className="mb6_border">
               <div
                 onClick={() => handleTabClick("offline")}
-                className={`${activeTab === "offline"
-                  ? "bg-[#EBF2FF] text-[#0A64F9] font-circular-bold relative  cursor-pointer"
-                  : "bg-white text-[#6A6A6A]  cursor-pointer"
-                  } orderfilter`}
+                className={`${
+                  activeTab === "offline"
+                    ? "bg-[#EBF2FF] text-[#0A64F9] font-circular-bold relative  cursor-pointer"
+                    : "bg-white text-[#6A6A6A]  cursor-pointer"
+                } orderfilter`}
               >
                 In-Store Orders
               </div>
               <div
                 onClick={() => handleTabClick("online")}
-                className={`${activeTab === "online"
+                className={`${
+                  activeTab === "online"
                     ? "bg-[#EBF2FF] text-[#0A64F9]  font-circular-bold relative cursor-pointer"
                     : "bg-white text-[#6A6A6A] cursor-pointer"
-                  } orderfilter`}
+                } orderfilter`}
               >
                 Online Orders
               </div>
@@ -87,29 +93,31 @@ const MainInStore = () => {
               <div className="">{renderInStoreContent()}</div>
             </div>
           </div>
-          <div className="q_dateRange_header">
-            <DateRange 
-              onDateRangeChange={handleDateRangeChange}
-            />
-          </div>
-          <div className="q_dateRange_header">
-            <ContentList />
-          </div>
+          {!searchId && (
+            <>
+              <div className="q_dateRange_header">
+                <DateRange onDateRangeChange={handleDateRangeChange} />
+              </div>
+              <div className="q_dateRange_header">
+                <ContentList />
+              </div>
+            </>
+          )}
 
           <div className="q_dateRange_header">
             {activeTab === "offline" ? (
-              <InstoreTableViewData 
-                OrderSourceData={OrderSourceData} 
-                EmployeeIDData={EmployeeIDData} 
-                OffSearchIdData={OffSearchIdData} 
-                selectedDateRange={selectedDateRange} 
+              <InstoreTableViewData
+                OrderSourceData={OrderSourceData}
+                EmployeeIDData={EmployeeIDData}
+                OffSearchIdData={OffSearchIdData}
+                selectedDateRange={selectedDateRange}
               />
             ) : (
               <OnlineTableViewData
-                OrderSourceData={OrderSourceData} 
-                OrderTypeData={OrderTypeData} 
-                OnlSearchIdData={OnlSearchIdData} 
-                selectedDateRange={selectedDateRange} 
+                OrderSourceData={OrderSourceData}
+                OrderTypeData={OrderTypeData}
+                OnlSearchIdData={OnlSearchIdData}
+                selectedDateRange={selectedDateRange}
               />
             )}
           </div>

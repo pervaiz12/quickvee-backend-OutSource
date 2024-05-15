@@ -12,8 +12,14 @@ import { setMenuOpen } from "../../Redux/features/NavBar/MenuSlice";
 import Paper from '@mui/material/Paper';
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
+import { useLocation } from "react-router-dom";
+import { setIsDropdownOpen } from "../../Redux/features/NavBar/MenuSlice";
 export default function Header() {
+  const location = useLocation();
+  const currentUrl = location.pathname;
+  const [isSideBar,setIsSideBar] = useState(false);
   const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
+  const isDropdownOpen = useSelector((state) => state.NavBarToggle.isDropdownOpen);
   const [loginType, setLoginType] = useState("admin");
   const [showDropdown, setShowDropdown] = useState(false);
   const dispatch = useDispatch();
@@ -37,7 +43,13 @@ export default function Header() {
       setIsSticky(false);
     }
   };
-
+  useEffect(() => {
+    if (currentUrl.split('/')[1] === 'store-reporting') {
+      setIsSideBar(true);
+    } else {
+      setIsSideBar(false);
+    }
+  },[currentUrl]);
   useEffect(() => {
     window.addEventListener("scroll", handleScroll);
     return () => {
@@ -53,14 +65,18 @@ export default function Header() {
         }`}
       >
         <div className="flex items-center px-4 mx-2">
-          <BiMenu
+          {!isSideBar && (<>
+            <BiMenu
             className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out`}
             onClick={(e) => {
               // setIsMenuOpen(!isMenuOpen);
               dispatch(setMenuOpen(!isMenuOpenRedux));
+              dispatch(setIsDropdownOpen(false));
             }}
           />
-          <a href="/dashboard">
+          </>)}
+         
+          <a href="/">
             <img src={Quick} alt="Logo" className="ml-6" />
           </a>
           {loginType === "admin" && (

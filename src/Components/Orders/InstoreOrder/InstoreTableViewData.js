@@ -14,6 +14,7 @@ const InstoreTableViewData = (props, searchId) => {
   // console.log(props)
   const [currentPage, setCurrentPage] = useState(1);
   const [inStoreOrder, setAllInStoreOrders] = useState([]);
+  console.log("inStoreOrder ",inStoreOrder)
   const AllInStoreDataState = useSelector((state) => state.inStoreOrder);
   const [selectedValue, setSelectedValue] = useState(1);
   const dispatch = useDispatch();

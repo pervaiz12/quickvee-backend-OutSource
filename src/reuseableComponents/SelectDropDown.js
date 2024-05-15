@@ -29,7 +29,7 @@ const SelectDropDown = ({
   dropdownFor,
   title
 }) => {
-  console.log("selectedOption ", selectedOption);
+
   return (
     <>
       <FormControl fullWidth>
