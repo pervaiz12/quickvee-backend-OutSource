@@ -89,22 +89,22 @@ const DateRange = ({ onDateRangeChange }) => {
     setDatesBasedOnOption(activeOption);
   }, [activeOption]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsTablet(window.innerWidth <= 995); // Assuming tablet width as 768px
-    };
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setIsTablet(window.innerWidth <= 995); // Assuming tablet width as 768px
+  //   };
 
-    // Initial check
-    handleResize();
+  //   // Initial check
+  //   handleResize();
 
-    // Event listener for window resize
-    window.addEventListener("resize", handleResize);
+  //   // Event listener for window resize
+  //   window.addEventListener("resize", handleResize);
 
-    // Cleanup
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
+  //   // Cleanup
+  //   return () => {
+  //     window.removeEventListener("resize", handleResize);
+  //   };
+  // }, []);
 
   return (
     <>

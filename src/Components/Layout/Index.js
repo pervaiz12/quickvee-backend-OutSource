@@ -20,8 +20,7 @@ const Index = ({ visible }) => {
   }, [isTabletNav]);
 
   const onClickHandler = () => {
-    isTabletNav && dispatch(setMenuOpen(false));
-    dispatch(setIsDropdownOpen(false));
+    isTabletNav && dispatch(setMenuOpen(false)) && dispatch(setIsDropdownOpen(false));
   };
   return (
     <>
