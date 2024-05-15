@@ -68,9 +68,7 @@ import AddPo from "../PurchaseOrders/AddPo";
 import EditCoupon from "../Coupons/EditCoupon";
 import StorePage from "../Store/MerchantStore";
 import ManagerStore from "../Store/ManagerStore";
-
 const LeftSide = ({ visible }) => {
-
   useEffect(() => {
     // console.log("hello")
     return () => {
@@ -81,8 +79,12 @@ const LeftSide = ({ visible }) => {
 
   return (
     <>
-      <div className="w-full">
-        <div className="">
+      <div className="w-full"
+        
+      >
+        <div className=""
+       
+        >
           {visible === "dashboard" && <DashboardMain />}
           {visible === "order" && <MainOrder />}
           {visible === "category" && <MainCategory />}

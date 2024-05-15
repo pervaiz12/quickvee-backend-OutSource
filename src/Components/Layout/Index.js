@@ -7,7 +7,7 @@ import Header from "./Header";
 import LeftSide from "./LeftSide";
 import React from "react";
 import { useMediaQuery } from "@mui/material";
-
+import { setIsDropdownOpen } from "../../Redux/features/NavBar/MenuSlice";
 const Index = ({ visible }) => {
   const dispatch = useDispatch();
   const isTabletNav = useMediaQuery("(max-width:1024px)");
@@ -21,6 +21,9 @@ const Index = ({ visible }) => {
     }
   }, [isTabletNav]);
 
+  const onClickHandler = () => {
+    isTabletNav && dispatch(setMenuOpen(false));
+  }
   return (
     <>
       <div className="bg-[#F9F9F9] main-page-home-dashboard">
@@ -43,6 +46,7 @@ const Index = ({ visible }) => {
                     paddingRight: "1rem",
                   }
             }
+            onClick={()=> onClickHandler()}
           >
             <Outlet />
             <LeftSide visible={visible} />
