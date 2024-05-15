@@ -1,8 +1,4 @@
 import React, { useState, useEffect, useRef } from "react";
-
-import DownIcon from "../../../Assests/Dashboard/Down.svg";
-import UpArrow from "../../../Assests/Dashboard/Up.svg";
-import SearchBar from "../SearchBar";
 import { Grid, TextField } from "@mui/material";
 import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
@@ -152,7 +148,7 @@ const MainOnline = ({ onFilterDataChange ,searchId,setSearchId}) => {
                 </Grid>
               </Grid>
               <Grid container spacing={2}>
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={4}>
                   <label htmlFor="transactionFilter">Transactions</label>
                   <SelectDropDown
                     heading={""}
@@ -163,7 +159,7 @@ const MainOnline = ({ onFilterDataChange ,searchId,setSearchId}) => {
                     dropdownFor={"transaction"}
                   />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={4}>
                   <label htmlFor="orderStatusFilter">Order Status</label>
                   <SelectDropDown
                     heading={""}

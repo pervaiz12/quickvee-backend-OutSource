@@ -90,7 +90,7 @@ const InstoreTableViewData = (props, searchId) => {
       ],
       destroy: true,
       searching: true,
-      dom: "<'row 'l<'col-sm-12'b>><'row'<'col-sm-7 mt-5'p><'col-sm-5'>>",
+      dom: "<'row'l<'col-sm-12'b>><'row'<'col-sm-12 mt-2'p><'col-sm-12'>>",
       lengthMenu: [ 10, 20, 50],
       lengthChange: true,
       ordering: false,

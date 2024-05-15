@@ -106,7 +106,7 @@ function App() {
     }
   }, [isTabletNav]);
   useEffect(() => {
-    if (currentUrl.split('/')[1] === 'store-reporting') {
+    if (currentUrl.split('/')[2] === 'order-summary') {
       setIsSideBar(true);
     } else {
       setIsSideBar(false);

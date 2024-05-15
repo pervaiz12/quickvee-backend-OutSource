@@ -1,40 +1,27 @@
 import React, { useState, useEffect, useRef } from "react";
-import DownIcon from "../../../Assests/Dashboard/Down.svg";
-
-import UpArrow from "../../../Assests/Dashboard/Up.svg";
 import { BASE_URL, EMPLOYEE_LIST } from "../../../Constants/Config";
 import axios from "axios";
-
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
-import Container from "react-bootstrap/Container";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import { Grid } from "@mui/material";
 
-import $ from "jquery";
-import SearchBar from "../SearchBar";
+const transactionsList = [
+  {
+    title: "Both",
+  },
+  {
+    title: "Cash",
+  },
+  {
+    title: "Online",
+  },
+];
 
 const FilterEmp = ({ onFilterEmpDataChange, searchId, setSearchId }) => {
-  const transactionsList = [
-    {
-      title: "Both",
-    },
-    {
-      title: "Cash",
-    },
-    {
-      title: "Online",
-    },
-  ];
+
 
   const [selected, setSelected] = useState(false);
-
-  const [isTablet, setIsTablet] = useState(false);
-  //const [selectedEmployee, setSelectedEmployee] = useState("All");
-
   const [selectedEmployee, setSelectedEmployee] = useState("All");
-  // console.log("Selected employee", selectedEmployee);
   const [selectedEmployeeID, setSelectedEmployeeID] = useState("All");
   const [filteredData, setFilteredData] = useState({ emp_id: "all" });
 
@@ -184,20 +171,6 @@ const FilterEmp = ({ onFilterEmpDataChange, searchId, setSearchId }) => {
     onFilterEmpDataChange(selectedTransaction, selectedEmployeeID, searchId);
   }, [selectedTransaction, selectedEmployeeID, searchId]);
 
-  useEffect(() => {
-    const handleResize = () => {
-      setIsTablet(window.innerWidth <= 995);
-    };
-
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
   return (
     <>
       <Grid container className="px-5">
@@ -221,7 +194,7 @@ const FilterEmp = ({ onFilterEmpDataChange, searchId, setSearchId }) => {
                 </Grid>
               </Grid>
               <Grid container spacing={2} className="">
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={4}>
                   <label>Employee</label>
                   <SelectDropDown
                     heading={"All"}
@@ -232,7 +205,7 @@ const FilterEmp = ({ onFilterEmpDataChange, searchId, setSearchId }) => {
                     title={"title"}
                   />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={4}>
                   <label htmlFor="transactionFilter">Transactions</label>
                   <SelectDropDown
                     listItem={transactionsList}
