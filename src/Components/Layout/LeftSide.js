@@ -1,4 +1,3 @@
-
 import React from "react";
 
 import DashboardMain from "../Dashboard/DashboardMain";
@@ -58,7 +57,7 @@ import OrderRefundReportMain from "../Reporting/OrderRefundReport/OrderRefundRep
 import ReorderInventoryMain from "../Reporting/ReorderInventory/ReorderInventoryMain";
 import EditVendors from "../Vendors/EditVendors";
 import SingleVendorsDetail from "../Vendors/SingleVendorsDetail";
-import AddProducts from "../Products/AddProducts"
+import AddProducts from "../Products/AddProducts";
 import MainLoayalty from "../LoyaltyProgram/MainLoayalty";
 import MainEmployeelist from "../Reporting/Employelist/MainEmployeelist";
 import AddPo from "../PurchaseOrders/AddPo";
@@ -70,21 +69,13 @@ import StorePage from "../Store/MerchantStore";
 import ManagerStore from "../Store/ManagerStore";
 const LeftSide = ({ visible }) => {
   useEffect(() => {
-    // console.log("hello")
-    return () => {
-
-    }
-  },)
-
+    window.scrollTo(0, 0);
+  });
 
   return (
     <>
-      <div className="w-full"
-        
-      >
-        <div className=""
-       
-        >
+      <div className="w-full">
+        <div className="">
           {visible === "dashboard" && <DashboardMain />}
           {visible === "order" && <MainOrder />}
           {visible === "category" && <MainCategory />}
@@ -142,26 +133,16 @@ const LeftSide = ({ visible }) => {
           {visible === "vendor-details" && <SingleVendorsDetail />}
           {visible === "loyalty-program" && <MainLoayalty />}
 
-
-
           {/* {visible === "order-summary" && <OrderSummeryPage />} */}
-
-
 
           {visible === "recorder-inventory" && <ReorderInventoryMain />}
 
           {visible === "vendors-sales-reports" && <VendorSalesReportMain />}
           {visible === "order-refund-report" && <OrderRefundReportMain />}
-
-
-
         </div>
       </div>
     </>
   );
 };
 
-
 export default LeftSide;
-
-
