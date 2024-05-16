@@ -11,7 +11,7 @@ const MainTimesheet = () => {
   const handleDataFiltered = (data) => {
     const updatedData = {
         ...data,
-        merchant_id: "MAL0100CA",
+        merchant_id:"MAL0100CA",
         employee_id:selectedEmployeeID,
       };
       setFilteredData(updatedData);
@@ -31,7 +31,7 @@ const MainTimesheet = () => {
           
         </div>
       <div className='q-category-main-page'>
-        <TimesheetListing data={filteredData}/>
+        <TimesheetListing data={filteredData} />
 
       </div>
    

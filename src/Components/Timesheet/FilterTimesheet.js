@@ -47,9 +47,9 @@ const FilterTimesheet = ({ onClickHandler, listItem, selectedEmployeeID,setSelec
     
         switch (dropdown) {
           case "employee":
-            if (option === "all") {
+            if (option === "All") {
               console.log("handleOptionClick ", option);
-              setSelectedEmployee("all");
+              setSelectedEmployee("All");
               setSelectedEmployeeID("all");
               setEmployeeDropdownVisible(false);
               setFilteredData({

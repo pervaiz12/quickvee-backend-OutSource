@@ -1,12 +1,4 @@
 import React, { useEffect, useState } from "react";
-import DraggableTable from '../../reuseableComponents/DraggableTable';
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import { useSelector, useDispatch } from "react-redux";
 import dayjs, { Dayjs } from "dayjs";
 import AddIcon from "../../Assests/Category/addIcon.svg";
@@ -25,14 +17,15 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
 import { Box, Modal } from "@mui/material";
 import { fetchtimeSheetData } from "../../Redux/features/Timesheet/timesheetSlice";
+import axios from "axios";
+import { BASE_URL, EMPLOYEE_LIST } from '../../Constants/Config';
 
 const TimesheetListing = ({ data }) => {
 
   const dispatch = useDispatch();
-
   const [timesheet, settimesheet] = useState([]);
-
-
+  const [employeeList, setemployeeList] = useState([]);
+  const [EmployeeName, setEmployeeName] = useState(""); 
   const timeSheetDataState = useSelector((state) => state.timeSheet);
 
   useEffect(() => {
@@ -49,12 +42,31 @@ const TimesheetListing = ({ data }) => {
     timeSheetDataState.timeSheetData,
   ]);
 
-  // if (!data || data.length === 0) {
-  //   return <div className="empty-div box">No data available</div>;
-  // }
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.post(
+          BASE_URL + EMPLOYEE_LIST,
+          { merchant_id: "MAL0100CA" },
+          { headers: { "Content-Type": "multipart/form-data" } }
+        );
+
+        const EmpList = response.data.result;
+
+        const mappedOptions = EmpList.map((empdata) => ({
+          id: empdata.id,
+          title: empdata.f_name + " " + empdata.l_name,
+        }));
+        setemployeeList(mappedOptions);
+
+      } catch (error) {
+        console.error("Error fetching Employee List:", error);
+      }
+    };
+    fetchData();
+  }, []);
   
 
-  console.log("timesheet",data)
 
   const [showModal, setShowModal] = useState(false);
   const handleOpen = () => setShowModal(true);
@@ -69,7 +81,8 @@ const TimesheetListing = ({ data }) => {
     fontFamily: "'CircularSTDMedium', sans-serif !important",
   };
 
-  const openModal = () => {
+  const openModal = (title) => {
+    setEmployeeName(title)
     setShowModal(true);
   };
 
@@ -79,17 +92,22 @@ const TimesheetListing = ({ data }) => {
 
   const [dateStartError, setDateStartError] = useState("");
   const [dateEndError, setDateEndError] = useState("");
+  const [dateStartTimeError, setDateStartTimeError] = useState("");
+  const [dateEndTimeError, setDateEndTimeError] = useState("");
 
   const minutes = Math.round(dayjs().minute() / 15) * 15;
   const roundedTime = dayjs().minute(minutes).second(0);
-  console.log(roundedTime);
+  // console.log(roundedTime);
 
   const [addtimebreak, setTimeBreak] = useState({
     merchant_id: "MAL0100CA",
     add_in_date: "",
     add_out_date: "",
-    add_clocked_in: dayjs().format("HH:mm:ss"),
-    add_clocked_out: dayjs().format("HH:mm:ss"),
+    add_clocked_in: "",
+    add_clocked_out: "",
+
+    // add_clocked_in: dayjs().format("HH:mm:ss"),
+    // add_clocked_out: dayjs().format("HH:mm:ss"),
 
     // time_valid: roundedTime.format("HH:mm:ss"),
     // time_expire: roundedTime.format("HH:mm:ss"),
@@ -110,20 +128,13 @@ const TimesheetListing = ({ data }) => {
 
   const handleStartDateChange = (newDate) => {
     const formattedStartDate = newDate.format("YYYY-MM-DD");
-    if (formattedStartDate === addtimebreak.add_out_date) {
-      alert("Start date cannot be the same as the end date");
-      setTimeBreak({
-        ...addtimebreak,
-        add_in_date: null,
-      });
-      setDateStartError("Start Date is required");
-    } else if (dayjs(formattedStartDate).isAfter(dayjs(addtimebreak.add_out_date))) {
+    if (dayjs(formattedStartDate).isAfter(dayjs(addtimebreak.add_out_date))) {
       alert("Start date cannot be greater than the end date");
       setTimeBreak({
         ...addtimebreak,
         add_in_date: null,
       });
-      setDateStartError("Start Date is required");
+      setDateStartError("Select In Date is required");
     } else {
       setTimeBreak({
         ...addtimebreak,
@@ -137,21 +148,14 @@ const TimesheetListing = ({ data }) => {
   const handleEndDateChange = (newDate) => {
     const formattedEndDate = newDate.format("YYYY-MM-DD");
 
-    if (formattedEndDate === addtimebreak.add_in_date) {
-      alert("End date cannot be the same as the start date");
-      setTimeBreak({
-        ...addtimebreak,
-        add_out_date: null,
-      });
-      setDateEndError("End Date is required");
-      // return; // Do not update the state
-    } else if (dayjs(formattedEndDate).isBefore(dayjs(addtimebreak.add_in_date))) {
+    if (dayjs(formattedEndDate).isBefore(dayjs(addtimebreak.add_in_date))){
       alert("End date cannot be less than the start date");
       setTimeBreak({
         ...addtimebreak,
         add_out_date: null,
       });
-      setDateEndError("End Date is required");
+      setDateEndError("Select Out Date is required");
+      // return; // Do not update the state
     } else {
       setTimeBreak({
         ...addtimebreak,
@@ -161,6 +165,11 @@ const TimesheetListing = ({ data }) => {
     }
   };
 
+  const handleSave = async (e) => {
+    e.preventDefault();
+    console.log("Add ")
+
+  }
 
 
   // for Break Modal start
@@ -169,8 +178,9 @@ const TimesheetListing = ({ data }) => {
   const handleCloseBreak = () => setShowModalBreak(false);
 
 
-  const openModalBreak = () => {
-    setShowModal(true);
+  const openModalBreak = (title) => {
+    setEmployeeName(title)
+    setShowModalBreak(true);
   };
 
   const closeModalBreak = () => {
@@ -184,8 +194,8 @@ const TimesheetListing = ({ data }) => {
   const handleOpenViewBreak = () => setShowModalViewBreak(true);
   const handleCloseViewBreak = () => setShowModalViewBreak(false);
 
-
-  const openModalViewBreak = () => {
+  const openModalViewBreak = (title) => {
+    setEmployeeName(title)
     setShowModalViewBreak(true);
   };
 
@@ -193,51 +203,116 @@ const TimesheetListing = ({ data }) => {
     setShowModalViewBreak(false);
   };
 
-
   // for All View Break IN/Out End
 
-  return (
-   <>
-        <div className="box" >
-          <div className="q-attributes-bottom-detail-section ">
-            <div className="mt-6 ">
-              <div className="q-attributes-bottom-header bg-[#ffffff] ">
-                <span>Kalpesh</span>
-                <p onClick={openModal} > Add Clock-in/ClocK-out<img src={AddIcon} alt="add-icon" />{" "}</p>
+
+  const renderDataTable = () => {
+    if ( timesheet && timesheet.status === false ){
+      return <div className="empty-div box"></div>;
+    }
+    
+    // const renderEmployeeData = (employee) => (
+    //   <div className="box" key={employee.id}>
+    //     <div className="q-attributes-bottom-detail-section">
+    //       <div className="mt-6">
+    //         <div className="q-attributes-bottom-header bg-[#ffffff]">
+    //           <span>{employee.title}</span>
+    //           <p onClick={() => openModal(employee.title)}> Add Clock-in/Clock-out<img src={AddIcon} alt="add-icon" />{" "}</p>
+    //         </div>
+    //         <div className="q-attributes-bottom-attriButes-header">
+    //           <p className="q-catereport-item">Date Worked</p>
+    //           <p className="q-catereport-item ">Wage Rate</p>
+    //           <p className="q-catereport-item">Clock In</p>
+    //           <p className="q-catereport-item">Clock Out</p>
+    //           <p className="q-catereport-item"></p>
+    //         </div>
+    //         <div className="q-attributes-bottom-attriButes-listing">
+    //           <div className="q-attributes-bottom-attriButes-single-attributes TimesheetRow cursor-pointer" onClick={() => openModalViewBreak(employee.title)}>
+    //             <p className="q-catereport-item">05/10/2023</p>
+    //             <p className="q-catereport-item">$60</p>
+    //             <p className="q-catereport-item">9:50 AM</p>
+    //             <p className="q-catereport-item">11:00 PM</p>
+    //             <p className="q-catereport-item">
+    //               <div className="q-attributes-bottom-header timesheet bg-[#ffffff]">
+    //                 <p onClick={(e) => {
+    //                   openModalBreak(employee.title);
+    //                   e.stopPropagation();
+    //                 }}>
+    //                   Add Break<img src={AddIcon} alt="add-icon" />{" "}
+    //                 </p>
+    //               </div>
+    //             </p>
+    //           </div>
+    //         </div>
+    //       </div>
+    //     </div>
+    //   </div>
+    // );
+
+    const renderEmployeeData = (employee,index) => {
+      return (
+        <div className="box" key={index}>
+          <div className="q-attributes-bottom-detail-section">
+            <div className="mt-6">
+              <div className="q-attributes-bottom-header bg-[#ffffff]">
+                <span>{employee.title}</span>
+                <p onClick={() => openModal(employee.title)}> Add Clock-in/Clock-out<img src={AddIcon} alt="add-icon" />{" "}</p>
               </div>
               <div className="q-attributes-bottom-attriButes-header">
                 <p className="q-catereport-item">Date Worked</p>
-                <p className="q-catereport-item ">Wage Rate</p>
-                <p className="q-catereport-item" >Clock In</p>
-                <p className="q-catereport-item" >Clock Out</p>
-                <p className="q-catereport-item" ></p>
+                <p className="q-catereport-item">Wage Rate</p>
+                <p className="q-catereport-item">Clock In</p>
+                <p className="q-catereport-item">Clock Out</p>
+                <p className="q-catereport-item"></p>
               </div>
-                <div  className="q-attributes-bottom-attriButes-listing" >
-                  <div className="q-attributes-bottom-attriButes-single-attributes TimesheetRow cursor-pointer" onClick={openModalViewBreak} >
-                    <p className="q-catereport-item">05/10/2023</p>
-                    <p className="q-catereport-item">$60</p>
-                    <p className="q-catereport-item ">9:50 AM</p>
-                    <p className="q-catereport-item">11:00 PM</p>
-                    <p  className="q-catereport-item ">
-                      <div className="q-attributes-bottom-header timesheet bg-[#ffffff] ">
-                        <p onClick={(e) => {
-                          handleOpenBreak();
-                          e.stopPropagation();
-                        }}
-                        > Add Break<img src={AddIcon} alt="add-icon" />{" "}</p>
-                      </div>
-                    </p>
-                  </div>
+              <div className="q-attributes-bottom-attriButes-listing">
+                <div className="q-attributes-bottom-attriButes-single-attributes TimesheetRow cursor-pointer" onClick={() => openModalViewBreak(employee.title)}>
+                  <p className="q-catereport-item">05/10/2023</p>
+                  <p className="q-catereport-item">$60</p>
+                  <p className="q-catereport-item">9:50 AM</p>
+                  <p className="q-catereport-item">11:00 PM</p>
+                  <p className="q-catereport-item">
+                    <div className="q-attributes-bottom-header timesheet bg-[#ffffff]">
+                      <p onClick={(e) => {
+                        openModalBreak(employee.title);
+                        e.stopPropagation();
+                      }}>
+                        Add Break<img src={AddIcon} alt="add-icon" />{" "}
+                      </p>
+                    </div>
+                  </p>
                 </div>
-
-             
+              </div>
             </div>
           </div>
         </div>
+      );
+    };
 
 
+    if (!timesheet || data.employee_id === "all") {
+      return employeeList.map(renderEmployeeData);
+    }
+    const selectedEmployee = employeeList.find((employee) => employee.id === data.employee_id);
+    // console.log("jxdzbv",selectedEmployee?.title+'_'+selectedEmployee?.id)
+    if (selectedEmployee) {
+      const name = selectedEmployee?.title+'_'+selectedEmployee.id
+      const matchingData = timesheet.data.find((item) => item.key == name);
+      if (matchingData) {
+        console.log("Matching data:", matchingData);
+        // Do something with the matching data
+      } else {
+        console.log("No matching data found for", name);
+      }
+
+      return renderEmployeeData(selectedEmployee);
+    }
+  };
+
+  return <>
+  {renderDataTable()}
+  
         {/* Modal for Add Clock-in/ClocK-out start  */}
-
         <Modal
           open={showModal}
           onClose={handleClose}
@@ -252,7 +327,7 @@ const TimesheetListing = ({ data }) => {
                   alt="Timesheet"
                   className="w-6 h-6"
                 />
-                <span>Kalpesh</span>
+                <span>{EmployeeName}</span>
               </span>
               <p className="viewTextBark">Clock-in/Clock-out</p>
             </div>
@@ -280,7 +355,7 @@ const TimesheetListing = ({ data }) => {
                                 disablePast
                                 views={["year", "month", "day"]}
                                 slotProps={{
-                                  textField: { placeholder: "Start Date" },
+                                  textField: { placeholder: "Select Date" },
                                 }}
                                 components={{
                                   OpenPickerIcon: () => (
@@ -291,7 +366,7 @@ const TimesheetListing = ({ data }) => {
                               />
                             </LocalizationProvider>
                             {dateStartError && (
-                              <p className="error-message date_error">
+                              <p className="error-message ">
                                 {dateStartError}
                               </p>
                             )}
@@ -304,8 +379,11 @@ const TimesheetListing = ({ data }) => {
                                   name="clock_in"
                                   id="clock_in"
                                   slotProps={{
-                                    textField: { placeholder: "Start Time" },
+                                    textField: { placeholder: "Select Time" },
                                   }}
+                                  onChange={(newTime) =>
+                                    handleStartTimeChange(newTime)
+                                  }
                                   components={{
                                     OpenPickerIcon: () => (
                                       <img src={TimeIcon} alt="time-icon" />
@@ -314,6 +392,12 @@ const TimesheetListing = ({ data }) => {
                                   sx={{ width: '100%' }}
                                 />
                           </LocalizationProvider>
+
+                          {dateStartTimeError && (
+                                <p className="error-message ">
+                                  {dateStartTimeError}
+                                </p>
+                              )}
                       </Grid>
                      
                     </Grid>
@@ -327,7 +411,7 @@ const TimesheetListing = ({ data }) => {
                               <label htmlFor=" " className="pb-1">Select Out Date*</label>
                               <DatePicker
                                 onChange={(newDate) =>
-                                  handleStartDateChange(newDate)
+                                  handleEndDateChange(newDate)
                                 }
                                 size="medium"
                                 shouldDisableDate={(date) =>
@@ -338,7 +422,7 @@ const TimesheetListing = ({ data }) => {
                                 disablePast
                                 views={["year", "month", "day"]}
                                 slotProps={{
-                                  textField: { placeholder: "Start Date" },
+                                  textField: { placeholder: "Select Date" },
                                 }}
                                 components={{
                                   OpenPickerIcon: () => (
@@ -349,7 +433,7 @@ const TimesheetListing = ({ data }) => {
                               />
                             </LocalizationProvider>
                             {dateEndError && (
-                                <p className="error-message date_error">
+                                <p className="error-message ">
                                   {dateEndError}
                                 </p>
                               )}
@@ -362,8 +446,11 @@ const TimesheetListing = ({ data }) => {
                                   name="break_in"
                                   id="break_in"
                                   slotProps={{
-                                    textField: { placeholder: "Start Time" },
+                                    textField: { placeholder: "Select Time" },
                                   }}
+                                  onChange={(newTime) =>
+                                    handleEndTimeChange(newTime)
+                                  }
                                   components={{
                                     OpenPickerIcon: () => (
                                       <img src={TimeIcon} alt="time-icon" />
@@ -372,24 +459,22 @@ const TimesheetListing = ({ data }) => {
                                   sx={{ width: '100%' }}
                                 />
                           </LocalizationProvider>
+                          {dateEndTimeError && (
+                                <p className="error-message ">
+                                  {dateEndTimeError} 
+                                </p>
+                              )}
                       </Grid>
-                     
                     </Grid>
-
-                 
-                  <span className="input-error">
-                    
-                  </span>
                 </div>
             </div>
 
             <div className="q-add-categories-section-middle-footer">
-                  <button  className="quic-btn quic-btn-save" >Add</button>
+                  <button  className="quic-btn quic-btn-save" onClick={handleSave}>Add</button>
                   <button onClick={closeModal} className="quic-btn quic-btn-cancle">Cancel</button>
             </div>
           </Box>
         </Modal>
-
         {/* Modal for Add Clock-in/ClocK-out End  */}
 
         {/* Modal for Break In /Out Start  */}
@@ -408,7 +493,7 @@ const TimesheetListing = ({ data }) => {
                   alt="Timesheet"
                   className="w-6 h-6"
                 />
-                <span>Kalpesh</span>
+                <span>{EmployeeName}</span>
               </span>
               <div className="viewTextBark">
               <span className="borderRight ">05/10/2023</span> <span className="pl-1"> Break-in/Break-out</span>
@@ -469,8 +554,6 @@ const TimesheetListing = ({ data }) => {
 
         {/* Modal for Break In /Out End */}
 
-
-
         {/* Modal for All View Break IN/Out Start  */}
         <Modal
         open={showModalViewBreak}
@@ -487,7 +570,7 @@ const TimesheetListing = ({ data }) => {
                   alt="Timesheet"
                   className="w-6 h-6"
                 />
-                <span>Kalpesh</span>
+                <span>{EmployeeName}</span>
               </span>
               <p className="pr-1"><img src={DeleteIcon} alt="delete-icon" className="cursor-pointer" /></p>
             </div>
@@ -527,45 +610,8 @@ const TimesheetListing = ({ data }) => {
           </Box>
         </Modal>
         {/* Modal for All View Break IN/Out End */}
-
-   </>
-  )
+  
+  </>;
 }
 
 export default TimesheetListing
-
-
-// import React from 'react';
-// import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-
-// const TimesheetListing = ({ tableHead, tableRow }) => {
-//     return (
-//         <TableContainer component={Paper}>
-//             <Table sx={{ minWidth: 500 }}>
-//                 <TableHead>
-//                     <TableRow>
-//                         {/* Render table headers */}
-//                         {tableHead.map((header, index) => (
-//                             <TableCell key={index}>{header}</TableCell>
-//                         ))}
-//                     </TableRow>
-//                 </TableHead>
-//                 <TableBody>
-//                     {/* Render table rows */}
-//                     {tableRow.map((row, rowIndex) => (
-//                         <TableRow key={rowIndex}>
-//                             {tableHead.map((header, headerIndex) => (
-//                                 <TableCell key={headerIndex}>
-//                                     {/* Render row data based on header */}
-//                                     {row[header.toLowerCase()] || ''}
-//                                 </TableCell>
-//                             ))}
-//                         </TableRow>
-//                     ))}
-//                 </TableBody>
-//             </Table>
-//         </TableContainer>
-//     );
-// };
-
-// export default TimesheetListing;

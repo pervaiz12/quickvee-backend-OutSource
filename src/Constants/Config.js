@@ -291,6 +291,11 @@ module.exports = Object.freeze({
   LOGIN_OTP_SUBMIT_AUTHENTICATION:"LoginApiReact/create_session",//
 
 
+
+  // For TimeSheet 
+  TIME_SHEET_LIST: "Timesheet_react_api/timesheet_list",
+
+
 });
 
 

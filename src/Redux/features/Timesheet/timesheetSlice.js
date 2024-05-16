@@ -1,7 +1,7 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
-import { BASE_URL, } from "../../../Constants/Config"
+import { BASE_URL, TIME_SHEET_LIST } from "../../../Constants/Config"
 
 
 const initialState = {
@@ -15,11 +15,10 @@ const initialState = {
 // Generate pening , fulfilled and rejected action type
 export const fetchtimeSheetData = createAsyncThunk('timeSheet/fetchtimeSheetData.', async (data) => {
     try {
-        const response = await axios.post(BASE_URL + "LIST_TIMESHEET", data, { headers: { "Content-Type": "multipart/form-data" } })
-        if (response.data.status === "Success") {
-
-           return response.data.result
-        }else if(response.data.status === "Failed" && response.data.msg === "No. Data found."){
+        const response = await axios.post(BASE_URL + TIME_SHEET_LIST , data, { headers: { "Content-Type": "multipart/form-data" } })
+        if (response.data.status === true) {
+           return response.data
+        }else if(response.data.status === false ){
             return response.data
         }
     } catch (error) {
