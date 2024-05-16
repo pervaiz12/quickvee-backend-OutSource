@@ -225,7 +225,7 @@ const DropdownMenuItem = ({
       >
         <div className="flex">
           {isMenuOpenRedux ? (
-            <div className="w-full flex items-center ">
+            <div className="w-full flex items-center cursor-pointer">
               {activeItem === dropDownItem || hoveredItem === item.id
                 ? item.activeIcon
                 : item.icon}

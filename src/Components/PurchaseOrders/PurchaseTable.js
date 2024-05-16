@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor:"#253338",
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
@@ -87,7 +87,7 @@ const PurchaseTable = ({ seVisible, searchId }) => {
             </Link>
           </div>
           <TableContainer component={Paper}>
-            <Table sx={{ minWidth: 700 }} aria-label="customized table">
+            <Table aria-label="customized table">
               <TableHead>
                 <TableRow>
                   {tableRow.map((item, index) => (
@@ -169,7 +169,7 @@ const PurchaseTable = ({ seVisible, searchId }) => {
                       </StyledTableCell>
                       <StyledTableCell align="">
                         <div className="flex justify-center">
-                          <p className="  purchaseData">
+                          <p className="  purchaseData text-center">
                             {purchaseData.vendor_name}
                           </p>
                         </div>
