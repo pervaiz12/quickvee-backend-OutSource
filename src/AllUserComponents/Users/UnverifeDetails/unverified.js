@@ -1,10 +1,34 @@
 import React,{useEffect,useState} from 'react'
-import{getUnVerifiedMerchant} from '../../../Redux/features/user/unverifiedMerchantSlice'
+import{getUnVerifiedMerchant,handleMoveDash} from '../../../Redux/features/user/unverifiedMerchantSlice'
+import {getAuthInvalidMessage} from '../../../Redux/features/Authentication/loginSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import{Link,useNavigate} from "react-router-dom"
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
+import Cookies from 'js-cookie'; 
+import CryptoJS from 'crypto-js'; 
 export default function Unverified() {
   const dispatch = useDispatch()
   const navigate = useNavigate();
+  let LoginGetDashBoardRecord=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.StoreUserDashboardRecord, 'secret key').toString(CryptoJS.enc.Utf8));
+  let AuthDecryptDataDashBoardJSONFormat=LoginGetDashBoardRecord !==""? JSON.parse(LoginGetDashBoardRecord):""
+  const AdminRocordNew=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.getUserRecord, 'secret key').toString(CryptoJS.enc.Utf8));
+  let LoginAllStore=AdminRocordNew !==""? JSON.parse(AdminRocordNew):""
+  // ===================
+  // --------------------------------------------------------------------------------------------------------------
+  console.log(AuthDecryptDataDashBoardJSONFormat)
+  // console.log(AuthDecryptDataDashBoardJSONFormat)
+  console.log(LoginAllStore)
+  // console.log(LoginSuccessJson)
+
+   const merchant_id=AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id
+   const token_id=AuthDecryptDataDashBoardJSONFormat?.token_id
+   const login_type=AuthDecryptDataDashBoardJSONFormat?.login_type
+   const token= AuthDecryptDataDashBoardJSONFormat?.token
+
+  // =======================
   const UnVerifiedMerchantList = useSelector(
     (state) =>state.unverifiedMerchantRecord.unverifiedMerchantData,
   );
@@ -15,6 +39,7 @@ export default function Unverified() {
   },[])
    // ====================================
    const [searchRecord,setSearchRecord]=useState('')
+
 
    const handleSearchInputChange=(e)=>{
      setSearchRecord(e.target.value)
@@ -35,6 +60,38 @@ export default function Unverified() {
       // Navigate to the editMerchant route and pass 'result' as state
       navigate(`/users/editMerchant/${data}`);
     };
+    const handleGetVerifiedMerchant=(merchant_id)=>{
+      let data = {
+        merchant_id: merchant_id,
+        token_id:token_id,
+        login_type:login_type,
+        token:token
+      };
+      // const formdata = new FormData();
+   
+      dispatch(handleMoveDash(data)).then(result=>{
+        // console.log(result?.payload)
+        if(result?.payload?.status==true)
+          {
+            
+            if(result?.payload?.final_login==1)
+              {
+                navigate(`/`)
+              }else{
+                console.log("store page called")
+              }
+     
+          }else{
+            console.log("hhhhhh")
+              Cookies.remove('loginDetails');
+              Cookies.remove('user_auth_record');
+              // Cookies.remove('token_data');
+              dispatch(getAuthInvalidMessage(result?.payload?.msg))
+              navigate('/login')
+    
+          }
+    })
+  }
   
     //  ====================================
   return (
@@ -91,10 +148,30 @@ export default function Unverified() {
                     {/* <p className='table5'>{result.phone}</p> */}
                     <p className='table10'>{result.merchant_id}</p>
                     <p className='table5'>{result.ver_code}</p>
-                    <div className='table10'><div className='verifiedTableIcon'><div 
+                    <div className='table10'><div className='verifiedTableIcon'>
+                      {/* <div 
                     // to={`/users/editMerchant/${result.id}`}
                     onClick={()=>handleEditMerchant(result.id)}
-                    ><img src="/static/media/editIcon.4dccb72a9324ddcac62b9a41d0a042db.svg"></img></div> <Link><img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img></Link></div>
+                    ><img src="/static/media/editIcon.4dccb72a9324ddcac62b9a41d0a042db.svg"></img></div> */}
+                     {/* <Link><img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img></Link> */}
+                     </div>
+                     <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Action</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={""}
+          label="Age"
+          onChange={""}
+        >
+          <MenuItem value={10} onClick={()=>handleGetVerifiedMerchant(result.merchant_id)}>view</MenuItem>
+          <MenuItem value={20}><div 
+                    // to={`/users/editMerchant/${result.id}`}
+                    onClick={()=>handleEditMerchant(result.id)}
+                    ><img src="/static/media/editIcon.4dccb72a9324ddcac62b9a41d0a042db.svg"></img></div></MenuItem>
+          <MenuItem value={30}><Link><img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img></Link></MenuItem>
+        </Select>
+      </FormControl>
                     </div>
                   </div>
 

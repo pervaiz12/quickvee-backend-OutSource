@@ -31,11 +31,50 @@ import Loyalty from "../../Assests/Taxes/Loyalty Program.svg";
 import LoyaltIcon from "../../Assests/Taxes/loyaltyactive.svg";
 import { useLocation } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
-import { setMenuOpen } from "../../Redux/features/NavBar/MenuSlice";
+import { setMenuOpen,  setIsDropdownOpen } from "../../Redux/features/NavBar/MenuSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { setIsDropdownOpen } from "../../Redux/features/NavBar/MenuSlice";
-const SideMenu = () => {
+import CryptoJS from 'crypto-js';
+import Cookies from 'js-cookie'; 
+
+
+
+const SideMenu =() => {
   // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  // const AdminRocordNew=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.getUserRecord, 'secret key').toString(CryptoJS.enc.Utf8));
+  // const AdminRocord= AdminRocordNew !=="" ?JSON.parse(AdminRocordNew):[]
+  let AuthSessionRecord=Cookies.get('loginDetails') !==undefined ? Cookies.get('loginDetails') :[]
+  let AuthDecryptData=CryptoJS.AES.decrypt(AuthSessionRecord, 'secret key').toString(CryptoJS.enc.Utf8);
+  const AdminRocord= AuthDecryptData !=="" ?JSON.parse(AuthDecryptData):[]
+  let LoginGetDashBoard=Cookies.get('token_data') !==undefined ? Cookies.get('token_data') :[]
+  let AuthDecryptDataDashBoard=CryptoJS.AES.decrypt(LoginGetDashBoard, 'secret key').toString(CryptoJS.enc.Utf8);
+  const AuthDecryptDataDashBoardJSONFormat= AuthDecryptDataDashBoard !=="" ?JSON.parse(AuthDecryptDataDashBoard):[]
+  // console.log(AuthDecryptDataDashBoardJSONFormat?.final_login)
+  // console.log(AdminRocord?.final_login)
+  // (AuthDecryptDataDashBoardJSONFormat?.final_login==1 || AdminRocord?.final_login==1)
+
+  
+
+  // useEffect(()=>{
+
+  //   console.log('hehhehehe')
+  //   console.log(AdminRocord)
+
+  // },[AuthSessionRecord])
+  // ======================================
+  let LoginGetDashBoardRecord=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.StoreUserDashboardRecord, 'secret key').toString(CryptoJS.enc.Utf8));
+  let LoginGetDashBoardRecordJson=LoginGetDashBoardRecord !==""? JSON.parse(LoginGetDashBoardRecord):""
+  // console.log(LoginGetDashBoardRecordJson)
+  // ======================================
+
+  const temp = {
+    "superadmin": menuItems,
+    "admin" : merchant,
+    "manager" : ManagerLink,
+    "merchant":MerchantLink,
+   
+  }
+  
+
   const location = useLocation();
   const currentUrl = location.pathname;
   const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
@@ -44,8 +83,7 @@ const SideMenu = () => {
   );
   const [activeItem, setActiveItem] = useState(currentUrl);
   const [hoveredItem, setHoveredItem] = useState(null);
-  // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [currentDropDownItem, activeDropDownItem] = useState(null);
+  const [currentDropDownItem, activeDropDownItem] = useState(null) 
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const handleItemClick = (item) => {
@@ -65,10 +103,11 @@ const SideMenu = () => {
           paddingTop: "69px",
         }}
       >
+        {/* || AdminRocord?.final_login==1 */}
         {/* Left Side Menu */}
         <div className="flex-1 bg-[#253338] text-[#9E9E9E]">
           {isMenuOpenRedux
-            ? menuItems.map((item) => (
+            ? ((LoginGetDashBoardRecordJson?.final_login==1 )?temp["superadmin"]:temp[LoginGetDashBoardRecordJson?.data?.login_type])?.map((item) => (
                 <div
                   key={item.id}
                   className={`text-[#9E9E9E] active:bg-[#414F54] hover:bg-[#414F54] hover:text-[#FFC400] px-0 ${
@@ -290,6 +329,8 @@ const DropdownMenuItem = ({
 };
 
 // Define menu items with icons and text
+// {AdminRocord?.data?.login_type!==("admin" &&"manager"&& "merchant") 
+
 const menuItems = [
   {
     id: 1,
@@ -632,5 +673,36 @@ const menuItems = [
     ],
   },
 ];
+
+const merchant =[
+    {
+      id: 82,
+      text: "Store",
+      link: "/store",
+  },
+  {
+    id: 82,
+    text: "Manager",
+    link: "/manager",
+},
+  
+]
+const ManagerLink =[
+  {
+    id: 82,
+    text: "Store",
+    link: "/store",
+},
+  
+]
+const MerchantLink =[
+  {
+    id: 82,
+    text: "Store",
+    link: "/store",
+},
+  
+]
+// }MerchantLink
 
 export default SideMenu;

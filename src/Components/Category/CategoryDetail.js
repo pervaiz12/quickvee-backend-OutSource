@@ -3,6 +3,8 @@ import AddIcon from "../../Assests/Category/addIcon.svg";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import EditIcon from "../../Assests/Category/editIcon.svg";
 import SortIcon from "../../Assests/Category/Sorting.svg";
+import Cookies from 'js-cookie'; 
+import CryptoJS from 'crypto-js'; 
 import {
   fetchCategoriesData,
   deleteCategory,
@@ -25,11 +27,36 @@ const CategoryDetail = ({ seVisible }) => {
 
   const AllCategoriesDataState = useSelector((state) => state.categories);
   const dispatch = useDispatch();
+  
+
+  let LoginGetDashBoardRecord=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.StoreUserDashboardRecord, 'secret key').toString(CryptoJS.enc.Utf8));
+  let AuthDecryptDataDashBoardJSONFormat=LoginGetDashBoardRecord !==""? JSON.parse(LoginGetDashBoardRecord):""
+  // ===================
+  // --------------------------------------------------------------------------------------------------------------
+  // console.log(AuthDecryptDataDashBoardJSONFormat)
+  console.log(AuthDecryptDataDashBoardJSONFormat)
+  // console.log(LoginSuccessJson)
+
+   const merchant_id=AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id
+   const token_id=AuthDecryptDataDashBoardJSONFormat?.token_id
+   const login_type=AuthDecryptDataDashBoardJSONFormat?.login_type
+   const token= AuthDecryptDataDashBoardJSONFormat?.token
+
+  // =======================
+ 
+  let data = {
+    merchant_id: merchant_id,
+    token_id:token_id,
+    login_type:login_type,
+    token:token
+  };
+  // console.log(data)
+  
+  // console.log(tokenData)
   useEffect(() => {
-    let data = {
-      merchant_id: "MAL0100CA",
-    };
+   
     if (data) {
+      // console.log(data)
       dispatch(fetchCategoriesData(data));
     }
   }, []);

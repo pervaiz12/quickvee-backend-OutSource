@@ -26,6 +26,7 @@ const FormInputFields = {
   stores: ["Store Name-1", "Store Name-Lorem 2", "Store 3"],
 };
 const AddManagerFormModel = (props) => {
+  let storeData=props.stores?.data?.stores
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -131,8 +132,9 @@ const AddManagerFormModel = (props) => {
                 <div className="">
                   <SearchableDropdown 
                      keyName="stores"
-                     optionList={props.stores}
+                     optionList={storeData}
                      handleSelectProductOptions={handleSelectedOptions}
+                     name="name"
                      selectedOption={selectedOption}
                      handleDeleteSelectedOption={handleDeleteSelectedOption}
                     //  selectedOption={productInfo?.relatedProduct}
