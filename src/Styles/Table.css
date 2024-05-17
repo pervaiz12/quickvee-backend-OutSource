@@ -84,7 +84,7 @@ table.dataTable tbody td {
     outline: none;
 }
 #loyaltyProgramTable_filter input{
-    transform: translate(-1rem, 1rem);
+    transform: translate(0rem, 1rem);
     width: 20rem;
     padding: 0.5rem 1rem;
     color: #000000;

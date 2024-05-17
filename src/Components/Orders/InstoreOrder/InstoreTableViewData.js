@@ -14,6 +14,7 @@ const InstoreTableViewData = (props, searchId) => {
   // console.log(props)
   const [currentPage, setCurrentPage] = useState(1);
   const [inStoreOrder, setAllInStoreOrders] = useState([]);
+  console.log("inStoreOrder ",inStoreOrder)
   const AllInStoreDataState = useSelector((state) => state.inStoreOrder);
   const [selectedValue, setSelectedValue] = useState(1);
   const dispatch = useDispatch();
@@ -42,6 +43,7 @@ const InstoreTableViewData = (props, searchId) => {
           start_date: props.selectedDateRange?.start_date,
           end_date: props.selectedDateRange?.end_date,
           emp_id: props?.EmployeeIDData,
+          search_by: props?.OffSearchIdData,
           // page: currentPage,
           // entriesPerPage: 10,
         };
@@ -65,10 +67,10 @@ const InstoreTableViewData = (props, searchId) => {
 
   // for table start
   $.DataTable = require('datatables.net') 
-
+  // console.log(inStoreOrder)
   useEffect(() => {
     const modifiedData = inStoreOrder.map(data => ({
-      "Customer": `<span class="text-[#000000] order_method">${data.name || ""}</span><br><span class="text-[#818181]">${data.delivery_phn || ""}</span>`,
+      "Customer": `<span class="text-[#000000] order_method">${data.billing_name || ""}</span><br><span class="text-[#818181]">${data.delivery_phn || ""}</span>`,
       "Order": `<span class="text-[#000000] order_method">${data.order_id || ""}</span><br><span class="text-[#818181]">${data.merchant_time || ""}</span><br><span class="text-[#818181]">${data.order_method || ""}</span>`,
       "Amount": `${data.amt || ""}<br><span class="text-[#1EC26B]">${capitalizeFirstLetter(data.order_status || "")}</span>`,
     
@@ -88,7 +90,7 @@ const InstoreTableViewData = (props, searchId) => {
       ],
       destroy: true,
       searching: true,
-      dom: "<'row 'l<'col-sm-12'b>><'row'<'col-sm-7 mt-5'p><'col-sm-5'>>",
+      dom: "<'row'l<'col-sm-12'b>><'row'<'col-sm-12 mt-2'p><'col-sm-12'>>",
       lengthMenu: [ 10, 20, 50],
       lengthChange: true,
       ordering: false,

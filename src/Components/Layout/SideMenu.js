@@ -31,24 +31,67 @@ import Loyalty from "../../Assests/Taxes/Loyalty Program.svg";
 import LoyaltIcon from "../../Assests/Taxes/loyaltyactive.svg";
 import { useLocation } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
-import { setMenuOpen } from "../../Redux/features/NavBar/MenuSlice";
+import { setMenuOpen,  setIsDropdownOpen } from "../../Redux/features/NavBar/MenuSlice";
 import { useSelector, useDispatch } from "react-redux";
-const SideMenu = () => {
+import CryptoJS from 'crypto-js';
+import Cookies from 'js-cookie'; 
+
+
+
+const SideMenu =() => {
   // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  // const AdminRocordNew=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.getUserRecord, 'secret key').toString(CryptoJS.enc.Utf8));
+  // const AdminRocord= AdminRocordNew !=="" ?JSON.parse(AdminRocordNew):[]
+  let AuthSessionRecord=Cookies.get('loginDetails') !==undefined ? Cookies.get('loginDetails') :[]
+  let AuthDecryptData=CryptoJS.AES.decrypt(AuthSessionRecord, 'secret key').toString(CryptoJS.enc.Utf8);
+  const AdminRocord= AuthDecryptData !=="" ?JSON.parse(AuthDecryptData):[]
+  let LoginGetDashBoard=Cookies.get('token_data') !==undefined ? Cookies.get('token_data') :[]
+  let AuthDecryptDataDashBoard=CryptoJS.AES.decrypt(LoginGetDashBoard, 'secret key').toString(CryptoJS.enc.Utf8);
+  const AuthDecryptDataDashBoardJSONFormat= AuthDecryptDataDashBoard !=="" ?JSON.parse(AuthDecryptDataDashBoard):[]
+  // console.log(AuthDecryptDataDashBoardJSONFormat?.final_login)
+  // console.log(AdminRocord?.final_login)
+  // (AuthDecryptDataDashBoardJSONFormat?.final_login==1 || AdminRocord?.final_login==1)
+
+  
+
+  // useEffect(()=>{
+
+  //   console.log('hehhehehe')
+  //   console.log(AdminRocord)
+
+  // },[AuthSessionRecord])
+  // ======================================
+  let LoginGetDashBoardRecord=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.StoreUserDashboardRecord, 'secret key').toString(CryptoJS.enc.Utf8));
+  let LoginGetDashBoardRecordJson=LoginGetDashBoardRecord !==""? JSON.parse(LoginGetDashBoardRecord):""
+  // console.log(LoginGetDashBoardRecordJson)
+  // ======================================
+
+  const temp = {
+    "superadmin": menuItems,
+    "admin" : merchant,
+    "manager" : ManagerLink,
+    "merchant":MerchantLink,
+   
+  }
+  
+
   const location = useLocation();
   const currentUrl = location.pathname;
   const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
+  const isDropdownOpen = useSelector(
+    (state) => state.NavBarToggle.isDropdownOpen
+  );
   const [activeItem, setActiveItem] = useState(currentUrl);
   const [hoveredItem, setHoveredItem] = useState(null);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [currentDropDownItem, activeDropDownItem] = useState(null)
+  const [currentDropDownItem, activeDropDownItem] = useState(null) 
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const handleItemClick = (item) => {
-    // console.log(item);
+
     setActiveItem(item.link);
     navigate(item.link);
-    setIsDropdownOpen(false);
+  
+    dispatch(setIsDropdownOpen(false));
   };
 
   return (
@@ -60,10 +103,11 @@ const SideMenu = () => {
           paddingTop: "69px",
         }}
       >
+        {/* || AdminRocord?.final_login==1 */}
         {/* Left Side Menu */}
         <div className="flex-1 bg-[#253338] text-[#9E9E9E]">
           {isMenuOpenRedux
-            ? menuItems.map((item) => (
+            ? ((LoginGetDashBoardRecordJson?.final_login==1 )?temp["superadmin"]:temp[LoginGetDashBoardRecordJson?.data?.login_type])?.map((item) => (
                 <div
                   key={item.id}
                   className={`text-[#9E9E9E] active:bg-[#414F54] hover:bg-[#414F54] hover:text-[#FFC400] px-0 ${
@@ -170,40 +214,36 @@ const DropdownMenuItem = ({
   isDropdownOpen,
   setIsDropdownOpen,
   activeDropDownItem,
-  currentDropDownItem
+  currentDropDownItem,
 }) => {
   const dispatch = useDispatch();
-  const location = useLocation();
 
   const [dropDownItem, setDropDownItem] = useState(null);
   const isTabletNav = useMediaQuery("(max-width:1024px)");
-  console.log("currentDropDownItem", currentDropDownItem)
   useEffect(() => {
-    isTabletNav && setIsDropdownOpen(false);
+    isTabletNav && dispatch(setIsDropdownOpen(false));
   }, [isTabletNav]);
+
+
 
   const handleToggleDropdownItems = (link, e) => {
     if (isTabletNav) {
-      setIsDropdownOpen(false);
+      dispatch(setIsDropdownOpen(false));
     }
     setActiveItem(link);
     setDropDownItem(link);
-    // setIsDropdownOpen(
-    //   !!item.dropdownItems.find((obj) => (obj.link === activeItem ? false : true))
-    // );
   };
 
   const handleToggleSideBar = () => {
     dispatch(setMenuOpen(!isMenuOpenRedux));
-    setIsDropdownOpen(true);
+    dispatch(setIsDropdownOpen(true));
   };
 
-  const HandleDropdownClick = (event,id) => {
-    event.preventDefault();
-    console.log("id of item ",id , "item clicked id", item.id)
-   
-    setIsDropdownOpen(!isDropdownOpen);
-    activeDropDownItem(id)
+  const HandleDropdownClick = (event, id) => {
+    activeDropDownItem(id);
+
+    dispatch(setIsDropdownOpen(!isDropdownOpen));
+
     // setIsMenuOpen(!isMenuOpen);
   };
 
@@ -218,16 +258,13 @@ const DropdownMenuItem = ({
         }
         onMouseEnter={() => setHoveredItem(item.id)}
         onMouseLeave={() => setHoveredItem(null)}
+        onClick={(e) => {
+          HandleDropdownClick(e, item.id);
+        }}
       >
         <div className="flex">
           {isMenuOpenRedux ? (
-            <div
-              onClick={(e) => {
-                HandleDropdownClick(e,item.id);
-                e.stopPropagation();
-              }}
-              className="w-full flex items-center "
-            >
+            <div className="w-full flex items-center cursor-pointer">
               {activeItem === dropDownItem || hoveredItem === item.id
                 ? item.activeIcon
                 : item.icon}
@@ -235,7 +272,6 @@ const DropdownMenuItem = ({
                 className={`ml-2 menu-item DropDown-memu text-[14px] flex-auto Admin_std ${
                   activeItem === dropDownItem ? "activeTab" : ""
                 }`}
-              
               >
                 {item.text}
               </p>
@@ -248,7 +284,7 @@ const DropdownMenuItem = ({
                 onClick={(e) => {
                   handleToggleSideBar();
                   e.stopPropagation();
-                 
+                  HandleDropdownClick(e, item.id);
                 }}
               >
                 {activeItem === dropDownItem || hoveredItem === item.id
@@ -261,8 +297,14 @@ const DropdownMenuItem = ({
       </div>
       {isDropdownOpen && currentDropDownItem === item.id && (
         <div
-          onMouseEnter={(e) => {setHoveredItem(item.id); e.stopPropagation();} }
-          onMouseLeave={(e) => {setHoveredItem(null); e.stopPropagation();}}
+          onMouseEnter={(e) => {
+            setHoveredItem(item.id);
+            e.stopPropagation();
+          }}
+          onMouseLeave={(e) => {
+            setHoveredItem(null);
+            e.stopPropagation();
+          }}
           className="mt-0 bg-[#334247] p-4 shadow w-full text-center z-10"
         >
           {item.dropdownItems.map((dropdownItem) => (
@@ -287,6 +329,8 @@ const DropdownMenuItem = ({
 };
 
 // Define menu items with icons and text
+// {AdminRocord?.data?.login_type!==("admin" &&"manager"&& "merchant") 
+
 const menuItems = [
   {
     id: 1,
@@ -629,5 +673,36 @@ const menuItems = [
     ],
   },
 ];
+
+const merchant =[
+    {
+      id: 82,
+      text: "Store",
+      link: "/store",
+  },
+  {
+    id: 82,
+    text: "Manager",
+    link: "/manager",
+},
+  
+]
+const ManagerLink =[
+  {
+    id: 82,
+    text: "Store",
+    link: "/store",
+},
+  
+]
+const MerchantLink =[
+  {
+    id: 82,
+    text: "Store",
+    link: "/store",
+},
+  
+]
+// }MerchantLink
 
 export default SideMenu;

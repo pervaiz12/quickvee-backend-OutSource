@@ -23,13 +23,13 @@ const theme = createTheme({
 });
 const SelectDropDown = ({
   heading,
-  listItem,
+  listItem = false,
   onClickHandler,
   selectedOption,
   dropdownFor,
   title
 }) => {
-  console.log("selectedOption ", selectedOption);
+  console.log("listItem: ", listItem)
   return (
     <>
       <FormControl fullWidth>
@@ -46,7 +46,7 @@ const SelectDropDown = ({
               </MenuItem>
             )}
 
-            {listItem?.map((item,index) => (
+            {listItem &&  listItem.length > 0 && listItem?.map((item,index) => (
               <MenuItem
               key={index}
                 onClick={(e) => {

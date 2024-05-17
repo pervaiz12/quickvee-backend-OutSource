@@ -56,11 +56,6 @@
     top: 0;
 }
 
-.q-attributes-bottom-detail-section {
-    width: 100%;
-    box-shadow: 0px 3px 6px #0000001F;
-    border-radius: 8px !important;
-}
 
 .q-attributes-bottom-header-sticky {
     background: #fff;

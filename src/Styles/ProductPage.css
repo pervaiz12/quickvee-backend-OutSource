@@ -1,0 +1,210 @@
+@font-face {
+    font-family: CircularSTDBook;
+    src: url("../Assests/Fonts/circulur-std-book.TTF");
+  }
+  
+  @font-face {
+    font-family: CircularSTDMedium;
+    src: url("../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
+  }
+  
+  .title-area span {
+    color: #818181;
+    font-size: 14px;
+  }
+  
+  .dropdownBox {
+    margin-top: 5px;
+    margin-bottom: 14px;
+    border: 1px solid #ccc;
+    box-sizing: border-box;
+    border-radius: 5px;
+  }
+  
+  .search-area {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+  }
+  
+  .search-area .toggle-btn {
+    width: 5%;
+    text-align: right;
+  }
+  
+  .search-area .toggle-btn .down-arrow-image {
+    display: inline-block;
+    width: 30px;
+    cursor: pointer;
+    margin-bottom: 6px;
+  }
+  
+  .search-selected-item {
+    display: flex;
+    align-items: center;
+    width: 95%;
+    flex-wrap: wrap;
+    padding: 4px 0px 10px 0px;
+  }
+  
+  .selected-item {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  .search-selected-item input.search-item {
+    border: none !important;
+    border-radius: 0px !important;
+    margin-top: 3px;
+    /* padding: 0px 0px 0px 5px; */
+    margin: 0px;
+  }
+  .search-selected-item input.search-item::placeholder {
+    font-size: 14px;
+  }
+  .search-selected-item .search-item:focus {
+    border-left: 2px solid #2e5eff !important;
+  }
+  .selected-item .item {
+    background-color: #f2f2f2;
+    padding: 4px 8px;
+    border-radius: 3px;
+    font-size: 13px;
+    font-weight: 500;
+    font-family: CircularSTDMedium !important;
+  }
+  .selected-item .item:last-child {
+    margin-right: 8px;
+  }
+  .selected-item .item .cancel-image {
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    font-size: 20px;
+    cursor: pointer;
+    margin-left: 2px;
+  }
+  .selected-item .item .cancel-image:hover {
+    background-color: #afafaf;
+    padding: 2px;
+  }
+  
+  .selected-item span {
+    background-color: #e1e1e1;
+    padding: 7px;
+    margin-right: 5px;
+    border-radius: 3px;
+    position: relative;
+  }
+  
+  .options-box {
+    padding: 2px 0px;
+    margin-top: 12px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: wrap;
+    max-height: 160px;
+    overflow-x: auto;
+  }
+  .options-box .item {
+    background: #fff;
+    border-radius: 3px;
+    border: 1.5px solid #bebebe;
+    padding: 4px 10px;
+    box-sizing: border-box;
+    margin-right: 12px;
+    font-size: 15px;
+    font-weight: 400;
+    cursor: pointer;
+    text-align: left;
+    margin-bottom: 8px;
+    font-family: CircularSTDBook !important;
+    text-transform: capitalize;
+  }
+  
+  .rotate-dropdpown {
+    transform: rotate(180deg);
+    transition: 0.3s all linear;
+  }
+  
+  .remove-rotate-dropdown {
+    transform: rotate(0deg);
+    transition: 0.3s all linear;
+  }
+  
+  .active-item {
+    color: #0a64f9;
+    border: 1.5px solid #0a64f9 !important;
+  }
+  
+  /* add product upload image */
+  
+  .image-upload-gallery {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .image-upload-gallery .image-display {
+    border: 1px solid #ececec !important;
+    padding: 5px;
+    position: relative;
+    margin-left: 15px;
+  }
+  
+  .image-upload-gallery .image-display:first-child {
+    margin-left: 0px;
+  }
+  
+  .image-upload-gallery .image-display img {
+    width: 190px;
+    max-width: 180px;
+    height: 170px;
+    object-fit: cover;
+  }
+  .image-display .delete-image-icon .delete-image {
+    background-color: rgba(255, 255, 255, 0.7);
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    padding: 3px;
+    box-sizing: border-box;
+    cursor: pointer;
+    margin: 4px 4px 0px 0px;
+  }
+  
+  .image-upload-gallery .image-list {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    margin-left: 6px;
+  }
+  
+  /* varient add section */
+  .varientAddSection {
+    display: flex;
+    align-items: center;
+  }
+  
+  .custom-dropdown-control .Dropdown-arrow {
+    display: none;
+  }
+  
+  .loader-box {
+    display: grid;
+    place-content: center;
+  }
+  .loader-box span {
+    width: 23px !important;
+    height: 25px !important;
+    color: #fff;
+  }
+  
+  .error-alert {
+    color: #ff0000;
+    font-size: 11px;
+    font-weight: 400;
+  }

@@ -5,6 +5,7 @@ import {
   Route,
   Switch,
   Link,
+  useLocation
 } from "react-router-dom";
 import "./index.css";
 import Layout from "./Components/Layout/Index";
@@ -82,7 +83,7 @@ import MainEmployeelist from "./Components/Reporting/Employelist/MainEmployeelis
 import MainTaxesReport from "./Components/Reporting/Taxes/MainTaxesReport";
 import MainSalesPerson from "./Components/Reporting/SalesByPerson/MainSalesPerson";
 import Login from './Components/Authenticate/login'
-import StoreList from './Components/StoreRcord/storeList'
+// import StoreList from './Components/StoreRcord/storeList'
 // import MainInvDuplicates from "./Components/InventoryDuplicates/MainInvDuplicates";
 import Main from "./Main";
 import "./Styles/OrderSummaryDetails.css";
@@ -92,21 +93,32 @@ import SideMenu from "./Components/Layout/SideMenu";
 import { useEffect,useState } from "react";
 import { useMediaQuery } from "@mui/material";
 // import InventoryExport from "./Components/InventoryExport/MainInventoryExport";
+import ProtectedRoute from './protected/protectedRoute'
 
 function App() {
-
+  const location = useLocation();
   const isTabletNav = useMediaQuery("(max-width:1024px)");
   const [isMenuOpen, setIsMenuOpen] = useState(!isTabletNav);
-
+  const currentUrl = location.pathname;
+  const [isSideBar,setIsSideBar] = useState(false);
   useEffect(() => {
     setIsMenuOpen(!isTabletNav);
     if (!isTabletNav) {
     }
   }, [isTabletNav]);
-
+  useEffect(() => {
+    if (currentUrl.split('/')[2] === 'order-summary') {
+      setIsSideBar(true);
+    } else {
+      setIsSideBar(false);
+    }
+  },[currentUrl]);
   return (
     <>
-      <SideMenu setIsMenuOpen={setIsMenuOpen} isTabletNav={isTabletNav} isMenuOpen={isMenuOpen}/>
+      {
+      location.pathname !=='/login' ?
+      <SideMenu setIsMenuOpen={setIsMenuOpen} isTabletNav={isTabletNav} isMenuOpen={isMenuOpen}/>:''
+      }
       <Routes>
         {/* <Route exact path="/" element={<Main />} /> */}
         {/* <Route exact path="/" element={<Layout />} /> */}
@@ -116,30 +128,30 @@ function App() {
         path="/users/view/unapprove"
         element={<Main visible={"multimerchant"} />}
       /> */}
-        <Route
+       <Route
         exact
         path="/login"
         element={< Login visible={"login"} />}
       />
-      <Route
-        exact
-        path="/store"
-        element={< StoreList visible={"storelist"} />}
-      />
-      <Route index path="/" element={<Main visible={"dashboard"} />} />
-      <Route exact path="/order" element={<Main visible={"order"} />} />
-      <Route exact path="/category" element={<Main visible={"category"} />} />
-      <Route exact path="/products" element={<Main visible={"products"} />} />
-      <Route
-        exact
-        path="/purchase-data"
-        element={<Main visible={"purchase-data"} />}
-      />
-      <Route
+      <Route element={<ProtectedRoute/>}>
+        <Route exact path= "/store" element={<Main visible={"store"} />} />
+        <Route exact path= "/manager" element={<Main visible={"manager"} />} />
+        <Route index path="/" element={<Main visible={"dashboard"} />} />
+        <Route exact path="/order" element={<Main visible={"order"} />} />
+        <Route exact path="/store" element={<Main visible={"store"} />} />
+        <Route exact path="/category" element={<Main visible={"category"} />} />
+        <Route exact path="/products" element={<Main visible={"products"} />} />
+        <Route
+          exact
+          path="/purchase-data"
+          element={<Main visible={"purchase-data"} />}
+        />
+        <Route
         exact
         path="/attributes"
+
         element={<Main visible={"attributes"} />}
-      />
+        />
 
 
 
@@ -699,6 +711,7 @@ function App() {
           path="/store-settings/recorder-inventory"
           element={<ReorderInventoryMain />}
         /> */}
+        </Route>
       </Routes>
     </>
   );

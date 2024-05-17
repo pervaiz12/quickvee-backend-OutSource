@@ -1,9 +1,9 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { useMediaQuery } from "@mui/material";
 // Define initial state
 const initialState = {
     
-  isMenuOpen: false // Initial value based on your useState
+  isMenuOpen: false, // Initial value based on your useState
+  isDropdownOpen: false
 };
 
 // Create a slice
@@ -18,12 +18,15 @@ const MenuSlice = createSlice({
     // Reducer function for setting menu state
     setMenuOpen: (state, action) => {
       state.isMenuOpen = action.payload;
+    },
+    setIsDropdownOpen: (state, action) => {
+      state.isDropdownOpen = action.payload;
     }
   }
 });
 
 // Export actions
-export const { toggleMenu, setMenuOpen } = MenuSlice.actions;
+export const { toggleMenu, setMenuOpen,setIsDropdownOpen } = MenuSlice.actions;
 
 // Export reducer
 export default MenuSlice.reducer;

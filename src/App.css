@@ -57,7 +57,17 @@
 	font-family: CircularSTDMedium;
 	src: url("./Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
 }
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
 .main-page-home-dashboard {
 	width: 100%;
 	height: auto;
@@ -218,12 +228,12 @@
 }
 
 /* add error msg css */
-.input-error{
+.input-error {
 	color: #fa0000 !important;
-    font-family: QuicksandSemiBold, Quicksand !important;
-    font-size: 16px !important;
-    margin: 3px !important;
-    padding: 0 !important;
+	font-family: QuicksandSemiBold, Quicksand !important;
+	font-size: 16px !important;
+	margin: 3px !important;
+	padding: 0 !important;
 	/* bottom: -17px;
     height: 15px;
     left: 10px;
@@ -240,13 +250,13 @@
 	}
 }
 
-.main-content {
+/* .main-content {
 	overflow-x: auto;
 	overflow-y: auto;
-height: 100vh;
+	height: 100vh;
 	overflow-x: hidden;
 	position: relative;
-}
+} */
 
 .importBtn {
 	box-shadow: rgba(0, 0, 0, 0.12) 0px 3px 6px;
@@ -839,6 +849,7 @@ a.flex.text-center.submenu-item.text-gray-400.py-4.CircularSTDBook:hover {
 .submenu-item.active {
 	color: #ffc400;
 }
+
 .DropDown-memu.activeTab {
 	color: #ffc400;
 }
@@ -1031,47 +1042,94 @@ div.q_label_details::after {
 	z-index: 2 !important;
 }
 
-.qvrowmain label{
+.qvrowmain label {
 	color: #818181;
-    font-size: 14px;
-    font-family: CircularSTDBook !important;
-    display: block;
+	font-size: 14px;
+	font-family: CircularSTDBook !important;
+	display: block;
 }
 
-.vender_list svg{
+.vender_list svg {
 	right: 0px !important;
 	top: 0px !important;
 	color: rgba(0, 0, 0, 0.26) !important;
 }
 
 .q-attributes-main-page {
-    margin: 0px 0px;
+	margin: 0px 0px;
 }
 
-.store-items-list{
+.store-items-list {
 	margin-top: 10px !important;
 }
 
-.store-items{
+.store-items {
 	padding-top: unset !important;
 }
-.store-item-card{
+
+.store-item-card {
 	display: flex;
 	box-shadow: 0px 3px 6px #0000001F;
 	border-radius: 8px;
 }
 
-.store-items-address{
+.store-item-card-manager{
+	display: flex;
+	flex-direction: column;
+	box-shadow: 0px 3px 6px #0000001F;
+	border-radius: 8px;
+}
+
+.store-items-address {
 	font-style: Circular Std Medium, Regular !important;
 }
 
-.store-items-store-name{
-font-size: 18px !important;
-font-family: admin_std_medium;
+.store-items-store-name {
+	font-size: 18px !important;
+	font-family: admin_std_medium;
 }
 
-.store-items-store-name-address{
+.store-items-store-name-address {
+	display: flex;
+	flex-wrap: wrap;
 	font-family: adminstdbook;
-color: #7B7B7B;
-font-size: 14px;
+	color: #7B7B7B;
+	font-size: 16px;
+}
+
+.store-items-edit-btn {
+	font-family: adminstdbook;
+	font-size: 14px;
+	color: #0A64F9;
+	cursor: pointer;
+}
+.store-items-store-names{
+	font-size: 14px;
+}
+
+.managerStore-title{
+	font-size: 20px;
+	font-family: admin_std_medium;
+}
+
+.managerStore-title-main{
+	margin-left: -15px;
+	margin-right: -15px;
+}
+.managerStore-btn{
+	font-size: 18px;
+	color: #0A64F9;
+}
+
+.Add-manager-forrm-title{
+	font-size: 20px;
+	font-family: admin_std_medium;
+}
+
+.header-menu{
+	font-size: clamp(10px, 1.5vw, 18px) !important;
+}
+
+.custom-datepicker-remove-border fieldset{
+	border-width: 0 !important;
 }

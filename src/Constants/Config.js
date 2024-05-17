@@ -289,6 +289,7 @@ module.exports = Object.freeze({
   LOGIN_AUTHENICATE2_API:"LoginApiReact/send_otp_session",//
   LOGIN_OTP_AUTHENTICATION:"LoginApiReact/chk_otp",//
   LOGIN_OTP_SUBMIT_AUTHENTICATION:"LoginApiReact/create_session",//
+  LOGIN_VIA_SUPERADMIN:"LoginApiReact/login_via_superadmin",//
 
 
 
