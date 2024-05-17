@@ -28,7 +28,7 @@ export default function Unverified() {
 
   // const data={type:'unapprove',token, token_id,login_type}
   useEffect(()=>{
-      dispatch(getUnVerifiedMerchant({merchant_id,...userTypeData}))
+      dispatch(getUnVerifiedMerchant({type:'unapprove',...userTypeData}))
 
   },[])
    // ====================================
