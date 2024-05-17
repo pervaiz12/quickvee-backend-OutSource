@@ -15,7 +15,6 @@ import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch} from "react-redux";//,localAuthCheck 
-
 import InputLabel from '@mui/material/InputLabel';
 // import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -23,24 +22,14 @@ import Select from '@mui/material/Select';
 
 import {getAuthSessionRecord,handleGetStoreRecord,getAuthInvalidMessage,getUserRecordData,getUserDashboardRecord} from "../../Redux/features/Authentication/loginSlice";
 import { display } from "@mui/system";
+import { useAuthDetails } from '../../Common/cookiesHelper';
 
 
 export default function Header() {
+  const {LoginGetDashBoardRecordJson,LoginAllStore} = useAuthDetails();
   const dispatch = useDispatch();
   const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
-  // ----------------------
-  // const AdminRocordNew=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.getUserRecord, 'secret key').toString(CryptoJS.enc.Utf8));
-  let AuthFinalLogin=Cookies.get('loginDetails') !==undefined ? Cookies.get('loginDetails') :[]
-   let LoginGetDashBoard=Cookies.get('token_data') !==undefined ? Cookies.get('token_data') :[]
- 
-  const AdminRocordNew=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.getUserRecord, 'secret key').toString(CryptoJS.enc.Utf8));
-  let LoginAllStore=AdminRocordNew !==""? JSON.parse(AdminRocordNew):""
-  let LoginGetDashBoardRecord=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.StoreUserDashboardRecord, 'secret key').toString(CryptoJS.enc.Utf8));
-  let LoginGetDashBoardRecordJson=LoginGetDashBoardRecord !==""? JSON.parse(LoginGetDashBoardRecord):""
-  // console.log(LoginGetDashBoardRecordJson)
-  // console.log(LoginAllStore)
-// =================================
-  // ===================================
+
   let UserLoginDataStringFy=Cookies.get('user_auth_record') !==undefined ? Cookies.get('user_auth_record') :[]
   let UserLoginRecord=useSelector((state)=>state?.loginAuthentication?.getUserLoginRecord)
   const getUserLoginAuth = atob(UserLoginRecord);
@@ -49,26 +38,12 @@ export default function Header() {
   // 
   let allStoresData=LoginAllStore?.data?.stores
   let storenameCookie=LoginGetDashBoardRecordJson !=="" ? LoginGetDashBoardRecordJson?.data?.name :LoginGetDashBoardRecordJson?.data?.name
-  console.log(storenameCookie)
   useEffect(()=>{
     setStoreName(storenameCookie)
   },[LoginGetDashBoardRecordJson])
  
   // useEffect for all when update data in coockie-----------------
   
-
-    //AuthFinalLogin
-    useEffect(()=>{
-      if( AuthFinalLogin !=="")
-        {
-          dispatch(getAuthSessionRecord(AuthFinalLogin))
-        }
-      
-    },[AuthFinalLogin])
- 
-  useEffect(()=>{
-    dispatch(getUserDashboardRecord(LoginGetDashBoard))
-  },[LoginGetDashBoard])
   useEffect(()=>{
     dispatch(getUserRecordData(UserLoginDataStringFy))
   },[UserLoginDataStringFy])

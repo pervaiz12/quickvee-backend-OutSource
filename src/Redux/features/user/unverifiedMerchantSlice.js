@@ -13,7 +13,14 @@ let initialState={
 
 export const getUnVerifiedMerchant=createAsyncThunk('UnVerified/getUnVerifiedMerchant',async(data)=>{
     // console.log(data)
-       const response= await axios.post(BASE_URL+GET_VERIFIED_MERCHANT,data,{ headers: { "Content-Type": "multipart/form-data" } })
+    const { token, ...dataNew } = data;
+
+       const response= await axios.post(BASE_URL+GET_VERIFIED_MERCHANT,dataNew, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+            'Authorization': `Bearer ${token}` // Use data?.token directly
+        }
+    })
     //    console.log(response)
        if(response.data.status==200)
         {

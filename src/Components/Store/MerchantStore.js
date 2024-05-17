@@ -7,6 +7,9 @@ import {getAuthSessionRecord,handleGetStoreRecord,getAuthInvalidMessage} from ".
 import CryptoJS from 'crypto-js';
 import Cookies from 'js-cookie'; 
 import { useNavigate } from 'react-router-dom';
+import { useAuthDetails } from './../../Common/cookiesHelper';
+
+
 const storeList = [
   {
     a_address_line_1: "230 dr suit",
@@ -83,13 +86,14 @@ const storeList = [
 const StorePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const {LoginGetDashBoardRecordJson,LoginAllStore} = useAuthDetails();
   // let AuthSessionRecord=Cookies.get('loginDetails') !==undefined ? Cookies.get('loginDetails') :[]
   let UserLoginDataStringFy=Cookies.get('user_auth_record') !==undefined ? Cookies.get('user_auth_record') :[]
   const getUserLoginAuth = atob(UserLoginDataStringFy);
   const GetSessionLogin=getUserLoginAuth !==""? JSON.parse(getUserLoginAuth):[]
   // const {handleGetStoreData}=StoreListLogic()
-  const AdminRocordNew=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.getUserRecord, 'secret key').toString(CryptoJS.enc.Utf8));
-  const AdminRocord= AdminRocordNew !=="" ?JSON.parse(AdminRocordNew):[]
+  // const AdminRocordNew=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.getUserRecord, 'secret key').toString(CryptoJS.enc.Utf8));
+  // const AdminRocord= AdminRocordNew !=="" ?JSON.parse(AdminRocordNew):[]
 
   // useEffect(()=>{
   //   if( AuthSessionRecord !=="")
@@ -114,7 +118,7 @@ const StorePage = () => {
 //     }GetSessionLogin?.username  GetSessionLogin?.username
 // }
 const handleSubmitStoreRecord=(merchant_id)=>{
-  const data={username:GetSessionLogin?.username,password:GetSessionLogin.password,login_type:AdminRocord?.data?.login_type,merchant_id:merchant_id}
+  const data={username:GetSessionLogin?.username,password:GetSessionLogin.password,login_type:LoginAllStore?.data?.login_type,merchant_id:merchant_id}
   dispatch(handleGetStoreRecord(data)).then(result=>{
     console.log(result?.payload)
     if(result?.payload?.status==true)
@@ -140,12 +144,12 @@ const handleSubmitStoreRecord=(merchant_id)=>{
   return (
     <>
     {
-      AdminRocord?.data?.login_type=="admin"?
+      LoginAllStore?.data?.login_type=="admin"?
       <>
       <Grid container className="store-items-list" spacing={2}>
         {
-          Array.isArray(AdminRocord?.data?.stores) &&
-          AdminRocord?.data?.stores.map((store,Index) => {
+          Array.isArray(LoginAllStore?.data?.stores) &&
+          LoginAllStore?.data?.stores.map((store,Index) => {
             return(
              
                   <Grid item className="store-items " xs={12} sm={6}  key={Index}>
@@ -178,11 +182,11 @@ const handleSubmitStoreRecord=(merchant_id)=>{
       </Grid>
       </>
       :
-      AdminRocord?.data?.login_type=="merchant"?
+      LoginAllStore?.data?.login_type=="merchant"?
       <Grid container className="store-items-list" spacing={2}>
         {
-            Array.isArray(AdminRocord?.data?.stores) &&
-            AdminRocord?.data?.stores.map((store,Index) => {
+            Array.isArray(LoginAllStore?.data?.stores) &&
+            LoginAllStore?.data?.stores.map((store,Index) => {
               return(
                 <Grid item className="store-items " xs={12} sm={6}  key={Index}>
                   <Link to={`/?m_id=${store?.merchant_id}`}>
@@ -214,11 +218,11 @@ const handleSubmitStoreRecord=(merchant_id)=>{
         }
       </Grid>
       :
-      AdminRocord?.data?.login_type=="manager"?
+      LoginAllStore?.data?.login_type=="manager"?
       <Grid container className="store-items-list" spacing={2}>
         {
-            Array.isArray(AdminRocord?.data?.stores) &&
-            AdminRocord?.data?.stores.map((store,Index) => {
+            Array.isArray(LoginAllStore?.data?.stores) &&
+            LoginAllStore?.data?.stores.map((store,Index) => {
               return(
                 <Grid item className="store-items " xs={12} sm={6}  key={Index}>
                    {/* <Link to={`/?m_id=${store?.merchant_id}`}> */}

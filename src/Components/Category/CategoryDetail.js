@@ -20,8 +20,12 @@ import CheckBoxField from "../../reuseableComponents/CheckBoxField";
 import DraggableTable from "../../reuseableComponents/DraggableTable";
 import RadioSelect from "./RadioSelect";
 import { BASE_URL,  SORT_CATOGRY_DATA } from "../../Constants/Config";
+import { useAuthDetails } from './../../Common/cookiesHelper';
+
 
 const CategoryDetail = ({ seVisible }) => {
+  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+
   const [allcategories, setallcategories] = useState([]);
   const [reorderedItems, setreorderedItems] = useState([]);
 
@@ -29,26 +33,14 @@ const CategoryDetail = ({ seVisible }) => {
   const dispatch = useDispatch();
   
 
-  let LoginGetDashBoardRecord=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.StoreUserDashboardRecord, 'secret key').toString(CryptoJS.enc.Utf8));
-  let AuthDecryptDataDashBoardJSONFormat=LoginGetDashBoardRecord !==""? JSON.parse(LoginGetDashBoardRecord):""
-  // ===================
-  // --------------------------------------------------------------------------------------------------------------
-  // console.log(AuthDecryptDataDashBoardJSONFormat)
-  console.log(AuthDecryptDataDashBoardJSONFormat)
-  // console.log(LoginSuccessJson)
+   let AuthDecryptDataDashBoardJSONFormat=LoginGetDashBoardRecordJson
 
    const merchant_id=AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id
-   const token_id=AuthDecryptDataDashBoardJSONFormat?.token_id
-   const login_type=AuthDecryptDataDashBoardJSONFormat?.login_type
-   const token= AuthDecryptDataDashBoardJSONFormat?.token
 
-  // =======================
  
   let data = {
     merchant_id: merchant_id,
-    token_id:token_id,
-    login_type:login_type,
-    token:token
+    ...userTypeData
   };
   // console.log(data)
   

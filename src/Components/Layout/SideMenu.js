@@ -35,37 +35,10 @@ import { setMenuOpen,  setIsDropdownOpen } from "../../Redux/features/NavBar/Men
 import { useSelector, useDispatch } from "react-redux";
 import CryptoJS from 'crypto-js';
 import Cookies from 'js-cookie'; 
-
-
+import { useAuthDetails } from '../../Common/cookiesHelper';
 
 const SideMenu =() => {
-  // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  // const AdminRocordNew=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.getUserRecord, 'secret key').toString(CryptoJS.enc.Utf8));
-  // const AdminRocord= AdminRocordNew !=="" ?JSON.parse(AdminRocordNew):[]
-  let AuthSessionRecord=Cookies.get('loginDetails') !==undefined ? Cookies.get('loginDetails') :[]
-  let AuthDecryptData=CryptoJS.AES.decrypt(AuthSessionRecord, 'secret key').toString(CryptoJS.enc.Utf8);
-  const AdminRocord= AuthDecryptData !=="" ?JSON.parse(AuthDecryptData):[]
-  let LoginGetDashBoard=Cookies.get('token_data') !==undefined ? Cookies.get('token_data') :[]
-  let AuthDecryptDataDashBoard=CryptoJS.AES.decrypt(LoginGetDashBoard, 'secret key').toString(CryptoJS.enc.Utf8);
-  const AuthDecryptDataDashBoardJSONFormat= AuthDecryptDataDashBoard !=="" ?JSON.parse(AuthDecryptDataDashBoard):[]
-  // console.log(AuthDecryptDataDashBoardJSONFormat?.final_login)
-  // console.log(AdminRocord?.final_login)
-  // (AuthDecryptDataDashBoardJSONFormat?.final_login==1 || AdminRocord?.final_login==1)
-
-  
-
-  // useEffect(()=>{
-
-  //   console.log('hehhehehe')
-  //   console.log(AdminRocord)
-
-  // },[AuthSessionRecord])
-  // ======================================
-  let LoginGetDashBoardRecord=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.StoreUserDashboardRecord, 'secret key').toString(CryptoJS.enc.Utf8));
-  let LoginGetDashBoardRecordJson=LoginGetDashBoardRecord !==""? JSON.parse(LoginGetDashBoardRecord):""
-  // console.log(LoginGetDashBoardRecordJson)
-  // ======================================
-
+  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
   const temp = {
     "superadmin": menuItems,
     "admin" : merchant,
@@ -103,7 +76,7 @@ const SideMenu =() => {
           paddingTop: "69px",
         }}
       >
-        {/* || AdminRocord?.final_login==1 */}
+        {/* || LoginAllStore?.final_login==1 */}
         {/* Left Side Menu */}
         <div className="flex-1 bg-[#253338] text-[#9E9E9E]">
           {isMenuOpenRedux
@@ -329,7 +302,7 @@ const DropdownMenuItem = ({
 };
 
 // Define menu items with icons and text
-// {AdminRocord?.data?.login_type!==("admin" &&"manager"&& "merchant") 
+// {LoginAllStore?.data?.login_type!==("admin" &&"manager"&& "merchant") 
 
 const menuItems = [
   {

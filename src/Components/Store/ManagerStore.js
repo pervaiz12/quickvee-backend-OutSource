@@ -11,6 +11,8 @@ import AddIcon from "../../Assests/Category/addIcon.svg";
 import {getAuthSessionRecord,handleGetStoreRecord,getAuthInvalidMessage} from "../../Redux/features/Authentication/loginSlice";
 import AddManagerFormModel from "./AddManagerFormModel";
 import { useNavigate } from 'react-router-dom';
+import { useAuthDetails } from './../../Common/cookiesHelper';
+
 
 const managerStore = [
   {
@@ -54,24 +56,26 @@ const stores = [
 const ManagerStore = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    let AuthSessionRecord=Cookies.get('loginDetails') !==undefined ? Cookies.get('loginDetails') :[]
-    const AdminRocordNew=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.getUserRecord, 'secret key').toString(CryptoJS.enc.Utf8));
-    const AdminRocord= AdminRocordNew !=="" ?JSON.parse(AdminRocordNew):[]
+    const {LoginGetDashBoardRecordJson,LoginAllStore} = useAuthDetails();
+
+    // let AuthSessionRecord=Cookies.get('loginDetails') !==undefined ? Cookies.get('loginDetails') :[]
+    // const AdminRocordNew=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.getUserRecord, 'secret key').toString(CryptoJS.enc.Utf8));
+    // const LoginAllStore= AdminRocordNew !=="" ?JSON.parse(AdminRocordNew):[]
     let UserLoginDataStringFy=Cookies.get('user_auth_record') !==undefined ? Cookies.get('user_auth_record') :[]
     const getUserLoginAuth = atob(UserLoginDataStringFy);
     const GetSessionLogin=getUserLoginAuth !==""? JSON.parse(getUserLoginAuth):[]
-    useEffect(()=>{
-      if( AuthSessionRecord !=="")
-        {
-          dispatch(getAuthSessionRecord(AuthSessionRecord))
-        }
+    // useEffect(()=>{
+    //   if( AuthSessionRecord !=="")
+    //     {
+    //       dispatch(getAuthSessionRecord(AuthSessionRecord))
+    //     }
       
-    },[AuthSessionRecord])
+    // },[AuthSessionRecord])
     // onClick={()=>handleSubmitStoreRecord(matchedStorenew?.merchant_id)}
     // onClick={()=>handleSubmitStoreRecord(matchedStore?.merchant_id)}
     
       // const handleSubmitStoreRecord=(merchant_id)=>{
-      //   const data={username:GetSessionLogin?.username,password:GetSessionLogin.password,login_type:AdminRocord?.data?.login_type,merchant_id:merchant_id}
+      //   const data={username:GetSessionLogin?.username,password:GetSessionLogin.password,login_type:LoginAllStore?.data?.login_type,merchant_id:merchant_id}
       //   dispatch(handleGetStoreRecord(data)).then(result=>{
       //     if(result?.payload?.status==true)
       //       {
@@ -99,7 +103,7 @@ const ManagerStore = () => {
       // }
     
   let getSingleStore = (result) => {
-    const matchedStorenew = AdminRocord?.data?.stores?.find(store => store?.merchant_id === result);
+    const matchedStorenew = LoginAllStore?.data?.stores?.find(store => store?.merchant_id === result);
     if (matchedStorenew) {
         // console.log("Matched store:", matchedStorenew); // Check if the matched store is correct
         return <p className="p-1 border me-3 store-items-store-names"  key={matchedStorenew?.id}>{matchedStorenew.name}</p>;
@@ -116,16 +120,16 @@ const ManagerStore = () => {
             <p className="managerStore-title select-none">Manager</p>
             <div className="flex items-center cursor-pointer">
               {/* <p className="me-3 select-none managerStore-btn" style={{whiteSpace:"nowrap"}}>Add Manager</p> <img src={AddIcon} /> */}
-              <AddManagerFormModel stores={AdminRocord} />
+              <AddManagerFormModel stores={LoginAllStore} />
             </div>
           </div>
         </Grid>
       </Grid>
         <Grid container className="store-items-list" spacing={2}>
             {
-                AdminRocord?.data?.login_type=="admin"?
-                AdminRocord?.data?.managers && Array.isArray(AdminRocord?.data?.managers)?
-                AdminRocord?.data?.managers?.map((item,Index)=>{
+                LoginAllStore?.data?.login_type=="admin"?
+                LoginAllStore?.data?.managers && Array.isArray(LoginAllStore?.data?.managers)?
+                LoginAllStore?.data?.managers?.map((item,Index)=>{
                     // console.log(result)
                     return(
                         <Grid item className="store-items " xs={12} sm={6} key={Index}>
@@ -154,7 +158,7 @@ const ManagerStore = () => {
                                 {
                                       item?.merchant_id.includes(',') ?
                                       item?.merchant_id.split(',')?.map((merchantData,index) => {
-                                          const matchedStore = AdminRocord?.data?.stores?.find(store => store?.merchant_id === merchantData)
+                                          const matchedStore = LoginAllStore?.data?.stores?.find(store => store?.merchant_id === merchantData)
                                           if (matchedStore) {
                                             // console.log(handleGetStoreData)
                                               return <p  key={index} className="p-1 border me-3 store-items-store-names">{matchedStore.name}</p>;

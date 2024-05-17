@@ -9,32 +9,26 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Cookies from 'js-cookie'; 
 import CryptoJS from 'crypto-js'; 
+import { useAuthDetails } from '../../../Common/cookiesHelper';
+
 export default function Unverified() {
   const dispatch = useDispatch()
   const navigate = useNavigate();
-  let LoginGetDashBoardRecord=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.StoreUserDashboardRecord, 'secret key').toString(CryptoJS.enc.Utf8));
-  let AuthDecryptDataDashBoardJSONFormat=LoginGetDashBoardRecord !==""? JSON.parse(LoginGetDashBoardRecord):""
-  const AdminRocordNew=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.getUserRecord, 'secret key').toString(CryptoJS.enc.Utf8));
-  let LoginAllStore=AdminRocordNew !==""? JSON.parse(AdminRocordNew):""
-  // ===================
-  // --------------------------------------------------------------------------------------------------------------
-  console.log(AuthDecryptDataDashBoardJSONFormat)
-  // console.log(AuthDecryptDataDashBoardJSONFormat)
-  console.log(LoginAllStore)
-  // console.log(LoginSuccessJson)
+  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
 
-   const merchant_id=AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id
-   const token_id=AuthDecryptDataDashBoardJSONFormat?.token_id
-   const login_type=AuthDecryptDataDashBoardJSONFormat?.login_type
-   const token= AuthDecryptDataDashBoardJSONFormat?.token
+
+  const merchant_id=LoginGetDashBoardRecordJson?.data?.merchant_id
+
+
 
   // =======================
   const UnVerifiedMerchantList = useSelector(
     (state) =>state.unverifiedMerchantRecord.unverifiedMerchantData,
   );
-  const data={type:'unapprove'}
+
+  // const data={type:'unapprove',token, token_id,login_type}
   useEffect(()=>{
-      dispatch(getUnVerifiedMerchant(data))
+      dispatch(getUnVerifiedMerchant({merchant_id,...userTypeData}))
 
   },[])
    // ====================================
@@ -54,18 +48,13 @@ export default function Unverified() {
    // ====================================
     // ====================================
     const handleEditMerchant = (data) => {
-      // console.log(data)
-      // console.log(`/users/editMerchant/${data}`)
-      // Assuming 'result' is the data you want to pass to the editMerchant route
-      // Navigate to the editMerchant route and pass 'result' as state
+      
       navigate(`/users/editMerchant/${data}`);
     };
     const handleGetVerifiedMerchant=(merchant_id)=>{
       let data = {
         merchant_id: merchant_id,
-        token_id:token_id,
-        login_type:login_type,
-        token:token
+        ...userTypeData
       };
       // const formdata = new FormData();
    

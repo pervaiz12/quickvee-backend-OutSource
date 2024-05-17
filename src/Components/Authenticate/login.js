@@ -12,20 +12,18 @@ import Quickvee from '../../Assests/LoginScreen/quickveeLogo.svg'
 import CryptoJS from 'crypto-js';
 import { useNavigate } from 'react-router-dom';
 // import { useLocation } from 'react-router-dom';
+import { useAuthDetails } from '../../Common/cookiesHelper';
 
 export default function Login() {
     const navigate = useNavigate();
-    // const{handleChangeLogin,handleSubmitForm,formData,errors,handleBlur,authEmailValidate,errorMessage}=LoginLogic();
-    // const location = useLocation();
-    // const errorMessageState = location?.state?.msg;
-    
+
+    const {LoginGetDashBoardRecordJson,LoginAllStore} = useAuthDetails();
+
     const [errorMessage,setErrorMessage]=useState("")
     const errorMessageRecord=useSelector((state)=>state?.loginAuthentication?.errors)
     const{handleChangeLogin,handleSubmitForm,formData,errors,handleBlur}=LoginLogic();
-    const AdminRocordNew=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.getUserRecord, 'secret key').toString(CryptoJS.enc.Utf8));
-    const AdminRocord= AdminRocordNew !=="" ?JSON.parse(AdminRocordNew):[]
-    console.log()
-    console.log(AdminRocord?.status)
+
+
     const handleHideErrorMessage=()=>{
         setErrorMessage(errorMessageRecord)
         setTimeout(()=>{
