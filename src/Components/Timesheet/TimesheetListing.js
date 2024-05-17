@@ -176,10 +176,12 @@ const TimesheetListing = ({ data }) => {
   const [showModalBreak, setShowModalBreak] = useState(false);
   const handleOpenBreak = () => setShowModalBreak(true);
   const handleCloseBreak = () => setShowModalBreak(false);
+  const [modalDate, setModalDate] = useState("");
 
 
-  const openModalBreak = (title) => {
+  const openModalBreak = (title,date) => {
     setEmployeeName(title)
+    setModalDate(formatDate(date));
     setShowModalBreak(true);
   };
 
@@ -206,52 +208,37 @@ const TimesheetListing = ({ data }) => {
   // for All View Break IN/Out End
 
 
+
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${month}/${day}/${year}`;
+  };
+
+  // Function to format time from HH:MM:SS to hh:mm AM/PM
+  const formatTime = (timeString) => {
+    if (!timeString) {
+      return ''; // Return an empty string or a placeholder if timeString is undefined
+    }
+    let [hours, minutes, seconds] = timeString.split(':');
+    hours = parseInt(hours, 10);
+    const ampm = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12; // Convert 0 to 12 for 12 AM
+    return `${hours.toString().padStart(2, '0')}:${minutes} ${ampm}`;
+  };
+
+
   const renderDataTable = () => {
     if ( timesheet && timesheet.status === false ){
       return <div className="empty-div box"></div>;
     }
     
-    // const renderEmployeeData = (employee) => (
-    //   <div className="box" key={employee.id}>
-    //     <div className="q-attributes-bottom-detail-section">
-    //       <div className="mt-6">
-    //         <div className="q-attributes-bottom-header bg-[#ffffff]">
-    //           <span>{employee.title}</span>
-    //           <p onClick={() => openModal(employee.title)}> Add Clock-in/Clock-out<img src={AddIcon} alt="add-icon" />{" "}</p>
-    //         </div>
-    //         <div className="q-attributes-bottom-attriButes-header">
-    //           <p className="q-catereport-item">Date Worked</p>
-    //           <p className="q-catereport-item ">Wage Rate</p>
-    //           <p className="q-catereport-item">Clock In</p>
-    //           <p className="q-catereport-item">Clock Out</p>
-    //           <p className="q-catereport-item"></p>
-    //         </div>
-    //         <div className="q-attributes-bottom-attriButes-listing">
-    //           <div className="q-attributes-bottom-attriButes-single-attributes TimesheetRow cursor-pointer" onClick={() => openModalViewBreak(employee.title)}>
-    //             <p className="q-catereport-item">05/10/2023</p>
-    //             <p className="q-catereport-item">$60</p>
-    //             <p className="q-catereport-item">9:50 AM</p>
-    //             <p className="q-catereport-item">11:00 PM</p>
-    //             <p className="q-catereport-item">
-    //               <div className="q-attributes-bottom-header timesheet bg-[#ffffff]">
-    //                 <p onClick={(e) => {
-    //                   openModalBreak(employee.title);
-    //                   e.stopPropagation();
-    //                 }}>
-    //                   Add Break<img src={AddIcon} alt="add-icon" />{" "}
-    //                 </p>
-    //               </div>
-    //             </p>
-    //           </div>
-    //         </div>
-    //       </div>
-    //     </div>
-    //   </div>
-    // );
-
-    const renderEmployeeData = (employee,index) => {
+    const renderEmployeeData = (employee,timesheetEntries) => {
+      console.log("dbnvji",timesheetEntries)
       return (
-        <div className="box" key={index}>
+        <div className="box" key={employee.id}>
           <div className="q-attributes-bottom-detail-section">
             <div className="mt-6">
               <div className="q-attributes-bottom-header bg-[#ffffff]">
@@ -265,24 +252,51 @@ const TimesheetListing = ({ data }) => {
                 <p className="q-catereport-item">Clock Out</p>
                 <p className="q-catereport-item"></p>
               </div>
-              <div className="q-attributes-bottom-attriButes-listing">
-                <div className="q-attributes-bottom-attriButes-single-attributes TimesheetRow cursor-pointer" onClick={() => openModalViewBreak(employee.title)}>
-                  <p className="q-catereport-item">05/10/2023</p>
-                  <p className="q-catereport-item">$60</p>
-                  <p className="q-catereport-item">9:50 AM</p>
-                  <p className="q-catereport-item">11:00 PM</p>
-                  <p className="q-catereport-item">
-                    <div className="q-attributes-bottom-header timesheet bg-[#ffffff]">
-                      <p onClick={(e) => {
-                        openModalBreak(employee.title);
+              {timesheetEntries.length > 0 ? (
+                timesheetEntries.map((entry, index) => (
+                  <div
+                className="q-attributes-bottom-attriButes-single-attributes TimesheetRow cursor-pointer"
+                key={index}
+                onClick={() => openModalViewBreak(employee.title)}
+              >
+                <p className="q-catereport-item">{formatDate(entry.attendance_date)}</p>
+                <p className="q-catereport-item">{`$${entry.wages_per_hr}`}</p>
+                <p className="q-catereport-item">{formatTime(entry.check_in_time)}</p>
+                <p className="q-catereport-item">{formatTime(entry.check_out_time)}</p>
+                <p className="q-catereport-item">
+                  <div className="q-attributes-bottom-header timesheet bg-[#ffffff]">
+                    <p
+                      onClick={(e) => {
+                        openModalBreak(employee.title, entry.attendance_date);
                         e.stopPropagation();
-                      }}>
-                        Add Break<img src={AddIcon} alt="add-icon" />{" "}
-                      </p>
-                    </div>
-                  </p>
-                </div>
+                      }}
+                    >
+                      Add Break<img src={AddIcon} alt="add-icon" />{" "}
+                    </p>
+                  </div>
+                </p>
               </div>
+                ))
+              ) : (
+                <div className="q-attributes-bottom-attriButes-single-attributes TimesheetRow cursor-pointer">
+                <p className="q-catereport-item">-</p>
+                <p className="q-catereport-item">-</p>
+                <p className="q-catereport-item">-</p>
+                <p className="q-catereport-item">-</p>
+                <p className="q-catereport-item">
+                  <div className="q-attributes-bottom-header timesheet bg-[#ffffff]">
+                    <p
+                      onClick={(e) => {
+                        openModalBreak(employee.title, "MM/DD/YYYY");
+                        e.stopPropagation();
+                      }}
+                    >
+                      Add Break<img src={AddIcon} alt="add-icon" />{" "}
+                    </p>
+                  </div>
+                </p>
+                </div>
+              )}
             </div>
           </div>
         </div>
@@ -290,22 +304,23 @@ const TimesheetListing = ({ data }) => {
     };
 
 
-    if (!timesheet || data.employee_id === "all") {
-      return employeeList.map(renderEmployeeData);
+    if ( data.employee_id === "all") {
+      const matchingEntries = employeeList.map(employee => {
+        const ALLkey = `${employee.title}_${employee.id}`;
+        return {
+          employee,
+          entries: timesheet.data[ALLkey] || []
+        };
+      });
+      return matchingEntries.map(({ employee, entries }) => renderEmployeeData(employee, entries));
+  
     }
     const selectedEmployee = employeeList.find((employee) => employee.id === data.employee_id);
     // console.log("jxdzbv",selectedEmployee?.title+'_'+selectedEmployee?.id)
     if (selectedEmployee) {
-      const name = selectedEmployee?.title+'_'+selectedEmployee.id
-      const matchingData = timesheet.data.find((item) => item.key == name);
-      if (matchingData) {
-        console.log("Matching data:", matchingData);
-        // Do something with the matching data
-      } else {
-        console.log("No matching data found for", name);
-      }
-
-      return renderEmployeeData(selectedEmployee);
+      const key = `${selectedEmployee.title}_${data.employee_id}`;
+      const matchingEntries = timesheet.data[key] || [];
+      return renderEmployeeData(selectedEmployee,matchingEntries);
     }
   };
 
@@ -496,7 +511,7 @@ const TimesheetListing = ({ data }) => {
                 <span>{EmployeeName}</span>
               </span>
               <div className="viewTextBark">
-              <span className="borderRight ">05/10/2023</span> <span className="pl-1"> Break-in/Break-out</span>
+              <span className="borderRight ">{modalDate}</span> <span className="pl-1"> Break-in/Break-out</span>
               </div>
             </div>
 
