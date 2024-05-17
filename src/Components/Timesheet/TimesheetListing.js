@@ -83,10 +83,18 @@ const TimesheetListing = ({ data }) => {
 
   const openModal = (title) => {
     setEmployeeName(title)
+    setDateStartError("");
+    setDateEndError("");
+    setDateStartTimeError("");
+    setDateEndTimeError("");
     setShowModal(true);
   };
 
   const closeModal = () => {
+    setDateStartError("");
+    setDateEndError("");
+    setDateStartTimeError("");
+    setDateEndTimeError("");
     setShowModal(false);
   };
 
@@ -167,7 +175,41 @@ const TimesheetListing = ({ data }) => {
 
   const handleSave = async (e) => {
     e.preventDefault();
-    console.log("Add ")
+    
+    if (!addtimebreak.add_in_date) {
+      setDateStartError("Select In Date is required");
+      return;
+    } else {
+      setDateStartError("");
+    }
+
+    if (!addtimebreak.add_clocked_in) {
+      setDateStartTimeError("Clock In Time is required");
+      return;
+    } else {
+      setDateStartTimeError("");
+    }
+
+    if (!addtimebreak.add_out_date) {
+      setDateEndError("Select Out Date is required");
+      return;
+    } else {
+      setDateEndError("");
+    }
+
+    if (!addtimebreak.add_clocked_out) {
+      setDateEndTimeError("Clock Out Time is required");
+      return;
+    } else {
+      setDateEndTimeError("");
+    }
+
+    const formData = new FormData();
+    formData.append("merchant_id", addtimebreak.merchant_id);
+   
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
 
   }
 
@@ -177,17 +219,74 @@ const TimesheetListing = ({ data }) => {
   const handleOpenBreak = () => setShowModalBreak(true);
   const handleCloseBreak = () => setShowModalBreak(false);
   const [modalDate, setModalDate] = useState("");
+  const [modalAddBreakID, setModalAddBreakID] = useState("");
+  const [BreakInTimeError, setBreakInTimeError] = useState("");
+  const [BreakOutTimeError, setBreakOutTimeError] = useState("");
 
 
-  const openModalBreak = (title,date) => {
+  const openModalBreak = (title,id,date) => {
     setEmployeeName(title)
+    setModalAddBreakID(id)
     setModalDate(formatDate(date));
+    setBreakInTimeError("");
+    setBreakOutTimeError("");
     setShowModalBreak(true);
   };
 
   const closeModalBreak = () => {
+    setBreakInTimeError("");
+    setBreakOutTimeError("");
     setShowModalBreak(false);
   };
+
+  const [addbreak, setaddbreak] = useState({
+    merchant_id: "MAL0100CA",
+    employee_id: modalAddBreakID,
+    addbreakIn: "",
+    addbreakOut: "",
+  });
+
+  const handleBreakStartTimeChange = (newTime) => {
+    setaddbreak({
+      ...addbreak,
+      addbreakIn: newTime.format("HH:mm:ss"),
+    });
+  };
+  const handleBreakEndTimeChange = (newTime) => {
+    setaddbreak({
+      ...addbreak,
+      addbreakOut: newTime.format("HH:mm:ss"),
+    });
+  };
+
+
+  const handleBreakSave = async (e) => {
+    e.preventDefault();
+    
+    if (!addbreak.addbreakIn) {
+      setBreakInTimeError("Break In Time is required");
+      return;
+    } else {
+      setBreakInTimeError("");
+    }
+
+    if (!addbreak.addbreakOut) {
+      setBreakOutTimeError("Break Out Time is required");
+      return;
+    } else {
+      setBreakOutTimeError("");
+    }
+
+
+    const formData = new FormData();
+    formData.append("merchant_id", addtimebreak.merchant_id);
+   
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+
+  }
+
 
   // for Break Modal End
   
@@ -217,6 +316,15 @@ const TimesheetListing = ({ data }) => {
     return `${month}/${day}/${year}`;
   };
 
+  const [currentDate, setCurrentDate] = useState(getDate());
+  function getDate() {
+    const today = new Date();
+    const month = today.getMonth() + 1;
+    const year = today.getFullYear();
+    const date = today.getDate();
+    return `${month}/${date}/${year}`;
+  }
+
   // Function to format time from HH:MM:SS to hh:mm AM/PM
   const formatTime = (timeString) => {
     if (!timeString) {
@@ -236,7 +344,6 @@ const TimesheetListing = ({ data }) => {
     }
     
     const renderEmployeeData = (employee,timesheetEntries) => {
-      console.log("dbnvji",timesheetEntries)
       return (
         <div className="box" key={employee.id}>
           <div className="q-attributes-bottom-detail-section">
@@ -264,10 +371,10 @@ const TimesheetListing = ({ data }) => {
                 <p className="q-catereport-item">{formatTime(entry.check_in_time)}</p>
                 <p className="q-catereport-item">{formatTime(entry.check_out_time)}</p>
                 <p className="q-catereport-item">
-                  <div className="q-attributes-bottom-header timesheet bg-[#ffffff]">
+                  <div className="q-attributes-bottom-header viewTimesheet-AddBreak timesheet bg-[#ffffff]">
                     <p
                       onClick={(e) => {
-                        openModalBreak(employee.title, entry.attendance_date);
+                        openModalBreak(employee.title,employee.id,entry.attendance_date);
                         e.stopPropagation();
                       }}
                     >
@@ -278,16 +385,16 @@ const TimesheetListing = ({ data }) => {
               </div>
                 ))
               ) : (
-                <div className="q-attributes-bottom-attriButes-single-attributes TimesheetRow cursor-pointer">
+                <div className="q-attributes-bottom-attriButes-single-attributes TimesheetRow ">
                 <p className="q-catereport-item">-</p>
                 <p className="q-catereport-item">-</p>
                 <p className="q-catereport-item">-</p>
                 <p className="q-catereport-item">-</p>
                 <p className="q-catereport-item">
-                  <div className="q-attributes-bottom-header timesheet bg-[#ffffff]">
+                  <div className="q-attributes-bottom-header viewTimesheet-AddBreak timesheet bg-[#ffffff]">
                     <p
                       onClick={(e) => {
-                        openModalBreak(employee.title, "MM/DD/YYYY");
+                        openModalBreak(employee.title,employee.id,currentDate);
                         e.stopPropagation();
                       }}
                     >
@@ -508,7 +615,7 @@ const TimesheetListing = ({ data }) => {
                   alt="Timesheet"
                   className="w-6 h-6"
                 />
-                <span>{EmployeeName}</span>
+                <span>{EmployeeName} / {modalAddBreakID}</span>
               </span>
               <div className="viewTextBark">
               <span className="borderRight ">{modalDate}</span> <span className="pl-1"> Break-in/Break-out</span>
@@ -527,6 +634,9 @@ const TimesheetListing = ({ data }) => {
                                   slotProps={{
                                     textField: { placeholder: "Start Time" },
                                   }}
+                                  onChange={(newTime) =>
+                                    handleBreakStartTimeChange(newTime)
+                                  }
                                   components={{
                                     OpenPickerIcon: () => (
                                       <img src={TimeIcon} alt="time-icon" />
@@ -535,6 +645,11 @@ const TimesheetListing = ({ data }) => {
                                   sx={{ width: '100%' }}
                                 />
                           </LocalizationProvider>
+                          {BreakInTimeError && (
+                                <p className="error-message ">
+                                  {BreakInTimeError} 
+                                </p>
+                          )}
                       </Grid>
 
                       <Grid item md={6} xs={6}>
@@ -546,6 +661,9 @@ const TimesheetListing = ({ data }) => {
                                   slotProps={{
                                     textField: { placeholder: "Start Time" },
                                   }}
+                                  onChange={(newTime) =>
+                                    handleBreakEndTimeChange(newTime)
+                                  }
                                   components={{
                                     OpenPickerIcon: () => (
                                       <img src={TimeIcon} alt="time-icon" />
@@ -554,6 +672,11 @@ const TimesheetListing = ({ data }) => {
                                   sx={{ width: '100%' }}
                                 />
                           </LocalizationProvider>
+                          {BreakOutTimeError && (
+                                <p className="error-message ">
+                                  {BreakOutTimeError} 
+                                </p>
+                          )}
                       </Grid>
                      
                     </Grid>
@@ -561,7 +684,7 @@ const TimesheetListing = ({ data }) => {
             </div>
 
             <div className="q-add-categories-section-middle-footer">
-                  <button  className="quic-btn quic-btn-save" >Add</button>
+                  <button  className="quic-btn quic-btn-save" onClick={handleBreakSave}>Add</button>
                   <button onClick={closeModalBreak} className="quic-btn quic-btn-cancle">Cancel</button>
             </div>
           </Box>
