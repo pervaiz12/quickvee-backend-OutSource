@@ -16,6 +16,7 @@ const StoreWorkingHrs = () => {
   const [classItem, setClassItem] = useState(1)
 
   const setupDataState = useSelector((state)=>state?.StoreSetupList?.storesetupData)
+
   // console.log("gagaga", setupDataState)
 
   // const [days, setDays] = useState([
@@ -78,8 +79,7 @@ const StoreWorkingHrs = () => {
   // ]);
 
   const defaultDays = setupDataState?.time_slot ? setupDataState.time_slot : '';
-  const [days, setDays] = useState(defaultDays);
-
+  const [days, setDays] = useState([]);
   useEffect(() => {
     if (setupDataState?.time_slot) {
       try {

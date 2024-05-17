@@ -57,7 +57,17 @@
 	font-family: CircularSTDMedium;
 	src: url("./Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
 }
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
 .main-page-home-dashboard {
 	width: 100%;
 	height: auto;
@@ -240,13 +250,13 @@
 	}
 }
 
-.main-content {
+/* .main-content {
 	overflow-x: auto;
 	overflow-y: auto;
 	height: 100vh;
 	overflow-x: hidden;
 	position: relative;
-}
+} */
 
 .importBtn {
 	box-shadow: rgba(0, 0, 0, 0.12) 0px 3px 6px;
@@ -1119,4 +1129,8 @@ div.q_label_details::after {
 
 .header-menu{
 	font-size: clamp(10px, 1.5vw, 18px) !important;
+}
+
+.custom-datepicker-remove-border fieldset{
+	border-width: 0 !important;
 }

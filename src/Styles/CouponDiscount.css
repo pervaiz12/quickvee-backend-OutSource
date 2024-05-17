@@ -766,7 +766,7 @@ img.clock_design{
 }
 
 .MuiFormControl-root.MuiTextField-root.input_label_section.css-z3c6am-MuiFormControl-root-MuiTextField-root {
-  margin-left: -39px;
+  /* margin-left: -39px; */
 }
 
 
@@ -888,7 +888,7 @@ img.clock_design{
   height: 80%;
   background-color: #E3E3E3;
 
-  transform: translate(2.8rem , 0.3rem);
+  /* transform: translate(2.8rem , 0.3rem); */
 }
 
 .q_time_display .MuiFormControl-root.MuiTextField-root.input_label_section.css-z3c6am-MuiFormControl-root-MuiTextField-root {

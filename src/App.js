@@ -5,6 +5,7 @@ import {
   Route,
   Switch,
   Link,
+  useLocation
 } from "react-router-dom";
 import "./index.css";
 import Layout from "./Components/Layout/Index";
@@ -94,19 +95,26 @@ import { useMediaQuery } from "@mui/material";
 // import InventoryExport from "./Components/InventoryExport/MainInventoryExport";
 
 function App() {
-
+  const location = useLocation();
   const isTabletNav = useMediaQuery("(max-width:1024px)");
   const [isMenuOpen, setIsMenuOpen] = useState(!isTabletNav);
-
+  const currentUrl = location.pathname;
+  const [isSideBar,setIsSideBar] = useState(false);
   useEffect(() => {
     setIsMenuOpen(!isTabletNav);
     if (!isTabletNav) {
     }
   }, [isTabletNav]);
-
+  useEffect(() => {
+    if (currentUrl.split('/')[2] === 'order-summary') {
+      setIsSideBar(true);
+    } else {
+      setIsSideBar(false);
+    }
+  },[currentUrl]);
   return (
     <>
-      <SideMenu setIsMenuOpen={setIsMenuOpen} isTabletNav={isTabletNav} isMenuOpen={isMenuOpen}/>
+       {!isSideBar && <SideMenu setIsMenuOpen={setIsMenuOpen} isTabletNav={isTabletNav} isMenuOpen={isMenuOpen}/>}
       <Routes>
         {/* <Route exact path="/" element={<Main />} /> */}
         {/* <Route exact path="/" element={<Layout />} /> */}
