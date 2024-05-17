@@ -139,6 +139,8 @@ const initialState = {
     loading: false,
     getUserRecord: [],
     errors: '',
+    getUserLoginRecord:[],
+    StoreUserDashboardRecord:[],
 };
 
 // Async thunk to handle user authentication
@@ -147,11 +149,12 @@ export const handleUserType = createAsyncThunk('LoginAuth/handleUserType', async
         const response = await axios.post(BASE_URL + LOGIN_OTP_SUBMIT_AUTHENTICATION, data, {
             headers: { "Content-Type": "multipart/form-data" },
         });
-
+        localStorage.removeItem("AllStore")
         if (response.data.status === true) {
             // Encrypt response data before storing in cookies
             const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(response.data), 'secret key').toString();
             Cookies.set('loginDetails', encryptedData);
+            Cookies.set('token_data', encryptedData);
 
             // Store user authentication record in local storage
             const encoded = btoa(JSON.stringify(data));
@@ -172,7 +175,9 @@ export const handleGetStoreRecord = createAsyncThunk('LoginAuth/handleGetStoreRe
         const response = await axios.post(BASE_URL + LOGIN_OTP_SUBMIT_AUTHENTICATION, data, {
             headers: { "Content-Type": "multipart/form-data" },
         });
+        localStorage.removeItem("AllStore")
         if (response.data.status === true) {
+           
             const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(response?.data), 'secret key').toString();
             Cookies.set('token_data', encryptedData);
         }
@@ -182,6 +187,7 @@ export const handleGetStoreRecord = createAsyncThunk('LoginAuth/handleGetStoreRe
         throw error;
     }
 });
+
 
 const LoginSlice = createSlice({
     name: 'LoginAuth',
@@ -193,8 +199,16 @@ const LoginSlice = createSlice({
         getAuthInvalidMessage(state, action) {
             state.errors = action.payload;
         },
+        getUserRecordData(state, action){
+            state.getUserLoginRecord = action.payload;
+
+        },
+        getUserDashboardRecord(state, action)
+        {
+            state.StoreUserDashboardRecord=action.payload
+        }
     },
 });
 
-export const { getAuthSessionRecord ,getAuthInvalidMessage} = LoginSlice.actions;
+export const { getAuthSessionRecord ,getAuthInvalidMessage,getUserRecordData,getUserDashboardRecord} = LoginSlice.actions;
 export default LoginSlice.reducer;

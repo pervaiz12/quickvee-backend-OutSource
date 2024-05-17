@@ -43,15 +43,28 @@ const SideMenu =() => {
   // const AdminRocordNew=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.getUserRecord, 'secret key').toString(CryptoJS.enc.Utf8));
   // const AdminRocord= AdminRocordNew !=="" ?JSON.parse(AdminRocordNew):[]
   let AuthSessionRecord=Cookies.get('loginDetails') !==undefined ? Cookies.get('loginDetails') :[]
-let AuthDecryptData=CryptoJS.AES.decrypt(AuthSessionRecord, 'secret key').toString(CryptoJS.enc.Utf8);
-const AdminRocord= AuthDecryptData !=="" ?JSON.parse(AuthDecryptData):[]
-console.log(AdminRocord)
-  useEffect(()=>{
+  let AuthDecryptData=CryptoJS.AES.decrypt(AuthSessionRecord, 'secret key').toString(CryptoJS.enc.Utf8);
+  const AdminRocord= AuthDecryptData !=="" ?JSON.parse(AuthDecryptData):[]
+  let LoginGetDashBoard=Cookies.get('token_data') !==undefined ? Cookies.get('token_data') :[]
+  let AuthDecryptDataDashBoard=CryptoJS.AES.decrypt(LoginGetDashBoard, 'secret key').toString(CryptoJS.enc.Utf8);
+  const AuthDecryptDataDashBoardJSONFormat= AuthDecryptDataDashBoard !=="" ?JSON.parse(AuthDecryptDataDashBoard):[]
+  // console.log(AuthDecryptDataDashBoardJSONFormat?.final_login)
+  // console.log(AdminRocord?.final_login)
+  // (AuthDecryptDataDashBoardJSONFormat?.final_login==1 || AdminRocord?.final_login==1)
 
-    console.log('hehhehehe')
-    console.log(AdminRocord)
+  
 
-  },[AuthSessionRecord])
+  // useEffect(()=>{
+
+  //   console.log('hehhehehe')
+  //   console.log(AdminRocord)
+
+  // },[AuthSessionRecord])
+  // ======================================
+  let LoginGetDashBoardRecord=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.StoreUserDashboardRecord, 'secret key').toString(CryptoJS.enc.Utf8));
+  let LoginGetDashBoardRecordJson=LoginGetDashBoardRecord !==""? JSON.parse(LoginGetDashBoardRecord):""
+  // console.log(LoginGetDashBoardRecordJson)
+  // ======================================
 
   const temp = {
     "superadmin": menuItems,
@@ -68,7 +81,7 @@ console.log(AdminRocord)
   const [activeItem, setActiveItem] = useState(currentUrl);
   const [hoveredItem, setHoveredItem] = useState(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [currentDropDownItem, activeDropDownItem] = useState(null)
+  const [currentDropDownItem, activeDropDownItem] = useState(null) 
   const navigate = useNavigate();
 
   const handleItemClick = (item) => {
@@ -87,10 +100,11 @@ console.log(AdminRocord)
           paddingTop: "69px",
         }}
       >
+        {/* || AdminRocord?.final_login==1 */}
         {/* Left Side Menu */}
         <div className="flex-1 bg-[#253338] text-[#9E9E9E]">
           {isMenuOpenRedux
-            ? temp[AdminRocord?.data?.login_type]?.map((item) => (
+            ? ((LoginGetDashBoardRecordJson?.final_login==1 )?temp["superadmin"]:temp[LoginGetDashBoardRecordJson?.data?.login_type])?.map((item) => (
                 <div
                   key={item.id}
                   className={`text-[#9E9E9E] active:bg-[#414F54] hover:bg-[#414F54] hover:text-[#FFC400] px-0 ${
@@ -204,7 +218,7 @@ const DropdownMenuItem = ({
 
   const [dropDownItem, setDropDownItem] = useState(null);
   const isTabletNav = useMediaQuery("(max-width:1024px)");
-  console.log("currentDropDownItem", currentDropDownItem)
+  // console.log("currentDropDownItem", currentDropDownItem)
   useEffect(() => {
     isTabletNav && setIsDropdownOpen(false);
   }, [isTabletNav]);

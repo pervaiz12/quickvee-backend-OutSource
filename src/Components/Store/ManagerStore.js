@@ -67,40 +67,42 @@ const ManagerStore = () => {
         }
       
     },[AuthSessionRecord])
+    // onClick={()=>handleSubmitStoreRecord(matchedStorenew?.merchant_id)}
+    // onClick={()=>handleSubmitStoreRecord(matchedStore?.merchant_id)}
     
-      const handleSubmitStoreRecord=(merchant_id)=>{
-        const data={username:GetSessionLogin?.username,password:GetSessionLogin.password,login_type:AdminRocord?.data?.login_type,merchant_id:merchant_id}
-        dispatch(handleGetStoreRecord(data)).then(result=>{
-          if(result?.payload?.status==true)
-            {
-              console.log(result?.payload)
-              console.log(result?.payload?.final_login)
-              if(result?.payload?.final_login==1)
-                {
-                  navigate(`/`)
+      // const handleSubmitStoreRecord=(merchant_id)=>{
+      //   const data={username:GetSessionLogin?.username,password:GetSessionLogin.password,login_type:AdminRocord?.data?.login_type,merchant_id:merchant_id}
+      //   dispatch(handleGetStoreRecord(data)).then(result=>{
+      //     if(result?.payload?.status==true)
+      //       {
+      //         console.log(result?.payload)
+      //         console.log(result?.payload?.final_login)
+      //         if(result?.payload?.final_login==1)
+      //           {
+      //             navigate(`/`)
                  
-                }else{
-                  console.log("store page called")
-                }
+      //           }else{
+      //             console.log("store page called")
+      //           }
               
               
-            }else{
-                Cookies.remove('loginDetails');
-                Cookies.remove('user_auth_record');
-                // navigate('/login'), { state: {msg: result?.payload?.msg} }
-                dispatch(getAuthInvalidMessage(result?.payload?.msg))
-                navigate('/login')
+      //       }else{
+      //           Cookies.remove('loginDetails');
+      //           Cookies.remove('user_auth_record');
+      //           // navigate('/login'), { state: {msg: result?.payload?.msg} }
+      //           dispatch(getAuthInvalidMessage(result?.payload?.msg))
+      //           navigate('/login')
       
-            }
-        })
+      //       }
+      //   })
       
-      }
+      // }
     
   let getSingleStore = (result) => {
     const matchedStorenew = AdminRocord?.data?.stores?.find(store => store?.merchant_id === result);
     if (matchedStorenew) {
         // console.log("Matched store:", matchedStorenew); // Check if the matched store is correct
-        return <p className="p-1 border me-3 store-items-store-names" onClick={()=>handleSubmitStoreRecord(matchedStorenew?.merchant_id)} key={matchedStorenew?.id}>{matchedStorenew.name}</p>;
+        return <p className="p-1 border me-3 store-items-store-names"  key={matchedStorenew?.id}>{matchedStorenew.name}</p>;
     }
 }
 
@@ -155,7 +157,7 @@ const ManagerStore = () => {
                                           const matchedStore = AdminRocord?.data?.stores?.find(store => store?.merchant_id === merchantData)
                                           if (matchedStore) {
                                             // console.log(handleGetStoreData)
-                                              return <p onClick={()=>handleSubmitStoreRecord(matchedStore?.merchant_id)} key={index} className="p-1 border me-3 store-items-store-names">{matchedStore.name}</p>;
+                                              return <p  key={index} className="p-1 border me-3 store-items-store-names">{matchedStore.name}</p>;
                                           }
                                       
                                       })

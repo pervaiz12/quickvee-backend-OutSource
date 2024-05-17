@@ -83,24 +83,21 @@ const storeList = [
 const StorePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  let AuthSessionRecord=Cookies.get('loginDetails') !==undefined ? Cookies.get('loginDetails') :[]
+  // let AuthSessionRecord=Cookies.get('loginDetails') !==undefined ? Cookies.get('loginDetails') :[]
   let UserLoginDataStringFy=Cookies.get('user_auth_record') !==undefined ? Cookies.get('user_auth_record') :[]
   const getUserLoginAuth = atob(UserLoginDataStringFy);
   const GetSessionLogin=getUserLoginAuth !==""? JSON.parse(getUserLoginAuth):[]
-  console.log(GetSessionLogin)
-
-
   // const {handleGetStoreData}=StoreListLogic()
   const AdminRocordNew=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.getUserRecord, 'secret key').toString(CryptoJS.enc.Utf8));
   const AdminRocord= AdminRocordNew !=="" ?JSON.parse(AdminRocordNew):[]
-  console.log(AdminRocord)
-  useEffect(()=>{
-    if( AuthSessionRecord !=="")
-      {
-        dispatch(getAuthSessionRecord(AuthSessionRecord))
-      }
+
+  // useEffect(()=>{
+  //   if( AuthSessionRecord !=="")
+  //     {
+  //       dispatch(getAuthSessionRecord(AuthSessionRecord))
+  //     }
     
-  },[AuthSessionRecord])
+  // },[AuthSessionRecord])
 
   // const handleGetRecord=(merchantId)=>{
   //   console.log(merchantId)
@@ -114,12 +111,12 @@ const StorePage = () => {
 //     if (matchedStorenew) {
 //         console.log("Matched store:", matchedStorenew); // Check if the matched store is correct GetSessionLogin.username
 //         return <span onClick={()=>handleGetRecord(matchedStorenew?.merchant_id)} key={matchedStorenew?.id}>{matchedStorenew.name}</span>;
-//     }GetSessionLogin?.username
+//     }GetSessionLogin?.username  GetSessionLogin?.username
 // }
 const handleSubmitStoreRecord=(merchant_id)=>{
   const data={username:GetSessionLogin?.username,password:GetSessionLogin.password,login_type:AdminRocord?.data?.login_type,merchant_id:merchant_id}
-  console.log(data)
   dispatch(handleGetStoreRecord(data)).then(result=>{
+    console.log(result?.payload)
     if(result?.payload?.status==true)
       {
         if(result?.payload?.final_login==1)
@@ -132,7 +129,7 @@ const handleSubmitStoreRecord=(merchant_id)=>{
       }else{
           Cookies.remove('loginDetails');
           Cookies.remove('user_auth_record');
-          Cookies.remove('token_data');
+          // Cookies.remove('token_data');
           dispatch(getAuthInvalidMessage(result?.payload?.msg))
           navigate('/login')
 
