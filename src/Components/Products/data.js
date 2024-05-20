@@ -82,16 +82,16 @@ export const formData = [
 
 export const bulkVarientEdit = [
   {
-    name: "compareAtPrice",
-    placeholder: "",
-    type: "text",
-    label: "Compare At Price",
-  },
-  {
     name: "costPerItem",
     placeholder: "",
     type: "text",
     label: "Cost per item",
+  },
+  {
+    name: "compareAtPrice",
+    placeholder: "",
+    type: "text",
+    label: "Compare At Price",
   },
   {
     name: "price",
@@ -100,16 +100,31 @@ export const bulkVarientEdit = [
     label: "Price",
   },
   {
+    name: "reorderQty",
+    placeholder: "",
+    type: "text",
+    label: "Reorder Qty",
+  },
+  {
     name: "reorderLevel",
     placeholder: "",
     type: "text",
     label: "Reorder Level",
   },
+];
+
+export const bulkInstantPo = [
   {
-    name: "reorderQty",
+    name: "qty",
     placeholder: "",
     type: "text",
-    label: "Reorder Cost",
+    label: "Quantity",
+  },
+  {
+    name: "upcCode",
+    placeholder: "",
+    type: "text",
+    label: "Cost",
   },
 ];
 

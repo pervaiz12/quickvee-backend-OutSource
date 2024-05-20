@@ -16,14 +16,15 @@ const SearchableDropdown = ({
   handleUpdateError,
   name,
 }) => {
+  // console.log("optionList", keyName, optionList);
   const { checkLength } = Validation();
   const [filterOptions, setFilterOptions] = useState(optionList);
   const [filterValue, setFilterValue] = useState("");
   const handleFilterOptions = (e) => {
     const { value } = e.target;
     setFilterValue(value);
-    const filterList = optionList.filter((item) => {
-      return item.title.toLowerCase().includes(value.toLowerCase());
+    const filterList = optionList?.filter((item) => {
+      return item?.[name]?.toLowerCase().includes(value.toLowerCase());
     });
     setFilterOptions(
       filterList?.length ? filterList : ["No Search Result Found"]
@@ -44,7 +45,7 @@ const SearchableDropdown = ({
 
   const changeFilterableList = () => {
     // filter incoming optionList items when onchange run
-    if (filterOptions.length) {
+    if (filterOptions?.length) {
       return filterOptions;
     }
     return optionList;
@@ -81,9 +82,13 @@ const SearchableDropdown = ({
 
   return (
     <>
-      <div className="title-area">
-        <span>{title}</span>
-      </div>
+      {title ? (
+        <div className="title-area">
+          <span>{title}</span>
+        </div>
+      ) : (
+        ""
+      )}
       <div
         className="dropdownBox"
         style={{ padding: showOptions ? "10px" : "7px 8px 0px 8px" }}
@@ -151,7 +156,7 @@ const SearchableDropdown = ({
               ? changeFilterableList()?.map((opt) => {
                   if (typeof opt === "string") {
                     return <p>{opt}</p>;
-                  } else if (opt?.id) {
+                  } else if (opt?.id && opt?.[name]) {
                     return (
                       <span
                         className={
@@ -166,7 +171,7 @@ const SearchableDropdown = ({
                             : handleSelectProductOptions(opt, keyName)
                         }
                       >
-                        {opt?.title}
+                        {opt?.[name]}
                       </span>
                     );
                   }
@@ -177,7 +182,7 @@ const SearchableDropdown = ({
           ""
         )}
       </div>
-      {error[keyName] ? (
+      {error?.[keyName] ? (
         <span className="error-alert">{error[keyName]}</span>
       ) : (
         ""

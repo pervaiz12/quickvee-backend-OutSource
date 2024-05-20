@@ -7,6 +7,8 @@ import { useDispatch, useSelector } from "react-redux";
 import htmlToFormattedText from "html-to-formatted-text";
 import {
   addProduct,
+  checkProductTitle,
+  editProductData,
   fetchCategoryList,
   fetchProductList,
   fetchProductsData,
@@ -28,11 +30,14 @@ import AlertModal from "../../CommonComponents/AlertModal";
 import { useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "../../Constants/Config";
 import EditPage from "./EditPage";
+import ToastModal from "../../CommonComponents/ToastModal";
+import { ToastContainer } from "react-toastify";
+import Loader from "../../CommonComponents/Loader";
 
 const AddProducts = () => {
   const fileUploadRef = useRef();
   const dispatch = useDispatch();
-  const { isLoading, isError } = useSelector(
+  const { isLoading, isError, isEditError, isFetchLoading } = useSelector(
     (state) => state?.productsListData
   );
   const navigate = useNavigate();
@@ -57,6 +62,8 @@ const AddProducts = () => {
     files: [],
   });
 
+  const [toastModal, setToastModal] = useState(false);
+
   // modal of bulk varientedit states
   const [editVarient, setEditVarient] = useState({
     costPerItem: "",
@@ -66,8 +73,16 @@ const AddProducts = () => {
     reorderLevel: "",
   });
 
+  const [bulkEditPo, setBulkEditPo] = useState([
+    {
+      quantity: "",
+      Cost: "",
+    },
+  ]);
+
   //fetch data states
   const [productData, setProductData] = useState({});
+  const [inventoryData, setInventoryData] = useState({});
   const [options, setOptions] = useState({});
   const [varientData, setVarientData] = useState([]);
 
@@ -77,6 +92,7 @@ const AddProducts = () => {
 
   /// varientTitle combination list
   let varientTitle = [];
+  let titleTimeoutId;
   const [error, setError] = useState({
     title: "",
     description: "",
@@ -182,6 +198,7 @@ const AddProducts = () => {
     errorIndex: null,
   });
 
+  const [productTitleError, SetProductTitleError] = useState(false);
   const [dropdownData, setDropdowndata] = useState({
     varientList: [],
     taxList: [],
@@ -221,15 +238,15 @@ const AddProducts = () => {
           },
         ]);
         setFormValue([]);
-        setProductInfo({
-          title: "",
-          description: "",
-          category: [],
-          taxes: [],
-          relatedProduct: [],
-          frequentlyBought: [],
-          files: [],
-        });
+        // setProductInfo({
+        //   title: "",
+        //   description: "",
+        //   category: [],
+        //   taxes: [],
+        //   relatedProduct: [],
+        //   frequentlyBought: [],
+        //   files: [],
+        // });
       }
     } else {
       setIsMultipleVaient((prev) => {
@@ -267,15 +284,15 @@ const AddProducts = () => {
             isFoodStamble: false,
           },
         ]);
-        setProductInfo({
-          title: "",
-          description: "",
-          category: [],
-          taxes: [],
-          relatedProduct: [],
-          frequentlyBought: [],
-          files: [],
-        });
+        // setProductInfo({
+        //   title: "",
+        //   description: "",
+        //   category: [],
+        //   taxes: [],
+        //   relatedProduct: [],
+        //   frequentlyBought: [],
+        //   files: [],
+        // });
       }
     }
   };
@@ -303,8 +320,38 @@ const AddProducts = () => {
     }));
   };
 
+  console.log("productInfo?.files", productInfo?.files);
   const handleProductInfo = async (e) => {
     const { name, value } = e.target;
+
+    if (name === "title") {
+      const formData = new FormData();
+      formData.append("title", value);
+      formData.append("id", productData?.id);
+      formData.append("merchant_id", "MAL0100CA");
+
+      // Clear previous timeout if exists
+      clearTimeout(titleTimeoutId);
+
+      // Call the API after one second
+      titleTimeoutId = setTimeout(async () => {
+        try {
+          const res = await dispatch(checkProductTitle(formData));
+          if (res?.payload?.status) {
+            SetProductTitleError(false);
+          } else {
+            SetProductTitleError(true);
+          }
+        } catch (error) {
+          // Handle any errors from the API call
+          console.error("Error:", error);
+        }
+      }, 500);
+    }
+    setProductInfo((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
     switch (name) {
       case "title":
         await validatTitle(value, error);
@@ -316,10 +363,6 @@ const AddProducts = () => {
         break;
     }
     handleUpdateError(error);
-    setProductInfo((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
   };
 
   const handleSetVarientLength = (updatedVarient) => {
@@ -362,7 +405,7 @@ const AddProducts = () => {
     let deleteImage;
     if (type === "string") {
       deleteImage = productInfo?.files?.filter((img) => {
-        return img?.file?.name !== imageToDelete?.file?.name;
+        return img !== imageToDelete;
       });
     } else {
       deleteImage = productInfo?.files?.filter((img) => {
@@ -682,6 +725,21 @@ const AddProducts = () => {
           inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
       }
     }
+    // allowed alphanumeric value in upcCode field but not allowed decimal value
+    else if (name === "upcCode") {
+      fieldValue = fieldValue = value
+        // Remove extra dots and ensure only one dot exists at most
+        .replace(/[^\w.]/g, "") // Allow alphanumeric characters, digits, and dots only
+        .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
+        .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+
+      let inputStr = fieldValue.replace(/[^\w]/g, "");
+      if (inputStr == "0") {
+        fieldValue = "0";
+      } else {
+        fieldValue = inputStr.toUpperCase();
+      }
+    }
     // normal input value format
     else {
       fieldValue = value
@@ -883,8 +941,15 @@ const AddProducts = () => {
               customCode: previousData.customCode || "",
               reorderQty: previousData.reorderQty || "",
               reorderLevel: previousData.reorderLevel || "",
-              trackQuantity: previousData.trackQuantity || true,
-              sellOutOfStock: previousData.sellOutOfStock || true,
+              // here when fetching prodcut data and track and sellout was false but still showing true and check that's why using this condition
+              trackQuantity:
+                previousData.trackQuantity || pageUrl !== "product-edit"
+                  ? true
+                  : false,
+              sellOutOfStock:
+                previousData.sellOutOfStock || pageUrl !== "product-edit"
+                  ? true
+                  : false,
               checkId: previousData.checkId || false,
               disable: previousData.disable || false,
               // itemForAllLinkedLocation:
@@ -929,9 +994,13 @@ const AddProducts = () => {
       if (!!productId?.id) {
         dispatch(fetchProductsDataById(formData)).then((res) => {
           if (res?.payload?.message === "Success") {
-            setProductData(res?.payload?.productdata);
-            setOptions(res?.payload?.options);
-            setVarientData(res?.payload?.varients);
+            setProductData(res?.payload?.data?.productdata);
+            setInventoryData(res?.payload?.data?.inventory_setting_data);
+            setOptions(res?.payload?.data?.options);
+            setVarientData(res?.payload?.data?.product_variants);
+            setIsMultipleVaient(
+              Boolean(+res?.payload?.data?.productdata?.isvarient)
+            );
           }
         });
       } else {
@@ -967,7 +1036,7 @@ const AddProducts = () => {
           "relatedProducttList"
         )?.map((i) => i[0]),
         frequentlyBought: selectedItemsFromdata(
-          productData?.featured_product?.split(","),
+          productData?.buy_with_product?.split(","),
           "frequentlyBroughtList"
         )?.map((i) => i[0]),
         files: !!productData?.media
@@ -983,99 +1052,123 @@ const AddProducts = () => {
 
       const varientOptions = [];
       // if first varient values only exist
-      if (!!options?.options3 && !!options?.optionsvl3) {
-        for (let i = 1; i < 4; i++) {
-          const varientName = "options" + [i];
-          const varientAttribute = "optionsvl" + [i];
-          if (options[varientName]) {
-            varientOptions.push({
-              id: i,
-              varientName: {
-                value: options[varientName],
-                label: options[varientName],
-              },
-              varientAttributeList: options[varientAttribute]
-                ?.split(",")
-                ?.map((i) => ({
-                  label: i,
-                  value: i,
-                })),
-            });
-          }
-        }
-      }
-      // if second varient values only exist
-      else if (!!options?.options2 && !!options?.optionsvl2) {
-        for (let i = 1; i < 3; i++) {
-          const varientName = "options" + [i];
-          const varientAttribute = "optionsvl" + [i];
-          if (options[varientName]) {
-            varientOptions.push({
-              id: i,
-              varientName: {
-                value: options[varientName],
-                label: options[varientName],
-              },
-              varientAttributeList: options[varientAttribute]
-                ?.split(",")
-                ?.map((i) => ({
-                  label: i,
-                  value: i,
-                })),
-            });
-          }
-        }
-      }
-      // if third varient values only exist
-      else if (!!options?.options1 && !!options?.optionsvl1) {
-        for (let i = 1; i < 2; i++) {
-          const varientName = "options" + [i];
-          const varientAttribute = "optionsvl" + [i];
-          if (options[varientName]) {
-            varientOptions.push({
-              id: i,
-              varientName: {
-                value: options[varientName],
-                label: options[varientName],
-              },
-              varientAttributeList: options[varientAttribute]
-                ?.split(",")
-                ?.map((i) => ({
-                  label: i,
-                  value: i,
-                })),
-            });
-          }
-        }
-      }
-      setVarientLength([...new Set(varientOptions)]);
 
-      setFormValue((_) => {
-        const newFormValue = varientData.map((val, index) => {
-          return {
-            costPerItem: val?.costperItem || "",
-            compareAtPrice: val?.compare_price || "",
-            price: val?.price || "",
-            margin: val?.margin || "",
-            Profit: val?.profit || "",
-            qty: val?.quantity || "",
-            upcCode: val?.upc || "",
-            customCode: val?.custom_code || "",
-            reorderQty: val?.reorder_qty || "",
-            reorderLevel: val?.reorder_level || "",
-            trackQuantity: Boolean(+val?.trackqnty) || true,
-            sellOutOfStock: Boolean(+val?.isstockcontinue) || true,
-            checkId: Boolean(+val?.is_tobacco) || false,
-            disable: Boolean(+val?.disable) || false,
-            // itemForAllLinkedLocation: val?.,
-            isFoodStamble: Boolean(+val?.food_stampable) || false,
-          };
-          // }
+      if (isMultipleVarient) {
+        if (!!options?.options3 && !!options?.optionsvl3) {
+          for (let i = 1; i < 4; i++) {
+            const varientName = "options" + [i];
+            const varientAttribute = "optionsvl" + [i];
+            if (options[varientName]) {
+              varientOptions.push({
+                id: i,
+                varientName: {
+                  value: options[varientName],
+                  label: options[varientName],
+                },
+                varientAttributeList: options[varientAttribute]
+                  ?.split(",")
+                  ?.map((i) => ({
+                    label: i,
+                    value: i,
+                  })),
+              });
+            }
+          }
+        }
+        // if second varient values only exist
+        else if (!!options?.options2 && !!options?.optionsvl2) {
+          for (let i = 1; i < 3; i++) {
+            const varientName = "options" + [i];
+            const varientAttribute = "optionsvl" + [i];
+            if (options[varientName]) {
+              varientOptions.push({
+                id: i,
+                varientName: {
+                  value: options[varientName],
+                  label: options[varientName],
+                },
+                varientAttributeList: options[varientAttribute]
+                  ?.split(",")
+                  ?.map((i) => ({
+                    label: i,
+                    value: i,
+                  })),
+              });
+            }
+          }
+        }
+        // if third varient values only exist
+        else if (!!options?.options1 && !!options?.optionsvl1) {
+          for (let i = 1; i < 2; i++) {
+            const varientName = "options" + [i];
+            const varientAttribute = "optionsvl" + [i];
+            if (options[varientName]) {
+              varientOptions.push({
+                id: i,
+                varientName: {
+                  value: options[varientName],
+                  label: options[varientName],
+                },
+                varientAttributeList: options[varientAttribute]
+                  ?.split(",")
+                  ?.map((i) => ({
+                    label: i,
+                    value: i,
+                  })),
+              });
+            }
+          }
+        }
+
+        setVarientLength([...new Set(varientOptions)]);
+        setFormValue((_) => {
+          const newFormValue = varientData?.map((val, index) => {
+            return {
+              costPerItem: val?.costperItem || "",
+              compareAtPrice: val?.compare_price || "",
+              price: val?.price || "",
+              margin: val?.margin || "",
+              Profit: val?.profit || "",
+              qty: val?.quantity || "",
+              upcCode: val?.upc || "",
+              customCode: val?.custom_code || "",
+              reorderQty: val?.reorder_qty || "",
+              reorderLevel: val?.reorder_level || "",
+              trackQuantity: Boolean(+val?.trackqnty) || false,
+              sellOutOfStock: Boolean(+val?.isstockcontinue) || false,
+              checkId: Boolean(+val?.is_tobacco) || false,
+              disable: Boolean(+val?.disable) || false,
+              // itemForAllLinkedLocation: val?.,
+              isFoodStamble: Boolean(+val?.food_stampable) || false,
+            };
+            // }
+          });
+          return newFormValue;
         });
-        return newFormValue;
-      });
+      } else {
+        setFormValue(() => [
+          {
+            costPerItem: productData?.costperItem || "",
+            compareAtPrice: productData?.compare_price || "",
+            price: productData?.price || "",
+            margin: productData?.margin || "",
+            Profit: productData?.profit || "",
+            qty: productData?.quantity || "",
+            upcCode: productData?.upc || "",
+            customCode: productData?.custom_code || "",
+            reorderQty: productData?.reorder_qty || "",
+            reorderLevel: productData?.reorder_level || "",
+            trackQuantity: Boolean(+productData?.trackqnty) || false,
+            sellOutOfStock: Boolean(+productData?.isstockcontinue) || false,
+            checkId: Boolean(+productData?.is_tobacco) || false,
+            disable: Boolean(+productData?.disable) || false,
+            // itemForAllLinkedLocation: productData?.,
+            isFoodStamble: Boolean(+productData?.food_stampable) || false,
+          },
+        ]);
+      }
     }
-  }, [productData, dropdownData, options]);
+  }, [productData, dropdownData, options, isMultipleVarient]);
 
   const characters = "0123456789";
   function generateString(length) {
@@ -1096,6 +1189,17 @@ const AddProducts = () => {
     });
     setFormValue(updatedUpcData);
   };
+
+  console.log(
+    productInfo?.files
+      ?.map((file) => file)
+      .filter((i) => typeof i === "object")
+      .map((i) => i?.file),
+    productInfo?.files
+      ?.map((file) => file)
+      .filter((i) => typeof i === "string")
+      .toString()
+  );
 
   const handleSubmitForm = async (e) => {
     e.preventDefault();
@@ -1133,7 +1237,14 @@ const AddProducts = () => {
       bought_product: productInfo?.frequentlyBought
         ?.map((item) => item?.id)
         .toString(),
-      files: productInfo?.files?.map((file) => file[0]),
+      files: productInfo?.files
+        ?.map((file) => file)
+        .filter((i) => typeof i === "object")
+        ?.map((i) => i?.file),
+      media: productInfo?.files
+        ?.map((file) => file)
+        .filter((i) => typeof i === "string")
+        .toString(),
       // files: productInfo?.files?.map((file) => file?.base64),
       //HS_code:
       isvarient: +isMultipleVarient,
@@ -1150,6 +1261,9 @@ const AddProducts = () => {
       optionarray1: isMultipleVarient
         ? varientLength[1]?.varientName?.value
         : "",
+      optionarray2: isMultipleVarient
+        ? varientLength[2]?.varientName?.value
+        : "",
       optionvalue: isMultipleVarient
         ? varientLength[0]?.varientAttributeList
             ?.map((item) => item)
@@ -1158,6 +1272,12 @@ const AddProducts = () => {
         : "",
       optionvalue1: isMultipleVarient
         ? varientLength[1]?.varientAttributeList
+            ?.map((item) => item)
+            ?.map((i) => i?.value)
+            ?.toString()
+        : "",
+      optionvalue2: isMultipleVarient
+        ? varientLength[2]?.varientAttributeList
             ?.map((item) => item)
             ?.map((i) => i?.value)
             ?.toString()
@@ -1219,6 +1339,22 @@ const AddProducts = () => {
       // reorder_cost: [10, 10, 10, 10],
     };
 
+    console.log(
+      productInfo?.files
+        ?.map((file) => file)
+        .filter((i) => typeof i === "object")
+        .map((i) => i?.file),
+      productInfo?.files
+        ?.map((file) => file)
+        .filter((i) => typeof i === "string")
+        .toString()
+    );
+
+    if (pageUrl === "product-edit") {
+      data["productid"] = productData?.id ? productData?.id : "";
+      data["optionid"] = options?.id ? options?.id : "";
+    }
+
     let checkEmpty;
     if (isMultipleVarient) {
       checkEmpty = varientLength?.map((item, i) => {
@@ -1247,7 +1383,12 @@ const AddProducts = () => {
         }
       );
       setError({});
-      if (checkEmpty.every((i) => Boolean(i)) && !!response) {
+      // check any error exist in error state and if response success and any productTitleError is exist
+      if (
+        checkEmpty.every((i) => Boolean(i)) &&
+        !!response &&
+        !productTitleError
+      ) {
         const formdata = new FormData();
         for (let i in data) {
           if (i !== "files") {
@@ -1257,8 +1398,29 @@ const AddProducts = () => {
         for (let i = 0; i < uploadImage.length; i++) {
           formdata.append("files[]", uploadImage[i]);
         }
-        console.log("product added success");
-        // dispatch(addProduct(formdata));
+        pageUrl === "product-edit"
+          ? dispatch(editProductData(formdata))
+              .then((res) => {
+                if (res?.payload?.data?.status) {
+                  setToastModal(true);
+                }
+              })
+              .catch((err) => {
+                if (err) {
+                  setToastModal(true);
+                }
+              })
+          : dispatch(addProduct(formdata))
+              .then((res) => {
+                if (res?.payload?.data?.status) {
+                  setToastModal(true);
+                }
+              })
+              .catch((err) => {
+                if (err) {
+                  setToastModal(true);
+                }
+              });
       }
     } catch (err) {
       let errorsList = {};
@@ -1288,372 +1450,439 @@ const AddProducts = () => {
   //   handleUpdateError(error);
   // };
 
-  console.log("formvalue", formValue);
-
   return (
     <div className="box">
       {/* edit modal */}
-      <EditPage
-        openEditModal={openEditModal}
-        handleCloseEditModal={handleCloseEditModal}
-        editVarient={editVarient}
-        formData={formValue}
-        handleVarientTitleBasedItemList={handleVarientTitleBasedItemList}
-      />
-      {/* alert modal */}
-      <AlertModal
-        openAlertModal={openAlertModal}
-        handleCloseAlertModal={handleCloseAlertModal}
-        text="Compare Price must be greater than price."
-      />
-      <div className="q-attributes-main-page">
-        <div className="q-add-categories-section">
-          <div className="q-add-categories-section-header">
-            <span>
-              <img src={AddNewCategory} alt="Add-New-Category" />
-              <span style={{ width: "153px" }}>Add Product</span>
-            </span>
-          </div>
-          <div className="q-add-categories-section-middle-form">
-            <div className="q-add-categories-single-input">
-              <label htmlFor="title">Title</label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                value={productInfo?.title}
-                onChange={handleProductInfo}
-              />
-              {error?.title ? (
-                <span className="error-alert">{error?.title}</span>
-              ) : (
-                ""
-              )}
-            </div>
+      {isFetchLoading ? (
+        <div class="loading-box">
+          <Loader />
+        </div>
+      ) : (
+        <>
+          <EditPage
+            openEditModal={openEditModal}
+            handleCloseEditModal={handleCloseEditModal}
+            editVarient={editVarient}
+            bulkEditPo={bulkEditPo}
+            productData={productData}
+            handleVarientTitleBasedItemList={handleVarientTitleBasedItemList}
+          />
+          {/* alert modal */}
+          <AlertModal
+            openAlertModal={openAlertModal}
+            handleCloseAlertModal={handleCloseAlertModal}
+            text="Compare Price must be greater than price."
+          />
+          {/* Toast alert */}
+          {toastModal ? (
+            <ToastModal
+              textToDisplay="Product Update Successfully"
+              position="bottom-right"
+              autoClose={4000}
+              color="#07bc0c"
+              type="SUCCESS"
+              theme="colored"
+            />
+          ) : null}
 
-            <div className="q-add-categories-single-input">
-              <label htmlFor="description">Description</label>
-              <textarea
-                id="description"
-                name="description"
-                rows="4"
-                cols="50"
-                value={productInfo?.description}
-                onChange={handleProductInfo}
-              ></textarea>
-              {error?.description ? (
-                <span className="error-alert">{error?.description}</span>
-              ) : (
-                ""
-              )}
-            </div>
-            <div className="">
-              <div className="q-add-categories-single-input">
-                <SearchableDropdown
-                  title="Category"
-                  keyName="category"
-                  name="title"
-                  optionList={dropdownData?.categoryList}
-                  handleSelectProductOptions={handleSelectProductOptions}
-                  handleDeleteSelectedOption={handleDeleteSelectedOption}
-                  selectedOption={productInfo?.category}
-                  error={error}
-                  handleUpdateError={handleUpdateError}
-                />
+          {toastModal ? (
+            <ToastModal
+              textToDisplay="Product Added Successfully"
+              position="bottom-right"
+              autoClose={4000}
+              color="#07bc0c"
+              type="SUCCESS"
+              theme="colored"
+            />
+          ) : null}
+
+          {toastModal && isError ? (
+            <ToastModal
+              textToDisplay="Product Added Error"
+              position="bottom-right"
+              autoClose={4000}
+              color="#e74c3c"
+              type="ERROR"
+              theme="colored"
+            />
+          ) : null}
+
+          {toastModal && isEditError ? (
+            <ToastModal
+              textToDisplay="Product Update Error"
+              position="bottom-right"
+              autoClose={4000}
+              color="#e74c3c"
+              type="ERROR"
+              theme="colored"
+            />
+          ) : null}
+          <ToastContainer position="bottom-right" />
+          <div className="q-attributes-main-page">
+            <div className="q-add-categories-section">
+              <div className="q-add-categories-section-header">
+                <span>
+                  <img src={AddNewCategory} alt="Add-New-Category" />
+                  <span style={{ width: "153px" }}>Add Product</span>
+                </span>
               </div>
-            </div>
-
-            <div className="q-add-categories-single-input">
-              <SearchableDropdown
-                title="Taxes"
-                keyName="taxes"
-                name="title"
-                optionList={dropdownData?.taxList}
-                handleSelectProductOptions={handleSelectProductOptions}
-                handleDeleteSelectedOption={handleDeleteSelectedOption}
-                selectedOption={productInfo?.taxes}
-                error={error}
-                // handleUpdateError={handleUpdateError}
-              />
-            </div>
-
-            <div className="q-add-categories-single-input">
-              <SearchableDropdown
-                title="Related Products"
-                keyName="relatedProduct"
-                name="title"
-                optionList={dropdownData?.relatedProducttList}
-                handleSelectProductOptions={handleSelectProductOptions}
-                handleDeleteSelectedOption={handleDeleteSelectedOption}
-                selectedOption={productInfo?.relatedProduct}
-                error={error}
-                // handleUpdateError={handleUpdateError}
-              />
-            </div>
-
-            <div className="q-add-categories-single-input">
-              <SearchableDropdown
-                title="Frequently Bought Together"
-                keyName="frequentlyBought"
-                name="title"
-                optionList={dropdownData?.frequentlyBroughtList}
-                handleSelectProductOptions={handleSelectProductOptions}
-                handleDeleteSelectedOption={handleDeleteSelectedOption}
-                selectedOption={productInfo?.frequentlyBought}
-                error={error}
-                // handleUpdateError={handleUpdateError}
-              />
-            </div>
-
-            <div className="q-add-categories-single-input">
-              <div className="q_dashbaord_netsales">
-                <h1>Product Image</h1>
-              </div>
-
-              <label>
-                Select Default Image if in case some color image is not
-                available.
-              </label>
-              <div className="q_border_product image-upload-gallery">
-                <div
-                  className="py-10"
-                  style={{
-                    border: "2px solid #0A64F9",
-                    width: "180px",
-                    height: "180px",
-                    cursor: "pointer",
-                    display: "grid",
-                    placeContent: "center",
-                  }}
-                  onDragOver={handleDragOver}
-                  onDrop={handleDrop}
-                  onClick={openFileInput}
-                >
-                  <div
-                    className=""
-                    style={{
-                      display: "flex",
-                      flexDirection: "column",
-                      alignItems: "center",
-                      width: "200px",
-                    }}
-                  >
-                    <img
-                      src={UploadIMG}
-                      alt="Default"
-                      className="w-6 h-6 text-center"
-                    />
-                    <span style={{ color: "#0A64F9", fontSize: "12px" }}>
-                      Choose Files
-                    </span>
-                  </div>
-                  <div className="q-add-categories-single-input">
-                    <input
-                      type="file"
-                      id="image"
-                      name="files"
-                      accept="image/*"
-                      ref={fileUploadRef}
-                      multiple
-                      className="default-img-inputfield"
-                      onChange={handleImageChange}
-                    />
-                  </div>
-                </div>
-
-                <div class="image-list">
-                  {productInfo?.files?.length
-                    ? productInfo?.files?.map((img, index) => {
-                        // if img type is string
-                        if (typeof img === "string") {
-                          return (
-                            <div
-                              className="py-10 image-display"
-                              style={{
-                                border: "2px solid #0A64F9",
-                                // width: "20%",
-                                cursor: "pointer",
-                              }}
-                              key={index}
-                            >
-                              <>
-                                <span
-                                  className="delete-image-icon img-DeleteIcon"
-                                  // onClick={handleDeleteImage}
-                                  style={{
-                                    position: "absolute",
-                                    top: "7px",
-                                    right: "7px",
-                                  }}
-                                >
-                                  <img
-                                    src={CloseIcon}
-                                    className="delete-image"
-                                    onClick={() =>
-                                      handleDeleteSelectedImage("string", img)
-                                    }
-                                  />
-                                </span>
-                                <img
-                                  src={
-                                    BASE_URL +
-                                    `/upload/products/MAL0100CA/` +
-                                    img
-                                  }
-                                  alt="Preview"
-                                  className="default-img"
-                                />
-                              </>
-                            </div>
-                          );
-                        }
-                        // if img type is object
-                        return (
-                          <div
-                            className="py-10 image-display"
-                            style={{
-                              border: "2px solid #0A64F9",
-                              // width: "20%",
-                              cursor: "pointer",
-                            }}
-                            key={index}
-                          >
-                            <>
-                              <span
-                                className="delete-image-icon img-DeleteIcon"
-                                // onClick={handleDeleteImage}
-                                style={{
-                                  position: "absolute",
-                                  top: "7px",
-                                  right: "7px",
-                                }}
-                              >
-                                <img
-                                  src={CloseIcon}
-                                  className="delete-image"
-                                  onClick={() =>
-                                    handleDeleteSelectedImage("object", img)
-                                  }
-                                />
-                              </span>
-                              <img
-                                src={img?.base64}
-                                alt="Preview"
-                                className="default-img"
-                              />
-                            </>
-                          </div>
-                        );
-                      })
-                    : ""}
-                </div>
-              </div>
-              {error["files"] ? (
-                <span className="error-alert">{error["files"]}</span>
-              ) : (
-                ""
-              )}
-              {}
-            </div>
-
-            <div className="mt_card_header">
-              <VariantAttributes
-                varientDropdownList={dropdownData?.varientList}
-                varientError={varientError}
-                filterOptionList={filterOptionList}
-                toggleVarientSection={toggleVarientSection}
-                isMultipleVarient={isMultipleVarient}
-                handleOnBlurAttributes={handleOnBlurAttributes}
-                handleFilterDropdownOption={handleFilterDropdownOption}
-                varientLength={varientLength}
-                handleSetVarientLength={handleSetVarientLength}
-                addMoreVarientItems={addMoreVarientItems}
-                handleClearFormData={handleClearFormData}
-              />
-            </div>
-
-            <div className="mt_card_header">
-              <GeneratePUC
-                handleVarientTitleBasedItemList={
-                  handleVarientTitleBasedItemList
-                }
-                error={error}
-                handleGenerateUPC={handleGenerateUPC}
-                handleOnChange={handleOnChange}
-                formValue={formValue}
-                handleBlur={handleBlur}
-                isMultipleVarient={isMultipleVarient}
-                productInfo={productInfo}
-              />
-            </div>
-
-            <div className="box">
-              <div className="variant-attributes-container">
-                {/* Your existing JSX for variant attributes */}
-
-                <div className="q-add-categories-section-middle-footer  ">
-                  {pageUrl === "product-edit" ? (
-                    <div
-                      className="q-category-bottom-header"
-                      style={{ marginRight: "67px" }}
-                    >
-                      <button
-                        className="quic-btn quic-btn-bulk-edit"
-                        onClick={() => handleCloseEditModal()}
-                      >
-                        Bulk Edit
-                      </button>
-                    </div>
+              <div className="q-add-categories-section-middle-form">
+                <div className="q-add-categories-single-input">
+                  <label htmlFor="title">Title</label>
+                  <input
+                    type="text"
+                    id="title"
+                    name="title"
+                    value={productInfo?.title}
+                    onChange={handleProductInfo}
+                  />
+                  {error?.title ? (
+                    <span className="error-alert">{error?.title}</span>
                   ) : (
                     ""
                   )}
-                  <div
-                    className="q-category-bottom-header"
-                    style={{ marginRight: "67px" }}
-                  >
-                    {pageUrl !== "product-edit" ? (
-                      <button
-                        className="quic-btn quic-btn-save"
-                        onClick={handleSubmitForm}
-                        disabled={isLoading}
+                  {productTitleError ? (
+                    <span className="error-alert">
+                      *The name is already exist
+                    </span>
+                  ) : (
+                    ""
+                  )}
+                </div>
+
+                <div className="q-add-categories-single-input">
+                  <label htmlFor="description">Description</label>
+                  <textarea
+                    id="description"
+                    name="description"
+                    rows="4"
+                    cols="50"
+                    value={productInfo?.description}
+                    onChange={handleProductInfo}
+                  ></textarea>
+                  {error?.description ? (
+                    <span className="error-alert">{error?.description}</span>
+                  ) : (
+                    ""
+                  )}
+                </div>
+                <div className="">
+                  <div className="q-add-categories-single-input">
+                    <SearchableDropdown
+                      title="Category"
+                      keyName="category"
+                      name="title"
+                      optionList={dropdownData?.categoryList}
+                      handleSelectProductOptions={handleSelectProductOptions}
+                      handleDeleteSelectedOption={handleDeleteSelectedOption}
+                      selectedOption={productInfo?.category}
+                      error={error}
+                      handleUpdateError={handleUpdateError}
+                    />
+                  </div>
+                </div>
+
+                <div className="q-add-categories-single-input">
+                  <SearchableDropdown
+                    title="Taxes"
+                    keyName="taxes"
+                    name="title"
+                    optionList={dropdownData?.taxList}
+                    handleSelectProductOptions={handleSelectProductOptions}
+                    handleDeleteSelectedOption={handleDeleteSelectedOption}
+                    selectedOption={productInfo?.taxes}
+                    error={error}
+                    // handleUpdateError={handleUpdateError}
+                  />
+                </div>
+
+                <div className="q-add-categories-single-input">
+                  <SearchableDropdown
+                    title="Related Products"
+                    keyName="relatedProduct"
+                    name="title"
+                    optionList={dropdownData?.relatedProducttList}
+                    handleSelectProductOptions={handleSelectProductOptions}
+                    handleDeleteSelectedOption={handleDeleteSelectedOption}
+                    selectedOption={productInfo?.relatedProduct}
+                    error={error}
+                    // handleUpdateError={handleUpdateError}
+                  />
+                </div>
+
+                <div className="q-add-categories-single-input">
+                  <SearchableDropdown
+                    title="Frequently Bought Together"
+                    keyName="frequentlyBought"
+                    name="title"
+                    optionList={dropdownData?.frequentlyBroughtList}
+                    handleSelectProductOptions={handleSelectProductOptions}
+                    handleDeleteSelectedOption={handleDeleteSelectedOption}
+                    selectedOption={productInfo?.frequentlyBought}
+                    error={error}
+                    // handleUpdateError={handleUpdateError}
+                  />
+                </div>
+
+                <div className="q-add-categories-single-input">
+                  <div className="q_dashbaord_netsales">
+                    <h1>Product Image</h1>
+                  </div>
+
+                  <label>
+                    Select Default Image if in case some color image is not
+                    available.
+                  </label>
+                  <div className="q_border_product image-upload-gallery">
+                    <div
+                      className="py-10"
+                      style={{
+                        border: "2px solid #0A64F9",
+                        width: "180px",
+                        height: "180px",
+                        cursor: "pointer",
+                        display: "grid",
+                        placeContent: "center",
+                      }}
+                      onDragOver={handleDragOver}
+                      onDrop={handleDrop}
+                      onClick={openFileInput}
+                    >
+                      <div
+                        className=""
                         style={{
-                          backgroundColor: isLoading ? "#878787" : "#0A64F9",
+                          display: "flex",
+                          flexDirection: "column",
+                          alignItems: "center",
+                          width: "200px",
                         }}
                       >
-                        {isLoading ? (
-                          <Box className="loader-box">
-                            <CircularProgress />
-                          </Box>
-                        ) : (
-                          "Insert"
-                        )}
-                      </button>
-                    ) : (
-                      <button
-                        className="quic-btn quic-btn-update"
-                        // onClick={handleSubmitForm}
-                        disabled={isLoading}
-                        style={{
-                          backgroundColor: isLoading ? "#878787" : "#0A64F9",
-                        }}
+                        <img
+                          src={UploadIMG}
+                          alt="Default"
+                          className="w-6 h-6 text-center"
+                        />
+                        <span style={{ color: "#0A64F9", fontSize: "12px" }}>
+                          Choose Files
+                        </span>
+                      </div>
+                      <div className="q-add-categories-single-input">
+                        <input
+                          type="file"
+                          id="image"
+                          name="files"
+                          accept="image/*"
+                          ref={fileUploadRef}
+                          multiple
+                          className="default-img-inputfield"
+                          onChange={handleImageChange}
+                        />
+                      </div>
+                    </div>
+
+                    <div class="image-list">
+                      {productInfo?.files?.length
+                        ? productInfo?.files?.map((img, index) => {
+                            // if img type is string
+                            if (typeof img === "string") {
+                              return (
+                                <div
+                                  className="py-10 image-display"
+                                  style={{
+                                    border: "2px solid #0A64F9",
+                                    // width: "20%",
+                                    cursor: "pointer",
+                                  }}
+                                  key={index}
+                                >
+                                  <>
+                                    <span
+                                      className="delete-image-icon img-DeleteIcon"
+                                      // onClick={handleDeleteImage}
+                                      style={{
+                                        position: "absolute",
+                                        top: "7px",
+                                        right: "7px",
+                                      }}
+                                    >
+                                      <img
+                                        src={CloseIcon}
+                                        className="delete-image"
+                                        onClick={() =>
+                                          handleDeleteSelectedImage(
+                                            "string",
+                                            img
+                                          )
+                                        }
+                                      />
+                                    </span>
+                                    <img
+                                      src={
+                                        BASE_URL +
+                                        `/upload/products/MAL0100CA/` +
+                                        img
+                                      }
+                                      alt="Preview"
+                                      className="default-img"
+                                    />
+                                  </>
+                                </div>
+                              );
+                            }
+                            // if img type is object
+                            return (
+                              <div
+                                className="py-10 image-display"
+                                style={{
+                                  border: "2px solid #0A64F9",
+                                  // width: "20%",
+                                  cursor: "pointer",
+                                }}
+                                key={index}
+                              >
+                                <>
+                                  <span
+                                    className="delete-image-icon img-DeleteIcon"
+                                    // onClick={handleDeleteImage}
+                                    style={{
+                                      position: "absolute",
+                                      top: "7px",
+                                      right: "7px",
+                                    }}
+                                  >
+                                    <img
+                                      src={CloseIcon}
+                                      className="delete-image"
+                                      onClick={() =>
+                                        handleDeleteSelectedImage("object", img)
+                                      }
+                                    />
+                                  </span>
+                                  <img
+                                    src={img?.base64}
+                                    alt="Preview"
+                                    className="default-img"
+                                  />
+                                </>
+                              </div>
+                            );
+                          })
+                        : ""}
+                    </div>
+                  </div>
+                  {error["files"] ? (
+                    <span className="error-alert">{error["files"]}</span>
+                  ) : (
+                    ""
+                  )}
+                  {}
+                </div>
+
+                <div className="mt_card_header">
+                  <VariantAttributes
+                    varientDropdownList={dropdownData?.varientList}
+                    varientError={varientError}
+                    filterOptionList={filterOptionList}
+                    toggleVarientSection={toggleVarientSection}
+                    isMultipleVarient={isMultipleVarient}
+                    handleOnBlurAttributes={handleOnBlurAttributes}
+                    handleFilterDropdownOption={handleFilterDropdownOption}
+                    varientLength={varientLength}
+                    handleSetVarientLength={handleSetVarientLength}
+                    addMoreVarientItems={addMoreVarientItems}
+                    handleClearFormData={handleClearFormData}
+                  />
+                </div>
+
+                <div className="mt_card_header">
+                  <GeneratePUC
+                    handleVarientTitleBasedItemList={
+                      handleVarientTitleBasedItemList
+                    }
+                    error={error}
+                    handleGenerateUPC={handleGenerateUPC}
+                    handleOnChange={handleOnChange}
+                    formValue={formValue}
+                    handleBlur={handleBlur}
+                    isMultipleVarient={isMultipleVarient}
+                    productInfo={productInfo}
+                    inventoryData={inventoryData}
+                  />
+                </div>
+
+                <div className="box">
+                  <div className="variant-attributes-container">
+                    {/* Your existing JSX for variant attributes */}
+
+                    <div className="q-add-categories-section-middle-footer  ">
+                      {/* {pageUrl === "product-edit" ? ( */}
+                      <div
+                        className="q-category-bottom-header"
+                        style={{ marginRight: "67px" }}
                       >
-                        {isLoading ? (
-                          <Box className="loader-box">
-                            <CircularProgress />
-                          </Box>
+                        <button
+                          className="quic-btn quic-btn-bulk-edit"
+                          onClick={() => handleCloseEditModal()}
+                        >
+                          Bulk Edit
+                        </button>
+                      </div>
+                      {/* ) : ( "" )} */}
+                      <div
+                        className="q-category-bottom-header"
+                        style={{ marginRight: "67px" }}
+                      >
+                        {pageUrl !== "product-edit" ? (
+                          <button
+                            className="quic-btn quic-btn-save"
+                            onClick={handleSubmitForm}
+                            disabled={isLoading}
+                            style={{
+                              backgroundColor: isLoading
+                                ? "#878787"
+                                : "#0A64F9",
+                            }}
+                          >
+                            {isLoading ? (
+                              <Box className="loader-box">
+                                <CircularProgress />
+                              </Box>
+                            ) : (
+                              "Insert"
+                            )}
+                          </button>
                         ) : (
-                          "Update"
+                          <button
+                            className="quic-btn quic-btn-update"
+                            onClick={handleSubmitForm}
+                            disabled={isLoading}
+                            style={{
+                              backgroundColor: isLoading
+                                ? "#878787"
+                                : "#0A64F9",
+                            }}
+                          >
+                            {isLoading ? (
+                              <Box className="loader-box">
+                                <CircularProgress />
+                              </Box>
+                            ) : (
+                              "Update"
+                            )}
+                          </button>
                         )}
-                      </button>
-                    )}
-                    <button className="quic-btn quic-btn-cancle">Cancel</button>
+                        <button className="quic-btn quic-btn-cancle">
+                          Cancel
+                        </button>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
-      </div>
+        </>
+      )}
     </div>
   );
 };

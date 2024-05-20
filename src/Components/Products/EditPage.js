@@ -15,14 +15,16 @@ const EditPage = ({
   openEditModal,
   handleCloseEditModal,
   editVarient,
-  formData,
   handleVarientTitleBasedItemList,
+  bulkEditPo,
+  productData,
 }) => {
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
   return (
     <>
       <Modal
@@ -56,11 +58,11 @@ const EditPage = ({
                   <BulkVarientEdit editVarient={editVarient} />
                 </TabPanel>
                 <TabPanel value="2">
-                  <BulkVendorEdit />
+                  <BulkVendorEdit productData={productData} />
                 </TabPanel>
                 <TabPanel value="3">
                   <BulkInstantPo
-                    formData={formData}
+                    bulkEditPoState={bulkEditPo}
                     handleVarientTitleBasedItemList={
                       handleVarientTitleBasedItemList
                     }

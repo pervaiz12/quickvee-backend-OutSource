@@ -10,9 +10,9 @@ const GeneratePUC = ({
   isMultipleVarient,
   productInfo,
   error,
+  inventoryData,
 }) => {
   const pageUrl = window.location.pathname?.split("/")[1];
-  console.log("pageurl", pageUrl);
   const varientTitle = handleVarientTitleBasedItemList();
   const setInputMaxLength = (fieldname) => {
     switch (fieldname) {
@@ -35,6 +35,25 @@ const GeneratePUC = ({
   };
   const disabledFields = ["margin", "Profit"];
   const disabledFieldsOnEdit = ["margin", "Profit", "qty"];
+
+  const disabledInput = (inp) => {
+    if (pageUrl !== "product-edit" && disabledFields.includes(inp?.name)) {
+      return true;
+    } else if (
+      pageUrl === "product-edit" &&
+      disabledFieldsOnEdit.includes(inp?.name)
+    ) {
+      return true;
+    } else if (
+      pageUrl === "product-edit" &&
+      +inventoryData?.cost_method === 1 &&
+      inp?.name === "costPerItem"
+    ) {
+      return true;
+    }
+
+    return false;
+  };
   return (
     <>
       <div className="mx-0">
@@ -85,13 +104,7 @@ const GeneratePUC = ({
                                     onChange={(e) => handleOnChange(e, index)}
                                     onBlur={(e) => handleBlur(e, index)}
                                     maxLength={setInputMaxLength(inp?.name)}
-                                    disabled={
-                                      pageUrl !== "product-edit"
-                                        ? disabledFields.includes(inp?.name)
-                                        : disabledFieldsOnEdit.includes(
-                                            inp?.name
-                                          )
-                                    }
+                                    disabled={disabledInput(inp)}
                                   />
 
                                   {error[`formValue[${index}].${inp?.name}`] ? (
@@ -221,7 +234,7 @@ const GeneratePUC = ({
             : ""}
           {!isMultipleVarient ? (
             <div className="qvrow">
-              <div className="mx-4 my-4">{varientTitle[0]}</div>
+              <div className="mx-4 my-4">{varientTitle?.[0]}</div>
               {formData?.length
                 ? formData?.map((inp, i) => {
                     return (
@@ -238,7 +251,7 @@ const GeneratePUC = ({
                               onChange={(e) => handleOnChange(e, 0)}
                               onBlur={(e) => handleBlur(e, 0)}
                               maxLength={setInputMaxLength(inp?.name)}
-                              disabled={disabledFields.includes(inp?.name)}
+                              disabled={disabledInput(inp)}
                             />
                             {error[`formValue[0].${inp?.name}`] ? (
                               <span className="error-alert">
@@ -342,6 +355,39 @@ const GeneratePUC = ({
                   />
                   <span class="checkmark"></span>
                 </label> */}
+              </div>
+
+              <div class="edit-profile-btns">
+                <button
+                  className="quic-btn quic-btn-save vendor-btn"
+                  // onClick={handleSubmitForm}
+                  // disabled={isLoading}
+                  style={{
+                    backgroundColor: "#0A64F9",
+                  }}
+                >
+                  Vendors
+                </button>
+                <button
+                  className="quic-btn quic-btn-save"
+                  // onClick={handleSubmitForm}
+                  // disabled={isLoading}
+                  style={{
+                    backgroundColor: "#0A64F9",
+                  }}
+                >
+                  Sales History
+                </button>
+                <button
+                  className="quic-btn quic-btn-save"
+                  // onClick={handleSubmitForm}
+                  // disabled={isLoading}
+                  style={{
+                    backgroundColor: "#0A64F9",
+                  }}
+                >
+                  Instant PO
+                </button>
               </div>
             </div>
           ) : (

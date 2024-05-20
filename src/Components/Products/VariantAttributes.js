@@ -19,6 +19,7 @@ const VariantAttributes = ({
   addMoreVarientItems,
   handleClearFormData,
 }) => {
+  const pageUrl = window.location.pathname?.split("/")[1];
   const [showAttributes, setShowAttributes] = useState(false);
 
   const animatedComponents = makeAnimated();
@@ -165,18 +166,22 @@ const VariantAttributes = ({
         </div>
       </div>
 
-      <div class="multiple-items">
-        <span>Multiple Items?*</span>
-        <div class="checkbox-area">
-          <input
-            type="checkbox"
-            name="isMultiple"
-            checked={isMultipleVarient}
-            onChange={toggleVarientSection}
-          />
-          <label for="isMultiple">Create Attributes and Options</label>
+      {pageUrl !== "product-edit" ? (
+        <div class="multiple-items">
+          <span>Multiple Items?*</span>
+          <div class="checkbox-area">
+            <input
+              type="checkbox"
+              name="isMultiple"
+              checked={isMultipleVarient}
+              onChange={toggleVarientSection}
+            />
+            <label for="isMultiple">Create Attributes and Options</label>
+          </div>
         </div>
-      </div>
+      ) : (
+        ""
+      )}
       {isMultipleVarient ? (
         <div className="">
           <div className="">

@@ -1153,6 +1153,7 @@ select:active {
   width: 92%;
   height: auto;
   margin: 0 auto;
+  position: relative;
 }
 .qvrow {
   --bs-gutter-x: 1.5rem;

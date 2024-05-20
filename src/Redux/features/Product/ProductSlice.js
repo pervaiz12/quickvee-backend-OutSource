@@ -20,6 +20,12 @@ const initialState = {
   // for add product varient
   isLoading: false,
   isError: false,
+
+  // for edit product
+  isEditError: false,
+
+  // for fetchDataBy Id
+  isFetchLoading: false,
 };
 
 // Generate pening , fulfilled and rejected action type
@@ -73,6 +79,23 @@ export const getInventorySetting = createAsyncThunk(
   }
 );
 
+export const editProductData = createAsyncThunk(
+  "products/editProduct",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/edit_produt",
+        payload
+      );
+
+      console.log("product edit response", response);
+      return response;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
 export const addProduct = createAsyncThunk(
   "products/addProduct",
   async (payload) => {
@@ -82,7 +105,7 @@ export const addProduct = createAsyncThunk(
         payload
       );
 
-      console.log("product response", response);
+      console.log("product added response", response);
       return response;
     } catch (error) {
       throw new Error(error.response.data.message);
@@ -154,10 +177,39 @@ export const fetchProductList = createAsyncThunk(
 export const fetchProductsDataById = createAsyncThunk(
   "products/fetchProductData",
   async (payload) => {
-    console.log(payload);
     try {
       const response = await axios.post(
-        BASE_URL + "Productapi/get_productdata_ById",
+        BASE_URL + "Product_api_react/get_productdata_ById",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const checkProductTitle = createAsyncThunk(
+  "products/checkProductTitle",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/check_productTitle",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const fetchVendorList = createAsyncThunk(
+  "products/fetchVendorList",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Vendor_api/vendor_list",
         payload
       );
       return response?.data;
@@ -260,8 +312,36 @@ const productsSlice = createSlice({
       state.isError = false;
     });
     builder.addCase(addProduct.rejected, (state, action) => {
-      state.loading = false;
+      state.isLoading = false;
       state.isError = true;
+    });
+
+    // edit product
+    builder.addCase(editProductData.pending, (state) => {
+      state.isLoading = true;
+      state.isEditError = false;
+    });
+    builder.addCase(editProductData.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isEditError = false;
+    });
+    builder.addCase(editProductData.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isEditError = true;
+    });
+
+    // fetchingDataById
+    builder.addCase(fetchProductsDataById.pending, (state) => {
+      state.isFetchLoading = true;
+      // state.isEditError = false;
+    });
+    builder.addCase(fetchProductsDataById.fulfilled, (state, action) => {
+      state.isFetchLoading = false;
+      // state.isEditError = false;
+    });
+    builder.addCase(fetchProductsDataById.rejected, (state, action) => {
+      state.isFetchLoading = false;
+      // state.isEditError = true;
     });
   },
 });
