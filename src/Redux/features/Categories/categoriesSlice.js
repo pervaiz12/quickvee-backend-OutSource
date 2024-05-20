@@ -11,17 +11,49 @@ const initialState = {
 
 
 // Generate pening , fulfilled and rejected action type
-export const fetchCategoriesData = createAsyncThunk('categories/fetchCategoriesData.', async (data) => {
+// export const fetchCategoriesData = createAsyncThunk('categories/fetchCategoriesData', async (data) => {
+//     let dataNew={merchant_id:data?.merchant_id,login_type:data?.login_type,token_id:data?.token_id}
+//     let token={token:data?.token}
+//     console.log(token)
+
+//     // console.log('hhhhh')
+//     try {
+//         const response = await axios.post(BASE_URL + LIST_ALL_CATEGORIES, dataNew, {
+//             headers: {
+//               "Content-Type": "multipart/form-data",
+//               'Authorization': `${data?.token}`
+//             }
+//           });
+//         if (response.status === 200) {
+//             // console.log(response.data)
+//            return response.data.result
+//         }
+//     } catch (error) {
+//         throw new Error(error.response.data.message);
+//     }
+// })
+export const fetchCategoriesData = createAsyncThunk('categories/fetchCategoriesData', async (data) => {
+    // let dataNew = {
+    //     merchant_id: data?.merchant_id,
+    //     login_type: data?.login_type,
+    //     token_id: data?.token_id
+    // };
+    const {token, ...dataNew}= data;
     try {
-        const response = await axios.post(BASE_URL + LIST_ALL_CATEGORIES, data, { headers: { "Content-Type": "multipart/form-data" } })
+        const response = await axios.post(BASE_URL + LIST_ALL_CATEGORIES, dataNew, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                'Authorization': `Bearer ${token}` // Use data?.token directly
+            }
+        });
+
         if (response.status === 200) {
-            // console.log(response.data)
-           return response.data.result
+            return response.data.result;
         }
     } catch (error) {
         throw new Error(error.response.data.message);
     }
-})
+});
 
 // Generate pening , fulfilled and rejected action type
 
