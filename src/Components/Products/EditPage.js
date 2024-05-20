@@ -10,6 +10,7 @@ import TabPanel from "@mui/lab/TabPanel";
 import BulkVarientEdit from "./BulkVarientEdit";
 import BulkVendorEdit from "./BulkVendorEdit";
 import BulkInstantPo from "./BulkInstantPo";
+import { useEffect } from "react";
 
 const EditPage = ({
   openEditModal,
@@ -18,12 +19,25 @@ const EditPage = ({
   handleVarientTitleBasedItemList,
   bulkEditPo,
   productData,
+  modalType,
+  varientData,
+  varientIndex,
 }) => {
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
+
+  useEffect(() => {
+    if (modalType === "single_vendor") {
+      setValue("2");
+    } else if (modalType === "single_instant") {
+      setValue("3");
+    } else {
+      setValue("1");
+    }
+  }, [modalType]);
 
   return (
     <>
@@ -49,16 +63,44 @@ const EditPage = ({
                     onChange={handleChange}
                     aria-label="lab API tabs example"
                   >
-                    <Tab label="Bulk Variant Edit" value="1" />
-                    <Tab label="Bulk Vendor Edit" value="2" />
-                    <Tab label="Bulk Instant PO" value="3" />
+                    {modalType !== "single_vendor" &&
+                    modalType !== "single_instant" ? (
+                      <Tab label="Bulk Variant Edit" value="1" />
+                    ) : (
+                      ""
+                    )}
+
+                    {modalType !== "single_instant" ? (
+                      <Tab
+                        label={`${
+                          modalType !== "single_vendor"
+                            ? "Bulk Vendor Edit"
+                            : "Vendor Edit"
+                        }`}
+                        value="2"
+                      />
+                    ) : (
+                      ""
+                    )}
+                    {modalType !== "single_vendor" ? (
+                      <Tab label="Bulk Instant PO" value="3" />
+                    ) : (
+                      ""
+                    )}
                   </TabList>
                 </Box>
+
                 <TabPanel value="1">
                   <BulkVarientEdit editVarient={editVarient} />
                 </TabPanel>
+
                 <TabPanel value="2">
-                  <BulkVendorEdit productData={productData} />
+                  <BulkVendorEdit
+                    productData={productData}
+                    varientData={varientData}
+                    varientIndex={varientIndex}
+                    modalType={modalType}
+                  />
                 </TabPanel>
                 <TabPanel value="3">
                   <BulkInstantPo
@@ -66,6 +108,8 @@ const EditPage = ({
                     handleVarientTitleBasedItemList={
                       handleVarientTitleBasedItemList
                     }
+                    modalType={modalType}
+                    varientIndex={varientIndex}
                   />
                 </TabPanel>
               </TabContext>

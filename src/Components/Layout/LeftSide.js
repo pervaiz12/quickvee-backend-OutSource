@@ -58,6 +58,7 @@ import ReorderInventoryMain from "../Reporting/ReorderInventory/ReorderInventory
 import EditVendors from "../Vendors/EditVendors";
 import SingleVendorsDetail from "../Vendors/SingleVendorsDetail";
 import AddProducts from "../Products/AddProducts";
+import ProductSalesReport from "../Products/ProductSalesReport";
 //  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
 // import MainEmployee from "../Reporting/EmployeeWorkingHours/MainEmployee";
 // import MainInvDuplicates from '../InventoryDuplicates/MainInvDuplicates';
@@ -91,6 +92,7 @@ const LeftSide = ({ visible }) => {
           {visible === "productedit" && <ProductEdit />}
           {visible === "product-add" && <AddProducts />}
           {visible === "product-edit" && <AddProducts />}
+          {visible === "product-sales" && <ProductSalesReport />}
 
           {visible === "info" && <Info />}
           {visible === "setup" && <Setup />}

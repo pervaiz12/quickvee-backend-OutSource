@@ -167,6 +167,18 @@ function App() {
 
       <Route
         exact
+        path="/product/saleshistory/:id/:varientId"
+        element={<Main visible={"product-sales"} />}
+      />
+
+      <Route
+        exact
+        path="/product/saleshistory/:id"
+        element={<Main visible={"product-sales"} />}
+      />
+
+      <Route
+        exact
         path="/product-edit/:id"
         element={<Main visible={"product-edit"} />}
       />

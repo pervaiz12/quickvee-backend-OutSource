@@ -24,6 +24,7 @@ const Main = ({ visible }) => {
       {visible === "productedit" && <Layout visible={visible} />}
       {visible === "product-add" && <Layout visible={visible} />}
       {visible === "product-edit" && <Layout visible={visible} />}
+      {visible === "product-sales" && <Layout visible={visible} />}
 
       {visible === "info" && <Layout visible={visible} />}
       {visible === "setup" && <Layout visible={visible} />}

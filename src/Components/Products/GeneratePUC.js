@@ -1,5 +1,6 @@
 import React from "react";
 import { formData } from "./data";
+import { useNavigate } from "react-router-dom";
 
 const GeneratePUC = ({
   handleVarientTitleBasedItemList,
@@ -11,7 +12,11 @@ const GeneratePUC = ({
   productInfo,
   error,
   inventoryData,
+  handleCloseEditModal,
+  productData,
+  varientData,
 }) => {
+  const navigate = useNavigate();
   const pageUrl = window.location.pathname?.split("/")[1];
   const varientTitle = handleVarientTitleBasedItemList();
   const setInputMaxLength = (fieldname) => {
@@ -53,6 +58,16 @@ const GeneratePUC = ({
     }
 
     return false;
+  };
+
+  const handleRedirectHistory = (varientIndex) => {
+    if (varientIndex === null) {
+      navigate(`/product/saleshistory/${productData?.id}`);
+    } else {
+      navigate(
+        `/product/saleshistory/${productData?.id}/${varientData[varientIndex]?.id}`
+      );
+    }
   };
   return (
     <>
@@ -228,6 +243,46 @@ const GeneratePUC = ({
                         <span class="checkmark"></span>
                       </label> */}
                     </div>
+
+                    <div class="edit-profile-btns">
+                      <button
+                        className="quic-btn quic-btn-save vendor-btn"
+                        // onClick={handleSubmitForm}
+                        // disabled={isLoading}
+                        style={{
+                          backgroundColor: "#0A64F9",
+                        }}
+                        onClick={() =>
+                          handleCloseEditModal("single_vendor", index)
+                        }
+                      >
+                        Vendors
+                      </button>
+                      <button
+                        className="quic-btn quic-btn-save"
+                        // onClick={handleSubmitForm}
+                        // disabled={isLoading}
+                        style={{
+                          backgroundColor: "#0A64F9",
+                        }}
+                        onClick={() => handleRedirectHistory(index)}
+                      >
+                        Sales History
+                      </button>
+                      <button
+                        className="quic-btn quic-btn-save edit"
+                        // onClick={handleSubmitForm}
+                        // disabled={isLoading}
+                        style={{
+                          backgroundColor: "#0A64F9",
+                        }}
+                        onClick={() =>
+                          handleCloseEditModal("single_instant", index)
+                        }
+                      >
+                        Instant PO
+                      </button>
+                    </div>
                   </div>
                 );
               })
@@ -365,6 +420,7 @@ const GeneratePUC = ({
                   style={{
                     backgroundColor: "#0A64F9",
                   }}
+                  onClick={() => handleCloseEditModal("single_vendor", 0)}
                 >
                   Vendors
                 </button>
@@ -375,16 +431,18 @@ const GeneratePUC = ({
                   style={{
                     backgroundColor: "#0A64F9",
                   }}
+                  onClick={() => handleRedirectHistory(null)}
                 >
                   Sales History
                 </button>
                 <button
-                  className="quic-btn quic-btn-save"
+                  className="quic-btn quic-btn-save edit"
                   // onClick={handleSubmitForm}
                   // disabled={isLoading}
                   style={{
                     backgroundColor: "#0A64F9",
                   }}
+                  onClick={() => handleCloseEditModal("single_instant", 0)}
                 >
                   Instant PO
                 </button>

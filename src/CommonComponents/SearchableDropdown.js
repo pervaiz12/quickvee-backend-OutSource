@@ -15,6 +15,8 @@ const SearchableDropdown = ({
   error,
   handleUpdateError,
   name,
+  hideSelectedValue,
+  hideSelectedList,
 }) => {
   // console.log("optionList", keyName, optionList);
   const { checkLength } = Validation();
@@ -41,7 +43,15 @@ const SearchableDropdown = ({
     } else {
       setFilterValue("");
     }
-  }, [selectedOption]);
+
+    // hide selected value if hideSelectedValue = true
+    if (hideSelectedValue === true && hideSelectedList?.length) {
+      const hideItemList = optionList?.filter((filtered) => {
+        return !hideSelectedList.some((item) => +item.id === +filtered.id);
+      });
+      setFilterOptions(hideItemList);
+    }
+  }, [selectedOption, hideSelectedValue, hideSelectedList, optionList]);
 
   const changeFilterableList = () => {
     // filter incoming optionList items when onchange run

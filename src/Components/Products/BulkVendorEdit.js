@@ -12,7 +12,12 @@ import { fetchVendorList } from "../../Redux/features/Product/ProductSlice";
 import { useDispatch } from "react-redux";
 import Switch from "@mui/material/Switch";
 
-const BulkVendorEdit = ({ productData }) => {
+const BulkVendorEdit = ({
+  productData,
+  varientData,
+  varientIndex,
+  modalType,
+}) => {
   const dispatch = useDispatch();
   const [selectedVendor, setSelectedVendor] = useState([]);
   const [vendor, setVendor] = useState([]);
@@ -27,8 +32,6 @@ const BulkVendorEdit = ({ productData }) => {
   };
 
   const [vendorItems, setVendorItems] = useState([]);
-
-  console.log(selectedVendor, vendorItems);
 
   const handleAddVendor = () => {
     setVendorItems((prev) => [
@@ -60,11 +63,22 @@ const BulkVendorEdit = ({ productData }) => {
   };
 
   // fetch vendor data here...
-  console.log("productdata", Boolean(+productData?.isvarient));
+  console.log(
+    "productdata  modaltype",
+    modalType,
+    Boolean(+productData?.isvarient)
+  );
   useEffect(() => {
     let isVarient = Boolean(+productData?.isvarient);
     const formData = new FormData();
-    formData.append("varient_id", !isVarient && productData?.id);
+    formData.append(
+      "varient_id",
+      !isVarient
+        ? productData?.id
+        : modalType === "bulk-edit" && Boolean(+productData?.isvarient)
+          ? productData?.id
+          : varientData[varientIndex]?.id
+    );
     formData.append("merchant_id", "MAL0100CA");
     formData.append("single_product", isVarient ? 0 : 1);
 
@@ -77,7 +91,6 @@ const BulkVendorEdit = ({ productData }) => {
 
   const handleDeleteVendor = (id) => {
     const filtervendorList = vendorItems?.filter((item) => +item?.id !== +id);
-    console.log("filtervendorList", filtervendorList);
     setVendorItems(filtervendorList);
   };
 
@@ -94,6 +107,8 @@ const BulkVendorEdit = ({ productData }) => {
               selectedOption={selectedVendor}
               // error,
               // handleUpdateError,
+              hideSelectedValue={true}
+              hideSelectedList={vendorItems}
               name="name"
             />
             <button
@@ -172,6 +187,34 @@ const BulkVendorEdit = ({ productData }) => {
             </TableBody>
           </Table>
         </TableContainer>
+      </div>
+
+      <div className="box">
+        <div className="variant-attributes-container">
+          {/* Your existing JSX for variant attributes */}
+          <div className="q-add-categories-section-middle-footer  ">
+            {!!!varientIndex ? (
+              <p className="bulk-edit-note">
+                <span className="note">Note:</span>
+                By clicking on update, it will assign selected vendor as
+                Preferred vendor to all Variants
+              </p>
+            ) : (
+              ""
+            )}
+            <div className="q-category-bottom-header">
+              <button
+                className="quic-btn quic-btn-update"
+                style={{
+                  backgroundColor: "#0A64F9",
+                }}
+              >
+                Update
+              </button>
+              <button className="quic-btn quic-btn-cancle">Cancel</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

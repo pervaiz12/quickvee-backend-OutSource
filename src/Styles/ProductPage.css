@@ -318,6 +318,15 @@
   color: #000000;
   cursor: pointer;
   font-weight: 500;
+  margin-bottom: 30px;
+  text-transform: capitalize;
+}
+
+.edit-profile-btns button.edit {
+  background-color: #000 !important;
+  color: #fff;
+}
+.dropdown-hide-item {
 }
 
 /* bulk vendor edit modal css */

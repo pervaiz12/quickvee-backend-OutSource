@@ -107,14 +107,18 @@ const AddProducts = () => {
   const [clearInput, setClearInput] = useState(false);
   const [openAlertModal, setOpenAlertModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
+  const [modalType, setModalType] = useState("");
+  const [varientIndex, setVarientIndex] = useState(null);
 
   // close alert
   const handleCloseAlertModal = () => {
     setOpenAlertModal((prev) => !prev);
   };
 
-  const handleCloseEditModal = () => {
+  const handleCloseEditModal = (modalType, varientId) => {
     setOpenEditModal((prev) => !prev);
+    setModalType(modalType);
+    setVarientIndex(varientId);
   };
 
   // clear all form input value
@@ -320,7 +324,6 @@ const AddProducts = () => {
     }));
   };
 
-  console.log("productInfo?.files", productInfo?.files);
   const handleProductInfo = async (e) => {
     const { name, value } = e.target;
 
@@ -1190,17 +1193,6 @@ const AddProducts = () => {
     setFormValue(updatedUpcData);
   };
 
-  console.log(
-    productInfo?.files
-      ?.map((file) => file)
-      .filter((i) => typeof i === "object")
-      .map((i) => i?.file),
-    productInfo?.files
-      ?.map((file) => file)
-      .filter((i) => typeof i === "string")
-      .toString()
-  );
-
   const handleSubmitForm = async (e) => {
     e.preventDefault();
     const data = {
@@ -1339,16 +1331,16 @@ const AddProducts = () => {
       // reorder_cost: [10, 10, 10, 10],
     };
 
-    console.log(
-      productInfo?.files
-        ?.map((file) => file)
-        .filter((i) => typeof i === "object")
-        .map((i) => i?.file),
-      productInfo?.files
-        ?.map((file) => file)
-        .filter((i) => typeof i === "string")
-        .toString()
-    );
+    // console.log(
+    //   productInfo?.files
+    //     ?.map((file) => file)
+    //     .filter((i) => typeof i === "object")
+    //     .map((i) => i?.file),
+    //   productInfo?.files
+    //     ?.map((file) => file)
+    //     .filter((i) => typeof i === "string")
+    //     .toString()
+    // );
 
     if (pageUrl === "product-edit") {
       data["productid"] = productData?.id ? productData?.id : "";
@@ -1466,6 +1458,9 @@ const AddProducts = () => {
             bulkEditPo={bulkEditPo}
             productData={productData}
             handleVarientTitleBasedItemList={handleVarientTitleBasedItemList}
+            modalType={modalType}
+            varientData={varientData}
+            varientIndex={varientIndex}
           />
           {/* alert modal */}
           <AlertModal
@@ -1807,6 +1802,9 @@ const AddProducts = () => {
                     isMultipleVarient={isMultipleVarient}
                     productInfo={productInfo}
                     inventoryData={inventoryData}
+                    handleCloseEditModal={handleCloseEditModal}
+                    productData={productData}
+                    varientData={varientData}
                   />
                 </div>
 
@@ -1815,19 +1813,22 @@ const AddProducts = () => {
                     {/* Your existing JSX for variant attributes */}
 
                     <div className="q-add-categories-section-middle-footer  ">
-                      {/* {pageUrl === "product-edit" ? ( */}
-                      <div
-                        className="q-category-bottom-header"
-                        style={{ marginRight: "67px" }}
-                      >
-                        <button
-                          className="quic-btn quic-btn-bulk-edit"
-                          onClick={() => handleCloseEditModal()}
+                      {pageUrl === "product-edit" &&
+                      productData?.isvarient === "1" ? (
+                        <div
+                          className="q-category-bottom-header"
+                          style={{ marginRight: "67px" }}
                         >
-                          Bulk Edit
-                        </button>
-                      </div>
-                      {/* ) : ( "" )} */}
+                          <button
+                            className="quic-btn quic-btn-bulk-edit"
+                            onClick={() => handleCloseEditModal("bulk-edit")}
+                          >
+                            Bulk Edit
+                          </button>
+                        </div>
+                      ) : (
+                        ""
+                      )}
                       <div
                         className="q-category-bottom-header"
                         style={{ marginRight: "67px" }}
