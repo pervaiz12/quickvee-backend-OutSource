@@ -25,6 +25,7 @@ const SellItems = () => {
             <div className="box_shadow_div ">
               <div className="q_saleitem_header">
                 <Link to="/toptraders" className="q_dashbaord_netsales flex">
+                 
                   <h1> Top Selling Items</h1>
 
                   <div className="ml-3">

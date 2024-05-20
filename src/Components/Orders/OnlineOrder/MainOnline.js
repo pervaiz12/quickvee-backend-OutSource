@@ -1,21 +1,48 @@
 import React, { useState, useEffect, useRef } from "react";
-import SearchIcon from "../../../Assests/Filter/Search.svg"
-import DownIcon from "../../../Assests/Dashboard/Down.svg";
+import { Grid, TextField } from "@mui/material";
+import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
+import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
+const MainOnline = ({ onFilterDataChange ,searchId,setSearchId}) => {
+  const transactionsList = [
+    {
+      title: "Both",
+    },
+    {
+      title: "Cash",
+    },
+    {
+      title: "Online",
+    },
+  ];
 
-const MainOnline = ({onFilterDataChange}) => {
-  const [searchId, setSearchId] = useState(""); // State to track search ID
+  const orderStatusList = [
+    {
+      title: "New",
+    },
+    {
+      title: "Closed",
+    },
+    {
+      title: "Failed",
+    },
+  ];
 
+
+  console.log("setSearchId", searchId);
   const handleSearch = () => {
-    console.log("Search ID:", searchId);
+    // console.log("Search ID:", searchId);
   };
 
+  const [isTablet, setIsTablet] = useState(false);
   // const [selectedEmployee, setSelectedEmployee] = useState("All");
   const [selectedTransaction, setSelectedTransaction] = useState("Both");
   const [selectedOrderStatus, setSelectedOrderStatus] = useState("New");
 
   // const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
-  const [transactionDropdownVisible, setTransactionDropdownVisible] = useState(false);
-  const [orderStatusDropdownVisible, setOrderStatusDropdownVisible] = useState(false);
+  const [transactionDropdownVisible, setTransactionDropdownVisible] =
+    useState(false);
+  const [orderStatusDropdownVisible, setOrderStatusDropdownVisible] =
+    useState(false);
 
   const toggleDropdown = (dropdown) => {
     switch (dropdown) {
@@ -35,18 +62,14 @@ const MainOnline = ({onFilterDataChange}) => {
 
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
-      // case "employee":
-      //   setSelectedEmployee(option);
-      //   setEmployeeDropdownVisible(false);
-      //   break;
       case "transaction":
-        setSelectedTransaction(option);
+        setSelectedTransaction(option.title);
         setTransactionDropdownVisible(false);
         break;
       case "orderStatus":
-          setSelectedOrderStatus(option);
-          setOrderStatusDropdownVisible(false); 
-          break;
+        setSelectedOrderStatus(option.title);
+        setOrderStatusDropdownVisible(false);
+        break;
       default:
         break;
     }
@@ -55,122 +78,104 @@ const MainOnline = ({onFilterDataChange}) => {
   const dropdownRef = useRef(null);
 
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleOutsideClick = (event) => {
       if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-        // setEmployeeDropdownVisible(false);
-        // setTransactionDropdownVisible(false);
+        setTransactionDropdownVisible(false);
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside);
+    document.addEventListener("mousedown", handleOutsideClick);
 
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
+  const orderStatus = useRef(null);
+
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (orderStatus.current && !orderStatus.current.contains(event.target)) {
+        setOrderStatusDropdownVisible(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
 
   useEffect(() => {
-    onFilterDataChange(selectedTransaction , selectedOrderStatus)
-  }, [selectedTransaction , selectedOrderStatus]);
+    onFilterDataChange(selectedTransaction, selectedOrderStatus, searchId);
+  }, [selectedTransaction, selectedOrderStatus, searchId]);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsTablet(window.innerWidth <= 885);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
   return (
     <>
-      <div className="q_main_data_range">
-        <div className="q_searchBar">
-          <div className="flex border  rounded-md overflow-hidden">
-            <input
-              type="text"
-              placeholder="Search orders by order ID, last 4 digits on payment card, or invoice ID"
-              value={searchId}
-              onChange={(e) => setSearchId(e.target.value)}
-              className="w-full px-4 py-2 border-none focus:outline-none place_text_search"
-            />
- 
-            <button
-              onClick={handleSearch}
-              className="text-black px-4 py-2 focus:outline-none text-2xl"
-            >
-              <img src={SearchIcon} alt="" className="w-6 h-6" />
-            </button>
-          </div>
-        </div>
-
-        <div className="mt_card_header q_dashbaord_netsales">
-          <h1 className="">Filter By</h1>
-        </div>
-
-        <div className="qvrow">
-          {/* Employee Dropdown */}
-          {/* <div className="col-qv-4">
-            <label htmlFor="employeeFilter">
-              Employee
-            </label>
-            <div className="custom-dropdown input_area" ref={dropdownRef}>
-              <div
-                className="custom-dropdown-header"
-                onClick={() => toggleDropdown("employee")}
-              >
-                <span className="selected-option mt-1">{selectedEmployee}</span>
-                <img src={DownIcon} alt="Down Icon" className="w-6 h-6" />
-              </div>
-              {employeeDropdownVisible && (
-                <div className="dropdown-content">
-                  <div className="all" onClick={() => handleOptionClick("All", "employee")}>All</div>
-                  <div className="all" onClick={() => handleOptionClick("employee1", "employee")}>employee1</div>
-                  <div className="all" onClick={() => handleOptionClick("employee2", "employee")}>employee2</div>
-                </div>
-              )}
-            </div>
-          </div> */}
-
-          {/* Transaction Dropdown */}
-          <div className="col-qv-4">
-            <label htmlFor="transactionFilter">
-              Transactions
-            </label>
-            <div className="custom-dropdown input_area" ref={dropdownRef}>
-              <div
-                className="custom-dropdown-header"
-                onClick={() => toggleDropdown("transaction")}
-              >
-                <span className="selected-option mt-1">{selectedTransaction}</span>
-                <img src={DownIcon} alt="Down Icon" className="w-6 h-6" />
-              </div>
-              {transactionDropdownVisible && (
-                <div className="dropdown-content">
-                  <div className="all" onClick={() => handleOptionClick("Both", "transaction")}>Both</div>
-                  <div className="all" onClick={() => handleOptionClick("Cash", "transaction")}>Cash</div>
-                  <div className="all" onClick={() => handleOptionClick("Online", "transaction")}>Online</div>
-                </div>
-                
-              )}
-            </div>
-          </div>
-
-          {/* Order Status Dropdown */}
-          <div className="col-qv-4">
-            <label htmlFor="orderStatusFilter">
-              Order Status
-            </label>
-            <div className="custom-dropdown input_area" ref={dropdownRef}>
-              <div
-                className="custom-dropdown-header"
-                onClick={() => toggleDropdown("orderStatus")}
-              >
-                <span className="selected-option mt-1">{selectedOrderStatus}</span>
-                <img src={DownIcon} alt="Down Icon" className="w-6 h-6" />
-              </div>
-              {orderStatusDropdownVisible && (
-                <div className="dropdown-content">
-                  <div className="all" onClick={() => handleOptionClick("New", "orderStatus")}>New</div>
-                  <div className="all" onClick={() => handleOptionClick("Closed", "orderStatus")}>Closed</div>
-                  <div className="all" onClick={() => handleOptionClick("Failed", "orderStatus")}>Failed</div>
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div>
+      <Grid container className="px-5">
+        <Grid item xs={12}>
+          <Grid container className="mt-5">
+            <Grid item xs={12} className="">
+              <InputTextSearch
+                placeholder="Search orders by order ID, last 4 digits on payment card, or invoice ID"
+                value={searchId}
+                handleChange={setSearchId}
+                handleSearchButton={handleSearch}
+              />
+            </Grid>
+          </Grid>
+          {!searchId && (
+            <>
+              <Grid container className="mt-5 ">
+                <Grid item className="mt_card_header q_dashbaord_netsales ">
+                  <h1 className="">Filter By</h1>
+                </Grid>
+              </Grid>
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6} md={4}>
+                  <label htmlFor="transactionFilter">Transactions</label>
+                  <SelectDropDown
+                    heading={""}
+                    listItem={transactionsList}
+                    title={"title"}
+                    onClickHandler={handleOptionClick}
+                    selectedOption={selectedTransaction}
+                    dropdownFor={"transaction"}
+                  />
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
+                  <label htmlFor="orderStatusFilter">Order Status</label>
+                  <SelectDropDown
+                    heading={""}
+                    listItem={orderStatusList}
+                    title={"title"}
+                    onClickHandler={handleOptionClick}
+                    selectedOption={selectedOrderStatus}
+                    dropdownFor={"orderStatus"}
+                  />
+                </Grid>
+              </Grid>
+            </>
+          )}
+        </Grid>
+      </Grid>
+   
     </>
   );
 };

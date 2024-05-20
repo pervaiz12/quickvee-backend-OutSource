@@ -32,6 +32,7 @@
   font-family: admin_std_medium;
   src: url(./Assests//Fonts/FontsFree-Net-Circular-Std-Medium.ttf);
 }
+
 @font-face {
   font-family: CircularBold;
   src: url("./Assests/Fonts/circular-bold.TTF");
@@ -56,7 +57,17 @@
   font-family: CircularSTDMedium;
   src: url("./Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
 }
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
 
+/* Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
 .main-page-home-dashboard {
   width: 100%;
   height: auto;
@@ -78,6 +89,7 @@
   margin-right: calc(-0.5 * var(--bs-gutter-x));
   margin-left: calc(-0.5 * var(--bs-gutter-x));
 }
+
 .qvrow > * {
   flex-shrink: 0;
   width: 100%;
@@ -86,54 +98,67 @@
   padding-left: calc(var(--bs-gutter-x) * 0.5);
   margin-top: var(--bs-gutter-y);
 }
+
 .col-qv-1 {
   flex: 0 0 auto;
   width: 8.33333333%;
 }
+
 .col-qv-2 {
   flex: 0 0 auto;
   width: 16.66666667%;
 }
+
 .col-qv-3 {
   flex: 0 0 auto;
   width: 25%;
 }
+
 .col-qv-4 {
   flex: 0 0 auto;
   width: 33.33333333%;
 }
+
 .col-qv-5 {
   flex: 0 0 auto;
   width: 41.66666667%;
 }
+
 .col-qv-6 {
   flex: 0 0 auto;
   width: 50%;
 }
+
 .col-qv-7 {
   flex: 0 0 auto;
   width: 58.33333333%;
 }
+
 .col-qv-8 {
   flex: 0 0 auto;
   width: 66.66666667%;
 }
+
 .col-qv-9 {
   flex: 0 0 auto;
   width: 75%;
 }
+
 .col-qv-10 {
   flex: 0 0 auto;
   width: 83.33333333%;
 }
+
 .col-qv-11 {
   flex: 0 0 auto;
   width: 91.66666667%;
 }
+
 .col-qv-12 {
   flex: 0 0 auto;
   width: 100%;
 }
+
 .Admin_bold {
   font-family: adminbold !important;
 }
@@ -174,7 +199,8 @@
   background-color: #253338;
   /* top: 0; */
   overflow-y: auto;
-  height: 94vh;
+  overflow-x: hidden;
+  height: 100vh;
   /* width: 16rem; */
   z-index: 9;
   color: #9e9e9e;
@@ -194,10 +220,24 @@
   left: 0;
   z-index: 999;
 }
+
 .boder_bottom_line {
   border-bottom: 3px solid #000;
   background-color: #000;
   margin-bottom: 16px;
+}
+
+/* add error msg css */
+.input-error {
+  color: #fa0000 !important;
+  font-family: QuicksandSemiBold, Quicksand !important;
+  font-size: 16px !important;
+  margin: 3px !important;
+  padding: 0 !important;
+  /* bottom: -17px;
+    height: 15px;
+    left: 10px;
+    position: absolute; */
 }
 
 /* Media Queries for Responsive Font Sizes */
@@ -214,6 +254,14 @@
   overflow-x: hidden;
 }
 
+/* .main-content {
+	overflow-x: auto;
+	overflow-y: auto;
+	height: 100vh;
+	overflow-x: hidden;
+	position: relative;
+} */
+
 .importBtn {
   box-shadow: rgba(0, 0, 0, 0.12) 0px 3px 6px;
   display: flex;
@@ -229,6 +277,8 @@
   border-radius: 50%;
   display: inline-block;
   border: 3px solid #0a64f9;
+  position: absolute;
+  left: -6px;
 }
 
 .border-customColor {
@@ -349,12 +399,35 @@ select option {
   opacity: 1;
 }
 
+@media only screen and (max-width: 1366px) and (min-width: 768px) {
+  .dataCalender {
+    background-color: #fff;
+    z-index: 5;
+    top: 12rem;
+    bottom: 3px;
+    z-index: 5;
+    right: 5.1rem;
+    bottom: 3px;
+    position: absolute;
+    transition:
+      width 5s,
+      height 4s;
+    height: 570px;
+    width: 60%;
+    padding: 12px;
+    box-shadow: 0px 3px 6px #0000001f;
+    border-radius: 8px;
+    opacity: 1;
+  }
+}
+
 .nonedatacalender {
   width: 0px;
   height: 0px;
   display: none;
 }
-*/ .days_btn {
+
+.days_btn {
   border-width: 1px;
   padding-left: 3.5rem;
   padding-right: 3.5rem;
@@ -412,15 +485,26 @@ ul li .q_filter_data_days {
 .active_link_pagination {
   color: #fff;
 }
+
 .select_date_btn {
   border: 1px solid #ccc;
   border-radius: 4px;
-  padding: 10px 40px;
-  width: 90%;
+  padding: 10px 10px;
+  width: 100%;
+}
+
+@media screen and (min-width: 640px) and (max-width: 1080px) {
+  .days_filter {
+    font-size: 10px !important;
+    font-family: "Admin_std", sans-serif;
+    /* Assuming 'Admin_std' is the font name */
+    font-weight: normal;
+  }
+
+  /* CSS rules for screens between 600px and 900px wide */
 }
 
 .days_filter {
-  color: #707070;
   font-size: 16px;
   font-family: "Admin_std", sans-serif;
   /* Assuming 'Admin_std' is the font name */
@@ -431,6 +515,7 @@ a.days_filter {
   display: flex;
   justify-content: space-between;
 }
+
 .main_blocks {
   margin-right: -2.4rem;
   margin-left: -2.4rem;
@@ -453,52 +538,47 @@ a.days_filter {
   width: 100%;
   background-color: #fff;
   color: #000;
-  font-size: 15px; /* Large screens */
+  font-size: 15px;
+  /* Large screens */
   border: 1px solid #ccc;
   outline: none;
-  padding: 8px 16px; /* Adjust padding as needed */
+  padding: 8px 16px;
+  /* Adjust padding as needed */
   border-radius: 4px;
 }
 
 /* Media Queries for Responsive Font Sizes */
 @media (max-width: 991px) {
   .custom-text-input {
-    font-size: 12px; /* Medium screens */
+    font-size: 12px;
+    /* Medium screens */
   }
 }
 
 @media (max-width: 767px) {
   .custom-text-input {
-    font-size: 10px; /* Small screens */
+    font-size: 10px;
+    /* Small screens */
   }
 }
 
 @media (max-width: 575px) {
   .custom-text-input {
-    font-size: 8px; /* Extra Small screens */
+    font-size: 8px;
+    /* Extra Small screens */
   }
 }
-
-.quickarrow_icon {
-  margin-left: 7.25rem;
-  /* display: flex; */
-  /* justify-content: space-between; */
-  margin-top: -1rem;
-}
-
-/* .error-close-icon {
-  color: #000 !important;
-  background-color: #fff !important;
-} */
 
 .q-custom-modal-content.modal_custom {
   height: auto !important;
   top: 10%;
 }
+
 .input_area label {
   display: block;
   margin-bottom: 10px;
 }
+
 .plr0 {
   padding-left: 0px !important;
   padding-right: 0px !important;
@@ -517,9 +597,11 @@ a.days_filter {
   font-size: 14px !important;
   font-family: CircularSTDBook !important;
 }
+
 .datarange_days_order > * {
-  margin-right: 1rem;
+  margin-right: 1.5rem;
 }
+
 .q-order-daterange-button {
   background-color: #007bff;
   color: #fff;
@@ -573,6 +655,7 @@ a.days_filter {
   padding-bottom: 4px;
   border-radius: 8px;
   cursor: pointer;
+  position: relative;
 }
 
 /* Custom Styles for Flex Container */
@@ -670,7 +753,8 @@ a.days_filter {
   display: block;
   font-size: 16px;
   color: #818181;
-  font-family: "CircularSTDBook", sans-serif; /* Assuming CircularSTDBook is a font family */
+  font-family: "CircularSTDBook", sans-serif;
+  /* Assuming CircularSTDBook is a font family */
   margin-bottom: 1rem;
 }
 
@@ -695,7 +779,7 @@ a.days_filter {
 
 /* width */
 ::-webkit-scrollbar {
-  width: 5px;
+  width: 2px;
   height: auto;
 }
 
@@ -751,7 +835,8 @@ a.flex.text-center.submenu-item.text-gray-400.py-4.CircularSTDBook:hover {
   display: flex;
 
   background-color: #334247;
-  color: #808080; /* or any other color you prefer */
+  color: #808080;
+  /* or any other color you prefer */
 
   font-family: "CircularSTDBook", sans-serif;
 }
@@ -760,7 +845,11 @@ a.flex.text-center.submenu-item.text-gray-400.py-4.CircularSTDBook:hover {
   color: #ffc400;
 }
 
-.submenu-item:active {
+.submenu-item.active {
+  color: #ffc400;
+}
+
+.DropDown-memu.activeTab {
   color: #ffc400;
 }
 
@@ -778,6 +867,7 @@ a.flex.text-center.submenu-item.text-gray-400.py-4.CircularSTDBook:hover {
     hue-rotate(359deg) brightness(102%) contrast(105%);
   /* You can adjust the filter properties based on your desired effect */
 }
+
 .hoverable-image:active {
   filter: brightness(0) saturate(100%) invert(71%) sepia(50%) saturate(886%)
     hue-rotate(359deg) brightness(102%) contrast(105%) !important;
@@ -788,12 +878,13 @@ a.flex.text-center.submenu-item.text-gray-400.py-4.CircularSTDBook:hover {
   display: none;
 }
 
-@media screen and (max-width: 776px) and (min-width: 376px) {
+@media screen and (max-width: 675px) and (min-width: 210px) {
   .q_date_range_filter_details {
     display: block;
     display: flex;
-    justify-content: end;
+    justify-content: flex-end;
   }
+
   .order_Details_days {
     display: none;
   }
@@ -802,9 +893,11 @@ a.flex.text-center.submenu-item.text-gray-400.py-4.CircularSTDBook:hover {
 .q-sales-item {
   width: 40%;
 }
+
 .q-sales-in {
   width: 40%;
 }
+
 .q-sales-total {
   width: 40%;
 }
@@ -849,6 +942,7 @@ a.flex.text-center.submenu-item.text-gray-400.py-4.CircularSTDBook:hover {
   top: 0;
   z-index: 1;
 }
+
 .secondVariant_product {
   position: absolute;
   left: 4rem;
@@ -869,9 +963,11 @@ a.flex.text-center.submenu-item.text-gray-400.py-4.CircularSTDBook:hover {
   top: 0;
   z-index: 4;
 }
+
 div.q_label_details::after {
   border: 1px solid #818181;
 }
+
 .border_transpert_details > input {
   border-top: 1px solid #000 !important;
   border-bottom: 1px solid #000 !important;
@@ -883,6 +979,7 @@ div.q_label_details::after {
   height: auto;
   padding: 10px;
 }
+
 .error-message {
   color: red;
 }
@@ -891,6 +988,7 @@ div.q_label_details::after {
   display: flex;
   justify-content: end;
 }
+
 .defaultDrag_div {
   cursor: pointer;
   position: relative;
@@ -903,6 +1001,7 @@ div.q_label_details::after {
   height: 320px;
   object-fit: contain;
 }
+
 .default-img-inputfield {
   display: none;
   width: 100%;
@@ -918,12 +1017,18 @@ div.q_label_details::after {
   width: 40px;
 }
 
+.img-DeleteIcon img {
+  height: 40px;
+  width: 40px;
+}
+
 .css-19xm0h7-MuiButtonBase-root-MuiPaginationItem-root.Mui-selected {
   background-color: #f9f9f9 !important;
   color: #0a64f9 !important;
   border: 1px solid #0a64f9 !important;
   padding: 19px 15px;
 }
+
 .css-19xm0h7-MuiButtonBase-root-MuiPaginationItem-root {
   padding: 19px 15px !important;
 }
@@ -934,4 +1039,103 @@ div.q_label_details::after {
   border-radius: 4px;
   width: 100%;
   height: auto;
+}
+
+/* date range css  */
+.react-datepicker-popper {
+  z-index: 2 !important;
+}
+
+.qvrowmain label {
+  color: #818181;
+  font-size: 14px;
+  font-family: CircularSTDBook !important;
+  display: block;
+}
+
+.vender_list svg {
+  right: 0px !important;
+  top: 0px !important;
+  color: rgba(0, 0, 0, 0.26) !important;
+}
+
+.q-attributes-main-page {
+  margin: 0px 0px;
+}
+
+.store-items-list {
+  margin-top: 10px !important;
+}
+
+.store-items {
+  padding-top: unset !important;
+}
+
+.store-item-card {
+  display: flex;
+  box-shadow: 0px 3px 6px #0000001f;
+  border-radius: 8px;
+}
+
+.store-item-card-manager {
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0px 3px 6px #0000001f;
+  border-radius: 8px;
+}
+
+.store-items-address {
+  font-style:
+    Circular Std Medium,
+    Regular !important;
+}
+
+.store-items-store-name {
+  font-size: 18px !important;
+  font-family: admin_std_medium;
+}
+
+.store-items-store-name-address {
+  display: flex;
+  flex-wrap: wrap;
+  font-family: adminstdbook;
+  color: #7b7b7b;
+  font-size: 16px;
+}
+
+.store-items-edit-btn {
+  font-family: adminstdbook;
+  font-size: 14px;
+  color: #0a64f9;
+  cursor: pointer;
+}
+.store-items-store-names {
+  font-size: 14px;
+}
+
+.managerStore-title {
+  font-size: 20px;
+  font-family: admin_std_medium;
+}
+
+.managerStore-title-main {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+.managerStore-btn {
+  font-size: 18px;
+  color: #0a64f9;
+}
+
+.Add-manager-forrm-title {
+  font-size: 20px;
+  font-family: admin_std_medium;
+}
+
+.header-menu {
+  font-size: clamp(10px, 1.5vw, 18px) !important;
+}
+
+.custom-datepicker-remove-border fieldset {
+  border-width: 0 !important;
 }

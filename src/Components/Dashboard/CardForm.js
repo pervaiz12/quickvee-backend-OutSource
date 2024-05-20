@@ -1,16 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BiCaretUp } from 'react-icons/bi';
 import "../../Styles/Settings/Side.css";
 
 
 
 
+
 const CardForm = () => {
+  const [isTablet, setIsTablet] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsTablet(window.innerWidth <= 995); // Assuming tablet width as 768px
+    };
+
+    // Initial check
+    handleResize();
+
+    // Event listener for window resize
+    window.addEventListener('resize', handleResize);
+
+    // Cleanup
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
   return (
     <div className="box">
      
       <div className="qvrow">
-        <div className="col-span-4 col-qv-3 lg:col-span-1">
+          <div className={`Card_admin ${isTablet ? 'col-qv-6' : 'col-qv-3'}`}>
           <div className="box_shadow_div mt_card_header">
             <div className="text-[#707070] font-normal lg:text-[18px]  sm:text-[14px] tracking-normal opacity-100 Admin_std">
               Transactions
@@ -24,7 +43,7 @@ const CardForm = () => {
         </div>
 
       
-        <div className="col-span-4 col-qv-3 lg:col-span-1">
+        <div className={`col-qv-3 Card_admin ${isTablet ? 'col-qv-6' : 'col-qv-3'}`}>
        <div className="box_shadow_div mt_card_header">
             <div className="text-[#707070] font-normal  lg:text-[18px]  sm:text-[14px] tracking-normal opacity-100 Admin_std">
             Average Sale Value
@@ -38,7 +57,7 @@ const CardForm = () => {
         </div>
 
         {/* Example of a third card */}
-        <div className="col-span-4 col-qv-3 lg:col-span-1">
+        <div className={`Card_admin ${isTablet ? 'col-qv-6' : 'col-qv-3'}`}>
        <div className="box_shadow_div mt_card_header ">
             <div className="text-[#707070] font-normal  lg:text-[18px]  sm:text-[14px] tracking-normal opacity-100 Admin_std">
             Average Item Sale
@@ -52,7 +71,7 @@ const CardForm = () => {
         </div>
 
         {/* Example of a fourth card */}
-        <div className="col-span-4 col-qv-3 lg:col-span-1">
+        <div className={`Card_admin ${isTablet ? 'col-qv-6' : 'col-qv-3'}`}>
        <div className="box_shadow_div mt_card_header">
             <div className="text-[#707070] font-normal  lg:text-[18px]  sm:text-[14px] tracking-normal opacity-100 Admin_std">
             Net COGS
@@ -67,7 +86,7 @@ const CardForm = () => {
       </div>
       <div className=''>
       <div className="qvrow">
-        <div className="col-span-4 col-qv-3 lg:col-span-1">
+          <div className={`Card_admin ${isTablet ? 'col-qv-6' : 'col-qv-3'}`}>
          <div className="box_shadow_div mt_card_header">
             <div className="text-[#707070] font-normal text-[18px] tracking-normal opacity-100 Admin_std">
             Gross Margin
@@ -82,7 +101,7 @@ const CardForm = () => {
 
         {/* Add more cards as needed */}
         {/* Example of a second card */}
-        <div className="col-span-4 col-qv-3 lg:col-span-1">
+          <div className={`Card_admin ${isTablet ? 'col-qv-6' : 'col-qv-3'}`}>
        <div className="box_shadow_div mt_card_header">
             <div className="text-[#707070] font-normal text-[18px] tracking-normal opacity-100 Admin_std">
             Gross Profit
@@ -96,7 +115,7 @@ const CardForm = () => {
         </div>
 
         {/* Example of a third card */}
-        <div className="col-span-4 col-qv-3 lg:col-span-1">
+          <div className={`Card_admin ${isTablet ? 'col-qv-6' : 'col-qv-3'}`}>
        <div className="box_shadow_div mt_card_header">
             <div className="text-[#707070] font-normal text-[18px] tracking-normal opacity-100 Admin_std">
             Non-cash Gratuity
@@ -110,7 +129,7 @@ const CardForm = () => {
         </div>
 
         {/* Example of a fourth card */}
-        <div className="col-span-4 col-qv-3 lg:col-span-1">
+          <div className={`Card_admin ${isTablet ? 'col-qv-6' : 'col-qv-3'}`}>
         <div className="box_shadow_div mt_card_header">
             <div className="text-[#707070] font-normal text-[18px] tracking-normal opacity-100 Admin_std">
             # of Saved Sales

@@ -19,7 +19,9 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import caleIcon from "../../Assests/Filter/Calender.svg";
 import TimeIcon from "../../Assests/Filter/Clock.svg";
 import dayjs, { Dayjs } from "dayjs";
-
+import BasicTextFields from "../../reuseableComponents/TextInputField";
+import SwitchLabel from "../../reuseableComponents/SwitchLabel";
+import { FormControl } from "@mui/material";
 const AddCoupon = ({ seVisible }) => {
   const [activeTab, setActiveTab] = useState("amount");
 
@@ -83,13 +85,13 @@ const AddCoupon = ({ seVisible }) => {
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-    setDateMaxDisAMTError("")
-    setDiscountError("")
+    setDateMaxDisAMTError("");
+    setDiscountError("");
   };
 
   const minutes = Math.round(dayjs().minute() / 15) * 15;
   const roundedTime = dayjs().minute(minutes).second(0);
-  console.log(roundedTime)
+  console.log(roundedTime);
 
   const [coupon, setCoupon] = useState({
     merchant_id: "MAL0100CA",
@@ -130,7 +132,6 @@ const AddCoupon = ({ seVisible }) => {
       setCoupon({
         ...coupon,
         date_valid: null,
-        
       });
       setDateStartError("Start Date is required");
     } else if (dayjs(formattedStartDate).isAfter(dayjs(coupon.date_expire))) {
@@ -148,7 +149,6 @@ const AddCoupon = ({ seVisible }) => {
       setDateStartError("");
     }
   };
-
 
   const handleEndDateChange = (newDate) => {
     const formattedEndDate = newDate.format("YYYY-MM-DD");
@@ -225,7 +225,7 @@ const AddCoupon = ({ seVisible }) => {
     if (activeTab === "percentage") {
       if (!coupon.maximum_discount) {
         setDateMaxDisAMTError("Maximum Discount Amount is required");
-        
+
         // return; // Stop further execution
       } else if (coupon.maximum_discount === "") {
         setDateMaxDisAMTError("Maximum Discount Amount is required");
@@ -233,26 +233,23 @@ const AddCoupon = ({ seVisible }) => {
       } else {
         setDateMaxDisAMTError("");
       }
-      if(!coupon.discount == null || coupon.discount === ""){
-        setDiscountError("Discount Amount Percentage is required")
-      }else{
-        setDiscountError("")
+      if (!coupon.discount == null || coupon.discount === "") {
+        setDiscountError("Discount Amount Percentage is required");
+      } else {
+        setDiscountError("");
       }
     }
 
-
-
-     if (!coupon.date_valid) {
+    if (!coupon.date_valid) {
       //  alert("Start Date are required.");
-       setDateStartError("Start Date is required");
-       // return; // Stop further execution
-     }
-     if (!coupon.date_expire) {
+      setDateStartError("Start Date is required");
+      // return; // Stop further execution
+    }
+    if (!coupon.date_expire) {
       // alert("End Date are required.");
       setDateEndError("End Date is required");
       // return; // Stop further execution
     }
-
 
     const formData = new FormData();
     formData.append("merchant_id", coupon.merchant_id);
@@ -309,32 +306,36 @@ const AddCoupon = ({ seVisible }) => {
       dayjs(coupon.time_expire, "HH:mm:ss").format("hh:mm A")
     );
 
-
-    if (errorMessage === "Coupon name already exists" || inputValue === "" || minOrderAmountError === "Minimum Order Amount is required" || discountError === "Discount Amount is required" || discountError ==="Discount Amount Percentage is required" || dateStartError === "Start Date is required" || dateEndError === "End Date is required" || dateMaxDisAMTError === "Maximum Discount Amount is required") {
-      return; 
+    if (
+      errorMessage === "Coupon name already exists" ||
+      inputValue === "" ||
+      minOrderAmountError === "Minimum Order Amount is required" ||
+      discountError === "Discount Amount is required" ||
+      discountError === "Discount Amount Percentage is required" ||
+      dateStartError === "Start Date is required" ||
+      dateEndError === "End Date is required" ||
+      dateMaxDisAMTError === "Maximum Discount Amount is required"
+    ) {
+      return;
     }
-    
-     if (!coupon.date_valid) {
-       setDateStartError("Start Date is required");
-       return;
-     } else {
-       setDateStartError("");
-     }
 
-     if (!coupon.date_expire) {
-       setDateEndError("End Date is required");
-       return;
-     } else {
-       setDateEndError("");
-     }
+    if (!coupon.date_valid) {
+      setDateStartError("Start Date is required");
+      return;
+    } else {
+      setDateStartError("");
+    }
+
+    if (!coupon.date_expire) {
+      setDateEndError("End Date is required");
+      return;
+    } else {
+      setDateEndError("");
+    }
 
     for (const [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
     }
-
-    
-    return
-
 
     try {
       const res = await axios.post(BASE_URL + ADD_COUPON, formData, {
@@ -422,180 +423,192 @@ const AddCoupon = ({ seVisible }) => {
               </span>
             </div>
             <form onSubmit={handleAddButtonClick}>
-            <div className="q-add-categories-section-middle-form">
-              <div className="q_coupon_Add_status_btn">
-                <p>Show Online</p>
-                <Switch
-                  name="online"
-                  id="online"
-                  checked={couponStates.online}
-                  onChange={handleCheckboxChange("online")}
-                  sx={{
-                    "& .MuiSwitch-switchBase.Mui-checked": {
-                      color: "#0A64F9",
-                    },
-                    "& .MuiSwitch-track": {
-                      backgroundColor: "#0A64F9",
-                    },
-                  }}
-                />
-              </div>
-              <div className="q-add-coupon-single-input">
-                <label htmlFor="coupon_name">Coupon Code</label>
-                <input
-                  type="text"
-                  id="coupon_name"
-                  name="coupon_name"
-                  maxLength="11"
-                  value={inputValue}
-             
-                  onChange={handleInputChange}
-                />
-                {errorMessage && (
-                  <p className="error-message">{errorMessage}</p>
-                )}
-              </div>
-
-              <div className="q-add-coupon-single-input">
-                <label htmlFor="description">Description</label>
-                <textarea
-                  id="description"
-                  name="description"
-                  rows="4"
-                  cols="50"
-                  value={coupon.description}
-                  onChange={(e) =>
-                    setCoupon({ ...coupon, description: e.target.value })
-                  }
-                ></textarea>
-              </div>
-
-              <Grid container spacing={2}>
-                <Grid item md={6} xs={12}>
-                  <div className="q_coupon_minium input_area">
-                    <label htmlFor="minorder_amt">Minimum Order Amount</label>
-                    <input
-                      type="number"
-                      id="minorder_amt"
-                      name="minorder_amt"
-                      value={coupon.min_amount}
-                      onChange={(e) => handleMinAmountChange(e)}
-                      
-                      placeholder="Enter Minimum Order Amount"
-                    />
-                    {minOrderAmountError && (
-                      <p className="error-message">{minOrderAmountError}</p>
-                    )}
-                  </div>
-                </Grid>
-                <Grid item md={6} xs={12}>
-                  <div className="q_coupon_minium  dicount_per_amo">
-                    <Grid container>
-                      <Grid item xs={6}>
-                        {activeTab === "amount" &&  (
-                          <div className="q_coupon_minium input_area">
-                            <label htmlFor="discount_amt">Discount Amount</label>
-                            <input
-                              type="number"
-                              id="discount_amt"
-                              name="discount"
-                              placeholder="Enter Discount Amount"
-                              value={coupon.discount}
-                              onChange={(e) => handleDiscountAmountChange(e)}
-                              
-                            />
-                            {discountError && (
-                              <p className="error-message">{discountError}</p>
-                            )}
-                          </div>
-                        )}
-                        {activeTab === "percentage" && (
-                          <div className="q_coupon_minium input_area">
-                            <label htmlFor="discount_per">
-                              Discount Percentage
-                            </label>
-                            <input
-                              type="number"
-                              id="discount_per"
-                              name="discount"
-                              placeholder="Enter Discount Percentage"
-                              value={coupon.discount}
-                              
-                              onChange={(e) => handleDiscountPercentChange(e)}
-                            />
-                            {discountError && (
-                              <p className="error-message">{discountError}</p>
-                            )}
-                          </div>
-                        )}
-                      </Grid>
-                      <Grid item xs={6}>
-                        <div className="AMT_PER_button">
-                          <Grid container>
-                            <Grid item xs={6}>
-                              <div
-                                className={`cursor-pointer amt_btn text-center   ${
-                                  activeTab === "amount"
-                                    ? "bg-[#0A64F9] text-white radius-4"
-                                    : ""
-                                }`}
-                                onClick={() => handleTabChange("amount")}
-                              >
-                                Amount ($)
-                              </div>
-                            </Grid>
-                            <Grid item xs={6}>
-                              <div
-                                className={`cursor-pointer amt_btn text-center  ${
-                                  activeTab === "percentage"
-                                    ? "bg-[#0A64F9] text-white radius-4"
-                                    : ""
-                                }`}
-                                onClick={() => handleTabChange("percentage")}
-                              >
-                                Percentage (%)
-                              </div>
-                            </Grid>
-                          </Grid>
-                        </div>
-                      </Grid>
-                    </Grid>
-                  </div>
-                </Grid>
-              </Grid>
-              {activeTab === "percentage" && (
-                <div className="q_coupon_minium input_area">
-                  <label htmlFor="maximum_discount">Maximum Discount Amount</label>
-                  <input
-                    type="number"
-                    id="maximum_discount"
-                    name="maximum_discount"
-                    placeholder="Enter Maximum Discount Amount"
-                    value={coupon.maximum_discount}
-                    onChange={(e) => handleMaxDiscountChange(e)}
+              <div className="q-add-categories-section-middle-form">
+                <div className="q_coupon_Add_status_btn">
+                  <p>Show Online</p>
+                  <SwitchLabel
+                    checked={couponStates.online}
+                    onChangeFun={handleCheckboxChange("online")}
                   />
-                  {dateMaxDisAMTError && (
-                    <p className="error-message">{dateMaxDisAMTError}</p>
+                  {/* <Switch
+                    name="online"
+                    id="online"
+                    checked={couponStates.online}
+                    onChange={handleCheckboxChange("online")}
+                    sx={{
+                      "& .MuiSwitch-switchBase.Mui-checked": {
+                        color: "#0A64F9",
+                      },
+                      "& .MuiSwitch-track": {
+                        backgroundColor: "#0A64F9",
+                      },
+                    }}
+                  /> */}
+                </div>
+
+                <div className="q-add-coupon-single-input mb-6">
+                  <label htmlFor="coupon_name">Coupon Code</label>
+                  <div className="input_area input">
+                    <BasicTextFields
+                      type={"text"}
+                      value={inputValue}
+                      maxLength={11}
+                      onChangeFun={handleInputChange}
+                    />
+                  </div>
+
+                  {/* <input
+                    type="text"
+                    id="coupon_name"
+                    name="coupon_name"
+                    maxLength="11"
+                    value={inputValue}
+                    onChange={handleInputChange}
+                  /> */}
+                  {errorMessage && (
+                    <p className="error-message">{errorMessage}</p>
                   )}
                 </div>
-              )}
 
-              <div className="q_coupon_minium my-4">
-                <label htmlFor="coupon mt-2">Date & Time</label>
-                <div className="flex flex-row gap-5">
-                  <Grid container spacing={2}>
-                    <Grid item xs={6}>
-                      <div className="">
-                        <div
-                          style={{
-                            display: "flex",
-                            // gap: "1rem",
-                            border: "1px solid #E3E3E3",
-                            borderRadius: "4px",
-                            height: "45px",
-                          }}
-                          className="date_selected"
-                        >
+                <div className="q-add-coupon-single-input mb-6">
+                  <label htmlFor="description">Description</label>
+                  <textarea
+                  className="mt-1"
+                    id="description"
+                    name="description"
+                    rows="4"
+                    cols="50"
+                    value={coupon.description}
+                    onChange={(e) =>
+                      setCoupon({ ...coupon, description: e.target.value })
+                    }
+                  ></textarea>
+                </div>
+
+                <Grid container spacing={2}>
+                  <Grid item md={6} xs={12}>
+                    <div className="q_coupon_minium input_area">
+                      <label htmlFor="minorder_amt">Minimum Order Amount</label>
+                      <BasicTextFields
+                        type={"number"}
+                        value={coupon.min_amount}
+                        onChangeFun={handleMinAmountChange}
+                        placeholder="Enter Minimum Order Amount"
+                      />
+
+                      {minOrderAmountError && (
+                        <p className="error-message">{minOrderAmountError}</p>
+                      )}
+                    </div>
+                  </Grid>
+                  <Grid item md={6} xs={12}>
+                    <div className="q_coupon_minium  dicount_per_amo">
+                      <Grid container>
+                        <Grid item xs={5}>
+                          {activeTab === "amount" && (
+                            <div className="q_coupon_minium input_area">
+                              <label htmlFor="discount_amt">
+                                Discount Amount
+                              </label>
+                              <BasicTextFields
+                                type={"number"}
+                                value={coupon.discount}
+                                placeholder="Enter Discount Amount"
+                                onChangeFun={handleDiscountAmountChange}
+                              />
+
+                              {discountError && (
+                                <p className="error-message">{discountError}</p>
+                              )}
+                            </div>
+                          )}
+                          {activeTab === "percentage" && (
+                            <div className="q_coupon_minium input_area">
+                              <label htmlFor="discount_per">
+                                Discount Percentage
+                              </label>
+                              <BasicTextFields
+                                type={"number"}
+                                value={coupon.discount}
+                                placeholder="Enter Discount Percentage"
+                                onChangeFun={handleDiscountPercentChange}
+                              />
+
+                              {discountError && (
+                                <p className="error-message">{discountError}</p>
+                              )}
+                            </div>
+                          )}
+                        </Grid>
+                        <Grid item xs={7}>
+                          <div className="AMT_PER_button">
+                            <Grid container>
+                              <Grid item xs={6}>
+                                <div
+                                  className={`cursor-pointer amt_btn text-center   ${
+                                    activeTab === "amount"
+                                      ? "bg-[#0A64F9] text-white radius-4"
+                                      : ""
+                                  }`}
+                                  onClick={() => handleTabChange("amount")}
+                                >
+                                  Amount ($)
+                                </div>
+                              </Grid>
+                              <Grid item xs={6}>
+                                <div
+                                  className={`cursor-pointer amt_btn text-center  ${
+                                    activeTab === "percentage"
+                                      ? "bg-[#0A64F9] text-white radius-4"
+                                      : ""
+                                  }`}
+                                  style={{ whiteSpace: "nowrap" }}
+                                  onClick={() => handleTabChange("percentage")}
+                                >
+                                  Percentage (%)
+                                </div>
+                              </Grid>
+                            </Grid>
+                          </div>
+                        </Grid>
+                      </Grid>
+                    </div>
+                  </Grid>
+                </Grid>
+                {activeTab === "percentage" && (
+                  <Grid
+                    container
+                    sx={{ marginTop: 2, marginBottom: 2 }}
+                    className="q_coupon_minium input_area"
+                  >
+                    <Grid item xs={12}>
+                      <label htmlFor="maximum_discount">
+                        Maximum Discount Amount
+                      </label>
+                      <input
+                        type="number"
+                        id="maximum_discount"
+                        name="maximum_discount"
+                        placeholder="Enter Maximum Discount Amount"
+                        value={coupon.maximum_discount}
+                        onChange={(e) => handleMaxDiscountChange(e)}
+                      />
+                      {dateMaxDisAMTError && (
+                        <p className="error-message">{dateMaxDisAMTError}</p>
+                      )}
+                    </Grid>
+                  </Grid>
+                )}
+                <Grid container sx={{ marginTop: 0.5, marginBottom: 0.5 }}>
+                  <Grid item xs={12}>
+                    <label htmlFor="coupon">Date & Time</label>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={12} md={6}>
+                    <Grid container className="border rounded">
+                      <Grid item xs={5.7}>
+                        <FormControl fullWidth>
                           <LocalizationProvider
                             dateAdapter={AdapterDayjs}
                             className="date-provider"
@@ -604,80 +617,97 @@ const AddCoupon = ({ seVisible }) => {
                               onChange={(newDate) =>
                                 handleStartDateChange(newDate)
                               }
-                              size="medium"
+                              style={{ border: "none" }} // Remove border
+                              size="small"
                               shouldDisableDate={(date) =>
                                 date.format("YYYY-MM-DD") === coupon.date_valid
                               }
                               format={"DD-MM-YYYY"}
                               disablePast
                               views={["year", "month", "day"]}
-                           
-                              slotProps={{ textField: { placeholder: 'Start Date' } }}
+                              slotProps={{
+                                textField: {
+                                  placeholder: "Start Date",
+                                  size: "small",
+                                },
+                              }}
                               components={{
                                 OpenPickerIcon: () => (
                                   <img src={caleIcon} alt="calendar-icon" />
                                 ),
                               }}
-                              className="custom-datepicker"
-                              
+                              className="custom-datepicker-remove-border"
                             />
                           </LocalizationProvider>
                           {dateStartError && (
-                            <p className="error-message date_error">{dateStartError}</p>
+                            <p className="error-message date_error">
+                              {dateStartError}
+                            </p>
                           )}
-                          <div className="dividersss" />
-                          <div className="q_time_display">
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <TimePicker
-                              
-                                className="input_label_section"
-                                name="start_tym"
-                                id="start_tym"
-                                value={dayjs(coupon.time_valid, "HH:mm:ss")}
-                                onChange={(newTime) =>
-                                  handleStartTimeChange(newTime)
-                                }
-                                slotProps={{ textField: { placeholder: 'Start Time' } }}
-                                components={{
-                                  OpenPickerIcon: () => (
-                                    <img src={TimeIcon} alt="time-icon" />
-                                  ),
-                                }}
-                              />
-                            </LocalizationProvider>
-                          </div>
-                        </div>
-                      </div>
+                        </FormControl>
+                      </Grid>
+
+                      <Grid
+                        item
+                        xs={0.5}
+                        className="flex justify-center items-center"
+                      >
+                        <div className="dividersss" />
+                      </Grid>
+
+                      <Grid item xs={5.6}>
+                        <FormControl fullWidth>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <TimePicker
+                              className="custom-datepicker-remove-border"
+                              name="start_tym"
+                              id="start_tym"
+                              value={dayjs(coupon.time_valid, "HH:mm:ss")}
+                              onChange={(newTime) =>
+                                handleStartTimeChange(newTime)
+                              }
+                              slotProps={{
+                                textField: {
+                                  placeholder: "Start Time",
+                                  size: "small",
+                                },
+                              }}
+                              components={{
+                                OpenPickerIcon: () => (
+                                  <img src={TimeIcon} alt="time-icon" />
+                                ),
+                              }}
+                            />
+                          </LocalizationProvider>
+                        </FormControl>
+                      </Grid>
                     </Grid>
-                    <Grid item xs={6}>
-                      <div className="">
-                        <div
-                          style={{
-                            display: "flex",
-                            // gap: "1rem",
-                            margin: "0px",
-                            border: "1px solid #E3E3E3",
-                            borderRadius: "4px",
-                            height: "45px",
-                          }}
-                          className="date_selected"
-                        >
+                  </Grid>
+                  <Grid item xs={12} sm={12} md={6}>
+                    <Grid container className="border rounded">
+                      <Grid item xs={5.7}>
+                        <FormControl fullWidth>
                           <LocalizationProvider
                             dateAdapter={AdapterDayjs}
                             className="date-provider"
                           >
                             <DatePicker
+                              className="custom-datepicker-remove-border"
                               onChange={(newDate) =>
                                 handleEndDateChange(newDate)
                               }
                               shouldDisableDate={(date) =>
                                 date.format("YYYY-MM-DD") === coupon.date_expire
                               }
-                              
                               format={"DD-MM-YYYY"}
                               disablePast
                               views={["year", "month", "day"]}
-                              slotProps={{ textField: { placeholder: 'End Date' } }}
+                              slotProps={{
+                                textField: {
+                                  placeholder: "End Date",
+                                  size: "small",
+                                },
+                              }}
                               components={{
                                 OpenPickerIcon: () => (
                                   <img src={caleIcon} alt="calendar-icon" />
@@ -685,94 +715,256 @@ const AddCoupon = ({ seVisible }) => {
                               }}
                             />
                             {dateEndError && (
-                              <p className="error-message date_error">{dateEndError}</p>
+                              <p className="error-message date_error">
+                                {dateEndError}
+                              </p>
                             )}
                           </LocalizationProvider>
-                          <div className="dividersss" />
-                          <div className="q_time_display">
-                            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                              <TimePicker
-                                className="input_label_section"
-                                name="end_tym"
-                                id="end_tym"
-                                value={dayjs(coupon.time_expire, "HH:mm:ss")}
-                                onChange={(newTime) =>
-                                  handleEndTimeChange(newTime)
+                        </FormControl>
+                      </Grid>
+                      <Grid
+                        item
+                        xs={0.5}
+                        className="flex justify-center items-center"
+                      >
+                        <div className="dividersss" />
+                      </Grid>
+                      <Grid item xs={5.6}>
+                        <FormControl fullWidth>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <TimePicker
+                              className="custom-datepicker-remove-border"
+                              name="end_tym"
+                              id="end_tym"
+                              value={dayjs(coupon.time_expire, "HH:mm:ss")}
+                              onChange={(newTime) =>
+                                handleEndTimeChange(newTime)
+                              }
+                              slotProps={{
+                                textField: {
+                                  placeholder: "End Time",
+                                  size: "small",
+                                },
+                              }}
+                              components={{
+                                OpenPickerIcon: () => (
+                                  <img src={TimeIcon} alt="time-icon" />
+                                ),
+                              }}
+                            />
+                          </LocalizationProvider>
+                        </FormControl>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+                {/* <div className="q_coupon_minium my-4">
+                  <label htmlFor="coupon mt-2">Date & Time</label>
+                  <div className="flex flex-row gap-5">
+                    <Grid container spacing={2}>
+                      <Grid item xs={6}>
+                        <div className="">
+                          <div
+                            style={{
+                              display: "flex",
+                              // gap: "1rem",
+                              border: "1px solid #E3E3E3",
+                              borderRadius: "4px",
+                              height: "45px",
+                            }}
+                            className="date_selected"
+                          >
+                            <LocalizationProvider
+                              dateAdapter={AdapterDayjs}
+                              className="date-provider"
+                            >
+                              <DatePicker
+                                onChange={(newDate) =>
+                                  handleStartDateChange(newDate)
                                 }
-                                slotProps={{ textField: { placeholder: 'End Time' } }}
+                                size="medium"
+                                shouldDisableDate={(date) =>
+                                  date.format("YYYY-MM-DD") ===
+                                  coupon.date_valid
+                                }
+                                format={"DD-MM-YYYY"}
+                                disablePast
+                                views={["year", "month", "day"]}
+                                slotProps={{
+                                  textField: { placeholder: "Start Date" },
+                                }}
                                 components={{
                                   OpenPickerIcon: () => (
-                                    <img src={TimeIcon} alt="time-icon" />
+                                    <img src={caleIcon} alt="calendar-icon" />
+                                  ),
+                                }}
+                                className="custom-datepicker"
+                              />
+                            </LocalizationProvider>
+                            {dateStartError && (
+                              <p className="error-message date_error">
+                                {dateStartError}
+                              </p>
+                            )}
+                            <div className="dividersss" />
+                            <div className="q_time_display">
+                              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <TimePicker
+                                  className="input_label_section"
+                                  name="start_tym"
+                                  id="start_tym"
+                                  value={dayjs(coupon.time_valid, "HH:mm:ss")}
+                                  onChange={(newTime) =>
+                                    handleStartTimeChange(newTime)
+                                  }
+                                  slotProps={{
+                                    textField: { placeholder: "Start Time" },
+                                  }}
+                                  components={{
+                                    OpenPickerIcon: () => (
+                                      <img src={TimeIcon} alt="time-icon" />
+                                    ),
+                                  }}
+                                />
+                              </LocalizationProvider>
+                            </div>
+                          </div>
+                        </div>
+                      </Grid>
+                      <Grid item xs={6}>
+                        <div className="">
+                          <div
+                            style={{
+                              display: "flex",
+                              // gap: "1rem",
+                              margin: "0px",
+                              border: "1px solid #E3E3E3",
+                              borderRadius: "4px",
+                              height: "45px",
+                            }}
+                            className="date_selected"
+                          >
+                            <LocalizationProvider
+                              dateAdapter={AdapterDayjs}
+                              className="date-provider"
+                            >
+                              <DatePicker
+                                onChange={(newDate) =>
+                                  handleEndDateChange(newDate)
+                                }
+                                shouldDisableDate={(date) =>
+                                  date.format("YYYY-MM-DD") ===
+                                  coupon.date_expire
+                                }
+                                format={"DD-MM-YYYY"}
+                                disablePast
+                                views={["year", "month", "day"]}
+                                slotProps={{
+                                  textField: { placeholder: "End Date" },
+                                }}
+                                components={{
+                                  OpenPickerIcon: () => (
+                                    <img src={caleIcon} alt="calendar-icon" />
                                   ),
                                 }}
                               />
+                              {dateEndError && (
+                                <p className="error-message date_error">
+                                  {dateEndError}
+                                </p>
+                              )}
                             </LocalizationProvider>
+                            <div className="dividersss" />
+                            <div className="q_time_display">
+                              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                                <TimePicker
+                                  className="input_label_section"
+                                  name="end_tym"
+                                  id="end_tym"
+                                  value={dayjs(coupon.time_expire, "HH:mm:ss")}
+                                  onChange={(newTime) =>
+                                    handleEndTimeChange(newTime)
+                                  }
+                                  slotProps={{
+                                    textField: { placeholder: "End Time" },
+                                  }}
+                                  components={{
+                                    OpenPickerIcon: () => (
+                                      <img src={TimeIcon} alt="time-icon" />
+                                    ),
+                                  }}
+                                />
+                              </LocalizationProvider>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      </Grid>
                     </Grid>
+                  </div>
+                </div> */}
+
+                <Grid
+                  container
+                  sx={{ marginTop: 2 }}
+                  className="q-add-coupon-single-input"
+                >
+                  <Grid item xs={12} className="q_coupon_Add_status_btn">
+                    <p>Enable Redemption Limit?</p>
+                    <SwitchLabel
+                      checked={couponStates.enable_limit}
+                      onChangeFun={handleCheckboxChange("enable_limit")}
+                    />
+                    {/* <Switch
+                      name="enable_limit"
+                      id="enable_limit"
+                      checked={couponStates.enable_limit}
+                      onChange={handleCheckboxChange("enable_limit")}
+                      sx={{
+                        "& .MuiSwitch-switchBase.Mui-checked": {
+                          color: "#0A64F9", // Change color when switch is checked
+                        },
+                        "& .MuiSwitch-track": {
+                          backgroundColor: "#0A64F9", // Change background color of the track
+                        },
+                      }}
+                    /> */}
                   </Grid>
-                </div>
+                </Grid>
+
+                {couponStates.enable_limit > 0 && (
+                  <div className="q-add-coupon-single-input">
+                    <label htmlFor="count_limit">Redemption Limit</label>
+                    <input
+                      type="number"
+                      id="count_limit"
+                      name="count_limit"
+                      min="1"
+                      max="999"
+                      value={coupon.count_limit}
+                      onChange={(e) =>
+                        setCoupon({
+                          ...coupon,
+                          count_limit: e.target.value,
+                        })
+                      }
+                    />
+
+                    {countLimitError && (
+                      <p className="error-message">{countLimitError}</p>
+                    )}
+                  </div>
+                )}
               </div>
 
-              <div className="q-add-coupon-single-input">
-                <div className="q_coupon_Add_status_btn">
-                  <p>Enable Redemption Limit?</p>
-                  <Switch
-                    name="enable_limit"
-                    id="enable_limit"
-                    checked={couponStates.enable_limit}
-                    onChange={handleCheckboxChange("enable_limit")}
-                    sx={{
-                      "& .MuiSwitch-switchBase.Mui-checked": {
-                        color: "#0A64F9", // Change color when switch is checked
-                      },
-                      "& .MuiSwitch-track": {
-                        backgroundColor: "#0A64F9", // Change background color of the track
-                      },
-                    }}
-                  />
-                </div>
+              <div className="q-add-categories-section-middle-footer">
+                <button className="quic-btn quic-btn-save">Add</button>
+                <button
+                  onClick={() => seVisible("CouponDiscount")}
+                  className="quic-btn quic-btn-cancle"
+                >
+                  Cancel
+                </button>
               </div>
-
-              {couponStates.enable_limit > 0 && (
-                <div className="q-add-coupon-single-input">
-                  <label htmlFor="count_limit">Redemption Limit</label>
-                  <input
-                    type="number"
-                    id="count_limit"
-                    name="count_limit"
-                    min="1"
-                    max="999"
-                    value={coupon.count_limit}
-                    onChange={(e) =>
-                      setCoupon({
-                        ...coupon,
-                        count_limit: e.target.value,
-                      })
-                    }
-                  />
-
-                  {countLimitError && (
-                    <p className="error-message">{countLimitError}</p>
-                  )}
-                </div>
-              )}
-            </div>
-
-            <div className="q-add-categories-section-middle-footer">
-              <button
-                className="quic-btn quic-btn-save"
-              >
-                Add
-              </button>
-              <button
-                onClick={() => seVisible("CouponDiscount")}
-                className="quic-btn quic-btn-cancle"
-              >
-                Cancel
-              </button>
-            </div>
             </form>
           </div>
         </div>

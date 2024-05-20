@@ -13,6 +13,7 @@ export const fetchCouponList = createAsyncThunk('couponList/fetchCouponList.', a
     try {
         const response = await axios.post(BASE_URL + COUPON_LIST, data, { headers: { "Content-Type": "multipart/form-data" } })
         if (response.status === 200) {
+            console.log( response)
            return response.data.result
         }
     } catch (error) {
@@ -39,7 +40,7 @@ const couponListSlice = createSlice({
     reducers:{
         updateStatus: (state, action) => 
         {
-            state.couponData = state.couponData.map(coupon => {
+            state.couponData = Object.values(state.couponData).map(coupon => {
                 if (coupon.id === action.payload.coupon_id) {
 
                     return {
@@ -78,7 +79,7 @@ const couponListSlice = createSlice({
         builder.addCase(deleteCoupon.fulfilled, (state, action) => {
             state.loading = false;
             state.successMessage = action.payload.message;
-            state.couponData = state.couponData.filter((item) => item && item.id !== action.payload.couponId);
+            state.couponData = Object.values(state.couponData).filter((item) => item && item.id !== action.payload.couponId);
             state.error = ''; // Reset the error message
         });
         builder.addCase(deleteCoupon.rejected, (state, action) => {

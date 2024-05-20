@@ -7,10 +7,60 @@ import OnlineData from "../../Assests/Dashboard/store.svg";
 
 import DownIcon from "../../Assests/Dashboard/Down.svg";
 import UserIcon from "../../Assests/MultipleUserIcon/useractive.svg";
+import Cookies from "js-cookie";
+import { useSelector, useDispatch } from "react-redux"; //,localAuthCheck
 
+import { useNavigate } from "react-router-dom";
+import {
+  getAuthSessionRecord,
+  handleGetStoreRecord,
+  getAuthInvalidMessage,
+  getUserRecordData,
+  getUserDashboardRecord,
+} from "../../Redux/features/Authentication/loginSlice";
 const AllUserHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
   const [showDropdown, setShowDropdown] = useState(false);
+  const dispatch = useDispatch();
+
+  let AuthFinalLogin =
+    Cookies.get("loginDetails") !== undefined
+      ? Cookies.get("loginDetails")
+      : [];
+  let LoginGetDashBoard =
+    Cookies.get("token_data") !== undefined ? Cookies.get("token_data") : [];
+  // =======================================================================
+  let UserLoginDataStringFy =
+    Cookies.get("user_auth_record") !== undefined
+      ? Cookies.get("user_auth_record")
+      : [];
+
+  let UserLoginRecord = useSelector(
+    (state) => state?.loginAuthentication?.getUserLoginRecord
+  );
+  const getUserLoginAuth = atob(UserLoginRecord);
+  const GetSessionLogin =
+    getUserLoginAuth !== "" ? JSON.parse(getUserLoginAuth) : [];
+  // ==========================
+  // useEffect for all when update data in coockie-----------------
+
+  //AuthFinalLogin
+  useEffect(() => {
+    if (AuthFinalLogin !== "") {
+      dispatch(getAuthSessionRecord(AuthFinalLogin));
+    }
+  }, [AuthFinalLogin]);
+
+  useEffect(() => {
+    dispatch(getUserDashboardRecord(LoginGetDashBoard));
+  }, [LoginGetDashBoard]);
+  useEffect(() => {
+    dispatch(getUserRecordData(UserLoginDataStringFy));
+  }, [UserLoginDataStringFy]);
+
+  // useEffect for all when update data in coockie--------------
+  // ==========================
+  const navigate = useNavigate();
 
   const handleDropdownToggle = () => {
     setShowDropdown(!showDropdown);
@@ -32,6 +82,13 @@ const AllUserHeader = () => {
       window.removeEventListener("scroll", handleScroll);
     };
   }, []);
+  const handleLogout = () => {
+    Cookies.remove("loginDetails");
+    Cookies.remove("user_auth_record");
+    localStorage.removeItem("AllStore");
+    // Cookies.remove('token_data');
+    navigate("/login");
+  };
 
   return (
     <>
@@ -50,7 +107,6 @@ const AllUserHeader = () => {
           <img src={Quick} alt="Logo" className="ml-6" />
 
           <div className="relative ml-auto">
-         
             <div
               className="flex items-center ml-6 px-3 py-1 text-black lg:text-[20px] admin_medium cursor-pointer sm:text-[12px] md:text-[15px]"
               onClick={handleDropdownToggle}
@@ -58,23 +114,22 @@ const AllUserHeader = () => {
               <img src={UserIcon} alt="" className="w-6 h-6 mr-2" />
               Superadmin
               <img src={DownIcon} alt="" className="w-8 h-8 ml-2" />
-              
             </div>
 
-         
             {showDropdown && (
               <div className="dropdown-content w-full  mt-5">
                 <div className="flex justify-items-start">
-                 
-                <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />   <a href="/users/view/unapprove/" >Store Setup</a>
+                  <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />{" "}
+                  <a href="/users/view/unapprove/">Store Setup</a>
                 </div>
                 <div className="flex justify-items-start">
                   <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />
-                  <a href="/users/view/unapprove/need-help">
-                  Need Help
-                  </a>
+                  <a href="/users/view/unapprove/need-help">Need Help</a>
                 </div>
-                <div className="flex justify-items-start">
+                <div
+                  className="flex justify-items-start"
+                  onClick={handleLogout}
+                >
                   <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />
                   Logout
                 </div>

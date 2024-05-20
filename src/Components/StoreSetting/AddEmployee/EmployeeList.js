@@ -132,7 +132,7 @@ const EmployeeList = () => {
                     <p className="employee-pin">{employee.pin}</p>     
                     <p className="employee-role">{employee.role}</p>      
                     {/* <p className="employee-iconall"> */}
-                        <div className="qvrow">
+                        <div className="qvrow" >
                             <div className="col-qv-4">
                                 <div>
                               

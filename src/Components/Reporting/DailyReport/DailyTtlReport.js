@@ -1,10 +1,11 @@
-import React, { useState } from "react";
+import React, { useState  , useEffect} from "react";
 import DateRange from "../../Orders/InstoreOrder/DateRange";
 import DailyReportList from "./DailyReportList";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
 
 const DailyTtlReport = () => {
   const [filteredData, setFilteredData] = useState([]);
+  const [isTablet, setIsTablet] = useState(false);
 
   const handleDataFiltered = (data) => {
     if (typeof data === "object") {
@@ -91,100 +92,114 @@ const DailyTtlReport = () => {
     }
   };
 
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsTablet(window.innerWidth <= 995);
+    };
+
+    handleResize();
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
   return (
     <>
         <div className="q-order-main-page">
           <div className="box">
-      <div className="q-category-bottom-detail-section">
-          <div className="q-category-bottom-header-sticky">
-            <div className="q-category-bottom-header">
-              <div className="q_details_header ml-2">Daily Total Report</div>
-            </div>
-            <div className="q_details_header ml-8">Filter by</div>
-          </div>
-          <div className="q-order-page-container ml-8">
-            <div className="q-order-page-filter">
-              <label
-                className="q-details-page-label"
-                htmlFor="orderSourceFilter"
-              >
-                Order Source
-              </label>
-              <div className="custom-dropdown">
-                <div
-                  className="custom-dropdown-header"
-                  onClick={() => toggleDropdown("orderSource")}
-                >
-                  <span className="selected-option mt-1">
-                    {selectedOrderSource}
-                  </span>
-                  <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-                </div>
-                {orderSourceDropdownVisible && (
-                  <div className="dropdown-content ">
+          <div className="box_shadow_input">
+            <div className="pd_20">
+              <h1 className="heading">Daily Total Report</h1>
+           
+              
+              <h1 className="heading">Filter By</h1>
+               
+            <div className="qvrow">
+                <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
+              
+                    <label htmlFor="orderSourceFilter"> Order Source</label>
+                    <div className="custom-dropdown input_area">
                     <div
-                      onClick={() => handleOptionClick("All", "orderSource")}
+                      className="custom-dropdown-header"
+                      onClick={() => toggleDropdown("orderSource")}
                     >
-                      All
+                      <span className="selected-option mt-1">
+                        {selectedOrderSource}
+                      </span>
+                      <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
                     </div>
-                    <div
-                      onClick={() =>
-                        handleOptionClick("Online Order", "orderSource")
-                      }
-                    >
-                      Online Order
-                    </div>
-                    <div
-                      onClick={() =>
-                        handleOptionClick("Store Order", "orderSource")
-                      }
-                    >
-                      Store Order
-                    </div>
+                    {orderSourceDropdownVisible && (
+                      <div className="dropdown-content ">
+                        <div
+                          onClick={() => handleOptionClick("All", "orderSource")}
+                        >
+                          All
+                        </div>
+                        <div
+                          onClick={() =>
+                            handleOptionClick("Online Order", "orderSource")
+                          }
+                        >
+                          Online Order
+                        </div>
+                        <div
+                          onClick={() =>
+                            handleOptionClick("Store Order", "orderSource")
+                          }
+                        >
+                          Order Source
+                        </div>
 
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            </div>
-
-            <div className="q-order-page-filter">
-              <label className="q-details-page-label" htmlFor="orderTypeFilter">
-                Order Type
-              </label>
-              <div className="custom-dropdown">
-                <div
-                  className="custom-dropdown-header"
-                  onClick={() => toggleDropdown("orderType")}
-                >
-                  <span className="selected-option mt-1">
-                    {selectedOrderType}
-                  </span>
-                  <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
                 </div>
-                {orderTypeDropdownVisible && (
-                  <div className="dropdown-content">
-                    <div onClick={() => handleOptionClick("All", "orderType")}>
-                      All
-                    </div>
+             
+                <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
+                
+                  <label> Order Type</label>
+                    <div className="custom-dropdown input_area">
                     <div
-                      onClick={() => handleOptionClick("Pickup", "orderType")}
+                      className="custom-dropdown-header"
+                      onClick={() => toggleDropdown("orderType")}
                     >
-                      Pickup
+                      <span className="selected-option mt-1">
+                        {selectedOrderType}
+                      </span>
+                      <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
                     </div>
-                    <div
-                      onClick={() => handleOptionClick("Delivery", "orderType")}
-                    >
-                      Delivery
-                    </div>
-                    {/* ... (other order type options) ... */}
+                    {orderTypeDropdownVisible && (
+                      <div className="dropdown-content">
+                        <div onClick={() => handleOptionClick("All", "orderType")}>
+                          All
+                        </div>
+                        <div
+                          onClick={() => handleOptionClick("Pickup", "orderType")}
+                        >
+                          Pickup
+                        </div>
+                        <div
+                          onClick={() => handleOptionClick("Delivery", "orderType")}
+                        >
+                          Delivery
+                        </div>
+                        {/* ... (other order type options) ... */}
+                      </div>
+                    )}
                   </div>
-                )}
+               
               </div>
+              </div>
+              </div>
+
             </div>
           </div>
-        </div>
+      
       </div>
-      </div>
+     
 
       <style>
         {`

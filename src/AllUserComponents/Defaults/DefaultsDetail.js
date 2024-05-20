@@ -22,7 +22,12 @@ const DefaultsDetail = ({ seVisible }) => {
   const defaultsDataState = useSelector((state) => state.defaults);
 
   useEffect(() => {
-    dispatch(fetchdefaultsData());
+    let data = {
+      merchant_id: "MAL0100CA",
+    };
+    if (data) {
+      dispatch(fetchdefaultsData(data));
+    }
   }, []);
 
   useEffect(() => {

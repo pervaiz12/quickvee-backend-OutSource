@@ -29,9 +29,6 @@
 
 
 
-.q-attributes-main-page {
-    margin: 0px 40px;
-}
 
 .q-attributes-top-detail-section {
     padding: 20px;
@@ -62,6 +59,7 @@
     width: 100%;
     box-shadow: 0px 3px 6px #0000001F;
     border-radius: 8px !important;
+    margin: 30px 0;
 }
 
 .q-attributes-bottom-header-sticky {
@@ -134,7 +132,7 @@
 
 .q-attributes-bottom-attriButes-single-attributes {
     display: flex;
-    padding: 20px;
+    /* padding: 20px; */
     border-bottom: 1px solid #E8E8E8;
     /* cursor: all-scroll; */
     user-select: none;
@@ -263,14 +261,14 @@
   }
   .q-custom-modal-content {
     position: absolute;
-    top: 35%; /* Adjust the top position as needed */
-    left: 15.66666667%; /* Adjust the left position as needed */
-    width: 70%; /* Adjust the width as needed */
-    height: 262px; /* Adjust the height as needed */
+    top: 35%; 
+    left: 15.66666667%; 
+    width: 70%;
+    height: 300px; 
     background-color: #fff;
-    border-radius: 0.5rem; /* Adjust the border radius as needed */
+    border-radius: 0.5rem; 
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-    padding: 1.5rem; /* Adjust the padding as needed */
+    padding: 1.5rem;
   }
   .q-custom-modal-header{
     font-size: 18px;
@@ -306,7 +304,7 @@
 
 .custom-dropdown {
     position: relative;
-    margin-top: 8px;
+    /* margin-top: 8px; */
   }
   
   .custom-dropdown-header {
@@ -346,6 +344,14 @@
     margin-top:10px;
  }
 
+
+  .q-details-page-label_dasbaord{
+    color:#818181;
+    font-size: 12px;
+    font-family: CircularSTDBook !important;
+    opacity: 1;
+    margin-top:10px;
+ }
 
  .q-order-bottom-oder-details-listing {
     width: 100%;

@@ -1,157 +1,229 @@
 import React, { useEffect, useState } from "react";
-import { AiOutlineSearch } from 'react-icons/ai';
-import DownIcon from "../../Assests/Dashboard/Down.svg"
+import { AiOutlineSearch } from "react-icons/ai";
+import DownIcon from "../../Assests/Dashboard/Down.svg";
+import { useRef } from "react";
+import Grid from "@mui/system/Unstable_Grid/Grid";
+import InputTextSearch from "../../reuseableComponents/InputTextSearch";
+
+import SearchIcon from "../../Assests/Filter/Search.svg";
+
 import CategoryListDropDown from "../../CommonComponents/CategoryListDropDown";
+import UpArrow from "../../Assests/Dashboard/Up.svg";
+import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 
-const FilterProduct = ({ handleOptionClick, toggleDropdown, selectedEmployee, del_picDropdownVisible, selectedStatus, selectedStatusValue,
-  transactionDropdownVisible, selectedCategory, categoryDropdownVisible, selectedListingType, listingTypesDropdownVisible, handleCategoryChange, handleSearch, searchId, setSearchId }) => {
+const FilterProduct = ({
+  handleOptionClick,
+  toggleDropdown,
+  selectedEmployee,
+  del_picDropdownVisible,
+  setdel_picDropdownVisible,
+  selectedStatus,
+  selectedStatusValue,
+  transactionDropdownVisible,
+  setTransactionDropdownVisible,
+  selectedCategory,
+  categoryDropdownVisible,
+  selectedListingType,
+  setSelectedListingType,
+  listingTypesDropdownVisible,
+  setlistingTypesDropdownVisible,
+  handleCategoryChange,
+  handleSearch,
+  searchId,
+  setSearchId,
+}) => {
+  const productStatusList = [
+    {
+      id: "all",
+      title: "All",
+    },
+    {
+      id: "0",
+      title: "Pending",
+    },
+    {
+      id: "1",
+      title: "Approved",
+    },
+    {
+      id: "2",
+      title: "Rejected",
+    },
+  ];
 
+  const listingTypeList = [
+    {
+      id: 0,
+      title: "Product listing",
+    },
+    {
+      id: 1,
+      title: "Variant listing",
+    },
+  ];
 
+  const deliveryPickupList = [
+    {
+      id: "1",
+      title: "Enable All",
+    },
+    {
+      id: "2",
+      title: "Enable Pickup All",
+    },
+    {
+      id: "5",
+      title: "Disable Pickup All",
+    },
+    {
+      id: "3",
+      title: "Enable Delivery All",
+    },
+    {
+      id: "6",
+      title: "Disable Delivery All",
+    },
+
+    {
+      id: "4",
+      title: "Disable All",
+    },
+  ];
   const handleFilter = (filterType) => {
-    console.log('Selected filter:', filterType);
-
+    console.log("Selected filter:", filterType);
   };
 
+  const [isTablet, setIsTablet] = useState(false);
 
-  // const handleSearch = () => {
-  //   console.log("Search ID:", searchId);
+  useEffect(() => {
+    const handleResize = () => {
+      setIsTablet(window.innerWidth <= 995);
+    };
 
-  // };
+    handleResize();
 
-  // useEffect(()=> {
-  //   console.log('sa');
-  // });
+    window.addEventListener("resize", handleResize);
 
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
 
+  const prodcutstatus = useRef(null);
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (
+        prodcutstatus.current &&
+        !prodcutstatus.current.contains(event.target)
+      ) {
+        setTransactionDropdownVisible(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
+  // listing
+  const listingtype = useRef(null);
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (listingtype.current && !listingtype.current.contains(event.target)) {
+        setlistingTypesDropdownVisible(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
+
+  //
+  const delpicstatus = useRef(null);
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (delpicstatus.current && !listingtype.current.contains(event.target)) {
+        setdel_picDropdownVisible(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleOutsideClick);
+
+    return () => {
+      document.removeEventListener("mousedown", handleOutsideClick);
+    };
+  }, []);
   return (
     <>
-
-
-    <div className="box">
-
-      <div className="q-attributes-bottom-detail-section bg-white">
-        <div className=" p-4 mb-3  rounded-md">
-          <div className="flex border  rounded-md overflow-hidden mt-6 mr-9">
-            <input
-              type="text"
-              placeholder="Search orders by order ID, last 4 digits on payment card, or invoice ID"
-              value={searchId}
-              onChange={(e) => setSearchId(e.target.value)}
-              className="w-full px-4 py-2 border-none focus:outline-none"
-            />
-
-            <button
-              onClick={handleSearch}
-              className="text-black px-4 py-2 focus:outline-none text-2xl"
-            >
-              <AiOutlineSearch className="h- w-8  text-[#231F20]" />
-            </button>
+      <div className="box">
+        <div className="box_shadow_input">
+          <div className="q_main_data_range">
+            <Grid container>
+              <Grid item xs={12} className="px-5">
+                <InputTextSearch
+                  placeholder="Search orders by order ID, last 4 digits on payment card, or invoice ID"
+                  value={searchId}
+                  handleChange={setSearchId}
+                  handleSearchButton={handleSearch}
+                />
+              </Grid>
+            </Grid>
+            <Grid container>
+              <Grid item className="mt-5" xs={12}>
+                <h1 className="text-xl font-medium">Filter By</h1>
+              </Grid>
+            </Grid>
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6} md={4}>
+                <CategoryListDropDown
+                  type="category"
+                  onCategoryChange={handleCategoryChange}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <label>Product Status</label>
+                <SelectDropDown
+                  heading={null}
+                  title={"title"}
+                  listItem={productStatusList}
+                  selectedOption={selectedStatusValue}
+                  onClickHandler={handleOptionClick}
+                  dropdownFor={"status"}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <label>Listing Type {selectedListingType}</label>
+                <SelectDropDown
+                  heading={"Select listing"}
+                  title={"title"}
+                  listItem={listingTypeList}
+                  selectedOption={selectedListingType}
+                  onClickHandler={handleOptionClick}
+                  dropdownFor={"listingType"}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <label style={{ whiteSpace: "nowrap" }}>
+                  Enable Product for Delivery/Pickup
+                </label>
+                <SelectDropDown
+                  heading={"Select"}
+                  title={"title"}
+                  listItem={deliveryPickupList}
+                  selectedOption={selectedEmployee}
+                  onClickHandler={handleOptionClick}
+                  dropdownFor={"del_pic"}
+                />
+              </Grid>
+            </Grid>
           </div>
-        </div>
-
-        <div className=" p-4 rounded-md">
-          <div className="mb-4">
-            <h3 className="text-[20px] font-normal opacity-100 text-black admin_medium">Filter By</h3>
-          </div>
-
-
-
-          <div className="q-order-page-container">
-
-            <CategoryListDropDown type="category" onCategoryChange={handleCategoryChange} />
-
-            {/* status Dropdown */}
-            <div className="q-order-page-filter">
-              <label className="q-details-page-label" htmlFor="statusFilter">
-                Product Status
-              </label>
-              <div className="custom-dropdown">
-                <div
-                  className="custom-dropdown-header"
-                  onClick={() => toggleDropdown("status")}
-                >
-                  <span className="selected-option mt-1">{selectedStatusValue === 'all' ? 'All' : selectedStatusValue}</span>
-                  <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-                </div>
-                {transactionDropdownVisible && (
-                  <div className="dropdown-content ">
-                    <div onClick={() => handleOptionClick("all", "status", "All")}>All</div>
-                    <div onClick={() => handleOptionClick("1", "status", "Approved")}>Approved</div>
-                    <div onClick={() => handleOptionClick("0", "status", "Pending")}>Pending</div>
-                    <div onClick={() => handleOptionClick("2", "status", "Rejected")}>Rejected</div>
-                    {/* ... (other status options) ... */}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            {/* Order Status Dropdown */}
-            <div className="q-order-page-filter w-[31.2%]">
-              <label className="q-details-page-label" htmlFor="ListingFilter">
-                Listing Type
-              </label>
-              <div className="custom-dropdown">
-                <div
-                  className="custom-dropdown-header"
-                  onClick={() => toggleDropdown("listingType")}
-                >
-                  <span className="selected-option mt-1">{selectedListingType}</span>
-                  <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-                </div>
-                {listingTypesDropdownVisible && (
-                  <div className="dropdown-content ">
-                    {/* <div onClick={() => handleOptionClick("All", "listingtype")}>All</div> */}
-                    <div onClick={() => handleOptionClick(0, "listingType", "Product listing")}>Product listing</div>
-                    <div onClick={() => handleOptionClick(1, "listingType", "Variant listing")}>Variant listing</div>
-                    {/* ... (other order status options) ... */}
-                  </div>
-                )}
-              </div>
-            </div>
-
-          </div>
-
-          <div className="q-order-page-container">
-            {/* Employee Dropdown */}
-            <div className="q-order-page-filter">
-              <label className="q-details-page-label" htmlFor="employeeFilter">
-                Enable Product for Delivery/Pickup
-              </label>
-              <div className="custom-dropdown">
-                <div
-                  className="custom-dropdown-header"
-                  onClick={() => toggleDropdown("del_pic")}
-                >
-                  <span className="selected-option mt-1">{selectedEmployee}</span>
-                  <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-                </div>
-                {del_picDropdownVisible && (
-                  <div className="dropdown-content ">
-                    <div onClick={() => handleOptionClick("1", "del_pic", "Enable All")}>Enable All</div>
-                    <div onClick={() => handleOptionClick("2", "del_pic", "Enable Pickup All")}>Enable Pickup All</div>
-                    <div onClick={() => handleOptionClick("5", "del_pic", "Disable Pickup All")}>Disable Pickup All</div>
-                    <div onClick={() => handleOptionClick("3", "del_pic", "Enable Delivery All")}>Enable Delivery All</div>
-                    <div onClick={() => handleOptionClick("6", "del_pic", "Disable Delivery All")}>Disable Delivery All</div>
-                    <div onClick={() => handleOptionClick("4", "del_pic", "Disable All")}>Disable All</div>
-                    {/* ... (other employee options) ... */}
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="q-order-page-filter"></div>
-            <div className="q-order-page-filter"></div>
-
-          </div>
-
-        </div>
-        <div>
-
         </div>
       </div>
-
-      </div>
-
     </>
   );
 };

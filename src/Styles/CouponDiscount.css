@@ -23,11 +23,7 @@
     src: url("../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
   }
   
-  .q-attributes-main-page {
-    margin: 0px 40px;
-    /* background-color: #FFFFFF !important; */
  
-  }
   
   .q-attributes-top-detail-section {
     padding: 20px;
@@ -478,7 +474,8 @@ font-size: 18px;
       border: 1px solid #E1E1E1;
       border-radius: 4px;
       padding: 8px;
-      margin: 5px 0 15px 0;}
+      /* margin: 5px 0 15px 0; */
+    }
 
       .q_coupon_calculation_amount>label {
           color: #818181;
@@ -769,7 +766,7 @@ img.clock_design{
 }
 
 .MuiFormControl-root.MuiTextField-root.input_label_section.css-z3c6am-MuiFormControl-root-MuiTextField-root {
-  margin-left: -39px;
+  /* margin-left: -39px; */
 }
 
 
@@ -891,7 +888,7 @@ img.clock_design{
   height: 80%;
   background-color: #E3E3E3;
 
-  transform: translate(2.8rem , 0.3rem);
+  /* transform: translate(2.8rem , 0.3rem); */
 }
 
 .q_time_display .MuiFormControl-root.MuiTextField-root.input_label_section.css-z3c6am-MuiFormControl-root-MuiTextField-root {

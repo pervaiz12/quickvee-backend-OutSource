@@ -32,8 +32,130 @@
   margin-right: calc(-0.5 * var(--bs-gutter-x));
   margin-left: calc(-0.5 * var(--bs-gutter-x));
 }
-.qvrow > * {
-  flex-shrink: 0;
+
+.box_shadow_div_order {
+  width: 100%;
+  height: auto;
+  box-shadow: 0 5px 10px 1px #ddd;
+  margin: 30px 0px;
+  border-radius: 8px;
+  background-color: #fff;
+  padding-bottom: 30px;
+}
+
+.box_shadow_div_order label {
+  color: #818181;
+  font-size: 14px;
+  font-family: qvbook !important;
+  display: block;
+  margin: 0px;
+}
+
+.heading {
+  color: #000000;
+  font-family: adminmedium;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+.pd_20 {
+  padding: 20px;
+}
+
+.box_shadow_div label {
+  color: #818181;
+  font-size: 14px;
+  font-family: qvbook !important;
+  display: block;
+  margin: 0px;
+}
+.input_area {
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+.input_area input {
+  font-family: qvmedium !important;
+  color: #000000;
+  font-size: 15px;
+  outline: none;
+  background: #ffffff;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 5px 0 0 0;
+  width: 100%;
+  /* height: 40px; */
+}
+.input_area textarea {
+  font-family: qvmedium !important;
+  color: #000000;
+  font-size: 15px;
+  outline: none;
+  background: #ffffff;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 5px 0 15px 0;
+  width: 100%;
+}
+.input_area select {
+  font-family: qvmedium !important;
+  color: #000000;
+  font-size: 15px;
+  outline: none;
+  background: #ffffff;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 5px 0 15px 0;
+  width: 100%;
+  height: 40px;
+}
+.box_shadow_heading {
+  color: #000000;
+  font-size: 18px;
+  font-family: qvstdmedium !important;
+}
+
+.qv_checkbox {
+  width: auto;
+  height: auto;
+  float: left;
+  display: inline-block;
+}
+
+.qv_checkbox .qv_checkbox_add_checkmark_label {
+  color: #000;
+  font-size: 16px;
+  font-family: adminmedium !important;
+  display: block;
+  position: relative;
+  padding-left: 33px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.qv_checkbox .qv_checkbox_add_checkmark_label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.qv_add_checkmark {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+  border-radius: 5px;
+}
+.checkbox_space {
   width: 100%;
   max-width: 100%;
   padding-right: calc(var(--bs-gutter-x) * 0.5);
@@ -56,13 +178,9 @@
   flex: 0 0 auto;
   width: 33.33333333%;
 }
-.col-qv-5 {
-  flex: 0 0 auto;
-  width: 41.66666667%;
-}
-.col-qv-6 {
-  flex: 0 0 auto;
-  width: 50%;
+
+.input_area .css-4jnixx-MuiStack-root {
+  padding-top: 0px;
 }
 .col-qv-7 {
   flex: 0 0 auto;
@@ -584,8 +702,111 @@ input.blue_btn {
   margin-right: calc(-0.5 * var(--bs-gutter-x));
   margin-left: calc(-0.5 * var(--bs-gutter-x));
 }
-.qvrow > * {
-  flex-shrink: 0;
+.heading {
+  color: #000000;
+  font-family: adminmedium;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+.pd_20 {
+  padding: 20px;
+}
+
+.box_shadow_div label {
+  color: #818181;
+  font-size: 14px;
+  font-family: qvbook !important;
+  display: block;
+  margin: 0px;
+}
+.input_area {
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+.input_area input {
+  font-family: qvmedium !important;
+  color: #000000;
+  font-size: 15px;
+  outline: none;
+  background: #ffffff;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 5px 0 15px 0;
+  width: 100%;
+  /* height: 40px; */
+}
+.input_area textarea {
+  font-family: qvmedium !important;
+  color: #000000;
+  font-size: 15px;
+  outline: none;
+  background: #ffffff;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 5px 0 15px 0;
+  width: 100%;
+}
+.input_area select {
+  font-family: qvmedium !important;
+  color: #000000;
+  font-size: 15px;
+  outline: none;
+  background: #ffffff;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 5px 0 15px 0;
+  width: 100%;
+  height: 40px;
+}
+.box_shadow_heading {
+  color: #000000;
+  font-size: 18px;
+  font-family: qvstdmedium !important;
+}
+
+.qv_checkbox {
+  width: auto;
+  height: auto;
+  float: left;
+  display: inline-block;
+}
+
+.qv_checkbox .qv_checkbox_add_checkmark_label {
+  color: #000;
+  font-size: 16px;
+  font-family: adminmedium !important;
+  display: block;
+  position: relative;
+  padding-left: 33px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.qv_checkbox .qv_checkbox_add_checkmark_label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.qv_add_checkmark {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+  border-radius: 5px;
+}
+.checkbox_space {
   width: 100%;
   max-width: 100%;
   padding-right: calc(var(--bs-gutter-x) * 0.5);
@@ -608,13 +829,9 @@ input.blue_btn {
   flex: 0 0 auto;
   width: 33.33333333%;
 }
-.col-qv-5 {
-  flex: 0 0 auto;
-  width: 41.66666667%;
-}
-.col-qv-6 {
-  flex: 0 0 auto;
-  width: 50%;
+
+.input_area .css-4jnixx-MuiStack-root {
+  padding-top: 0px;
 }
 .col-qv-7 {
   flex: 0 0 auto;
@@ -1100,7 +1317,7 @@ input.blue_btn {
   font-family: qvmedium !important;
 }
 
-select {
+/* select {
   margin-top: -1rem;
   border: 2px solid #0a64f9 !important;
   padding: 10px 30px;
@@ -1113,7 +1330,7 @@ select:active {
   padding: 10px 30px;
   border-radius: 4px;
   background-color: white;
-}
+} */
 
 .pagination_selected {
   padding: 6px 12px;
@@ -1164,8 +1381,111 @@ select:active {
   margin-right: calc(-0.5 * var(--bs-gutter-x));
   margin-left: calc(-0.5 * var(--bs-gutter-x));
 }
-.qvrow > * {
-  flex-shrink: 0;
+.heading {
+  color: #000000;
+  font-family: adminmedium;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+.pd_20 {
+  padding: 20px;
+}
+
+.box_shadow_div label {
+  color: #818181;
+  font-size: 14px;
+  font-family: qvbook !important;
+  display: block;
+  margin: 0px;
+}
+.input_area {
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+.input_area input {
+  font-family: qvmedium !important;
+  color: #000000;
+  font-size: 15px;
+  outline: none;
+  background: #ffffff;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 5px 0 15px 0;
+  width: 100%;
+  /* height: 40px; */
+}
+.input_area textarea {
+  font-family: qvmedium !important;
+  color: #000000;
+  font-size: 15px;
+  outline: none;
+  background: #ffffff;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 5px 0 15px 0;
+  width: 100%;
+}
+.input_area select {
+  font-family: qvmedium !important;
+  color: #000000;
+  font-size: 15px;
+  outline: none;
+  background: #ffffff;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 5px 0 15px 0;
+  width: 100%;
+  height: 40px;
+}
+.box_shadow_heading {
+  color: #000000;
+  font-size: 18px;
+  font-family: qvstdmedium !important;
+}
+
+.qv_checkbox {
+  width: auto;
+  height: auto;
+  float: left;
+  display: inline-block;
+}
+
+.qv_checkbox .qv_checkbox_add_checkmark_label {
+  color: #000;
+  font-size: 16px;
+  font-family: adminmedium !important;
+  display: block;
+  position: relative;
+  padding-left: 33px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.qv_checkbox .qv_checkbox_add_checkmark_label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.qv_add_checkmark {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+  border-radius: 5px;
+}
+.checkbox_space {
   width: 100%;
   max-width: 100%;
   padding-right: calc(var(--bs-gutter-x) * 0.5);
@@ -1188,13 +1508,9 @@ select:active {
   flex: 0 0 auto;
   width: 33.33333333%;
 }
-.col-qv-5 {
-  flex: 0 0 auto;
-  width: 41.66666667%;
-}
-.col-qv-6 {
-  flex: 0 0 auto;
-  width: 50%;
+
+.input_area .css-4jnixx-MuiStack-root {
+  padding-top: 0px;
 }
 .col-qv-7 {
   flex: 0 0 auto;
@@ -1686,7 +2002,7 @@ input.blue_btn {
 }
 
 .box {
-  width: 92%;
+  width: 100%;
   height: auto;
   margin: 0 auto;
 }
@@ -1699,8 +2015,111 @@ input.blue_btn {
   margin-right: calc(-0.5 * var(--bs-gutter-x));
   margin-left: calc(-0.5 * var(--bs-gutter-x));
 }
-.qvrow > * {
-  flex-shrink: 0;
+.heading {
+  color: #000000;
+  font-family: adminmedium;
+  font-size: 18px;
+  margin-bottom: 12px;
+}
+.pd_20 {
+  padding: 20px;
+}
+
+.box_shadow_div label {
+  color: #818181;
+  font-size: 14px;
+  font-family: qvbook !important;
+  display: block;
+  margin: 0px;
+}
+.input_area {
+  width: 100%;
+  height: auto;
+  margin-bottom: 10px;
+}
+.input_area input {
+  font-family: qvmedium !important;
+  color: #000000;
+  font-size: 15px;
+  outline: none;
+  background: #ffffff;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 5px 0 15px 0;
+  width: 100%;
+  /* height: 40px; */
+}
+.input_area textarea {
+  font-family: qvmedium !important;
+  color: #000000;
+  font-size: 15px;
+  outline: none;
+  background: #ffffff;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 5px 0 15px 0;
+  width: 100%;
+}
+.input_area select {
+  font-family: qvmedium !important;
+  color: #000000;
+  font-size: 15px;
+  outline: none;
+  background: #ffffff;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 5px 0 15px 0;
+  width: 100%;
+  height: 40px;
+}
+.box_shadow_heading {
+  color: #000000;
+  font-size: 18px;
+  font-family: qvstdmedium !important;
+}
+
+.qv_checkbox {
+  width: auto;
+  height: auto;
+  float: left;
+  display: inline-block;
+}
+
+.qv_checkbox .qv_checkbox_add_checkmark_label {
+  color: #000;
+  font-size: 16px;
+  font-family: adminmedium !important;
+  display: block;
+  position: relative;
+  padding-left: 33px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.qv_checkbox .qv_checkbox_add_checkmark_label input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.qv_add_checkmark {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+  border-radius: 5px;
+}
+.checkbox_space {
   width: 100%;
   max-width: 100%;
   padding-right: calc(var(--bs-gutter-x) * 0.5);
@@ -1723,13 +2142,9 @@ input.blue_btn {
   flex: 0 0 auto;
   width: 33.33333333%;
 }
-.col-qv-5 {
-  flex: 0 0 auto;
-  width: 41.66666667%;
-}
-.col-qv-6 {
-  flex: 0 0 auto;
-  width: 50%;
+
+.input_area .css-4jnixx-MuiStack-root {
+  padding-top: 0px;
 }
 .col-qv-7 {
   flex: 0 0 auto;

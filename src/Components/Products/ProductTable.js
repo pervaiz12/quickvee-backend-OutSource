@@ -11,6 +11,7 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import ProductRow from "./ProductRow";
 
 const ProductTable = ({
+  seVisible,
   selectedListingType,
   selectedListingTypeValue,
   productsList,
@@ -60,17 +61,13 @@ const ProductTable = ({
   const checkStatus = (status) => {
     switch (status) {
       case "1":
-        return "Approved";
-        break;
+        return { text: "Approved", color: "#0A64F9" };
       case "2":
-        return "Rejected";
-        break;
+        return { text: "Rejected", color: "#F90A0A" };
       case "0":
-        return "Pending";
-        break;
+        return { text: "Pending", color: "#FF8800" };
       default:
-        return "Pending";
-        break;
+        return { text: "Pending", color: "#FF8800" };
     }
   };
 

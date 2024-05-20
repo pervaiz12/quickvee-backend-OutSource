@@ -8,19 +8,19 @@ const MainCoupon = () => {
   return (
     <>
       <div className="q-category-main-page">
-    
+
         {visible === "CouponDiscount" && (
           <CouponDiscount seVisible={seVisible} />
         )}
-         </div>
-         <div className="q-category-main-page">
+      </div>
+      <div className="q-category-main-page">
         {visible === "AddCoupon" && <AddCoupon seVisible={seVisible} />}
-        </div>
+      </div>
 
-        <div className="q-category-main-page">
+      <div className="q-category-main-page">
         {visible === "CustomeDate" && <CustomeDateTime seVisible={seVisible} />}
-        </div>
-     
+      </div>
+
     </>
   );
 };

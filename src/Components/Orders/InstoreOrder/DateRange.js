@@ -2,10 +2,16 @@ import React, { useEffect, useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FiCalendar } from "react-icons/fi";
-import CalendIcon from "../../../Assests/Filter/Calender.svg"
+import CalendIcon from "../../../Assests/Filter/Calender.svg";
 import { padding } from "@mui/system";
-
+import dayjs from "dayjs";
+import { Grid } from "@mui/material";
+import { useMediaQuery } from "@mui/material";
 const DateRange = ({ onDateRangeChange }) => {
+  const isDesktopWtdth = useMediaQuery("(max-width:710px)");
+  console.log("isDesktopWtdth : ", isDesktopWtdth);
+  const today = dayjs();
+  const [isTablet, setIsTablet] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
 
@@ -69,13 +75,9 @@ const DateRange = ({ onDateRangeChange }) => {
         setEndDate(today);
         break;
       case "Last 30 days":
-        const firstDayOfMonth = new Date(
-          today.getFullYear(),
-          today.getMonth(),
-          1
-        );
-
-        setStartDate(firstDayOfMonth);
+        const thirtyDaysAgo = new Date(today);
+        thirtyDaysAgo.setDate(today.getDate() - 30);
+        setStartDate(thirtyDaysAgo);
         setEndDate(today);
         break;
       default:
@@ -87,140 +89,142 @@ const DateRange = ({ onDateRangeChange }) => {
     setDatesBasedOnOption(activeOption);
   }, [activeOption]);
 
+  // useEffect(() => {
+  //   const handleResize = () => {
+  //     setIsTablet(window.innerWidth <= 995); // Assuming tablet width as 768px
+  //   };
 
+  //   // Initial check
+  //   handleResize();
+
+  //   // Event listener for window resize
+  //   window.addEventListener("resize", handleResize);
+
+  //   // Cleanup
+  //   return () => {
+  //     window.removeEventListener("resize", handleResize);
+  //   };
+  // }, []);
 
   return (
     <>
-    
-      <div className="q_dateRange_header">
-        <div className="q-datarange-bottom-detail-section">
-          {/* Date Range Section */}
-          <div className="q_datafilter_section">
-            <div className="q_details_header"><h1>Date Range</h1></div>
-
-            <div className="datarange_days_order">
-              {["Today", "Yesterday", "Last 7 Days", "Last 30 days"].map(
-                (option) => (
-                  <div
-                    key={option}
-                    className={`order_Details_days ${
-                      isActive(option) ? "text-blue-500" : "text-gray-600"
-                    }`}
-                    onClick={() => {
-                      setActive(option);
-                      setDatesBasedOnOption(option);
-                    }}
-                  >
-                    {isActive(option) && <div className="dot mr-2" />}
-                    {option}
-                  </div>
-                )
-              )}
+      <Grid container className="q-datarange-bottom-detail-section p-5">
+        <Grid container justifyContent="space-between">
+          <Grid item>
+            <div className="mt_card_header q_dashbaord_netsales">
+              <h1 className="">Date Range</h1>
             </div>
-          </div>
-          <div>
-      {/* Your other content goes here */}
-      
-        <div className="q_date_range_filter_details">
-          <select
-            className="border-2 border-customColor rounded px-4 py-2 mr-7 bg-white text-blue-500 text-[16px] Admin_std"
-            onChange={(e) => {
-              const selectedOption = e.target.value;
-              setActive(selectedOption);
-              setDatesBasedOnOption(selectedOption);
-            }}
-          >
-            {["Today", "Yesterday", "Last 7 Days", "Last 30 days"].map(
-              (option) => (
-                <option
-                  key={option}
-                  value={option}
-                  className={
-                    isActive(option) ? "text-blue-500" : "text-gray-600"
-                  }
+          </Grid>
+          {!isDesktopWtdth ? (
+            <>
+              <Grid item className="datarange_days_order px-6">
+                {["Today", "Yesterday", "Last 7 Days", "Last 30 days"].map(
+                  (option) => (
+                    <div
+                      key={option}
+                      className={`order_Details_days ${
+                        isActive(option) ? "text-blue-500" : "text-gray-600"
+                      }`}
+                      onClick={() => {
+                        setActive(option);
+                        setDatesBasedOnOption(option);
+                      }}
+                    >
+                      {isActive(option) && <div className="dot mr-1" />}
+                      {option}
+                    </div>
+                  )
+                )}
+              </Grid>
+            </>
+          ) : (
+            <>
+              <Grid item className="pt-4">
+                <select
+                  className="border-2 p-2 border-customColor rounded bg-white text-blue-500 text-[16px] "
+                  onChange={(e) => {
+                    const selectedOption = e.target.value;
+                    setActive(selectedOption);
+                    setDatesBasedOnOption(selectedOption);
+                  }}
                 >
-                  {option}
-                </option>
-              )
-            )}
-          </select>
-        </div>
-     </div>
-  <div className="q_main_data_range">
-          <div className="qvrow">
-         
-  {/* Start Date */}
-  <div className="col-qv-4">
-    <div className="q_date_range_start">Start Date</div>
-    <div className="flex items-center">
-      <DatePicker
-        selected={startDate}
-        onChange={(date) => setStartDate(date)}
-        selectsStart
-        startDate={startDate}
-        endDate={endDate}
-        dateFormat="MMMM d, yyyy"
-        className="q_input_details"
-        ref={startDateRef}
-        showPopperArrow={false}
-      />
-      <span
-        className="q_cal_daterange"
-        onClick={handleStartDateIconClick}
-      >
-      <img src ={CalendIcon} alt="" className="w-6 h-6" />
-      </span>
-    </div>
-  </div>
+                  {["Today", "Yesterday", "Last 7 Days", "Last 30 days"].map(
+                    (option) => (
+                      <option
+                        key={option}
+                        value={option}
+                        className={
+                          isActive(option) ? "text-blue-500" : "text-gray-600"
+                        }
+                      >
+                        {option}
+                      </option>
+                    )
+                  )}
+                </select>
+              </Grid>
+            </>
+          )}
+        </Grid>
 
-  {/* End Date */}
-  <div className="col-qv-4">
-    <div className="q_date_range_start ">End Date</div>
-    <div className="flex items-center">
-
-      <DatePicker
-        selected={endDate}
-        onChange={(date) => setEndDate(date)}
-        selectsEnd
-        startDate={startDate}
-        endDate={endDate}
-        minDate={startDate}
-        dateFormat="MMMM d, yyyy"
-        className="q_input_details ml-0 "
-        ref={endDateRef}
-        showPopperArrow={false}
-      />
-      <span
-        className="q_cal_daterange"
-        onClick={handleEndDateIconClick}
-      >
-         <img src ={CalendIcon} alt="" className="w-6 h-6" />
-      </span>
-    </div>
-  </div>
-  <div className="col-qv-4">
- 
-  
-  <div className=" q_search_opcity"> Search</div>
-    <button
-      onClick={handleSearch}
-      className="save_btn"
-    >
-      Search
-    </button>
-  </div>
-  </div>
-  </div>
-  
-
-  {/* Search Button */}
- 
-</div>
-</div>
-
-
-      
-    
+        <Grid container spacing={2} className="py-5">
+          <Grid item xs={12} sm={6} md={4}>
+            <div className="q_date_range_start">Start Date</div>
+            <div className="relative">
+              <DatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                selectsStart
+                startDate={startDate}
+                endDate={endDate}
+                dateFormat="MMMM d, yyyy"
+                className="q_input_details"
+                ref={startDateRef}
+                showPopperArrow={false}
+              />
+              <span
+                className="q_cal_daterange"
+                onClick={handleStartDateIconClick}
+              >
+                <img src={CalendIcon} alt="" className="w-6 h-6" />
+              </span>
+            </div>
+          </Grid>
+          <Grid item xs={12} sm={6} md={4}>
+            <div className="q_date_range_start ">End Date</div>
+            <div className="relative">
+              <DatePicker
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+                selectsEnd
+                startDate={startDate}
+                endDate={endDate}
+                minDate={startDate}
+                maxDate={new Date()} // Set maxDate to today's date
+                dateFormat="MMMM d, yyyy"
+                className="q_input_details ml-0"
+                ref={endDateRef}
+                showPopperArrow={false}
+                defaultValue={today}
+              />
+              <span
+                className="q_cal_daterange"
+                onClick={handleEndDateIconClick}
+              >
+                <img src={CalendIcon} alt="" className="w-6 h-6" />
+              </span>
+            </div>
+          </Grid>
+          <Grid item alignSelf={"center"} xs={12} sm={6} md={4}>
+            <div className="pt-4">
+              <button onClick={handleSearch} className="save_btn">
+                Search
+              </button>
+            </div>
+          </Grid>
+        </Grid>
+        <Grid container></Grid>
+      </Grid>
     </>
   );
 };

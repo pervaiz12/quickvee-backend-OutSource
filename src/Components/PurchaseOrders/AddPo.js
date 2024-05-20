@@ -1,160 +1,174 @@
-import React, { useState } from "react";
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
+import React, { useState  ,useEffect} from "react";
+import { Grid, TextField, MenuItem } from "@mui/material";
 import AutoPo from "./AutoPo";
+import { FormControl } from "@mui/material";  
+import "react-datepicker/dist/react-datepicker.css";
+import SelectDropDown from "../../reuseableComponents/SelectDropDown";
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
+import BasicTextFields from "../../reuseableComponents/TextInputField";
+import AddNewCategory from '../../Assests/Dashboard/Left.svg'
+import { fetchaddpopurchaseData } from '../../Redux/features/PurchaseOrder/AddpurchaseOrderSlice'
+import { useDispatch, useSelector } from "react-redux";
 
-const AddPo = () => {
-  const [selectedVendor, setSelectedVendor] = useState("");
+import { Link } from "react-router-dom";
+import { event } from "jquery";
+
+const AddPo = (listItem) => {
+  // const [isHide, setIsHide] = useState(false);
+  const [visible, seVisible] = useState("MainPurchase");
   const [issueDate, setIssueDate] = useState(null);
-  const [stockDate, setStockDate] = useState(null);
-  const [reference, setReference] = useState("");
-  const [email, setEmail] = useState("");
+  
+  const [addpostock , setAddpostock] = useState('')
+  const [purchaseInfo, setPurchaseInfo] = useState({
+    issuedDate: "",
+    stockDate: "",
+    email: "",
+    reference: ""
+  });
 
-  const handleVendorChange = (event) => {
-    setSelectedVendor(event.target.value);
+  
+
+  const dispatch = useDispatch();
+  const addpoData = useSelector((state) => state.Addpolist);
+  const adpoDataList = addpoData?.addpoData?.result;
+
+ // console.log(adpoDataList);
+  // const dispatch = useDispatch();
+  // const addpoData = useSelector((state) => state.Addpolist);
+  // console.log(addpoData?.addpoData?.result);
+
+  // const adpoDataList = addpoData?.addpoData?.result
+
+  useEffect(() => {
+    const data = { merchant_id: 'MAL0100CA', admin_id: 'MAL0100CA' }
+    dispatch(fetchaddpopurchaseData(data)); 
+    //console.log('purchaseData', data)
+  }, [dispatch]); 
+ 
+
+useEffect(() => {
+  // console.log("hello");
+  // console.log('addpoData',addpoData)
+
+
+  
+}, [addpoData.lenght])
+
+
+  const handleVendorClick = (data) => {
+    const { email, reference, issued_date, stock_date } = data;
+
+    // Update state with the extracted data
+    setPurchaseInfo(prevState => ({
+      ...prevState,
+      issuedDate: issued_date,
+      stockDate: stock_date,
+      email: email,
+      reference: reference
+    }));
   };
 
-  const handleIssueDateChange = (date) => {
-    setIssueDate(date);
-  };
+  const { issuedDate, stockDate, email, reference } = purchaseInfo;
 
-  const handleStockDateChange = (date) => {
-    setStockDate(date);
-  };
+  console.log('purchaseInfo', issuedDate);
 
-  const handleReferenceChange = (event) => {
-    setReference(event.target.value);
-  };
+  useEffect(() => {
+    if (adpoDataList) {
+      const { issued_date, stock_date, email, reference  } = adpoDataList;
+      setPurchaseInfo({
+        issuedDate: issued_date,
+        stockDate: stock_date,
+        email: email,
+        reference: reference,
+      });
+    }
+  }, [adpoDataList]);
 
-  const handleEmailChange = (event) => {
-    setEmail(event.target.value);
-  };
 
-  // Replace this with your actual list of vendors
-  const vendors = ["Vendor 1", "Vendor 2", "Vendor 3"];
+
+
 
   return (
     <>
-    <div className="box">
-      <div
-        className="box_shadow_div"
-      >
-        <div className="flex justify-between gap-2 mx-6 my-2">
-          <div className="text-[18px] Admin_std leading-0 text-black admin_medium font-semibold opacity-100">
-            Create Purchase Order
-          </div>
-          <div>
-            <div className="text-[18px] Admin_std leading-0 text-blue-500 admin_medium font-semibold opacity-100">
-              {/* <Link to="/productedit"> */}
-              PO00001
-              <button className="text-[18px] text-blue-500 ml-1 focus:outline-none">
-                +
-              </button>
-              {/* </Link> */}
-            </div>
-          </div>
+     
+        <div className="box">
+      <div className="box_shadow_div" style={{ height: "300px" }}>
+        <div className="q-add-categories-section-header">
+          <span>
+            <span onClick={() => seVisible("MainPurchase")}>
+              <img src={AddNewCategory} alt="Add New Category" className="w-6 h-6" />
+            </span>
+            <span>Create Purchase Order</span>
+          </span>
         </div>
-        <div className="mt-2 bg-[#000] border-b-2 w-full mb-4"></div>
+      
+         <div>
+           
+              
+              <div className="px-6" >
+                <Grid container spacing={2}>
+                  <Grid item xs={4}>
+                    <label>vendor</label>
+                  
+                    <SelectDropDown
+                      heading={"All"}
+                      selectedOption={"lll"}
+                      listItem={adpoDataList}
+                      onClickHandler={handleVendorClick}
+                      title={'vendor_name'}
+                    />
+                  </Grid>
+                <Grid item xs={4}>
+                  <label>Issued Date</label>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={['DatePicker']}>
+                      <DatePicker title={issuedDate} /> 
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </Grid>
+                <Grid item xs={4}>
+                  <label>Stock Due</label>
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={['DatePicker']}>
+                      <DatePicker title={stockDate} /> 
+                    </DemoContainer>
+                  </LocalizationProvider>
+                </Grid>
 
-        <div className="flex flex-wrap mx-6 my-9">
-          <div className="flex-grow flex-shrink-0 flex-basis-full md:flex-basis-1/3 px-4 mb-4">
-            <label
-              htmlFor="vendor"
-              className="text-[14px] text-[#818181] Admin_std opacity-100 mb-4 leading-3"
-            >
-              Vendor
-            </label>
-            <select
-              id="vendor"
-              name="vendor"
-              value={selectedVendor}
-              onChange={handleVendorChange}
-              className="w-full p-2 border border-gray-300 rounded-md bg-white"
-              wrapperClassName="w-full"
-            >
-              <option value="" disabled hidden>
-                Select a vendor
-              </option>
-              {vendors.map((vendor) => (
-                <option key={vendor} value={vendor}>
-                  {vendor}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div className="flex-grow flex-shrink-0 flex-basis-full md:flex-basis-1/3 px-4 mb-4">
-            <label
-              htmlFor="issueDate"
-              className="text-[14px] text-[#818181] Admin_std opacity-100 mb-4 leading-3"
-            >
-              Issued Date
-            </label>
-            <DatePicker
-              id="issueDate"
-              selected={issueDate}
-              onChange={handleIssueDateChange}
-              className="w-full p-2 border border-gray-300 rounded-md"
-              wrapperClassName="w-full"
-            />
-          </div>
-
-          <div className="flex-grow flex-shrink-0 flex-basis-full md:flex-basis-1/3 px-4 mb-4">
-            <label
-              htmlFor="stockDate"
-              className="text-[14px] text-[#818181] Admin_std opacity-100 mb-4 leading-3"
-            >
-              Stock Due
-            </label>
-            <DatePicker
-              id="stockDate"
-              selected={stockDate}
-              onChange={handleStockDateChange}
-              className="w-full p-2 border border-gray-300 rounded-md"
-              wrapperClassName="w-full"
-            />
-          </div>
-        </div>
-        <div className="flex flex-wrap mx-6 my-4">
-          <div className="w-full md:w-1/2 px-4 mb-4">
-            <label
-              htmlFor="reference"
-              className="block text-gray-600 text-sm font-semibold mb-1"
-            >
-              Reference
-            </label>
-            <input
-              type="text"
-              id="reference"
-              name="reference"
-              value={reference}
-              onChange={handleReferenceChange}
-              className="w-full bg-white text-gray-600 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-400"
-            />
-          </div>
-
-          <div className="w-full md:w-1/2 px-4 mb-4">
-            <label
-              htmlFor="email"
-              className="block text-gray-600 text-sm font-semibold mb-1"
-            >
-              Vendor Email
-            </label>
-            <input
-              type="email"
-              id="email"
-              name="email"
-              value={email}
-              onChange={handleEmailChange}
-              className="w-full bg-white text-gray-600 px-4 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-400"
-            />
-          </div>
-        </div>
+                <Grid item xs={6}>
+                  <label>Reference</label>
+                  <BasicTextFields
+                  
+                    value={reference} 
+                    onClickHandler={handleVendorClick}
+                    type={"text"}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <label>Vendor Email</label>
+                  <BasicTextFields
+                    value={email} 
+                    onClickHandler={handleVendorClick}
+                    type={"email"}
+                  />
+                </Grid>
+                </Grid>
+              </div>
+            
+          </div>    
       </div>
     </div>
-
-    <AutoPo />
-
+     
+     
+       <div className="second-component">
+          <AutoPo />
+      </div> 
+       
+      
+   
     </>
   );
 };

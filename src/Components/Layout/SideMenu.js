@@ -27,38 +27,60 @@ import PurIcon from "../../Assests/Dashboard/purchaseY.svg";
 import SettingIcon from "../../Assests/Dashboard/settingY.svg";
 import ResportIcons from "../../Assests/Dashboard/reports.svg";
 import timesheetblackIcon from "../../Assests/Dashboard/timesheetblackIcon.svg";
-import Loyalty from '../../Assests/Taxes/Loyalty Program.svg'
-import LoyaltIcon from '../../Assests/Taxes/loyaltyactive.svg'
-
+import Loyalty from "../../Assests/Taxes/Loyalty Program.svg";
+import LoyaltIcon from "../../Assests/Taxes/loyaltyactive.svg";
 import { useLocation } from "react-router-dom";
+import { useMediaQuery } from "@mui/material";
+import { setMenuOpen,  setIsDropdownOpen } from "../../Redux/features/NavBar/MenuSlice";
+import { useSelector, useDispatch } from "react-redux";
+import CryptoJS from 'crypto-js';
+import Cookies from 'js-cookie'; 
+import { useAuthDetails } from '../../Common/cookiesHelper';
 
-const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
-  // const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+const SideMenu =() => {
+  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+  const temp = {
+    "superadmin": menuItems,
+    "admin" : merchant,
+    "manager" : ManagerLink,
+    "merchant":MerchantLink,
+   
+  }
+  
+
   const location = useLocation();
   const currentUrl = location.pathname;
-
+  const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
+  const isDropdownOpen = useSelector(
+    (state) => state.NavBarToggle.isDropdownOpen
+  );
   const [activeItem, setActiveItem] = useState(currentUrl);
-  
+  const [hoveredItem, setHoveredItem] = useState(null);
+  const [currentDropDownItem, activeDropDownItem] = useState(null) 
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const handleItemClick = (item) => {
-    // console.log(item);
+
     setActiveItem(item.link);
     navigate(item.link);
-  };
-
   
+    dispatch(setIsDropdownOpen(false));
+  };
 
   return (
     <>
       <div
         className="sidebar-menu"
-        style={isMenuOpen ? { width: "16rem" } : { width: "6rem" }}
+        style={{
+          width: isMenuOpenRedux ? "16rem" : "4rem",
+          paddingTop: "69px",
+        }}
       >
+        {/* || LoginAllStore?.final_login==1 */}
         {/* Left Side Menu */}
         <div className="flex-1 bg-[#253338] text-[#9E9E9E]">
-          {isMenuOpen
-            ? menuItems.map((item) => (
+          {isMenuOpenRedux
+            ? ((LoginGetDashBoardRecordJson?.final_login==1 )?temp["superadmin"]:temp[LoginGetDashBoardRecordJson?.data?.login_type])?.map((item) => (
                 <div
                   key={item.id}
                   className={`text-[#9E9E9E] active:bg-[#414F54] hover:bg-[#414F54] hover:text-[#FFC400] px-0 ${
@@ -66,12 +88,25 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                   }`}
                 >
                   {item.dropdownItems ? (
-                    <DropdownMenuItem item={item} isMenuOpen={isMenuOpen} />
+                    <DropdownMenuItem
+                      setHoveredItem={setHoveredItem}
+                      item={item}
+                      isMenuOpenRedux={isMenuOpenRedux}
+                      activeItem={activeItem}
+                      setActiveItem={setActiveItem}
+                      hoveredItem={hoveredItem}
+                      isDropdownOpen={isDropdownOpen}
+                      setIsDropdownOpen={setIsDropdownOpen}
+                      currentDropDownItem={currentDropDownItem}
+                      activeDropDownItem={activeDropDownItem}
+                    />
                   ) : (
-                    
                     <div
+                      onMouseEnter={() => setHoveredItem(item.id)}
+                      onMouseLeave={() => setHoveredItem(null)}
+                      onClick={() => handleItemClick(item)}
+                      style={{ cursor: "pointer" }}
                       className={`flex items-center ${
-                        
                         activeItem === item.link
                           ? "bg-[#414F54] text-[#FFC400]"
                           : ""
@@ -79,9 +114,11 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                             : ""
                       }`}
                     >
-                      {activeItem === item.link ? item.activeIcon : item.icon}
+                      {/* {activeItem === item.link ? item.activeIcon : item.icon} */}
+                      {activeItem === item.link || hoveredItem === item.id
+                        ? item.activeIcon
+                        : item.icon}
                       <Link
-                        onClick={() => handleItemClick(item)}
                         className={`ml-2 menu-item text-[14px] Admin_std ${
                           activeItem === item.link ? "bg-[#414F54]" : ""
                         }`}
@@ -89,7 +126,6 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                       >
                         {item.text}
                       </Link>
-                     
                     </div>
                   )}
                 </div>
@@ -102,7 +138,18 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                   }`}
                 >
                   {item.dropdownItems ? (
-                    <DropdownMenuItem item={item} isMenuOpen={isMenuOpen} />
+                    <DropdownMenuItem
+                      setHoveredItem={setHoveredItem}
+                      item={item}
+                      isMenuOpenRedux={isMenuOpenRedux}
+                      activeItem={activeItem}
+                      setActiveItem={setActiveItem}
+                      hoveredItem={hoveredItem}
+                      isDropdownOpen={isDropdownOpen}
+                      setIsDropdownOpen={setIsDropdownOpen}
+                      currentDropDownItem={currentDropDownItem}
+                      activeDropDownItem={activeDropDownItem}
+                    />
                   ) : (
                     <div
                       className={`flex flex-col items-center ${
@@ -110,15 +157,19 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
                           ? "text-[#FFC400] active"
                           : "text-gray-400 hover-text-yellow hover:bg-[#414F54] px-0"
                       }`}
+                      onMouseEnter={() => setHoveredItem(item.id)}
+                      onMouseLeave={() => setHoveredItem(null)}
                       onClick={() => {
                         handleItemClick(item);
                       }}
                     >
-                      {activeItem === item.id ? item.activeIcon : item.icon}
+                      {/* {activeItem === item.id ? item.activeIcon : item.icon} */}
+                      {activeItem === item.link || hoveredItem === item.id
+                        ? item.activeIcon
+                        : item.icon}
                     </div>
                   )}
                 </div>
-                
               ))}
         </div>
       </div>
@@ -126,76 +177,133 @@ const SideMenu = ({ isMenuOpen, setIsMenuToggle }) => {
   );
 };
 
-const DropdownMenuItem = ({ item, isMenuOpen }) => {
-  const location = useLocation();
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const currentUrl = location.pathname;
-  const [activeItem, setActiveItem] = useState(currentUrl);
+const DropdownMenuItem = ({
+  item,
+  isMenuOpenRedux,
+  activeItem,
+  setActiveItem,
+  setHoveredItem,
+  hoveredItem,
+  isDropdownOpen,
+  setIsDropdownOpen,
+  activeDropDownItem,
+  currentDropDownItem,
+}) => {
+  const dispatch = useDispatch();
 
-  const   handleToggleDropdownItems= (link) => {
-    setActiveItem(link)
+  const [dropDownItem, setDropDownItem] = useState(null);
+  const isTabletNav = useMediaQuery("(max-width:1024px)");
+  useEffect(() => {
+    isTabletNav && dispatch(setIsDropdownOpen(false));
+  }, [isTabletNav]);
 
-    for (let obj of item.dropdownItems) {
-     
-      if (obj.link === activeItem) {
-        setIsDropdownOpen(true)
-      }
-      else{
-    setIsDropdownOpen(false)
 
-      }
+
+  const handleToggleDropdownItems = (link, e) => {
+    if (isTabletNav) {
+      dispatch(setIsDropdownOpen(false));
     }
-  }
+    setActiveItem(link);
+    setDropDownItem(link);
+  };
 
-  const handleToggleDropdown = () => {
-  //  console.log("calling")
-    setIsDropdownOpen(!isDropdownOpen)
-  
-  }
+  const handleToggleSideBar = () => {
+    dispatch(setMenuOpen(!isMenuOpenRedux));
+    dispatch(setIsDropdownOpen(true));
+  };
 
+  const HandleDropdownClick = (event, id) => {
+    activeDropDownItem(id);
 
-  // useEffect(() => {
-  //   console.log("Calling from useeffect" , isDropdownOpen , currentUrl)
-  // }, [isDropdownOpen , currentUrl])
-  
+    dispatch(setIsDropdownOpen(!isDropdownOpen));
 
+    // setIsMenuOpen(!isMenuOpen);
+  };
 
   return (
-    <div
-    className="relative"
-    style={isMenuOpen ? { width: "16rem" } : { width: "6rem", marginLeft: "24px" }}
-    onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-  >
-    <div className="flex items-center">
-      {item.icon}
-      {isMenuOpen && (
-        <p className="ml-2 menu-item text-[14px] Admin_std">
-          {item.text}
-          <FaChevronDown className="quickarrow_icon" />
-        </p>
-      )}
-    </div>
+    <>
+      <div
+        className="relative"
+        style={
+          isMenuOpenRedux
+            ? { width: "16rem" }
+            : { width: "6rem", marginLeft: "10px" }
+        }
+        onMouseEnter={() => setHoveredItem(item.id)}
+        onMouseLeave={() => setHoveredItem(null)}
+        onClick={(e) => {
+          HandleDropdownClick(e, item.id);
+        }}
+      >
+        <div className="flex">
+          {isMenuOpenRedux ? (
+            <div className="w-full flex items-center cursor-pointer">
+              {activeItem === dropDownItem || hoveredItem === item.id
+                ? item.activeIcon
+                : item.icon}
+              <p
+                className={`ml-2 menu-item DropDown-memu text-[14px] flex-auto Admin_std ${
+                  activeItem === dropDownItem ? "activeTab" : ""
+                }`}
+              >
+                {item.text}
+              </p>
 
-    {isDropdownOpen && (
-      <div className="mt-0 bg-[#334247] p-4 shadow w-full text-center z-10">
-        {item.dropdownItems.map((dropdownItem) => (
-          <Link
-            key={dropdownItem.id}
-            to={dropdownItem.link}
-            className="flex text-center submenu-item text-gray-400 py-4 text-[14px]"
-            onClick={() => handleToggleDropdownItems(dropdownItem.link)}
-          >
-            {dropdownItem.text}
-          </Link>
-        ))}
+              <FaChevronDown className="quickarrow_icon ml-4 me-5" />
+            </div>
+          ) : (
+            <>
+              <div
+                onClick={(e) => {
+                  handleToggleSideBar();
+                  e.stopPropagation();
+                  HandleDropdownClick(e, item.id);
+                }}
+              >
+                {activeItem === dropDownItem || hoveredItem === item.id
+                  ? item.activeIcon
+                  : item.icon}
+              </div>
+            </>
+          )}
+        </div>
       </div>
-    )}
-  </div>
-  
+      {isDropdownOpen && currentDropDownItem === item.id && (
+        <div
+          onMouseEnter={(e) => {
+            setHoveredItem(item.id);
+            e.stopPropagation();
+          }}
+          onMouseLeave={(e) => {
+            setHoveredItem(null);
+            e.stopPropagation();
+          }}
+          className="mt-0 bg-[#334247] p-4 shadow w-full text-center z-10"
+        >
+          {item.dropdownItems.map((dropdownItem) => (
+            <Link
+              key={dropdownItem.id}
+              to={dropdownItem.link}
+              className={`flex text-center submenu-item text-gray-400 py-4 text-[14px] ${
+                activeItem === dropdownItem.link ? "active" : ""
+              }`}
+              onClick={(e) => {
+                handleToggleDropdownItems(dropdownItem.link);
+                e.stopPropagation();
+              }}
+            >
+              {dropdownItem.text}
+            </Link>
+          ))}
+        </div>
+      )}
+    </>
   );
 };
 
 // Define menu items with icons and text
+// {LoginAllStore?.data?.login_type!==("admin" &&"manager"&& "merchant") 
+
 const menuItems = [
   {
     id: 1,
@@ -210,7 +318,7 @@ const menuItems = [
       <img src={DashboardIcon} alt="Dashboard" className="h-6 w-10 mt-4 mb-4" />
     ),
     text: "Dashboard",
-    link: "/dashboard",
+    link: "/",
   },
 
   {
@@ -523,14 +631,51 @@ const menuItems = [
       },
       { id: 79, text: " Order Type ", link: "/store-reporting/order-type" },
 
-      { id: 81, text: "Current Inventory Value ", link: "/store-reporting/current-inventory-value" },
+      {
+        id: 81,
+        text: "Current Inventory Value ",
+        link: "/store-reporting/current-inventory-value",
+      },
 
       { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
-      { id: 82, text: "Order Refund Report ", link: "/store-settings/order-refund-report" },
-
+      {
+        id: 82,
+        text: "Order Refund Report ",
+        link: "/store-settings/order-refund-report",
+      },
     ],
   },
-  
 ];
+
+const merchant =[
+    {
+      id: 82,
+      text: "Store",
+      link: "/store",
+  },
+  {
+    id: 82,
+    text: "Manager",
+    link: "/manager",
+},
+  
+]
+const ManagerLink =[
+  {
+    id: 82,
+    text: "Store",
+    link: "/store",
+},
+  
+]
+const MerchantLink =[
+  {
+    id: 82,
+    text: "Store",
+    link: "/store",
+},
+  
+]
+// }MerchantLink
 
 export default SideMenu;

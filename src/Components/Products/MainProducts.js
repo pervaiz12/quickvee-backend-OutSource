@@ -15,8 +15,9 @@ const MainProducts = () => {
   const [offset, setoffset] = useState(0);
   const [limit, setlimit] = useState(10);
   const [selectedEmployee, setSelectedEmployee] = useState("Select");
+  console.log("setSelectedEmployee ", selectedEmployee);
   const [selectedStatus, setSelectedStatus] = useState("all");
-  const [selectedStatusValue, setSelectedStatusValue] = useState("all");
+  const [selectedStatusValue, setSelectedStatusValue] = useState("All");
 
   const [selectedListingType, setSelectedListingType] =
     useState("Select listing");
@@ -77,14 +78,14 @@ const MainProducts = () => {
   const handleOptionClick = (option, dropdown, value) => {
     switch (dropdown) {
       case "del_pic":
-        setSelectedEmployee(value);
+        setSelectedEmployee(option.title);
         setdel_picDropdownVisible(false);
         if (window.confirm("Are you sure you want to update?")) {
           console.log("yes");
           dispatch(emptyProduct([]));
           let type_date = {
             merchant_id: "MAL0100CA",
-            id: option,
+            id: option.id,
           };
           if (type_date) {
             dispatch(updateProductsType(type_date))
@@ -118,14 +119,14 @@ const MainProducts = () => {
 
         break;
       case "status":
-        setSelectedStatus(option);
-        setSelectedStatusValue(value);
+        setSelectedStatus(option.id);
+        setSelectedStatusValue(option.title);
         setTransactionDropdownVisible(false);
         dispatch(emptyProduct([]));
         let status_data = {
           merchant_id: "MAL0100CA",
           category_id: categoryId,
-          show_status: option,
+          show_status: option.id,
           listing_type: selectedListingTypeValue,
           offset: 0,
           limit: 10,
@@ -138,7 +139,7 @@ const MainProducts = () => {
         break;
       case "listingType":
         dispatch(emptyProduct([]));
-        if (option === 0) {
+        if (option.id === 0) {
           setSelectedListingType("Product listing");
         } else {
           setSelectedListingType("Variant listing");
@@ -148,7 +149,7 @@ const MainProducts = () => {
           merchant_id: "MAL0100CA",
           category_id: categoryId,
           show_status: selectedStatus,
-          listing_type: option,
+          listing_type: option.id,
           offset: 0,
           limit: 10,
           page: 0,
@@ -172,11 +173,15 @@ const MainProducts = () => {
             toggleDropdown,
             selectedEmployee,
             del_picDropdownVisible,
+            setdel_picDropdownVisible,
             selectedStatus,
+            setTransactionDropdownVisible,
             transactionDropdownVisible,
             selectedListingType,
+            setSelectedListingType,
             selectedListingTypeValue,
             listingTypesDropdownVisible,
+            setlistingTypesDropdownVisible,
             handleCategoryChange,
             selectedStatusValue,
             handleSearch,

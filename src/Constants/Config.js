@@ -13,6 +13,7 @@ module.exports = Object.freeze({
   CATEGORIE_STATUS: "CategoryReactapi/categoryapi_status",
   CATEGORIE_BANNER_REMOVE: "CategoryReactapi/delete_banner_image",
   EDIT_CATOGRY_DATA: "CategoryReactapi/category_data",
+  SORT_CATOGRY_DATA: "CategoryReactapi/SaveSizeSorting",
 
   // Defaults API Calls
   LIST_ALL_Defaults: "DefaultReactapi/Default_list",
@@ -65,7 +66,8 @@ module.exports = Object.freeze({
   COUPON_STATUS_UPDATE: "Couponapi/show_online",
   COUPON_DELETE: "Couponapi/delete_coupon",
   COUPON_TITLE_CHECK: "Couponapi/check_coupon_title",
-  COUPON_DETAILS_ID_CHECK: "Couponapi/get_edit_coupon_details",
+  // COUPON_DETAILS_ID_CHECK: "Couponapi/get_edit_coupon_details",
+  COUPON_DETAILS_ID_CHECK: "Couponapi/get_coupon_by_id",
   EDIT_COUPON: "Couponapi/edit_coupon",
   ADD_COUPON: "Couponapi/add_coupon",
 
@@ -185,6 +187,8 @@ module.exports = Object.freeze({
   GET_VERIFIED_MERCHANT: "UserController/getUnverifiedMerchant", //get verified and unverified merchant
   GET_ADD_ADMIN: "UserController/insert_admin", //add admin
   GET_UPDATE_MERCHANT: "UserController/merchant_update",
+  GET_Edit_STORE_INFO: "UserController/store_info",
+  UPDATE_STORE_INFO: "UserController/createMenuLink",
 
   // vendor Report List API
   VENDORS_REPORT_LIST: "vendor_report_api/vendor_list",
@@ -239,6 +243,17 @@ module.exports = Object.freeze({
   // Employee work hours API
   // EMPLOYEE_WORK_HOURS: "Report_api/employee_work_hours1",
   EMPLOYEE_WORK_HOURS: "Report_api/employee_work_hours1_api",
+
+  // Add Po
+
+  ADD_PO_LIST: "Purchase_orders_api/po_list",
+  // -----------------
+
+  LOGIN_AUTHENICATE_API: "LoginApiReact/chk_merchant",
+  LOGIN_AUTHENICATE2_API: "LoginApiReact/send_otp_session", //
+  LOGIN_OTP_AUTHENTICATION: "LoginApiReact/chk_otp", //
+  LOGIN_OTP_SUBMIT_AUTHENTICATION: "LoginApiReact/create_session", //
+  LOGIN_VIA_SUPERADMIN: "LoginApiReact/login_via_superadmin", //
 });
 
 // All api calls are initialized in this component for this application

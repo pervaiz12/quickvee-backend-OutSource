@@ -58,14 +58,18 @@ import ReorderInventoryMain from "../Reporting/ReorderInventory/ReorderInventory
 import EditVendors from "../Vendors/EditVendors";
 import SingleVendorsDetail from "../Vendors/SingleVendorsDetail";
 import AddProducts from "../Products/AddProducts";
-import ProductSalesReport from "../Products/ProductSalesReport";
+import MainLoayalty from "../LoyaltyProgram/MainLoayalty";
+import MainEmployeelist from "../Reporting/Employelist/MainEmployeelist";
+import AddPo from "../PurchaseOrders/AddPo";
 //  import OrderSummeryPage from "../Reporting/orderSummeryPage/orderSummery";
 // import MainEmployee from "../Reporting/EmployeeWorkingHours/MainEmployee";
 // import MainInvDuplicates from '../InventoryDuplicates/MainInvDuplicates';
-
+import EditCoupon from "../Coupons/EditCoupon";
+import StorePage from "../Store/MerchantStore";
+import ManagerStore from "../Store/ManagerStore";
 const LeftSide = ({ visible }) => {
   useEffect(() => {
-    return () => {};
+    window.scrollTo(0, 0);
   });
 
   return (
@@ -78,8 +82,10 @@ const LeftSide = ({ visible }) => {
           {visible === "purchase-data" && <MainPurchase />}
           {visible === "attributes" && <MainAttributes />}
           {visible === "products" && <MainProducts />}
-
+          {visible === "store" && <StorePage />}
+          {visible === "manager" && <ManagerStore />}
           {visible === "coupons" && <MainCoupon />}
+          {visible === "coupons-edit-cop" && <EditCoupon />}
           {visible === "vendors" && <MainVendors />}
           {visible === "timesheet" && <MainTimesheet />}
           {visible === "import-data" && <MainImportData />}
@@ -117,6 +123,7 @@ const LeftSide = ({ visible }) => {
           {visible === "taxes-report" && <MainTaxesReport />}
           {visible === "current-inventory-value" && <CurrentInventoryValue />}
           {visible === "addemployee" && <MainAddEmployee />}
+          {visible === "employee-list" && <MainEmployeelist />}
           {visible === "receipt" && <ReceiptMainpage />}
           {visible === "item-sales" && <MainItemSales />}
           {visible === "item-create-between" && <NewItemCreatedBetweenMain />}
@@ -125,6 +132,7 @@ const LeftSide = ({ visible }) => {
           {visible === "vendors-list" && <VendorListMain />}
           {visible === "edit-vendor" && <EditVendors />}
           {visible === "vendor-details" && <SingleVendorsDetail />}
+          {visible === "loyalty-program" && <MainLoayalty />}
 
           {/* {visible === "order-summary" && <OrderSummeryPage />} */}
 

@@ -21,6 +21,7 @@ import TimeIcon from "../../Assests/Filter/Clock.svg";
 import dayjs, { Dayjs } from "dayjs";
 
 import { useNavigate } from "react-router-dom";
+import BasicTextFields from "../../reuseableComponents/TextInputField";
 
 import _ from "lodash";
 
@@ -37,13 +38,15 @@ const EditCoupon = () => {
   };
 
   const [activeTab, setActiveTab] = useState("");
+  
 
   const params = useParams();
   async function fetchData() {
     const getcouponData = {
       merchant_id: "MAL0100CA",
-      id: params.couponsCode,
+      coupon_id: params.couponsCode,
     };
+   
 
     try {
       const response = await axios.post(
@@ -106,6 +109,7 @@ const EditCoupon = () => {
     fetchDataAndUpdateState();
   }, [params.couponsCode]);
 
+  
   const [inputValue, setInputValue] = useState("");
   const [isUnique, setIsUnique] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
@@ -461,7 +465,7 @@ const EditCoupon = () => {
                 </div>
                 <div className="q-add-coupon-single-input">
                   <label htmlFor="coupon_name">Coupon Code</label>
-                  <input
+                  {/* <input
                     type="text"
                     id="coupon_name"
                     name="coupon_name"
@@ -469,6 +473,13 @@ const EditCoupon = () => {
                     value={inputValue || coupon.name}
                     readOnly
                     onChange={handleInputChange}
+                  /> */}
+                  <BasicTextFields
+                    type={"text"}
+                    value={inputValue || coupon.name}
+                    maxLength={11}
+                    onChangeFun={handleInputChange}
+                    readOnly={true}
                   />
                   {errorMessage && (
                     <p className="error-message">{errorMessage}</p>
@@ -551,22 +562,20 @@ const EditCoupon = () => {
                             <Grid container>
                               <Grid item xs={6}>
                                 <div
-                                  className={`cursor-pointer amt_btn text-center   ${
-                                    activeTab === "amount"
+                                  className={`cursor-pointer amt_btn text-center   ${activeTab === "amount"
                                       ? "bg-[#0A64F9] text-white radius-4"
                                       : ""
-                                  }`}
+                                    }`}
                                 >
                                   Amount ($)
                                 </div>
                               </Grid>
                               <Grid item xs={6}>
                                 <div
-                                  className={`cursor-pointer amt_btn text-center  ${
-                                    activeTab === "percentage"
+                                  className={`cursor-pointer amt_btn text-center  ${activeTab === "percentage"
                                       ? "bg-[#0A64F9] text-white radius-4"
                                       : ""
-                                  }`}
+                                    }`}
                                 >
                                   Percentage (%)
                                 </div>
@@ -785,7 +794,7 @@ const EditCoupon = () => {
                       max={999}
                       value={
                         coupon.count_limit === null ||
-                        coupon.count_limit === "0"
+                          coupon.count_limit === "0"
                           ? 1
                           : Math.min(coupon.count_limit, 999)
                       }

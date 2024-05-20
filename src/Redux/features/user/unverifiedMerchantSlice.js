@@ -1,16 +1,26 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import {  BASE_URL , GET_VERIFIED_MERCHANT} from "../../../Constants/Config"
+import {  BASE_URL , GET_VERIFIED_MERCHANT,LOGIN_VIA_SUPERADMIN} from "../../../Constants/Config"
+import Cookies from 'js-cookie'; 
+import CryptoJS from 'crypto-js';
 import axios from 'axios';
 
 let initialState={
     loading: false,
     unverifiedMerchantData: {},
     error: '',
+    getDashboardData:[]
 }
 
 export const getUnVerifiedMerchant=createAsyncThunk('UnVerified/getUnVerifiedMerchant',async(data)=>{
     // console.log(data)
-       const response= await axios.post(BASE_URL+GET_VERIFIED_MERCHANT,data,{ headers: { "Content-Type": "multipart/form-data" } })
+    const { token, ...dataNew } = data;
+
+       const response= await axios.post(BASE_URL+GET_VERIFIED_MERCHANT,dataNew, {
+        headers: {
+            "Content-Type": "multipart/form-data",
+            'Authorization': `Bearer ${token}` // Use data?.token directly
+        }
+    })
     //    console.log(response)
        if(response.data.status==200)
         {
@@ -19,6 +29,45 @@ export const getUnVerifiedMerchant=createAsyncThunk('UnVerified/getUnVerifiedMer
    
 
 })
+//https://sandbox.quickvee.net/Dashboard/login_via_superadmin
+export const handleMoveDash = createAsyncThunk('UnVerified/handleMoveDash', async (data) => {
+    try {
+        const { token, ...dataNew } = data;
+        const response = await axios.post("https://sandbox.quickvee.net/Dashboard/login_via_superadmin", dataNew, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                'Authorization': `Bearer ${token}`
+            }
+        });
+
+
+        if (response?.data?.status === true) {
+            console.log(response?.data?.stores)
+            
+            // Cookies.remove("token_data")
+            // Cookies.remove("loginDetails")
+            const dataNew = {
+                data: response?.data?.data,
+                token: response?.data?.token,
+                token_id: response?.data?.token_id,
+                login_type: response?.data?.login_type,
+                final_login:response?.data?.final_login,
+                status:response?.data?.status
+              };
+
+            const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(dataNew), 'secret key').toString();
+            console.log(response?.data?.stores)
+            Cookies.set('token_data', encryptedData);
+            Cookies.set('loginDetails', response?.data?.stores);
+            localStorage.setItem('AllStore',JSON.stringify(response?.data?.stores))
+        }
+
+        return response.data;
+    } catch (error) {
+        console.error("Error occurred:", error);
+        throw error;
+    }
+});
 
 export const UnVerifiedMerchantSlice=createSlice({
     name:'UnVerified',
@@ -37,6 +86,21 @@ export const UnVerifiedMerchantSlice=createSlice({
             state.unverifiedMerchantData = {};
             state.error = action.error.message;
         })
+        // ==================
+        // builder.addCase(handleMoveDash.pending, (state) => {
+        //     state.loading = true;
+        // })
+        // builder.addCase(handleMoveDash.fulfilled, (state, action) => {
+        //     state.loading = false;
+        //     state.getDashboardData = action.payload;
+        //     state.error = '';
+        // })
+        // builder.addCase(handleMoveDash.rejected, (state, action) => {
+        //     state.loading = false;
+        //     // state.unverifiedMerchantData = {};
+        //     state.error = action.error.message;
+        // })
+        // =================
 
     }
 
