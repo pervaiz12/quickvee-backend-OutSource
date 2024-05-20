@@ -4,9 +4,11 @@ import { BASE_URL, PRODUCT_LIST_BY_CATEGORY } from "../../Constants/Config";
 import Table from 'react-bootstrap/Table';
 import axios from "axios";
 import CrossIcon from "../../Assests/Dashboard/cross.svg";
+import { useAuthDetails } from './../../Common/cookiesHelper';
 
 
 const ViewItemsModal = ({ selectedView, onViewClick }) => {
+  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -22,15 +24,18 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
   };
 
   const fetchCategoryProductData = async () => {
+    const {token,...otherUserData} = userTypeData
     const data = {
       cat_id: selectedView.id,
+      ...otherUserData
     };
     try {
-      const response = await axios.post(
-        BASE_URL + PRODUCT_LIST_BY_CATEGORY,
-        data,
-        { headers: { "Content-Type": "multipart/form-data" } }
-      );
+      const response = await axios.post(BASE_URL + PRODUCT_LIST_BY_CATEGORY, data, {
+          headers: {
+              "Content-Type": "multipart/form-data",
+              'Authorization': `Bearer ${token}` // Use data?.token directly
+          }
+      });
       if (response.data.status === true) {
         setItemsData(response.data.result)
       }

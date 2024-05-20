@@ -2372,6 +2372,7 @@ margin: 5px 0 15px 0;
 .timesheet{
   padding: 0px !important;
   text-align: center;
+  background: #f9f9f900;
 }
 .borderRight{
   border-right: 1px solid #000000;

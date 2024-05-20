@@ -154,7 +154,7 @@ export default function Header() {
                 // console.log(JSON.parse(localStorage.getItem("AllStore")))
              
                 (JSON.parse(localStorage.getItem("AllStore"))!==""|| Array.isArray(allStoresData)) ? (JSON.parse(localStorage.getItem("AllStore")) || allStoresData)?.map((result,index)=>{
-                  console.log(result)
+                  // console.log(result)
                   return(
                     <MenuItem  onClick={()=>handleChangeMerchant(result?.merchant_id)}value={result?.name}>{result?.name}</MenuItem>
 

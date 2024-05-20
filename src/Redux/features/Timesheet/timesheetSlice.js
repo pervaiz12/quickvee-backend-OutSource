@@ -27,6 +27,42 @@ export const fetchtimeSheetData = createAsyncThunk('timeSheet/fetchtimeSheetData
 })
 // Generate pening , fulfilled and rejected action type
 
+export const deleteTimesheet = createAsyncThunk('categories/deleteTimesheet', async (data) => {
+
+    try {
+        const response = await axios.post(BASE_URL + "DELETE_TIMESHEET", data, {
+            headers: { "Content-Type": "multipart/form-data" }
+        });
+      if(response){
+        console.log(response)
+        return {
+            categoryId:data.id
+        }
+      }
+        
+    } catch (error) {
+        throw new Error(error.response.data.message);
+    }
+});
+
+export const deleteBreak = createAsyncThunk('categories/deleteBreak', async (data) => {
+
+    try {
+        const response = await axios.post(BASE_URL + "DELETE_BREAK", data, {
+            headers: { "Content-Type": "multipart/form-data" }
+        });
+      if(response){
+        console.log(response)
+        return {
+            categoryId:data.id
+        }
+      }
+        
+    } catch (error) {
+        throw new Error(error.response.data.message);
+    }
+});
+
 
 
 
@@ -48,6 +84,35 @@ const timeSheetSlice = createSlice({
             state.error = action.error.message;
         })
 
+        // for DeleteTimeAll sheet
+        builder.addCase(deleteTimesheet.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(deleteTimesheet.fulfilled, (state, action) => {
+            state.loading = false;
+            state.successMessage = action.payload.message;
+            state.timeSheetData = state.timeSheetData.filter((item) => item && item.id !== action.payload.categoryId);
+            state.error = ''; // Reset the error message
+        });
+        builder.addCase(deleteTimesheet.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+        });
+
+         // for Deletebreak sheet
+         builder.addCase(deleteBreak.pending, (state) => {
+            state.loading = true;
+        });
+        builder.addCase(deleteBreak.fulfilled, (state, action) => {
+            state.loading = false;
+            state.successMessage = action.payload.message;
+            state.timeSheetData = state.timeSheetData.filter((item) => item && item.id !== action.payload.categoryId);
+            state.error = ''; // Reset the error message
+        });
+        builder.addCase(deleteBreak.rejected, (state, action) => {
+            state.loading = false;
+            state.error = action.error.message;
+        });
     }
 })
 

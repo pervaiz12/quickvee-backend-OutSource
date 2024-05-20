@@ -16,7 +16,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 
 import { Box, Modal } from "@mui/material";
-import { fetchtimeSheetData } from "../../Redux/features/Timesheet/timesheetSlice";
+import { fetchtimeSheetData , deleteTimesheet , deleteBreak } from "../../Redux/features/Timesheet/timesheetSlice";
 import axios from "axios";
 import { BASE_URL, EMPLOYEE_LIST } from '../../Constants/Config';
 
@@ -294,9 +294,20 @@ const TimesheetListing = ({ data }) => {
   const [showModalViewBreak, setShowModalViewBreak] = useState(false);
   const handleOpenViewBreak = () => setShowModalViewBreak(true);
   const handleCloseViewBreak = () => setShowModalViewBreak(false);
+  const [breakDetails, setBreakDetails] = useState([]);
+  const [EmployeeWorkDate, setEmployeeWorkDate] = useState(""); 
+  const [EmployeeTimeIn, setEmployeeTimeIn] = useState(""); 
+  const [EmployeeTimeOut, setEmployeeTimeOut] = useState(""); 
+  const [AllbreakDelete, setAllbreakDelete] = useState(""); 
 
-  const openModalViewBreak = (title) => {
+
+  const openModalViewBreak = (title,data) => {
     setEmployeeName(title)
+    fetchBreakDetails(data);
+    setEmployeeWorkDate(data.attendance_date)
+    setEmployeeTimeIn(formatTime(data.check_in_time))
+    setEmployeeTimeOut(formatTime(data.check_out_time))
+    setAllbreakDelete(data)
     setShowModalViewBreak(true);
   };
 
@@ -304,7 +315,135 @@ const TimesheetListing = ({ data }) => {
     setShowModalViewBreak(false);
   };
 
+  const breaks_list = [
+    {
+      id: "10903-10904",
+      attendance_id: "3909",
+      merchant_id: "MAL0100CA",
+      employee_id: "29",
+      formatted_time: "01:05 AM to 01:30 AM",
+      newtype: "break_in to break_out",
+      system_time: "17-05-2024 01:05:00 to 17-05-2024 01:30:00",
+      status: true
+    },
+    {
+      id: "10905-10906",
+      attendance_id: "3909",
+      merchant_id: "MAL0100CA",
+      employee_id: "29",
+      formatted_time: "05:45 AM to 08:00 AM",
+      newtype: "break_in to break_out",
+      system_time: "17-05-2024 05:45:00 to 17-05-2024 08:00:00",
+      status: true
+    },
+    {
+      id: "10907-10908",
+      attendance_id: "3909",
+      merchant_id: "MAL0100CA",
+      employee_id: "29",
+      formatted_time: "12:30 AM to 01:40 AM",
+      newtype: "break_in to break_out",
+      system_time: "17-05-2024 00:30:00 to 17-05-2024 01:40:00",
+      status: true
+    },
+    {
+      id: "10909-10910",
+      attendance_id: "3909",
+      merchant_id: "MAL0100CA",
+      employee_id: "29",
+      formatted_time: "04:50 PM to 09:00 PM",
+      newtype: "break_in to break_out",
+      system_time: "17-05-2024 16:50:00 to 17-05-2024 21:00:00",
+      status: true
+    }
+  ];
+  const fetchBreakDetails = async (data) => {
+    try {
+      const response = await axios.post(
+        `${BASE_URL}getBreakDetails`,
+        {
+          attendance_id: data.attendance_id,
+          check_in: formatTime(data.check_in_time),
+          check_out: formatTime(data.check_out_time),
+          indate: data.attendance_date,
+          outdate: data.attendance_date,
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      setBreakDetails(response.data);
+    } catch (error) {
+      // setBreakDetails(breaks_list);
+      console.log("Failed to fetch break details");
+    }
+  };
+
+
+  
   // for All View Break IN/Out End
+
+
+  // for Delete Break Start 
+   // first alert Are you sure want to delete this break timeing ?
+  // Url https://sandbox.quickvee.net/Timesheet/delete_breaks
+  // paramerte break_id: 10921-10922
+  const deleteBreakTimesheet = (data) => {
+    const datas = {
+      break_id:`${data.check_in_id}-${data.check_out_id}`,
+    };
+   
+    const userConfirmed = window.confirm("Are you sure want to delete this break timeing ?");
+    if (userConfirmed) {
+      if (data) {
+        dispatch(deleteBreak(datas)).then(() => {
+          dispatch(fetchBreakDetails(data));
+        });
+      }
+    } else {
+      console.log("Deletion canceled by break timeing");
+    }
+  };
+
+
+
+
+  // fo all Break Delete 
+  // first alert Are sure want to delete this timeclock? confirm then hit api 
+  // url https://sandbox.quickvee.net/Timesheet/delete_timeclock
+  // parameter inid: 10931
+            // outid: 10932
+            // attendanceid: 3912
+            // checkin: 12:00 AM
+            // checkout: 09:00 PM
+            // indate: 17-05-2024
+            // outdate: 17-05-2024
+
+    const deleteAllBreakTimesheet = (data) => {
+      const datas = {
+        inid: data.check_in_id,
+        outid: data.check_out_id,
+        attendanceid: data.attendance_id,
+        checkin: formatTime(data.check_in_time),
+        checkout: formatTime(data.check_out_time),
+        indate: data.attendance_date,
+        outdate: data.attendance_date,
+      };
+     
+      const userConfirmed = window.confirm("Are sure want to delete this timeclock?");
+      if (userConfirmed) {
+        if (data) {
+          dispatch(deleteTimesheet(datas)).then(() => {
+            dispatch(fetchtimeSheetData(data));
+          });
+        }
+      } else {
+        console.log("Deletion canceled by timeclock");
+      }
+    };
+  // for Delete Break End
 
 
 
@@ -364,7 +503,7 @@ const TimesheetListing = ({ data }) => {
                   <div
                 className="q-attributes-bottom-attriButes-single-attributes TimesheetRow cursor-pointer"
                 key={index}
-                onClick={() => openModalViewBreak(employee.title)}
+                onClick={() => openModalViewBreak(employee.title,entry)}
               >
                 <p className="q-catereport-item">{formatDate(entry.attendance_date)}</p>
                 <p className="q-catereport-item">{`$${entry.wages_per_hr}`}</p>
@@ -710,15 +849,14 @@ const TimesheetListing = ({ data }) => {
                 />
                 <span>{EmployeeName}</span>
               </span>
-              <p className="pr-1"><img src={DeleteIcon} alt="delete-icon" className="cursor-pointer" /></p>
+              <p className="pr-1" onClick={() => deleteAllBreakTimesheet(AllbreakDelete)}><img src={DeleteIcon} alt="delete-icon" className="cursor-pointer" /></p>
             </div>
 
             <div className="view-category-item-modal-header" >
               <div className="title_attributes_section viewbreak" style={{margin: "1rem 1.5rem"}}>
-                 {/* Working Date: 05/10/2023 | Clock In: 09:30 AM | Clock Out: 11:30 PM */}
-                 <span className="borderRight">Working Date: <span className="viewTextBark">05/10/2023</span> </span>
-                 <span className="borderRight">Clock In: <span className="viewTextBark">09:30 AM</span> </span>
-                 <span className="pl-2">Clock Out: <span className="viewTextBark">11:30 PM</span> </span>
+                 <span className="borderRight">Working Date: <span className="viewTextBark">{formatDate(EmployeeWorkDate)}</span> </span>
+                 <span className="borderRight">Clock In: <span className="viewTextBark">{EmployeeTimeIn}</span> </span>
+                 <span className="pl-2">Clock Out: <span className="viewTextBark">{EmployeeTimeOut}</span> </span>
               </div>
               
                 <div className="viewTaleBreak table__header"> 
@@ -727,18 +865,27 @@ const TimesheetListing = ({ data }) => {
                   <p>Breaked Out</p>
                   <p></p>
                 </div>
-                <div className="viewTaleBreak viewTableRow ">
-                  <p>Break 1</p>
-                  <p >4:05 PM</p>
-                  <p >4:35 PM</p>
-                  <p ><img src={DeleteIcon} alt="delete-icon" className="cursor-pointer" /></p>
-                </div>
-                <div className="viewTaleBreak viewTableRow ">
-                  <p>Break 2</p>
-                  <p >8:15 PM</p>
-                  <p >8:25 PM</p>
-                  <p ><img src={DeleteIcon} alt="delete-icon" className="cursor-pointer" /></p>
-                </div>
+                  {breakDetails.length > 0 ? (
+                    breakDetails.map((breakDetail, index) => {
+                      const breakTimeIn = breakDetail.formatted_time.split(' to ')[0];
+                      const breakTimeOut = breakDetail.formatted_time.split(' to ')[1];
+                      const isLastRow = index === breakDetails.length - 1;
+                      return (
+                        <div className={`viewTaleBreak ${!isLastRow ? 'viewTableRow' : ''}`} key={index}>
+                          <p>Break {index+1}</p>
+                          <p>{breakTimeIn}</p>
+                          <p>{breakTimeOut}</p>
+                          <p  onClick={(e) => { deleteBreakTimesheet(AllbreakDelete);  e.stopPropagation();}}>
+                            <img src={DeleteIcon} alt="delete-icon" className="cursor-pointer" />
+                          </p>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <div className="viewTaleBreak ">
+                      <p>No break details available.</p>
+                    </div>
+                  )}
 
             </div>
 
