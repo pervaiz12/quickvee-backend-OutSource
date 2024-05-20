@@ -2,8 +2,12 @@ import axios from 'axios';
 import React,{useState} from 'react'
 import{BASE_URL,GET_ADD_ADMIN,CHECK_ADMIN_EMAIL} from '../../../../Constants/Config'
 import { useNavigate } from 'react-router-dom';
+import { useAuthDetails } from '../../../../Common/cookiesHelper';
+
 
 export default function Add_adminFunctionality() {
+  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+
   const navigate = useNavigate();
     const[addAdminData,setAddAdminData]=useState({owner_name:'',email:'',password:'',phone:'',
     errors:{
@@ -106,11 +110,16 @@ export default function Add_adminFunctionality() {
   }
 
   const emailValidate = async (data) => {
-  const dataNew = { email: data };
+    const{token,...newData}=userTypeData
+
+  const dataNew = { email: data,...newData};
 
   try {
     const response = await axios.post(BASE_URL + CHECK_ADMIN_EMAIL, dataNew, {
-      headers: { "Content-Type": "multipart/form-data" },
+      headers: {
+        "Content-Type": "multipart/form-data",
+        'Authorization': `Bearer ${token}`
+    },
     });
 
     return response.data; // Assuming this data indicates whether email is valid or not
@@ -191,14 +200,15 @@ const handleSubmit=async(e)=>
     
     const formIsValid = await validateForm();
     const CurrentValidate=Currentvalidate(addAdminData.errors)
+    const{token,...newData}=userTypeData
     if(formIsValid==false)
     {
       if(CurrentValidate==true)
       {
-        const packet={owner_name:addAdminData.owner_name,email:addAdminData.email,password:addAdminData.password,phone:addAdminData.phone}
+        const packet={owner_name:addAdminData.owner_name,email:addAdminData.email,password:addAdminData.password,phone:addAdminData.phone,...newData}
         // console.log(packet)
        
-                      await axios.post(BASE_URL+GET_ADD_ADMIN,packet,{ headers: { "Content-Type": "multipart/form-data" }}).then(res=>{if(res.data.status==200){
+                      await axios.post(BASE_URL+GET_ADD_ADMIN,packet,{ headers: { "Content-Type": "multipart/form-data", 'Authorization': `Bearer ${token}` }}).then(res=>{if(res.data.status==200){
                         setAddAdminData({owner_name:'',email:'',password:'',phone:'',
                         errors:{
                           owner_name:'',
@@ -207,7 +217,6 @@ const handleSubmit=async(e)=>
                           phone:'',
                         }
                         })
-
                         navigate('/users/admin')
                       }
                 })

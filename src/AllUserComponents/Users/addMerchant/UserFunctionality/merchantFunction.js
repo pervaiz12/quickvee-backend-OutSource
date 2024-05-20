@@ -4,11 +4,13 @@ import axios from 'axios'
 import {BASE_URL,ADD_MERCHAN_EMPLOYEE,GET_MERCHAN_STATE,GET_ADMIN_DATA,ADMIN_CHECK_USER}
  from '../../../../Constants/Config'
  import { useNavigate } from 'react-router-dom';
+ import { useAuthDetails } from '../../../../Common/cookiesHelper';
+
+
 
 const MerchantFunction=()=>{
      const navigate = useNavigate();
-                                                                     
-    
+     const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
     const [store,setStore]=useState({
         storename:'',
         ownerName:'',
@@ -37,11 +39,14 @@ const MerchantFunction=()=>{
     const [adminId,setAdminId]=useState()
     const [errorAdminId,setErrorAdminId]=useState('')
     const [errorPin,setErrorPin]=useState('')
-    // ==================== get state and admin data---------
+    // ==================== get state and admin data---------  
        const  getState=async()=>
        {
-        // console.log('hello')
-         await axios.get(BASE_URL+GET_MERCHAN_STATE).then(result=>{
+        const{token,...newData}=userTypeData
+        await axios.post(BASE_URL+GET_MERCHAN_STATE,newData,{headers:{
+            "Content-Type":'multipart/form-data',
+            'Authorization': `Bearer ${token}`
+        }}).then(result=>{
             if(result.status==200)
             {
                 setStateList(result.data.states)
@@ -51,6 +56,17 @@ const MerchantFunction=()=>{
                 setAdminList([])
             }
          })
+        // console.log('hello')
+        //  await axios.get(BASE_URL+GET_MERCHAN_STATE).then(result=>{
+        //     if(result.status==200)
+        //     {
+        //         setStateList(result.data.states)
+        //         setAdminList(result.data.admin_list)
+        //     }else{
+        //         setStateList([])
+        //         setAdminList([])
+        //     }
+        //  })
 
        }
 
@@ -61,11 +77,13 @@ const MerchantFunction=()=>{
        const onChangeAdminId=async(e)=>
        {
             const{name,value}=e.target
+            const{token,...newData}=userTypeData
             setAdminId(value)
-            const data={m_id:value}
+            const data={m_id:value,...newData}
             await axios.post(BASE_URL+GET_ADMIN_DATA,data,{
                 headers: {
-                    "Content-Type": "multipart/form-data"
+                    "Content-Type": "multipart/form-data",
+                    'Authorization': `Bearer ${token}`
                 },
 
             }).then(result=>{
@@ -381,13 +399,15 @@ const MerchantFunction=()=>{
     }
     const passwordValidate=async(email,password)=>
     {
-        const dataNew = { email: email,password:password};
+        const{token,...newData}=userTypeData
+        const dataNew = { email: email,password:password,...newData};
        
 
         try {
-                const response = await axios.post(BASE_URL+ADMIN_CHECK_USER, dataNew, {
-                headers: { "Content-Type": "multipart/form-data" },
-                });
+                const response = await axios.post(BASE_URL+ADMIN_CHECK_USER, dataNew, {headers:{
+            "Content-Type":'multipart/form-data',
+            'Authorization': `Bearer ${token}`
+        }});
                 
                 return response.data;
             } catch (error) {
@@ -476,16 +496,19 @@ const MerchantFunction=()=>{
         {
             if(currentValidate)
             {
-                console.log('merchantlogin')
+              
+                const{token,...newData}=userTypeData
+
                 const data={login_pin:merchantStore.pin,admin:adminId,storename:store.storename,
                     ownerName:store.ownerName,email:store.email,password:store.password,phone:store.phone,
                     state:store.state,created_by_user:'superadmin',
-                user_type:userRadioData
+                user_type:userRadioData,...newData
                 }
+                console.log(data)
                
                 
                             await axios.post(BASE_URL+ADD_MERCHAN_EMPLOYEE,data,
-                                { headers: { "Content-Type": "multipart/form-data" } }).then(result=>{
+                                { headers: { "Content-Type": "multipart/form-data",'Authorization': `Bearer ${token}` } }).then(result=>{
                                      if(result.data.status==200)
                                         {
                                             setUserRadioData('') 
@@ -541,13 +564,18 @@ const MerchantFunction=()=>{
             {
                 if(currentValidate)
                 {
-                    console.log('submit')
-                    
-                    const data={storename:store.storename,ownerName:store.ownerName,email:store.email,password:store.password,phone:store.phone,state:store.state,created_by_user:'superadmin',
-                    user_type:userRadioData
+                  
+                    const{token,...newData}=userTypeData
+                    const data=
+                    {
+                        storename:store.storename,ownerName:store.ownerName,email:store.email,
+                        password:store.password,phone:store.phone,state:store.state,
+                        created_by_user:'superadmin',
+                        user_type:userRadioData,
+                        ...newData
                     }
                     await axios.post(BASE_URL+ADD_MERCHAN_EMPLOYEE,data,
-                        { headers: { "Content-Type": "multipart/form-data" } }).then(result=>{
+                        { headers: { "Content-Type": "multipart/form-data",'Authorization': `Bearer ${token}` } }).then(result=>{
                             if(result.data.status==200)
                             {
                                 setUserRadioData('') 

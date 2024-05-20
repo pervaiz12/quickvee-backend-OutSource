@@ -6,15 +6,19 @@ import {CustomerFunction } from '../../../Redux/features/user/customerSlice'
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+import { useAuthDetails } from '../../../Common/cookiesHelper';
+
 
 
 const Customer=()=> {
+  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const customerRecord = useSelector(
     (state) => state.customerRecord,
   );
-  let data={type:2}
+  let data={type:2,...userTypeData}
 
 
   useEffect(()=>{

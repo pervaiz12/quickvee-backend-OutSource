@@ -86,11 +86,11 @@ const storeList = [
 const StorePage = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const {LoginGetDashBoardRecordJson,LoginAllStore} = useAuthDetails();
+  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData,GetSessionLogin} = useAuthDetails();
   // let AuthSessionRecord=Cookies.get('loginDetails') !==undefined ? Cookies.get('loginDetails') :[]
-  let UserLoginDataStringFy=Cookies.get('user_auth_record') !==undefined ? Cookies.get('user_auth_record') :[]
-  const getUserLoginAuth = atob(UserLoginDataStringFy);
-  const GetSessionLogin=getUserLoginAuth !==""? JSON.parse(getUserLoginAuth):[]
+  // let UserLoginDataStringFy=Cookies.get('user_auth_record') !==undefined ? Cookies.get('user_auth_record') :[]
+  // const getUserLoginAuth = atob(UserLoginDataStringFy);
+  // const GetSessionLogin=getUserLoginAuth !==""? JSON.parse(getUserLoginAuth):[]
   // const {handleGetStoreData}=StoreListLogic()
   // const AdminRocordNew=useSelector((state)=>CryptoJS.AES.decrypt(state?.loginAuthentication?.getUserRecord, 'secret key').toString(CryptoJS.enc.Utf8));
   // const AdminRocord= AdminRocordNew !=="" ?JSON.parse(AdminRocordNew):[]
@@ -118,7 +118,7 @@ const StorePage = () => {
 //     }GetSessionLogin?.username  GetSessionLogin?.username
 // }
 const handleSubmitStoreRecord=(merchant_id)=>{
-  const data={username:GetSessionLogin?.username,password:GetSessionLogin.password,login_type:LoginAllStore?.data?.login_type,merchant_id:merchant_id}
+  const data={username:GetSessionLogin?.username,password:GetSessionLogin.password,login_type:LoginGetDashBoardRecordJson?.data?.login_type,merchant_id:merchant_id}
   dispatch(handleGetStoreRecord(data)).then(result=>{
     console.log(result?.payload)
     if(result?.payload?.status==true)

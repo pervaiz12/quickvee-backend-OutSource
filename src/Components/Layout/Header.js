@@ -26,16 +26,10 @@ import { useAuthDetails } from '../../Common/cookiesHelper';
 
 
 export default function Header() {
-  const {LoginGetDashBoardRecordJson,LoginAllStore} = useAuthDetails();
+  const {LoginGetDashBoardRecordJson,LoginAllStore,GetSessionLogin} = useAuthDetails();
   const dispatch = useDispatch();
   const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
 
-  let UserLoginDataStringFy=Cookies.get('user_auth_record') !==undefined ? Cookies.get('user_auth_record') :[]
-  let UserLoginRecord=useSelector((state)=>state?.loginAuthentication?.getUserLoginRecord)
-  const getUserLoginAuth = atob(UserLoginRecord);
-  const GetSessionLogin=getUserLoginAuth !==""? JSON.parse(getUserLoginAuth):[]
-  // ===================================AuthDecryptDataDashBoardJSONFormat?.data?.name   LoginSuccessJson?.data?.name
-  // 
   let allStoresData=LoginAllStore?.data?.stores
   let storenameCookie=LoginGetDashBoardRecordJson !=="" ? LoginGetDashBoardRecordJson?.data?.name :LoginGetDashBoardRecordJson?.data?.name
   useEffect(()=>{
@@ -43,10 +37,6 @@ export default function Header() {
   },[LoginGetDashBoardRecordJson])
  
   // useEffect for all when update data in coockie-----------------
-  
-  useEffect(()=>{
-    dispatch(getUserRecordData(UserLoginDataStringFy))
-  },[UserLoginDataStringFy])
    
   // useEffect for all when update data in coockie--------------
 
@@ -154,7 +144,6 @@ export default function Header() {
                 // console.log(JSON.parse(localStorage.getItem("AllStore")))
              
                 (JSON.parse(localStorage.getItem("AllStore"))!==""|| Array.isArray(allStoresData)) ? (JSON.parse(localStorage.getItem("AllStore")) || allStoresData)?.map((result,index)=>{
-                  console.log(result)
                   return(
                     <MenuItem  onClick={()=>handleChangeMerchant(result?.merchant_id)}value={result?.name}>{result?.name}</MenuItem>
 
