@@ -152,7 +152,13 @@
   /* cursor: all-scroll; */
   user-select: none;
 }
-
+.q-category-bottom-categories-single-category-table  {
+  display: flex;
+  padding: 20px;
+  border-bottom: 1px solid #e8e8e8;
+  /* cursor: all-scroll; */
+  user-select: none;
+}
 .q-category-bottom-categories-single-category > .categories-title {
   font-size: 16px;
   color: #000000;

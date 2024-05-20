@@ -4,7 +4,8 @@ import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import EditIcon from "../../Assests/Category/editIcon.svg";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import { useLocation } from "react-router-dom";
+import LeftArrow from "../../Assests/Vendors/LeftArrow.svg"
+import { useLocation,useNavigate } from "react-router-dom";
 import "../../Styles/Common.css";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -19,8 +20,10 @@ import CrossIcon from "../../Assests/Dashboard/cross.svg";
 import dayjs from "dayjs";
 import DateRangeComponent from "../../reuseableComponents/DateRangeComponent";
 import { Grid } from "@mui/material";
-import CustomizedTable from "../../reuseableComponents/CustomizedTable";
+import CustomizedTable from "./CustomizedTable";
 import { useSelector } from "react-redux";
+import { useAuthDetails } from "../../Common/cookiesHelper";
+import { useParams } from "react-router-dom";
 const options = [
   "Select Range",
   "Today",
@@ -31,17 +34,15 @@ const options = [
 ];
 
 const SingleVendorsDetail = ({ setVisible }) => {
+  const Navigate = useNavigate()
+  const { userTypeData } = useAuthDetails();
   const [showModal, setShowModal] = useState(false);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const vendorId = searchParams.get("vendorId");
-  const [value, setValue] = React.useState(options[0]);
-  const [inputValue, setInputValue] = React.useState("");
+  const vendor_name = decodeURIComponent(location.pathname.split("/").pop());
 
   // date range
-  const [showDateRangePicker, setShowDateRangePicker] = React.useState(false);
-  const [startDate, setStartDate] = React.useState(null);
-  const [endDate, setEndDate] = React.useState(null);
 
   const [modalData, setModalData] = useState(null);
 
@@ -49,103 +50,41 @@ const SingleVendorsDetail = ({ setVisible }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPayAmount, setSelectedPayAmount] = useState(0);
   const [selectedRemark, setSelectedRemark] = useState();
-  const AllVendorsDataState = useSelector((state) => state.vendors);
-  const [selectedVendor, setSelectedVendor] = useState(false);
-  console.log("selectedVendor", selectedVendor);
-  useEffect(() => {
-    if (
-      !AllVendorsDataState.loading &&
-      AllVendorsDataState.vendorListData &&
-      AllVendorsDataState.vendorListData.length >= 1
-    ) {
-      const foundVendor = AllVendorsDataState.vendorListData[1].find(
-        (vendor) => vendor.vendor_id === vendorId
-      );
-      setSelectedVendor(foundVendor);
 
-      // setStates(AllVendorsDataState.vendorListData[2])
-
-      // const stateArray = AllVendorsDataState.vendorListData[2].map(
-      //   (item) => item.State
-      // );
-      // setStates(stateArray);
-    }
-  }, [
-    AllVendorsDataState,
-    AllVendorsDataState.loading,
-    AllVendorsDataState.vendorListData,
-  ]);
   const openModal = (payAmount, id, remark) => {
     setShowModal(true);
     setModalData({ payAmount, id, remark });
     setSelectedPayAmount(payAmount);
     setSelectedRemark(remark);
-
-    // console.log(remark)
   };
 
   const closeModal = () => {
     setShowModal(false);
   };
 
-  const handleOptionChange = (event, newValue) => {
-    setValue(newValue);
-
-    switch (newValue) {
-      case "Today":
-        setStartDate(dayjs().startOf("day").toDate());
-        setEndDate(dayjs().endOf("day").toDate());
-        break;
-      case "Yesterday":
-        setStartDate(dayjs().subtract(1, "day").startOf("day").toDate());
-        setEndDate(dayjs().subtract(1, "day").endOf("day").toDate());
-        break;
-      case "Last 7 Days":
-        setStartDate(dayjs().subtract(6, "days").startOf("day").toDate());
-        setEndDate(dayjs().endOf("day").toDate());
-        break;
-      case "This Month":
-        setStartDate(dayjs().startOf("month").toDate());
-        setEndDate(dayjs().endOf("day").toDate());
-        break;
-      case "Custom":
-        // You can handle custom logic here
-        break;
-      default:
-        break;
-    }
-
-    setShowDateRangePicker(newValue === "Custom");
-  };
-
   const [vendorDetails, setVendorDetails] = useState([]);
 
   const handleGetReport = async (dateRangeData) => {
     const { start_date, end_date } = dateRangeData;
-    console.log("start_date", start_date, "end_date", end_date);
-    try {
-      // const formattedStartDate = start_date
-      //   ? dayjs(startDate).format("YYYY-MM-DD")
-      //   : null;
-      // const formattedEndDate = end_date
-      //   ? dayjs(endDate).format("YYYY-MM-DD")
-      //   : null;
 
-      const queryParams = {
+    try {
+      const { token, ...otherUserData } = userTypeData;
+      const data = {
         // merchant_id: 'MAL0100CA',
         id: vendorId,
         start_date: start_date,
         end_date: end_date,
+        ...otherUserData,
       };
-      console.log("queryParams", queryParams);
 
-      const response = await axios.get(BASE_URL + GET_VENDOR_DETAILS, {
-        params: queryParams,
+      const response = await axios.post(BASE_URL + GET_VENDOR_DETAILS, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`, // Use data?.token directly
+        },
       });
 
       setVendorDetails(response.data.vendor_details);
-
-      console.log(response.data);
     } catch (error) {
       console.error("Error:", error);
     }
@@ -174,8 +113,6 @@ const SingleVendorsDetail = ({ setVisible }) => {
         remark: selectedRemark,
       };
 
-      // console.log(updSingleVendor)
-
       try {
         const response = await axios.post(
           BASE_URL + UPDATE_SINGLE_VENDOR_DATA,
@@ -200,8 +137,6 @@ const SingleVendorsDetail = ({ setVisible }) => {
           });
 
           setVendorDetails(updatedDetails);
-
-          console.log(response);
         } else {
           console.error(response);
         }
@@ -225,8 +160,6 @@ const SingleVendorsDetail = ({ setVisible }) => {
       end: currentDateTime,
     };
 
-    // console.log(delSingleVendor)
-
     try {
       const response = await axios.post(
         BASE_URL + DELETE_SINGLE_VENDOR_DATA,
@@ -242,7 +175,6 @@ const SingleVendorsDetail = ({ setVisible }) => {
         );
         setVendorDetails(updatedVendorDetails);
 
-        console.log(response);
         // alert(response.data.message);
       } else {
         console.error(response);
@@ -269,18 +201,19 @@ const SingleVendorsDetail = ({ setVisible }) => {
       </Grid>
       <Grid
         container
-        sx={{ marginTop: 2, padding: 2.5 }}
+        sx={{ marginTop: 2 }}
         className="q-add-categories-section"
       >
         <Grid xs={12} item>
           <Grid item xs={12}>
             <div className="q-add-categories-section-header">
               <span>
-                <span>{selectedVendor.vendor_name}</span>
+                <img src={LeftArrow} onClick={()=>{Navigate(-1)}} />
+                <span>{vendor_name}</span>
               </span>
             </div>
           </Grid>
-          <Grid container>
+          <Grid container >
             <Grid item xs={12}>
               <CustomizedTable
                 tableRowData={[
@@ -290,12 +223,14 @@ const SingleVendorsDetail = ({ setVisible }) => {
                   "Remark",
                   "",
                 ]}
+                vendorDetails={vendorDetails}
+                handleDeleteClick={handleDeleteClick}
               />
             </Grid>
           </Grid>
         </Grid>
       </Grid>
-      <div className="q-category-main-page">
+      {/* <div className="q-category-main-page">
         <div className="box">
           <br></br>
           <form>
@@ -310,7 +245,7 @@ const SingleVendorsDetail = ({ setVisible }) => {
                   <div className="qvrow">
                     <div className="col-qv-4">
                       <div className="q-add-categories-single-input qv_input">
-                        {/* <label htmlFor="State">Date Range</label> */}
+                      
                         <div className="q-add-categories-single-input qv_input">
                           <label htmlFor="State">Date Range</label>
                           <Autocomplete
@@ -446,9 +381,9 @@ const SingleVendorsDetail = ({ setVisible }) => {
 
               {showModal && (
                 <div className="q-custom-modal-container" id="addemployee">
-                  {/* Your modal JSX */}
+              
                   <div className="q-custom-modal-content modal_custom">
-                    {/* Your modal content */}
+              
                     <div className="">
                       <p className="q-custom-modal-header ">
                         Update Vendor Details
@@ -460,7 +395,7 @@ const SingleVendorsDetail = ({ setVisible }) => {
                         />
                       </p>
                     </div>
-                    {/* ... other modal content ... */}
+       
                     <div className="qvrow">
                       <div className="col-qv-12">
                         <div className="input_area">
@@ -475,7 +410,7 @@ const SingleVendorsDetail = ({ setVisible }) => {
                             maxLength={8}
                           />
                           <span className="input-error">
-                            {/* {values.errors.firstname !== "" ? values.errors.firstname : ""} */}
+                         
                           </span>
                         </div>
                       </div>
@@ -493,7 +428,7 @@ const SingleVendorsDetail = ({ setVisible }) => {
                             className="q-custom-input-field"
                           ></textarea>
                           <span className="input-error">
-                            {/* {values.errors.lastname !== "" ? values.errors.lastname : ""} */}
+                        
                           </span>
                         </div>
                       </div>
@@ -519,7 +454,7 @@ const SingleVendorsDetail = ({ setVisible }) => {
             </div>
           </form>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

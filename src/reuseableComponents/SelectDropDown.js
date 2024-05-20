@@ -27,14 +27,15 @@ const SelectDropDown = ({
   onClickHandler,
   selectedOption,
   dropdownFor,
-  title
+  title,
+  name,
 }) => {
-  console.log("listItem: ", listItem)
+
   return (
     <>
       <FormControl fullWidth>
         <ThemeProvider theme={theme}>
-          <Select size="small" value={selectedOption} displayEmpty>
+          <Select name={name} size="small" value={selectedOption} displayEmpty>
             {heading && (
               <MenuItem
                 onClick={(e) => {
