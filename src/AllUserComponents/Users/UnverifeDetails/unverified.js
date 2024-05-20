@@ -1,39 +1,20 @@
 import React,{useEffect,useState} from 'react'
-import{getUnVerifiedMerchant,handleMoveDash} from '../../../Redux/features/user/unverifiedMerchantSlice'
-import {getAuthInvalidMessage} from '../../../Redux/features/Authentication/loginSlice'
+import{getUnVerifiedMerchant} from '../../../Redux/features/user/unverifiedMerchantSlice'
 import { useSelector, useDispatch } from 'react-redux'
 import{Link,useNavigate} from "react-router-dom"
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import Cookies from 'js-cookie'; 
-import CryptoJS from 'crypto-js'; 
-import { useAuthDetails } from '../../../Common/cookiesHelper';
-
 export default function Unverified() {
   const dispatch = useDispatch()
   const navigate = useNavigate();
-  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
-
-
-  const merchant_id=LoginGetDashBoardRecordJson?.data?.merchant_id
-
-
-
-  // =======================
   const UnVerifiedMerchantList = useSelector(
     (state) =>state.unverifiedMerchantRecord.unverifiedMerchantData,
   );
-
-  // const data={type:'unapprove',token, token_id,login_type}
+  const data={type:'unapprove'}
   useEffect(()=>{
-      dispatch(getUnVerifiedMerchant({type:'unapprove',...userTypeData}))
+      dispatch(getUnVerifiedMerchant(data))
 
   },[])
    // ====================================
    const [searchRecord,setSearchRecord]=useState('')
-
 
    const handleSearchInputChange=(e)=>{
      setSearchRecord(e.target.value)
@@ -48,39 +29,12 @@ export default function Unverified() {
    // ====================================
     // ====================================
     const handleEditMerchant = (data) => {
-      
+      // console.log(data)
+      // console.log(`/users/editMerchant/${data}`)
+      // Assuming 'result' is the data you want to pass to the editMerchant route
+      // Navigate to the editMerchant route and pass 'result' as state
       navigate(`/users/editMerchant/${data}`);
     };
-    const handleGetVerifiedMerchant=(merchant_id)=>{
-      let data = {
-        merchant_id: merchant_id,
-        ...userTypeData
-      };
-      // const formdata = new FormData();
-   
-      dispatch(handleMoveDash(data)).then(result=>{
-        // console.log(result?.payload)
-        if(result?.payload?.status==true)
-          {
-            
-            if(result?.payload?.final_login==1)
-              {
-                navigate(`/`)
-              }else{
-                console.log("store page called")
-              }
-     
-          }else{
-            console.log("hhhhhh")
-              Cookies.remove('loginDetails');
-              Cookies.remove('user_auth_record');
-              // Cookies.remove('token_data');
-              dispatch(getAuthInvalidMessage(result?.payload?.msg))
-              navigate('/login')
-    
-          }
-    })
-  }
   
     //  ====================================
   return (
@@ -137,30 +91,10 @@ export default function Unverified() {
                     {/* <p className='table5'>{result.phone}</p> */}
                     <p className='table10'>{result.merchant_id}</p>
                     <p className='table5'>{result.ver_code}</p>
-                    <div className='table10'><div className='verifiedTableIcon'>
-                      {/* <div 
+                    <div className='table10'><div className='verifiedTableIcon'><div 
                     // to={`/users/editMerchant/${result.id}`}
                     onClick={()=>handleEditMerchant(result.id)}
-                    ><img src="/static/media/editIcon.4dccb72a9324ddcac62b9a41d0a042db.svg"></img></div> */}
-                     {/* <Link><img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img></Link> */}
-                     </div>
-                     <FormControl fullWidth>
-        <InputLabel id="demo-simple-select-label">Action</InputLabel>
-        <Select
-          labelId="demo-simple-select-label"
-          id="demo-simple-select"
-          value={""}
-          label="Age"
-          onChange={""}
-        >
-          <MenuItem value={10} onClick={()=>handleGetVerifiedMerchant(result.merchant_id)}>view</MenuItem>
-          <MenuItem value={20}><div 
-                    // to={`/users/editMerchant/${result.id}`}
-                    onClick={()=>handleEditMerchant(result.id)}
-                    ><img src="/static/media/editIcon.4dccb72a9324ddcac62b9a41d0a042db.svg"></img></div></MenuItem>
-          <MenuItem value={30}><Link><img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img></Link></MenuItem>
-        </Select>
-      </FormControl>
+                    ><img src="/static/media/editIcon.4dccb72a9324ddcac62b9a41d0a042db.svg"></img></div> <Link><img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img></Link></div>
                     </div>
                   </div>
 

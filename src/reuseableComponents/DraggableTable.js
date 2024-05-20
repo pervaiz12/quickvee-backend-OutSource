@@ -55,7 +55,6 @@ const DraggableTable = ({
   const { viewSelectedOptionEnable, fun1, fun2 } = viewSelectedOption;
   const {  deleteButtonEnable, deleteButtonFun } = deleteButton;
   const { editButtonEnable, editButtonurl } = editBtnCategory;
-  
 
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);

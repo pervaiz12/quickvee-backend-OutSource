@@ -83,7 +83,7 @@ import MainEmployeelist from "./Components/Reporting/Employelist/MainEmployeelis
 import MainTaxesReport from "./Components/Reporting/Taxes/MainTaxesReport";
 import MainSalesPerson from "./Components/Reporting/SalesByPerson/MainSalesPerson";
 import Login from './Components/Authenticate/login'
-// import StoreList from './Components/StoreRcord/storeList'
+import StoreList from './Components/StoreRcord/storeList'
 // import MainInvDuplicates from "./Components/InventoryDuplicates/MainInvDuplicates";
 import Main from "./Main";
 import "./Styles/OrderSummaryDetails.css";
@@ -93,7 +93,6 @@ import SideMenu from "./Components/Layout/SideMenu";
 import { useEffect,useState } from "react";
 import { useMediaQuery } from "@mui/material";
 // import InventoryExport from "./Components/InventoryExport/MainInventoryExport";
-import ProtectedRoute from './protected/protectedRoute'
 
 function App() {
   const location = useLocation();
@@ -115,10 +114,7 @@ function App() {
   },[currentUrl]);
   return (
     <>
-      {
-      location.pathname !=='/login' ?
-      <SideMenu setIsMenuOpen={setIsMenuOpen} isTabletNav={isTabletNav} isMenuOpen={isMenuOpen}/>:''
-      }
+       {!isSideBar && <SideMenu setIsMenuOpen={setIsMenuOpen} isTabletNav={isTabletNav} isMenuOpen={isMenuOpen}/>}
       <Routes>
         {/* <Route exact path="/" element={<Main />} /> */}
         {/* <Route exact path="/" element={<Layout />} /> */}
@@ -128,30 +124,32 @@ function App() {
         path="/users/view/unapprove"
         element={<Main visible={"multimerchant"} />}
       /> */}
-       <Route
+        <Route exact path= "/store" element={<Main visible={"store"} />} />
+        <Route exact path= "/manager" element={<Main visible={"manager"} />} />
+        <Route
         exact
         path="/login"
         element={< Login visible={"login"} />}
       />
-      <Route element={<ProtectedRoute/>}>
-        <Route exact path= "/store" element={<Main visible={"store"} />} />
-        <Route exact path= "/manager" element={<Main visible={"manager"} />} />
-        <Route index path="/" element={<Main visible={"dashboard"} />} />
-        <Route exact path="/order" element={<Main visible={"order"} />} />
-        <Route exact path="/store" element={<Main visible={"store"} />} />
-        <Route exact path="/category" element={<Main visible={"category"} />} />
-        <Route exact path="/products" element={<Main visible={"products"} />} />
-        <Route
-          exact
-          path="/purchase-data"
-          element={<Main visible={"purchase-data"} />}
-        />
-        <Route
+      <Route
+        exact
+        path="/store"
+        element={< StoreList visible={"storelist"} />}
+      />
+      <Route index path="/" element={<Main visible={"dashboard"} />} />
+      <Route exact path="/order" element={<Main visible={"order"} />} />
+      <Route exact path="/category" element={<Main visible={"category"} />} />
+      <Route exact path="/products" element={<Main visible={"products"} />} />
+      <Route
+        exact
+        path="/purchase-data"
+        element={<Main visible={"purchase-data"} />}
+      />
+      <Route
         exact
         path="/attributes"
-
         element={<Main visible={"attributes"} />}
-        />
+      />
 
 
 
@@ -711,7 +709,6 @@ function App() {
           path="/store-settings/recorder-inventory"
           element={<ReorderInventoryMain />}
         /> */}
-        </Route>
       </Routes>
     </>
   );

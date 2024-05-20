@@ -9,31 +9,12 @@ import { useSelector, useDispatch } from "react-redux";
 import '../../Styles/loginAuth.css'
 // import Quickvee from "../../../Assets/LoginScreen/quickveeLogo.svg";handleSubmitFormPlace
 import Quickvee from '../../Assests/LoginScreen/quickveeLogo.svg'
-import CryptoJS from 'crypto-js';
-import { useNavigate } from 'react-router-dom';
-// import { useLocation } from 'react-router-dom';
-import { useAuthDetails } from '../../Common/cookiesHelper';
 
 export default function Login() {
-    const navigate = useNavigate();
-
-    const {LoginGetDashBoardRecordJson,LoginAllStore} = useAuthDetails();
-
-    const [errorMessage,setErrorMessage]=useState("")
-    const errorMessageRecord=useSelector((state)=>state?.loginAuthentication?.errors)
+    // const{handleChangeLogin,handleSubmitForm,formData,errors,handleBlur,authEmailValidate,errorMessage}=LoginLogic();
     const{handleChangeLogin,handleSubmitForm,formData,errors,handleBlur}=LoginLogic();
-
-
-    const handleHideErrorMessage=()=>{
-        setErrorMessage(errorMessageRecord)
-        setTimeout(()=>{
-            setErrorMessage("")
-
-        },2000)
-    }
-    useEffect(()=>{
-        handleHideErrorMessage()  
-    },[]) 
+    
+    
   return (
     <>
         <div className='main-authentication-component'>
@@ -48,7 +29,9 @@ export default function Login() {
                 </Link>
                 <form className="login-customer-form">
                     <h1>Merchant Login</h1>
-                    <span>{errorMessage}</span>
+                    {/* {
+                        <span>{errorMessage}</span>
+                    } */}
                     <div
                         style={{
                         width: '300px',
