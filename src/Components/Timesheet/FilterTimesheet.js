@@ -3,6 +3,7 @@ import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { Grid } from '@mui/material';
 import axios from "axios";
 import { BASE_URL, EMPLOYEE_LIST } from '../../Constants/Config';
+import { useAuthDetails } from './../../Common/cookiesHelper';
 
 const FilterTimesheet = ({ onClickHandler, listItem, selectedEmployeeID,setSelectedEmployeeID  }) => {
 
@@ -10,17 +11,21 @@ const FilterTimesheet = ({ onClickHandler, listItem, selectedEmployeeID,setSelec
     const [loadingEmpList, setLoadingEmpList] = useState(true);
 
      const [selectedEmployee, setSelectedEmployee] = useState("All");
-   // const [selectedEmployeeID, setSelectedEmployeeID] = useState("All");
+  //  const [selectedEmployeeID, setSelectedEmployeeID] = useState("All");
     const [filteredData, setFilteredData] = useState({ emp_id: "all" });
     const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
     const [selected, setSelected] = useState(false);
+
+    const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+  let AuthDecryptDataDashBoardJSONFormat=LoginGetDashBoardRecordJson
+   const merchant_id=AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id
 
     useEffect(() => {
         const fetchData = async () => {
           try {
             const response = await axios.post(
               BASE_URL + EMPLOYEE_LIST,
-              { merchant_id: "MAL0100CA" },
+              { merchant_id: merchant_id },
               { headers: { "Content-Type": "multipart/form-data" } }
             );
     

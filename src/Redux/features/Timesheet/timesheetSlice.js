@@ -13,18 +13,23 @@ const initialState = {
 
 
 // Generate pening , fulfilled and rejected action type
-export const fetchtimeSheetData = createAsyncThunk('timeSheet/fetchtimeSheetData.', async (data) => {
+
+
+export const fetchtimeSheetData=createAsyncThunk('timeSheet/fetchtimeSheetData',async(data)=>{
+    const{token,...newData}=data
     try {
-        const response = await axios.post(BASE_URL + TIME_SHEET_LIST , data, { headers: { "Content-Type": "multipart/form-data" } })
-        if (response.data.status === true) {
-           return response.data
-        }else if(response.data.status === false ){
-            return response.data
-        }
+    const response=await axios.post( BASE_URL+TIME_SHEET_LIST,newData,{ headers: { "Content-Type": "multipart/form-data", 'Authorization': `Bearer ${token}` }})
+
+    if(response.data.status===true) {
+        return response.data.data
+    }else if(response.data.status === false ){
+        return response.data
+    }
     } catch (error) {
         throw new Error(error.response.data.message);
     }
 })
+
 // Generate pening , fulfilled and rejected action type
 
 export const deleteTimesheet = createAsyncThunk('categories/deleteTimesheet', async (data) => {

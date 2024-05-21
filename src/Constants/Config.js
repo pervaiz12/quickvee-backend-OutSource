@@ -294,7 +294,8 @@ module.exports = Object.freeze({
 
 
   // For TimeSheet 
-  TIME_SHEET_LIST: "Timesheet_react_api/timesheet_list",
+  TIME_SHEET_LIST: "LoginApiReact/timesheet_test",
+  ADD_TIME_SHEET: "Timesheet_react_api/addNewTimeclock",
 
 
 });
