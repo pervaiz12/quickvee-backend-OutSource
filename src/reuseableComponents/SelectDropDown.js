@@ -27,9 +27,9 @@ const SelectDropDown = ({
   onClickHandler,
   selectedOption,
   dropdownFor,
-  title
+  title,
 }) => {
-  console.log("listItem: ", listItem)
+  // console.log("listItem: ", listItem)
   return (
     <>
       <FormControl fullWidth>
@@ -46,17 +46,19 @@ const SelectDropDown = ({
               </MenuItem>
             )}
 
-            {listItem &&  listItem.length > 0 && listItem?.map((item,index) => (
-              <MenuItem
-              key={index}
-                onClick={(e) => {
-                  onClickHandler(item, dropdownFor);
-                }}
-                value={item[title]}
-              >
-                {item[title]}
-              </MenuItem>
-            ))}
+            {listItem &&
+              listItem.length > 0 &&
+              listItem?.map((item, index) => (
+                <MenuItem
+                  key={index}
+                  onClick={(e) => {
+                    onClickHandler(item, dropdownFor);
+                  }}
+                  value={item[title]}
+                >
+                  {item[title]}
+                </MenuItem>
+              ))}
           </Select>
         </ThemeProvider>
       </FormControl>

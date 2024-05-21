@@ -15,10 +15,12 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
+import { Grid } from "@mui/material";
+import InputTextSearch from "../../reuseableComponents/InputTextSearch";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor:"#253338",
+    backgroundColor: "#253338",
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
@@ -35,9 +37,10 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const PurchaseTable = ({ seVisible, searchId }) => {
+const PurchaseTable = ({ seVisible }) => {
   // for list Purchase Order
   const [allpurchase, setallpurchase] = useState([]);
+  const [searchId, setSearchId] = useState(""); // State to track search ID
 
   const AllpurchaseDataState = useSelector((state) => state.purchase);
   const dispatch = useDispatch();
@@ -76,15 +79,28 @@ const PurchaseTable = ({ seVisible, searchId }) => {
   ];
   return (
     <>
+      <div className="q-category-main-page">
+        <div className="box">
+          <div className="box_shadow_input">
+            <Grid container className="py-5">
+              <Grid item xs={12} className="px-5 ">
+                <InputTextSearch
+                  placeholder="Search Purchase Order"
+                  value={searchId}
+                  handleChange={setSearchId}
+                />
+              </Grid>
+            </Grid>
+          </div>
+        </div>
+      </div>
       <div className="box_shadow_div">
         <div className="q-category-bottom-header-sticky">
           <div className="q-category-bottom-header">
             <span>Purchase Order</span>
-            <Link to="/add-po">
-              <p>
-                Add New PO <img src={AddIcon} alt="add-icon" />{" "}
-              </p>
-            </Link>
+            <p onClick={() => seVisible("AddPo")}>
+              Add New PO <img src={AddIcon} alt="add-icon" />{" "}
+            </p>
           </div>
           <TableContainer component={Paper}>
             <Table aria-label="customized table">

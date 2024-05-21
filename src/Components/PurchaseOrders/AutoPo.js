@@ -12,16 +12,12 @@ const AutoPo = ({ value, maxLength, onChangeFun, type }) => {
   const [products, setProducts] = useState([]);
   const [showProductList, setShowProductList] = useState(false);
 
-
   const inputRef = useRef(null);
 
   const handleInputClick = () => {
     // Scroll to the top of the page
-    window.scrollTo({ top: 1000, behavior: 'smooth' });
+    window.scrollTo({ top: 1000, behavior: "smooth" });
   };
-
-
-
 
   const handleSearch = () => {
     console.log("helo", showProductList);
@@ -91,10 +87,10 @@ const AutoPo = ({ value, maxLength, onChangeFun, type }) => {
   // console.log("HELLO",searchId)
 
   const handleInputChange = (event, product) => {
-    const inputValue = value !== null ? product.name : event.target.value;
+    const inputValue = value !== null ? product?.name : event.target.value;
     setSearchId(inputValue);
     // Filter products based on input value
-    const filteredProducts = dummyProducts.filter(product =>
+    const filteredProducts = dummyProducts.filter((product) =>
       product.name.toLowerCase().includes(inputValue.toLowerCase())
     );
     setProducts(filteredProducts);
@@ -158,7 +154,6 @@ const AutoPo = ({ value, maxLength, onChangeFun, type }) => {
                       value={searchId} // Ensure searchId is properly set and controlled
                       onChange={(event, value) => {
                         handleInputChange(event, value);
-                        
                       }}
                       options={dummyProducts}
                       getOptionLabel={(product) => product.name}
@@ -210,8 +205,9 @@ const AutoPo = ({ value, maxLength, onChangeFun, type }) => {
               {products.map((product, index) => (
                 <div
                   key={product.id}
-                  className={`q-category-bottom-categories-single-category  purchase-addpo ${index % 2 === 0 ? "even" : "odd"
-                    }`}
+                  className={`q-category-bottom-categories-single-category  purchase-addpo ${
+                    index % 2 === 0 ? "even" : "odd"
+                  }`}
                 >
                   <p className="purchase-data-item text-[18px]">
                     {product.name}

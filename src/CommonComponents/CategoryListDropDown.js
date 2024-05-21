@@ -9,6 +9,7 @@ import {
 import SelectDropDown from "../reuseableComponents/SelectDropDown";
 import UpArrow from "../Assests/Dashboard/Up.svg";
 import DownIcon from "../Assests/Dashboard/Down.svg";
+import { useAuthDetails } from "../Common/cookiesHelper";
 
 const CategoryListDropDown = ({ type, onCategoryChange }) => {
   let listing_type = 0;
@@ -20,9 +21,12 @@ const CategoryListDropDown = ({ type, onCategoryChange }) => {
   const AllCategoriesDataState = useSelector((state) => state.categories);
   const [isTablet, setIsTablet] = useState(false);
   const dispatch = useDispatch();
+  const { userTypeData } = useAuthDetails();
+
   useEffect(() => {
     let cat_data = {
       merchant_id: "MAL0100CA",
+      ...userTypeData,
     };
     if (cat_data) {
       dispatch(fetchCategoriesData(cat_data));

@@ -97,7 +97,7 @@ const LeftSide = ({ visible }) => {
           {visible === "toptraders" && <TopTenders />}
           {visible === "productedit" && <ProductEdit />}
           {visible === "product-add" && <AddProducts />}
-          {visible === "add-po" && <AddPo />}
+          {/* {visible === "add-po" && <AddPo />} */}
 
           {visible === "info" && <Info />}
           {visible === "setup" && <Setup />}
