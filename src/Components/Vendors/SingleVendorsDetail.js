@@ -50,6 +50,10 @@ const SingleVendorsDetail = ({ setVisible }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPayAmount, setSelectedPayAmount] = useState(0);
   const [selectedRemark, setSelectedRemark] = useState();
+  const AllVendorsDataState = useSelector((state) => state.vendors);
+  const [selectedVendor, setSelectedVendor] = useState(false);
+  console.log("selectedVendor", selectedVendor);
+ 
 
   const openModal = (payAmount, id, remark) => {
     setShowModal(true);

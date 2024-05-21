@@ -24,8 +24,13 @@ export const CustomerUpdate=createAsyncThunk('Customer/CustomerUpdate', async (d
 
 
 export const CustomerFunction = createAsyncThunk('Customer/CustomerFunction', async (data) => {
-    const response = await axios.post( BASE_URL+ADMIN_GET_CUSTOMER,data, { headers: { "Content-Type": "multipart/form-data" } })
-    // console.log(response.data.status)
+    // console.log(data)
+    const{token,...newData}=data
+    const response = await axios.post( BASE_URL+ADMIN_GET_CUSTOMER,newData, {   headers: {
+                "Content-Type": "multipart/form-data",
+                'Authorization': `Bearer ${token}` // Use data?.token directly
+            } })
+    // // console.log(response.data.status)
     if (response.data.status === 200) {
         // console.log()
         return response.data.message

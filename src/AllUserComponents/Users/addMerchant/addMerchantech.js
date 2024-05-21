@@ -170,7 +170,7 @@ export default function AddMerchan() {
                                     <div className='input_area'>
                                         <label>Select Admin</label>
                                         <select 
-                                       value={adminId} 
+                                        value={adminId} 
                                         onChange={onChangeAdminId}
                                         >
                                             <option value="" >Select an Admin</option>
