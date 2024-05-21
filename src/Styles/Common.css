@@ -144,11 +144,7 @@
     display: block;
     margin: 0px;
 }
-.input_area{
-    width: 100%;
-    height: auto;
-    margin-bottom: 10px;
-}
+
 .input_area input{
     font-family: qvmedium !important;
     color: #000000;
@@ -682,11 +678,7 @@ input.blue_btn{
     display: block;
     margin: 0px;
 }
-.input_area{
-    width: 100%;
-    height: auto;
-    margin-bottom: 10px;
-}
+
 .input_area input{
     font-family: qvmedium !important;
     color: #000000;
@@ -1255,11 +1247,7 @@ select:active{
     display: block;
     margin: 0px;
 }
-.input_area{
-    width: 100%;
-    height: auto;
-    margin-bottom: 10px;
-}
+
 .input_area input{
     font-family: qvmedium !important;
     color: #000000;
@@ -1777,11 +1765,7 @@ input.blue_btn{
     display: block;
     margin: 0px;
 }
-.input_area{
-    width: 100%;
-    height: auto;
-    margin-bottom: 10px;
-}
+
 .input_area input{
     font-family: qvmedium !important;
     color: #000000;

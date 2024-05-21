@@ -51,20 +51,6 @@
 	color: #0a64f9;
 }
 
-.dropdown-content {
-	position: absolute;
-	top: 100%;
-	left: 0;
-	background-color: #fff;
-	box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-	border: 1px solid #e1e1e1;
-	z-index: 1;
-	width: 100%;
-	color: #e1e1e1;
-	font-size: 12px;
-	cursor: pointer;
-	color: #707070
-}
 
 .mt_header_order {
 	margin: 30px 0

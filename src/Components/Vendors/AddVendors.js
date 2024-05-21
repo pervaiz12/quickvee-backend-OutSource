@@ -16,14 +16,11 @@ const AddVendors = ({ setVisible }) => {
   const [allvendors, setallvendors] = useState([]);
 
   const [states, setStates] = useState([]);
-  const listItem = states.map((item) => ({ title: item }));
+
 
   const AllVendorsDataState = useSelector((state) => state.vendors);
 
   const [value, setValue] = useState();
-  const [inputValue, setInputValue] = useState("");
-
-  const [selectedVendor, setSelectedVendor] = useState([]);
 
   const handleAutocompleteChange = (event) => {
     handleSelectedVendor(event?.value);
@@ -36,21 +33,6 @@ const AddVendors = ({ setVisible }) => {
     };
     dispatch(fetchVendorsListData(data));
   }, []);
-  const [isTablet, setIsTablet] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsTablet(window.innerWidth <= 995);
-    };
-
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   const [vendor, setVendor] = useState({
     vendor_name: "",
@@ -62,7 +44,6 @@ const AddVendors = ({ setVisible }) => {
     zip_code: "",
     state: "",
   });
-  console.log("vendor: ", vendor);
   const inputChange = (e) => {
     const { name, value } = e.target;
     setVendor((preValue) => {
@@ -209,7 +190,7 @@ const AddVendors = ({ setVisible }) => {
             <Grid item xs={12}>
               <form onSubmit={handleSubmit}>
                 <Grid container spacing={2}>
-                  <Grid item xs={4}>
+                  <Grid item xs={12} sm={6} md={4}>
                     <div className=" qvrowmain my-1">
                       <label htmlFor="vendorName">Vendor Name</label>
                     </div>
@@ -224,7 +205,7 @@ const AddVendors = ({ setVisible }) => {
                       })}
                     />
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid item xs={12} sm={6} md={4}>
                     <div className=" qvrowmain my-1">
                       <label htmlFor="email">Email Address</label>
                     </div>
@@ -237,7 +218,7 @@ const AddVendors = ({ setVisible }) => {
                       required={"required"}
                     />
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid item xs={12} sm={6} md={4}>
                     <div className="qvrowmain my-1">
                       <label htmlFor="phone">Phone Number</label>
                     </div>
@@ -267,7 +248,7 @@ const AddVendors = ({ setVisible }) => {
                   </Grid>
                 </Grid>
                 <Grid container sx={{ marginTop: 0 }} spacing={2}>
-                  <Grid item xs={4}>
+                  <Grid item xs={12} sm={6} md={4}>
                     <div className="qvrowmain my-1">
                       <label htmlFor="city">City</label>
                     </div>
@@ -279,7 +260,7 @@ const AddVendors = ({ setVisible }) => {
                       onChangeFun={inputChange}
                     />
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid item xs={12} sm={6} md={4}>
                     <div className="my-1 qvrowmain">
                       <label htmlFor="zip">Zip</label>
                     </div>
@@ -292,7 +273,7 @@ const AddVendors = ({ setVisible }) => {
                       maxLength={5}
                     />
                   </Grid>
-                  <Grid item xs={4}>
+                  <Grid item xs={12} sm={6} md={4}>
                     <div className="my-1 qvrowmain">
                       <label htmlFor="State">State</label>
                     </div>

@@ -28,14 +28,14 @@ const SelectDropDown = ({
   selectedOption,
   dropdownFor,
   title,
-  name,
+  
 }) => {
 
   return (
     <>
       <FormControl fullWidth>
         <ThemeProvider theme={theme}>
-          <Select name={name} size="small" value={selectedOption} displayEmpty>
+          <Select size="small" value={selectedOption} displayEmpty>
             {heading && (
               <MenuItem
                 onClick={(e) => {
