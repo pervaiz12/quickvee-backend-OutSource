@@ -2,8 +2,11 @@ import React,{useState} from 'react'
 import{BASE_URL,GET_EDIT_CUSTOMER,GET_UPDATE_MERCHANT} from '../../../Constants/Config'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom';
+import { useAuthDetails,handleLogoutTokenExpire } from '../../../Common/cookiesHelper';
 export default function EditMerchantFunctionality() {
     const navigate = useNavigate();
+    const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+
 
     const[getEditMerchant,setEditMerchant]=useState({id:'',username:'',name:'',merchant_id:'',password:'',live_account:'',owner_name:'',otp:'',a_address_line_1:'',a_address_line_2:'',a_phone:'',a_city:'',a_zip:'',a_state:'',merchant_token:'',usa_pin:'',
     user_type:'',id:'',states:[]})
@@ -26,12 +29,14 @@ export default function EditMerchantFunctionality() {
 
    }
     const getEditMerchantData=async(data)=>{
-        const dataNew={id:data}
-            await axios.post(BASE_URL+GET_EDIT_CUSTOMER,dataNew,{headers:{
-                "Content-Type":'multipart/form-data'
-            }}).then(response=>{
-                console.log(response.data)
-                console.log(response.data.message.row.flag)
+        const {token, ...dataNew}= data;
+        // const dataNew={id:data}
+            await axios.post(BASE_URL+GET_EDIT_CUSTOMER,dataNew,{
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                    'Authorization': `Bearer ${token}` // Use data?.token directly
+                }
+        }).then(response=>{
                 if(response.data.status==200)
                 {
                     const inventory=response.data.message.inventory !==null && response.data.message.inventory!==''? response.data.message.inventory:'0'
@@ -162,12 +167,16 @@ export default function EditMerchantFunctionality() {
             inventoryNew=1
 
         }
+        const {token, ...dataNew}= userTypeData;
+        // console.log(dataNew)
+        // console.log(token)
+        console.log(getEditMerchant)
         const packet={
-            id:getEditMerchant.id,
-            username:getEditMerchant.username,
-            user_type:getEditMerchant.user_type,
+            id:getEditMerchant?.id.id,
+            username:getEditMerchant?.username,
+            ...dataNew,
             inventory:inventoryNew,
-            mer_id:getEditMerchant.id,
+            mer_id:getEditMerchant?.id.id,
             name:getEditMerchant.name,
             merchant_id:getEditMerchant.merchant_id,
             ownername:getEditMerchant.owner_name,
@@ -182,22 +191,29 @@ export default function EditMerchantFunctionality() {
                 usa_pin:getEditMerchant.usa_pin,
             } 
             console.log(packet)      
+            // console.log(userTypeData?.token)
         try {
-            let response=await axios.post(BASE_URL+GET_UPDATE_MERCHANT,packet,{headers:{
-                "Content-Type":'multipart/form-data'
-            }})
-           
+            let response=await axios.post(BASE_URL+GET_UPDATE_MERCHANT,packet,{
+                headers: {
+                            "Content-Type": "multipart/form-data",
+                            'Authorization': `Bearer ${token}` // Use data?.token directly
+                        }       
+                    }   
+                )
             if(response.data.status==200)
             {
-                // console.log(response.data)
-                setMessage(response.data.message)
+               
+                setMessage(response?.data?.message)
                 setSuccessMessageHandle(true)
                 handleSuccessMessage()
-                navigate(`/users/editMerchant/${getEditMerchant.id}`)
+                navigate(`/users/editMerchant/${response?.data?.id}`)
+                // navigate(`/users/editMerchant/${getEditMerchant.id}`)
             }
             
         } catch (e) {
            console.log('Exception',e)
+           handleLogoutTokenExpire()
+           navigate('/')
         }
 
     }

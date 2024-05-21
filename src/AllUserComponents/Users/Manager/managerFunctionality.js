@@ -42,19 +42,20 @@ export default function ManagerFunctionality() {
     //      console.log(sports)
          
     // }
-    const handleViewMerchant = async (data,name) => {
+    const handleViewMerchant = async (data,name,userTypeData) => {
         // console.log(name)
         setName(name)
         const dataArray = data.split(',');
         const sports = [];
+        const{token,...newData}=userTypeData
         // console.log(dataArray)
     
         if (Array.isArray(dataArray)) {
             try {
                 
                 await Promise.all(dataArray.map(async (result) => {
-                    const postData = { merchant_id: result };
-                    const response = await axios.post(BASE_URL + GET_MANAGER_MERCHANT, postData, { headers: { "Content-Type": "multipart/form-data" } });
+                    const postData = { merchant_id: result,...newData };
+                    const response = await axios.post(BASE_URL + GET_MANAGER_MERCHANT, postData, { headers: { "Content-Type": "multipart/form-data", 'Authorization': `Bearer ${token}` } });
     
                     if (response.data.status === 200) {
                         console.log(response.data)

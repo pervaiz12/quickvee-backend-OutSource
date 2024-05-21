@@ -48,7 +48,6 @@ export default function Unverified() {
    // ====================================
     // ====================================
     const handleEditMerchant = (data) => {
-      
       navigate(`/users/editMerchant/${data}`);
     };
     const handleGetVerifiedMerchant=(merchant_id)=>{

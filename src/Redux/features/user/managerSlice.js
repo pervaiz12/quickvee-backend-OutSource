@@ -32,13 +32,24 @@ const initialState = {
         
 //     }
 // }
-export const ManagerRecord=createAsyncThunk('Manager/ManagerRecord', async ()=>{
-    const response=await axios.get(BASE_URL+GET_MANAGER_RECORD)
+export const ManagerRecord=createAsyncThunk('Manager/ManagerRecord', async (data)=>{
+    const{token,...newData}=data
+    const response=await axios.post(BASE_URL+GET_MANAGER_RECORD,newData,{   headers: {
+        "Content-Type": "multipart/form-data",
+        'Authorization': `Bearer ${token}` // Use data?.token directly
+        } })
   
     if (response.data.status === 200) {
         // console.log()
         return response.data.message
     }
+   
+    // const response=await axios.get(BASE_URL+GET_MANAGER_RECORD)
+  
+    // if (response.data.status === 200) {
+    //     // console.log()
+    //     return response.data.message
+    // }
    
 
 })

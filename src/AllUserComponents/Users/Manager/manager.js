@@ -3,10 +3,14 @@ import { useSelector, useDispatch } from 'react-redux'
 import{ManagerRecord} from '../../../Redux/features/user/managerSlice'
 import ManagerFunctionality from './managerFunctionality'
 import ViewMerchant from './viewMerchantModel'
+import { useAuthDetails } from '../../../Common/cookiesHelper';
+
 
 
 export default function Manager() {
   const{setShowMerchant,showMerchant,handleViewMerchant,handleCloseMerchantModel,showMerchantData,name}=ManagerFunctionality()
+  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+
     const dispatch = useDispatch()
     const managerList = useSelector(
       (state) => state.managerRecord,
@@ -14,7 +18,7 @@ export default function Manager() {
     
     // state.managerRecord.ManagerRecord
     useEffect(()=>{
-        dispatch(ManagerRecord())
+        dispatch(ManagerRecord(userTypeData))
 
     },[])
     // ====================================
@@ -80,7 +84,7 @@ export default function Manager() {
                     <p className='table25'>{result.name}</p>
                     <p className='table30'>{result.email}</p>
                     <p className='table20'>{result.phone}</p>
-                    <p className='table20' onClick={()=>handleViewMerchant(result.merchant_id,result.name)} ><span className="viewMerchant">View Merchant</span></p>
+                    <p className='table20' onClick={()=>handleViewMerchant(result.merchant_id,result.name,userTypeData)} ><span className="viewMerchant">View Merchant</span></p>
                    
                   </div>
   

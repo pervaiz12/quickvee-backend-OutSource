@@ -3,14 +3,18 @@ import {
     useParams,
   } from "react-router-dom";
   import EditAdminFunctionality from './editAdminFunctionality'
+  import { useAuthDetails } from '../../../../Common/cookiesHelper';
+
 export default function EditAdmin() {
     const{handleEditAdmin,editData,handleChangeAdmin,handleSubmitAdmin,errors,handleKeyPress}=EditAdminFunctionality()
+    const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+
     const  {id}  = useParams();
     // console.log(id)
     
     useEffect(()=>{
         // console.log(id)
-        handleEditAdmin(id)
+        handleEditAdmin({admin_id:id,...userTypeData})
 
     },[id])
   return (

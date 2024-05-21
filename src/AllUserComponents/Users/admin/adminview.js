@@ -5,10 +5,14 @@ import { useSelector, useDispatch } from 'react-redux';
 import AdminFunctionality from './adminFunctionality'
 import ViewAdmin from './viewAdminModal'
 import { useNavigate } from 'react-router-dom';
+import { useAuthDetails } from '../../../Common/cookiesHelper';
+
 
 import {Link} from 'react-router-dom'
 
 export default function AdminView() {
+  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+
     const navigate = useNavigate();
     const {handleCloseAdminModel,handleViewAdmin,showAdmin,showMerchantData,adminName}=AdminFunctionality()
     const dispatch = useDispatch();
@@ -16,7 +20,7 @@ export default function AdminView() {
         (state) => state.adminRecord,
       );
     useEffect(()=>{
-        dispatch(AdminFunction())
+        dispatch(AdminFunction(userTypeData))
     },[])
 // ---------------------------
 const [selectedAction, setSelectedAction] = useState('');
@@ -98,7 +102,7 @@ const filteredAdminRecord = AdminRecord && AdminRecord.AdminRecord && Array.isAr
                                   <p className='table20 txt_ellipsis'>{result.name}</p>
                                   <p className='table20 txt_ellipsis'>{result.email}</p>
                                   <p className='table20'>{result.phone}</p>
-                                  <p className='table15'onClick={()=>handleViewAdmin(result.email,result.name)}><span className="viewMerchant">view merchant</span></p>
+                                  <p className='table15'onClick={()=>handleViewAdmin(result.email,result.name,userTypeData)}><span className="viewMerchant">view merchant</span></p>
                                   <div className='table5' >
                                   {/* <select
                                       value={selectedAction}
