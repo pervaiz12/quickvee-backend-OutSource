@@ -144,11 +144,7 @@
     display: block;
     margin: 0px;
 }
-.input_area{
-    width: 100%;
-    height: auto;
-    margin-bottom: 10px;
-}
+
 .input_area input{
     font-family: qvmedium !important;
     color: #000000;
@@ -682,11 +678,7 @@ input.blue_btn{
     display: block;
     margin: 0px;
 }
-.input_area{
-    width: 100%;
-    height: auto;
-    margin-bottom: 10px;
-}
+
 .input_area input{
     font-family: qvmedium !important;
     color: #000000;
@@ -1079,12 +1071,6 @@ input.blue_btn{
 
 
 
-.css-b62m3t-container {
-  position: relative;
-  box-sizing: border-box;
- 
-  padding: 20px 0 !important;
-}
 
 
 .css-wsp0cs-MultiValueGeneric {
@@ -1261,11 +1247,7 @@ select:active{
     display: block;
     margin: 0px;
 }
-.input_area{
-    width: 100%;
-    height: auto;
-    margin-bottom: 10px;
-}
+
 .input_area input{
     font-family: qvmedium !important;
     color: #000000;
@@ -1783,11 +1765,7 @@ input.blue_btn{
     display: block;
     margin: 0px;
 }
-.input_area{
-    width: 100%;
-    height: auto;
-    margin-bottom: 10px;
-}
+
 .input_area input{
     font-family: qvmedium !important;
     color: #000000;
@@ -2178,13 +2156,6 @@ input.blue_btn{
   cursor: pointer;
 }
 
-
-.css-b62m3t-container {
-  position: relative;
-  box-sizing: border-box;
- 
-  padding: 20px 0 !important;
-}
 
 
 .css-wsp0cs-MultiValueGeneric {

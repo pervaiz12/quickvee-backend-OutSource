@@ -8,19 +8,19 @@ import { BASE_URL, ADD_VENDOR_DATA } from "../../Constants/Config";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
-import { Grid } from "@mui/material";
+import { FormControl, Grid } from "@mui/material";
 // import Stack from '@mui/material/Stack';
 import CreatableSelect from "react-select/creatable";
+import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 const AddVendors = ({ setVisible }) => {
   const [allvendors, setallvendors] = useState([]);
 
   const [states, setStates] = useState([]);
+
+
   const AllVendorsDataState = useSelector((state) => state.vendors);
 
   const [value, setValue] = useState();
-  const [inputValue, setInputValue] = useState("");
-
-  const [selectedVendor, setSelectedVendor] = useState([]);
 
   const handleAutocompleteChange = (event) => {
     handleSelectedVendor(event?.value);
@@ -33,21 +33,6 @@ const AddVendors = ({ setVisible }) => {
     };
     dispatch(fetchVendorsListData(data));
   }, []);
-  const [isTablet, setIsTablet] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsTablet(window.innerWidth <= 995);
-    };
-
-    handleResize();
-
-    window.addEventListener("resize", handleResize);
-
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
 
   const [vendor, setVendor] = useState({
     vendor_name: "",
@@ -57,8 +42,8 @@ const AddVendors = ({ setVisible }) => {
     full_address: "",
     city: "",
     zip_code: "",
+    state: "",
   });
-  console.log("vendor: ", vendor);
   const inputChange = (e) => {
     const { name, value } = e.target;
     setVendor((preValue) => {
@@ -139,7 +124,7 @@ const AddVendors = ({ setVisible }) => {
         city: matchedObject.city,
         zip_code: matchedObject.zip_code,
         full_address: matchedObject.full_address,
-        // state:stateValue,
+        state: matchedObject.state,
       });
     } else {
       // If no match is found, set name to the entered value
@@ -156,12 +141,18 @@ const AddVendors = ({ setVisible }) => {
       });
     }
   };
-
+  const handleSetVendorStateChange = (newState) => {
+    console.log("setVendorStateChange", newState);
+    setVendor((preState) => ({
+      ...preState,
+      state: newState["title"],
+    }));
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     const state = value;
     // Assuming `vendor` is an object that you want to send in the request
-    let updatedVendor = { ...vendor, state };
+    let updatedVendor = { ...vendor };
 
     const response = await axios.post(
       BASE_URL + ADD_VENDOR_DATA,
@@ -183,7 +174,143 @@ const AddVendors = ({ setVisible }) => {
 
   return (
     <>
-      <div className="box">
+      <Grid container className="box">
+        <Grid item xs={12} className="q-add-categories-section">
+          <Grid container>
+            <Grid item xs={12}>
+              <div className="q-add-categories-section-header">
+                <span onClick={() => setVisible("VendorsDetail")}>
+                  <img src={AddNewVendors} alt="Add-New-Vendors" />
+                  <span>Add New Vendors</span>
+                </span>
+              </div>
+            </Grid>
+          </Grid>
+          <Grid container sx={{ padding: 3 }}>
+            <Grid item xs={12}>
+              <form onSubmit={handleSubmit}>
+                <Grid container spacing={2}>
+                  <Grid item xs={12} sm={6} md={4}>
+                    <div className=" qvrowmain my-1">
+                      <label htmlFor="vendorName">Vendor Name</label>
+                    </div>
+                    <CreatableSelect
+                      isClearable
+                      onChange={handleAutocompleteChange}
+                      options={allvendors.map((option, index) => {
+                        return {
+                          value: option.name,
+                          label: option?.name,
+                        };
+                      })}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4}>
+                    <div className=" qvrowmain my-1">
+                      <label htmlFor="email">Email Address</label>
+                    </div>
+                    <BasicTextFields
+                      type={"email"}
+                      name="email"
+                      value={vendor.email}
+                      placeholder="Email Address"
+                      onChangeFun={inputChange}
+                      required={"required"}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4}>
+                    <div className="qvrowmain my-1">
+                      <label htmlFor="phone">Phone Number</label>
+                    </div>
+                    <BasicTextFields
+                      type={"text"}
+                      placeholder="Phone Number"
+                      required={"required"}
+                      name={"phone"}
+                      onChangeFun={inputChange}
+                      value={vendor.phone}
+                      maxLength={10}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid container sx={{ marginTop: 0 }} spacing={2}>
+                  <Grid item xs={12}>
+                    <div className=" qvrowmain my-1">
+                      <label htmlFor="address">Address</label>
+                    </div>
+                    <BasicTextFields
+                      type={"text"}
+                      name={"full_address"}
+                      placeholder="Address Line 1"
+                      onChangeFun={inputChange}
+                      value={vendor.full_address}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid container sx={{ marginTop: 0 }} spacing={2}>
+                  <Grid item xs={12} sm={6} md={4}>
+                    <div className="qvrowmain my-1">
+                      <label htmlFor="city">City</label>
+                    </div>
+                    <BasicTextFields
+                      type={"text"}
+                      name={"city"}
+                      value={vendor.city}
+                      placeholder="City"
+                      onChangeFun={inputChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4}>
+                    <div className="my-1 qvrowmain">
+                      <label htmlFor="zip">Zip</label>
+                    </div>
+                    <BasicTextFields
+                      type={"text"}
+                      name="zip_code"
+                      value={vendor.zip_code}
+                      placeholder="Zip"
+                      onChangeFun={inputChange}
+                      maxLength={5}
+                    />
+                  </Grid>
+                  <Grid item xs={12} sm={6} md={4}>
+                    <div className="my-1 qvrowmain">
+                      <label htmlFor="State">State</label>
+                    </div>
+                    <SelectDropDown
+                      listItem={states.map((item) => ({ title: item }))}
+                      title={"title"}
+                      selectedOption={vendor.state}
+                      onClickHandler={handleSetVendorStateChange}
+                      name={"state"}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="flex-end"
+                  alignItems="center"
+                  xs={12}
+                  sx={{ marginTop: 3 }}
+                >
+                  <button type="submit" className="quic-btn quic-btn-save me-3">
+                    Save
+                  </button>
+                  <button
+                    onClick={() => setVisible("VendorsDetail")}
+                    className="quic-btn quic-btn-cancle"
+                  >
+                    Cancel
+                  </button>
+                </Grid>
+              </form>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      {/* <div className="box">
         <form onSubmit={handleSubmit}>
           <div className="q-add-categories-section">
             <div className="q-add-categories-section-header">
@@ -199,7 +326,7 @@ const AddVendors = ({ setVisible }) => {
                 </div>
 
                 <CreatableSelect
-                className="my-5"
+                  className="my-5"
                   isClearable
                   onChange={handleAutocompleteChange}
                   options={allvendors.map((option, index) => {
@@ -254,7 +381,6 @@ const AddVendors = ({ setVisible }) => {
                     />
                   </Grid>
                 </Grid>
-                {/* <input type="hidden" id="address" name="merchant_id" value={'MAL0100CA'}  onChange={inputChange}   /> */}
 
                 <Grid container spacing={2}>
                   <Grid item xs={4}>
@@ -318,7 +444,7 @@ const AddVendors = ({ setVisible }) => {
             </div>
           </div>
         </form>
-      </div>
+      </div> */}
     </>
   );
 };

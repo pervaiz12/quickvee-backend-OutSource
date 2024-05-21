@@ -133,13 +133,7 @@
     border-radius: 0px !important;
 }
 
-.q-category-bottom-categories-single-category {
-    display: flex;
-    padding: 20px 27px !important;
-    border-bottom: 1px solid #E8E8E8;
-    /* cursor: all-scroll; */
-    user-select: none;
-}
+
 
 .q-category-bottom-categories-single-category>.categories-title {
     font-size: 16px;

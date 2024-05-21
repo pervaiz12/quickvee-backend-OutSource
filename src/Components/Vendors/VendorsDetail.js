@@ -4,6 +4,7 @@ import AddIcon from "../../Assests/Category/addIcon.svg";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import Viewarrow from "../../Assests/Vendors/viewarrow.png";
 import EditIcon from "../../Assests/Category/editIcon.svg";
+
 import { fetchVendorsListData } from "../../Redux/features/VendorList/vListSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { BASE_URL, STATUS_UPD_VENDORS } from "../../Constants/Config";
@@ -102,7 +103,9 @@ const VendorsDetail = ({ setVisible }) => {
 
                       <p className="table30">
                         <Link
-                          to={`/vendors/vendor-details/${singleVender.vendor_name}?vendorId=${singleVender.vendor_id}`}
+                          to={`/vendors/vendor-details/${encodeURIComponent(
+                            singleVender.vendor_name
+                          )}?vendorId=${singleVender.vendor_id}`}
                         >
                           {singleVender.recent_trans}
                         </Link>

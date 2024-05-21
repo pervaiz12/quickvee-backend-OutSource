@@ -117,7 +117,7 @@ function App() {
     <>
       {
       location.pathname !=='/login' ?
-      <SideMenu setIsMenuOpen={setIsMenuOpen} isTabletNav={isTabletNav} isMenuOpen={isMenuOpen}/>:''
+      !isSideBar && <SideMenu setIsMenuOpen={setIsMenuOpen} isTabletNav={isTabletNav} isMenuOpen={isMenuOpen}/>:''
       }
       <Routes>
         {/* <Route exact path="/" element={<Main />} /> */}

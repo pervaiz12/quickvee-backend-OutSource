@@ -227,7 +227,8 @@ module.exports = Object.freeze({
   EDIT_VENDOR_DATA:"Vendor_api/edit_vendor",
   UPDATE_VENDOR_DATA:"Vendor_api/update_vendor",
   ADD_VENDOR_DATA:"Vendor_api/add_vendor",
-
+  GET_VENDOR_DETAILS:"Vendor_api/vendor_details",
+  DELETE_SINGLE_VENDOR_DATA: "Vendor_api/delete_vendor",
   // Vendors Sales List API
   VENDORS_SALES_REPORT: "vendor_report_api/vendors_sales_report",
 
