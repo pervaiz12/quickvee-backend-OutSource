@@ -6,8 +6,9 @@ const initialState = {
     AdminRecord: {},
     error: '',
 }
-export const AdminFunction=createAsyncThunk('adminRecord/AdminFunction',async()=>{
-    const response=await axios.get( BASE_URL+GET_ADMIN_RECORD,{ headers: { "Content-Type": "multipart/form-data" }})
+export const AdminFunction=createAsyncThunk('adminRecord/AdminFunction',async(data)=>{
+    const{token,...newData}=data
+    const response=await axios.post( BASE_URL+GET_ADMIN_RECORD,newData,{ headers: { "Content-Type": "multipart/form-data", 'Authorization': `Bearer ${token}` }})
     if(response.data.status==200)
     {
         return response.data.message

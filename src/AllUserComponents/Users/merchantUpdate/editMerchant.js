@@ -3,6 +3,7 @@ import EditMerchantFunctionality from './editMerchantFunctionality'
 import Switch from '@mui/material/Switch';
 import Alert from '@mui/material/Alert';
 import CheckIcon from '@mui/icons-material/Check';
+import { useAuthDetails } from '../../../Common/cookiesHelper';
 import {
     BrowserRouter as Router,
     Link,
@@ -12,12 +13,15 @@ import {
   } from "react-router-dom";
 
 export default function EditMerchant() {
+    const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData,GetSessionLogin} = useAuthDetails();
+
     const{getEditMerchantData,getEditMerchant,handleChangePaymentMode,paymentModeOnline,paymentModeOffline,handleUpdateMerchant,handleChangeMerchant,paymentCredits,setEditMerchant,message,successMessagehandle,handleKeyPress,inventory,inventoryApprove}=EditMerchantFunctionality()
     const  {id}  = useParams();
     // console.log(id)
     useEffect(()=>{
-        // console.log(id)
-        getEditMerchantData(id)
+       let data={id,...userTypeData}
+ 
+        getEditMerchantData(data)
    },[id])
 
   return (

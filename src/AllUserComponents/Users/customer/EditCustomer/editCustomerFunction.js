@@ -2,10 +2,14 @@ import axios from 'axios'
 import React,{useState,useEffect}  from 'react'
 import{BASE_URL,GET_EDIT_CUSTOMER,GET_UPDATE_CUSTOMER}from '../../../../Constants/Config'
 import { useNavigate } from 'react-router-dom';
+import { useAuthDetails } from '../../../../Common/cookiesHelper';
+
 
 
 const EditCustomerFunction=()=>{
     const navigate = useNavigate();
+    const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+
     const [customerData, setCustomerData] = useState({
         name: '',
         email: '',
@@ -29,9 +33,11 @@ const EditCustomerFunction=()=>{
 
     const handleEditData=async(data)=>
     {
-        const dataNew={id:data}
-            await axios.post(BASE_URL+GET_EDIT_CUSTOMER,dataNew,{headers:{
-                "Content-Type":'multipart/form-data'
+        const{token,...newData}=data
+        // const dataNew={id:data}
+            await axios.post(BASE_URL+GET_EDIT_CUSTOMER,newData,{headers:{
+                "Content-Type":'multipart/form-data',
+                    'Authorization': `Bearer ${token}`
             }}).then(response=>{
               
                 if(response.data.status==200)
@@ -127,13 +133,14 @@ const EditCustomerFunction=()=>{
     const handleSubmitCustomerRecord=async(e)=>{
         e.preventDefault();
         // console.log(customerData.reSet)
-        const data={id:customerData.id,user_type:storeRadio,name:customerData.name,phone:customerData.phone,password:customerData.reSet,user_created:'superadmin'}
-    
+        const{token,...newData}=userTypeData
+        const data={id:customerData.id,user_type:storeRadio,name:customerData.name,phone:customerData.phone,password:customerData.reSet,user_created:'superadmin',login_type:newData?.login_type,token_id:newData?.token_id}
         let validate=Object.values(errors).filter(error => error !== '').length;  
         if(validate == 0)
         {
               await axios.post(BASE_URL+GET_UPDATE_CUSTOMER,data,{headers:{
-            "Content-Type":'multipart/form-data'
+            "Content-Type":'multipart/form-data',
+            'Authorization': `Bearer ${token}`
         }}).then(response=>{
             
             if(response.data.status==200)
