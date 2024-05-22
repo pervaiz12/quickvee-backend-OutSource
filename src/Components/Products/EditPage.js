@@ -22,6 +22,7 @@ const EditPage = ({
   modalType,
   varientData,
   varientIndex,
+  fetchDataLoadingVendor,
 }) => {
   const [value, setValue] = React.useState("1");
 
@@ -100,6 +101,7 @@ const EditPage = ({
                     varientData={varientData}
                     varientIndex={varientIndex}
                     modalType={modalType}
+                    fetchDataLoadingVendor={fetchDataLoadingVendor}
                   />
                 </TabPanel>
                 <TabPanel value="3">

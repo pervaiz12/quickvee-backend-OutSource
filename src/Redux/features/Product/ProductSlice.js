@@ -291,6 +291,20 @@ export const deleteProductVendor = createAsyncThunk(
   }
 );
 
+export const saveVendorList = createAsyncThunk(
+  "products/saveVendorList",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Productapi/save_vendor_list",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
 const productsSlice = createSlice({
   name: "products",
   initialState,

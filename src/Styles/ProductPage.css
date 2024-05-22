@@ -408,7 +408,6 @@
   opacity: 1;
   padding: 10px;
   box-sizing: border-box;
-  outline: 0;
 }
 .vendor-add-loading {
   display: flex;

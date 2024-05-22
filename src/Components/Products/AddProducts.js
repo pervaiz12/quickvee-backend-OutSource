@@ -34,6 +34,8 @@ import ToastModal from "../../CommonComponents/ToastModal";
 import { ToastContainer } from "react-toastify";
 import Loader from "../../CommonComponents/Loader";
 
+import { toast } from "react-toastify";
+
 const AddProducts = () => {
   const fileUploadRef = useRef();
   const dispatch = useDispatch();
@@ -41,6 +43,9 @@ const AddProducts = () => {
     (state) => state?.productsListData
   );
   const navigate = useNavigate();
+
+  const [fetchDataLoading, setFetchDataLoading] = useState(false);
+  const [fetchDataLoadingVendor, setFetchDataLoadingVendor] = useState(false);
 
   // find add or edit url
   const pageUrl = window.location.pathname?.split("/")[1];
@@ -989,21 +994,36 @@ const AddProducts = () => {
   }, [varientLength]);
 
   const fetchProductDataById = () => {
+    if (modalType !== "single_vendor") {
+      setFetchDataLoading(true);
+    } else {
+      setFetchDataLoadingVendor(true);
+    }
     const formData = new FormData();
     formData.append("merchant_id", "MAL0100CA");
     formData.append("id", productId?.id);
     if (!!productId?.id) {
-      dispatch(fetchProductsDataById(formData)).then((res) => {
-        if (res?.payload?.message === "Success") {
-          setProductData(res?.payload?.data?.productdata);
-          setInventoryData(res?.payload?.data?.inventory_setting_data);
-          setOptions(res?.payload?.data?.options);
-          setVarientData(res?.payload?.data?.product_variants);
-          setIsMultipleVaient(
-            Boolean(+res?.payload?.data?.productdata?.isvarient)
-          );
-        }
-      });
+      dispatch(fetchProductsDataById(formData))
+        .then((res) => {
+          if (res?.payload?.message === "Success") {
+            setProductData(res?.payload?.data?.productdata);
+            setInventoryData(res?.payload?.data?.inventory_setting_data);
+            setOptions(res?.payload?.data?.options);
+            setVarientData(res?.payload?.data?.product_variants);
+            setIsMultipleVaient(
+              Boolean(+res?.payload?.data?.productdata?.isvarient)
+            );
+          }
+        })
+        .catch((err) => {
+          toast.error("Error while fetch product data!", {
+            position: "top-right",
+          });
+        })
+        .finally(() => {
+          setFetchDataLoading(false);
+          setFetchDataLoadingVendor(false);
+        });
     } else {
       navigate("/products");
     }
@@ -1458,7 +1478,7 @@ const AddProducts = () => {
   return (
     <div className="box">
       {/* edit modal */}
-      {isFetchLoading ? (
+      {fetchDataLoading ? (
         <div class="loading-box">
           <Loader />
         </div>
@@ -1474,6 +1494,7 @@ const AddProducts = () => {
             modalType={modalType}
             varientData={varientData}
             varientIndex={varientIndex}
+            fetchDataLoadingVendor={fetchDataLoadingVendor}
           />
           {/* alert modal */}
           <AlertModal
