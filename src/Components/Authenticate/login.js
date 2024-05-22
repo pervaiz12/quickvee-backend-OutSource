@@ -29,12 +29,19 @@ export default function Login() {
   const { LoginGetDashBoardRecordJson, LoginAllStore } = useAuthDetails();
   const inputRefs = useRef({});
 
-  const [errorMessage, setErrorMessage] = useState("");
   const errorMessageRecord = useSelector(
     (state) => state?.loginAuthentication?.errors
   );
-  const { handleChangeLogin, handleSubmitForm, formData, errors, handleBlur } =
-    LoginLogic();
+
+  const {
+    handleChangeLogin,
+    handleSubmitForm,
+    formData,
+    errors,
+    handleBlur,
+    setErrorMessage,
+    errorMessage,
+  } = LoginLogic();
 
   const handleHideErrorMessage = () => {
     setErrorMessage(errorMessageRecord);
