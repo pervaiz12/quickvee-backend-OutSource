@@ -8,9 +8,20 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
-import { fetchVendorList } from "../../Redux/features/Product/ProductSlice";
+import {
+  assignPrefferedVendor,
+  assignProductVendor,
+  deleteProductVendor,
+  fetchProductsDataById,
+  fetchVendorList,
+  filterVendorAPI,
+} from "../../Redux/features/Product/ProductSlice";
 import { useDispatch } from "react-redux";
 import Switch from "@mui/material/Switch";
+import CircularProgress from "@mui/material/CircularProgress";
+import { Box } from "@mui/material";
+import { ToastContainer, toast } from "react-toastify";
+import { useParams } from "react-router-dom";
 
 const BulkVendorEdit = ({
   productData,
@@ -21,6 +32,8 @@ const BulkVendorEdit = ({
   const dispatch = useDispatch();
   const [selectedVendor, setSelectedVendor] = useState([]);
   const [vendor, setVendor] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const productId = useParams();
 
   const handleSelectProductOptions = (value, name) => {
     setSelectedVendor((prev) => [...prev, value]);
@@ -33,19 +46,7 @@ const BulkVendorEdit = ({
 
   const [vendorItems, setVendorItems] = useState([]);
 
-  const handleAddVendor = () => {
-    setVendorItems((prev) => [
-      ...prev,
-      ...selectedVendor.map((vendor) => ({
-        ...vendor,
-        costPerItem: "",
-        isPreferred: false,
-      })),
-    ]);
-    setSelectedVendor([]);
-  };
-
-  const handleVendorCostPerItem = (e, index) => {
+  const handleVendorCostPerItem = (e, index, vendorId) => {
     const { name, value, type, checked } = e.target;
     let updateVandorItems;
 
@@ -54,6 +55,32 @@ const BulkVendorEdit = ({
         ...item,
         isPreferred: i === index ? checked : false,
       }));
+      const formData = new FormData();
+      formData.append(
+        "single_product",
+        !Boolean(+productData?.isvarient) ? 1 : 0
+      );
+      formData.append(
+        "varient_id",
+        !Boolean(+productData?.isvarient)
+          ? productData?.id
+          : modalType === "bulk-edit"
+            ? productData?.id
+            : varientData[varientIndex]?.id
+      );
+      formData.append("vendor_id", vendorId);
+
+      dispatch(assignPrefferedVendor(formData))
+        .then((res) => {
+          toast.success("Updated Preferred Vendor!", {
+            position: "top-right",
+          });
+        })
+        .catch((err) => {
+          toast.error("Error!", {
+            position: "top-right",
+          });
+        });
     } else {
       updateVandorItems = [...vendorItems];
       updateVandorItems[index]["costPerItem"] = value;
@@ -63,11 +90,7 @@ const BulkVendorEdit = ({
   };
 
   // fetch vendor data here...
-  console.log(
-    "productdata  modaltype",
-    modalType,
-    Boolean(+productData?.isvarient)
-  );
+
   useEffect(() => {
     let isVarient = Boolean(+productData?.isvarient);
     const formData = new FormData();
@@ -83,15 +106,138 @@ const BulkVendorEdit = ({
     formData.append("single_product", isVarient ? 0 : 1);
 
     dispatch(fetchVendorList(formData)).then((res) => {
-      if (res?.payload?.status === "true") {
-        setVendor(res?.payload?.vendor_name_list);
+      if (res?.payload?.status) {
+        setVendor(res?.payload?.result);
       }
     });
   }, []);
 
-  const handleDeleteVendor = (id) => {
-    const filtervendorList = vendorItems?.filter((item) => +item?.id !== +id);
-    setVendorItems(filtervendorList);
+  const fetchBulkVendorData = () => {
+    let isVarient = Boolean(+productData?.isvarient);
+
+    // if (!isVarient) {
+    const parseJson = JSON.parse(productData?.assigned_vendors);
+    let assignedVendorId;
+    let assignedVendorValues;
+    if (parseJson) {
+      assignedVendorId = Object.keys(parseJson);
+      assignedVendorValues = Object.values(parseJson);
+    }
+
+    // formdata
+    const formData = new FormData();
+    formData.append("merchant_id", "MAL0100CA");
+    let foundVendors = [];
+    dispatch(filterVendorAPI(formData)).then((res) => {
+      if (res?.payload?.status) {
+        const vendorNameList = res?.payload?.vendor_name_list;
+        const foundVendors = vendorNameList
+          ?.filter((filtered) => {
+            return assignedVendorId?.some((item) => +item === +filtered.id);
+          })
+          .map((vendor) => {
+            return {
+              ...vendor,
+              costPerItem: assignedVendorValues[vendor.id] || 0,
+              isPreferred: +productData?.prefferd_vendor == +vendor?.id,
+            };
+          });
+        console.log("foundVendors", foundVendors);
+        setVendorItems(foundVendors);
+      }
+    });
+    // }
+  };
+
+  const handleAddVendor = () => {
+    setLoading(true);
+    const formData = new FormData();
+
+    formData.append(
+      "single_product",
+      !Boolean(+productData?.isvarient) ? 1 : 0
+    );
+    formData.append(
+      "varient_id",
+      !Boolean(+productData?.isvarient)
+        ? productData?.id
+        : modalType === "bulk-edit"
+          ? productData?.id
+          : varientData[varientIndex]?.id
+    );
+    formData.append(
+      "vendor_id",
+      selectedVendor?.map((item) => item?.id)?.toString()
+    );
+
+    dispatch(assignProductVendor(formData))
+      .then((res) => {
+        if (res?.payload?.status) {
+          setVendorItems((prev) => [
+            ...prev,
+            ...selectedVendor.map((vendor) => ({
+              ...vendor,
+              costPerItem: "",
+              isPreferred: false,
+            })),
+          ]);
+          // calles product API when vendor is added
+          const formData = new FormData();
+          formData.append("merchant_id", "MAL0100CA");
+          formData.append("id", productId?.id);
+          dispatch(fetchProductsDataById(formData));
+          toast.success("Vendor Added Successfully!", {
+            position: "top-right",
+          });
+          setSelectedVendor([]);
+          // fetchBulkVendorData();
+        }
+      })
+      .catch((err) => {
+        console.log("error for assign vendor", err);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  useEffect(() => {
+    fetchBulkVendorData();
+  }, [productData]);
+
+  const handleDeleteVendor = (vendorId) => {
+    // formData
+    const formData = new FormData();
+    formData.append(
+      "single_product",
+      !Boolean(+productData?.isvarient) ? 1 : 0
+    );
+    formData.append(
+      "varient_id",
+      !Boolean(+productData?.isvarient)
+        ? productData?.id
+        : modalType === "bulk-edit"
+          ? productData?.id
+          : varientData[varientIndex]?.id
+    );
+    formData.append("vendor_id", vendorId);
+    dispatch(deleteProductVendor(formData))
+      .then((res) => {
+        if (res?.payload?.status) {
+          const filtervendorList = vendorItems?.filter(
+            (item) => +item?.id !== +vendorId
+          );
+          setVendorItems(filtervendorList);
+          toast.success("Vendor deleted successfully!", {
+            position: "top-right",
+          });
+        }
+      })
+      .catch((err) => {
+        toast.error("Error!", {
+          position: "top-right",
+        });
+      });
   };
 
   return (
@@ -117,8 +263,15 @@ const BulkVendorEdit = ({
               style={{
                 backgroundColor: "#0A64F9",
               }}
+              disabled={!selectedVendor?.length}
             >
-              Add
+              {loading ? (
+                <Box className="vendor-add-loading">
+                  <CircularProgress />
+                </Box>
+              ) : (
+                "Add"
+              )}
             </button>
           </div>
         </div>
@@ -151,7 +304,9 @@ const BulkVendorEdit = ({
                           className="vendor-cost-input"
                           placeholder="$10.00"
                           name="costPerItem"
-                          onChange={(e) => handleVendorCostPerItem(e, index)}
+                          onChange={(e) =>
+                            handleVendorCostPerItem(e, index, row?.id)
+                          }
                           value={vendorItems[index]["costPerItem"]}
                         />
                       </TableCell>
@@ -160,7 +315,9 @@ const BulkVendorEdit = ({
                           name="online"
                           id="online"
                           checked={vendorItems[index]["isPreferred"] || false}
-                          onChange={(e) => handleVendorCostPerItem(e, index)}
+                          onChange={(e) =>
+                            handleVendorCostPerItem(e, index, row?.id)
+                          }
                           sx={{
                             "& .MuiSwitch-switchBase.Mui-checked": {
                               color: "#0A64F9",

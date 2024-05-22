@@ -88,7 +88,6 @@ export const editProductData = createAsyncThunk(
         payload
       );
 
-      console.log("product edit response", response);
       return response;
     } catch (error) {
       throw new Error(error.response.data.message);
@@ -104,8 +103,6 @@ export const addProduct = createAsyncThunk(
         BASE_URL + "Product_api_react/add_product",
         payload
       );
-
-      console.log("product added response", response);
       return response;
     } catch (error) {
       throw new Error(error.response.data.message);
@@ -209,7 +206,82 @@ export const fetchVendorList = createAsyncThunk(
   async (payload) => {
     try {
       const response = await axios.post(
+        BASE_URL + "Productapi/product_vendors_list",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const filterVendorAPI = createAsyncThunk(
+  "products/filterVendorAPI",
+  async (payload) => {
+    try {
+      const response = await axios.post(
         BASE_URL + "Vendor_api/vendor_list",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const assignProductVendor = createAsyncThunk(
+  "products/assignProductVendor",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/assign_product_vendors",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const fetchSalesHistory = createAsyncThunk(
+  "products/fetchSalesHistory",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/saleshistory",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const assignPrefferedVendor = createAsyncThunk(
+  "products/assignPrefferedVendor",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Productapi/assign_preferred_vendor",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const deleteProductVendor = createAsyncThunk(
+  "products/deleteProductVendor",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Productapi/delete_product_vendor",
         payload
       );
       return response?.data;
@@ -245,7 +317,6 @@ const productsSlice = createSlice({
       });
     },
     updateFormValue: (state, action) => {
-      console.log("action", action);
       state.formData = action?.payload;
     },
   },
@@ -262,7 +333,6 @@ const productsSlice = createSlice({
         state.productsData = [];
       }
       // Append new items to the productsData array
-      console.log(state);
       state.productsData.push(...action.payload);
       state.offset += 10;
       state.hasMore = action.payload.length > 0;
@@ -279,8 +349,6 @@ const productsSlice = createSlice({
     });
     builder.addCase(updateProductsType.fulfilled, (state, action) => {
       state.loading = false;
-      console.log(action);
-      console.log(state.productsData);
     });
     builder.addCase(updateProductsType.rejected, (state, action) => {
       state.loading = false;

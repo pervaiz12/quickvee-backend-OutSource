@@ -320,13 +320,59 @@
   font-weight: 500;
   margin-bottom: 30px;
   text-transform: capitalize;
+  color: #000 !important;
 }
 
 .edit-profile-btns button.edit {
   background-color: #000 !important;
-  color: #fff;
+  color: #fff !important;
 }
-.dropdown-hide-item {
+
+/* sales history page css */
+
+.sales-history-table thead {
+  background-color: #253338;
+}
+
+.sales-history-table thead th {
+  color: #fff;
+  padding: 10px;
+  letter-spacing: var(--unnamed-character-spacing-0);
+  text-align: left;
+  font: normal normal normal 15px/21px Circular Std Book;
+  letter-spacing: 0px;
+  color: #ffffff;
+  opacity: 1;
+  text-align: left;
+}
+
+.sales-history-table tbody tr th,
+.sales-history-table tbody tr td {
+  /* font: var(--unnamed-font-style-normal) normal
+    var(--unnamed-font-weight-normal) var(--unnamed-font-size-16) /
+    var(--unnamed-line-spacing-22)
+    var(--unnamed-font-family-circular-std-medium);
+  letter-spacing: var(--unnamed-character-spacing-0); */
+  /* color: var(--unnamed-color-000000); */
+  text-align: left;
+  /* font: normal normal normal 16px/22px Circular Std Medium; */
+  letter-spacing: 0px;
+  color: #000000;
+  opacity: 1;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.search-history-box {
+  margin-bottom: 20px;
+  text-align: right;
+}
+
+.search-history-box input {
+  border: 1px solid #000;
+  border-radius: 2px;
+  padding: 4px 8px;
+  box-sizing: border-box;
 }
 
 /* bulk vendor edit modal css */
@@ -364,6 +410,17 @@
   box-sizing: border-box;
   outline: 0;
 }
+.vendor-add-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.vendor-add-loading span {
+  color: #fff !important;
+  width: 24px !important;
+  height: 24px !important;
+}
+
 /* alert toast css */
 .toast-modal {
   position: absolute;

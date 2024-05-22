@@ -78,7 +78,9 @@ const ProductRow = ({
           </div>
         </div>
         <p className="categories-sort"></p>
-        <p className="categories-title">{checkStatus(product.show_status)} </p>
+        <p className="categories-title">
+          {checkStatus(product.show_status)?.text}
+        </p>
         <p className="categories-sort"></p>
         <div className="categories-items" style={{ width: "50%" }}>
           <div className="flex items-center space-x-2 text-base"></div>

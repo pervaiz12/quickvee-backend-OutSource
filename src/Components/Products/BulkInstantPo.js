@@ -104,7 +104,7 @@ const BulkInstantPo = ({
                     <div class="varient-container">
                       <div class="varientform ">
                         <p className="varientName">
-                          {varientTitle[varientIndex]}
+                          {varientTitle?.[varientIndex]}
                         </p>
                         <div class="form">
                           {bulkInstantPo?.length

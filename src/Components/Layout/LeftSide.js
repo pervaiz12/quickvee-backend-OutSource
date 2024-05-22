@@ -67,6 +67,7 @@ import AddPo from "../PurchaseOrders/AddPo";
 import EditCoupon from "../Coupons/EditCoupon";
 import StorePage from "../Store/MerchantStore";
 import ManagerStore from "../Store/ManagerStore";
+import ProductSalesReport from "../Products/ProductSalesReport";
 const LeftSide = ({ visible }) => {
   useEffect(() => {
     window.scrollTo(0, 0);

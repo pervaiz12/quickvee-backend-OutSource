@@ -17,7 +17,7 @@ const MainProducts = () => {
   const [selectedEmployee, setSelectedEmployee] = useState("Select");
   console.log("setSelectedEmployee ", selectedEmployee);
   const [selectedStatus, setSelectedStatus] = useState("all");
-  const [selectedStatusValue, setSelectedStatusValue] = useState("All");
+  const [selectedStatusValue, setSelectedStatusValue] = useState("all");
 
   const [selectedListingType, setSelectedListingType] =
     useState("Select listing");

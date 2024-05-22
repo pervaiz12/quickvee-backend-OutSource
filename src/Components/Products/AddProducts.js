@@ -988,29 +988,42 @@ const AddProducts = () => {
     }
   }, [varientLength]);
 
+  const fetchProductDataById = () => {
+    const formData = new FormData();
+    formData.append("merchant_id", "MAL0100CA");
+    formData.append("id", productId?.id);
+    if (!!productId?.id) {
+      dispatch(fetchProductsDataById(formData)).then((res) => {
+        if (res?.payload?.message === "Success") {
+          setProductData(res?.payload?.data?.productdata);
+          setInventoryData(res?.payload?.data?.inventory_setting_data);
+          setOptions(res?.payload?.data?.options);
+          setVarientData(res?.payload?.data?.product_variants);
+          setIsMultipleVaient(
+            Boolean(+res?.payload?.data?.productdata?.isvarient)
+          );
+        }
+      });
+    } else {
+      navigate("/products");
+    }
+  };
+
   useEffect(() => {
     // called fetchproduct data api based on id
+    console.log("modal---type", modalType);
     if (pageUrl === "product-edit") {
-      const formData = new FormData();
-      formData.append("merchant_id", "MAL0100CA");
-      formData.append("id", productId?.id);
-      if (!!productId?.id) {
-        dispatch(fetchProductsDataById(formData)).then((res) => {
-          if (res?.payload?.message === "Success") {
-            setProductData(res?.payload?.data?.productdata);
-            setInventoryData(res?.payload?.data?.inventory_setting_data);
-            setOptions(res?.payload?.data?.options);
-            setVarientData(res?.payload?.data?.product_variants);
-            setIsMultipleVaient(
-              Boolean(+res?.payload?.data?.productdata?.isvarient)
-            );
-          }
-        });
-      } else {
-        navigate("/products");
-      }
+      fetchProductDataById();
     }
   }, [pageUrl]);
+
+  useEffect(() => {
+    // called fetchproduct data api based on id
+    console.log("modalType", modalType);
+    if (modalType === "single_vendor") {
+      fetchProductDataById();
+    }
+  }, [modalType]);
 
   const selectedItemsFromdata = (items, filterListName) => {
     const arr = items?.map((i) => {
