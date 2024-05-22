@@ -294,9 +294,12 @@ module.exports = Object.freeze({
 
 
   // For TimeSheet 
-  TIME_SHEET_LIST: "LoginApiReact/timesheet_test",
+  // TIME_SHEET_LIST: "CategoryReactapi/timesheet_list",
+  // TIME_SHEET_GETBREAKS:"CategoryReactapi/getBreaks"
+  TIME_SHEET_LIST: "Timesheet_react_api/timesheet_list",
+  TIME_SHEET_GETBREAKS:"Timesheet_react_api/getBreaks",
   ADD_TIME_SHEET: "Timesheet_react_api/addNewTimeclock",
-
+  ADD_TIME_BREAK: "Timesheet_react_api/addBreak",
 
 });
 
