@@ -27,9 +27,10 @@ const SelectDropDown = ({
   onClickHandler,
   selectedOption,
   dropdownFor,
-  title
+  title,
+  
 }) => {
-  console.log("listItem: ", listItem)
+
   return (
     <>
       <FormControl fullWidth>

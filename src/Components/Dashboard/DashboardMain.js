@@ -20,8 +20,7 @@ const DashboardMain = () => {
   // ===================
   // --------------------------------------------------------------------------------------------------------------
   // console.log(AuthDecryptDataDashBoardJSONFormat)
-  console.log(AuthDecryptDataDashBoardJSONFormat)
-  console.log(LoginAllStore)
+
   return (
     <>
     <div className="q-category-main-page">

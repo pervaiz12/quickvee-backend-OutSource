@@ -150,6 +150,31 @@ function App() {
             path="/products"
             element={<Main visible={"products"} />}
           />
+
+          <Route
+            exact
+            path="/product-add"
+            element={<Main visible={"product-add"} />}
+          />
+
+          <Route
+            exact
+            path="/product/saleshistory/:id/:varientId"
+            element={<Main visible={"product-sales"} />}
+          />
+
+          <Route
+            exact
+            path="/product/saleshistory/:id"
+            element={<Main visible={"product-sales"} />}
+          />
+
+          <Route
+            exact
+            path="/product-edit/:id"
+            element={<Main visible={"product-edit"} />}
+          />
+
           <Route
             exact
             path="/purchase-data"
@@ -206,26 +231,14 @@ function App() {
           />
           <Route
             exact
+            path="/productedit"
+            element={<Main visible={"productedit"} />}
+          />
+
+          <Route
+            exact
             path="/product-add"
             element={<Main visible={"product-add"} />}
-          />
-
-          <Route
-            exact
-            path="/product/saleshistory/:id/:varientId"
-            element={<Main visible={"product-sales"} />}
-          />
-
-          <Route
-            exact
-            path="/product/saleshistory/:id"
-            element={<Main visible={"product-sales"} />}
-          />
-
-          <Route
-            exact
-            path="/product-edit/:id"
-            element={<Main visible={"product-edit"} />}
           />
 
           <Route exact path="/add-po" element={<Main visible={"add-po"} />} />

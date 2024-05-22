@@ -47,6 +47,7 @@ const InstoreTableViewData = (props, searchId) => {
           // page: currentPage,
           // entriesPerPage: 10,
         };
+        console.log("date data",  data);
         if (data) {
           dispatch(fetchInStoreOrderData(data));
         }
