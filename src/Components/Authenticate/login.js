@@ -27,6 +27,7 @@ export default function Login() {
   const navigate = useNavigate();
 
   const { LoginGetDashBoardRecordJson, LoginAllStore } = useAuthDetails();
+  const inputRefs = useRef({});
 
   const [errorMessage, setErrorMessage] = useState("");
   const errorMessageRecord = useSelector(
@@ -50,6 +51,14 @@ export default function Login() {
 
   const handleMouseDownPassword = (event) => {
     event.preventDefault();
+  };
+
+  const handleTouchStart = () => {
+    setShowPassword(true);
+  };
+
+  const handleTouchEnd = () => {
+    setShowPassword(false);
   };
 
   return (
@@ -92,37 +101,37 @@ export default function Login() {
                   className="col-md-12"
                   style={{ position: "relative", marginBottom: "24px" }}
                 >
-                  <FormControl
-                    // sx={{ m: 1, width: "25ch" }}
-                    variant="outlined"
-                    fullWidth
-                  >
-                    <InputLabel htmlFor="outlined-adornment-password">
-                      Password
-                    </InputLabel>
-                    <OutlinedInput
-                      id="outlined-adornment-password"
-                      type={showPassword ? "text" : "password"}
+                  <FormControl fullWidth>
+                    <TextField
+                      className="input-field"
+                      label="Password"
+                      variant="outlined"
+                      // size="small"
+                      autoComplete="off"
+                      type={showPassword === true ? "text" : "password"}
                       onChange={handleChangeLogin}
                       name="password"
                       value={formData.password}
-                      endAdornment={
-                        <InputAdornment position="end">
-                          <IconButton
-                            aria-label="toggle password visibility"
-                            onClick={handleClickShowPassword}
-                            onMouseDown={handleMouseDownPassword}
-                            edge="end"
-                            className="password-icon-btn"
-                          >
-                            {showPassword ? <VisibilityOff /> : <Visibility />}
-                          </IconButton>
-                        </InputAdornment>
-                      }
-                      label="Password"
+                      inputProps={{
+                        "data-field": "password",
+                        autoComplete: "off",
+                        ref: (input) => (inputRefs.current["password"] = input), // Store the ref in a ref object
+                        selectionstart: formData.password,
+                      }}
                     />
                   </FormControl>
-
+                  <span
+                    className="show-hide-button"
+                    onTouchStart={handleTouchStart}
+                    onTouchEnd={handleTouchEnd}
+                    onMouseDown={handleTouchStart}
+                    onMouseUp={handleTouchEnd}
+                  >
+                    {" "}
+                    {showPassword === true && formData?.password?.length > 0
+                      ? "Hide"
+                      : "Show"}{" "}
+                  </span>
                   {/* <FormControl fullWidth>
                     <TextInput
                       label="Password"

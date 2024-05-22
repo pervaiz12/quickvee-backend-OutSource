@@ -22,6 +22,11 @@
   font-family: CircularSTDMedium;
   src: url("../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
 }
+
+@font-face {
+  font-family: CircularRegular;
+  src: url("../Assests/Fonts/Circular-Std-Regular-Book.ttf");
+}
 .login-customer-form h1 {
   color: #222 !important;
   font-family: CircularMedium;
@@ -42,8 +47,8 @@
 }
 .input-error {
   color: #fa0000;
-  font-family: CircularMedium;
-  font-size: 12px;
+  font-family: CircularRegular;
+  font-size: 14px !important;
   display: flex;
   justify-content: flex-start;
   /* padding: 0; */
@@ -84,6 +89,19 @@
 .password-icon-btn svg {
   position: absolute;
   right: 0px !important;
+}
+
+.show-hide-button {
+  color: #222 !important;
+  cursor: pointer !important;
+  font-size: 13px;
+  padding: 18px;
+  position: absolute;
+  right: 0px;
+  top: 0px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  user-select: none;
 }
 @keyframes slider {
   0% {
