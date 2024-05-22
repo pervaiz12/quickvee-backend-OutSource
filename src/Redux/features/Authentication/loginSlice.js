@@ -149,7 +149,7 @@ export const handleUserType = createAsyncThunk('LoginAuth/handleUserType', async
         const response = await axios.post(BASE_URL + LOGIN_OTP_SUBMIT_AUTHENTICATION, data, {
             headers: { "Content-Type": "multipart/form-data" },
         });
-        localStorage.removeItem("AllStore")
+         localStorage.removeItem("AllStore")
         if (response.data.status === true) {
             // Encrypt response data before storing in cookies
             const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(response.data), 'secret key').toString();
@@ -175,9 +175,8 @@ export const handleGetStoreRecord = createAsyncThunk('LoginAuth/handleGetStoreRe
         const response = await axios.post(BASE_URL + LOGIN_OTP_SUBMIT_AUTHENTICATION, data, {
             headers: { "Content-Type": "multipart/form-data" },
         });
-        localStorage.removeItem("AllStore")
-        if (response.data.status === true) {
-           
+        // localStorage.removeItem("AllStore")
+        if (response.data.status === true) {    
             const encryptedData = CryptoJS.AES.encrypt(JSON.stringify(response?.data), 'secret key').toString();
             Cookies.set('token_data', encryptedData);
         }
