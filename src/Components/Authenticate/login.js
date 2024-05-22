@@ -1,92 +1,140 @@
-import { FormControl, Button, TextField } from '@mui/material';
-import React, { useState, useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
-import LoginLogic from './loginLogic'
-import TextInput from './commonField/textInput'
-import QSubmitButton from './commonField/QSubmitButton'
+import {
+  FormControl,
+  Button,
+  TextField,
+  InputLabel,
+  InputAdornment,
+  OutlinedInput,
+} from "@mui/material";
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import LoginLogic from "./loginLogic";
+import TextInput from "./commonField/textInput";
+import QSubmitButton from "./commonField/QSubmitButton";
 // import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import '../../Styles/loginAuth.css'
+import "../../Styles/loginAuth.css";
 // import Quickvee from "../../../Assets/LoginScreen/quickveeLogo.svg";handleSubmitFormPlace
-import Quickvee from '../../Assests/LoginScreen/quickveeLogo.svg'
-import CryptoJS from 'crypto-js';
-import { useNavigate } from 'react-router-dom';
+import Quickvee from "../../Assests/LoginScreen/quickveeLogo.svg";
+import CryptoJS from "crypto-js";
+import { useNavigate } from "react-router-dom";
 // import { useLocation } from 'react-router-dom';
-import { useAuthDetails } from '../../Common/cookiesHelper';
+import { useAuthDetails } from "../../Common/cookiesHelper";
+import IconButton from "@mui/material/IconButton";
+import { Visibility, VisibilityOff } from "@mui/icons-material";
 
 export default function Login() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
 
-    const {LoginGetDashBoardRecordJson,LoginAllStore} = useAuthDetails();
+  const { LoginGetDashBoardRecordJson, LoginAllStore } = useAuthDetails();
 
-    const [errorMessage,setErrorMessage]=useState("")
-    const errorMessageRecord=useSelector((state)=>state?.loginAuthentication?.errors)
-    const{handleChangeLogin,handleSubmitForm,formData,errors,handleBlur}=LoginLogic();
+  const [errorMessage, setErrorMessage] = useState("");
+  const errorMessageRecord = useSelector(
+    (state) => state?.loginAuthentication?.errors
+  );
+  const { handleChangeLogin, handleSubmitForm, formData, errors, handleBlur } =
+    LoginLogic();
 
+  const handleHideErrorMessage = () => {
+    setErrorMessage(errorMessageRecord);
+    setTimeout(() => {
+      setErrorMessage("");
+    }, 2000);
+  };
+  useEffect(() => {
+    handleHideErrorMessage();
+  }, []);
 
-    const handleHideErrorMessage=()=>{
-        setErrorMessage(errorMessageRecord)
-        setTimeout(()=>{
-            setErrorMessage("")
+  const [showPassword, setShowPassword] = useState(false);
+  const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-        },2000)
-    }
-    useEffect(()=>{
-        handleHideErrorMessage()  
-    },[]) 
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
+
   return (
     <>
-        <div className='main-authentication-component'>
-         
-            <div className=' login-customer-form ' >
-                <Link >
-                    <img
-                    src={Quickvee}
-                    className="quickvee-logo-authentication"
-                    alt="Quickvee"
+      <div className="main-authentication-component">
+        <div className=" login-customer-form ">
+          <Link>
+            <img
+              src={Quickvee}
+              className="quickvee-logo-authentication"
+              alt="Quickvee"
+            />
+          </Link>
+          <form className="login-customer-form">
+            <h1>Merchant Login</h1>
+            <span>{errorMessage}</span>
+            <div
+              style={{
+                width: "300px",
+              }}
+            >
+              <div className="row">
+                <div
+                  className="col-md-12"
+                  style={{ position: "relative", marginBottom: "24px" }}
+                >
+                  <FormControl fullWidth>
+                    <TextInput
+                      label="Username"
+                      type="text"
+                      name="username"
+                      value={formData.username}
+                      onChange={handleChangeLogin}
+                      handleBlur={handleBlur}
                     />
-                </Link>
-                <form className="login-customer-form">
-                    <h1>Merchant Login</h1>
-                    <span>{errorMessage}</span>
-                    <div
-                        style={{
-                        width: '300px',
-                        }}
-                    >
-                        <div className="row">
-                            <div
-                                className="col-md-12"
-                                style={{ position: 'relative', marginBottom: '24px' }}
-                            >
-                                <FormControl fullWidth>
-                                    <TextInput
-                                    label="username" 
-                                    type="text"
-                                    name="username"
-                                    value={formData.username}
-                                    onChange={handleChangeLogin}
-                                    handleBlur={handleBlur} 
-                                    />
-                                </FormControl>
-                                <span className="input-error">{errors.usernameError}</span>
-                            </div>
-                            <div
-                                className="col-md-12"
-                                style={{ position: 'relative', marginBottom: '24px' }}
-                            >
-                                <FormControl fullWidth>
-                                <TextInput
-                                label="password"
-                                name="password"
-                                type="password"
-                                value={formData.password}
-                                onChange={handleChangeLogin}
-                                />
-                                </FormControl>
-                                <span className="input-error">{errors.passwordError}</span>
-                            </div>
-                            {/* {
+                  </FormControl>
+                  <span className="input-error">{errors.usernameError}</span>
+                </div>
+                <div
+                  className="col-md-12"
+                  style={{ position: "relative", marginBottom: "24px" }}
+                >
+                  <FormControl
+                    // sx={{ m: 1, width: "25ch" }}
+                    variant="outlined"
+                    fullWidth
+                  >
+                    <InputLabel htmlFor="outlined-adornment-password">
+                      Password
+                    </InputLabel>
+                    <OutlinedInput
+                      id="outlined-adornment-password"
+                      type={showPassword ? "text" : "password"}
+                      onChange={handleChangeLogin}
+                      name="password"
+                      value={formData.password}
+                      endAdornment={
+                        <InputAdornment position="end">
+                          <IconButton
+                            aria-label="toggle password visibility"
+                            onClick={handleClickShowPassword}
+                            onMouseDown={handleMouseDownPassword}
+                            edge="end"
+                            className="password-icon-btn"
+                          >
+                            {showPassword ? <VisibilityOff /> : <Visibility />}
+                          </IconButton>
+                        </InputAdornment>
+                      }
+                      label="Password"
+                    />
+                  </FormControl>
+
+                  {/* <FormControl fullWidth>
+                    <TextInput
+                      label="Password"
+                      name="password"
+                      type="password"
+                      value={formData.password}
+                      onChange={handleChangeLogin}
+                    />
+                  </FormControl> */}
+                  <span className="input-error">{errors.passwordError}</span>
+                </div>
+                {/* {
                                 //    (authEmailValidate?.checkemailValidate && authEmailValidate?.CoockieEmailValidate !=="true" ) 
                                 //    && (!authEmailValidate?.checkemailValidate && authEmailValidate?.CoockieEmailValidate !=="true")
 
@@ -112,23 +160,25 @@ export default function Login() {
                             :''
                             :''
                             } */}
-                        </div>
-                    </div>
-                
-                    <FormControl fullWidth>
-                        {
-                            //  (authEmailValidate?.checkemailValidate || authEmailValidate?.localEmailValidate=="true" ) && (!authEmailValidate?.checkemailValidate || authEmailValidate?.localEmailValidate=="true")
-                            // authEmailValidate?.EmailValidateOtp ?
-                            // <QSubmitButton name="submit" handleSubmitForm={handleSubmitFormPlace} />
-                            // :
-                            <QSubmitButton name="submit" handleSubmitForm={handleSubmitForm} />
-                        }
-                    </FormControl>
-                </form>
+              </div>
             </div>
-            <div className="wrapper">
-            </div>
+
+            <FormControl fullWidth>
+              {
+                //  (authEmailValidate?.checkemailValidate || authEmailValidate?.localEmailValidate=="true" ) && (!authEmailValidate?.checkemailValidate || authEmailValidate?.localEmailValidate=="true")
+                // authEmailValidate?.EmailValidateOtp ?
+                // <QSubmitButton name="submit" handleSubmitForm={handleSubmitFormPlace} />
+                // :
+                <QSubmitButton
+                  name="submit"
+                  handleSubmitForm={handleSubmitForm}
+                />
+              }
+            </FormControl>
+          </form>
         </div>
+        <div className="wrapper"></div>
+      </div>
     </>
-  )
+  );
 }

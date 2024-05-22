@@ -17,7 +17,7 @@ const AddVendors = ({ setVisible }) => {
 
   const [states, setStates] = useState([]);
 
-
+  console.log("states", states);
   const AllVendorsDataState = useSelector((state) => state.vendors);
 
   const [value, setValue] = useState();
