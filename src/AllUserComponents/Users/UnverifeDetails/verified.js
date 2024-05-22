@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { getVerifiedMerchant } from "../../../Redux/features/user/verifiedMerchantSlice";
 import {
@@ -16,8 +17,19 @@ import Cookies from "js-cookie";
 import AddIcon from "../../../Assests/Category/addIcon.svg";
 import { Grid } from "@mui/material";
 import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
-
+import View from "../../../Assests/VerifiedMerchant/View.svg";
+import Edit from "../../../Assests/VerifiedMerchant/Edit.svg";
+import Delete from "../../../Assests/VerifiedMerchant/Delete.svg";
+import DisLike from "../../../Assests/VerifiedMerchant/DisLike.svg";
+import $ from "jquery";
+import "datatables.net-dt/css/jquery.dataTables.min.css";
+import {
+  BASE_URL,
+  DELETE_SINGLE_STORE,
+} from "../../../Constants/Config";
 export default function Verified() {
+  const tableRef = useRef(null);
+
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
 
@@ -26,8 +38,20 @@ export default function Verified() {
   const VerifiedMerchantList = useSelector(
     (state) => state.verifiedMerchantRecord.verifiedMerchantData
   );
+  const [VerifiedMerchantListState, setVerifiedMerchantListState] = useState(
+    []
+  );
+
+  useEffect(() => {
+    if (!VerifiedMerchantList.loading && VerifiedMerchantList.length >= 1) {
+      setVerifiedMerchantListState(VerifiedMerchantList);
+    }
+  }, [VerifiedMerchantList, VerifiedMerchantList.loading]);
+  console.log("VerifiedMerchantList: ", VerifiedMerchantList);
   const data = { type: "approve" };
   const merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
+
+
   useEffect(() => {
     dispatch(getVerifiedMerchant({ type: "approve", ...userTypeData }));
   }, []);
@@ -56,18 +80,52 @@ export default function Verified() {
         )
       : [];
 
-      console.log("filteredAdminRecord : ",filteredAdminRecord)
+  console.log("filteredAdminRecord : ", filteredAdminRecord);
   // ====================================
   const handleEditMerchant = (data) => {
-    
-  
     // Assuming 'result' is the data you want to pass to the editMerchant route
     // Navigate to the editMerchant route and pass 'result' as state
     navigate(`/users/editMerchant/${data}`);
   };
+  const handleDeleteMerchant = async (data) => {
+   
+    try {
+      const { token, ...otherUserData } = userTypeData;
+      const [idFormTable, MerchantIdFromTable ] = data;
+      console.log("deleteMerchant data", data)
+      console.log("deleteMerchant",idFormTable, MerchantIdFromTable)
+      const delVendor = {
+        merchant_id: MerchantIdFromTable,
+        id: idFormTable,
+        ...otherUserData
+      };
+      
+      const response = await axios.post(
+        BASE_URL + DELETE_SINGLE_STORE,
+        delVendor,
+        {
+          headers: { 
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
-  
+      if (response) {
+        const updatedVendorDetails = VerifiedMerchantListState.filter(
+          (vendor) => vendor.id !== idFormTable
+        );
+        setVerifiedMerchantListState(updatedVendorDetails);
 
+        // alert(response.data.message);
+      } else {
+        console.error(response);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+  };
   const handleGetVerifiedMerchant = (merchant_id) => {
     let data = {
       merchant_id: merchant_id,
@@ -76,7 +134,6 @@ export default function Verified() {
     // const formdata = new FormData();
 
     dispatch(handleMoveDash(data)).then((result) => {
-   
       if (result?.payload?.status == true) {
         if (result?.payload?.final_login == 1) {
           navigate(`/`);
@@ -93,6 +150,81 @@ export default function Verified() {
       }
     });
   };
+  $.DataTable = require("datatables.net");
+  useEffect(() => {
+    const modifiedData = Object.entries(VerifiedMerchantListState).map(
+      ([key, data], i) => {
+        return {
+          StoreInfo: `
+          <div class="flex">
+            <div class="text-[#000000] order_method capitalize">${
+              data.name.length < 18
+                ? data.name
+                : data.name.slice(0, 18) + `...` || ""
+            }</div>
+            <div class="mx-2 ">State(${data.a_state})</div>
+          </div>
+          <div class="text-[#818181] lowercase">${data.email || ""}</div>
+          <div class="text-[#818181]">${data.a_phone || ""}</div>
+          `,
+          OwnerName: `<div class="text-[#000000] order_method capitalize">${
+            data.owner_name || ""
+          }</div>`,
+          MerchantID: `<div class="text-[#000000] order_method capitalize">${
+            data.merchant_id || ""
+          }</div>`,
+          View: `<div class="flex" >
+                  <img class="mx-1 view " data-id="${
+                    data.merchant_id
+                  }" src=${View} alt="View"/>
+                  <img class="mx-1 edit"  data-id="${
+                    data.id
+                  }"  src=${Edit} alt="Edit"/>
+                  <img class="mx-1 delete" data-id="${[
+                     data.id,
+                    data.merchant_id,
+                  ]}" src=${Delete} alt="Delete" />
+                  <img class="mx-1" src=${DisLike} alt="DisLike"/>
+                </div>`,
+        };
+      }
+    );
+
+    $(tableRef.current).on("click", "img.view", function () {
+      const merchantId = $(this).data("id");
+      handleGetVerifiedMerchant(merchantId);
+    });
+    $(tableRef.current).on("click", "img.edit", function () {
+      const merchantId = $(this).data("id");
+      handleEditMerchant(merchantId);
+    });
+    $(tableRef.current).on("click", "img.delete", function () {
+      const data = $(this).data("id");
+      handleDeleteMerchant(data);
+    });
+
+    const table = $("#OnlineStoreTable").DataTable({
+      data: modifiedData,
+      columns: [
+        { title: "Store Info", data: "StoreInfo", orderable: false },
+        { title: "Owner Name", data: "OwnerName", orderable: false },
+        { title: "Merchant ID", data: "MerchantID", orderable: false },
+        { title: " ", data: "View", orderable: false },
+      ],
+      destroy: true,
+      searching: true,
+      dom: "<'row 'l<'col-sm-12'b>><'row'<'col-sm-7 mt-2'p><'col-sm-5'>>",
+      lengthMenu: [10, 20, 50],
+      lengthChange: true,
+      ordering: false,
+      language: {
+        paginate: {
+          previous: "<",
+          next: ">",
+        },
+      },
+    });
+  }, [filteredAdminRecord]);
 
   //  ====================================
   return (
@@ -104,6 +236,9 @@ export default function Verified() {
             direction="row"
             justifyContent="space-between"
             alignItems="center"
+            style={{
+              borderBottom: "1px solid #E8E8E8",
+            }}
           >
             <Grid item>
               <div className="q-category-bottom-header">
@@ -145,6 +280,11 @@ export default function Verified() {
                 placeholder="Search..."
                 autoComplete="off"
               />
+            </Grid>
+          </Grid>
+          <Grid container sx={{ padding: 0 }}>
+            <Grid item xs={12}>
+              <table id="OnlineStoreTable" ref={tableRef}></table>
             </Grid>
           </Grid>
         </Grid>

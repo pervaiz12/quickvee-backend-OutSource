@@ -14,6 +14,7 @@ const InputTextSearch = ({
     <>
       <FormControl fullWidth>
         <OutlinedInput
+        size="small"
           placeholder={placeholder}
           value={value}
           onChange={(e) => {

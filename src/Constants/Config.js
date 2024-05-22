@@ -292,7 +292,7 @@ module.exports = Object.freeze({
   LOGIN_OTP_SUBMIT_AUTHENTICATION:"LoginApiReact/create_session",//
   LOGIN_VIA_SUPERADMIN:"LoginApiReact/login_via_superadmin",//
 
-
+  DELETE_SINGLE_STORE:"UserController/delete"
 });
 
 
