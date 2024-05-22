@@ -2,8 +2,36 @@ import React, {useState} from "react";
 import DownIcon from "../../Assests/Dashboard/Down.svg";
 import { BASE_URL, EXPORT_ORDER_COUNT_DATA } from "../../Constants/Config";
 import axios from "axios";
+import SelectDropDown from "../../reuseableComponents/SelectDropDown";
+import { Grid } from '@mui/material';
+
+import { useAuthDetails } from './../../Common/cookiesHelper';
 
 const OrderCountList = () => {
+
+    const OrderStatus = [
+        {
+          title: "Paid",
+        },
+        {
+          title: "Unpaid",
+        },
+        {
+          title: "Both",
+        },
+      ];
+    
+      const orderType = [
+        {
+          title: "Online",
+        },
+        {
+          title: "Offline",
+        },
+        {
+          title: "Both",
+        },
+      ];
     const [selectedOrderStatus, setSelectedOrderStatus] = useState("Paid");
     const [selectedOrderType, setSelectedOrderType] = useState("Online");
 
@@ -33,11 +61,11 @@ const OrderCountList = () => {
     const handleOptionClick = (option, dropdown) => {
         switch (dropdown) {
             case "OrderStatus":
-                setSelectedOrderStatus(option);
+                setSelectedOrderStatus(option.title);
                 setOrderStatusDropdownVisible(false);
                 break;
             case "orderType":
-                setSelectedOrderType(option);
+                setSelectedOrderType(option.title);
                 setOrderTypeDropdownVisible(false);
                 break;
             default:
@@ -66,6 +94,7 @@ const OrderCountList = () => {
             setError("");
         }
     };
+    const {userTypeData} = useAuthDetails();
 
     const handleSubmitData = async () => {
         if (selectedStartDate && selectedEndDate && new Date(selectedStartDate) > new Date(selectedEndDate)) {
@@ -77,6 +106,8 @@ const OrderCountList = () => {
                 end_date: selectedEndDate,
                 order_source: selectedOrderType,
                 order_status: selectedOrderStatus,
+                token_id:userTypeData.token_id,
+                login_type:userTypeData.login_type
             };
             console.log(data);
             try {
@@ -84,7 +115,10 @@ const OrderCountList = () => {
                     BASE_URL + EXPORT_ORDER_COUNT_DATA,
                     data,
                     {
-                        headers: { "Content-Type": "multipart/form-data" },
+                        headers: {
+                            "Content-Type": "multipart/form-data",
+                            'Authorization': `Bearer ${userTypeData.token}` 
+                        }
                     }
                 );
     
@@ -116,7 +150,7 @@ const OrderCountList = () => {
 
     return (
         <>
-        <div className="box">
+        {/* <div className="box">
             <div className="q-category-bottom-detail-section">
                 <div className="">
                     <div className="q-category-bottom-header">
@@ -250,7 +284,108 @@ const OrderCountList = () => {
                     </button>
                 </div>
             </div>
+            </div> */}
+
+
+            <div className="box_shadow_div_order ">
+
+                <Grid item className="q-category-bottom-header" xs={12}>
+                    <h1 className="text-xl font-medium">Store Order</h1>
+                </Grid>
+
+                <div className='px-6  '>
+                    <Grid container spacing={4} className="">
+                        <Grid item xs={6}>
+                            <label> Order Status</label>
+                            <SelectDropDown
+                                listItem={OrderStatus}
+                                title={"title"}
+                                onClickHandler={handleOptionClick}
+                                selectedOption={selectedOrderStatus}
+                            dropdownFor={"OrderStatus"}
+                            />
+                        </Grid>
+                        <Grid item xs={6}>
+                            <label> Order Type</label>
+                            <SelectDropDown
+                                listItem={orderType}
+                                title={"title"}
+                                onClickHandler={handleOptionClick}
+                                selectedOption={selectedOrderType}
+                            dropdownFor={"orderType"}
+                            />
+                        </Grid>
+                    </Grid>
+                </div>
+
             </div>
+
+            <div className="q-category-bottom-detail-section mt-5 pb-5 ">
+                <div className="store-setting-flex">
+                    
+                </div>
+
+
+                <div className='px-6  '>
+                    <Grid container spacing={4} className="">
+                        <Grid item xs={6}>
+                            <label>Start Date</label>
+                            <div className="store-setting-input-div pt-2">
+                            <input
+                                type="date"
+                                className="store-setting-alert-input"
+                                value={selectedStartDate}
+                                onChange={IsStartDatetoggleInput}
+                            />
+                            {error && (
+                                <p
+                                    style={{
+                                        fontSize: "14px",
+                                        color: "red",
+                                        fontFamily: "CircularSTDBook !important",
+                                    }}
+                                >
+                                    {error}
+                                </p>
+                            )}
+                        </div>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <label> End Date</label>
+                            <div className="store-setting-input-div pt-2">
+                            <input
+                                type="date"
+                                className="store-setting-alert-input"
+                                value={selectedEndDate}
+                                onChange={IsEndDatetoggleInput}
+                            />
+                            {error && (
+                                <p
+                                    style={{
+                                        fontSize: "14px",
+                                        color: "red",
+                                        fontFamily: "CircularSTDBook !important",
+                                    }}
+                                >
+                                    {error}
+                                </p>
+                            )}
+                        </div>
+                        </Grid>
+                    </Grid>
+                </div>
+
+
+                <div 
+                    style={{
+                       paddingLeft:"2rem",
+                    }}>
+                    <button className="save_btn" onClick={handleSubmitData}>
+                        Export
+                    </button>
+                </div>
+            </div>
+        
         </>
     );
 };
