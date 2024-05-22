@@ -3,21 +3,10 @@ import { Link } from "react-router-dom";
 import SalesBar from "./SalesBar";
 import Mainbarharts from "../../Mainbarcharts";
 import TenderTable from "./TenderTable";
-import SideMenu from "../Layout/SideMenu";
-import { useMediaQuery } from "@mui/material";
 
 const TopTenders = () => {
-  const isTabletNav = useMediaQuery("(max-width:1024px)");
-  const [isMenuOpen, setIsMenuOpen] = useState(!isTabletNav);
   return (
     <>
-      {/* Sidebar */}
-      <SideMenu
-        setIsMenuOpen={setIsMenuOpen}
-        isTabletNav={isTabletNav}
-        isMenuOpen={isMenuOpen}
-      />
-
       <div className="mx-4 py-7 h-[100] my-9">
         <div className="container mx-auto">
           <div className="grid grid-cols-2 gap-4">

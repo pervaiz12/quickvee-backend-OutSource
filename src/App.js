@@ -555,7 +555,7 @@ function App() {
 
           {/* <Route exact path="/" element={<DashboardMain />} /> */}
 
-          <Route exact path="/toptraders" element={<TopTenders />} />
+          {/* <Route exact path="/toptraders" element={<TopTenders />} /> */}
 
           {/* <Route path="/report" element={<MainReport />} /> */}
           {/* <Route path="/store-settings/taxes" element={<MainTaxes />} /> */}

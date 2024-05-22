@@ -1,26 +1,29 @@
 import React, { useState, useEffect } from "react";
 import { Grid, TextField, MenuItem } from "@mui/material";
-import AutoPo from "./AutoPo";
 import { FormControl } from "@mui/material";
-import "react-datepicker/dist/react-datepicker.css";
-import SelectDropDown from "../../reuseableComponents/SelectDropDown";
+import { useDispatch, useSelector } from "react-redux";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import BasicTextFields from "../../reuseableComponents/TextInputField";
-import AddNewCategory from "../../Assests/Dashboard/Left.svg";
-import { fetchaddpopurchaseData } from "../../Redux/features/PurchaseOrder/AddpurchaseOrderSlice";
-import { useDispatch, useSelector } from "react-redux";
-
 import { Link } from "react-router-dom";
 import { event } from "jquery";
 
+import AutoPo from "./AutoPo";
+import SelectDropDown from "../../reuseableComponents/SelectDropDown";
+import BasicTextFields from "../../reuseableComponents/TextInputField";
+import AddNewCategory from "../../Assests/Dashboard/Left.svg";
+import { fetchaddpopurchaseData } from "../../Redux/features/PurchaseOrder/AddpurchaseOrderSlice";
+import { fetchVendorsListData } from "../../Redux/features/VendorList/vListSlice";
+
+import "react-datepicker/dist/react-datepicker.css";
+
 const AddPo = ({ seVisible }) => {
+  const dispatch = useDispatch();
+
   // const [isHide, setIsHide] = useState(false);
   // const [visible, seVisible] = useState("MainPurchase");
   const [issueDate, setIssueDate] = useState(null);
-
   const [addpostock, setAddpostock] = useState("");
   const [selectedVendor, setSelectedVendor] = useState("");
   const [purchaseInfo, setPurchaseInfo] = useState({
@@ -30,19 +33,21 @@ const AddPo = ({ seVisible }) => {
     reference: "",
   });
 
-  const dispatch = useDispatch();
   const addpoData = useSelector((state) => state.Addpolist);
+  const allVendors = useSelector((state) => state.vendors);
   const adpoDataList = addpoData?.addpoData?.result;
 
   useEffect(() => {
-    const data = { merchant_id: "MAL0100CA", admin_id: "MAL0100CA" };
-    dispatch(fetchaddpopurchaseData(data));
+    const data = { merchant_id: "MAL0100CA" };
+    dispatch(fetchaddpopurchaseData({ ...data, admin_id: "MAL0100CA" }));
+
+    dispatch(fetchVendorsListData(data));
   }, [dispatch]);
 
   const handleVendorClick = (data) => {
     const { email, reference, issued_date, stock_date } = data;
 
-    setSelectedVendor(() => data?.vendor_name ?? "");
+    setSelectedVendor(() => data?.name ?? "");
 
     // Update state with the extracted data
     setPurchaseInfo((prevState) => ({
@@ -102,11 +107,10 @@ const AddPo = ({ seVisible }) => {
                 <Grid item xs={12} sm={6} md={4}>
                   <label>Vendor</label>
                   <SelectDropDown
-                    heading={"All"}
                     selectedOption={selectedVendor}
-                    listItem={adpoDataList}
+                    listItem={allVendors.vendorListData[0]}
                     onClickHandler={handleVendorClick}
-                    title={"vendor_name"}
+                    title={"name"}
                   />
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
