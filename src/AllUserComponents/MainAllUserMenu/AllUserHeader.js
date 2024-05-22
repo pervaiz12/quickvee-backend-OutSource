@@ -167,7 +167,6 @@ const AllUserHeader = () => {
           <img src={Quick} alt="Logo" className="ml-6" />
 
           <div className="relative ml-auto">
-         
             <div
               className="flex items-center ml-6 px-3 py-1 text-black lg:text-[20px] admin_medium cursor-pointer sm:text-[12px] md:text-[15px]"
               onClick={handleDropdownToggle}
@@ -175,23 +174,22 @@ const AllUserHeader = () => {
               <img src={UserIcon} alt="" className="w-6 h-6 mr-2" />
               Superadmin
               <img src={DownIcon} alt="" className="w-8 h-8 ml-2" />
-              
             </div>
 
-         
             {showDropdown && (
               <div className="dropdown-content w-full  mt-5">
                 <div className="flex justify-items-start">
-                 
-                <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />   <a href="/users/view/unapprove/" >Store Setup</a>
+                  <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />{" "}
+                  <a href="/users/view/unapprove/">Store Setup</a>
                 </div>
                 <div className="flex justify-items-start">
                   <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />
-                  <a href="/users/view/unapprove/need-help">
-                  Need Help
-                  </a>
+                  <a href="/users/view/unapprove/need-help">Need Help</a>
                 </div>
-                <div className="flex justify-items-start" onClick={handleLogout} >
+                <div
+                  className="flex justify-items-start"
+                  onClick={handleLogout}
+                >
                   <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />
                   Logout
                 </div>

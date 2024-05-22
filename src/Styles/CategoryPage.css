@@ -1,191 +1,183 @@
 @font-face {
-    font-family: CircularBold;
-    src: url("../Assests/Fonts/circular-bold.TTF");
+  font-family: CircularBold;
+  src: url("../Assests/Fonts/circular-bold.TTF");
 }
 
 @font-face {
-    font-family: CircularMedium;
-    src: url("../Assests/Fonts/circulur-medium.TTF");
+  font-family: CircularMedium;
+  src: url("../Assests/Fonts/circulur-medium.TTF");
 }
 
 @font-face {
-    font-family: CircularSTDBlack;
-    src: url("../Assests/Fonts/circulur-std-black.TTF");
+  font-family: CircularSTDBlack;
+  src: url("../Assests/Fonts/circulur-std-black.TTF");
 }
 
 @font-face {
-    font-family: CircularSTDBook;
-    src: url("../Assests/Fonts/circulur-std-book.TTF");
+  font-family: CircularSTDBook;
+  src: url("../Assests/Fonts/circulur-std-book.TTF");
 }
 
 @font-face {
-    font-family: CircularSTDMedium;
-    src: url("../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
+  font-family: CircularSTDMedium;
+  src: url("../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
 }
-
-
-
-
-
-
-
-
 
 .q-category-top-detail-section {
-    padding: 20px;
-    background: #FFFFFF;
-    box-shadow: 0px 3px 6px #0000001F;
-    border-radius: 8px;
-    margin: 30px 0;
+  padding: 20px;
+  background: #ffffff;
+  box-shadow: 0px 3px 6px #0000001f;
+  border-radius: 8px;
+  margin: 30px 0;
 }
 
 .q-category-top-detail-section li {
-    color: #818181;
-    list-style-type: none;
-    font-family: CircularSTDBook !important;
-    font-size: 14px;
-    position: relative;
-    padding-left: 20px;
+  color: #818181;
+  list-style-type: none;
+  font-family: CircularSTDBook !important;
+  font-size: 14px;
+  position: relative;
+  padding-left: 20px;
 }
 
 .q-category-top-detail-section li::before {
-    content: '\2022';
-    color: #000;
-    position: absolute;
-    left: 0;
-    top: 0;
+  content: "\2022";
+  color: #000;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .q-category-bottom-detail-section {
-    width: 100%;
-    background: #FFFFFF;
-    box-shadow: 0px 3px 6px #0000001F;
-    border-radius: 4px !important;
-    margin: 30px 0;
+  width: 100%;
+  background: #ffffff;
+  box-shadow: 0px 3px 6px #0000001f;
+  border-radius: 4px !important;
+  margin: 30px 0;
 }
 
 .q-category-bottom-header-sticky {
-    background: #fff;
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    border-radius: 8px;
+  background: #fff;
+  position: sticky;
+  top: 0;
+  z-index: 1;
+  border-radius: 8px;
 }
 
 .q-category-bottom-header {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
 }
 
 .q-category-bottom-header span {
-    color: #000000;
-    font-size: 18px;
-    font-family: CircularSTDMedium !important;
+  color: #000000;
+  font-size: 18px;
+  font-family: CircularSTDMedium !important;
 }
 
 .q-category-bottom-header p {
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #0A64F9;
-    font-family: CircularSTDMedium !important;
-    font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #0a64f9;
+  font-family: CircularSTDMedium !important;
+  font-size: 16px;
 }
 
 .q-category-bottom-header p img {
-    margin-left: 8px;
+  margin-left: 8px;
 }
 
 .q-category-bottom-categories-header {
-    background: #253338;
-    display: flex;
-    padding: 10px 20px;
+  background: #253338;
+  display: flex;
+  padding: 10px 20px;
 }
 
 .q-category-bottom-categories-header p {
-    color: #FFFFFF;
-    font-size: 15px;
-    font-family: CircularSTDBook !important;
-
+  color: #ffffff;
+  font-size: 15px;
+  font-family: CircularSTDBook !important;
 }
 
 .categories-data-sort {
-    width: 12%;
+  width: 12%;
 }
 
 .categories-data-title {
-    width: 12%;
-
+  width: 12%;
 }
 
 .categories-data-items {
-    width: 20%;
+  width: 20%;
 }
-.categories-items-btn{
-width: auto !important;
-cursor:  pointer !important;
+.categories-items-btn {
+  width: auto !important;
+  cursor: pointer !important;
 }
 .categories-enable-disable {
-    width: calc(100% - 52%);
+  width: calc(100% - 52%);
 }
-
 
 .q-category-bottom-categories-listing {
-    width: 100%;
-    background: #fff;
-    border-radius: 8px;
+  width: 100%;
+  background: #fff;
+  border-radius: 8px;
 }
 
-
-
-.q-category-bottom-categories-single-category>.categories-title {
-    font-size: 16px;
-    color: #000000;
-    font-family: CircularSTDMedium !important;
-    text-transform: capitalize;
+.q-category-bottom-categories-single-category {
+  display: flex;
+  padding: 20px;
+  border-bottom: 1px solid #e8e8e8;
+  /* cursor: all-scroll; */
+  user-select: none;
 }
 
-.q-category-bottom-categories-single-category>.categories-data-items  {
-    color: #0A64F9;
-    /* cursor: pointer; */
-    font-family: CircularSTDMedium !important;
-    font-size: 16px;
-    text-decoration: underline;
+.q-category-bottom-categories-single-category > .categories-title {
+  font-size: 16px;
+  color: #000000;
+  font-family: CircularSTDMedium !important;
+  text-transform: capitalize;
 }
 
-.q-category-bottom-categories-single-category>.categories-enable-disable {
-    display: flex;
-    align-items: flex-start;
-    justify-content: space-between;
+.q-category-bottom-categories-single-category > .categories-data-items {
+  color: #0a64f9;
+  /* cursor: pointer; */
+  font-family: CircularSTDMedium !important;
+  font-size: 16px;
+  text-decoration: underline;
+}
+
+.q-category-bottom-categories-single-category > .categories-enable-disable {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
 }
 
 .category-checkmark-div {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 200px;
 }
-
-
 
 .category-checkmark-div .category-checkmark-label {
-    color: #000000;
-    font-family: CircularSTDMedium !important;
-    font-size: 16px;
-    display: block;
-    position: relative;
-    padding-left: 33px;
-    cursor: pointer;
-    font-size: 16px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  color: #000000;
+  font-family: CircularSTDMedium !important;
+  font-size: 16px;
+  display: block;
+  position: relative;
+  padding-left: 33px;
+  cursor: pointer;
+  font-size: 16px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
-
 
 /* responsive css */
 /* @media only screen and (max-width: 1060px) and (min-width:768px) {
@@ -205,279 +197,303 @@ cursor:  pointer !important;
 }
 } */
 
-
-
 .category-checkmark-div .category-checkmark-label input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
 }
 
 .category-checkmark {
-    position: absolute;
-    top: 2px;
-    left: 0;
-    height: 20px;
-    width: 20px;
-    background-color: #eee;
-    border-radius: 5px;
+  position: absolute;
+  top: 2px;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+  border-radius: 5px;
 }
 
-
 /* When the checkbox is checked, add a blue background */
-.category-checkmark-div .category-checkmark-label input:checked~.category-checkmark {
-    background-color: #1EC26B;
-    border-radius: 5px;
+.category-checkmark-div
+  .category-checkmark-label
+  input:checked
+  ~ .category-checkmark {
+  background-color: #1ec26b;
+  border-radius: 5px;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
 .category-checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
+  content: "";
+  position: absolute;
+  display: none;
 }
 
 /* Show the checkmark when checked */
-.category-checkmark-div .category-checkmark-label input:checked~.category-checkmark:after {
-    display: block;
+.category-checkmark-div
+  .category-checkmark-label
+  input:checked
+  ~ .category-checkmark:after {
+  display: block;
 }
 
 /* Style the checkmark/indicator */
 .category-checkmark-div .category-checkmark-label .category-checkmark:after {
-    left: 8px;
-    top: 4px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 2px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
+  left: 8px;
+  top: 4px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 
-.categories-enable-disable>img {
-    cursor: pointer;
+.categories-enable-disable > img {
+  cursor: pointer;
 }
 
 .q-add-categories-section {
-    width: 100%;
-    background: #FFFFFF;
-    box-shadow: 0px 3px 6px #0000001F;
-    border-radius: 8px;
-
+  width: 100%;
+  background: #ffffff;
+  box-shadow: 0px 3px 6px #0000001f;
+  border-radius: 8px;
 }
 
 .q-add-categories-section-header {
-    display: flex;
-    padding: 20px;
-    border-bottom: 1px solid #E8E8E8;
+  display: flex;
+  padding: 20px;
+  border-bottom: 1px solid #e8e8e8;
 }
 
-.q-add-categories-section-header>span {
-    display: flex;
-    width: 190px;
-    justify-content: space-between;
-    cursor: pointer;
-    color: #000000;
-    font-size: 18px;
-    font-family: CircularSTDMedium !important;
-
+.q-add-categories-section-header > span {
+  display: flex;
+  width: 190px;
+  justify-content: space-between;
+  cursor: pointer;
+  color: #000000;
+  font-size: 18px;
+  font-family: CircularSTDMedium !important;
 }
 
 .q-add-categories-section-middle-form {
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
 }
 
-.q-add-categories-section-middle-form>.q-add-categories-single-input {
-    display: flex;
-    flex-direction: column;
+.q-add-categories-section-middle-form > .q-add-categories-single-input {
+  display: flex;
+  flex-direction: column;
 }
 
-.q-add-categories-single-input>label {
-    color: #818181;
-    font-size: 14px;
-    font-family: CircularSTDBook !important;
+.q-add-categories-single-input > label {
+  color: #818181;
+  font-size: 14px;
+  font-family: CircularSTDBook !important;
 }
 
 .q-add-categories-single-input input,
 .q-add-categories-single-input textarea {
-    font-family: CircularSTDBook !important;
-    color: #000000;
-    font-size: 15px;
-    outline: none;
-    background: #FFFFFF;
-    border: 1px solid #E1E1E1;
-    border-radius: 4px;
-    padding: 8px;
-    margin: 5px 0 15px 0;
-
+  font-family: CircularSTDBook !important;
+  color: #000000;
+  font-size: 15px;
+  outline: none;
+  background: #ffffff;
+  border: 1px solid #e1e1e1;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 5px 0 15px 0;
 }
 
-
-
 .q-add-categories-section-middles-footer {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    padding: 20px 15px !important;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 20px 15px !important;
 }
 
 /* button.quic-btn.quic-btn-save {
     width: 12%;
 } */
 .q-add-categories-section-middles-footer .quic-btn {
-    font-family: CircularSTDBook !important;
-    font-size: 16px;
-    color: #fff;
-    padding: 10px 40px;
-    border-radius: 4px;
-    cursor: pointer;
+  font-family: CircularSTDBook !important;
+  font-size: 16px;
+  color: #fff;
+  padding: 10px 40px;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .q-add-categories-section-middle-footer .quic-btn-save {
-    background: #0A64F9;
+  background: #0a64f9;
 }
 
 .q-add-categories-section-middle-footer .quic-btn-cancle {
-    background: #878787;
-    margin-left: 10px;
+  background: #878787;
+  margin-left: 10px;
 }
 
 /* css for coupon add and cancel button */
 
-
 .q-add-categories-section-footer .quic-btn {
-    font-family: CircularSTDBook !important;
-    font-size: 16px;
-    color: #fff;
-    padding: 10px 40px;
-    border-radius: 4px;
-    cursor: pointer;
+  font-family: CircularSTDBook !important;
+  font-size: 16px;
+  color: #fff;
+  padding: 10px 40px;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
 .q-add-categories-section-footer .quic-btn-save {
-    background: #0A64F9;
+  background: #0a64f9;
 }
 
 .q-add-categories-section-footer .quic-btn-cancle {
-    background: #878787;
-    margin-left: 10px;
+  background: #878787;
+  margin-left: 10px;
 }
 
-.view-category-item-modal{
-    background: #FFFFFF ;
-    box-shadow: 0px 3px 28px #00000014;
-    border-radius: 8px;
-    outline: none;
+/* css for coupon add and cancel button */
+
+.q-add-categories-section-footer .quic-btn {
+  font-family: CircularSTDBook !important;
+  font-size: 16px;
+  color: #fff;
+  padding: 10px 40px;
+  border-radius: 4px;
+  cursor: pointer;
 }
 
+.q-add-categories-section-footer .quic-btn-save {
+  background: #0a64f9;
+}
 
+.q-add-categories-section-footer .quic-btn-cancle {
+  background: #878787;
+  margin-left: 10px;
+}
+
+.view-category-item-modal {
+  background: #ffffff;
+  box-shadow: 0px 3px 28px #00000014;
+  border-radius: 8px;
+  outline: none;
+}
 
 .add-category-checkmark-div {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 200px;
 }
 
 .add-category-checkmark-div .add-category-checkmark-label {
-    color: #000000;
-    font-size: 14px;
-    font-family: CircularSTDBook !important;
-    display: block;
-    position: relative;
-    padding-left: 33px;
-    cursor: pointer;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  color: #818181;
+  font-size: 14px;
+  font-family: CircularSTDBook !important;
+  display: block;
+  position: relative;
+  padding-left: 33px;
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .add-category-checkmark-div .add-category-checkmark-label input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
 }
 
 .add-category-checkmark {
-    position: absolute;
-    top: -2px;
-    left: 0;
-    height: 20px;
-    width: 20px;
-    background-color: #eee;
-    border-radius: 5px;
+  position: absolute;
+  top: -2px;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #eee;
+  border-radius: 5px;
 }
 
-
 /* When the checkbox is checked, add a blue background */
-.add-category-checkmark-div .add-category-checkmark-label input:checked~.add-category-checkmark {
-    background-color: #1EC26B;
-    border-radius: 5px;
+.add-category-checkmark-div
+  .add-category-checkmark-label
+  input:checked
+  ~ .add-category-checkmark {
+  background-color: #1ec26b;
+  border-radius: 5px;
 }
 
 /* Create the checkmark/indicator (hidden when not checked) */
 .add-category-checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
+  content: "";
+  position: absolute;
+  display: none;
 }
 
 /* Show the checkmark when checked */
-.add-category-checkmark-div .add-category-checkmark-label input:checked~.add-category-checkmark:after {
-    display: block;
+.add-category-checkmark-div
+  .add-category-checkmark-label
+  input:checked
+  ~ .add-category-checkmark:after {
+  display: block;
 }
 
 /* Style the checkmark/indicator */
-.add-category-checkmark-div .add-category-checkmark-label .add-category-checkmark:after {
-    left: 8px;
-    top: 4px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 2px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
+.add-category-checkmark-div
+  .add-category-checkmark-label
+  .add-category-checkmark:after {
+  left: 8px;
+  top: 4px;
+  width: 5px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 3px 0;
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  transform: rotate(45deg);
 }
 
-
-.quic-btn-ok{
-    background: #0A64F9;
-    margin-left: 10px;
+.quic-btn-ok {
+  background: #0a64f9;
+  margin-left: 10px;
 }
 
-.suggestlist_input fieldset{
-    border: 1px solid #E1E1E1 !important;
-    border-bottom: 1px solid #000;
-}   
-
-.css-gdh49b-MuiAutocomplete-listbox .MuiAutocomplete-option[aria-selected="true"].Mui-focused {
-    background-color: #0A64F9 !important;
-    color:#ffffff !important;
-     border-bottom: 1px solid #000;
+.suggestlist_input fieldset {
+  border: 1px solid #e1e1e1 !important;
 }
 
-
-.css-1xnbq41-MuiAutocomplete-root .MuiOutlinedInput-root.MuiInputBase-sizeSmall .MuiAutocomplete-input {
-    
+.suggestlist_input fieldset {
+  border: 1px solid #e1e1e1 !important;
+  border-bottom: 1px solid #000;
 }
 
-
-
-.viewModal-width{
-    max-height: 50vh;
-    overflow-y: scroll;
+.css-gdh49b-MuiAutocomplete-listbox
+  .MuiAutocomplete-option[aria-selected="true"].Mui-focused {
+  background-color: #0a64f9 !important;
+  color: #ffffff !important;
+  border-bottom: 1px solid #000;
 }
-.viewModal-Btn{
-    color: #0A64F9;
-    border-bottom: 1px solid;
-    padding-bottom: 2px;
+
+.css-1xnbq41-MuiAutocomplete-root
+  .MuiOutlinedInput-root.MuiInputBase-sizeSmall
+  .MuiAutocomplete-input {
+}
+
+.viewModal-width {
+  max-height: 50vh;
+  overflow-y: scroll;
+}
+.viewModal-Btn {
+  color: #0a64f9;
+  border-bottom: 1px solid;
+  padding-bottom: 2px;
 }

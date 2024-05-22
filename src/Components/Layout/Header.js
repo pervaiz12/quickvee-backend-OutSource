@@ -82,7 +82,6 @@ export default function Header() {
 
   const handleChangeMerchant=(merchant_id)=>{
     const data={username:GetSessionLogin?.username,password:GetSessionLogin.password,login_type:LoginGetDashBoardRecordJson?.login_type,merchant_id:merchant_id}
-    console.log(data)
     dispatch(handleGetStoreRecord(data)).then(result=>{
       if(result?.payload?.status==true)
         {
@@ -128,8 +127,10 @@ export default function Header() {
           <a href="/dashboard">
             <img src={Quick} alt="Logo" className="ml-6" />
           </a>
-         { LoginGetDashBoardRecordJson?.final_login==1 ?
-         (LoginAllStore?.data?.stores !==undefined || localStorage.getItem("AllStore")) ?
+         { 
+        //  console.log(localStorage.getItem("AllStore"))
+         LoginGetDashBoardRecordJson?.final_login==1 ?
+         (LoginAllStore?.data?.stores !==undefined || (localStorage.getItem("AllStore")!=="" && localStorage.getItem("AllStore")!== null)) ?
           <div className="relative">
           <FormControl fullWidth>
             <InputLabel id="demo-simple-select-label">{storename}</InputLabel>

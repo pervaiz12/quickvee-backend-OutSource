@@ -67,6 +67,7 @@ import AddPo from "../PurchaseOrders/AddPo";
 import EditCoupon from "../Coupons/EditCoupon";
 import StorePage from "../Store/MerchantStore";
 import ManagerStore from "../Store/ManagerStore";
+import ProductSalesReport from "../Products/ProductSalesReport";
 const LeftSide = ({ visible }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -97,7 +98,8 @@ const LeftSide = ({ visible }) => {
           {visible === "toptraders" && <TopTenders />}
           {visible === "productedit" && <ProductEdit />}
           {visible === "product-add" && <AddProducts />}
-          {visible === "add-po" && <AddPo />}
+          {visible === "product-edit" && <AddProducts />}
+          {visible === "product-sales" && <ProductSalesReport />}
 
           {visible === "info" && <Info />}
           {visible === "setup" && <Setup />}
