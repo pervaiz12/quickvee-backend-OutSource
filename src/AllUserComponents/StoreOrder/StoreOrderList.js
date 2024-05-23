@@ -62,14 +62,13 @@ const StoreOrderList = (props) => {
             // "StoreInfo": `${data.id || ""} ${data.cname || ""} ${data.email || ""} ${data.delivery_phn || ""}`,
             "StoreInfo": `
           <div class="flex">
-            <div class="">ID(${data.id})</div>
             <div class="text-[#000000] order_method capitalize">${
               data.cname.length < 18
                 ? data.cname
                 : data.cname.slice(0, 18) + `...` || ""
             }</div>
-
           </div>
+          <div class="text-[#818181]">ID - ${data.id}</div>
           <div class="text-[#818181] lowercase">${data.email || ""}</div>
           <div class="text-[#818181]">${data.delivery_phn || ""}</div>
           `,

@@ -116,6 +116,7 @@
   color: #ffffff;
   font-size: 15px;
   font-family: CircularSTDBook !important;
+  width: 30%;
 }
 
 .product-table-sort {
@@ -163,6 +164,7 @@
   color: #000000;
   font-family: CircularSTDMedium !important;
   text-transform: capitalize;
+  width: 40%;
 }
 
 .q-category-bottom-categories-single-category > .categories-items {
@@ -183,7 +185,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 200px;
+  /* width: 200px; */
 }
 
 .category-checkmark-div .category-checkmark-label {
@@ -474,4 +476,10 @@ h3.popup_msg {
   font-family: CircularSTDBook !important;
   display: block;
   margin-top: 1.2rem;
+}
+
+.default-Edit-Delete{
+  display: flex;
+  justify-content: end;
+  margin-right: 0.5rem;
 }
