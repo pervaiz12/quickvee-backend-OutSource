@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "../../Styles/EmployeeList/employeeList.css";
@@ -13,17 +11,19 @@ import {
   fetchPermissionData,
   deletePermission,
 } from "../../Redux/features/Permission/PermissionSlice";
+import { useAuthDetails } from "../../Common/cookiesHelper";
 
 const PermissionList = () => {
   const [allpermission, setAllPermission] = useState([]);
 
   const AllPermissionDataState = useSelector((state) => state.permissionRed);
+  const { userTypeData } = useAuthDetails();
 
   const dispatch = useDispatch();
 
   useEffect(() => {
     // console.log("Fetching permission data...");
-    dispatch(fetchPermissionData());
+    dispatch(fetchPermissionData(userTypeData));
   }, []);
 
   useEffect(() => {
@@ -46,33 +46,24 @@ const PermissionList = () => {
   const handleDeletePermission = (id) => {
     const data = {
       id: id,
-      
     };
-    const userConfirmed = window.confirm("Are you sure you want to delete this ?");
+    const userConfirmed = window.confirm(
+      "Are you sure you want to delete this ?"
+    );
     if (userConfirmed) {
-
       if (id) {
         dispatch(deletePermission(data));
       }
     } else {
-
       console.log("Deletion canceled by user");
     }
   };
 
- 
-  
-
-
-
-
-
   return (
     <>
-   
       <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
-        <div className="q-attributes-bottom-header">
+          <div className="q-attributes-bottom-header">
             <span>Permission</span>
             {/* <p className="" >
               Add New Sub Permission <img src={AddIcon} alt="add-icon" /> 
@@ -98,12 +89,14 @@ const PermissionList = () => {
                     <p className="report-sort">{index + 1}</p>
                     <p className="report-title">{permission.sub_permission}</p>
                     <p className="report-title">{permission.permission}</p>
-                    <p className="report-title"><EditPermissionModal selected={permission} />
-                        </p>
-                    <p className="report-title"> <img
+                    <p className="report-title">
+                      <EditPermissionModal selected={permission} />
+                    </p>
+                    <p className="report-title">
+                      {" "}
+                      <img
                         src={DeleteIcon}
                         alt="Delete-icon"
-                       
                         className="h-8 w-8"
                         onClick={() => handleDeletePermission(permission.id)}
                       />
@@ -114,7 +107,6 @@ const PermissionList = () => {
           </div>
         </div>
       </div>
-    
     </>
   );
 };

@@ -58,7 +58,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function Verified() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
 
   const [filteredMerchants, setFilteredMerchants] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -77,7 +77,8 @@ export default function Verified() {
   const [VerifiedMerchantListState, setVerifiedMerchantListState] = useState(
     []
   );
-  console.log("VerifiedMerchantList", VerifiedMerchantListState);
+
+  console.log("VerifiedMerchantListState", VerifiedMerchantListState)
 
   useEffect(() => {
     if (!VerifiedMerchantList.loading && VerifiedMerchantList.length >= 1) {
@@ -94,7 +95,6 @@ export default function Verified() {
     : filteredMerchants.slice(indexOfFirstMerchant, indexOfLastMerchant);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  console.log("VerifiedMerchantList: ", VerifiedMerchantList);
   const data = { type: "approve" };
   const merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
@@ -126,7 +126,7 @@ export default function Verified() {
               (result.a_state && result.a_state.includes(searchRecord))
           )
         : [];
-    // console.log("filteredAdminRecord", filteredAdminRecord);
+
     setVerifiedMerchantListState(filteredAdminRecord);
   };
 
@@ -271,17 +271,14 @@ export default function Verified() {
                 totalItems={totalCount}
                 itemsPerPage={rowsPerPage}
                 onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
               />
             </Grid>
           </Grid>
           <Grid container>
             <TableContainer>
               <StyledTable
-                initialState={{
-                  pagination: {
-                    paginationModel: { page: 0, pageSize: 5 },
-                  },
-                }}
                 sx={{ minWidth: 500 }}
                 aria-label="customized table"
               >
@@ -304,7 +301,7 @@ export default function Verified() {
                               ? data.name
                               : data.name.slice(0, 18) + `...` || ""}
                           </div>
-                          <div class="mx-2 ">(State{data.a_state})</div>
+                          <div class="mx-2 ">(State: {data.a_state})</div>
                         </div>
                         <div class="text-[#818181] lowercase">
                           {data.email || ""}
