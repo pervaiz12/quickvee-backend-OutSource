@@ -35,21 +35,17 @@ const Customer = () => {
     dispatch(CustomerFunction(data));
   }, []);
 
-  // const handleSelectChange = (e) => {
-  //   const selectedUrl = e.target.value;
-  //   const urlParts = selectedUrl.split('/');
-  //   if(urlParts[2]=="editCustomer"){
-  //     navigate(`${selectedUrl}`);
-
-  //   }else {
-  //     console.log('hello delet')
-  //   }
-  // };
   useEffect(() => {
-    if (!customerRecord.loading && customerRecord.CustomerRecord) {
-      setManagerTable(customerRecord.CustomerRecord);
+    if (customerRecord.CustomerRecord) {
+      const filteredData = Boolean(searchRecord.trim())
+        ? customerRecord?.CustomerRecord?.filter((customer) =>
+            customer?.name?.toLowerCase().includes(searchRecord.toLowerCase())
+          )
+        : customerRecord?.CustomerRecord;
+
+      setManagerTable(filteredData);
     }
-  }, [customerRecord.loading, customerRecord.CustomerRecord]);
+  }, [customerRecord.CustomerRecord, searchRecord]);
 
   useEffect(() => {
     if (managerTable.length && tableRef.current) {

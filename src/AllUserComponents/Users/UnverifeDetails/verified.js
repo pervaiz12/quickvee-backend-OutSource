@@ -56,12 +56,10 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-
 export default function Verified() {
- 
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-  
+
   const [filteredMerchants, setFilteredMerchants] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [searchRecord, setSearchRecord] = useState("");
@@ -79,7 +77,7 @@ export default function Verified() {
   const [VerifiedMerchantListState, setVerifiedMerchantListState] = useState(
     []
   );
-  console.log("VerifiedMerchantList", VerifiedMerchantListState)
+  console.log("VerifiedMerchantList", VerifiedMerchantListState);
 
   useEffect(() => {
     if (!VerifiedMerchantList.loading && VerifiedMerchantList.length >= 1) {
@@ -89,13 +87,11 @@ export default function Verified() {
     }
   }, [VerifiedMerchantList, VerifiedMerchantList.loading]);
 
-
   const indexOfLastMerchant = currentPage * rowsPerPage;
   const indexOfFirstMerchant = indexOfLastMerchant - rowsPerPage;
-  const currentMerchants =  searchRecord ? VerifiedMerchantListState : filteredMerchants.slice(
-    indexOfFirstMerchant,
-    indexOfLastMerchant
-  );
+  const currentMerchants = searchRecord
+    ? VerifiedMerchantListState
+    : filteredMerchants.slice(indexOfFirstMerchant, indexOfLastMerchant);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   console.log("VerifiedMerchantList: ", VerifiedMerchantList);
@@ -107,12 +103,11 @@ export default function Verified() {
   }, []);
   // ====================================
 
-
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
 
     const filteredAdminRecord =
-    filteredMerchants && Array.isArray(filteredMerchants)
+      filteredMerchants && Array.isArray(filteredMerchants)
         ? filteredMerchants.filter(
             (result) =>
               (result.owner_name &&
@@ -127,23 +122,23 @@ export default function Verified() {
                 result.email
                   .toLowerCase()
                   .includes(searchRecord.toLowerCase())) ||
-              (result.phone && result.phone.includes(searchRecord)) ||
+              (result.a_phone && result.a_phone.includes(searchRecord)) ||
               (result.a_state && result.a_state.includes(searchRecord))
           )
         : [];
-          console.log("filteredAdminRecord",filteredAdminRecord)
+    // console.log("filteredAdminRecord", filteredAdminRecord);
     setVerifiedMerchantListState(filteredAdminRecord);
   };
 
   // ====================================
   const handleEditMerchant = (data) => {
-    console.log("handleEditMerchant ", data);
- 
+    // console.log("handleEditMerchant ", data);
+
     navigate(`/users/editMerchant/${data}`);
   };
   const handleDeleteMerchant = async (tableData) => {
-    console.log("handleDeleteMer", tableData);
-   
+    // console.log("handleDeleteMer", tableData);
+
     try {
       const { token, ...otherUserData } = userTypeData;
       const delVendor = {
@@ -168,7 +163,7 @@ export default function Verified() {
           (vendor) => vendor.id !== tableData.id
         );
         setVerifiedMerchantListState(updatedVendorDetails);
-        setFilteredMerchants(updatedVendorDetails)
+        setFilteredMerchants(updatedVendorDetails);
       } else {
         console.error(response);
       }
@@ -181,7 +176,6 @@ export default function Verified() {
       merchant_id: merchant_id,
       ...userTypeData,
     };
-
 
     dispatch(handleMoveDash(data)).then((result) => {
       if (result?.payload?.status == true) {
@@ -201,18 +195,18 @@ export default function Verified() {
     });
   };
 
-  $(tableRef.current).on("click", "img.delete", function () {
-    const data = $(this).data("id");
-    handleDeleteMerchant(data);
-  });
-  $(tableRef.current).on("click", "img.view", function () {
-    const merchantId = $(this).data("id");
-    handleGetVerifiedMerchant(merchantId);
-  });
-  $(tableRef.current).on("click", "img.edit", function () {
-    const merchantId = $(this).data("id");
-    handleEditMerchant(merchantId);
-  });
+  // $(tableRef.current).on("click", "img.delete", function () {
+  //   const data = $(this).data("id");
+  //   handleDeleteMerchant(data);
+  // });
+  // $(tableRef.current).on("click", "img.view", function () {
+  //   const merchantId = $(this).data("id");
+  //   handleGetVerifiedMerchant(merchantId);
+  // });
+  // $(tableRef.current).on("click", "img.edit", function () {
+  //   const merchantId = $(this).data("id");
+  //   handleEditMerchant(merchantId);
+  // });
 
   //  ====================================
   return (
@@ -272,24 +266,25 @@ export default function Verified() {
           </Grid>
           <Grid container sx={{ padding: 2.5 }}>
             <Grid item xs={12}>
-              <Pagination 
+              <Pagination
                 currentPage={currentPage}
                 totalItems={totalCount}
                 itemsPerPage={rowsPerPage}
                 onPageChange={paginate}
-              
               />
             </Grid>
           </Grid>
           <Grid container>
             <TableContainer>
               <StyledTable
-               initialState={{
-                pagination: {
-                  paginationModel: { page: 0, pageSize: 5 },
-                },
-              }}
-              sx={{ minWidth: 500 }} aria-label="customized table">
+                initialState={{
+                  pagination: {
+                    paginationModel: { page: 0, pageSize: 5 },
+                  },
+                }}
+                sx={{ minWidth: 500 }}
+                aria-label="customized table"
+              >
                 <TableHead>
                   {/* {TableRow.map((row) => (
                     <StyledTableCell>{row}</StyledTableCell>
@@ -300,7 +295,7 @@ export default function Verified() {
                   <StyledTableCell></StyledTableCell>
                 </TableHead>
                 <TableBody>
-                  { currentMerchants.map((data, index) => (
+                  {currentMerchants.map((data, index) => (
                     <StyledTableRow>
                       <StyledTableCell>
                         <div class="flex">
