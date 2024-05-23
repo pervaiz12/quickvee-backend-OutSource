@@ -134,12 +134,11 @@ function App() {
         element={<Main visible={"multimerchant"} />}
       /> */}
         <Route exact path="/login" element={<Login visible={"login"} />} />
-        <Route element={<ProtectedRoute />}>
+        <Route element={<ProtectedRoute visible="manager" />}>
           <Route exact path="/store" element={<Main visible={"store"} />} />
           <Route exact path="/manager" element={<Main visible={"manager"} />} />
           <Route index path="/" element={<Main visible={"dashboard"} />} />
           <Route exact path="/order" element={<Main visible={"order"} />} />
-          <Route exact path="/store" element={<Main visible={"store"} />} />
           <Route
             exact
             path="/category"
@@ -150,13 +149,6 @@ function App() {
             path="/products"
             element={<Main visible={"products"} />}
           />
-
-          <Route
-            exact
-            path="/product-add"
-            element={<Main visible={"product-add"} />}
-          />
-
           <Route
             exact
             path="/product/saleshistory/:id/:varientId"
@@ -234,7 +226,6 @@ function App() {
             path="/productedit"
             element={<Main visible={"productedit"} />}
           />
-
           <Route
             exact
             path="/product-add"
@@ -419,11 +410,6 @@ function App() {
           />
           <Route
             exact
-            path="/store-reporting/vendors-sales-reports"
-            element={<Main visible={"vendors-sales-reports"} />}
-          />
-          <Route
-            exact
             path="/store-reporting/item-sales"
             element={<Main visible={"item-sales"} />}
           />
@@ -442,32 +428,15 @@ function App() {
           />
           <Route
             exact
-            path="/users/view/unapprove/need-help"
-            element={<Main visible={"need-help"} />}
-          />
-          <Route
-            exact
             path="/store-reporting/current-inventory-value"
             element={<Main visible={"current-inventory-value"} />}
           />
           <Route exact path="/toptraders" element={<TopTenders />} />
           <Route
             exact
-            path="/users/view/unapprove/label"
-            element={<Main visible={"label"} />}
-          />
-
-          <Route
-            exact
             path="/users/view/unapprove/menu/defaults/edit-defaults/:defaultsCode"
             element={<Main visible={"edit-defaults"} />}
           />
-          <Route
-            exact
-            path="/users/view/unapprove/release_apk"
-            element={<Main visible={"release_apk"} />}
-          />
-
           <Route
             exact
             path="/users/view/unapprove/permission"
@@ -516,11 +485,6 @@ function App() {
             exact
             path="/users/addAdmin"
             element={<Main visible={"addAdmin"} />}
-          />
-          <Route
-            exact
-            path="/users/editAdmin/:id"
-            element={<Main visible={"editAdmin"} />}
           />
           <Route
             exact
