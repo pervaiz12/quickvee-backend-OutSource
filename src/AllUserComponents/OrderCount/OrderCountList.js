@@ -4,6 +4,12 @@ import { BASE_URL, EXPORT_ORDER_COUNT_DATA } from "../../Constants/Config";
 import axios from "axios";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { Grid } from '@mui/material';
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import dayjs, { Dayjs } from "dayjs";
+import caleIcon from "../../Assests/Filter/Calender.svg";
+import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 
 import { useAuthDetails } from './../../Common/cookiesHelper';
 
@@ -28,14 +34,11 @@ const OrderCountList = () => {
         {
           title: "Offline",
         },
-        {
-          title: "Both",
-        },
       ];
     const [selectedOrderStatus, setSelectedOrderStatus] = useState("Paid");
     const [selectedOrderType, setSelectedOrderType] = useState("Online");
 
-    const currentDate = new Date().toISOString().split("T")[0];
+    const currentDate = dayjs().format("YYYY-MM-DD");
     const [selectedStartDate, setSelectedStartDate] = useState(currentDate);
     const [selectedEndDate, setSelectedEndDate] = useState(currentDate);
     const [error, setError] = useState("");
@@ -45,18 +48,7 @@ const OrderCountList = () => {
     const [orderTypeDropdownVisible, setOrderTypeDropdownVisible] =
         useState(false);
 
-    const toggleDropdown = (dropdown) => {
-        switch (dropdown) {
-            case "OrderStatus":
-                setOrderStatusDropdownVisible(!orderStatusDropdownVisible);
-                break;
-            case "orderType":
-                setOrderTypeDropdownVisible(!orderTypeDropdownVisible);
-                break;
-            default:
-                break;
-        }
-    };
+
 
     const handleOptionClick = (option, dropdown) => {
         switch (dropdown) {
@@ -73,17 +65,6 @@ const OrderCountList = () => {
         }
     };
 
-    const IsStartDatetoggleInput = (event) => {
-        setSelectedStartDate(event.target.value);
-        const newStartDate = event.target.value;
-        validateDates(newStartDate, selectedEndDate);
-    };
-
-    const IsEndDatetoggleInput = (event) => {
-        setSelectedEndDate(event.target.value);
-        const newEndDate = event.target.value;
-        validateDates(selectedStartDate, newEndDate);
-    };
 
     const validateDates = (start, end) => {
         console.log(start);
@@ -147,6 +128,13 @@ const OrderCountList = () => {
             }
         }
     };
+
+
+    const handleDateChange = (setter) => (newValue) => {
+        setter(newValue.format("YYYY-MM-DD"));
+        validateDates(selectedStartDate, selectedEndDate);
+    };
+    
 
     return (
         <>
@@ -290,7 +278,7 @@ const OrderCountList = () => {
             <div className="box_shadow_div_order ">
 
                 <Grid item className="q-category-bottom-header" xs={12}>
-                    <h1 className="text-xl font-medium">Store Order</h1>
+                    <h1 className="text-xl font-medium">Order Count</h1>
                 </Grid>
 
                 <div className='px-6  '>
@@ -329,8 +317,8 @@ const OrderCountList = () => {
                 <div className='px-6  '>
                     <Grid container spacing={4} className="">
                         <Grid item xs={6}>
-                            <label>Start Date</label>
-                            <div className="store-setting-input-div pt-2">
+                          
+                            {/* <div className="store-setting-input-div pt-2">
                             <input
                                 type="date"
                                 className="store-setting-alert-input"
@@ -348,10 +336,36 @@ const OrderCountList = () => {
                                     {error}
                                 </p>
                             )}
-                        </div>
+                        </div> */}
+                        <label>Start Date</label>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer components={['DatePicker']}>
+                                <DatePicker  
+                                value={dayjs(selectedStartDate)}
+                                onChange={handleDateChange(setSelectedStartDate)}
+                                maxDate={dayjs()}
+                                  style={{ border: "none" }} // Remove border
+                                  size="small"
+                                  format={"DD-MM-YYYY"}
+                                  views={["year", "month", "day"]}
+                                  slotProps={{
+                                    textField: {
+                                      placeholder: "Start Date",
+                                      size: "small",
+                                    },
+                                  }}
+                                  components={{
+                                    OpenPickerIcon: () => (
+                                      <img src={caleIcon} alt="calendar-icon" style={{ width: 20, height: 20 }} />
+                                    ),
+                                  }}
+                                 
+                                />
+                            </DemoContainer>
+                            </LocalizationProvider>
                         </Grid>
                         <Grid item xs={6}>
-                            <label> End Date</label>
+                            {/* <label> End Date</label>
                             <div className="store-setting-input-div pt-2">
                             <input
                                 type="date"
@@ -370,15 +384,54 @@ const OrderCountList = () => {
                                     {error}
                                 </p>
                             )}
-                        </div>
+                        </div> */}
+                        <label>End Date</label>
+                        <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DemoContainer components={['DatePicker']}>
+                                <DatePicker  
+                                  style={{ border: "none" }} // Remove border
+                                  size="small"
+                                  value={dayjs(selectedEndDate)}
+                                  onChange={handleDateChange(setSelectedEndDate)}
+                                  maxDate={dayjs()}
+                                  format={"DD-MM-YYYY"}
+                                  views={["year", "month", "day"]}
+                                  slotProps={{
+                                    textField: {
+                                      placeholder: "End Date",
+                                      size: "small",
+                                    },
+                                  }}
+                                  components={{
+                                    OpenPickerIcon: () => (
+                                      <img src={caleIcon} alt="calendar-icon" style={{ width: 20, height: 20 }} />
+                                    ),
+                                  }}
+                                 
+                                />
+                            </DemoContainer>
+                            </LocalizationProvider>
                         </Grid>
                     </Grid>
                 </div>
+
+                {error && (
+                    <p
+                        style={{
+                        fontSize: "14px",
+                        color: "red",
+                        marginLeft: "2rem",
+                        }}
+                    >
+                        {error}
+                    </p>
+                    )}
 
 
                 <div 
                     style={{
                        paddingLeft:"2rem",
+                       marginTop:"2rem"
                     }}>
                     <button className="save_btn" onClick={handleSubmitData}>
                         Export

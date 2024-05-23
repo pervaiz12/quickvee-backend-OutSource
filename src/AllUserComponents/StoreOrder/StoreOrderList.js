@@ -25,6 +25,7 @@ const StoreOrderList = (props) => {
             let data = {
                 pay_status: props.OrderStatusData,
                 order_env: props.OrderTypeData,
+                page:1,
                 ...userTypeData
             };
             if (data) {
@@ -32,17 +33,17 @@ const StoreOrderList = (props) => {
             }
 
         }
-    }, [props]);
+    }, [props.OrderStatusData,props.OrderTypeData,]);
 
     useEffect(() => {
         if (!AllStoreOrderDataState.loading && AllStoreOrderDataState.StoreOrderData)
         {
             console.log("kbkzsxdbv",AllStoreOrderDataState.StoreOrderData)
-            setallStoreOrderData(AllStoreOrderDataState.StoreOrderData );
+            setallStoreOrderData(AllStoreOrderDataState.StoreOrderData);
         }
         else
         {
-            setallStoreOrderData("");
+            setallStoreOrderData([]);
         }
     }, [
         AllStoreOrderDataState,
@@ -53,10 +54,6 @@ const StoreOrderList = (props) => {
     $.DataTable = require('datatables.net')
     const tableRef = useRef(null);
 
-    const [searchRecord, setSearchRecord] = useState("");
-    const handleSearchInputChange = (value) => {
-        setSearchRecord(value);
-      };
 
 
 
@@ -65,7 +62,7 @@ const StoreOrderList = (props) => {
             // "StoreInfo": `${data.id || ""} ${data.cname || ""} ${data.email || ""} ${data.delivery_phn || ""}`,
             "StoreInfo": `
           <div class="flex">
-            <div class="mx-2 ">State(${data.id})</div>
+            <div class="">ID(${data.id})</div>
             <div class="text-[#000000] order_method capitalize">${
               data.cname.length < 18
                 ? data.cname
@@ -95,7 +92,7 @@ const StoreOrderList = (props) => {
           ],
           destroy: true,
           searching: true,
-          dom: "<'row 'l<'col-sm-5'><'col-sm-7'><'col-sm-12't>><'row'i<'col-sm-7 mt-5'><'col-sm-5'>>",
+          dom: "<'row 'l<'col-sm-5'><'col-sm-7'p><'col-sm-12't>><'row'i<'col-sm-7 mt-5'><'col-sm-5'>>",
         //   dom: "<'row 'l<'col-sm-12'b>><'row'<'col-sm-7 mt-2'p><'col-sm-5'>>",
           lengthMenu: [ 10, 20, 50],
           lengthChange: true,
@@ -110,19 +107,30 @@ const StoreOrderList = (props) => {
           }
         });
     
-        $('#searchInput').on('input', function () {
-          table.search(this.value).draw();
-        });
+        // $('#searchInput').on('input', function () {
+        //   table.search(this.value).draw();
+        // });
     
         return () => {
           table.destroy();
         }
       }, [allStoreOrderData]);
 
+      const [searchRecord, setSearchRecord] = useState([]);
+   
+      const handleSearchInputChange = (value) => {
+          setSearchRecord(value);
+        };
+
+      useEffect(() => {
+        const table = $('#storeOrderTable').DataTable();
+        table.search(searchRecord).draw();
+      }, [searchRecord]);
+
 
     return (
         <>
-        <div className="box">
+        {/* <div className="box">
             <div className="box_shadow_div">
             <div className="store_order_div">
                 <h4>Store Order</h4>
@@ -159,17 +167,17 @@ const StoreOrderList = (props) => {
                 </table>
             </div>
             </div>
-            </div>
+            </div> */}
 
 
             <Grid container className="box_shadow_div">
         <Grid item xs={12}>
 
-            <Grid item>
+            {/* <Grid item>
               <div className="q-category-bottom-header">
                 <span>Store Order</span>
               </div>
-            </Grid>
+            </Grid> */}
           <Grid container sx={{ padding: 2.5 }}>
             <Grid item xs={12}>
               <InputTextSearch
