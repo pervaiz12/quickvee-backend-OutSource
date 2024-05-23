@@ -256,6 +256,7 @@ module.exports = Object.freeze({
   LOGIN_OTP_SUBMIT_AUTHENTICATION: "LoginApiReact/create_session", //
   LOGIN_VIA_SUPERADMIN: "LoginApiReact/login_via_superadmin", //
   DASHBOARD_COUNT_STORE: "DashboardReactApi/all_orders_total_api", //
+  DELETE_SINGLE_STORE: "UserController/delete",
 });
 
 // All api calls are initialized in this component for this application
