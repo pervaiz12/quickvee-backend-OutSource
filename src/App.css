@@ -255,7 +255,7 @@ input[type="number"] {
 .main-content {
   overflow-x: hidden;
   overflow-y: auto;
-  height: auto;
+  height: 100vh;
   overflow-x: hidden;
 }
 

@@ -91,7 +91,6 @@ export default function Unverified() {
 
   // ============================= END USEFFECTS =============================
 
-
   //  ============================= HANDLIING FUNCTIONS =============================
 
   const handleDeleteMerchant = async (tableData) => {
@@ -266,66 +265,60 @@ export default function Unverified() {
           <Grid container sx={{ padding: 2.5 }}>
             <Grid item xs={12}>
               <Pagination
-              currentPage={currentPage}
-              totalItems={totalCount}
-              itemsPerPage={rowsPerPage}
-              onPageChange={paginate}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
               />
-            
+            </Grid>
           </Grid>
-        </Grid>
-        <Grid container>
-                <TableContainer>
-                  <StyledTable
-                    sx={{ minWidth: 500 }}
-                    aria-label="customized table"
-                  >
-                    <TableHead>
-                      <StyledTableCell>Store Info</StyledTableCell>
-                      <StyledTableCell>Owner Name</StyledTableCell>
-                      <StyledTableCell>Merchant ID</StyledTableCell>
-                      <StyledTableCell>OTP</StyledTableCell>
-                      <StyledTableCell></StyledTableCell>
-                    </TableHead>
-                    <TableBody>
-                      {currentMerchants?.map((data, index) => (
-                        <StyledTableRow>
-                          <StyledTableCell>
-                            <div class="flex">
-                              <div class="text-[#000000] order_method capitalize">
-                                {data.owner_name.length < 18
-                                  ? data.owner_name
-                                  : data.owner_name.slice(0, 18) + `...` || ""}
-                              </div>
-                              <div class="mx-2 ">(State: {data.a_state})</div>
-                            </div>
-                            <div class="text-[#818181] lowercase">
-                              {data.email || ""}
-                            </div>
-                            <div class="text-[#818181]">
-                              {data.a_phone || ""}
-                            </div>
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <div class="text-[#000000] order_method capitalize">
-                              {data.name.length < 18
-                                ? data.name
-                                : data.name.slice(0, 18) + `...` || ""}
-                            </div>
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <div class="text-[#000000] order_method capitalize">
-                              {data.merchant_id}
-                            </div>
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <div class="text-[#000000] order_method capitalize">
-                              {data.ver_code}
-                            </div>
-                          </StyledTableCell>
-                          <StyledTableCell>
+          <Grid container>
+            <TableContainer>
+              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
+                <TableHead>
+                  <StyledTableCell>Store Info</StyledTableCell>
+                  <StyledTableCell>Owner Name</StyledTableCell>
+                  <StyledTableCell>Merchant ID</StyledTableCell>
+                  <StyledTableCell>OTP</StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
+                </TableHead>
+                <TableBody>
+                  {currentMerchants?.map((data, index) => (
+                    <StyledTableRow>
+                      <StyledTableCell>
+                        <div class="flex">
+                          <div class="text-[#000000] order_method capitalize">
+                            {data.owner_name.length < 18
+                              ? data.owner_name
+                              : data.owner_name.slice(0, 18) + `...` || ""}
+                          </div>
+                          <div class="mx-2 ">(State: {data.a_state})</div>
+                        </div>
+                        <div class="text-[#818181] lowercase">
+                          {data.email || ""}
+                        </div>
+                        <div class="text-[#818181]">{data.a_phone || ""}</div>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <div class="text-[#000000] order_method capitalize">
+                          {data.name.length < 18
+                            ? data.name
+                            : data.name.slice(0, 18) + `...` || ""}
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <div class="text-[#000000] order_method capitalize">
+                          {data.merchant_id}
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <div class="text-[#000000] order_method capitalize">
+                          {data.ver_code}
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell>
                         <div className="flex">
                           <img
                             className="mx-1 view "
@@ -353,13 +346,13 @@ export default function Unverified() {
                           <img class="mx-1" src={DisLike} alt="DisLike" />
                         </div>
                       </StyledTableCell>
-                        </StyledTableRow>
-                      ))}
-                    </TableBody>
-                  </StyledTable>
-                </TableContainer>
-              </Grid>
-            </Grid>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </StyledTable>
+            </TableContainer>
+          </Grid>
+        </Grid>
       </Grid>
       {/* <div className="q-order-main-page">
         <div className="box">

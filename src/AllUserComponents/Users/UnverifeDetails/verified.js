@@ -78,7 +78,7 @@ export default function Verified() {
     []
   );
 
-  console.log("VerifiedMerchantListState", VerifiedMerchantListState)
+  console.log("VerifiedMerchantListState", VerifiedMerchantListState);
 
   useEffect(() => {
     if (!VerifiedMerchantList.loading && VerifiedMerchantList.length >= 1) {
@@ -278,10 +278,7 @@ export default function Verified() {
           </Grid>
           <Grid container>
             <TableContainer>
-              <StyledTable
-                sx={{ minWidth: 500 }}
-                aria-label="customized table"
-              >
+              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
                 <TableHead>
                   {/* {TableRow.map((row) => (
                     <StyledTableCell>{row}</StyledTableCell>
