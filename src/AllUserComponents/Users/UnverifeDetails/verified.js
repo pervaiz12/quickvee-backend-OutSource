@@ -9,10 +9,6 @@ import {
 import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import Cookies from "js-cookie";
 import AddIcon from "../../../Assests/Category/addIcon.svg";
 import { Grid } from "@mui/material";
@@ -24,7 +20,52 @@ import DisLike from "../../../Assests/VerifiedMerchant/DisLike.svg";
 import $ from "jquery";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import { BASE_URL, DELETE_SINGLE_STORE } from "../../../Constants/Config";
+
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Pagination from "./Pagination";
+
+const StyledTable = styled(Table)(({ theme }) => ({
+  padding: 2, // Adjust padding as needed
+}));
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#253338",
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+  [`&.${tableCellClasses.table}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
+
+
 export default function Verified() {
+ 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  
+  const [filteredMerchants, setFilteredMerchants] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [searchRecord, setSearchRecord] = useState("");
+
   const tableRef = useRef(null);
 
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -38,12 +79,25 @@ export default function Verified() {
   const [VerifiedMerchantListState, setVerifiedMerchantListState] = useState(
     []
   );
+  console.log("VerifiedMerchantList", VerifiedMerchantListState)
 
   useEffect(() => {
     if (!VerifiedMerchantList.loading && VerifiedMerchantList.length >= 1) {
       setVerifiedMerchantListState(VerifiedMerchantList);
+      setFilteredMerchants(VerifiedMerchantList);
+      setTotalCount(VerifiedMerchantList.length);
     }
   }, [VerifiedMerchantList, VerifiedMerchantList.loading]);
+
+
+  const indexOfLastMerchant = currentPage * rowsPerPage;
+  const indexOfFirstMerchant = indexOfLastMerchant - rowsPerPage;
+  const currentMerchants =  searchRecord ? VerifiedMerchantListState : filteredMerchants.slice(
+    indexOfFirstMerchant,
+    indexOfLastMerchant
+  );
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
   console.log("VerifiedMerchantList: ", VerifiedMerchantList);
   const data = { type: "approve" };
   const merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
@@ -52,46 +106,49 @@ export default function Verified() {
     dispatch(getVerifiedMerchant({ type: "approve", ...userTypeData }));
   }, []);
   // ====================================
-  const [searchRecord, setSearchRecord] = useState("");
+
 
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
-  };
-  const filteredAdminRecord =
-    VerifiedMerchantList && Array.isArray(VerifiedMerchantList)
-      ? VerifiedMerchantList.filter(
-          (result) =>
-            (result.owner_name &&
-              result.owner_name
-                .toLowerCase()
-                .includes(searchRecord.toLowerCase())) ||
-            (result.name &&
-              result.name.toLowerCase().includes(searchRecord.toLowerCase())) ||
-            (result.email &&
-              result.email
-                .toLowerCase()
-                .includes(searchRecord.toLowerCase())) ||
-            (result.phone && result.phone.includes(searchRecord)) ||
-            (result.a_state && result.a_state.includes(searchRecord))
-        )
-      : [];
 
-  console.log("filteredAdminRecord : ", filteredAdminRecord);
+    const filteredAdminRecord =
+    filteredMerchants && Array.isArray(filteredMerchants)
+        ? filteredMerchants.filter(
+            (result) =>
+              (result.owner_name &&
+                result.owner_name
+                  .toLowerCase()
+                  .includes(searchRecord.toLowerCase())) ||
+              (result.name &&
+                result.name
+                  .toLowerCase()
+                  .includes(searchRecord.toLowerCase())) ||
+              (result.email &&
+                result.email
+                  .toLowerCase()
+                  .includes(searchRecord.toLowerCase())) ||
+              (result.phone && result.phone.includes(searchRecord)) ||
+              (result.a_state && result.a_state.includes(searchRecord))
+          )
+        : [];
+          console.log("filteredAdminRecord",filteredAdminRecord)
+    setVerifiedMerchantListState(filteredAdminRecord);
+  };
+
   // ====================================
   const handleEditMerchant = (data) => {
-    // Assuming 'result' is the data you want to pass to the editMerchant route
-    // Navigate to the editMerchant route and pass 'result' as state
+    console.log("handleEditMerchant ", data);
+ 
     navigate(`/users/editMerchant/${data}`);
   };
-  const handleDeleteMerchant = async (data) => {
+  const handleDeleteMerchant = async (tableData) => {
+    console.log("handleDeleteMer", tableData);
+   
     try {
       const { token, ...otherUserData } = userTypeData;
-      const [idFormTable, MerchantIdFromTable] = data;
-      // console.log("deleteMerchant data", data);
-      // console.log("deleteMerchant", idFormTable, MerchantIdFromTable);
       const delVendor = {
-        merchant_id: MerchantIdFromTable,
-        id: idFormTable,
+        merchant_id: tableData.merchant_id,
+        id: tableData.id,
         ...otherUserData,
       };
 
@@ -108,11 +165,10 @@ export default function Verified() {
 
       if (response) {
         const updatedVendorDetails = VerifiedMerchantListState.filter(
-          (vendor) => vendor.id !== idFormTable
+          (vendor) => vendor.id !== tableData.id
         );
         setVerifiedMerchantListState(updatedVendorDetails);
-
-        // alert(response.data.message);
+        setFilteredMerchants(updatedVendorDetails)
       } else {
         console.error(response);
       }
@@ -125,7 +181,7 @@ export default function Verified() {
       merchant_id: merchant_id,
       ...userTypeData,
     };
-    // const formdata = new FormData();
+
 
     dispatch(handleMoveDash(data)).then((result) => {
       if (result?.payload?.status == true) {
@@ -144,81 +200,19 @@ export default function Verified() {
       }
     });
   };
-  $.DataTable = require("datatables.net");
-  useEffect(() => {
-    const modifiedData = Object.entries(VerifiedMerchantListState).map(
-      ([key, data], i) => {
-        return {
-          StoreInfo: `
-          <div class="flex">
-            <div class="text-[#000000] order_method capitalize">${
-              data.name.length < 18
-                ? data.name
-                : data.name.slice(0, 18) + `...` || ""
-            }</div>
-            <div class="mx-2 ">State(${data.a_state})</div>
-          </div>
-          <div class="text-[#818181] lowercase">${data.email || ""}</div>
-          <div class="text-[#818181]">${data.a_phone || ""}</div>
-          `,
-          OwnerName: `<div class="text-[#000000] order_method capitalize">${
-            data.owner_name || ""
-          }</div>`,
-          MerchantID: `<div class="text-[#000000] order_method capitalize">${
-            data.merchant_id || ""
-          }</div>`,
-          View: `<div class="flex" >
-                  <img class="mx-1 view " data-id="${
-                    data.merchant_id
-                  }" src=${View} alt="View"/>
-                  <img class="mx-1 edit"  data-id="${
-                    data.id
-                  }"  src=${Edit} alt="Edit"/>
-                  <img class="mx-1 delete" data-id="${[
-                    data.id,
-                    data.merchant_id,
-                  ]}" src=${Delete} alt="Delete" />
-                  <img class="mx-1" src=${DisLike} alt="DisLike"/>
-                </div>`,
-        };
-      }
-    );
 
-    $(tableRef.current).on("click", "img.view", function () {
-      const merchantId = $(this).data("id");
-      handleGetVerifiedMerchant(merchantId);
-    });
-    $(tableRef.current).on("click", "img.edit", function () {
-      const merchantId = $(this).data("id");
-      handleEditMerchant(merchantId);
-    });
-    $(tableRef.current).on("click", "img.delete", function () {
-      const data = $(this).data("id");
-      handleDeleteMerchant(data);
-    });
-
-    const table = $("#OnlineStoreTable").DataTable({
-      data: modifiedData,
-      columns: [
-        { title: "Store Info", data: "StoreInfo", orderable: false },
-        { title: "Owner Name", data: "OwnerName", orderable: false },
-        { title: "Merchant ID", data: "MerchantID", orderable: false },
-        { title: " ", data: "View", orderable: false },
-      ],
-      destroy: true,
-      searching: true,
-      dom: "<'row 'l<'col-sm-12'b>><'row'<'col-sm-7 mt-2'p><'col-sm-5'>>",
-      lengthMenu: [10, 20, 50],
-      lengthChange: true,
-      ordering: false,
-      language: {
-        paginate: {
-          previous: "<",
-          next: ">",
-        },
-      },
-    });
-  }, [filteredAdminRecord]);
+  $(tableRef.current).on("click", "img.delete", function () {
+    const data = $(this).data("id");
+    handleDeleteMerchant(data);
+  });
+  $(tableRef.current).on("click", "img.view", function () {
+    const merchantId = $(this).data("id");
+    handleGetVerifiedMerchant(merchantId);
+  });
+  $(tableRef.current).on("click", "img.edit", function () {
+    const merchantId = $(this).data("id");
+    handleEditMerchant(merchantId);
+  });
 
   //  ====================================
   return (
@@ -276,10 +270,95 @@ export default function Verified() {
               />
             </Grid>
           </Grid>
-          <Grid container sx={{ padding: 0 }}>
+          <Grid container sx={{ padding: 2.5 }}>
             <Grid item xs={12}>
-              <table id="OnlineStoreTable" ref={tableRef}></table>
+              <Pagination 
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+              
+              />
             </Grid>
+          </Grid>
+          <Grid container>
+            <TableContainer>
+              <StyledTable
+               initialState={{
+                pagination: {
+                  paginationModel: { page: 0, pageSize: 5 },
+                },
+              }}
+              sx={{ minWidth: 500 }} aria-label="customized table">
+                <TableHead>
+                  {/* {TableRow.map((row) => (
+                    <StyledTableCell>{row}</StyledTableCell>
+                  ))} */}
+                  <StyledTableCell>Store Info</StyledTableCell>
+                  <StyledTableCell>Owner Name</StyledTableCell>
+                  <StyledTableCell>Merchant ID</StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
+                </TableHead>
+                <TableBody>
+                  { currentMerchants.map((data, index) => (
+                    <StyledTableRow>
+                      <StyledTableCell>
+                        <div class="flex">
+                          <div class="text-[#000000] order_method capitalize">
+                            {data.name.length < 18
+                              ? data.name
+                              : data.name.slice(0, 18) + `...` || ""}
+                          </div>
+                          <div class="mx-2 ">(State{data.a_state})</div>
+                        </div>
+                        <div class="text-[#818181] lowercase">
+                          {data.email || ""}
+                        </div>
+                        <div class="text-[#818181]">{data.a_phone || ""}</div>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <div class="text-[#000000] order_method capitalize">
+                          {data.owner_name || ""}
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <div class="text-[#000000] order_method capitalize">
+                          {data.merchant_id || ""}
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <div className="flex">
+                          <img
+                            className="mx-1 view "
+                            data-id="${data.merchant_id}"
+                            onClick={() =>
+                              handleGetVerifiedMerchant(data.merchant_id)
+                            }
+                            src={View}
+                            alt="View"
+                          />
+                          <img
+                            className="mx-1 edit"
+                            data-id="${data.id}"
+                            onClick={() => handleEditMerchant(data.id)}
+                            src={Edit}
+                            alt="Edit"
+                          />
+                          <img
+                            class="mx-1 delete"
+                            data-id="${[data.id,data.merchant_id,]}"
+                            onClick={() => handleDeleteMerchant(data)}
+                            src={Delete}
+                            alt="Delete"
+                          />
+                          <img class="mx-1" src={DisLike} alt="DisLike" />
+                        </div>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </StyledTable>
+            </TableContainer>
           </Grid>
         </Grid>
       </Grid>

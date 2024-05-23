@@ -120,7 +120,7 @@ const Customer = () => {
           >
             <Grid item>
               <div className="q-category-bottom-header">
-                <span>Customer ok</span>
+                <span>Customer</span>
               </div>
             </Grid>
             <Grid item>
