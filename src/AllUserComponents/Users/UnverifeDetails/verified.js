@@ -9,10 +9,6 @@ import {
 import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
-import InputLabel from "@mui/material/InputLabel";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
 import Cookies from "js-cookie";
 import AddIcon from "../../../Assests/Category/addIcon.svg";
 import { Grid } from "@mui/material";
@@ -68,7 +64,7 @@ export default function Verified() {
   
   const [filteredMerchants, setFilteredMerchants] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
-
+  const [searchRecord, setSearchRecord] = useState("");
 
   const tableRef = useRef(null);
 
@@ -83,6 +79,7 @@ export default function Verified() {
   const [VerifiedMerchantListState, setVerifiedMerchantListState] = useState(
     []
   );
+  console.log("VerifiedMerchantList", VerifiedMerchantListState)
 
   useEffect(() => {
     if (!VerifiedMerchantList.loading && VerifiedMerchantList.length >= 1) {
@@ -95,7 +92,7 @@ export default function Verified() {
 
   const indexOfLastMerchant = currentPage * rowsPerPage;
   const indexOfFirstMerchant = indexOfLastMerchant - rowsPerPage;
-  const currentMerchants = filteredMerchants.slice(
+  const currentMerchants =  searchRecord ? VerifiedMerchantListState : filteredMerchants.slice(
     indexOfFirstMerchant,
     indexOfLastMerchant
   );
@@ -109,14 +106,14 @@ export default function Verified() {
     dispatch(getVerifiedMerchant({ type: "approve", ...userTypeData }));
   }, []);
   // ====================================
-  const [searchRecord, setSearchRecord] = useState("");
+
 
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
 
     const filteredAdminRecord =
-      VerifiedMerchantListState && Array.isArray(VerifiedMerchantListState)
-        ? VerifiedMerchantListState.filter(
+    filteredMerchants && Array.isArray(filteredMerchants)
+        ? filteredMerchants.filter(
             (result) =>
               (result.owner_name &&
                 result.owner_name
@@ -134,25 +131,21 @@ export default function Verified() {
               (result.a_state && result.a_state.includes(searchRecord))
           )
         : [];
-
+          console.log("filteredAdminRecord",filteredAdminRecord)
     setVerifiedMerchantListState(filteredAdminRecord);
   };
 
   // ====================================
   const handleEditMerchant = (data) => {
     console.log("handleEditMerchant ", data);
-    // Assuming 'result' is the data you want to pass to the editMerchant route
-    // Navigate to the editMerchant route and pass 'result' as state
+ 
     navigate(`/users/editMerchant/${data}`);
   };
   const handleDeleteMerchant = async (tableData) => {
     console.log("handleDeleteMer", tableData);
-    // const tempArray = tableData.split(",");
-    // console.log("tempArray : ", tempArray);
+   
     try {
       const { token, ...otherUserData } = userTypeData;
-      // const [idFormTable, MerchantIdFromTable] = tempArray;
-
       const delVendor = {
         merchant_id: tableData.merchant_id,
         id: tableData.id,
@@ -175,8 +168,7 @@ export default function Verified() {
           (vendor) => vendor.id !== tableData.id
         );
         setVerifiedMerchantListState(updatedVendorDetails);
-
-        // alert(response.data.message);
+        setFilteredMerchants(updatedVendorDetails)
       } else {
         console.error(response);
       }
@@ -189,7 +181,7 @@ export default function Verified() {
       merchant_id: merchant_id,
       ...userTypeData,
     };
-    // const formdata = new FormData();
+
 
     dispatch(handleMoveDash(data)).then((result) => {
       if (result?.payload?.status == true) {
@@ -208,68 +200,7 @@ export default function Verified() {
       }
     });
   };
-  // $.DataTable = require("datatables.net");
-  // useEffect(() => {
-  //   const modifiedData = Object.entries(VerifiedMerchantListState).map(
-  //     ([key, data], i) => {
-  //       return {
-  //         StoreInfo: `
-  //         <div class="flex">
-  //           <div class="text-[#000000] order_method capitalize">${
-  //             data.name.length < 18
-  //               ? data.name
-  //               : data.name.slice(0, 18) + `...` || ""
-  //           }</div>
-  //           <div class="mx-2 ">State(${data.a_state})</div>
-  //         </div>
-  //         <div class="text-[#818181] lowercase">${data.email || ""}</div>
-  //         <div class="text-[#818181]">${data.a_phone || ""}</div>
-  //         `,
-  //         OwnerName: `<div class="text-[#000000] order_method capitalize">${
-  //           data.owner_name || ""
-  //         }</div>`,
-  //         MerchantID: `<div class="text-[#000000] order_method capitalize">${
-  //           data.merchant_id || ""
-  //         }</div>`,
-  //         View: `<div class="flex" >
-  //                 <img class="mx-1 view " data-id="${
-  //                   data.merchant_id
-  //                 }" src=${View} alt="View"/>
-  //                 <img class="mx-1 edit"  data-id="${
-  //                   data.id
-  //                 }"  src=${Edit} alt="Edit"/>
-  //                 <img class="mx-1 delete" data-id="${[
-  //                   data.id,
-  //                   data.merchant_id,
-  //                 ]}" src=${Delete} alt="Delete" />
-  //                 <img class="mx-1" src=${DisLike} alt="DisLike"/>
-  //               </div>`,
-  //       };
-  //     }
-  //   );
 
-  //   const table = $("#OnlineStoreTable").DataTable({
-  //     data: modifiedData,
-  //     columns: [
-  //       { title: "Store Info", data: "StoreInfo", orderable: false },
-  //       { title: "Owner Name", data: "OwnerName", orderable: false },
-  //       { title: "Merchant ID", data: "MerchantID", orderable: false },
-  //       { title: " ", data: "View", orderable: false },
-  //     ],
-  //     destroy: true,
-  //     searching: true,
-  //     dom: "<'row 'l<'col-sm-12'b>><'row'<'col-sm-7 mt-2'p><'col-sm-5'>>",
-  //     lengthMenu: [10, 20, 50],
-  //     lengthChange: true,
-  //     ordering: false,
-  //     language: {
-  //       paginate: {
-  //         previous: "<",
-  //         next: ">",
-  //       },
-  //     },
-  //   });
-  // }, [VerifiedMerchantListState]);
   $(tableRef.current).on("click", "img.delete", function () {
     const data = $(this).data("id");
     handleDeleteMerchant(data);
@@ -369,7 +300,7 @@ export default function Verified() {
                   <StyledTableCell></StyledTableCell>
                 </TableHead>
                 <TableBody>
-                  {currentMerchants.map((data, index) => (
+                  { currentMerchants.map((data, index) => (
                     <StyledTableRow>
                       <StyledTableCell>
                         <div class="flex">
@@ -429,124 +360,10 @@ export default function Verified() {
               </StyledTable>
             </TableContainer>
           </Grid>
-          {/* <Grid container sx={{ padding: 0 }}>
-            <Grid item xs={12}>
-              <table id="OnlineStoreTable" ref={tableRef}></table>
-            </Grid>
-          </Grid> */}
         </Grid>
       </Grid>
 
-      {/* <div className="q-order-main-page">
-        <div className="box">
-          <div className="box_shadow_div">
-            <div className="qvrow">
-              <div className="col-qv-8">
-                <div className="btn-area">
-                  <Link to="/users/addMerchant" className="blue_btn">
-                    ADD
-                  </Link>
-                </div>
-              </div>
-              <div className="col-qv-4">
-                <div className="seacrh_area">
-                  <div className="input_area">
-                    <input
-                      className=""
-                      type="text"
-                      value={searchRecord}
-                      onInput={handleSearchInputChange}
-                      placeholder="Search..."
-                      autoComplete="off"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="table_main_area">
-              <div className="table_header_sticky">
-                <div className="table_header_top">
-               
-                </div>
-                <div className="table_header">
-                  <p className="table12">Owner Name</p>
-                  <p className="table12">Name</p>
-                  <p className="table19">Email</p>
-                  <p className="table10">Phone</p>
-                  <p className="table5">State</p>
-                  <p className="table12">Payment Mode</p>
-                  <p className="table10">Merchant ID</p>
-                  <p className="table10">OTP</p>
-                  <p className="table10">Action</p>
-                </div>
-              </div>
-              <div className="table_body">
-                {Array.isArray(VerifiedMerchantList) &&
-                  VerifiedMerchantList &&
-                  filteredAdminRecord.map((result, index) => {
-                 
-                    return (
-                      <div className="table_row" key={index}>
-                        <p className="table12">{result.owner_name}</p>
-                        <p className="table12">{result.name}</p>
-                        <p className="table19 txt_ellipsis">{result.email}</p>
-                        <p className="table10">{result.a_phone}</p>
-                        <p className="table5">{result.a_state}</p>
-                        <p className="table12">{result.paymentmode}</p>
-                        <p className="table10">{result.merchant_id}</p>
-                        <p className="table10">{result.ver_code}</p>
-
-                        <div className="table10">
-                          <div className="verifiedTableIcon">
-                       
-                            <FormControl fullWidth>
-                              <InputLabel id="demo-simple-select-label">
-                                Action
-                              </InputLabel>
-                              <Select
-                                labelId="demo-simple-select-label"
-                                id="demo-simple-select"
-                                value={""}
-                                label="Age"
-                                onChange={""}
-                              >
-                                <MenuItem
-                                  value={10}
-                                  onClick={() =>
-                                    handleGetVerifiedMerchant(
-                                      result.merchant_id
-                                    )
-                                  }
-                                >
-                                  view
-                                </MenuItem>
-                                <MenuItem value={20}>
-                                  <div
-                             
-                                    onClick={() =>
-                                      handleEditMerchant(result.id)
-                                    }
-                                  >
-                                    <img src="/static/media/editIcon.4dccb72a9324ddcac62b9a41d0a042db.svg"></img>
-                                  </div>
-                                </MenuItem>
-                                <MenuItem value={30}>
-                                  <Link>
-                                    <img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img>
-                                  </Link>
-                                </MenuItem>
-                              </Select>
-                            </FormControl>
-                          </div>
-                        </div>
-                     </div>
-                    );
-                  })}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
+   
     </>
   );
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-
+import LeftArrow from "../../../Assests/VerifiedMerchant/LeftArrow.svg"
 const Pagination = ({ currentPage, totalItems, itemsPerPage, onPageChange }) => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -68,10 +68,10 @@ const Pagination = ({ currentPage, totalItems, itemsPerPage, onPageChange }) => 
 
   return (
     <nav>
-      <ul className="pagination">
+      <ul className="flex justify-end	">
         <li className={`page-item ${currentPage === 1 ? 'disabled' : ''}`}>
           <button className="page-link" onClick={() => onPageChange(currentPage - 1)}>
-            Previous
+            <img src={LeftArrow} />
           </button>
         </li>
         {renderPaginationItems()}
