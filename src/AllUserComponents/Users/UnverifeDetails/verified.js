@@ -77,7 +77,8 @@ export default function Verified() {
   const [VerifiedMerchantListState, setVerifiedMerchantListState] = useState(
     []
   );
-  console.log("VerifiedMerchantList", VerifiedMerchantListState);
+
+  console.log("VerifiedMerchantListState", VerifiedMerchantListState)
 
   useEffect(() => {
     if (!VerifiedMerchantList.loading && VerifiedMerchantList.length >= 1) {
@@ -94,7 +95,6 @@ export default function Verified() {
     : filteredMerchants.slice(indexOfFirstMerchant, indexOfLastMerchant);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  console.log("VerifiedMerchantList: ", VerifiedMerchantList);
   const data = { type: "approve" };
   const merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
@@ -126,7 +126,7 @@ export default function Verified() {
               (result.a_state && result.a_state.includes(searchRecord))
           )
         : [];
-    console.log("filteredAdminRecord", filteredAdminRecord);
+
     setVerifiedMerchantListState(filteredAdminRecord);
   };
 
