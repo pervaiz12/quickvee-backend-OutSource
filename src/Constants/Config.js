@@ -255,7 +255,10 @@ module.exports = Object.freeze({
   LOGIN_OTP_AUTHENTICATION: "LoginApiReact/chk_otp", //
   LOGIN_OTP_SUBMIT_AUTHENTICATION: "LoginApiReact/create_session", //
   LOGIN_VIA_SUPERADMIN: "LoginApiReact/login_via_superadmin", //
-  DELETE_SINGLE_STORE:"UserController/delete"
+  DELETE_SINGLE_STORE:"UserController/delete",
+  UNAPPROVE_SINGLE_STORE: "UserController/unapprove",
+  APPROVE_SINGLE_STORE: "UserController/approve",
+  EXPORTCSV: "UserController/exportCSV",
 });
 
 // All api calls are initialized in this component for this application
