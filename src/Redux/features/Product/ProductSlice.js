@@ -206,7 +206,7 @@ export const fetchVendorList = createAsyncThunk(
   async (payload) => {
     try {
       const response = await axios.post(
-        BASE_URL + "Productapi/product_vendors_list",
+        BASE_URL + "Product_api_react/product_vendors_list",
         payload
       );
       return response?.data;
