@@ -440,8 +440,48 @@ function App() {
             path="/users/view/unapprove/label"
             element={<Main visible={"label"} />}
           />
+          <Route
+            exact
+            path="/users/view/unapprove/need-help"
+            element={<Main visible={"need-help"} />}
+          />
+          <Route
+            exact
+            path="/store-reporting/current-inventory-value"
+            element={<Main visible={"current-inventory-value"} />}
+          />
+          <Route exact path="/toptraders" element={<TopTenders />} />
+          <Route
+            exact
+            path="/users/view/unapprove/label"
+            element={<Main visible={"label"} />}
+          />
 
-          {/* ---------------------------------------- */}
+          <Route
+            exact
+            path="/users/view/unapprove/menu/defaults/edit-defaults/:defaultsCode"
+            element={<Main visible={"edit-defaults"} />}
+          />
+          <Route
+            exact
+            path="/users/view/unapprove/release_apk"
+            element={<Main visible={"release_apk"} />}
+          />
+
+          <Route
+            exact
+            path="/users/view/unapprove/permission"
+            element={<Main visible={"permission"} />}
+          />
+          <Route
+            exact
+            path="/users/view/unapprove/need-help"
+            element={<Main visible={"need-help"} />}
+          />
+        </Route>
+
+        {/* ------------------------Superadmin---------------- */}
+        <Route element={<ProtectedRoute visible="superadmin" />}>
           <Route
             exact
             path="/users/manager_view"
@@ -489,11 +529,6 @@ function App() {
           />
           <Route
             exact
-            path="/users/editMerchant/:id"
-            element={<Main visible={"editMerchant"} />}
-          />
-          <Route
-            exact
             path="/users/editAdmin/:id"
             element={<Main visible={"editAdmin"} />}
           />
@@ -507,13 +542,11 @@ function App() {
             path="/users/editMerchant/:id"
             element={<Main visible={"editMerchant"} />}
           />
-          {/* ------------------------------------ */}
           <Route
             exact
             path="/users/view/unapprove/newsletter"
             element={<Main visible={"newsletter"} />}
           />
-
           <Route
             exact
             path="/users/view/unapprove/store-order"
@@ -529,6 +562,7 @@ function App() {
             path="/users/view/unapprove/menu/defaults"
             element={<Main visible={"defaults"} />}
           />
+
           <Route
             exact
             path="/users/view/unapprove/release_apk"
@@ -544,7 +578,6 @@ function App() {
             path="/users/view/unapprove/category-duplicate"
             element={<Main visible={"category-duplicate"} />}
           />
-
           <Route
             exact
             path="/users/view/unapprove/product-duplicate"
@@ -565,27 +598,18 @@ function App() {
             path="/users/view/unapprove/merchant-details"
             element={<Main visible={"merchant-details"} />}
           />
-          <Route
-            exact
-            path="/users/view/unapprove/need-help"
-            element={<Main visible={"need-help"} />}
-          />
-          <Route
-            exact
-            path="/store-reporting/current-inventory-value"
-            element={<Main visible={"current-inventory-value"} />}
-          />
+        </Route>
 
-          {/* <Route exact path="/" element={<DashboardMain />} /> */}
+        {/* -----------------=============superadmin===========------------------- */}
 
-          <Route exact path="/toptraders" element={<TopTenders />} />
+        {/* <Route exact path="/" element={<DashboardMain />} /> */}
 
-          {/* <Route path="/report" element={<MainReport />} /> */}
-          {/* <Route path="/store-settings/taxes" element={<MainTaxes />} /> */}
+        {/* <Route path="/report" element={<MainReport />} /> */}
+        {/* <Route path="/store-settings/taxes" element={<MainTaxes />} /> */}
 
-          {/* <Route path="/store-settings/info"  element={<MainStoreOption />} /> */}
-          {/* <Route path="/store-settings/options" element={<MainStoreOption />} /> */}
-          {/* <Route
+        {/* <Route path="/store-settings/info"  element={<MainStoreOption />} /> */}
+        {/* <Route path="/store-settings/options" element={<MainStoreOption />} /> */}
+        {/* <Route
 
       <Route exact path="/users/view/unapprove" element={<Main  visible={"multimerchant"} />} />
       <Route exact path="/dashboard" element={<Main  visible={"dashboard"} />} />
@@ -635,118 +659,57 @@ function App() {
 
      {/* multiple users dashbaord */}
 
-          <Route
-            exact
-            path="/users/view/unapprove/label"
-            element={<Main visible={"label"} />}
-          />
-          <Route
-            exact
-            path="/users/view/unapprove/newsletter"
-            element={<Main visible={"newsletter"} />}
-          />
-          <Route
-            exact
-            path="/users/view/unapprove/store-order"
-            element={<Main visible={"store-order"} />}
-          />
-          <Route
-            exact
-            path="/users/view/unapprove/order-count"
-            element={<Main visible={"order-count"} />}
-          />
-          <Route
-            exact
-            path="/users/view/unapprove/menu/defaults"
-            element={<Main visible={"defaults"} />}
-          />
-          <Route
-            exact
-            path="/users/view/unapprove/menu/defaults/edit-defaults/:defaultsCode"
-            element={<Main visible={"edit-defaults"} />}
-          />
-          <Route
-            exact
-            path="/users/view/unapprove/release_apk"
-            element={<Main visible={"release_apk"} />}
-          />
-          <Route
-            exact
-            path="/users/view/unapprove/inverntory-duplicate"
-            element={<Main visible={"inverntory-duplicate"} />}
-          />
-          <Route
+        {/* <Route
             exact
             path="/users/view/unapprove/category-duplicate"
             element={<Main visible={"category-duplicate"} />}
-          />
+          /> */}
 
-          <Route
-            exact
-            path="/users/view/unapprove/product-duplicate"
-            element={<Main visible={"product-duplicate"} />}
-          />
-          <Route
-            exact
-            path="/users/view/unapprove/permission"
-            element={<Main visible={"permission"} />}
-          />
-          <Route
+        {/* <Route
             exact
             path="/users/view/unapprove/invertory-export"
             element={<Main visible={"invertory-export"} />}
-          />
-          <Route
-            exact
-            path="/users/view/unapprove/merchant-details"
-            element={<Main visible={"merchant-details"} />}
-          />
-          <Route
-            exact
-            path="/users/view/unapprove/need-help"
-            element={<Main visible={"need-help"} />}
-          />
+          /> */}
 
-          {/* <Route exact path="/" element={<DashboardMain />} /> */}
+        {/* <Route exact path="/" element={<DashboardMain />} /> */}
 
-          {/* <Route path="/store-settings/info"  element={<MainStoreOption />} /> */}
+        {/* <Route path="/store-settings/info"  element={<MainStoreOption />} /> */}
 
-          {/* /store-settings/inventory */}
-          {/* <Route path="/store-reporting/inventory" element={<MainInventory />} /> */}
+        {/* /store-settings/inventory */}
+        {/* <Route path="/store-reporting/inventory" element={<MainInventory />} /> */}
 
-          {/* <Route
+        {/* <Route
           path="/store-reporting/employee-list"
           element={<MainEmployeelist />}
         /> */}
 
-          {/* <Route
+        {/* <Route
           path="/store-reporting/permission/:employee_id"
           element={<Permission />}
         /> */}
 
-          {/* <Route
+        {/* <Route
           path="/store-reporting/id-verification"
           element={<CheckIDVerifyMain />}
         /> */}
-          {/* <Route path="/store-reporting/order-type" element={<MainItem />} />
+        {/* <Route path="/store-reporting/order-type" element={<MainItem />} />
         <Route path="/store-reporting/item-sales" element={<MainItemSales />} />
         <Route path="/store-reporting/taxes" element={<MainTaxesReport />} /> */}
 
-          {/* <Route
+        {/* <Route
           path="/store-settings/payment-method-detail-report"
           element={<PaymentMethodReport />}
         /> */}
 
-          {/* <Route
+        {/* <Route
           path="/store-settings/item-create-between"
           element={<NewItemCreatedBetweenMain />}
         /> */}
-          {/* 
+        {/* 
         <Route
           path="/store-settings/recorder-inventory"
           element={<ReorderInventoryMain />}
         /> */}
-        </Route>
       </Routes>
     </>
   );
