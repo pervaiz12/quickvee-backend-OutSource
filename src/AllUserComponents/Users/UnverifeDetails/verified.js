@@ -19,7 +19,12 @@ import Delete from "../../../Assests/VerifiedMerchant/Delete.svg";
 import DisLike from "../../../Assests/VerifiedMerchant/DisLike.svg";
 import $ from "jquery";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
-import { BASE_URL, DELETE_SINGLE_STORE } from "../../../Constants/Config";
+import {
+  BASE_URL,
+  DELETE_SINGLE_STORE,
+  UNAPPROVE_SINGLE_STORE,
+  EXPORTCSV,
+} from "../../../Constants/Config";
 
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -63,7 +68,8 @@ export default function Verified() {
   const [filteredMerchants, setFilteredMerchants] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [searchRecord, setSearchRecord] = useState("");
-
+  const [storename, setStorename] = useState();
+  const [submitmessage, setsubmitmessage] = useState("");
   const tableRef = useRef(null);
 
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -78,7 +84,7 @@ export default function Verified() {
     []
   );
 
-  console.log("VerifiedMerchantListState", VerifiedMerchantListState)
+  console.log("VerifiedMerchantListState", VerifiedMerchantListState);
 
   useEffect(() => {
     if (!VerifiedMerchantList.loading && VerifiedMerchantList.length >= 1) {
@@ -90,9 +96,8 @@ export default function Verified() {
 
   const indexOfLastMerchant = currentPage * rowsPerPage;
   const indexOfFirstMerchant = indexOfLastMerchant - rowsPerPage;
-  const currentMerchants = searchRecord
-    ? VerifiedMerchantListState
-    : filteredMerchants.slice(indexOfFirstMerchant, indexOfLastMerchant);
+  const currentMerchants =  VerifiedMerchantListState.slice(indexOfFirstMerchant, indexOfLastMerchant);
+    
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const data = { type: "approve" };
@@ -105,29 +110,31 @@ export default function Verified() {
 
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
-
-    const filteredAdminRecord =
-      filteredMerchants && Array.isArray(filteredMerchants)
-        ? filteredMerchants.filter(
-            (result) =>
-              (result.owner_name &&
-                result.owner_name
-                  .toLowerCase()
-                  .includes(searchRecord.toLowerCase())) ||
-              (result.name &&
-                result.name
-                  .toLowerCase()
-                  .includes(searchRecord.toLowerCase())) ||
-              (result.email &&
-                result.email
-                  .toLowerCase()
-                  .includes(searchRecord.toLowerCase())) ||
-              (result.phone && result.phone.includes(searchRecord)) ||
-              (result.a_state && result.a_state.includes(searchRecord))
-          )
-        : [];
-
-    setVerifiedMerchantListState(filteredAdminRecord);
+    if (value === "") {
+      setVerifiedMerchantListState(VerifiedMerchantList);
+    } else {
+      const filteredAdminRecord =
+        VerifiedMerchantList && Array.isArray(VerifiedMerchantList)
+          ? VerifiedMerchantList.filter(
+              (result) =>
+                (result.owner_name &&
+                  result.owner_name
+                    .toLowerCase()
+                    .includes(searchRecord.toLowerCase())) ||
+                (result.name &&
+                  result.name
+                    .toLowerCase()
+                    .includes(searchRecord.toLowerCase())) ||
+                (result.email &&
+                  result.email
+                    .toLowerCase()
+                    .includes(searchRecord.toLowerCase())) ||
+                (result.a_phone && result.a_phone.includes(searchRecord)) ||
+                (result.a_state && result.a_state.includes(searchRecord))
+            )
+          : [];
+      setVerifiedMerchantListState(filteredAdminRecord);
+    }
   };
 
   // ====================================
@@ -195,18 +202,77 @@ export default function Verified() {
     });
   };
 
-  $(tableRef.current).on("click", "img.delete", function () {
-    const data = $(this).data("id");
-    handleDeleteMerchant(data);
-  });
-  $(tableRef.current).on("click", "img.view", function () {
-    const merchantId = $(this).data("id");
-    handleGetVerifiedMerchant(merchantId);
-  });
-  $(tableRef.current).on("click", "img.edit", function () {
-    const merchantId = $(this).data("id");
-    handleEditMerchant(merchantId);
-  });
+  const hadleDislikeMerchant = async (merchant_id) => {
+    try {
+      const { token, ...otherUserData } = userTypeData;
+      const delVendor = {
+        id: merchant_id,
+        ...otherUserData,
+      };
+
+      const response = await axios.post(
+        BASE_URL + UNAPPROVE_SINGLE_STORE,
+        delVendor,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response) {
+        const updatedVendorDetails = VerifiedMerchantListState.filter(
+          (vendor) => vendor.id !== merchant_id
+        );
+        setVerifiedMerchantListState(updatedVendorDetails);
+        setFilteredMerchants(updatedVendorDetails);
+      } else {
+        console.error(response);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+  const handleExportTransaction = async (type) => {
+    try {
+      const { token, ...otherUserData } = userTypeData;
+      const delVendor = {
+        type: type,
+        ...otherUserData,
+      };
+
+      const response = await axios.post(BASE_URL + EXPORTCSV, delVendor, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (response) {
+        const csvData = response.data;
+        // Convert the data to a Blob
+        const blob = new Blob([csvData], { type: "text/csv" });
+
+        // Create a URL for the Blob
+        const fileUrl = URL.createObjectURL(blob);
+
+        // Create a temporary anchor element and trigger a download
+        const a = document.createElement("a");
+        a.href = fileUrl;
+        a.download = "Inventory_" + storename + ".csv"; // Name of the downloaded file
+        document.body.appendChild(a);
+        a.click();
+
+        // Cleanup: remove the anchor element and revoke the Blob URL
+        document.body.removeChild(a);
+        URL.revokeObjectURL(fileUrl);
+        setsubmitmessage("Inventory Exported Successfully");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   //  ====================================
   return (
@@ -230,7 +296,12 @@ export default function Verified() {
             <Grid item>
               <Grid container direction="row" alignItems="center">
                 <Grid item>
-                  <div className="flex q-category-bottom-header ">
+                  <div
+                    onClick={() => {
+                      handleExportTransaction(2);
+                    }}
+                    className="flex q-category-bottom-header "
+                  >
                     <p className="me-2">Export Last Transaction</p>
                   </div>
                 </Grid>
@@ -278,10 +349,7 @@ export default function Verified() {
           </Grid>
           <Grid container>
             <TableContainer>
-              <StyledTable
-                sx={{ minWidth: 500 }}
-                aria-label="customized table"
-              >
+              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
                 <TableHead>
                   {/* {TableRow.map((row) => (
                     <StyledTableCell>{row}</StyledTableCell>
@@ -322,7 +390,6 @@ export default function Verified() {
                         <div className="flex">
                           <img
                             className="mx-1 view "
-                            data-id="${data.merchant_id}"
                             onClick={() =>
                               handleGetVerifiedMerchant(data.merchant_id)
                             }
@@ -331,19 +398,22 @@ export default function Verified() {
                           />
                           <img
                             className="mx-1 edit"
-                            data-id="${data.id}"
                             onClick={() => handleEditMerchant(data.id)}
                             src={Edit}
                             alt="Edit"
                           />
                           <img
                             class="mx-1 delete"
-                            data-id="${[data.id,data.merchant_id,]}"
                             onClick={() => handleDeleteMerchant(data)}
                             src={Delete}
                             alt="Delete"
                           />
-                          <img class="mx-1" src={DisLike} alt="DisLike" />
+                          <img
+                            class="mx-1"
+                            onClick={() => hadleDislikeMerchant(data.id)}
+                            src={DisLike}
+                            alt="DisLike"
+                          />
                         </div>
                       </StyledTableCell>
                     </StyledTableRow>

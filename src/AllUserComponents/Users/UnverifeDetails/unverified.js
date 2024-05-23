@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { BASE_URL, DELETE_SINGLE_STORE } from "../../../Constants/Config";
+import { BASE_URL, DELETE_SINGLE_STORE, APPROVE_SINGLE_STORE,EXPORTCSV} from "../../../Constants/Config";
 import {
   getUnVerifiedMerchant,
   handleMoveDash,
@@ -32,7 +32,7 @@ import { Grid } from "@mui/material";
 import View from "../../../Assests/VerifiedMerchant/View.svg";
 import Edit from "../../../Assests/VerifiedMerchant/Edit.svg";
 import Delete from "../../../Assests/VerifiedMerchant/Delete.svg";
-import DisLike from "../../../Assests/VerifiedMerchant/DisLike.svg";
+import Like from "../../../Assests/VerifiedMerchant/Like.svg";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -76,7 +76,8 @@ export default function Unverified() {
   const [VerifiedMerchantListState, setVerifiedMerchantListState] = useState(
     []
   );
-
+  const [storename,setStorename] = useState();
+  const [submitmessage, setsubmitmessage] = useState("");
   //  ============= END DEFINED STATES =============================
 
   // ============================= USEFFECTS ================================
@@ -148,8 +149,7 @@ export default function Unverified() {
 
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
-  };
-  const filteredAdminRecord =
+    const filteredAdminRecord =
     UnVerifiedMerchantList && Array.isArray(UnVerifiedMerchantList)
       ? UnVerifiedMerchantList.filter(
           (result) =>
@@ -167,6 +167,9 @@ export default function Unverified() {
             (result.a_state && result.a_state.includes(searchRecord))
         )
       : [];
+      setVerifiedMerchantListState(filteredAdminRecord);
+  };
+ 
   // ====================================
   // ====================================
   const handleEditMerchant = (data) => {
@@ -198,12 +201,95 @@ export default function Unverified() {
     });
   };
 
+
+  const hadleDislikeMerchant = async (merchant_id) => {
+    try {
+      const { token, ...otherUserData } = userTypeData;
+      const delVendor = {
+        id: merchant_id,
+        ...otherUserData,
+      };
+
+      const response = await axios.post(
+        BASE_URL + APPROVE_SINGLE_STORE,
+        delVendor,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response) {
+        const updatedVendorDetails = VerifiedMerchantListState.filter(
+          (vendor) => vendor.id !== merchant_id
+        );
+        setVerifiedMerchantListState(updatedVendorDetails);
+        setFilteredMerchants(updatedVendorDetails);
+      } else {
+        console.error(response);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+
+    const handleExportTransaction =async (type)=>{
+      try {
+        const { token, ...otherUserData } = userTypeData;
+        const delVendor = {
+          type: type,
+          ...otherUserData,
+        };
+  
+        const response = await axios.post(
+          BASE_URL + EXPORTCSV,
+          delVendor,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+  
+        if (response) {
+          const csvData = response.data;
+          // Convert the data to a Blob
+          const blob = new Blob([csvData], { type: 'text/csv' });
+
+          // Create a URL for the Blob
+          const fileUrl = URL.createObjectURL(blob);
+
+          // Create a temporary anchor element and trigger a download
+          const a = document.createElement("a");
+          a.href = fileUrl;
+          a.download = "Inventory_"+storename+".csv"; // Name of the downloaded file
+          document.body.appendChild(a);
+          a.click();
+
+          // Cleanup: remove the anchor element and revoke the Blob URL
+          document.body.removeChild(a);
+          URL.revokeObjectURL(fileUrl);
+          setsubmitmessage("Inventory Exported Successfully");
+        }
+         
+      } catch (error) {
+        console.error(error);
+      }
+
+     
+    };
+  
+    
   // ====================== PAGINATION LOGIC =========================================
 
   const indexOfLastMerchant = currentPage * rowsPerPage;
   const indexOfFirstMerchant = indexOfLastMerchant - rowsPerPage;
   const currentMerchants = searchRecord
-    ? VerifiedMerchantListState
+    ? VerifiedMerchantListState.slice(indexOfFirstMerchant, indexOfLastMerchant)
     : filteredMerchants.slice(indexOfFirstMerchant, indexOfLastMerchant);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   // ========================= END PAGINATION LOGIC ======================================
@@ -223,14 +309,16 @@ export default function Unverified() {
           >
             <Grid item>
               <div className="q-category-bottom-header">
-                <span>Verified Merchant</span>
+                <span>Unverified Merchant</span>
               </div>
             </Grid>
             <Grid item>
               <Grid container direction="row" alignItems="center">
                 <Grid item>
-                  <div className="flex q-category-bottom-header ">
-                    <p className="me-2">Export Last Transaction</p>
+                  <div
+                   onClick={()=> handleExportTransaction(1)}
+                  className="flex q-category-bottom-header ">
+                    <p className="me-2 ">Export Last Transaction</p>
                   </div>
                 </Grid>
                 <Grid
@@ -350,7 +438,12 @@ export default function Unverified() {
                             src={Delete}
                             alt="Delete"
                           />
-                          <img class="mx-1" src={DisLike} alt="DisLike" />
+                          <img class="mx-1 " 
+                          
+                          onClick={()=>hadleDislikeMerchant(data.id)}
+                          src={Like}
+                            
+                          alt="Like" />
                         </div>
                       </StyledTableCell>
                         </StyledTableRow>
