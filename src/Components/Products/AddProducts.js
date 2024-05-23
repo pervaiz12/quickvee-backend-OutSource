@@ -30,7 +30,6 @@ import AlertModal from "../../CommonComponents/AlertModal";
 import { useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "../../Constants/Config";
 import EditPage from "./EditPage";
-import ToastModal from "../../CommonComponents/ToastModal";
 import { ToastContainer } from "react-toastify";
 import Loader from "../../CommonComponents/Loader";
 
@@ -66,8 +65,6 @@ const AddProducts = () => {
     frequentlyBought: [],
     files: [],
   });
-
-  const [toastModal, setToastModal] = useState(false);
 
   // modal of bulk varientedit states
   const [editVarient, setEditVarient] = useState({
@@ -1427,23 +1424,31 @@ const AddProducts = () => {
           ? dispatch(editProductData(formdata))
               .then((res) => {
                 if (res?.payload?.data?.status) {
-                  setToastModal(true);
+                  toast.success("Product Edit successfully!", {
+                    position: "top-right",
+                  });
                 }
               })
               .catch((err) => {
                 if (err) {
-                  setToastModal(true);
+                  toast.error("Error!", {
+                    position: "top-right",
+                  });
                 }
               })
           : dispatch(addProduct(formdata))
               .then((res) => {
                 if (res?.payload?.data?.status) {
-                  setToastModal(true);
+                  toast.success("Product Added!", {
+                    position: "top-right",
+                  });
                 }
               })
               .catch((err) => {
                 if (err) {
-                  setToastModal(true);
+                  toast.error("Error!", {
+                    position: "top-right",
+                  });
                 }
               });
       }
@@ -1502,50 +1507,7 @@ const AddProducts = () => {
             handleCloseAlertModal={handleCloseAlertModal}
             text="Compare Price must be greater than price."
           />
-          {/* Toast alert */}
-          {toastModal ? (
-            <ToastModal
-              textToDisplay="Product Update Successfully"
-              position="bottom-right"
-              autoClose={4000}
-              color="#07bc0c"
-              type="SUCCESS"
-              theme="colored"
-            />
-          ) : null}
 
-          {toastModal ? (
-            <ToastModal
-              textToDisplay="Product Added Successfully"
-              position="bottom-right"
-              autoClose={4000}
-              color="#07bc0c"
-              type="SUCCESS"
-              theme="colored"
-            />
-          ) : null}
-
-          {toastModal && isError ? (
-            <ToastModal
-              textToDisplay="Product Added Error"
-              position="bottom-right"
-              autoClose={4000}
-              color="#e74c3c"
-              type="ERROR"
-              theme="colored"
-            />
-          ) : null}
-
-          {toastModal && isEditError ? (
-            <ToastModal
-              textToDisplay="Product Update Error"
-              position="bottom-right"
-              autoClose={4000}
-              color="#e74c3c"
-              type="ERROR"
-              theme="colored"
-            />
-          ) : null}
           <ToastContainer position="bottom-right" />
           <div className="q-attributes-main-page">
             <div className="q-add-categories-section">
