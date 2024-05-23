@@ -11,8 +11,14 @@ const initialState = {
 
 // Generate pening , fulfilled and rejected action type
 export const fetchStoreOrderData = createAsyncThunk('StoreOrderSlice/fetchStoreOrderData.', async (data) => {
+    const {token, ...dataNew}= data;
     try {
-        const response = await axios.post(BASE_URL + GET_STORE_ORDER_DATA, data, { headers: { "Content-Type": "multipart/form-data" } })
+        const response = await axios.post(BASE_URL + GET_STORE_ORDER_DATA, dataNew, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                'Authorization': `Bearer ${token}` // Use data?.token directly
+            }
+        });
         if (response.data.status === true) {
             // console.log(response);
            return response.data.store_order_data

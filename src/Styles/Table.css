@@ -20,7 +20,7 @@
     background: var(--background) !important ;
 }
 .dataTables_wrapper{
-      padding: 10px 9px;
+      /* padding: 10px 9px; */
     margin-bottom: 1rem;
 }
 .dataTables_length{
@@ -113,3 +113,10 @@ table.dataTable tbody td {
 /* .order_status_details_quivkwee{
     color:red
 } */
+
+#storeOrderTable_previous,#storeOrderTable_next{
+    transform: translate(0px, 7px);
+}
+.dataTables_paginate a{
+    transform: translate(0px, -7px);
+}
