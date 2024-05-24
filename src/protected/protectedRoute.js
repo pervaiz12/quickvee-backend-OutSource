@@ -18,7 +18,8 @@ export default function ProtectedRoute(props) {
       ? JSON.parse(authdecryptRecord)
       : { status: false };
 
-  console.log(AdminRocord?.status);
+  // console.log(AdminRocord?.status);
+  console.log(props);
 
   return AdminRocord?.status == true ? <Outlet /> : <Navigate to="/login" />;
 

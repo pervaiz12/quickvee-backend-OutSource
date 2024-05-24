@@ -1,5 +1,3 @@
-
-
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "../../Styles/EmployeeList/employeeList.css";
@@ -8,75 +6,269 @@ import AddPermissionModal from "./AddPermissionModal";
 import EditPermissionModal from "./EditPermissionModal";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import EditIcon from "../../Assests/Category/editIcon.svg";
+import View from "../../Assests/VerifiedMerchant/View.svg";
+import Edit from "../../Assests/VerifiedMerchant/Edit.svg";
+import Delete from "../../Assests/Category/deleteIcon.svg";
+import DisLike from "../../Assests/VerifiedMerchant/DisLike.svg";
 
 import {
   fetchPermissionData,
   deletePermission,
 } from "../../Redux/features/Permission/PermissionSlice";
+import { useAuthDetails } from "../../Common/cookiesHelper";
+import {
+  Grid,
+  Pagination,
+  TableContainer,
+  TableHead,
+  tableCellClasses,
+  TableCell,
+} from "@mui/material";
+import { Link, useNavigate } from "react-router-dom";
+import InputTextSearch from "../../reuseableComponents/InputTextSearch";
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableRow from "@mui/material/TableRow";
+
+const StyledTable = styled(Table)(({ theme }) => ({
+  padding: 2, // Adjust padding as needed
+}));
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#253338",
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+  [`&.${tableCellClasses.table}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
 
 const PermissionList = () => {
+  const navigate = useNavigate();
   const [allpermission, setAllPermission] = useState([]);
 
+  const [filteredMerchants, setFilteredMerchants] = useState([]);
+  const [totalCount, setTotalCount] = useState(0);
+  const [searchRecord, setSearchRecord] = useState("");
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+
+  const [VerifiedMerchantListState, setVerifiedMerchantListState] = useState(
+    []
+  );
+
   const AllPermissionDataState = useSelector((state) => state.permissionRed);
+  const { userTypeData } = useAuthDetails();
 
   const dispatch = useDispatch();
 
   useEffect(() => {
-    // console.log("Fetching permission data...");
-    dispatch(fetchPermissionData());
+    dispatch(fetchPermissionData(userTypeData));
   }, []);
 
   useEffect(() => {
-    // console.log("Permission data state:", AllPermissionDataState);
-
     if (
       !AllPermissionDataState.loading &&
       AllPermissionDataState.permissionData
     ) {
-      // console.log(
-      //   "Setting all permission data:",
-      //   AllPermissionDataState.permissionData
-      // );
       setAllPermission(AllPermissionDataState.permissionData);
     }
   }, [AllPermissionDataState.loading, AllPermissionDataState.permissionData]);
 
-  // console.log("All permission data:", allpermission);
-
   const handleDeletePermission = (id) => {
     const data = {
       id: id,
-      
+      ...userTypeData,
     };
-    const userConfirmed = window.confirm("Are you sure you want to delete this ?");
+    const userConfirmed = window.confirm(
+      "Are you sure you want to delete this ?"
+    );
     if (userConfirmed) {
-
       if (id) {
         dispatch(deletePermission(data));
       }
     } else {
-
       console.log("Deletion canceled by user");
     }
   };
 
- 
-  
+  // const handleSearchInputChange = (value) => {
+  //   console.log(value);
+  //   setSearchRecord(value);
 
+  //   const filteredAdminRecord =
+  //     filteredMerchants && Array.isArray(filteredMerchants)
+  //       ? filteredMerchants.filter(
+  //           (result) =>
+  //             (result.owner_name &&
+  //               result.permission
+  //                 .toLowerCase()
+  //                 .includes(searchRecord.toLowerCase())) ||
+  //             (result.name &&
+  //               result.sub_permission
+  //                 .toLowerCase()
+  //                 .includes(searchRecord.toLowerCase())) ||
+  //             (result.email &&
+  //               result.email.toLowerCase().includes(searchRecord.toLowerCase()))
+  //         )
+  //       : [];
 
+  //   console.log("filteredAdminRecord", filteredAdminRecord);
+  //   setVerifiedMerchantListState(filteredAdminRecord);
+  // };
 
+  const handleSearchInputChange = (value) => {
+    setSearchRecord(value);
 
+    if (value === "") {
+      // If search input is empty, display the entire dataset
+      setAllPermission(AllPermissionDataState?.permissionData);
+    } else {
+      // Filter managerList.ManagerRecord based on search term
+      const filteredRecords = AllPermissionDataState?.permissionData?.filter(
+        (record) => {
+          // Convert search term to lowercase for case-insensitive search
+          const searchTerm = value.toLowerCase();
+          // Check if any of the fields contain the search term
+          return (
+            record?.purmission?.toLowerCase().includes(searchTerm) ||
+            record?.sub_permission?.toLowerCase().includes(searchTerm)
+          );
+        }
+      );
+
+      // Update the managerTable state with filtered records
+      setAllPermission(filteredRecords);
+    }
+  };
 
   return (
     <>
-   
       <div className="q-attributes-bottom-detail-section">
-        <div className="q-attributes-bottom-header-sticky">
-        <div className="q-attributes-bottom-header">
-            <span>Permission</span>
-            {/* <p className="" >
+        <Grid container className="box_shadow_div">
+          <Grid item xs={12}>
+            <div className="q-attributes-bottom-header">
+              <span>Permission</span>
+              {/* <p className="" >
               Add New Sub Permission <img src={AddIcon} alt="add-icon" /> 
             </p> */}
+              <AddPermissionModal />
+            </div>
+            <Grid container sx={{ padding: 2.5 }}>
+              <Grid item xs={12}>
+                <InputTextSearch
+                  className=""
+                  type="text"
+                  value={searchRecord}
+                  handleChange={handleSearchInputChange}
+                  placeholder="Search..."
+                  autoComplete="off"
+                />
+              </Grid>
+            </Grid>
+            {/* <Grid container sx={{ padding: 2.5 }}>
+              <Grid item xs={12}>
+                <Pagination
+                  currentPage={currentPage}
+                  totalItems={totalCount}
+                  itemsPerPage={rowsPerPage}
+                  onPageChange={paginate}
+                  rowsPerPage={rowsPerPage}
+                  setRowsPerPage={setRowsPerPage}
+                />
+              </Grid>
+            </Grid> */}
+            <Grid container>
+              <TableContainer>
+                <StyledTable
+                  sx={{ minWidth: 500 }}
+                  aria-label="customized table"
+                >
+                  <TableHead>
+                    {/* {TableRow.map((row) => (
+                    <StyledTableCell>{row}</StyledTableCell>
+                  ))} */}
+                    <StyledTableCell>Sub Permission</StyledTableCell>
+                    <StyledTableCell>Permission</StyledTableCell>
+
+                    <StyledTableCell></StyledTableCell>
+                  </TableHead>
+                  <TableBody>
+                    {allpermission?.length
+                      ? allpermission?.map((data, index) => {
+                          return (
+                            <StyledTableRow>
+                              {/* <StyledTableCell>
+                              <div class="flex">
+                                <div class="text-[#000000] order_method capitalize">
+                                  {data?.sub_permission}
+                                </div>
+                                <div class="mx-2 ">(State: {data.a_state})</div>
+                              </div>
+                              <div class="text-[#818181] lowercase">
+                                {data?.permission?.length < 18
+                                  ? data?.permission
+                                  : data?.permission?.slice(0, 18) + `...` ||
+                                    ""}
+                              </div>
+                            </StyledTableCell> */}
+                              <StyledTableCell>
+                                <div class="text-[#000000] order_method capitalize">
+                                  {data?.sub_permission}
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <div class="text-[#000000] order_method capitalize">
+                                  {data?.permission?.length < 18
+                                    ? data?.permission
+                                    : data?.permission?.slice(0, 18) + `...` ||
+                                      ""}
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <div className="flex">
+                                  <EditPermissionModal selected={data} />
+                                  <img
+                                    class="mx-6 delete"
+                                    data-id="${[data.id,data.merchant_id,]}"
+                                    onClick={() =>
+                                      handleDeletePermission(data?.id)
+                                    }
+                                    src={Delete}
+                                    alt="Delete"
+                                  />
+                                </div>
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          );
+                        })
+                      : ""}
+                  </TableBody>
+                </StyledTable>
+              </TableContainer>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        {/* <div className="q-attributes-bottom-header-sticky">
+          <div className="q-attributes-bottom-header">
+            <span>Permission</span>
+
             <AddPermissionModal />
           </div>
           <div className="q-daily-report-bottom-report-header">
@@ -98,12 +290,14 @@ const PermissionList = () => {
                     <p className="report-sort">{index + 1}</p>
                     <p className="report-title">{permission.sub_permission}</p>
                     <p className="report-title">{permission.permission}</p>
-                    <p className="report-title"><EditPermissionModal selected={permission} />
-                        </p>
-                    <p className="report-title"> <img
+                    <p className="report-title">
+                      <EditPermissionModal selected={permission} />
+                    </p>
+                    <p className="report-title">
+                      {" "}
+                      <img
                         src={DeleteIcon}
                         alt="Delete-icon"
-                       
                         className="h-8 w-8"
                         onClick={() => handleDeletePermission(permission.id)}
                       />
@@ -112,9 +306,8 @@ const PermissionList = () => {
                 </div>
               ))}
           </div>
-        </div>
+        </div> */}
       </div>
-    
     </>
   );
 };

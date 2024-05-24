@@ -14,6 +14,7 @@ const InputTextSearch = ({
     <>
       <FormControl fullWidth>
         <OutlinedInput
+          size="small"
           placeholder={placeholder}
           value={value}
           onChange={(e) => {
@@ -27,7 +28,7 @@ const InputTextSearch = ({
                   handleSearchButton && handleSearchButton();
                 }}
               >
-                <img src={SearchIcon} />
+                <img src={SearchIcon} alt="" />
               </IconButton>
             </InputAdornment>
           }

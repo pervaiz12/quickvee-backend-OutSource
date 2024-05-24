@@ -138,6 +138,7 @@
 }
 .css-4jnixx-MuiStack-root{
     flex-direction: column !important;
+    overflow: hidden !important;
 }
 
 .store-setting-btn{

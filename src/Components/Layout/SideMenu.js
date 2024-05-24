@@ -169,9 +169,9 @@ const SideMenu = () => {
                 </div>
               ))
             : (LoginGetDashBoardRecordJson?.final_login == 1
-              ? temp["superadmin"]
-              : temp[LoginGetDashBoardRecordJson?.data?.login_type]
-            )?.map((item) => (
+                ? temp["superadmin"]
+                : temp[LoginGetDashBoardRecordJson?.data?.login_type]
+              )?.map((item) => (
                 <div
                   key={item.id}
                   className={`mb-1 text-base cursor-pointer ${
@@ -973,12 +973,12 @@ const SuperAdminMenuItems = [
 
 const merchant = [
   {
-    id: 82,
+    // id: 82,
     text: "Store",
     link: "/store",
   },
   {
-    id: 82,
+    // id: 82,
     text: "Manager",
     link: "/manager",
   },

@@ -3,7 +3,7 @@ import {  BASE_URL , GET_MANAGER_RECORD} from "../../../Constants/Config"
 import axios from 'axios';
 const initialState = {
     loading: false,
-    ManagerRecord: {},
+    ManagerRecord: [],
     // successMessage:'',
     error: '',
 }

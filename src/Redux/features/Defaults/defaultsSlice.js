@@ -14,8 +14,15 @@ const initialState = {
 
 // Generate pening , fulfilled and rejected action type
 export const fetchdefaultsData = createAsyncThunk('defaults/fetchdefaultsData', async (data) => {
+    const {token, ...dataNew}= data;
     try {
-        const response = await axios.post(BASE_URL + LIST_ALL_Defaults,data, { headers: { "Content-Type": "multipart/form-data" } })
+        const response = await axios.post(BASE_URL + LIST_ALL_Defaults, dataNew, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                'Authorization': `Bearer ${token}` // Use data?.token directly
+            }
+        });
+
         if (response.data.status === "Success") {
 
            return response.data.result
@@ -30,10 +37,13 @@ export const fetchdefaultsData = createAsyncThunk('defaults/fetchdefaultsData', 
 
 
 export const deleteDefaultsData = createAsyncThunk('defaults/deleteDefaultsData', async (data) => {
-
+    const {token, ...dataNew}= data;
     try {
-        const response = await axios.post(BASE_URL + DELETE_SINGLE_DEFAULTS, data, {
-            headers: { "Content-Type": "multipart/form-data" }
+        const response = await axios.post(BASE_URL + DELETE_SINGLE_DEFAULTS, dataNew, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                'Authorization': `Bearer ${token}` // Use data?.token directly
+            }
         });
       if(response){
         console.log(response)
@@ -50,10 +60,13 @@ export const deleteDefaultsData = createAsyncThunk('defaults/deleteDefaultsData'
 
 // for multiple delete default menu start 
 export const deleteDefaultsMultiData = createAsyncThunk('defaults/deleteDefaultsMultiData', async (data) => {
-
+    const {token, ...dataNew}= data;
     try {
-        const response = await axios.post(BASE_URL + DELETE_MULTI_DEFAULTS, data, {
-            headers: { "Content-Type": "multipart/form-data" }
+        const response = await axios.post(BASE_URL + DELETE_MULTI_DEFAULTS, dataNew, {
+            headers: {
+                "Content-Type": "multipart/form-data",
+                'Authorization': `Bearer ${token}` // Use data?.token directly
+            }
         });
       if(response){
         console.log(response)

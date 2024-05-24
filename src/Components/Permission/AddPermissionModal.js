@@ -1,16 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
-import { Box, Button, Modal } from "@mui/material";
+import { Box, Button, Grid, Modal } from "@mui/material";
 import AddIcon from "../../Assests/Category/addIcon.svg";
 import CrossIcon from "../../Assests/Dashboard/cross.svg";
 import { BASE_URL, ADD_UPDATE_PERMISSION } from "../../Constants/Config";
 import EditIcon from "../../Assests/Category/editIcon.svg";
 import LeftIcon from "../../Assests/Taxes/Left.svg";
-import {
-  fetchPermissionData
-} from "../../Redux/features/Permission/PermissionSlice";
+import { fetchPermissionData } from "../../Redux/features/Permission/PermissionSlice";
 import axios from "axios";
+import BasicTextFields from "../../reuseableComponents/TextInputField";
+import SelectDropDown from "../../reuseableComponents/SelectDropDown";
+import { useAuthDetails } from "../../Common/cookiesHelper";
 
 const AddPermissionModal = () => {
   const [open, setOpen] = useState(false);
@@ -19,11 +20,28 @@ const AddPermissionModal = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useDispatch();
 
+  const { userTypeData } = useAuthDetails();
+
+  const { token, ...userTypeDataAlter } = userTypeData;
+  const [states, setStates] = useState([
+    "Select",
+    "Register",
+    " Store Stats",
+    "Users",
+    "Inventory",
+    "Customers",
+    "Coupons",
+    "Setup",
+    " Dispatch Center",
+    "Attendance",
+  ]);
+
   const myStyles = {
-    width: "50rem",
-    transform: "translate(25rem, 4.5rem)",
-    maxHeight: "85vh",
-    overflowY: "auto",
+    width: "60%",
+    position: "absolute",
+    top: "47%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
   };
   const mycur = {
     cursor: "pointer",
@@ -33,77 +51,66 @@ const AddPermissionModal = () => {
     width: "30rem",
   };
 
-
-
   const [permission, setPermission] = useState({
- 
     permission: "",
     sub_permission: "",
-    
   });
 
-//Handle Select Permission's
-const handlePermissionChange = (e) => {
-  const { name, value } = e.target;
-  setPermission((prevState) => ({
-    ...prevState,
-    [name]: value,
-  }));
-  // console.log("name and value", name, value);
-};
+  //Handle Select Permission's
+  const handlePermissionChange = (e) => {
+    setPermission((prevState) => ({
+      ...prevState,
+      ["permission"]: e?.title,
+    }));
+  };
 
+  //Handle Sub Permission's
+  const handleSubPermissionChange = (e) => {
+    const { name, value } = e?.target;
+    setPermission((prevState) => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
-//Handle Sub Permission's
-const handleSubPermissionChange = (e) => {
-  const { name, value } = e.target;
-  setPermission((prevState) => ({
-    ...prevState,
-    [name]: value,
-  }));
-  // console.log("name and value", name, value);
-};
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-const handleSubmit = async (e) => {
-  e.preventDefault();
+    try {
+      const res = await axios.post(
+        BASE_URL + ADD_UPDATE_PERMISSION,
+        { ...permission, ...userTypeDataAlter },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      const data = await res.data.status;
+      const msg = await res.data.message;
 
-  try {
-    const res = await axios.post(BASE_URL + ADD_UPDATE_PERMISSION, permission, {
-      headers: { "Content-Type": "multipart/form-data" },
-    });
-    const data = await res.data.status;
-    const msg = await res.data.message;
-    
-    
-    if (data == "success") {
-      alert('Permission Added Successfully !');
-      
-        dispatch(fetchPermissionData());
-      
+      if (data == "success") {
+        alert("Permission Added Successfully !");
+
+        dispatch(fetchPermissionData(userTypeData));
+
         setPermission({
           permission: "",
           sub_permission: "",
-        
-      });
+        });
 
-      handleClose();
-    } 
-     else if (data == "failed" && msg == "Permission and Sub-Permission cannot be empty.") {
-      setErrorMessage(msg);
+        handleClose();
+      } else if (
+        data == "failed" &&
+        msg == "Permission and Sub-Permission cannot be empty."
+      ) {
+        setErrorMessage(msg);
+      }
+    } catch (error) {
+      console.error("API Error:", error);
     }
-  } catch (error) {
-    console.error("API Error:", error);
-  }
-};
-
-
-
-
-
-
-
-
-
-
+  };
 
   return (
     <div>
@@ -111,10 +118,13 @@ const handleSubmit = async (e) => {
         className="flex justify-evenly categories-items categories-items-btn"
         onClick={handleOpen}
       >
-        <img src={AddIcon} alt="edit-icon" />{" "}
-        <span className="categories-items categories-items-btn">
+        <p>
           Add Sub Permission
-        </span>
+          <img
+            src="/static/media/addIcon.554c6e38782178cf6d445d3838e59ad3.svg"
+            alt="add-icon"
+          />
+        </p>
       </div>
 
       <Modal
@@ -124,52 +134,61 @@ const handleSubmit = async (e) => {
         aria-describedby="modal-modal-description"
       >
         <Box className="view-category-item-modal" style={myStyles}>
-          {/* <div className='view-category-item-modal-header'> */}
-          <div className="q-add-categories-section-header">
-            <span onClick={() => handleClose()} style={width}>
-              <img src={LeftIcon} alt="Add-New-Category" />
-              <div className="col-qv-11">
-                <p className="q-custom-modal-header ">
-                ADD NEW SUB PERMISSION
-                </p>
-              </div>
+          <div
+            class="q-add-categories-section-header text-[18px]"
+            style={{
+              justifyContent: "space-between",
+              fontFamily: "CircularSTDBook",
+            }}
+          >
+            <span>
+              <span>Add New Sub Permission</span>
             </span>
+            <div>
+              <img
+                src="/static/media/cross.02a286778a0b1b3162ac5e3858cdc5f1.svg"
+                alt="icon"
+                class="  quic-btn-cancle w-6 h-6"
+                style={{ cursor: "pointer" }}
+                onClick={() => handleClose()}
+              />
+            </div>
           </div>
 
           {/* </div> */}
           <div className="view-category-item-modal-header">
             <form onSubmit={handleSubmit} enctype="multipart/form-data">
               <div className="q-add-categories-section-middle-form">
-               
-
                 <div className="qvrow">
-                  <div className="col-qv-6">
-                    <div className="input_area">
-                      <input type="text" name="sub_permission" placeholder="Sub Permission" onChange={ handleSubPermissionChange}/>
+                  {/* <div className="col-qv-6"> */}
+                  <Grid item xs={12} sm={6} md={6}>
+                    <div className=" qvrowmain my-1">
+                      <label htmlFor="email">Sub Permission</label>
                     </div>
-                  </div>
+                    <BasicTextFields
+                      type="text"
+                      name="sub_permission"
+                      placeholder="Sub Permission"
+                      onChangeFun={handleSubPermissionChange}
+                    />
+                  </Grid>
+                  {/* </div> */}
 
-                  <div className="col-qv-6">
-                    <div className="input_area">
-                      <select
-                        name="permission"
-                        placeholder="Permission"
-                        className="q-custom-input-field"
-                        onChange={handlePermissionChange}
-                      >
-                        <option value="">Select</option>
-                        <option value="Register">Register</option>
-                        <option value="Store Stats">Store Stats</option>
-                        <option value="Users">Users</option>
-                        <option value="Inventory">Inventory</option>
-                        <option value="Customers">Customers</option>
-                        <option value="Coupons">Coupons</option>
-                        <option value="Setup">Setup</option>
-                        <option value="Dispatch Center">Dispatch Center</option>
-                        <option value="Attendance">Attendance</option>
-                      </select>
+                  {/* <div className="col-qv-6"> */}
+                  <Grid item xs={12} sm={6} md={6}>
+                    <div className="my-1 qvrowmain">
+                      <label htmlFor="State">Permission</label>
                     </div>
-                  </div>
+                    <SelectDropDown
+                      listItem={states.map((item) => ({ title: item }))}
+                      title={"title"}
+                      selectedOption={permission?.permission}
+                      // heading={"Select"}
+                      onClickHandler={handlePermissionChange}
+                      name="permission"
+                    />
+                  </Grid>
+                  {/* </div> */}
                 </div>
               </div>
 
