@@ -14,6 +14,7 @@ import {
 } from "../../Constants/Config";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const CateDuplicateStore = () => {
   const [selectedStorefrom, setSelectedStorefrom] =
@@ -226,6 +227,7 @@ const CateDuplicateStore = () => {
           setsubmitmessage(response.data.msg);
           setSelectedStorefrom("-- Select Store --");
           setSelectedStoreto("-- Select Store --");
+          ToastifyAlert("Duplicate Inventory Success!", "success");
           setStorefrom(null);
           setStoreto(null);
           setCategoryOptions([
@@ -234,10 +236,12 @@ const CateDuplicateStore = () => {
           setSelectedCategories([]);
           setIsSelectClicked(false);
         } else if (response.data.status === "Failed") {
+          ToastifyAlert("Duplicate Inventory Failed!", "error");
           setsubmitmessage(response.data.msg);
         }
       } catch (error) {
         // console.log('33 catch err');
+        ToastifyAlert("Error!", "error");
         return new Error(error);
       }
     }
@@ -275,7 +279,7 @@ const CateDuplicateStore = () => {
             </Box> */}
           </div>
           <div className="alert">
-            {submitmessage && (
+            {/* {submitmessage && (
               <Box
                 sx={{
                   width: "100%",
@@ -305,7 +309,7 @@ const CateDuplicateStore = () => {
                   </Alert>
                 </Collapse>
               </Box>
-            )}
+            )} */}
           </div>
 
           <div className="q-add-categories-section-header ">

@@ -5,6 +5,7 @@ import {
   LIST_ALL_PERMISSION,
   DELETE_SINGLE_PERMISSION,
 } from "../../../Constants/Config";
+import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 
 const initialState = {
   loading: false,
@@ -57,11 +58,13 @@ export const deletePermission = createAsyncThunk(
       );
       if (response) {
         console.log(response);
+        ToastifyAlert("Permission Deleted Successfully!", "success");
         return {
           id: data.id,
         };
       }
     } catch (error) {
+      ToastifyAlert("Error!", "error");
       throw new Error(error.response.data.message);
     }
   }

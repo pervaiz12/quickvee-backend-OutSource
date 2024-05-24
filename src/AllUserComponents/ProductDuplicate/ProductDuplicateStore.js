@@ -14,6 +14,7 @@ import {
 } from "../../Constants/Config";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const ProductDuplicateStore = () => {
   const [storeFromError, setStoreFromError] = useState("");
@@ -233,6 +234,7 @@ const ProductDuplicateStore = () => {
           setsubmitmessage("Products Copied successfully ");
           setSelectedStorefrom("-- Select Store --");
           setSelectedStoreto("-- Select Store --");
+          ToastifyAlert("Duplicate Inventory Success!", "success");
           setStorefrom(null);
           setStoreto(null);
           setProductOptions([
@@ -241,10 +243,12 @@ const ProductDuplicateStore = () => {
           setselectedProducts([]);
           setIsSelectClicked(false);
         } else if (response.data.status === "Failed") {
+          ToastifyAlert("Duplicate Inventory Failed!", "error");
           setsubmitmessage("Something Went Wrong");
         }
       } catch (error) {
         // console.log('33 catch err');
+        ToastifyAlert("Error!", "error");
         return new Error(error);
       }
     }
@@ -261,7 +265,7 @@ const ProductDuplicateStore = () => {
           </li>
         </div>
         <div className=" box_shadow_div_order">
-          <div className="alert">
+          {/* <div className="alert">
             {submitmessage && (
               <Box
                 sx={{
@@ -293,7 +297,7 @@ const ProductDuplicateStore = () => {
                 </Collapse>
               </Box>
             )}
-          </div>
+          </div> */}
 
           <div className="alert">
             {excludedproducts && (
