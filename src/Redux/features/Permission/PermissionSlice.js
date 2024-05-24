@@ -43,12 +43,16 @@ export const fetchPermissionData = createAsyncThunk(
 export const deletePermission = createAsyncThunk(
   "permission/deletePermission",
   async (data) => {
+    const { token, ...dataNew } = data;
     try {
       const response = await axios.post(
         BASE_URL + DELETE_SINGLE_PERMISSION,
-        data,
+        dataNew,
         {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       if (response) {

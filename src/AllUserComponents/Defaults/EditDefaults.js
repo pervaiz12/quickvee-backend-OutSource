@@ -3,18 +3,20 @@ import AddNewCategory from "../../Assests/Taxes/Left.svg";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import DownIcon from "../../Assests/Dashboard/Down.svg";
 import axios from "axios";
-
+import { useAuthDetails } from './../../Common/cookiesHelper';
 import Upload from "../../Assests/Category/upload.svg";
 import { Link, useParams } from "react-router-dom";
 import { BASE_URL, DEFAULTDATA, EDIT_DEFAULTS } from "../../Constants/Config";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import { Grid } from '@mui/material';
+import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 
 const EditDefaults = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = useState("");
-
+  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
   const [defaults, setDefaults] = useState({
     name: "",
     type: "",
@@ -31,6 +33,8 @@ const EditDefaults = () => {
   async function fetchData() {
     const getdefaultsData = {
       id: params.defaultsCode,
+      token_id:userTypeData.token_id,
+      login_type:userTypeData.login_type,
     };
 
     try {
@@ -40,6 +44,7 @@ const EditDefaults = () => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            'Authorization': `Bearer ${userTypeData.token}`
           },
         }
       );
@@ -129,9 +134,11 @@ const EditDefaults = () => {
       formData.append("image", "");
       formData.append("filename", "");
     }
+    formData.append("token_id", userTypeData.token_id);
+    formData.append("login_type", userTypeData.login_type);
     try {
       const res = await axios.post(BASE_URL + EDIT_DEFAULTS, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: { "Content-Type": "multipart/form-data",'Authorization': `Bearer ${userTypeData.token}` },
       });
 
       const data = await res.data.status;
@@ -233,12 +240,12 @@ const EditDefaults = () => {
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
       case "category":
-        setSelectedCatSource(option);
+        setSelectedCatSource(option.title);
         setCatSourceDropdownVisible(false);
 
         // Set defaults.type based on the selected option
         let typeValue;
-        switch (option) {
+        switch (option.title) {
           case "Select":
             typeValue = ""; // You can set it to an empty string or another default value
             break;
@@ -262,13 +269,23 @@ const EditDefaults = () => {
     }
   };
 
+  const category = [
+    {
+      title: "Select",
+    },
+    {
+      title: "Category",
+    },
+
+  ];
+
   //   for dropdown select End
 
   return (
     <>
       <div className="q-category-main-page ">
         <div className="q-add-categories-section">
-          <div className="mt-10">
+          <div className="mt-10 mb-4">
             <form onSubmit={handleSubmit} enctype="multipart/form-data">
               <div className="q-add-categories-section-header">
                 <Link to={`/users/view/unapprove/menu/defaults`}>
@@ -294,7 +311,7 @@ const EditDefaults = () => {
                 {fieldErrors.name && (
                   <span className="error-message">{fieldErrors.name}</span>
                 )}
-                <div className="q-add-categories-single-input mb-5">
+                {/* <div className="q-add-categories-single-input mb-5">
                   <label
                     className="q-details-page-label"
                     htmlFor="orderSourceFilter"
@@ -330,13 +347,24 @@ const EditDefaults = () => {
                       </div>
                     )}
                   </div>
-                </div>
+                </div> */}
+
+                <Grid item xs={6}>
+                            <label className="q-details-page-label ">Type</label>
+                            <SelectDropDown
+                                listItem={category}
+                                title={"title"}
+                                onClickHandler={handleOptionClick}
+                                selectedOption={selectedCatSource}
+                            dropdownFor={"category"}
+                            />
+                        </Grid>
                 {fieldErrors.type && (
                   <span className="error-message">{fieldErrors.type}</span>
                 )}
 
                 <div
-                  className={`h-1/2  h-[100px] flex items-center justify-center border-2 border-dashed border-[#BFBFBF] bg-white rounded-lg mt-2 defaultDrag_div`}
+                  className={`h-1/2  h-[100px] mt-6 flex items-center justify-center border-2 border-dashed border-[#BFBFBF] bg-white rounded-lg mt-2 defaultDrag_div`}
                   onDragOver={handleDragOver}
                   onDrop={handleDrop}
                   onClick={openFileInput}

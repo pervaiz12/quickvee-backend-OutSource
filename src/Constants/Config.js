@@ -62,14 +62,14 @@ module.exports = Object.freeze({
   UPDATE_STORE_OPTIONS_DATA: "Store_setting_api/update_store_options_data",
 
   //Coupon API Calls
-  COUPON_LIST: "Couponapi/get_coupon_details",
-  COUPON_STATUS_UPDATE: "Couponapi/show_online",
-  COUPON_DELETE: "Couponapi/delete_coupon",
-  COUPON_TITLE_CHECK: "Couponapi/check_coupon_title",
+  COUPON_LIST: "CouponReactApi/get_coupon_details",
+  COUPON_STATUS_UPDATE: "CouponReactApi/show_online",
+  COUPON_DELETE: "CouponReactApi/delete_coupon",
+  COUPON_TITLE_CHECK: "CouponReactApi/check_coupon_title",
   // COUPON_DETAILS_ID_CHECK: "Couponapi/get_edit_coupon_details",
-  COUPON_DETAILS_ID_CHECK: "Couponapi/get_coupon_by_id",
-  EDIT_COUPON: "Couponapi/edit_coupon",
-  ADD_COUPON: "Couponapi/add_coupon",
+  COUPON_DETAILS_ID_CHECK: "CouponReactApi/get_coupon_by_id",
+  EDIT_COUPON: "CouponReactApi/edit_coupon",
+  ADD_COUPON: "CouponReactApi/add_coupon",
 
   // System Access API Calls Listing and Update
   LIST_ALL_SYSTEM_ACCESS: "api/Settings_api/system_access",
@@ -255,7 +255,10 @@ module.exports = Object.freeze({
   LOGIN_OTP_AUTHENTICATION: "LoginApiReact/chk_otp", //
   LOGIN_OTP_SUBMIT_AUTHENTICATION: "LoginApiReact/create_session", //
   LOGIN_VIA_SUPERADMIN: "LoginApiReact/login_via_superadmin", //
-  DELETE_SINGLE_STORE:"UserController/delete"
+  DELETE_SINGLE_STORE:"UserController/delete",
+  UNAPPROVE_SINGLE_STORE: "UserController/unapprove",
+  APPROVE_SINGLE_STORE: "UserController/approve",
+  EXPORTCSV: "UserController/exportCSV",
 });
 
 // All api calls are initialized in this component for this application

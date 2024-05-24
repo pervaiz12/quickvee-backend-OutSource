@@ -23,7 +23,6 @@
   src: url("../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
 }
 
-
 .q_dateRange_header {
   margin-top: 2rem;
 }
@@ -117,18 +116,19 @@
   color: #ffffff;
   font-size: 15px;
   font-family: CircularSTDBook !important;
+  width: 30%;
 }
 
-.product-table-sort{
-     width: 10%;
+.product-table-sort {
+  width: 10%;
 }
 
 .product-table-items {
   width: 20%;
   height: 0;
 }
-.product-table-title{
-    width:20%
+.product-table-title {
+  width: 20%;
 }
 .product-table-btn {
   width: 40%;
@@ -152,7 +152,7 @@
   /* cursor: all-scroll; */
   user-select: none;
 }
-.q-category-bottom-categories-single-category-table  {
+.q-category-bottom-categories-single-category-table {
   display: flex;
   padding: 20px;
   border-bottom: 1px solid #e8e8e8;
@@ -164,6 +164,7 @@
   color: #000000;
   font-family: CircularSTDMedium !important;
   text-transform: capitalize;
+  width: 40%;
 }
 
 .q-category-bottom-categories-single-category > .categories-items {
@@ -184,7 +185,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 200px;
+  /* width: 200px; */
 }
 
 .category-checkmark-div .category-checkmark-label {
@@ -284,7 +285,6 @@
   font-family: CircularSTDMedium !important;
 }
 
-
 .q-add-categories-section-middle-form {
   padding: 20px;
   display: flex;
@@ -338,11 +338,8 @@
 .q-add-dashboard-section-middle-footer .quic-cal-cancle {
   background: #878787;
   margin-left: 10px;
- 
- 
 }
 .css-1e6y48t-MuiButtonBase-root-MuiButton-root {
-
   padding: 0 !important;
 }
 
@@ -407,36 +404,34 @@ margin-bottom: 3px;
 
   } */
 
- h3.popup_msg{
+h3.popup_msg {
   padding: 30px;
-    text-align: center;
-    font-family: CircularSTDMedium !important;
-
+  text-align: center;
+  font-family: CircularSTDMedium !important;
 }
 
 .import_container {
   height: calc(50% - -10px);
-  width: 100%; 
-  display: flex; 
-  align-items: center; 
+  width: 100%;
+  display: flex;
+  align-items: center;
   justify-content: center;
-  border: 1px dashed #BFBFBF; 
-  background-color: white; 
+  border: 1px dashed #bfbfbf;
+  background-color: white;
   border-radius: 8px;
-  margin-top: 1rem; 
+  margin-top: 1rem;
 }
 
+.product_table_image_msg {
+  position: relative;
+  font-size: 12px;
+  left: 8rem;
+  bottom: 3.5rem;
+  color: #ffffff;
+  font-family: CircularSTDBook !important;
+}
 
-
- .product_table_image_msg{
-    position: relative;
-    font-size: 12px;
-    left: 8rem;
-    bottom: 3.5rem;
-    color:#FFFFFF;
- font-family: CircularSTDBook !important;}
-
- .product_table_image{
+.product_table_image {
   display: inline-block;
   width: 3rem;
   height: 3rem;
@@ -444,46 +439,47 @@ margin-bottom: 3px;
   border-radius: 50%;
   border-width: 2px;
   border-color: white;
- 
-
 }
 
-
- .product_img_section{
- font-size: 12px;
-      position: relative;
-    left: 4rem;
-    bottom: 47px;
-   z-index: 1;
-   color:#000000;
-   width: 48px;
-   height: 48px;
-   background-color: #0000008f;
-   border-radius: 50%;
+.product_img_section {
+  font-size: 12px;
+  position: relative;
+  left: 4rem;
+  bottom: 47px;
+  z-index: 1;
+  color: #000000;
+  width: 48px;
+  height: 48px;
+  background-color: #0000008f;
+  border-radius: 50%;
 }
 
-
-.textMsg{position: relative;
-    top: 6px;
-    left: 8px;
-    font-family: CircularSTDMedium !important;
-    font-size: 10px;
-  color:white}
-
-
-
-  .q-add-dashboard-section-middle-footer {
-    display: flex;
-    align-items: center;
-    /* justify-content: flex-end; */
-    padding: 20px;
+.textMsg {
+  position: relative;
+  top: 6px;
+  left: 8px;
+  font-family: CircularSTDMedium !important;
+  font-size: 10px;
+  color: white;
 }
 
-.title_attributes_section label{
+.q-add-dashboard-section-middle-footer {
+  display: flex;
+  align-items: center;
+  /* justify-content: flex-end; */
+  padding: 20px;
+}
+
+.title_attributes_section label {
   color: #818181;
-    font-size: 14px;
-    font-family: CircularSTDBook !important;
-    display: block;
-        margin-top: 1.2rem;
+  font-size: 14px;
+  font-family: CircularSTDBook !important;
+  display: block;
+  margin-top: 1.2rem;
+}
 
+.default-Edit-Delete{
+  display: flex;
+  justify-content: end;
+  margin-right: 0.5rem;
 }
