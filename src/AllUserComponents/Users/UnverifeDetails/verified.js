@@ -139,12 +139,12 @@ export default function Verified() {
 
   // ====================================
   const handleEditMerchant = (data) => {
-    console.log("handleEditMerchant ", data);
+    // console.log("handleEditMerchant ", data);
 
     navigate(`/users/editMerchant/${data}`);
   };
   const handleDeleteMerchant = async (tableData) => {
-    console.log("handleDeleteMer", tableData);
+    // console.log("handleDeleteMer", tableData);
 
     try {
       const { token, ...otherUserData } = userTypeData;
@@ -317,7 +317,7 @@ export default function Verified() {
                     className="flex q-category-bottom-header "
                   >
                     <p className="me-2">ADD</p>
-                    <img src={AddIcon} />
+                    <img src={AddIcon} alt="" />
                   </Link>
                 </Grid>
               </Grid>

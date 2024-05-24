@@ -161,7 +161,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: 200px;
+  /* width: 200px; */
 }
 
 .category-checkmark-div .category-checkmark-label {

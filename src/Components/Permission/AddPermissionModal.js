@@ -160,34 +160,35 @@ const AddPermissionModal = () => {
             <form onSubmit={handleSubmit} enctype="multipart/form-data">
               <div className="q-add-categories-section-middle-form">
                 <div className="qvrow">
-                  <div className="col-qv-6">
-                    <Grid item xs={12} sm={6} md={4}>
-                      <div className=" qvrowmain my-1">
-                        <label htmlFor="email">Sub Permission</label>
-                      </div>
-                      <BasicTextFields
-                        type="text"
-                        name="sub_permission"
-                        placeholder="Sub Permission"
-                        onChangeFun={handleSubPermissionChange}
-                      />
-                    </Grid>
-                  </div>
+                  {/* <div className="col-qv-6"> */}
+                  <Grid item xs={12} sm={6} md={6}>
+                    <div className=" qvrowmain my-1">
+                      <label htmlFor="email">Sub Permission</label>
+                    </div>
+                    <BasicTextFields
+                      type="text"
+                      name="sub_permission"
+                      placeholder="Sub Permission"
+                      onChangeFun={handleSubPermissionChange}
+                    />
+                  </Grid>
+                  {/* </div> */}
 
-                  <div className="col-qv-6">
-                    <Grid item xs={12} sm={6} md={4}>
-                      <div className="my-1 qvrowmain">
-                        <label htmlFor="State">State</label>
-                      </div>
-                      <SelectDropDown
-                        listItem={states.map((item) => ({ title: item }))}
-                        title={"title"}
-                        // selectedOption={vendor.state}
-                        onClickHandler={handlePermissionChange}
-                        name="permission"
-                      />
-                    </Grid>
-                  </div>
+                  {/* <div className="col-qv-6"> */}
+                  <Grid item xs={12} sm={6} md={6}>
+                    <div className="my-1 qvrowmain">
+                      <label htmlFor="State">Permission</label>
+                    </div>
+                    <SelectDropDown
+                      listItem={states.map((item) => ({ title: item }))}
+                      title={"title"}
+                      selectedOption={permission?.permission}
+                      // heading={"Select"}
+                      onClickHandler={handlePermissionChange}
+                      name="permission"
+                    />
+                  </Grid>
+                  {/* </div> */}
                 </div>
               </div>
 

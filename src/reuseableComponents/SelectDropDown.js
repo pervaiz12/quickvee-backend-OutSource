@@ -5,6 +5,7 @@ import Select from "@mui/material/Select";
 import { createTheme } from "@mui/material/styles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { ThemeProvider } from "@mui/material/styles";
+import { InputLabel } from "@mui/material";
 const theme = createTheme({
   components: {
     MuiSelect: {
@@ -28,14 +29,17 @@ const SelectDropDown = ({
   selectedOption,
   dropdownFor,
   title,
-  
 }) => {
-
   return (
     <>
       <FormControl fullWidth>
         <ThemeProvider theme={theme}>
-          <Select size="small" value={selectedOption} displayEmpty>
+          <Select
+            size="small"
+            value={selectedOption}
+            displayEmpty
+            defaultValue={listItem[0]}
+          >
             {heading && (
               <MenuItem
                 onClick={(e) => {
@@ -47,17 +51,19 @@ const SelectDropDown = ({
               </MenuItem>
             )}
 
-            {listItem &&  listItem.length > 0 && listItem?.map((item,index) => (
-              <MenuItem
-              key={index}
-                onClick={(e) => {
-                  onClickHandler(item, dropdownFor);
-                }}
-                value={item[title]}
-              >
-                {item[title]}
-              </MenuItem>
-            ))}
+            {listItem &&
+              listItem.length > 0 &&
+              listItem?.map((item, index) => (
+                <MenuItem
+                  key={index}
+                  onClick={(e) => {
+                    onClickHandler(item, dropdownFor);
+                  }}
+                  value={item[title]}
+                >
+                  {item[title]}
+                </MenuItem>
+              ))}
           </Select>
         </ThemeProvider>
       </FormControl>

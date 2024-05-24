@@ -1,8 +1,35 @@
 import React, { useState , useEffect } from "react";
 import StoreOrderList from './StoreOrderList';
 import DownIcon from "../../Assests/Dashboard/Down.svg";
+import SelectDropDown from "../../reuseableComponents/SelectDropDown";
+import { Grid } from '@mui/material';
 
 const StoreOrderFilter = ({onFilterDataChange}) => {
+
+    const OrderStatus = [
+        {
+          title: "Paid",
+        },
+        {
+          title: "Unpaid",
+        },
+        {
+          title: "Both",
+        },
+      ];
+    
+      const orderType = [
+        {
+          title: "Online",
+        },
+        {
+          title: "Offline",
+        },
+        {
+          title: "Both",
+        },
+      ];
+    
 
     const [selectedOrderStatus, setSelectedOrderStatus] = useState("Paid");
     const [selectedOrderType, setSelectedOrderType] = useState("Online");
@@ -24,13 +51,14 @@ const StoreOrderFilter = ({onFilterDataChange}) => {
     };
 
     const handleOptionClick = (option, dropdown) => {
+        console.log(option)
         switch (dropdown) {
             case "OrderStatus":
-                setSelectedOrderStatus(option);
+                setSelectedOrderStatus(option.title);
                 setOrderStatusDropdownVisible(false);
                 break;
             case "orderType":
-                setSelectedOrderType(option);
+                setSelectedOrderType(option.title);
                 setOrderTypeDropdownVisible(false);
                 break;
             default:
@@ -42,9 +70,12 @@ const StoreOrderFilter = ({onFilterDataChange}) => {
         onFilterDataChange(selectedOrderStatus , selectedOrderType)
     }, [selectedOrderStatus , selectedOrderType]);
 
+
+ 
+
     return (
         <>
-        <div className="box">
+        {/* <div className="box">
             <div className="q-category-bottom-detail-section">
                 <div className="">
                     <div className="q-category-bottom-header">
@@ -98,8 +129,47 @@ const StoreOrderFilter = ({onFilterDataChange}) => {
                     </div>
 
                 </div>
+
             </div>
+            </div> */}
+
+
+
+        <div className="box_shadow_div_order ">
+
+                <Grid item className="q-category-bottom-header" xs={12}>
+                    <h1 className="text-xl font-medium">Store Order</h1>
+                </Grid>
+
+            <div className='px-6  '>
+
+                  <Grid container spacing={4} className="">
+                      <Grid item xs={6}>
+                          <label> Order Status</label>
+                          <SelectDropDown
+                            listItem={OrderStatus}
+                            title={"title"}
+                            onClickHandler={handleOptionClick}
+                            selectedOption={selectedOrderStatus}
+                           dropdownFor={"OrderStatus"}
+                          />
+                      </Grid>
+                      <Grid item xs={6}>
+                          <label> Order Type</label>
+                          <SelectDropDown
+                            listItem={orderType}
+                            title={"title"}
+                            onClickHandler={handleOptionClick}
+                            selectedOption={selectedOrderType}
+                           dropdownFor={"orderType"}
+                          />
+                      </Grid>
+                  </Grid>
             </div>
+              
+        </div>
+
+                
         </>
     )
 }

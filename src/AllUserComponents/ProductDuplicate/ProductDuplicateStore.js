@@ -12,6 +12,7 @@ import {
   LIST_ALL_PRODUCTS,
   PRODUCT_INVENTORY_DUPLICATE,
 } from "../../Constants/Config";
+import { useAuthDetails } from "../../Common/cookiesHelper";
 
 const ProductDuplicateStore = () => {
   const [storeFromError, setStoreFromError] = useState("");
@@ -21,6 +22,9 @@ const ProductDuplicateStore = () => {
     useState("-- Select Store --");
   const [selectedStoreto, setSelectedStoreto] = useState("-- Select Store --");
   const [selectedProducts, setselectedProducts] = useState([]);
+
+  const { userTypeData } = useAuthDetails();
+  const { token, ...userTypeDataNew } = userTypeData;
 
   const [storeFromDropdownVisible, setStoreFromDropdownVisible] =
     useState(false);
@@ -52,20 +56,24 @@ const ProductDuplicateStore = () => {
         if (option.merchant_id !== "-- Select Store --") {
           const data = {
             merchant_id: option.merchant_id,
+            ...userTypeDataNew,
           };
           try {
             const response = await axios.post(
               BASE_URL + LIST_ALL_PRODUCTS,
               data,
-              { headers: { "Content-Type": "multipart/form-data" } }
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  Authorization: `Bearer ${token}`,
+                },
+              }
             );
             if (response.data.status === "Success") {
-              const newProductOptions = response.data.result.map(
-                (product) => ({
-                  value: product.id,
-                  label: product.title,
-                })
-              );
+              const newProductOptions = response.data.result.map((product) => ({
+                value: product.id,
+                label: product.title,
+              }));
               setStorefrom(option.merchant_id);
               setProductOptions(newProductOptions);
               setselectedProducts([]);
@@ -151,7 +159,7 @@ const ProductDuplicateStore = () => {
   }, [MerchantListData, MerchantListData.loading]);
 
   useEffect(() => {
-    dispatch(fetchMerchantsList());
+    dispatch(fetchMerchantsList(userTypeData));
   }, []);
 
   const myStyles = {
@@ -181,9 +189,7 @@ const ProductDuplicateStore = () => {
 
       // Check if the checkbox is present and get its value
       const isUpcChecked = upcCheckbox ? upcCheckbox.checked : false;
-      const productValues = selectedProducts.map(
-        (product) => product.value
-      );
+      const productValues = selectedProducts.map((product) => product.value);
       if (productValues.length === 0) {
         alert("Please select at least one Product");
         return;
@@ -197,15 +203,21 @@ const ProductDuplicateStore = () => {
         store_name_to: storeto,
         product_id: productValues,
         upc_check: isUpcChecked,
+        ...userTypeDataNew,
       };
 
       try {
         const response = await axios.post(
           BASE_URL + PRODUCT_INVENTORY_DUPLICATE,
           data,
-          { headers: { "Content-Type": "multipart/form-data" } }
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-       
+
         if (response.data.status == true) {
           const temp_excludedproducts = response.data.existing_products;
           const commaSeparatedString = temp_excludedproducts.join(", ");
@@ -234,28 +246,23 @@ const ProductDuplicateStore = () => {
     <>
       <div className="box">
         <div className="q-add-categories-section">
-        <div className="alert">
-            
-              <Box
-                sx={{
-                  width: "100%",
-                  position: "relative",
-                  top: "2rem",
-                  marginLeft: "auto",
-                }}
-                className="form-submit-info-message"
-              >
-                <Collapse in={openAlert}>
-                  <Alert
-                    severity="info"
-                   
-                    sx={{ mb: 2 }}
-                  >
-                    The existing Attributes of the selected Store 2 Must be same as selected Store 1 Variants.
-                  </Alert>
-                </Collapse>
-              </Box>
-            
+          <div className="alert">
+            <Box
+              sx={{
+                width: "100%",
+                position: "relative",
+                top: "2rem",
+                marginLeft: "auto",
+              }}
+              className="form-submit-info-message"
+            >
+              <Collapse in={openAlert}>
+                <Alert severity="info" sx={{ mb: 2 }}>
+                  The existing Attributes of the selected Store 2 Must be same
+                  as selected Store 1 Variants.
+                </Alert>
+              </Collapse>
+            </Box>
           </div>
 
           <div className="alert">
@@ -360,8 +367,8 @@ const ProductDuplicateStore = () => {
                     >
                       -- Select Store --
                     </div>
-                    {MerchantList &&
-                      MerchantList.map((merchant) => (
+                    {MerchantList?.length &&
+                      MerchantList?.map((merchant) => (
                         <div
                           key={merchant.id}
                           onClick={() =>
@@ -381,10 +388,10 @@ const ProductDuplicateStore = () => {
                 )}
               </div>
               <span className="input-error ">
-                  {storeFromError && (
-                    <span className="input-error ">{storeFromError}</span>
-                  )}
-                </span>
+                {storeFromError && (
+                  <span className="input-error ">{storeFromError}</span>
+                )}
+              </span>
               {/* Multiple Select Categories */}
               <div
                 className={`py-4 ${isSelectClicked ? "select-clicked" : ""}`}
@@ -470,8 +477,8 @@ const ProductDuplicateStore = () => {
                       >
                         -- Select Store --
                       </div>
-                      {MerchantList &&
-                        MerchantList.map((merchant) => (
+                      {MerchantList?.length &&
+                        MerchantList?.map((merchant) => (
                           <div
                             key={merchant.id}
                             onClick={() =>

@@ -524,8 +524,8 @@ function App() {
           />
           <Route
             exact
-            path="/users/addMerchant"
-            element={<Main visible={"addMerchant"} />}
+            path="/users/editMerchant/:id"
+            element={<Main visible={"editMerchant"} />}
           />
           <Route
             exact
