@@ -7,11 +7,10 @@ import Cookies from "js-cookie";
 
 export default function ProtectedRoute(props) {
   const location = useLocation();
-  console.log(location.pathname);
+  const navigate = useNavigate();
+
   let AuthSessionRecord =
-    Cookies.get("loginDetails") !== undefined
-      ? Cookies.get("loginDetails")
-      : [];
+    Cookies.get("token_data") !== undefined ? Cookies.get("token_data") : [];
   let authdecryptRecord = CryptoJS.AES.decrypt(
     AuthSessionRecord,
     "secret key"
@@ -20,8 +19,13 @@ export default function ProtectedRoute(props) {
     authdecryptRecord !== ""
       ? JSON.parse(authdecryptRecord)
       : { status: false };
+  const handleClearCoockie = () => {
+    Cookies.remove("loginDetails");
+    Cookies.remove("user_auth_record");
+    Cookies.remove("token_data");
+    localStorage.removeItem("AllStore");
+  };
 
-  console.log(AdminRocord);
   if (
     AdminRocord?.status == true &&
     AdminRocord?.login_type == "superadmin" &&
@@ -29,19 +33,40 @@ export default function ProtectedRoute(props) {
   ) {
     return <Outlet />;
   } else if (
-    AdminRocord?.status == true &&
-    (AdminRocord?.login_type == "superadmin" ||
-      AdminRocord?.data?.login_type == "manager" ||
-      AdminRocord?.data?.login_type == "admin" ||
-      AdminRocord?.login_type == "manager" ||
-      AdminRocord?.login_type == "admin") &&
-    props.visible == "manager"
+    (AdminRocord?.status == true &&
+      (AdminRocord?.login_type == "superadmin" ||
+        AdminRocord?.data?.login_type == "manager" ||
+        AdminRocord?.data?.login_type == "merchant" ||
+        AdminRocord?.data?.login_type == "admin" ||
+        AdminRocord?.login_type == "merchant" ||
+        AdminRocord?.login_type == "manager" ||
+        AdminRocord?.login_type == "admin") &&
+      props.visible == "manager" &&
+      AdminRocord?.data?.merchant_id !== "") ||
+    (AdminRocord?.data?.merchant_id == "no_id" &&
+      AdminRocord?.data?.merchant_id !== undefined)
   ) {
     return <Outlet />;
   } else {
+    handleClearCoockie();
     return <Navigate to="/login" />;
   }
+
   // return AdminRocord?.status == true ? <Outlet /> : <Navigate to="/login" />;
 
   // If authenticated, render the protected component
+  // else if (
+  //   AdminRocord?.status == true &&
+  //   (AdminRocord?.data?.login_type == "manager" ||
+  //     AdminRocord?.data?.login_type == "admin" ||
+  //     AdminRocord?.data?.login_type == "merchant" ||
+  //     AdminRocord?.login_type == "manager" ||
+  //     AdminRocord?.login_type == "merchant" ||
+  //     AdminRocord?.login_type == "admin") &&
+  //   props.visible == "manager" &&
+  //   AdminRocord?.data?.stores !== undefined &&
+  //   AdminRocord?.data?.stores.length >= 0
+  // ) {
+  //   return <Outlet />;
+  // }
 }

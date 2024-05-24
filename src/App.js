@@ -94,6 +94,9 @@ import { useEffect, useState } from "react";
 import { useMediaQuery } from "@mui/material";
 // import InventoryExport from "./Components/InventoryExport/MainInventoryExport";
 import ProtectedRoute from "./protected/protectedRoute";
+import ProtectedOrderSummery from "./protected/protectedOrderSummery";
+import ProtectedStoreRoute from "./protected/protectedStoreRoute";
+import PaymentCalDetails from "./Components/Reporting/SalesByPerson/MainOrderSumaaryDetails/PaymentCalDetails";
 
 function App() {
   const location = useLocation();
@@ -113,9 +116,13 @@ function App() {
       setIsSideBar(false);
     }
   }, [currentUrl]);
+
   return (
     <>
-      {location.pathname !== "/login" ? (
+      {}
+      {location.pathname !== "/login" &&
+      location.pathname.split("/").slice(0, 3).join("/") !==
+        "/store-reporting/order-summary" ? (
         <SideMenu
           setIsMenuOpen={setIsMenuOpen}
           isTabletNav={isTabletNav}
@@ -124,19 +131,30 @@ function App() {
       ) : (
         ""
       )}
+
       <Routes>
         {/* <Route exact path="/" element={<Main />} /> */}
         {/* <Route exact path="/" element={<Layout />} /> */}
 
         {/* <Route
-        exact
+        exact  props.merchant_id
         path="/users/view/unapprove"
         element={<Main visible={"multimerchant"} />}
       /> */}
         <Route exact path="/login" element={<Login visible={"login"} />} />
-        <Route element={<ProtectedRoute visible="manager" />}>
+        <Route element={<ProtectedOrderSummery visible="manager12" />}>
+          <Route
+            path="/store-reporting/order-summary/:merchant_id/:order_id"
+            element={<PaymentCalDetails visible={"order-summary"} />}
+          />
+        </Route>
+        <Route element={<ProtectedStoreRoute visible="manager11221" />}>
           <Route exact path="/store" element={<Main visible={"store"} />} />
           <Route exact path="/manager" element={<Main visible={"manager"} />} />
+        </Route>
+        {/* <Route exact path="/store" element={<Main visible={"store"} />} /> */}
+        <Route element={<ProtectedRoute visible="manager" />}>
+          {/* <Route exact path="/manager" element={<Main visible={"manager"} />} /> */}
           <Route index path="/" element={<Main visible={"dashboard"} />} />
           <Route exact path="/order" element={<Main visible={"order"} />} />
           <Route
@@ -261,10 +279,10 @@ function App() {
             element={<Main visible={"permission"} />}
           />
 
-          <Route
+          {/* <Route
             path="/store-reporting/order-summary/:order_id"
             element={<Main visible={"order-summary"} />}
-          />
+          /> */}
 
           <Route
             exact

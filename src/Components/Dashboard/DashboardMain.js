@@ -9,25 +9,33 @@ import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
 import { useSelector, useDispatch } from "react-redux";
 import DashboardFunctionality from "./dashboardFunctionality";
-
+import DashboardTables from "./paginationTable";
+import { useAuthDetails } from "./../../Common/cookiesHelper";
 const DashboardMain = () => {
-  const { dashboardCount } = DashboardFunctionality();
+  const { dashboardCount, dashboardRecord } = DashboardFunctionality();
+  const {
+    LoginGetDashBoardRecordJson,
+    LoginAllStore,
+    userTypeData,
+    GetSessionLogin,
+  } = useAuthDetails();
+  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
-  let LoginGetDashBoardRecord = useSelector((state) =>
-    CryptoJS.AES.decrypt(
-      state?.loginAuthentication?.StoreUserDashboardRecord,
-      "secret key"
-    ).toString(CryptoJS.enc.Utf8)
-  );
-  let AuthDecryptDataDashBoardJSONFormat =
-    LoginGetDashBoardRecord !== "" ? JSON.parse(LoginGetDashBoardRecord) : "";
-  const AdminRocordNew = useSelector((state) =>
-    CryptoJS.AES.decrypt(
-      state?.loginAuthentication?.getUserRecord,
-      "secret key"
-    ).toString(CryptoJS.enc.Utf8)
-  );
-  let LoginAllStore = AdminRocordNew !== "" ? JSON.parse(AdminRocordNew) : "";
+  // let LoginGetDashBoardRecord = useSelector((state) =>
+  //   CryptoJS.AES.decrypt(
+  //     state?.loginAuthentication?.StoreUserDashboardRecord,
+  //     "secret key"
+  //   ).toString(CryptoJS.enc.Utf8)
+  // );
+  // let AuthDecryptDataDashBoardJSONFormat =
+  //   LoginGetDashBoardRecord !== "" ? JSON.parse(LoginGetDashBoardRecord) : "";
+  // const AdminRocordNew = useSelector((state) =>
+  //   CryptoJS.AES.decrypt(
+  //     state?.loginAuthentication?.getUserRecord,
+  //     "secret key"
+  //   ).toString(CryptoJS.enc.Utf8)
+  // );
+  // let LoginAllStore = AdminRocordNew !== "" ? JSON.parse(AdminRocordNew) : "";
 
   // ===================
   // --------------------------------------------------------------------------------------------------------------
@@ -42,7 +50,13 @@ const DashboardMain = () => {
       <div className="q-category-main-page">
         <CardForm dashboardCount={dashboardCount} />
       </div>
-      <div className="q-category-main-page">{/* <NetSales /> */}</div>
+      <div className="q-category-main-page">
+        {/* <NetSales /> */}
+        <DashboardTables
+          dashboardRecord={dashboardRecord}
+          merchant_id={merchant_id}
+        />
+      </div>
       <div className="q-category-main-page">{/* <SellItems /> */}</div>
     </>
   );
