@@ -155,12 +155,8 @@ const SideMenu = () => {
                             : ""
                       }`}
                     >
-                      {/* {activeItem === item.link ? item.activeIcon : item.icon} */}
-
-                      {console.log("activeItem ",activeItem, "===" ," item.link ",item.link , activeItem === item.link )}
-                      {
-                        
-                      activeItem === item.link.trim() || hoveredItem === item.id
+                      {activeItem === item.link.trim() ||
+                      hoveredItem === item.id
                         ? item.activeIcon
                         : item.icon}
                       <Link
@@ -169,7 +165,7 @@ const SideMenu = () => {
                         }`}
                         to={item.link}
                       >
-                        {item.text} 
+                        {item.text}
                       </Link>
                     </div>
                   )}
@@ -297,10 +293,15 @@ const DropdownMenuItem = ({
                   activeItem === dropDownItem ? "activeTab" : ""
                 }`}
               >
-                {item.text} 
+                {item.text}
               </p>
 
-              <FaChevronDown className="quickarrow_icon ml-4 me-5" />
+              <FaChevronDown
+                className={`quickarrow_icon ml-4 me-5 text-${
+                  (activeItem === dropDownItem || hoveredItem === item.id) &&
+                  "[#FFC400]"
+                }`}
+              />
             </div>
           ) : (
             <>
@@ -331,20 +332,65 @@ const DropdownMenuItem = ({
           }}
           className="mt-0 bg-[#334247] p-4 shadow w-full text-center z-10"
         >
-          {item.dropdownItems.map((dropdownItem) => (
-            <Link
-              key={dropdownItem.id}
-              to={dropdownItem.link}
-              className={`flex text-center submenu-item text-gray-400 py-4 text-[14px] ${
-                activeItem === dropdownItem.link ? "active" : ""
-              }`}
-              onClick={(e) => {
-                handleToggleDropdownItems(dropdownItem.link);
-                e.stopPropagation();
-              }}
-            >
-              {dropdownItem.text}
-            </Link>
+          {item?.dropdownItems?.map((dropdownItem) => (
+            <>
+              {dropdownItem?.dropDownItems ? (
+                <>
+                  {isMenuOpenRedux ? (
+                    <div className="w-full flex items-center cursor-pointer">
+                      <p
+                        className={`ml-2 menu-item DropDown-memu text-[14px] flex-auto Admin_std ${
+                          activeItem === dropDownItem ? "activeTab" : ""
+                        }`}
+                      >
+                        {dropdownItem?.text}
+                      </p>
+
+                      <FaChevronDown
+                        className={`quickarrow_icon ml-4 me-5 text-${
+                          (activeItem === dropDownItem ||
+                            hoveredItem === item?.id) &&
+                          "[#FFC400]"
+                        }`}
+                      />
+                    </div>
+                  ) : (
+                    <>{/* for icons */}</>
+                  )}
+                  {console.log("dropdownItem ", dropdownItem?.dropDownItems)}
+                  {dropdownItem?.dropDownItems?.length &&
+                    dropdownItem?.dropDownItems?.map((item) => (
+                      <Link
+                        key={item.id}
+                        to={item.link}
+                        className={`flex text-center submenu-item text-gray-400 py-4 text-[14px] ${
+                          activeItem === item.link ? "active" : ""
+                        }`}
+                        onClick={(e) => {
+                          handleToggleDropdownItems(item.link);
+                          e.stopPropagation();
+                        }}
+                      >
+                        {item.text}
+                      </Link>
+                    ))}
+                </>
+              ) : (
+                <Link
+                  key={dropdownItem.id}
+                  to={dropdownItem.link}
+                  className={`flex text-center submenu-item text-gray-400 py-4 text-[14px] ${
+                    activeItem === dropdownItem.link ? "active" : ""
+                  }`}
+                  onClick={(e) => {
+                    handleToggleDropdownItems(dropdownItem.link);
+                    e.stopPropagation();
+                  }}
+                >
+                  {dropdownItem.text}
+                </Link>
+              )}
+            </>
           ))}
         </div>
       )}
@@ -605,22 +651,45 @@ const menuItems = [
     link: "/reporting",
     className: "flex items-center gap-2",
     dropdownItems: [
-      { id: 61, text: "Sales Report", link: "/store-reporting/sales-report" },
       {
-        id: 62,
-        text: "Daily Total Report",
-        link: "/store-reporting/daily-total-report",
+        id: 1,
+        text: "Sales Report",
+        dropDownItems: [
+          {
+            id: 61,
+            text: "Sales Report",
+            link: "/store-reporting/sales-report",
+          },
+          {
+            id: 62,
+            text: "Daily Total Report",
+            link: "/store-reporting/daily-total-report",
+          },
+          {
+            id: 63,
+            text: "Detailed Category Sale",
+            link: "/store-reporting/Details-category",
+          },
+
+          { id: 79, text: " Order Type ", link: "/store-reporting/order-type" },
+          {
+            id: 64,
+            text: "Report by Sales Person",
+            link: "/store-reporting/report-sales-person",
+          },
+          {
+            id: 69,
+            text: "Top Seller - Overall Top 10",
+            link: "/store-reporting/overall-top",
+          },
+          {
+            id: 78,
+            text: " Payment Method Details",
+            link: "/store-reporting/payment-method-details",
+          },
+        ],
       },
-      {
-        id: 63,
-        text: "Detailed Category Sale",
-        link: "/store-reporting/Details-category",
-      },
-      {
-        id: 64,
-        text: "Report by Sales Person",
-        link: "/store-reporting/report-sales-person",
-      },
+
       {
         id: 65,
         text: "Check ID verification",
@@ -641,11 +710,7 @@ const menuItems = [
         text: "Instant PO Activity Report",
         link: "/store-reporting/instant-activity",
       },
-      {
-        id: 69,
-        text: "Top Seller - Overall Top 10",
-        link: "/store-reporting/overall-top",
-      },
+
       { id: 70, text: "Flash Report", link: "/store-reporting/flash-resigter" },
       { id: 71, text: "Vendor List", link: "/store-reporting/vendors-list" },
       { id: 72, text: "Employee List", link: "/store-reporting/employee-list" },
@@ -675,12 +740,6 @@ const menuItems = [
       // },
 
       { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
-      {
-        id: 78,
-        text: " Payment Method Details",
-        link: "/store-reporting/payment-method-details",
-      },
-      { id: 79, text: " Order Type ", link: "/store-reporting/order-type" },
 
       {
         id: 81,
