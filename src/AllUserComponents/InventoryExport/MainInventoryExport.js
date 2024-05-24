@@ -9,17 +9,19 @@ import { fetchMerchantsList } from "../../Redux/features/ExportInventory/ExportI
 import { useSelector } from "react-redux";
 import InventoryExportLogic from "./InventoryExportLogic";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import SelectDropDown from "../../reuseableComponents/SelectDropDown";
+import { Grid } from '@mui/material';
 
 const MainInventoryExport = () => {
   const [openAlert, setOpenAlert] = useState(true);
-  const [MerchantList, setMerchantList] = useState();
+  const [MerchantList, setMerchantList] = useState([]);
   const MerchantListData = useSelector((state) => state.ExportInventoryData);
   const { userTypeData } = useAuthDetails();
   //console.log(MerchantListData);
   const goToTop = () => {
     setsubmitmessage();
   };
-  const [storeFromError, setStoreFromError] = useState("");
+  
   const [selectedStorefrom, setSelectedStorefrom] =
     useState("-- Select Store --");
 
@@ -44,7 +46,12 @@ const MainInventoryExport = () => {
   const handleOptionClick = async (option, dropdown) => {
     switch (dropdown) {
       case "storefrom":
-        setSelectedStorefrom(option.label);
+        if (option === "-- Select Store --") {
+          setSelectedStorefrom("-- Select Store --");
+          setStoreFromError("This field is required");
+          return; 
+        }
+        setSelectedStorefrom(option.title);
         setStoreFromDropdownVisible(false);
 
         if (option.merchant_id !== null) {
@@ -62,7 +69,7 @@ const MainInventoryExport = () => {
     }
   };
 
-  const { handleStoreInput, handleSubmit, submitmessage, setsubmitmessage } =
+  const { handleStoreInput, handleSubmit, submitmessage, setsubmitmessage ,storeFromError,setStoreFromError} =
     InventoryExportLogic();
 
   useEffect(() => {
@@ -77,11 +84,16 @@ const MainInventoryExport = () => {
     dispatch(fetchMerchantsList(userTypeData));
   }, []);
 
+  const storefrom = MerchantList.length > 0 ? MerchantList.map((merchant) => ({
+    title: `${merchant.name}-${merchant.merchant_id}`,
+    merchant_id: merchant.merchant_id,
+  })) : [];
+
   return (
     <>
-      <div className="q-order-main-page">
-        <div className="box">
-          <div className="q-add-categories-section">
+    
+        <div className="box_shadow_div_order">
+          <div className="">
             <div className="alert">
               {submitmessage && (
                 <Box
@@ -124,7 +136,7 @@ const MainInventoryExport = () => {
             </div>
 
             <div className="q-order-page-container ml-8 md:flex-col">
-              <div className="col-qv-6 mt-6">
+              {/* <div className="col-qv-6 mt-6">
                 <label
                   className="q-details-page-label"
                   htmlFor="storefromFilter"
@@ -179,8 +191,29 @@ const MainInventoryExport = () => {
                     <span className="input-error ">{storeFromError}</span>
                   )}
                 </span>
-              </div>
+              </div> */}
             </div>
+            <Grid container sx={{ padding: 2.5 }}>
+                  <Grid item xs={6} className="MainInventory">
+                      <label className="q-details-page-label">Select Store Name</label>
+                        <SelectDropDown
+                          className="MainInventory-selecteDropdown"
+                          heading={"-- Select Store --"}
+                            listItem={storefrom}
+                            title={"title"}
+                            onClickHandler={handleOptionClick}
+                            selectedOption={selectedStorefrom}
+                            dropdownFor={"storefrom"}
+                            
+                        />
+                  </Grid>
+                </Grid>
+
+              <span className="input-error " style={{ transform: "translate(15px, -6px)" }}>
+                  {storeFromError && (
+                    <span className="input-error ">{storeFromError}</span>
+                  )}
+              </span>
 
             <div
               className="q-add-categories-section-middle-footer "
@@ -193,7 +226,9 @@ const MainInventoryExport = () => {
             </div>
           </div>
         </div>
-      </div>
+
+     
+
     </>
   );
 };
