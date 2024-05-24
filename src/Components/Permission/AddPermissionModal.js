@@ -12,12 +12,12 @@ import axios from "axios";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import { toast } from "react-toastify";
 
 const AddPermissionModal = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-  const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useDispatch();
 
   const { userTypeData } = useAuthDetails();
@@ -91,7 +91,9 @@ const AddPermissionModal = () => {
       const msg = await res.data.message;
 
       if (data == "success") {
-        alert("Permission Added Successfully !");
+        toast.success("Permission Added Successfully!", {
+          position: "top-right",
+        });
 
         dispatch(fetchPermissionData(userTypeData));
 
@@ -105,10 +107,14 @@ const AddPermissionModal = () => {
         data == "failed" &&
         msg == "Permission and Sub-Permission cannot be empty."
       ) {
-        setErrorMessage(msg);
+        toast.warning(msg, {
+          position: "top-right",
+        });
       }
     } catch (error) {
-      console.error("API Error:", error);
+      toast.error("Error!", {
+        position: "top-right",
+      });
     }
   };
 
