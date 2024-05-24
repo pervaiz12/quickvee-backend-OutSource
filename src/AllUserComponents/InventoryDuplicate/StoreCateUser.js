@@ -72,7 +72,6 @@ const StoreCateUser = () => {
 
   // const handleOptionClick = async (option, dropdown) => {
   const handleOptionClick = async (value, dropdown) => {
-    console.log(value, dropdown);
     switch (dropdown) {
       case "copyFrom":
         setSelectedStorefrom(value?.title ? value?.title : value);
@@ -102,8 +101,6 @@ const StoreCateUser = () => {
         break;
     }
   };
-
-  console.log("from", selectedStorefrom, "to", selectedStoreto, values);
 
   const dupplicateInventoryHandler = (e) => {
     if (selectedStorefrom === "-- Select Store --") {

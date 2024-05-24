@@ -77,9 +77,11 @@ const BulkVendorEdit = ({
 
       dispatch(assignPrefferedVendor(formData))
         .then((res) => {
-          toast.success("Updated Preferred Vendor!", {
-            position: "top-right",
-          });
+          if (res?.payload?.status) {
+            toast.success("Updated Preferred Vendor!", {
+              position: "top-right",
+            });
+          }
         })
         .catch((err) => {
           toast.error("Error!", {
