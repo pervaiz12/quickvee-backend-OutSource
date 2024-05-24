@@ -44,7 +44,7 @@ const NewsLetterList = (props) => {
   const [allNewsData, setAllNewsData] = useState([]);
   const AllNewsDataState = useSelector((state) => state.NewsLetterList);
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
+  // const itemsPerPage = 10;
 
   useEffect(() => {
     dispatch(fetchNewsLetterListData());
@@ -60,9 +60,10 @@ const NewsLetterList = (props) => {
   }, [AllNewsDataState.loading, AllNewsDataState.NewsLetterListData]);
 
   // Logic for pagination
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const indexOfLastItem = currentPage * rowsPerPage;
+  const indexOfFirstItem = indexOfLastItem - rowsPerPage;
   const currentItems = allNewsData.slice(indexOfFirstItem, indexOfLastItem);
+  
 
 
   const renderItems = () => {

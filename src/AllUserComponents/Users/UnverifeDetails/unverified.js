@@ -148,25 +148,33 @@ export default function Unverified() {
 
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
-    const filteredAdminRecord =
-    UnVerifiedMerchantList && Array.isArray(UnVerifiedMerchantList)
-      ? UnVerifiedMerchantList.filter(
-          (result) =>
-            (result.owner_name &&
-              result.owner_name
-                .toLowerCase()
-                .includes(searchRecord.toLowerCase())) ||
-            (result.name &&
-              result.name.toLowerCase().includes(searchRecord.toLowerCase())) ||
-            (result.email &&
-              result.email
-                .toLowerCase()
-                .includes(searchRecord.toLowerCase())) ||
-            (result.phone && result.phone.includes(searchRecord)) ||
-            (result.a_state && result.a_state.includes(searchRecord))
-        )
-      : [];
-      setVerifiedMerchantListState(filteredAdminRecord);
+    if (value === "") {
+      setFilteredMerchants(VerifiedMerchantListState);
+      setTotalCount(VerifiedMerchantListState.length);
+    } else{
+      const filteredAdminRecord =
+      UnVerifiedMerchantList && Array.isArray(UnVerifiedMerchantList)
+        ? UnVerifiedMerchantList.filter(
+            (result) =>
+              (result.owner_name &&
+                result.owner_name
+                  .toLowerCase()
+                  .includes(searchRecord.toLowerCase())) ||
+              (result.name &&
+                result.name.toLowerCase().includes(searchRecord.toLowerCase())) ||
+              (result.email &&
+                result.email
+                  .toLowerCase()
+                  .includes(searchRecord.toLowerCase())) ||
+              (result.phone && result.phone.includes(searchRecord)) ||
+              (result.a_state && result.a_state.includes(searchRecord))
+          )
+        : [];
+        setVerifiedMerchantListState(filteredAdminRecord);
+        setFilteredMerchants(filteredAdminRecord);
+        setTotalCount(filteredAdminRecord.length);
+    }
+   
   };
  
   // ====================================
@@ -287,9 +295,9 @@ export default function Unverified() {
 
   const indexOfLastMerchant = currentPage * rowsPerPage;
   const indexOfFirstMerchant = indexOfLastMerchant - rowsPerPage;
-  const currentMerchants = searchRecord
-    ? VerifiedMerchantListState.slice(indexOfFirstMerchant, indexOfLastMerchant)
-    : filteredMerchants.slice(indexOfFirstMerchant, indexOfLastMerchant);
+  // const currentMerchants = searchRecord
+  //   ? VerifiedMerchantListState.slice(indexOfFirstMerchant, indexOfLastMerchant)
+  //   : filteredMerchants.slice(indexOfFirstMerchant, indexOfLastMerchant);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   // ========================= END PAGINATION LOGIC ======================================
   //  ====================================
@@ -373,7 +381,10 @@ export default function Unverified() {
                   <StyledTableCell></StyledTableCell>
                 </TableHead>
                 <TableBody>
-                  {currentMerchants?.map((data, index) => (
+                  {filteredMerchants?.slice(
+                    indexOfFirstMerchant,
+                    indexOfLastMerchant
+                  )?.map((data, index) => (
                     <StyledTableRow>
                       <StyledTableCell>
                         <div class="flex">

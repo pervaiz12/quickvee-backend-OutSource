@@ -86,7 +86,10 @@ const SideMenu = () => {
   const [currentDropDownItem, activeDropDownItem] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  console.log("activeItem: ", activeItem);
   const handleItemClick = (item) => {
+    console.log("handleItemClick: ", item.link)
     setActiveItem(item.link);
     navigate(item.link);
 
@@ -162,7 +165,7 @@ const SideMenu = () => {
                         }`}
                         to={item.link}
                       >
-                        {item.text}
+                        {item.text} 
                       </Link>
                     </div>
                   )}
@@ -234,10 +237,17 @@ const DropdownMenuItem = ({
 
   const [dropDownItem, setDropDownItem] = useState(null);
   const isTabletNav = useMediaQuery("(max-width:1024px)");
-
   useEffect(() => {
     isTabletNav && dispatch(setIsDropdownOpen(false));
-  }, [isTabletNav]);
+    const foundItem = item?.dropdownItems?.find(
+      (item) => item?.link === activeItem
+    );
+    if (foundItem) {
+      setDropDownItem(foundItem.link);
+      activeDropDownItem(item.id);
+    }
+    item.id === currentDropDownItem && dispatch(setIsDropdownOpen(true));
+  }, [isTabletNav, currentDropDownItem, dropDownItem]);
 
   const handleToggleDropdownItems = (link, e) => {
     if (isTabletNav) {
@@ -254,10 +264,7 @@ const DropdownMenuItem = ({
 
   const HandleDropdownClick = (event, id) => {
     activeDropDownItem(id);
-
     dispatch(setIsDropdownOpen(!isDropdownOpen));
-
-    // setIsMenuOpen(!isMenuOpen);
   };
 
   return (
@@ -286,7 +293,7 @@ const DropdownMenuItem = ({
                   activeItem === dropDownItem ? "activeTab" : ""
                 }`}
               >
-                {item.text}
+                {item.text} 
               </p>
 
               <FaChevronDown className="quickarrow_icon ml-4 me-5" />
@@ -816,21 +823,21 @@ const SuperAdminMenuItems = [
     link: "/users/view/unapprove/menu/defaults ",
   },
 
-  {
-    id: 7,
-    icon: (
-      <img
-        src={ApkIcon}
-        alt="release_apk"
-        className="h-6 w-10 mt-4 mb-4 hoverable-image"
-      />
-    ),
-    activeIcon: (
-      <img src={ApkActive} alt="release_apk" className="h-6 w-10 mt-4 mb-4" />
-    ),
-    text: "Release APK   ",
-    link: "/users/view/unapprove/release_apk",
-  },
+  // {
+  //   id: 7,
+  //   icon: (
+  //     <img
+  //       src={ApkIcon}
+  //       alt="release_apk"
+  //       className="h-6 w-10 mt-4 mb-4 hoverable-image"
+  //     />
+  //   ),
+  //   activeIcon: (
+  //     <img src={ApkActive} alt="release_apk" className="h-6 w-10 mt-4 mb-4" />
+  //   ),
+  //   text: "Release APK   ",
+  //   link: "/users/view/unapprove/release_apk",
+  // },
   {
     id: 8,
     icon: (
@@ -931,25 +938,25 @@ const SuperAdminMenuItems = [
     link: "/users/view/unapprove/invertory-export",
   },
 
-  {
-    id: 13,
-    icon: (
-      <img
-        src={MerchantIcon}
-        alt="labal"
-        className="h-6 w-10 mt-4 mb-4 hoverable-image"
-      />
-    ),
-    activeIcon: (
-      <img
-        src={MerchantActive}
-        alt="menu-defaults"
-        className="h-6 w-10 mt-4 mb-4"
-      />
-    ),
-    text: "Merchant Details ",
-    link: "/users/view/unapprove/merchant-details",
-  },
+  // {
+  //   id: 13,
+  //   icon: (
+  //     <img
+  //       src={MerchantIcon}
+  //       alt="labal"
+  //       className="h-6 w-10 mt-4 mb-4 hoverable-image"
+  //     />
+  //   ),
+  //   activeIcon: (
+  //     <img
+  //       src={MerchantActive}
+  //       alt="menu-defaults"
+  //       className="h-6 w-10 mt-4 mb-4"
+  //     />
+  //   ),
+  //   text: "Merchant Details ",
+  //   link: "/users/view/unapprove/merchant-details",
+  // },
   // {
   //   id: 12,
   //   icon: (
