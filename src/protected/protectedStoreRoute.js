@@ -6,9 +6,7 @@ import { Route, useNavigate, Navigate, Outlet } from "react-router-dom";
 
 export default function ProtectedStoreRoute() {
   let AuthSessionRecord =
-    Cookies.get("loginDetails") !== undefined
-      ? Cookies.get("loginDetails")
-      : [];
+    Cookies.get("token_data") !== undefined ? Cookies.get("token_data") : [];
   let authdecryptRecord = CryptoJS.AES.decrypt(
     AuthSessionRecord,
     "secret key"
@@ -23,7 +21,7 @@ export default function ProtectedStoreRoute() {
     Cookies.remove("token_data");
     localStorage.removeItem("AllStore");
   };
-  if (AdminRocord?.status == true) {
+  if (AdminRocord?.status == true && AdminRocord?.data?.stores !== undefined) {
     return <Outlet />;
   } else {
     handleClearCoockie();

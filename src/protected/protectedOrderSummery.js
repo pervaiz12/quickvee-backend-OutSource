@@ -6,9 +6,7 @@ import { Route, useNavigate, Navigate, Outlet } from "react-router-dom";
 
 export default function ProtectedOrderSummery() {
   let AuthSessionRecord =
-    Cookies.get("loginDetails") !== undefined
-      ? Cookies.get("loginDetails")
-      : [];
+    Cookies.get("token_data") !== undefined ? Cookies.get("token_data") : [];
   let authdecryptRecord = CryptoJS.AES.decrypt(
     AuthSessionRecord,
     "secret key"
@@ -18,6 +16,5 @@ export default function ProtectedOrderSummery() {
       ? JSON.parse(authdecryptRecord)
       : { status: false };
 
-  console.log(AdminRocord);
   return AdminRocord?.status == true ? <Outlet /> : <Navigate to="/login" />;
 }
