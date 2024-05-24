@@ -32,15 +32,15 @@ const Pagination = ({
     };
 
     // Add first page
-    if (currentPage !== 1) {
-      items.push(
-        <li key="first" className="page-item">
-          <button className="page-link" onClick={() => onPageChange(1)}>
-            {"<<"}
-          </button>
-        </li>
-      );
-    }
+    // if (currentPage !== 1) {
+    //   items.push(
+    //     <li key="first" className="page-item">
+    //       <button className="page-link" onClick={() => onPageChange(1)}>
+    //         {"<<"}
+    //       </button>
+    //     </li>
+    //   );
+    // }
 
     // Add pages around current page
     if (totalPages <= 5) {
@@ -76,18 +76,18 @@ const Pagination = ({
     }
 
     // Add last page
-    if (currentPage !== totalPages && totalPages > 1) {
-      items.push(
-        <li key="last" className="page-item">
-          <button
-            className="page-link"
-            onClick={() => onPageChange(totalPages)}
-          >
-            {'>>'}
-          </button>
-        </li>
-      );
-    }
+    // if (currentPage !== totalPages && totalPages > 1) {
+    //   items.push(
+    //     <li key="last" className="page-item">
+    //       <button
+    //         className="page-link"
+    //         onClick={() => onPageChange(totalPages)}
+    //       >
+    //         {'>>'}
+    //       </button>
+    //     </li>
+    //   );
+    // }
 
     return items;
   };
