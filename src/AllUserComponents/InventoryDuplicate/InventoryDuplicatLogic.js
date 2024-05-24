@@ -7,6 +7,7 @@ import {
   SETTINGS_DUPLICATE,
 } from "../../Constants/Config";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const InventoryExportLogic = () => {
   const [submitmessage, setsubmitmessage] = useState();
@@ -96,11 +97,13 @@ const InventoryExportLogic = () => {
 
           if (response.data) {
             setsubmitmessage(response.data);
+            ToastifyAlert("Duplicate Inventory Success!", "success");
           } else {
             setsubmitmessage(response.data);
           }
         } catch (error) {
           // console.log('33 catch err');
+          ToastifyAlert("Error!", "error");
           return new Error(error);
         }
       }
@@ -144,10 +147,12 @@ const InventoryExportLogic = () => {
 
           if (response.data) {
             setsubmitmessage(response.data);
+            ToastifyAlert("Duplicate Settings Success!", "success");
           } else {
             setsubmitmessage(response.data);
           }
         } catch (error) {
+          ToastifyAlert("Error!", "error");
           // console.log('33 catch err');
           return new Error(error);
         }

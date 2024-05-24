@@ -13,6 +13,7 @@ import BasicTextFields from "../../reuseableComponents/TextInputField";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { toast } from "react-toastify";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const AddPermissionModal = () => {
   const [open, setOpen] = useState(false);
@@ -91,9 +92,7 @@ const AddPermissionModal = () => {
       const msg = await res.data.message;
 
       if (data == "success") {
-        toast.success("Permission Added Successfully!", {
-          position: "top-right",
-        });
+        ToastifyAlert("Permission Added Successfully!", "success");
 
         dispatch(fetchPermissionData(userTypeData));
 
@@ -107,14 +106,10 @@ const AddPermissionModal = () => {
         data == "failed" &&
         msg == "Permission and Sub-Permission cannot be empty."
       ) {
-        toast.warning(msg, {
-          position: "top-right",
-        });
+        ToastifyAlert(msg, "warn");
       }
     } catch (error) {
-      toast.error("Error!", {
-        position: "top-right",
-      });
+      ToastifyAlert("Error!", "error");
     }
   };
 
