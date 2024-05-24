@@ -252,7 +252,7 @@ const ProductDuplicateStore = () => {
 
   return (
     <>
-      <div className="box">
+      <div className="q-order-main-page">
         {/* <div className="q-add-categories-section"> */}
         <div class="q-category-top-detail-section">
           <li>
@@ -260,7 +260,6 @@ const ProductDuplicateStore = () => {
             selected Store 1 Variants.
           </li>
         </div>
-
         <div className=" box_shadow_div_order">
           <div className="alert">
             {submitmessage && (
@@ -452,32 +451,32 @@ const ProductDuplicateStore = () => {
               </Grid>
             </Grid>
           </div>
-        </div>
+          <div className="q-order-page-filter mt-6"></div>
 
-        <div className="q-order-page-filter mt-6"></div>
+          <div className="q-add-inventory-section-header mx-2">
+            <div className="qv_checkbox">
+              <label className="qv_checkbox_add_checkmark_label">
+                Want to Replicate UPC's for inventory
+                <input type="checkbox" id="upc_check" name="upc_check" />
+                <span className="qv_add_checkmark"></span>
+              </label>
+            </div>
+          </div>
 
-        <div className="q-add-inventory-section-header mx-2">
-          <div className="qv_checkbox">
-            <label className="qv_checkbox_add_checkmark_label">
-              Want to Replicate UPC's for inventory
-              <input type="checkbox" id="upc_check" name="upc_check" />
-              <span className="qv_add_checkmark"></span>
-            </label>
+          <div
+            className="q-add-categories-section-middle-footer "
+            style={{ justifyContent: "start" }}
+          >
+            <button
+              className="quic-btn quic-btn-save"
+              onClick={dupplicateProductInventory}
+            >
+              Duplicate Inventory
+            </button>
           </div>
         </div>
-
-        <div
-          className="q-add-categories-section-middle-footer "
-          style={{ justifyContent: "start" }}
-        >
-          <button
-            className="quic-btn quic-btn-save"
-            onClick={dupplicateProductInventory}
-          >
-            Duplicate Inventory
-          </button>
-        </div>
       </div>
+
       {/* </div> */}
     </>
   );
