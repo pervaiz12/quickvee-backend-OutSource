@@ -985,14 +985,14 @@ const merchant = [
 ];
 const ManagerLink = [
   {
-    id: 82,
+    // id: 82,
     text: "Store",
     link: "/store",
   },
 ];
 const MerchantLink = [
   {
-    id: 82,
+    // id: 82,
     text: "Store",
     link: "/store",
   },
