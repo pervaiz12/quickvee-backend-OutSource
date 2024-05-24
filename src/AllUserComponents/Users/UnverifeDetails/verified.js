@@ -33,6 +33,7 @@ import Pagination from "./Pagination";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
@@ -78,8 +79,6 @@ export default function Verified() {
     []
   );
 
-  console.log("VerifiedMerchantListState", VerifiedMerchantListState)
-
   useEffect(() => {
     if (!VerifiedMerchantList.loading && VerifiedMerchantList.length >= 1) {
       setVerifiedMerchantListState(VerifiedMerchantList);
@@ -93,15 +92,12 @@ export default function Verified() {
   const currentMerchants = searchRecord
     ? VerifiedMerchantListState
     : filteredMerchants.slice(indexOfFirstMerchant, indexOfLastMerchant);
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const data = { type: "approve" };
-  const merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   useEffect(() => {
     dispatch(getVerifiedMerchant({ type: "approve", ...userTypeData }));
   }, []);
-  // ====================================
 
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
@@ -130,7 +126,6 @@ export default function Verified() {
     setVerifiedMerchantListState(filteredAdminRecord);
   };
 
-  // ====================================
   const handleEditMerchant = (data) => {
     // console.log("handleEditMerchant ", data);
 
@@ -195,20 +190,6 @@ export default function Verified() {
     });
   };
 
-  // $(tableRef.current).on("click", "img.delete", function () {
-  //   const data = $(this).data("id");
-  //   handleDeleteMerchant(data);
-  // });
-  // $(tableRef.current).on("click", "img.view", function () {
-  //   const merchantId = $(this).data("id");
-  //   handleGetVerifiedMerchant(merchantId);
-  // });
-  // $(tableRef.current).on("click", "img.edit", function () {
-  //   const merchantId = $(this).data("id");
-  //   handleEditMerchant(merchantId);
-  // });
-
-  //  ====================================
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -278,10 +259,7 @@ export default function Verified() {
           </Grid>
           <Grid container>
             <TableContainer>
-              <StyledTable
-                sx={{ minWidth: 500 }}
-                aria-label="customized table"
-              >
+              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
                 <TableHead>
                   {/* {TableRow.map((row) => (
                     <StyledTableCell>{row}</StyledTableCell>
@@ -322,7 +300,6 @@ export default function Verified() {
                         <div className="flex">
                           <img
                             className="mx-1 view "
-                            data-id="${data.merchant_id}"
                             onClick={() =>
                               handleGetVerifiedMerchant(data.merchant_id)
                             }
@@ -331,14 +308,12 @@ export default function Verified() {
                           />
                           <img
                             className="mx-1 edit"
-                            data-id="${data.id}"
                             onClick={() => handleEditMerchant(data.id)}
                             src={Edit}
                             alt="Edit"
                           />
                           <img
                             class="mx-1 delete"
-                            data-id="${[data.id,data.merchant_id,]}"
                             onClick={() => handleDeleteMerchant(data)}
                             src={Delete}
                             alt="Delete"

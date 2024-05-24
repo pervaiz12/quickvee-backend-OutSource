@@ -15,6 +15,16 @@ import { Grid } from "@mui/material";
 import $ from "jquery";
 import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
 import AddIcon from "../../../Assests/Category/addIcon.svg";
+import { styled } from "@mui/material/styles";
+import Pagination from "../UnverifeDetails/Pagination";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Edit from "../../../Assests/VerifiedMerchant/Edit.svg";
+import Delete from "../../../Assests/VerifiedMerchant/Delete.svg";
 
 const Customer = () => {
   $.DataTable = require("datatables.net");
@@ -26,6 +36,53 @@ const Customer = () => {
   const [managerTable, setManagerTable] = useState([]);
   const [selectedAction, setSelectedAction] = useState("");
   const [searchRecord, setSearchRecord] = useState("");
+  const [customersDataState, setCustomersDataState] = useState([]);
+
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+
+  const indexOfLastMerchant = currentPage * rowsPerPage;
+  const indexOfFirstMerchant = indexOfLastMerchant - rowsPerPage;
+  const currentCustomers = searchRecord
+    ? customersDataState
+    : customersDataState.slice(indexOfFirstMerchant, indexOfLastMerchant);
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  useEffect(() => {
+    if (!customerRecord.loading && customerRecord.CustomerRecord.length >= 1) {
+      setCustomersDataState(customerRecord.CustomerRecord);
+      setTotalCount(customerRecord.CustomerRecord.length);
+    }
+  }, [customerRecord.CustomerRecord, customerRecord.loading]);
+
+  const StyledTable = styled(Table)(({ theme }) => ({
+    padding: 2, // Adjust padding as needed
+  }));
+
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: "#253338",
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+    [`&.${tableCellClasses.table}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+  }));
 
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -43,59 +100,16 @@ const Customer = () => {
           )
         : customerRecord?.CustomerRecord;
 
-      setManagerTable(filteredData);
+      console.log("filteredData: ", filteredData);
+
+      const data =
+        Array.isArray(filteredData) && filteredData.length > 0
+          ? filteredData
+          : [];
+
+      setManagerTable(data);
     }
-  }, [customerRecord.CustomerRecord, searchRecord]);
-
-  useEffect(() => {
-    if (managerTable.length && tableRef.current) {
-      const modifiedData = managerTable.map((user) => ({
-        Name: user.name || "",
-        Email: user.email || "",
-        Phone: user.phone || "",
-        UserType: user?.user_type,
-      }));
-
-      $(tableRef.current).on("click", "span.viewMerchant", function () {
-        const merchantId = $(this).data("id");
-        const merchantName = $(this).data("name");
-        // handleViewMerchant(merchantId, merchantName, userTypeData);
-      });
-
-      const table = $("#OnlineStoreTable").DataTable({
-        data: modifiedData,
-        columns: [
-          { title: "Name", data: "Name", orderable: false },
-          { title: "Email", data: "Email", orderable: false },
-          { title: "Phone", data: "Phone", orderable: false },
-          { title: "User Type", data: "UserType", orderable: false },
-        ],
-        destroy: true,
-        searching: true,
-        // dom: "<'row 'l<'col-sm-5'><'col-sm-7'>p<'col-sm-12't>><'row'<'col-sm-7 mt-5'><'col-sm-5'>>",
-        dom: "<'row 'l<'col-sm-12'b>><'row'<'col-sm-7 mt-2'p><'col-sm-5'>>",
-        lengthMenu: [10, 20, 50],
-        lengthChange: true,
-        ordering: false,
-        language: {
-          paginate: {
-            previous: "<",
-            next: ">",
-          },
-          search: "_INPUT_",
-          searchPlaceholder: " Search...",
-        },
-      });
-
-      $("#searchInput").on("input", function () {
-        table.search(this.value).draw();
-      });
-
-      return () => {
-        table.destroy();
-      };
-    }
-  }, [managerTable]);
+  }, [customerRecord, searchRecord]);
 
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
@@ -145,10 +159,74 @@ const Customer = () => {
               />
             </Grid>
           </Grid>
-          <Grid container sx={{ padding: 0 }}>
+          <Grid container sx={{ padding: 2.5 }}>
             <Grid item xs={12}>
-              <table id="OnlineStoreTable" ref={tableRef}></table>
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+              />
             </Grid>
+          </Grid>
+          <Grid container>
+            <TableContainer>
+              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
+                <TableHead>
+                  <StyledTableCell>Customer Name</StyledTableCell>
+                  <StyledTableCell>Email</StyledTableCell>
+                  <StyledTableCell>Phone</StyledTableCell>
+                  <StyledTableCell>User Type</StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
+                </TableHead>
+                <TableBody>
+                  {currentCustomers?.map((data, index) => (
+                    <StyledTableRow key={data.id}>
+                      <StyledTableCell>
+                        <div class="text-[#000000] order_method capitalize">
+                          {data.name.length < 18
+                            ? data.name
+                            : data.name.slice(0, 18) + `...` || ""}
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <div class="text-[#000000] order_method capitalize">
+                          {data.email || ""}
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <div class="text-[#000000] order_method capitalize">
+                          {data.phone || ""}
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <div class="text-[#000000] order_method capitalize">
+                          {data.user_type || ""}
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <div className="flex">
+                          <img
+                            className="mx-1 edit"
+                            // onClick={() => handleEditMerchant(data.id)}
+                            src={Edit}
+                            alt="Edit"
+                          />
+                          <img
+                            class="mx-1 delete"
+                            // onClick={() => handleDeleteMerchant(data.id)}
+                            src={Delete}
+                            alt="Delete"
+                          />
+                        </div>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </StyledTable>
+            </TableContainer>
           </Grid>
         </Grid>
       </Grid>
