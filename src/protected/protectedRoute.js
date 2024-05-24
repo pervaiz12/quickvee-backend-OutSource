@@ -8,7 +8,6 @@ import Cookies from "js-cookie";
 export default function ProtectedRoute(props) {
   const location = useLocation();
   const navigate = useNavigate();
-
   let AuthSessionRecord =
     Cookies.get("token_data") !== undefined ? Cookies.get("token_data") : [];
   let authdecryptRecord = CryptoJS.AES.decrypt(
@@ -25,6 +24,7 @@ export default function ProtectedRoute(props) {
     Cookies.remove("token_data");
     localStorage.removeItem("AllStore");
   };
+  console.log(AdminRocord);
 
   if (
     AdminRocord?.status == true &&
@@ -33,18 +33,18 @@ export default function ProtectedRoute(props) {
   ) {
     return <Outlet />;
   } else if (
-    (AdminRocord?.status == true &&
-      (AdminRocord?.login_type == "superadmin" ||
-        AdminRocord?.data?.login_type == "manager" ||
-        AdminRocord?.data?.login_type == "merchant" ||
-        AdminRocord?.data?.login_type == "admin" ||
-        AdminRocord?.login_type == "merchant" ||
-        AdminRocord?.login_type == "manager" ||
-        AdminRocord?.login_type == "admin") &&
-      props.visible == "manager" &&
-      AdminRocord?.data?.merchant_id !== "") ||
-    (AdminRocord?.data?.merchant_id == "no_id" &&
-      AdminRocord?.data?.merchant_id !== undefined)
+    AdminRocord?.status == true &&
+    (AdminRocord?.login_type == "superadmin" ||
+      AdminRocord?.data?.login_type == "manager" ||
+      AdminRocord?.data?.login_type == "merchant" ||
+      AdminRocord?.data?.login_type == "admin" ||
+      AdminRocord?.login_type == "merchant" ||
+      AdminRocord?.login_type == "manager" ||
+      AdminRocord?.login_type == "admin") &&
+    props.visible == "manager" &&
+    (AdminRocord?.data?.merchant_id !== "" ||
+      AdminRocord?.data?.merchant_id == "no_id") &&
+    AdminRocord?.data?.merchant_id !== undefined
   ) {
     return <Outlet />;
   } else {

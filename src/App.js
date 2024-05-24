@@ -142,13 +142,13 @@ function App() {
         element={<Main visible={"multimerchant"} />}
       /> */}
         <Route exact path="/login" element={<Login visible={"login"} />} />
-        <Route element={<ProtectedOrderSummery visible="manager12" />}>
+        <Route element={<ProtectedOrderSummery visible="manager" />}>
           <Route
             path="/store-reporting/order-summary/:merchant_id/:order_id"
             element={<PaymentCalDetails visible={"order-summary"} />}
           />
         </Route>
-        <Route element={<ProtectedStoreRoute visible="manager11221" />}>
+        <Route element={<ProtectedStoreRoute visible="manager" />}>
           <Route exact path="/store" element={<Main visible={"store"} />} />
           <Route exact path="/manager" element={<Main visible={"manager"} />} />
         </Route>
