@@ -61,6 +61,7 @@ import InverntoryIcon from "../../Assests/MultipleUserIcon/inventory.svg";
 import InvertoryActive from "../../Assests/MultipleUserIcon/inventoryactive.svg";
 import MerchantIcon from "../../Assests/MultipleUserIcon/merchant.svg";
 import MerchantActive from "../../Assests/MultipleUserIcon/merchantactive.svg";
+import NestedDropdownMenu from "./NestedDropdownMenu";
 const SideMenu = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -84,15 +85,16 @@ const SideMenu = () => {
   const [activeItem, setActiveItem] = useState(currentUrl);
   const [hoveredItem, setHoveredItem] = useState(null);
   const [currentDropDownItem, activeDropDownItem] = useState(null);
+  const [activeNestedItem, setActiveNestedItem] = useState();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // console.log("activeItem: ", activeItem);
+
   const handleItemClick = (item) => {
-    // console.log("handleItemClick: ", item.link)
+
     setActiveItem(item.link);
     navigate(item.link);
-
+    setActiveNestedItem(null)
     dispatch(setIsDropdownOpen(false));
   };
 
@@ -140,6 +142,8 @@ const SideMenu = () => {
                       setIsDropdownOpen={setIsDropdownOpen}
                       currentDropDownItem={currentDropDownItem}
                       activeDropDownItem={activeDropDownItem}
+                      activeNestedItem = {activeNestedItem}
+                       setActiveNestedItem={setActiveNestedItem}
                     />
                   ) : (
                     <div
@@ -193,6 +197,8 @@ const SideMenu = () => {
                       setIsDropdownOpen={setIsDropdownOpen}
                       currentDropDownItem={currentDropDownItem}
                       activeDropDownItem={activeDropDownItem}
+                      activeNestedItem = {activeNestedItem}
+                      setActiveNestedItem={setActiveNestedItem}
                     />
                   ) : (
                     <div
@@ -232,10 +238,13 @@ const DropdownMenuItem = ({
   setIsDropdownOpen,
   activeDropDownItem,
   currentDropDownItem,
+  activeNestedItem,
+  setActiveNestedItem
 }) => {
   const dispatch = useDispatch();
 
   const [dropDownItem, setDropDownItem] = useState(null);
+ 
   const isTabletNav = useMediaQuery("(max-width:1024px)");
   useEffect(() => {
     isTabletNav && dispatch(setIsDropdownOpen(false));
@@ -247,24 +256,28 @@ const DropdownMenuItem = ({
       activeDropDownItem(item.id);
     }
     item.id === currentDropDownItem && dispatch(setIsDropdownOpen(true));
-  }, [isTabletNav, currentDropDownItem, dropDownItem]);
-
+  }, [isTabletNav, dropDownItem]);
+  // {console.log("activateItem  is", activeItem)}
+  // {console.log("activate DropDown link is", dropDownItem)}
   const handleToggleDropdownItems = (link, e) => {
+    // console.log("handleToggleDropdownItems activate link is", link);
     if (isTabletNav) {
       dispatch(setIsDropdownOpen(false));
     }
     setActiveItem(link);
     setDropDownItem(link);
+    setActiveNestedItem(null)
   };
 
   const handleToggleSideBar = () => {
     dispatch(setMenuOpen(!isMenuOpenRedux));
+    
     dispatch(setIsDropdownOpen(true));
   };
 
   const HandleDropdownClick = (event, id) => {
     activeDropDownItem(id);
-    dispatch(setIsDropdownOpen(!isDropdownOpen));
+       dispatch(setIsDropdownOpen(!isDropdownOpen));
   };
 
   return (
@@ -330,64 +343,37 @@ const DropdownMenuItem = ({
             setHoveredItem(null);
             e.stopPropagation();
           }}
-          className="mt-0 bg-[#334247] p-4 shadow w-full text-center z-10"
+          className="mt-0 bg-[#334247]  shadow w-full text-center z-10"
         >
-          {item?.dropdownItems?.map((dropdownItem) => (
+          {item?.dropdownItems?.map((nestedDropdownItem) => (
             <>
-              {dropdownItem?.dropDownItems ? (
+              {nestedDropdownItem?.dropDownItems ? (
                 <>
-                  {isMenuOpenRedux ? (
-                    <div className="w-full flex items-center cursor-pointer">
-                      <p
-                        className={`ml-2 menu-item DropDown-memu text-[14px] flex-auto Admin_std ${
-                          activeItem === dropDownItem ? "activeTab" : ""
-                        }`}
-                      >
-                        {dropdownItem?.text}
-                      </p>
-
-                      <FaChevronDown
-                        className={`quickarrow_icon ml-4 me-5 text-${
-                          (activeItem === dropDownItem ||
-                            hoveredItem === item?.id) &&
-                          "[#FFC400]"
-                        }`}
-                      />
-                    </div>
-                  ) : (
-                    <>{/* for icons */}</>
-                  )}
-                  {console.log("dropdownItem ", dropdownItem?.dropDownItems)}
-                  {dropdownItem?.dropDownItems?.length &&
-                    dropdownItem?.dropDownItems?.map((item) => (
-                      <Link
-                        key={item.id}
-                        to={item.link}
-                        className={`flex text-center submenu-item text-gray-400 py-4 text-[14px] ${
-                          activeItem === item.link ? "active" : ""
-                        }`}
-                        onClick={(e) => {
-                          handleToggleDropdownItems(item.link);
-                          e.stopPropagation();
-                        }}
-                      >
-                        {item.text}
-                      </Link>
-                    ))}
+                  <NestedDropdownMenu
+                    item={nestedDropdownItem}
+                    isMenuOpenRedux={isMenuOpenRedux}
+                    activeItem={activeItem}
+                    dropDownItem={dropDownItem }
+                    hoveredItem={hoveredItem}
+                    handleToggleDropdownItems={handleToggleDropdownItems}
+                    setHoveredItem={setHoveredItem}
+                    activeNestedItem={activeNestedItem}
+                    setActiveNestedItem={setActiveNestedItem}
+                  />
                 </>
               ) : (
                 <Link
-                  key={dropdownItem.id}
-                  to={dropdownItem.link}
-                  className={`flex text-center submenu-item text-gray-400 py-4 text-[14px] ${
-                    activeItem === dropdownItem.link ? "active" : ""
+                  key={nestedDropdownItem.id}
+                  to={nestedDropdownItem.link}
+                  className={`flex text-center submenu-item text-gray-400 p-4 text-[14px] ${
+                    activeItem === nestedDropdownItem.link ? "active" : ""
                   }`}
                   onClick={(e) => {
-                    handleToggleDropdownItems(dropdownItem.link);
+                    handleToggleDropdownItems(nestedDropdownItem.link);
                     e.stopPropagation();
                   }}
                 >
-                  {dropdownItem.text}
+                  {nestedDropdownItem.text}
                 </Link>
               )}
             </>
@@ -417,7 +403,150 @@ const menuItems = [
     text: "Dashboard",
     link: "/",
   },
+    {
+    id: 12,
+    icon: (
+      <img
+        src={ReportIcon}
+        alt="store"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={ResportIcons}
+        alt="active report"
+        className="h-6 w-10 mt-4 mb-4"
+      />
+    ),
+    text: "Reporting",
+    link: "/reporting",
+    className: "flex items-center gap-2",
+    dropdownItems: [
+      {
+        id: 1,
+        text: "Sales Report",
+        dropDownItems: [
+          // {
+          //   id: 61,
+          //   text: "Sales Report",
+          //   link: "/store-reporting/sales-report",
+          // },
+          {
+            id: 62,
+            text: "Daily Total Report",
+            link: "/store-reporting/daily-total-report",
+          },
+          {
+            id: 63,
+            text: "Detailed Category Sale",
+            link: "/store-reporting/Details-category",
+          },
 
+          { id: 79, text: " Order Type ", link: "/store-reporting/order-type" },
+          {
+            id: 64,
+            text: "Report by Sales Person",
+            link: "/store-reporting/report-sales-person",
+          },
+          {
+            id: 69,
+            text: "Top Seller - Overall Top 10",
+            link: "/store-reporting/overall-top",
+          },
+          {
+            id: 78,
+            text: " Payment Method Details",
+            link: "/store-reporting/payment-method-details",
+          },
+        ],
+        
+      },
+      {
+        id:2,
+        text: "Inventory Reports",
+        dropDownItems:[
+          {
+            id: 81,
+            text: "Current Inventory Value",
+            link: "/store-reporting/current-inventory-value",
+          },
+          {
+            id: 73,
+            text: "New Item Created Between",
+            link: "/store-reporting/item-create-between",
+          },
+          {
+            id: 74,
+            text: "Reorder Inventory",
+            link: "/store-reporting/recorder-inventory",
+          },
+          {
+            id: 68,
+            text: "Instant PO Activity Report",
+            link: "/store-reporting/instant-activity",
+          },
+          {
+            id: 65,
+            text: "Check ID verification",
+            link: "/store-reporting/id-verification",
+          },
+        ],
+      },
+      {
+        id:3,
+        text: "Employee Reports",
+        dropDownItems:[
+          { id: 72, text: "Employee List", link: "/store-reporting/employee-list" },
+          {
+            id: 75,
+            text: " Employee Working Hours",
+            link: "/store-reporting/employee-working-hours",
+          },
+        ]
+      },
+
+      
+      {
+        id: 66,
+        text: "Vendor Sales Report",
+        link: "/store-reporting/vendors-sales-reports",
+      },
+      {
+        id: 67,
+        text: "Credit Debit Sales Report",
+        link: "/store-reporting/credit-debit-sales",
+      },
+     
+
+      { id: 70, text: "Flash Report", link: "/store-reporting/flash-resigter" },
+      { id: 71, text: "Vendor List", link: "/store-reporting/vendors-list" },
+      
+     
+      
+
+      
+      { id: 76, text: "Shift Summary", link: "/store-reporting/shift-summary" },
+
+      // { id: 77, text: " Item Sales ", link: "/store-settings/item-sales" },
+      // {
+      //   id: 78,
+      //   text: " Payment Method Details",
+      //   link: "/store-settings/payment-method-detail-report",
+      // },
+
+      { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
+
+      
+
+      { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
+      {
+        id: 82,
+        text: "Order Refund Report ",
+        link: "/store-settings/order-refund-report",
+      },
+    ],
+  },
   {
     id: 2,
     icon: (
@@ -631,130 +760,7 @@ const menuItems = [
     ],
   },
 
-  {
-    id: 12,
-    icon: (
-      <img
-        src={ReportIcon}
-        alt="store"
-        className="h-6 w-10 mt-4 mb-4 hoverable-image"
-      />
-    ),
-    activeIcon: (
-      <img
-        src={ResportIcons}
-        alt="active report"
-        className="h-6 w-10 mt-4 mb-4"
-      />
-    ),
-    text: "Reporting",
-    link: "/reporting",
-    className: "flex items-center gap-2",
-    dropdownItems: [
-      {
-        id: 1,
-        text: "Sales Report",
-        dropDownItems: [
-          {
-            id: 61,
-            text: "Sales Report",
-            link: "/store-reporting/sales-report",
-          },
-          {
-            id: 62,
-            text: "Daily Total Report",
-            link: "/store-reporting/daily-total-report",
-          },
-          {
-            id: 63,
-            text: "Detailed Category Sale",
-            link: "/store-reporting/Details-category",
-          },
 
-          { id: 79, text: " Order Type ", link: "/store-reporting/order-type" },
-          {
-            id: 64,
-            text: "Report by Sales Person",
-            link: "/store-reporting/report-sales-person",
-          },
-          {
-            id: 69,
-            text: "Top Seller - Overall Top 10",
-            link: "/store-reporting/overall-top",
-          },
-          {
-            id: 78,
-            text: " Payment Method Details",
-            link: "/store-reporting/payment-method-details",
-          },
-        ],
-      },
-
-      {
-        id: 65,
-        text: "Check ID verification",
-        link: "/store-reporting/id-verification",
-      },
-      {
-        id: 66,
-        text: "Vendor Sales Report",
-        link: "/store-reporting/vendors-sales-reports",
-      },
-      {
-        id: 67,
-        text: "Credit Debit Sales Report",
-        link: "/store-reporting/credit-debit-sales",
-      },
-      {
-        id: 68,
-        text: "Instant PO Activity Report",
-        link: "/store-reporting/instant-activity",
-      },
-
-      { id: 70, text: "Flash Report", link: "/store-reporting/flash-resigter" },
-      { id: 71, text: "Vendor List", link: "/store-reporting/vendors-list" },
-      { id: 72, text: "Employee List", link: "/store-reporting/employee-list" },
-      {
-        id: 73,
-        text: "New Item Created Between",
-        link: "/store-reporting/item-create-between",
-      },
-      {
-        id: 74,
-        text: "Reorder Inventory",
-        link: "/store-reporting/recorder-inventory",
-      },
-
-      {
-        id: 75,
-        text: " Employee Working Hours",
-        link: "/store-reporting/employee-working-hours",
-      },
-      { id: 76, text: "Shift Summary", link: "/store-reporting/shift-summary" },
-
-      // { id: 77, text: " Item Sales ", link: "/store-settings/item-sales" },
-      // {
-      //   id: 78,
-      //   text: " Payment Method Details",
-      //   link: "/store-settings/payment-method-detail-report",
-      // },
-
-      { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
-
-      {
-        id: 81,
-        text: "Current Inventory Value ",
-        link: "/store-reporting/current-inventory-value",
-      },
-
-      { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
-      {
-        id: 82,
-        text: "Order Refund Report ",
-        link: "/store-settings/order-refund-report",
-      },
-    ],
-  },
 ];
 const SuperAdminMenuItems = [
   // {
