@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { BASE_URL, DELETE_SINGLE_STORE, APPROVE_SINGLE_STORE,EXPORTCSV} from "../../../Constants/Config";
+import {
+  BASE_URL,
+  DELETE_SINGLE_STORE,
+  APPROVE_SINGLE_STORE,
+  EXPORTCSV,
+} from "../../../Constants/Config";
 import {
   getUnVerifiedMerchant,
   handleMoveDash,
@@ -76,7 +81,7 @@ export default function Unverified() {
   const [VerifiedMerchantListState, setVerifiedMerchantListState] = useState(
     []
   );
-  const [storename,setStorename] = useState();
+  const [storename, setStorename] = useState();
   const [submitmessage, setsubmitmessage] = useState("");
   //  ============= END DEFINED STATES =============================
 
@@ -149,26 +154,28 @@ export default function Unverified() {
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
     const filteredAdminRecord =
-    UnVerifiedMerchantList && Array.isArray(UnVerifiedMerchantList)
-      ? UnVerifiedMerchantList.filter(
-          (result) =>
-            (result.owner_name &&
-              result.owner_name
-                .toLowerCase()
-                .includes(searchRecord.toLowerCase())) ||
-            (result.name &&
-              result.name.toLowerCase().includes(searchRecord.toLowerCase())) ||
-            (result.email &&
-              result.email
-                .toLowerCase()
-                .includes(searchRecord.toLowerCase())) ||
-            (result.phone && result.phone.includes(searchRecord)) ||
-            (result.a_state && result.a_state.includes(searchRecord))
-        )
-      : [];
-      setVerifiedMerchantListState(filteredAdminRecord);
+      UnVerifiedMerchantList && Array.isArray(UnVerifiedMerchantList)
+        ? UnVerifiedMerchantList.filter(
+            (result) =>
+              (result.owner_name &&
+                result.owner_name
+                  .toLowerCase()
+                  .includes(searchRecord.toLowerCase())) ||
+              (result.name &&
+                result.name
+                  .toLowerCase()
+                  .includes(searchRecord.toLowerCase())) ||
+              (result.email &&
+                result.email
+                  .toLowerCase()
+                  .includes(searchRecord.toLowerCase())) ||
+              (result.phone && result.phone.includes(searchRecord)) ||
+              (result.a_state && result.a_state.includes(searchRecord))
+          )
+        : [];
+    setVerifiedMerchantListState(filteredAdminRecord);
   };
- 
+
   // ====================================
   // ====================================
   const handleEditMerchant = (data) => {
@@ -199,7 +206,6 @@ export default function Unverified() {
       }
     });
   };
-
 
   const hadleDislikeMerchant = async (merchant_id) => {
     try {
@@ -234,55 +240,46 @@ export default function Unverified() {
     }
   };
 
+  const handleExportTransaction = async (type) => {
+    try {
+      const { token, ...otherUserData } = userTypeData;
+      const delVendor = {
+        type: type,
+        ...otherUserData,
+      };
 
-    const handleExportTransaction =async (type)=>{
-      try {
-        const { token, ...otherUserData } = userTypeData;
-        const delVendor = {
-          type: type,
-          ...otherUserData,
-        };
-  
-        const response = await axios.post(
-          BASE_URL + EXPORTCSV,
-          delVendor,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-  
-        if (response) {
-          const csvData = response.data;
-          // Convert the data to a Blob
-          const blob = new Blob([csvData], { type: 'text/csv' });
+      const response = await axios.post(BASE_URL + EXPORTCSV, delVendor, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-          // Create a URL for the Blob
-          const fileUrl = URL.createObjectURL(blob);
+      if (response) {
+        const csvData = response.data;
+        // Convert the data to a Blob
+        const blob = new Blob([csvData], { type: "text/csv" });
 
-          // Create a temporary anchor element and trigger a download
-          const a = document.createElement("a");
-          a.href = fileUrl;
-          a.download = "Inventory_"+storename+".csv"; // Name of the downloaded file
-          document.body.appendChild(a);
-          a.click();
+        // Create a URL for the Blob
+        const fileUrl = URL.createObjectURL(blob);
 
-          // Cleanup: remove the anchor element and revoke the Blob URL
-          document.body.removeChild(a);
-          URL.revokeObjectURL(fileUrl);
-          setsubmitmessage("Inventory Exported Successfully");
-        }
-         
-      } catch (error) {
-        console.error(error);
+        // Create a temporary anchor element and trigger a download
+        const a = document.createElement("a");
+        a.href = fileUrl;
+        a.download = "Inventory_" + storename + ".csv"; // Name of the downloaded file
+        document.body.appendChild(a);
+        a.click();
+
+        // Cleanup: remove the anchor element and revoke the Blob URL
+        document.body.removeChild(a);
+        URL.revokeObjectURL(fileUrl);
+        setsubmitmessage("Inventory Exported Successfully");
       }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
-     
-    };
-  
-    
   // ====================== PAGINATION LOGIC =========================================
 
   const indexOfLastMerchant = currentPage * rowsPerPage;
@@ -315,8 +312,9 @@ export default function Unverified() {
               <Grid container direction="row" alignItems="center">
                 <Grid item>
                   <div
-                   onClick={()=> handleExportTransaction(1)}
-                  className="flex q-category-bottom-header ">
+                    onClick={() => handleExportTransaction(1)}
+                    className="flex q-category-bottom-header "
+                  >
                     <p className="me-2 ">Export Last Transaction</p>
                   </div>
                 </Grid>
@@ -330,6 +328,7 @@ export default function Unverified() {
                   <Link
                     to="/users/addMerchant"
                     className="flex q-category-bottom-header "
+                    state={{ from: "/users/view/unapprove" }}
                   >
                     <p className="me-2">ADD</p>
                     <img src={AddIcon} />
@@ -431,12 +430,12 @@ export default function Unverified() {
                             src={Delete}
                             alt="Delete"
                           />
-                          <img class="mx-1 " 
-                          
-                          onClick={()=>hadleDislikeMerchant(data.id)}
-                          src={Like}
-                            
-                          alt="Like" />
+                          <img
+                            class="mx-1 "
+                            onClick={() => hadleDislikeMerchant(data.id)}
+                            src={Like}
+                            alt="Like"
+                          />
                         </div>
                       </StyledTableCell>
                     </StyledTableRow>

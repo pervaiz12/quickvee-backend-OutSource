@@ -95,8 +95,11 @@ export default function Verified() {
 
   const indexOfLastMerchant = currentPage * rowsPerPage;
   const indexOfFirstMerchant = indexOfLastMerchant - rowsPerPage;
-  const currentMerchants =  VerifiedMerchantListState.slice(indexOfFirstMerchant, indexOfLastMerchant);
-    
+  const currentMerchants = VerifiedMerchantListState.slice(
+    indexOfFirstMerchant,
+    indexOfLastMerchant
+  );
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   useEffect(() => {
@@ -107,6 +110,7 @@ export default function Verified() {
     setSearchRecord(value);
     if (value === "") {
       setVerifiedMerchantListState(VerifiedMerchantList);
+      setTotalCount(VerifiedMerchantList.length);
     } else {
       const filteredAdminRecord =
         VerifiedMerchantList && Array.isArray(VerifiedMerchantList)
@@ -129,6 +133,7 @@ export default function Verified() {
             )
           : [];
       setVerifiedMerchantListState(filteredAdminRecord);
+      setTotalCount(filteredAdminRecord.length);
     }
   };
 
@@ -309,6 +314,7 @@ export default function Verified() {
                   <Link
                     to="/users/addMerchant"
                     className="flex q-category-bottom-header "
+                    state={{ from: "/users/view/approve" }}
                   >
                     <p className="me-2">ADD</p>
                     <img src={AddIcon} alt="" />
