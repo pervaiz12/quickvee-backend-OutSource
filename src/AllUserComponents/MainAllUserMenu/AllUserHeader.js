@@ -87,7 +87,7 @@ const AllUserHeader = () => {
     Cookies.remove("loginDetails");
     Cookies.remove("user_auth_record");
     localStorage.removeItem("AllStore");
-    // Cookies.remove('token_data');
+    Cookies.remove("token_data");
     navigate("/login");
   };
 

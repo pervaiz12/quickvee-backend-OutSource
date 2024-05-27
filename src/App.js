@@ -142,11 +142,6 @@ function App() {
         element={<Main visible={"multimerchant"} />}
       /> */}
         <Route exact path="/login" element={<Login visible={"login"} />} />
-        <Route
-            exact
-            path="/users/view/unapprove/menu/defaults/edit-defaults/:defaultsCode"
-            element={<Main visible={"edit-defaults"} />}
-          />
         <Route element={<ProtectedOrderSummery visible="manager" />}>
           <Route
             path="/store-reporting/order-summary/:merchant_id/:order_id"
@@ -455,11 +450,11 @@ function App() {
             element={<Main visible={"current-inventory-value"} />}
           />
           <Route exact path="/toptraders" element={<TopTenders />} />
-          {/* <Route
+          <Route
             exact
             path="/users/view/unapprove/menu/defaults/edit-defaults/:defaultsCode"
             element={<Main visible={"edit-defaults"} />}
-          /> */}
+          />
           <Route
             exact
             path="/users/view/unapprove/permission"
