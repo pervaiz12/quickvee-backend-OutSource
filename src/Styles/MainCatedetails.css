@@ -320,12 +320,16 @@
   .dropdown-content {
     position: absolute;
     top: 100%;
-    left: 0;
+    left: -19px;
     background-color: #fff;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0px 7px rgb(225 225 225);
     border: 1px solid #ddd;
     z-index: 2;
     width: 100%;
+    font-size: 12px;
+    cursor: pointer;
+    color: #707070;
+    border-radius: 8px;
   }
   
   .dropdown-content div {

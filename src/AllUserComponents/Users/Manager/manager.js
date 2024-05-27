@@ -1,114 +1,176 @@
-import React,{useEffect,useState} from 'react'
-import { useSelector, useDispatch } from 'react-redux'
-import{ManagerRecord} from '../../../Redux/features/user/managerSlice'
-import ManagerFunctionality from './managerFunctionality'
-import ViewMerchant from './viewMerchantModel'
-import { useAuthDetails } from '../../../Common/cookiesHelper';
+import React, { useEffect, useState, useRef } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { ManagerRecord } from "../../../Redux/features/user/managerSlice";
+import ViewMerchant from "./viewMerchantModel";
+import "datatables.net-dt/css/jquery.dataTables.min.css";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { Grid } from "@mui/material";
+import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 
+const StyledTable = styled(Table)(({ theme }) => ({
+  padding: 2, // Adjust padding as needed
+}));
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#253338",
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+  [`&.${tableCellClasses.table}`]: {
+    fontSize: 14,
+  },
+}));
 
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
 
 export default function Manager() {
-  const{setShowMerchant,showMerchant,handleViewMerchant,handleCloseMerchantModel,showMerchantData,name}=ManagerFunctionality()
-  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+  const dispatch = useDispatch();
+  const managerList = useSelector((state) => state.managerRecord);
 
-    const dispatch = useDispatch()
-    const managerList = useSelector(
-      (state) => state.managerRecord,
-    );
-    
-    // state.managerRecord.ManagerRecord
-    useEffect(()=>{
-        dispatch(ManagerRecord(userTypeData))
+  // ========================= DEFIENED STATES ========================================
+  const [managerTable, setManagerTable] = useState([]);
+  const [searchRecord, setSearchRecord] = useState("");
+  // ====================================================================================
 
-    },[])
-    // ====================================
-    const [searchRecord,setSearchRecord]=useState('')
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
 
-    const handleSearchInputChange=(e)=>{
-      setSearchRecord(e.target.value)
+  // state.managerRecord.ManagerRecord
+
+  // ===================== USE EFFECTS============================================================
+  useEffect(() => {
+    dispatch(ManagerRecord(userTypeData));
+  }, []);
+
+  useEffect(() => {
+    if (!managerList.loading && managerList.ManagerRecord) {
+      setManagerTable(managerList.ManagerRecord);
     }
-    const filteredAdminRecord = managerList && managerList.ManagerRecord &&  Array.isArray(managerList.ManagerRecord)
-    ? managerList.ManagerRecord.filter(result =>
-        (result.name && result.name.toLowerCase().includes(searchRecord.toLowerCase())) ||
-        (result.email && result.email.toLowerCase().includes(searchRecord.toLowerCase())) ||
-        (result.phone && result.phone.includes(searchRecord))
-      )
-    : [];
-    // ====================================
+  }, [managerList.loading, managerList.ManagerRecord]);
 
+  // =====================================END USE EFFECTS=====================================================
+
+  //  ==================================== HANDLERE FUNCTIONS =============================================================
+
+  const handleSearchInputChange = (value) => {
+    setSearchRecord(value);
+
+    if (value === "") {
+      // If search input is empty, display the entire dataset
+      setManagerTable(managerList.ManagerRecord);
+    } else {
+      // Filter managerList.ManagerRecord based on search term
+      const filteredRecords = managerList.ManagerRecord.filter((record) => {
+        // Convert search term to lowercase for case-insensitive search
+        const searchTerm = value.toLowerCase();
+        // Check if any of the fields contain the search term
+        return (
+          record.name.toLowerCase().includes(searchTerm) ||
+          record.email.toLowerCase().includes(searchTerm) ||
+          record.phone.includes(searchTerm)
+        );
+      });
+
+      // Update the managerTable state with filtered records
+      setManagerTable(filteredRecords);
+    }
+  };
+  console.log("managerList?.ManagerRecord", managerList.ManagerRecord);
+  //  ================================= END HANDLER FUNCTIONS =================================
   return (
     <>
-    <div className='q-order-main-page'>
-    <div className='box'>
-    <div className='box_shadow_div'>
-      <div className='qvrow'>
-          <div className='col-qv-8'>
-            {/* <div className='btn-area'>
-              <Link to="/users/addMerchant"className='blue_btn'>ADD</Link>
-            </div>  */}
-          </div>
-          <div className='col-qv-4'>
-              <div className='seacrh_area'>
-              <div className="input_area">
-                <input className="" type="text" value={searchRecord}
-                onInput={handleSearchInputChange}
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            style={{
+              borderBottom: "1px solid #E8E8E8",
+            }}
+          >
+            <Grid item>
+              <div className="q-category-bottom-header">
+                <span>Manager List</span>
+              </div>
+            </Grid>
+          </Grid>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <InputTextSearch
+                className=""
+                type="text"
+                value={searchRecord}
+                handleChange={handleSearchInputChange}
                 placeholder="Search..."
                 autoComplete="off"
-                />
-              </div>
-              </div>
-          </div>
-
-      </div>
-      <div className='table_main_area'>
-        <div className='table_header_sticky'>
-          <div className='table_header_top'>
-            {/* <h1>Table Area</h1> */}
-          </div>
-          <div className='table_header'>
-            <p className='table25'>Name</p>
-            <p className='table30'>Email</p>
-            <p className='table20'>Phone</p>
-            <p className='table5'>View</p>
-          </div>
-        </div>
-          <div className='table_body'>
-            {
-              // filteredAdminRecord
-              // managerList && Array.isArray(managerList.ManagerRecord) && managerList.ManagerRecord.map((result,index)=>{
-                managerList && Array.isArray(managerList.ManagerRecord) && filteredAdminRecord.map((result,index)=>{
-                
-                // console.log(result)
-                return(
-                  <div className='table_row' key={index}>
-                    <p className='table25'>{result.name}</p>
-                    <p className='table30'>{result.email}</p>
-                    <p className='table20'>{result.phone}</p>
-                    <p className='table20' onClick={()=>handleViewMerchant(result.merchant_id,result.name,userTypeData)} ><span className="viewMerchant">View Merchant</span></p>
-                   
-                  </div>
-  
-                )
-                
-              })
-
-            } 
-            
-          </div>
-      </div>
-      
-    </div>
-    </div>
-    </div>
-    <ViewMerchant
-    showMerchant={showMerchant}
-    showMerchantData={showMerchantData}
-    name={name}
-    handleCloseMerchantModel={handleCloseMerchantModel}
-    
-    />
+              />
+            </Grid>
+          </Grid>
+          <Grid container>
+            <TableContainer>
+              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
+                <TableHead>
+                  <StyledTableCell>Name</StyledTableCell>
+                  <StyledTableCell>Email</StyledTableCell>
+                  <StyledTableCell>Phone</StyledTableCell>
+                  <StyledTableCell>View</StyledTableCell>
+                </TableHead>
+                <TableBody>
+                  {managerTable?.length
+                    ? managerTable?.map((data, index) => {
+                        console.log("data", data);
+                        return (
+                          <StyledTableRow>
+                            <StyledTableCell>
+                              <div class="text-[#000000] order_method capitalize">
+                                {data?.name}
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <div class="text-[#000000] order_method capitalize">
+                                {data?.email}
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <div class="text-[#000000] order_method capitalize">
+                                {data?.phone}
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <ViewMerchant
+                                userTypeData={userTypeData}
+                                data={data}
+                              />
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        );
+                      })
+                    : ""}
+                </TableBody>
+              </StyledTable>
+            </TableContainer>
+          </Grid>
+        </Grid>
+      </Grid>
     </>
-
-  
-  )
+  );
 }

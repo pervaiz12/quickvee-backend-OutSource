@@ -1,0 +1,1008 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+@import url('https://fonts.googleapis.com/css2?family=Quicksand&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@600&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
+
+@font-face {
+    font-family: QuicksandLight;
+    src:url(../Assests/Fonts/Quicksand-Light.ttf);
+    /* src: url(./fonts/Quicksand-Light.ttf ); */
+  }
+@font-face {
+    font-family: QuicksandBold;
+    src: url(../Assests/Fonts/Quicksand-Bold.ttf);
+  }
+  
+  @font-face {
+    font-family: QuicksandMedium;
+    src: url(../Assests/Fonts/Quicksand-Medium.ttf);
+  }
+  
+  @font-face {
+    font-family: QuicksandRegular;
+    src: url(../Assests/Fonts/Quicksand-Regular.ttf);
+  }
+  
+  @font-face {
+    font-family: QuicksandSemiBold;
+    src: url(../Assests/Fonts/Quicksand-SemiBold.ttf);
+  }
+  
+  @font-face {
+    font-family: QuicksandLight;
+    src: url(../Assests/Fonts/Quicksand-Light.ttf);
+  }
+  /* font-family: QuicksandRegular, 'Quicksand' !important; */
+.headerSummery{
+    position: sticky;
+    top: 0;
+    z-index: 999;
+    background-color:#ffffff;
+    /* padding: 0 20px; */
+    padding: 0px 11px 0px 6px;
+}
+@media (max-width:480px) {
+    .headerSummery{
+        padding: 0
+    }
+}
+ 
+
+.headerSummeryDiv{
+    width: 80%;
+    /* border:1px solid red; */
+    margin: auto;
+    display: flex;
+    text-align: center;
+    justify-content: space-between;
+    /* border:1px solid green; */
+    position: relative;
+    margin-bottom: 10px;
+    
+}
+.orderSummeryCarosuelSlider{
+    left: 0 !important;
+    right: 25%;
+}
+.carouselIcon>.carousel-control-prev >.carousel-control-prev-icon{
+    background-image: none !important;
+
+}
+.carouselIcon>.carousel-control-next >.carousel-control-next-icon{
+    background-image: none !important;
+
+}
+.carouselIcon>.carousel-indicators {
+    display: none;
+}
+
+.carousel-indicators li { visibility: hidden; }
+.order-summery-carosuel{
+    position: relative;
+}
+.order-summery-carousel-details{
+    position: absolute;
+    top: 60px;
+    right: 40%;
+}
+.order-summery-bannerText{
+    color:#ffffff;
+    font-size: 16px;
+    font-family: QuicksandRegular,'regular';
+}
+.order-summery-drop-down .dropdown-toggle{
+    color:#202020;
+    font-size: 16px;
+    font-family: 'Poppins', sans-serif;
+    background:white;
+    border:none;
+    padding: 5px;;
+}
+.order-summery-drop-down{
+    position: absolute;
+    right: 0;
+    top: 10px;
+}
+.order-summery-drop-down .btn:hover{
+    background-color:#ffffff;
+    color:#202020;
+}
+.order-summery-drop-down .btn.show, .btn:first-child:active{
+    background:#ffffff !important;
+    color:#202020 !important;
+}
+.order-summery-icon-div{
+    display: flex;
+    margin-bottom: 10px;
+}
+.order-summery-banner-icon{
+    width: 28px;
+    height: 28px;
+    border-radius:50%;
+    background-color:#0A64F9;
+    text-align:center;
+    color:#ffff !important;
+    margin-right:15px;
+}
+/* .show{
+    background:white !important;
+} */
+
+
+/* ----------- main section  ------------------*/
+.mainSection{
+    width: 100%;
+    height: auto;
+    /* border: 1px solid red; */
+    /* padding-top: 30px; */
+    margin-top: 30px;
+   
+}
+/* ----------- main section  ------------------*/
+/* ----------- main mid section -------------- */
+.MidMainSection{
+    width: 80%;
+    margin: auto;
+    /* border:2px solid rgb(60, 5, 105); */
+    display: flex;
+}
+
+@media (max-width:768px) {
+    .MidMainSection{
+        width: 90%;
+    }
+    .left-font-header img{
+        margin-left: 0;
+        margin-right: 0;
+    }
+
+}
+/* ----------- main mid section end -------------- */
+/* ----------- Left div start --------------------- */
+.LeftMidMainSection{
+    width: 60%;
+    padding-right: 30px;
+}
+.orderStatus{
+    /* padding-right: 60px;
+     */
+     width: 90%;
+     position: relative;
+}
+.progressBar{
+    display: flex;
+    justify-content: space-between;
+    /* border:1px solid green; */
+}
+.OrderSummeryimageSize{
+    width: 30px;
+}
+.trackIconImageCircle{
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border:1px solid green;
+    margin: 0 auto;
+}
+.deliverySection{
+    margin-top: 20px;
+}
+.DeliveryImageSection{
+    /* border:1px solid rgb(172, 211, 120); */
+    width: 100%;
+    height: auto;
+    display: flex;
+    margin-bottom: 20px;
+}
+.OrderImagePrice{
+    width: 10%;
+    /* border: 1px solid red; */
+}
+.OrderImageDescription{
+    width: 90%;
+    /* border:2px solid green; */
+    padding-left: 2%;
+}
+.deliveryImageSize{
+    width: 60px;
+    height: 60px;
+    background-size: cover;
+    /* background-color: */
+}
+.orderDeliveryprice{
+    display: flex;
+    justify-content: space-between;
+
+}
+.order-Delivery-price-Number{
+    color:#2e2e2e;
+    font-size: 18px;
+    font-family: QuicksandMedium ,'Quicksand';
+}
+.order-Delivery-price-Numberbolf{
+    /* display: flex;
+    justify-content: space-between; */
+    color:#2e2e2e;
+    font-size: 18px;
+    font-family: QuicksandBold ,'Quicksand';
+
+}
+.trackIconImage{
+    text-align: center;
+}
+.hrLine{
+    width: 95%;
+    border:0.5px solid #C6CFDB;
+    opacity: 1; 
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+.orderSummeryList{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding-top: 10px;
+}
+.orderSumeryText{
+    color: #6A6969;
+    font-size: 18px;
+    font-family: QuicksandMedium ,'Quicksand';
+
+}
+.orderSumeryText-number{
+    color: #6A6969;
+    font-size: 18px;
+    font-family: QuicksandSemiBold ,'Quicksand';
+
+}
+.orderSumeryTextRefund{
+    color: #E6962E;
+    font-size: 18px;
+    font-family: QuicksandMedium ,'Quicksand';
+}
+.tracking-status-text{
+    font-size: 16px;
+    font-family: QuicksandSemiBold, 'Quicksand' !important;
+    color:#000000;
+}
+.order-summery-grand-total{
+    color:#000000;
+    font-size: 18px;
+    font-family: QuicksandBold ,'Quicksand';
+}
+.lineData{
+    width: 80px;
+    border-top:2px solid #D4D4D4D4;
+}
+/* .main{
+    width: 80px;
+    border-top:2px solid #D4D4D4D4;
+} */
+.order-summery-quantity{
+    font-size: 22px;
+    font-family: QuicksandBold ,'Quicksand';
+    color:#F55353;
+
+}
+
+/*-------------------- left div end here------------- */
+/* --------------------Right div start here ---------- */
+.RightMidMainSection{
+    width: 40%;
+    border-left: 0.5px solid #C6CFDB;
+    top: 0;
+    opacity: 1;
+    /* border:2px solid green; */
+    padding-left: 40px;
+    /* border:2px solid rgb(128, 15, 0);
+     */
+
+}
+.order-summery-right-header{
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 30px;
+    /* padding-bottom: 10px;
+    border-bottom: 0.5px solid #C6CFDB;
+    opacity: 1; */
+}.order-summery-right-header-section{
+    display: flex;
+    justify-content: space-between;
+
+}
+.order-summery-success{
+    width: 80px;
+    padding: 5px;
+    border-radius:5px;
+    background-color:#2ECF89;
+    color:#ffffff;
+    text-align: center;
+    border:1px solid #2ECF89;
+}
+.order-Sumery-Text-amount{
+    color:#000000;
+    font-family: QuicksandBold ,'Quicksand';
+    font-size: 18px;
+}
+.order-Sumery-text-right{
+    color:#000000;
+    font-size: 14px;
+    font-family: QuicksandBold ,'Quicksand';
+
+}
+.RightMidMainSection>.orderSummeryList>.orderSummeryLeftList>.orderSumeryText{
+    font-size: 14px;
+}
+.order-summery-identification>.orderSummeryList>.orderSummeryLeftList>.orderSumeryText{
+    font-size: 14px;
+}
+.order-Sumery-payment-Text{
+    font-size: 18px;
+    font-family: QuicksandSemiBold ,'Quicksand';
+    color:#3A3a3A;
+
+}
+/* .order-summery-right-customer-header > .order-summery-text-success{
+    background-color:#D8D8D8;
+    width: 110px;
+    height: 25px;
+    padding: 3px 0px;
+    border-radius:5px;
+    color: #2B2B2B;
+    text-align: center;
+    font-size: 12px;
+    font-family: QuicksandMedium ,'Quicksand';
+   
+} */
+.order-summery-text-success-billing{
+    background-color:#2ECF89;
+    border:1px solid #2ECF89;
+    width: 110px;
+    height: 25px;
+    padding: 3px 0px;
+    border-radius:5px;
+    color: #2B2B2B;
+    text-align: center;
+    font-size: 12px;
+    font-family: QuicksandMedium ,'Quicksand';
+   
+}
+.order-summery-text-success{
+    background-color:#D8D8D8;
+    width: 110px;
+    height: 25px;
+    padding: 3px 0px;
+    border-radius:5px;
+    color: #2B2B2B;
+    text-align: center;
+    font-size: 12px;
+    font-family: QuicksandMedium ,'Quicksand';
+}
+.billing-top-div{
+    display: flex;
+    justify-content: space-between;
+}
+.order-summery-address{
+    width: 70%;
+    /* border:1px solid green; */
+}
+.order-address-image{
+    padding-right: 5px;
+}
+.order-summery-address{
+    color:#3A3A3A;
+    font-size: 14px;
+    font-family:QuicksandMedium ,'Quicksand';
+
+}
+.order-address-dive{
+    margin-bottom: 20px;
+}
+.order-address-customer-delivery{
+    margin-top: 30px;
+    margin-bottom: 30px;
+    /* display: flex; */
+    
+}
+.order-summery-right-customer-header{
+    display: flex;
+    justify-content: space-between;
+
+}
+.font-header-right{
+    font-size: 22px;
+    font-family: QuicksandBold ,'Quicksand';
+    color:#202020;
+    /* margin-bottom: 40px; */
+    opacity:1;
+}
+.left-font-header{
+    font-size: 22px;
+    font-family: QuicksandBold ,'Quicksand';
+    color:#202020;
+    opacity:1;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom:1px solid #C6CFDB;
+}
+.left-font-header img{
+    width: 100%;
+    margin-top: 20px;
+}
+.font-header-right-text{
+    font-size: 16px;
+    font-family: QuicksandBold ,'Quicksand';
+    color:#000000;
+}
+.order-summry-id-cart-details{
+    width: 90%;
+    height: auto;
+    border:1px solid #E4E4E4;
+    text-align: center;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    border-radius:5px;
+}
+.order-summery-profile-page{
+    width: 328px;
+    height: 168px;
+
+}
+.id-cart-image{
+    width: 100%;
+}
+.carousel-Image-size{
+    height: 40vh;
+}
+/* ----------- Right div end--------------------- */
+
+/* .orderSummeryBanner{
+    width: 100%;
+    height: 300px;
+    position: relative;
+    background: url('../Assests/NewImage/OrderSummeryBanner1.png');
+    background-repeat: no-repeat;
+    background-position: left;
+    background-size: cover;
+    animation: loginbanner 10s infinite;
+} */
+@keyframes loginbanner {
+    0% {
+      background: url('../Assests/NewImage/OrderSummeryBanner1.png');
+      background-size: cover;
+      background-position: center;
+    }
+    30% {
+      background: url("../Assests/NewImage/OrderSummeryBanner2.png");
+      background-size: cover;
+      background-position: center;
+    }
+    60% {
+      /* background: url("../Assests/imageNew/OrderSummeryBanner3.png"); */
+      background:url("../Assests/NewImage/OrderSummeryBanner3.png");
+      background-size: cover;
+      background-position: center;  
+    }  
+    100% {
+      /* background: url("../Assests/imageNew/OrderSummeryBanner1.png"); */
+      background:url('../Assests//NewImage/OrderSummeryBanner1.png');
+
+      background-size: cover;
+      background-position: center;
+    }
+  }
+.orderSummeryBanner img{
+    width: 100%;
+    height: auto;
+    display: none;
+}
+.orderSummeryBannerContent{
+    position: absolute;
+    right: 0;
+    z-index: 2;
+    width: 45%;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.orderSummeryBannerContent img{
+    width: auto;
+}
+.orderSummeryBannerContent p {
+    width: 100%;
+    float: left;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    color: #FFF;
+    font-family: QuicksandRegular;
+}
+.orderSummeryBannerContent p img {
+    margin-right: 10px;
+    float: left;
+    display: table;
+    position: relative;
+    top: -2px;
+}
+.orderSummeryBannerContent p span {
+    display: table;
+}
+.orderSummery_head{
+    font-size: 22px;
+    font-family: QuicksandBold;
+    color: #202020;
+}
+.orderSummery_head span{
+    color: #F55353;
+    margin-left: 10px;
+}
+.OrderSummeryProductArea{
+    width: 100%;
+    height: auto;
+    display: inline-block;
+    border-bottom: 1px solid #c6cfdb;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+
+}
+.OrderSummeryProductDiv{
+    width: 100%;
+    height: auto;
+    display: inline-block;
+    margin-top:40px;
+}
+.OrderSummeryProductL{
+    width:70px;
+    height:70px;
+    float: left;
+    border-radius: 4px;
+    border: 1px solid #C6CFDB;
+    position: absolute;
+    left: 0;
+    top: 0;
+    overflow: hidden;
+}
+.OrderSummeryProductL img{
+    width: 100%;
+    height: auto;
+    right: 0;
+    z-index: 2;
+    top: 50%;
+    transform: translateY(-50%);
+    position: relative;
+}
+.OrderSummeryProductR{
+    width: 100%;
+    height: auto;
+    float: left;
+    position: relative;
+    padding-left:90px;
+}
+.OrderSummeryProductRTop{
+    width: 100%;
+    height: auto;
+    display: inline-block
+}
+.OrderSummeryProductRTop h4{
+    font-size: 18px;
+    color:#000;
+    font-family: QuicksandBold;
+}
+.OrderSummeryProductRBottom{
+    width: 100%;
+    height: auto;
+    margin-top: 10px;
+    display:inline-block;
+}
+.OrderSummeryProductRBottomL{
+    width:33.33%;
+    height: auto;
+    float: left;
+}
+.OrderSummeryProductRBottomL span{
+    color: #2E2E2E;
+    font-size: 20px;
+    font-family:'QuicksandSemiBold';
+}
+.OrderSummeryProductRBottomM{
+    width:33.33%;
+    height: auto;
+    float: left;
+    text-align: center;
+}
+.OrderSummeryProductRBottomM span{
+    color: #000000;
+    font-size: 20px;
+    font-family:'QuicksandSemiBold';
+}
+.OrderSummeryProductRBottomR{
+    width:33.33%;
+    height: auto;
+    float: left;
+    text-align: right;
+}
+.OrderSummeryProductRBottomR span{
+    color:#2E2E2E;
+    font-size: 20px;
+    font-family:'QuicksandSemiBold';
+}
+.OrderSummeryItemArea{
+    width: 100%;
+    height: auto;
+    display:inline-block;
+}
+.OrderSummeryItemDiv{
+    width: 100%;
+    height: auto;
+    display: inline-block;
+    margin-top: 20px;
+}
+.OrderSummeryItemDiv p{
+    font-size: 18px;
+    color: #6A6969;
+    font-family: QuicksandSemiBold;
+    margin-bottom: 10px !important;
+}
+.OrderSummeryItemDiv p span{
+    float: right;
+}
+.OrderSummeryItemDiv p.yellowclr{
+    color: #E6962E;
+}
+.OrderSummeryItemDiv p.blackclr{
+    color: #000;
+}
+.orderSummeryRightTop{
+    width: 100%;
+    height: auto;
+    display: inline-block;
+    border-bottom: 1px solid #c6cfdb;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+}
+.orderSummeryRightTopL{
+    width: 60%;
+    height: auto;
+    float: left;
+}
+.orderSummeryRightTopR{
+    width: 40%;
+    height: auto;
+    float: left;
+    text-align: right;
+}
+.orderSummeryRightTopR span.successbtn{
+    background: #2ECF89;
+    font-size: 12px;
+    color: #FFF;
+    text-transform: uppercase;
+    font-family: QuicksandMedium;
+    padding: 6px 12px;
+    border-radius: 4px;
+    position: relative;
+    top: 4px;
+}
+.orderSummeryRightTopC p {
+    color: #6A6A6A;
+    font-size: 16px;
+    font-family: QuicksandMedium;
+    margin-bottom: 10px !important;
+}
+.orderSummeryRightTopC p span {
+    float: right;
+    font-family: 'QuicksandBold';
+    color: #000;
+}
+.orderSummeryRightTopC p.amountrow{
+    font-size: 18px;
+    font-family: 'QuicksandBold';
+    color: #000;
+    margin-bottom: 20px;
+    margin-top: 20px;
+    border-bottom: 1px solid #c6cfdb;
+    padding-bottom: 20px;
+}
+.orderSummeryCustomerDetailsArea .orderSummery_head{
+    margin-bottom: 10px;
+}
+.orderSummeryCustomerDetailsArea{
+    width: 100%;
+    height: auto;
+    display: inline-block;
+    margin-bottom: 20px;
+    border-bottom: 1px solid #c6cfdb;
+    padding-bottom: 20px;
+    padding-top: 20px;
+}
+.orderSummeryCustomerDetailsInner{
+    width: 100%;
+    height: auto;
+    display:inline-block;
+}
+.orderSummeryCustomerDetailsInner h5{
+    font-size: 18px;
+    margin-top: 10px;
+    font-family:QuicksandSemiBold;
+    color: #3A3A3A;
+    margin-bottom: 10px;
+}
+.orderSummeryCustomerDetailsInner h5 span{
+    font-size: 12px;
+    color: #FFF;
+    font-family: QuicksandSemiBold;
+    padding: 6px 12px;
+    border-radius: 4px;
+    float: right;
+    position: relative;
+    top: -2px;
+    width: 124px;
+    text-align: center;
+}
+.orderSummeryCustomerDetailsInner p{
+    color: #3A3A3A;
+    font-size: 16px;
+    font-family: QuicksandMedium;
+    margin-bottom: 10px;
+}
+.orderSummeryCustomerDetailsInner p.pleftright{
+    display: inline-block;
+    margin-right: 20px;
+}
+.btngreen_orderSummery{
+    background-color: #2ECF89;
+}
+.btngrey_orderSummery{
+    background-color: #D8D8D8;
+}
+.orderSummeryIdentification h1{
+    margin-bottom:20px;
+}
+.ordersummaryR_div_file{
+    width: 90%;
+    height: auto;
+    margin: 0 auto;
+    position: relative;
+    margin-bottom: 35px;
+    margin-top: 20px;
+}
+.photo_area {
+    width: 100%;
+    height: 200px;
+    border-radius: 10px;
+    border: 1px solid #E4E4E4;
+    position: relative;
+    text-align: center;
+    padding: 10px;
+    cursor: pointer;
+    overflow: hidden;
+    display: inline-block;
+    background: #E4E4E4;
+}
+#img_container {
+    position: relative;
+    top: 50%;
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
+.photo_area img {
+    width: 90%;
+    height: auto;
+}
+.photo_area_text {
+    position: absolute;
+    bottom: -16px;
+    left: 0;
+    right: 0;
+    width: 145px;
+    margin: 0 auto;
+    text-align: center;
+    z-index: 11;
+}
+.photo_area_text span {
+    font-family: 'QuicksandBold';
+    color: #202020;
+    display: block;
+    background: #FFF;
+    padding: 6px 0px;
+    border-radius: 100px;
+    box-shadow: 0 0 10px #00000029;
+    font-size: 16px;
+}
+
+
+
+/********Responsive*********/
+@media (min-width: 1920px) {    
+}
+@media (max-width: 1440px) {   
+}
+@media (max-width: 1367px) {
+    .orderSummery_head{
+        font-size: 21px;
+    }
+}
+@media (max-width: 1281px) {   
+}
+@media(max-width: 1280px) { 
+    .orderSummery_head{
+        font-size: 20px;
+    }   
+    .OrderSummeryItemDiv p{
+        font-size: 16px;
+    }
+    .OrderSummeryItemDiv p{
+        font-size: 17px;
+    }
+}
+@media (max-width: 1279px) {    
+}
+@media (max-width: 1200px) {   
+}
+@media (max-width: 1024px) {    
+    .orderSummery_head {
+        font-size: 19px;
+    }
+    .OrderSummeryItemDiv p {
+        font-size: 16px;
+    }
+}
+@media (max-width: 1023px) {    
+}
+@media (max-width: 991px) {
+    .MidMainSection{
+        margin: 0 auto;
+        display: block;
+    }
+    .LeftMidMainSection{
+        width: 100%;
+        padding-right: 0px;
+    }
+    .RightMidMainSection {
+        width: 100%;
+        margin-left: 0px;
+        padding-left: 0px;
+        border-left: none;
+    }
+}
+@media (max-width: 950px) {   
+}
+@media (max-width: 800px) {  
+}
+@media(max-width: 768px) {
+    .orderSummery_head {
+        font-size: 18px;
+    }
+    .OrderSummeryItemDiv p {
+        font-size: 15px;
+    }
+    .photo_area_text span{
+        font-size: 15px;
+    }
+    .orderSummeryBanner{
+        height: 200px;
+    }
+    .orderSummeryBanner{
+        width: 100%;
+        height: 180px;
+        position: relative;
+        background: url('../Assests/NewImage/OrderSummeryBannerMobile1.jpg');
+        background-repeat: no-repeat;
+        background-position: left;
+        background-size: cover;
+        animation: loginbanner 10s infinite;
+    }
+    @keyframes loginbanner {
+        0% {
+          background: url("../Assests/NewImage/OrderSummeryBannerMobile1.jpg");
+          background-size: cover;
+        }
+        30% {
+          background: url("../Assests/NewImage/OrderSummeryBannerMobile2.jpg");
+          background-size: cover;
+        }
+        60% {
+          background: url("../Assests/NewImage/OrderSummeryBannerMobile3.jpg");
+          background-size: cover;
+        }  
+        100% {
+          background: url("../Assests/NewImage/OrderSummeryBannerMobile1.jpg");
+          background-size: cover;
+        }
+      }
+}
+@media (max-width: 767px) {
+}
+@media (max-width: 515px) {
+}
+@media(max-width: 480px) {
+    .MidMainSection{
+        width: 100%;
+    }
+}
+@media (max-width: 479px) {
+}
+@media (max-width: 420px) {
+}
+@media (max-width: 419px){
+}
+@media (max-width: 380px) {
+}
+
+.footer_area {
+    width: 100%;
+    height: auto;
+    background: #f6f6f6;
+    padding: 10px 0;
+    float: left;
+    margin-top: 20px;
+  }
+  
+  .footer_area_inner {
+    width: 80%;
+    height: auto;
+    margin: 0 auto;
+  }
+  
+  .footer_area_inner.footer_area_inner_menu {
+    width: 100%;
+    height: auto;
+    padding-left: 18%;
+    padding-right: 2%;
+    display: inline-block;
+  }
+  
+  .footer_areaL {
+    width: 40%;
+    height: auto;
+    float: left;
+  }
+  
+  .footer_areaL p {
+    display: inline-block;
+    font-size: 12px;
+    color: #707070;
+    font-family: 'QuicksandMedium';
+  }
+  
+  .footer_areaR {
+    width: 60%;
+    height: auto;
+    float: left;
+  }
+  
+  .footer_areaR ul {
+    list-style: none;
+    float: right;
+    padding: 0px;
+  }
+  
+  .footer_areaR ul li {
+    float: left;
+    padding: 0 10px;
+    border-right: 1px solid #707070;
+    display: inline-block;
+  }
+  
+  .footer_areaR ul li:last-child {
+    border-right: none;
+    padding-right: 0px;
+  }
+  
+  .footer_areaR ul li a {
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    color: #707070;
+    font-family: 'QuicksandMedium';
+  }
+  
+  .footer_areaR ul li a:hover {
+    color: #0a64f9;
+  }
+  

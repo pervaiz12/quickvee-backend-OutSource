@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Box, Collapse, Alert, IconButton } from "@mui/material";
+import { Box, Collapse, Alert, IconButton, Grid } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import Select from "react-select";
 import DownIcon from "../../Assests/Dashboard/Down.svg";
@@ -12,13 +12,15 @@ import {
   LIST_ALL_CATEGORIES_MECHANT_ID,
   CATEGORY_INVENTORY_DUPLICATE,
 } from "../../Constants/Config";
+import { useAuthDetails } from "../../Common/cookiesHelper";
+import SelectDropDown from "../../reuseableComponents/SelectDropDown";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const CateDuplicateStore = () => {
   const [selectedStorefrom, setSelectedStorefrom] =
     useState("-- Select Store --");
   const [selectedStoreto, setSelectedStoreto] = useState("-- Select Store --");
   const [selectedCategories, setSelectedCategories] = useState([]);
-
   const [storeFromDropdownVisible, setStoreFromDropdownVisible] =
     useState(false);
   const [storeToDropdownVisible, setStoreToDropdownVisible] = useState(false);
@@ -36,37 +38,51 @@ const CateDuplicateStore = () => {
     }
   };
 
+  const { userTypeData } = useAuthDetails();
+  const { token, ...userTypeDataNew } = userTypeData;
+
   const [storefrom, setStorefrom] = useState();
   const [storeto, setStoreto] = useState();
 
   const [storeFromError, setStoreFromError] = useState("");
   const [storeToError, setStoreToError] = useState("");
+  const [categoryFocus, setCategoryFocus] = useState(false);
 
-  const handleOptionClick = async (option, dropdown) => {
+  const handlFocusCategory = () => {
+    setCategoryFocus(true);
+  };
+
+  const handleOptionClick = async (value, dropdown) => {
     switch (dropdown) {
       case "storefrom":
-        setSelectedStorefrom(option.label);
+        setSelectedStorefrom(value?.title ? value?.title : value);
         setStoreFromDropdownVisible(false);
 
         // Fetch additional data based on the selected merchant's ID
-        if (option.merchant_id !== "-- Select Store --") {
+        if (value !== "-- Select Store --") {
           const data = {
-            merchant_id: option.merchant_id,
+            merchant_id: value?.id,
+            ...userTypeDataNew,
           };
           try {
             const response = await axios.post(
               BASE_URL + LIST_ALL_CATEGORIES_MECHANT_ID,
               data,
-              { headers: { "Content-Type": "multipart/form-data" } }
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  Authorization: `Bearer ${token}`,
+                },
+              }
             );
             if (response.data.status === "Success") {
-              const newCategoryOptions = response.data.result.map(
+              const newCategoryOptions = response?.data?.result?.map(
                 (category) => ({
                   value: category.title,
                   label: category.title,
                 })
               );
-              setStorefrom(option.merchant_id);
+              setStorefrom(value?.id);
               setCategoryOptions(newCategoryOptions);
               setSelectedCategories([]);
             } else if (
@@ -82,20 +98,20 @@ const CateDuplicateStore = () => {
             console.error("API Error:", error);
           }
         }
-        if (option.label == "-- Select Store --") {
+        if (value == "-- Select Store --") {
           setStoreFromError("This field is required");
         } else {
           setStoreFromError("");
         }
         break;
       case "storeto":
-        setSelectedStoreto(option.label);
+        setSelectedStoreto(value?.title);
         setStoreToDropdownVisible(false);
-        if (option.merchant_id !== "-- Select Store --") {
-          setStoreto(option.merchant_id);
+        if (value?.id !== "-- Select Store --") {
+          setStoreto(value?.id);
         }
 
-        if (option.label == "-- Select Store --") {
+        if (value?.title == "-- Select Store --") {
           setStoreToError("This field is required");
         } else {
           setStoreToError("");
@@ -122,6 +138,7 @@ const CateDuplicateStore = () => {
   };
 
   const handleSelectBlur = () => {
+    setCategoryFocus(false);
     setIsSelectClicked(false);
   };
 
@@ -147,7 +164,7 @@ const CateDuplicateStore = () => {
   }, [MerchantListData, MerchantListData.loading]);
 
   useEffect(() => {
-    dispatch(fetchMerchantsList());
+    dispatch(fetchMerchantsList(userTypeData));
   }, []);
 
   const myStyles = {
@@ -191,19 +208,26 @@ const CateDuplicateStore = () => {
         store_name_to: storeto,
         category_name: categoryValues,
         upc_check: isUpcChecked,
+        ...userTypeDataNew,
       };
 
       try {
         const response = await axios.post(
           BASE_URL + CATEGORY_INVENTORY_DUPLICATE,
           data,
-          { headers: { "Content-Type": "multipart/form-data" } }
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         if (response.data.status === "Success") {
           setsubmitmessage(response.data.msg);
           setSelectedStorefrom("-- Select Store --");
           setSelectedStoreto("-- Select Store --");
+          ToastifyAlert("Duplicate Inventory Success!", "success");
           setStorefrom(null);
           setStoreto(null);
           setCategoryOptions([
@@ -212,10 +236,12 @@ const CateDuplicateStore = () => {
           setSelectedCategories([]);
           setIsSelectClicked(false);
         } else if (response.data.status === "Failed") {
+          ToastifyAlert("Duplicate Inventory Failed!", "error");
           setsubmitmessage(response.data.msg);
         }
       } catch (error) {
         // console.log('33 catch err');
+        ToastifyAlert("Error!", "error");
         return new Error(error);
       }
     }
@@ -227,10 +253,16 @@ const CateDuplicateStore = () => {
   return (
     <>
       <div className="q-order-main-page">
-        <div className="box">
-        <div className="q-add-categories-section">
+        <div class="q-category-top-detail-section">
+          <li>
+            The existing Variants of the selected Store 2 Must be same as
+            selected Store 1 Variants.
+          </li>
+        </div>
+
+        <div className=" box_shadow_div_order">
           <div className="alert">
-            <Box
+            {/* <Box
               sx={{
                 width: "100%",
                 position: "relative",
@@ -239,18 +271,15 @@ const CateDuplicateStore = () => {
               }}
             >
               <Collapse in={openAlert}>
-                <Alert
-                  severity="info"
-                  sx={{ mb: 2 }}
-                >
+                <Alert severity="info" sx={{ mb: 2 }}>
                   The existing Variants of the selected Store 2 Must be same as
                   selected Store 1 Variants.
                 </Alert>
               </Collapse>
-            </Box>
+            </Box> */}
           </div>
           <div className="alert">
-            {submitmessage && (
+            {/* {submitmessage && (
               <Box
                 sx={{
                   width: "100%",
@@ -280,182 +309,134 @@ const CateDuplicateStore = () => {
                   </Alert>
                 </Collapse>
               </Box>
-            )}
+            )} */}
           </div>
 
-          <div className="q-add-categories-section-header">
+          <div className="q-add-categories-section-header ">
             <span>
               <span>Category Duplicate</span>
             </span>
           </div>
 
-          <div className="q-order-page-container ml-8 md:flex-col">
+          <div className="q-order-page-container mx-6 mt-6 md:flex-col d-flex">
             {/* StoreFrom Dropdown */}
-            <div className="col-qv-6 mt-6">
-              <label className="q-details-page-label" htmlFor="storefromFilter">
-                Copy from this store
-              </label>
-              <div className="custom-dropdown">
-                <div
-                  className="custom-dropdown-header"
-                  onClick={() => toggleDropdown("storefrom")}
-                >
-                  <span className="selected-option mt-1">
-                    {selectedStorefrom}
-                  </span>
-                  <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-                </div>
-                {storeFromDropdownVisible && (
-                  <div className="dropdown-content" style={myStyles}>
-                    <div
-                      onClick={() =>
-                        handleOptionClick(
-                          { label: "-- Select Store --", merchant_id: null },
-                          "storefrom"
-                        )
-                      }
-                    >
-                      -- Select Store --
-                    </div>
-                    {MerchantList &&
-                      MerchantList.map((merchant) => (
-                        <div
-                          key={merchant.id}
-                          onClick={() =>
-                            handleOptionClick(
-                              {
-                                label: merchant.name,
-                                merchant_id: merchant.merchant_id,
-                              },
-                              "storefrom"
-                            )
-                          }
-                        >
-                          {merchant.name}
-                        </div>
-                      ))}
-                  </div>
-                )}
-              </div>
-                <span className="input-error ">
-                  {storeFromError && (
-                    <span className="input-error ">{storeFromError}</span>
-                  )}
-                </span>
-              {/* Multiple Select Categories */}
-              <div
-                className={`py-4 ${isSelectClicked ? "select-clicked" : ""}`}
-              >
+
+            <Grid container spacing={4} className="">
+              <Grid item xs={6} sm={12} md={6}>
                 <label
-                  className="q-details-page-label mt-2"
-                  htmlFor="categoryFilter"
+                  className="q-details-page-label"
+                  htmlFor="storefromFilter"
                 >
-                  Select Categories
+                  Copy from this store
                 </label>
-
-                <Select
-                  className="py-2"
-                  isMulti
-                  value={selectedCategories}
-                  onChange={handleCategoryChange}
-                  options={categoryOptions}
-                  isCreatable={true}
-                  onClick={handleSelectClick}
-                  onBlur={handleSelectBlur}
-                  components={{
-                    MultiValue: ({ data, innerProps }) => (
-                      <div
-                        className="css-wsp0cs-MultiValueGeneric"
-                        {...innerProps}
-                      >
-                        {data.label}
-                        <button
-                          type="button"
-                          className="cancel-button "
-                          onClick={() => handleCancelClick(data.value)}
-                        >
-                          <img
-                            src={CrossIcons}
-                            alt=""
-                            className="w-4 h-4 ml-6 pt-1"
-                          />
-                        </button>
-                      </div>
-                    ),
-                    IndicatorsContainer: ({ children }) => (
-                      <div className="css-1xc3v61-indicatorContainer">
-                        {children}
-                      </div>
-                    ),
-                    Control: ({ children, innerProps }) => (
-                      <div
-                        className={`css-13cymwt-control ${
-                          isSelectClicked ? "select-clicked" : ""
-                        }`}
-                        {...innerProps}
-                      >
-                        {children}
-                      </div>
-                    ),
-                  }}
+                <SelectDropDown
+                  listItem={
+                    MerchantList?.length &&
+                    MerchantList?.map((item) => ({
+                      title: item?.name,
+                      id: item?.merchant_id,
+                    }))
+                  }
+                  heading={"-- Select Store --"}
+                  title={"title"}
+                  selectedOption={selectedStorefrom}
+                  onClickHandler={handleOptionClick}
+                  dropdownFor={"storefrom"}
+                  // onClickHandler={(handleOptionClick, "copyFrom")}
+                  name="permission"
                 />
-              </div>
+              </Grid>
+              {/* Multiple Select Categories */}
+              <Grid item xs={6} sm={12} md={6}>
+                <div
+                  className={`py-0 ${
+                    isSelectClicked
+                      ? "select-clicked select-cat-unique"
+                      : "select-cat-unique"
+                  }`}
+                >
+                  <label
+                    className="q-details-page-label"
+                    htmlFor="storefromFilter"
+                  >
+                    Select Categories
+                  </label>
+                  <Select
+                    className={categoryFocus ? "category-select" : ""}
+                    isMulti
+                    value={selectedCategories}
+                    onChange={handleCategoryChange}
+                    options={categoryOptions}
+                    isCreatable={true}
+                    onClick={handleSelectClick}
+                    onBlur={handleSelectBlur}
+                    onFocus={handlFocusCategory}
+                    components={{
+                      MultiValue: ({ data, innerProps }) => (
+                        <div
+                          className="css-wsp0cs-MultiValueGeneric"
+                          {...innerProps}
+                        >
+                          {data.label}
+                          <button
+                            type="button"
+                            className="cancel-button "
+                            onClick={() => handleCancelClick(data.value)}
+                          >
+                            <img
+                              src={CrossIcons}
+                              alt=""
+                              className="w-4 h-4 ml-6 pt-1"
+                            />
+                          </button>
+                        </div>
+                      ),
+                      IndicatorsContainer: ({ children }) => (
+                        <div className="css-1xc3v61-indicatorContainer">
+                          {children}
+                        </div>
+                      ),
+                      Control: ({ children, innerProps }) => (
+                        <div
+                          className={`css-13cymwt-control ${
+                            isSelectClicked ? "select-clicked" : ""
+                          }`}
+                          {...innerProps}
+                        >
+                          {children}
+                        </div>
+                      ),
+                    }}
+                  />
+                </div>
+              </Grid>
 
-              <div className="">
-                <label className="q-details-page-label" htmlFor="storetoFilter">
+              <Grid item xs={6} sm={12} md={6}>
+                <label
+                  className="q-details-page-label"
+                  htmlFor="storefromFilter"
+                >
                   Paste to this store
                 </label>
-                <div className="custom-dropdown">
-                  <div
-                    className="custom-dropdown-header"
-                    onClick={() => toggleDropdown("storeto")}
-                  >
-                    <span className="selected-option mt-1">
-                      {selectedStoreto}
-                    </span>
-                    <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-                  </div>
-                  {storeToDropdownVisible && (
-                    <div className="dropdown-content" style={myStyles}>
-                      <div
-                        onClick={() =>
-                          handleOptionClick(
-                            { label: "-- Select Store --", merchant_id: null },
-                            "storeto"
-                          )
-                        }
-                      >
-                        -- Select Store --
-                      </div>
-                      {MerchantList &&
-                        MerchantList.map((merchant) => (
-                          <div
-                            key={merchant.id}
-                            onClick={() =>
-                              handleOptionClick(
-                                {
-                                  label: merchant.name,
-                                  merchant_id: merchant.merchant_id,
-                                },
-                                "storeto"
-                              )
-                            }
-                          >
-                            {merchant.name}
-                          </div>
-                        ))}
-                    </div>
-                  )}
-                </div>
-                <span className="input-error ">
-                  {storeToError && (
-                    <span className="input-error ">{storeToError}</span>
-                  )}
-                </span>
-              </div>
-            </div>
+                <SelectDropDown
+                  listItem={
+                    MerchantList?.length &&
+                    MerchantList?.map((item) => ({
+                      title: item?.name,
+                      id: item?.merchant_id,
+                    }))
+                  }
+                  heading={"-- Select Store --"}
+                  title={"title"}
+                  selectedOption={selectedStoreto}
+                  onClickHandler={handleOptionClick}
+                  dropdownFor={"storeto"}
+                  // onClickHandler={(handleOptionClick, "copyFrom")}
+                  name="permission"
+                />
+              </Grid>
+            </Grid>
           </div>
-
 
           <div className="q-add-inventory-section-header mx-2">
             <div className="qv_checkbox">
@@ -479,7 +460,6 @@ const CateDuplicateStore = () => {
             </button>
           </div>
         </div>
-      </div>
       </div>
     </>
   );

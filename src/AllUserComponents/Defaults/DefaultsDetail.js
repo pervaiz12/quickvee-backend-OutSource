@@ -1,13 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 
-import { fetchdefaultsData , deleteDefaultsData, deleteDefaultsMultiData} from "../../Redux/features/Defaults/defaultsSlice";
+import {
+  fetchdefaultsData,
+  deleteDefaultsData,
+  deleteDefaultsMultiData,
+} from "../../Redux/features/Defaults/defaultsSlice";
 
 import AddIcon from "../../Assests/Category/addIcon.svg";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import EditIcon from "../../Assests/Category/editIcon.svg";
 import DeleteIconAll from "../../Assests/Defaults/deleteIcon.svg";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from "react-router-dom";
+import { useAuthDetails } from "./../../Common/cookiesHelper";
+
+import { Grid } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 
 const DefaultsDetail = ({ seVisible }) => {
   const myStyles = {
@@ -20,10 +34,15 @@ const DefaultsDetail = ({ seVisible }) => {
   const [defaults, setdefaults] = useState([]);
 
   const defaultsDataState = useSelector((state) => state.defaults);
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
+  let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
+  const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
 
   useEffect(() => {
     let data = {
-      merchant_id: "MAL0100CA",
+      merchant_id: merchant_id,
+      ...userTypeData,
     };
     if (data) {
       dispatch(fetchdefaultsData(data));
@@ -31,7 +50,11 @@ const DefaultsDetail = ({ seVisible }) => {
   }, []);
 
   useEffect(() => {
-    if (!defaultsDataState.loading && defaultsDataState.defaultsData) {
+
+    if (
+      !defaultsDataState.loading &&
+      Array.isArray(defaultsDataState.defaultsData)
+    ) {
       setdefaults(defaultsDataState.defaultsData);
     }
   }, [
@@ -42,7 +65,10 @@ const DefaultsDetail = ({ seVisible }) => {
 
   //   for all checkbox
   useEffect(() => {
-    if (!defaultsDataState.loading && defaultsDataState.defaultsData) {
+    if (
+      !defaultsDataState.loading &&
+      Array.isArray(defaultsDataState.defaultsData)
+    ) {
       const updatedDefaults = defaultsDataState.defaultsData.map((item) => ({
         ...item,
         isChecked: false, // Initialize the isChecked property
@@ -50,8 +76,6 @@ const DefaultsDetail = ({ seVisible }) => {
       setdefaults(updatedDefaults);
     }
   }, [defaultsDataState]);
-
-
 
   const [headerCheckboxChecked, setHeaderCheckboxChecked] = useState(false);
 
@@ -74,146 +98,221 @@ const DefaultsDetail = ({ seVisible }) => {
     setHeaderCheckboxChecked(allChecked);
   };
 
-
-
-
-  // for Delete star 
+  // for Delete star
   const handleDeleteDefaults = (id) => {
     const data = {
       id: id,
+      ...userTypeData,
     };
-   
-    const userConfirmed = window.confirm("Are you sure you want to delete this Default?");
+
+    const userConfirmed = window.confirm(
+      "Are you sure you want to delete this Default?"
+    );
     if (userConfirmed) {
       if (id) {
         dispatch(deleteDefaultsData(data)).then(() => {
-          dispatch(fetchdefaultsData());
+          dispatch(fetchdefaultsData({ merchant_id, ...userTypeData }));
         });
       }
     } else {
       console.log("Deletion canceled by Default");
     }
-
   };
-
 
   // for selected check box item Delete start
   const handleDeleteDefaultSelected = () => {
-
     const checkedIds = defaults
-    .filter((item) => item.isChecked)
-    .map((checkedItem) => checkedItem.id);
+      .filter((item) => item.isChecked)
+      .map((checkedItem) => checkedItem.id);
 
     if (checkedIds.length === 0) {
       alert("Please select defaults for delete");
-    }else{
+    } else {
       const data = {
         selectedIds: checkedIds,
+        ...userTypeData,
       };
-      const userConfirmed = window.confirm("Are you sure you want to delete this Default?");
+      const userConfirmed = window.confirm(
+        "Are you sure you want to delete this Default?"
+      );
       if (userConfirmed) {
         dispatch(deleteDefaultsMultiData(data)).then(() => {
-          dispatch(fetchdefaultsData());
+          dispatch(fetchdefaultsData({ merchant_id, ...userTypeData }));
         });
       } else {
         console.log("Deletion canceled by Default");
       }
     }
-  }
+  };
   // for selected check box item Delete End
 
+  const StyledTable = styled(Table)(({ theme }) => ({
+    padding: 2, // Adjust padding as needed
+  }));
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: "#253338",
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+    [`&.${tableCellClasses.table}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+  }));
+
+  const navigate = useNavigate();
+  const handleEditDefault = (data) => {
+    // console.log("handleEditMerchant ", data);
+    navigate(`/users/view/unapprove/menu/defaults/edit-defaults/${data}`);
+  };
 
   return (
     <>
-      <div className="box">
-        <div className="q-category-bottom-detail-section">
-          <div className="mt-10">
-            <div className="q-category-bottom-header-sticky">
-
-            <div className="q-category-bottom-header">
-              <span>Default</span>
-              <p onClick={() => seVisible("DefaultsAlert")}>
-                Add Default <img src={AddIcon} alt="add-icon" />
-              </p>
-            </div>
-            <div className="q-category-bottom-categories-header ">
-              <p className="categories-sort">
-                <div className="category-checkmark-div">
-                  <label className="category-checkmark-label">
-                    <input
-                      type="checkbox"
-                      id="selectAll"
-                      checked={headerCheckboxChecked}
-                        onChange={handleHeaderCheckboxChange}
-                    />
-                    <span
-                      className="category-checkmark"
-                      style={{ left: "1rem", transform: "translate(0px, 2px)" }}
-                    ></span>
-                  </label>
-                </div>
-              </p>
-              <p className="categories-title" style={{  textTransform: 'none'}}>Name</p>
-              <p className="categories-title">Type</p>
-              <p
-                className="categories-enable-disable default-DeleteIcon"
-        
-              >
-                <img src={DeleteIconAll} alt="delete-icon" onClick={() => handleDeleteDefaultSelected()}/>
-              </p>
-            </div>
-            </div>
-
-
-            {defaults.map((defaultsdata, index) => (
-              <div
-                className="q-category-bottom-categories-single-category"
-                key={index}
-              >
-                <p className="categories-sort">
-                  <div className="category-checkmark-div">
-                    <label className="category-checkmark-label">
-                      <input type="checkbox" checked={defaultsdata.isChecked}
-                      onChange={() => handleCheckboxChange(index)} />
-                      <span
-                        className="category-checkmark"
-                        style={myStyles}
-                      ></span>
-                    </label>
-                  </div>
-                </p>
-                <p className="categories-title" style={{  textTransform: 'none'}}>{defaultsdata.name}</p>
-                <p className="categories-title">
-                  {defaultsdata.type === "1"
-                    ? "Collection"
-                    // : defaultsdata.type === "2"
-                    //   ? "Sauce"
-                    //   : defaultsdata.type === "3"
-                    //     ? "Topping"
-                        : ""}
-                </p>
-                <p
-                  className="categories-enable-disable default-DeleteIcon"
-                  style={{ display: "flex", justifyContent: "end" }}
-                >
-
-                 <Link to={`edit-defaults/${defaultsdata.id}`} >
-                     
-                      <img
-                        className='edit_center pr-10'
-                        selectedDefaults={defaultsdata}
-                        src={EditIcon}
-                        alt="Edit"
-                      />
-                    </Link> 
-
-                  <img src={DeleteIcon} alt="delete-icon" onClick={() => handleDeleteDefaults(defaultsdata.id)} />
-                </p>
+      {/* for ajinkya table start  */}
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            style={{
+              borderBottom: "1px solid #E8E8E8",
+            }}
+          >
+            <Grid item>
+              <div className="q-category-bottom-header">
+                <span>Default</span>
               </div>
-            ))}
-          </div>
-        </div>
-      </div>
+            </Grid>
+            <Grid item>
+              <Grid container direction="row" alignItems="center">
+                <Grid item>
+                  <div className="q-category-bottom-header">
+                    <p onClick={() => seVisible("DefaultsAlert")}>
+                      Add Default <img src={AddIcon} alt="add-icon" />
+                    </p>
+                  </div>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <Grid container>
+            <TableContainer>
+              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
+                <TableHead>
+                  <StyledTableCell>
+                    <div
+                      className="category-checkmark-div defaultCheckbox-div"
+                      style={{ width: "unset !important" }}
+                    >
+                      <label className="category-checkmark-label">
+                        <input
+                          type="checkbox"
+                          id="selectAll"
+                          checked={headerCheckboxChecked}
+                          onChange={handleHeaderCheckboxChange}
+                        />
+                        <span
+                          className="category-checkmark"
+                          style={{
+                            left: "1rem",
+                            transform: "translate(0px, -10px)",
+                          }}
+                        ></span>
+                      </label>
+                    </div>
+                  </StyledTableCell>
+                  <StyledTableCell>Name</StyledTableCell>
+                  <StyledTableCell>Type </StyledTableCell>
+                  <StyledTableCell>
+                  <div className="default-Edit-Delete ">
+                    <img
+                      src={DeleteIconAll}
+                      alt="delete-icon"
+                      onClick={() => handleDeleteDefaultSelected()} style={{transform: "translate(-5px, 0px)"}}
+                    />
+                    </div>
+                  </StyledTableCell>
+                </TableHead>
+                <TableBody>
+                  {defaults.map((data, index) => (
+                    <StyledTableRow>
+                      <StyledTableCell>
+                        <div className="category-checkmark-div" style={{ width: "unset !important" }}>
+                          <label className="category-checkmark-label">
+                            <input
+                              type="checkbox"
+                              checked={data.isChecked}
+                              onChange={() => handleCheckboxChange(index)}
+                            />
+                            <span
+                              className="category-checkmark"
+                              // style={myStyles}
+                              style={{
+                                left: "1rem",
+                                transform: "translate(0px, -10px)",
+                              }}
+                            ></span>
+                          </label>
+                        </div>
+                      </StyledTableCell>
+
+                      <StyledTableCell>
+                        <div class="text-[#000000] order_method capitalize">
+                          {data.name || ""}
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <div class="text-[#000000] order_method capitalize">
+                          {data.type === "1"
+                            ? "Collection"
+                            : // : defaultsdata.type === "2"
+                              //   ? "Sauce"
+                              //   : defaultsdata.type === "3"
+                              //     ? "Topping"
+                              ""}
+                        </div>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <div className="default-Edit-Delete ">
+                          <img
+                            className="mx-1 edit cursor-pointer"
+                            onClick={() => handleEditDefault(data.id)}
+                            src={EditIcon}
+                            alt="Edit"
+                          />
+                          <img
+                            class="mx-1 delete cursor-pointer"
+                            onClick={() => handleDeleteDefaults(data.id)}
+                            src={DeleteIcon}
+                            alt="Delete"
+                          />
+                        </div>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                </TableBody>
+              </StyledTable>
+            </TableContainer>
+          </Grid>
+        </Grid>
+      </Grid>
+
+
     </>
   );
 };

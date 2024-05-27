@@ -1,7 +1,7 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
-import { BASE_URL, TIME_SHEET_LIST } from "../../../Constants/Config"
+import { BASE_URL, TIME_SHEET_LIST, DELETE_TIMESHEET } from "../../../Constants/Config"
 
 
 const initialState = {
@@ -32,16 +32,16 @@ export const fetchtimeSheetData=createAsyncThunk('timeSheet/fetchtimeSheetData',
 
 // Generate pening , fulfilled and rejected action type
 
-export const deleteTimesheet = createAsyncThunk('categories/deleteTimesheet', async (data) => {
-
+export const deleteTimesheet = createAsyncThunk('timeSheet/deleteTimesheet', async (data) => {
+    const{token,...newData}=data
     try {
-        const response = await axios.post(BASE_URL + "DELETE_TIMESHEET", data, {
-            headers: { "Content-Type": "multipart/form-data" }
+        const response = await axios.post(BASE_URL + DELETE_TIMESHEET, newData, {
+            headers: { "Content-Type": "multipart/form-data", 'Authorization': `Bearer ${token}` }
         });
       if(response){
         console.log(response)
         return {
-            categoryId:data.id
+            categoryId:data.attendanceid
         }
       }
         
@@ -50,7 +50,7 @@ export const deleteTimesheet = createAsyncThunk('categories/deleteTimesheet', as
     }
 });
 
-export const deleteBreak = createAsyncThunk('categories/deleteBreak', async (data) => {
+export const deleteBreak = createAsyncThunk('timeSheet/deleteBreak', async (data) => {
 
     try {
         const response = await axios.post(BASE_URL + "DELETE_BREAK", data, {
@@ -93,12 +93,20 @@ const timeSheetSlice = createSlice({
         builder.addCase(deleteTimesheet.pending, (state) => {
             state.loading = true;
         });
+        // builder.addCase(deleteTimesheet.fulfilled, (state, action) => {
+        //     state.loading = false;
+        //     state.successMessage = action.payload.message;
+        //     state.timeSheetData = state.timeSheetData.filter((item) => item && item.id !== action.payload.categoryId);
+        //     state.error = ''; // Reset the error message
+        // });
         builder.addCase(deleteTimesheet.fulfilled, (state, action) => {
             state.loading = false;
             state.successMessage = action.payload.message;
-            state.timeSheetData = state.timeSheetData.filter((item) => item && item.id !== action.payload.categoryId);
-            state.error = ''; // Reset the error message
-        });
+            state.timeSheetData = Array.isArray(state.timeSheetData)
+                ? state.timeSheetData.filter(item => item && item.id !== action.payload.categoryId)
+                : [];
+            state.error = '';
+        })
         builder.addCase(deleteTimesheet.rejected, (state, action) => {
             state.loading = false;
             state.error = action.error.message;

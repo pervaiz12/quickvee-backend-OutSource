@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useLocation } from "react-router-dom";
 import DashboardIcon from "../../Assests/Dashboard/dashboard.svg";
 import ShoppingCartIcon from "../../Assests/Dashboard/orders.svg";
 import CategoryIcon from "../../Assests/Dashboard/category.svg";
@@ -12,7 +12,7 @@ import VenderIcon from "../../Assests/Dashboard/vender.svg";
 
 import TimesheetsIcon from "../../Assests/Dashboard/timesheetb.svg";
 
-import StoreIcon from "../../Assests/Dashboard/store.svg";
+import StoreSettingIcon from "../../Assests/Dashboard/store.svg";
 import ReportIcon from "../../Assests/Dashboard/reporting.svg";
 import DashIcon from "../../Assests/Dashboard/dashIcon.svg";
 import OrderYellow from "../../Assests/Dashboard/ordery.svg";
@@ -29,43 +29,81 @@ import ResportIcons from "../../Assests/Dashboard/reports.svg";
 import timesheetblackIcon from "../../Assests/Dashboard/timesheetblackIcon.svg";
 import Loyalty from "../../Assests/Taxes/Loyalty Program.svg";
 import LoyaltIcon from "../../Assests/Taxes/loyaltyactive.svg";
-import { useLocation } from "react-router-dom";
 import { useMediaQuery } from "@mui/material";
-import { setMenuOpen,  setIsDropdownOpen } from "../../Redux/features/NavBar/MenuSlice";
+import {
+  setMenuOpen,
+  setIsDropdownOpen,
+} from "../../Redux/features/NavBar/MenuSlice";
 import { useSelector, useDispatch } from "react-redux";
-import CryptoJS from 'crypto-js';
-import Cookies from 'js-cookie'; 
-import { useAuthDetails } from '../../Common/cookiesHelper';
+import CryptoJS from "crypto-js";
+import Cookies from "js-cookie";
+import { useAuthDetails } from "../../Common/cookiesHelper";
 
-const SideMenu =() => {
-  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+import LabelIcon from "../../Assests/MultipleUserIcon/label.svg";
+import LabelActive from "../../Assests/MultipleUserIcon/labelactive.svg";
+import UsersICcon from "../../Assests/MultipleUserIcon/user.svg";
+import UserActive from "../../Assests/MultipleUserIcon/useractive.svg";
+import NewsletterIcon from "../../Assests/MultipleUserIcon/newsletter.svg";
+import NewsletterActive from "../../Assests/MultipleUserIcon/newsletteractive.svg";
+import StoreIcon from "../../Assests/MultipleUserIcon/store.svg";
+import StoreActive from "../../Assests/MultipleUserIcon/storeactive.svg";
+import OrderIcon from "../../Assests/MultipleUserIcon/orderCount.svg";
+import OrderActive from "../../Assests/MultipleUserIcon/ordercountactive.svg";
+import DefaultIcon from "../../Assests/MultipleUserIcon/defaults.svg";
+import DefaultActive from "../../Assests/MultipleUserIcon/defaultactive.svg";
+import ApkIcon from "../../Assests/MultipleUserIcon/apk.svg";
+import ApkActive from "../../Assests/MultipleUserIcon/apkactive.svg";
+import DuplicatesIcon from "../../Assests/MultipleUserIcon/duplicates.svg";
+import DuplicatesActive from "../../Assests/MultipleUserIcon/duplicatesactive.svg";
+import PermissionIcon from "../../Assests/MultipleUserIcon/permission.svg";
+import PermissionActive from "../../Assests/MultipleUserIcon/permissionactive.svg";
+import InverntoryIcon from "../../Assests/MultipleUserIcon/inventory.svg";
+import InvertoryActive from "../../Assests/MultipleUserIcon/inventoryactive.svg";
+import MerchantIcon from "../../Assests/MultipleUserIcon/merchant.svg";
+import MerchantActive from "../../Assests/MultipleUserIcon/merchantactive.svg";
+const SideMenu = () => {
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
+
+  const [menuItemSwitcher, setMenuItemSwitcher] = useState(menuItems);
+
   const temp = {
-    "superadmin": menuItems,
-    "admin" : merchant,
-    "manager" : ManagerLink,
-    "merchant":MerchantLink,
-   
-  }
-  
+    superadmin: menuItemSwitcher,
+    admin: merchant,
+    manager: ManagerLink,
+    merchant: MerchantLink,
+  };
 
   const location = useLocation();
   const currentUrl = location.pathname;
   const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
+
   const isDropdownOpen = useSelector(
     (state) => state.NavBarToggle.isDropdownOpen
   );
   const [activeItem, setActiveItem] = useState(currentUrl);
   const [hoveredItem, setHoveredItem] = useState(null);
-  const [currentDropDownItem, activeDropDownItem] = useState(null) 
+  const [currentDropDownItem, activeDropDownItem] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const handleItemClick = (item) => {
 
+  // console.log("activeItem: ", activeItem);
+  const handleItemClick = (item) => {
+    // console.log("handleItemClick: ", item.link)
     setActiveItem(item.link);
     navigate(item.link);
-  
+
     dispatch(setIsDropdownOpen(false));
   };
+
+  useEffect(() => {
+    if (currentUrl.split("/")[1] === "users") {
+      setMenuItemSwitcher(SuperAdminMenuItems);
+      dispatch(setMenuOpen(true));
+    } else {
+      setMenuItemSwitcher(menuItems);
+    }
+  }, [currentUrl]);
 
   return (
     <>
@@ -80,7 +118,10 @@ const SideMenu =() => {
         {/* Left Side Menu */}
         <div className="flex-1 bg-[#253338] text-[#9E9E9E]">
           {isMenuOpenRedux
-            ? ((LoginGetDashBoardRecordJson?.final_login==1 )?temp["superadmin"]:temp[LoginGetDashBoardRecordJson?.data?.login_type])?.map((item) => (
+            ? (LoginGetDashBoardRecordJson?.final_login == 1
+                ? temp["superadmin"]
+                : temp[LoginGetDashBoardRecordJson?.data?.login_type]
+              )?.map((item) => (
                 <div
                   key={item.id}
                   className={`text-[#9E9E9E] active:bg-[#414F54] hover:bg-[#414F54] hover:text-[#FFC400] px-0 ${
@@ -107,7 +148,7 @@ const SideMenu =() => {
                       onClick={() => handleItemClick(item)}
                       style={{ cursor: "pointer" }}
                       className={`flex items-center ${
-                        activeItem === item.link
+                        activeItem === item.link.trim()
                           ? "bg-[#414F54] text-[#FFC400]"
                           : ""
                             ? "text-[#FFC400] active:bg-[#414F54] hover:bg-[#414F54] px-0"
@@ -115,22 +156,29 @@ const SideMenu =() => {
                       }`}
                     >
                       {/* {activeItem === item.link ? item.activeIcon : item.icon} */}
-                      {activeItem === item.link || hoveredItem === item.id
+
+                      {console.log("activeItem ",activeItem, "===" ," item.link ",item.link , activeItem === item.link )}
+                      {
+                        
+                      activeItem === item.link.trim() || hoveredItem === item.id
                         ? item.activeIcon
                         : item.icon}
                       <Link
                         className={`ml-2 menu-item text-[14px] Admin_std ${
-                          activeItem === item.link ? "bg-[#414F54]" : ""
+                          activeItem === item.link.trim() ? "bg-[#414F54]" : ""
                         }`}
                         to={item.link}
                       >
-                        {item.text}
+                        {item.text} 
                       </Link>
                     </div>
                   )}
                 </div>
               ))
-            : menuItems.map((item) => (
+            : (LoginGetDashBoardRecordJson?.final_login == 1
+                ? temp["superadmin"]
+                : temp[LoginGetDashBoardRecordJson?.data?.login_type]
+              )?.map((item) => (
                 <div
                   key={item.id}
                   className={`mb-1 text-base cursor-pointer ${
@@ -195,9 +243,15 @@ const DropdownMenuItem = ({
   const isTabletNav = useMediaQuery("(max-width:1024px)");
   useEffect(() => {
     isTabletNav && dispatch(setIsDropdownOpen(false));
-  }, [isTabletNav]);
-
-
+    const foundItem = item?.dropdownItems?.find(
+      (item) => item?.link === activeItem
+    );
+    if (foundItem) {
+      setDropDownItem(foundItem.link);
+      activeDropDownItem(item.id);
+    }
+    item.id === currentDropDownItem && dispatch(setIsDropdownOpen(true));
+  }, [isTabletNav, currentDropDownItem, dropDownItem]);
 
   const handleToggleDropdownItems = (link, e) => {
     if (isTabletNav) {
@@ -214,10 +268,7 @@ const DropdownMenuItem = ({
 
   const HandleDropdownClick = (event, id) => {
     activeDropDownItem(id);
-
     dispatch(setIsDropdownOpen(!isDropdownOpen));
-
-    // setIsMenuOpen(!isMenuOpen);
   };
 
   return (
@@ -246,7 +297,7 @@ const DropdownMenuItem = ({
                   activeItem === dropDownItem ? "activeTab" : ""
                 }`}
               >
-                {item.text}
+                {item.text} 
               </p>
 
               <FaChevronDown className="quickarrow_icon ml-4 me-5" />
@@ -302,7 +353,7 @@ const DropdownMenuItem = ({
 };
 
 // Define menu items with icons and text
-// {LoginAllStore?.data?.login_type!==("admin" &&"manager"&& "merchant") 
+// {LoginAllStore?.data?.login_type!==("admin" &&"manager"&& "merchant")
 
 const menuItems = [
   {
@@ -468,7 +519,7 @@ const menuItems = [
     id: 11,
     icon: (
       <img
-        src={StoreIcon}
+        src={StoreSettingIcon}
         alt="store"
         className="h-6 w-10 mt-4 mb-4 hoverable-image"
       />
@@ -643,39 +694,322 @@ const menuItems = [
         text: "Order Refund Report ",
         link: "/store-settings/order-refund-report",
       },
+      { id: 83, text: "Tip Report", link: "/store-reporting/tip-report" },
+      { id: 84, text: "Coupon Report", link: "/store-reporting/coupon-report" },
     ],
   },
 ];
+const SuperAdminMenuItems = [
+  // {
+  //   id: 1,
+  //   icon: (
+  //     <img
+  //       src={LabelIcon}
+  //       alt="labal"
+  //       className="h-6 w-10 mt-4 mb-4 hoverable-image"
+  //     />
+  //   ),
+  //   activeIcon: (
+  //     <img src={LabelActive} alt="Label" className="h-6 w-10 mt-4 mb-4" />
+  //   ),
+  //   text: "Label",
+  //   link: "/users/view/unapprove/label",
+  // },
+  {
+    id: 2,
+    icon: (
+      <img
+        src={UsersICcon}
+        alt="store"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img src={UserActive} alt="active store" className="h-6 w-10 mt-4 mb-4" />
+    ),
+    text: "Users",
+    link: "/users/view/unapprove/users/add",
+    className: "flex items-center gap-2",
+    dropdownItems: [
+      { id: 21, text: " Add ", link: "/users/addmerchant" },
+      { id: 22, text: " Verified Merchant ", link: "/users/view/approve" },
+      {
+        id: 23,
+        icon: (
+          <img src={CouponIcon} alt="option" className="h-6 w-10 mt-4 mb-4" />
+        ),
+        activeIcon: (
+          <img src={CouIcon} alt="option" className="h-6 w-10 mt-4 mb-4 " />
+        ),
+        text: " Unverified Merchant ",
+        link: "/users/view/unapprove",
+      },
 
-const merchant =[
-    {
-      id: 82,
-      text: "Store",
-      link: "/store",
+      { id: 26, text: " Customer ", link: "/users/customer" },
+      { id: 27, text: "  Admin  ", link: "/users/admin" },
+      { id: 28, text: "  Manager  ", link: "/users/manager_view" },
+    ],
+  },
+
+  {
+    id: 3,
+    icon: (
+      <img
+        src={NewsletterIcon}
+        alt="labal"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={NewsletterActive}
+        alt="Newsletter"
+        className="h-6 w-10 mt-4 mb-4"
+      />
+    ),
+    text: "Newsletter ",
+    link: "/users/view/unapprove/newsletter",
   },
   {
-    id: 82,
+    id: 4,
+    icon: (
+      <img
+        src={StoreIcon}
+        alt="Store Order "
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={StoreActive}
+        alt="Store Order "
+        className="h-6 w-10 mt-4 mb-4"
+      />
+    ),
+    text: "Store Order ",
+    link: "/users/view/unapprove/store-order",
+  },
+  {
+    id: 5,
+    icon: (
+      <img
+        src={OrderIcon}
+        alt="labal"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={OrderActive}
+        alt="Order Count "
+        className="h-6 w-10 mt-4 mb-4"
+      />
+    ),
+    text: "Order Count ",
+    link: "/users/view/unapprove/order-count ",
+  },
+
+  {
+    id: 6,
+    icon: (
+      <img
+        src={DefaultIcon}
+        alt="labal"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={DefaultActive}
+        alt="menu-defaults"
+        className="h-6 w-10 mt-4 mb-4"
+      />
+    ),
+    text: "Defaults  ",
+    link: "/users/view/unapprove/menu/defaults",
+  },
+
+  // {
+  //   id: 7,
+  //   icon: (
+  //     <img
+  //       src={ApkIcon}
+  //       alt="release_apk"
+  //       className="h-6 w-10 mt-4 mb-4 hoverable-image"
+  //     />
+  //   ),
+  //   activeIcon: (
+  //     <img src={ApkActive} alt="release_apk" className="h-6 w-10 mt-4 mb-4" />
+  //   ),
+  //   text: "Release APK   ",
+  //   link: "/users/view/unapprove/release_apk",
+  // },
+  {
+    id: 8,
+    icon: (
+      <img
+        src={DuplicatesIcon}
+        alt="labal"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={DuplicatesActive}
+        alt="menu-defaults"
+        className="h-6 w-10 mt-4 mb-4"
+      />
+    ),
+    text: "Inventory Duplicate   ",
+    link: "/users/view/unapprove/inverntory-duplicate",
+  },
+
+  {
+    id: 9,
+    icon: (
+      <img
+        src={DuplicatesIcon}
+        alt="labal"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={DuplicatesActive}
+        alt="menu-defaults"
+        className="h-6 w-10 mt-4 mb-4"
+      />
+    ),
+    text: " Category Duplicate ",
+    link: "/users/view/unapprove/category-duplicate",
+  },
+
+  {
+    id: 10,
+    icon: (
+      <img
+        src={DuplicatesIcon}
+        alt="duplicates"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={DuplicatesActive}
+        alt="menu-defaults"
+        className="h-6 w-10 mt-4 mb-4"
+      />
+    ),
+    text: "Product Duplicate ",
+    link: "/users/view/unapprove/product-duplicate",
+  },
+
+  {
+    id: 11,
+    icon: (
+      <img
+        src={PermissionIcon}
+        alt="labal"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={PermissionActive}
+        alt="menu-defaults"
+        className="h-6 w-10 mt-4 mb-4"
+      />
+    ),
+    text: "Permission",
+    link: "/users/view/unapprove/create_permission",
+  },
+
+  {
+    id: 12,
+    icon: (
+      <img
+        src={InverntoryIcon}
+        alt="labal"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={InvertoryActive}
+        alt="menu-defaults"
+        className="h-6 w-10 mt-4 mb-4"
+      />
+    ),
+    text: "Inventory Export ",
+    link: "/users/view/unapprove/invertory-export",
+  },
+
+  // {
+  //   id: 13,
+  //   icon: (
+  //     <img
+  //       src={MerchantIcon}
+  //       alt="labal"
+  //       className="h-6 w-10 mt-4 mb-4 hoverable-image"
+  //     />
+  //   ),
+  //   activeIcon: (
+  //     <img
+  //       src={MerchantActive}
+  //       alt="menu-defaults"
+  //       className="h-6 w-10 mt-4 mb-4"
+  //     />
+  //   ),
+  //   text: "Merchant Details ",
+  //   link: "/users/view/unapprove/merchant-details",
+  // },
+  // {
+  //   id: 12,
+  //   icon: (
+  //     <img
+  //       src={MerchantIcon}
+  //       alt="labal"
+  //       className="h-6 w-10 mt-4 mb-4 hoverable-image"
+  //     />
+  //   ),
+  //   activeIcon: (
+  //     <img
+  //       src={MerchantActive}
+  //       alt="menu-defaults"
+  //       className="h-6 w-10 mt-4 mb-4"
+  //     />
+  //   ),
+  //   text: "Need Help ",
+  //   link: "/users/view/unapprove/need-help",
+  // },
+];
+
+const merchant = [
+  {
+    // id: 82,
+    text: "Store",
+    link: "/store",
+  },
+  {
+    // id: 82,
     text: "Manager",
     link: "/manager",
-},
-  
-]
-const ManagerLink =[
+  },
+];
+const ManagerLink = [
   {
-    id: 82,
+    // id: 82,
     text: "Store",
     link: "/store",
-},
-  
-]
-const MerchantLink =[
+  },
+];
+const MerchantLink = [
   {
-    id: 82,
+    // id: 82,
     text: "Store",
     link: "/store",
-},
-  
-]
+  },
+];
 // }MerchantLink
 
 export default SideMenu;

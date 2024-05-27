@@ -28,6 +28,9 @@ const TimesheetListing = ({ data }) => {
   const [employeeList, setemployeeList] = useState([]);
   const [EmployeeName, setEmployeeName] = useState(""); 
   const timeSheetDataState = useSelector((state) => state.timeSheet);
+  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+  let AuthDecryptDataDashBoardJSONFormat=LoginGetDashBoardRecordJson
+   const merchant_id=AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id
 
   useEffect(() => {
     if(!data.merchant_id){
@@ -54,7 +57,7 @@ const TimesheetListing = ({ data }) => {
       try {
         const response = await axios.post(
           BASE_URL + EMPLOYEE_LIST,
-          { merchant_id: "MAL0100CA" },
+          { merchant_id: merchant_id },
           { headers: { "Content-Type": "multipart/form-data" } }
         );
 
@@ -95,10 +98,6 @@ const TimesheetListing = ({ data }) => {
   const [modalAddTimesheetID, setModalAddTimesheetID] = useState("");
   const [addTimesheetMsg, setaddTimesheetMsg] = useState("");
 
-  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
-
-  let AuthDecryptDataDashBoardJSONFormat=LoginGetDashBoardRecordJson
-   const merchant_id=AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id
 
   const [addtimebreak, setTimeBreak] = useState({
     merchant_id:merchant_id,
@@ -127,6 +126,10 @@ const TimesheetListing = ({ data }) => {
       add_clocked_in: "",
       add_clocked_out: ""
     }));
+    setDateStartError("");
+    setDateStartTimeError("");
+    setDateEndError("");
+    setDateEndTimeError("");
     setShowModal(true);
   };
 
@@ -245,6 +248,7 @@ const TimesheetListing = ({ data }) => {
         }
       });
       if (response.data.status === true && response.data.msg ==="Inserted successfully." ) {
+        dispatch(fetchtimeSheetData(data));
         setShowModal(false);
       }else if(response.data.status === false && response.data.msg ==="Invalid time entered."){
         setaddTimesheetMsg(response.data.msg)
@@ -265,17 +269,20 @@ const TimesheetListing = ({ data }) => {
   const handleOpenBreak = () => setShowModalBreak(true);
   const handleCloseBreak = () => setShowModalBreak(false);
   const [modalDate, setModalDate] = useState("");
+  const [modalDateOUT, setModalDateOUT] = useState("");
   const [modalAddBreakID, setModalAddBreakID] = useState("");
   const [BreakInTimeError, setBreakInTimeError] = useState("");
   const [BreakOutTimeError, setBreakOutTimeError] = useState("");
+  const [addBreakMsg, setaddBreakMsg] = useState("");
 
-
-  const openModalBreak = (title,id,date) => {
+  const openModalBreak = (title,id,date,out_date) => {
     setEmployeeName(title)
     setModalAddBreakID(id)
     setModalDate(formatDate(date));
+    setModalDateOUT(out_date);
     setBreakInTimeError("");
     setBreakOutTimeError("");
+    setaddBreakMsg("")
     setShowModalBreak(true);
   };
 
@@ -328,8 +335,8 @@ const TimesheetListing = ({ data }) => {
     const formData = new FormData();
     formData.append("merchant_id", addbreak.merchant_id);
     formData.append("employee_id", modalAddBreakID);
-    formData.append("break_in_date", addbreak.modalDate);
-    formData.append("break_out_date", addbreak.modalDate);
+    formData.append("break_in_date", formatDatePayload(modalDate));
+    formData.append("break_out_date", modalDateOUT);
     formData.append("break_in_time", addbreak.addbreakIn);
     formData.append("break_out_time", addbreak.addbreakOut);
     formData.append("token_id", addtimebreak.token_id);
@@ -346,14 +353,14 @@ const TimesheetListing = ({ data }) => {
           'Authorization': `Bearer ${userTypeData.token}`
         }
       });
-      // if (response.data.status === true && response.data.msg ==="Inserted successfully." ) {
-      //   setShowModal(false);
-      // }else if(response.data.status === false && response.data.msg ==="Invalid time entered."){
-      //   setaddTimesheetMsg(response.data.msg)
-      //   setShowModal(true);
-      // }else{
-      //   setShowModal(true);
-      // }
+      if (response.data.status === true && response.data.msg ==="Break Added." ) {
+        setShowModalBreak(false);
+      }else if(response.data.status === false && response.data.msg === "Invalid time entered."){
+        setaddBreakMsg(response.data.msg)
+        setShowModalBreak(true);
+      }else{
+        setShowModalBreak(true);
+      }
     } catch (error) {
       console.error("API Error:", error);
     }
@@ -368,6 +375,7 @@ const TimesheetListing = ({ data }) => {
   const handleCloseViewBreak = () => setShowModalViewBreak(false);
   const [breakDetails, setBreakDetails] = useState([]);
   const [EmployeeWorkDate, setEmployeeWorkDate] = useState(""); 
+  const [EmployeeWorkDateOUT, setEmployeeWorkDateOUT] = useState(""); 
   const [EmployeeTimeIn, setEmployeeTimeIn] = useState(""); 
   const [EmployeeTimeOut, setEmployeeTimeOut] = useState(""); 
   const [AllbreakDelete, setAllbreakDelete] = useState(""); 
@@ -377,6 +385,7 @@ const TimesheetListing = ({ data }) => {
     setEmployeeName(title)
     fetchBreakDetails(data);
     setEmployeeWorkDate(data.attendance_date)
+    setEmployeeWorkDateOUT(data.out_date)
     setEmployeeTimeIn(formatTime(data.check_in_time))
     setEmployeeTimeOut(formatTime(data.check_out_time))
     setAllbreakDelete(data)
@@ -395,8 +404,8 @@ const TimesheetListing = ({ data }) => {
         attendance_id: data.attendance_id,
         check_in_time: formatTime(data.check_in_time),
         check_out_time: formatTime(data.check_out_time),
-        indate: data.attendance_date,
-        outdate: data.attendance_date,
+        indate: formatDatePayload(data.attendance_date),
+        outdate: data.out_date,
         token_id:userTypeData.token_id,
         login_type:userTypeData.login_type
       }, {
@@ -455,25 +464,28 @@ const TimesheetListing = ({ data }) => {
             // indate: 17-05-2024
             // outdate: 17-05-2024
 
-    const deleteAllBreakTimesheet = (data) => {
+    const deleteAllBreakTimesheet = (dataTimesheet) => {
       const datas = {
-        inid: data.check_in_id,
-        outid: data.check_out_id,
-        attendanceid: data.attendance_id,
-        checkin: formatTime(data.check_in_time),
-        checkout: formatTime(data.check_out_time),
-        indate: data.attendance_date,
-        outdate: data.attendance_date,
+        inid: dataTimesheet.check_in_id,
+        outid: dataTimesheet.check_out_id,
+        attendanceid: dataTimesheet.attendance_id,
+        checkintime: formatTime(dataTimesheet.check_in_time),
+        checkouttime: formatTime(dataTimesheet.check_out_time),
+        indate: dataTimesheet.attendance_date,
+        outdate: dataTimesheet.out_date,
+        merchant_id:merchant_id,
+        ...userTypeData
       };
      
       const userConfirmed = window.confirm("Are sure want to delete this timeclock?");
       if (userConfirmed) {
-        if (data) {
-          dispatch(deleteTimesheet(datas)).then(() => {
-            dispatch(fetchtimeSheetData(data));
-          });
+        if (dataTimesheet) {
+          dispatch(deleteTimesheet(datas));
         }
+        dispatch(fetchtimeSheetData(data));
+        closeModalViewBreak()
       } else {
+        console.log("props data",data)
         console.log("Deletion canceled by timeclock");
       }
     };
@@ -510,6 +522,19 @@ const TimesheetListing = ({ data }) => {
     return `${hours.toString().padStart(2, '0')}:${minutes} ${ampm}`;
   };
 
+  const formatDatePayload = (dateString) => {
+    const date = new Date(dateString);
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
+  const formatDateBrake = (dateString) => {
+    const [day, month, year] = dateString.split('-');
+    return `${month}/${day}/${year}`;
+  };
+
 
   const renderDataTable = () => {
     if ( timesheet && timesheet.status === false ){
@@ -540,13 +565,27 @@ const TimesheetListing = ({ data }) => {
                 onClick={() => openModalViewBreak(employee.title,entry)}
               >
                 <p className="q-catereport-item">{formatDate(entry.attendance_date)}</p>
-                <p className="q-catereport-item">{`$${entry.wages_per_hr}`}</p>
-                <p className="q-catereport-item">{formatTime(entry.check_in_time)}</p>
-                <p className="q-catereport-item">{formatTime(entry.check_out_time)}</p>
+                <p className="q-catereport-item">{entry.wages_per_hr && entry.wages_per_hr > 0 ? `$${entry.wages_per_hr}/hr` : '-'} </p>
+                {/* <p className="q-catereport-item">{formatTime(entry.check_in_time)}</p> */}
+                {/* <p className="q-catereport-item">{formatTime(entry.check_out_time)}</p> */}
+                {entry.incomplete === true ? (
+                  <>
+                    <p className="q-catereport-item">{formatTime(entry.time_entered)}</p>
+                    <p className="q-catereport-item">pending</p>
+                  </>
+                ) : (
+                  <>
+                    <p className="q-catereport-item">{formatTime(entry.check_in_time)}</p>
+                    <p className="q-catereport-item">
+                      {formatTime(entry.check_out_time)}
+                      {entry.date_diff > 0 && new Date(entry.attendance_date).toDateString() !== new Date(entry.out_date).toDateString() && ` (+${entry.date_diff})`}
+                    </p>
+                  </>
+                )}
                 <p className="q-catereport-item">
                   <div className="q-attributes-bottom-header viewTimesheet-AddBreak timesheet bg-[#ffffff]"
                   onClick={(e) => {
-                    openModalBreak(employee.title,employee.id,entry.attendance_date);
+                    openModalBreak(employee.title,employee.id,entry.attendance_date,entry.out_date);
                     e.stopPropagation();
                   }}
                   >
@@ -563,18 +602,7 @@ const TimesheetListing = ({ data }) => {
                 <p className="q-catereport-item">-</p>
                 <p className="q-catereport-item">-</p>
                 <p className="q-catereport-item">-</p>
-                <p className="q-catereport-item">
-                  <div className="q-attributes-bottom-header viewTimesheet-AddBreak timesheet bg-[#ffffff]">
-                    <p
-                      onClick={(e) => {
-                        openModalBreak(employee.title,employee.id,currentDate);
-                        e.stopPropagation();
-                      }}
-                    >
-                      Add Break<img src={AddIcon} alt="add-icon" />{" "}
-                    </p>
-                  </div>
-                </p>
+                <p className="q-catereport-item"></p>
                 </div>
               )}
             </div>
@@ -585,17 +613,36 @@ const TimesheetListing = ({ data }) => {
 
   
 
-    if ( data.employee_id === "all") {
-      const matchingEntries = employeeList.map(employee => {
-        const ALLkey = `${employee.title}_${employee.id}`;
-        return {
-          employee,
-          entries: timesheet[ALLkey] || []
-        };
-      });
-      return matchingEntries.map(({ employee, entries }) => renderEmployeeData(employee, entries));
+    // if ( data.employee_id === "all") {
+    //   const matchingEntries = employeeList.map(employee => {
+    //     const ALLkey = `${employee.title}_${employee.id}`;
+    //     return {
+    //       employee,
+    //       entries: timesheet[ALLkey] || []
+    //     };
+    //   });
+    //   return matchingEntries.map(({ employee, entries }) => renderEmployeeData(employee, entries));
   
+    // }
+
+
+    if (data.employee_id === "all") {
+      const timesheetKeys = Object.keys(timesheet).filter(key => key !== 'status');
+      const prioritizedEmployees = timesheetKeys.map(key => {
+        const [title, id] = key.split('_');
+        return employeeList.find(employee => employee.id.toString() === id && employee.title === title);
+      }).filter(Boolean);
+  
+      const otherEmployees = employeeList.filter(employee => !prioritizedEmployees.includes(employee));
+      const allEmployees = [...prioritizedEmployees, ...otherEmployees];
+
+      return allEmployees.map(employee => {
+        const key = `${employee.title}_${employee.id}`;
+        const timesheetEntries = timesheet[key] || [];
+        return renderEmployeeData(employee, timesheetEntries);
+      });
     }
+
     const selectedEmployee = employeeList.find((employee) => employee.id === data.employee_id);
     // console.log("jxdzbv",selectedEmployee?.title+'_'+selectedEmployee?.id)
     if (selectedEmployee) {
@@ -643,10 +690,6 @@ const TimesheetListing = ({ data }) => {
                                   handleStartDateChange(newDate)
                                 }
                                 size="medium"
-                                shouldDisableDate={(date) => {
-                                  const today = dayjs().format("YYYY-MM-DD");
-                                  return date.format("YYYY-MM-DD") > today || date.format("YYYY-MM-DD") === addtimebreak.add_in_date;
-                                }} 
                                 format={"DD-MM-YYYY"}
                                 views={["year", "month", "day"]}
                                 slotProps={{
@@ -709,10 +752,6 @@ const TimesheetListing = ({ data }) => {
                                   handleEndDateChange(newDate)
                                 }
                                 size="medium"
-                                shouldDisableDate={(date) => {
-                                  const today = dayjs().format("YYYY-MM-DD");
-                                  return date.format("YYYY-MM-DD") > today || date.format("YYYY-MM-DD") === addtimebreak.add_clocked_out;
-                                }}
                                 format={"DD-MM-YYYY"}
                                 views={["year", "month", "day"]}
                                 slotProps={{
@@ -800,7 +839,7 @@ const TimesheetListing = ({ data }) => {
                 <span>{EmployeeName}</span>
               </span>
               <div className="viewTextBark">
-              <span className="borderRight ">{modalDate}</span> <span className="pl-1"> Break-in/Break-out</span>
+              <span className="borderRight ">{modalDate} - {modalDateOUT ? formatDateBrake(modalDateOUT) : '-'}</span> <span className="pl-1"> Break-in/Break-out</span>
               </div>
             </div>
 
@@ -814,7 +853,7 @@ const TimesheetListing = ({ data }) => {
                                   name="break_in"
                                   id="break_in"
                                   slotProps={{
-                                    textField: { placeholder: "Start Time" },
+                                    textField: { placeholder: "Select Time" },
                                   }}
                                   onChange={(newTime) =>
                                     handleBreakStartTimeChange(newTime)
@@ -841,7 +880,7 @@ const TimesheetListing = ({ data }) => {
                                   name="break_out"
                                   id="break_out"
                                   slotProps={{
-                                    textField: { placeholder: "Start Time" },
+                                    textField: { placeholder: "Select Time" },
                                   }}
                                   onChange={(newTime) =>
                                     handleBreakEndTimeChange(newTime)
@@ -860,6 +899,16 @@ const TimesheetListing = ({ data }) => {
                                 </p>
                           )}
                       </Grid>
+
+                      <Grid container spacing={3}>
+                      <Grid item md={12} xs={12} style={{ display: 'flex', justifyContent: 'center' }}>
+                      {addBreakMsg && (
+                          <p className="error-message " style={{margin: "14px"}}>
+                            {addBreakMsg}
+                          </p>
+                      )}
+                      </Grid>
+                    </Grid>
                      
                     </Grid>
                 </div>
@@ -897,7 +946,7 @@ const TimesheetListing = ({ data }) => {
 
             <div className="view-category-item-modal-header" >
               <div className="title_attributes_section viewbreak" style={{margin: "1rem 1.5rem"}}>
-                 <span className="borderRight">Working Date: <span className="viewTextBark">{formatDate(EmployeeWorkDate)}</span> </span>
+                 <span className="borderRight">Working Date: <span className="viewTextBark">{formatDate(EmployeeWorkDate)} - {formatDateBrake(EmployeeWorkDateOUT)}</span> </span>
                  <span className="borderRight">Clock In: <span className="viewTextBark">{EmployeeTimeIn}</span> </span>
                  <span className="pl-2">Clock Out: <span className="viewTextBark">{EmployeeTimeOut}</span> </span>
               </div>

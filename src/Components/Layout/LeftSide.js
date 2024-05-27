@@ -67,6 +67,11 @@ import AddPo from "../PurchaseOrders/AddPo";
 import EditCoupon from "../Coupons/EditCoupon";
 import StorePage from "../Store/MerchantStore";
 import ManagerStore from "../Store/ManagerStore";
+import ProductSalesReport from "../Products/ProductSalesReport";
+import TipReportMain from "../Reporting/TipReport/TipReportMain";
+import CouponReportMain from "../Reporting/CouponReport/CouponReportMain";
+import SalesReportMain from "../Reporting/SalesReport/SalesReportMain";
+
 const LeftSide = ({ visible }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -97,7 +102,8 @@ const LeftSide = ({ visible }) => {
           {visible === "toptraders" && <TopTenders />}
           {visible === "productedit" && <ProductEdit />}
           {visible === "product-add" && <AddProducts />}
-          {visible === "add-po" && <AddPo />}
+          {visible === "product-edit" && <AddProducts />}
+          {visible === "product-sales" && <ProductSalesReport />}
 
           {visible === "info" && <Info />}
           {visible === "setup" && <Setup />}
@@ -139,6 +145,9 @@ const LeftSide = ({ visible }) => {
 
           {visible === "vendors-sales-reports" && <VendorSalesReportMain />}
           {visible === "order-refund-report" && <OrderRefundReportMain />}
+          {visible === "tip-report" && <TipReportMain />}
+          {visible === "coupon-report" && <CouponReportMain />}
+          {visible === "sales-report" && <SalesReportMain />}
         </div>
       </div>
     </>
