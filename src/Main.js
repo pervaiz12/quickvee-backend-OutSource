@@ -66,6 +66,9 @@ const Main = ({ visible }) => {
       {visible === "order-refund-report" && <Layout visible={visible} />}
       {visible === "edit-vendor" && <Layout visible={visible} />}
       {visible === "vendor-details" && <Layout visible={visible} />}
+      {visible === "sales-report"  && <Layout visible={visible} />}
+      {visible === "tip-report"  && <Layout visible={visible} />}
+      {visible === "coupon-report"  && <Layout visible={visible} />}
 
       {/* multip user layout */}
       {visible === "multimerchant" && <IndexAllUsers />}

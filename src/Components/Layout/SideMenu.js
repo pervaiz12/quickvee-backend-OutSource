@@ -693,6 +693,8 @@ const menuItems = [
         text: "Order Refund Report ",
         link: "/store-settings/order-refund-report",
       },
+      { id: 83, text: "Tip Report", link: "/store-reporting/tip-report" },
+      { id: 84, text: "Coupon Report", link: "/store-reporting/coupon-report" },
     ],
   },
 ];
