@@ -34,7 +34,6 @@ const Customer = () => {
 
   const customerRecord = useSelector((state) => state.customerRecord);
   const [managerTable, setManagerTable] = useState([]);
-  const [selectedAction, setSelectedAction] = useState("");
   const [searchRecord, setSearchRecord] = useState("");
   const [customersDataState, setCustomersDataState] = useState([]);
 
@@ -84,8 +83,7 @@ const Customer = () => {
     },
   }));
 
-  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
-    useAuthDetails();
+  const { userTypeData } = useAuthDetails();
   let data = { type: 2, ...userTypeData };
 
   useEffect(() => {
@@ -138,10 +136,11 @@ const Customer = () => {
                 <Grid item>
                   <Link
                     to="/users/addMerchant"
-                    className="flex q-category-bottom-header "
+                    className="flex q-category-bottom-header"
+                    state={{ from: "/users/customer", heading: "Customer" }}
                   >
                     <p className="me-2">ADD</p>
-                    <img src={AddIcon} alt="" />
+                    <img src={AddIcon} alt="add icon" />
                   </Link>
                 </Grid>
               </Grid>

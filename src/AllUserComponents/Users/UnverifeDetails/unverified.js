@@ -156,30 +156,31 @@ export default function Unverified() {
     if (value === "") {
       setFilteredMerchants(VerifiedMerchantListState);
       setTotalCount(VerifiedMerchantListState.length);
-    } else{
+    } else {
       const filteredAdminRecord =
-      UnVerifiedMerchantList && Array.isArray(UnVerifiedMerchantList)
-        ? UnVerifiedMerchantList.filter(
-            (result) =>
-              (result.owner_name &&
-                result.owner_name
-                  .toLowerCase()
-                  .includes(searchRecord.toLowerCase())) ||
-              (result.name &&
-                result.name.toLowerCase().includes(searchRecord.toLowerCase())) ||
-              (result.email &&
-                result.email
-                  .toLowerCase()
-                  .includes(searchRecord.toLowerCase())) ||
-              (result.phone && result.phone.includes(searchRecord)) ||
-              (result.a_state && result.a_state.includes(searchRecord))
-          )
-        : [];
-        setVerifiedMerchantListState(filteredAdminRecord);
-        setFilteredMerchants(filteredAdminRecord);
-        setTotalCount(filteredAdminRecord.length);
+        UnVerifiedMerchantList && Array.isArray(UnVerifiedMerchantList)
+          ? UnVerifiedMerchantList.filter(
+              (result) =>
+                (result.owner_name &&
+                  result.owner_name
+                    .toLowerCase()
+                    .includes(searchRecord.toLowerCase())) ||
+                (result.name &&
+                  result.name
+                    .toLowerCase()
+                    .includes(searchRecord.toLowerCase())) ||
+                (result.email &&
+                  result.email
+                    .toLowerCase()
+                    .includes(searchRecord.toLowerCase())) ||
+                (result.phone && result.phone.includes(searchRecord)) ||
+                (result.a_state && result.a_state.includes(searchRecord))
+            )
+          : [];
+      setVerifiedMerchantListState(filteredAdminRecord);
+      setFilteredMerchants(filteredAdminRecord);
+      setTotalCount(filteredAdminRecord.length);
     }
-   
   };
 
   // ====================================
@@ -334,10 +335,13 @@ export default function Unverified() {
                   <Link
                     to="/users/addMerchant"
                     className="flex q-category-bottom-header "
-                    state={{ from: "/users/view/unapprove" }}
+                    state={{
+                      from: "/users/view/unapprove",
+                      heading: "Merchant",
+                    }}
                   >
                     <p className="me-2">ADD</p>
-                    <img src={AddIcon} />
+                    <img src={AddIcon} alt="add icon" />
                   </Link>
                 </Grid>
               </Grid>
@@ -378,77 +382,73 @@ export default function Unverified() {
                   <StyledTableCell></StyledTableCell>
                 </TableHead>
                 <TableBody>
-                  {filteredMerchants?.slice(
-                    indexOfFirstMerchant,
-                    indexOfLastMerchant
-                  )?.map((data, index) => (
-                    <StyledTableRow>
-                      <StyledTableCell>
-                        <div class="flex">
-                          <div class="text-[#000000] order_method capitalize">
-                            {data.owner_name.length < 18
-                              ? data.owner_name
-                              : data.owner_name.slice(0, 18) + `...` || ""}
+                  {filteredMerchants
+                    ?.slice(indexOfFirstMerchant, indexOfLastMerchant)
+                    ?.map((data, index) => (
+                      <StyledTableRow>
+                        <StyledTableCell>
+                          <div class="flex">
+                            <div class="text-[#000000] order_method capitalize">
+                              {data.owner_name.length < 18
+                                ? data.owner_name
+                                : data.owner_name.slice(0, 18) + `...` || ""}
+                            </div>
+                            <div class="mx-2 ">(State: {data.a_state})</div>
                           </div>
-                          <div class="mx-2 ">(State: {data.a_state})</div>
-                        </div>
-                        <div class="text-[#818181] lowercase">
-                          {data.email || ""}
-                        </div>
-                        <div class="text-[#818181]">{data.a_phone || ""}</div>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <div class="text-[#000000] order_method capitalize">
-                          {data.name.length < 18
-                            ? data.name
-                            : data.name.slice(0, 18) + `...` || ""}
-                        </div>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <div class="text-[#000000] order_method capitalize">
-                          {data.merchant_id}
-                        </div>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <div class="text-[#000000] order_method capitalize">
-                          {data.ver_code}
-                        </div>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <div className="flex">
-                          <img
-                            className="mx-1 view "
-                            data-id="${data.merchant_id}"
-                            onClick={() =>
-                              handleGetVerifiedMerchant(data.merchant_id)
-                            }
-                            src={View}
-                            alt="View"
-                          />
-                          <img
-                            className="mx-1 edit"
-                            data-id="${data.id}"
-                            onClick={() => handleEditMerchant(data.id)}
-                            src={Edit}
-                            alt="Edit"
-                          />
-                          <img
-                            class="mx-1 delete"
-                            data-id="${[data.id,data.merchant_id,]}"
-                            onClick={() => handleDeleteMerchant(data)}
-                            src={Delete}
-                            alt="Delete"
-                          />
-                          <img
-                            class="mx-1 "
-                            onClick={() => hadleDislikeMerchant(data.id)}
-                            src={Like}
-                            alt="Like"
-                          />
-                        </div>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  ))}
+                          <div class="text-[#818181] lowercase">
+                            {data.email || ""}
+                          </div>
+                          <div class="text-[#818181]">{data.a_phone || ""}</div>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <div class="text-[#000000] order_method capitalize">
+                            {data.name.length < 18
+                              ? data.name
+                              : data.name.slice(0, 18) + `...` || ""}
+                          </div>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <div class="text-[#000000] order_method capitalize">
+                            {data.merchant_id}
+                          </div>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <div class="text-[#000000] order_method capitalize">
+                            {data.ver_code}
+                          </div>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <div className="flex">
+                            <img
+                              className="mx-1 view"
+                              onClick={() =>
+                                handleGetVerifiedMerchant(data.merchant_id)
+                              }
+                              src={View}
+                              alt="View"
+                            />
+                            <img
+                              className="mx-1 edit"
+                              onClick={() => handleEditMerchant(data.id)}
+                              src={Edit}
+                              alt="Edit"
+                            />
+                            <img
+                              class="mx-1 delete"
+                              onClick={() => handleDeleteMerchant(data)}
+                              src={Delete}
+                              alt="Delete"
+                            />
+                            <img
+                              class="mx-1 "
+                              onClick={() => hadleDislikeMerchant(data.id)}
+                              src={Like}
+                              alt="Like"
+                            />
+                          </div>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
                 </TableBody>
               </StyledTable>
             </TableContainer>

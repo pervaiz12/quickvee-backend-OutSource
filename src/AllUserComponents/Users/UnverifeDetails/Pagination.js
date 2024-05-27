@@ -31,17 +31,6 @@ const Pagination = ({
       );
     };
 
-    // Add first page
-    // if (currentPage !== 1) {
-    //   items.push(
-    //     <li key="first" className="page-item">
-    //       <button className="page-link" onClick={() => onPageChange(1)}>
-    //         {"<<"}
-    //       </button>
-    //     </li>
-    //   );
-    // }
-
     // Add pages around current page
     if (totalPages <= 5) {
       for (let i = 1; i <= totalPages; i++) {
@@ -64,6 +53,7 @@ const Pagination = ({
           </li>
         );
       }
+
       if (currentPage < totalPages - 2) {
         items.splice(
           items.length,
@@ -75,36 +65,22 @@ const Pagination = ({
       }
     }
 
-    // Add last page
-    // if (currentPage !== totalPages && totalPages > 1) {
-    //   items.push(
-    //     <li key="last" className="page-item">
-    //       <button
-    //         className="page-link"
-    //         onClick={() => onPageChange(totalPages)}
-    //       >
-    //         {'>>'}
-    //       </button>
-    //     </li>
-    //   );
-    // }
-
     return items;
   };
   const pageLength = [{ title: 10 }, { title: 25 }, { title: 50 }];
-  const handlePageRowLenght = (value) => {
-    console.log("handlePageRowLenght", value);
-    setRowsPerPage(value.title)
+  const handlePageRowLength = (value) => {
+    // console.log("handlePageRowLength", value);
+    setRowsPerPage(value.title);
   };
   return (
     <nav className="flex items-center justify-between">
-      <div className="flex items-center ">
+      <div className="flex items-center">
         <p className="me-3">show</p>
         <SelectDropDown
           listItem={pageLength}
           title={"title"}
           selectedOption={rowsPerPage}
-          onClickHandler={handlePageRowLenght}
+          onClickHandler={handlePageRowLength}
         />
         <p className="ms-3">entries</p>
       </div>
@@ -112,9 +88,13 @@ const Pagination = ({
         <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
           <button
             className="page-link"
-            onClick={() => onPageChange(currentPage - 1)}
+            onClick={() => {
+              if (currentPage - 1 > 0) {
+                onPageChange(currentPage - 1);
+              }
+            }}
           >
-            <img src={LeftArrow} />
+            <img src={LeftArrow} alt="left arrow" />
           </button>
         </li>
         {renderPaginationItems()}
@@ -125,7 +105,11 @@ const Pagination = ({
         >
           <button
             className="page-link"
-            onClick={() => onPageChange(currentPage + 1)}
+            onClick={() => {
+              if (totalPages >= currentPage + 1) {
+                onPageChange(currentPage + 1);
+              }
+            }}
           >
             <img src={RightArrow} />
           </button>

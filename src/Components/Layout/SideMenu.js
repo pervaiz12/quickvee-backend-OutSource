@@ -157,10 +157,9 @@ const SideMenu = () => {
                     >
                       {/* {activeItem === item.link ? item.activeIcon : item.icon} */}
 
-                      {console.log("activeItem ",activeItem, "===" ," item.link ",item.link , activeItem === item.link )}
-                      {
-                        
-                      activeItem === item.link.trim() || hoveredItem === item.id
+                      {/* {console.log("activeItem ",activeItem, "===" ," item.link ",item.link , activeItem === item.link )} */}
+                      {activeItem === item.link.trim() ||
+                      hoveredItem === item.id
                         ? item.activeIcon
                         : item.icon}
                       <Link
@@ -169,7 +168,7 @@ const SideMenu = () => {
                         }`}
                         to={item.link}
                       >
-                        {item.text} 
+                        {item.text}
                       </Link>
                     </div>
                   )}
@@ -297,7 +296,7 @@ const DropdownMenuItem = ({
                   activeItem === dropDownItem ? "activeTab" : ""
                 }`}
               >
-                {item.text} 
+                {item.text}
               </p>
 
               <FaChevronDown className="quickarrow_icon ml-4 me-5" />

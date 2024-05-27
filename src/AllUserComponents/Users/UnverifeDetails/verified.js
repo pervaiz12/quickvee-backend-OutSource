@@ -1,7 +1,10 @@
 import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { getVerifiedMerchant } from "../../../Redux/features/user/verifiedMerchantSlice";
+import {
+  getVerifiedMerchant,
+  getVerifiedMerchantCount,
+} from "../../../Redux/features/user/verifiedMerchantSlice";
 import {
   getUnVerifiedMerchant,
   handleMoveDash,
@@ -34,6 +37,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Pagination from "./Pagination";
+import useDebounce from "../../../hooks/useDebouncs";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -69,6 +73,7 @@ export default function Verified() {
   const [filteredMerchants, setFilteredMerchants] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [searchRecord, setSearchRecord] = useState("");
+  const debouncedValue = useDebounce(searchRecord);
   const [storename, setStorename] = useState();
   const [submitmessage, setsubmitmessage] = useState("");
   const tableRef = useRef(null);
@@ -81,68 +86,89 @@ export default function Verified() {
   const VerifiedMerchantList = useSelector(
     (state) => state.verifiedMerchantRecord.verifiedMerchantData
   );
+  const verifiedMerchantListCount = useSelector(
+    (state) => state.verifiedMerchantRecord.verifiedMerchantCount
+  );
   const [VerifiedMerchantListState, setVerifiedMerchantListState] = useState(
     []
   );
 
-
+  // only when user changes Page number or Page size
   useEffect(() => {
-    if (!VerifiedMerchantList.loading && VerifiedMerchantList.length >= 1) {
+    dispatch(
+      getVerifiedMerchant({
+        type: "approve",
+        ...userTypeData,
+        page: currentPage,
+        perpage: rowsPerPage,
+        search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+      })
+    );
+  }, [currentPage, debouncedValue, rowsPerPage]);
+
+  // only when user searches
+  useEffect(() => {
+    dispatch(
+      getVerifiedMerchantCount({
+        type: "approve",
+        search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+      })
+    );
+  }, [debouncedValue]);
+
+  // on load setting the verified merchant list and whenever the List changes.
+  useEffect(() => {
+    if (VerifiedMerchantList?.length >= 1) {
       setVerifiedMerchantListState(VerifiedMerchantList);
       setFilteredMerchants(VerifiedMerchantList);
-      setTotalCount(VerifiedMerchantList.length);
     }
-  }, [VerifiedMerchantList, VerifiedMerchantList.loading]);
+  }, [VerifiedMerchantList]);
 
-  const indexOfLastMerchant = currentPage * rowsPerPage;
-  const indexOfFirstMerchant = indexOfLastMerchant - rowsPerPage;
-  // const currentMerchants =  VerifiedMerchantListState.slice(indexOfFirstMerchant, indexOfLastMerchant);
+  // on load setting count...
+  useEffect(() => {
+    setTotalCount(verifiedMerchantListCount);
+  }, [verifiedMerchantListCount]);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  useEffect(() => {
-    dispatch(getVerifiedMerchant({ type: "approve", ...userTypeData }));
-  }, []);
-
+  // when user searches
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
-    if (value === "") {
-      setFilteredMerchants(VerifiedMerchantListState);
-      setTotalCount(VerifiedMerchantListState.length);
-    } else {
-      const filteredAdminRecord =
-        VerifiedMerchantListState && Array.isArray(VerifiedMerchantListState)
-          ? VerifiedMerchantListState.filter(
-              (result) =>
-                (result.owner_name &&
-                  result.owner_name
-                    .toLowerCase()
-                    .includes(searchRecord.toLowerCase())) ||
-                (result.name &&
-                  result.name
-                    .toLowerCase()
-                    .includes(searchRecord.toLowerCase())) ||
-                (result.email &&
-                  result.email
-                    .toLowerCase()
-                    .includes(searchRecord.toLowerCase())) ||
-                (result.a_phone && result.a_phone.includes(searchRecord)) ||
-                (result.a_state && result.a_state.includes(searchRecord))
-            )
-          : [];
-          setFilteredMerchants(filteredAdminRecord);
-      setTotalCount(filteredAdminRecord.length);
-    }
+    setFilteredMerchants(VerifiedMerchantList);
+    // if (value === "") {
+    // setFilteredMerchants(VerifiedMerchantListState);
+    // setTotalCount(VerifiedMerchantListState.length);
+    // } else {
+    // const filteredAdminRecord =
+    //   VerifiedMerchantListState && Array.isArray(VerifiedMerchantListState)
+    //     ? VerifiedMerchantListState.filter(
+    //         (result) =>
+    //           (result.owner_name &&
+    //             result.owner_name
+    //               .toLowerCase()
+    //               .includes(searchRecord.toLowerCase())) ||
+    //           (result.name &&
+    //             result.name
+    //               .toLowerCase()
+    //               .includes(searchRecord.toLowerCase())) ||
+    //           (result.email &&
+    //             result.email
+    //               .toLowerCase()
+    //               .includes(searchRecord.toLowerCase())) ||
+    //           (result.a_phone && result.a_phone.includes(searchRecord)) ||
+    //           (result.a_state && result.a_state.includes(searchRecord))
+    //       )
+    //     : [];
+    // setFilteredMerchants(filteredAdminRecord);
+    // setTotalCount(filteredAdminRecord.length);
+    // }
   };
 
   const handleEditMerchant = (data) => {
-    // console.log("handleEditMerchant ", data);
-
     navigate(`/users/editMerchant/${data}`);
   };
-  const handleDeleteMerchant = async (tableData) => {
-    // console.log("handleDeleteMer", tableData);
 
+  const handleDeleteMerchant = async (tableData) => {
     try {
       const { token, ...otherUserData } = userTypeData;
       const delVendor = {
@@ -175,6 +201,7 @@ export default function Verified() {
       console.error(error);
     }
   };
+
   const handleGetVerifiedMerchant = (merchant_id) => {
     let data = {
       merchant_id: merchant_id,
@@ -229,6 +256,7 @@ export default function Verified() {
       console.error(error);
     }
   };
+
   const handleExportTransaction = async (type) => {
     try {
       const { token, ...otherUserData } = userTypeData;
@@ -269,7 +297,6 @@ export default function Verified() {
     }
   };
 
-  //  ====================================
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -310,7 +337,7 @@ export default function Verified() {
                   <Link
                     to="/users/addMerchant"
                     className="flex q-category-bottom-header "
-                    state={{ from: "/users/view/approve" }}
+                    state={{ from: "/users/view/approve", heading: "Merchant" }}
                   >
                     <p className="me-2">ADD</p>
                     <img src={AddIcon} alt="" />
@@ -347,19 +374,13 @@ export default function Verified() {
             <TableContainer>
               <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
                 <TableHead>
-                  {/* {TableRow.map((row) => (
-                    <StyledTableCell>{row}</StyledTableCell>
-                  ))} */}
                   <StyledTableCell>Store Info</StyledTableCell>
                   <StyledTableCell>Owner Name</StyledTableCell>
                   <StyledTableCell>Merchant ID</StyledTableCell>
                   <StyledTableCell></StyledTableCell>
                 </TableHead>
                 <TableBody>
-                  {filteredMerchants?.slice(
-                    indexOfFirstMerchant,
-                    indexOfLastMerchant
-                  )?.map((data, index) => (
+                  {filteredMerchants?.map((data, index) => (
                     <StyledTableRow>
                       <StyledTableCell>
                         <div class="flex">
