@@ -164,6 +164,14 @@ module.exports = Object.freeze({
 
   DETAIL_CATEGORY_SALE_REPORT: "vendor_report_api/detailed_category_sale",
 
+  //  Sales Report List API
+  SALES_REPORT_LIST: "vendor_report_api/sales_report",
+  // tip report list api
+  TIP_REPORT_LIST: "ReportingReactapi/tip_report",
+  //coupon report api
+
+  COUPON_REPORT_LIST: "ReportingReactapi/coupon_report",
+
   // GET_ORDER_SUMMERY_DETAILS:'Orders/order_details',
 
   // -------------------------

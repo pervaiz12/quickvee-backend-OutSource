@@ -57,6 +57,9 @@ import AddpurchaseOrderSliceReducer from "../features/PurchaseOrder/AddpurchaseO
 import MenuSlice from "../features/NavBar/MenuSlice";
 import LoginSliceReducer from "../features/Authentication/loginSlice";
 import orderSummeryReducer from "../features/orderSummeryHistory/orderSummerySlice";
+import SalesReportSlice from "../features/Reports/SalesReport/SalesReportSlice";
+import TipReportSlice from "../features/Reports/TipReport/TipReportSlice";
+import CouponReportSlice from "../features/Reports/CouponReport/CouponReportSlice";
 
 const store = configureStore({
   reducer: {
@@ -134,6 +137,9 @@ const store = configureStore({
     orderSummeryList: orderSummeryReducer,
 
     NavBarToggle: MenuSlice,
+    SalesReportList: SalesReportSlice,
+    TipReportList: TipReportSlice,
+    CouponReportList: CouponReportSlice,
   },
 
   //setting setup
