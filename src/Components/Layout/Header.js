@@ -7,7 +7,7 @@ import DownlIcon from "../../Assests/Dashboard/download.svg";
 import OnlineData from "../../Assests/Dashboard/online.svg";
 import SynkData from "../../Assests/Dashboard/sync.svg";
 import DownIcon from "../../Assests/Dashboard/Down.svg";
-import { setMenuOpen } from "../../Redux/features/NavBar/MenuSlice";
+import { setMenuOpen,setIsDropdownOpen } from "../../Redux/features/NavBar/MenuSlice";
 import Cookies from 'js-cookie'; 
 import CryptoJS from 'crypto-js'; 
 import UserLogo from "../../Assests/Dashboard/UserLogo.svg";
@@ -29,7 +29,9 @@ export default function Header() {
   const {LoginGetDashBoardRecordJson,LoginAllStore,GetSessionLogin} = useAuthDetails();
   const dispatch = useDispatch();
   const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
-
+  const isDropdownOpen = useSelector(
+    (state) => state.NavBarToggle.isDropdownOpen
+  );
   let allStoresData=LoginAllStore?.data?.stores
   let storenameCookie=LoginGetDashBoardRecordJson !=="" ? LoginGetDashBoardRecordJson?.data?.name :LoginGetDashBoardRecordJson?.data?.name
   useEffect(()=>{
@@ -48,7 +50,8 @@ export default function Header() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [storename,setStoreName]=useState(storenameCookie)
   const handleDropdownToggle = () => {
-    setShowDropdown(!showDropdown);
+    dispatch(setMenuOpen(!isMenuOpenRedux));
+    dispatch(setIsDropdownOpen(!isDropdownOpen));
   };
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -119,7 +122,8 @@ export default function Header() {
             onClick={(e) => {
               // setIsMenuOpen(!isMenuOpen); || AdminRocord?.final_login==1
               // (LoginSuccessJson?.final_login==1 || AuthDecryptDataDashBoardJSONFormat?.final_login==1 )
-              dispatch(setMenuOpen(!isMenuOpenRedux));
+              handleDropdownToggle()
+           
             }}
           />
           :''

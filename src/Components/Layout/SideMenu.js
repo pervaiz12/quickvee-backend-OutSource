@@ -89,13 +89,12 @@ const SideMenu = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-
   const handleItemClick = (item) => {
-
     setActiveItem(item.link);
     navigate(item.link);
-    setActiveNestedItem(null)
-    dispatch(setIsDropdownOpen(false));
+    setActiveNestedItem(null);
+    // dispatch(setIsDropdownOpen(false))
+    activeDropDownItem(null);
   };
 
   useEffect(() => {
@@ -142,8 +141,8 @@ const SideMenu = () => {
                       setIsDropdownOpen={setIsDropdownOpen}
                       currentDropDownItem={currentDropDownItem}
                       activeDropDownItem={activeDropDownItem}
-                      activeNestedItem = {activeNestedItem}
-                       setActiveNestedItem={setActiveNestedItem}
+                      activeNestedItem={activeNestedItem}
+                      setActiveNestedItem={setActiveNestedItem}
                     />
                   ) : (
                     <div
@@ -197,7 +196,7 @@ const SideMenu = () => {
                       setIsDropdownOpen={setIsDropdownOpen}
                       currentDropDownItem={currentDropDownItem}
                       activeDropDownItem={activeDropDownItem}
-                      activeNestedItem = {activeNestedItem}
+                      activeNestedItem={activeNestedItem}
                       setActiveNestedItem={setActiveNestedItem}
                     />
                   ) : (
@@ -239,12 +238,12 @@ const DropdownMenuItem = ({
   activeDropDownItem,
   currentDropDownItem,
   activeNestedItem,
-  setActiveNestedItem
+  setActiveNestedItem,
 }) => {
   const dispatch = useDispatch();
 
   const [dropDownItem, setDropDownItem] = useState(null);
- 
+
   const isTabletNav = useMediaQuery("(max-width:1024px)");
   useEffect(() => {
     isTabletNav && dispatch(setIsDropdownOpen(false));
@@ -257,27 +256,23 @@ const DropdownMenuItem = ({
     }
     item.id === currentDropDownItem && dispatch(setIsDropdownOpen(true));
   }, [isTabletNav, dropDownItem]);
-  // {console.log("activateItem  is", activeItem)}
-  // {console.log("activate DropDown link is", dropDownItem)}
   const handleToggleDropdownItems = (link, e) => {
-    // console.log("handleToggleDropdownItems activate link is", link);
     if (isTabletNav) {
       dispatch(setIsDropdownOpen(false));
     }
     setActiveItem(link);
     setDropDownItem(link);
-    setActiveNestedItem(null)
+    setActiveNestedItem(null);
   };
 
   const handleToggleSideBar = () => {
     dispatch(setMenuOpen(!isMenuOpenRedux));
-    
+
     dispatch(setIsDropdownOpen(true));
   };
 
   const HandleDropdownClick = (event, id) => {
-    activeDropDownItem(id);
-       dispatch(setIsDropdownOpen(!isDropdownOpen));
+    activeDropDownItem((prevId) => (prevId === id ? null : id));
   };
 
   return (
@@ -333,6 +328,7 @@ const DropdownMenuItem = ({
           )}
         </div>
       </div>
+
       {isDropdownOpen && currentDropDownItem === item.id && (
         <div
           onMouseEnter={(e) => {
@@ -353,7 +349,7 @@ const DropdownMenuItem = ({
                     item={nestedDropdownItem}
                     isMenuOpenRedux={isMenuOpenRedux}
                     activeItem={activeItem}
-                    dropDownItem={dropDownItem }
+                    dropDownItem={dropDownItem}
                     hoveredItem={hoveredItem}
                     handleToggleDropdownItems={handleToggleDropdownItems}
                     setHoveredItem={setHoveredItem}
@@ -403,7 +399,7 @@ const menuItems = [
     text: "Dashboard",
     link: "/",
   },
-    {
+  {
     id: 12,
     icon: (
       <img
@@ -460,12 +456,11 @@ const menuItems = [
             link: "/store-reporting/payment-method-details",
           },
         ],
-        
       },
       {
-        id:2,
+        id: 2,
         text: "Inventory Reports",
-        dropDownItems:[
+        dropDownItems: [
           {
             id: 81,
             text: "Current Inventory Value",
@@ -494,19 +489,22 @@ const menuItems = [
         ],
       },
       {
-        id:3,
+        id: 3,
         text: "Employee Reports",
-        dropDownItems:[
-          { id: 72, text: "Employee List", link: "/store-reporting/employee-list" },
+        dropDownItems: [
+          {
+            id: 72,
+            text: "Employee List",
+            link: "/store-reporting/employee-list",
+          },
           {
             id: 75,
             text: " Employee Working Hours",
             link: "/store-reporting/employee-working-hours",
           },
-        ]
+        ],
       },
 
-      
       {
         id: 66,
         text: "Vendor Sales Report",
@@ -517,15 +515,10 @@ const menuItems = [
         text: "Credit Debit Sales Report",
         link: "/store-reporting/credit-debit-sales",
       },
-     
 
       { id: 70, text: "Flash Report", link: "/store-reporting/flash-resigter" },
       { id: 71, text: "Vendor List", link: "/store-reporting/vendors-list" },
-      
-     
-      
 
-      
       { id: 76, text: "Shift Summary", link: "/store-reporting/shift-summary" },
 
       // { id: 77, text: " Item Sales ", link: "/store-settings/item-sales" },
@@ -536,8 +529,6 @@ const menuItems = [
       // },
 
       { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
-
-      
 
       { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
       {
@@ -759,8 +750,6 @@ const menuItems = [
       { id: 71, text: "System Access", link: "/store-settings/system-access" },
     ],
   },
-
-
 ];
 const SuperAdminMenuItems = [
   // {

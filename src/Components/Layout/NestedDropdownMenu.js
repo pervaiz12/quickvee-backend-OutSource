@@ -11,21 +11,20 @@ const NestedDropdownMenu = ({
   hoveredItem,
   handleToggleDropdownItems,
   activeNestedItem,
-  setActiveNestedItem
+  setActiveNestedItem,
 }) => {
   const dispatch = useDispatch();
   const isNestedDropdown = useSelector(
     (state) => state.NavBarToggle.isNestedDropdown
   );
- 
+  
   const handleNestedClick = (id) => {
-    setActiveNestedItem((prevId) => (prevId === id ? null : id))
+    setActiveNestedItem((prevId) => (prevId === id ? null : id));
   };
-  const handleActiveCurrentNestedTab=(id)=>{
-    console.log("handleActiveCurrentNestedTab: ",id)
-    setActiveNestedItem((prevId) => (prevId === id ? null : id))
-
-  }
+  const handleActiveCurrentNestedTab = (id) => {
+    console.log("handleActiveCurrentNestedTab: ", id);
+    setActiveNestedItem((prevId) => (prevId === id ? null : id));
+  };
   return (
     <div className="w-full  items-center cursor-pointer hover:text-[#F5F9FF] hover:bg-[#526167]  text-[#9E9E9E] ">
       {isMenuOpenRedux ? (
@@ -36,15 +35,13 @@ const NestedDropdownMenu = ({
                 handleNestedClick(item.id);
                 e.stopPropagation();
               }}
-            
               className={`w-full flex items-center hover:bg-[#526167]  justify-between cursor-pointer
               ${activeNestedItem === item.id ? "bg-[#526167] " : ""}
               `}
             >
-                {console.log("activeNestedItem",activeNestedItem," ===" ,"item.id",item.id, activeNestedItem === item.id)}
               <p
                 className={` text-[14px] p-4  Admin_std ${
-                    activeNestedItem === item.id ? "text-[#F5F9FF] " : ""
+                  activeNestedItem === item.id ? "text-[#F5F9FF] " : ""
                 }`}
               >
                 {item?.text}
@@ -71,11 +68,10 @@ const NestedDropdownMenu = ({
               key={NestedItem.id}
               to={NestedItem.link}
               className={`flex nested-submenu-item ps-6  hover:text-[#FFC400] text-center text-[#9E9E9E]  py-3 text-[14px]
-              ${activeItem === NestedItem.link ? "text-[#FFC400]" : ""}`
-            }
+              ${activeItem === NestedItem.link ? "text-[#FFC400]" : ""}`}
               onClick={(e) => {
                 handleToggleDropdownItems(NestedItem.link);
-                handleActiveCurrentNestedTab(item.id)
+                handleActiveCurrentNestedTab(item.id);
                 e.stopPropagation();
               }}
             >
