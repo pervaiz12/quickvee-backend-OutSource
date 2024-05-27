@@ -5,11 +5,14 @@ import {fetchMerchantsList} from "../../Redux/features/ExportInventory/ExportInv
 import { useSelector } from "react-redux";
 import { BASE_URL, INVENTORY_EXPORT } from "../../Constants/Config";
 import axios from "axios";
+import { useAuthDetails } from "../../Common/cookiesHelper";
 
 const InventoryExportLogic = () => {
 
     const [submitmessage, setsubmitmessage] = useState("");
-    const [storename,setStorename] = useState();
+    const { userTypeData } = useAuthDetails();
+    const [storename,setStorename] = useState("");
+    const [storeFromError, setStoreFromError] = useState("");
     const handleStoreInput = async (event) => {
         const fieldValue = event.target.type === "checkbox" ? event.target.checked : event.target.value;
         // console.log(values.ebt_type)
@@ -19,13 +22,16 @@ const InventoryExportLogic = () => {
     
       const handleSubmit = async (e) => {
         e.preventDefault();
-        if (storename != "") {
+        if (storename != "" && storeFromError === "") {
           const data = {
             "merchant_id": storename,
+            token_id:userTypeData.token_id,
+            login_type:userTypeData.login_type
           }
     
           try {
-            const response = await axios.post(BASE_URL + INVENTORY_EXPORT, data, { headers: { "Content-Type": "multipart/form-data" } })
+            const response = await axios.post(BASE_URL + INVENTORY_EXPORT, data, 
+              { headers: { "Content-Type": "multipart/form-data" , 'Authorization': `Bearer ${userTypeData.token}` } })
             // console.log(response.data)
             if (response.data) {
               const csvData = response.data;
@@ -57,7 +63,7 @@ const InventoryExportLogic = () => {
         }
       };
 
-    return {handleStoreInput, handleSubmit, submitmessage, setsubmitmessage};
+    return {handleStoreInput, handleSubmit, submitmessage, setsubmitmessage,storeFromError,setStoreFromError};
 }
 
 export default InventoryExportLogic;

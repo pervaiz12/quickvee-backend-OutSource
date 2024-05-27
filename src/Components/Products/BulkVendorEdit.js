@@ -24,6 +24,7 @@ import { Box } from "@mui/material";
 import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import Loader from "../../CommonComponents/Loader";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const BulkVendorEdit = ({
   productData,
@@ -77,14 +78,12 @@ const BulkVendorEdit = ({
 
       dispatch(assignPrefferedVendor(formData))
         .then((res) => {
-          toast.success("Updated Preferred Vendor!", {
-            position: "top-right",
-          });
+          if (res?.payload?.status) {
+            ToastifyAlert("Updated Preferred Vendor!", "success");
+          }
         })
         .catch((err) => {
-          toast.error("Error!", {
-            position: "top-right",
-          });
+          ToastifyAlert("Error!", "error");
         });
     }
     // when type is input run block of code
@@ -236,9 +235,9 @@ const BulkVendorEdit = ({
           const formData = new FormData();
           formData.append("merchant_id", "MAL0100CA");
           formData.append("id", productId?.id);
-          toast.success("Vendor Added Successfully!", {
-            position: "top-right",
-          });
+
+          ToastifyAlert("Vendor Added Successfully!", "success");
+
           setSelectedVendor([]);
         }
       })
@@ -279,15 +278,12 @@ const BulkVendorEdit = ({
             (item) => +item?.id !== +vendorId
           );
           setVendorItems(filtervendorList);
-          toast.success("Vendor deleted successfully!", {
-            position: "top-right",
-          });
+
+          ToastifyAlert("Vendor deleted successfully!", "success");
         }
       })
       .catch((err) => {
-        toast.error("Error!", {
-          position: "top-right",
-        });
+        ToastifyAlert("Error!", "error");
       });
   };
 
@@ -315,15 +311,11 @@ const BulkVendorEdit = ({
     dispatch(saveVendorList(formData))
       .then((res) => {
         if (res?.payload?.status) {
-          toast.success("Updated successfully!", {
-            position: "top-right",
-          });
+          ToastifyAlert("Updated successfully!", "success");
         }
       })
       .catch(() => {
-        toast.error("Error!", {
-          position: "top-right",
-        });
+        ToastifyAlert("Error!", "error");
       });
   };
 

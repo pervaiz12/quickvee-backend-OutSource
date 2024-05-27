@@ -253,10 +253,10 @@ input[type="number"] {
   }
 }
 .main-content {
-  overflow-x: hidden;
+  /* overflow-x: hidden;
   overflow-y: auto;
-  height: 100vh;
-  overflow-x: hidden;
+  overflow-x: hidden; */
+  min-height: 100vh;
 }
 
 /* .main-content {

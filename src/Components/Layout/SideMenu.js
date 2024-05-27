@@ -86,7 +86,10 @@ const SideMenu = () => {
   const [currentDropDownItem, activeDropDownItem] = useState(null);
   const navigate = useNavigate();
   const dispatch = useDispatch();
+
+  // console.log("activeItem: ", activeItem);
   const handleItemClick = (item) => {
+    // console.log("handleItemClick: ", item.link)
     setActiveItem(item.link);
     navigate(item.link);
 
@@ -145,7 +148,7 @@ const SideMenu = () => {
                       onClick={() => handleItemClick(item)}
                       style={{ cursor: "pointer" }}
                       className={`flex items-center ${
-                        activeItem === item.link
+                        activeItem === item.link.trim()
                           ? "bg-[#414F54] text-[#FFC400]"
                           : ""
                             ? "text-[#FFC400] active:bg-[#414F54] hover:bg-[#414F54] px-0"
@@ -153,16 +156,20 @@ const SideMenu = () => {
                       }`}
                     >
                       {/* {activeItem === item.link ? item.activeIcon : item.icon} */}
-                      {activeItem === item.link || hoveredItem === item.id
+
+                      {console.log("activeItem ",activeItem, "===" ," item.link ",item.link , activeItem === item.link )}
+                      {
+                        
+                      activeItem === item.link.trim() || hoveredItem === item.id
                         ? item.activeIcon
                         : item.icon}
                       <Link
                         className={`ml-2 menu-item text-[14px] Admin_std ${
-                          activeItem === item.link ? "bg-[#414F54]" : ""
+                          activeItem === item.link.trim() ? "bg-[#414F54]" : ""
                         }`}
                         to={item.link}
                       >
-                        {item.text}
+                        {item.text} 
                       </Link>
                     </div>
                   )}
@@ -234,10 +241,17 @@ const DropdownMenuItem = ({
 
   const [dropDownItem, setDropDownItem] = useState(null);
   const isTabletNav = useMediaQuery("(max-width:1024px)");
-
   useEffect(() => {
     isTabletNav && dispatch(setIsDropdownOpen(false));
-  }, [isTabletNav]);
+    const foundItem = item?.dropdownItems?.find(
+      (item) => item?.link === activeItem
+    );
+    if (foundItem) {
+      setDropDownItem(foundItem.link);
+      activeDropDownItem(item.id);
+    }
+    item.id === currentDropDownItem && dispatch(setIsDropdownOpen(true));
+  }, [isTabletNav, currentDropDownItem, dropDownItem]);
 
   const handleToggleDropdownItems = (link, e) => {
     if (isTabletNav) {
@@ -254,10 +268,7 @@ const DropdownMenuItem = ({
 
   const HandleDropdownClick = (event, id) => {
     activeDropDownItem(id);
-
     dispatch(setIsDropdownOpen(!isDropdownOpen));
-
-    // setIsMenuOpen(!isMenuOpen);
   };
 
   return (
@@ -286,7 +297,7 @@ const DropdownMenuItem = ({
                   activeItem === dropDownItem ? "activeTab" : ""
                 }`}
               >
-                {item.text}
+                {item.text} 
               </p>
 
               <FaChevronDown className="quickarrow_icon ml-4 me-5" />
@@ -774,7 +785,7 @@ const SuperAdminMenuItems = [
       />
     ),
     text: "Store Order ",
-    link: "/users/view/unapprove/store-order ",
+    link: "/users/view/unapprove/store-order",
   },
   {
     id: 5,
@@ -813,24 +824,24 @@ const SuperAdminMenuItems = [
       />
     ),
     text: "Defaults  ",
-    link: "/users/view/unapprove/menu/defaults ",
+    link: "/users/view/unapprove/menu/defaults",
   },
 
-  {
-    id: 7,
-    icon: (
-      <img
-        src={ApkIcon}
-        alt="release_apk"
-        className="h-6 w-10 mt-4 mb-4 hoverable-image"
-      />
-    ),
-    activeIcon: (
-      <img src={ApkActive} alt="release_apk" className="h-6 w-10 mt-4 mb-4" />
-    ),
-    text: "Release APK   ",
-    link: "/users/view/unapprove/release_apk",
-  },
+  // {
+  //   id: 7,
+  //   icon: (
+  //     <img
+  //       src={ApkIcon}
+  //       alt="release_apk"
+  //       className="h-6 w-10 mt-4 mb-4 hoverable-image"
+  //     />
+  //   ),
+  //   activeIcon: (
+  //     <img src={ApkActive} alt="release_apk" className="h-6 w-10 mt-4 mb-4" />
+  //   ),
+  //   text: "Release APK   ",
+  //   link: "/users/view/unapprove/release_apk",
+  // },
   {
     id: 8,
     icon: (
@@ -848,7 +859,7 @@ const SuperAdminMenuItems = [
       />
     ),
     text: "Inventory Duplicate   ",
-    link: "/users/view/unapprove/inverntory-duplicate ",
+    link: "/users/view/unapprove/inverntory-duplicate",
   },
 
   {
@@ -868,7 +879,7 @@ const SuperAdminMenuItems = [
       />
     ),
     text: " Category Duplicate ",
-    link: "/users/view/unapprove/category-duplicate ",
+    link: "/users/view/unapprove/category-duplicate",
   },
 
   {
@@ -888,7 +899,7 @@ const SuperAdminMenuItems = [
       />
     ),
     text: "Product Duplicate ",
-    link: "/users/view/unapprove/product-duplicate ",
+    link: "/users/view/unapprove/product-duplicate",
   },
 
   {
@@ -908,7 +919,7 @@ const SuperAdminMenuItems = [
       />
     ),
     text: "Permission",
-    link: "/users/view/unapprove/create_permission ",
+    link: "/users/view/unapprove/create_permission",
   },
 
   {
@@ -931,25 +942,25 @@ const SuperAdminMenuItems = [
     link: "/users/view/unapprove/invertory-export",
   },
 
-  {
-    id: 13,
-    icon: (
-      <img
-        src={MerchantIcon}
-        alt="labal"
-        className="h-6 w-10 mt-4 mb-4 hoverable-image"
-      />
-    ),
-    activeIcon: (
-      <img
-        src={MerchantActive}
-        alt="menu-defaults"
-        className="h-6 w-10 mt-4 mb-4"
-      />
-    ),
-    text: "Merchant Details ",
-    link: "/users/view/unapprove/merchant-details",
-  },
+  // {
+  //   id: 13,
+  //   icon: (
+  //     <img
+  //       src={MerchantIcon}
+  //       alt="labal"
+  //       className="h-6 w-10 mt-4 mb-4 hoverable-image"
+  //     />
+  //   ),
+  //   activeIcon: (
+  //     <img
+  //       src={MerchantActive}
+  //       alt="menu-defaults"
+  //       className="h-6 w-10 mt-4 mb-4"
+  //     />
+  //   ),
+  //   text: "Merchant Details ",
+  //   link: "/users/view/unapprove/merchant-details",
+  // },
   // {
   //   id: 12,
   //   icon: (
@@ -985,14 +996,14 @@ const merchant = [
 ];
 const ManagerLink = [
   {
-    id: 82,
+    // id: 82,
     text: "Store",
     link: "/store",
   },
 ];
 const MerchantLink = [
   {
-    id: 82,
+    // id: 82,
     text: "Store",
     link: "/store",
   },
