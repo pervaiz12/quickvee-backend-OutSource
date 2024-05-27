@@ -3,12 +3,12 @@ import { FaChevronDown } from "react-icons/fa";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import DashboardIcon from "../../Assests/Dashboard/dashboard.svg";
 import ShoppingCartIcon from "../../Assests/Dashboard/orders.svg";
-import CategoryIcon from "../../Assests/Dashboard/category.svg";
+import CategoryIconActive from "../../Assests/Dashboard/category.svg";
 import CouponIcon from "../../Assests/Dashboard/coupanb.svg";
 import AttributesIcon from "../../Assests/Dashboard/attributesadmin.svg";
 import PurchaseIcon from "../../Assests/Dashboard/purchesb.svg";
 import ProductIcon from "../../Assests/Dashboard/productb.svg";
-import VenderIcon from "../../Assests/Dashboard/vender.svg";
+import dataIcon from "../../Assests/Dashboard/vender.svg";
 
 import TimesheetsIcon from "../../Assests/Dashboard/timesheetb.svg";
 
@@ -20,8 +20,8 @@ import CatIcon from "../../Assests/Dashboard/categoryd.svg";
 import AtriIcon from "../../Assests/Dashboard/attributesy.svg";
 import ProdIcon from "../../Assests/Dashboard/productY.svg";
 import VenIcon from "../../Assests/Dashboard/venderb.svg";
-import VenIcons from "../../Assests/Dashboard/vendery.svg";
-import DataIcons from "../../Assests/Dashboard/importy.svg";
+import VenIconActive from "../../Assests/Dashboard/vendery.svg";
+import DataIconActive from "../../Assests/Dashboard/importy.svg";
 import CouIcon from "../../Assests/Dashboard/coupony.svg";
 import PurIcon from "../../Assests/Dashboard/purchaseY.svg";
 import SettingIcon from "../../Assests/Dashboard/settingY.svg";
@@ -88,7 +88,7 @@ const SideMenu = () => {
   const [activeNestedItem, setActiveNestedItem] = useState();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
+  const isTabletNav = useMediaQuery("(max-width:1024px)");
   const handleItemClick = (item) => {
     setActiveItem(item.link);
     navigate(item.link);
@@ -96,6 +96,11 @@ const SideMenu = () => {
     // dispatch(setIsDropdownOpen(false))
     activeDropDownItem(null);
   };
+
+  useEffect(() => {
+    dispatch(setMenuOpen(!isTabletNav));
+
+  }, [isTabletNav]);
 
   useEffect(() => {
     if (currentUrl.split("/")[1] === "users") {
@@ -246,16 +251,32 @@ const DropdownMenuItem = ({
 
   const isTabletNav = useMediaQuery("(max-width:1024px)");
   useEffect(() => {
-    isTabletNav && dispatch(setIsDropdownOpen(false));
     const foundItem = item?.dropdownItems?.find(
       (item) => item?.link === activeItem
     );
-    if (foundItem) {
+    if (isMenuOpenRedux && foundItem) {
       setDropDownItem(foundItem.link);
       activeDropDownItem(item.id);
     }
-    item.id === currentDropDownItem && dispatch(setIsDropdownOpen(true));
-  }, [isTabletNav, dropDownItem]);
+
+    const NesedFoundItem = item?.dropdownItems?.find((nestedItem) => {
+      if (nestedItem?.dropDownItems) {
+        return (
+          nestedItem?.dropDownItems?.find(
+            (dropDownItem) => dropDownItem.link === activeItem
+          ) && nestedItem
+        );
+      }
+    });
+    if (NesedFoundItem) {
+      setActiveNestedItem(NesedFoundItem?.id);
+      setDropDownItem(activeItem);
+      activeDropDownItem(item.id);
+    }
+    // item.id === currentDropDownItem && dispatch(setIsDropdownOpen(true));
+    dispatch(setIsDropdownOpen(!isTabletNav));
+  }, [isTabletNav, dropDownItem, isTabletNav]);
+
   const handleToggleDropdownItems = (link, e) => {
     if (isTabletNav) {
       dispatch(setIsDropdownOpen(false));
@@ -267,7 +288,6 @@ const DropdownMenuItem = ({
 
   const handleToggleSideBar = () => {
     dispatch(setMenuOpen(!isMenuOpenRedux));
-
     dispatch(setIsDropdownOpen(true));
   };
 
@@ -355,6 +375,9 @@ const DropdownMenuItem = ({
                     setHoveredItem={setHoveredItem}
                     activeNestedItem={activeNestedItem}
                     setActiveNestedItem={setActiveNestedItem}
+                    setDropDownItem={setDropDownItem}
+                    activeDropDownItem={activeDropDownItem}
+                    isTabletNav={isTabletNav}
                   />
                 </>
               ) : (
@@ -400,7 +423,22 @@ const menuItems = [
     link: "/",
   },
   {
-    id: 12,
+    id: 2,
+    icon: (
+      <img
+        src={ShoppingCartIcon}
+        alt="Order"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img src={OrderYellow} alt="order" className="h-6 w-10 mt-4 mb-4 " />
+    ),
+    text: "Order",
+    link: "/order",
+  },
+  {
+    id: 3,
     icon: (
       <img
         src={ReportIcon}
@@ -504,7 +542,44 @@ const menuItems = [
           },
         ],
       },
-
+      { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
+      {
+        id: 4,
+        text: "Refunds",
+        dropDownItems: [
+          {
+            id: 84,
+            text: "Refund Summary",
+            link: "/store-settings/#",
+          },
+          {
+            id: 82,
+            text: "Order Refund Report",
+            link: "/store-settings/order-refund-report",
+          },
+          {
+            id: 85,
+            text: "Refunded Order ID's",
+            link: "/store-settings/#",
+          },
+        ],
+      },
+      {
+        id: 5,
+        text: "Vendors",
+        dropDownItems: [
+          {
+            id: 71,
+            text: "Vendors List",
+            link: "/store-reporting/vendors-list",
+          },
+          {
+            id: 86,
+            text: "Vendors Payout",
+            link: "/store-settings/#",
+          },
+        ],
+      },
       {
         id: 66,
         text: "Vendor Sales Report",
@@ -517,7 +592,6 @@ const menuItems = [
       },
 
       { id: 70, text: "Flash Report", link: "/store-reporting/flash-resigter" },
-      { id: 71, text: "Vendor List", link: "/store-reporting/vendors-list" },
 
       { id: 76, text: "Shift Summary", link: "/store-reporting/shift-summary" },
 
@@ -529,77 +603,73 @@ const menuItems = [
       // },
 
       { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
-
-      { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
-      {
-        id: 82,
-        text: "Order Refund Report ",
-        link: "/store-settings/order-refund-report",
-      },
     ],
   },
   {
-    id: 2,
+    id: 4,
     icon: (
       <img
-        src={ShoppingCartIcon}
-        alt="Order"
-        className="h-6 w-10 mt-4 mb-4 hoverable-image"
-      />
-    ),
-    activeIcon: (
-      <img src={OrderYellow} alt="order" className="h-6 w-10 mt-4 mb-4 " />
-    ),
-    text: "Order",
-    link: "/order",
-  },
-  {
-    id: 3,
-    icon: (
-      <img
-        src={CategoryIcon}
-        alt="Category"
+        src={CategoryIconActive}
+        alt="Products"
         className="h-6 w-10 mt-4 mb-4 hoverable-image"
       />
     ),
     activeIcon: (
       <img src={CatIcon} alt="Category" className="h-6 w-10 mt-4 mb-4 " />
     ),
-    text: "Category",
-    link: "/category",
+    text: "Inventory",
+    className: "flex items-center gap-2",
+    dropdownItems: [
+      {
+        id: 1,
+        icon: (
+          <img
+            src={CategoryIconActive}
+            alt="Category"
+            className="h-6 w-10 mt-4 mb-4 hoverable-image"
+          />
+        ),
+        activeIcon: (
+          <img src={CatIcon} alt="Category" className="h-6 w-10 mt-4 mb-4 " />
+        ),
+        text: "Category",
+        link: "/category",
+      },
+      {
+        id: 2,
+        icon: (
+          <img
+            src={ProductIcon}
+            alt="Products"
+            className="h-6 w-10 mt-4 mb-4 hoverable-image"
+          />
+        ),
+        activeIcon: (
+          <img src={ProdIcon} alt="Products" className="h-6 w-10 mt-4 mb-4 " />
+        ),
+        text: "Products",
+        link: "/products",
+      },
+      {
+        id: 3,
+        icon: (
+          <img
+            src={AttributesIcon}
+            alt="Attributes"
+            className="h-6 w-10 mt-4 mb-4 hoverable-image"
+          />
+        ),
+        activeIcon: (
+          <img src={AtriIcon} alt="atributes" className="h-6 w-10 mt-4 mb-4" />
+        ),
+        text: "Attributes",
+        link: "/attributes",
+      },
+    ],
   },
-  {
-    id: 4,
-    icon: (
-      <img
-        src={ProductIcon}
-        alt="Products"
-        className="h-6 w-10 mt-4 mb-4 hoverable-image"
-      />
-    ),
-    activeIcon: (
-      <img src={ProdIcon} alt="Products" className="h-6 w-10 mt-4 mb-4 " />
-    ),
-    text: "Products",
-    link: "/products",
-  },
+
   {
     id: 5,
-    icon: (
-      <img
-        src={AttributesIcon}
-        alt="Attributes"
-        className="h-6 w-10 mt-4 mb-4 hoverable-image"
-      />
-    ),
-    activeIcon: (
-      <img src={AtriIcon} alt="atributes" className="h-6 w-10 mt-4 mb-4" />
-    ),
-    text: "Attributes",
-    link: "/attributes",
-  },
-  {
-    id: 6,
     icon: (
       <img
         src={PurchaseIcon}
@@ -614,34 +684,53 @@ const menuItems = [
     link: "/purchase-data",
   },
   {
+    id: 6,
+    icon: <img src={VenIcon} alt="Vendors" className="h-6 w-10 mt-4 mb-4" />,
+    activeIcon: (
+      <img src={VenIconActive} alt="Vendors" className="h-6 w-10 mt-4 mb-4 " />
+    ),
+    text: "Vendors",
+    link: "/vendors",
+  },
+  {
     id: 7,
     icon: (
       <img
-        src={VenderIcon}
-        alt="Import Data"
+        src={dataIcon}
+        alt="Employees"
         className="h-6 w-10 mt-4 mb-4 hoverable-image"
       />
     ),
     activeIcon: (
-      <img src={DataIcons} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
+      <img src={DataIconActive} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
     ),
-    text: "Import Data",
-    link: "/import-data",
-  },
-  {
-    id: 83,
-    icon: (
-      <img
-        src={Loyalty}
-        alt="Loyalty Porogram"
-        className="h-6 w-10 mt-4 mb-4 hoverable-image"
-      />
-    ),
-    activeIcon: (
-      <img src={LoyaltIcon} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
-    ),
-    text: "Loyalty Porogram",
-    link: "/loyalty-program",
+    text: "Employees",
+    dropdownItems: [
+      {
+        id: 1,
+        text: "Employees",
+        link: "/#",
+      },
+      {
+        id: 2,
+        icon: (
+          <img
+            src={timesheetblackIcon}
+            alt="Timesheet"
+            className="h-6 w-10 mt-4 mb-4 hoverable-image"
+          />
+        ),
+        activeIcon: (
+          <img
+            src={TimesheetsIcon}
+            alt="Timesheet"
+            className="h-6 w-10 mt-4 mb-4 "
+          />
+        ),
+        text: "Timesheet",
+        link: "/timesheet",
+      },
+    ],
   },
   {
     id: 8,
@@ -654,35 +743,6 @@ const menuItems = [
   },
   {
     id: 9,
-    icon: <img src={VenIcon} alt="Vendors" className="h-6 w-10 mt-4 mb-4" />,
-    activeIcon: (
-      <img src={VenIcons} alt="Vendors" className="h-6 w-10 mt-4 mb-4 " />
-    ),
-    text: "Vendors",
-    link: "/vendors",
-  },
-  {
-    id: 10,
-    icon: (
-      <img
-        src={timesheetblackIcon}
-        alt="Timesheet"
-        className="h-6 w-10 mt-4 mb-4 hoverable-image"
-      />
-    ),
-    activeIcon: (
-      <img
-        src={TimesheetsIcon}
-        alt="Timesheet"
-        className="h-6 w-10 mt-4 mb-4 "
-      />
-    ),
-    text: "Timesheet",
-    link: "/timesheet",
-  },
-
-  {
-    id: 11,
     icon: (
       <img
         src={StoreSettingIcon}
@@ -701,18 +761,30 @@ const menuItems = [
     link: "/store-settings/info",
     className: "flex items-center gap-2",
     dropdownItems: [
-      { id: 61, text: "Info", link: "/store-settings/info" },
-      { id: 62, text: "Setup", link: "/store-settings/setup" },
       {
-        id: 63,
-        icon: (
-          <img src={CouponIcon} alt="option" className="h-6 w-10 mt-4 mb-4" />
-        ),
-        activeIcon: (
-          <img src={CouIcon} alt="option" className="h-6 w-10 mt-4 mb-4 " />
-        ),
-        text: "Option",
-        link: "/store-settings/options",
+        id: 6,
+        text: "Store",
+        className: "flex items-center gap-2",
+        dropDownItems: [
+          { id: 1, text: "Profile", link: "#" },
+          { id: 61, text: "Info", link: "/store-settings/info" },
+          { id: 62, text: "Setup", link: "/store-settings/setup" },
+          {
+            id: 63,
+            icon: (
+              <img
+                src={CouponIcon}
+                alt="option"
+                className="h-6 w-10 mt-4 mb-4"
+              />
+            ),
+            activeIcon: (
+              <img src={CouIcon} alt="option" className="h-6 w-10 mt-4 mb-4 " />
+            ),
+            text: "Option",
+            link: "/store-settings/options",
+          },
+        ],
       },
 
       {
@@ -749,6 +821,90 @@ const menuItems = [
       // { id: 70, text: "Quick Add", link: "/store-settings/quick-add" },
       { id: 71, text: "System Access", link: "/store-settings/system-access" },
     ],
+  },
+  {
+    id: 10,
+    icon: (
+      <img
+        src={dataIcon}
+        alt="Import Data"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img src={DataIconActive} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
+    ),
+    text: "Import/Export",
+    dropdownItems: [
+      {
+        id: 1,
+        icon: (
+          <img
+            src={dataIcon}
+            alt="Import Data"
+            className="h-6 w-10 mt-4 mb-4 hoverable-image"
+          />
+        ),
+        activeIcon: (
+          <img
+            src={DataIconActive}
+            alt="Import"
+            className="h-6 w-10 mt-4 mb-4 "
+          />
+        ),
+        text: "Import Inventory",
+        link: "#",
+      },
+      {
+        id: 2,
+        icon: (
+          <img
+            src={dataIcon}
+            alt="Export Sold Items"
+            className="h-6 w-10 mt-4 mb-4 hoverable-image"
+          />
+        ),
+        activeIcon: (
+          <img
+            src={DataIconActive}
+            alt="Import"
+            className="h-6 w-10 mt-4 mb-4 "
+          />
+        ),
+        text: "Export Sold Items",
+        link: "/import-data",
+      },
+    ],
+  },
+  // {
+  //   id: 12,
+  //   icon: (
+  //     <img
+  //       src={dataIcon}
+  //       alt="Import Data"
+  //       className="h-6 w-10 mt-4 mb-4 hoverable-image"
+  //     />
+  //   ),
+  //   activeIcon: (
+  //     <img src={DataIconActive} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
+  //   ),
+  //   text: "Import Data",
+  //   link: "/import-data",
+  // },
+  {
+    id: 11,
+    icon: (
+      <img
+        src={Loyalty}
+        alt="Loyalty Porogram"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img src={LoyaltIcon} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
+    ),
+    text: "Loyalty Porogram",
+    link: "/loyalty-program",
   },
 ];
 const SuperAdminMenuItems = [
@@ -1050,14 +1206,14 @@ const merchant = [
 ];
 const ManagerLink = [
   {
-    id: 82,
+    // id: 82,
     text: "Store",
     link: "/store",
   },
 ];
 const MerchantLink = [
   {
-    id: 82,
+    // id: 82,
     text: "Store",
     link: "/store",
   },

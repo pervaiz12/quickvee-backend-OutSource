@@ -131,7 +131,6 @@ const StorePage = () => {
       merchant_id: merchant_id,
     };
     dispatch(handleGetStoreRecord(data)).then((result) => {
-      console.log(result?.payload);
       if (result?.payload?.status == true) {
         if (result?.payload?.final_login == 1) {
           navigate(`/`);

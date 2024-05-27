@@ -13,20 +13,26 @@ import CryptoJS from 'crypto-js';
 import UserLogo from "../../Assests/Dashboard/UserLogo.svg";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { useNavigate } from 'react-router-dom';
-import { useSelector, useDispatch} from "react-redux";//,localAuthCheck 
-import InputLabel from '@mui/material/InputLabel';
+import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux"; //,localAuthCheck
+import InputLabel from "@mui/material/InputLabel";
 // import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 
-import {getAuthSessionRecord,handleGetStoreRecord,getAuthInvalidMessage,getUserRecordData,getUserDashboardRecord} from "../../Redux/features/Authentication/loginSlice";
+import {
+  getAuthSessionRecord,
+  handleGetStoreRecord,
+  getAuthInvalidMessage,
+  getUserRecordData,
+  getUserDashboardRecord,
+} from "../../Redux/features/Authentication/loginSlice";
 import { display } from "@mui/system";
-import { useAuthDetails } from '../../Common/cookiesHelper';
-
+import { useAuthDetails } from "../../Common/cookiesHelper";
 
 export default function Header() {
-  const {LoginGetDashBoardRecordJson,LoginAllStore,GetSessionLogin} = useAuthDetails();
+  const { LoginGetDashBoardRecordJson, LoginAllStore, GetSessionLogin } =
+    useAuthDetails();
   const dispatch = useDispatch();
   const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
   const isDropdownOpen = useSelector(
@@ -39,16 +45,16 @@ export default function Header() {
   },[LoginGetDashBoardRecordJson])
  
   // useEffect for all when update data in coockie-----------------
-   
+
   // useEffect for all when update data in coockie--------------
 
-  const handleClose=()=>{
+  const handleClose = () => {
     setAnchorEl(null);
-  }
-  
+  };
+
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
-  const [storename,setStoreName]=useState(storenameCookie)
+  const [storename, setStoreName] = useState(storenameCookie);
   const handleDropdownToggle = () => {
     dispatch(setMenuOpen(!isMenuOpenRedux));
     dispatch(setIsDropdownOpen(!isDropdownOpen));
@@ -59,12 +65,11 @@ export default function Header() {
     setAnchorEl(event.currentTarget);
   };
   const handleLogout = () => {
-   
-    Cookies.remove('loginDetails');
-    Cookies.remove('user_auth_record');
-    Cookies.remove('token_data');
-    localStorage.removeItem("AllStore")
-    navigate('/login')
+    Cookies.remove("loginDetails");
+    Cookies.remove("user_auth_record");
+    Cookies.remove("token_data");
+    localStorage.removeItem("AllStore");
+    navigate("/login");
   };
   const [isSticky, setIsSticky] = useState(false);
 
@@ -83,29 +88,29 @@ export default function Header() {
     };
   }, []);
 
-  const handleChangeMerchant=(merchant_id)=>{
-    const data={username:GetSessionLogin?.username,password:GetSessionLogin.password,login_type:LoginGetDashBoardRecordJson?.login_type,merchant_id:merchant_id}
-    dispatch(handleGetStoreRecord(data)).then(result=>{
-      if(result?.payload?.status==true)
-        {
-          if(result?.payload?.final_login==1)
-            {
-              navigate(`/`)
-            }else{
-              console.log("store page called")
-            }
-   
-        }else{
-            Cookies.remove('loginDetails');
-            Cookies.remove('user_auth_record');
-            // Cookies.remove('token_data');
-            dispatch(getAuthInvalidMessage(result?.payload?.msg))
-            navigate('/login')
-  
+  const handleChangeMerchant = (merchant_id) => {
+    const data = {
+      username: GetSessionLogin?.username,
+      password: GetSessionLogin.password,
+      login_type: LoginGetDashBoardRecordJson?.login_type,
+      merchant_id: merchant_id,
+    };
+    dispatch(handleGetStoreRecord(data)).then((result) => {
+      if (result?.payload?.status == true) {
+        if (result?.payload?.final_login == 1) {
+          navigate(`/`);
+        } else {
+          console.log("store page called");
         }
-    })
-
-  }
+      } else {
+        Cookies.remove("loginDetails");
+        Cookies.remove("user_auth_record");
+        // Cookies.remove('token_data');
+        dispatch(getAuthInvalidMessage(result?.payload?.msg));
+        navigate("/login");
+      }
+    });
+  };
 
   return (
     <>
@@ -115,8 +120,7 @@ export default function Header() {
         }`}
       >
         <div className="flex items-center px-4 mx-2">
-          {
-            LoginGetDashBoardRecordJson?.final_login==1?
+          {LoginGetDashBoardRecordJson?.final_login == 1 ? (
             <BiMenu
             className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out`}
             onClick={(e) => {
@@ -125,45 +129,59 @@ export default function Header() {
               handleDropdownToggle()
            
             }}
-          />
+          />)
           :''
           }
           <a href="/dashboard">
             <img src={Quick} alt="Logo" className="ml-6" />
           </a>
-         { 
-        //  console.log(localStorage.getItem("AllStore"))
-         LoginGetDashBoardRecordJson?.final_login==1 ?
-         (LoginAllStore?.data?.stores !==undefined || (localStorage.getItem("AllStore")!=="" && localStorage.getItem("AllStore")!== null)) ?
-          <div className="relative">
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">{storename}</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={storename}
-              label={storename}
-              // onChange={handleChangeStore}
-            >
-              {
-                // console.log(JSON.parse(localStorage.getItem("AllStore")))
-             
-                (JSON.parse(localStorage.getItem("AllStore"))!==""|| Array.isArray(allStoresData)) ? (JSON.parse(localStorage.getItem("AllStore")) || allStoresData)?.map((result,index)=>{
-                  return(
-                    <MenuItem  onClick={()=>handleChangeMerchant(result?.merchant_id)}value={result?.name}>{result?.name}</MenuItem>
+          {
+            //  console.log(localStorage.getItem("AllStore"))
+            LoginGetDashBoardRecordJson?.final_login == 1 ? (
+              LoginAllStore?.data?.stores !== undefined ||
+              (localStorage.getItem("AllStore") !== "" &&
+                localStorage.getItem("AllStore") !== null) ? (
+                <div className="relative">
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">
+                      {storename}
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={storename}
+                      label={storename}
+                      // onChange={handleChangeStore}
+                    >
+                      {
+                        // console.log(JSON.parse(localStorage.getItem("AllStore")))
 
-                  )
-                })
-                :""
-      
-              }
-              {/* <MenuItem value={10}>Ten</MenuItem>
+                        JSON.parse(localStorage.getItem("AllStore")) !== "" ||
+                        Array.isArray(allStoresData)
+                          ? (
+                              JSON.parse(localStorage.getItem("AllStore")) ||
+                              allStoresData
+                            )?.map((result, index) => {
+                              return (
+                                <MenuItem
+                                  onClick={() =>
+                                    handleChangeMerchant(result?.merchant_id)
+                                  }
+                                  value={result?.name}
+                                >
+                                  {result?.name}
+                                </MenuItem>
+                              );
+                            })
+                          : ""
+                      }
+                      {/* <MenuItem value={10}>Ten</MenuItem>
               <MenuItem value={20}>Twenty</MenuItem>
               <MenuItem value={30}>Thirty</MenuItem> */}
-            </Select>
-          </FormControl>
-          
-            {/* <div
+                    </Select>
+                  </FormControl>
+
+                  {/* <div
               className="flex items-center ml-6 px-3 py-1 text-black lg:text-[20px] admin_medium cursor-pointer sm:text-[12px] md:text-[15px]"
               onClick={handleDropdownToggle}
             >
@@ -184,33 +202,41 @@ export default function Header() {
                 </div>
               </div>
             )} */}
-          </div>
-          :''
-          :''
+                </div>
+              ) : (
+                ""
+              )
+            ) : (
+              ""
+            )
           }
           <div className="flex items-center lg:text-[20px] text-black ml-auto sm:text-xs md:text-sm">
             {/* Download App section */}
             {/* ================================ */}
-            {
-             (LoginGetDashBoardRecordJson?.final_login==1 ) ?
-            <>
-            <div className="ml-12 flex items-center">
-              <img src={DownlIcon} alt="icon" className="ml-2" />
-              <p className="cursor-pointer ml-2 admin_medium">Download App</p>
-            </div>
+            {LoginGetDashBoardRecordJson?.final_login == 1 ? (
+              <>
+                <div className="ml-12 flex items-center">
+                  <img src={DownlIcon} alt="icon" className="ml-2" />
+                  <p className="cursor-pointer ml-2 admin_medium">
+                    Download App
+                  </p>
+                </div>
 
-            {/* Online Store and Sync Data section */}
-            <div className="ml-12 flex items-center">
-              <img src={OnlineData} alt="icon" className="ml-2" />
-              <p className="cursor-pointer ml-2 admin_medium">Online Store</p>
-            </div>
-            <div className="mx-12 flex items-center">
-              <img src={SynkData} alt="icon" className="ml-2" />
-              <p className="cursor-pointer ml-2 admin_medium">Sync Data</p>
-            </div>
-            </>
-            :''
-            }
+                {/* Online Store and Sync Data section */}
+                <div className="ml-12 flex items-center">
+                  <img src={OnlineData} alt="icon" className="ml-2" />
+                  <p className="cursor-pointer ml-2 admin_medium">
+                    Online Store
+                  </p>
+                </div>
+                <div className="mx-12 flex items-center">
+                  <img src={SynkData} alt="icon" className="ml-2" />
+                  <p className="cursor-pointer ml-2 admin_medium">Sync Data</p>
+                </div>
+              </>
+            ) : (
+              ""
+            )}
             {/* ======================================== */}
             <div
               className="flex  items-center"

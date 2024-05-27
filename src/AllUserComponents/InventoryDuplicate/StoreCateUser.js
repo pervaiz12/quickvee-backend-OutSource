@@ -72,7 +72,6 @@ const StoreCateUser = () => {
 
   // const handleOptionClick = async (option, dropdown) => {
   const handleOptionClick = async (value, dropdown) => {
-    console.log(value, dropdown);
     switch (dropdown) {
       case "copyFrom":
         setSelectedStorefrom(value?.title ? value?.title : value);
@@ -103,15 +102,12 @@ const StoreCateUser = () => {
     }
   };
 
-  console.log("from", selectedStorefrom, "to", selectedStoreto, values);
-
   const dupplicateInventoryHandler = (e) => {
     if (selectedStorefrom === "-- Select Store --") {
       alert("Please select Store From");
     } else if (selectedStoreto === "-- Select Store --") {
       alert("Please select Store To");
     } else {
-      console.log("run else here");
       dupplicateInventory(e);
       setSelectedStorefrom("-- Select Store --");
       setSelectedStoreto("-- Select Store --");
@@ -136,7 +132,7 @@ const StoreCateUser = () => {
     <>
       <div className="q-order-main-page">
         <div className=" box_shadow_div_order ">
-          <div className="alert">
+          {/* <div className="alert">
             {submitmessage && (
               <Box
                 sx={{
@@ -168,7 +164,7 @@ const StoreCateUser = () => {
                 </Collapse>
               </Box>
             )}
-          </div>
+          </div> */}
           <div className="q-add-categories-section-header">
             <span>
               {/* <img src={()} alt="Add-New-Category" /> */}

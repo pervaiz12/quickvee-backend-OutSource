@@ -13,11 +13,7 @@ const Index = ({ visible }) => {
   const isTabletNav = useMediaQuery("(max-width:1024px)");
   const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
 
-  useEffect(() => {
-    dispatch(setMenuOpen(!isTabletNav));
-    if (!isTabletNav) {
-    }
-  }, [isTabletNav]);
+
 
   const onClickHandler = () => {
     isTabletNav &&

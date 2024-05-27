@@ -497,3 +497,19 @@
   border-bottom: 1px solid;
   padding-bottom: 2px;
 }
+
+.select-cat-unique .css-b62m3t-container {
+  padding: 0px !important;
+}
+
+.select-cat-unique .css-1xc3v61-indicatorContainer {
+  padding: 0px 4px;
+}
+
+.select-cat-unique .category-select .css-1xc3v61-indicatorContainer {
+  transform: rotate(180deg) !important;
+}
+
+.select-cat-unique .category-select .css-1u9des2-indicatorSeparator {
+  display: none !important;
+}

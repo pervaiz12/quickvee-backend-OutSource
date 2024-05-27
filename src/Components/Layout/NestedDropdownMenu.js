@@ -1,8 +1,7 @@
-import { FaChevronDown } from "react-icons/fa";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
-import { setNestedDropdown } from "../../Redux/features/NavBar/MenuSlice";
+
 const NestedDropdownMenu = ({
   item,
   isMenuOpenRedux,
@@ -12,17 +11,20 @@ const NestedDropdownMenu = ({
   handleToggleDropdownItems,
   activeNestedItem,
   setActiveNestedItem,
+  setDropDownItem,
+  activeDropDownItem,
+  isTabletNav
 }) => {
-  const dispatch = useDispatch();
-  const isNestedDropdown = useSelector(
-    (state) => state.NavBarToggle.isNestedDropdown
-  );
+
   
+
+  const dispatch = useDispatch();
+ 
+
   const handleNestedClick = (id) => {
     setActiveNestedItem((prevId) => (prevId === id ? null : id));
   };
   const handleActiveCurrentNestedTab = (id) => {
-    console.log("handleActiveCurrentNestedTab: ", id);
     setActiveNestedItem((prevId) => (prevId === id ? null : id));
   };
   return (
@@ -47,12 +49,30 @@ const NestedDropdownMenu = ({
                 {item?.text}
               </p>
 
-              <FaChevronDown
+              {activeNestedItem === item.id ? (
+                <FaChevronUp
+                  className={`quickarrow_icon me-4 text-${
+                    (activeNestedItem === item.id ||
+                      hoveredItem === item?.id) &&
+                    "[#F5F9FF]"
+                  }`}
+                />
+              ) : (
+                <FaChevronDown
+                  className={`quickarrow_icon me-4 text-${
+                    (activeNestedItem === item.id ||
+                      hoveredItem === item?.id) &&
+                    "[#F5F9FF]"
+                  }`}
+                />
+              )}
+
+              {/* <FaChevronDown
                 className={`quickarrow_icon me-4 text-${
-                  (activeItem === dropDownItem || hoveredItem === item?.id) &&
+                  ( activeNestedItem === item.id  || hoveredItem === item?.id) &&
                   "[#F5F9FF]"
                 }`}
-              />
+              /> */}
             </div>
           </div>
         </>
