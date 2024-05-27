@@ -442,6 +442,25 @@ function App() {
             element={<Main visible={"item-create-between"} />}
           />
 
+          <Route
+                  exact
+                  path="/store-reporting/sales-report"
+                  element={<Main visible={"sales-report"} />}
+                />
+          <Route
+            exact
+            path="/store-reporting/tip-report"
+            element={<Main visible={"tip-report"} />}
+          />
+
+
+          <Route
+            exact
+            path="/store-reporting/coupon-report"
+            element={<Main visible={"coupon-report"} />}
+          />
+
+
           {/* multiple users dashbaord */}
 
           <Route
