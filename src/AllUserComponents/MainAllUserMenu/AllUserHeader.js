@@ -132,10 +132,10 @@ const AllUserHeader = () => {
 
             {showDropdown && (
               <div className="dropdown-content w-full ">
-                <div className="flex justify-items-start items-center">
+                {/* <div className="flex justify-items-start items-center">
                   <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />{" "}
                   <a href="/users/view/unapprove/">Store Setup</a>
-                </div>
+                </div> */}
                 <div className="flex justify-items-start items-center">
                   <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />
                   <a href="/users/view/unapprove/need-help">Need Help</a>

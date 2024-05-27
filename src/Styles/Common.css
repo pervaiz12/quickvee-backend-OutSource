@@ -3030,6 +3030,14 @@ select:active {
   margin: 0.8rem;
 }
 
+/* react-toastify close-btn */
+.Toastify__close-button {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translate(-90%, -50%);
+}
+
 /* ============== */
 /* .infoheader{
   width: 95%;

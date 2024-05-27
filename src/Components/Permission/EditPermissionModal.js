@@ -14,6 +14,8 @@ import { BASE_URL, ADD_UPDATE_PERMISSION } from "../../Constants/Config";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import { toast } from "react-toastify";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const EditPermissionModal = ({ selected }) => {
   const [open, setOpen] = useState(false);
@@ -121,13 +123,17 @@ const EditPermissionModal = ({ selected }) => {
       const msg = response.data.message;
       if (update_message == "success") {
         // alert(msg)
+
+        ToastifyAlert("Permission Edited!", "success");
+
         dispatch(fetchPermissionData(userTypeData));
         handleClose();
       } else if (
         update_message == "failed" &&
         msg == "Permission and Sub-Permission cannot be empty."
       ) {
-        alert("*Please enter Permission and Sub Permission");
+        ToastifyAlert("Please enter Permission and Sub Permission", "warn");
+
         setErrorMessage(msg);
       }
 
@@ -135,6 +141,8 @@ const EditPermissionModal = ({ selected }) => {
       handleClose();
     } catch (error) {
       console.error("Error submitting data:", error);
+
+      ToastifyAlert("Error!", "error");
       // Handle errors as needed
     }
     // }

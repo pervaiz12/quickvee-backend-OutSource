@@ -22,7 +22,6 @@ import Validation from "../../Constants/Validation";
 import SearchableDropdown from "../../CommonComponents/SearchableDropdown";
 import "../../Styles/ProductPage.css";
 import CloseIcon from "../../Assests/Dashboard/cross.svg";
-import { event } from "jquery";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Box } from "@mui/material";
 import * as yup from "yup";
@@ -30,10 +29,10 @@ import AlertModal from "../../CommonComponents/AlertModal";
 import { useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "../../Constants/Config";
 import EditPage from "./EditPage";
-import { ToastContainer } from "react-toastify";
 import Loader from "../../CommonComponents/Loader";
 
 import { toast } from "react-toastify";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const AddProducts = () => {
   const fileUploadRef = useRef();
@@ -1013,9 +1012,7 @@ const AddProducts = () => {
           }
         })
         .catch((err) => {
-          toast.error("Error while fetch product data!", {
-            position: "top-right",
-          });
+          ToastifyAlert("Error while fetch product data!", "error");
         })
         .finally(() => {
           setFetchDataLoading(false);
@@ -1424,31 +1421,23 @@ const AddProducts = () => {
           ? dispatch(editProductData(formdata))
               .then((res) => {
                 if (res?.payload?.data?.status) {
-                  toast.success("Product Edit successfully!", {
-                    position: "top-right",
-                  });
+                  ToastifyAlert("Product Edit Successfully!", "success");
                 }
               })
               .catch((err) => {
                 if (err) {
-                  toast.error("Error!", {
-                    position: "top-right",
-                  });
+                  ToastifyAlert("Error!", "error");
                 }
               })
           : dispatch(addProduct(formdata))
               .then((res) => {
                 if (res?.payload?.data?.status) {
-                  toast.success("Product Added!", {
-                    position: "top-right",
-                  });
+                  ToastifyAlert("Product Added Successfully!", "success");
                 }
               })
               .catch((err) => {
                 if (err) {
-                  toast.error("Error!", {
-                    position: "top-right",
-                  });
+                  ToastifyAlert("Error!", "error");
                 }
               });
       }
@@ -1508,7 +1497,6 @@ const AddProducts = () => {
             text="Compare Price must be greater than price."
           />
 
-          <ToastContainer position="bottom-right" />
           <div className="q-attributes-main-page">
             <div className="q-add-categories-section">
               <div className="q-add-categories-section-header">

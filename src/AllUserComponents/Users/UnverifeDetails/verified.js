@@ -84,7 +84,6 @@ export default function Verified() {
     []
   );
 
-  console.log("VerifiedMerchantListState", VerifiedMerchantListState);
 
   useEffect(() => {
     if (!VerifiedMerchantList.loading && VerifiedMerchantList.length >= 1) {
@@ -96,8 +95,8 @@ export default function Verified() {
 
   const indexOfLastMerchant = currentPage * rowsPerPage;
   const indexOfFirstMerchant = indexOfLastMerchant - rowsPerPage;
-  const currentMerchants =  VerifiedMerchantListState.slice(indexOfFirstMerchant, indexOfLastMerchant);
-    
+  // const currentMerchants =  VerifiedMerchantListState.slice(indexOfFirstMerchant, indexOfLastMerchant);
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const data = { type: "approve" };
@@ -111,11 +110,12 @@ export default function Verified() {
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
     if (value === "") {
-      setVerifiedMerchantListState(VerifiedMerchantList);
+      setFilteredMerchants(VerifiedMerchantListState);
+      setTotalCount(VerifiedMerchantListState.length);
     } else {
       const filteredAdminRecord =
-        VerifiedMerchantList && Array.isArray(VerifiedMerchantList)
-          ? VerifiedMerchantList.filter(
+        VerifiedMerchantListState && Array.isArray(VerifiedMerchantListState)
+          ? VerifiedMerchantListState.filter(
               (result) =>
                 (result.owner_name &&
                   result.owner_name
@@ -133,7 +133,8 @@ export default function Verified() {
                 (result.a_state && result.a_state.includes(searchRecord))
             )
           : [];
-      setVerifiedMerchantListState(filteredAdminRecord);
+          setFilteredMerchants(filteredAdminRecord);
+      setTotalCount(filteredAdminRecord.length);
     }
   };
 
@@ -192,10 +193,8 @@ export default function Verified() {
           console.log("store page called");
         }
       } else {
-        console.log("hhhhhh");
         Cookies.remove("loginDetails");
         Cookies.remove("user_auth_record");
-        // Cookies.remove('token_data');
         dispatch(getAuthInvalidMessage(result?.payload?.msg));
         navigate("/login");
       }
@@ -360,7 +359,10 @@ export default function Verified() {
                   <StyledTableCell></StyledTableCell>
                 </TableHead>
                 <TableBody>
-                  {currentMerchants.map((data, index) => (
+                  {filteredMerchants?.slice(
+                    indexOfFirstMerchant,
+                    indexOfLastMerchant
+                  )?.map((data, index) => (
                     <StyledTableRow>
                       <StyledTableCell>
                         <div class="flex">

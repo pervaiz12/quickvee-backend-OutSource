@@ -175,8 +175,7 @@ const DefaultsDetail = ({ seVisible }) => {
   const navigate = useNavigate();
   const handleEditDefault = (data) => {
     // console.log("handleEditMerchant ", data);
-
-    navigate(`edit-defaults/${data}`);
+    navigate(`/users/view/unapprove/menu/defaults/edit-defaults/${data}`);
   };
 
   return (
@@ -291,13 +290,13 @@ const DefaultsDetail = ({ seVisible }) => {
                       <StyledTableCell>
                         <div className="default-Edit-Delete ">
                           <img
-                            className="mx-1 edit"
+                            className="mx-1 edit cursor-pointer"
                             onClick={() => handleEditDefault(data.id)}
                             src={EditIcon}
                             alt="Edit"
                           />
                           <img
-                            class="mx-1 delete"
+                            class="mx-1 delete cursor-pointer"
                             onClick={() => handleDeleteDefaults(data.id)}
                             src={DeleteIcon}
                             alt="Delete"
