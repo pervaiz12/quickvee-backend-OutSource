@@ -279,7 +279,7 @@ const DropdownMenuItem = ({
 
   const handleToggleDropdownItems = (link, e) => {
     if (isTabletNav) {
-      dispatch(setIsDropdownOpen(false));
+      // dispatch(setIsDropdownOpen(false));
     }
     setActiveItem(link);
     setDropDownItem(link);
@@ -313,6 +313,7 @@ const DropdownMenuItem = ({
         <div className="flex">
           {isMenuOpenRedux ? (
             <div className="w-full flex items-center cursor-pointer">
+              {/* {console.log("activeItem",activeItem," ===","dropDownItem", dropDownItem,  activeItem === dropDownItem  )} */}
               {activeItem === dropDownItem || hoveredItem === item.id
                 ? item.activeIcon
                 : item.icon}
@@ -348,7 +349,7 @@ const DropdownMenuItem = ({
           )}
         </div>
       </div>
-
+        {console.log("isDropdownOpen", isDropdownOpen,"currentDropDownItem",currentDropDownItem,"item.id",item.id,"===",isDropdownOpen && currentDropDownItem === item.id)}
       {isDropdownOpen && currentDropDownItem === item.id && (
         <div
           onMouseEnter={(e) => {
