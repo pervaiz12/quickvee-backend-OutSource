@@ -361,17 +361,15 @@ export default function Header() {
                 className="mx-2"
               />
               <p className="admin_medium" >
-                {storename.length >= 15
-                  ? `${storename.slice(0, 10)} ...`
-                  : storename}
-              </p>
+                {storename.slice(0, 1)}
+                </p>
               <img src={DownIcon} alt="" />
             </div>
 
             <Menu
               PaperProps={{
                 style: {
-                  width: 150,
+                  // width: 150,
                   marginTop: 20,
                 },
               }}
@@ -384,6 +382,7 @@ export default function Header() {
               open={open}
               onClose={handleClose}
             >
+               <MenuItem>{storename}</MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
 
