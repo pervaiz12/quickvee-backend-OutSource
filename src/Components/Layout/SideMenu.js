@@ -3,12 +3,12 @@ import { FaChevronDown } from "react-icons/fa";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import DashboardIcon from "../../Assests/Dashboard/dashboard.svg";
 import ShoppingCartIcon from "../../Assests/Dashboard/orders.svg";
-import CategoryIcon from "../../Assests/Dashboard/category.svg";
+import CategoryIconActive from "../../Assests/Dashboard/category.svg";
 import CouponIcon from "../../Assests/Dashboard/coupanb.svg";
 import AttributesIcon from "../../Assests/Dashboard/attributesadmin.svg";
 import PurchaseIcon from "../../Assests/Dashboard/purchesb.svg";
 import ProductIcon from "../../Assests/Dashboard/productb.svg";
-import VenderIcon from "../../Assests/Dashboard/vender.svg";
+import dataIcon from "../../Assests/Dashboard/vender.svg";
 
 import TimesheetsIcon from "../../Assests/Dashboard/timesheetb.svg";
 
@@ -20,8 +20,8 @@ import CatIcon from "../../Assests/Dashboard/categoryd.svg";
 import AtriIcon from "../../Assests/Dashboard/attributesy.svg";
 import ProdIcon from "../../Assests/Dashboard/productY.svg";
 import VenIcon from "../../Assests/Dashboard/venderb.svg";
-import VenIcons from "../../Assests/Dashboard/vendery.svg";
-import DataIcons from "../../Assests/Dashboard/importy.svg";
+import VenIconActive from "../../Assests/Dashboard/vendery.svg";
+import DataIconActive from "../../Assests/Dashboard/importy.svg";
 import CouIcon from "../../Assests/Dashboard/coupony.svg";
 import PurIcon from "../../Assests/Dashboard/purchaseY.svg";
 import SettingIcon from "../../Assests/Dashboard/settingY.svg";
@@ -61,6 +61,7 @@ import InverntoryIcon from "../../Assests/MultipleUserIcon/inventory.svg";
 import InvertoryActive from "../../Assests/MultipleUserIcon/inventoryactive.svg";
 import MerchantIcon from "../../Assests/MultipleUserIcon/merchant.svg";
 import MerchantActive from "../../Assests/MultipleUserIcon/merchantactive.svg";
+import NestedDropdownMenu from "./NestedDropdownMenu";
 const SideMenu = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -84,17 +85,22 @@ const SideMenu = () => {
   const [activeItem, setActiveItem] = useState(currentUrl);
   const [hoveredItem, setHoveredItem] = useState(null);
   const [currentDropDownItem, activeDropDownItem] = useState(null);
+  const [activeNestedItem, setActiveNestedItem] = useState();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-
-  // console.log("activeItem: ", activeItem);
+  const isTabletNav = useMediaQuery("(max-width:1024px)");
   const handleItemClick = (item) => {
-    // console.log("handleItemClick: ", item.link)
     setActiveItem(item.link);
     navigate(item.link);
-
-    dispatch(setIsDropdownOpen(false));
+    setActiveNestedItem(null);
+    // dispatch(setIsDropdownOpen(false))
+    activeDropDownItem(null);
   };
+
+  useEffect(() => {
+    dispatch(setMenuOpen(!isTabletNav));
+
+  }, [isTabletNav]);
 
   useEffect(() => {
     if (currentUrl.split("/")[1] === "users") {
@@ -140,6 +146,8 @@ const SideMenu = () => {
                       setIsDropdownOpen={setIsDropdownOpen}
                       currentDropDownItem={currentDropDownItem}
                       activeDropDownItem={activeDropDownItem}
+                      activeNestedItem={activeNestedItem}
+                      setActiveNestedItem={setActiveNestedItem}
                     />
                   ) : (
                     <div
@@ -155,12 +163,8 @@ const SideMenu = () => {
                             : ""
                       }`}
                     >
-                      {/* {activeItem === item.link ? item.activeIcon : item.icon} */}
-
-                      {console.log("activeItem ",activeItem, "===" ," item.link ",item.link , activeItem === item.link )}
-                      {
-                        
-                      activeItem === item.link.trim() || hoveredItem === item.id
+                      {activeItem === item.link.trim() ||
+                      hoveredItem === item.id
                         ? item.activeIcon
                         : item.icon}
                       <Link
@@ -169,7 +173,7 @@ const SideMenu = () => {
                         }`}
                         to={item.link}
                       >
-                        {item.text} 
+                        {item.text}
                       </Link>
                     </div>
                   )}
@@ -197,6 +201,8 @@ const SideMenu = () => {
                       setIsDropdownOpen={setIsDropdownOpen}
                       currentDropDownItem={currentDropDownItem}
                       activeDropDownItem={activeDropDownItem}
+                      activeNestedItem={activeNestedItem}
+                      setActiveNestedItem={setActiveNestedItem}
                     />
                   ) : (
                     <div
@@ -236,29 +242,48 @@ const DropdownMenuItem = ({
   setIsDropdownOpen,
   activeDropDownItem,
   currentDropDownItem,
+  activeNestedItem,
+  setActiveNestedItem,
 }) => {
   const dispatch = useDispatch();
 
   const [dropDownItem, setDropDownItem] = useState(null);
+
   const isTabletNav = useMediaQuery("(max-width:1024px)");
   useEffect(() => {
-    isTabletNav && dispatch(setIsDropdownOpen(false));
     const foundItem = item?.dropdownItems?.find(
       (item) => item?.link === activeItem
     );
-    if (foundItem) {
+    if (isMenuOpenRedux && foundItem) {
       setDropDownItem(foundItem.link);
       activeDropDownItem(item.id);
     }
-    item.id === currentDropDownItem && dispatch(setIsDropdownOpen(true));
-  }, [isTabletNav, currentDropDownItem, dropDownItem]);
+
+    const NesedFoundItem = item?.dropdownItems?.find((nestedItem) => {
+      if (nestedItem?.dropDownItems) {
+        return (
+          nestedItem?.dropDownItems?.find(
+            (dropDownItem) => dropDownItem.link === activeItem
+          ) && nestedItem
+        );
+      }
+    });
+    if (NesedFoundItem) {
+      setActiveNestedItem(NesedFoundItem?.id);
+      setDropDownItem(activeItem);
+      activeDropDownItem(item.id);
+    }
+    // item.id === currentDropDownItem && dispatch(setIsDropdownOpen(true));
+    dispatch(setIsDropdownOpen(!isTabletNav));
+  }, [isTabletNav, dropDownItem, isTabletNav]);
 
   const handleToggleDropdownItems = (link, e) => {
     if (isTabletNav) {
-      dispatch(setIsDropdownOpen(false));
+      // dispatch(setIsDropdownOpen(false));
     }
     setActiveItem(link);
     setDropDownItem(link);
+    setActiveNestedItem(null);
   };
 
   const handleToggleSideBar = () => {
@@ -267,8 +292,7 @@ const DropdownMenuItem = ({
   };
 
   const HandleDropdownClick = (event, id) => {
-    activeDropDownItem(id);
-    dispatch(setIsDropdownOpen(!isDropdownOpen));
+    activeDropDownItem((prevId) => (prevId === id ? null : id));
   };
 
   return (
@@ -289,6 +313,7 @@ const DropdownMenuItem = ({
         <div className="flex">
           {isMenuOpenRedux ? (
             <div className="w-full flex items-center cursor-pointer">
+              {/* {console.log("activeItem",activeItem," ===","dropDownItem", dropDownItem,  activeItem === dropDownItem  )} */}
               {activeItem === dropDownItem || hoveredItem === item.id
                 ? item.activeIcon
                 : item.icon}
@@ -297,10 +322,15 @@ const DropdownMenuItem = ({
                   activeItem === dropDownItem ? "activeTab" : ""
                 }`}
               >
-                {item.text} 
+                {item.text}
               </p>
 
-              <FaChevronDown className="quickarrow_icon ml-4 me-5" />
+              <FaChevronDown
+                className={`quickarrow_icon ml-4 me-5 text-${
+                  (activeItem === dropDownItem || hoveredItem === item.id) &&
+                  "[#FFC400]"
+                }`}
+              />
             </div>
           ) : (
             <>
@@ -319,6 +349,7 @@ const DropdownMenuItem = ({
           )}
         </div>
       </div>
+        {console.log("isDropdownOpen", isDropdownOpen,"currentDropDownItem",currentDropDownItem,"item.id",item.id,"===",isDropdownOpen && currentDropDownItem === item.id)}
       {isDropdownOpen && currentDropDownItem === item.id && (
         <div
           onMouseEnter={(e) => {
@@ -329,22 +360,43 @@ const DropdownMenuItem = ({
             setHoveredItem(null);
             e.stopPropagation();
           }}
-          className="mt-0 bg-[#334247] p-4 shadow w-full text-center z-10"
+          className="mt-0 bg-[#334247]  shadow w-full text-center z-10"
         >
-          {item.dropdownItems.map((dropdownItem) => (
-            <Link
-              key={dropdownItem.id}
-              to={dropdownItem.link}
-              className={`flex text-center submenu-item text-gray-400 py-4 text-[14px] ${
-                activeItem === dropdownItem.link ? "active" : ""
-              }`}
-              onClick={(e) => {
-                handleToggleDropdownItems(dropdownItem.link);
-                e.stopPropagation();
-              }}
-            >
-              {dropdownItem.text}
-            </Link>
+          {item?.dropdownItems?.map((nestedDropdownItem) => (
+            <>
+              {nestedDropdownItem?.dropDownItems ? (
+                <>
+                  <NestedDropdownMenu
+                    item={nestedDropdownItem}
+                    isMenuOpenRedux={isMenuOpenRedux}
+                    activeItem={activeItem}
+                    dropDownItem={dropDownItem}
+                    hoveredItem={hoveredItem}
+                    handleToggleDropdownItems={handleToggleDropdownItems}
+                    setHoveredItem={setHoveredItem}
+                    activeNestedItem={activeNestedItem}
+                    setActiveNestedItem={setActiveNestedItem}
+                    setDropDownItem={setDropDownItem}
+                    activeDropDownItem={activeDropDownItem}
+                    isTabletNav={isTabletNav}
+                  />
+                </>
+              ) : (
+                <Link
+                  key={nestedDropdownItem.id}
+                  to={nestedDropdownItem.link}
+                  className={`flex text-center submenu-item text-gray-400 p-4 text-[14px] ${
+                    activeItem === nestedDropdownItem.link ? "active" : ""
+                  }`}
+                  onClick={(e) => {
+                    handleToggleDropdownItems(nestedDropdownItem.link);
+                    e.stopPropagation();
+                  }}
+                >
+                  {nestedDropdownItem.text}
+                </Link>
+              )}
+            </>
           ))}
         </div>
       )}
@@ -371,7 +423,6 @@ const menuItems = [
     text: "Dashboard",
     link: "/",
   },
-
   {
     id: 2,
     icon: (
@@ -391,49 +442,237 @@ const menuItems = [
     id: 3,
     icon: (
       <img
-        src={CategoryIcon}
-        alt="Category"
+        src={ReportIcon}
+        alt="store"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={ResportIcons}
+        alt="active report"
+        className="h-6 w-10 mt-4 mb-4"
+      />
+    ),
+    text: "Reporting",
+    link: "/reporting",
+    className: "flex items-center gap-2",
+    dropdownItems: [
+      {
+        id: 1,
+        text: "Sales Report",
+        dropDownItems: [
+          {
+            id: 61,
+            text: "Sales Report",
+            link: "/store-reporting/sales-report",
+          },
+          {
+            id: 62,
+            text: "Daily Total Report",
+            link: "/store-reporting/daily-total-report",
+          },
+          {
+            id: 63,
+            text: "Detailed Category Sale",
+            link: "/store-reporting/Details-category",
+          },
+
+          { id: 79, text: " Order Type ", link: "/store-reporting/order-type" },
+          {
+            id: 64,
+            text: "Report by Sales Person",
+            link: "/store-reporting/report-sales-person",
+          },
+          {
+            id: 69,
+            text: "Top Seller - Overall Top 10",
+            link: "/store-reporting/overall-top",
+          },
+          {
+            id: 78,
+            text: " Payment Method Details",
+            link: "/store-reporting/payment-method-details",
+          },
+        ],
+      },
+      {
+        id: 2,
+        text: "Inventory Reports",
+        dropDownItems: [
+          {
+            id: 81,
+            text: "Current Inventory Value",
+            link: "/store-reporting/current-inventory-value",
+          },
+          {
+            id: 73,
+            text: "New Item Created Between",
+            link: "/store-reporting/item-create-between",
+          },
+          {
+            id: 74,
+            text: "Reorder Inventory",
+            link: "/store-reporting/recorder-inventory",
+          },
+          {
+            id: 68,
+            text: "Instant PO Activity Report",
+            link: "/store-reporting/instant-activity",
+          },
+          {
+            id: 65,
+            text: "Check ID verification",
+            link: "/store-reporting/id-verification",
+          },
+        ],
+      },
+      {
+        id: 3,
+        text: "Employee Reports",
+        dropDownItems: [
+          {
+            id: 72,
+            text: "Employee List",
+            link: "/store-reporting/employee-list",
+          },
+          {
+            id: 75,
+            text: " Employee Working Hours",
+            link: "/store-reporting/employee-working-hours",
+          },
+        ],
+      },
+      { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
+      {
+        id: 4,
+        text: "Refunds",
+        dropDownItems: [
+          {
+            id: 84,
+            text: "Refund Summary",
+            link: "/store-settings/#",
+          },
+          {
+            id: 82,
+            text: "Order Refund Report",
+            link: "/store-settings/order-refund-report",
+          },
+          {
+            id: 85,
+            text: "Refunded Order ID's",
+            link: "/store-settings/#",
+          },
+        ],
+      },
+      {
+        id: 5,
+        text: "Vendors",
+        dropDownItems: [
+          {
+            id: 71,
+            text: "Vendors List",
+            link: "/store-reporting/vendors-list",
+          },
+          {
+            id: 86,
+            text: "Vendors Payout",
+            link: "/store-settings/#",
+          },
+        ],
+      },
+      {
+        id: 66,
+        text: "Vendor Sales Report",
+        link: "/store-reporting/vendors-sales-reports",
+      },
+      {
+        id: 67,
+        text: "Credit Debit Sales Report",
+        link: "/store-reporting/credit-debit-sales",
+      },
+
+      { id: 70, text: "Flash Report", link: "/store-reporting/flash-resigter" },
+
+      { id: 76, text: "Shift Summary", link: "/store-reporting/shift-summary" },
+
+      // { id: 77, text: " Item Sales ", link: "/store-settings/item-sales" },
+      // {
+      //   id: 78,
+      //   text: " Payment Method Details",
+      //   link: "/store-settings/payment-method-detail-report",
+      // },
+
+      { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
+      { id: 87, text: "Tip Report", link: "/store-reporting/tip-report" },
+      { id: 88, text: "Coupon Report", link: "/store-reporting/coupon-report" },
+    ],
+  },
+  {
+    id: 4,
+    icon: (
+      <img
+        src={CategoryIconActive}
+        alt="Products"
         className="h-6 w-10 mt-4 mb-4 hoverable-image"
       />
     ),
     activeIcon: (
       <img src={CatIcon} alt="Category" className="h-6 w-10 mt-4 mb-4 " />
     ),
-    text: "Category",
-    link: "/category",
+    text: "Inventory",
+    className: "flex items-center gap-2",
+    dropdownItems: [
+      {
+        id: 1,
+        icon: (
+          <img
+            src={CategoryIconActive}
+            alt="Category"
+            className="h-6 w-10 mt-4 mb-4 hoverable-image"
+          />
+        ),
+        activeIcon: (
+          <img src={CatIcon} alt="Category" className="h-6 w-10 mt-4 mb-4 " />
+        ),
+        text: "Category",
+        link: "/category",
+      },
+      {
+        id: 2,
+        icon: (
+          <img
+            src={ProductIcon}
+            alt="Products"
+            className="h-6 w-10 mt-4 mb-4 hoverable-image"
+          />
+        ),
+        activeIcon: (
+          <img src={ProdIcon} alt="Products" className="h-6 w-10 mt-4 mb-4 " />
+        ),
+        text: "Products",
+        link: "/products",
+      },
+      {
+        id: 3,
+        icon: (
+          <img
+            src={AttributesIcon}
+            alt="Attributes"
+            className="h-6 w-10 mt-4 mb-4 hoverable-image"
+          />
+        ),
+        activeIcon: (
+          <img src={AtriIcon} alt="atributes" className="h-6 w-10 mt-4 mb-4" />
+        ),
+        text: "Attributes",
+        link: "/attributes",
+      },
+    ],
   },
-  {
-    id: 4,
-    icon: (
-      <img
-        src={ProductIcon}
-        alt="Products"
-        className="h-6 w-10 mt-4 mb-4 hoverable-image"
-      />
-    ),
-    activeIcon: (
-      <img src={ProdIcon} alt="Products" className="h-6 w-10 mt-4 mb-4 " />
-    ),
-    text: "Products",
-    link: "/products",
-  },
+
   {
     id: 5,
-    icon: (
-      <img
-        src={AttributesIcon}
-        alt="Attributes"
-        className="h-6 w-10 mt-4 mb-4 hoverable-image"
-      />
-    ),
-    activeIcon: (
-      <img src={AtriIcon} alt="atributes" className="h-6 w-10 mt-4 mb-4" />
-    ),
-    text: "Attributes",
-    link: "/attributes",
-  },
-  {
-    id: 6,
     icon: (
       <img
         src={PurchaseIcon}
@@ -448,34 +687,53 @@ const menuItems = [
     link: "/purchase-data",
   },
   {
+    id: 6,
+    icon: <img src={VenIcon} alt="Vendors" className="h-6 w-10 mt-4 mb-4" />,
+    activeIcon: (
+      <img src={VenIconActive} alt="Vendors" className="h-6 w-10 mt-4 mb-4 " />
+    ),
+    text: "Vendors",
+    link: "/vendors",
+  },
+  {
     id: 7,
     icon: (
       <img
-        src={VenderIcon}
-        alt="Import Data"
+        src={dataIcon}
+        alt="Employees"
         className="h-6 w-10 mt-4 mb-4 hoverable-image"
       />
     ),
     activeIcon: (
-      <img src={DataIcons} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
+      <img src={DataIconActive} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
     ),
-    text: "Import Data",
-    link: "/import-data",
-  },
-  {
-    id: 83,
-    icon: (
-      <img
-        src={Loyalty}
-        alt="Loyalty Porogram"
-        className="h-6 w-10 mt-4 mb-4 hoverable-image"
-      />
-    ),
-    activeIcon: (
-      <img src={LoyaltIcon} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
-    ),
-    text: "Loyalty Porogram",
-    link: "/loyalty-program",
+    text: "Employees",
+    dropdownItems: [
+      {
+        id: 1,
+        text: "Employees",
+        link: "/#",
+      },
+      {
+        id: 2,
+        icon: (
+          <img
+            src={timesheetblackIcon}
+            alt="Timesheet"
+            className="h-6 w-10 mt-4 mb-4 hoverable-image"
+          />
+        ),
+        activeIcon: (
+          <img
+            src={TimesheetsIcon}
+            alt="Timesheet"
+            className="h-6 w-10 mt-4 mb-4 "
+          />
+        ),
+        text: "Timesheet",
+        link: "/timesheet",
+      },
+    ],
   },
   {
     id: 8,
@@ -488,35 +746,6 @@ const menuItems = [
   },
   {
     id: 9,
-    icon: <img src={VenIcon} alt="Vendors" className="h-6 w-10 mt-4 mb-4" />,
-    activeIcon: (
-      <img src={VenIcons} alt="Vendors" className="h-6 w-10 mt-4 mb-4 " />
-    ),
-    text: "Vendors",
-    link: "/vendors",
-  },
-  {
-    id: 10,
-    icon: (
-      <img
-        src={timesheetblackIcon}
-        alt="Timesheet"
-        className="h-6 w-10 mt-4 mb-4 hoverable-image"
-      />
-    ),
-    activeIcon: (
-      <img
-        src={TimesheetsIcon}
-        alt="Timesheet"
-        className="h-6 w-10 mt-4 mb-4 "
-      />
-    ),
-    text: "Timesheet",
-    link: "/timesheet",
-  },
-
-  {
-    id: 11,
     icon: (
       <img
         src={StoreSettingIcon}
@@ -535,18 +764,30 @@ const menuItems = [
     link: "/store-settings/info",
     className: "flex items-center gap-2",
     dropdownItems: [
-      { id: 61, text: "Info", link: "/store-settings/info" },
-      { id: 62, text: "Setup", link: "/store-settings/setup" },
       {
-        id: 63,
-        icon: (
-          <img src={CouponIcon} alt="option" className="h-6 w-10 mt-4 mb-4" />
-        ),
-        activeIcon: (
-          <img src={CouIcon} alt="option" className="h-6 w-10 mt-4 mb-4 " />
-        ),
-        text: "Option",
-        link: "/store-settings/options",
+        id: 6,
+        text: "Store",
+        className: "flex items-center gap-2",
+        dropDownItems: [
+          { id: 1, text: "Profile", link: "#" },
+          { id: 61, text: "Info", link: "/store-settings/info" },
+          { id: 62, text: "Setup", link: "/store-settings/setup" },
+          {
+            id: 63,
+            icon: (
+              <img
+                src={CouponIcon}
+                alt="option"
+                className="h-6 w-10 mt-4 mb-4"
+              />
+            ),
+            activeIcon: (
+              <img src={CouIcon} alt="option" className="h-6 w-10 mt-4 mb-4 " />
+            ),
+            text: "Option",
+            link: "/store-settings/options",
+          },
+        ],
       },
 
       {
@@ -584,119 +825,91 @@ const menuItems = [
       { id: 71, text: "System Access", link: "/store-settings/system-access" },
     ],
   },
-
   {
-    id: 12,
+    id: 10,
     icon: (
       <img
-        src={ReportIcon}
-        alt="store"
+        src={dataIcon}
+        alt="Import Data"
         className="h-6 w-10 mt-4 mb-4 hoverable-image"
       />
     ),
     activeIcon: (
-      <img
-        src={ResportIcons}
-        alt="active report"
-        className="h-6 w-10 mt-4 mb-4"
-      />
+      <img src={DataIconActive} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
     ),
-    text: "Reporting",
-    link: "/reporting",
-    className: "flex items-center gap-2",
+    text: "Import/Export",
     dropdownItems: [
-      { id: 61, text: "Sales Report", link: "/store-reporting/sales-report" },
       {
-        id: 62,
-        text: "Daily Total Report",
-        link: "/store-reporting/daily-total-report",
+        id: 1,
+        icon: (
+          <img
+            src={dataIcon}
+            alt="Import Data"
+            className="h-6 w-10 mt-4 mb-4 hoverable-image"
+          />
+        ),
+        activeIcon: (
+          <img
+            src={DataIconActive}
+            alt="Import"
+            className="h-6 w-10 mt-4 mb-4 "
+          />
+        ),
+        text: "Import Inventory",
+        link: "#",
       },
       {
-        id: 63,
-        text: "Detailed Category Sale",
-        link: "/store-reporting/Details-category",
-      },
-      {
-        id: 64,
-        text: "Report by Sales Person",
-        link: "/store-reporting/report-sales-person",
-      },
-      {
-        id: 65,
-        text: "Check ID verification",
-        link: "/store-reporting/id-verification",
-      },
-      {
-        id: 66,
-        text: "Vendor Sales Report",
-        link: "/store-reporting/vendors-sales-reports",
-      },
-      {
-        id: 67,
-        text: "Credit Debit Sales Report",
-        link: "/store-reporting/credit-debit-sales",
-      },
-      {
-        id: 68,
-        text: "Instant PO Activity Report",
-        link: "/store-reporting/instant-activity",
-      },
-      {
-        id: 69,
-        text: "Top Seller - Overall Top 10",
-        link: "/store-reporting/overall-top",
-      },
-      { id: 70, text: "Flash Report", link: "/store-reporting/flash-resigter" },
-      { id: 71, text: "Vendor List", link: "/store-reporting/vendors-list" },
-      { id: 72, text: "Employee List", link: "/store-reporting/employee-list" },
-      {
-        id: 73,
-        text: "New Item Created Between",
-        link: "/store-reporting/item-create-between",
-      },
-      {
-        id: 74,
-        text: "Reorder Inventory",
-        link: "/store-reporting/recorder-inventory",
-      },
-
-      {
-        id: 75,
-        text: " Employee Working Hours",
-        link: "/store-reporting/employee-working-hours",
-      },
-      { id: 76, text: "Shift Summary", link: "/store-reporting/shift-summary" },
-
-      // { id: 77, text: " Item Sales ", link: "/store-settings/item-sales" },
-      // {
-      //   id: 78,
-      //   text: " Payment Method Details",
-      //   link: "/store-settings/payment-method-detail-report",
-      // },
-
-      { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
-      {
-        id: 78,
-        text: " Payment Method Details",
-        link: "/store-reporting/payment-method-details",
-      },
-      { id: 79, text: " Order Type ", link: "/store-reporting/order-type" },
-
-      {
-        id: 81,
-        text: "Current Inventory Value ",
-        link: "/store-reporting/current-inventory-value",
-      },
-
-      { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
-      {
-        id: 82,
-        text: "Order Refund Report ",
-        link: "/store-settings/order-refund-report",
+        id: 2,
+        icon: (
+          <img
+            src={dataIcon}
+            alt="Export Sold Items"
+            className="h-6 w-10 mt-4 mb-4 hoverable-image"
+          />
+        ),
+        activeIcon: (
+          <img
+            src={DataIconActive}
+            alt="Import"
+            className="h-6 w-10 mt-4 mb-4 "
+          />
+        ),
+        text: "Export Sold Items",
+        link: "/import-data",
       },
       { id: 83, text: "Tip Report", link: "/store-reporting/tip-report" },
       { id: 84, text: "Coupon Report", link: "/store-reporting/coupon-report" },
     ],
+  },
+  // {
+  //   id: 12,
+  //   icon: (
+  //     <img
+  //       src={dataIcon}
+  //       alt="Import Data"
+  //       className="h-6 w-10 mt-4 mb-4 hoverable-image"
+  //     />
+  //   ),
+  //   activeIcon: (
+  //     <img src={DataIconActive} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
+  //   ),
+  //   text: "Import Data",
+  //   link: "/import-data",
+  // },
+  {
+    id: 11,
+    icon: (
+      <img
+        src={Loyalty}
+        alt="Loyalty Porogram"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img src={LoyaltIcon} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
+    ),
+    text: "Loyalty Porogram",
+    link: "/loyalty-program",
   },
 ];
 const SuperAdminMenuItems = [
