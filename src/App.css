@@ -845,6 +845,11 @@ a.flex.text-center.submenu-item.text-gray-400.py-4.CircularSTDBook:hover {
 
   font-family: "CircularSTDBook", sans-serif;
 }
+.nested-submenu-item{
+  display: flex;
+  background-color: #334247;
+  font-family: "CircularSTDBook", sans-serif;
+}
 
 .submenu-item:hover {
   color: #ffc400;

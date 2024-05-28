@@ -1,138 +1,278 @@
-import React,{useState,useEffect} from 'react'
-import {AdminFunction} from '../../../Redux/features/user/adminSlice'
+import React, { useState, useEffect } from "react";
+import { Grid } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-import { useSelector, useDispatch } from 'react-redux';
-import AdminFunctionality from './adminFunctionality'
-import ViewAdmin from './viewAdminModal'
-import { useNavigate } from 'react-router-dom';
-import { useAuthDetails } from '../../../Common/cookiesHelper';
-
-
-import {Link} from 'react-router-dom'
+import AdminFunctionality from "./adminFunctionality";
+import ViewAdmin from "./viewAdminModal";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
+import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
+import {
+  AdminFunction,
+  getAdminRecordCount,
+} from "../../../Redux/features/user/adminSlice";
+import AddIcon from "../../../Assests/Category/addIcon.svg";
+import Pagination from "../UnverifeDetails/Pagination";
+import Edit from "../../../Assests/VerifiedMerchant/Edit.svg";
+import useDebounce from "../../../hooks/useDebouncs";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 
 export default function AdminView() {
-  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+  const { userTypeData } = useAuthDetails();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const {
+    handleCloseAdminModel,
+    handleViewAdmin,
+    showAdmin,
+    showMerchantData,
+    adminName,
+  } = AdminFunctionality();
 
-    const navigate = useNavigate();
-    const {handleCloseAdminModel,handleViewAdmin,showAdmin,showMerchantData,adminName}=AdminFunctionality()
-    const dispatch = useDispatch();
-    const AdminRecord = useSelector(
-        (state) => state.adminRecord,
-      );
-    useEffect(()=>{
-        dispatch(AdminFunction(userTypeData))
-    },[])
-// ---------------------------
-const [selectedAction, setSelectedAction] = useState('');
-const [searchRecord,setSearchRecord]=useState('')
+  // states
+  const [searchRecord, setSearchRecord] = useState("");
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
-  // const handleSelectChange = (e) => {
-  //   const selectedUrl = e.target.value;
-  //   const urlParts = selectedUrl.split('/');
-  //   const url=window.location.href
-    
-  //   if(urlParts[2]=="editAdmin"){
-      
-  //     navigate(`${selectedUrl}`);
-     
-  //   }else {
-  //     console.log('hello delet')
+  const debouncedValue = useDebounce(searchRecord);
+  const AdminRecord = useSelector((state) => state.adminRecord);
+  const adminRecordCount = useSelector(
+    (state) => state.adminRecord.adminRecordCount
+  );
+
+  // only when user changes Page number, Page size & searches something
+  useEffect(() => {
+    const data = {
+      ...userTypeData,
+      perpage: rowsPerPage,
+      page: currentPage,
+      search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+    };
+
+    dispatch(AdminFunction(data));
+  }, [currentPage, debouncedValue, rowsPerPage]);
+
+  // only when user searches to update the total count
+  useEffect(() => {
+    dispatch(
+      getAdminRecordCount({
+        ...userTypeData,
+        search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+      })
+    );
+  }, [debouncedValue]);
+
+  // useEffect(() => {
+  //   if (AdminRecord.AdminRecord.length >= 1) {
+  //     setAdminsDataState(AdminRecord.AdminRecord);
+  //     setTotalCount(AdminRecord.AdminRecord.length);
   //   }
-  // };
+  // }, [AdminRecord.AdminRecord]);
 
-// ---------------------------
-const handleSearchInputChange=(e)=>{
-  setSearchRecord(e.target.value)
-}
-const filteredAdminRecord = AdminRecord && AdminRecord.AdminRecord && Array.isArray(AdminRecord.AdminRecord) 
-? AdminRecord.AdminRecord.filter(result =>
-    (result.owner_name && result.owner_name.toLowerCase().includes(searchRecord.toLowerCase())) ||
-    (result.email && result.email.toLowerCase().includes(searchRecord.toLowerCase())) ||(result.name && result.name.toLowerCase().includes(searchRecord.toLowerCase())) ||
-    (result.phone && result.phone.includes(searchRecord))
-  )
-: [];
+  // on load setting count of Verified Merchant list & on every change...
+  useEffect(() => {
+    setTotalCount(adminRecordCount);
+  }, [adminRecordCount]);
 
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleSearchInputChange = (value) => {
+    setSearchRecord(value);
+    setCurrentPage(1);
+  };
+
+  const StyledTable = styled(Table)(({ theme }) => ({
+    padding: 2, // Adjust padding as needed
+  }));
+
+  const StyledTableCell = styled(TableCell)(({ theme }) => ({
+    [`&.${tableCellClasses.head}`]: {
+      backgroundColor: "#253338",
+      color: theme.palette.common.white,
+    },
+    [`&.${tableCellClasses.body}`]: {
+      fontSize: 14,
+    },
+    [`&.${tableCellClasses.table}`]: {
+      fontSize: 14,
+    },
+  }));
+
+  const StyledTableRow = styled(TableRow)(({ theme }) => ({
+    "&:nth-of-type(odd)": {
+      backgroundColor: theme.palette.action.hover,
+    },
+    // hide last border
+    "&:last-child td, &:last-child th": {
+      border: 0,
+    },
+  }));
+
+  const columns = ["Owner Name", "Name", "Email", "Phone", "View", ""];
 
   return (
     <>
-     <div className='q-order-main-page'>
-   <div className='box'>
-      <div className='box_shadow_div'>
-        <div className='qvrow'>
-          <div className='col-qv-8'>
-            <div className='btn-area'>
-              <Link to="/users/addAdmin" className='blue_btn'>ADD</Link>
-            </div>
-          </div>
-          <div className='col-qv-4'>
-            <div className='seacrh_area'>
-            <div className="input_area">
-              <input className="" type="text" value={searchRecord}
-               onInput={handleSearchInputChange}
-               placeholder="Search..."
-               autoComplete="off"
-               />
-            </div>
-            </div>
-          </div>
-        </div>
-        <div className='table_main_area'>
-          <div className='table_header_sticky'>
-              {/* <div className='table_header_top'>
-              <h1>Table Area</h1>
-              </div> */}
-              <div className='table_header'>
-              <p className='table20'>Owner Name</p>
-              <p className='table20'>Name</p>
-              <p className='table20'>Email</p>
-              <p className='table20'>Phone</p>
-              <p className='table15'>View</p>
-              <p className='table5'>Action</p>
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            style={{
+              borderBottom: "1px solid #E8E8E8",
+            }}
+          >
+            <Grid item>
+              <div className="q-category-bottom-header">
+                <span>Admin</span>
               </div>
-          </div>
-          <div className='table_body'>
-              {
-                  // Array.isArray(AdminRecord && AdminRecord.AdminRecord) ?AdminRecord.AdminRecord.map(result=>{
-                    Array.isArray(AdminRecord && AdminRecord.AdminRecord) ? filteredAdminRecord.map(result=>{
-                     
-                      return(
-                          
-                              <div className='table_row' key={result.id}>
-                                  <p className='table20 txt_ellipsis'>{result.owner_name}</p>
-                                  <p className='table20 txt_ellipsis'>{result.name}</p>
-                                  <p className='table20 txt_ellipsis'>{result.email}</p>
-                                  <p className='table20'>{result.phone}</p>
-                                  <p className='table15'onClick={()=>handleViewAdmin(result.email,result.name,userTypeData)}><span className="viewMerchant">view merchant</span></p>
-                                  <div className='table5' >
-                                  {/* <select
-                                      value={selectedAction}
-                                      onChange={handleSelectChange}
-                                      >
-                                      <option  value="" disabled hidden></option>
-                                      <option value={`/users/editAdmin/${result.id}`}>Edit</option> */}
-                                      {/* <option value={result.id}>Delete</option> */}
-                                  {/* </select> */}
-                                <div className='verifiedTableIcon'><Link to={`/users/editAdmin/${result.id}`}><img src="/static/media/editIcon.4dccb72a9324ddcac62b9a41d0a042db.svg"></img></Link> </div>
-                                  
-                                  </div>
+            </Grid>
+            <Grid item>
+              <Grid container direction="row" alignItems="center">
+                <Grid item>
+                  <Link
+                    to="/users/addAdmin"
+                    className="flex q-category-bottom-header "
+                  >
+                    <p className="me-2">ADD</p>
+                    <img src={AddIcon} alt="" />
+                  </Link>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <InputTextSearch
+                className=""
+                type="text"
+                value={searchRecord}
+                handleChange={handleSearchInputChange}
+                placeholder="Search..."
+                autoComplete="off"
+              />
+            </Grid>
+          </Grid>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
+              />
+            </Grid>
+          </Grid>
+
+          <Grid container>
+            {AdminRecord.loading ? (
+              <>
+                <SkeletonTable columns={columns} />
+              </>
+            ) : (
+              <>
+                {AdminRecord &&
+                Array.isArray(AdminRecord.AdminRecord) &&
+                AdminRecord.AdminRecord?.length > 0 ? (
+                  <TableContainer>
+                    <StyledTable
+                      sx={{ minWidth: 500 }}
+                      aria-label="customized table"
+                    >
+                      <TableHead>
+                        <StyledTableCell>Owner Name</StyledTableCell>
+                        <StyledTableCell>Name</StyledTableCell>
+                        <StyledTableCell>Email</StyledTableCell>
+                        <StyledTableCell>Phone</StyledTableCell>
+                        <StyledTableCell>View</StyledTableCell>
+
+                        <StyledTableCell></StyledTableCell>
+                      </TableHead>
+                      <TableBody>
+                        {AdminRecord.AdminRecord?.map((data, index) => (
+                          <StyledTableRow key={data.id}>
+                            <StyledTableCell>
+                              <div className="text-[#000000] order_method capitalize">
+                                {data.owner_name?.length < 18
+                                  ? data.owner_name
+                                  : data.owner_name?.slice(0, 18) + `...` || ""}
                               </div>
-              
-                              
-                          )
-                  }):[]
-              }
-          </div>
-        </div>
-      </div>
-    </div>
-    </div>
-  <ViewAdmin
-    showAdmin={showAdmin}
-    showMerchantData={showMerchantData}
-    adminName={adminName}
-    handleCloseAdminModel={handleCloseAdminModel}
-    
-    />
-  </>
-  )
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <div className="text-[#000000] order_method capitalize">
+                                {data.name || ""}
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <div className="text-[#000000] order_method capitalize">
+                                {data.email || ""}
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <div className="text-[#000000] order_method capitalize">
+                                {data.phone || ""}
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <div
+                                className="text-[#000000] order_method capitalize cursor-pointer"
+                                onClick={() =>
+                                  handleViewAdmin(
+                                    data.email,
+                                    data.name,
+                                    userTypeData
+                                  )
+                                }
+                              >
+                                view merchant
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <div className="flex">
+                                <img
+                                  title="Edit"
+                                  className="mx-1 edit cursor-pointer"
+                                  onClick={() =>
+                                    navigate(`/users/editAdmin/${data.id}`)
+                                  }
+                                  src={Edit}
+                                  alt="Edit"
+                                />
+                              </div>
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        ))}
+                      </TableBody>
+                    </StyledTable>
+                  </TableContainer>
+                ) : (
+                  <p className="px-5 py-4">No Data Found</p>
+                )}
+              </>
+            )}
+          </Grid>
+        </Grid>
+      </Grid>
+
+      <ViewAdmin
+        showAdmin={showAdmin}
+        showMerchantData={showMerchantData}
+        adminName={adminName}
+        handleCloseAdminModel={handleCloseAdminModel}
+      />
+    </>
+  );
 }

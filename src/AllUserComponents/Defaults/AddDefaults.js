@@ -4,14 +4,15 @@ import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import DownIcon from "../../Assests/Dashboard/Down.svg";
 import { BASE_URL, ADD_DEFAULTS } from "../../Constants/Config";
 import axios from "axios";
-import { useAuthDetails } from './../../Common/cookiesHelper';
+import { useAuthDetails } from "./../../Common/cookiesHelper";
 import Upload from "../../Assests/Category/upload.svg";
-import { Grid } from '@mui/material';
+import { Grid } from "@mui/material";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 
 const AddDefaults = ({ seVisible }) => {
   const [errorMessage, setErrorMessage] = useState("");
-  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
   const [defaults, setDefaults] = useState({
     name: "",
     type: "",
@@ -96,9 +97,9 @@ const AddDefaults = ({ seVisible }) => {
     try {
       const res = await axios.post(BASE_URL + ADD_DEFAULTS, formData, {
         headers: {
-            "Content-Type": "multipart/form-data",
-            'Authorization': `Bearer ${userTypeData.token}` // Use data?.token directly
-        }
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userTypeData.token}`, // Use data?.token directly
+        },
       });
       const data = await res.data.status;
       const update_message = await res.data.msg;
@@ -162,12 +163,13 @@ const AddDefaults = ({ seVisible }) => {
         };
         reader.readAsDataURL(file);
       } else {
-        alert(`${file.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`);
+        alert(
+          `${file.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`
+        );
         e.target.value = null;
       }
     }
   };
-
 
   const handleDeleteImage = (e) => {
     e.stopPropagation();
@@ -243,7 +245,6 @@ const AddDefaults = ({ seVisible }) => {
     {
       title: "Category",
     },
-
   ];
 
   return (
@@ -254,11 +255,7 @@ const AddDefaults = ({ seVisible }) => {
             <form onSubmit={handleSubmit} enctype="multipart/form-data">
               <div className="q-add-categories-section-header">
                 <span onClick={() => seVisible("DefaultsDetail")}>
-                  <img
-                    src={AddNewCategory}
-                    alt="Add-New-Category"
-                    style={{ height: "1.79rem" }}
-                  />
+                  <img src={AddNewCategory} alt="Add-New-Category" />
                   <span>Add New Defaults</span>
                 </span>
               </div>
@@ -319,15 +316,15 @@ const AddDefaults = ({ seVisible }) => {
                 </div> */}
 
                 <Grid item xs={6}>
-                            <label className="q-details-page-label">Type</label>
-                            <SelectDropDown
-                                listItem={category}
-                                title={"title"}
-                                onClickHandler={handleOptionClick}
-                                selectedOption={selectedCatSource}
-                            dropdownFor={"category"}
-                            />
-                        </Grid>
+                  <label className="q-details-page-label">Type</label>
+                  <SelectDropDown
+                    listItem={category}
+                    title={"title"}
+                    onClickHandler={handleOptionClick}
+                    selectedOption={selectedCatSource}
+                    dropdownFor={"category"}
+                  />
+                </Grid>
 
                 {fieldErrors.type && (
                   <span className="error-message">{fieldErrors.type}</span>
@@ -341,10 +338,17 @@ const AddDefaults = ({ seVisible }) => {
                 >
                   {defaults.image && defaults.image.base64 ? (
                     <>
-                      <span  className="delete-image-icon img-DeleteIcon" onClick={handleDeleteImage} >
+                      <span
+                        className="delete-image-icon img-DeleteIcon"
+                        onClick={handleDeleteImage}
+                      >
                         <img src={DeleteIcon} alt="delete-icon" />
                       </span>
-                      <img src={defaults.image.base64} alt="Preview" className="default-img" />
+                      <img
+                        src={defaults.image.base64}
+                        alt="Preview"
+                        className="default-img"
+                      />
                     </>
                   ) : (
                     <div className="flex-column">
