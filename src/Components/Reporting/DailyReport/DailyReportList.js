@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { fetchdailyreportData } from "../../../Redux/features/DailyReport/dailyreportSlice";
 
 import { useSelector, useDispatch } from "react-redux";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -42,6 +43,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const DailyReportList = ({ data }) => {
   const dispatch = useDispatch();
+  const {
+    LoginGetDashBoardRecordJson,
+    LoginAllStore,
+    userTypeData,
+    GetSessionLogin,
+  } = useAuthDetails();
 
   // ====================== STATE DECLARED ==================================
   const [dailyreport, setdailyreport] = useState([]);
@@ -51,8 +58,9 @@ const DailyReportList = ({ data }) => {
 
   // ==================== USEEFFECT ===========================================
   useEffect(() => {
+    let newData = { ...data, ...userTypeData };
     // Dispatch the action to fetch data when the component mounts
-    dispatch(fetchdailyreportData(data));
+    dispatch(fetchdailyreportData(newData));
   }, [dispatch, data]);
 
   useEffect(() => {
@@ -102,7 +110,7 @@ const DailyReportList = ({ data }) => {
       );
       return (
         <>
-          <Grid container className="box_shadow_div ">
+          <Grid container className="box_shadow_div">
             <Grid item xs={12}>
               <Grid container>
                 <Grid item xs={12}>

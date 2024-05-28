@@ -491,8 +491,13 @@ const menuItems = [
           },
           {
             id: 78,
-            text: " Payment Method Details",
+            text: "Payment Method Details",
             link: "/store-reporting/payment-method-details",
+          },
+          {
+            id: 78,
+            text: "Discount Per Sales Report",
+            link: "/store-reporting/discount-per-sales-report",
           },
         ],
       },
@@ -879,6 +884,11 @@ const menuItems = [
       },
       { id: 83, text: "Tip Report", link: "/store-reporting/tip-report" },
       { id: 84, text: "Coupon Report", link: "/store-reporting/coupon-report" },
+      {
+        id: 85,
+        text: "Discount Per Sales Person",
+        link: "/store-reporting/discount-per-sales-report",
+      },
     ],
   },
   // {

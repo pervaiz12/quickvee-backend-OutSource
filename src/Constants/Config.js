@@ -270,6 +270,7 @@ module.exports = Object.freeze({
   UNAPPROVE_SINGLE_STORE: "UserController/unapprove",
   APPROVE_SINGLE_STORE: "UserController/approve",
   EXPORTCSV: "UserController/exportCSV",
+  DISCOUNT_PER_PERSON: "Reportingreactapi_pcr/discount_per_sales_person_report",
 });
 
 // All api calls are initialized in this component for this application
