@@ -42,7 +42,6 @@ export default function AdminView() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-  // const [adminsDataState, setAdminsDataState] = useState([]);
 
   const debouncedValue = useDebounce(searchRecord);
   const AdminRecord = useSelector((state) => state.adminRecord);
@@ -122,7 +121,6 @@ export default function AdminView() {
 
   return (
     <>
-      {/* new code */}
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
           <Grid

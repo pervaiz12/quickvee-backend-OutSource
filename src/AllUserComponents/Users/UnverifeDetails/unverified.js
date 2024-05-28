@@ -8,6 +8,7 @@ import {
 } from "../../../Constants/Config";
 import {
   getUnVerifiedMerchant,
+  getUnVerifiedMerchantCount,
   handleMoveDash,
 } from "../../../Redux/features/user/unverifiedMerchantSlice";
 import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
@@ -38,6 +39,8 @@ import View from "../../../Assests/VerifiedMerchant/View.svg";
 import Edit from "../../../Assests/VerifiedMerchant/Edit.svg";
 import Delete from "../../../Assests/VerifiedMerchant/Delete.svg";
 import Like from "../../../Assests/VerifiedMerchant/Like.svg";
+import useDebounce from "../../../hooks/useDebouncs";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -64,12 +67,16 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
+
 export default function Unverified() {
   //  ============== DEFINED REDUX STATES ============================
 
   const UnVerifiedMerchantList = useSelector(
-    (state) => state.unverifiedMerchantRecord.unverifiedMerchantData
+    (state) => state.unverifiedMerchantRecord
   );
+  // unverifiedMerchantData
+  // UnVerifiedMerchantList.unverifiedMerchantDataCount
+
   // ============= END DEFINED REDUX STATE =============================
 
   //  ============== DEFINED STATES =============================
@@ -83,17 +90,18 @@ export default function Unverified() {
   );
   const [storename, setStorename] = useState();
   const [submitmessage, setsubmitmessage] = useState("");
+
+  const debouncedValue = useDebounce(searchRecord);
   //  ============= END DEFINED STATES =============================
 
   // ============================= USEFFECTS ================================
 
-  useEffect(() => {
-    if (!UnVerifiedMerchantList.loading && UnVerifiedMerchantList.length >= 1) {
-      setVerifiedMerchantListState(UnVerifiedMerchantList);
-      setFilteredMerchants(UnVerifiedMerchantList);
-      setTotalCount(UnVerifiedMerchantList.length);
-    }
-  }, [UnVerifiedMerchantList, UnVerifiedMerchantList.loading]);
+  // useEffect(() => {
+  //   if (UnVerifiedMerchantList.length >= 1) {
+  //     setVerifiedMerchantListState(UnVerifiedMerchantList);
+  //     setFilteredMerchants(UnVerifiedMerchantList);
+  //   }
+  // }, [UnVerifiedMerchantList]);
 
   // ============================= END USEFFECTS =============================
 
@@ -144,43 +152,66 @@ export default function Unverified() {
   const merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   // =======================
-
-  // const data={type:'unapprove',token, token_id,login_type}
   useEffect(() => {
-    dispatch(getUnVerifiedMerchant({ type: "unapprove", ...userTypeData }));
-  }, []);
+    const data = {
+      type: "unapprove",
+      ...userTypeData,
+      perpage: rowsPerPage,
+      page: currentPage,
+      search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+    };
+
+    dispatch(getUnVerifiedMerchant(data));
+  }, [currentPage, debouncedValue, rowsPerPage]);
+
+  // only when user searches
+  useEffect(() => {
+    dispatch(
+      getUnVerifiedMerchantCount({
+        type: "unapprove",
+        ...userTypeData,
+        search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+      })
+    );
+  }, [debouncedValue]);
+
+  // on load setting count of Verified Merchant list & on every change...
+  useEffect(() => {
+    setTotalCount(UnVerifiedMerchantList.unverifiedMerchantDataCount);
+  }, [UnVerifiedMerchantList.unverifiedMerchantDataCount]);
   // ====================================
 
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
-    if (value === "") {
-      setFilteredMerchants(VerifiedMerchantListState);
-      setTotalCount(VerifiedMerchantListState.length);
-    } else {
-      const filteredAdminRecord =
-        UnVerifiedMerchantList && Array.isArray(UnVerifiedMerchantList)
-          ? UnVerifiedMerchantList.filter(
-              (result) =>
-                (result.owner_name &&
-                  result.owner_name
-                    .toLowerCase()
-                    .includes(searchRecord.toLowerCase())) ||
-                (result.name &&
-                  result.name
-                    .toLowerCase()
-                    .includes(searchRecord.toLowerCase())) ||
-                (result.email &&
-                  result.email
-                    .toLowerCase()
-                    .includes(searchRecord.toLowerCase())) ||
-                (result.phone && result.phone.includes(searchRecord)) ||
-                (result.a_state && result.a_state.includes(searchRecord))
-            )
-          : [];
-      setVerifiedMerchantListState(filteredAdminRecord);
-      setFilteredMerchants(filteredAdminRecord);
-      setTotalCount(filteredAdminRecord.length);
-    }
+    setCurrentPage(1);
+    // if (value === "") {
+    //   setFilteredMerchants(VerifiedMerchantListState);
+    //   setTotalCount(VerifiedMerchantListState.length);
+    // } else {
+    //   const filteredAdminRecord =
+    //     UnVerifiedMerchantList && Array.isArray(UnVerifiedMerchantList)
+    //       ? UnVerifiedMerchantList.filter(
+    //           (result) =>
+    //             (result.owner_name &&
+    //               result.owner_name
+    //                 .toLowerCase()
+    //                 .includes(searchRecord.toLowerCase())) ||
+    //             (result.name &&
+    //               result.name
+    //                 .toLowerCase()
+    //                 .includes(searchRecord.toLowerCase())) ||
+    //             (result.email &&
+    //               result.email
+    //                 .toLowerCase()
+    //                 .includes(searchRecord.toLowerCase())) ||
+    //             (result.phone && result.phone.includes(searchRecord)) ||
+    //             (result.a_state && result.a_state.includes(searchRecord))
+    //         )
+    //       : [];
+    //   setVerifiedMerchantListState(filteredAdminRecord);
+    //   setFilteredMerchants(filteredAdminRecord);
+    //   setTotalCount(filteredAdminRecord.length);
+    // }
   };
 
   // ====================================
@@ -291,12 +322,12 @@ export default function Unverified() {
 
   const indexOfLastMerchant = currentPage * rowsPerPage;
   const indexOfFirstMerchant = indexOfLastMerchant - rowsPerPage;
-  // const currentMerchants = searchRecord
-  //   ? VerifiedMerchantListState.slice(indexOfFirstMerchant, indexOfLastMerchant)
-  //   : filteredMerchants.slice(indexOfFirstMerchant, indexOfLastMerchant);
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   // ========================= END PAGINATION LOGIC ======================================
-  //  ====================================
+
+  const columns = ["Store Info", "Owner Name", "Merchant ID", "OTP", ""];
+
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -368,198 +399,120 @@ export default function Unverified() {
                 onPageChange={paginate}
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
               />
             </Grid>
           </Grid>
           <Grid container>
-            <TableContainer>
-              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-                <TableHead>
-                  <StyledTableCell>Store Info</StyledTableCell>
-                  <StyledTableCell>Owner Name</StyledTableCell>
-                  <StyledTableCell>Merchant ID</StyledTableCell>
-                  <StyledTableCell>OTP</StyledTableCell>
-                  <StyledTableCell></StyledTableCell>
-                </TableHead>
-                <TableBody>
-                  {filteredMerchants
-                    ?.slice(indexOfFirstMerchant, indexOfLastMerchant)
-                    ?.map((data, index) => (
-                      <StyledTableRow>
-                        <StyledTableCell>
-                          <div class="flex">
-                            <div class="text-[#000000] order_method capitalize">
-                              {data.owner_name.length < 18
-                                ? data.owner_name
-                                : data.owner_name.slice(0, 18) + `...` || ""}
-                            </div>
-                            <div class="mx-2 ">(State: {data.a_state})</div>
-                          </div>
-                          <div class="text-[#818181] lowercase">
-                            {data.email || ""}
-                          </div>
-                          <div class="text-[#818181]">{data.a_phone || ""}</div>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <div class="text-[#000000] order_method capitalize">
-                            {data.name.length < 18
-                              ? data.name
-                              : data.name.slice(0, 18) + `...` || ""}
-                          </div>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <div class="text-[#000000] order_method capitalize">
-                            {data.merchant_id}
-                          </div>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <div class="text-[#000000] order_method capitalize">
-                            {data.ver_code}
-                          </div>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <div className="flex">
-                            <img
-                              className="mx-1 view"
-                              onClick={() =>
-                                handleGetVerifiedMerchant(data.merchant_id)
-                              }
-                              src={View}
-                              alt="View"
-                            />
-                            <img
-                              className="mx-1 edit"
-                              onClick={() => handleEditMerchant(data.id)}
-                              src={Edit}
-                              alt="Edit"
-                            />
-                            <img
-                              class="mx-1 delete"
-                              onClick={() => handleDeleteMerchant(data)}
-                              src={Delete}
-                              alt="Delete"
-                            />
-                            <img
-                              class="mx-1 "
-                              onClick={() => hadleDislikeMerchant(data.id)}
-                              src={Like}
-                              alt="Like"
-                            />
-                          </div>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    ))}
-                </TableBody>
-              </StyledTable>
-            </TableContainer>
+            {UnVerifiedMerchantList.loading ? (
+              <>
+                <SkeletonTable columns={columns} />
+              </>
+            ) : (
+              <>
+                {UnVerifiedMerchantList.unverifiedMerchantData &&
+                Array.isArray(UnVerifiedMerchantList.unverifiedMerchantData) &&
+                UnVerifiedMerchantList.unverifiedMerchantData.length > 0 ? (
+                  <TableContainer>
+                    <StyledTable
+                      sx={{ minWidth: 500 }}
+                      aria-label="customized table"
+                    >
+                      <TableHead>
+                        <StyledTableCell>Store Info</StyledTableCell>
+                        <StyledTableCell>Owner Name</StyledTableCell>
+                        <StyledTableCell>Merchant ID</StyledTableCell>
+                        <StyledTableCell>OTP</StyledTableCell>
+                        <StyledTableCell></StyledTableCell>
+                      </TableHead>
+                      <TableBody>
+                        {UnVerifiedMerchantList.unverifiedMerchantData?.map(
+                          (data, index) => (
+                            <StyledTableRow>
+                              <StyledTableCell>
+                                <div class="flex">
+                                  <div class="text-[#000000] order_method capitalize">
+                                    {data.owner_name.length < 18
+                                      ? data.owner_name
+                                      : data.owner_name.slice(0, 18) + `...` ||
+                                        ""}
+                                  </div>
+                                  <div class="mx-2 ">
+                                    (State: {data.a_state})
+                                  </div>
+                                </div>
+                                <div class="text-[#818181] lowercase">
+                                  {data.email || ""}
+                                </div>
+                                <div class="text-[#818181]">
+                                  {data.a_phone || ""}
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <div class="text-[#000000] order_method capitalize">
+                                  {data.name.length < 18
+                                    ? data.name
+                                    : data.name.slice(0, 18) + `...` || ""}
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <div class="text-[#000000] order_method capitalize">
+                                  {data.merchant_id}
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <div class="text-[#000000] order_method capitalize">
+                                  {data.ver_code}
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <div className="flex">
+                                  <img
+                                    className="mx-1 view"
+                                    onClick={() =>
+                                      handleGetVerifiedMerchant(
+                                        data.merchant_id
+                                      )
+                                    }
+                                    src={View}
+                                    alt="View"
+                                  />
+                                  <img
+                                    className="mx-1 edit"
+                                    onClick={() => handleEditMerchant(data.id)}
+                                    src={Edit}
+                                    alt="Edit"
+                                  />
+                                  <img
+                                    class="mx-1 delete"
+                                    onClick={() => handleDeleteMerchant(data)}
+                                    src={Delete}
+                                    alt="Delete"
+                                  />
+                                  <img
+                                    class="mx-1 "
+                                    onClick={() =>
+                                      hadleDislikeMerchant(data.id)
+                                    }
+                                    src={Like}
+                                    alt="Like"
+                                  />
+                                </div>
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          )
+                        )}
+                      </TableBody>
+                    </StyledTable>
+                  </TableContainer>
+                ) : (
+                  <p className="px-5 py-4">No Data Found</p>
+                )}
+              </>
+            )}
           </Grid>
         </Grid>
       </Grid>
-      {/* <div className="q-order-main-page">
-        <div className="box">
-          <div className="box_shadow_div">
-            <div className="qvrow">
-              <div className="col-qv-8">
-                <div className="btn-area">
-                  <Link to="/users/addMerchant" className="blue_btn">
-                    ADD
-                  </Link>
-                </div>
-              </div>
-              <div className="col-qv-4">
-                <div className="seacrh_area">
-                  <div className="input_area">
-                    <input
-                      className=""
-                      type="text"
-                      value={searchRecord}
-                      onInput={handleSearchInputChange}
-                      placeholder="Search..."
-                      autoComplete="off"
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="table_main_area">
-              <div className="table_header_sticky">
-                <div className="table_header_top">
-                
-                </div>
-                <div className="table_header">
-                  <p className="table15">Owner Name</p>
-                  <p className="table15">Name</p>
-                  <p className="table25">Email</p>
-                  <p className="table10">Phone</p>
-                  <p className="table10">State</p>
-                
-                  <p className="table10">Merchant ID</p>
-                  <p className="table5">OTP</p>
-                  <p className="table10">Action</p>
-                </div>
-              </div>
-              <div className="table_body">
-                {Array.isArray(UnVerifiedMerchantList) &&
-                  UnVerifiedMerchantList &&
-                  filteredAdminRecord.map((result, index) => {
-                    // console.log(result)
-                    return (
-                      <div className="table_row" key={index}>
-                        <p className="table15">{result.owner_name}</p>
-                        <p className="table15">{result.name}</p>
-                        <p className="table25">{result.email}</p>
-                        <p className="table10">{result.a_phone}</p>
-                        <p className="table10">{result.a_state}</p>
-                    
-                        <p className="table10">{result.merchant_id}</p>
-                        <p className="table5">{result.ver_code}</p>
-                        <div className="table10">
-                          <div className="verifiedTableIcon">
-                         
-                          </div>
-                          <FormControl fullWidth>
-                            <InputLabel id="demo-simple-select-label">
-                              Action
-                            </InputLabel>
-                            <Select
-                              labelId="demo-simple-select-label"
-                              id="demo-simple-select"
-                              value={""}
-                              label="Age"
-                              onChange={""}
-                            >
-                              <MenuItem
-                                value={10}
-                                onClick={() =>
-                                  handleGetVerifiedMerchant(result.merchant_id)
-                                }
-                              >
-                                view
-                              </MenuItem>
-                              <MenuItem value={20}>
-                                <div
-                                  // to={`/users/editMerchant/${result.id}`}
-                                  onClick={() => handleEditMerchant(result.id)}
-                                >
-                                  <img src="/static/media/editIcon.4dccb72a9324ddcac62b9a41d0a042db.svg"></img>
-                                </div>
-                              </MenuItem>
-                              <MenuItem value={30}>
-                                <Link>
-                                  <img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img>
-                                </Link>
-                              </MenuItem>
-                            </Select>
-                          </FormControl>
-                        </div>
-                      </div>
-                    );
-                  })}
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
     </>
   );
 }

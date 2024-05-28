@@ -11,6 +11,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { useAuthDetails } from "../../Common/cookiesHelper";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -38,16 +39,17 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 const NewsLetterList = (props) => {
-    const [totalCount, setTotalCount] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [totalCount, setTotalCount] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const dispatch = useDispatch();
   const [allNewsData, setAllNewsData] = useState([]);
   const AllNewsDataState = useSelector((state) => state.NewsLetterList);
   const [currentPage, setCurrentPage] = useState(1);
-  // const itemsPerPage = 10;
+
+  const { userTypeData } = useAuthDetails();
 
   useEffect(() => {
-    dispatch(fetchNewsLetterListData());
+    dispatch(fetchNewsLetterListData({ ...userTypeData }));
   }, [dispatch]);
 
   useEffect(() => {
@@ -62,22 +64,10 @@ const NewsLetterList = (props) => {
   // Logic for pagination
   const indexOfLastItem = currentPage * rowsPerPage;
   const indexOfFirstItem = indexOfLastItem - rowsPerPage;
-  const currentItems = allNewsData.slice(indexOfFirstItem, indexOfLastItem);
-  
-
-
-  const renderItems = () => {
-    return currentItems.map((NewsData, index) => (
-      <div className="box">
-        <div key={index} className="q-category-bottom-categories-listing">
-          <div className="q-category-bottom-categories-single-category">
-            <p className="report-title">{NewsData.id}</p>
-            <p className="report-title">{NewsData.email}</p>
-          </div>
-        </div>
-      </div>
-    ));
-  };
+  const currentItems =
+    allNewsData && allNewsData.length > 0
+      ? allNewsData?.slice(indexOfFirstItem, indexOfLastItem)
+      : [];
 
   // Logic for page navigation
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -103,12 +93,12 @@ const NewsLetterList = (props) => {
             <Grid container sx={{ padding: 2.5 }}>
               <Grid item xs={12}>
                 <Pagination
-                currentPage={currentPage}
-                totalItems={totalCount}
-                itemsPerPage={rowsPerPage}
-                onPageChange={paginate}
-                rowsPerPage={rowsPerPage}
-                setRowsPerPage={setRowsPerPage}
+                  currentPage={currentPage}
+                  totalItems={totalCount}
+                  itemsPerPage={rowsPerPage}
+                  onPageChange={paginate}
+                  rowsPerPage={rowsPerPage}
+                  setRowsPerPage={setRowsPerPage}
                 />
               </Grid>
             </Grid>
@@ -145,27 +135,6 @@ const NewsLetterList = (props) => {
           </Grid>
         </Grid>
       </Grid>
-      {/* <div className="box">
-        <div className="q-daily-report-bottom-report-header">
-          <p className="report-sort">ID</p>
-          <p className="report-sort">Email</p>
-        </div>
-      </div>
-
-      {renderItems()}
-
-    
-      <div className="box">
-        <div className="pagination">
-          {Array.from({
-            length: Math.ceil(allNewsData.length / itemsPerPage),
-          }).map((_, index) => (
-            <button key={index} onClick={() => paginate(index + 1)}>
-              {index + 1}
-            </button>
-          ))}
-        </div>
-      </div> */}
     </>
   );
 };

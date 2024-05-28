@@ -146,6 +146,7 @@ module.exports = Object.freeze({
 
   // Store Order List API
   GET_STORE_ORDER_DATA: "Store_order_api/get_store_order_data",
+  GET_STORE_ORDER_DATA_COUNT: "Store_order_api/get_store_order_count",
 
   // Export Order Count Data
   EXPORT_ORDER_COUNT_DATA: "Store_order_api/export_order_count_data",
@@ -186,6 +187,7 @@ module.exports = Object.freeze({
   // GET_EDIT_CUSTOMER:'UserController/edit_customer',
   // GET_EDIT_CUSTOMER:'UserController/edit_customer',
   GET_MANAGER_RECORD: "UserController/maneger_view", // manager view
+  GET_MANAGER_RECORD_COUNT: "UserController/maneger_view_count", // manager view
   GET_ADMIN_RECORD: "UserController/admin_view", // admin view data
   GET_ADMIN_RECORD_COUNT: "UserController/admin_view_count", // admin records count
   GET_MANAGER_MERCHANT: "UserController/get_manager_merchant", // get manager merchant
