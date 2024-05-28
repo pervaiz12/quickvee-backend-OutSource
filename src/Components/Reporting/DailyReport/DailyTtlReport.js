@@ -44,7 +44,7 @@ const DailyTtlReport = () => {
       }
       const updatedData = {
         ...data,
-        merchant_id: "MAL0100CA",
+        // merchant_id: "MAL0100CA",
         order_env: orderEnvValue,
         order_typ: orderTypValue,
       };

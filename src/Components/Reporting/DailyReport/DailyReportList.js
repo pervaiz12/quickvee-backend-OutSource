@@ -16,9 +16,10 @@ const DailyReportList = ({ data }) => {
   const [dailyreport, setdailyreport] = useState([]);
 
   const dailyreportDataState = useSelector((state) => state.dailyreport);
+  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   useEffect(() => {
-    let newData = { ...data, ...userTypeData };
+    let newData = { ...data, ...userTypeData, merchant_id };
     // Dispatch the action to fetch data when the component mounts
     dispatch(fetchdailyreportData(newData));
   }, [dispatch, data]);
