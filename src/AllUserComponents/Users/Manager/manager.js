@@ -1,6 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { ManagerRecord } from "../../../Redux/features/user/managerSlice";
+import {
+  ManagerRecord,
+  getManagerRecordCount,
+} from "../../../Redux/features/user/managerSlice";
 import ViewMerchant from "./viewMerchantModel";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
@@ -13,6 +16,9 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import useDebounce from "../../../hooks/useDebouncs";
+import Pagination from "../UnverifeDetails/Pagination";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -47,53 +53,48 @@ export default function Manager() {
   // ========================= DEFIENED STATES ========================================
   const [managerTable, setManagerTable] = useState([]);
   const [searchRecord, setSearchRecord] = useState("");
-  // ====================================================================================
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const debouncedValue = useDebounce(searchRecord);
 
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
 
-  // state.managerRecord.ManagerRecord
-
-  // ===================== USE EFFECTS============================================================
   useEffect(() => {
-    dispatch(ManagerRecord(userTypeData));
-  }, []);
+    const data = {
+      ...userTypeData,
+      perpage: rowsPerPage,
+      page: currentPage,
+      search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+    };
+    dispatch(ManagerRecord(data));
+  }, [currentPage, debouncedValue, rowsPerPage]);
 
+  // only when user searches to update the total count
   useEffect(() => {
-    if (!managerList.loading && managerList.ManagerRecord) {
-      setManagerTable(managerList.ManagerRecord);
-    }
-  }, [managerList.loading, managerList.ManagerRecord]);
+    dispatch(
+      getManagerRecordCount({
+        ...userTypeData,
+        search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+      })
+    );
+  }, [debouncedValue]);
 
-  // =====================================END USE EFFECTS=====================================================
-
-  //  ==================================== HANDLERE FUNCTIONS =============================================================
+  // on load setting count of Verified Merchant list & on every change...
+  useEffect(() => {
+    setTotalCount(managerList.managerRecordsCount);
+  }, [managerList.managerRecordsCount]);
 
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
-
-    if (value === "") {
-      // If search input is empty, display the entire dataset
-      setManagerTable(managerList.ManagerRecord);
-    } else {
-      // Filter managerList.ManagerRecord based on search term
-      const filteredRecords = managerList.ManagerRecord.filter((record) => {
-        // Convert search term to lowercase for case-insensitive search
-        const searchTerm = value.toLowerCase();
-        // Check if any of the fields contain the search term
-        return (
-          record.name.toLowerCase().includes(searchTerm) ||
-          record.email.toLowerCase().includes(searchTerm) ||
-          record.phone.includes(searchTerm)
-        );
-      });
-
-      // Update the managerTable state with filtered records
-      setManagerTable(filteredRecords);
-    }
+    setCurrentPage(1);
   };
-  console.log("managerList?.ManagerRecord", managerList.ManagerRecord);
-  //  ================================= END HANDLER FUNCTIONS =================================
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const columns = ["Name", "Email", "Phone", "View"];
+
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -113,6 +114,7 @@ export default function Manager() {
               </div>
             </Grid>
           </Grid>
+
           <Grid container sx={{ padding: 2.5 }}>
             <Grid item xs={12}>
               <InputTextSearch
@@ -125,49 +127,79 @@ export default function Manager() {
               />
             </Grid>
           </Grid>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
+              />
+            </Grid>
+          </Grid>
+
           <Grid container>
-            <TableContainer>
-              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-                <TableHead>
-                  <StyledTableCell>Name</StyledTableCell>
-                  <StyledTableCell>Email</StyledTableCell>
-                  <StyledTableCell>Phone</StyledTableCell>
-                  <StyledTableCell>View</StyledTableCell>
-                </TableHead>
-                <TableBody>
-                  {managerTable?.length
-                    ? managerTable?.map((data, index) => {
-                        console.log("data", data);
-                        return (
-                          <StyledTableRow>
-                            <StyledTableCell>
-                              <div class="text-[#000000] order_method capitalize">
-                                {data?.name}
-                              </div>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <div class="text-[#000000] order_method capitalize">
-                                {data?.email}
-                              </div>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <div class="text-[#000000] order_method capitalize">
-                                {data?.phone}
-                              </div>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <ViewMerchant
-                                userTypeData={userTypeData}
-                                data={data}
-                              />
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        );
-                      })
-                    : ""}
-                </TableBody>
-              </StyledTable>
-            </TableContainer>
+            {managerList.loading ? (
+              <>
+                <SkeletonTable columns={columns} />
+              </>
+            ) : (
+              <>
+                {managerList.ManagerRecord &&
+                managerList.ManagerRecord.length > 0 &&
+                Array.isArray(managerList.ManagerRecord) ? (
+                  <TableContainer>
+                    <StyledTable
+                      sx={{ minWidth: 500 }}
+                      aria-label="customized table"
+                    >
+                      <TableHead>
+                        <StyledTableCell>Name</StyledTableCell>
+                        <StyledTableCell>Email</StyledTableCell>
+                        <StyledTableCell>Phone</StyledTableCell>
+                        <StyledTableCell>View</StyledTableCell>
+                      </TableHead>
+                      <TableBody>
+                        {managerList.ManagerRecord?.length
+                          ? managerList.ManagerRecord?.map((data, index) => {
+                              return (
+                                <StyledTableRow key={data.id}>
+                                  <StyledTableCell>
+                                    <div className="text-[#000000] order_method capitalize">
+                                      {data?.name}
+                                    </div>
+                                  </StyledTableCell>
+                                  <StyledTableCell>
+                                    <div className="text-[#000000] order_method capitalize">
+                                      {data?.email}
+                                    </div>
+                                  </StyledTableCell>
+                                  <StyledTableCell>
+                                    <div className="text-[#000000] order_method capitalize">
+                                      {data?.phone}
+                                    </div>
+                                  </StyledTableCell>
+                                  <StyledTableCell>
+                                    <ViewMerchant
+                                      userTypeData={userTypeData}
+                                      data={data}
+                                    />
+                                  </StyledTableCell>
+                                </StyledTableRow>
+                              );
+                            })
+                          : ""}
+                      </TableBody>
+                    </StyledTable>
+                  </TableContainer>
+                ) : (
+                  <p className="px-5 py-4">No Data Found</p>
+                )}
+              </>
+            )}
           </Grid>
         </Grid>
       </Grid>
