@@ -144,16 +144,45 @@ const TimesheetListing = ({ data }) => {
   // console.log(roundedTime);
 
   const handleStartTimeChange = (newTime) => {
-    setTimeBreak({
-      ...addtimebreak,
-      add_clocked_in: newTime.format("HH:mm:ss"),
-    });
+    if(!addtimebreak.add_clocked_out){
+        setTimeBreak({
+          ...addtimebreak,
+          add_clocked_in: newTime.format("HH:mm:ss"),
+        });
+    }else{
+      if(addtimebreak.add_clocked_in<addtimebreak.add_clocked_out){
+        console.log("add_clocked_in<add_clocked_out")
+        setDateEndTimeError("Out Date and Time should be greater than In Date and Time.")
+      }else if(addtimebreak.add_clocked_in>addtimebreak.add_clocked_out){
+        setTimeBreak({
+          ...addtimebreak,
+          add_clocked_in: newTime.format("HH:mm:ss"),
+        });
+        setDateEndTimeError("");
+      }
+    }
   };
   const handleEndTimeChange = (newTime) => {
     setTimeBreak({
       ...addtimebreak,
       add_clocked_out: newTime.format("HH:mm:ss"),
     });
+  //   if(!addtimebreak.add_clocked_in){
+  //     setTimeBreak({
+  //       ...addtimebreak,
+  //       add_clocked_out: newTime.format("HH:mm:ss"),
+  //     });
+  //   }else{
+  //     if(addtimebreak.add_clocked_in<addtimebreak.add_clocked_out){
+  //       setDateEndTimeError("Out Date and Time should be greater than In Date and Time.")
+  //     }else{
+  //       setTimeBreak({
+  //         ...addtimebreak,
+  //         add_clocked_out: newTime.format("HH:mm:ss"),
+  //       });
+  //       setDateEndTimeError("");
+  //     }
+  //   }
   };
 
   const handleStartDateChange = (newDate) => {
@@ -225,7 +254,15 @@ const TimesheetListing = ({ data }) => {
     } else {
       setDateEndTimeError("");
     }
-
+    if(addtimebreak.add_in_date == addtimebreak.add_out_date && addtimebreak.add_clocked_in == addtimebreak.add_clocked_out){
+      setDateEndTimeError("Out Date and Time should be greater than In Date and Time.")
+      return
+    }else if(addtimebreak.add_clocked_in<addtimebreak.add_clocked_out){
+      setDateEndTimeError("Out Date and Time should be greater than In Date and Time.")
+      return
+    }else{
+      setDateEndTimeError("");
+    }
     const formData = new FormData();
     formData.append("merchant_id", addtimebreak.merchant_id);
     formData.append("employee_id", modalAddTimesheetID);
@@ -240,6 +277,7 @@ const TimesheetListing = ({ data }) => {
       console.log(`${key}: ${value}`);
     }
 
+    return
     try {
       const response = await axios.post(`${BASE_URL}${ADD_TIME_SHEET}`, formData, {
         headers: {
@@ -480,15 +518,18 @@ const TimesheetListing = ({ data }) => {
       const userConfirmed = window.confirm("Are sure want to delete this timeclock?");
       if (userConfirmed) {
         if (dataTimesheet) {
-          dispatch(deleteTimesheet(datas));
+          dispatch(deleteTimesheet(datas)).then(() => {
+            dispatch(fetchtimeSheetData(data));
+          });
         }
-        dispatch(fetchtimeSheetData(data));
         closeModalViewBreak()
       } else {
         console.log("props data",data)
         console.log("Deletion canceled by timeclock");
       }
     };
+
+   
   // for Delete Break End
 
 
@@ -695,6 +736,7 @@ const TimesheetListing = ({ data }) => {
                                 slotProps={{
                                   textField: { placeholder: "Select Date" },
                                 }}
+                                disableFuture
                                 components={{
                                   OpenPickerIcon: () => (
                                     <img src={caleIcon} alt="calendar-icon" />
@@ -751,6 +793,10 @@ const TimesheetListing = ({ data }) => {
                                 onChange={(newDate) =>
                                   handleEndDateChange(newDate)
                                 }
+                                shouldDisableDate={(date) => {
+                                  const start = addtimebreak.add_in_date;
+                                  return date.format("YYYY-MM-DD") < start ;
+                                }}
                                 size="medium"
                                 format={"DD-MM-YYYY"}
                                 views={["year", "month", "day"]}
