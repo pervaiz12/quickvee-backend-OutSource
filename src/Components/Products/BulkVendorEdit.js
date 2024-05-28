@@ -11,10 +11,12 @@ import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import {
   assignPrefferedVendor,
   assignProductVendor,
+  bulkVendorAssign,
   deleteProductVendor,
   fetchProductsDataById,
   fetchVendorList,
   filterVendorAPI,
+  getAlreadyAssignVendor,
   saveVendorList,
 } from "../../Redux/features/Product/ProductSlice";
 import { useDispatch } from "react-redux";
@@ -31,10 +33,10 @@ const BulkVendorEdit = ({
   varientData,
   varientIndex,
   modalType,
-  fetchDataLoadingVendor,
 }) => {
   const dispatch = useDispatch();
   const [selectedVendor, setSelectedVendor] = useState([]);
+  const [fetchDataLoadingVendor, setFetchDataLoadingVendor] = useState(false);
   const [vendor, setVendor] = useState([]);
   const [loading, setLoading] = useState(false);
   const productId = useParams();
@@ -53,10 +55,10 @@ const BulkVendorEdit = ({
   // onchange of costperItem and
   const handleVendorCostPerItem = (e, index, vendorId) => {
     const { name, value, type, checked } = e.target;
-    let updateVandorItems;
 
+    let updateVandorItems;
     // when type is checkbox run block of code
-    if (type === "checkbox") {
+    if (type === "checkbox" && modalType === "single_vendor") {
       updateVandorItems = vendorItems.map((item, i) => ({
         ...item,
         isPreferred: i === index ? checked : false,
@@ -85,14 +87,73 @@ const BulkVendorEdit = ({
         .catch((err) => {
           ToastifyAlert("Error!", "error");
         });
+    } else if (type === "checkbox" && modalType === "bulk-edit") {
+      updateVandorItems = vendorItems.map((item, i) => ({
+        ...item,
+        isPreferred: i === index ? checked : false,
+      }));
     }
     // when type is input run block of code
     else {
+      /// allowed costPerItem value in 0.00
+      let fieldValue;
+      fieldValue = value
+        // Remove extra dots and ensure only one dot exists at most
+        .replace(/[^\d.]/g, "") // Allow digits and dots only
+        .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
+        .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+
+      let inputStr = fieldValue.replace(/\D/g, "");
+      inputStr = inputStr.replace(/^0+/, "");
+
+      if (inputStr.length == "") {
+        fieldValue = "";
+      } else if (inputStr.length === 1) {
+        fieldValue = "0.0" + inputStr;
+      } else if (inputStr.length === 2) {
+        fieldValue = "0." + inputStr;
+      } else {
+        fieldValue =
+          inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
+      }
+
       updateVandorItems = [...vendorItems];
-      updateVandorItems[index]["costPerItem"] = value;
+      updateVandorItems[index]["costPerItem"] = fieldValue;
     }
 
     setVendorItems(updateVandorItems);
+  };
+
+  // fetch data when modal open
+  const fetchBulkVendorData = () => {
+    /// called vendor api for get already assign vendor
+    setFetchDataLoadingVendor(true);
+    let isVarient = Boolean(+productData?.isvarient);
+    const formData = new FormData();
+    formData.append(
+      "varient_id",
+      !isVarient
+        ? productData?.id
+        : modalType === "bulk-edit" && Boolean(+productData?.isvarient)
+          ? productData?.id
+          : varientData[varientIndex]?.id
+    );
+    formData.append("merchant_id", "MAL0100CA");
+    formData.append("single_product", isVarient ? 0 : 1);
+
+    dispatch(getAlreadyAssignVendor(formData))
+      .then((res) => {
+        if (res?.payload?.status) {
+          const assign_vendor_data = res?.payload?.result?.map((item) => ({
+            ...item,
+            costPerItem: item?.cost_per_item,
+            isPreferred: Boolean(+item?.pref_vendor),
+          }));
+          setVendorItems(assign_vendor_data);
+        }
+      })
+      .catch((err) => console.log(err))
+      .finally(() => setFetchDataLoadingVendor(false));
   };
 
   // fetch vendor data here...
@@ -111,186 +172,129 @@ const BulkVendorEdit = ({
     formData.append("merchant_id", "MAL0100CA");
     formData.append("single_product", isVarient ? 0 : 1);
 
+    // called vendor api for dropdown vendor data
     dispatch(fetchVendorList(formData)).then((res) => {
       if (res?.payload?.status) {
         setVendor(res?.payload?.result);
       }
     });
+
+    // called function for get already assign vendor data
+    fetchBulkVendorData();
   }, []);
-
-  // fetch data when modal open
-  const fetchBulkVendorData = () => {
-    let isVarient = Boolean(+productData?.isvarient);
-
-    // when product has single varient filter here
-    if (!isVarient) {
-      const parseJson = JSON.parse(productData?.assigned_vendors);
-      let assignedVendorId;
-      let assignedVendorValues;
-      if (parseJson) {
-        assignedVendorId = Object.keys(parseJson);
-        assignedVendorValues = Object.values(parseJson);
-      }
-
-      // formdata
-      const formData = new FormData();
-      formData.append("merchant_id", "MAL0100CA");
-      let foundVendors = [];
-      dispatch(filterVendorAPI(formData)).then((res) => {
-        if (res?.payload?.status) {
-          const vendorNameList = res?.payload?.vendor_name_list;
-          const foundVendors = vendorNameList
-            ?.filter((filtered) => {
-              return assignedVendorId?.some((item) => +item === +filtered.id);
-            })
-            .map((vendor) => {
-              console.log("single single", parseJson);
-              return {
-                ...vendor,
-                costPerItem: assignedVendorValues[vendor.id] || 0,
-                isPreferred: +productData?.prefferd_vendor == +vendor?.id,
-              };
-            });
-          setVendorItems(foundVendors);
-        }
-      });
-    }
-    // when product has multiple varient
-    else {
-      const parseJson = JSON.parse(
-        varientData?.[varientIndex]?.assigned_vendors
-      );
-      let assignedVendorId;
-      let assignedVendorValues;
-      if (parseJson) {
-        assignedVendorId = Object.keys(parseJson);
-        assignedVendorValues = Object.values(parseJson);
-      }
-      console.log(
-        "all mall",
-        varientData?.[varientIndex]?.assigned_vendors,
-        assignedVendorId,
-        assignedVendorValues
-      );
-
-      // formdata
-      const formData = new FormData();
-      formData.append("merchant_id", "MAL0100CA");
-      let foundVendors = [];
-      dispatch(filterVendorAPI(formData)).then((res) => {
-        if (res?.payload?.status) {
-          const vendorNameList = res?.payload?.vendor_name_list;
-          const foundVendors = vendorNameList
-            ?.filter((filtered) => {
-              return assignedVendorId?.some((item) => +item === +filtered.id);
-            })
-            .map((vendor) => {
-              console.log("vendorrrr", assignedVendorValues);
-              return {
-                ...vendor,
-                costPerItem: assignedVendorValues[vendor.id] || 0,
-                isPreferred:
-                  +varientData?.[varientIndex]?.prefferd_vendor == +vendor?.id,
-              };
-            });
-          setVendorItems(foundVendors);
-        }
-      });
-    }
-  };
 
   // when add vendor button is click
   const handleAddVendor = () => {
     setLoading(true);
-    const formData = new FormData();
+    if (modalType !== "bulk-edit") {
+      const formData = new FormData();
 
-    formData.append(
-      "single_product",
-      !Boolean(+productData?.isvarient) ? 1 : 0
-    );
-    formData.append(
-      "varient_id",
-      !Boolean(+productData?.isvarient)
-        ? productData?.id
-        : modalType === "bulk-edit"
+      formData.append(
+        "single_product",
+        !Boolean(+productData?.isvarient) ? 1 : 0
+      );
+      formData.append(
+        "varient_id",
+        !Boolean(+productData?.isvarient)
           ? productData?.id
-          : varientData[varientIndex]?.id
-    );
-    formData.append(
-      "vendor_id",
-      selectedVendor?.map((item) => item?.id)?.toString()
-    );
+          : modalType === "bulk-edit"
+            ? productData?.id
+            : varientData[varientIndex]?.id
+      );
+      formData.append(
+        "vendor_id",
+        selectedVendor?.map((item) => item?.id)?.toString()
+      );
 
-    dispatch(assignProductVendor(formData))
-      .then((res) => {
-        if (res?.payload?.status) {
-          setVendorItems((prev) => [
-            ...prev,
-            ...selectedVendor.map((vendor) => ({
-              ...vendor,
-              costPerItem: 0,
-              isPreferred: false,
-            })),
-          ]);
-          const formData = new FormData();
-          formData.append("merchant_id", "MAL0100CA");
-          formData.append("id", productId?.id);
+      dispatch(assignProductVendor(formData))
+        .then((res) => {
+          if (res?.payload?.status) {
+            setVendorItems((prev) => [
+              ...prev,
+              ...selectedVendor.map((vendor) => ({
+                ...vendor,
+                costPerItem: "",
+                isPreferred: false,
+              })),
+            ]);
+            const formData = new FormData();
+            formData.append("merchant_id", "MAL0100CA");
+            formData.append("id", productId?.id);
 
-          ToastifyAlert("Vendor Added Successfully!", "success");
+            ToastifyAlert("Vendor Added Successfully!", "success");
 
-          setSelectedVendor([]);
-        }
-      })
-      .catch((err) => {
-        console.log("error for assign vendor", err);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+            setSelectedVendor([]);
+          }
+        })
+        .catch((err) => {
+          console.log("error for assign vendor", err);
+        })
+        .finally(() => {
+          setLoading(false);
+        });
+    } else {
+      setVendorItems((prev) => [...prev, ...selectedVendor]);
+      setSelectedVendor([]);
+      setLoading(false);
+    }
   };
-
-  useEffect(() => {
-    // fetch vendor data intially when modal open
-    fetchBulkVendorData();
-  }, [productData]);
 
   // when click on delete icon // delete vendor by Id
   const handleDeleteVendor = (vendorId) => {
-    // formData
-    const formData = new FormData();
-    formData.append(
-      "single_product",
-      !Boolean(+productData?.isvarient) ? 1 : 0
+    /// show prompt before delete the item
+    const userConfirmed = window.confirm(
+      "Are you sure you want to delete this vendor?"
     );
-    formData.append(
-      "varient_id",
-      !Boolean(+productData?.isvarient)
-        ? productData?.id
-        : modalType === "bulk-edit"
-          ? productData?.id
-          : varientData[varientIndex]?.id
-    );
-    formData.append("vendor_id", vendorId);
-    dispatch(deleteProductVendor(formData))
-      .then((res) => {
-        if (res?.payload?.status) {
-          const filtervendorList = vendorItems?.filter(
-            (item) => +item?.id !== +vendorId
-          );
-          setVendorItems(filtervendorList);
 
-          ToastifyAlert("Vendor deleted successfully!", "success");
-        }
-      })
-      .catch((err) => {
-        ToastifyAlert("Error!", "error");
-      });
+    if (!userConfirmed) {
+      return; // If the user clicks "No", exit the function
+    }
+
+    // formData
+    if (modalType !== "bulk-edit") {
+      const formData = new FormData();
+      formData.append(
+        "single_product",
+        !Boolean(+productData?.isvarient) ? 1 : 0
+      );
+      formData.append(
+        "varient_id",
+        !Boolean(+productData?.isvarient)
+          ? productData?.id
+          : modalType === "bulk-edit"
+            ? productData?.id
+            : varientData[varientIndex]?.id
+      );
+      formData.append("vendor_id", vendorId);
+      dispatch(deleteProductVendor(formData))
+        .then((res) => {
+          if (res?.payload?.status) {
+            const filtervendorList = vendorItems?.filter(
+              (item) => +item?.id !== +vendorId
+            );
+            setVendorItems(filtervendorList);
+
+            ToastifyAlert("Vendor deleted successfully!", "success");
+          }
+        })
+        .catch((err) => {
+          ToastifyAlert("Error!", "error");
+        });
+    } else {
+      const filtervendorList = vendorItems?.filter(
+        (item) => +item?.id !== +vendorId
+      );
+      setVendorItems(filtervendorList);
+    }
   };
 
   // when click on save vendor
   // save all the selected vendor
   const handleSaveVendorList = () => {
     const formData = new FormData();
+    const bulkFormData = new FormData();
+
+    /// send formData payload when single varient
     formData.append(
       "single_product",
       !Boolean(+productData?.isvarient) ? 1 : 0
@@ -308,15 +312,45 @@ const BulkVendorEdit = ({
       vendorItems?.map((i) => i?.costPerItem).toString()
     );
     formData.append("vendor_id", vendorItems?.map((i) => i?.id).toString());
-    dispatch(saveVendorList(formData))
-      .then((res) => {
-        if (res?.payload?.status) {
-          ToastifyAlert("Updated successfully!", "success");
-        }
-      })
-      .catch(() => {
-        ToastifyAlert("Error!", "error");
-      });
+
+    /// send bulkFormData when multiple varient and bulkModal is open
+    bulkFormData.append("product_id", productId?.id);
+    bulkFormData.append(
+      "vendor_id",
+      vendorItems?.map((i) => i?.id)?.toString()
+    );
+    bulkFormData.append(
+      "costperItem",
+      vendorItems?.map((i) => i?.costPerItem)?.toString()
+    );
+    bulkFormData.append("merchant_id", "MAL0100CA");
+    bulkFormData.append(
+      "prefferd_vendor",
+      vendorItems?.filter((i) => Boolean(+i?.isPreferred))[0]?.id ?? ""
+    );
+
+    if (modalType === "bulk-edit") {
+      formData.append("vendor_id", vendorItems?.map((i) => i?.id).toString());
+      dispatch(bulkVendorAssign(bulkFormData))
+        .then((res) => {
+          if (res?.payload?.status) {
+            ToastifyAlert("Updated successfully!", "success");
+          }
+        })
+        .catch(() => {
+          ToastifyAlert("Error!", "error");
+        });
+    } else {
+      dispatch(saveVendorList(formData))
+        .then((res) => {
+          if (res?.payload?.status) {
+            ToastifyAlert("Updated successfully!", "success");
+          }
+        })
+        .catch(() => {
+          ToastifyAlert("Error!", "error");
+        });
+    }
   };
 
   return (
@@ -396,6 +430,7 @@ const BulkVendorEdit = ({
                                 handleVendorCostPerItem(e, index, row?.id)
                               }
                               value={vendorItems[index]["costPerItem"]}
+                              maxLength={9}
                             />
                           </TableCell>
                           <TableCell align="center">

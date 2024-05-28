@@ -76,7 +76,7 @@ export const formData = [
     name: "reorderQty",
     placeholder: "",
     type: "text",
-    label: "Reorder Cost",
+    label: "Reorder Qty",
   },
 ];
 
@@ -121,7 +121,7 @@ export const bulkInstantPo = [
     label: "Quantity",
   },
   {
-    name: "upcCode",
+    name: "cost",
     placeholder: "",
     type: "text",
     label: "Cost",

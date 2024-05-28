@@ -305,6 +305,66 @@ export const saveVendorList = createAsyncThunk(
     }
   }
 );
+
+export const getAlreadyAssignVendor = createAsyncThunk(
+  "products/getAlreadyAssignVendor",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/assign_product_vendors_list",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const bulkVendorAssign = createAsyncThunk(
+  "products/bulkVendorAssign",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/bulk_assign_vendors",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const saveSingleVarientPO = createAsyncThunk(
+  "products/saveSingleVarientPO",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/save_instant_po",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const saveBulkInstantPo = createAsyncThunk(
+  "products/saveBulkInstantPo",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/bulk_instant_po",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
 const productsSlice = createSlice({
   name: "products",
   initialState,
