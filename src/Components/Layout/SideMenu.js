@@ -462,11 +462,11 @@ const menuItems = [
         id: 1,
         text: "Sales Report",
         dropDownItems: [
-          // {
-          //   id: 61,
-          //   text: "Sales Report",
-          //   link: "/store-reporting/sales-report",
-          // },
+          {
+            id: 61,
+            text: "Sales Report",
+            link: "/store-reporting/sales-report",
+          },
           {
             id: 62,
             text: "Daily Total Report",
@@ -604,6 +604,8 @@ const menuItems = [
       // },
 
       { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
+      { id: 87, text: "Tip Report", link: "/store-reporting/tip-report" },
+      { id: 88, text: "Coupon Report", link: "/store-reporting/coupon-report" },
     ],
   },
   {
