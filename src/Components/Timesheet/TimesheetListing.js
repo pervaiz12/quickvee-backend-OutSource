@@ -150,39 +150,34 @@ const TimesheetListing = ({ data }) => {
           add_clocked_in: newTime.format("HH:mm:ss"),
         });
     }else{
-      if(addtimebreak.add_clocked_in<addtimebreak.add_clocked_out){
-        console.log("add_clocked_in<add_clocked_out")
-        setDateEndTimeError("Out Date and Time should be greater than In Date and Time.")
-      }else if(addtimebreak.add_clocked_in>addtimebreak.add_clocked_out){
+      if(newTime.format("HH:mm:ss")<addtimebreak.add_clocked_out){
         setTimeBreak({
           ...addtimebreak,
           add_clocked_in: newTime.format("HH:mm:ss"),
         });
         setDateEndTimeError("");
+      }else{
+        setDateEndTimeError("Out Date and Time should be greater than In Date and Time.")
       }
     }
   };
   const handleEndTimeChange = (newTime) => {
-    setTimeBreak({
-      ...addtimebreak,
-      add_clocked_out: newTime.format("HH:mm:ss"),
-    });
-  //   if(!addtimebreak.add_clocked_in){
-  //     setTimeBreak({
-  //       ...addtimebreak,
-  //       add_clocked_out: newTime.format("HH:mm:ss"),
-  //     });
-  //   }else{
-  //     if(addtimebreak.add_clocked_in<addtimebreak.add_clocked_out){
-  //       setDateEndTimeError("Out Date and Time should be greater than In Date and Time.")
-  //     }else{
-  //       setTimeBreak({
-  //         ...addtimebreak,
-  //         add_clocked_out: newTime.format("HH:mm:ss"),
-  //       });
-  //       setDateEndTimeError("");
-  //     }
-  //   }
+    if(!addtimebreak.add_clocked_in){
+      setTimeBreak({
+        ...addtimebreak,
+        add_clocked_out: newTime.format("HH:mm:ss"),
+      });
+    }else{
+      if(addtimebreak.add_clocked_in<newTime.format("HH:mm:ss")){
+        setTimeBreak({
+          ...addtimebreak,
+          add_clocked_out: newTime.format("HH:mm:ss"),
+        });
+        setDateEndTimeError("");
+      }else{
+        setDateEndTimeError("Out Date and Time should be greater than In Date and Time.")
+      }
+    }
   };
 
   const handleStartDateChange = (newDate) => {
@@ -247,22 +242,23 @@ const TimesheetListing = ({ data }) => {
     } else {
       setDateEndError("");
     }
-
     if (!addtimebreak.add_clocked_out) {
       setDateEndTimeError("Clock Out Time is required");
       return;
     } else {
       setDateEndTimeError("");
     }
-    if(addtimebreak.add_in_date == addtimebreak.add_out_date && addtimebreak.add_clocked_in == addtimebreak.add_clocked_out){
-      setDateEndTimeError("Out Date and Time should be greater than In Date and Time.")
-      return
-    }else if(addtimebreak.add_clocked_in<addtimebreak.add_clocked_out){
-      setDateEndTimeError("Out Date and Time should be greater than In Date and Time.")
-      return
-    }else{
-      setDateEndTimeError("");
-    }
+    // if (addtimebreak.add_in_date === addtimebreak.add_out_date && addtimebreak.add_clocked_in === addtimebreak.add_clocked_out) {
+    //   alert("Clocked in time and clocked out time cannot be the same on the same day.");
+    //   return; // Prevent save operation
+    // }
+
+    // if (addtimebreak.add_clocked_in >= addtimebreak.add_clocked_out) {
+    //   setDateEndTimeError("Out Date and Time should be greater than In Date and Time.ssss");
+    //   return;
+    // }else{
+    //   setDateEndError("");
+    // }
     const formData = new FormData();
     formData.append("merchant_id", addtimebreak.merchant_id);
     formData.append("employee_id", modalAddTimesheetID);
@@ -277,7 +273,7 @@ const TimesheetListing = ({ data }) => {
       console.log(`${key}: ${value}`);
     }
 
-    return
+    // return
     try {
       const response = await axios.post(`${BASE_URL}${ADD_TIME_SHEET}`, formData, {
         headers: {
@@ -289,6 +285,9 @@ const TimesheetListing = ({ data }) => {
         dispatch(fetchtimeSheetData(data));
         setShowModal(false);
       }else if(response.data.status === false && response.data.msg ==="Invalid time entered."){
+        setaddTimesheetMsg(response.data.msg)
+        setShowModal(true);
+      }else if(response.data.status === false && response.data.msg ==="Already checked in, please check out first."){
         setaddTimesheetMsg(response.data.msg)
         setShowModal(true);
       }else{
@@ -396,6 +395,9 @@ const TimesheetListing = ({ data }) => {
       }else if(response.data.status === false && response.data.msg === "Invalid time entered."){
         setaddBreakMsg(response.data.msg)
         setShowModalBreak(true);
+      }else if(response.data.status === false && response.data.msg === "Already reached maximum allowed breaks for a day."){
+        setaddBreakMsg(response.data.msg)
+        setShowModalBreak(true);
       }else{
         setShowModalBreak(true);
       }
@@ -463,45 +465,26 @@ const TimesheetListing = ({ data }) => {
 
   };
 
-
-
-  // for All View Break IN/Out End
-
-   // for Delete Break Start 
-   // first alert Are you sure want to delete this break timeing ?
-  // Url https://sandbox.quickvee.net/Timesheet/delete_breaks
-  // paramerte break_id: 10921-10922
-  const deleteBreakTimesheet = (data) => {
+  const deleteBreakTimesheet = (dataBreak) => {
     const datas = {
-      break_id:`${data.check_in_id}-${data.check_out_id}`,
+      break_id:dataBreak,
+      ...userTypeData
     };
-   
     const userConfirmed = window.confirm("Are you sure want to delete this break timeing ?");
     if (userConfirmed) {
-      if (data) {
+      if (dataBreak) {
         dispatch(deleteBreak(datas)).then(() => {
-          dispatch(fetchBreakDetails(data));
+          dispatch(fetchtimeSheetData(data));
         });
       }
+      closeModalViewBreak()
     } else {
-      console.log("Deletion canceled by break timeing");
+      console.log("Deletion canceled by Break ");
     }
   };
 
 
-
-
   // fo all Break Delete 
-  // first alert Are sure want to delete this timeclock? confirm then hit api 
-  // url https://sandbox.quickvee.net/Timesheet/delete_timeclock
-  // parameter inid: 10931
-            // outid: 10932
-            // attendanceid: 3912
-            // checkin: 12:00 AM
-            // checkout: 09:00 PM
-            // indate: 17-05-2024
-            // outdate: 17-05-2024
-
     const deleteAllBreakTimesheet = (dataTimesheet) => {
       const datas = {
         inid: dataTimesheet.check_in_id,
@@ -514,7 +497,6 @@ const TimesheetListing = ({ data }) => {
         merchant_id:merchant_id,
         ...userTypeData
       };
-     
       const userConfirmed = window.confirm("Are sure want to delete this timeclock?");
       if (userConfirmed) {
         if (dataTimesheet) {
@@ -524,15 +506,10 @@ const TimesheetListing = ({ data }) => {
         }
         closeModalViewBreak()
       } else {
-        console.log("props data",data)
         console.log("Deletion canceled by timeclock");
       }
     };
-
-   
   // for Delete Break End
-
-
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -764,6 +741,7 @@ const TimesheetListing = ({ data }) => {
                                   onChange={(newTime) =>
                                     handleStartTimeChange(newTime)
                                   }
+                                  // onChange={handleStartTimeChange}
                                   components={{
                                     OpenPickerIcon: () => (
                                       <img src={TimeIcon} alt="time-icon" />
@@ -830,6 +808,7 @@ const TimesheetListing = ({ data }) => {
                                   onChange={(newTime) =>
                                     handleEndTimeChange(newTime)
                                   }
+                                  // onChange={handleEndTimeChange}
                                   components={{
                                     OpenPickerIcon: () => (
                                       <img src={TimeIcon} alt="time-icon" />
@@ -1013,7 +992,7 @@ const TimesheetListing = ({ data }) => {
                           <p>Break {index+1}</p>
                           <p>{breakTimeIn}</p>
                           <p>{breakTimeOut}</p>
-                          <p  onClick={(e) => { deleteBreakTimesheet(AllbreakDelete);  e.stopPropagation();}}>
+                          <p  onClick={(e) => { deleteBreakTimesheet(breakDetail.id);  e.stopPropagation();}}>
                             <img src={DeleteIcon} alt="delete-icon" className="cursor-pointer" />
                           </p>
                         </div>

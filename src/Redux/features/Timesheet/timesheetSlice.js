@@ -1,7 +1,7 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
-import { BASE_URL, TIME_SHEET_LIST, DELETE_TIMESHEET } from "../../../Constants/Config"
+import { BASE_URL, TIME_SHEET_LIST, DELETE_TIMESHEET, DELETE_BREAK } from "../../../Constants/Config"
 
 
 const initialState = {
@@ -51,10 +51,10 @@ export const deleteTimesheet = createAsyncThunk('timeSheet/deleteTimesheet', asy
 });
 
 export const deleteBreak = createAsyncThunk('timeSheet/deleteBreak', async (data) => {
-
+    const{token,...newData}=data
     try {
-        const response = await axios.post(BASE_URL + "DELETE_BREAK", data, {
-            headers: { "Content-Type": "multipart/form-data" }
+        const response = await axios.post(BASE_URL + DELETE_BREAK, newData, {
+            headers: { "Content-Type": "multipart/form-data", 'Authorization': `Bearer ${token}` }
         });
       if(response){
         console.log(response)
@@ -119,7 +119,9 @@ const timeSheetSlice = createSlice({
         builder.addCase(deleteBreak.fulfilled, (state, action) => {
             state.loading = false;
             state.successMessage = action.payload.message;
-            state.timeSheetData = state.timeSheetData.filter((item) => item && item.id !== action.payload.categoryId);
+            state.timeSheetData = Array.isArray(state.timeSheetData)
+            ? state.timeSheetData.filter(item => item && item.id !== action.payload.categoryId)
+            : [];
             state.error = ''; // Reset the error message
         });
         builder.addCase(deleteBreak.rejected, (state, action) => {

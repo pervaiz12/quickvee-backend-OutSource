@@ -272,13 +272,12 @@ module.exports = Object.freeze({
   EXPORTCSV: "UserController/exportCSV",
 
    // For TimeSheet 
-  // TIME_SHEET_LIST: "CategoryReactapi/timesheet_list",
-  // TIME_SHEET_GETBREAKS:"CategoryReactapi/getBreaks"
   TIME_SHEET_LIST: "Timesheet_react_api/timesheet_list",
   TIME_SHEET_GETBREAKS:"Timesheet_react_api/getBreaks",
   ADD_TIME_SHEET: "Timesheet_react_api/addNewTimeclock",
   ADD_TIME_BREAK: "Timesheet_react_api/addBreak",
   DELETE_TIMESHEET: "Timesheet_react_api/delete_timeclock",
+  DELETE_BREAK:"Timesheet_react_api/delete_breaks",
 });
 
 // All api calls are initialized in this component for this application
