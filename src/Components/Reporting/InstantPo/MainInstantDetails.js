@@ -133,8 +133,8 @@ const MainInstantDetails = ({ data }) => {
                       parseFloat(instantactivity.price);
                     // console.log(result.a_state)
                     return (
-                      <div className="table_row "   key={index}>
-                        <p className="table12" style={{ color: '#818181' }}>
+                      <div className="table_row " key={index}>
+                        <p className="table12" style={{ color: "#818181" }}>
                           {new Date(instantactivity.created_at)
                             .toLocaleDateString("en-US", {
                               month: "2-digit",
@@ -144,7 +144,7 @@ const MainInstantDetails = ({ data }) => {
                             .split("/")
                             .join("-")}
                         </p>
-                        <p className="table12" style={{ color: '#818181' }}>
+                        <p className="table12" style={{ color: "#818181" }}>
                           {new Date(
                             instantactivity.created_at
                           ).toLocaleTimeString("en-US", {
@@ -154,23 +154,40 @@ const MainInstantDetails = ({ data }) => {
                             hour12: true,
                           })}
                         </p>
-                        <p className="table10 txt_ellipsis" style={{ color: '#818181' }}>
+                        <p
+                          className="table10 txt_ellipsis"
+                          style={{ color: "#818181" }}
+                        >
                           {instantactivity.emp_name === null ||
                           instantactivity.emp_name === ""
                             ? "Online"
                             : instantactivity.emp_name}
                         </p>
-                        <p className="table12 txt_ellipsis" style={{ color: '#818181' }}>
+                        <p
+                          className="table12 txt_ellipsis"
+                          style={{ color: "#818181" }}
+                        >
                           {instantactivity.title}
                         </p>
-                        <p className="table12 txt_ellipsis" style={{ color: '#818181' }}>
+                        <p
+                          className="table12 txt_ellipsis"
+                          style={{ color: "#818181" }}
+                        >
                           {instantactivity.variant}
                         </p>
-                        <p className="table10" style={{ color: '#818181' }}>{instantactivity.current_qty}</p>
-                        <p className="table8" style={{ color: '#818181' }}>{instantactivity.qty}</p>
-                        <p className="table8" style={{ color: '#818181' }}>{AfterAdjustQty}</p>
-                        <p className="table8" style={{ color: '#818181' }}>{instantactivity.price}</p>
-                        <p className="table8" style={{ color: '#818181' }}>
+                        <p className="table10" style={{ color: "#818181" }}>
+                          {instantactivity.current_qty}
+                        </p>
+                        <p className="table8" style={{ color: "#818181" }}>
+                          {instantactivity.qty}
+                        </p>
+                        <p className="table8" style={{ color: "#818181" }}>
+                          {AfterAdjustQty}
+                        </p>
+                        <p className="table8" style={{ color: "#818181" }}>
+                          {instantactivity.price}
+                        </p>
+                        <p className="table8" style={{ color: "#818181" }}>
                           {calculatedTotal % 1 !== 0
                             ? calculatedTotal.toFixed(2)
                             : calculatedTotal}

@@ -3,7 +3,8 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     
   isMenuOpen: false, // Initial value based on your useState
-  isDropdownOpen: false
+  isDropdownOpen: true,
+  isNestedDropdown: false
 };
 
 // Create a slice
@@ -21,12 +22,15 @@ const MenuSlice = createSlice({
     },
     setIsDropdownOpen: (state, action) => {
       state.isDropdownOpen = action.payload;
+    },
+    setNestedDropdown: (state, action) => {
+      state.isNestedDropdown = action.payload;
     }
   }
 });
 
 // Export actions
-export const { toggleMenu, setMenuOpen,setIsDropdownOpen } = MenuSlice.actions;
+export const { toggleMenu, setMenuOpen,setIsDropdownOpen,setNestedDropdown } = MenuSlice.actions;
 
 // Export reducer
 export default MenuSlice.reducer;

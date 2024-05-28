@@ -4,9 +4,16 @@ import { fetchdetailCategorySaleData } from "../../../Redux/features/DetailCateg
 import { useSelector, useDispatch } from "react-redux";
 import SortIcon from "../../../Assests/Category/Sorting.svg";
 import SortIconW from "../../../Assests/Category/SortingW.svg";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 
 const DetailsSaleReport = ({ data }) => {
   const dispatch = useDispatch();
+  const {
+    LoginGetDashBoardRecordJson,
+    LoginAllStore,
+    userTypeData,
+    GetSessionLogin,
+  } = useAuthDetails();
 
   const [detailCategorySale, setdetailCategorySale] = useState([]);
   const [order, setOrder] = useState("DESC");
@@ -15,12 +22,23 @@ const DetailsSaleReport = ({ data }) => {
   const detailCategorySaleDataState = useSelector(
     (state) => state.detailCategorySale
   );
-
+  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
-    if (!data.merchant_id) {
+    if (!merchant_id) {
       console.log("empty");
     } else {
-      dispatch(fetchdetailCategorySaleData({ ...data, order, sorting_type }));
+      let NewData = {
+        ...data,
+        merchant_id,
+        // merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        order,
+        sorting_type,
+        ...userTypeData,
+      };
+      // console.log(data);
+      // console.log(NewData);
+
+      dispatch(fetchdetailCategorySaleData(NewData));
     }
   }, [dispatch, data, order, sorting_type]);
 

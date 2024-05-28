@@ -5,9 +5,16 @@ import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import DetailsSaleReport from "./DetailsSaleReport";
 import { BASE_URL, TAXE_CATEGORY_LIST } from "../../../Constants/Config";
 import axios from "axios";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 
 const MainCatedetails = () => {
   const [filteredData, setFilteredData] = useState({ category_id: "all" });
+  const {
+    LoginGetDashBoardRecordJson,
+    LoginAllStore,
+    userTypeData,
+    GetSessionLogin,
+  } = useAuthDetails();
 
   const handleDataFiltered = (data) => {
     if (typeof data === "object") {
@@ -46,7 +53,7 @@ const MainCatedetails = () => {
       const updatedData = {
         ...filteredData,
         ...data,
-        merchant_id: "MAL0100CA",
+        // merchant_id: "MAL0100CA",
         order_env: orderEnvValue,
         order_typ: orderTypValue,
       };
@@ -128,15 +135,23 @@ const MainCatedetails = () => {
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
 
+  let data = {
+    merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+    ...userTypeData,
+  };
   useEffect(() => {
+    const { token, ...dataNew } = data;
     const fetchData = async () => {
       try {
         const response = await axios.post(
           BASE_URL + TAXE_CATEGORY_LIST,
+          dataNew,
           {
-            merchant_id: "MAL0100CA",
-          },
-          { headers: { "Content-Type": "multipart/form-data" } }
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         // Assuming the API response has a data property containing the category list
@@ -298,7 +313,7 @@ const MainCatedetails = () => {
 
       <div className="q-category-main-page">
         <div className="box">
-          <DateRange onDateRangeChange={handleDataFiltered}/>
+          <DateRange onDateRangeChange={handleDataFiltered} />
         </div>
       </div>
       <style>
@@ -310,7 +325,7 @@ const MainCatedetails = () => {
       </style>
 
       <div className="q-category-main-page categorysaleReport">
-        <DetailsSaleReport data={filteredData}/>
+        <DetailsSaleReport data={filteredData} />
       </div>
     </>
   );
