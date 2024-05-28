@@ -130,6 +130,7 @@ const StorePage = () => {
       login_type: LoginGetDashBoardRecordJson?.data?.login_type,
       merchant_id: merchant_id,
     };
+
     dispatch(handleGetStoreRecord(data)).then((result) => {
       if (result?.payload?.status == true) {
         if (result?.payload?.final_login == 1) {
@@ -201,35 +202,33 @@ const StorePage = () => {
             LoginAllStore?.data?.stores.map((store, Index) => {
               return (
                 <Grid item className="store-items " xs={12} sm={6} key={Index}>
-                  <Link to={`/?m_id=${store?.merchant_id}`}>
-                    <div
-                      className="store-item-card border my-2 p-2"
-                      onClick={() =>
-                        handleSubmitStoreRecord(store?.merchant_id)
-                      }
-                    >
-                      <div className="me-5">
-                        <img
-                          src={store.img || storeDefaultImage}
-                          alt="store_image"
-                        />
-                      </div>
-                      <div className="grid content-center store-items-address">
-                        <p className="store-items-store-name">{store.name}</p>
-                        <p className="store-items-store-name-address">
-                          {[
-                            store.a_address_line_1,
-                            store.a_address_line_2,
-                            store.a_city,
-                            store.a_state,
-                            store.a_zip,
-                          ]
-                            .filter((part) => part !== null && part !== "")
-                            .join(", ")}
-                        </p>
-                      </div>
+                  {/* <Link to={`/?m_id=${store?.merchant_id}`}> */}
+                  <div
+                    className="store-item-card border my-2 p-2"
+                    onClick={() => handleSubmitStoreRecord(store?.merchant_id)}
+                  >
+                    <div className="me-5">
+                      <img
+                        src={store.img || storeDefaultImage}
+                        alt="store_image"
+                      />
                     </div>
-                  </Link>
+                    <div className="grid content-center store-items-address">
+                      <p className="store-items-store-name">{store.name}</p>
+                      <p className="store-items-store-name-address">
+                        {[
+                          store.a_address_line_1,
+                          store.a_address_line_2,
+                          store.a_city,
+                          store.a_state,
+                          store.a_zip,
+                        ]
+                          .filter((part) => part !== null && part !== "")
+                          .join(", ")}
+                      </p>
+                    </div>
+                  </div>
+                  {/* </Link> */}
                 </Grid>
               );
             })}

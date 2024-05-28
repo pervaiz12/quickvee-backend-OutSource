@@ -24,7 +24,6 @@ export default function ProtectedRoute(props) {
     Cookies.remove("token_data");
     localStorage.removeItem("AllStore");
   };
-  console.log(AdminRocord);
 
   if (
     AdminRocord?.status == true &&
