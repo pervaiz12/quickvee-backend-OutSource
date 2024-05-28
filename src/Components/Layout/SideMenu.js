@@ -349,7 +349,7 @@ const DropdownMenuItem = ({
           )}
         </div>
       </div>
-        {console.log("isDropdownOpen", isDropdownOpen,"currentDropDownItem",currentDropDownItem,"item.id",item.id,"===",isDropdownOpen && currentDropDownItem === item.id)}
+     
       {isDropdownOpen && currentDropDownItem === item.id && (
         <div
           onMouseEnter={(e) => {
