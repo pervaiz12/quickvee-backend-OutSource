@@ -1,6 +1,6 @@
 import React from "react";
 import Add_adminFunctionality from "./add_adminFunctionality";
-import AddSvg from "../../../../Assests/Dashboard/Left.svg";
+import leftSvg from "../../../../Assests/Dashboard/Left.svg";
 import { useNavigate } from "react-router-dom";
 
 export default function Add_Admin() {
@@ -20,7 +20,7 @@ export default function Add_Admin() {
           <div className="box_shadow_div">
             <div className="q-add-categories-section-header">
               <span onClick={() => navigate("/users/admin")}>
-                <img src={AddSvg} alt="Add-New-Category" />
+                <img src={leftSvg} alt="Add-New-Category" />
                 <span>Add New Admin</span>
               </span>
             </div>

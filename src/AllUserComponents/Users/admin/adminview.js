@@ -1,31 +1,34 @@
-import React, { useState, useEffect, useMemo } from "react";
-import { AdminFunction } from "../../../Redux/features/user/adminSlice";
+import React, { useState, useEffect } from "react";
 import { Grid } from "@mui/material";
-
-import { useSelector, useDispatch } from "react-redux";
-import AdminFunctionality from "./adminFunctionality";
-import ViewAdmin from "./viewAdminModal";
-import { useNavigate } from "react-router-dom";
-import { useAuthDetails } from "../../../Common/cookiesHelper";
-
-import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
-import AddIcon from "../../../Assests/Category/addIcon.svg";
 import { styled } from "@mui/material/styles";
-import Pagination from "../UnverifeDetails/Pagination";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Edit from "../../../Assests/VerifiedMerchant/Edit.svg";
-
+import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
+
+import AdminFunctionality from "./adminFunctionality";
+import ViewAdmin from "./viewAdminModal";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
+import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
+import {
+  AdminFunction,
+  getAdminRecordCount,
+} from "../../../Redux/features/user/adminSlice";
+import AddIcon from "../../../Assests/Category/addIcon.svg";
+import Pagination from "../UnverifeDetails/Pagination";
+import Edit from "../../../Assests/VerifiedMerchant/Edit.svg";
+import useDebounce from "../../../hooks/useDebouncs";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 
 export default function AdminView() {
   const { userTypeData } = useAuthDetails();
-
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const {
     handleCloseAdminModel,
     handleViewAdmin,
@@ -33,62 +36,59 @@ export default function AdminView() {
     showMerchantData,
     adminName,
   } = AdminFunctionality();
-  const dispatch = useDispatch();
-  const AdminRecord = useSelector((state) => state.adminRecord);
 
-  useEffect(() => {
-    dispatch(AdminFunction(userTypeData));
-  }, []);
-
+  // states
   const [searchRecord, setSearchRecord] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-  const [adminsDataState, setAdminsDataState] = useState([]);
+  // const [adminsDataState, setAdminsDataState] = useState([]);
+
+  const debouncedValue = useDebounce(searchRecord);
+  const AdminRecord = useSelector((state) => state.adminRecord);
+  const adminRecordCount = useSelector(
+    (state) => state.adminRecord.adminRecordCount
+  );
+
+  // only when user changes Page number, Page size & searches something
+  useEffect(() => {
+    const data = {
+      ...userTypeData,
+      perpage: rowsPerPage,
+      page: currentPage,
+      search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+    };
+
+    dispatch(AdminFunction(data));
+  }, [currentPage, debouncedValue, rowsPerPage]);
+
+  // only when user searches to update the total count
+  useEffect(() => {
+    dispatch(
+      getAdminRecordCount({
+        ...userTypeData,
+        search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+      })
+    );
+  }, [debouncedValue]);
+
+  // useEffect(() => {
+  //   if (AdminRecord.AdminRecord.length >= 1) {
+  //     setAdminsDataState(AdminRecord.AdminRecord);
+  //     setTotalCount(AdminRecord.AdminRecord.length);
+  //   }
+  // }, [AdminRecord.AdminRecord]);
+
+  // on load setting count of Verified Merchant list & on every change...
+  useEffect(() => {
+    setTotalCount(adminRecordCount);
+  }, [adminRecordCount]);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const indexOfLastAdmin = currentPage * rowsPerPage;
-  const indexOfFirstAdmin = indexOfLastAdmin - rowsPerPage;
-
-  useEffect(() => {
-    if (!AdminRecord.loading && AdminRecord.AdminRecord.length >= 1) {
-      setAdminsDataState(AdminRecord.AdminRecord);
-      setTotalCount(AdminRecord.AdminRecord.length);
-    }
-  }, [AdminRecord.AdminRecord, AdminRecord.loading]);
-
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
-    if (value === "") {
-      setAdminsDataState(AdminRecord.AdminRecord);
-      setTotalCount(AdminRecord.AdminRecord.length);
-    } else {
-      const data =
-        AdminRecord &&
-        AdminRecord.AdminRecord &&
-        Array.isArray(AdminRecord.AdminRecord)
-          ? AdminRecord.AdminRecord.filter(
-              (result) =>
-                (result.owner_name &&
-                  result.owner_name
-                    .toLowerCase()
-                    .includes(searchRecord.toLowerCase())) ||
-                (result.email &&
-                  result.email
-                    .toLowerCase()
-                    .includes(searchRecord.toLowerCase())) ||
-                (result.name &&
-                  result.name
-                    .toLowerCase()
-                    .includes(searchRecord.toLowerCase())) ||
-                (result.phone && result.phone.includes(searchRecord))
-            )
-          : [];
-
-      setAdminsDataState(data);
-      setTotalCount(data.length);
-    }
+    setCurrentPage(1);
   };
 
   const StyledTable = styled(Table)(({ theme }) => ({
@@ -117,6 +117,8 @@ export default function AdminView() {
       border: 0,
     },
   }));
+
+  const columns = ["Owner Name", "Name", "Email", "Phone", "View", ""];
 
   return (
     <>
@@ -172,80 +174,97 @@ export default function AdminView() {
                 onPageChange={paginate}
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
               />
             </Grid>
           </Grid>
-          <Grid container>
-            <TableContainer>
-              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-                <TableHead>
-                  <StyledTableCell>Owner Name</StyledTableCell>
-                  <StyledTableCell>Name</StyledTableCell>
-                  <StyledTableCell>Email</StyledTableCell>
-                  <StyledTableCell>Phone</StyledTableCell>
-                  <StyledTableCell>View</StyledTableCell>
 
-                  <StyledTableCell></StyledTableCell>
-                </TableHead>
-                <TableBody>
-                  {adminsDataState
-                    ?.slice(indexOfFirstAdmin, indexOfLastAdmin)
-                    ?.map((data, index) => (
-                      <StyledTableRow key={data.id}>
-                        <StyledTableCell>
-                          <div className="text-[#000000] order_method capitalize">
-                            {data.owner_name.length < 18
-                              ? data.owner_name
-                              : data.owner_name.slice(0, 18) + `...` || ""}
-                          </div>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <div className="text-[#000000] order_method capitalize">
-                            {data.name || ""}
-                          </div>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <div className="text-[#000000] order_method capitalize">
-                            {data.email || ""}
-                          </div>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <div className="text-[#000000] order_method capitalize">
-                            {data.phone || ""}
-                          </div>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <div
-                            className="text-[#000000] order_method capitalize cursor-pointer"
-                            onClick={() =>
-                              handleViewAdmin(
-                                data.email,
-                                data.name,
-                                userTypeData
-                              )
-                            }
-                          >
-                            view merchant
-                          </div>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <div className="flex">
-                            <img
-                              title="Edit"
-                              className="mx-1 edit cursor-pointer"
-                              onClick={() =>
-                                navigate(`/users/editAdmin/${data.id}`)
-                              }
-                              src={Edit}
-                              alt="Edit"
-                            />
-                          </div>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    ))}
-                </TableBody>
-              </StyledTable>
-            </TableContainer>
+          <Grid container>
+            {AdminRecord.loading ? (
+              <>
+                <SkeletonTable columns={columns} />
+              </>
+            ) : (
+              <>
+                {AdminRecord &&
+                Array.isArray(AdminRecord.AdminRecord) &&
+                AdminRecord.AdminRecord?.length > 0 ? (
+                  <TableContainer>
+                    <StyledTable
+                      sx={{ minWidth: 500 }}
+                      aria-label="customized table"
+                    >
+                      <TableHead>
+                        <StyledTableCell>Owner Name</StyledTableCell>
+                        <StyledTableCell>Name</StyledTableCell>
+                        <StyledTableCell>Email</StyledTableCell>
+                        <StyledTableCell>Phone</StyledTableCell>
+                        <StyledTableCell>View</StyledTableCell>
+
+                        <StyledTableCell></StyledTableCell>
+                      </TableHead>
+                      <TableBody>
+                        {AdminRecord.AdminRecord?.map((data, index) => (
+                          <StyledTableRow key={data.id}>
+                            <StyledTableCell>
+                              <div className="text-[#000000] order_method capitalize">
+                                {data.owner_name?.length < 18
+                                  ? data.owner_name
+                                  : data.owner_name?.slice(0, 18) + `...` || ""}
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <div className="text-[#000000] order_method capitalize">
+                                {data.name || ""}
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <div className="text-[#000000] order_method capitalize">
+                                {data.email || ""}
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <div className="text-[#000000] order_method capitalize">
+                                {data.phone || ""}
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <div
+                                className="text-[#000000] order_method capitalize cursor-pointer"
+                                onClick={() =>
+                                  handleViewAdmin(
+                                    data.email,
+                                    data.name,
+                                    userTypeData
+                                  )
+                                }
+                              >
+                                view merchant
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <div className="flex">
+                                <img
+                                  title="Edit"
+                                  className="mx-1 edit cursor-pointer"
+                                  onClick={() =>
+                                    navigate(`/users/editAdmin/${data.id}`)
+                                  }
+                                  src={Edit}
+                                  alt="Edit"
+                                />
+                              </div>
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        ))}
+                      </TableBody>
+                    </StyledTable>
+                  </TableContainer>
+                ) : (
+                  <p className="px-5 py-4">No Data Found</p>
+                )}
+              </>
+            )}
           </Grid>
         </Grid>
       </Grid>

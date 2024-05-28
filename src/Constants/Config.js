@@ -182,10 +182,12 @@ module.exports = Object.freeze({
   ADMIN_CHECK_USER: "UserController/check_user", // check email pending
   CHECK_ADMIN_EMAIL: "UserController/check_user_type", //check admin email
   ADMIN_GET_CUSTOMER: "UserController/get_customer", // get customer data
+  GET_CUSTOMER_COUNT: "UserController/get_customer_count", // get customer count
   // GET_EDIT_CUSTOMER:'UserController/edit_customer',
   // GET_EDIT_CUSTOMER:'UserController/edit_customer',
   GET_MANAGER_RECORD: "UserController/maneger_view", // manager view
   GET_ADMIN_RECORD: "UserController/admin_view", // admin view data
+  GET_ADMIN_RECORD_COUNT: "UserController/admin_view_count", // admin records count
   GET_MANAGER_MERCHANT: "UserController/get_manager_merchant", // get manager merchant
   GET_ADMIN_MERCHANT: "UserController/get_merchant", // give admin merchant
   GET_EDIT_ADMIN: "UserController/edit_admin", // edit admin

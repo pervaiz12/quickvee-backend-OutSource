@@ -9,6 +9,7 @@ const Pagination = ({
   onPageChange,
   rowsPerPage,
   setRowsPerPage,
+  setCurrentPage,
 }) => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -31,47 +32,46 @@ const Pagination = ({
       );
     };
 
-    // Add pages around current page
-    if (totalPages <= 5) {
-      for (let i = 1; i <= totalPages; i++) {
-        addPageNumber(i);
+    /*
+    1) Pagination should have only 3 number and 2 buttons. one for left and one for right.
+    2) if total pages are only 3 or less. then show 1,2,3 all.
+    3) if total pages are more than 3, and user is visiting on 4, then show 3,4,5..
+    4) if user has reached final page, then show it on last number like.. 10 totalpages.. 8,9,10. 
+    */
+
+    if (totalPages > 3) {
+      if (currentPage < 3) {
+        addPageNumber(1);
+        addPageNumber(2);
+        addPageNumber(3);
+      } else if (currentPage === 3) {
+        addPageNumber(2);
+        addPageNumber(3);
+        addPageNumber(4);
+      } else if (currentPage > 3 && currentPage !== totalPages) {
+        addPageNumber(currentPage - 1);
+        addPageNumber(currentPage);
+        addPageNumber(currentPage + 1);
+      } else if (currentPage === totalPages) {
+        addPageNumber(currentPage - 2);
+        addPageNumber(currentPage - 1);
+        addPageNumber(currentPage);
       }
     } else {
-      for (
-        let i = Math.max(1, currentPage - 2);
-        i <= Math.min(currentPage + 2, totalPages);
-        i++
-      ) {
+      for (let i = 1; i <= totalPages; i++) {
         addPageNumber(i);
-      }
-      if (currentPage > 3) {
-        items.splice(
-          1,
-          0,
-          <li key="separator-start" className="page-item disabled">
-            <span className="page-link">...</span>
-          </li>
-        );
-      }
-
-      if (currentPage < totalPages - 2) {
-        items.splice(
-          items.length,
-          0,
-          <li key="separator-end" className="page-item disabled">
-            <span className="page-link">...</span>
-          </li>
-        );
       }
     }
 
     return items;
   };
   const pageLength = [{ title: 10 }, { title: 25 }, { title: 50 }];
+
   const handlePageRowLength = (value) => {
-    // console.log("handlePageRowLength", value);
     setRowsPerPage(value.title);
+    setCurrentPage(1);
   };
+
   return (
     <nav className="flex items-center justify-between">
       <div className="flex items-center">
@@ -111,7 +111,7 @@ const Pagination = ({
               }
             }}
           >
-            <img src={RightArrow} />
+            <img src={RightArrow} alt="right arrow" />
           </button>
         </li>
       </ul>
