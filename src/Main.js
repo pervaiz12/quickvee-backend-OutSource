@@ -56,6 +56,7 @@ const Main = ({ visible }) => {
       {visible === "order-type" && <Layout visible={visible} />}
 
       {visible === "current-inventory-value" && <Layout visible={visible} />}
+      {visible === "discount-per-sales-person" && <Layout visible={visible} />}
 
       {visible === "addemployee" && <Layout visible={visible} />}
       {visible === "receipt" && <Layout visible={visible} />}
@@ -66,9 +67,9 @@ const Main = ({ visible }) => {
       {visible === "order-refund-report" && <Layout visible={visible} />}
       {visible === "edit-vendor" && <Layout visible={visible} />}
       {visible === "vendor-details" && <Layout visible={visible} />}
-      {visible === "sales-report"  && <Layout visible={visible} />}
-      {visible === "tip-report"  && <Layout visible={visible} />}
-      {visible === "coupon-report"  && <Layout visible={visible} />}
+      {visible === "sales-report" && <Layout visible={visible} />}
+      {visible === "tip-report" && <Layout visible={visible} />}
+      {visible === "coupon-report" && <Layout visible={visible} />}
 
       {/* multip user layout */}
       {visible === "multimerchant" && <IndexAllUsers />}

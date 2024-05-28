@@ -2,17 +2,25 @@ import React, { useEffect, useState } from "react";
 import { fetchdailyreportData } from "../../../Redux/features/DailyReport/dailyreportSlice";
 
 import { useSelector, useDispatch } from "react-redux";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 
 const DailyReportList = ({ data }) => {
   const dispatch = useDispatch();
+  const {
+    LoginGetDashBoardRecordJson,
+    LoginAllStore,
+    userTypeData,
+    GetSessionLogin,
+  } = useAuthDetails();
 
   const [dailyreport, setdailyreport] = useState([]);
 
   const dailyreportDataState = useSelector((state) => state.dailyreport);
 
   useEffect(() => {
+    let newData = { ...data, ...userTypeData };
     // Dispatch the action to fetch data when the component mounts
-    dispatch(fetchdailyreportData(data));
+    dispatch(fetchdailyreportData(newData));
   }, [dispatch, data]);
 
   useEffect(() => {
@@ -54,23 +62,23 @@ const DailyReportList = ({ data }) => {
         <>
           <div className="box">
             <div className="q-daily-report-bottom-report-header">
-              <p className="report-sort" >Date</p>
-              <p className="report-title" >Total</p>
+              <p className="report-sort">Date</p>
+              <p className="report-title">Total</p>
             </div>
             {dailyreport.map((dailyreport, index) => (
-              <div className="q-category-bottom-categories-listing" key={index} >
+              <div className="q-category-bottom-categories-listing" key={index}>
                 <div className="q-category-bottom-categories-single-category">
-                  <p className="report-sort" >
+                  <p className="report-sort">
                     {formatDate(dailyreport.merchant_time)}
                   </p>
-                  <p className="report-title" >${dailyreport.amt}</p>
+                  <p className="report-title">${dailyreport.amt}</p>
                 </div>
               </div>
             ))}
             <div className="q-category-bottom-report-listing">
               <div className="q-category-bottom-categories-single-category">
-                <p className="report-sort" >Grand Total</p>
-                <p className="report-title" >${totalAmt.toFixed(2)}</p>
+                <p className="report-sort">Grand Total</p>
+                <p className="report-title">${totalAmt.toFixed(2)}</p>
               </div>
             </div>
           </div>

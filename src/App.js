@@ -438,23 +438,21 @@ function App() {
           />
 
           <Route
-                  exact
-                  path="/store-reporting/sales-report"
-                  element={<Main visible={"sales-report"} />}
-                />
+            exact
+            path="/store-reporting/sales-report"
+            element={<Main visible={"sales-report"} />}
+          />
           <Route
             exact
             path="/store-reporting/tip-report"
             element={<Main visible={"tip-report"} />}
           />
 
-
           <Route
             exact
             path="/store-reporting/coupon-report"
             element={<Main visible={"coupon-report"} />}
           />
-
 
           {/* multiple users dashbaord */}
 
@@ -468,6 +466,12 @@ function App() {
             path="/store-reporting/current-inventory-value"
             element={<Main visible={"current-inventory-value"} />}
           />
+          <Route
+            exact
+            path="/store-reporting/discount-per-sales-report"
+            element={<Main visible={"discount-per-sales-person"} />}
+          />
+
           <Route exact path="/toptraders" element={<TopTenders />} />
           <Route
             exact

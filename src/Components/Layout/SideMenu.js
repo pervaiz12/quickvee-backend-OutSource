@@ -157,10 +157,16 @@ const SideMenu = () => {
                     >
                       {/* {activeItem === item.link ? item.activeIcon : item.icon} */}
 
-                      {console.log("activeItem ",activeItem, "===" ," item.link ",item.link , activeItem === item.link )}
-                      {
-                        
-                      activeItem === item.link.trim() || hoveredItem === item.id
+                      {console.log(
+                        "activeItem ",
+                        activeItem,
+                        "===",
+                        " item.link ",
+                        item.link,
+                        activeItem === item.link
+                      )}
+                      {activeItem === item.link.trim() ||
+                      hoveredItem === item.id
                         ? item.activeIcon
                         : item.icon}
                       <Link
@@ -169,7 +175,7 @@ const SideMenu = () => {
                         }`}
                         to={item.link}
                       >
-                        {item.text} 
+                        {item.text}
                       </Link>
                     </div>
                   )}
@@ -297,7 +303,7 @@ const DropdownMenuItem = ({
                   activeItem === dropDownItem ? "activeTab" : ""
                 }`}
               >
-                {item.text} 
+                {item.text}
               </p>
 
               <FaChevronDown className="quickarrow_icon ml-4 me-5" />
@@ -696,6 +702,11 @@ const menuItems = [
       },
       { id: 83, text: "Tip Report", link: "/store-reporting/tip-report" },
       { id: 84, text: "Coupon Report", link: "/store-reporting/coupon-report" },
+      {
+        id: 85,
+        text: "Discount Per Sales Person",
+        link: "/store-reporting/discount-per-sales-report",
+      },
     ],
   },
 ];
