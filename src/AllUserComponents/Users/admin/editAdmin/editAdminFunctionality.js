@@ -2,10 +2,14 @@ import axios from 'axios'
 import React,{useState,useEffect}  from 'react'
 import{BASE_URL,GET_EDIT_ADMIN,UPDATE_ADMIN_RECORD}from '../../../../Constants/Config'
 import { useNavigate } from 'react-router-dom';
+import { useAuthDetails } from '../../../../Common/cookiesHelper';
+
 
 const EditAdminFunctionality=()=>{
     const navigate = useNavigate();
     const[editData,setEditData]=useState({owner_name:'',email:'',password1:'',phone:'',password:''})
+    const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+
     const[errors,setErrors]=useState({
       owner_name:'',
       phone:'',
@@ -13,11 +17,12 @@ const EditAdminFunctionality=()=>{
   })
 
     const handleEditAdmin=async(data)=>{
-        
-        const dataNew={admin_id:data}
-        // console.log(dataNew)
-        await axios.post(BASE_URL+GET_EDIT_ADMIN,dataNew,{headers:{
-            "Content-Type":'multipart/form-data'
+      const{token,...newData}=data
+      // console.log(newData)
+        // const dataNew={admin_id:data,newData}
+        await axios.post(BASE_URL+GET_EDIT_ADMIN,newData,{headers:{
+            "Content-Type":'multipart/form-data',
+            'Authorization': `Bearer ${token}`
           }}).then(response=>{
             if(response.data.status==200)
             {
@@ -101,9 +106,9 @@ const EditAdminFunctionality=()=>{
     }
 
     const handleSubmitAdmin=async(e)=>{
-        const data={admin_id:editData.id,name:editData.owner_name,owner_name:editData.owner_name,password:editData.password1,phone:editData.phone,email:editData.email}
-        // console.log(data)
-       
+        const{token,...newData}=userTypeData
+        // console.log(newData)
+        const data={admin_id:editData.id,name:editData.owner_name,owner_name:editData.owner_name,password:editData.password1,phone:editData.phone,email:editData.email,...newData}
         let validate=Object.values(errors).filter(error => error !== '').length;
         const validateBlank=validateForm()
         if(validateBlank)
@@ -111,7 +116,8 @@ const EditAdminFunctionality=()=>{
           if(validate == 0)
           {
             await axios.post(BASE_URL+UPDATE_ADMIN_RECORD,data,{headers:{
-              "Content-Type":'multipart/form-data'
+              "Content-Type":'multipart/form-data',
+              'Authorization': `Bearer ${token}`
             }}).then(result=>{
               setEditData({owner_name:'',email:'',password:'',phone:'',password:''})
               navigate('/users/admin')

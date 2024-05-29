@@ -159,7 +159,6 @@ const MainProducts = () => {
           offset: 0,
           limit: 10,
           page: 0,
-          ...userTypeData,
         };
         if (listing_data) {
           dispatch(fetchProductsData(listing_data));

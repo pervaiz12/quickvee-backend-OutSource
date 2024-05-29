@@ -62,14 +62,14 @@ module.exports = Object.freeze({
   UPDATE_STORE_OPTIONS_DATA: "Store_setting_api/update_store_options_data",
 
   //Coupon API Calls
-  COUPON_LIST: "Couponapi/get_coupon_details",
-  COUPON_STATUS_UPDATE: "Couponapi/show_online",
-  COUPON_DELETE: "Couponapi/delete_coupon",
-  COUPON_TITLE_CHECK: "Couponapi/check_coupon_title",
+  COUPON_LIST: "CouponReactApi/get_coupon_details",
+  COUPON_STATUS_UPDATE: "CouponReactApi/show_online",
+  COUPON_DELETE: "CouponReactApi/delete_coupon",
+  COUPON_TITLE_CHECK: "CouponReactApi/check_coupon_title",
   // COUPON_DETAILS_ID_CHECK: "Couponapi/get_edit_coupon_details",
-  COUPON_DETAILS_ID_CHECK: "Couponapi/get_coupon_by_id",
-  EDIT_COUPON: "Couponapi/edit_coupon",
-  ADD_COUPON: "Couponapi/add_coupon",
+  COUPON_DETAILS_ID_CHECK: "CouponReactApi/get_coupon_by_id",
+  EDIT_COUPON: "CouponReactApi/edit_coupon",
+  ADD_COUPON: "CouponReactApi/add_coupon",
 
   // System Access API Calls Listing and Update
   LIST_ALL_SYSTEM_ACCESS: "api/Settings_api/system_access",
@@ -146,6 +146,7 @@ module.exports = Object.freeze({
 
   // Store Order List API
   GET_STORE_ORDER_DATA: "Store_order_api/get_store_order_data",
+  GET_STORE_ORDER_DATA_COUNT: "Store_order_api/get_store_order_count",
 
   // Export Order Count Data
   EXPORT_ORDER_COUNT_DATA: "Store_order_api/export_order_count_data",
@@ -164,6 +165,14 @@ module.exports = Object.freeze({
 
   DETAIL_CATEGORY_SALE_REPORT: "vendor_report_api/detailed_category_sale",
 
+  //  Sales Report List API
+  SALES_REPORT_LIST: "vendor_report_api/sales_report",
+  // tip report list api
+  TIP_REPORT_LIST: "ReportingReactapi/tip_report",
+  //coupon report api
+
+  COUPON_REPORT_LIST: "ReportingReactapi/coupon_report",
+
   // GET_ORDER_SUMMERY_DETAILS:'Orders/order_details',
 
   // -------------------------
@@ -174,10 +183,13 @@ module.exports = Object.freeze({
   ADMIN_CHECK_USER: "UserController/check_user", // check email pending
   CHECK_ADMIN_EMAIL: "UserController/check_user_type", //check admin email
   ADMIN_GET_CUSTOMER: "UserController/get_customer", // get customer data
+  GET_CUSTOMER_COUNT: "UserController/get_customer_count", // get customer count
   // GET_EDIT_CUSTOMER:'UserController/edit_customer',
   // GET_EDIT_CUSTOMER:'UserController/edit_customer',
   GET_MANAGER_RECORD: "UserController/maneger_view", // manager view
+  GET_MANAGER_RECORD_COUNT: "UserController/maneger_view_count", // manager view
   GET_ADMIN_RECORD: "UserController/admin_view", // admin view data
+  GET_ADMIN_RECORD_COUNT: "UserController/admin_view_count", // admin records count
   GET_MANAGER_MERCHANT: "UserController/get_manager_merchant", // get manager merchant
   GET_ADMIN_MERCHANT: "UserController/get_merchant", // give admin merchant
   GET_EDIT_ADMIN: "UserController/edit_admin", // edit admin
@@ -185,6 +197,7 @@ module.exports = Object.freeze({
   GET_EDIT_CUSTOMER: "UserController/edit", // adit customer
   GET_UPDATE_CUSTOMER: "UserController/update", // update customer
   GET_VERIFIED_MERCHANT: "UserController/getUnverifiedMerchant", //get verified and unverified merchant
+  GET_VERIFIED_MERCHANT_COUNT: "UserController/getUnverifiedMerchantCount", //get verified and unverified merchant count
   GET_ADD_ADMIN: "UserController/insert_admin", //add admin
   GET_UPDATE_MERCHANT: "UserController/merchant_update",
   GET_Edit_STORE_INFO: "UserController/store_info",
@@ -195,7 +208,8 @@ module.exports = Object.freeze({
   EDIT_VENDOR_DATA: "Vendor_api/edit_vendor",
   UPDATE_VENDOR_DATA: "Vendor_api/update_vendor",
   ADD_VENDOR_DATA: "Vendor_api/add_vendor",
-
+  GET_VENDOR_DETAILS: "Vendor_api/vendor_details",
+  DELETE_SINGLE_VENDOR_DATA: "Vendor_api/delete_vendor",
   // Vendors Sales List API
   VENDORS_SALES_REPORT: "vendor_report_api/vendors_sales_report",
 
@@ -256,6 +270,14 @@ module.exports = Object.freeze({
   LOGIN_OTP_AUTHENTICATION: "LoginApiReact/chk_otp", //
   LOGIN_OTP_SUBMIT_AUTHENTICATION: "LoginApiReact/create_session", //
   LOGIN_VIA_SUPERADMIN: "LoginApiReact/login_via_superadmin", //
+  DASHBOARD_COUNT_STORE: "DashboardReactApi/all_orders_total_api", //
+  DASHBOARD_TABLE_LIST: "DashboardReactApi/recent_online_orders_list",
+  DELETE_SINGLE_STORE: "UserController/delete",
+  GET_ORDER_SUMMERY_DETAILS: "Orders/order_details",
+  UNAPPROVE_SINGLE_STORE: "UserController/unapprove",
+  APPROVE_SINGLE_STORE: "UserController/approve",
+  EXPORTCSV: "UserController/exportCSV",
+  DISCOUNT_PER_PERSON: "Reportingreactapi_pcr/discount_per_sales_person_report",
 });
 
 // All api calls are initialized in this component for this application

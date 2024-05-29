@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { FaAngleLeft } from 'react-icons/fa';
-import DefaultDrop from './DefaultDrop';
-import ProductImagesField from './ProductImagesField';
+import React, { useState } from "react";
+import { FaAngleLeft } from "react-icons/fa";
+import DefaultDrop from "./DefaultDrop";
+import ProductImagesField from "./ProductImagesField";
 
 const ProductEdit = () => {
   const [productData, setProductData] = useState({
-    title: '',
-    description: '',
-    category: '',
+    title: "",
+    description: "",
+    category: "",
   });
 
   const [appendedData, setAppendedData] = useState([]);
@@ -24,22 +24,22 @@ const ProductEdit = () => {
     e.preventDefault(); // Prevent form submission
 
     // Add your logic to update the product data
-    console.log('Product data updated:', productData);
+    console.log("Product data updated:", productData);
   };
 
   const categories = [
-    'Vapes',
-    '510 Thread Vape Batteries',
-    'Torches',
-    'Coils and Pods',
-    'Butane',
-    'Nectar Collectors',
-    'Vapes',
-    '510 Thread Vape Batteries',
-    'Torches',
-    'Coils and Pods',
-    'Butane',
-    'Nectar Collectors'
+    "Vapes",
+    "510 Thread Vape Batteries",
+    "Torches",
+    "Coils and Pods",
+    "Butane",
+    "Nectar Collectors",
+    "Vapes",
+    "510 Thread Vape Batteries",
+    "Torches",
+    "Coils and Pods",
+    "Butane",
+    "Nectar Collectors",
     // Add more categories as needed
   ];
 
@@ -59,7 +59,7 @@ const ProductEdit = () => {
   };
   return (
     <>
-      <div className='mx-2 my-2'>
+      <div className="mx-2 my-2">
         <div
           className="box-content h-auto w-70 p-2 border-4 border-white bg-white rounded-xl opacity-100 mt-9 mx-8"
           style={{ boxShadow: "0px 3px 6px #0000001F" }}
@@ -73,7 +73,7 @@ const ProductEdit = () => {
                 </div>
               </div>
             </div>
-            <div className='mt-1 bg-[#000] border-b-2 w-full mb-2'></div>
+            <div className="mt-1 bg-[#000] border-b-2 w-full mb-2"></div>
           </div>
 
           <form onSubmit={handleUpdate}>
@@ -86,7 +86,7 @@ const ProductEdit = () => {
                 type="text"
                 id="title"
                 value={productData.title}
-                onChange={(e) => handleChange('title', e.target.value)}
+                onChange={(e) => handleChange("title", e.target.value)}
                 className="border p-2 rounded-md"
               />
             </div>
@@ -99,37 +99,37 @@ const ProductEdit = () => {
               <textarea
                 id="description"
                 value={productData.description}
-                onChange={(e) => handleChange('description', e.target.value)}
+                onChange={(e) => handleChange("description", e.target.value)}
                 className="border p-2 rounded-md"
               />
             </div>
 
-           <div className='border border-[#E1E1E1] py-6 px-5 mb-5 '>
-            <div className="flex flex-col mb-4">
-              <label className="text-sm mb-1" htmlFor="category">
-                Category
-              </label>
-              <input
-                type="text"
-                id="category"
-                value={`${productData.category} ${appendedData.join(', ')}`}
-                onChange={(e) => handleChange('category', e.target.value)}
-                className="border p-2 rounded-m"
-              />
-            </div>
+            <div className="border border-[#E1E1E1] py-6 px-5 mb-5 ">
+              <div className="flex flex-col mb-4">
+                <label className="text-sm mb-1" htmlFor="category">
+                  Category
+                </label>
+                <input
+                  type="text"
+                  id="category"
+                  value={`${productData.category} ${appendedData.join(", ")}`}
+                  onChange={(e) => handleChange("category", e.target.value)}
+                  className="border p-2 rounded-m"
+                />
+              </div>
 
-            {/* Category buttons */}
-            <div className="flex space-x-4 mb-4">
-              {categories.map((category, index) => (
-                <button
-                  key={index}
-                  className="px-4 py-2 bg-white border text-[16px] text-black opacity-100 Admin_bold leading-0 rounded-md mx-4 my-2"
-                  onClick={() => handleCategoryClick(category)}
-                >
-                  {category}
-                </button>
-              ))}
-            </div>
+              {/* Category buttons */}
+              <div className="flex space-x-4 mb-4">
+                {categories.map((category, index) => (
+                  <button
+                    key={index}
+                    className="px-4 py-2 bg-white border text-[16px] text-black opacity-100 Admin_bold leading-0 rounded-md mx-4 my-2"
+                    onClick={() => handleCategoryClick(category)}
+                  >
+                    {category}
+                  </button>
+                ))}
+              </div>
             </div>
             {/* <div className="flex flex-col mb-4">
               <label className="text-sm mb-1" htmlFor="searchKeyword">
@@ -145,30 +145,32 @@ const ProductEdit = () => {
             </div> */}
 
             {/* Update and Cancel buttons */}
-            
           </form>
           <div>
-      <DefaultDrop options={['Option 1', 'Option 2', 'Option 3']} selectedOptions={selectedOptions} updateSelectedOptions={updateSelectedOptions} />
-   
-    </div>
-         
+            <DefaultDrop
+              options={["Option 1", "Option 2", "Option 3"]}
+              selectedOptions={selectedOptions}
+              updateSelectedOptions={updateSelectedOptions}
+            />
+          </div>
+
           <ProductImagesField />
           <div className="flex justify-end space-x-4">
-              <button
-                type="submit"
-                className="px-4 py-2 bg-green-500 text-white rounded-md"
-                onSubmit={{updateSelectedOptions}}
-              >
-                Update
-              </button>
-              <button
-                type="button"
-                className="px-4 py-2 bg-red-500 text-white rounded-md"
-                onClick={handleCancel}
-              >
-                Cancel
-              </button>
-            </div>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-green-500 text-white rounded-md"
+              onSubmit={{ updateSelectedOptions }}
+            >
+              Update
+            </button>
+            <button
+              type="button"
+              className="px-4 py-2 bg-red-500 text-white rounded-md"
+              onClick={handleCancel}
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       </div>
     </>

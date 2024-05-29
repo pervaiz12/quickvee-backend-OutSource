@@ -18,8 +18,6 @@ const transactionsList = [
 ];
 
 const FilterEmp = ({ onFilterEmpDataChange, searchId, setSearchId }) => {
-
-
   const [selected, setSelected] = useState(false);
   const [selectedEmployee, setSelectedEmployee] = useState("All");
   const [selectedEmployeeID, setSelectedEmployeeID] = useState("All");

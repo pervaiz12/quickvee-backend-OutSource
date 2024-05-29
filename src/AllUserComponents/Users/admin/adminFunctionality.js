@@ -8,18 +8,16 @@ export default function AdminFunctionality() {
     const[showMerchantData,setShowMerchantData]=useState([])
     const [adminName,setAdminName]=useState('')
 
-    const handleViewAdmin=async(data,name)=>
+    const handleViewAdmin=async(data,name,userTypeData)=>
     {
         setAdminName(name)
-        // "kaushal123@imerchantech.com"
-        const datarecord={email:data}
-        await axios.post(BASE_URL+GET_ADMIN_MERCHANT,datarecord,{ headers: { "Content-Type": "multipart/form-data" }}).then(response=>{
+        const{token,...newData}=userTypeData
+        const dataNew={email:data,...newData}
+        await axios.post(BASE_URL+GET_ADMIN_MERCHANT,dataNew,{ headers: { "Content-Type": "multipart/form-data", 'Authorization': `Bearer ${token}` }}).then(response=>{
             if(response.data.status==200)
             {
-                // console.log(response.data.message)
                 setShowMerchantData(response.data.message)
                 setShowAdmin(true)
-                // console.log('yessss')
             }
             else{
                 setShowMerchantData(response.data.message)

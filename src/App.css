@@ -57,6 +57,10 @@
   font-family: CircularSTDMedium;
   src: url("./Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
 }
+@font-face {
+  font-family: CircularRegular;
+  src: url("./Assests/Fonts/Circular-Std-Regular-Book.ttf");
+}
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -230,10 +234,11 @@ input[type="number"] {
 /* add error msg css */
 .input-error {
   color: #fa0000 !important;
-  font-family: QuicksandSemiBold, Quicksand !important;
   font-size: 16px !important;
   margin: 3px !important;
   padding: 0 !important;
+  font-family: CircularRegular;
+
   /* bottom: -17px;
     height: 15px;
     left: 10px;
@@ -246,6 +251,12 @@ input[type="number"] {
     display: flex;
     flex-direction: column;
   }
+}
+.main-content {
+  /* overflow-x: hidden;
+  overflow-y: auto;
+  overflow-x: hidden; */
+  min-height: 100vh;
 }
 
 /* .main-content {
@@ -373,10 +384,11 @@ select option {
 .dataCalender {
   background-color: #fff;
   z-index: 5;
-  top: 12rem;
+  top: 13.5rem;
   bottom: 3px;
   z-index: 5;
-  right: 6.2rem;
+  right: 6.5rem;
+  top: 11.5rem;
   bottom: 3px;
 
   position: absolute;
@@ -384,8 +396,8 @@ select option {
   transition:
     width 5s,
     height 4s;
-  height: 570px;
-  width: 60%;
+  height: 550px;
+  width: 70%;
   padding: 12px;
   box-shadow: 0px 3px 6px #0000001f;
   border-radius: 8px;
@@ -833,6 +845,11 @@ a.flex.text-center.submenu-item.text-gray-400.py-4.CircularSTDBook:hover {
 
   font-family: "CircularSTDBook", sans-serif;
 }
+.nested-submenu-item{
+  display: flex;
+  background-color: #334247;
+  font-family: "CircularSTDBook", sans-serif;
+}
 
 .submenu-item:hover {
   color: #ffc400;
@@ -1004,6 +1021,10 @@ div.q_label_details::after {
   position: absolute;
   top: 7px;
   right: 7px;
+}
+.img-DeleteIcon img {
+  height: 40px;
+  width: 40px;
 }
 
 .img-DeleteIcon img {

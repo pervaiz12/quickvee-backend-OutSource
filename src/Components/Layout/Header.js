@@ -7,9 +7,9 @@ import DownlIcon from "../../Assests/Dashboard/download.svg";
 import OnlineData from "../../Assests/Dashboard/online.svg";
 import SynkData from "../../Assests/Dashboard/sync.svg";
 import DownIcon from "../../Assests/Dashboard/Down.svg";
-import { setMenuOpen } from "../../Redux/features/NavBar/MenuSlice";
-import Cookies from "js-cookie";
-import CryptoJS from "crypto-js";
+import { setMenuOpen,setIsDropdownOpen } from "../../Redux/features/NavBar/MenuSlice";
+import Cookies from 'js-cookie'; 
+import CryptoJS from 'crypto-js'; 
 import UserLogo from "../../Assests/Dashboard/UserLogo.svg";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -31,36 +31,20 @@ import { display } from "@mui/system";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 
 export default function Header() {
-  const { LoginGetDashBoardRecordJson, LoginAllStore } = useAuthDetails();
+  const { LoginGetDashBoardRecordJson, LoginAllStore, GetSessionLogin } =
+    useAuthDetails();
   const dispatch = useDispatch();
   const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
-
-  let UserLoginDataStringFy =
-    Cookies.get("user_auth_record") !== undefined
-      ? Cookies.get("user_auth_record")
-      : [];
-  let UserLoginRecord = useSelector(
-    (state) => state?.loginAuthentication?.getUserLoginRecord
+  const isDropdownOpen = useSelector(
+    (state) => state.NavBarToggle.isDropdownOpen
   );
-  const getUserLoginAuth = atob(UserLoginRecord);
-  const GetSessionLogin =
-    getUserLoginAuth !== "" ? JSON.parse(getUserLoginAuth) : [];
-  // ===================================AuthDecryptDataDashBoardJSONFormat?.data?.name   LoginSuccessJson?.data?.name
-  //
-  let allStoresData = LoginAllStore?.data?.stores;
-  let storenameCookie =
-    LoginGetDashBoardRecordJson !== ""
-      ? LoginGetDashBoardRecordJson?.data?.name
-      : LoginGetDashBoardRecordJson?.data?.name;
-  useEffect(() => {
-    setStoreName(storenameCookie);
-  }, [LoginGetDashBoardRecordJson]);
-
+  let allStoresData=LoginAllStore?.data?.stores
+  let storenameCookie=LoginGetDashBoardRecordJson !=="" ? LoginGetDashBoardRecordJson?.data?.name :LoginGetDashBoardRecordJson?.data?.name
+  useEffect(()=>{
+    setStoreName(storenameCookie)
+  },[LoginGetDashBoardRecordJson])
+ 
   // useEffect for all when update data in coockie-----------------
-
-  useEffect(() => {
-    dispatch(getUserRecordData(UserLoginDataStringFy));
-  }, [UserLoginDataStringFy]);
 
   // useEffect for all when update data in coockie--------------
 
@@ -72,7 +56,8 @@ export default function Header() {
   const [showDropdown, setShowDropdown] = useState(false);
   const [storename, setStoreName] = useState(storenameCookie);
   const handleDropdownToggle = () => {
-    setShowDropdown(!showDropdown);
+    dispatch(setMenuOpen(!isMenuOpenRedux));
+    dispatch(setIsDropdownOpen(!isDropdownOpen));
   };
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
@@ -110,7 +95,6 @@ export default function Header() {
       login_type: LoginGetDashBoardRecordJson?.login_type,
       merchant_id: merchant_id,
     };
-    // console.log(data);
     dispatch(handleGetStoreRecord(data)).then((result) => {
       if (result?.payload?.status == true) {
         if (result?.payload?.final_login == 1) {
@@ -138,63 +122,66 @@ export default function Header() {
         <div className="flex items-center px-4 mx-2">
           {LoginGetDashBoardRecordJson?.final_login == 1 ? (
             <BiMenu
-              className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out`}
-              onClick={(e) => {
-                // setIsMenuOpen(!isMenuOpen); || AdminRocord?.final_login==1
-                // (LoginSuccessJson?.final_login==1 || AuthDecryptDataDashBoardJSONFormat?.final_login==1 )
-                dispatch(setMenuOpen(!isMenuOpenRedux));
-              }}
-            />
-          ) : (
-            ""
-          )}
+            className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out`}
+            onClick={(e) => {
+              // setIsMenuOpen(!isMenuOpen); || AdminRocord?.final_login==1
+              // (LoginSuccessJson?.final_login==1 || AuthDecryptDataDashBoardJSONFormat?.final_login==1 )
+              handleDropdownToggle()
+           
+            }}
+          />)
+          :''
+          }
           <a href="/dashboard">
             <img src={Quick} alt="Logo" className="ml-6" />
           </a>
-          {LoginGetDashBoardRecordJson?.final_login == 1 ? (
-            LoginAllStore?.data?.stores !== undefined ||
-            localStorage.getItem("AllStore") ? (
-              <div className="relative">
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">
-                    {storename}
-                  </InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={storename}
-                    label={storename}
-                    // onChange={handleChangeStore}
-                  >
-                    {
-                      // console.log(JSON.parse(localStorage.getItem("AllStore")))
+          {
+            //  console.log(localStorage.getItem("AllStore"))
+            LoginGetDashBoardRecordJson?.final_login == 1 ? (
+              LoginAllStore?.data?.stores !== undefined ||
+              (localStorage.getItem("AllStore") !== "" &&
+                localStorage.getItem("AllStore") !== null) ? (
+                <div className="relative">
+                  <FormControl fullWidth>
+                    <InputLabel id="demo-simple-select-label">
+                      {storename}
+                    </InputLabel>
+                    <Select
+                      labelId="demo-simple-select-label"
+                      id="demo-simple-select"
+                      value={storename}
+                      label={storename}
+                      // onChange={handleChangeStore}
+                    >
+                      {
+                        // console.log(JSON.parse(localStorage.getItem("AllStore")))
 
-                      JSON.parse(localStorage.getItem("AllStore")) !== "" ||
-                      Array.isArray(allStoresData)
-                        ? (
-                            JSON.parse(localStorage.getItem("AllStore")) ||
-                            allStoresData
-                          )?.map((result, index) => {
-                            return (
-                              <MenuItem
-                                onClick={() =>
-                                  handleChangeMerchant(result?.merchant_id)
-                                }
-                                value={result?.name}
-                              >
-                                {result?.name}
-                              </MenuItem>
-                            );
-                          })
-                        : ""
-                    }
-                    {/* <MenuItem value={10}>Ten</MenuItem>
+                        JSON.parse(localStorage.getItem("AllStore")) !== "" ||
+                        Array.isArray(allStoresData)
+                          ? (
+                              JSON.parse(localStorage.getItem("AllStore")) ||
+                              allStoresData
+                            )?.map((result, index) => {
+                              return (
+                                <MenuItem
+                                  onClick={() =>
+                                    handleChangeMerchant(result?.merchant_id)
+                                  }
+                                  value={result?.name}
+                                >
+                                  {result?.name}
+                                </MenuItem>
+                              );
+                            })
+                          : ""
+                      }
+                      {/* <MenuItem value={10}>Ten</MenuItem>
               <MenuItem value={20}>Twenty</MenuItem>
               <MenuItem value={30}>Thirty</MenuItem> */}
-                  </Select>
-                </FormControl>
+                    </Select>
+                  </FormControl>
 
-                {/* <div
+                  {/* <div
               className="flex items-center ml-6 px-3 py-1 text-black lg:text-[20px] admin_medium cursor-pointer sm:text-[12px] md:text-[15px]"
               onClick={handleDropdownToggle}
             >
@@ -215,13 +202,14 @@ export default function Header() {
                 </div>
               </div>
             )} */}
-              </div>
+                </div>
+              ) : (
+                ""
+              )
             ) : (
               ""
             )
-          ) : (
-            ""
-          )}
+          }
           <div className="flex items-center lg:text-[20px] text-black ml-auto sm:text-xs md:text-sm">
             {/* Download App section */}
             {/* ================================ */}

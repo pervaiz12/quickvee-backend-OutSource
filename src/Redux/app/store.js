@@ -8,11 +8,11 @@ import settingstoreoptionReducer from "../features/StoreSettingOption/StoreSetti
 import systemAccessListingReducer from "../features/SystemAccess/systemAccessSlice";
 import couponListReducer from "../features/Coupon/couponSlice";
 import inventoryListingReducer from "../features/Inventory/InventorySlice";
-import taxesReducer from "../features/Taxes/taxesSlice"
-import CurrentInventoryReducer from  "../features/CurrentInventoryValue/currentInventoryValueSlice"
-import settingstorealtersReducer from "../features/SettingStoreAlters/SettingStoreAltersSlice"
+import taxesReducer from "../features/Taxes/taxesSlice";
+import CurrentInventoryReducer from "../features/CurrentInventoryValue/currentInventoryValueSlice";
+import settingstorealtersReducer from "../features/SettingStoreAlters/SettingStoreAltersSlice";
 import SettingReceiptReducer from "../features/StoreSettings/SettingsReceipt/SettingsReceiptSlice";
-import PurchaseOrderReducer from "../features/PurchaseOrder/purchaseOrderSlice"
+import PurchaseOrderReducer from "../features/PurchaseOrder/purchaseOrderSlice";
 import CheckIDVerifyListReducer from "../features/Reports/CheckIDVerify/CheckIDVerifySlice";
 import DailyReportList from "../features/DailyReport/dailyreportSlice";
 import EmployeeListReducer from "../features/EmployeeList/EmployeeListSlice";
@@ -32,13 +32,13 @@ import OrderTypeReducer from "../features/OrderType/OrderTypeSlice";
 import TaxesreportSliceReducer from "../features/TaxesReport/taxesreportSlice";
 import PermissionListReducer from "../features/Permission/PermissionSlice";
 import ReorderInventoryListReducer from "../features/Reports/ReorderInventory/ReorderInventorySlice";
-import DefaultsSliceReducer from "../features/Defaults/defaultsSlice"
+import DefaultsSliceReducer from "../features/Defaults/defaultsSlice";
 import SalesByPersonSliceReducer from "../features/SalesByPerson/SalesByPersonSlice";
-import CustomerSliceReducer from '../features/user/customerSlice';
-import ManagerSliceReducer from '../features/user/managerSlice';
-import AdminSliceReducer from '../features/user/adminSlice';
-import VerifiedMerchantSliceReducer from '../features/user/verifiedMerchantSlice';
-import UnVerifiedMerchantSliceReducer from '../features/user/unverifiedMerchantSlice';
+import CustomerSliceReducer from "../features/user/customerSlice";
+import ManagerSliceReducer from "../features/user/managerSlice";
+import AdminSliceReducer from "../features/user/adminSlice";
+import VerifiedMerchantSliceReducer from "../features/user/verifiedMerchantSlice";
+import UnVerifiedMerchantSliceReducer from "../features/user/unverifiedMerchantSlice";
 import VendorListReducer from "../features/Reports/VendorList/VendorListSlice";
 import VendorSalesListReducer from "../features/Reports/VendorSales/VendorSalesSlice";
 import OrderRefundListReducer from "../features/Reports/OrderRefundReport/OrderRefundReportSlice";
@@ -55,96 +55,96 @@ import DetailCategorySaleSliceReducer from "../features/DetailCategorySale/detai
 import EmployeeWorkinghrsSlice from "../features/Reports/EmployeeWorkinghrs/EmployeeWorkinghrsSlice";
 import AddpurchaseOrderSliceReducer from "../features/PurchaseOrder/AddpurchaseOrderSlice";
 import MenuSlice from "../features/NavBar/MenuSlice";
-import LoginSliceReducer from '../features/Authentication/loginSlice'
+import LoginSliceReducer from "../features/Authentication/loginSlice";
+import orderSummeryReducer from "../features/orderSummeryHistory/orderSummerySlice";
+import SalesReportSlice from "../features/Reports/SalesReport/SalesReportSlice";
+import TipReportSlice from "../features/Reports/TipReport/TipReportSlice";
+import CouponReportSlice from "../features/Reports/CouponReport/CouponReportSlice";
 
 const store = configureStore({
   reducer: {
-
-    VendorList:VendorListReducer,
-    vendors:vendorReducer,
+    VendorList: VendorListReducer,
+    vendors: vendorReducer,
     categories: categoriesReducer,
     attributes: attributesReducer,
-    purchase:PurchaseOrderReducer,
+    purchase: PurchaseOrderReducer,
     inStoreOrder: inStoreOrderReducer,
     onlineStoreOrder: onlineStoreOrderReducer,
-    employeelistData:addEmployeeReducer,
-    couponList:couponListReducer,
-    settingStoreOption:settingstoreoptionReducer,
+    employeelistData: addEmployeeReducer,
+    couponList: couponListReducer,
+    settingStoreOption: settingstoreoptionReducer,
     taxes: taxesReducer,
-    systemAccessList:systemAccessListingReducer,
-    inventoryDataList:inventoryListingReducer,
+    systemAccessList: systemAccessListingReducer,
+    inventoryDataList: inventoryListingReducer,
     settingstoreoption: settingstoreoptionReducer,
     settingstorealters: settingstorealtersReducer,
     SettingReceiptList: SettingReceiptReducer,
-    CheckIDVerifyList:CheckIDVerifyListReducer,
-    dailyreport:DailyReportList,
-    detailCategorySale:DetailCategorySaleSliceReducer,
+    CheckIDVerifyList: CheckIDVerifyListReducer,
+    dailyreport: DailyReportList,
+    detailCategorySale: DetailCategorySaleSliceReducer,
 
+    //reducer for payment method  report
+    paymentDetailReport: PaymentMethodDetailReducer,
 
-   //reducer for payment method  report
-   paymentDetailReport:PaymentMethodDetailReducer,
+    NewItemCreatedBtnList: NewItemCreatedBtnListReducer,
+    ReorderInventoryList: ReorderInventoryListReducer,
 
-
-    NewItemCreatedBtnList:NewItemCreatedBtnListReducer,
-    ReorderInventoryList:ReorderInventoryListReducer,
-
-
-    topsaller:TopsallerReducer,
-    instantactivity:instantactivitySlice,
+    topsaller: TopsallerReducer,
+    instantactivity: instantactivitySlice,
 
     RegisterSettingsData: RegisterSettingReducer,
-   
 
-    NewsLetterList:NewsLetterListReducer,
+    NewsLetterList: NewsLetterListReducer,
 
-   //Employee List Data
-    employeeDataList :EmployeeListReducer,
-    ExportInventoryData:ExportInventoryReducer,
+    //Employee List Data
+    employeeDataList: EmployeeListReducer,
+    ExportInventoryData: ExportInventoryReducer,
 
-    ItemSalesReportList:ItemSalesReportListReducer,
+    ItemSalesReportList: ItemSalesReportListReducer,
 
     //Order Type
-    orderTypeList:OrderTypeReducer,
+    orderTypeList: OrderTypeReducer,
 
-    taxesreport:TaxesreportSliceReducer,
-    currentInventoryreport:CurrentInventoryReducer,
-    VendorSalesList:VendorSalesListReducer,
-
+    taxesreport: TaxesreportSliceReducer,
+    currentInventoryreport: CurrentInventoryReducer,
+    VendorSalesList: VendorSalesListReducer,
 
     //Permission
 
-    permissionRed:PermissionListReducer,
+    permissionRed: PermissionListReducer,
 
-
-    StoreOrderList:StoreOrderSliceReducer,
+    StoreOrderList: StoreOrderSliceReducer,
 
     defaults: DefaultsSliceReducer,
 
-    SalesByPersonList:SalesByPersonSliceReducer,
+    SalesByPersonList: SalesByPersonSliceReducer,
 
-    orderSummeryList:orderSummerySlice,
-    customerRecord:CustomerSliceReducer,
-    managerRecord:ManagerSliceReducer,
-    adminRecord:AdminSliceReducer,
-    verifiedMerchantRecord:VerifiedMerchantSliceReducer,
-    unverifiedMerchantRecord:UnVerifiedMerchantSliceReducer,
-    OrderRefundList:OrderRefundListReducer,
+    orderSummeryList: orderSummerySlice,
+    customerRecord: CustomerSliceReducer,
+    managerRecord: ManagerSliceReducer,
+    adminRecord: AdminSliceReducer,
+    verifiedMerchantRecord: VerifiedMerchantSliceReducer,
+    unverifiedMerchantRecord: UnVerifiedMerchantSliceReducer,
+    OrderRefundList: OrderRefundListReducer,
     productsListData: productsReducer,
 
     loyaltyprogram: loyaltyprogramSlice,
     ShiftSummarylist: ShiftSummarySlice,
     StoreSetupList: SettingSetupSlice,
-    EmpWorkinghrsList:EmployeeWorkinghrsSlice,
+    EmpWorkinghrsList: EmployeeWorkinghrsSlice,
     Addpolist: AddpurchaseOrderSliceReducer,
-    loginAuthentication:LoginSliceReducer,
-    
-    NavBarToggle: MenuSlice
+    loginAuthentication: LoginSliceReducer,
+    orderSummeryList: orderSummeryReducer,
+
+    NavBarToggle: MenuSlice,
+    SalesReportList: SalesReportSlice,
+    TipReportList: TipReportSlice,
+    CouponReportList: CouponReportSlice,
   },
 
-      //setting setup 
+  //setting setup
 
-   //ShiftSummarySlice
-
+  //ShiftSummarySlice
 
   // middleware:(getDefaultMiddleware)=> getDefaultMiddleware().concat(logger),
 });

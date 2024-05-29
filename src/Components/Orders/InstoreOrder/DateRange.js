@@ -88,24 +88,6 @@ const DateRange = ({ onDateRangeChange }) => {
   useEffect(() => {
     setDatesBasedOnOption(activeOption);
   }, [activeOption]);
-
-  // useEffect(() => {
-  //   const handleResize = () => {
-  //     setIsTablet(window.innerWidth <= 995); // Assuming tablet width as 768px
-  //   };
-
-  //   // Initial check
-  //   handleResize();
-
-  //   // Event listener for window resize
-  //   window.addEventListener("resize", handleResize);
-
-  //   // Cleanup
-  //   return () => {
-  //     window.removeEventListener("resize", handleResize);
-  //   };
-  // }, []);
-
   return (
     <>
       <Grid container className="q-datarange-bottom-detail-section p-5">
@@ -223,7 +205,6 @@ const DateRange = ({ onDateRangeChange }) => {
             </div>
           </Grid>
         </Grid>
-        <Grid container></Grid>
       </Grid>
     </>
   );

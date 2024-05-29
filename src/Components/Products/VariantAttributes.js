@@ -1,58 +1,157 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
-import DownArrow from "../../Assests/Dashboard/Down.svg";
-import { FaPencilAlt } from "react-icons/fa";
-import CrossIcon from "../../Assests/Dashboard/cross.svg";
-import SortIcon from "../../Assests/Dashboard/sort-arrows-icon.svg";
 
 import Select from "react-select";
+import CreatableSelect from "react-select/creatable";
 import makeAnimated from "react-select/animated";
-import { colourOptions } from "../Products/data";
+import Validation from "../../Constants/Validation";
 
-const VariantAttributes = () => {
-  const [items, setItems] = useState([]);
-  const [variantValue, setVariantValue] = useState("");
+const VariantAttributes = ({
+  filterOptionList,
+  handleFilterDropdownOption,
+  varientDropdownList,
+  varientError,
+  toggleVarientSection,
+  isMultipleVarient,
+  handleOnBlurAttributes,
+  varientLength,
+  handleSetVarientLength,
+  addMoreVarientItems,
+  handleClearFormData,
+}) => {
+  const pageUrl = window.location.pathname?.split("/")[1];
   const [showAttributes, setShowAttributes] = useState(false);
 
-  const handleInputChange = (event, itemId) => {
-    const updatedItems = items.map((item) =>
-      item.id === itemId ? { ...item, title: event.target.value } : item
-    );
-    setItems(updatedItems);
-  };
-
-  const handleDeleteClick = (itemId) => {
-    const updatedItems = items.filter((item) => item.id !== itemId);
-    setItems(updatedItems);
-  };
-
-  const [showModal, setShowModal] = useState(false);
-  const [newAttribute, setNewAttribute] = useState("");
-  const [options, setOptions] = useState([]);
-
-  const sortBy = (key) => {
-    const sortedItems = [...items].sort((a, b) => {
-      return a[key].localeCompare(b[key], undefined, { numeric: true });
-    });
-    setItems(sortedItems);
-  };
-
-  const handleAddAttribute = () => {
-    const newItem = {
-      id: (items.length + 1).toString(),
-      sort: SortIcon,
-      title: newAttribute,
-      action: <FaPencilAlt />,
-      options: options.map((option) => option.value),
-    };
-    setItems([...items, newItem]);
-    setShowModal(false);
-    setNewAttribute("");
-    setOptions([]);
-    setShowAttributes(true); // Show variant attributes after adding data
-  };
-
   const animatedComponents = makeAnimated();
+
+  const handleDeleteClick = (category, id) => {
+    // when varientList item is deleted through delete icon click then catgeory is null
+    // if someone deleted all items of varient item then category is apply.
+    const deleteSelected = varientLength?.filter((item) => {
+      return item?.id !== id;
+    });
+
+    // change varientItem id => if id is 1 keep 1 or change deleteSelected[0]?.id - 1
+    const updatedData = deleteSelected.map((item) => ({
+      ...item,
+      id: category ? (item?.id === 1 ? 1 : item?.id - 1) : item?.id,
+    }));
+
+    handleSetVarientLength(updatedData);
+  };
+
+  const filterVarientListIfAllItemsDelete = (index, value) => {
+    if (index === 0) {
+      if (
+        varientLength?.length > 1 &&
+        value < varientLength[0]?.varientAttributeList?.length
+      ) {
+        handleDeleteClick("conditionally-delete", varientLength[0]?.id);
+        return true;
+      }
+    } else if (index === 1) {
+      if (
+        varientLength?.length > 2 &&
+        value < varientLength[1]?.varientAttributeList?.length
+      ) {
+        handleDeleteClick("conditionally-delete", varientLength[1]?.id);
+        return true;
+      }
+    }
+    return false;
+  };
+
+  const handlechange = (value, index, name) => {
+    // validation for add varient item => only ' is allowed and " is not allowed in varient item text
+    let filterValue;
+    // if value comes from createble varient
+    if (Array.isArray(value)) {
+      filterValue = value?.filter((item) => {
+        let checkValidation =
+          !(item?.label?.split("").filter((p) => p === "'")?.length > 1) &&
+          !item?.label?.includes(`"`);
+
+        if (!checkValidation) {
+          alert("special character is not allowed.");
+        }
+        return (
+          !(item?.label?.split("").filter((p) => p === "'")?.length > 1) &&
+          !item?.label?.includes(`"`)
+        );
+      });
+    } else {
+      // when value comes from varient title dropdown
+      filterValue = value;
+    }
+
+    // clear the all input fields value when add new varient first item
+    // here using varientLength length and value is less that current varientLength
+    if (index > 0) {
+      if (
+        filterValue?.length === 1 &&
+        filterValue > varientLength[index]?.varientAttributeList
+      ) {
+        handleClearFormData(true);
+      } else {
+        handleClearFormData(false);
+      }
+    }
+
+    if (filterVarientListIfAllItemsDelete(index, filterValue)) {
+      return;
+    }
+
+    let updateVarientLength = [...varientLength];
+    if (name == "varientName") {
+      updateVarientLength[index] = {
+        ...updateVarientLength[index],
+        varientName: filterValue,
+      };
+    } else if (name == "varientAttributeList") {
+      updateVarientLength[index] = {
+        ...updateVarientLength[index],
+        varientAttributeList: filterValue,
+      };
+    }
+    handleSetVarientLength(updateVarientLength);
+  };
+
+  useEffect(() => {
+    const filterItems = varientDropdownList?.filter(
+      (opt) =>
+        !varientLength
+          ?.map((item) => item?.varientName?.value)
+          .includes(opt?.title)
+    );
+    handleFilterDropdownOption(filterItems);
+  }, [varientLength, varientDropdownList]);
+
+  // if varientName is empty set defaultValue dropdown first item. only for the first dropwdown for fill the value.
+  useEffect(() => {
+    if (varientLength?.length && varientDropdownList?.length) {
+      const setDefaultValue = varientLength?.map((sec, index) => {
+        return {
+          ...sec,
+          varientName: !!sec?.varientName
+            ? sec?.varientName
+            : {
+                value: varientDropdownList[0]?.title,
+                label: varientDropdownList[0]?.title,
+              },
+        };
+      });
+      handleSetVarientLength(setDefaultValue);
+    }
+  }, [varientDropdownList]);
+
+  const filterDefaultvalue = () => {
+    if (filterOptionList?.length > 0) {
+      return filterOptionList?.map((option) => ({
+        value: option?.title,
+        label: option?.title,
+      }));
+    }
+  };
 
   return (
     <>
@@ -64,137 +163,132 @@ const VariantAttributes = () => {
           <div className="q_dashbaord_netsales">
             <h1>Variant Attributes</h1>
           </div>
-
-          <div className="my-4">
-            {items.map((item) => (
-              <div key={item.id} className="flex items-center my-2" style={{border:"1px solid #E1E1E1", borderRadius:"4px", padding:"10px"}}>
-                <div
-                  className="q_product_modal"
-                  onChange={(event) => handleInputChange(event, item.id)}
-                >
-                  {item.title} -
-                </div>
-
-                <div className="ml-2 flex">
-                  {item.options.map((option, index) => (
-                    <React.Fragment key={option}>
-                      <div>{option} </div>
-                      {index !== item.options.length - 1 && <div>,</div>}
-                    </React.Fragment>
-                  ))}
-                </div>
-
-                <button
-                  onClick={() => handleDeleteClick(item.id)}
-                  className="ml-auto"
-                >
-                  <img src={DeleteIcon} alt="" className="w-6 h-6 ml-auto" />
-                </button>
-              </div>
-            ))}
-          </div>
-          {/* {items.map((item) => (
-            <div key={item.id} className="flex items-center my-2">
-              <input
-                type="text"
-                id={`variant-${item.id}`}
-                name={`variant-${item.id}`}
-                value={item.title}
-                onChange={(event) => handleInputChange(event, item.id)}
-              />
-              <Select
-                className="ml-2"
-                options={colourOptions}
-                defaultValue={colourOptions.filter((option) =>
-                  item.options.includes(option.value)
-                )}
-                isMulti
-              />
-              <button onClick={() => handleDeleteClick(item.id)}>
-                <img
-                  src={DeleteIcon}
-                  alt=""
-                  className="w-6 h-6 ml-auto relative top-[-46px] mr-2"
-                />
-              </button>
-            </div>
-          ))} */}
         </div>
       </div>
 
-      <div className="q-add-categories-single-input">
-        <div className="q_add_variant_attributes">
-          <div
-            className="text-[#0A64F9] text-center"
-            onClick={() => setShowModal(true)}
-          >
-            Add Variant Attributes +
+      {pageUrl !== "product-edit" ? (
+        <div class="multiple-items">
+          <span>Multiple Items?*</span>
+          <div class="checkbox-area">
+            <input
+              type="checkbox"
+              name="isMultiple"
+              checked={isMultipleVarient}
+              onChange={toggleVarientSection}
+            />
+            <label for="isMultiple">Create Attributes and Options</label>
           </div>
         </div>
-      </div>
-
-      {/* Modal for adding new attribute */}
-      {showModal && (
-        <div className="fixed inset-0 z-50 overflow-auto bg-gray-500 bg-opacity-75 flex items-center justify-center">
-          <div className="absolute top-60 left-1/6 w-5/6 h-auto bg-white rounded-lg shadow-md p-6">
+      ) : (
+        ""
+      )}
+      {isMultipleVarient ? (
+        <div className="">
+          <div className="">
             <div className="flex">
               <h2 className="text-[18px] text-black opacity-100 Admin_std mb-4">
-                Add Variant Attributes{" "}
+                Variant Attributes
               </h2>
-              <img
-                src={CrossIcon}
-                alt="icon"
-                className="ml-auto mb-4"
-                onClick={() => setShowModal(false)}
-              />
             </div>
-            <div class="mt-2 bg-[#000] border-b-2 w-full mb-4"></div>
 
-            <div class="qvrow">
-              <div class="col-qv-12">
-                <div class="input_area">
-                  <label>Attribute</label>
-                  <input
+            {varientLength.length > 0
+              ? varientLength?.map((varient, index) => {
+                  return (
+                    <div class="qvrow varientAddSection" key={index + 1}>
+                      <div class="col-qv-5">
+                        <div class="input_area">
+                          {/* <input
                     className=""
                     type="text"
                     name="owner_name"
                     value={newAttribute}
                     onChange={(e) => setNewAttribute(e.target.value)}
-                  />
-                </div>
-              </div>
-              <div class="col-qv-12">
-                <div class="input_area">
-                  <label>Options</label>
-                  <Select
-                    closeMenuOnSelect={false}
-                    components={{ ...animatedComponents }}
-                    value={options}
-                    onChange={(selectedOptions) => setOptions(selectedOptions)}
-                    isMulti
-                    options={colourOptions}
-                  />
-                </div>
-              </div>
-            </div>
+                  /> */}
 
-            <div className="flex justify-end">
-              <button
-                className="px-4 py-2 bg-[#0A64F9] text-white rounded-md"
-                onClick={handleAddAttribute}
-              >
-                Save
-              </button>
-              <button
-                className="ml-4 px-4 py-2 bg-[#878787] rounded-md"
-                onClick={() => setShowModal(false)}
-              >
-                Cancel
-              </button>
-            </div>
+                          <Select
+                            closeMenuOnSelect={true}
+                            components={{ ...animatedComponents }}
+                            value={varient?.varientName}
+                            onChange={(e) =>
+                              handlechange(e, index, "varientName")
+                            }
+                            options={filterDefaultvalue()}
+                            isSearchable
+                            isClearable
+                            // defaultValue={{
+                            //   value: varientDropdownList[0]?.title,
+                            //   label: varientDropdownList[0]?.title,
+                            // }}
+                            isDisabled={index + 1 < varientLength?.length}
+                          />
+                        </div>
+                      </div>
+                      <div class="col-qv-5">
+                        <div class="input_area">
+                          <CreatableSelect
+                            closeMenuOnSelect={true}
+                            components={{ ...animatedComponents }}
+                            value={varient?.varientAttributeList}
+                            onChange={(e) => {
+                              handlechange(e, index, "varientAttributeList");
+                            }}
+                            onKeyDown={handleOnBlurAttributes}
+                            isMulti
+
+                            // options={colourOptions}
+                          />
+                        </div>
+                        {!!varientError?.error &&
+                        +varientError?.errorIndex === index ? (
+                          <span className="error-alert">
+                            {varientError?.error}
+                          </span>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                      <div className="col-qv-2">
+                        {varientLength[varientLength?.length - 1]?.id ===
+                          varient?.id && varient?.id !== 1 ? (
+                          <button
+                            onClick={() => handleDeleteClick(null, varient?.id)}
+                            className="ml-auto"
+                          >
+                            <img
+                              src={DeleteIcon}
+                              alt=""
+                              className=" m-auto d-grid place-content-center"
+                              width="50px"
+                            />
+                          </button>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </div>
+                  );
+                })
+              : ""}
+
+            {varientLength.length < 3 ? (
+              <div className="flex">
+                <button
+                  className="px-4 py-2 bg-[#0A64F9] text-white rounded-md"
+                  // onClick={handleAddAttribute}
+                  onClick={addMoreVarientItems}
+                >
+                  Add Variant Attributes +
+                </button>
+              </div>
+            ) : (
+              ""
+            )}
           </div>
         </div>
+      ) : (
+        ""
       )}
+      {/* )} */}
     </>
   );
 };

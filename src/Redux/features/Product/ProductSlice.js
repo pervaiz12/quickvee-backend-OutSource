@@ -17,8 +17,16 @@ const initialState = {
   hasMore: true,
   successMessage: "",
   error: "",
-};
+  formData: [],
 
+  // for add product varient
+  isLoading: false,
+  isError: false,
+  // for edit product
+  isEditError: false,
+  // for fetchDataBy Id
+  isFetchLoading: false,
+};
 // Generate pening , fulfilled and rejected action type
 export const fetchAllProducts = createAsyncThunk(
   "products/fetchAllProducts",
@@ -82,7 +90,248 @@ export const updateProductsType = createAsyncThunk(
     }
   }
 );
+export const getInventorySetting = createAsyncThunk(
+  "products/getInventorySetting",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Profile_setup/inventory_register_setting",
+        payload
+      );
 
+      return response?.data?.result?.cost_per;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const editProductData = createAsyncThunk(
+  "products/editProduct",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/edit_produt",
+        payload
+      );
+
+      return response;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const addProduct = createAsyncThunk(
+  "products/addProduct",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/add_product",
+        payload
+      );
+      return response;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+// dropdown content
+export const fetchVarientList = createAsyncThunk(
+  "products/fetchVarientList",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Varientsapi/varients_list",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const fetchCategoryList = createAsyncThunk(
+  "products/fetchCategoryList",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Categoryapi/category_list",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const fetchTaxList = createAsyncThunk(
+  "products/fetchTaxList",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Settingapi/tax_list",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const fetchProductList = createAsyncThunk(
+  "products/fetchProductList",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Productapi/products_list",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const fetchProductsDataById = createAsyncThunk(
+  "products/fetchProductData",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/get_productdata_ById",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const checkProductTitle = createAsyncThunk(
+  "products/checkProductTitle",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/check_productTitle",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const fetchVendorList = createAsyncThunk(
+  "products/fetchVendorList",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Productapi/product_vendors_list",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const filterVendorAPI = createAsyncThunk(
+  "products/filterVendorAPI",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Vendor_api/vendor_list",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const assignProductVendor = createAsyncThunk(
+  "products/assignProductVendor",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/assign_product_vendors",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const fetchSalesHistory = createAsyncThunk(
+  "products/fetchSalesHistory",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/saleshistory",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const assignPrefferedVendor = createAsyncThunk(
+  "products/assignPrefferedVendor",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Productapi/assign_preferred_vendor",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const deleteProductVendor = createAsyncThunk(
+  "products/deleteProductVendor",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Productapi/delete_product_vendor",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const saveVendorList = createAsyncThunk(
+  "products/saveVendorList",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Productapi/save_vendor_list",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
 const productsSlice = createSlice({
   name: "products",
   initialState,
@@ -107,6 +356,9 @@ const productsSlice = createSlice({
           return product;
         }
       });
+    },
+    updateFormValue: (state, action) => {
+      state.formData = action?.payload;
     },
   },
   extraReducers: (builder) => {
@@ -143,6 +395,17 @@ const productsSlice = createSlice({
       state.productsData = {};
       state.error = action.error.message;
     });
+    builder.addCase(updateProductsType.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(updateProductsType.fulfilled, (state, action) => {
+      state.loading = false;
+    });
+    builder.addCase(updateProductsType.rejected, (state, action) => {
+      state.loading = false;
+      state.productsData = {};
+      state.error = action.error.message;
+    });
 
     builder.addCase(updateProductsType.pending, (state) => {
       state.loading = true;
@@ -174,5 +437,50 @@ const productsSlice = createSlice({
   },
 });
 
-export const { editProduct, emptyProduct } = productsSlice.actions;
+    // add product varient
+    builder.addCase(addProduct.pending, (state) => {
+      state.isLoading = true;
+      state.isError = false;
+    });
+    builder.addCase(addProduct.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isError = false;
+    });
+    builder.addCase(addProduct.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isError = true;
+    });
+
+    // edit product
+    builder.addCase(editProductData.pending, (state) => {
+      state.isLoading = true;
+      state.isEditError = false;
+    });
+    builder.addCase(editProductData.fulfilled, (state, action) => {
+      state.isLoading = false;
+      state.isEditError = false;
+    });
+    builder.addCase(editProductData.rejected, (state, action) => {
+      state.isLoading = false;
+      state.isEditError = true;
+    });
+
+    // fetchingDataById
+    builder.addCase(fetchProductsDataById.pending, (state) => {
+      state.isFetchLoading = true;
+      // state.isEditError = false;
+    });
+    builder.addCase(fetchProductsDataById.fulfilled, (state, action) => {
+      state.isFetchLoading = false;
+      // state.isEditError = false;
+    });
+    builder.addCase(fetchProductsDataById.rejected, (state, action) => {
+      state.isFetchLoading = false;
+      // state.isEditError = true;
+    });
+  },
+});
+
+export const { editProduct, emptyProduct, updateFormValue } =
+  productsSlice.actions;
 export default productsSlice.reducer;

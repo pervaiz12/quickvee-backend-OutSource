@@ -7,6 +7,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import {CustomerUpdate , updatecustomerData} from '../../../../Redux/features/user/customerSlice'
 // import { useNavigate } from 'react-router-dom';
 import EditCustomerFunction from './editCustomerFunction'
+import { useAuthDetails } from '../../../../Common/cookiesHelper';
  
 import {
     BrowserRouter as Router,
@@ -19,9 +20,11 @@ import {
 export default function EditCustomer() {
     const {handleEditData,customerData,handleChange,customerRadio,AdminRadio,merchantRadio,
         handleChangeRadio,handleSubmitCustomerRecord,successMessage,handleKeyPress,errors,onhandlePassword,password}=EditCustomerFunction()
+        const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+
     const  {id}  = useParams();
     useEffect(()=>{
-         handleEditData(id)
+         handleEditData({id,...userTypeData})
     },[id])
   return (
     <div className='box'>

@@ -1,4 +1,4 @@
-import React, { useState  , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import DateRange from "../../Orders/InstoreOrder/DateRange";
 import DailyReportList from "./DailyReportList";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
@@ -44,7 +44,7 @@ const DailyTtlReport = () => {
       }
       const updatedData = {
         ...data,
-        merchant_id: "MAL0100CA",
+        // merchant_id: "MAL0100CA",
         order_env: orderEnvValue,
         order_typ: orderTypValue,
       };
@@ -92,7 +92,6 @@ const DailyTtlReport = () => {
     }
   };
 
-
   useEffect(() => {
     const handleResize = () => {
       setIsTablet(window.innerWidth <= 995);
@@ -108,20 +107,22 @@ const DailyTtlReport = () => {
   }, []);
   return (
     <>
-        <div className="q-order-main-page">
-          <div className="box">
+      <div className="q-order-main-page">
+        <div className="box">
           <div className="box_shadow_input">
             <div className="pd_20">
               <h1 className="heading">Daily Total Report</h1>
-           
-              
+
               <h1 className="heading">Filter By</h1>
-               
-            <div className="qvrow">
-                <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
-              
-                    <label htmlFor="orderSourceFilter"> Order Source</label>
-                    <div className="custom-dropdown input_area">
+
+              <div className="qvrow">
+                <div
+                  className={`Card_admin ${
+                    isTablet ? "col-qv-12" : "col-qv-4"
+                  }`}
+                >
+                  <label htmlFor="orderSourceFilter"> Order Source</label>
+                  <div className="custom-dropdown input_area">
                     <div
                       className="custom-dropdown-header"
                       onClick={() => toggleDropdown("orderSource")}
@@ -134,7 +135,9 @@ const DailyTtlReport = () => {
                     {orderSourceDropdownVisible && (
                       <div className="dropdown-content ">
                         <div
-                          onClick={() => handleOptionClick("All", "orderSource")}
+                          onClick={() =>
+                            handleOptionClick("All", "orderSource")
+                          }
                         >
                           All
                         </div>
@@ -152,16 +155,18 @@ const DailyTtlReport = () => {
                         >
                           Order Source
                         </div>
-
                       </div>
                     )}
                   </div>
                 </div>
-             
-                <div className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}>
-                
+
+                <div
+                  className={`Card_admin ${
+                    isTablet ? "col-qv-12" : "col-qv-4"
+                  }`}
+                >
                   <label> Order Type</label>
-                    <div className="custom-dropdown input_area">
+                  <div className="custom-dropdown input_area">
                     <div
                       className="custom-dropdown-header"
                       onClick={() => toggleDropdown("orderType")}
@@ -173,16 +178,22 @@ const DailyTtlReport = () => {
                     </div>
                     {orderTypeDropdownVisible && (
                       <div className="dropdown-content">
-                        <div onClick={() => handleOptionClick("All", "orderType")}>
+                        <div
+                          onClick={() => handleOptionClick("All", "orderType")}
+                        >
                           All
                         </div>
                         <div
-                          onClick={() => handleOptionClick("Pickup", "orderType")}
+                          onClick={() =>
+                            handleOptionClick("Pickup", "orderType")
+                          }
                         >
                           Pickup
                         </div>
                         <div
-                          onClick={() => handleOptionClick("Delivery", "orderType")}
+                          onClick={() =>
+                            handleOptionClick("Delivery", "orderType")
+                          }
                         >
                           Delivery
                         </div>
@@ -190,16 +201,12 @@ const DailyTtlReport = () => {
                       </div>
                     )}
                   </div>
-               
+                </div>
               </div>
-              </div>
-              </div>
-
             </div>
           </div>
-      
+        </div>
       </div>
-     
 
       <style>
         {`
@@ -212,18 +219,14 @@ const DailyTtlReport = () => {
       <div className="q-order-main-page">
         <div className="dailytotoalReport">
           <div className="box">
-          <DateRange onDateRangeChange={handleDataFiltered} />
+            <DateRange onDateRangeChange={handleDataFiltered} />
+          </div>
         </div>
       </div>
-      </div>
 
-     
-        <div className="q-order-main-page">
-          
-          <DailyReportList data={filteredData} />
-       
+      <div className="q-order-main-page">
+        <DailyReportList data={filteredData} />
       </div>
-     
     </>
   );
 };

@@ -6,9 +6,13 @@ import DownIcon from "../../../Assests/Dashboard/Down.svg";
 
 import { BASE_URL, TAXE_CATEGORY_LIST } from "../../../Constants/Config";
 import axios from "axios";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 
 const TopSallerReport = () => {
   const [filteredData, setFilteredData] = useState({ category_id: "all" });
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
+  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   const handleDataFiltered = (data) => {
     if (typeof data === "object") {
@@ -51,9 +55,10 @@ const TopSallerReport = () => {
       const updatedData = {
         ...filteredData,
         ...data,
-        merchant_id: "MAL0100CA",
+        merchant_id,
         order_env: orderEnvValue,
         limit: orderTypValue,
+        ...userTypeData,
       };
       // console.log(updatedData);
       setFilteredData(updatedData);
@@ -132,16 +137,21 @@ const TopSallerReport = () => {
 
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
-
+  let data = { merchant_id, ...userTypeData };
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const { token, ...dataNew } = data;
+
         const response = await axios.post(
           BASE_URL + TAXE_CATEGORY_LIST,
+          dataNew,
           {
-            merchant_id: "MAL0100CA",
-          },
-          { headers: { "Content-Type": "multipart/form-data" } }
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         // Assuming the API response has a data property containing the category list
@@ -168,127 +178,130 @@ const TopSallerReport = () => {
     <>
       <div className="q-order-main-page">
         <div className="box">
-        <div className="q-category-bottom-detail-section">
-          <div className="q-category-bottom-header-sticky">
-            <div className="q-category-bottom-header">
-              <div className="q_details_header ml-2">
-                {" "}
-                Top Sellers - Overall Top 10
-              </div>
-            </div>
-            <div className="q_details_header ml-8">Filter by</div>
-          </div>
-          <div className="q-order-page-container ml-8">
-            <div className="q-order-page-filter">
-              <label
-                className="q-details-page-label"
-                htmlFor="orderSourceFilter"
-              >
-                Order Source
-              </label>
-              <div className="custom-dropdown">
-                <div
-                  className="custom-dropdown-header"
-                  onClick={() => toggleDropdown("orderSource")}
-                >
-                  <span className="selected-option mt-1">
-                    {selectedOrderSource}
-                  </span>
-                  <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
+          <div className="q-category-bottom-detail-section">
+            <div className="q-category-bottom-header-sticky">
+              <div className="q-category-bottom-header">
+                <div className="q_details_header ml-2">
+                  {" "}
+                  Top Sellers - Overall Top 10
                 </div>
-                {orderSourceDropdownVisible && (
-                  <div className="dropdown-content ">
-                    <div
-                      onClick={() => handleOptionClick("All", "orderSource")}
-                    >
-                      All
-                    </div>
-                    <div
-                      onClick={() =>
-                        handleOptionClick("Online Order", "orderSource")
-                      }
-                    >
-                      Online Order
-                    </div>
-                    <div
-                      onClick={() =>
-                        handleOptionClick("Store Order", "orderSource")
-                      }
-                    >
-                      Store Order
-                    </div>
+              </div>
+              <div className="q_details_header ml-8">Filter by</div>
+            </div>
+            <div className="q-order-page-container ml-8">
+              <div className="q-order-page-filter">
+                <label
+                  className="q-details-page-label"
+                  htmlFor="orderSourceFilter"
+                >
+                  Order Source
+                </label>
+                <div className="custom-dropdown">
+                  <div
+                    className="custom-dropdown-header"
+                    onClick={() => toggleDropdown("orderSource")}
+                  >
+                    <span className="selected-option mt-1">
+                      {selectedOrderSource}
+                    </span>
+                    <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
                   </div>
-                )}
-              </div>
-            </div>
-
-            <div className="q-order-page-filter">
-              <label className="q-details-page-label" htmlFor="limitFilter">
-                Limit
-              </label>
-              <div className="custom-dropdown">
-                <div
-                  className="custom-dropdown-header"
-                  onClick={() => toggleDropdown("limit")}
-                >
-                  <span className="selected-option mt-1">
-                    {selectedLimitType}
-                  </span>
-                  <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-                </div>
-                {limitTypeDropdownVisible && (
-                  <div className="dropdown-content">
-                    <div onClick={() => handleOptionClick("10", "limit")}>
-                      10
-                    </div>
-                    <div onClick={() => handleOptionClick("20", "limit")}>
-                      20
-                    </div>
-                    <div onClick={() => handleOptionClick("50", "limit")}>
-                      50
-                    </div>
-                    <div onClick={() => handleOptionClick("100", "limit")}>
-                      100
-                    </div>
-                  </div>
-                )}
-              </div>
-            </div>
-
-            <div className="q-order-page-filter">
-              <label className="q-details-page-label" htmlFor="categoryFilter">
-                Category
-              </label>
-              <div className="custom-dropdown">
-                <div
-                  className="custom-dropdown-header"
-                  onClick={() => toggleDropdown("category")}
-                >
-                  <span className="selected-option mt-1">
-                    {selectedLCategoryType}
-                  </span>
-                  <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-                </div>
-                {categoryTypeDropdownVisible && (
-                  <div className="dropdown-content">
-                    <div onClick={() => handleOptionClick("All", "category")}>
-                      All
-                    </div>
-                    {categoryOptions.map((option, key) => (
+                  {orderSourceDropdownVisible && (
+                    <div className="dropdown-content ">
                       <div
-                        key={key}
-                        onClick={() => handleOptionClick(option, "category")}
+                        onClick={() => handleOptionClick("All", "orderSource")}
                       >
-                        {option.title}
+                        All
                       </div>
-                    ))}
+                      <div
+                        onClick={() =>
+                          handleOptionClick("Online Order", "orderSource")
+                        }
+                      >
+                        Online Order
+                      </div>
+                      <div
+                        onClick={() =>
+                          handleOptionClick("Store Order", "orderSource")
+                        }
+                      >
+                        Store Order
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="q-order-page-filter">
+                <label className="q-details-page-label" htmlFor="limitFilter">
+                  Limit
+                </label>
+                <div className="custom-dropdown">
+                  <div
+                    className="custom-dropdown-header"
+                    onClick={() => toggleDropdown("limit")}
+                  >
+                    <span className="selected-option mt-1">
+                      {selectedLimitType}
+                    </span>
+                    <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
                   </div>
-                )}
+                  {limitTypeDropdownVisible && (
+                    <div className="dropdown-content">
+                      <div onClick={() => handleOptionClick("10", "limit")}>
+                        10
+                      </div>
+                      <div onClick={() => handleOptionClick("20", "limit")}>
+                        20
+                      </div>
+                      <div onClick={() => handleOptionClick("50", "limit")}>
+                        50
+                      </div>
+                      <div onClick={() => handleOptionClick("100", "limit")}>
+                        100
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              <div className="q-order-page-filter">
+                <label
+                  className="q-details-page-label"
+                  htmlFor="categoryFilter"
+                >
+                  Category
+                </label>
+                <div className="custom-dropdown">
+                  <div
+                    className="custom-dropdown-header"
+                    onClick={() => toggleDropdown("category")}
+                  >
+                    <span className="selected-option mt-1">
+                      {selectedLCategoryType}
+                    </span>
+                    <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
+                  </div>
+                  {categoryTypeDropdownVisible && (
+                    <div className="dropdown-content">
+                      <div onClick={() => handleOptionClick("All", "category")}>
+                        All
+                      </div>
+                      {categoryOptions.map((option, key) => (
+                        <div
+                          key={key}
+                          onClick={() => handleOptionClick(option, "category")}
+                        >
+                          {option.title}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
       </div>
       <style>
         {`
@@ -301,9 +314,9 @@ const TopSallerReport = () => {
       <div className="q-attributes-main-page">
         <div className="dailytotoalReport">
           <div className="box">
-          <DateRange onDateRangeChange={handleDataFiltered} />
+            <DateRange onDateRangeChange={handleDataFiltered} />
+          </div>
         </div>
-      </div>
       </div>
 
       <div className="mt-10">
@@ -311,7 +324,6 @@ const TopSallerReport = () => {
           <TopSallerList data={filteredData} />
         </div>
       </div>
-      
     </>
   );
 };

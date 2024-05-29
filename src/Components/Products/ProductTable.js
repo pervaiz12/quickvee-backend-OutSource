@@ -124,66 +124,68 @@ const ProductTable = ({
   return (
     <>
       <div className="box">
-        <div className="box_shadow_div" id="123">
+        <div className="q-category-bottom-detail-section" id="123">
           <div className="">
             <div className="q-category-bottom-header">
               <span>Products</span>
-
-              <p className="">
-                <Link to="/product-add">Add New Product</Link>
-                <Link to="/product-add">
+              <Link to="/product-add">
+                <p className="">
+                  Add New Product
                   <img src={AddIcon} alt="add-icon" />
-                </Link>
-              </p>
+                </p>
+              </Link>
             </div>
             <div className="q-category-bottom-detail-section">
-              {/* <div className="q-category-bottom-header-sticky"> */}
-              <div className="q-category-bottom-categories-header">
-                <p className="product-table-sort">Sort</p>
-
-                <p className="product-table-title">Title</p>
-
-                <p className="product-table-items">Category</p>
-
-                <p className="product-table-enable-disable">
-                  Enable online ordering?
-                </p>
-
-                <p className="product-table-title">Product Status</p>
-
-                <p className="product-table-items ">Images</p>
-
-                <p className="product-table-btn "></p>
-              </div>
-
-              {/* if  want table short and sticky add this css (style={{ height: 300, overflow: "auto" }}) */}
-              <div id="scrollableDiv">
-                <InfiniteScroll
-                  dataLength={productsList.length}
-                  next={fetchMoreData}
-                  hasMore={hasMore}
-                  loader={<h4>Loading...</h4>}
-                  scrollableTarget="scrollableDiv"
-                  endMessage={
-                    <h3 className="popup_msg">
-                      ALL products have been listed above
-                    </h3>
-                  }
+              <div className="q-category-bottom-header-sticky">
+                <div
+                  className="q-category-bottom-categories-header"
+                  style={{ position: "sticky", top: "0px" }}
                 >
-                  {productsList?.length >= 1 &&
-                    productsList.map((product, index) => (
-                      <ProductRow
-                        key={index}
-                        {...{
-                          Avail_Online,
-                          index,
-                          product,
-                          checkStatus,
-                          handleError,
-                        }}
-                      />
-                    ))}
-                </InfiniteScroll>
+                  <p className="categories-sort">Sort</p>
+                  <p className="categories-sort"></p>
+                  <p className="categories-title">Title</p>
+                  <p className="categories-sort"></p>
+                  <p className="categories-items">Category</p>
+                  <p className="categories-sort"></p>
+                  <p className="categories-enable-disable">
+                    Enable online ordering?
+                  </p>
+                  <p className="categories-sort"></p>
+                  <p className="categories-items">Product Status</p>
+                  <p className="categories-sort"></p>
+                  <p className="categories-items">Images</p>
+                  <p className="categories-sort"></p>
+                  <p className="categories-items">Delete</p>
+                  <p className=""></p>
+                </div>
+
+                <div
+                  id="scrollableDiv"
+                  style={{ height: 300, overflow: "auto" }}
+                >
+                  <InfiniteScroll
+                    dataLength={productsList.length}
+                    next={fetchMoreData}
+                    hasMore={hasMore}
+                    loader={<h4>Loading...</h4>}
+                    scrollableTarget="scrollableDiv"
+                    endMessage={<h3>ALL products have been listed above</h3>}
+                  >
+                    {productsList?.length >= 1 &&
+                      productsList.map((product, index) => (
+                        <ProductRow
+                          key={index}
+                          {...{
+                            Avail_Online,
+                            index,
+                            product,
+                            checkStatus,
+                            handleError,
+                          }}
+                        />
+                      ))}
+                  </InfiniteScroll>
+                </div>
               </div>
             </div>
           </div>
