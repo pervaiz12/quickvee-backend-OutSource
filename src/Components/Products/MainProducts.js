@@ -56,6 +56,12 @@ const MainProducts = () => {
     }
   };
 
+  const handlefocus=(e)=>{
+    if (e.key === 'Enter' || e.keyCode === 13) {
+      handleSearch()
+    }
+  }
+
   const toggleDropdown = (dropdown) => {
     switch (dropdown) {
       case "del_pic":
@@ -186,6 +192,7 @@ const MainProducts = () => {
             selectedStatusValue,
             handleSearch,
             searchId,
+            handlefocus,
             setSearchId,
           }}
         />

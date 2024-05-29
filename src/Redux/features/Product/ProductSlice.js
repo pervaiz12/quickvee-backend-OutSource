@@ -365,6 +365,29 @@ export const saveBulkInstantPo = createAsyncThunk(
     }
   }
 );
+
+export const changeOnlineOrderMethod = createAsyncThunk(
+  "products/changeOnlineOrderMethod",
+  async (payload) => {
+    console.log(payload);
+    const {token, ...payloadNew} = payload;
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/product_show_status_update",
+        payloadNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
 const productsSlice = createSlice({
   name: "products",
   initialState,

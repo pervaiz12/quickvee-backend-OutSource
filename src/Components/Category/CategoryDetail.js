@@ -32,6 +32,7 @@ const CategoryDetail = ({ seVisible }) => {
   const AllCategoriesDataState = useSelector((state) => state.categories);
   const dispatch = useDispatch();
   
+  
 
    let AuthDecryptDataDashBoardJSONFormat=LoginGetDashBoardRecordJson
 
@@ -90,6 +91,7 @@ const CategoryDetail = ({ seVisible }) => {
       id: id,
       status: status,
       merchant_id: "MAL0100CA",
+      ...userTypeData
     };
 
     const rep = await dispatch(updateCategoryStatus(data));
@@ -109,12 +111,12 @@ const CategoryDetail = ({ seVisible }) => {
       category.cat_show_status === "0" || category.cat_show_status === "1"
         ? "1"
         : "0";
-    console.log("category status: " + category);
-    console.log("category Custom status: " + status);
     const isOnlineChecked =
       category.cat_show_status === "0" || category.cat_show_status === "1";
     const isRegisterChecked =
       category.cat_show_status === "0" || category.cat_show_status === "2";
+
+      console.log('alls', category, isOnlineChecked, isRegisterChecked)
 
     if (!isOnlineChecked && !isRegisterChecked) {
       // console.log(isOnlineChecked);

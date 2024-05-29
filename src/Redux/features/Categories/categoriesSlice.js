@@ -117,8 +117,9 @@ export const deleteCategorybanner = createAsyncThunk('categories/deleteCategoryb
 export const updateCategoryStatus = createAsyncThunk(
     'categories/updateCategoryStatus',
     async (data) => {
+        const {token, ...dataNew} = data;
       try {
-        const response = await axios.post(BASE_URL + CATEGORIE_STATUS, data, { headers: { "Content-Type": "multipart/form-data" } })
+        const response = await axios.post(BASE_URL + CATEGORIE_STATUS, dataNew, { headers: { "Content-Type": "multipart/form-data",    Authorization: `Bearer ${token}`, } })
         return response.data.status;  
       } catch (error) {
         throw error;

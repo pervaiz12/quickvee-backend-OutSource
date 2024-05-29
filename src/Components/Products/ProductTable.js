@@ -5,10 +5,11 @@ import { Link } from "react-router-dom";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 // import EditIcon from "../../Assests/Category/editIcon.svg";
 import SortIcon from "../../Assests/Category/Sorting.svg";
-import { fetchProductsData } from "../../Redux/features/Product/ProductSlice";
+import { changeOnlineOrderMethod, fetchProductsData } from "../../Redux/features/Product/ProductSlice";
 import { BASE_URL } from "../../Constants/Config";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ProductRow from "./ProductRow";
+import { useAuthDetails } from "../../Common/cookiesHelper";
 
 const ProductTable = ({
   seVisible,
@@ -26,13 +27,14 @@ const ProductTable = ({
     (state) => state.productsListData
   );
 
+  const { userTypeData } = useAuthDetails();
 
   const [showType, setShowType]= useState("")
-  console.log('showtype outside', showType)
 
   useEffect(() => {
     if (!ProductsListDataState.loading && ProductsListDataState.productsData) {
       setproductsList(ProductsListDataState.productsData);
+      console.log('again call')
     }
   }, [
     ProductsListDataState,
@@ -41,18 +43,18 @@ const ProductTable = ({
   ]);
 
   const dispatch = useDispatch();
+  let payloadData = {
+    merchant_id: "MAL0100CA",
+    category_id: categoryId,
+    show_status: selectedStatusValue,
+    listing_type: selectedListingTypeValue,
+    offset: 0,
+    limit: 10,
+    page: 0,
+  };
   useEffect(() => {
-    let data = {
-      merchant_id: "MAL0100CA",
-      category_id: categoryId,
-      show_status: selectedStatusValue,
-      listing_type: selectedListingTypeValue,
-      offset: 0,
-      limit: 10,
-      page: 0,
-    };
-    if (data) {
-      dispatch(fetchProductsData(data));
+    if (payloadData) {
+      dispatch(fetchProductsData(payloadData));
     }
   }, []);
 
@@ -74,7 +76,18 @@ const ProductTable = ({
 
   const Avail_Online = (event, showtype) => {
     const {name, value, id} = event?.target;
-    setShowType(value)
+    console.log(value, name, id);
+    const data ={
+      product_id:592660,
+      status:value,
+      merchant_id:'MAL0100CA',
+      ...userTypeData,
+    }
+    dispatch(changeOnlineOrderMethod(data)).then((res)=>{
+      if(res?.payload?.status){
+        dispatch(fetchProductsData(payloadData));
+      }
+    })
   };
 
   const [items, setItems] = useState(Array.from({ length: 10 }));
@@ -84,6 +97,8 @@ const ProductTable = ({
     margin: 6,
     padding: 8,
   };
+
+
   const fetchMoreData = () => {
     let page = 0;
     if (productsList.length > 0) {
@@ -96,9 +111,6 @@ const ProductTable = ({
       listing_type = 0;
     }
     //let page = productsList.length / 10 + 1 ;
-
-    console.log(page + "page");
-    console.log(productsList);
     let data1 = {
       merchant_id: "MAL0100CA",
       format: "json",
@@ -165,13 +177,13 @@ const ProductTable = ({
                       productsList.map((product, index) => (
                         <ProductRow
                           key={index}
+                          setShowType={setShowType}
+                          showType={showType}
                           {...{
                             Avail_Online,
                             index,
                             product,
-                            checkStatus,
-                            setShowType,
-                            showType
+                            checkStatus
                           }}
                         />
                       ))}

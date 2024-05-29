@@ -7,9 +7,7 @@ function SearchBar({ onSearch }) {
 
     const handleSearch = () => {
         
-        
             console.log("Please enter a valid ID");
-        
     };
 
     return (

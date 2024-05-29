@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import AddIcon from "../../Assests/Category/addIcon.svg";
 import { Link } from "react-router-dom";
@@ -7,22 +7,15 @@ import SortIcon from "../../Assests/Category/Sorting.svg";
 
 import { BASE_URL } from "../../Constants/Config";
 
-const ProductRow = ({
+const   ProductRow = ({
   product,
   index,
   Avail_Online,
   checkStatus,
   // handleError,
-  setShowType,
-  showType
 }) => {
 
-  useMemo(()=>{
-    setShowType(product?.show_type)
-  }, [product, showType])
-
-  console.log('showType function', showType)
-
+ 
   return (
     <>
       <div
@@ -46,7 +39,7 @@ const ProductRow = ({
               Delivery
               <input
                 type="checkbox"
-                id={"delivery_check" + product.id}
+                id={product.id}
                 name="delivery_check"
                 checked={
                   product.show_type == 0 || product.show_type == 2
@@ -67,7 +60,7 @@ const ProductRow = ({
               Pickup
               <input
                 type="checkbox"
-                id={"pickup_check" + product.id}
+                id={product.id}
                 name="pickup_check"
                 checked={
                   product.show_type == 0 || product.show_type == 1

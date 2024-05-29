@@ -29,6 +29,7 @@ const FilterProduct = ({
   setlistingTypesDropdownVisible,
   handleCategoryChange,
   handleSearch,
+  handlefocus,
   searchId,
   setSearchId,
 }) => {
@@ -158,6 +159,7 @@ const FilterProduct = ({
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
+  
   return (
     <>
       <div className="box">
@@ -170,6 +172,7 @@ const FilterProduct = ({
                   value={searchId}
                   handleChange={setSearchId}
                   handleSearchButton={handleSearch}
+                  handlefocus={handlefocus}
                 />
               </Grid>
             </Grid>
