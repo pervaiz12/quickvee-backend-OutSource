@@ -1,31 +1,9 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-import { getVerifiedMerchant } from "../../../Redux/features/user/verifiedMerchantSlice";
-import {
-  getUnVerifiedMerchant,
-  handleMoveDash,
-} from "../../../Redux/features/user/unverifiedMerchantSlice";
-import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
 import { useSelector, useDispatch } from "react-redux";
-import { useAuthDetails } from "../../../Common/cookiesHelper";
 import Cookies from "js-cookie";
-import AddIcon from "../../../Assests/Category/addIcon.svg";
 import { Grid } from "@mui/material";
-import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
-import View from "../../../Assests/VerifiedMerchant/View.svg";
-import Edit from "../../../Assests/VerifiedMerchant/Edit.svg";
-import Delete from "../../../Assests/VerifiedMerchant/Delete.svg";
-import DisLike from "../../../Assests/VerifiedMerchant/DisLike.svg";
-import $ from "jquery";
-import "datatables.net-dt/css/jquery.dataTables.min.css";
-import {
-  BASE_URL,
-  DELETE_SINGLE_STORE,
-  UNAPPROVE_SINGLE_STORE,
-  EXPORTCSV,
-} from "../../../Constants/Config";
-
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -33,11 +11,34 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+
+import {
+  getVerifiedMerchant,
+  getVerifiedMerchantCount,
+} from "../../../Redux/features/user/verifiedMerchantSlice";
+import { handleMoveDash } from "../../../Redux/features/user/unverifiedMerchantSlice";
+import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
+import AddIcon from "../../../Assests/Category/addIcon.svg";
+import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
+import View from "../../../Assests/VerifiedMerchant/View.svg";
+import Edit from "../../../Assests/VerifiedMerchant/Edit.svg";
+import Delete from "../../../Assests/VerifiedMerchant/Delete.svg";
+import DisLike from "../../../Assests/VerifiedMerchant/DisLike.svg";
+import {
+  BASE_URL,
+  DELETE_SINGLE_STORE,
+  UNAPPROVE_SINGLE_STORE,
+  EXPORTCSV,
+} from "../../../Constants/Config";
 import Pagination from "./Pagination";
+import useDebounce from "../../../hooks/useDebouncs";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
+
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
@@ -62,91 +63,80 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 export default function Verified() {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  // states
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-
   const [filteredMerchants, setFilteredMerchants] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [searchRecord, setSearchRecord] = useState("");
   const [storename, setStorename] = useState();
   const [submitmessage, setsubmitmessage] = useState("");
-  const tableRef = useRef(null);
 
-  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
-    useAuthDetails();
-
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const VerifiedMerchantList = useSelector(
-    (state) => state.verifiedMerchantRecord.verifiedMerchantData
+  const verifiedMerchantList = useSelector(
+    (state) => state.verifiedMerchantRecord
   );
+
   const [VerifiedMerchantListState, setVerifiedMerchantListState] = useState(
     []
   );
 
+  const { userTypeData } = useAuthDetails();
+  const debouncedValue = useDebounce(searchRecord);
 
+  // only when user changes Page number, Page size & searches something
   useEffect(() => {
-    if (!VerifiedMerchantList.loading && VerifiedMerchantList.length >= 1) {
-      setVerifiedMerchantListState(VerifiedMerchantList);
-      setFilteredMerchants(VerifiedMerchantList);
-      setTotalCount(VerifiedMerchantList.length);
-    }
-  }, [VerifiedMerchantList, VerifiedMerchantList.loading]);
+    const data = {
+      type: "approve",
+      ...userTypeData,
+      perpage: rowsPerPage,
+      page: currentPage,
+      search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+    };
 
-  const indexOfLastMerchant = currentPage * rowsPerPage;
-  const indexOfFirstMerchant = indexOfLastMerchant - rowsPerPage;
-  // const currentMerchants =  VerifiedMerchantListState.slice(indexOfFirstMerchant, indexOfLastMerchant);
+    dispatch(getVerifiedMerchant(data));
+  }, [currentPage, debouncedValue, rowsPerPage]);
+
+  // only when user searches
+  useEffect(() => {
+    dispatch(
+      getVerifiedMerchantCount({
+        type: "approve",
+        ...userTypeData,
+        search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+      })
+    );
+  }, [debouncedValue]);
+
+  // on load setting the verified merchant list and whenever the List changes.
+  // useEffect(() => {
+  //   if (verifiedMerchantList.verifiedMerchantData?.length >= 1) {
+  //     setVerifiedMerchantListState(verifiedMerchantList.verifiedMerchantData);
+  //     setFilteredMerchants(verifiedMerchantList.verifiedMerchantData);
+  //   }
+  // }, [verifiedMerchantList.verifiedMerchantData]);
+
+  // on load setting count of Verified Merchant list & on every change...
+  useEffect(() => {
+    setTotalCount(verifiedMerchantList.verifiedMerchantCount);
+  }, [verifiedMerchantList.verifiedMerchantCount]);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const data = { type: "approve" };
-  const merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-
-  useEffect(() => {
-    dispatch(getVerifiedMerchant({ type: "approve", ...userTypeData }));
-  }, []);
-  // ====================================
-
+  // when user searches
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
-    if (value === "") {
-      setFilteredMerchants(VerifiedMerchantListState);
-      setTotalCount(VerifiedMerchantListState.length);
-    } else {
-      const filteredAdminRecord =
-        VerifiedMerchantListState && Array.isArray(VerifiedMerchantListState)
-          ? VerifiedMerchantListState.filter(
-              (result) =>
-                (result.owner_name &&
-                  result.owner_name
-                    .toLowerCase()
-                    .includes(searchRecord.toLowerCase())) ||
-                (result.name &&
-                  result.name
-                    .toLowerCase()
-                    .includes(searchRecord.toLowerCase())) ||
-                (result.email &&
-                  result.email
-                    .toLowerCase()
-                    .includes(searchRecord.toLowerCase())) ||
-                (result.a_phone && result.a_phone.includes(searchRecord)) ||
-                (result.a_state && result.a_state.includes(searchRecord))
-            )
-          : [];
-          setFilteredMerchants(filteredAdminRecord);
-      setTotalCount(filteredAdminRecord.length);
-    }
+    // setFilteredMerchants(VerifiedMerchantList);
+    setCurrentPage(1);
   };
 
-  // ====================================
   const handleEditMerchant = (data) => {
-    // console.log("handleEditMerchant ", data);
-
     navigate(`/users/editMerchant/${data}`);
   };
-  const handleDeleteMerchant = async (tableData) => {
-    // console.log("handleDeleteMer", tableData);
 
+  const handleDeleteMerchant = async (tableData) => {
     try {
       const { token, ...otherUserData } = userTypeData;
       const delVendor = {
@@ -167,9 +157,10 @@ export default function Verified() {
       );
 
       if (response) {
-        const updatedVendorDetails = VerifiedMerchantListState.filter(
-          (vendor) => vendor.id !== tableData.id
-        );
+        const updatedVendorDetails =
+          verifiedMerchantList.verifiedMerchantData.filter(
+            (vendor) => vendor.id !== tableData.id
+          );
         setVerifiedMerchantListState(updatedVendorDetails);
         setFilteredMerchants(updatedVendorDetails);
       } else {
@@ -179,6 +170,7 @@ export default function Verified() {
       console.error(error);
     }
   };
+
   const handleGetVerifiedMerchant = (merchant_id) => {
     let data = {
       merchant_id: merchant_id,
@@ -221,9 +213,10 @@ export default function Verified() {
       );
 
       if (response) {
-        const updatedVendorDetails = VerifiedMerchantListState.filter(
-          (vendor) => vendor.id !== merchant_id
-        );
+        const updatedVendorDetails =
+          verifiedMerchantList.verifiedMerchantData.filter(
+            (vendor) => vendor.id !== merchant_id
+          );
         setVerifiedMerchantListState(updatedVendorDetails);
         setFilteredMerchants(updatedVendorDetails);
       } else {
@@ -233,6 +226,7 @@ export default function Verified() {
       console.error(error);
     }
   };
+
   const handleExportTransaction = async (type) => {
     try {
       const { token, ...otherUserData } = userTypeData;
@@ -273,7 +267,8 @@ export default function Verified() {
     }
   };
 
-  //  ====================================
+  const columns = ["Store Info", "Owner Name", "Merchant ID", ""];
+
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -299,7 +294,7 @@ export default function Verified() {
                     onClick={() => {
                       handleExportTransaction(2);
                     }}
-                    className="flex q-category-bottom-header "
+                    className="flex q-category-bottom-header"
                   >
                     <p className="me-2">Export Last Transaction</p>
                   </div>
@@ -314,6 +309,7 @@ export default function Verified() {
                   <Link
                     to="/users/addMerchant"
                     className="flex q-category-bottom-header "
+                    state={{ from: "/users/view/approve", heading: "Merchant" }}
                   >
                     <p className="me-2">ADD</p>
                     <img src={AddIcon} alt="" />
@@ -343,86 +339,109 @@ export default function Verified() {
                 onPageChange={paginate}
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
               />
             </Grid>
           </Grid>
+
           <Grid container>
-            <TableContainer>
-              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-                <TableHead>
-                  {/* {TableRow.map((row) => (
-                    <StyledTableCell>{row}</StyledTableCell>
-                  ))} */}
-                  <StyledTableCell>Store Info</StyledTableCell>
-                  <StyledTableCell>Owner Name</StyledTableCell>
-                  <StyledTableCell>Merchant ID</StyledTableCell>
-                  <StyledTableCell></StyledTableCell>
-                </TableHead>
-                <TableBody>
-                  {filteredMerchants?.slice(
-                    indexOfFirstMerchant,
-                    indexOfLastMerchant
-                  )?.map((data, index) => (
-                    <StyledTableRow>
-                      <StyledTableCell>
-                        <div class="flex">
-                          <div class="text-[#000000] order_method capitalize">
-                            {data.name.length < 18
-                              ? data.name
-                              : data.name.slice(0, 18) + `...` || ""}
-                          </div>
-                          <div class="mx-2 ">(State: {data.a_state})</div>
-                        </div>
-                        <div class="text-[#818181] lowercase">
-                          {data.email || ""}
-                        </div>
-                        <div class="text-[#818181]">{data.a_phone || ""}</div>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <div class="text-[#000000] order_method capitalize">
-                          {data.owner_name || ""}
-                        </div>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <div class="text-[#000000] order_method capitalize">
-                          {data.merchant_id || ""}
-                        </div>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <div className="flex">
-                          <img
-                            className="mx-1 view "
-                            onClick={() =>
-                              handleGetVerifiedMerchant(data.merchant_id)
-                            }
-                            src={View}
-                            alt="View"
-                          />
-                          <img
-                            className="mx-1 edit"
-                            onClick={() => handleEditMerchant(data.id)}
-                            src={Edit}
-                            alt="Edit"
-                          />
-                          <img
-                            class="mx-1 delete"
-                            onClick={() => handleDeleteMerchant(data)}
-                            src={Delete}
-                            alt="Delete"
-                          />
-                          <img
-                            class="mx-1"
-                            onClick={() => hadleDislikeMerchant(data.id)}
-                            src={DisLike}
-                            alt="DisLike"
-                          />
-                        </div>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  ))}
-                </TableBody>
-              </StyledTable>
-            </TableContainer>
+            {verifiedMerchantList.loading ? (
+              <>
+                <SkeletonTable columns={columns} />
+              </>
+            ) : (
+              <>
+                {verifiedMerchantList.verifiedMerchantData &&
+                Array.isArray(verifiedMerchantList.verifiedMerchantData) &&
+                verifiedMerchantList.verifiedMerchantData?.length > 0 ? (
+                  <TableContainer>
+                    <StyledTable
+                      sx={{ minWidth: 500 }}
+                      aria-label="customized table"
+                    >
+                      <TableHead>
+                        <StyledTableCell>Store Info</StyledTableCell>
+                        <StyledTableCell>Owner Name</StyledTableCell>
+                        <StyledTableCell>Merchant ID</StyledTableCell>
+                        <StyledTableCell></StyledTableCell>
+                      </TableHead>
+                      <TableBody>
+                        {verifiedMerchantList.verifiedMerchantData?.map(
+                          (data, index) => (
+                            <StyledTableRow key={data.id}>
+                              <StyledTableCell>
+                                <div className="flex">
+                                  <div className="text-[#000000] order_method capitalize">
+                                    {data.name.length < 18
+                                      ? data.name
+                                      : data.name.slice(0, 18) + `...` || ""}
+                                  </div>
+                                  <div className="mx-2 ">
+                                    (State: {data.a_state})
+                                  </div>
+                                </div>
+                                <div className="text-[#818181] lowercase">
+                                  {data.email || ""}
+                                </div>
+                                <div className="text-[#818181]">
+                                  {data.a_phone || ""}
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <div className="text-[#000000] order_method capitalize">
+                                  {data.owner_name || ""}
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <div className="text-[#000000] order_method capitalize">
+                                  {data.merchant_id || ""}
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <div className="flex">
+                                  <img
+                                    className="mx-1 view "
+                                    onClick={() =>
+                                      handleGetVerifiedMerchant(
+                                        data.merchant_id
+                                      )
+                                    }
+                                    src={View}
+                                    alt="View"
+                                  />
+                                  <img
+                                    className="mx-1 edit"
+                                    onClick={() => handleEditMerchant(data.id)}
+                                    src={Edit}
+                                    alt="Edit"
+                                  />
+                                  <img
+                                    className="mx-1 delete"
+                                    onClick={() => handleDeleteMerchant(data)}
+                                    src={Delete}
+                                    alt="Delete"
+                                  />
+                                  <img
+                                    className="mx-1"
+                                    onClick={() =>
+                                      hadleDislikeMerchant(data.id)
+                                    }
+                                    src={DisLike}
+                                    alt="DisLike"
+                                  />
+                                </div>
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          )
+                        )}
+                      </TableBody>
+                    </StyledTable>
+                  </TableContainer>
+                ) : (
+                  <p className="px-5 py-4">No Data Found</p>
+                )}
+              </>
+            )}
           </Grid>
         </Grid>
       </Grid>

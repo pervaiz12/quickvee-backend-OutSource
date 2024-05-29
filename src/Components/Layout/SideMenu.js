@@ -99,7 +99,6 @@ const SideMenu = () => {
 
   useEffect(() => {
     dispatch(setMenuOpen(!isTabletNav));
-
   }, [isTabletNav]);
 
   useEffect(() => {
@@ -611,6 +610,11 @@ const menuItems = [
       { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
       { id: 87, text: "Tip Report", link: "/store-reporting/tip-report" },
       { id: 88, text: "Coupon Report", link: "/store-reporting/coupon-report" },
+      {
+        id: 89,
+        text: "Discount Per Sales Person",
+        link: "/store-reporting/discount-per-sales-report",
+      },
     ],
   },
   {
@@ -882,13 +886,8 @@ const menuItems = [
         text: "Export Sold Items",
         link: "/import-data",
       },
-      { id: 83, text: "Tip Report", link: "/store-reporting/tip-report" },
-      { id: 84, text: "Coupon Report", link: "/store-reporting/coupon-report" },
-      {
-        id: 85,
-        text: "Discount Per Sales Person",
-        link: "/store-reporting/discount-per-sales-report",
-      },
+      // { id: 83, text: "Tip Report", link: "/store-reporting/tip-report" },
+      // { id: 84, text: "Coupon Report", link: "/store-reporting/coupon-report" },
     ],
   },
   // {

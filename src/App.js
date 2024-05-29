@@ -59,6 +59,7 @@ import "./Styles/DailyDaterange.css";
 // import "./Styles/EmployeeWorking.css";
 import "./Styles/Table.css";
 import "./Styles/DefaultsPage.css";
+import "react-loading-skeleton/dist/skeleton.css";
 
 import "./Styles/ReceiptMainpage.css";
 import "./Styles/MainCatedetails.css";
@@ -142,6 +143,11 @@ function App() {
         element={<Main visible={"multimerchant"} />}
       /> */}
         <Route exact path="/login" element={<Login visible={"login"} />} />
+        <Route
+          exact
+          path="/users/view/unapprove/menu/defaults/edit-defaults/:defaultsCode"
+          element={<Main visible={"edit-defaults"} />}
+        />
         <Route element={<ProtectedOrderSummery visible="manager" />}>
           <Route
             path="/store-reporting/order-summary/:merchant_id/:order_id"
@@ -544,11 +550,6 @@ function App() {
           />
           <Route
             exact
-            path="/users/editMerchant/:id"
-            element={<Main visible={"editMerchant"} />}
-          />
-          <Route
-            exact
             path="/users/view/unapprove/newsletter"
             element={<Main visible={"newsletter"} />}
           />
@@ -567,7 +568,6 @@ function App() {
             path="/users/view/unapprove/menu/defaults"
             element={<Main visible={"defaults"} />}
           />
-
           <Route
             exact
             path="/users/view/unapprove/release_apk"

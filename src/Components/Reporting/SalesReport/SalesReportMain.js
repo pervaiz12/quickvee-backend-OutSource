@@ -17,14 +17,14 @@ const SalesReportMain = () => {
           <DateRangeComponent onDateRangeChange={onDateRangeChange} />
         </Grid>
       </Grid>
-      <div className="mt-10">
+    
         <div className="q-attributes-main-page">
           <SalesReportList
             selectedDateRange={selectedDateRange}
             // VendorIdData={VendorIdData}
           />
         </div>
-      </div>
+   
     </>
   );
 };

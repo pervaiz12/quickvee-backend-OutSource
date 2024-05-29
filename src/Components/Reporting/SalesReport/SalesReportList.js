@@ -31,12 +31,9 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
+    backgroundColor: "#F8F8F8",
   },
   // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
 }));
 
 const SalesReportList = (props) => {
@@ -115,6 +112,71 @@ const SalesReportList = (props) => {
 
   // console.log(discount1)
   // console.log(SalesReportData)
+  const SalesSummeryList = [
+    {
+      name: "Gross Sale",
+      amount: gross_sale,
+    },
+    {
+      name: "Loyalty Point Redeemed",
+      amount: loyaltyPoint,
+    },
+    {
+      name: "Gift Card Amount Redeemed",
+      amount: SalesReportData.giftcard_amt_collected,
+    },
+    {
+      name: "Discount",
+      amount: discount1,
+    },
+    {
+      name: "Refunds",
+      amount: refunds,
+    },
+    {
+      name: "Net Sales",
+      amount: netSales,
+    },
+    {
+      name: "Taxes",
+      amount: taxesAndFees,
+    },
+    {
+      name: "Tips",
+      amount: tip,
+    },
+    {
+      name: "Services Charges",
+      amount: serviceCharges,
+    },
+    {
+      name: "Non Cash Adjustment Fees",
+      amount: cashDiscounting,
+    },
+  ];
+
+  const SalesByTenderAndCardTypeList = [
+    {
+      name: "Credit Cards + Debit Cards",
+      amount: SalesReportData.card_collected,
+    },
+    {
+      name: "Cash",
+      amount: SalesReportData.cash_collected,
+    },
+    {
+      name: "Food EBT Card Collected",
+      amount: SalesReportData.food_ebt_collected,
+    },
+    {
+      name: "Cash EBT Card Collected",
+      amount: SalesReportData.cash_ebt_collected,
+    },
+    {
+      name: "Amount Collected",
+      amount: amountCollected,
+    },
+  ];
 
   return (
     <>
@@ -164,20 +226,117 @@ const SalesReportList = (props) => {
               </div>
             </Grid>
           </Grid>
-          <Grid container>
+          <Grid container className="box_shadow_div">
             <Grid item xs={12}>
               <TableContainer>
                 <StyledTable
                   sx={{ minWidth: 500 }}
                   aria-label="customized table"
                 >
-                  <StyledTableCell>dfsdf</StyledTableCell>
-                  <StyledTableCell>sdasdasd</StyledTableCell>
+                  <TableHead>
+                    <StyledTableCell>Sales Summary</StyledTableCell>
+                    <StyledTableCell align="right"></StyledTableCell>
+                  </TableHead>
+                  <TableBody>
+                    {SalesSummeryList?.map((item, index) => (
+                      <StyledTableRow key={index}>
+                        <StyledTableCell
+                          sx={{
+                            fontWeight:
+                              item.name === "Gross Sale" ||
+                              item.name === "Net Sales"
+                                ? "bold"
+                                : "normal",
+                            borderRight: "1px solid #E3E3E3",
+                            width: 400,
+                            color:
+                              item.name === "Gross Sale" ||
+                              item.name === "Net Sales"
+                                ? "#0A64F9"
+                                : "",
+                          }}
+                        >
+                          <div className="q_sales_trading_data p-0">
+                            <p>{item.name}</p>
+                          </div>
+                        </StyledTableCell>
+                        <StyledTableCell
+                          align="left"
+                          sx={{
+                            fontWeight:
+                              item.name === "Gross Sale" ||
+                              item.name === "Net Sales"
+                                ? "bold"
+                                : "normal",
+                            color:
+                              item.name === "Gross Sale" ||
+                              item.name === "Net Sales"
+                                ? "#0A64F9"
+                                : "",
+                          }}
+                        >
+                          <p>${parseFloat(item.amount).toFixed(2)}</p>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                  </TableBody>
                 </StyledTable>
               </TableContainer>
             </Grid>
           </Grid>
-          <div className="box">
+          <Grid container className="box_shadow_div">
+            <Grid item xs={12}>
+              <TableContainer>
+                <StyledTable
+                  sx={{ minWidth: 500 }}
+                  aria-label="customized table"
+                >
+                  <TableHead>
+                    <StyledTableCell>
+                      Sales by Tender and Card Type
+                    </StyledTableCell>
+                    <StyledTableCell align="right"></StyledTableCell>
+                  </TableHead>
+                  <TableBody>
+                    {SalesByTenderAndCardTypeList?.map((item, index) => (
+                      <StyledTableRow key={index}>
+                        <StyledTableCell
+                          sx={{
+                            fontWeight:
+                              item.name === "Amount Collected"
+                                ? "bold"
+                                : "normal",
+                            borderRight: "1px solid #E3E3E3",
+                            width: 400,
+                            color:
+                              item.name === "Amount Collected" ? "#0A64F9" : "",
+                          }}
+                        >
+                          <div className="q_sales_trading_data p-0">
+                            <p>{item.name}</p>
+                          </div>
+                        </StyledTableCell>
+                        <StyledTableCell
+                          align="left"
+                          sx={{
+                            fontWeight:
+                              item.name === "Amount Collected"
+                                ? "bold"
+                                : "normal",
+                            color:
+                              item.name === "Amount Collected" ? "#0A64F9" : "",
+                          }}
+                        >
+                          <p>${parseFloat(item.amount).toFixed(2)}</p>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                  </TableBody>
+                </StyledTable>
+              </TableContainer>
+            </Grid>
+          </Grid>
+          {/* <div className="box">
             <div className="qvrow">
               <div className="col-span-4 col-qv-4 lg:col-span-1">
                 <div className="box_shadow_div mt_card_header">
@@ -187,10 +346,7 @@ const SalesReportList = (props) => {
                   <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
                     ${parseFloat(gross_sale).toFixed(2)}
                   </div>
-                  {/* <div className="flex items-center text-green-500">
-                    <BiCaretUp className="mr-1" />
-                    <span className="text-green-500 Admin_std">+21.00%</span>
-                    </div> */}
+                
                 </div>
               </div>
 
@@ -202,10 +358,6 @@ const SalesReportList = (props) => {
                   <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
                     ${parseFloat(netSales).toFixed(2)}
                   </div>
-                  {/* <div className="flex items-center text-green-500">
-                    <BiCaretUp className="mr-1" />
-                    <span className="text-green-500 Admin_std">+21.00%</span>
-                    </div> */}
                 </div>
               </div>
 
@@ -217,25 +369,8 @@ const SalesReportList = (props) => {
                   <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
                     ${parseFloat(amountCollected).toFixed(2)}
                   </div>
-                  {/* <div className="flex items-center text-green-500">
-                        <BiCaretUp className="mr-1" />
-                        <span className="text-green-500 Admin_std">+21.00%</span>
-                        </div> */}
                 </div>
               </div>
-
-              {/* <div className="col-span-4 col-qv-3 lg:col-span-1">
-                <div className="box_shadow_div mt_card_header">
-                        <div className="text-[#707070] font-normal  lg:text-[18px]  sm:text-[14px] tracking-normal opacity-100 Admin_std">
-                        Net COGS
-                        </div>
-                        <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">116.50</div>
-                        <div className="flex items-center text-green-500">
-                        <BiCaretUp className="mr-1" />
-                        <span className="text-green-500 Admin_std">+21.00%</span>
-                        </div>
-                    </div>
-                    </div> */}
             </div>
 
             <div className="qvrow">
@@ -357,23 +492,24 @@ const SalesReportList = (props) => {
                   </div>
                 </div>
               </div>
-
-              {/* <div className="col-qv-6">
-               
-            </div> */}
             </div>
-          </div>
+          </div> */}
         </>
       ) : (
-        <div>
-          <table className="table table-bordered my_new_table">
-            <tbody>
-              <tr>
-                <td>No record found.</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <Grid sx={{padding:2.5 ,margin: 0}} className="box_shadow_div">
+          <Grid item xs={12}>
+            <p>No record found.</p>
+          </Grid>
+        </Grid>
+        // <div>
+        //   <table className="table table-bordered my_new_table">
+        //     <tbody>
+        //       <tr>
+        //         <td>No record found.</td>
+        //       </tr>
+        //     </tbody>
+        //   </table>
+        // </div>
       )}
     </>
   );
