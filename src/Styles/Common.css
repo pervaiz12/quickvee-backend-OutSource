@@ -267,12 +267,7 @@
   margin: 0px;
 }
 
-.heading {
-  color: #000000;
-  font-family: adminmedium;
-  font-size: 18px;
-  margin-bottom: 12px;
-}
+
 .pd_20 {
   padding: 20px;
 }
@@ -436,12 +431,7 @@
   padding: 0px;
   overflow: hidden;
 }
-.heading {
-  color: #000000;
-  font-family: adminmedium;
-  font-size: 18px;
-  margin-bottom: 12px;
-}
+
 .pd_20 {
   padding: 20px;
 }
@@ -918,12 +908,7 @@ input.blue_btn {
   margin-right: calc(-0.5 * var(--bs-gutter-x));
   margin-left: calc(-0.5 * var(--bs-gutter-x));
 }
-.heading {
-  color: #000000;
-  font-family: adminmedium;
-  font-size: 18px;
-  margin-bottom: 12px;
-}
+
 .pd_20 {
   padding: 20px;
 }
@@ -1073,21 +1058,8 @@ input.blue_btn {
   flex: 0 0 auto;
   width: 100%;
 }
-.box_shadow_div {
-  width: 100%;
-  height: auto;
-  box-shadow: 0 5px 10px 1px #ddd;
-  margin: 30px 0px;
-  border-radius: 8px;
-  background-color: #fff;
-  padding: 0px;
-}
-.heading {
-  color: #000000;
-  font-family: adminmedium;
-  font-size: 18px;
-  margin-bottom: 12px;
-}
+
+
 .pd_20 {
   padding: 20px;
 }
@@ -1597,12 +1569,7 @@ select:active {
   margin-right: calc(-0.5 * var(--bs-gutter-x));
   margin-left: calc(-0.5 * var(--bs-gutter-x));
 }
-.heading {
-  color: #000000;
-  font-family: adminmedium;
-  font-size: 18px;
-  margin-bottom: 12px;
-}
+
 .pd_20 {
   padding: 20px;
 }
@@ -1756,21 +1723,8 @@ select:active {
   color: red !important;
   font-size: 12px !important;
 }
-.box_shadow_div {
-  width: 100%;
-  height: auto;
-  box-shadow: 0 5px 10px 1px #ddd;
-  margin: 30px 0px;
-  border-radius: 8px;
-  background-color: #fff;
-  padding: 0px;
-}
-.heading {
-  color: #000000;
-  font-family: adminmedium;
-  font-size: 18px;
-  margin-bottom: 12px;
-}
+
+
 .pd_20 {
   padding: 20px;
 }
@@ -2231,12 +2185,7 @@ input.blue_btn {
   margin-right: calc(-0.5 * var(--bs-gutter-x));
   margin-left: calc(-0.5 * var(--bs-gutter-x));
 }
-.heading {
-  color: #000000;
-  font-family: adminmedium;
-  font-size: 18px;
-  margin-bottom: 12px;
-}
+
 .pd_20 {
   padding: 20px;
 }
@@ -2386,21 +2335,7 @@ input.blue_btn {
   flex: 0 0 auto;
   width: 100%;
 }
-.box_shadow_div {
-  width: 100%;
-  height: auto;
-  box-shadow: 0 5px 10px 1px #ddd;
-  margin: 30px 0px;
-  border-radius: 8px;
-  background-color: #fff;
-  padding: 0px;
-}
-.heading {
-  color: #000000;
-  font-family: adminmedium;
-  font-size: 18px;
-  margin-bottom: 12px;
-}
+
 .pd_20 {
   padding: 20px;
 }

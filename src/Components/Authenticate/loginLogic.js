@@ -118,9 +118,9 @@ export default function LoginLogic() {
     }, 2000);
   };
   const handleWrongPasswordError = () => {
-    setTimeout(() => {
-      setErrorMessage("");
-    }, 2000);
+    // setTimeout(() => {
+    //   setErrorMessage("");
+    // }, 10000);
   };
   // const handleSubmitForm=async(e)=>{
   //     e.preventDefault();

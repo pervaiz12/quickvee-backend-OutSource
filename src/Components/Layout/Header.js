@@ -7,9 +7,12 @@ import DownlIcon from "../../Assests/Dashboard/download.svg";
 import OnlineData from "../../Assests/Dashboard/online.svg";
 import SynkData from "../../Assests/Dashboard/sync.svg";
 import DownIcon from "../../Assests/Dashboard/Down.svg";
-import { setMenuOpen,setIsDropdownOpen } from "../../Redux/features/NavBar/MenuSlice";
-import Cookies from 'js-cookie'; 
-import CryptoJS from 'crypto-js'; 
+import {
+  setMenuOpen,
+  setIsDropdownOpen,
+} from "../../Redux/features/NavBar/MenuSlice";
+import Cookies from "js-cookie";
+import CryptoJS from "crypto-js";
 import UserLogo from "../../Assests/Dashboard/UserLogo.svg";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -19,7 +22,7 @@ import InputLabel from "@mui/material/InputLabel";
 // import MenuItem from '@mui/material/MenuItem';
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
-
+import { FaChevronDown } from "react-icons/fa";
 import {
   getAuthSessionRecord,
   handleGetStoreRecord,
@@ -29,6 +32,7 @@ import {
 } from "../../Redux/features/Authentication/loginSlice";
 import { display } from "@mui/system";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import { Button, InputBase } from "@mui/material";
 
 export default function Header() {
   const { LoginGetDashBoardRecordJson, LoginAllStore, GetSessionLogin } =
@@ -38,12 +42,16 @@ export default function Header() {
   const isDropdownOpen = useSelector(
     (state) => state.NavBarToggle.isDropdownOpen
   );
-  let allStoresData=LoginAllStore?.data?.stores
-  let storenameCookie=LoginGetDashBoardRecordJson !=="" ? LoginGetDashBoardRecordJson?.data?.name :LoginGetDashBoardRecordJson?.data?.name
-  useEffect(()=>{
-    setStoreName(storenameCookie)
-  },[LoginGetDashBoardRecordJson])
- 
+  let allStoresData = LoginAllStore?.data?.stores;
+  let storenameCookie =
+    LoginGetDashBoardRecordJson !== ""
+      ? LoginGetDashBoardRecordJson?.data?.name
+      : LoginGetDashBoardRecordJson?.data?.name;
+  useEffect(() => {
+    setStoreName(storenameCookie);
+    setSelection(storenameCookie);
+  }, [LoginGetDashBoardRecordJson]);
+
   // useEffect for all when update data in coockie-----------------
 
   // useEffect for all when update data in coockie--------------
@@ -55,6 +63,26 @@ export default function Header() {
   const navigate = useNavigate();
   const [showDropdown, setShowDropdown] = useState(false);
   const [storename, setStoreName] = useState(storenameCookie);
+
+  const [anchorElForDropDown, setAnchorElForDropDown] = useState(null);
+  const [searchText, setSearchText] = useState("");
+  const [selection, setSelection] = useState("");
+
+  const handleMenuOpen = (event) => {
+    setAnchorElForDropDown(event.currentTarget);
+  };
+
+  const handleCloseForDropDown = (e) => {
+    if (e.target.innerText !== selection && e.target.innerText !== "") {
+      setSelection(e.target.innerText);
+    }
+    setSelection("");
+    setAnchorElForDropDown(null);
+  };
+
+  const handleSearchChange = (e) => {
+    setSearchText(e.target.value);
+  };
   const handleDropdownToggle = () => {
     dispatch(setMenuOpen(!isMenuOpenRedux));
     dispatch(setIsDropdownOpen(!isDropdownOpen));
@@ -89,6 +117,7 @@ export default function Header() {
   }, []);
 
   const handleChangeMerchant = (merchant_id) => {
+    setSearchText("");
     const data = {
       username: GetSessionLogin?.username,
       password: GetSessionLogin.password,
@@ -112,6 +141,73 @@ export default function Header() {
     });
   };
 
+  function renderDashboardDropDown() {
+    const displayOptions = (
+      JSON.parse(localStorage.getItem("AllStore")) || allStoresData
+    )
+      ?.map((item) => {
+        if (item.name.toLowerCase().includes(searchText.toLowerCase())) {
+          return item;
+        }
+      })
+      .filter((item) => item !== undefined);
+
+    function renderOption(value) {
+      if (selection === value) {
+        return <div>{value}</div>;
+      }
+      return value;
+    }
+
+    return (
+      <>
+        <Menu
+          anchorEl={anchorElForDropDown}
+          keepMounted={true}
+          open={!!anchorElForDropDown}
+          onClose={handleCloseForDropDown}
+          // anchorReference="anchorPosition"
+          // anchorPosition={{ top: 0, left: 0 }}
+          PaperProps={{
+            style: {
+              marginTop: 17,
+            },
+          }}
+          MenuListProps={{
+            style: {
+              paddingTop: 0,
+            },
+          }}
+      
+        >
+          <MenuItem disableTouchRipple={true}>
+            <div>
+              <InputBase
+                placeholder="Search..."
+                onChange={handleSearchChange}
+                value={searchText}
+              />
+            </div>
+          </MenuItem>
+          {displayOptions.map((item, index) => {
+            return (
+              <div key={index}>
+                <MenuItem
+                  onClick={(e) => {
+                    handleCloseForDropDown(e);
+                    handleChangeMerchant(item?.merchant_id);
+                  }}
+                >
+                  {renderOption(item.name)}
+                </MenuItem>
+              </div>
+            );
+          })}
+        </Menu>
+      </>
+    );
+  }
+
   return (
     <>
       <div
@@ -119,19 +215,20 @@ export default function Header() {
           isSticky ? "sticky-header" : ""
         }`}
       >
-        <div className="flex items-center px-4 mx-2">
+        <div className="flex items-center px-4 mx-2 cursor-pointer">
+          
           {LoginGetDashBoardRecordJson?.final_login == 1 ? (
             <BiMenu
-            className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out`}
-            onClick={(e) => {
-              // setIsMenuOpen(!isMenuOpen); || AdminRocord?.final_login==1
-              // (LoginSuccessJson?.final_login==1 || AuthDecryptDataDashBoardJSONFormat?.final_login==1 )
-              handleDropdownToggle()
-           
-            }}
-          />)
-          :''
-          }
+              className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out cursor-pointer`}
+              onClick={(e) => {
+                // setIsMenuOpen(!isMenuOpen); || AdminRocord?.final_login==1
+                // (LoginSuccessJson?.final_login==1 || AuthDecryptDataDashBoardJSONFormat?.final_login==1 )
+                handleDropdownToggle();
+              }}
+            />
+          ) : (
+            ""
+          )}
           <a href="/dashboard">
             <img src={Quick} alt="Logo" className="ml-6" />
           </a>
@@ -141,8 +238,22 @@ export default function Header() {
               LoginAllStore?.data?.stores !== undefined ||
               (localStorage.getItem("AllStore") !== "" &&
                 localStorage.getItem("AllStore") !== null) ? (
-                <div className="relative">
-                  <FormControl fullWidth>
+                <div className="relative flex mx-4 cursor-pointer">
+                  <div className="flex lg:text-[20px]">
+                    <div className="flex items-center" onClick={handleMenuOpen}>
+                      <p className="admin_medium">
+                        {storename.length >= 15
+                          ? `${storename.slice(0, 17)} ...`
+                          : storename}
+                      </p>
+                      <div className="ms-2">
+                        <img src={DownIcon} alt="" />
+                      </div>
+                    </div>
+                    <div>{renderDashboardDropDown()}</div>
+                  </div>
+
+                  {/* <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">
                       {storename}
                     </InputLabel>
@@ -175,11 +286,9 @@ export default function Header() {
                             })
                           : ""
                       }
-                      {/* <MenuItem value={10}>Ten</MenuItem>
-              <MenuItem value={20}>Twenty</MenuItem>
-              <MenuItem value={30}>Thirty</MenuItem> */}
+                  
                     </Select>
-                  </FormControl>
+                  </FormControl> */}
 
                   {/* <div
               className="flex items-center ml-6 px-3 py-1 text-black lg:text-[20px] admin_medium cursor-pointer sm:text-[12px] md:text-[15px]"
@@ -215,7 +324,7 @@ export default function Header() {
             {/* ================================ */}
             {LoginGetDashBoardRecordJson?.final_login == 1 ? (
               <>
-                <div className="ml-12 flex items-center">
+                <div className="ml-5 flex items-center">
                   <img src={DownlIcon} alt="icon" className="ml-2" />
                   <p className="cursor-pointer ml-2 admin_medium">
                     Download App
@@ -223,13 +332,13 @@ export default function Header() {
                 </div>
 
                 {/* Online Store and Sync Data section */}
-                <div className="ml-12 flex items-center">
+                <div className="ml-5 flex items-center">
                   <img src={OnlineData} alt="icon" className="ml-2" />
                   <p className="cursor-pointer ml-2 admin_medium">
                     Online Store
                   </p>
                 </div>
-                <div className="mx-12 flex items-center">
+                <div className="mx-5 flex items-center">
                   <img src={SynkData} alt="icon" className="ml-2" />
                   <p className="cursor-pointer ml-2 admin_medium">Sync Data</p>
                 </div>
@@ -239,7 +348,7 @@ export default function Header() {
             )}
             {/* ======================================== */}
             <div
-              className="flex  items-center"
+              className="flex  items-center cursor-pointer"
               id="basic-button"
               aria-controls={open ? "basic-menu" : undefined}
               aria-haspopup="true"
@@ -252,25 +361,29 @@ export default function Header() {
                 alt="icon"
                 className="mx-2"
               />
-              <p className="admin_medium">{storename}</p>
+              <p className="admin_medium" >
+                {storename.slice(0, 1)}
+                </p>
               <img src={DownIcon} alt="" />
             </div>
 
             <Menu
               PaperProps={{
                 style: {
-                  width: 150,
+                  // width: 150,
                   marginTop: 20,
                 },
               }}
-              id="basic-menu"
+              MenuListProps={{
+                style: {
+                  padding: 0,
+                },
+              }}
               anchorEl={anchorEl}
               open={open}
               onClose={handleClose}
-              MenuListProps={{
-                "aria-labelledby": "basic-button",
-              }}
             >
+               <MenuItem>{storename}</MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
 
