@@ -100,13 +100,10 @@ const TimesheetListing = ({ data }) => {
 
 
   const [addtimebreak, setTimeBreak] = useState({
-    merchant_id:merchant_id,
     add_in_date: "",
     add_out_date: "",
     add_clocked_in: "",
     add_clocked_out: "",
-    token_id:userTypeData.token_id,
-    login_type:userTypeData.login_type
     // add_clocked_in: dayjs().format("HH:mm:ss"),
     // add_clocked_out: dayjs().format("HH:mm:ss"),
 
@@ -118,14 +115,12 @@ const TimesheetListing = ({ data }) => {
     setEmployeeName(title)
     setModalAddTimesheetID(id)
     setaddTimesheetMsg("");
-
-    setTimeBreak(prevState => ({
-      ...prevState,
+    setTimeBreak({
       add_in_date: "",
       add_out_date: "",
       add_clocked_in: "",
       add_clocked_out: ""
-    }));
+    });
     setDateStartError("");
     setDateStartTimeError("");
     setDateEndError("");
@@ -134,6 +129,12 @@ const TimesheetListing = ({ data }) => {
   };
 
   const closeModal = () => {
+    setTimeBreak({
+      add_in_date: "",
+      add_out_date: "",
+      add_clocked_in: "",
+      add_clocked_out: ""
+    });
     setShowModal(false);
   };
 
@@ -221,30 +222,28 @@ const TimesheetListing = ({ data }) => {
 
   const handleSave = async (e) => {
     e.preventDefault();
-
+    let valid = true;
     if (!addtimebreak.add_in_date) {
       setDateStartError("Select In Date is required");
-      return;
+      valid = false;
     } else {
       setDateStartError("");
     }
-
     if (!addtimebreak.add_clocked_in) {
       setDateStartTimeError("Clock In Time is required");
-      return;
+      valid = false;
     } else {
       setDateStartTimeError("");
     }
-
     if (!addtimebreak.add_out_date) {
       setDateEndError("Select Out Date is required");
-      return;
+      valid = false;
     } else {
       setDateEndError("");
     }
     if (!addtimebreak.add_clocked_out) {
       setDateEndTimeError("Clock Out Time is required");
-      return;
+      valid = false;
     } else {
       setDateEndTimeError("");
     }
@@ -259,15 +258,17 @@ const TimesheetListing = ({ data }) => {
     // }else{
     //   setDateEndError("");
     // }
+
+    if (!valid) return;
     const formData = new FormData();
-    formData.append("merchant_id", addtimebreak.merchant_id);
+    formData.append("merchant_id", merchant_id);
     formData.append("employee_id", modalAddTimesheetID);
     formData.append("in_date", addtimebreak.add_in_date);
     formData.append("out_date", addtimebreak.add_out_date);
     formData.append("clocked_in", addtimebreak.add_clocked_in);
     formData.append("clocked_out", addtimebreak.add_clocked_out);
-    formData.append("token_id", addtimebreak.token_id);
-    formData.append("login_type", addtimebreak.login_type);
+    formData.append("token_id", userTypeData.token_id);
+    formData.append("login_type", userTypeData.login_type);
    
     for (const [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
@@ -311,6 +312,13 @@ const TimesheetListing = ({ data }) => {
   const [BreakInTimeError, setBreakInTimeError] = useState("");
   const [BreakOutTimeError, setBreakOutTimeError] = useState("");
   const [addBreakMsg, setaddBreakMsg] = useState("");
+  
+  const [addbreak, setaddbreak] = useState({
+    modalDate:modalDate,
+    addbreakIn: "",
+    addbreakOut: "",
+
+  });
 
   const openModalBreak = (title,id,date,out_date) => {
     setEmployeeName(title)
@@ -320,64 +328,94 @@ const TimesheetListing = ({ data }) => {
     setBreakInTimeError("");
     setBreakOutTimeError("");
     setaddBreakMsg("")
+    setaddbreak({
+      addbreakIn: "",
+      addbreakOut: "",
+    });
     setShowModalBreak(true);
   };
 
   const closeModalBreak = () => {
     setBreakInTimeError("");
     setBreakOutTimeError("");
+    setaddbreak({
+      addbreakIn: "",
+      addbreakOut: "",
+    });
     setShowModalBreak(false);
   };
 
-  const [addbreak, setaddbreak] = useState({
-    merchant_id: merchant_id,
-    modalDate:modalDate,
-    addbreakIn: "",
-    addbreakOut: "",
-    token_id:userTypeData.token_id,
-    login_type:userTypeData.login_type
-  });
-
   const handleBreakStartTimeChange = (newTime) => {
-    setaddbreak({
-      ...addbreak,
-      addbreakIn: newTime.format("HH:mm:ss"),
-    });
-  };
+    if(!addbreak.addbreakOut){
+      setaddbreak({
+        ...addbreak,
+        addbreakIn: newTime.format("HH:mm:ss"),
+      });
+    }else{
+      if(newTime.format("HH:mm:ss")<addbreak.addbreakOut){
+        setaddbreak({
+          ...addbreak,
+          addbreakIn: newTime.format("HH:mm:ss"),
+        });
+        setBreakInTimeError("");
+      }else{
+        setaddbreak({
+          ...addbreak,
+          addbreakIn: null,
+        });
+        setBreakInTimeError("Break-In Time should be smaller than Break-In Time.");
+      }
+    }
+  }
   const handleBreakEndTimeChange = (newTime) => {
-    setaddbreak({
-      ...addbreak,
-      addbreakOut: newTime.format("HH:mm:ss"),
-    });
-  };
+    if(!addbreak.addbreakIn){
+      setaddbreak({
+        ...addbreak,
+        addbreakOut: newTime.format("HH:mm:ss"),
+      });
+    }else{
+      if(addbreak.addbreakIn<newTime.format("HH:mm:ss")){
+        setaddbreak({
+          ...addbreak,
+          addbreakOut: newTime.format("HH:mm:ss"),
+        });
+        setBreakOutTimeError("");
+      }else{
+        setaddbreak({
+          ...addbreak,
+          addbreakOut: null,
+        });
+        setBreakOutTimeError("Break-Out Time should be greater than Break-In Time.");
+      }
+    }
+  }
 
 
   const handleBreakSave = async (e) => {
     e.preventDefault();
-    
+    let valid = true;
     if (!addbreak.addbreakIn) {
-      setBreakInTimeError("Break In Time is required");
-      return;
-    } else {
+      setBreakInTimeError("Break In Time is required.");
+      valid = false;
+    }else{
       setBreakInTimeError("");
     }
-
     if (!addbreak.addbreakOut) {
-      setBreakOutTimeError("Break Out Time is required");
-      return;
-    } else {
+      setBreakOutTimeError("Break Out Time is required.");
+      valid = false;
+    }else{
       setBreakOutTimeError("");
     }
-
+    if (!valid) return;
     const formData = new FormData();
-    formData.append("merchant_id", addbreak.merchant_id);
+    formData.append("merchant_id", merchant_id);
     formData.append("employee_id", modalAddBreakID);
     formData.append("break_in_date", formatDatePayload(modalDate));
     formData.append("break_out_date", modalDateOUT);
     formData.append("break_in_time", addbreak.addbreakIn);
     formData.append("break_out_time", addbreak.addbreakOut);
-    formData.append("token_id", addtimebreak.token_id);
-    formData.append("login_type", addtimebreak.login_type);
+    formData.append("token_id", userTypeData.token_id);
+    formData.append("login_type", userTypeData.login_type);
 
     for (const [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
@@ -971,7 +1009,7 @@ const TimesheetListing = ({ data }) => {
 
             <div className="view-category-item-modal-header" >
               <div className="title_attributes_section viewbreak" style={{margin: "1rem 1.5rem"}}>
-                 <span className="borderRight">Working Date: <span className="viewTextBark">{formatDate(EmployeeWorkDate)} - {formatDateBrake(EmployeeWorkDateOUT)}</span> </span>
+                 <span className="borderRight">Working Date: <span className="viewTextBark">{formatDate(EmployeeWorkDate)} - {EmployeeWorkDateOUT ? formatDateBrake(EmployeeWorkDateOUT) : '-'}</span> </span>
                  <span className="borderRight">Clock In: <span className="viewTextBark">{EmployeeTimeIn}</span> </span>
                  <span className="pl-2">Clock Out: <span className="viewTextBark">{EmployeeTimeOut}</span> </span>
               </div>
