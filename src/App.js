@@ -472,12 +472,18 @@ function App() {
             path="/store-reporting/current-inventory-value"
             element={<Main visible={"current-inventory-value"} />}
           />
+          <Route
+            exact
+            path="/store-reporting/discount-per-sales-report"
+            element={<Main visible={"discount-per-sales-person"} />}
+          />
+
           <Route exact path="/toptraders" element={<TopTenders />} />
-          {/* <Route
+          <Route
             exact
             path="/users/view/unapprove/menu/defaults/edit-defaults/:defaultsCode"
             element={<Main visible={"edit-defaults"} />}
-          /> */}
+          />
           <Route
             exact
             path="/users/view/unapprove/permission"

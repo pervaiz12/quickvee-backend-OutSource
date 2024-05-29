@@ -17,7 +17,7 @@ import "../../Styles/loginAuth.css";
 // import Quickvee from "../../../Assets/LoginScreen/quickveeLogo.svg";handleSubmitFormPlace
 import Quickvee from "../../Assests/LoginScreen/quickveeLogo.svg";
 import CryptoJS from "crypto-js";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Navigate } from "react-router-dom";
 // import { useLocation } from 'react-router-dom';
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import IconButton from "@mui/material/IconButton";
@@ -26,7 +26,8 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 export default function Login() {
   const navigate = useNavigate();
 
-  const { LoginGetDashBoardRecordJson, LoginAllStore } = useAuthDetails();
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
   const inputRefs = useRef({});
 
   const errorMessageRecord = useSelector(
@@ -52,6 +53,19 @@ export default function Login() {
   useEffect(() => {
     handleHideErrorMessage();
   }, []);
+  // console.log(userTypeData);
+  // useEffect(() => {
+  //   if (
+  //     !!userTypeData?.login_type &&
+  //     userTypeData?.login_type !== "" &&
+  //     !!userTypeData?.data?.merchant_id &&
+  //     userTypeData?.data?.merchant_id !== ""
+  //   ) {
+  //     console.log(navigate(-2));
+  //   } else {
+  //     navigate("/login");
+  //   }
+  // }, [userTypeData]);
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
