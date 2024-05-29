@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import AddIcon from "../../Assests/Category/addIcon.svg";
 import { Link } from "react-router-dom";
@@ -12,24 +12,30 @@ const ProductRow = ({
   index,
   Avail_Online,
   checkStatus,
-  handleError,
+  // handleError,
+  setShowType,
+  showType
 }) => {
+
+  useMemo(()=>{
+    setShowType(product?.show_type)
+  }, [product, showType])
+
+  console.log('showType function', showType)
+
   return (
     <>
       <div
         key={index}
-        className="q-attributes-bottom-attriButes-single-attributes"
+        className="q-attributes-bottom-attriButes-single-attributes product-table-data"
       >
         <p className="categories-sort">
           <img src={SortIcon} alt="" className="" />
         </p>
-        <p className="categories-sort"></p>
         <p className="categories-title">
           <Link to={`/product-edit/${product?.id}`}>{product.title}</Link>
         </p>
-        <p className="categories-sort"></p>
         <p className="categories-title">{product.category_name}</p>
-        <p className="categories-sort"></p>
 
         <div className="categories-title">
           <div className="flex flex-wrap gap-3 ">
@@ -47,9 +53,9 @@ const ProductRow = ({
                     ? true
                     : false
                 }
-                value="2"
+                value={product.show_type}
                 onChange={(event) => {
-                  Avail_Online(event);
+                  Avail_Online(event, product?.show_type);
                 }}
               />
               <span className="checkmark"></span>
@@ -68,20 +74,18 @@ const ProductRow = ({
                     ? true
                     : false
                 }
-                value="1"
+                value={product.show_type}
                 onChange={(event) => {
-                  Avail_Online(event);
+                  Avail_Online(event, product?.show_type);
                 }}
               />
               <span className="checkmark"></span>
             </label>
           </div>
         </div>
-        <p className="categories-sort"></p>
         <p className="categories-title">
           {checkStatus(product.show_status)?.text}
         </p>
-        <p className="categories-sort"></p>
         <div className="categories-items" style={{ width: "50%" }}>
           <div className="flex items-center space-x-2 text-base"></div>
           <div className="mt-3 flex -space-x-2 overflow-hidden">
@@ -93,7 +97,10 @@ const ProductRow = ({
                   key={index}
                   className="inline-block h-12 w-12 rounded-full ring-2 ring-white"
                   src={BASE_URL + "upload/products/MAL0100CA/" + item}
-                  onError={handleError}
+                  onError={(e) => {
+                    e.target.onerror = null; // prevents looping
+                    e.target.src = `${BASE_URL}upload/products/MaskGroup4542.png`;
+                  }}
                   alt=""
                 />
               ))}

@@ -1436,6 +1436,7 @@ const AddProducts = () => {
               .then((res) => {
                 if (res?.payload?.data?.status) {
                   ToastifyAlert("Product Added Successfully!", "success");
+                  navigate("/products");
                 }
               })
               .catch((err) => {

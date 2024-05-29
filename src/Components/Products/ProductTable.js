@@ -26,6 +26,10 @@ const ProductTable = ({
     (state) => state.productsListData
   );
 
+
+  const [showType, setShowType]= useState("")
+  console.log('showtype outside', showType)
+
   useEffect(() => {
     if (!ProductsListDataState.loading && ProductsListDataState.productsData) {
       setproductsList(ProductsListDataState.productsData);
@@ -53,10 +57,7 @@ const ProductTable = ({
   }, []);
 
   const [count, setCount] = useState(0);
-  const defaultUrl = BASE_URL + "upload/products/MaskGroup4542.png";
-  const handleError = (e) => {
-    e.target.src = defaultUrl;
-  };
+
 
   const checkStatus = (status) => {
     switch (status) {
@@ -71,9 +72,9 @@ const ProductTable = ({
     }
   };
 
-  const Avail_Online = (event) => {
-    console.log(event.target.id);
-    console.log(event.target.name);
+  const Avail_Online = (event, showtype) => {
+    const {name, value, id} = event?.target;
+    setShowType(value)
   };
 
   const [items, setItems] = useState(Array.from({ length: 10 }));
@@ -112,9 +113,9 @@ const ProductTable = ({
       dispatch(fetchProductsData(data1));
     }
 
-    setTimeout(() => {
-      setItems(items.concat(Array.from({ length: 15 })));
-    }, 150);
+    // setTimeout(() => {
+    //   setItems(items.concat(Array.from({ length: 15 })));
+    // }, 150);
   };
 
   return (
@@ -134,25 +135,18 @@ const ProductTable = ({
             <div className="q-category-bottom-detail-section">
               <div className="q-category-bottom-header-sticky">
                 <div
-                  className="q-category-bottom-categories-header"
+                  className="q-category-bottom-categories-header product-data-table-header"
                   style={{ position: "sticky", top: "0px" }}
                 >
                   <p className="categories-sort">Sort</p>
-                  <p className="categories-sort"></p>
                   <p className="categories-title">Title</p>
-                  <p className="categories-sort"></p>
                   <p className="categories-items">Category</p>
-                  <p className="categories-sort"></p>
                   <p className="categories-enable-disable">
                     Enable online ordering?
                   </p>
-                  <p className="categories-sort"></p>
                   <p className="categories-items">Product Status</p>
-                  <p className="categories-sort"></p>
                   <p className="categories-items">Images</p>
-                  <p className="categories-sort"></p>
                   <p className="categories-items">Delete</p>
-                  <p className=""></p>
                 </div>
 
                 <div
@@ -176,7 +170,8 @@ const ProductTable = ({
                             index,
                             product,
                             checkStatus,
-                            handleError,
+                            setShowType,
+                            showType
                           }}
                         />
                       ))}

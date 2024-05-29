@@ -448,3 +448,30 @@
   align-items: center;
   justify-content: center;
 }
+
+
+/* product data table */
+
+.product-table-data{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.product-table-data p{
+  width: 14.28%;
+}
+
+.product-table-data div{
+  width: 14.28%;
+}
+
+.product-data-table-header{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.product-data-table-header p{
+  width: 14.28% !important;
+}

@@ -89,11 +89,8 @@ const BulkVarientEdit = ({
     // copyValue object send every time
     if (!Object.values(bulkVarient).every((value) => value === "")) {
       handleCopyAllVarientValue(copyValue);
-      ToastifyAlert(
-        "Copied values! Plase Click on Update for Save!",
-        "success"
-      );
     }
+  
 
     // compareAtPrice check inside form with all price // compareAtPrice must be greater than price value
     if (bulkVarient["compareAtPrice"] && !bulkVarient["price"]) {
@@ -101,6 +98,8 @@ const BulkVarientEdit = ({
         formData?.some((i) => +i?.["price"] > +bulkVarient["compareAtPrice"])
       ) {
         alert("compareAtPrice must be greater than price.");
+      handleCopyAllVarientValue(copyValue);
+
       } else {
         handleCopyAllVarientValue(copyAllValue);
         ToastifyAlert(
@@ -116,6 +115,8 @@ const BulkVarientEdit = ({
         formData?.some((i) => +i?.["compareAtPrice"] < +bulkVarient["price"])
       ) {
         alert("compareAtPrice must be greater than price.");
+        handleCopyAllVarientValue(copyValue);
+
       } else {
         handleCopyAllVarientValue(copyAllValue);
         ToastifyAlert(
@@ -131,16 +132,22 @@ const BulkVarientEdit = ({
       // compare inside modal
       if (+bulkVarient["compareAtPrice"] < +bulkVarient["price"]) {
         alert("compareAtPrice must be greater than price.");
+        handleCopyAllVarientValue(copyValue);
+
       }
       // compare inside form
       else if (
         formData?.some((i) => +i?.["price"] > +bulkVarient["compareAtPrice"])
       ) {
+        handleCopyAllVarientValue(copyValue);
+
         alert("compareAtPrice must be greater than price.");
       } else if (
         formData?.some((i) => +i?.["compareAtPrice"] < +bulkVarient["price"])
       ) {
         alert("compareAtPrice must be greater than price.");
+        handleCopyAllVarientValue(copyValue);
+
       } else {
         handleCopyAllVarientValue(copyAllValue);
         ToastifyAlert(
@@ -149,6 +156,16 @@ const BulkVarientEdit = ({
         );
         handleCloseEditModal();
       }
+    }
+
+    // if any from reorderQty or reorderLevel is not empty
+    else if(bulkVarient['reorderQty'] !== "" || bulkVarient['reorderLevel'] !== ""){
+      handleCopyAllVarientValue(copyValue);
+      ToastifyAlert(
+        "Copied values! Plase Click on Update for Save!",
+        "success"
+      );
+      handleCloseEditModal();
     }
   };
 
