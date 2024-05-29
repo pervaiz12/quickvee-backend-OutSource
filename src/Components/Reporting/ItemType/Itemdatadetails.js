@@ -45,7 +45,10 @@ const Itemdatadetails = ({ data }) => {
             <div className="q-attributes-bottom-attriButes-header text-center">
               <p className="q-employee-item">Name</p>
               <p className="q-employee-in text-center"># Of Payments </p>
-              <p className="q-employee-in text-right"> Net Revenue Without Tips</p>
+              <p className="q-employee-in text-right">
+                {" "}
+                Net Revenue Without Tips
+              </p>
               <p className="q-employee-in text-right"> Tips</p>
               <p className="q-employee-in text-right"> Net Revenue With Tips</p>
 
@@ -69,7 +72,7 @@ const Itemdatadetails = ({ data }) => {
                     {orderReportDa.amount_with_tip}
                   </p>
                   <Link
-                    // to={`/Order`}
+                  // to={`/Order`}
                   >
                     <p className="q-employee-in">Details</p>
                   </Link>

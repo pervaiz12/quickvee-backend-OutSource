@@ -2,82 +2,87 @@ import React, { useState } from "react";
 import DateRange from "../../Orders/InstoreOrder/DateRange";
 import PaymentMethodList from "./PaymentMethodList";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 
+const PaymentMethodReport = () => {
+  const [filteredData, setFilteredData] = useState([]);
+  const {
+    LoginGetDashBoardRecordJson,
+    LoginAllStore,
+    userTypeData,
+    GetSessionLogin,
+  } = useAuthDetails();
+  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
+  const handleDataFiltered = (data) => {
+    if (typeof data === "object") {
+      let orderEnvValue;
 
- const PaymentMethodReport = () => {
-    const [filteredData, setFilteredData] = useState([]);
-  
-    const handleDataFiltered = (data) => {
-      if (typeof data === "object") {
-        let orderEnvValue;
-
-        switch (selectedOrderSource) {
-    
-          case "Online Order":
-            orderEnvValue = 2;
-            break;
-          case "Store Order":
-            orderEnvValue = 3;
-            break;
-          
-  
-          default:
-            orderEnvValue = 2;
-            break;
-        }
-
-        const updatedData = {
-          ...data,
-          merchant_id: "MAL0100CA",
-          order_env: orderEnvValue,
-  
-        };
-        setFilteredData(updatedData);
-      } else {
-        // Handle other cases or log an error
-        console.error("Invalid data format:", data);
-      }
-    };
-  
-    const [selectedOrderSource, setSelectedOrderSource] = useState("Online Order");
-
-  
-    const [orderSourceDropdownVisible, setOrderSourceDropdownVisible] =
-      useState(false);
-
-  
-    const toggleDropdown = (dropdown) => {
-      switch (dropdown) {
-        case "orderSource":
-          setOrderSourceDropdownVisible(!orderSourceDropdownVisible);
+      switch (selectedOrderSource) {
+        case "Online Order":
+          orderEnvValue = 2;
           break;
-  
-        default:
-          break;
-      }
-    };
-  
-    const handleOptionClick = (option, dropdown) => {
-      switch (dropdown) {
-        case "orderSource":
-          setSelectedOrderSource(option);
-          setOrderSourceDropdownVisible(false);
+        case "Store Order":
+          orderEnvValue = 3;
           break;
 
         default:
+          orderEnvValue = 2;
           break;
       }
-    };
-  
-    return (
-      <>
-          <div className="q-order-main-page">
-            <div className="box">
-        <div className="q-category-bottom-detail-section">
+
+      const updatedData = {
+        ...data,
+        merchant_id: merchant_id,
+        order_env: orderEnvValue,
+        ...userTypeData,
+      };
+      setFilteredData(updatedData);
+    } else {
+      // Handle other cases or log an error
+      console.error("Invalid data format:", data);
+    }
+  };
+
+  const [selectedOrderSource, setSelectedOrderSource] =
+    useState("Online Order");
+
+  const [orderSourceDropdownVisible, setOrderSourceDropdownVisible] =
+    useState(false);
+
+  const toggleDropdown = (dropdown) => {
+    switch (dropdown) {
+      case "orderSource":
+        setOrderSourceDropdownVisible(!orderSourceDropdownVisible);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  const handleOptionClick = (option, dropdown) => {
+    switch (dropdown) {
+      case "orderSource":
+        setSelectedOrderSource(option);
+        setOrderSourceDropdownVisible(false);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  return (
+    <>
+      <div className="q-order-main-page">
+        <div className="box">
+          <div className="q-category-bottom-detail-section">
             <div className="q-category-bottom-header-sticky">
               <div className="q-category-bottom-header">
-                <div className="q_details_header ml-2">Payment Method Daily Report</div>
+                <div className="q_details_header ml-2">
+                  Payment Method Daily Report
+                </div>
               </div>
               <div className="q_details_header ml-8">Filter by</div>
             </div>
@@ -101,7 +106,6 @@ import DownIcon from "../../../Assests/Dashboard/Down.svg";
                   </div>
                   {orderSourceDropdownVisible && (
                     <div className="dropdown-content ">
-     
                       <div
                         onClick={() =>
                           handleOptionClick("Online Order", "orderSource")
@@ -116,43 +120,38 @@ import DownIcon from "../../../Assests/Dashboard/Down.svg";
                       >
                         Store Order
                       </div>
-  
                     </div>
                   )}
                 </div>
               </div>
-  
             </div>
           </div>
         </div>
-        </div>
-  
-        <style>
-          {`
+      </div>
+
+      <style>
+        {`
             .dailytotoalReport .q_dateRange_header{
               margin-top: 0rem ;
             }
           `}
-        </style>
-  
-        <div className="q-order-main-page">
-          <div className="dailytotoalReport">
-            <div className="box">
+      </style>
+
+      <div className="q-order-main-page">
+        <div className="dailytotoalReport">
+          <div className="box">
             <DateRange onDateRangeChange={handleDataFiltered} />
           </div>
         </div>
-        </div>
-  
-        <div className="mt-10">
-          <div className="q-order-main-page">
-            <PaymentMethodList data={filteredData} />
-          </div>
-        </div>
-      </>
-    );
-  };
-  
-  
-  
+      </div>
 
-export default PaymentMethodReport
+      <div className="mt-10">
+        <div className="q-order-main-page">
+          <PaymentMethodList data={filteredData} />
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default PaymentMethodReport;
