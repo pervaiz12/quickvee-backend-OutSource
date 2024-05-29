@@ -44,17 +44,18 @@ export default function Login() {
     handleBlur,
     setErrorMessage,
     errorMessage,
+    handleWrongPasswordError
   } = LoginLogic();
 
   const handleHideErrorMessage = () => {
     setErrorMessage(errorMessageRecord);
-    setTimeout(() => {
+    
       setErrorMessage("");
-    }, 2000);
+    
   };
-  useEffect(() => {
-    handleHideErrorMessage();
-  }, []);
+  // useEffect(() => {
+  //   handleHideErrorMessage();
+  // }, []);
   // console.log(userTypeData);
   // useEffect(() => {
   //   if (
@@ -98,9 +99,9 @@ export default function Login() {
                   aria-label="close"
                   color="error"
                   size="small"
-                  // onClick={goToTop}
+                  onClick={handleHideErrorMessage}
                 >
-                 
+                  <CloseIcon  />
                 </IconButton>
               }
               sx={{ mb: 4 }}
@@ -108,7 +109,7 @@ export default function Login() {
               {errorMessage}
             </Alert>
           </Collapse>
-        {/* <span>{errorMessage}</span> */}
+     
           <Link>
             <img
               src={Quickvee}
