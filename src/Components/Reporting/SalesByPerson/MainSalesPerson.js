@@ -1,11 +1,9 @@
-import React, { useState } from 'react'
-import SalesPersonFilter from './SalesPersonFilter'
-import DateRange from '../../Orders/InstoreOrder/DateRange'
-import SalesPersonReport from './SalesPersonReport'
-
+import React, { useState } from "react";
+import SalesPersonFilter from "./SalesPersonFilter";
+import SalesPersonReport from "./SalesPersonReport";
+import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 
 const MainSalesPerson = () => {
-
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const [OrderSourceData, setOrderSourceData] = useState(null);
   const [OrderTypeData, setOrderTypeData] = useState(null);
@@ -15,39 +13,31 @@ const MainSalesPerson = () => {
     setSelectedDateRange(dateRange);
   };
 
-  const handleFilterDataChange = (OrderSource , OrderType , SelectEmpList) => {
+  const handleFilterDataChange = (OrderSource, OrderType, SelectEmpList) => {
     setOrderSourceData(OrderSource);
     setOrderTypeData(OrderType);
     setSelectEmpListData(SelectEmpList);
   };
   return (
     <>
-      <div className='q-order-main-page'>
-        <SalesPersonFilter 
-          onFilterDataChange={handleFilterDataChange} 
-        />
+      <div className="q-order-main-page">
+        <SalesPersonFilter onFilterDataChange={handleFilterDataChange} />
       </div>
 
-      <div className='q-order-main-page'>
-        <div className='box'>
-        <DateRange 
-          onDateRangeChange={handleDateRangeChange}
-        />
-      </div>
+      <div className="q-order-main-page">
+        <div className="box">
+          <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
+        </div>
       </div>
 
-      <div className='q-order-main-page'>
-        <div className='box'>
-        <SalesPersonReport 
-          selectedDateRange={selectedDateRange} 
-          OrderSourceData={OrderSourceData} 
-          OrderTypeData={OrderTypeData} 
-          SelectEmpListData={SelectEmpListData} 
-        />
-      </div>
-      </div>
+      <SalesPersonReport
+        selectedDateRange={selectedDateRange}
+        OrderSourceData={OrderSourceData}
+        OrderTypeData={OrderTypeData}
+        SelectEmpListData={SelectEmpListData}
+      />
     </>
-  )
-}
+  );
+};
 
-export default MainSalesPerson
+export default MainSalesPerson;

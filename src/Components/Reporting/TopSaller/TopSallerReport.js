@@ -7,6 +7,7 @@ import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import { BASE_URL, TAXE_CATEGORY_LIST } from "../../../Constants/Config";
 import axios from "axios";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { Grid } from "@mui/material";
 
 const TopSallerReport = () => {
   const [filteredData, setFilteredData] = useState({ category_id: "all" });
@@ -176,6 +177,11 @@ const TopSallerReport = () => {
 
   return (
     <>
+    <Grid container className="box_shadow_div">
+      <Grid>
+      
+      </Grid>
+    </Grid>
       <div className="q-order-main-page">
         <div className="box">
           <div className="q-category-bottom-detail-section">
