@@ -116,11 +116,15 @@ export const deleteCategorybanner = createAsyncThunk(
   "categories/deleteCategorybanner",
   async (data) => {
     try {
+      const { token, ...dataNew } = data;
       const response = await axios.post(
         BASE_URL + CATEGORIE_BANNER_REMOVE,
-        data,
+        dataNew,
         {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
         }
       );
       if (response) {

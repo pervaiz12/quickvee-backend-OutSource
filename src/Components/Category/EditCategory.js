@@ -222,8 +222,9 @@ const EditCategory = () => {
     event.stopPropagation();
     const data = {
       id: id,
-      merchant_id: "MAL0100CA",
+      merchant_id,
       removeitem: removeitem,
+      ...userTypeData,
     };
     const userConfirmed = window.confirm(
       "Are you sure you want to delete this Category Image ?"
