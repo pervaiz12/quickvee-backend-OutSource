@@ -36,7 +36,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
   // hide last border
   "&:last-child td, &:last-child th": {
-    border: 0,
+    backgroundColor:"#F5F5F5"
   },
 }));
 // ==================== END TABLE STYLE ADDED ===================================================
