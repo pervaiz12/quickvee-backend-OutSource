@@ -100,8 +100,8 @@ const TimesheetListing = ({ data }) => {
 
 
   const [addtimebreak, setTimeBreak] = useState({
-    add_in_date: "",
-    add_out_date: "",
+    add_in_date: null,
+    add_out_date: null,
     add_clocked_in: "",
     add_clocked_out: "",
     // add_clocked_in: dayjs().format("HH:mm:ss"),
@@ -110,6 +110,9 @@ const TimesheetListing = ({ data }) => {
     // time_valid: roundedTime.format("HH:mm:ss"),
     // time_expire: roundedTime.format("HH:mm:ss"),
   });
+
+  // const [timeBreakErrors, set]
+
 
   const openModal = (title,id) => {
     setEmployeeName(title)
@@ -162,43 +165,70 @@ const TimesheetListing = ({ data }) => {
       }
     }
   };
+
   const handleEndTimeChange = (newTime) => {
     if(!addtimebreak.add_clocked_in){
       setTimeBreak({
         ...addtimebreak,
         add_clocked_out: newTime.format("HH:mm:ss"),
       });
-    }else{
+    }
+    if(addtimebreak.add_in_date == addtimebreak.add_out_date){
       if(addtimebreak.add_clocked_in<newTime.format("HH:mm:ss")){
         setTimeBreak({
           ...addtimebreak,
           add_clocked_out: newTime.format("HH:mm:ss"),
         });
         setDateEndTimeError("");
-      }else{
-        setDateEndTimeError("Out Date and Time should be greater than In Date and Time.")
+      }else if(addtimebreak.add_clocked_in==newTime.format("HH:mm:ss")){
+        setTimeBreak( prev =>({
+          ...prev,
+          add_clocked_out: null,
+        }));
+        setDateEndTimeError("Out Date and Time should be greater than In Date and Time. same date")
       }
+    }else{
+        setTimeBreak({
+          ...addtimebreak,
+          add_clocked_out: newTime.format("HH:mm:ss"),
+        });
+        setDateEndTimeError("")
     }
   };
+  console.log("vcv",addtimebreak)
 
   const handleStartDateChange = (newDate) => {
-    const formattedStartDate = newDate.format("YYYY-MM-DD");
-    if (dayjs(formattedStartDate).isAfter(dayjs(addtimebreak.add_out_date))) {
-      alert("Start date cannot be greater than the end date");
-      setTimeBreak({
-        ...addtimebreak,
-        add_in_date: null,
-      });
-      setDateStartError("Select In Date is required");
-    } else {
+    // const formattedStartDate = newDate.format("YYYY-MM-DD");
+
+    const dayjsDate = dayjs(newDate); // Convert to dayjs object
+    const formattedStartDate = dayjsDate.format("YYYY-MM-DD");
+    // const formattedStartDate = dayjs(newDate).format("YYYY-MM-DD");
+
+    if(!addtimebreak.add_out_date){
       setTimeBreak({
         ...addtimebreak,
         add_in_date: formattedStartDate,
       });
       setDateStartError("");
+    }else if(dayjs(formattedStartDate).isAfter(dayjs(addtimebreak.add_out_date))){
+      setTimeBreak({
+        ...addtimebreak,
+        add_in_date: formattedStartDate,
+        add_out_date: formattedStartDate,
+      });
+    }else if(dayjs(formattedStartDate).isBefore(dayjs(addtimebreak.add_out_date))){
+      setTimeBreak({
+        ...addtimebreak,
+        add_in_date: formattedStartDate,
+      });
+    }else{
+      setTimeBreak({
+        ...addtimebreak,
+        add_in_date: null,
+        add_out_date: null,
+      });
     }
   };
-
 
   const handleEndDateChange = (newDate) => {
     const formattedEndDate = newDate.format("YYYY-MM-DD");
@@ -235,29 +265,36 @@ const TimesheetListing = ({ data }) => {
     } else {
       setDateStartTimeError("");
     }
+    // console.log("hand save",addtimebreak.add_clocked_out)
+    // return
     if (!addtimebreak.add_out_date) {
       setDateEndError("Select Out Date is required");
       valid = false;
     } else {
       setDateEndError("");
     }
+    console.log("xzvxzc",addtimebreak.add_clocked_out)
+    if (addtimebreak.add_in_date === addtimebreak.add_out_date && addtimebreak.add_clocked_out === null) {
+      if(addtimebreak.add_clocked_out === null){
+        setDateEndTimeError("Out Date and Time should be greater than In Date and Time.  handle save");
+        valid = false;
+        return
+      }
+    }else{
+      setDateEndTimeError("");
+    }
     if (!addtimebreak.add_clocked_out) {
       setDateEndTimeError("Clock Out Time is required");
       valid = false;
-    } else {
+    }else if(addtimebreak.add_clocked_out === null){
+      console.log("addtimebreak.add_clocked_out handle save null value aa reha hai",addtimebreak.add_clocked_out)
+      setDateEndTimeError("Clock Out Time is required");
+      valid = false;
+    }else {
       setDateEndTimeError("");
     }
-    // if (addtimebreak.add_in_date === addtimebreak.add_out_date && addtimebreak.add_clocked_in === addtimebreak.add_clocked_out) {
-    //   alert("Clocked in time and clocked out time cannot be the same on the same day.");
-    //   return; // Prevent save operation
-    // }
+  
 
-    // if (addtimebreak.add_clocked_in >= addtimebreak.add_clocked_out) {
-    //   setDateEndTimeError("Out Date and Time should be greater than In Date and Time.ssss");
-    //   return;
-    // }else{
-    //   setDateEndError("");
-    // }
 
     if (!valid) return;
     const formData = new FormData();
@@ -300,6 +337,21 @@ const TimesheetListing = ({ data }) => {
 
 
   }
+
+  // const updateTimesheet = (value,type) => { 
+  //   setTimeBreak(prev => ({
+  //     ...prev,
+  //     [type]: type === "add_clocked_in" || type === "add_clocked_out" ? value.format("HH:mm:ss") : value.format("YYYY-MM-DD")
+  //   }))
+  // }
+
+
+  // useEffect(() => {
+  //   console.log("addtimebreak: ", addtimebreak)
+  //   if(addtimebreak.add_in_date === addtimebreak.add_out_date){
+  //     setaddTimesheetMsg("Sub empty hai");
+  //   }
+  // }, [addtimebreak])
 
 
   // for Break Modal start
@@ -745,6 +797,10 @@ const TimesheetListing = ({ data }) => {
                                 onChange={(newDate) =>
                                   handleStartDateChange(newDate)
                                 }
+                                name="add_in_date"
+                                // onChange={(newDate) => updateTimesheet(newDate, "add_in_date")}
+                                // value={addtimebreak.add_in_date}
+                                value={addtimebreak.add_in_date ? dayjs(addtimebreak.add_in_date) : null}
                                 size="medium"
                                 format={"DD-MM-YYYY"}
                                 views={["year", "month", "day"]}
@@ -771,14 +827,16 @@ const TimesheetListing = ({ data }) => {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                               <label htmlFor=" " className="pb-1">Clock In Time*</label>
                                 <TimePicker
-                                  name="clock_in"
                                   id="clock_in"
                                   slotProps={{
                                     textField: { placeholder: "Select Time" },
                                   }}
+                                  value={addtimebreak.add_clocked_in ? dayjs(addtimebreak.add_clocked_in, 'HH:mm') : null}
+                                  name="add_clocked_in"
                                   onChange={(newTime) =>
                                     handleStartTimeChange(newTime)
                                   }
+                                  // onChange={(newTime) => updateTimesheet(newTime, "add_clocked_in")}
                                   // onChange={handleStartTimeChange}
                                   components={{
                                     OpenPickerIcon: () => (
@@ -809,10 +867,17 @@ const TimesheetListing = ({ data }) => {
                                 onChange={(newDate) =>
                                   handleEndDateChange(newDate)
                                 }
+                                // onChange={(newDate) => updateTimesheet(newDate, "add_out_date")}
+                                value={addtimebreak.add_out_date ? dayjs(addtimebreak.add_out_date) : null}
+                                // shouldDisableDate={(date) => {
+                                //   const start = addtimebreak.add_in_date;
+                                //   return date.format("YYYY-MM-DD") < start ;
+                                // }}
                                 shouldDisableDate={(date) => {
-                                  const start = addtimebreak.add_in_date;
-                                  return date.format("YYYY-MM-DD") < start ;
+                                  const start = addtimebreak.add_in_date ? dayjs(addtimebreak.add_in_date) : null;
+                                  return start && date.isBefore(start, 'day');
                                 }}
+                                name="add_out_date"
                                 size="medium"
                                 format={"DD-MM-YYYY"}
                                 views={["year", "month", "day"]}
@@ -838,7 +903,7 @@ const TimesheetListing = ({ data }) => {
                       <LocalizationProvider dateAdapter={AdapterDayjs}>
                               <label htmlFor=" " className="pb-1">Clock Out Time*</label>
                                 <TimePicker
-                                  name="break_in"
+                                  name="add_clocked_out"
                                   id="break_in"
                                   slotProps={{
                                     textField: { placeholder: "Select Time" },
@@ -846,7 +911,9 @@ const TimesheetListing = ({ data }) => {
                                   onChange={(newTime) =>
                                     handleEndTimeChange(newTime)
                                   }
-                                  // onChange={handleEndTimeChange}
+                                  // onChange={(newTime) => updateTimesheet(newTime, "add_clocked_out")}
+                                  // value={addtimebreak.add_clocked_out}
+                                  value={addtimebreak.add_clocked_out ? dayjs(addtimebreak.add_clocked_out, 'HH:mm') : null}
                                   components={{
                                     OpenPickerIcon: () => (
                                       <img src={TimeIcon} alt="time-icon" />
