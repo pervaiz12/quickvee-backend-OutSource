@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from "react";
 import AddNewCategory from "../../Assests/Taxes/Left.svg";
 import axios from "axios";
@@ -17,10 +16,17 @@ import { deleteCategorybanner } from "../../Redux/features/Categories/categories
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 
 import { useNavigate } from "react-router-dom";
+import { useAuthDetails } from "../../Common/cookiesHelper";
 
 const EditCategory = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const {
+    LoginGetDashBoardRecordJson,
+    LoginAllStore,
+    userTypeData,
+    GetSessionLogin,
+  } = useAuthDetails();
 
   const [category, setCategory] = useState({
     collID: "",
@@ -32,24 +38,23 @@ const EditCategory = () => {
     earn_point: "",
     image: "",
   });
-
+  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   const params = useParams();
   async function fetchData() {
     const getcategoryData = {
-      merchant_id: "MAL0100CA",
+      merchant_id: merchant_id,
       id: params.categoryCode,
+      ...userTypeData,
     };
 
     try {
-      const response = await axios.post(
-        BASE_URL + EDIT_CATOGRY_DATA,
-        getcategoryData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const { token, ...dataNew } = getcategoryData;
+      const response = await axios.post(BASE_URL + EDIT_CATOGRY_DATA, dataNew, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       if (response.data.status === true) {
         // console.log(response.data.result)
@@ -102,7 +107,10 @@ const EditCategory = () => {
     if (file) {
       const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
       if (!allowedExtensions.exec(file.name)) {
-        alert(file.name + " is not an image. Only jpeg, png, jpg files can be uploaded.");
+        alert(
+          file.name +
+            " is not an image. Only jpeg, png, jpg files can be uploaded."
+        );
       } else {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -130,6 +138,8 @@ const EditCategory = () => {
     formData.append("show_online", category.show_online);
     formData.append("use_point", category.use_point);
     formData.append("earn_point", category.earn_point);
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("login_type", userTypeData?.login_type);
 
     if (category.image && category.image.base64) {
       formData.append("image", category.image.base64);
@@ -141,7 +151,10 @@ const EditCategory = () => {
 
     try {
       const res = await axios.post(BASE_URL + UPDATE_CATOGRY, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userTypeData?.token}`,
+        },
       });
 
       const data = await res.data.status;
@@ -150,7 +163,7 @@ const EditCategory = () => {
         // alert(update_message);
         setErrorMessage(" ");
         let data = {
-          merchant_id: "MAL0100CA",
+          merchant_id: merchant_id,
         };
         setSelectedImage(null);
         navigate("/category");
@@ -279,207 +292,205 @@ const EditCategory = () => {
   return (
     <div className="q-category-main-page">
       <div className="box">
-      <div className="q-category-top-detail-section">
-        <li>In order to use the Quickvee app one Category is required.</li>
-        <li>
-          If you make changes to the Category, the Category status will be
-          pending until the admin approves it.
-        </li>
-        <li>
-          After you've made changes to your menu, select the option "Click Here
-          To Send For Approval To Admin" to get admin approval to update your
-          website.
-        </li>
-      </div>
+        <div className="q-category-top-detail-section">
+          <li>In order to use the Quickvee app one Category is required.</li>
+          <li>
+            If you make changes to the Category, the Category status will be
+            pending until the admin approves it.
+          </li>
+          <li>
+            After you've made changes to your menu, select the option "Click
+            Here To Send For Approval To Admin" to get admin approval to update
+            your website.
+          </li>
+        </div>
 
-      <div className="q-add-categories-section">
-        <form>
-          <div className="q-add-categories-section-header">
-            <Link to={`/category`}>
-              <span style={myStyles}>
-                <img src={AddNewCategory} alt="Add-New-Category" />
-                <span className="pl-4">Edit Category</span>
-              </span>
-            </Link>
-          </div>
-          <div className="q-add-categories-section-middle-form">
-            <div className="q-add-categories-single-input">
-              <label for="title">Title</label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                value={category.title}
-                onChange={inputChange}
-              />
+        <div className="q-add-categories-section">
+          <form>
+            <div className="q-add-categories-section-header">
+              <Link to={`/category`}>
+                <span style={myStyles}>
+                  <img src={AddNewCategory} alt="Add-New-Category" />
+                  <span className="pl-4">Edit Category</span>
+                </span>
+              </Link>
             </div>
-            {errorMessage && (
-              <span className="error-message" style={{ color: "red" }}>
-                {errorMessage}
-              </span>
-            )}
-
-            <div className="q-add-categories-single-input">
-              <label for="description">Description</label>
-              <textarea
-                id="description"
-                name="description"
-                rows="4"
-                cols="50"
-                value={category.description}
-                onChange={inputChange}
-              ></textarea>
-            </div>
-
-            <div
-              className={`h-1/2  h-[100px] flex items-center justify-center border-2 border-dashed border-[#BFBFBF] bg-white rounded-lg mt-2 defaultDrag_div`}
-              onDragOver={handleDragOver}
-              onDrop={handleDrop}
-              onClick={openFileInput}
-              style={{
-                cursor: "pointer",
-                position: "relative",
-                height: "auto",
-                padding: "10px",
-                height: "260px",
-                backgroundColor: "#f9f9f9",
-                overflow:"hidden"
-              }}
-            >
-              {category.image && category.image.base64 ? (
-                <>
-                  <span
-                    className="delete-image-icon img-DeleteIcon"
-                    onClick={handleDeleteImage}
-                    style={{
-                      position: "absolute",
-                      top: "7px",
-                      right: "7px",
-                    }}
-                  >
-                    <img src={DeleteIcon} alt="delete-icon" />
-                  </span>
-                  <img
-                    src={category.image.base64}
-                    alt="Preview"
-                    className="default-img"
-                    style={{
-                      height: "320px",
-                      objectFit: "contain",
-                      width: "100%",
-                    }}
-                  />
-                </>
-              ) : (
-                <>
-                  {category.image && category.image.length > 0 ? (
-                    <div className="flex-column">
-                      <img
-                        src={`${BASE_URL}/upload/banner/category_banners/${category.merchant_id}/${category.image}`}
-                        alt="Default"
-                        className="default-img"
-                        style={{
-                          height: "320px",
-                          objectFit: "contain",
-                          width: "100%",
-                        }}
-                      />
-                      <span
-                        className="delete-image-icon img-DeleteIcon"
-                        // onClick={handleDeleteImage}
-                        onClick={(event) =>
-                          handleRemoveBanner(
-                            event,
-                            category.collID,
-                            category.image
-                          )
-                        }
-                        style={{
-                          position: "absolute",
-                          top: "7px",
-                          right: "7px",
-                        }}
-                      >
-                        <img src={DeleteIcon} alt="delete-icon" />
-                      </span>
-                    </div>
-                  ) : (
-                    <div className="flex-column">
-                      <img
-                        src={Upload}
-                        style={{ transform: "translate(2.5rem, 0px)" }}
-                        alt="Default"
-                      />
-                      <span>Category Image</span>
-                    </div>
-                  )}
-                </>
-              )}
+            <div className="q-add-categories-section-middle-form">
               <div className="q-add-categories-single-input">
+                <label for="title">Title</label>
                 <input
-                  type="file"
-                  id="image"
-                  name="image"
-                  accept="image/*"
-                  ref={inputRef}
-                  className="default-img-inputfield"
-                  onChange={handleImageChange}
-                  style={{ display: "none" }}
+                  type="text"
+                  id="title"
+                  name="title"
+                  value={category.title}
+                  onChange={inputChange}
                 />
               </div>
+              {errorMessage && (
+                <span className="error-message" style={{ color: "red" }}>
+                  {errorMessage}
+                </span>
+              )}
+
+              <div className="q-add-categories-single-input">
+                <label for="description">Description</label>
+                <textarea
+                  id="description"
+                  name="description"
+                  rows="4"
+                  cols="50"
+                  value={category.description}
+                  onChange={inputChange}
+                ></textarea>
+              </div>
+
+              <div
+                className={`h-1/2  h-[100px] flex items-center justify-center border-2 border-dashed border-[#BFBFBF] bg-white rounded-lg mt-2 defaultDrag_div`}
+                onDragOver={handleDragOver}
+                onDrop={handleDrop}
+                onClick={openFileInput}
+                style={{
+                  cursor: "pointer",
+                  position: "relative",
+                  height: "auto",
+                  padding: "10px",
+                  height: "260px",
+                  backgroundColor: "#f9f9f9",
+                  overflow: "hidden",
+                }}
+              >
+                {category.image && category.image.base64 ? (
+                  <>
+                    <span
+                      className="delete-image-icon img-DeleteIcon"
+                      onClick={handleDeleteImage}
+                      style={{
+                        position: "absolute",
+                        top: "7px",
+                        right: "7px",
+                      }}
+                    >
+                      <img src={DeleteIcon} alt="delete-icon" />
+                    </span>
+                    <img
+                      src={category.image.base64}
+                      alt="Preview"
+                      className="default-img"
+                      style={{
+                        height: "320px",
+                        objectFit: "contain",
+                        width: "100%",
+                      }}
+                    />
+                  </>
+                ) : (
+                  <>
+                    {category.image && category.image.length > 0 ? (
+                      <div className="flex-column">
+                        <img
+                          src={`${BASE_URL}/upload/banner/category_banners/${category.merchant_id}/${category.image}`}
+                          alt="Default"
+                          className="default-img"
+                          style={{
+                            height: "320px",
+                            objectFit: "contain",
+                            width: "100%",
+                          }}
+                        />
+                        <span
+                          className="delete-image-icon img-DeleteIcon"
+                          // onClick={handleDeleteImage}
+                          onClick={(event) =>
+                            handleRemoveBanner(
+                              event,
+                              category.collID,
+                              category.image
+                            )
+                          }
+                          style={{
+                            position: "absolute",
+                            top: "7px",
+                            right: "7px",
+                          }}
+                        >
+                          <img src={DeleteIcon} alt="delete-icon" />
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="flex-column">
+                        <img
+                          src={Upload}
+                          style={{ transform: "translate(2.5rem, 0px)" }}
+                          alt="Default"
+                        />
+                        <span>Category Image</span>
+                      </div>
+                    )}
+                  </>
+                )}
+                <div className="q-add-categories-single-input">
+                  <input
+                    type="file"
+                    id="image"
+                    name="image"
+                    accept="image/*"
+                    ref={inputRef}
+                    className="default-img-inputfield"
+                    onChange={handleImageChange}
+                    style={{ display: "none" }}
+                  />
+                </div>
+              </div>
+
+              <div className="row py-3" style={myStyles}>
+                {renderRemoveBannerButton()}
+                <div className="add-category-checkmark-div">
+                  <label className="add-category-checkmark-label mt-2">
+                    Use Loyalty Point ?
+                    <input
+                      type="checkbox"
+                      checked={category.use_point === 1}
+                      onChange={(e) =>
+                        setCategory((prevValue) => ({
+                          ...prevValue,
+                          use_point: e.target.checked ? 1 : 0,
+                        }))
+                      }
+                    />
+                    <span className="add-category-checkmark"></span>
+                  </label>
+                </div>
+                <div className="add-category-checkmark-div">
+                  <label className="add-category-checkmark-label mt-2">
+                    Earn Loyalty Point ?
+                    <input
+                      type="checkbox"
+                      checked={category.earn_point === 1}
+                      onChange={(e) =>
+                        setCategory((prevValue) => ({
+                          ...prevValue,
+                          earn_point: e.target.checked ? 1 : 0,
+                        }))
+                      }
+                    />
+                    <span className="add-category-checkmark"></span>
+                  </label>
+                </div>
+              </div>
             </div>
 
-           
+            <div className="q-add-categories-section-middle-footer">
+              <button className="quic-btn quic-btn-save" onClick={handleSubmit}>
+                Save
+              </button>
 
-            <div className="row py-3" style={myStyles}>
-            {renderRemoveBannerButton()}
-              <div className="add-category-checkmark-div">
-                <label className="add-category-checkmark-label mt-2">
-                  Use Loyalty Point ?
-                  <input
-                    type="checkbox"
-                    checked={category.use_point === 1}
-                    onChange={(e) =>
-                      setCategory((prevValue) => ({
-                        ...prevValue,
-                        use_point: e.target.checked ? 1 : 0,
-                      }))
-                    }
-                  />
-                  <span className="add-category-checkmark"></span>
-                </label>
-              </div>
-              <div className="add-category-checkmark-div">
-                <label className="add-category-checkmark-label mt-2">
-                  Earn Loyalty Point ?
-                  <input
-                    type="checkbox"
-                    checked={category.earn_point === 1}
-                    onChange={(e) =>
-                      setCategory((prevValue) => ({
-                        ...prevValue,
-                        earn_point: e.target.checked ? 1 : 0,
-                      }))
-                    }
-                  />
-                  <span className="add-category-checkmark"></span>
-                </label>
-              </div>
+              <Link to={`/category`}>
+                <button className="quic-btn quic-btn-cancle">Cancel</button>
+              </Link>
             </div>
-          </div>
-
-          <div className="q-add-categories-section-middle-footer">
-            <button className="quic-btn quic-btn-save" onClick={handleSubmit}>
-              Save
-            </button>
-
-            <Link to={`/category`}>
-              <button className="quic-btn quic-btn-cancle">Cancel</button>
-            </Link>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
     </div>
   );
 };
