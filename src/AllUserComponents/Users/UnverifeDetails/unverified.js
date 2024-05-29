@@ -63,9 +63,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
   },
   // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
 }));
 
 export default function Unverified() {
@@ -468,7 +465,7 @@ export default function Unverified() {
                               <StyledTableCell>
                                 <div className="flex">
                                   <img
-                                    className="mx-1 view"
+                                    className="mx-1 view cursor-pointer"
                                     onClick={() =>
                                       handleGetVerifiedMerchant(
                                         data.merchant_id
@@ -478,19 +475,19 @@ export default function Unverified() {
                                     alt="View"
                                   />
                                   <img
-                                    className="mx-1 edit"
+                                    className="mx-1 edit cursor-pointer"
                                     onClick={() => handleEditMerchant(data.id)}
                                     src={Edit}
                                     alt="Edit"
                                   />
                                   <img
-                                    class="mx-1 delete"
+                                    class="mx-1 delete cursor-pointer" 
                                     onClick={() => handleDeleteMerchant(data)}
                                     src={Delete}
                                     alt="Delete"
                                   />
                                   <img
-                                    class="mx-1 "
+                                    class="mx-1 cursor-pointer"
                                     onClick={() =>
                                       hadleDislikeMerchant(data.id)
                                     }

@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from "react";
 import FilterCatDetails from "./FilterCatDetails";
-import DateRange from "../../Orders/InstoreOrder/DateRange";
+
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import DetailsSaleReport from "./DetailsSaleReport";
 import { BASE_URL, TAXE_CATEGORY_LIST } from "../../../Constants/Config";
 import axios from "axios";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { Grid } from "@mui/material";
+import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
+import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
+import { styled } from '@mui/system';
+
+const CustomGrid = styled(Grid)(({ theme }) => ({
+  '& > .MuiGrid-item': {
+    paddingTop: 0, // Remove the padding-top
+  },
+}));
+
 
 const MainCatedetails = () => {
   const [filteredData, setFilteredData] = useState({ category_id: "all" });
@@ -67,7 +78,7 @@ const MainCatedetails = () => {
 
   const [selectedOrderSource, setSelectedOrderSource] = useState("All");
   const [selectedOrderType, setSelectedOrderType] = useState("All");
-  const [selectedLCategoryType, setselectedLCategoryType] = useState("ALL");
+  const [selectedLCategoryType, setselectedLCategoryType] = useState("All");
 
   const [orderSourceDropdownVisible, setOrderSourceDropdownVisible] =
     useState(false);
@@ -94,13 +105,14 @@ const MainCatedetails = () => {
   };
 
   const handleOptionClick = (option, dropdown) => {
+    console.log("handleOptionClick", option, dropdown);
     switch (dropdown) {
       case "orderSource":
-        setSelectedOrderSource(option);
+        setSelectedOrderSource(option.title);
         setOrderSourceDropdownVisible(false);
         break;
       case "orderType":
-        setSelectedOrderType(option);
+        setSelectedOrderType(option.title);
         setOrderTypeDropdownVisible(false);
         break;
       case "category":
@@ -173,11 +185,70 @@ const MainCatedetails = () => {
 
     fetchData();
   }, []); // Fetch categories only once when the component mounts
+
+  const orderSourceList = ["All", "Online Order", "Store Order"];
+  const orderTypeList = ["All", "Pickup", "Delivery"];
   return (
     <>
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid  item xs={12}>
+              <div className="q_details_header">Category Sale Report</div>
+            </Grid>
+          </Grid>
+          <Grid container sx={{px:2.5}}>
+            <Grid item xs={12}>
+              <div className="q_details_header ">Filter by</div>
+            </Grid>
+          </Grid>
+          <Grid container spacing={2} sx={{px:2.5,pb:2.5}}>
+            <Grid item  xs={12} sm={6} md={4}>
+              <label
+                className="q-details-page-label"
+                htmlFor="orderSourceFilter"
+              >
+                Order Source 
+              </label>
+              <SelectDropDown
+                listItem={orderSourceList.map((item) => ({ title: item }))}
+                title="title"
+                dropdownFor="orderSource"
+                selectedOption={selectedOrderSource}
+                onClickHandler={handleOptionClick}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <label className="q-details-page-label" htmlFor="orderTypeFilter">
+                Order Type
+              </label>
+              <SelectDropDown
+                listItem={orderTypeList.map((item) => ({ title: item }))}
+                title="title"
+                dropdownFor="orderType"
+                selectedOption={selectedOrderType}
+                onClickHandler={handleOptionClick}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <label className="q-details-page-label" htmlFor="orderTypeFilter">
+                Category
+              </label>
+              <SelectDropDown
+                heading={"All"}
+                listItem={categoryOptions}
+                title="title"
+                dropdownFor="category"
+                selectedOption={selectedLCategoryType}
+                onClickHandler={handleOptionClick}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
       <div className="q-order-main-page">
         <div className="box">
-          <div className="q-category-bottom-detail-section">
+          {/* <div className="q-category-bottom-detail-section">
             <div className="q-category-bottom-header-sticky">
               <div className="q-category-bottom-header">
                 <div className="q_details_header ml-2">
@@ -266,7 +337,7 @@ const MainCatedetails = () => {
                       >
                         Delivery
                       </div>
-                      {/* ... (other order type options) ... */}
+                   
                     </div>
                   )}
                 </div>
@@ -307,13 +378,13 @@ const MainCatedetails = () => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
 
       <div className="q-category-main-page">
         <div className="box">
-          <DateRange onDateRangeChange={handleDataFiltered} />
+          <DateRangeComponent onDateRangeChange={handleDataFiltered} />
         </div>
       </div>
       <style>
@@ -324,9 +395,7 @@ const MainCatedetails = () => {
         `}
       </style>
 
-      <div className="q-category-main-page categorysaleReport">
-        <DetailsSaleReport data={filteredData} />
-      </div>
+      <DetailsSaleReport data={filteredData} />
     </>
   );
 };

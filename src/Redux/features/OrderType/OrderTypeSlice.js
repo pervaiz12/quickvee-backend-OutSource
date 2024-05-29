@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BASE_URL, LIST_ALL_ORDER_TYPE } from "../../../Constants/Config";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 
 const initialState = {
   loading: false,
@@ -13,11 +14,12 @@ const initialState = {
 export const fetchOrderTypeData = createAsyncThunk(
   "orderType/fetchOrderTypeData.",
   async (data) => {
+    const { userTypeData } = useAuthDetails();
     try {
-      const { token, ...dataNew } = data;
+      const { token, ...otherUserData } = userTypeData;
       const response = await axios.post(
         BASE_URL + LIST_ALL_ORDER_TYPE,
-        dataNew,
+        { ...data, ...otherUserData },
         {
           headers: {
             "Content-Type": "multipart/form-data",

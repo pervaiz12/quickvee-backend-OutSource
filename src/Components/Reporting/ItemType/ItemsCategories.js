@@ -2,9 +2,12 @@ import React, { useState } from "react";
 import DateRange from "../../Orders/InstoreOrder/DateRange";
 import Itemdatadetails from "./Itemdatadetails";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
+import { Grid } from "@mui/material";
+import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
+import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
-
 const ItemsCategories = () => {
+
   const [filteredData, setFilteredData] = useState([]);
   const {
     LoginGetDashBoardRecordJson,
@@ -66,7 +69,7 @@ const ItemsCategories = () => {
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
       case "orderSource":
-        setSelectedOrderSource(option);
+        setSelectedOrderSource(option.title);
         setOrderSourceDropdownVisible(false);
         break;
 
@@ -74,10 +77,41 @@ const ItemsCategories = () => {
         break;
     }
   };
-
+  const orderSourceList = ["All", "Online Order", "Store Order"];
   return (
     <>
-      <div className="box">
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <Grid container sx={{ p: 2.5 }}>
+            <Grid item xs={12}>
+              <div className="q_details_header ml-2">Order Type</div>
+            </Grid>
+          </Grid>
+          <Grid container sx={{ px: 2.5 }}>
+            <Grid item xs={12}>
+              <div className="q_details_header">Filter by</div>
+            </Grid>
+          </Grid>
+          <Grid container sx={{ px: 2.5, pb: 2.5 }}>
+            <Grid item xs={4}>
+              <label
+                className="q-details-page-label"
+                htmlFor="orderSourceFilter"
+              >
+                Order Source
+              </label>
+              <SelectDropDown
+                listItem={orderSourceList.map((item) => ({ title: item }))}
+                title="title"
+                dropdownFor="orderSource"
+                selectedOption={selectedOrderSource}
+                onClickHandler={handleOptionClick}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      {/* <div className="box">
         <div className="q-category-bottom-detail-section">
           <div className="">
             <div className="q-category-bottom-header">
@@ -132,7 +166,7 @@ const ItemsCategories = () => {
             <div className="q-order-page-filter"></div>
           </div>
         </div>
-      </div>
+      </div> */}
 
       <style>
         {`
@@ -145,7 +179,7 @@ const ItemsCategories = () => {
       <div className="mt-10">
         <div className="dailytotoalReport">
           <div className="box">
-            <DateRange onDateRangeChange={handleDataFiltered} />
+            <DateRangeComponent onDateRangeChange={handleDataFiltered} />
           </div>
         </div>
       </div>
