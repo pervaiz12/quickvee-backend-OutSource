@@ -2,17 +2,18 @@ import React, { useState, useEffect } from "react";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import { BASE_URL, TAXE_CATEGORY_LIST } from "../../../Constants/Config";
 import axios from "axios";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 
-
-const ItemSalesFilter = ({onFilterDataChange}) => {
- 
-  const [selectedOrderSource ,setSelectedOrderSource] = useState("All");
+const ItemSalesFilter = ({ onFilterDataChange }) => {
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
+  const [selectedOrderSource, setSelectedOrderSource] = useState("All");
   const [selectedOrderType, setSelectedOrderType] = useState("All");
-  const[selectedCategory,setSelectedCategory] = useState("All");
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   const [orderSourceVisible, setOrderSourdeDropdownVisible] = useState(false);
-  const[orderTypeVisible , setOrderTypeDropdownVisible] = useState(false);
-  const [CategoryVisible , setCategoryDropdownVisible] = useState(false);
+  const [orderTypeVisible, setOrderTypeDropdownVisible] = useState(false);
+  const [CategoryVisible, setCategoryDropdownVisible] = useState(false);
   const [filteredData, setFilteredData] = useState({ category_id: "all" });
 
   const toggleDropdown = (dropdown) => {
@@ -70,16 +71,23 @@ const ItemSalesFilter = ({onFilterDataChange}) => {
 
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
-
+  let data = {
+    merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+    ...userTypeData,
+  };
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const { token, ...dataNew } = data;
         const response = await axios.post(
           BASE_URL + TAXE_CATEGORY_LIST,
+          dataNew,
           {
-            merchant_id: "MAL0100CA",
-          },
-          { headers: { "Content-Type": "multipart/form-data" } }
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         // Assuming the API response has a data property containing the category list
@@ -103,21 +111,25 @@ const ItemSalesFilter = ({onFilterDataChange}) => {
   }, []); // Fetch categories only once when the component mounts
 
   useEffect(() => {
-    onFilterDataChange(selectedOrderSource , selectedOrderType , selectedCategory)
-  }, [selectedOrderSource , selectedOrderType , selectedCategory]);
+    onFilterDataChange(
+      selectedOrderSource,
+      selectedOrderType,
+      selectedCategory
+    );
+  }, [selectedOrderSource, selectedOrderType, selectedCategory]);
 
   return (
     <>
       <div className="q-category-bottom-detail-section">
         <div className="">
           <div className="q-category-bottom-header">
-            <div className='q_details_header ml-2'>Item Sales</div>
+            <div className="q_details_header ml-2">Item Sales</div>
           </div>
-          <div className='q_details_header ml-8'>Filter by</div>
+          <div className="q_details_header ml-8">Filter by</div>
         </div>
         <div className="q-order-page-container ml-8">
           <div className="q-order-page-filter">
-            <label className="q-details-page-label" htmlFor ="employeeFilter">
+            <label className="q-details-page-label" htmlFor="employeeFilter">
               Order Source
             </label>
             <div className="custom-dropdown">
@@ -125,21 +137,37 @@ const ItemSalesFilter = ({onFilterDataChange}) => {
                 className="custom-dropdown-header"
                 onClick={() => toggleDropdown("odersource")}
               >
-                <span className="selected-option mt-1">{selectedOrderSource}</span>
+                <span className="selected-option mt-1">
+                  {selectedOrderSource}
+                </span>
                 <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
               </div>
               {orderSourceVisible && (
                 <div className="dropdown-content">
-                  <div onClick={() => handleOptionClick("All", "odersource")}>All</div>
-                  <div onClick={() => handleOptionClick("Online Order", "odersource")}>Online Order</div>
-                  <div onClick={() => handleOptionClick("Store Order", "odersource")}>Store Order</div>
+                  <div onClick={() => handleOptionClick("All", "odersource")}>
+                    All
+                  </div>
+                  <div
+                    onClick={() =>
+                      handleOptionClick("Online Order", "odersource")
+                    }
+                  >
+                    Online Order
+                  </div>
+                  <div
+                    onClick={() =>
+                      handleOptionClick("Store Order", "odersource")
+                    }
+                  >
+                    Store Order
+                  </div>
                 </div>
               )}
             </div>
           </div>
 
           <div className="q-order-page-filter">
-            <label className="q-details-page-label" htmlFor ="employeeFilter">
+            <label className="q-details-page-label" htmlFor="employeeFilter">
               Order Type
             </label>
             <div className="custom-dropdown">
@@ -147,14 +175,24 @@ const ItemSalesFilter = ({onFilterDataChange}) => {
                 className="custom-dropdown-header"
                 onClick={() => toggleDropdown("ordertype")}
               >
-                <span className="selected-option mt-1">{selectedOrderType}</span>
+                <span className="selected-option mt-1">
+                  {selectedOrderType}
+                </span>
                 <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
               </div>
               {orderTypeVisible && (
                 <div className="dropdown-content">
-                  <div onClick={() => handleOptionClick("All", "ordertype")}>All</div>
-                  <div onClick={() => handleOptionClick("Pickup", "ordertype")}>Pickup</div>
-                  <div onClick={() => handleOptionClick("Delivery", "ordertype")}>Delivery</div>
+                  <div onClick={() => handleOptionClick("All", "ordertype")}>
+                    All
+                  </div>
+                  <div onClick={() => handleOptionClick("Pickup", "ordertype")}>
+                    Pickup
+                  </div>
+                  <div
+                    onClick={() => handleOptionClick("Delivery", "ordertype")}
+                  >
+                    Delivery
+                  </div>
                 </div>
               )}
             </div>
@@ -162,7 +200,7 @@ const ItemSalesFilter = ({onFilterDataChange}) => {
 
           {/* Order Status Dropdown */}
           <div className="q-order-page-filter">
-            <label className="q-details-page-label" htmlFor ="employeeFilter">
+            <label className="q-details-page-label" htmlFor="employeeFilter">
               Category
             </label>
             <div className="custom-dropdown">
@@ -193,7 +231,7 @@ const ItemSalesFilter = ({onFilterDataChange}) => {
         </div>
       </div>
     </>
-  )
-}
+  );
+};
 
-export default ItemSalesFilter
+export default ItemSalesFilter;

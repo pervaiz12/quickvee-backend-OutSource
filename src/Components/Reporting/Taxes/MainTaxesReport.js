@@ -3,10 +3,13 @@ import DateRange from "../../Orders/InstoreOrder/DateRange";
 import TaxesFilter from "./TaxesFilter";
 import TaxesDetails from "./TaxesDetails";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 
 const MainTaxesReport = () => {
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
   const [filteredData, setFilteredData] = useState([]);
-
+  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   const handleDataFiltered = (data) => {
     if (typeof data === "object") {
       let orderEnvValue;
@@ -44,9 +47,10 @@ const MainTaxesReport = () => {
       }
       const updatedData = {
         ...data,
-        merchant_id: "MAL0100CA",
+        merchant_id,
         order_env: orderEnvValue,
         order_typ: orderTypValue,
+        ...userTypeData,
       };
       setFilteredData(updatedData);
     } else {
@@ -189,11 +193,9 @@ const MainTaxesReport = () => {
         </div>
 
         <div className="mt-8">
-        <div className="box">
-
-          <TaxesDetails data={filteredData} />
-
-        </div>
+          <div className="box">
+            <TaxesDetails data={filteredData} />
+          </div>
         </div>
       </div>
     </>
