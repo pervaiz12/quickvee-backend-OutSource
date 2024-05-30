@@ -1,7 +1,9 @@
 import React, { useState } from "react";
-import DateRange from "../../Orders/InstoreOrder/DateRange";
+
 import MainInstantDetails from "./MainInstantDetails";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
+import { Grid } from "@mui/material";
 
 const InstantActvity = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -19,17 +21,13 @@ const InstantActvity = () => {
   };
   return (
     <>
-      <div className="">
-        <div className="q-order-main-page">
-          <div className="box instantPOReport">
-            <DateRange onDateRangeChange={handleDataFiltered} />
-          </div>
-        </div>
+      <Grid container sx={{pt: 3.6}}>
+        <Grid item xs={12}>
+          <DateRangeComponent onDateRangeChange={handleDataFiltered} />
+        </Grid>
+      </Grid>
 
-        <div className="q-order-main-page">
-          <MainInstantDetails data={filteredData} />
-        </div>
-      </div>
+      <MainInstantDetails data={filteredData} />
     </>
   );
 };

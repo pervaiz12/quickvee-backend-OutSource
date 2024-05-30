@@ -1,17 +1,12 @@
-import React from 'react';
-import ReorderInventoryList from './ReorderInventoryList'
+import React from "react";
+import ReorderInventoryList from "./ReorderInventoryList";
 
 const ReorderInventoryMain = () => {
+  return (
+    <>
+      <ReorderInventoryList />
+    </>
+  );
+};
 
-    return (
-        <>
-            
-                <div className="q-order-main-page">
-                    <ReorderInventoryList />
-                </div>
-            
-        </>
-    )
-}
-
-export default ReorderInventoryMain
+export default ReorderInventoryMain;

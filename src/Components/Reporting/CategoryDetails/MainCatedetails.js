@@ -80,45 +80,23 @@ const MainCatedetails = () => {
   const [selectedOrderType, setSelectedOrderType] = useState("All");
   const [selectedLCategoryType, setselectedLCategoryType] = useState("All");
 
-  const [orderSourceDropdownVisible, setOrderSourceDropdownVisible] =
-    useState(false);
-  const [orderTypeDropdownVisible, setOrderTypeDropdownVisible] =
-    useState(false);
-  const [categoryTypeDropdownVisible, setCategoryTypeDropdownVisible] =
-    useState(false);
-
-  const toggleDropdown = (dropdown) => {
-    switch (dropdown) {
-      case "orderSource":
-        setOrderSourceDropdownVisible(!orderSourceDropdownVisible);
-        break;
-      case "orderType":
-        setOrderTypeDropdownVisible(!orderTypeDropdownVisible);
-        break;
-      case "category":
-        setCategoryTypeDropdownVisible(!categoryTypeDropdownVisible);
-        break;
-
-      default:
-        break;
-    }
-  };
+ 
 
   const handleOptionClick = (option, dropdown) => {
     console.log("handleOptionClick", option, dropdown);
     switch (dropdown) {
       case "orderSource":
         setSelectedOrderSource(option.title);
-        setOrderSourceDropdownVisible(false);
+
         break;
       case "orderType":
         setSelectedOrderType(option.title);
-        setOrderTypeDropdownVisible(false);
+
         break;
       case "category":
         if (option === "All") {
           setselectedLCategoryType("All");
-          setCategoryTypeDropdownVisible(false);
+
           setFilteredData({
             ...filteredData,
             category_id: "all",
@@ -129,7 +107,7 @@ const MainCatedetails = () => {
         } else {
           const category_id = option.id;
           setselectedLCategoryType(option.title);
-          setCategoryTypeDropdownVisible(false);
+  
           setFilteredData({
             ...filteredData,
             category_id,
@@ -246,141 +224,7 @@ const MainCatedetails = () => {
           </Grid>
         </Grid>
       </Grid>
-      <div className="q-order-main-page">
-        <div className="box">
-          {/* <div className="q-category-bottom-detail-section">
-            <div className="q-category-bottom-header-sticky">
-              <div className="q-category-bottom-header">
-                <div className="q_details_header ml-2">
-                  Category Sale Report
-                </div>
-              </div>
-              <div className="q_details_header ml-8">Filter by</div>
-            </div>
-            <div className="q-order-page-container ml-8">
-              <div className="q-order-page-filter">
-                <label
-                  className="q-details-page-label"
-                  htmlFor="orderSourceFilter"
-                >
-                  Order Source
-                </label>
-                <div className="custom-dropdown">
-                  <div
-                    className="custom-dropdown-header"
-                    onClick={() => toggleDropdown("orderSource")}
-                  >
-                    <span className="selected-option mt-1">
-                      {selectedOrderSource}
-                    </span>
-                    <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-                  </div>
-                  {orderSourceDropdownVisible && (
-                    <div className="dropdown-content ">
-                      <div
-                        onClick={() => handleOptionClick("All", "orderSource")}
-                      >
-                        All
-                      </div>
-                      <div
-                        onClick={() =>
-                          handleOptionClick("Online Order", "orderSource")
-                        }
-                      >
-                        Online Order
-                      </div>
-                      <div
-                        onClick={() =>
-                          handleOptionClick("Store Order", "orderSource")
-                        }
-                      >
-                        Store Order
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="q-order-page-filter">
-                <label
-                  className="q-details-page-label"
-                  htmlFor="orderTypeFilter"
-                >
-                  Order Type
-                </label>
-                <div className="custom-dropdown">
-                  <div
-                    className="custom-dropdown-header"
-                    onClick={() => toggleDropdown("orderType")}
-                  >
-                    <span className="selected-option mt-1">
-                      {selectedOrderType}
-                    </span>
-                    <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-                  </div>
-                  {orderTypeDropdownVisible && (
-                    <div className="dropdown-content">
-                      <div
-                        onClick={() => handleOptionClick("All", "orderType")}
-                      >
-                        All
-                      </div>
-                      <div
-                        onClick={() => handleOptionClick("Pickup", "orderType")}
-                      >
-                        Pickup
-                      </div>
-                      <div
-                        onClick={() =>
-                          handleOptionClick("Delivery", "orderType")
-                        }
-                      >
-                        Delivery
-                      </div>
-                   
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              <div className="q-order-page-filter">
-                <label
-                  className="q-details-page-label"
-                  htmlFor="categoryFilter"
-                >
-                  Category
-                </label>
-                <div className="custom-dropdown">
-                  <div
-                    className="custom-dropdown-header"
-                    onClick={() => toggleDropdown("category")}
-                  >
-                    <span className="selected-option mt-1">
-                      {selectedLCategoryType}
-                    </span>
-                    <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-                  </div>
-                  {categoryTypeDropdownVisible && (
-                    <div className="dropdown-content">
-                      <div onClick={() => handleOptionClick("All", "category")}>
-                        All
-                      </div>
-                      {categoryOptions.map((option, key) => (
-                        <div
-                          key={key}
-                          onClick={() => handleOptionClick(option, "category")}
-                        >
-                          {option.title}
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div> */}
-        </div>
-      </div>
+   
 
       <div className="q-category-main-page">
         <div className="box">

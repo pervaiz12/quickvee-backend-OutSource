@@ -36,7 +36,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
   // hide last border
   "&:last-child td, &:last-child th": {
-    backgroundColor:"#F5F5F5"
+    backgroundColor: "#F5F5F5",
   },
 }));
 // ==================== END TABLE STYLE ADDED ===================================================
@@ -103,7 +103,13 @@ const DailyReportList = ({ data }) => {
       dailyreport.status === "Failed" &&
       dailyreport.msg === "No. Data found."
     ) {
-      return <div className="empty-div box">No data available</div>;
+      return (
+        <Grid container sx={{ padding: 2.5 }} className="box_shadow_div ">
+          <Grid item xs={12}>
+            No data Found.
+          </Grid>
+        </Grid>
+      );
     } else if (dailyreport && dailyreport.length >= 1) {
       const totalAmt = dailyreport.reduce(
         (total, report) => total + parseFloat(report.amt),
@@ -158,7 +164,6 @@ const DailyReportList = ({ data }) => {
                   </TableContainer>
                 </Grid>
               </Grid>
-              
             </Grid>
           </Grid>
 

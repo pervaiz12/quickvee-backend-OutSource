@@ -145,12 +145,16 @@ const DetailsSaleReport = ({ data }) => {
                 >
                   <TableHead>
                     <StyledTableCell>Item Name</StyledTableCell>
-                    <StyledTableCell align="center">Quantity</StyledTableCell>
-                    <StyledTableCell align="center">Amount</StyledTableCell>
+                    <StyledTableCell align="center">
+                      <p>Quantity </p>
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      <p>Amount </p>
+                    </StyledTableCell>
                   </TableHead>
                   <TableBody>
                     {items?.map((item, index) => (
-                      <StyledTableRow>
+                      <StyledTableRow key={index}>
                         <StyledTableCell>
                           <p className="q-catereport-item">{item.name}</p>
                         </StyledTableCell>
