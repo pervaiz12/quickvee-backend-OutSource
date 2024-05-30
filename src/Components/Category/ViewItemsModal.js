@@ -1,14 +1,14 @@
 import { Box, Modal } from "@mui/material";
 import React, { useState, useEffect } from "react";
 import { BASE_URL, PRODUCT_LIST_BY_CATEGORY } from "../../Constants/Config";
-import Table from 'react-bootstrap/Table';
+import Table from "react-bootstrap/Table";
 import axios from "axios";
 import CrossIcon from "../../Assests/Dashboard/cross.svg";
-import { useAuthDetails } from './../../Common/cookiesHelper';
-
+import { useAuthDetails } from "./../../Common/cookiesHelper";
 
 const ViewItemsModal = ({ selectedView, onViewClick }) => {
-  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
@@ -27,29 +27,33 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
     const {token,...otherUserData} = userTypeData
     const data = {
       cat_id: selectedView.id,
-      ...otherUserData
+      ...userTypeData,
     };
     try {
-      const response = await axios.post(BASE_URL + PRODUCT_LIST_BY_CATEGORY, data, {
+      const { token, ...dataNew } = data;
+      const response = await axios.post(
+        BASE_URL + PRODUCT_LIST_BY_CATEGORY,
+        dataNew,
+        {
           headers: {
-              "Content-Type": "multipart/form-data",
-              'Authorization': `Bearer ${token}` // Use data?.token directly
-          }
-      });
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (response.data.status === true) {
-        setItemsData(response.data.result)
+        setItemsData(response.data.result);
       }
     } catch (error) {
-      console.error('API Error:', error);
+      console.error("API Error:", error);
     }
   };
 
-
   useEffect(() => {
     // console.log(selectedView)
-    fetchCategoryProductData()
-  }, [selectedView])
-  
+    fetchCategoryProductData();
+  }, [selectedView]);
+
   const handleClick = () => {
     handleOpen(true);
     onViewClick(selectedView);
@@ -71,7 +75,13 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
           aria-describedby="modal-modal-description"
         >
           <Box className="view-category-item-modal" style={myStyles}>
-            <div className="q-add-categories-section-header text-[18px]" style={{ justifyContent:"space-between" ,fontFamily:"CircularSTDBook" }}>
+            <div
+              className="q-add-categories-section-header text-[18px]"
+              style={{
+                justifyContent: "space-between",
+                fontFamily: "CircularSTDBook",
+              }}
+            >
               <span>
                 <span>{selectedView.title}</span>
               </span>
@@ -82,8 +92,8 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
                     <option> Month</option>
                     <option>Weeks</option>
                   </select> */}
-                
-              <img
+
+                  <img
                     src={CrossIcon}
                     alt="icon"
                     className="  quic-btn-cancle w-6 h-6"
@@ -93,15 +103,15 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
               </div>
             </div>
             <div className="view-category-item-modal-header viewModal-width">
-            {itemsData && itemsData.length >= 1 ? (
-                <Table striped >
+              {itemsData && itemsData.length >= 1 ? (
+                <Table striped>
                   <div className="  p-2 my-2">
                     {itemsData.map((item, index) => (
                       <>
-                        <p 
+                        <p
                           className="q_view_modal_details"
                           key={index}
-                          style={{fontFamily: "CircularSTDMedium !important"}}
+                          style={{ fontFamily: "CircularSTDMedium !important" }}
                         >
                           {item.title}
                         </p>

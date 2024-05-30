@@ -22,7 +22,11 @@ import dayjs, { Dayjs } from "dayjs";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import SwitchLabel from "../../reuseableComponents/SwitchLabel";
 import { FormControl } from "@mui/material";
+import { useAuthDetails } from "../../Common/cookiesHelper";
+
 const AddCoupon = ({ seVisible }) => {
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
   const [activeTab, setActiveTab] = useState("amount");
 
   const [couponStates, setCouponStates] = useState({
@@ -42,15 +46,26 @@ const AddCoupon = ({ seVisible }) => {
   const [errorMessage, setErrorMessage] = useState("");
 
   // Function to check uniqueness in the database
+  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   const checkUniqueness = async (value) => {
     const data = {
-      merchant_id: "MAL0100CA",
+      merchant_id,
       name: value,
+      ...userTypeData,
     };
     try {
-      const response = await axios.post(BASE_URL + COUPON_TITLE_CHECK, data, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const { token, ...dataNew } = data;
+
+      const response = await axios.post(
+        BASE_URL + COUPON_TITLE_CHECK,
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (response.data && response.data.status !== undefined) {
         setIsUnique(response.data.status); // Assuming the API returns { isUnique: boolean }
@@ -94,7 +109,7 @@ const AddCoupon = ({ seVisible }) => {
   console.log(roundedTime);
 
   const [coupon, setCoupon] = useState({
-    merchant_id: "MAL0100CA",
+    merchant_id,
     coupon_type: 0,
     is_online: "",
     coupon_code: "",
@@ -305,6 +320,8 @@ const AddCoupon = ({ seVisible }) => {
       "end_time",
       dayjs(coupon.time_expire, "HH:mm:ss").format("hh:mm A")
     );
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("login_type", userTypeData?.login_type);
 
     if (
       errorMessage === "Coupon name already exists" ||
@@ -339,7 +356,10 @@ const AddCoupon = ({ seVisible }) => {
 
     try {
       const res = await axios.post(BASE_URL + ADD_COUPON, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userTypeData?.token}`,
+        },
       });
 
       const data = await res.data.status;
@@ -347,7 +367,7 @@ const AddCoupon = ({ seVisible }) => {
       if (data === true) {
         // alert(update_message);
         let data = {
-          merchant_id: "MAL0100CA",
+          merchant_id,
         };
         seVisible("CouponDiscount");
       } else if (
@@ -473,7 +493,7 @@ const AddCoupon = ({ seVisible }) => {
                 <div className="q-add-coupon-single-input mb-6">
                   <label htmlFor="description">Description</label>
                   <textarea
-                  className="mt-1"
+                    className="mt-1"
                     id="description"
                     name="description"
                     rows="4"

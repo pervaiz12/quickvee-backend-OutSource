@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BASE_URL, SALES_REPORT_LIST } from "../../../../Constants/Config";
-
+import { useAuthDetails } from "../../../../Common/cookiesHelper";
 const initialState = {
   loading: false,
   SalesReportData: [],
@@ -13,16 +13,20 @@ const initialState = {
 export const fetchSalesReportData = createAsyncThunk(
   "SalesReportList/fetchSalesReportData.",
   async (data) => {
+    const { userTypeData } = useAuthDetails();
     try {
-      const { token, ...newData } = data;
-
+      const { token, ...otherUserData } = userTypeData;
       // console.log(BASE_URL + VENDORS_SALES_REPORT)
-      const response = await axios.post(BASE_URL + SALES_REPORT_LIST, newData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.post(
+        BASE_URL + SALES_REPORT_LIST,
+        { ...data, ...otherUserData },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       // console.log(response)
       if (response.data.status === true) {
         // console.log(response.data.sales_data

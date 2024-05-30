@@ -5,6 +5,8 @@ import {
   InputLabel,
   InputAdornment,
   OutlinedInput,
+  Collapse,
+  Alert,
 } from "@mui/material";
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
@@ -22,7 +24,7 @@ import { useNavigate, Navigate } from "react-router-dom";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import IconButton from "@mui/material/IconButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-
+import CloseIcon from '@mui/icons-material/Close';
 export default function Login() {
   const navigate = useNavigate();
 
@@ -42,17 +44,18 @@ export default function Login() {
     handleBlur,
     setErrorMessage,
     errorMessage,
+    handleWrongPasswordError
   } = LoginLogic();
 
   const handleHideErrorMessage = () => {
     setErrorMessage(errorMessageRecord);
-    setTimeout(() => {
+    
       setErrorMessage("");
-    }, 2000);
+    
   };
-  useEffect(() => {
-    handleHideErrorMessage();
-  }, []);
+  // useEffect(() => {
+  //   handleHideErrorMessage();
+  // }, []);
   // console.log(userTypeData);
   // useEffect(() => {
   //   if (
@@ -85,7 +88,28 @@ export default function Login() {
   return (
     <>
       <div className="main-authentication-component">
+     
         <div className=" login-customer-form ">
+        <Collapse in={errorMessage}>
+            <Alert
+              severity="error"
+              action={
+                <IconButton
+                  className="error-close-icon"
+                  aria-label="close"
+                  color="error"
+                  size="small"
+                  onClick={handleHideErrorMessage}
+                >
+                  <CloseIcon  />
+                </IconButton>
+              }
+              sx={{ mb: 4 }}
+            >
+              {errorMessage}
+            </Alert>
+          </Collapse>
+     
           <Link>
             <img
               src={Quickvee}
@@ -95,7 +119,7 @@ export default function Login() {
           </Link>
           <form className="login-customer-form">
             <h1>Merchant Login</h1>
-            <span>{errorMessage}</span>
+            
             <div
               style={{
                 width: "300px",

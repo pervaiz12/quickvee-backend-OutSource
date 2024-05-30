@@ -3,6 +3,7 @@ import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import { BASE_URL, EMPLOYEE_LIST } from "../../../Constants/Config";
 import axios from "axios";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { Grid } from "@mui/material";
 
 const SalesPersonFilter = ({ onFilterDataChange }) => {
   const {
@@ -121,6 +122,9 @@ const SalesPersonFilter = ({ onFilterDataChange }) => {
 
   return (
     <>
+    <Grid container>
+      
+    </Grid>
       <div className="box">
         <div className="q-category-bottom-detail-section">
           <div className="">

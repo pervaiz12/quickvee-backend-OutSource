@@ -10,10 +10,15 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
+import { Grid } from "@mui/material";
+
+const StyledTable = styled(Table)(({ theme }) => ({
+  padding: 2, // Adjust padding as needed
+}));
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: "#253338",
     color: theme.palette.common.white,
   },
   [`&.${tableCellClasses.body}`]: {
@@ -97,18 +102,13 @@ export default function DashboardTables(props) {
               ([key, result], index) => {
                 if (Array.isArray(result)) {
                   return (
-                    <React.Fragment key={index}>
-                      <h1 className="mt_card_header q_dashbaord_netsales">
-                        {key}
-                      </h1>
-                      <Table
-                        sx={{ minWidth: 700 }}
-                        aria-label="customized table"
-                      >
-                        <TableHead>
-                          <TableRow>
+                    <>
+                      <h1 className="heading p-4 pb-0">{key}</h1>
+                      <TableContainer sx={{}} aria-label="customized table">
+                        <StyledTable>
+                          <TableHead>
                             <StyledTableCell align="center">
-                              Employee Name
+                              Employee
                             </StyledTableCell>
                             <StyledTableCell align="center">
                               Discount($)
@@ -128,71 +128,89 @@ export default function DashboardTables(props) {
                             <StyledTableCell align="center">
                               Date & Time
                             </StyledTableCell>
-                          </TableRow>
-                        </TableHead>
-                        <TableBody>
-                          {result.map((item, innerIndex) => (
-                            <TableRow key={innerIndex}>
-                              <TableCell align="center">
-                                {item?.f_name + " " + item?.l_name}
-                              </TableCell>
-                              <TableCell align="center">
-                                {parseFloat(item?.discount).toFixed(2)}
-                              </TableCell>
-                              <TableCell align="center">
-                                {item?.coupon_code}
-                              </TableCell>
-                              <TableCell align="center">
-                                {item?.line_item_discount}
-                              </TableCell>
-                              <TableCell align="center">
-                                {item?.cash_discounting}
-                              </TableCell>
-                              <TableCell align="center">
-                                {item?.order_id}
-                              </TableCell>
-                              <TableCell align="center">
-                                {item?.merchant_time}
-                              </TableCell>
-                            </TableRow>
-                          ))}
-                          <TableRow>
-                            <TableCell align="center">Grand Total</TableCell>
-                            <TableCell align="center">
-                              {`$${result
-                                .reduce((total, item) => {
-                                  return (
-                                    total + (parseFloat(item?.discount) || 0)
-                                  );
-                                }, 0)
-                                .toFixed(2)}`}
-                            </TableCell>
-                          </TableRow>
-                          {/* <TableRow>
-                            <TableCell align="center">Total Discount</TableCell>
-                            <TableCell align="center">{totalRecord}</TableCell>
-                          </TableRow> */}
-                        </TableBody>
-                      </Table>
-                    </React.Fragment>
+                          </TableHead>
+                          <TableBody>
+                            {result.map((item, innerIndex) => (
+                              <StyledTableRow key={innerIndex}>
+                                <StyledTableCell align="center">
+                                  {item?.f_name + " " + item?.l_name}
+                                </StyledTableCell>
+                                <StyledTableCell align="center">
+                                  {parseFloat(item?.discount).toFixed(2)}
+                                </StyledTableCell>
+                                <StyledTableCell align="center">
+                                  {item?.coupon_code}
+                                </StyledTableCell>
+                                <StyledTableCell align="center">
+                                  {item?.line_item_discount}
+                                </StyledTableCell>
+                                <StyledTableCell align="center">
+                                  {item?.cash_discounting}
+                                </StyledTableCell>
+                                <StyledTableCell align="center">
+                                  {item?.order_id}
+                                </StyledTableCell>
+                                <StyledTableCell align="center">
+                                  {item?.merchant_time}
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            ))}
+                            <StyledTableRow>
+                              <StyledTableCell align="center">
+                                Grand Total
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                {`$${result
+                                  .reduce((total, item) => {
+                                    return (
+                                      total + (parseFloat(item?.discount) || 0)
+                                    );
+                                  }, 0)
+                                  .toFixed(2)}`}
+                              </StyledTableCell>
+                              <StyledTableCell></StyledTableCell>
+                              <StyledTableCell></StyledTableCell>
+                              <StyledTableCell></StyledTableCell>
+                              <StyledTableCell></StyledTableCell>
+                              <StyledTableCell></StyledTableCell>
+                            </StyledTableRow>
+                            {Object.entries(
+                              props.EmployeeFilterData.report_data
+                            ).length-1 === index && (
+                              <StyledTableRow>
+                                <StyledTableCell align="center">
+                                  <div className="q-category-bottom-report-listing">
+                                    <div>
+                                      <p className="">Grand Total</p>
+                                    </div>
+                                  </div>
+                                </StyledTableCell >
+                                <StyledTableCell align="center">
+                                  <div className="q-category-bottom-report-listing">
+                                    <div>
+                                      <p className="">${totalRecord}</p>
+                                    </div>
+                                  </div>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            )}
+                          </TableBody>
+                        </StyledTable>
+                      </TableContainer>
+                    </>
                   );
                 } else {
                   return null; // Handle non-array values if needed
                 }
               }
             )
-          : "no record found"
+          : <Grid container sx={{padding:2.5}}>
+            <Grid item>
+              <p>no record found </p>
+            </Grid>
+          </Grid> 
       }
-      {totalRecord && totalRecord !== "0.00" ? (
-        <div className="q-category-bottom-report-listing">
-          <div className="q-category-bottom-categories-single-category">
-            <p className="report-sort">Grand Total</p>
-            <p className="report-title">${totalRecord}</p>
-          </div>
-        </div>
-      ) : (
-        ""
-      )}
+    
     </TableContainer>
   );
 }

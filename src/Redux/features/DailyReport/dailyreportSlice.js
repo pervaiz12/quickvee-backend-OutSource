@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BASE_URL, LIST_DAILY_REPORT } from "../../../Constants/Config";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 
 const initialState = {
   loading: false,
@@ -13,14 +14,21 @@ const initialState = {
 export const fetchdailyreportData = createAsyncThunk(
   "dailyreport/fetchdailyreportData.",
   async (data) => {
-    const { token, ...dataNew } = data;
+    console.log("data",data)
+    const { userTypeData } =
+      useAuthDetails();
     try {
-      const response = await axios.post(BASE_URL + LIST_DAILY_REPORT, dataNew, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { token, ...otherUserData } = userTypeData;
+      const response = await axios.post(
+        BASE_URL + LIST_DAILY_REPORT,
+        { ...data, ...otherUserData },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       if (response.data.status === "Success") {
         return response.data.result;
       } else if (
