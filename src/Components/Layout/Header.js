@@ -7,9 +7,12 @@ import DownlIcon from "../../Assests/Dashboard/download.svg";
 import OnlineData from "../../Assests/Dashboard/online.svg";
 import SynkData from "../../Assests/Dashboard/sync.svg";
 import DownIcon from "../../Assests/Dashboard/Down.svg";
-import { setMenuOpen,setIsDropdownOpen } from "../../Redux/features/NavBar/MenuSlice";
-import Cookies from 'js-cookie'; 
-import CryptoJS from 'crypto-js'; 
+import {
+  setMenuOpen,
+  setIsDropdownOpen,
+} from "../../Redux/features/NavBar/MenuSlice";
+import Cookies from "js-cookie";
+import CryptoJS from "crypto-js";
 import UserLogo from "../../Assests/Dashboard/UserLogo.svg";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -38,12 +41,15 @@ export default function Header() {
   const isDropdownOpen = useSelector(
     (state) => state.NavBarToggle.isDropdownOpen
   );
-  let allStoresData=LoginAllStore?.data?.stores
-  let storenameCookie=LoginGetDashBoardRecordJson !=="" ? LoginGetDashBoardRecordJson?.data?.name :LoginGetDashBoardRecordJson?.data?.name
-  useEffect(()=>{
-    setStoreName(storenameCookie)
-  },[LoginGetDashBoardRecordJson])
- 
+  let allStoresData = LoginAllStore?.data?.stores;
+  let storenameCookie =
+    LoginGetDashBoardRecordJson !== ""
+      ? LoginGetDashBoardRecordJson?.data?.name
+      : LoginGetDashBoardRecordJson?.data?.name;
+  useEffect(() => {
+    setStoreName(storenameCookie);
+  }, [LoginGetDashBoardRecordJson]);
+
   // useEffect for all when update data in coockie-----------------
 
   // useEffect for all when update data in coockie--------------
@@ -122,16 +128,16 @@ export default function Header() {
         <div className="flex items-center px-4 mx-2">
           {LoginGetDashBoardRecordJson?.final_login == 1 ? (
             <BiMenu
-            className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out`}
-            onClick={(e) => {
-              // setIsMenuOpen(!isMenuOpen); || AdminRocord?.final_login==1
-              // (LoginSuccessJson?.final_login==1 || AuthDecryptDataDashBoardJSONFormat?.final_login==1 )
-              handleDropdownToggle()
-           
-            }}
-          />)
-          :''
-          }
+              className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out`}
+              onClick={(e) => {
+                // setIsMenuOpen(!isMenuOpen); || AdminRocord?.final_login==1
+                // (LoginSuccessJson?.final_login==1 || AuthDecryptDataDashBoardJSONFormat?.final_login==1 )
+                handleDropdownToggle();
+              }}
+            />
+          ) : (
+            ""
+          )}
           <a href="/dashboard">
             <img src={Quick} alt="Logo" className="ml-6" />
           </a>
@@ -153,28 +159,25 @@ export default function Header() {
                       label={storename}
                       // onChange={handleChangeStore}
                     >
-                      {
-                        // console.log(JSON.parse(localStorage.getItem("AllStore")))
-
-                        JSON.parse(localStorage.getItem("AllStore")) !== "" ||
-                        Array.isArray(allStoresData)
-                          ? (
-                              JSON.parse(localStorage.getItem("AllStore")) ||
-                              allStoresData
-                            )?.map((result, index) => {
-                              return (
-                                <MenuItem
-                                  onClick={() =>
-                                    handleChangeMerchant(result?.merchant_id)
-                                  }
-                                  value={result?.name}
-                                >
-                                  {result?.name}
-                                </MenuItem>
-                              );
-                            })
-                          : ""
-                      }
+                      {JSON.parse(localStorage.getItem("AllStore")) !== "" ||
+                      Array.isArray(allStoresData)
+                        ? (
+                            JSON.parse(localStorage.getItem("AllStore")) ||
+                            allStoresData
+                          )?.map((result, index) => {
+                            return (
+                              <MenuItem
+                                key={result?.merchant_id}
+                                onClick={() =>
+                                  handleChangeMerchant(result?.merchant_id)
+                                }
+                                value={result?.name}
+                              >
+                                {result?.name}
+                              </MenuItem>
+                            );
+                          })
+                        : ""}
                       {/* <MenuItem value={10}>Ten</MenuItem>
               <MenuItem value={20}>Twenty</MenuItem>
               <MenuItem value={30}>Thirty</MenuItem> */}
