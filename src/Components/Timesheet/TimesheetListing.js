@@ -149,21 +149,21 @@ const TimesheetListing = ({ data }) => {
 
   const handleStartTimeChange = (newTime) => {
     if(!addtimebreak.add_clocked_out){
-        setTimeBreak({
-          ...addtimebreak,
-          add_clocked_in: newTime.format("HH:mm:ss"),
-        });
+      setTimeBreak({
+        ...addtimebreak,
+        add_clocked_in: newTime.format("HH:mm:ss"),
+      });
+  }else{
+    if(newTime.format("HH:mm:ss")<addtimebreak.add_clocked_out){
+      setTimeBreak({
+        ...addtimebreak,
+        add_clocked_in: newTime.format("HH:mm:ss"),
+      });
+      setDateEndTimeError("");
     }else{
-      if(newTime.format("HH:mm:ss")<addtimebreak.add_clocked_out){
-        setTimeBreak({
-          ...addtimebreak,
-          add_clocked_in: newTime.format("HH:mm:ss"),
-        });
-        setDateEndTimeError("");
-      }else{
-        setDateEndTimeError("Out Date and Time should be greater than In Date and Time.")
-      }
+      setDateEndTimeError("Out Date and Time should be greater than In Date and Time.")
     }
+  }
   };
 
   const handleEndTimeChange = (newTime) => {
@@ -181,25 +181,28 @@ const TimesheetListing = ({ data }) => {
         });
         setDateEndTimeError("");
       }else if(addtimebreak.add_clocked_in==newTime.format("HH:mm:ss")){
+        setDateEndTimeError("Out Date and Time should be greater than In Date and Time.")
+        // setTimeBreak({
+        //   ...addtimebreak,
+        //   add_clocked_out: null,
+        // });
         setTimeBreak( prev =>({
           ...prev,
           add_clocked_out: null,
         }));
-        setDateEndTimeError("Out Date and Time should be greater than In Date and Time. same date")
       }
     }else{
-        setTimeBreak({
-          ...addtimebreak,
-          add_clocked_out: newTime.format("HH:mm:ss"),
-        });
-        setDateEndTimeError("")
+      setTimeBreak({
+        ...addtimebreak,
+        add_clocked_out: newTime.format("HH:mm:ss"),
+      });
+      setDateEndTimeError("");
+      
     }
   };
-  console.log("vcv",addtimebreak)
 
   const handleStartDateChange = (newDate) => {
     // const formattedStartDate = newDate.format("YYYY-MM-DD");
-
     const dayjsDate = dayjs(newDate); // Convert to dayjs object
     const formattedStartDate = dayjsDate.format("YYYY-MM-DD");
     // const formattedStartDate = dayjs(newDate).format("YYYY-MM-DD");
@@ -216,38 +219,33 @@ const TimesheetListing = ({ data }) => {
         add_in_date: formattedStartDate,
         add_out_date: formattedStartDate,
       });
-    }else if(dayjs(formattedStartDate).isBefore(dayjs(addtimebreak.add_out_date))){
+    }else if(dayjs(formattedStartDate).isSame(dayjs(addtimebreak.add_out_date))){
       setTimeBreak({
         ...addtimebreak,
         add_in_date: formattedStartDate,
+        add_out_date: formattedStartDate,
       });
     }else{
       setTimeBreak({
-        ...addtimebreak,
-        add_in_date: null,
-        add_out_date: null,
+          ...addtimebreak,
+          add_in_date: formattedStartDate,
+          add_out_date: null
       });
     }
   };
 
   const handleEndDateChange = (newDate) => {
     const formattedEndDate = newDate.format("YYYY-MM-DD");
-
-    if (dayjs(formattedEndDate).isBefore(dayjs(addtimebreak.add_in_date))){
-      alert("End date cannot be less than the start date");
-      setTimeBreak({
-        ...addtimebreak,
-        add_out_date: null,
-      });
-      setDateEndError("Select Out Date is required");
-      // return; // Do not update the state
-    } else {
       setTimeBreak({
         ...addtimebreak,
         add_out_date: formattedEndDate,
+        add_clocked_out: null,
       });
       setDateEndError("");
-    }
+      if(addtimebreak.add_clocked_out){
+        setDateEndTimeError("Clock In Time is required")
+      }
+
   };
 
   const handleSave = async (e) => {
@@ -265,29 +263,32 @@ const TimesheetListing = ({ data }) => {
     } else {
       setDateStartTimeError("");
     }
-    // console.log("hand save",addtimebreak.add_clocked_out)
-    // return
+    
     if (!addtimebreak.add_out_date) {
       setDateEndError("Select Out Date is required");
       valid = false;
     } else {
       setDateEndError("");
     }
-    console.log("xzvxzc",addtimebreak.add_clocked_out)
+   
+  
     if (addtimebreak.add_in_date === addtimebreak.add_out_date && addtimebreak.add_clocked_out === null) {
       if(addtimebreak.add_clocked_out === null){
-        setDateEndTimeError("Out Date and Time should be greater than In Date and Time.  handle save");
+        setDateEndTimeError("Out Date and Time should be greater than In Date and Time.");
         valid = false;
         return
       }
     }else{
       setDateEndTimeError("");
     }
-    if (!addtimebreak.add_clocked_out) {
+    if (!addtimebreak.add_clocked_out && addtimebreak.add_clocked_out === null) {
       setDateEndTimeError("Clock Out Time is required");
       valid = false;
-    }else if(addtimebreak.add_clocked_out === null){
-      console.log("addtimebreak.add_clocked_out handle save null value aa reha hai",addtimebreak.add_clocked_out)
+      return
+    }else {
+      setDateEndTimeError("");
+    }
+    if (!addtimebreak.add_clocked_out){
       setDateEndTimeError("Clock Out Time is required");
       valid = false;
     }else {
@@ -307,9 +308,9 @@ const TimesheetListing = ({ data }) => {
     formData.append("token_id", userTypeData.token_id);
     formData.append("login_type", userTypeData.login_type);
    
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
+    // for (const [key, value] of formData.entries()) {
+    //   console.log(`${key}: ${value}`);
+    // }
 
     // return
     try {
@@ -335,7 +336,6 @@ const TimesheetListing = ({ data }) => {
       console.error("API Error:", error);
     }
 
-
   }
 
   // const updateTimesheet = (value,type) => { 
@@ -346,12 +346,11 @@ const TimesheetListing = ({ data }) => {
   // }
 
 
-  // useEffect(() => {
-  //   console.log("addtimebreak: ", addtimebreak)
-  //   if(addtimebreak.add_in_date === addtimebreak.add_out_date){
-  //     setaddTimesheetMsg("Sub empty hai");
-  //   }
-  // }, [addtimebreak])
+  useEffect(() => {
+    // const clockInDateTime = dayjs(`${addtimebreak.add_in_date} ${addtimebreak.add_clocked_in}`);
+    // const clockOutDateTime = dayjs(`${addtimebreak.add_out_date} ${newTime.format("HH:mm:ss")}`);
+    console.log("addtimebreak: ", addtimebreak)
+  }, [addtimebreak])
 
 
   // for Break Modal start
@@ -477,7 +476,7 @@ const TimesheetListing = ({ data }) => {
       const response = await axios.post(`${BASE_URL}${ADD_TIME_BREAK}`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          'Authorization': `Bearer ${userTypeData.token}`
+          'Authorization': `Bearer ${userTypeData.token}` 
         }
       });
       if (response.data.status === true && response.data.msg ==="Break Added." ) {
