@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 // import MainAddEmployee from '../../StoreSetting/AddEmployee/MainAddEmployee'
-import MainEmployee from './MainEmployee'
-import DateRange from '../../Orders/InstoreOrder/DateRange'
-import Employeedetails from './Employeedetails'
+import MainEmployee from "./MainEmployee";
+import Employeedetails from "./Employeedetails";
+import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 
 const EmployeeWorking = () => {
   const [SelectEmpIDData, setSelectEmpIDData] = useState(null);
@@ -18,32 +18,20 @@ const EmployeeWorking = () => {
 
   return (
     <div>
-      
-      <div className='q-order-main-page'>
-        <MainEmployee 
-          onFilterDataChange={handleFilterDataChange}
-        />
-
+      <div className="q-order-main-page">
+        <MainEmployee onFilterDataChange={handleFilterDataChange} />
       </div>
 
-      <div className='q-order-main-page'>
-        <div className='box'>
-       <DateRange 
-        onDateRangeChange={handleDateRangeChange} 
-       />
-      </div>
-      </div>
+      <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
 
-      <div className='q-order-main-page'>
-        <Employeedetails 
-          selectedDateRange={selectedDateRange} 
+      <div className="q-order-main-page">
+        <Employeedetails
+          selectedDateRange={selectedDateRange}
           EmpId={SelectEmpIDData}
         />
-
       </div>
-
     </div>
-  )
-}
+  );
+};
 
-export default EmployeeWorking
+export default EmployeeWorking;

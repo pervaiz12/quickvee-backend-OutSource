@@ -10,7 +10,10 @@ import UserIcon from "../../Assests/MultipleUserIcon/useractive.svg";
 import Cookies from "js-cookie";
 import { useSelector, useDispatch } from "react-redux"; //,localAuthCheck
 import { setMenuOpen } from "../../Redux/features/NavBar/MenuSlice";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useNavigate } from "react-router-dom";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
+
 import {
   getAuthSessionRecord,
   handleGetStoreRecord,
@@ -21,7 +24,20 @@ import {
 import { Grid } from "@mui/material";
 const AllUserHeader = () => {
   // const [isMenuOpen, setIsMenuOpen] = useState(true);
-  const [showDropdown, setShowDropdown] = useState(false);
+
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  // ================ handle dropdown menu =============================
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  // ================ handle dropdown menu end =============================
+
   const dispatch = useDispatch();
   const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
   let AuthFinalLogin =
@@ -63,10 +79,6 @@ const AllUserHeader = () => {
   // ==========================
   const navigate = useNavigate();
 
-  const handleDropdownToggle = () => {
-    setShowDropdown(!showDropdown);
-  };
-
   const [isSticky, setIsSticky] = useState(false);
 
   const handleScroll = () => {
@@ -90,6 +102,10 @@ const AllUserHeader = () => {
     Cookies.remove("token_data");
     navigate("/login");
   };
+
+  const handleNavigateToNeedHelp = () => [
+    navigate("/users/view/unapprove/need-help"),
+  ];
 
   return (
     <>
@@ -122,33 +138,54 @@ const AllUserHeader = () => {
           {" "}
           <div className="relative ml-auto">
             <div
-              className="flex items-center ml-6 px-3 py-1 text-black lg:text-[20px] admin_medium cursor-pointer sm:text-[12px] md:text-[15px]"
-              onClick={handleDropdownToggle}
+              className="flex items-center ml-6 select-none px-3 py-1 text-black lg:text-[20px] admin_medium cursor-pointer sm:text-[12px] md:text-[15px]"
+              // onClick={handleDropdownToggle}
+              id="basic-button"
+              aria-controls={open ? "basic-menu" : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}
             >
               <img src={UserIcon} alt="" className="w-6 h-6 mr-2" />
               Superadmin
               <img src={DownIcon} alt="" className="w-8 h-8 ml-2" />
             </div>
-
-            {showDropdown && (
-              <div className="dropdown-content w-full ">
-                {/* <div className="flex justify-items-start items-center">
-                  <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />{" "}
-                  <a href="/users/view/unapprove/">Store Setup</a>
-                </div> */}
-                <div className="flex justify-items-start items-center">
-                  <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />
-                  <a href="/users/view/unapprove/need-help">Need Help</a>
-                </div>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                "aria-labelledby": "basic-button",
+              }}
+              PaperProps={{
+                style: {
+                  width: 200,
+                  marginTop: 5,
+                },
+              }}
+            >
+              <MenuItem onClick={handleClose}>
                 <div
                   className="flex justify-items-start items-center"
-                  onClick={handleLogout}
+                  onClick={handleNavigateToNeedHelp}
+                >
+                  <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />
+                  <p>Need Help</p>
+                </div>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <div
+                  className="flex justify-items-start items-center"
+                  onClick={() => {
+                    handleLogout();
+                  }}
                 >
                   <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />
                   Logout
-                </div>
-              </div>
-            )}
+                </div>{" "}
+              </MenuItem>
+            </Menu>
           </div>
         </Grid>
       </Grid>

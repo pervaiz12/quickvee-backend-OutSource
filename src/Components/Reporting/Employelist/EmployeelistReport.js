@@ -3,6 +3,43 @@ import { fetchEmployeeListData } from "../../../Redux/features/EmployeeList/Empl
 import { useSelector, useDispatch } from "react-redux";
 import "../../../Styles/EmployeeList/employeeList.css";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { Grid } from "@mui/material";
+
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+
+const StyledTable = styled(Table)(({ theme }) => ({
+  padding: 2, // Adjust padding as needed
+}));
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#253338",
+    color: theme.palette.common.white,
+    fontFamily: "CircularSTDBook !important",
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+    fontFamily: "CircularSTDMedium",
+  },
+  [`&.${tableCellClasses.table}`]: {
+    fontSize: 14,
+    fontFamily: "CircularSTDMedium",
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  "&:last-child td, &:last-child th": {
+    // backgroundColor: "#F5F5F5",
+  },
+}));
 
 const EmployeelistReport = () => {
   const [employeeData, setAllEmployeeData] = useState([]);
@@ -50,7 +87,61 @@ const EmployeelistReport = () => {
 
   return (
     <>
-      <div className="q-attributes-bottom-detail-section">
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <div className="q_details_header">Employee List</div>
+            </Grid>
+          </Grid>
+          <Grid container>
+            <Grid item xs={12}>
+              <TableContainer>
+                <StyledTable
+                  sx={{ minWidth: 500 }}
+                  aria-label="customized table"
+                >
+                  <TableHead>
+                    <StyledTableCell>Employee Name</StyledTableCell>
+                    <StyledTableCell>Contact</StyledTableCell>
+                    <StyledTableCell>Email</StyledTableCell>
+                    <StyledTableCell>Address</StyledTableCell>
+                  </TableHead>
+                  <TableBody>
+                    {employeeData && employeeData?.length >= 1 ? (
+                      employeeData?.map((employee, index) => (
+                        <StyledTableRow key={index}>
+                          <StyledTableCell>
+                            <p>
+                              {employee?.f_name} {employee?.l_name}
+                            </p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>{employee?.phone}</p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>{employee?.email}</p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>{employee?.address}</p>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))
+                    ) : (
+                      <Grid container sx={{ padding: 2.5 }}>
+                        <Grid item xs={12}>
+                          <p>No. Data found.</p>
+                        </Grid>
+                      </Grid>
+                    )}
+                  </TableBody>
+                </StyledTable>
+              </TableContainer>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      {/* <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
           <div className="q-attributes-bottom-header">
             <span>Employee List</span>
@@ -81,7 +172,7 @@ const EmployeelistReport = () => {
               ))}
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

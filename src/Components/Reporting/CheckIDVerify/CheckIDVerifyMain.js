@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import FilterCatDetails from '../CategoryDetails/FilterCatDetails'
-import DateRange from '../../Orders/InstoreOrder/DateRange'
 import CheckIDVerifyList from './CheckIDVerifyList'
+import DateRangeComponent from '../../../reuseableComponents/DateRangeComponent';
 
 const CheckIDVerifyMain = () => {
 
@@ -31,7 +31,7 @@ const CheckIDVerifyMain = () => {
             </div>
             <div className="q-attributes-main-page">
                 <div className='box'>
-                <DateRange 
+                <DateRangeComponent 
                     onDateRangeChange={handleDateRangeChange}
                 />
             </div>

@@ -4,6 +4,7 @@ import { BASE_URL, EMPLOYEE_LIST } from "../../../Constants/Config";
 import axios from "axios";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { Grid } from "@mui/material";
+import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 
 const SalesPersonFilter = ({ onFilterDataChange }) => {
   const {
@@ -69,11 +70,11 @@ const SalesPersonFilter = ({ onFilterDataChange }) => {
         }
         break;
       case "orderSource":
-        setSelectedOrderSource(option);
+        setSelectedOrderSource(option.title);
         setOrderSourceDropdownVisible(false);
         break;
       case "orderType":
-        setSelectedOrderType(option);
+        setSelectedOrderType(option.title);
         setOrderTypeDropdownVisible(false);
         break;
     }
@@ -120,12 +121,68 @@ const SalesPersonFilter = ({ onFilterDataChange }) => {
     );
   }, [selectedOrderSource, selectedOrderType, selectedEmployeeID]);
 
+  const orderSourceList = ["All", "Online", "Offline"];
+  const orderTypeList = ["All", "Pickup", "Delivery"];
+
   return (
     <>
-    <Grid container>
-      
-    </Grid>
-      <div className="box">
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <Grid container sx={{ p: 2.5 }}>
+            <Grid item xs={12}>
+              <div className="q_details_header">Report By Sales Person</div>
+            </Grid>
+          </Grid>
+          <Grid container sx={{ px: 2.5 }}>
+            <Grid item xs={12}>
+              <div className="q_details_header">Filter by</div>
+            </Grid>
+          </Grid>
+          <Grid container sx={{ px: 2.5, pb: 2.5 }} spacing={2}>
+            <Grid item xs={12} sm={6} md={4}>
+              <label className="q-details-page-label" htmlFor="employeeFilter">
+                Select Employee
+              </label>
+              <SelectDropDown
+                heading={"All"}
+                listItem={employeeList}
+                title={"title"}
+                selectedOption={selectedEmployee}
+                onClickHandler={handleOptionClick}
+                dropdownFor={"employee"}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <label
+                className="q-details-page-label"
+                htmlFor="orderSourceFilter"
+              >
+                Order Source
+              </label>
+              <SelectDropDown
+                listItem={orderSourceList.map((item) => ({ title: item }))}
+                title={"title"}
+                selectedOption={selectedOrderSource}
+                onClickHandler={handleOptionClick}
+                dropdownFor={"orderSource"}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <label className="q-details-page-label" htmlFor="orderTypeFilter">
+                Order Type
+              </label>
+              <SelectDropDown
+                listItem={orderTypeList.map((item) => ({ title: item }))}
+                title={"title"}
+                selectedOption={selectedOrderType}
+                dropdownFor={"orderType"}
+                onClickHandler={handleOptionClick}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      {/* <div className="box">
         <div className="q-category-bottom-detail-section">
           <div className="">
             <div className="q-category-bottom-header">
@@ -137,7 +194,7 @@ const SalesPersonFilter = ({ onFilterDataChange }) => {
           </div>
 
           <div className="q-order-page-container ml-8">
-            {/* Employee Dropdown */}
+     
             <div className="q-order-page-filter">
               <label className="q-details-page-label" htmlFor="employeeFilter">
                 Select Employee
@@ -171,7 +228,7 @@ const SalesPersonFilter = ({ onFilterDataChange }) => {
               </div>
             </div>
 
-            {/* Order Source Dropdown */}
+
             <div className="q-order-page-filter">
               <label
                 className="q-details-page-label"
@@ -213,7 +270,7 @@ const SalesPersonFilter = ({ onFilterDataChange }) => {
               </div>
             </div>
 
-            {/* Order Type Dropdown */}
+ 
             <div className="q-order-page-filter">
               <label className="q-details-page-label" htmlFor="orderTypeFilter">
                 Order Type
@@ -249,7 +306,7 @@ const SalesPersonFilter = ({ onFilterDataChange }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };
