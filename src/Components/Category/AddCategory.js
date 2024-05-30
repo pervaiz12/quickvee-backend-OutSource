@@ -13,15 +13,23 @@ import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import CheckBoxField from "../../reuseableComponents/CheckBoxField";
+import { useAuthDetails } from "../../Common/cookiesHelper";
 
 const AddCategory = ({ seVisible }) => {
+  const {
+    LoginGetDashBoardRecordJson,
+    LoginAllStore,
+    userTypeData,
+    GetSessionLogin,
+  } = useAuthDetails();
   const [errorMessage, setErrorMessage] = useState("");
   const [value, setValue] = useState(null);
+  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   const [category, setCategory] = useState({
     title: "",
     description: "",
-    merchant_id: "MAL0100CA",
+    merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
     online: 0,
     use_point: 0,
     earn_point: 0,
@@ -79,6 +87,8 @@ const AddCategory = ({ seVisible }) => {
     formData.append("merchant_id", category.merchant_id);
     formData.append("use_point", category.use_point);
     formData.append("earn_point", category.earn_point);
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("login_type", userTypeData?.login_type);
 
     if (category.image && category.image.base64) {
       formData.append("online", category.online);
@@ -92,7 +102,10 @@ const AddCategory = ({ seVisible }) => {
 
     try {
       const res = await axios.post(BASE_URL + ADD_CATOGRY, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userTypeData?.token}`,
+        },
       });
 
       const data = await res.data.status;
@@ -158,17 +171,21 @@ const AddCategory = ({ seVisible }) => {
     }));
   };
 
-  // for Default Category list start
+  // for Default Category list start merchant_id,userTypeData
   const [defaultList, setDefaultList] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
       try {
         let data = {
-          merchant_id: "MAL0100CA",
-          
+          merchant_id: merchant_id,
+          token_id: userTypeData?.token_id,
+          login_type: userTypeData?.login_type,
         };
-        const response = await axios.post(BASE_URL + LIST_ALL_Defaults,data, {
-          headers: { "Content-Type": "multipart/form-data" },
+        const response = await axios.post(BASE_URL + LIST_ALL_Defaults, data, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${userTypeData?.token}`,
+          },
         });
 
         if (response.data.status === "Success") {

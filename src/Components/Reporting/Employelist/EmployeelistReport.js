@@ -2,17 +2,21 @@ import React, { useEffect, useState } from "react";
 import { fetchEmployeeListData } from "../../../Redux/features/EmployeeList/EmployeeListSlice";
 import { useSelector, useDispatch } from "react-redux";
 import "../../../Styles/EmployeeList/employeeList.css";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 
 const EmployeelistReport = () => {
   const [employeeData, setAllEmployeeData] = useState([]);
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
 
   const AllEmployeeListState = useSelector((state) => state.employeeDataList);
   const dispatch = useDispatch();
-
+  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
     const fetchData = async () => {
       let data = {
-        merchant_id: "MAL0100CA",
+        merchant_id,
+        ...userTypeData,
       };
 
       if (data) {
@@ -46,9 +50,7 @@ const EmployeelistReport = () => {
 
   return (
     <>
-
-
-       <div className="q-attributes-bottom-detail-section">
+      <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
           <div className="q-attributes-bottom-header">
             <span>Employee List</span>
@@ -68,7 +70,9 @@ const EmployeelistReport = () => {
                   key={index}
                 >
                   <div className="q-category-bottom-categories-single-category">
-                    <p className="report-sort">{employee.f_name} {employee.l_name}</p>
+                    <p className="report-sort">
+                      {employee.f_name} {employee.l_name}
+                    </p>
                     <p className="report-title">{employee.phone}</p>
                     <p className="report-title">{employee.email}</p>
                     <p className="report-title">{employee.address}</p>
@@ -77,10 +81,9 @@ const EmployeelistReport = () => {
               ))}
           </div>
         </div>
-      </div> 
+      </div>
     </>
   );
 };
 
 export default EmployeelistReport;
-

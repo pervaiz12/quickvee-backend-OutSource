@@ -22,10 +22,13 @@ import dayjs, { Dayjs } from "dayjs";
 
 import { useNavigate } from "react-router-dom";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
+import { useAuthDetails } from "../../Common/cookiesHelper";
 
 import _ from "lodash";
 
 const EditCoupon = () => {
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
   const myStyles = {
     display: "flex",
   };
@@ -36,32 +39,33 @@ const EditCoupon = () => {
       [couponName]: e.target.checked ? 1 : 0,
     });
   };
-
+  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   const [activeTab, setActiveTab] = useState("");
-  
 
   const params = useParams();
   async function fetchData() {
     const getcouponData = {
-      merchant_id: "MAL0100CA",
+      merchant_id,
       coupon_id: params.couponsCode,
+      ...userTypeData,
     };
-   
 
     try {
+      const { token, ...dataNew } = getcouponData;
       const response = await axios.post(
         BASE_URL + COUPON_DETAILS_ID_CHECK,
-        getcouponData,
+        dataNew,
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
 
       if (response.data.status === true) {
         // console.log(response.data.result)
-        return response.data.result;
+        return response?.data?.result;
       }
     } catch (error) {
       console.error("Error:", error);
@@ -74,29 +78,29 @@ const EditCoupon = () => {
 
       if (res) {
         setCoupon({
-          id: res[0].id,
-          m_id: res[0].m_id,
-          name: res[0].name,
-          description: res[0].description,
-          merchant_id: res[0].m_id,
-          min_amount: res[0].min_amount,
-          discount: res[0].discount,
-          maximum_discount: res[0].maximum_discount,
-          date_valid: res[0].date_valid,
-          date_expire: res[0].date_expire,
-          time_valid: res[0].time_valid,
-          time_expire: res[0].time_expire,
-          count_limit: res[0].count_limit,
-          flag: res[0].flag,
+          id: res[0]?.id,
+          m_id: res[0]?.m_id,
+          name: res[0]?.name,
+          description: res[0]?.description,
+          merchant_id: res[0]?.m_id,
+          min_amount: res[0]?.min_amount,
+          discount: res[0]?.discount,
+          maximum_discount: res[0]?.maximum_discount,
+          date_valid: res[0]?.date_valid,
+          date_expire: res[0]?.date_expire,
+          time_valid: res[0]?.time_valid,
+          time_expire: res[0]?.time_expire,
+          count_limit: res[0]?.count_limit,
+          flag: res[0]?.flag,
         });
 
         setCouponStates({
           ...couponStates,
-          online: res[0].show_online === "1" ? true : false,
-          enablelimit: res[0].enable_limit === "1" ? true : false,
+          online: res[0]?.show_online === "1" ? true : false,
+          enablelimit: res[0]?.enable_limit === "1" ? true : false,
         });
 
-        if (res[0].flag === "1") {
+        if (res[0]?.flag === "1") {
           setActiveTab("amount");
         } else {
           setActiveTab("percentage");
@@ -109,7 +113,6 @@ const EditCoupon = () => {
     fetchDataAndUpdateState();
   }, [params.couponsCode]);
 
-  
   const [inputValue, setInputValue] = useState("");
   const [isUnique, setIsUnique] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
@@ -117,13 +120,23 @@ const EditCoupon = () => {
   // Function to check uniqueness in the database
   const checkUniqueness = async (value) => {
     const data = {
-      merchant_id: "MAL0100CA",
+      merchant_id,
       name: value,
+      ...userTypeData,
     };
     try {
-      const response = await axios.post(BASE_URL + COUPON_TITLE_CHECK, data, {
-        headers: { "Content-Type": "multipart/form-data" },
-      });
+      const { token, ...dataNew } = data;
+
+      const response = await axios.post(
+        BASE_URL + COUPON_TITLE_CHECK,
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (response.data && response.data.status !== undefined) {
         setIsUnique(response.data.status); // Assuming the API returns { isUnique: boolean }
@@ -271,8 +284,11 @@ const EditCoupon = () => {
     formData.append("end_date", coupon.date_expire);
     formData.append("start_time", coupon.time_valid);
     formData.append("end_time", coupon.time_expire);
+    formData.append("end_time", coupon.time_expire);
     formData.append("is_online", couponStates.online ? "1" : "0");
     formData.append("flag", activeTab === "percentage" ? "0" : "1");
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("login_type", userTypeData?.login_type);
 
     // Append count_limit only if enable_limit > 0
     if (couponStates.enablelimit === true) {
@@ -302,7 +318,10 @@ const EditCoupon = () => {
 
     try {
       const res = await axios.post(BASE_URL + EDIT_COUPON, formData, {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userTypeData?.token}`,
+        },
       });
 
       const data = await res.data.status;
@@ -310,7 +329,7 @@ const EditCoupon = () => {
       if (data === true) {
         // alert(update_message);
         let data = {
-          merchant_id: "MAL0100CA",
+          merchant_id,
         };
         navigate("/coupons");
       } else if (
@@ -562,20 +581,22 @@ const EditCoupon = () => {
                             <Grid container>
                               <Grid item xs={6}>
                                 <div
-                                  className={`cursor-pointer amt_btn text-center   ${activeTab === "amount"
+                                  className={`cursor-pointer amt_btn text-center   ${
+                                    activeTab === "amount"
                                       ? "bg-[#0A64F9] text-white radius-4"
                                       : ""
-                                    }`}
+                                  }`}
                                 >
                                   Amount ($)
                                 </div>
                               </Grid>
                               <Grid item xs={6}>
                                 <div
-                                  className={`cursor-pointer amt_btn text-center  ${activeTab === "percentage"
+                                  className={`cursor-pointer amt_btn text-center  ${
+                                    activeTab === "percentage"
                                       ? "bg-[#0A64F9] text-white radius-4"
                                       : ""
-                                    }`}
+                                  }`}
                                 >
                                   Percentage (%)
                                 </div>
@@ -627,7 +648,9 @@ const EditCoupon = () => {
                               className="date-provider"
                             >
                               <DatePicker
-                                slotProps={{ textField: { placeholder: 'Start Date' } }}
+                                slotProps={{
+                                  textField: { placeholder: "Start Date" },
+                                }}
                                 minDate={dayjs(new Date())}
                                 value={dayjs(
                                   new Date(Date.parse(coupon.date_valid))
@@ -657,13 +680,17 @@ const EditCoupon = () => {
                               />
                             </LocalizationProvider>
                             {dateStartError && (
-                              <p className="error-message date_error">{dateStartError}</p>
+                              <p className="error-message date_error">
+                                {dateStartError}
+                              </p>
                             )}
                             <div className="dividersss" />
                             <div className="q_time_display">
                               <LocalizationProvider dateAdapter={AdapterDayjs}>
                                 <TimePicker
-                                  slotProps={{ textField: { placeholder: 'Start Time' } }}
+                                  slotProps={{
+                                    textField: { placeholder: "Start Time" },
+                                  }}
                                   className="input_label_section"
                                   name="start_tym"
                                   id="start_tym"
@@ -731,7 +758,9 @@ const EditCoupon = () => {
                                 }}
                               />
                               {dateEndError && (
-                                <p className="error-message date_error">{dateEndError}</p>
+                                <p className="error-message date_error">
+                                  {dateEndError}
+                                </p>
                               )}
                             </LocalizationProvider>
                             <div className="dividersss" />
@@ -794,7 +823,7 @@ const EditCoupon = () => {
                       max={999}
                       value={
                         coupon.count_limit === null ||
-                          coupon.count_limit === "0"
+                        coupon.count_limit === "0"
                           ? 1
                           : Math.min(coupon.count_limit, 999)
                       }

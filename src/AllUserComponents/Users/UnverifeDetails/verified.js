@@ -400,7 +400,7 @@ export default function Verified() {
                               <StyledTableCell>
                                 <div className="flex">
                                   <img
-                                    className="mx-1 view "
+                                    className="mx-1 view cursor-pointer"
                                     onClick={() =>
                                       handleGetVerifiedMerchant(
                                         data.merchant_id
@@ -410,19 +410,19 @@ export default function Verified() {
                                     alt="View"
                                   />
                                   <img
-                                    className="mx-1 edit"
+                                    className="mx-1 edit cursor-pointer"
                                     onClick={() => handleEditMerchant(data.id)}
                                     src={Edit}
                                     alt="Edit"
                                   />
                                   <img
-                                    className="mx-1 delete"
+                                    className="mx-1 delete cursor-pointer"
                                     onClick={() => handleDeleteMerchant(data)}
                                     src={Delete}
                                     alt="Delete"
                                   />
                                   <img
-                                    className="mx-1"
+                                    className="mx-1 cursor-pointer"
                                     onClick={() =>
                                       hadleDislikeMerchant(data.id)
                                     }

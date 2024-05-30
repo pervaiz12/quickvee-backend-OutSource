@@ -3,8 +3,8 @@ import AddIcon from "../../Assests/Category/addIcon.svg";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import EditIcon from "../../Assests/Category/editIcon.svg";
 import SortIcon from "../../Assests/Category/Sorting.svg";
-import Cookies from 'js-cookie'; 
-import CryptoJS from 'crypto-js'; 
+import Cookies from "js-cookie";
+import CryptoJS from "crypto-js";
 import {
   fetchCategoriesData,
   deleteCategory,
@@ -19,34 +19,31 @@ import { Link } from "react-router-dom";
 import CheckBoxField from "../../reuseableComponents/CheckBoxField";
 import DraggableTable from "../../reuseableComponents/DraggableTable";
 import RadioSelect from "./RadioSelect";
-import { BASE_URL,  SORT_CATOGRY_DATA } from "../../Constants/Config";
-import { useAuthDetails } from './../../Common/cookiesHelper';
-
+import { BASE_URL, SORT_CATOGRY_DATA } from "../../Constants/Config";
+import { useAuthDetails } from "./../../Common/cookiesHelper";
 
 const CategoryDetail = ({ seVisible }) => {
-  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
 
   const [allcategories, setallcategories] = useState([]);
   const [reorderedItems, setreorderedItems] = useState([]);
 
   const AllCategoriesDataState = useSelector((state) => state.categories);
   const dispatch = useDispatch();
-  
 
-   let AuthDecryptDataDashBoardJSONFormat=LoginGetDashBoardRecordJson
+  let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
 
-   const merchant_id=AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id
+  const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
 
- 
   let data = {
     merchant_id: merchant_id,
-    ...userTypeData
+    ...userTypeData,
   };
   // console.log(data)
-  
+
   // console.log(tokenData)
   useEffect(() => {
-   
     if (data) {
       // console.log(data)
       dispatch(fetchCategoriesData(data));
@@ -69,6 +66,7 @@ const CategoryDetail = ({ seVisible }) => {
   const handleDeleteCategory = (id) => {
     const data = {
       id: id,
+      ...userTypeData,
     };
 
     const userConfirmed = window.confirm(
@@ -89,14 +87,15 @@ const CategoryDetail = ({ seVisible }) => {
     const data = {
       id: id,
       status: status,
-      merchant_id: "MAL0100CA",
+      merchant_id,
+      ...userTypeData,
     };
 
     const rep = await dispatch(updateCategoryStatus(data));
     if (rep.payload === "Success") {
       // alert("Status Success Updated");
       let datas = {
-        merchant_id: "MAL0100CA",
+        merchant_id,
       };
       if (datas) {
         dispatch(fetchCategoriesData(data));
@@ -182,7 +181,6 @@ const CategoryDetail = ({ seVisible }) => {
     alert("Are you sure you want to sort item!");
     //console.log(result);
   };
- 
 
   return (
     <>
@@ -206,7 +204,10 @@ const CategoryDetail = ({ seVisible }) => {
               }}
               viewSelectedOptionFun={handleViewItemsClick}
               radioButtonComponent={true}
-              editBtnCategory={{editButtonEnable:true,editButtonurl:'/category/edit-category/'}}
+              editBtnCategory={{
+                editButtonEnable: true,
+                editButtonurl: "/category/edit-category/",
+              }}
               deleteButton={{
                 deleteButtonEnable: true,
                 deleteButtonFun: handleDeleteCategory,

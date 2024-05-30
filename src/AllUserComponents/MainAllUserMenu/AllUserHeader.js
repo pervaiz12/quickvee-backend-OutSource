@@ -107,7 +107,7 @@ const AllUserHeader = () => {
           <Grid container>
             <Grid item sx={{ marginRight: 2 }}>
               <BiMenu
-                className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out`}
+                className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out cursor-pointer`}
                 onClick={(e) => {
                   dispatch(setMenuOpen(!isMenuOpenRedux));
                 }}

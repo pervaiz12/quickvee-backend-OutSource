@@ -108,9 +108,9 @@
 }
 
 .q_sales_trading_data {
-  display: flex;
-  justify-content: space-between;
-  padding: 20px;
+	display: flex;
+	justify-content: space-between;
+	/* padding: 20px; */
 }
 
 .bgprogress {

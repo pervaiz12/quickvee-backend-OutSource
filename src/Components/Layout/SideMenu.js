@@ -348,16 +348,7 @@ const DropdownMenuItem = ({
           )}
         </div>
       </div>
-      {console.log(
-        "isDropdownOpen",
-        isDropdownOpen,
-        "currentDropDownItem",
-        currentDropDownItem,
-        "item.id",
-        item.id,
-        "===",
-        isDropdownOpen && currentDropDownItem === item.id
-      )}
+     
       {isDropdownOpen && currentDropDownItem === item.id && (
         <div
           onMouseEnter={(e) => {
@@ -499,8 +490,13 @@ const menuItems = [
           },
           {
             id: 78,
-            text: " Payment Method Details",
+            text: "Payment Method Details",
             link: "/store-reporting/payment-method-details",
+          },
+          {
+            id: 78,
+            text: "Discount Per Sales Report",
+            link: "/store-reporting/discount-per-sales-report",
           },
         ],
       },
@@ -890,8 +886,8 @@ const menuItems = [
         text: "Export Sold Items",
         link: "/import-data",
       },
-      { id: 83, text: "Tip Report", link: "/store-reporting/tip-report" },
-      { id: 84, text: "Coupon Report", link: "/store-reporting/coupon-report" },
+      // { id: 83, text: "Tip Report", link: "/store-reporting/tip-report" },
+      // { id: 84, text: "Coupon Report", link: "/store-reporting/coupon-report" },
     ],
   },
   // {
