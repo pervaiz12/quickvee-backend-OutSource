@@ -7,12 +7,15 @@ import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import { fetchtaxesData } from "../../../Redux/features/Taxes/taxesSlice";
 import { useDispatch } from "react-redux";
 import axios from "axios";
-
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 import {
   BASE_URL,
   UPDATE_TAXES,
   TAXE_CATEGORY_LIST,
 } from "../../../Constants/Config";
+import BasicTextFields from "../../../reuseableComponents/TextInputField";
+import TextField from "@mui/material/TextField";
+import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 
 const EditTaxesModal = ({ selectedTaxe }) => {
   const [open, setOpen] = useState(false);
@@ -38,6 +41,9 @@ const EditTaxesModal = ({ selectedTaxe }) => {
   const width = {
     width: "6.5rem",
   };
+
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } = useAuthDetails();
+  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   useEffect(() => {
     if (selectedTaxe) {
@@ -113,11 +119,12 @@ const EditTaxesModal = ({ selectedTaxe }) => {
       formData.append("applytaxtocat", applyToCategory ? 1 : 0);
       formData.append("taxchoice", updateTax ? 1 : 0); // 1 for updating tax, 0 for additional tax
       formData.append("cate_id", categoryId);
-
+      formData.append("token_id", userTypeData?.token_id);
+      formData.append("login_type", userTypeData?.login_type);
       try {
         // Make your API request with axios
         const response = await axios.post(BASE_URL + UPDATE_TAXES, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { "Content-Type": "multipart/form-data" ,Authorization: `Bearer ${userTypeData?.token}`},
         });
 
         // Handle the response as needed
@@ -127,7 +134,8 @@ const EditTaxesModal = ({ selectedTaxe }) => {
         if (update_message == "Success") {
           // alert(msg)
           let data = {
-            merchant_id: "MAL0100CA",
+            merchant_id: merchant_id,
+            ...userTypeData
           };
           if (data) {
             dispatch(fetchtaxesData(data));
@@ -157,11 +165,12 @@ const EditTaxesModal = ({ selectedTaxe }) => {
       formData.append("title", taxes.title);
       formData.append("percent", taxes.percent);
       formData.append("merchant_id", taxes.merchant_id);
-
+      formData.append("token_id", userTypeData?.token_id);
+      formData.append("login_type", userTypeData?.login_type);
       try {
         // Make your API request with axios
         const response = await axios.post(BASE_URL + UPDATE_TAXES, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { "Content-Type": "multipart/form-data" ,Authorization: `Bearer ${userTypeData?.token}`},
         });
         // Handle the response as needed
         const update_message = response.data.status;
@@ -170,7 +179,8 @@ const EditTaxesModal = ({ selectedTaxe }) => {
         if (update_message == "Success") {
           // alert(msg)
           let data = {
-            merchant_id: "MAL0100CA",
+            merchant_id: merchant_id,
+            ...userTypeData
           };
           if (data) {
             dispatch(fetchtaxesData(data));
@@ -202,13 +212,14 @@ const EditTaxesModal = ({ selectedTaxe }) => {
 
   useEffect(() => {
     const fetchData = async () => {
+      const formData = new FormData();
+      formData.append("merchant_id", merchant_id);
+      formData.append("token_id", userTypeData?.token_id);
+      formData.append("login_type", userTypeData?.login_type);
       try {
         const response = await axios.post(
-          BASE_URL + TAXE_CATEGORY_LIST,
-          {
-            merchant_id: "MAL0100CA",
-          },
-          { headers: { "Content-Type": "multipart/form-data" } }
+          BASE_URL + TAXE_CATEGORY_LIST, formData,
+          { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}` } }
         );
 
         // Assuming the API response has a data property containing the category list
@@ -250,14 +261,14 @@ const EditTaxesModal = ({ selectedTaxe }) => {
   const handleOptionClick = async (option, dropdown) => {
     switch (dropdown) {
       case "category":
-        if (option.label === "--Select Category--") {
+        if (option === "--Select Category--") {
           setCategory("--Select Category--");
           setCategoryDropdownVisible(false);
         } else {
-          setCategory(option.label);
+          setCategory(option.title);
           setCategoryDropdownVisible(false);
         }
-        if (option.label == "--Select Category--") {
+        if (option == "--Select Category--") {
           setStoreToError("This field is required");
           setSelectedCategory("");
         } else {
@@ -309,14 +320,23 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                     <div className="q-add-categories-single-input">
                       <label for="title">Title</label>
 
-                      <input
+                      {/* <input
                         type="text"
                         id="title"
                         name="title"
                         value={taxes.title}
                         disabled
-                      />
+                      /> */}
                     </div>
+                    <BasicTextFields
+                        value={taxes.title}
+                        onChangeFun={inputChange}
+                        placeholder="Enter Title"
+                        name="title"
+                        type="text"
+                        required={true}
+                        disable={true}
+                      />
                     {errorMessage && (
                       <span className="error-message" >
                         {errorMessage}
@@ -328,14 +348,22 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                     <div className="q-add-categories-single-input">
                       <label for="title">Title</label>
 
-                      <input
+                      {/* <input
                         type="text"
                         id="title"
                         onChange={inputChange}
                         name="title"
                         value={taxes.title}
-                      />
+                      /> */}
                     </div>
+                    <BasicTextFields
+                        value={taxes.title}
+                        onChangeFun={inputChange}
+                        placeholder="Enter Title"
+                        name="title"
+                        type="text"
+                        required={true}
+                      />
                     {errorMessage && (
                       <span className="error-message" style={{ color: "red" }}>
                         {errorMessage}
@@ -344,10 +372,10 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                   </>
                 )}
 
-                <div className="q-add-categories-single-input">
+                <div className="q-add-categories-single-input mt-4">
                   <label for="Percentage">Percentage</label>
 
-                  <input
+                  {/* <input
                     type="text"
                     id="percent"
                     maxlength="5"
@@ -358,8 +386,20 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                     placeholder="00.00"
                     onChange={inputChange}
                     onKeyPress={handleKeyPress}
-                  />
+                  /> */}
                 </div>
+                <TextField
+                    id="outlined-basic"
+                    name="percent"
+                    value={taxes.percent}
+                    inputProps={{ maxLength: 5, type: "text" }}
+                    onChange={inputChange}
+                    placeholder="00.00"
+                    variant="outlined"
+                    size="small"
+                    required={true}
+                    onKeyPress={handleKeyPress}
+                  />
 
                 <div className="category-checkmark-div m-2">
                   <label className="category-checkmark-label">
@@ -382,7 +422,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                         <p>Loading categories...</p>
                       ) : (
                         <>
-                          <div className="custom-dropdown">
+                          {/* <div className="custom-dropdown">
                             <div
                               className="custom-dropdown-header"
                               onClick={() => toggleDropdown("category")}
@@ -433,7 +473,16 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                                   ))}
                               </div>
                             )}
-                          </div>
+                          </div> */}
+
+                          <SelectDropDown
+                                listItem={categoryOptions}
+                                heading={"--Select Category--"}
+                                title={"title"}
+                                onClickHandler={handleOptionClick}
+                                selectedOption={category}
+                                dropdownFor={"category"}
+                            />
 
                           <span className="input-error error-message" >
                             {storeToError && (
@@ -447,7 +496,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                     </div>
 
                     <div
-                      className="q-add-categories-single-input mt-3 d-flex"
+                      className="q-add-categories-single-input mt-3 d-flex taxesApplyCategory"
                       style={{ width: "fit-content" }}
                     >
                       <label className="q_receipt_page_main ">
@@ -460,7 +509,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                         />
                         <span className="checkmark_section"></span>
                       </label>
-                      <label className="q_receipt_page_main">
+                      <label className="q_receipt_page_main ml-3">
                         Update the tax for the chosen category?
                         <input type="radio" name="taxchoice" value="1" />
                         <span className="checkmark_section"></span>

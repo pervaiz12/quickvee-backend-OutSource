@@ -6,16 +6,58 @@ import 'datatables.net-dt/css/jquery.dataTables.min.css';
 
 import Left from "../../Assests/Taxes/Left.svg";
 import Right from "../../Assests/Taxes/Right.svg";
+import { useAuthDetails } from "../../Common/cookiesHelper";
+import { Grid } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Pagination from "../../AllUserComponents/Users/UnverifeDetails/Pagination";
+import useDebounce from "../../hooks/useDebouncs";
+import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
+import InputTextSearch from "../../reuseableComponents/InputTextSearch";
+
+const StyledTable = styled(Table)(({ theme }) => ({
+  padding: 2, // Adjust padding as needed
+}));
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#253338",
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+  [`&.${tableCellClasses.table}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
 
 const LoyaltyProgramList = () => {
   const dispatch = useDispatch();
   const loyaltyprogramDataState = useSelector((state) => state.loyaltyprogram);
   const [loyaltyprogram, setLoyaltyprogram] = useState([]);
   $.DataTable = require('datatables.net')
-
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } = useAuthDetails();
+  let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
+  const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
   useEffect(() => {
     let data = {
-      merchant_id: "MAL0100CA",
+      merchant_id: merchant_id,
+      ...userTypeData,
     };
     dispatch(fetchloyaltyprogramData(data));
   }, [dispatch]);
@@ -72,12 +114,133 @@ const LoyaltyProgramList = () => {
     }
   }, [loyaltyprogram]);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [totalCount, setTotalCount] = useState(0);
+  const [searchRecord, setSearchRecord] = useState("");
+  const debouncedValue = useDebounce(searchRecord);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+  const handleSearchInputChange = (value) => {
+    setSearchRecord(value);
+    setCurrentPage(1);
+  };
+
+  const columns = [
+    "Customer Name",
+    "Customer Email",
+    "Customer Phone",
+    "Customer Loyalty",
+    "Customer Store Credit",
+  ];
+
   return (
+    <>
     <div className="box">
          <div className="box_shadow_div">
             <table  id="loyaltyProgramTable"></table>
          </div>
     </div>
+
+    {/* <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <InputTextSearch
+                className=""
+                type="text"
+                value={searchRecord}
+                handleChange={handleSearchInputChange}
+                placeholder="Search..."
+                autoComplete="off"
+              />
+            </Grid>
+          </Grid>
+
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
+              />
+            </Grid>
+          </Grid>
+
+          <Grid container>
+            {loyaltyprogramDataState.loading ? (
+              <>
+                <SkeletonTable columns={columns} />
+              </>
+            ) : (
+              <>
+                {loyaltyprogramDataState.loyaltyprogramData &&
+                loyaltyprogramDataState.loyaltyprogramData.length >= 1 &&
+                Array.isArray(loyaltyprogramDataState.loyaltyprogramData) ? (
+                  <TableContainer>
+                    <StyledTable
+                      sx={{ minWidth: 500 }}
+                      aria-label="customized table"
+                    >
+                      <TableHead>
+                        <StyledTableCell>Customer Name</StyledTableCell>
+                        <StyledTableCell>Customer Email</StyledTableCell>
+                        <StyledTableCell>Customer Phone</StyledTableCell>
+                        <StyledTableCell>Customer Loyalty</StyledTableCell>
+                        <StyledTableCell>Customer Store Credit</StyledTableCell>
+
+                      </TableHead>
+                      <TableBody>
+
+                        {loyaltyprogramDataState.loyaltyprogramData.map(
+                          (Loyaltydata, index) => (
+                            <StyledTableRow key={Loyaltydata.id}>
+
+                              <StyledTableCell>
+                                <div className="text-[#000000] lowercase">
+                                {Loyaltydata.f_name || ""} {Loyaltydata.l_name || ""}
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <div className="text-[#000000] capitalize">
+                                  {Loyaltydata.email}
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <div className="text-[#000000] order_method capitalize">
+                                  {Loyaltydata.phone}
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <div className="text-[#000000] order_method capitalize">
+                                  {Loyaltydata.total_loyalty_pts}
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <div className="text-[#000000] order_method capitalize">
+                                  {Loyaltydata.total_store_credit}
+                                </div>
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          )
+                        )}
+                      </TableBody>
+                    </StyledTable>
+                  </TableContainer>
+                ) : (
+                  <p className="px-5 py-4">No Data Found</p>
+                )}
+              </>
+            )}
+          </Grid>
+        </Grid>
+      </Grid> */}
+
+
+    </>
   );
 };
 

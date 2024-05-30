@@ -3109,3 +3109,7 @@ padding: 15px 0px;
   display: inline-block;
   float: right;
 }
+
+.taxesApplyCategory{
+  flex-direction: row !important;
+}

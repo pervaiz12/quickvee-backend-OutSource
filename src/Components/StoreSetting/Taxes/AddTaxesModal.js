@@ -6,13 +6,21 @@ import LeftIcon from "../../../Assests/Taxes/Left.svg";
 import axios from "axios";
 import { fetchtaxesData } from "../../../Redux/features/Taxes/taxesSlice";
 import { useDispatch } from "react-redux";
-
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { BASE_URL, ADD_TAXES } from "../../../Constants/Config";
-
+import BasicTextFields from "../../../reuseableComponents/TextInputField";
+import TextField from "@mui/material/TextField";
 const AddTaxesModal = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setTaxes({
+      title: "",
+      percent: "",
+    });
+    setErrorMessage("")
+    setOpen(false);
+  }
   const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useDispatch();
 
@@ -27,10 +35,14 @@ const AddTaxesModal = () => {
     width: "6.5rem",
   };
 
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } = useAuthDetails();
+  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   const [taxes, setTaxes] = useState({
     title: "",
     percent: "",
-    merchant_id: "MAL0100CA",
+    merchant_id: merchant_id,
+    token_id: userTypeData?.token_id,
+    login_type: userTypeData?.login_type,
   });
 
   const inputChange = (e) => {
@@ -65,10 +77,17 @@ const AddTaxesModal = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+
+    formData.append("title", taxes.title);
+    formData.append("percent", taxes.percent);
+    formData.append("merchant_id", merchant_id);
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("login_type", userTypeData?.login_type);
 
     try {
-      const res = await axios.post(BASE_URL + ADD_TAXES, taxes, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const res = await axios.post(BASE_URL + ADD_TAXES, formData, {
+        headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}`, },
       });
       const data = await res.data.status;
       const update_message = await res.data.msg;
@@ -77,7 +96,8 @@ const AddTaxesModal = () => {
       if (data == "Success") {
         // alert(update_message);
         let data = {
-          merchant_id: "MAL0100CA",
+          merchant_id: merchant_id,
+          ...userTypeData
         };
         if (data) {
           dispatch(fetchtaxesData(data));
@@ -85,7 +105,7 @@ const AddTaxesModal = () => {
         setTaxes({
           title: "",
           percent: "",
-          merchant_id: "MAL0100CA",
+          merchant_id: merchant_id,
         });
 
         handleClose();
@@ -135,27 +155,31 @@ const AddTaxesModal = () => {
               <div className="q-add-categories-section-middle-form">
                 <div className="q-add-categories-single-input">
                   <label for="title">Title</label>
-
-                  <input
+                  {/* <input
                     type="text"
                     id="title"
                     name="title"
                     onChange={inputChange}
                     value={taxes.title}
-                  />
+                  /> */}
                 </div>
+                  <BasicTextFields
+                    value={taxes.title}
+                    onChangeFun={inputChange}
+                    placeholder="Enter Title"
+                    name="title"
+                    type="text"
+                    required={true}
+                  />
                 {errorMessage && (
                   <span className="error-message" style={{ color: "red" }}>
                     {errorMessage}
                   </span>
                 )}
 
-                <div className="q-add-categories-single-input">
+                <div className="q-add-categories-single-input mt-4">
                   <label for="Percentage">Percentage</label>
-
-                  {/* <input type="text" id="percent"  maxlength="5" min="0.00" max="99.99" pattern="[0-9].*" name="percent" value={taxes.percent}   onChange={inputChange}  /> */}
-
-                  <input
+                  {/* <input
                     type="text"
                     id="percent"
                     maxlength="5"
@@ -166,8 +190,20 @@ const AddTaxesModal = () => {
                     placeholder="00.00"
                     onChange={inputChange}
                     onKeyPress={handleKeyPress}
-                  />
+                  /> */}
                 </div>
+                  <TextField
+                    id="outlined-basic"
+                    name="percent"
+                    value={taxes.percent}
+                    inputProps={{ maxLength: 5, type: "text" }}
+                    onChange={inputChange}
+                    placeholder="00.00"
+                    variant="outlined"
+                    size="small"
+                    required={true}
+                    onKeyPress={handleKeyPress}
+                  />
               </div>
 
               <div className="q-add-categories-section-middle-footer">
