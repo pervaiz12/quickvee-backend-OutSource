@@ -350,7 +350,7 @@ const DropdownMenuItem = ({
           )}
         </div>
       </div>
-        {console.log("isDropdownOpen ",isDropdownOpen ,"&&", "currentDropDownItem",currentDropDownItem," ===", "item.id",item.id ,isDropdownOpen && currentDropDownItem === item.id )}
+     
       {isDropdownOpen && currentDropDownItem === item.id && (
         <div
           onMouseEnter={(e) => {
@@ -591,6 +591,11 @@ const menuItems = [
         id: 66,
         text: "Vendor Sales Report",
         link: "/store-reporting/vendors-sales-reports",
+      },
+      {
+        id: 90,
+        text: "item-sales-profit-report",
+        link: "/store-reporting/item-sale-profit-report",
       },
       {
         id: 67,

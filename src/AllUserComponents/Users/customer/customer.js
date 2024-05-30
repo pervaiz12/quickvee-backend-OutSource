@@ -159,7 +159,7 @@ const Customer = () => {
             </Grid>
             <Grid item>
               <Grid container direction="row" alignItems="center">
-                <Grid item>
+                {/* <Grid item>
                   <Link
                     to="/users/addMerchant"
                     className="flex q-category-bottom-header"
@@ -168,7 +168,7 @@ const Customer = () => {
                     <p className="me-2">ADD</p>
                     <img src={AddIcon} alt="add icon" />
                   </Link>
-                </Grid>
+                </Grid> */}
               </Grid>
             </Grid>
           </Grid>
@@ -244,7 +244,7 @@ const Customer = () => {
                                 {data.user_type || ""}
                               </div>
                             </StyledTableCell>
-                            <StyledTableCell>
+                            {/* <StyledTableCell>
                               <div className="flex">
                                 <img
                                   title="Edit"
@@ -256,7 +256,7 @@ const Customer = () => {
                                   alt="Edit"
                                 />
                               </div>
-                            </StyledTableCell>
+                            </StyledTableCell> */}
                           </StyledTableRow>
                         ))}
                       </TableBody>

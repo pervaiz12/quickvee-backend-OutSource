@@ -477,6 +477,11 @@ function App() {
             path="/store-reporting/discount-per-sales-report"
             element={<Main visible={"discount-per-sales-person"} />}
           />
+          <Route
+            exact
+            path="/store-reporting/item-sale-profit-report"
+            element={<Main visible={"item-sales-profit-report"} />}
+          />
 
           <Route exact path="/toptraders" element={<TopTenders />} />
           <Route

@@ -52,8 +52,8 @@ module.exports = Object.freeze({
   UPDATE_PERMISSION: "Store_setting_api/update_Employee_permission",
 
   // Store Setting - RegisterSettings api
-  GET_REGISTER_SETTINGS_DATA: "Profile_setup/inventory_register_setting",
-  UPDATE_REGISTER_SETTINGS: "Profile_setup/register_setting",
+  GET_REGISTER_SETTINGS_DATA: "ProfileReact_setup/inventory_register_setting",
+  UPDATE_REGISTER_SETTINGS: "ProfileReact_setup/register_setting",
 
   // Store Setting options api
   GET_STORE_OPTIONS_DATA: "Store_setting_api/get_store_options_data",
@@ -72,13 +72,13 @@ module.exports = Object.freeze({
   ADD_COUPON: "CouponReactApi/add_coupon",
 
   // System Access API Calls Listing and Update
-  LIST_ALL_SYSTEM_ACCESS: "api/Settings_api/system_access",
-  UPDATE_SYSTEM_ACCESS: "api/Settings_api/update_system_access",
-  END_DAY_ACTUAL_AMT: "api/Settings_api/day_end_actual_amt",
+  LIST_ALL_SYSTEM_ACCESS: "api/SettingsReact_api/system_access",
+  UPDATE_SYSTEM_ACCESS: "api/SettingsReact_api/update_system_access",
+  END_DAY_ACTUAL_AMT: "api/SettingsReact_api/day_end_actual_amt",
 
   //Inventory
-  LIST_INVENTORY: "api/Settings_api/inventory_list",
-  UPDATE_INVENTORY: "api/Settings_api/update_inventory_info",
+  LIST_INVENTORY: "api/SettingsReact_api/inventory_list",
+  UPDATE_INVENTORY: "api/SettingsReact_api/update_inventory_info",
 
   // get Store Setting alerts list api
   GET_STORE_ALERTS_DATA: "Store_setting_api/store_alerts_list",
@@ -87,8 +87,8 @@ module.exports = Object.freeze({
   UPDATE_STORE_ALERTS_DATA: "Store_setting_api/store_alerts_update",
 
   // Get Store Setting Receipt List and Update API
-  GET_STORE_RECEIPT_DATA: "Store_setting_api/get_receipt_list",
-  UPDATE_RECEIPT_INFO_DATA: "Store_setting_api/update_receipt_info_list",
+  GET_STORE_RECEIPT_DATA: "StoreReact_setting_api/get_receipt_list",
+  UPDATE_RECEIPT_INFO_DATA: "StoreReact_setting_api/update_receipt_info_list",
 
   // Purchase API Calls
   LIST_ALL_PARCHASE: "Purchase_ordersReactApi/purchase_order_list",
@@ -138,6 +138,7 @@ module.exports = Object.freeze({
   LIST_TAXES_REPORT: "ReportingReactapi/taxes_report",
 
   LIST_CURRENT_INVENTORY_REPORT: "ReportingReactapi/inventory_report",
+  ITEM_SALES_PROFIT_REPORT: "ReportingReactapi/item_sale_profit_report",
 
   //Super Admin - Permission
   LIST_ALL_PERMISSION: "api/Create_permission_api/permission_list",
