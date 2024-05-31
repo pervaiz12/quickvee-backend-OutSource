@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_3751" data-name="Rectangle 3751" width="24" height="24" transform="translate(-22345 12860)" fill="none" stroke="#9e9e9e" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="Mask_Group_4773" data-name="Mask Group 4773" transform="translate(22345 -12860)" clip-path="url(#clip-path)">
+    <g id="supermarket" transform="translate(-22342.199 12864.08)">
+      <path id="Path_8303" data-name="Path 8303" d="M38.185,58.92l-.719-1.56A2.339,2.339,0,0,0,35.342,56H23.057a2.339,2.339,0,0,0-2.124,1.36l-.719,1.56A2.329,2.329,0,0,0,20,59.9a2.211,2.211,0,0,0,2.183,2.339A2.339,2.339,0,0,0,24.522,59.9a2.339,2.339,0,1,0,4.678,0,2.339,2.339,0,1,0,4.678,0,2.339,2.339,0,0,0,2.339,2.339A2.211,2.211,0,0,0,38.4,59.9,2.329,2.329,0,0,0,38.185,58.92Z" transform="translate(-20 -56)" fill="none" stroke="#9e9e9e" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <line id="Line_822" data-name="Line 822" y2="9.489" transform="translate(1.559 6.104)" fill="none" stroke="#9e9e9e" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <line id="Line_823" data-name="Line 823" x2="18.366" transform="translate(0.033 15.84)" fill="none" stroke="#9e9e9e" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <line id="Line_824" data-name="Line 824" y1="6.37" transform="translate(16.84 6.104)" fill="none" stroke="#9e9e9e" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Path_8304" data-name="Path 8304" d="M140,302.237v-4.678A1.559,1.559,0,0,1,141.559,296h1.559a1.559,1.559,0,0,1,1.559,1.559v4.678" transform="translate(-135.323 -286.645)" fill="none" stroke="#9e9e9e" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <line id="Line_825" data-name="Line 825" x2="2.161" transform="translate(11.917 10.439)" fill="none" stroke="#9e9e9e" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>

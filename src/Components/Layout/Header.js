@@ -362,7 +362,7 @@ export default function Header() {
                 className="mx-2"
               />
               <p className="admin_medium" >
-                {storename.slice(0, 1)}
+                {storename?.slice(0, 1)}
                 </p>
               <img src={DownIcon} alt="" />
             </div>

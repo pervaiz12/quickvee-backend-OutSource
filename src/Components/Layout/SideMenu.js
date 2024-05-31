@@ -59,6 +59,11 @@ import PermissionIcon from "../../Assests/MultipleUserIcon/permission.svg";
 import PermissionActive from "../../Assests/MultipleUserIcon/permissionactive.svg";
 import InverntoryIcon from "../../Assests/MultipleUserIcon/inventory.svg";
 import InvertoryActive from "../../Assests/MultipleUserIcon/inventoryactive.svg";
+import storeIcon from "../../Assests/Manager/storeIcon.svg";
+import storeIconActive from "../../Assests/Manager/storeIconActive.svg";
+import ManagerIcon from "../../Assests/Manager/managerIcon.svg";
+import ManagerIconActive from "../../Assests/Manager/managerIconActive.svg";
+
 import MerchantIcon from "../../Assests/MultipleUserIcon/merchant.svg";
 import MerchantActive from "../../Assests/MultipleUserIcon/merchantactive.svg";
 import NestedDropdownMenu from "./NestedDropdownMenu";
@@ -125,7 +130,7 @@ const SideMenu = () => {
           {isMenuOpenRedux
             ? (LoginGetDashBoardRecordJson?.final_login == 1
                 ? temp["superadmin"]
-                : temp[LoginGetDashBoardRecordJson?.data?.login_type]
+                : temp[LoginGetDashBoardRecordJson?.data?.login_type] // admin
               )?.map((item) => (
                 <div
                   key={item.id}
@@ -1211,11 +1216,37 @@ const merchant = [
     // id: 82,
     text: "Store",
     link: "/store",
+    icon: (
+      <img
+        src={storeIcon}
+        alt="labal"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={storeIconActive}
+        alt="menu-defaults"
+        className="h-6 w-10 mt-4 mb-4"
+      />)
   },
   {
     // id: 82,
-    text: "Manager",
+    text: "Manager ",
     link: "/manager",
+    icon: (
+      <img
+        src={ManagerIcon}
+        alt="labal"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={ManagerIconActive}
+        alt="menu-defaults"
+        className="h-6 w-10 mt-4 mb-4"
+      />)
   },
 ];
 const ManagerLink = [

@@ -186,8 +186,11 @@ module.exports = Object.freeze({
   GET_CUSTOMER_COUNT: "UserController/get_customer_count", // get customer count
   // GET_EDIT_CUSTOMER:'UserController/edit_customer',
   // GET_EDIT_CUSTOMER:'UserController/edit_customer',
+  GET_MANAGER_LISTING: "Manager_react/manager_list",
   GET_MANAGER_RECORD: "UserController/maneger_view", // manager view
   GET_MANAGER_RECORD_COUNT: "UserController/maneger_view_count", // manager view
+  ADD_MANAGER:"Manager_react/add_update_manager", // manager view
+  DELETE_MANAGER:"Manager_react/delete_manager",
   GET_ADMIN_RECORD: "UserController/admin_view", // admin view data
   GET_ADMIN_RECORD_COUNT: "UserController/admin_view_count", // admin records count
   GET_MANAGER_MERCHANT: "UserController/get_manager_merchant", // get manager merchant
