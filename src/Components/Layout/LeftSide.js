@@ -72,6 +72,7 @@ import TipReportMain from "../Reporting/TipReport/TipReportMain";
 import CouponReportMain from "../Reporting/CouponReport/CouponReportMain";
 import SalesReportMain from "../Reporting/SalesReport/SalesReportMain";
 import Discount_Per_Sales from "../Reporting/Discount_Per_Sales/discount_per_sales";
+import Items_sales_profit_record from "../Reporting/itemSalesProfitRecord/items_sales_profit_record";
 
 const LeftSide = ({ visible }) => {
   useEffect(() => {
@@ -129,6 +130,9 @@ const LeftSide = ({ visible }) => {
           {visible === "taxes-report" && <MainTaxesReport />}
           {visible === "current-inventory-value" && <CurrentInventoryValue />}
           {visible === "discount-per-sales-person" && <Discount_Per_Sales />}
+          {visible === "item-sales-profit-report" && (
+            <Items_sales_profit_record />
+          )}
 
           {visible === "addemployee" && <MainAddEmployee />}
           {visible === "employee-list" && <MainEmployeelist />}

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { fetchcurrentInventoryreportData } from "../../../Redux/features/CurrentInventoryValue/currentInventoryValueSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { Grid } from "@mui/material";
 
 const CurrentInventoryValue = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -54,55 +55,47 @@ const CurrentInventoryValue = () => {
 
   return (
     <>
-      <div className="q-order-main-page">
-        <div className="box">
-          <div className="q-category-bottom-categories-listing">
-            <div className="q-category-bottom-detail-section">
-              <div className="q-category-bottom-header">
-                <div className="q_details_header ml-2">
-                  Current Inventory Report
-                </div>
-              </div>
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <div className="q_details_header"> Current Inventory Report</div>
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      <Grid container spacing={2}>
+        <Grid item xs={12} sm={6} md={4}>
+          <div className="bg-white p-4 shadow-md rounded-lg opacity-100  h-30">
+            <div className="font-normal  tracking-normal Admin_std">
+              Total Quantity
             </div>
-            <div className=" my-5">
-              <div className="grid gap-3 grid-cols-3">
-                <div className="col-span-4 md:col-span-2 lg:col-span-1">
-                  <div className="bg-white p-4 shadow-md rounded-lg opacity-100  h-30">
-                    <div className="font-normal  tracking-normal Admin_std">
-                      Total Quantity
-                    </div>
-                    <div className="text-[20px] font-bold mt-4">
-                      {currentInventory.final_quantity}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-span-4 md:col-span-2 lg:col-span-1">
-                  <div className="bg-white p-4 shadow-md rounded-lg opacity-100  h-30">
-                    <div className="font-normal  tracking-normal Admin_std">
-                      Total Selling Price
-                    </div>
-                    <div className="text-[20px] font-bold mt-4">
-                      $ {formatNumber(currentInventory.total_sale_price)}
-                    </div>
-                  </div>
-                </div>
-
-                <div className="col-span-4 md:col-span-2 lg:col-span-1">
-                  <div className="bg-white p-4 shadow-md rounded-lg opacity-100  h-30">
-                    <div className="font-normal  tracking-normal Admin_std">
-                      Total Cost Per Item
-                    </div>
-                    <div className="text-[20px] font-bold mt-4">
-                      $ {formatNumber(currentInventory.total_cpi_price)}
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <div className="text-[20px] font-bold mt-4">
+              {currentInventory.final_quantity}
             </div>
           </div>
-        </div>
-      </div>
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <div className="bg-white p-4 shadow-md rounded-lg opacity-100  h-30">
+            <div className="font-normal  tracking-normal Admin_std">
+              Total Selling Price
+            </div>
+            <div className="text-[20px] font-bold mt-4">
+              $ {formatNumber(currentInventory.total_sale_price)}
+            </div>
+          </div>
+        </Grid>
+        <Grid item xs={12} sm={6} md={4}>
+          <div className="bg-white p-4 shadow-md rounded-lg opacity-100  h-30">
+            <div className="font-normal  tracking-normal Admin_std">
+              Total Cost Per Item
+            </div>
+            <div className="text-[20px] font-bold mt-4">
+              $ {formatNumber(currentInventory.total_cpi_price)}
+            </div>
+          </div>
+        </Grid>
+      </Grid>
     </>
   );
 };

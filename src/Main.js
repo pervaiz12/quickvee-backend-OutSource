@@ -67,6 +67,7 @@ const Main = ({ visible }) => {
       {visible === "order-type" && <Layout visible={visible} />}
       {visible === "current-inventory-value" && <Layout visible={visible} />}
       {visible === "discount-per-sales-person" && <Layout visible={visible} />}
+      {visible === "item-sales-profit-report" && <Layout visible={visible} />}
 
       {visible === "addemployee" && <Layout visible={visible} />}
       {visible === "receipt" && <Layout visible={visible} />}

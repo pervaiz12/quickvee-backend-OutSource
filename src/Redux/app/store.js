@@ -60,6 +60,7 @@ import orderSummeryReducer from "../features/orderSummeryHistory/orderSummerySli
 import SalesReportSlice from "../features/Reports/SalesReport/SalesReportSlice";
 import TipReportSlice from "../features/Reports/TipReport/TipReportSlice";
 import CouponReportSlice from "../features/Reports/CouponReport/CouponReportSlice";
+import TimesheetSlice from "../features/Timesheet/timesheetSlice";
 
 const store = configureStore({
   reducer: {
@@ -137,6 +138,7 @@ const store = configureStore({
     orderSummeryList: orderSummeryReducer,
 
     NavBarToggle: MenuSlice,
+    timeSheet:TimesheetSlice,
     SalesReportList: SalesReportSlice,
     TipReportList: TipReportSlice,
     CouponReportList: CouponReportSlice,
