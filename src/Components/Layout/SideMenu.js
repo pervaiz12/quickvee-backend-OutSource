@@ -592,7 +592,7 @@ const menuItems = [
       },
       {
         id: 90,
-        text: "item-sales-profit-report",
+        text: "Item Sales Profit Report",
         link: "/store-reporting/item-sale-profit-report",
       },
       {
@@ -783,7 +783,7 @@ const menuItems = [
         text: "Store",
         className: "flex items-center gap-2",
         dropDownItems: [
-          { id: 1, text: "Profile", link: "#" },
+          // { id: 1, text: "Profile", link: "#" },
           { id: 61, text: "Info", link: "/store-settings/info" },
           { id: 62, text: "Setup", link: "/store-settings/setup" },
           {
@@ -832,7 +832,7 @@ const menuItems = [
         text: "Add Employee",
         link: "/store-settings/addemployee",
       },
-      { id: 67, text: "Receipt", link: "/store-settings/receipt" },
+      // { id: 67, text: "Receipt", link: "/store-settings/receipt" },
       { id: 68, text: "Inventory", link: "/store-settings/inventory" },
       { id: 69, text: "Register Settings", link: "/store-settings/register" },
       // { id: 70, text: "Quick Add", link: "/store-settings/quick-add" },

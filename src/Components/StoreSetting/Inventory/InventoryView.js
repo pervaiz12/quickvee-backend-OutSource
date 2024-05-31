@@ -221,9 +221,9 @@ const InventoryData = () => {
         </div>
         <div className="box_shadow_div" style={{ padding: "20px" }}>
           <div className="qvrow">
-            <h5 className="box_shadow_heading">Future Order</h5>
+            <h5 className="box_shadow_heading">Age Verification</h5>
             <h6 className="box_shadow_heading">
-              Enable Pickup
+              Enable By Scanning
               <div className="fr">
                 <Switch
                   {...label}
