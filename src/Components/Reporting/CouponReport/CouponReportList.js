@@ -3,6 +3,43 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchCouponReportData } from "../../../Redux/features/Reports/CouponReport/CouponReportSlice";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 
+import { Grid } from "@mui/material";
+
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+
+const StyledTable = styled(Table)(({ theme }) => ({
+  padding: 2, // Adjust padding as needed
+}));
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#253338",
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+    fontFamily: "CircularSTDMedium",
+  },
+  [`&.${tableCellClasses.table}`]: {
+    fontSize: 14,
+    fontFamily: "CircularSTDMedium",
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  "&:last-child td, &:last-child th": {
+    // backgroundColor: "#F5F5F5",
+  },
+}));
+
 const CouponReportList = (props) => {
   const dispatch = useDispatch();
 
@@ -45,13 +82,54 @@ const CouponReportList = (props) => {
 
   return (
     <>
-      <div className="box">
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <TableContainer>
+            <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
+              <TableHead>
+                <StyledTableCell>Date</StyledTableCell>
+                <StyledTableCell>Coupon Type</StyledTableCell>
+                <StyledTableCell>Total Coupon Used</StyledTableCell>
+              </TableHead>
+              <TableBody>
+                {CouponReportData.length > 0 &&
+                  CouponReportData.map((couponData, index) => (
+                    <StyledTableRow>
+                      <StyledTableCell>
+                        <p className="report-title">{couponData.date}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p className="report-title">
+                          {couponData.coupon_type === "Discount"
+                            ? "Direct Discount By App"
+                            : couponData.coupon_type}
+                        </p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p className="report-title">
+                          {couponData.total_coupons_used}
+                        </p>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+                {!CouponReportData.length > 0 && (
+                  <div className="box">
+                    <div className="q-category-bottom-categories-single-category">
+                      <p>No data found</p>
+                    </div>
+                  </div>
+                )}
+              </TableBody>
+            </StyledTable>
+          </TableContainer>
+        </Grid>
+      </Grid>
+      {/* <div className="box">
         <div className="q-daily-report-bottom-report-header">
           <p className="report-title">Date</p>
           <p className="report-title">Coupon Type</p>
           <p className="report-title">Total Coupon Used</p>
-          {/* <p className="report-title">Net Tip</p> */}
-          {/* <p className="report-title">Total Net Tip</p>  */}
+   
         </div>
         {CouponReportData.length > 0 ? (
           CouponReportData.map((couponData, index) => (
@@ -64,8 +142,7 @@ const CouponReportList = (props) => {
                     : couponData.coupon_type}
                 </p>
                 <p className="report-title">{couponData.total_coupons_used}</p>
-                {/* <p className="report-title">${parseFloat(couponData.net_tip).toFixed(2)}</p> */}
-                {/* <p className="report-title">{totalNetTip.toFixed(2)}</p>  */}
+     
               </div>
             </div>
           ))
@@ -76,7 +153,7 @@ const CouponReportList = (props) => {
             </div>
           </div>
         )}
-      </div>
+      </div> */}
     </>
   );
 };

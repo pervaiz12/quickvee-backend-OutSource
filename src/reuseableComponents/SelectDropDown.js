@@ -29,6 +29,7 @@ const SelectDropDown = ({
   selectedOption,
   dropdownFor,
   title,
+  default_title,
 }) => {
   return (
     <>
@@ -39,6 +40,7 @@ const SelectDropDown = ({
             value={selectedOption}
             displayEmpty
             defaultValue={listItem[0]}
+            renderValue={default_title && ((value) => default_title)}
           >
             {heading && (
               <MenuItem
