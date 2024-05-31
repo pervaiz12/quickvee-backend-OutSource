@@ -407,36 +407,6 @@ const productsSlice = createSlice({
       state.error = action.error.message;
     });
 
-    builder.addCase(updateProductsType.pending, (state) => {
-      state.loading = true;
-    });
-    builder.addCase(updateProductsType.fulfilled, (state, action) => {
-      state.loading = false;
-      // console.log(action);
-      // console.log(state.productsData);
-    });
-    builder.addCase(updateProductsType.rejected, (state, action) => {
-      state.loading = false;
-      state.productsData = {};
-      state.error = action.error.message;
-    });
-
-    /*  builder.addCase(addToWishlist.pending, (state) => {
-            state.loading = true;
-        });
-        builder.addCase(addToWishlist.fulfilled, (state, action) => {
-            state.loading = false;
-            state.successMessage = action.payload;
-            state.error = ''; // Reset the error message
-        });
-        builder.addCase(addToWishlist.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.error.message;
-        });
-    */
-  },
-});
-
     // add product varient
     builder.addCase(addProduct.pending, (state) => {
       state.isLoading = true;

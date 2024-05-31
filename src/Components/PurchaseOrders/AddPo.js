@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Grid, TextField, MenuItem } from "@mui/material";
-import { FormControl } from "@mui/material";
+import { Grid } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Link } from "react-router-dom";
-import { event } from "jquery";
 
 import AutoPo from "./AutoPo";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
@@ -17,45 +14,56 @@ import { fetchaddpopurchaseData } from "../../Redux/features/PurchaseOrder/Addpu
 import { fetchVendorsListData } from "../../Redux/features/VendorList/vListSlice";
 
 import "react-datepicker/dist/react-datepicker.css";
+import dayjs from "dayjs";
+import { useAuthDetails } from "../../Common/cookiesHelper";
 
 const AddPo = ({ seVisible }) => {
   const dispatch = useDispatch();
+  const { userTypeData } = useAuthDetails();
 
-  // const [isHide, setIsHide] = useState(false);
-  // const [visible, seVisible] = useState("MainPurchase");
-  const [issueDate, setIssueDate] = useState(null);
-  const [addpostock, setAddpostock] = useState("");
-  const [selectedVendor, setSelectedVendor] = useState("");
   const [purchaseInfo, setPurchaseInfo] = useState({
+    issuedDate: null,
+    stockDate: null,
+    email: "",
+    reference: "",
+    selectedVendor: "",
+    vendorId: "",
+  });
+
+  const [purchaseInfoErrors, setPurchaseInfoErrors] = useState({
     issuedDate: "",
     stockDate: "",
     email: "",
+    selectedVendor: "",
     reference: "",
   });
 
-  const addpoData = useSelector((state) => state.Addpolist);
   const allVendors = useSelector((state) => state.vendors);
-  const adpoDataList = addpoData?.addpoData?.result;
 
   useEffect(() => {
-    const data = { merchant_id: "MAL0100CA" };
+    const data = { merchant_id: "MAL0100CA", ...userTypeData };
     dispatch(fetchaddpopurchaseData({ ...data, admin_id: "MAL0100CA" }));
-
     dispatch(fetchVendorsListData(data));
   }, [dispatch]);
 
   const handleVendorClick = (data) => {
-    const { email, reference, issued_date, stock_date } = data;
-
-    setSelectedVendor(() => data?.name ?? "");
+    const { email, name, id } = data;
 
     // Update state with the extracted data
     setPurchaseInfo((prevState) => ({
       ...prevState,
-      issuedDate: issued_date,
-      stockDate: stock_date,
       email: email,
-      reference: reference,
+      selectedVendor: name,
+      vendorId: id,
+    }));
+
+    setPurchaseInfoErrors((prev) => ({
+      ...prev,
+      selectedVendor:
+        purchaseInfoErrors.selectedVendor && name && id
+          ? ""
+          : prev.selectedVendor,
+      email: purchaseInfoErrors.email && email ? "" : prev.email,
     }));
   };
 
@@ -68,23 +76,32 @@ const AddPo = ({ seVisible }) => {
         break;
       case "email":
         setPurchaseInfo((prev) => ({ ...prev, email: value }));
+        setPurchaseInfoErrors((prev) => ({
+          ...prev,
+          email: Boolean(value.trim()) ? "" : prev.email,
+        }));
         break;
       default:
         setPurchaseInfo((prev) => prev);
     }
   };
 
-  useEffect(() => {
-    if (adpoDataList) {
-      const { issued_date, stock_date, email, reference } = adpoDataList;
-      setPurchaseInfo({
-        issuedDate: issued_date,
-        stockDate: stock_date,
-        email: email,
-        reference: reference,
-      });
+  const handleDate = (date, type) => {
+    const dayjsDate = dayjs(date); // Convert to dayjs object
+    const formattedStartDate = dayjsDate.format("YYYY-MM-DD");
+    setPurchaseInfo((prev) => ({
+      ...prev,
+      [type]: formattedStartDate,
+    }));
+
+    if (type === "issuedDate" && purchaseInfoErrors.issuedDate) {
+      setPurchaseInfoErrors((prev) => ({ ...prev, issuedDate: "" }));
     }
-  }, [adpoDataList]);
+
+    if (type === "stockDate" && purchaseInfoErrors.stockDate) {
+      setPurchaseInfoErrors((prev) => ({ ...prev, stockDate: "" }));
+    }
+  };
 
   return (
     <>
@@ -107,11 +124,16 @@ const AddPo = ({ seVisible }) => {
                 <Grid item xs={12} sm={6} md={4}>
                   <label>Vendor</label>
                   <SelectDropDown
-                    selectedOption={selectedVendor}
+                    selectedOption={purchaseInfo.selectedVendor}
                     listItem={allVendors.vendorListData[0]}
                     onClickHandler={handleVendorClick}
                     title={"name"}
                   />
+                  {purchaseInfoErrors.selectedVendor && (
+                    <p className="error-message">
+                      {purchaseInfoErrors.selectedVendor}
+                    </p>
+                  )}
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
                   <label>Issued Date</label>
@@ -129,10 +151,24 @@ const AddPo = ({ seVisible }) => {
                             size: "small",
                           },
                         }}
-                        title={purchaseInfo.issuedDate}
+                        format={"MM/DD/YYYY"}
+                        disablePast
+                        onChange={(newDate) => {
+                          handleDate(newDate, "issuedDate");
+                          setPurchaseInfo((prev) => ({
+                            ...prev,
+                            stockDate: null,
+                          }));
+                        }}
+                        value={purchaseInfo.issuedDate}
                       />
                     </DemoContainer>
                   </LocalizationProvider>
+                  {purchaseInfoErrors.issuedDate && (
+                    <p className="error-message">
+                      {purchaseInfoErrors.issuedDate}
+                    </p>
+                  )}
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
                   <label>Stock Due</label>
@@ -150,10 +186,21 @@ const AddPo = ({ seVisible }) => {
                             size: "small",
                           },
                         }}
-                        title={purchaseInfo.stockDate}
+                        disablePast
+                        format={"MM/DD/YYYY"}
+                        shouldDisableDate={(date) => {
+                          return date < dayjs(purchaseInfo.issuedDate);
+                        }}
+                        onChange={(newDate) => handleDate(newDate, "stockDate")}
+                        value={purchaseInfo.stockDate}
                       />
                     </DemoContainer>
                   </LocalizationProvider>
+                  {purchaseInfoErrors.stockDate && (
+                    <p className="error-message">
+                      {purchaseInfoErrors.stockDate}
+                    </p>
+                  )}
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
                   <label>Reference</label>
@@ -176,6 +223,9 @@ const AddPo = ({ seVisible }) => {
                     required={true}
                     placeholder={"Vendor Email Address"}
                   />
+                  {purchaseInfoErrors.email && (
+                    <p className="error-message">{purchaseInfoErrors.email}</p>
+                  )}
                 </Grid>
               </Grid>
             </div>
@@ -184,7 +234,11 @@ const AddPo = ({ seVisible }) => {
       </div>
 
       <div className="second-component">
-        <AutoPo />
+        <AutoPo
+          purchaseInfo={purchaseInfo}
+          setPurchaseInfoErrors={setPurchaseInfoErrors}
+          seVisible={seVisible}
+        />
       </div>
     </>
   );

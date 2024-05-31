@@ -14,8 +14,12 @@ export const fetchVendorsListData = createAsyncThunk(
   "vendors/fetchVendorsListData.",
   async (data) => {
     try {
-      const response = await axios.post(BASE_URL + LIST_ALL_VENDORS, data, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const { token, ...dataNew } = data;
+      const response = await axios.post(BASE_URL + LIST_ALL_VENDORS, dataNew, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
       });
 
       if (response.data.status === "true") {

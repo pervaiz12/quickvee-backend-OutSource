@@ -300,10 +300,12 @@
   color: #131313 !important;
 }
 
-a.add_notes_purchase_data {
+button.add_notes_purchase_data {
   color: #0a64f9;
   font-size: 14px;
   font-family: CircularMedium !important ;
+  border: 0;
+  outline: none;
 }
 
 .button-container {

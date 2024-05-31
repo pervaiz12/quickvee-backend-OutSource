@@ -93,7 +93,8 @@ module.exports = Object.freeze({
   // Purchase API Calls
   LIST_ALL_PARCHASE: "Purchase_ordersReactApi/purchase_order_list",
   PURCHASE_ORDER_COUNT: "Purchase_ordersReactApi/purchase_order_count",
-  SAVE_PO: "Purchase_orders_api/save_po",
+  SAVE_PO: "Purchase_ordersReactApi/save_po",
+  AUTO_PO_LIST: "Purchase_ordersReactApi/auto_po_list",
 
   // Taxes API Calls
   ADD_TAXES: "Taxesapi/add_Tax",
@@ -263,11 +264,6 @@ module.exports = Object.freeze({
   // EMPLOYEE_WORK_HOURS: "Report_api/employee_work_hours1",
   EMPLOYEE_WORK_HOURS: "Report_api/employee_work_hours1_api",
 
-  // Add Po
-
-  ADD_PO_LIST: "Purchase_orders_api/po_list",
-  // -----------------
-
   LOGIN_AUTHENICATE_API: "LoginApiReact/chk_merchant",
   LOGIN_AUTHENICATE2_API: "LoginApiReact/send_otp_session", //
   LOGIN_OTP_AUTHENTICATION: "LoginApiReact/chk_otp", //
@@ -282,13 +278,13 @@ module.exports = Object.freeze({
   EXPORTCSV: "UserController/exportCSV",
   DISCOUNT_PER_PERSON: "Reportingreactapi_pcr/discount_per_sales_person_report",
 
-   // For TimeSheet 
+  // For TimeSheet
   TIME_SHEET_LIST: "Timesheet_react_api/timesheet_list",
-  TIME_SHEET_GETBREAKS:"Timesheet_react_api/getBreaks",
+  TIME_SHEET_GETBREAKS: "Timesheet_react_api/getBreaks",
   ADD_TIME_SHEET: "Timesheet_react_api/addNewTimeclock",
   ADD_TIME_BREAK: "Timesheet_react_api/addBreak",
   DELETE_TIMESHEET: "Timesheet_react_api/delete_timeclock",
-  DELETE_BREAK:"Timesheet_react_api/delete_breaks",
+  DELETE_BREAK: "Timesheet_react_api/delete_breaks",
 });
 
 // All api calls are initialized in this component for this application
