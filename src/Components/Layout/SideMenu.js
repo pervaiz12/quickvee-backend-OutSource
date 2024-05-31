@@ -562,7 +562,7 @@ const menuItems = [
           {
             id: 84,
             text: "Refund Summary",
-            link: "/store-settings/#",
+            link: "/store-settings/refund-report",
           },
           {
             id: 82,

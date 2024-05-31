@@ -151,11 +151,11 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
         >
           <Box className="view-category-item-modal" style={myStyles}>
           <div className="q-add-categories-section-header text-[18px]" style={{ justifyContent:"space-between" ,fontFamily:"CircularSTDBook" }}>
-              <span>
-                <span>Update Attribute</span>
-              </span>
+             
+                <span style={{cursor:"unset"}}>Update Attribute</span>
+              
               <div>
-              <img src={CrossIcon} alt="icon" className="  quic-btn-cancle w-6 h-6" onClick={() => handleClose()} />
+              <img src={CrossIcon} alt="icon" className="  quic-btn-cancle w-6 h-6 cursor-pointer" onClick={() => handleClose()} />
               </div>
             </div>
 

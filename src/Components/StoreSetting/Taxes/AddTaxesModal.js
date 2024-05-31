@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Box, Button, Modal } from "@mui/material";
 import AddIcon from "../../../Assests/Category/addIcon.svg";
 import LeftIcon from "../../../Assests/Taxes/Left.svg";
+import CrossIcon from "../../../Assests/Dashboard/cross.svg";
 import axios from "axios";
 import { fetchtaxesData } from "../../../Redux/features/Taxes/taxesSlice";
 import { useDispatch } from "react-redux";
@@ -142,11 +143,13 @@ const AddTaxesModal = () => {
       >
         <Box className="view-category-item-modal" style={myStyles}>
           {/* <div className='view-category-item-modal-header'> */}
-          <div className="q-add-categories-section-header ">
-            <span onClick={() => handleClose()} style={width}>
-              <img src={LeftIcon} alt="Add-New-Category" />
-              <span>Add Tax</span>
-            </span>
+          <div className="q-add-categories-section-header" style={{justifyContent:"space-between"}}>
+            
+              <span style={{cursor:"unset"}}>Add Tax</span>
+            
+            <div className="float-right">
+              <img src={CrossIcon} alt="icon" className="quic-btn-cancle w-6 h-6 cursor-pointer" onClick={() => handleClose()} />
+              </div>
           </div>
 
           {/* </div> */}
