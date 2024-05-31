@@ -3,6 +3,9 @@ import DateRange from "../../Orders/InstoreOrder/DateRange";
 import PaymentMethodList from "./PaymentMethodList";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { Grid } from "@mui/material";
+import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
+import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 
 const PaymentMethodReport = () => {
   const [filteredData, setFilteredData] = useState([]);
@@ -47,109 +50,58 @@ const PaymentMethodReport = () => {
   const [selectedOrderSource, setSelectedOrderSource] =
     useState("Online Order");
 
-  const [orderSourceDropdownVisible, setOrderSourceDropdownVisible] =
-    useState(false);
-
-  const toggleDropdown = (dropdown) => {
-    switch (dropdown) {
-      case "orderSource":
-        setOrderSourceDropdownVisible(!orderSourceDropdownVisible);
-        break;
-
-      default:
-        break;
-    }
-  };
-
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
       case "orderSource":
-        setSelectedOrderSource(option);
-        setOrderSourceDropdownVisible(false);
+        setSelectedOrderSource(option.title);
+
         break;
 
       default:
         break;
     }
   };
-
+  const orderSourceList = ["Online Order", "Store Order"];
   return (
     <>
-      <div className="q-order-main-page">
-        <div className="box">
-          <div className="q-category-bottom-detail-section">
-            <div className="q-category-bottom-header-sticky">
-              <div className="q-category-bottom-header">
-                <div className="q_details_header ml-2">
-                  Payment Method Daily Report
-                </div>
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <div className="q_details_header">
+                {" "}
+                Payment Method Daily Report
               </div>
-              <div className="q_details_header ml-8">Filter by</div>
-            </div>
-            <div className="q-order-page-container ml-8">
-              <div className="q-order-page-filter">
-                <label
-                  className="q-details-page-label"
-                  htmlFor="orderSourceFilter"
-                >
-                  Order Source
-                </label>
-                <div className="custom-dropdown">
-                  <div
-                    className="custom-dropdown-header"
-                    onClick={() => toggleDropdown("orderSource")}
-                  >
-                    <span className="selected-option mt-1">
-                      {selectedOrderSource}
-                    </span>
-                    <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-                  </div>
-                  {orderSourceDropdownVisible && (
-                    <div className="dropdown-content ">
-                      <div
-                        onClick={() =>
-                          handleOptionClick("Online Order", "orderSource")
-                        }
-                      >
-                        Online Order
-                      </div>
-                      <div
-                        onClick={() =>
-                          handleOptionClick("Store Order", "orderSource")
-                        }
-                      >
-                        Store Order
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+            </Grid>
+          </Grid>
+          <Grid container sx={{ px: 2.5 }}>
+            <Grid item xs={12}>
+              <div className="q_details_header ">Filter by</div>
+            </Grid>
+          </Grid>
+          <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
+            <Grid item xs={12}>
+              <label
+                className="q-details-page-label"
+                htmlFor="orderSourceFilter"
+              >
+                Order Source
+              </label>
+              <SelectDropDown
+                listItem={orderSourceList.map((item) => ({ title: item }))}
+                title={"title"}
+                dropdownFor={"orderSource"}
+                selectedOption={selectedOrderSource}
+                onClickHandler={handleOptionClick}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
 
-      <style>
-        {`
-            .dailytotoalReport .q_dateRange_header{
-              margin-top: 0rem ;
-            }
-          `}
-      </style>
+      <DateRangeComponent onDateRangeChange={handleDataFiltered} />
 
-      <div className="q-order-main-page">
-        <div className="dailytotoalReport">
-          <div className="box">
-            <DateRange onDateRangeChange={handleDataFiltered} />
-          </div>
-        </div>
-      </div>
-
-      <div className="mt-10">
-        <div className="q-order-main-page">
-          <PaymentMethodList data={filteredData} />
-        </div>
-      </div>
+      <PaymentMethodList data={filteredData} />
     </>
   );
 };

@@ -178,7 +178,6 @@ export default function Header() {
               paddingTop: 0,
             },
           }}
-      
         >
           <MenuItem disableTouchRipple={true}>
             <div>
@@ -216,7 +215,6 @@ export default function Header() {
         }`}
       >
         <div className="flex items-center px-4 mx-2 cursor-pointer">
-          
           {LoginGetDashBoardRecordJson?.final_login == 1 ? (
             <BiMenu
               className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out cursor-pointer`}
@@ -361,9 +359,7 @@ export default function Header() {
                 alt="icon"
                 className="mx-2"
               />
-              <p className="admin_medium" >
-                {storename?.slice(0, 1)}
-                </p>
+              <p className="admin_medium">{storename?.slice(0, 1)}</p>
               <img src={DownIcon} alt="" />
             </div>
 
@@ -383,7 +379,7 @@ export default function Header() {
               open={open}
               onClose={handleClose}
             >
-               <MenuItem>{storename}</MenuItem>
+              <MenuItem>{storename}</MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
 

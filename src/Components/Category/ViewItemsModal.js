@@ -24,6 +24,7 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
   };
 
   const fetchCategoryProductData = async () => {
+    const {token,...otherUserData} = userTypeData
     const data = {
       cat_id: selectedView.id,
       ...userTypeData,

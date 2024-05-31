@@ -1,47 +1,26 @@
 import React, { useState, useEffect } from "react";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
+import { Grid } from "@mui/material";
+import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 
 const FilterCatDetails = ({ onFilterDataChange, title, showcat }) => {
   const [selectedOrderSource, setSelectedOrderSource] = useState("All");
   const [selectedOrderType, setSelectedOrderType] = useState("All");
   const [selectedSelectCategory, setSelectedSelectCategory] = useState("All");
 
-  const [orderSourceDropdownVisible, setOrderSourceDropdownVisible] =
-    useState(false);
-  const [orderTypeDropdownVisible, setOrderTypeDropdownVisible] =
-    useState(false);
-  const [selectCategoryDropdownVisible, setSelectCategoryDropdownVisible] =
-    useState(false);
-
-  const toggleDropdown = (dropdown) => {
-    switch (dropdown) {
-      case "orderSource":
-        setOrderSourceDropdownVisible(!orderSourceDropdownVisible);
-        break;
-      case "orderType":
-        setOrderTypeDropdownVisible(!orderTypeDropdownVisible);
-        break;
-      case "selectCategory":
-        setSelectCategoryDropdownVisible(!selectCategoryDropdownVisible);
-        break;
-      default:
-        break;
-    }
-  };
-
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
       case "orderSource":
-        setSelectedOrderSource(option);
-        setOrderSourceDropdownVisible(false);
+        setSelectedOrderSource(option.title);
+
         break;
       case "orderType":
-        setSelectedOrderType(option);
-        setOrderTypeDropdownVisible(false);
+        setSelectedOrderType(option.title);
+
         break;
       case "selectCategory":
-        setSelectedSelectCategory(option);
-        setSelectCategoryDropdownVisible(false);
+        setSelectedSelectCategory(option.title);
+
         break;
       default:
         break;
@@ -55,11 +34,77 @@ const FilterCatDetails = ({ onFilterDataChange, title, showcat }) => {
       selectedSelectCategory
     );
   }, [selectedOrderSource, selectedOrderType, selectedSelectCategory]);
-
+  const orderSourceList = ["All", "Online Order", "Store Order"];
+  const orderTypeList = ["All", "Pickup", "Delivery"];
+  const selectCategoryList = ["All", "category1", "category2"];
   return (
     <>
-      <div className="box">
-       
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <div className="q_details_header">{title}</div>
+            </Grid>
+          </Grid>
+          <Grid container sx={{ px: 2.5 }}>
+            <Grid item xs={12}>
+              <div className="q_details_header ">Filter by</div>
+            </Grid>
+          </Grid>
+          <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
+            <Grid item xs={12} sm={6} md={showcat != 0 ? 4 : 6}>
+              <label
+                className="q-details-page-label"
+                htmlFor="orderSourceFilter"
+              >
+                Order Source
+              </label>
+              <SelectDropDown
+                listItem={orderSourceList.map((item) => ({ title: item }))}
+                title={"title"}
+                dropdownFor={"orderSource"}
+                selectedOption={selectedOrderSource}
+                onClickHandler={handleOptionClick}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={showcat != 0 ? 4 : 6}>
+              <label
+                className="q-details-page-label"
+                htmlFor="orderSourceFilter"
+              >
+                Order Source
+              </label>
+              <SelectDropDown
+                listItem={orderTypeList.map((item) => ({ title: item }))}
+                title={"title"}
+                dropdownFor={"orderType"}
+                selectedOption={selectedOrderType}
+                onClickHandler={handleOptionClick}
+              />
+            </Grid>
+            {showcat != 0 ? (
+              <Grid item xs={12} sm={6} md={showcat != 0 ? 4 : 6}>
+                <label
+                  className="q-details-page-label"
+                  htmlFor="orderSourceFilter"
+                >
+                  Order Source
+                </label>
+                <SelectDropDown
+                  listItem={selectCategoryList.map((item) => ({ title: item }))}
+                  title={"title"}
+                  dropdownFor={"selectCategory"}
+                  selectedOption={selectedSelectCategory}
+                  onClickHandler={handleOptionClick}
+                />
+              </Grid>
+            ) : (
+              ""
+            )}
+          </Grid>
+        </Grid>
+      </Grid>
+      {/* <div className="box">
         <div className="q-category-bottom-detail-section">
           <div className="q-category-bottom-header">
             <div className="q_details_header ml-2">{title}</div>
@@ -67,7 +112,7 @@ const FilterCatDetails = ({ onFilterDataChange, title, showcat }) => {
           <div className="q_details_header ml-8">Filter by</div>
 
           <div className="q-order-page-container ml-8">
-            {/* Order Source Dropdown */}
+         
             <div className="q-order-page-filter">
               <label
                 className="q-details-page-label"
@@ -106,13 +151,11 @@ const FilterCatDetails = ({ onFilterDataChange, title, showcat }) => {
                     >
                       Store Order
                     </div>
-                    {/* ... (other order source options) ... */}
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Order Type Dropdown */}
             <div className="q-order-page-filter">
               <label className="q-details-page-label" htmlFor="orderTypeFilter">
                 Order Type
@@ -142,13 +185,12 @@ const FilterCatDetails = ({ onFilterDataChange, title, showcat }) => {
                     >
                       Delivery
                     </div>
-                    {/* ... (other order type options) ... */}
                   </div>
                 )}
               </div>
             </div>
 
-            {/* Select Category Dropdown */}
+       
             {showcat != 0 ? (
               <div className="q-order-page-filter">
                 <label
@@ -190,7 +232,7 @@ const FilterCatDetails = ({ onFilterDataChange, title, showcat }) => {
                       >
                         category2
                       </div>
-                      {/* ... (other select category options) ... */}
+                   
                     </div>
                   )}
                 </div>
@@ -200,7 +242,7 @@ const FilterCatDetails = ({ onFilterDataChange, title, showcat }) => {
             )}
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

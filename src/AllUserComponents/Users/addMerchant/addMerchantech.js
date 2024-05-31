@@ -57,7 +57,7 @@ export default function AddMerchan() {
               <div className="qvrow">
                 <div className="col-qv-3">
                   <label htmlFor="">User Type</label>
-                  <div className="input_rediobutton_area">
+                  {/* <div className="input_rediobutton_area">
                     <input
                       className="inputredio"
                       type="radio"
@@ -65,9 +65,10 @@ export default function AddMerchan() {
                       name="radio"
                       value="admin"
                       onClick={onClickUserRadio}
+                      // checked={userRadio}
                     />
                     <label htmlFor="radio2">Admin</label>
-                  </div>
+                  </div> */}
                   <div className="input_rediobutton_area">
                     <input
                       className="inputredio"
@@ -76,6 +77,7 @@ export default function AddMerchan() {
                       name="radio"
                       value="merchant"
                       onClick={onClickUserRadio}
+                      checked={userRadio}
                     />
                     <label htmlFor="radio1">Merchant</label>
                   </div>
@@ -139,7 +141,7 @@ export default function AddMerchan() {
                       </div>
                       <div className="col-qv-6">
                         <div className="input_area">
-                          <label>password</label>
+                          <label>Password</label>
                           <input
                             className=""
                             type="text"
@@ -200,11 +202,27 @@ export default function AddMerchan() {
                     onClick={handleSubmit}
                   /> */}
                   </div>
+                  <div className="q-add-categories-section-middle-footer">
+                    <button
+                      className="quic-btn quic-btn-save"
+                      onClick={handleSubmit}
+                    >
+                      Add
+                    </button>
+                    {location.state?.from && (
+                      <button
+                        onClick={() => navigate(`${location.state?.from}`)}
+                        className="quic-btn quic-btn-cancle"
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </div>
                 </>
               ) : (
                 <>
                   <div className="qvrow">
-                    <div className="col-qv-6">
+                    {/* <div className="col-qv-6">
                       <div className="input_area">
                         <label>Select Admin</label>
                         <select value={adminId} onChange={onChangeAdminId}>
@@ -239,7 +257,7 @@ export default function AddMerchan() {
                         />
                         {errorPin && <span className="error">{errorPin}</span>}
                       </div>
-                    </div>
+                    </div> */}
                   </div>
                   <div className="qvrow">
                     <div className="col-qv-6">
@@ -350,6 +368,22 @@ export default function AddMerchan() {
                       onClick={handleSubmitMerchant}
                     /> */}
                   </div>
+                  <div className="q-add-categories-section-middle-footer">
+                    <button
+                      className="quic-btn quic-btn-save"
+                      onClick={handleSubmitMerchant}
+                    >
+                      Add
+                    </button>
+                    {location.state?.from && (
+                      <button
+                        onClick={() => navigate(`${location.state?.from}`)}
+                        className="quic-btn quic-btn-cancle"
+                      >
+                        Cancel
+                      </button>
+                    )}
+                  </div>
                   {/* <input 
                                 type='button'
                                 className="blue_btn"
@@ -357,19 +391,6 @@ export default function AddMerchan() {
                                 onClick={handleSubmit}
                             /> */}
                 </>
-              )}
-            </div>
-            <div className="q-add-categories-section-middle-footer">
-              <button className="quic-btn quic-btn-save" onClick={handleSubmit}>
-                Add
-              </button>
-              {location.state?.from && (
-                <button
-                  onClick={() => navigate(`${location.state?.from}`)}
-                  className="quic-btn quic-btn-cancle"
-                >
-                  Cancel
-                </button>
               )}
             </div>
           </div>

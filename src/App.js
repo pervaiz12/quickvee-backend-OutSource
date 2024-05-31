@@ -477,6 +477,11 @@ function App() {
             path="/store-reporting/discount-per-sales-report"
             element={<Main visible={"discount-per-sales-person"} />}
           />
+          <Route
+            exact
+            path="/store-reporting/item-sale-profit-report"
+            element={<Main visible={"item-sales-profit-report"} />}
+          />
 
           <Route exact path="/toptraders" element={<TopTenders />} />
           <Route
@@ -489,15 +494,16 @@ function App() {
             path="/users/view/unapprove/permission"
             element={<Main visible={"permission"} />}
           />
-          <Route
-            exact
-            path="/users/view/unapprove/need-help"
-            element={<Main visible={"need-help"} />}
-          />
+          
         </Route>
 
         {/* ------------------------Superadmin---------------- */}
         <Route element={<ProtectedRoute visible="superadmin" />}>
+        <Route
+            exact
+            path="/users/view/unapprove/need-help"
+            element={<Main visible={"need-help"} />}
+          />
           <Route
             exact
             path="/users/manager_view"
@@ -604,6 +610,7 @@ function App() {
             element={<Main visible={"merchant-details"} />}
           />
         </Route>
+        
 
         {/* -----------------=============superadmin===========------------------- */}
 

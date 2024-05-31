@@ -258,9 +258,10 @@ const DropdownMenuItem = ({
     const foundItem = item?.dropdownItems?.find(
       (item) => item?.link === activeItem
     );
-    if (isMenuOpenRedux && foundItem) {
-      setDropDownItem(foundItem.link);
-      activeDropDownItem(item.id);
+    console.log("foundItem: ",foundItem,isMenuOpenRedux)
+    if (!isMenuOpenRedux && foundItem) {
+      setDropDownItem(foundItem?.link);
+      activeDropDownItem(item?.id);
     }
 
     const NesedFoundItem = item?.dropdownItems?.find((nestedItem) => {
@@ -273,6 +274,7 @@ const DropdownMenuItem = ({
       }
     });
     if (NesedFoundItem) {
+      
       setActiveNestedItem(NesedFoundItem?.id);
       setDropDownItem(activeItem);
       activeDropDownItem(item.id);
@@ -594,6 +596,11 @@ const menuItems = [
         id: 66,
         text: "Vendor Sales Report",
         link: "/store-reporting/vendors-sales-reports",
+      },
+      {
+        id: 90,
+        text: "item-sales-profit-report",
+        link: "/store-reporting/item-sale-profit-report",
       },
       {
         id: 67,
@@ -958,8 +965,8 @@ const SuperAdminMenuItems = [
     link: "/users/view/unapprove/users/add",
     className: "flex items-center gap-2",
     dropdownItems: [
-      { id: 21, text: " Add ", link: "/users/addmerchant" },
-      { id: 22, text: " Verified Merchant ", link: "/users/view/approve" },
+      { id: 21, text: "Add", link: "/users/addmerchant" },
+      { id: 22, text: "Verified Merchant", link: "/users/view/approve" },
       {
         id: 23,
         icon: (
@@ -968,13 +975,13 @@ const SuperAdminMenuItems = [
         activeIcon: (
           <img src={CouIcon} alt="option" className="h-6 w-10 mt-4 mb-4 " />
         ),
-        text: " Unverified Merchant ",
+        text: "Unverified Merchant",
         link: "/users/view/unapprove",
       },
 
-      { id: 26, text: " Customer ", link: "/users/customer" },
-      { id: 27, text: "  Admin  ", link: "/users/admin" },
-      { id: 28, text: "  Manager  ", link: "/users/manager_view" },
+      { id: 26, text: "Customer", link: "/users/customer" },
+      { id: 27, text: "Admin", link: "/users/admin" },
+      { id: 28, text: "Manager", link: "/users/manager_view" },
     ],
   },
 
@@ -994,7 +1001,7 @@ const SuperAdminMenuItems = [
         className="h-6 w-10 mt-4 mb-4"
       />
     ),
-    text: "Newsletter ",
+    text: "Newsletter",
     link: "/users/view/unapprove/newsletter",
   },
   {
@@ -1013,7 +1020,7 @@ const SuperAdminMenuItems = [
         className="h-6 w-10 mt-4 mb-4"
       />
     ),
-    text: "Store Order ",
+    text: "Store Order",
     link: "/users/view/unapprove/store-order",
   },
   {
@@ -1028,12 +1035,12 @@ const SuperAdminMenuItems = [
     activeIcon: (
       <img
         src={OrderActive}
-        alt="Order Count "
+        alt="Order Count"
         className="h-6 w-10 mt-4 mb-4"
       />
     ),
-    text: "Order Count ",
-    link: "/users/view/unapprove/order-count ",
+    text: "Order Count",
+    link: "/users/view/unapprove/order-count",
   },
 
   {
@@ -1052,7 +1059,7 @@ const SuperAdminMenuItems = [
         className="h-6 w-10 mt-4 mb-4"
       />
     ),
-    text: "Defaults  ",
+    text: "Defaults",
     link: "/users/view/unapprove/menu/defaults",
   },
 
@@ -1087,7 +1094,7 @@ const SuperAdminMenuItems = [
         className="h-6 w-10 mt-4 mb-4"
       />
     ),
-    text: "Inventory Duplicate   ",
+    text: "Inventory Duplicate",
     link: "/users/view/unapprove/inverntory-duplicate",
   },
 
@@ -1107,7 +1114,7 @@ const SuperAdminMenuItems = [
         className="h-6 w-10 mt-4 mb-4"
       />
     ),
-    text: " Category Duplicate ",
+    text: "Category Duplicate",
     link: "/users/view/unapprove/category-duplicate",
   },
 
@@ -1127,7 +1134,7 @@ const SuperAdminMenuItems = [
         className="h-6 w-10 mt-4 mb-4"
       />
     ),
-    text: "Product Duplicate ",
+    text: "Product Duplicate",
     link: "/users/view/unapprove/product-duplicate",
   },
 
@@ -1167,7 +1174,7 @@ const SuperAdminMenuItems = [
         className="h-6 w-10 mt-4 mb-4"
       />
     ),
-    text: "Inventory Export ",
+    text: "Inventory Export",
     link: "/users/view/unapprove/invertory-export",
   },
 

@@ -2,27 +2,20 @@ import React, { useState, useEffect } from "react";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import { BASE_URL, EMPLOYEE_LIST } from "../../../Constants/Config";
 import axios from "axios";
-
+import { Grid } from "@mui/material";
+import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 
 const MainEmployee = ({ onFilterDataChange }) => {
-
   const [selectedEmployee, setSelectedEmployee] = useState("All");
 
-  const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
+
   const [selectedEmployeeID, setSelectedEmployeeID] = useState("All");
-  const [filteredEmpData, setFilteredEmpData] = useState({ category_id: "all" });
+  const [filteredEmpData, setFilteredEmpData] = useState({
+    category_id: "all",
+  });
   const [employeeList, setemployeeList] = useState([]);
   const [loadingEmpList, setLoadingEmpList] = useState(true);
 
-  const toggleDropdown = (dropdown) => {
-    switch (dropdown) {
-      case "employee":
-        setEmployeeDropdownVisible(!employeeDropdownVisible);
-        break;
-      default:
-        break;
-    }
-  };
 
 
   const handleOptionClick = (option, dropdown) => {
@@ -31,7 +24,7 @@ const MainEmployee = ({ onFilterDataChange }) => {
         if (option === "All") {
           setSelectedEmployee("All");
           setSelectedEmployeeID("All");
-          setEmployeeDropdownVisible(false);
+  
           setFilteredEmpData({
             ...filteredEmpData,
             emp_id: "all",
@@ -43,7 +36,7 @@ const MainEmployee = ({ onFilterDataChange }) => {
           const emp_id = option.id;
           setSelectedEmployee(option.title);
           setSelectedEmployeeID(option.id);
-          setEmployeeDropdownVisible(false);
+     
           setFilteredEmpData({
             ...filteredEmpData,
             emp_id,
@@ -57,7 +50,6 @@ const MainEmployee = ({ onFilterDataChange }) => {
         break;
     }
   };
-
 
   useEffect(() => {
     const fetchData = async () => {
@@ -74,7 +66,7 @@ const MainEmployee = ({ onFilterDataChange }) => {
         // Extracting category IDs and view titles
         const mappedOptions = EmpList.map((empdata) => ({
           id: empdata.id,
-          title: empdata.f_name+' '+empdata.l_name,
+          title: empdata.f_name + " " + empdata.l_name,
         }));
 
         setemployeeList(mappedOptions);
@@ -85,65 +77,47 @@ const MainEmployee = ({ onFilterDataChange }) => {
       }
     };
     fetchData();
-  }, []); 
+  }, []);
 
   useEffect(() => {
-    onFilterDataChange(selectedEmployeeID)
+    onFilterDataChange(selectedEmployeeID);
   }, [selectedEmployeeID]);
-
-
 
   return (
     <>
-    <div className="box">
-      <div className="q-category-bottom-detail-section">
-        <div className="">
-          <div className="q-category-bottom-header">
-            <div className="q_details_header ml-2">
-              Employee Working Hours (Clock In/Out)
-            </div>
-          </div>
-          {/* <div className='q_details_header ml-8'>Filter by</div> */}
-        </div>
-
-        <div className="q-order-page-container ml-8">
-          {/* Order Source Dropdown */}
-          <div className="q-order-page-filter">
-            <label className="q-details-page-label" htmlFor="employeeFilter">
-              Employee
-            </label>
-            <div className="custom-dropdown">
-              <div
-                className="custom-dropdown-header"
-                onClick={() => toggleDropdown("employee")}
-              >
-                <span className="selected-option mt-1">{selectedEmployee}</span>
-                <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <div className="q_details_header">
+                {" "}
+                Employee Working Hours (Clock In/Out)
               </div>
-              {employeeDropdownVisible && (
-                <div className="dropdown-content">
-                  <div onClick={() => handleOptionClick("All", "employee")}>
-                    All
-                  </div>
-                  {employeeList.map((option, key) => (
-                    <div
-                      key={key}
-                      onClick={() => handleOptionClick(option, "employee")}
-                    >
-                      {option.title}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="q-order-page-filter">.</div>
-
-          <div className="q-order-page-filter"></div>
-        </div>
-      </div>
-      </div>
+            </Grid>
+          </Grid>
+          <Grid container sx={{ px: 2.5 }}>
+            <Grid item xs={12}>
+              <div className="q_details_header ">Filter by</div>
+            </Grid>
+          </Grid>
+          <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
+            <Grid item xs={12} sm={6} md={4}>
+            <label className="q-details-page-label" htmlFor="employeeFilter">
+                Employee
+              </label>
+              <SelectDropDown 
+              heading={"All"}
+                listItem={employeeList}
+                title={"title"}
+                selectedOption={selectedEmployee}
+                dropdownFor={"employee"}
+                onClickHandler={handleOptionClick}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+    
     </>
   );
 };

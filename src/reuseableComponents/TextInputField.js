@@ -10,6 +10,7 @@ export default function BasicTextFields({
   readOnly,
   required,
   name,
+  disable
 }) {
   return (
     <FormControl fullWidth>
@@ -23,6 +24,7 @@ export default function BasicTextFields({
         required={required}
         variant="outlined"
         size="small"
+        disabled={disable}
       />
     </FormControl>
   );
