@@ -1,6 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import {
+  ADD_MANAGER,
   BASE_URL,
+  DELETE_MANAGER,
+  GET_MANAGER_LISTING,
   GET_MANAGER_RECORD,
   GET_MANAGER_RECORD_COUNT,
 } from "../../../Constants/Config";
@@ -49,6 +52,60 @@ export const getManagerRecordCount = createAsyncThunk(
     }
   }
 );
+
+export const deleteManagerById = createAsyncThunk(
+  "Manager/deleteManagerById",
+  async (data) => {
+    const response = await axios.post(
+      BASE_URL + DELETE_MANAGER,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        
+        },
+      }
+    );
+    return response?.data
+  }
+);
+
+
+export const addManager = createAsyncThunk(
+  "Manager/addManager",
+  async (data) => {
+    const { token, ...dataNew } = data;
+    const response = await axios.post(
+      BASE_URL + ADD_MANAGER,
+      dataNew,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`, // Use data?.token directly
+        },
+      }
+    );
+    return response?.data;
+  }
+);
+
+export const getManagerListing = createAsyncThunk(
+  "Manager/getManagerListing",
+  async (data) => {
+    const response = await axios.post(
+      BASE_URL + GET_MANAGER_LISTING,
+      data,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data"
+        },
+      }
+    );
+    return response?.data;
+  }
+);
+
+
 
 const ManagerSlice = createSlice({
   name: "Manager",

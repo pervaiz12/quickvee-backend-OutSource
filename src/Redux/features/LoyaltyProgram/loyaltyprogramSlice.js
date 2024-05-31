@@ -14,8 +14,9 @@ const initialState = {
 
 // Generate pening , fulfilled and rejected action type
 export const fetchloyaltyprogramData = createAsyncThunk('loyaltyprogram/fetchloyaltyprogramData.', async (data) => {
+    const { token, ...dataNew } = data;
     try {
-        const response = await axios.post(BASE_URL + LOYALTY_PROGRAM_LIST, data, { headers: { "Content-Type": "multipart/form-data" } })
+        const response = await axios.post(BASE_URL + LOYALTY_PROGRAM_LIST, dataNew, { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${token}` } })
         if (response.data.status === "Success") {
 
            return response.data.result

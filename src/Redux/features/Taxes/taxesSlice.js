@@ -12,8 +12,9 @@ const initialState = {
 
 // Generate pening , fulfilled and rejected action type
 export const fetchtaxesData = createAsyncThunk('taxes/fetchtaxesData', async (data) => {
+    const { token, ...dataNew } = data;
     try {
-        const response = await axios.post(BASE_URL + LIST_ALL_TAXES, data, { headers: { "Content-Type": "multipart/form-data" } })
+        const response = await axios.post(BASE_URL + LIST_ALL_TAXES, dataNew, { headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${token}`, } })
 
         if (response.data.status === "Success") {
            return response.data.result
@@ -24,10 +25,10 @@ export const fetchtaxesData = createAsyncThunk('taxes/fetchtaxesData', async (da
 })
 
 export const deleteTax = createAsyncThunk('taxes/deleteTax', async (data) => {
-
+    const { token, ...dataNew } = data;
     try {
-        const response = await axios.post(BASE_URL + DELETE_SINGLE_TAXE, data, {
-            headers: { "Content-Type": "multipart/form-data" }
+        const response = await axios.post(BASE_URL + DELETE_SINGLE_TAXE, dataNew, {
+            headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${token}` }
         });
       if(response){
         console.log(response)

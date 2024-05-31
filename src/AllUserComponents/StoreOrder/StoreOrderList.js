@@ -52,7 +52,7 @@ const StoreOrderList = (props) => {
   const dispatch = useDispatch();
 
   const AllStoreOrderDataState = useSelector((state) => state.StoreOrderList);
-
+  console.log("AllStoreOrderDataState: ",AllStoreOrderDataState)
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
@@ -174,9 +174,9 @@ const StoreOrderList = (props) => {
                       <TableBody>
                         {console.log(
                           "AllStoreOrderDataState.StoreOrderData: ",
-                          AllStoreOrderDataState.StoreOrderData
+                          AllStoreOrderDataState?.StoreOrderData
                         )}
-                        {AllStoreOrderDataState.StoreOrderData.map(
+                        {AllStoreOrderDataState?.StoreOrderData.map(
                           (StoreData, index) => (
                             <StyledTableRow key={StoreData.id}>
                               <StyledTableCell>
@@ -188,9 +188,9 @@ const StoreOrderList = (props) => {
                                         ""}
                                   </div>
                                 </div>
-                                <div className="text-[#818181]">
+                                {/* <div className="text-[#818181]">
                                   ID - {StoreData.id}
-                                </div>
+                                </div> */}
                                 <div className="text-[#818181] lowercase">
                                   {StoreData.email || ""}
                                 </div>
@@ -220,7 +220,7 @@ const StoreOrderList = (props) => {
                               </StyledTableCell>
                               <StyledTableCell>
                                 <div className="text-[#000000] order_method capitalize">
-                                  {StoreData.merchant_id}
+                                  {StoreData.merchant_name}
                                 </div>
                               </StyledTableCell>
                             </StyledTableRow>

@@ -21,7 +21,7 @@ import { useDispatch } from "react-redux";
 import { fetchCategoriesData } from "../Redux/features/Categories/categoriesSlice";
 import { fetchAttributesData } from "../Redux/features/Attributes/attributesSlice";
 import { useAuthDetails } from "../Common/cookiesHelper";
-
+import EditTaxesModal from "../Components/StoreSetting/Taxes/EditTaxesModal";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
@@ -51,6 +51,8 @@ const DraggableTable = ({
   editBtnCategory = false,
   deleteButton = false,
   editAttributeObj = false,
+  editTaxesObj = false,
+  deleteTaxButton = false,
   table,
 }) => {
   const dispatch = useDispatch();
@@ -58,6 +60,7 @@ const DraggableTable = ({
     useAuthDetails();
   const { viewSelectedOptionEnable, fun1, fun2 } = viewSelectedOption;
   const { deleteButtonEnable, deleteButtonFun } = deleteButton;
+  const { deleteTaxButtonEnable, deletetaxButtonFun } = deleteTaxButton;
   const { editButtonEnable, editButtonurl } = editBtnCategory;
 
   const reorder = (list, startIndex, endIndex) => {
@@ -195,6 +198,10 @@ const DraggableTable = ({
                               <img src={SortIcon} alt="add-icon" />
                             </StyledTableCell>
                             <StyledTableCell>{item.title}</StyledTableCell>
+                            {item.percent ? (
+                              <StyledTableCell>{item.percent}</StyledTableCell>
+                            ) : ""
+                            }
                             {viewSelectedOption && (
                               <StyledTableCell>
                                 <ViewItemsModal
@@ -224,6 +231,47 @@ const DraggableTable = ({
                                 </Link>
                               </StyledTableCell>
                             )}
+                            {
+                              item.title === "DefaultTax" ? (
+                                <>
+                                {editTaxesObj && (
+                                  <>
+                                  <StyledTableCell align="right" className="categories_add_delete ">
+                                    <EditTaxesModal
+                                      selectedTaxe={item}
+                                    />
+                                  </StyledTableCell>
+                                  <StyledTableCell></StyledTableCell>
+                                  </>
+                                )}
+                                </>
+                              ):(
+                                <>
+                                {editTaxesObj && (
+                                  <>
+                                  <StyledTableCell align="right">
+                                    <EditTaxesModal
+                                      selectedTaxe={item}
+                                    />
+                                  </StyledTableCell>
+                                  </>
+                                )}
+                                 {deleteTaxButton && (
+                                    <StyledTableCell>
+                                      <img
+                                        // className="edit_center w-8 h-8"
+                                        src={DeleteIcon}
+                                        alt="delete-icon"
+                                        onClick={() => deletetaxButtonFun(item.id)}
+                                      />
+                                    </StyledTableCell>
+                                  )}
+                                </>
+
+                              )
+                            }
+                            
+                           
                             {deleteButton && (
                               <StyledTableCell>
                                 <img

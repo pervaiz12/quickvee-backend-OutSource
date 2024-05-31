@@ -3,22 +3,25 @@ import SortIcon from "../../../Assests/Dashboard/sort-arrows-icon.svg";
 import DeleteIcon from "../../../Assests/Category/deleteIcon.svg";
 import AddTaxesModal from "./AddTaxesModal";
 import EditTaxesModal from "./EditTaxesModal";
-
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 import {
   fetchtaxesData,
   deleteTax,
 } from "../../../Redux/features/Taxes/taxesSlice";
-
+import DraggableTable from "../../../reuseableComponents/DraggableTable";
 import { useSelector, useDispatch } from "react-redux";
 
 const TaxesDetail = () => {
   const [alltaxes, setalltaxes] = useState([]);
-
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } = useAuthDetails();
   const AlltaxesDataState = useSelector((state) => state.taxes);
   const dispatch = useDispatch();
+  let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
+  const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
   useEffect(() => {
     let data = {
-      merchant_id: "MAL0100CA",
+      merchant_id: merchant_id,
+      ...userTypeData,
     };
     if (data) {
       dispatch(fetchtaxesData(data));
@@ -38,7 +41,8 @@ const TaxesDetail = () => {
   const handleDeleteTax = (id) => {
     const data = {
       id: id,
-      merchant_id: "MAL0100CA",
+      merchant_id: merchant_id,
+      ...userTypeData,
     };
     const userConfirmed = window.confirm(
       "Are you sure you want to delete this tax?"
@@ -59,7 +63,7 @@ const TaxesDetail = () => {
 
   return (
     <>
-    <div className='box'>
+    {/* <div className='box'>
       <div className="q-category-bottom-detail-section mt-6">
         <div className="q-category-bottom-header-sticky ">
           <div className="q-category-bottom-header">
@@ -117,6 +121,29 @@ const TaxesDetail = () => {
             ))}
         </div>
       </div>
+      </div> */}
+
+      <div className="box">
+        <div className="q-category-bottom-detail-section">
+            <div className="">
+              <div className="q-category-bottom-header">
+                <span>Taxes</span>
+                <AddTaxesModal />
+              </div>
+              <DraggableTable
+              tableHead={["Sort", "Title", "Percentage (%)","", ""]}
+              tableRow={alltaxes}
+              setFunction={setalltaxes}
+              editTaxesObj={true}
+              deleteTaxButton={{
+                deleteTaxButtonEnable: true,
+                deletetaxButtonFun: handleDeleteTax,
+              }}
+              table={"taxes"}
+              className="q-category-bottom-categories-single-category"
+            />
+            </div>
+          </div>
       </div>
     </>
   );

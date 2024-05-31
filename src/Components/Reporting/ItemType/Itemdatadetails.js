@@ -4,6 +4,7 @@ import { fetchOrderTypeData } from "../../../Redux/features/OrderType/OrderTypeS
 
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { Grid } from "@mui/material";
 
 const Itemdatadetails = ({ data }) => {
   const dispatch = useDispatch();
@@ -29,7 +30,13 @@ const Itemdatadetails = ({ data }) => {
   ]);
 
   if (!data || data.length === 0) {
-    return <div className="empty-div">No data available</div>;
+    return (
+      <Grid container sx={{ padding: 2.5 }} className="box_shadow_div">
+        <Grid item xs={12}>
+          <p>No. Data found.</p>
+        </Grid>
+      </Grid>
+    );
   }
 
   const renderDataTable = () => {

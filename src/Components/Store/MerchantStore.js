@@ -173,6 +173,11 @@ const StorePage = () => {
                         <img
                           src={store.img || storeDefaultImage}
                           alt="store_image"
+                          onError={(e) => {
+                            e.target.onerror = null; 
+                            e.target.src = storeDefaultImage;
+                          }}
+                        
                         />
                       </div>
                       <div className="grid content-center store-items-address">

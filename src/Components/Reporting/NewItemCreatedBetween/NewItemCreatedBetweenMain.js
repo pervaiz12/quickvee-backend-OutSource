@@ -1,32 +1,25 @@
-import React, { useState } from 'react';
-import DateRange from '../../Orders/InstoreOrder/DateRange'
-import NewItemCreatedBetweenList from './NewItemCreatedBetweenList'
+import React, { useState } from "react";
+import NewItemCreatedBetweenList from "./NewItemCreatedBetweenList";
+import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
+import { Grid } from "@mui/material";
 
 const NewItemCreatedBetweenMain = () => {
+  const [selectedDateRange, setSelectedDateRange] = useState(null);
+  const handleDateRangeChange = (dateRange) => {
+    setSelectedDateRange(dateRange);
+  };
 
-    const [selectedDateRange, setSelectedDateRange] = useState(null);
-    const handleDateRangeChange = (dateRange) => {
-        setSelectedDateRange(dateRange);
-    };
+  return (
+    <>
+      <Grid container sx={{py:3.6}}>
+        <Grid item>
+          <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
+        </Grid>
+      </Grid>
 
-    return (
-        <>
-            <div className="q-order-main-page">
-                <div className='box'>
-                <DateRange 
-                    onDateRangeChange={handleDateRangeChange}
-                />
-            </div>
-            </div>
-            
-                <div className="q-order-main-page">
-                    <NewItemCreatedBetweenList 
-                        selectedDateRange={selectedDateRange} 
-                    />
-                </div>
-           
-        </>
-    )
-}
+      <NewItemCreatedBetweenList selectedDateRange={selectedDateRange} />
+    </>
+  );
+};
 
-export default NewItemCreatedBetweenMain
+export default NewItemCreatedBetweenMain;

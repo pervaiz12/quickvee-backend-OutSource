@@ -142,7 +142,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
             }`}
             // Assigning the ref to the wrapper div
           >
-            <h1>Oct 4, 2023 - Oct 4, 2023</h1>
+            {/* <h1>Oct 4, 2023 - Oct 4, 2023</h1> */}
             <div className="container">
               <div className="row">
                 <div className="col-qv-12">
