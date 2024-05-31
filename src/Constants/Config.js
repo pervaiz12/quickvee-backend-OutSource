@@ -32,6 +32,7 @@ module.exports = Object.freeze({
 
   //Loyalty Program
   LOYALTY_PROGRAM_LIST: "LoyaltyProgramReactAPI/loyalty_program_list",
+  GET_LOYATY_DATA_COUNT: "LoyaltyProgramReactAPI/loyalty_program_count",
 
   // Order API Calls (Offline and Online)
   LIST_ALL_IN_STORE_ORDER: "api/orderoffline",
@@ -218,8 +219,9 @@ module.exports = Object.freeze({
   VENDORS_LIST: "vendor_report_api/get_vendor_list",
 
   // Order Refund Report
-  ORDER_REFUND_REPORT: "vendor_report_api/refund_report",
-
+  ORDER_REFUND_REPORT: "vendor_report_api/order_refund_report",
+  REFUND_REPORT: "ReportingReactapi/refund_report",
+  
   // Vendors API calls
   LIST_ALL_VENDORS: "Vendor_api/vendor_list",
 
