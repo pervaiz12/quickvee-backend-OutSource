@@ -121,19 +121,6 @@ function App() {
 
   return (
     <>
-      {}
-      {location.pathname !== "/login" &&
-      location.pathname.split("/").slice(0, 3).join("/") !==
-        "/store-reporting/order-summary" ? (
-        <SideMenu
-          setIsMenuOpen={setIsMenuOpen}
-          isTabletNav={isTabletNav}
-          isMenuOpen={isMenuOpen}
-        />
-      ) : (
-        ""
-      )}
-
       <Routes>
         {/* <Route exact path="/" element={<Main />} /> */}
         {/* <Route exact path="/" element={<Layout />} /> */}
@@ -179,7 +166,7 @@ function App() {
             path="/product/saleshistory/:id/:varientId"
             element={<Main visible={"product-sales"} />}
           />
-        <Route path="*" element={<PageNotFound />} />
+          <Route path="*" element={<PageNotFound />} />
 
           <Route
             exact
@@ -678,41 +665,41 @@ function App() {
             element={<Main visible={"invertory-export"} />}
           /> */}
 
-          {/* <Route exact path="/" element={<DashboardMain />} /> */}
+        {/* <Route exact path="/" element={<DashboardMain />} /> */}
 
-          {/* <Route path="/store-settings/info"  element={<MainStoreOption />} /> */}
+        {/* <Route path="/store-settings/info"  element={<MainStoreOption />} /> */}
 
-          {/* /store-settings/inventory */}
-          {/* <Route path="/store-reporting/inventory" element={<MainInventory />} /> */}
+        {/* /store-settings/inventory */}
+        {/* <Route path="/store-reporting/inventory" element={<MainInventory />} /> */}
 
-          {/* <Route
+        {/* <Route
           path="/store-reporting/employee-list"
           element={<MainEmployeelist />}
         /> */}
 
-          {/* <Route
+        {/* <Route
           path="/store-reporting/permission/:employee_id"
           element={<Permission />}
         /> */}
 
-          {/* <Route
+        {/* <Route
           path="/store-reporting/id-verification"
           element={<CheckIDVerifyMain />}
         /> */}
-          {/* <Route path="/store-reporting/order-type" element={<MainItem />} />
+        {/* <Route path="/store-reporting/order-type" element={<MainItem />} />
         <Route path="/store-reporting/item-sales" element={<MainItemSales />} />
         <Route path="/store-reporting/taxes" element={<MainTaxesReport />} /> */}
 
-          {/* <Route
+        {/* <Route
           path="/store-settings/payment-method-detail-report"
           element={<PaymentMethodReport />}
         /> */}
 
-          {/* <Route
+        {/* <Route
           path="/store-settings/item-create-between"
           element={<NewItemCreatedBetweenMain />}
         /> */}
-          {/* 
+        {/* 
         <Route
           path="/store-settings/recorder-inventory"
           element={<ReorderInventoryMain />}

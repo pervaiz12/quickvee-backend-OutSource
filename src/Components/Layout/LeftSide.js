@@ -98,7 +98,7 @@ const LeftSide = ({ visible }) => {
           {visible === "store-setting" && <MainStoreOption />}
           {visible === "store-setting" && <MainStoreOption />}
           {visible === "category-edit-cat" && <EditCategory />}
-          {visible === "product-edit-cat" && <ProductEdit />}
+          {/* {visible === "product-edit-cat" && <ProductEdit />} */}
 
           {visible === "toptraders" && <TopTenders />}
           {visible === "productedit" && <ProductEdit />}

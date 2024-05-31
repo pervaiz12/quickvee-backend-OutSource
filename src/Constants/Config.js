@@ -92,6 +92,7 @@ module.exports = Object.freeze({
 
   // Purchase API Calls
   LIST_ALL_PARCHASE: "Purchase_ordersReactApi/purchase_order_list",
+  PURCHASE_ORDER_COUNT: "Purchase_ordersReactApi/purchase_order_count",
   SAVE_PO: "Purchase_orders_api/save_po",
 
   // Taxes API Calls

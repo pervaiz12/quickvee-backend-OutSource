@@ -32,7 +32,8 @@ const Main = ({ visible }) => {
       {visible === "category-edit-cat" && <Layout visible={visible} />}
       {/* {visible === "product-edit-cat" && <Layout visible={visible} />} */}
       {visible === "toptraders" && <Layout visible={visible} />}
-      {visible === "productedit" && <Layout visible={visible} />}
+      {visible === "product-edit" && <Layout visible={visible} />}
+      {visible === "product-sales" && <Layout visible={visible} />}
       {visible === "product-add" && <Layout visible={visible} />}
       {visible === "add-po" && <Layout visible={visible} />}
       {visible === "store" && <Layout visible={visible} />}
@@ -79,32 +80,6 @@ const Main = ({ visible }) => {
       {visible === "sales-report" && <Layout visible={visible} />}
       {visible === "tip-report" && <Layout visible={visible} />}
       {visible === "coupon-report" && <Layout visible={visible} />}
-
-<<<<<<<
-      {visible === "addemployee" && <Layout visible={visible} />}
-      {visible === "receipt" && <Layout visible={visible} />}
-      {visible === "item-sales" && <Layout visible={visible} />}
-      {visible === "permission" && <Layout visible={visible} />}
-      {visible === "order-summary" && <Layout visible={visible} />}
-      {visible === "vendors-list" && <Layout visible={visible} />}
-      {visible === "order-refund-report" && <Layout visible={visible} />}
-      {visible === "edit-vendor" && <Layout visible={visible} />}
-      {visible === "vendor-details" && <Layout visible={visible} />}
-=======
-      {/* multip user layout */}
-      {visible === "multimerchant" && <IndexAllUsers />}
-      {visible === "label" && <IndexAllUsers visible={visible} />}
-      {visible === "newsletter" && <IndexAllUsers visible={visible} />}
-      {visible === "store-order" && <IndexAllUsers visible={visible} />}
-      {visible === "order-count" && <IndexAllUsers visible={visible} />}
-      {visible === "defaults" && <IndexAllUsers visible={visible} />}
-      {visible === "release_apk" && <IndexAllUsers visible={visible} />}
-      {visible === "inverntory-duplicate" && (
-        <IndexAllUsers visible={visible} />
-      )}
-      {visible === "product-duplicate" && <IndexAllUsers visible={visible} />}
-      {visible === "category-duplicate" && <IndexAllUsers visible={visible} />}
->>>>>>>
 
       {/* multip user layout */}
       {visible === "multimerchant" && <IndexAllUsers />}
