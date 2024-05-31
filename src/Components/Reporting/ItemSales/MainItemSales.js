@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
-import ItemSalesFilter from './ItemSalesFilter'
-import DateRange from '../../Orders/InstoreOrder/DateRange'
-import NetSalesFilter from './NetSalesFilter'
-import ItemSalesDetails from './ItemSalesDetails'
+import React, { useState } from "react";
+import ItemSalesFilter from "./ItemSalesFilter";
+import DateRange from "../../Orders/InstoreOrder/DateRange";
+import NetSalesFilter from "./NetSalesFilter";
+import ItemSalesDetails from "./ItemSalesDetails";
+import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 
 const MainItemSales = () => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
@@ -14,7 +15,7 @@ const MainItemSales = () => {
     setSelectedDateRange(dateRange);
   };
 
-  const handleFilterDataChange = (OrderSource , OrderType , SelectCat) => {
+  const handleFilterDataChange = (OrderSource, OrderType, SelectCat) => {
     setOrderSourceData(OrderSource);
     setOrderTypeData(OrderType);
     setSelectCatData(SelectCat);
@@ -22,37 +23,20 @@ const MainItemSales = () => {
 
   return (
     <>
-      <div className='q-order-main-page'>
-        <div className='box'>
-        <ItemSalesFilter 
-           onFilterDataChange={handleFilterDataChange} 
-        />
-      </div>
-      </div>
-      <div className='q-order-main-page'>
-      <div className='box'>
-        <DateRange 
-          onDateRangeChange={handleDateRangeChange}
-        />
-        </div>
-      </div>
-      <div className='q-order-main-page'>
-      <div className='box'>
-        <NetSalesFilter />
-      </div>
-      </div>
-      <div className='q-order-main-page'>
-      <div className='box'>
-        <ItemSalesDetails 
-          selectedDateRange={selectedDateRange} 
-          OrderSourceData={OrderSourceData} 
-          OrderTypeData={OrderTypeData} 
-          SelectCatData={SelectCatData} 
-        />
-      </div>
-      </div>
-    </>
-  )
-}
+      <ItemSalesFilter onFilterDataChange={handleFilterDataChange} />
 
-export default MainItemSales
+      <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
+
+      <NetSalesFilter />
+
+      <ItemSalesDetails
+        selectedDateRange={selectedDateRange}
+        OrderSourceData={OrderSourceData}
+        OrderTypeData={OrderTypeData}
+        SelectCatData={SelectCatData}
+      />
+    </>
+  );
+};
+
+export default MainItemSales;

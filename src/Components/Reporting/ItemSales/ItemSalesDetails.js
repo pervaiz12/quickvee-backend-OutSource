@@ -2,6 +2,42 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchItemSalesData } from "../../../Redux/features/Reports/ItemSales/ItemSalesSlice";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { Grid } from "@mui/material";
+
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+
+const StyledTable = styled(Table)(({ theme }) => ({
+  padding: 2, // Adjust padding as needed
+}));
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#253338",
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+    fontFamily: "CircularSTDMedium",
+  },
+  [`&.${tableCellClasses.table}`]: {
+    fontSize: 14,
+    fontFamily: "CircularSTDMedium",
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  "&:last-child td, &:last-child th": {
+    // backgroundColor: "#F5F5F5",
+  },
+}));
 
 const ItemSalesDetails = (props) => {
   const dispatch = useDispatch();
@@ -48,7 +84,78 @@ const ItemSalesDetails = (props) => {
 
   return (
     <>
-      <div className="q-attributes-bottom-detail-section">
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <div className="q-attributes-bottom-header">
+            <span>Item Sales Report</span>
+          </div>
+          <TableContainer>
+            <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
+              <TableHead>
+                <StyledTableCell>Category</StyledTableCell>
+                <StyledTableCell>Name</StyledTableCell>
+                <StyledTableCell sx={{ whiteSpace: "nowrap" }}>
+                  # Sold
+                </StyledTableCell>
+                <StyledTableCell>Gross Sales</StyledTableCell>
+                <StyledTableCell>Price Override</StyledTableCell>
+                <StyledTableCell>Discounts</StyledTableCell>
+                <StyledTableCell>Default Tax</StyledTableCell>
+                <StyledTableCell>Other Tax</StyledTableCell>
+                <StyledTableCell>Refunded</StyledTableCell>
+                <StyledTableCell>Net Sales</StyledTableCell>
+              </TableHead>
+              <TableBody>
+                {allItemSalesData &&
+                  allItemSalesData.length >= 1 &&
+                  allItemSalesData.map((ItemData, index) => (
+                    <StyledTableRow>
+                      <StyledTableCell>
+                        <p>{ItemData.categoryss}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{ItemData.name}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{ItemData.total_qty}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{ItemData.total_price}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{ItemData.adjust_price}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{ItemData.discount_amt}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{ItemData.saletx}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{ItemData.othertx}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{ItemData.refund_amount}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{ItemData.discount_price}</p>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+
+                {!allItemSalesData.length >= 1 && (
+                  <div className="box">
+                    <div className="q-category-bottom-categories-single-category">
+                      <p>No data found</p>
+                    </div>
+                  </div>
+                )}
+              </TableBody>
+            </StyledTable>
+          </TableContainer>
+        </Grid>
+      </Grid>
+      {/* <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
           <div className="q-attributes-bottom-header">
             <span>Item Sales Report</span>
@@ -87,7 +194,7 @@ const ItemSalesDetails = (props) => {
               </div>
             </div>
           ))}
-      </div>
+      </div> */}
     </>
   );
 };

@@ -253,8 +253,8 @@ const DropdownMenuItem = ({
     const foundItem = item?.dropdownItems?.find(
       (item) => item?.link === activeItem
     );
-    console.log("foundItem: ",foundItem,isMenuOpenRedux)
-    if (!isMenuOpenRedux && foundItem) {
+    // console.log("foundItem: ",foundItem,"isMenuOpenRedux",isMenuOpenRedux)
+    if (isMenuOpenRedux && foundItem) {
       setDropDownItem(foundItem?.link);
       activeDropDownItem(item?.id);
     }
@@ -350,7 +350,7 @@ const DropdownMenuItem = ({
           )}
         </div>
       </div>
-        {console.log("isDropdownOpen ",isDropdownOpen ,"&&", "currentDropDownItem",currentDropDownItem," ===", "item.id",item.id ,isDropdownOpen && currentDropDownItem === item.id )}
+        {/* {console.log("isDropdownOpen ",isDropdownOpen ,"&&", "currentDropDownItem",currentDropDownItem," ===", "item.id",item.id ,isDropdownOpen && currentDropDownItem === item.id )} */}
       {isDropdownOpen && currentDropDownItem === item.id && (
         <div
           onMouseEnter={(e) => {
@@ -495,11 +495,11 @@ const menuItems = [
             text: "Payment Method Details",
             link: "/store-reporting/payment-method-details",
           },
-          {
-            id: 78,
-            text: "Discount Per Sales Report",
-            link: "/store-reporting/discount-per-sales-report",
-          },
+          // {
+          //   id: 78,
+          //   text: "Discount Per Sales Report",
+          //   link: "/store-reporting/discount-per-sales-report",
+          // },
         ],
       },
       {
@@ -564,11 +564,11 @@ const menuItems = [
             text: "Order Refund Report",
             link: "/store-settings/order-refund-report",
           },
-          {
-            id: 85,
-            text: "Refunded Order ID's",
-            link: "/store-settings/#",
-          },
+          // {
+          //   id: 85,
+          //   text: "Refunded Order ID's",
+          //   link: "/store-settings/#",
+          // },
         ],
       },
       {
@@ -583,24 +583,24 @@ const menuItems = [
           {
             id: 86,
             text: "Vendors Payout",
-            link: "/store-settings/#",
+            link: "/store-reporting/vendors-sales-reports",
           },
         ],
       },
-      {
-        id: 66,
-        text: "Vendor Sales Report",
-        link: "/store-reporting/vendors-sales-reports",
-      },
-      {
-        id: 67,
-        text: "Credit Debit Sales Report",
-        link: "/store-reporting/credit-debit-sales",
-      },
+      // {
+      //   id: 66,
+      //   text: "Vendor Sales Report",
+      //   link: "/store-reporting/vendors-sales-reports",
+      // },
+      // {
+      //   id: 67,
+      //   text: "Credit Debit Sales Report",
+      //   link: "/store-reporting/credit-debit-sales",
+      // },
 
-      { id: 70, text: "Flash Report", link: "/store-reporting/flash-resigter" },
+      // { id: 70, text: "Flash Report", link: "/store-reporting/flash-resigter" },
 
-      { id: 76, text: "Shift Summary", link: "/store-reporting/shift-summary" },
+      // { id: 76, text: "Shift Summary", link: "/store-reporting/shift-summary" },
 
       // { id: 77, text: " Item Sales ", link: "/store-settings/item-sales" },
       // {
