@@ -47,11 +47,6 @@ const FlatDelivery = ({ DeliveryFeeData }) => {
 
   return (
     <>
-    <Grid Container className="box">
-      <Grid sx={{ padding: 2.5 }}  className="box_shadow_div">
-
-      </Grid>
-    </Grid>
       <div className="box">
         <div className="box_shadow_div">
           <div className="" style={{ padding: "20px" }}>

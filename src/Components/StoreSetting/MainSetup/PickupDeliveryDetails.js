@@ -50,7 +50,17 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
   //const [minTime, setMinTime] = useState();
 
   const handleConvenChange = (event) => {
-    SetConvenience(event.target.value);
+    const { value } = event.target;
+
+    // Remove non-digit characters if present
+    if (value) {
+      // Remove the decimal point from the current value
+      const numericValue = convenience.replace('.', '') + value;
+
+      // Shift the numbers to the left and format them correctly
+      const formattedValue = (parseInt(numericValue) / 100).toFixed(2);
+      SetConvenience(formattedValue);
+    }
   };
 
   const handleAmountdel = (event) => {
@@ -67,7 +77,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
   useEffect(() => {
     //console.log(setupDataState?.deliver_min_time)
     if (setupDataState?.cfee_pik) {
-      SetConvenience(setupDataState.cfee_pik);
+      SetConvenience(parseInt(setupDataState.cfee_pik).toFixed(2));
     }
     if (setupDataState?.min_delivery_amt) {
       setMinAmountdelivery(setupDataState.min_delivery_amt);
@@ -170,7 +180,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
           <Grid container spacing={3}>
             <Grid item xs={6}>
               <Grid container spacing={3}>
-                <Grid item xs={6} className="input_area">
+                <Grid item xs={6} >
                   <label>Minimum Time:</label>
                   <BasicTextFields
                     type="number"
@@ -179,7 +189,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
                     onChangeFun={handleMinPickupTime}
                   />
                 </Grid>
-                <Grid item xs={6} className="input_area">
+                <Grid item xs={6} >
                   <label>Maximum Time</label>
                   <BasicTextFields
                     type="number"
@@ -190,11 +200,11 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={6} className="input_area">
+            <Grid item xs={6}>
               <div>
                 <label>Convenience Fee ($)</label>
                 <BasicTextFields
-                  type="number"
+                  type="decimal"
                   placeholder="%0.00"
                   maxLength={10}
                   name="default_cash_drawer"
@@ -225,7 +235,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
             </Grid>
           </Grid>
           <Grid container spacing={3}>
-            <Grid item xs={6} className="input_area">
+            <Grid item xs={6} >
               <label>Minimum Amount for Delivery ($)</label>
               <BasicTextFields
                 type="text"
@@ -237,7 +247,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
                 onChangeFun={handleMinAmountdelivery}
               />
             </Grid>
-            <Grid item xs={6} className="input_area">
+            <Grid item xs={6}>
               <label>Delivery Radius (Miles)</label>
               <BasicTextFields
                 type="text"
@@ -253,7 +263,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
           <Grid container spacing={3} sx={{ marginTop: 0 }}>
             <Grid item xs={6}>
               <Grid container spacing={3}>
-                <Grid item xs={6} className="input_area">
+                <Grid item xs={6} >
                   <label> Delivery Time (Min)</label>
                   <BasicTextFields
                     type="number"
@@ -262,7 +272,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
                     onChangeFun={handleMinDeliveryTime}
                   />
                 </Grid>
-                <Grid item xs={6} className="input_area">
+                <Grid item xs={6} >
                   <label>Delivery Time (Max)</label>
                   <BasicTextFields
                     type="number"
@@ -273,7 +283,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={6} className="input_area">
+            <Grid item xs={6} >
               <label>Convenience Fee ($)</label>
               <BasicTextFields
                 type="text"
@@ -316,7 +326,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
           <div className="">
             <div className="qvrow">
               <div className="col-qv-3">
-                <div className="input_area">
+                <div >
                   <label>Minimum Time:</label>
                   <input
                     type="number"
@@ -328,7 +338,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
               </div>
 
               <div className="col-qv-3">
-                <div className="input_area">
+                <div >
                   <label>Maximum Time</label>
                   <input
                     type="number"
@@ -340,7 +350,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
               </div>
 
               <div className="col-qv-6">
-                <div className="input_area">
+                <div >
                   <label>Convenience Fee ($)</label>
                   <input
                     type="text"
@@ -375,7 +385,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
             </div>
             <div className="qvrow">
               <div className="col-qv-6">
-                <div className="input_area">
+                <div >
                   <label>Minimum Amount for Delivery ($)</label>
 
                   <input
@@ -390,7 +400,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
                 </div>
               </div>
               <div className="col-qv-6">
-                <div className="input_area">
+                <div >
                   <label>Delivery Radius (Miles)</label>
 
                   <input
@@ -408,7 +418,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
 
             <div className="qvrow">
               <div className="col-qv-3">
-                <div className="input_area">
+                <div >
                   <label> Delivery Time (Min)</label>
                   <input
                     type="number"
@@ -421,7 +431,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
               </div>
 
               <div className="col-qv-3">
-                <div className="input_area">
+                <div >
                   <label>Delivery Time (Max)</label>
                   <input
                     type="number"
@@ -434,7 +444,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
               </div>
 
               <div className="col-qv-6">
-                <div className="input_area">
+                <div >
                   <label>Convenience Fee ($)</label>
 
                   <input
