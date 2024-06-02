@@ -133,13 +133,9 @@ const Setup = () => {
 
       <StoreWorkingHrs />
 
-      <div className="q-order-main-page">
-        <PickupDeliveryDetails pickupdeliverydata={handlepickupdeliverydata} />
-      </div>
+      <PickupDeliveryDetails pickupdeliverydata={handlepickupdeliverydata} />
 
-      <div className="q-order-main-page">
-        <FlatDelivery DeliveryFeeData={handleDeliveryFeeData} />
-      </div>
+      <FlatDelivery DeliveryFeeData={handleDeliveryFeeData} />
 
       <div className="q-order-main-page">
         <DelveryPickupDetails DeliveryPickupData={handleDeliveryPickupData} />
