@@ -146,7 +146,7 @@ const StoreWorkingHrs = () => {
       const newDay = {
         id: Date.now().toString(),  // Generate a unique ID for the new day
         day_name: dayName,
-        day_count: prevDays[lastIndex].day_count + 1,  // Increment the day_count
+        day_count: prevDays[lastIndex].day_count ,  // Increment the day_count
         open_time: "",  // Default open time
         close_time: "",  // Default close time
         day_code: prevDays[lastIndex].day_code,
@@ -161,16 +161,22 @@ const StoreWorkingHrs = () => {
         newDay,
         ...prevDays.slice(lastIndex + 1),
       ];
+      const updatedDaysWthIndices = updatedDays.map((day) => {
+        if (day.day_name === dayName) {
+          return { ...day, day_count: day.day_count + 1 };
+        }
+        return day;
+      });
   
       // Recalculate lastIndices for all days
       const indicesMap = {};
-      updatedDays.forEach((day, index) => {
+      updatedDaysWthIndices.forEach((day, index) => {
         indicesMap[day.day_name] = index;
       });
   
       setLastIndices(indicesMap);
   
-      return updatedDays;
+      return updatedDaysWthIndices;
     });
   };
   

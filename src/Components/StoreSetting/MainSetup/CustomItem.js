@@ -13,13 +13,23 @@ const CustomTimePicker = ({ OpenTime, CloseTime }) => {
     const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
     return `${formattedHours}:${formattedMinutes}`;
   };
+  const formatTime = (time) => {
+    let [hour, minutePeriod] = time?.split(":");
+    let [minute, period] = minutePeriod?.split(" ");
 
-  const [startTime, setStartTime] = useState(
-    `${convertTo24HourFormat(OpenTime)} AM`
-  );
-  const [endTime, setEndTime] = useState(
-    `${convertTo24HourFormat(CloseTime)} PM`
-  );
+    // Ensure hour and minute are two digits
+    hour = hour.length < 2 ? "0" + hour : hour;
+    minute = minute.length < 2 ? "0" + minute : minute;
+
+    // Capitalize the period (am/pm)
+    period = period.toUpperCase();
+
+    return `${hour}:${minute} ${period}`;
+  };
+
+  const [startTime, setStartTime] = useState(formatTime(OpenTime));
+  const [endTime, setEndTime] = useState(formatTime(CloseTime));
+  console.log("OpenTime: ", startTime, "CloseTime :", endTime);
   // Generate time options with 15-minute intervals
   const generateTimeOptions = () => {
     const options = [];
