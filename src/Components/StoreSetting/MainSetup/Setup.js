@@ -6,6 +6,7 @@ import FlatDelivery from "./FlatDelivery";
 import DelveryPickupDetails from "./DelveryPickupDetails";
 import { useDispatch } from "react-redux";
 import { fetchStoreSettingSetupData } from "../../../Redux/features/SettingSetup/SettingSetupSlice";
+import { Grid } from "@mui/material";
 
 const Setup = () => {
   // const [updateDetails, setUpdateDetails] = useState(true);
@@ -137,21 +138,31 @@ const Setup = () => {
 
       <FlatDelivery DeliveryFeeData={handleDeliveryFeeData} />
 
-      <div className="q-order-main-page">
-        <DelveryPickupDetails DeliveryPickupData={handleDeliveryPickupData} />
-      </div>
+      <DelveryPickupDetails DeliveryPickupData={handleDeliveryPickupData} />
 
-      <div className="">
+      <Grid
+        container
+        direction="row"
+        justifyContent="flex-end"
+        alignItems="center"
+      >
+        <Grid item>
+          <button class="quic-btn quic-btn-save" onClick={handleUpdateClick}>
+            Update
+          </button>
+        </Grid>
+      </Grid>
+      {/* <div className="">
         <div class="q-add-categories-section-middle-footer">
           <div class="q-category-bottom-header" style={{ marginRight: "67px" }}>
             <button class="quic-btn quic-btn-save" onClick={handleUpdateClick}>
               Update
             </button>
 
-            {/* <button class="quic-btn quic-btn-cancle">Cancel</button> */}
+            <button class="quic-btn quic-btn-cancle">Cancel</button>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

@@ -163,6 +163,7 @@ const StoreWorkingHrs = () => {
   };
   return (
     <>
+      
       <Grid container sx={{}} className="box_shadow_div">
         <Grid item xs={12}>
           <Grid container sx={{ p: 2.5 }}>
@@ -191,7 +192,8 @@ const StoreWorkingHrs = () => {
                         ) : (
                           <>
                             <Switch
-                              checked={dayData.is_holiday}
+                              // checked={dayData.is_holiday}
+                              defaultChecked={dayData.is_holiday}
                               onChange={() =>
                                 handleSwitchChange(dayData.day_name)
                               }
@@ -296,7 +298,6 @@ const StoreWorkingHrs = () => {
           </Grid>
         </Grid>
       </Grid>
-      
     </>
   );
 };

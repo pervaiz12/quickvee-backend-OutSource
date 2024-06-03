@@ -125,7 +125,7 @@ const FlatDelivery = ({ DeliveryFeeData }) => {
         </Grid>
       </Grid>
 
-      <div className="box">
+      {/* <div className="box">
         <div className="box_shadow_div">
           <div className="" style={{ padding: "20px" }}>
             <h5 class="box_shadow_heading"></h5>
@@ -133,7 +133,7 @@ const FlatDelivery = ({ DeliveryFeeData }) => {
             <div className="qvrow">
               <div className="">
                 <div className="" style={{ display: "flex", width: "50%" }}>
-                  {/* delivery tab */}
+               
                   <div
                     className={`cursor-pointer px-12 rounded py-2 text-[14px]  ${
                       activeTab === "0"
@@ -145,7 +145,6 @@ const FlatDelivery = ({ DeliveryFeeData }) => {
                     Flat Delivery Fee
                   </div>
 
-                  {/* miledelivery tab */}
                   <div
                     className={`cursor-pointer px-12 rounded py-2  text-[14px]  ${
                       activeTab === "1"
@@ -160,7 +159,7 @@ const FlatDelivery = ({ DeliveryFeeData }) => {
               </div>
             </div>
 
-            {/* Conditionally render rows based on activeTab */}
+ 
             {activeTab === "0" && (
               <div className="mt-5">
                 <div className="qvrow">
@@ -181,8 +180,7 @@ const FlatDelivery = ({ DeliveryFeeData }) => {
                   </div>
                   <div className="col-qv-6">
                     <div className="input_area">
-                      {/* <label>Delivery Rate per Mile ($)</label>
-                    <input type="" id="" className="" value="" /> */}
+   
                     </div>
                   </div>
                 </div>
@@ -225,7 +223,7 @@ const FlatDelivery = ({ DeliveryFeeData }) => {
             )}
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };
