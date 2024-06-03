@@ -1,59 +1,47 @@
-import React, { useState } from 'react';
-import OrderRefundFilter from './OrderRefundFilter';
-import DateRange from '../../Orders/InstoreOrder/DateRange'
-import OrderRefundReportList from './OrderRefundReportList'
+import React, { useState } from "react";
+import OrderRefundFilter from "./OrderRefundFilter";
+
+import OrderRefundReportList from "./OrderRefundReportList";
+import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 
 const OrderRefundReportMain = () => {
-// console.log(onCategoryChange)
-    const [selectedDateRange, setSelectedDateRange] = useState(null);
-    const handleDateRangeChange = (dateRange) => {
-        setSelectedDateRange(dateRange);
-    };
+  // console.log(onCategoryChange)
+  const [selectedDateRange, setSelectedDateRange] = useState(null);
+  const handleDateRangeChange = (dateRange) => {
+    setSelectedDateRange(dateRange);
+  };
 
-    // const initialCategory = "all";  // Replace this with the initial category value you want
-    const initialReason = "all";    // Replace this with the initial reason value you want
-    // const [selectedCategory, setSelectedCategory] = useState(initialCategory);
-    const [selectedReason, setSelectedReason] = useState(initialReason);
+  // const [selectedCategory, setSelectedCategory] = useState(initialCategory);
+  const [selectedReason, setSelectedReason] = useState("All");
 
-    // const handleCategoryChange = (selectedCategoryId) => {
-    //     setSelectedCategory(selectedCategoryId);
-    // };
+  // const handleCategoryChange = (selectedCategoryId) => {
+  //     setSelectedCategory(selectedCategoryId);
+  // };
 
-    const handleReasonChange = (selectedReason) => {
-        setSelectedReason(selectedReason);
-    };
+  const handleReasonChange = (selectedReason) => {
+    setSelectedReason(selectedReason.title);
+  };
 
-    // console.log(selectedCategory)
+  // console.log(selectedCategory)
 
-    return (
-        <>
-            <div className='q-order-main-page'>
-                <OrderRefundFilter 
-                    title={"Order Refund Report"} 
-                    // onCategoryChange={handleCategoryChange}
-                    onReasonChange={handleReasonChange} 
-                    
-                />
-            </div>
-            <div className="q-attributes-main-page">
-                <div className='box'>
-                <DateRange 
-                    onDateRangeChange={handleDateRangeChange}
-                />
-            </div>
-            </div>
-            <div className='mt-10'>
-                <div className="q-attributes-main-page">
-                    <OrderRefundReportList 
-                        selectedDateRange={selectedDateRange} 
-                        // categoryId={selectedCategory} 
-                        reasonTitle={selectedReason}
-                        
-                    />
-                </div>
-            </div>
-        </>
-    )
-}
+  return (
+    <>
+      <OrderRefundFilter
+        title={"Order Refund Report"}
+        // onCategoryChange={handleCategoryChange}
+        onReasonChange={handleReasonChange}
+        selectedReason={selectedReason}
+      />
 
-export default OrderRefundReportMain
+      <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
+
+      <OrderRefundReportList
+        selectedDateRange={selectedDateRange}
+        // categoryId={selectedCategory}
+        reasonTitle={selectedReason}
+      />
+    </>
+  );
+};
+
+export default OrderRefundReportMain;

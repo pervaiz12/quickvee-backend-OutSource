@@ -59,39 +59,39 @@ export default function DashboardTables(props) {
   //     state: { merchantId: props.merchant_id, order_id: order_id },
   //   });
   // };
-  //   useEffect(() => {
-  //     console.log(props.EmployeeFilterData);
-  //     if (props.EmployeeFilterData) {
-  //       console.log("yes");
-  //       getDiscountRecord();
-  //     }
-  //   }, [props.EmployeeFilterData]);
+  useEffect(() => {
+    if (props.getItemRecord) {
+      getDiscountRecord();
+    }
+  }, [props.getItemRecord]);
 
-  //   const getDiscountRecord = () => {
-  //     let grandTotal = 0; // Initialize grand total
+  const getDiscountRecord = () => {
+    if (Array.isArray(props.getItemRecord) && props.getItemRecord.length > 0) {
+      const { costTotal, priceTotal, profit } = props.getItemRecord.reduce(
+        (acc, item) => {
+          const costPrice = parseFloat(item?.cost_price) || 0;
+          const price = parseFloat(item?.price) || 0;
+          const itemProfit = price - costPrice;
+          return {
+            costTotal: acc.costTotal + costPrice,
+            priceTotal: acc.priceTotal + price,
+            profit: acc.profit + itemProfit,
+          };
+        },
+        { costTotal: 0, priceTotal: 0, profit: 0 }
+      );
 
-  //     if (props.EmployeeFilterData?.report_data) {
-  //       Object.entries(props.EmployeeFilterData.report_data).forEach(
-  //         ([key, result]) => {
-  //           if (Array.isArray(result)) {
-  //             const total = result.reduce((acc, item) => {
-  //               return acc + (parseFloat(item?.discount) || 0);
-  //             }, 0);
-
-  //             grandTotal += total; // Add total to grand total
-  //             console.log(total);
-  //           }
-  //         }
-  //       );
-  //     } else {
-  //       console.log("No report data available");
-  //     }
-
-  //     console.log("Grand Total:", grandTotal.toFixed(2));
-  //     // Log the grand total
-  //     setTotalRecord(grandTotal.toFixed(2));
-  //     return grandTotal; // Return the overall grand total
-  //   };
+      console.log("Cost Total:", costTotal.toFixed(2));
+      console.log("Price Total:", priceTotal.toFixed(2));
+      console.log("profit Total:", profit.toFixed(2));
+      // setTotals({
+      //   costTotal: costTotal.toFixed(2),
+      //   priceTotal: priceTotal.toFixed(2),
+      // });
+    } else {
+      console.log("No report data available");
+    }
+  };
 
   return (
     <TableContainer component={Paper}>
@@ -99,7 +99,7 @@ export default function DashboardTables(props) {
         <StyledTable>
           <TableHead>
             <StyledTableCell align="center">Category</StyledTableCell>
-            <StyledTableCell>Name</StyledTableCell>
+            <StyledTableCell align="center">Name</StyledTableCell>
             <StyledTableCell align="center">#Sold</StyledTableCell>
             <StyledTableCell align="center">Cost of Item</StyledTableCell>
             <StyledTableCell align="center">Selling Price</StyledTableCell>
@@ -107,10 +107,64 @@ export default function DashboardTables(props) {
             <StyledTableCell align="center">Profit amount</StyledTableCell>
           </TableHead>
           <TableBody>
-            {!props.getItemRecord ? (
-              ""
+            {Array.isArray(props.getItemRecord) &&
+            props.getItemRecord.length > 0 ? (
+              props.getItemRecord.map((item, index) => (
+                <StyledTableRow key={index}>
+                  <StyledTableCell align="center">
+                    {item?.category}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">{item?.name}</StyledTableCell>
+                  <StyledTableCell align="center">
+                    {item?.total_qty}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {`$${parseFloat(item?.cost_price * item?.total_qty).toFixed(
+                      2
+                    )}`}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {`$${parseFloat(item?.price * item?.total_qty).toFixed(2)}`}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {(() => {
+                      const price = parseFloat(item?.price) || 0;
+                      const totalQty = parseFloat(item?.total_qty) || 0;
+                      const costPrice = parseFloat(item?.cost_price) || 0;
+                      const totalRevenue = price * totalQty;
+
+                      if (totalRevenue === 0) {
+                        return "0.00"; // Return "0.00" to avoid division by zero
+                      }
+
+                      const margin =
+                        ((totalRevenue - costPrice) / totalRevenue) * 100;
+                      return `${margin.toFixed(2)}%`; // Format to two decimal places
+                    })()}
+                  </StyledTableCell>
+                  <StyledTableCell align="center">
+                    {`$${(
+                      (item?.price - item?.cost_price) *
+                      item?.total_qty
+                    ).toFixed(2)}`}
+                  </StyledTableCell>
+                </StyledTableRow>
+              ))
             ) : (
-              <StyledTableCell>{props.getMessageRecord}</StyledTableCell>
+              <StyledTableCell colSpan={7} align="center">
+                {props.getMessageRecord || "No data available"}
+              </StyledTableCell>
+            )}
+            {Array.isArray(props.getItemRecord) &&
+            props.getItemRecord.length > 0 ? (
+              <StyledTableRow>
+                <StyledTableCell colSpan={2} align="center">
+                  Total
+                </StyledTableCell>
+                <StyledTableCell align="center">23</StyledTableCell>
+              </StyledTableRow>
+            ) : (
+              ""
             )}
           </TableBody>
         </StyledTable>

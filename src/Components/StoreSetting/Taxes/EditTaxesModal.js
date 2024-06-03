@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 
 import { Box, Modal } from "@mui/material";
 import EditIcon from "../../../Assests/Category/editIcon.svg";
-import LeftIcon from "../../../Assests/Taxes/Left.svg";
+import CrossIcon from "../../../Assests/Dashboard/cross.svg";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import { fetchtaxesData } from "../../../Redux/features/Taxes/taxesSlice";
 import { useDispatch } from "react-redux";
@@ -304,11 +304,13 @@ const EditTaxesModal = ({ selectedTaxe }) => {
       >
         <Box className="view-category-item-modal" style={myStyles}>
           {/* <div className='view-category-item-modal-header'> */}
-          <div className="q-add-categories-section-header">
-            <span onClick={() => handleClose()} style={width}>
-              <img src={LeftIcon} alt="Add-New-Category" />
-              <span>Edit Tax</span>
-            </span>
+          <div className="q-add-categories-section-header" style={{justifyContent:"space-between"}}>
+          
+              <span style={{cursor:"unset"}}>Edit Tax</span>
+            
+            <div className="float-right">
+              <img src={CrossIcon} alt="icon" className="quic-btn-cancle w-6 h-6 cursor-pointer" onClick={() => handleClose()} />
+              </div>
           </div>
 
           {/* </div> */}
@@ -401,7 +403,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                     onKeyPress={handleKeyPress}
                   />
 
-                <div className="category-checkmark-div m-2">
+                <div className="category-checkmark-div m-2 mt-4 mb-4">
                   <label className="category-checkmark-label">
                     Apply tax to category
                     <input
