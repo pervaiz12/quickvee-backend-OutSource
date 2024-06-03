@@ -187,6 +187,12 @@ function App() {
           />
           <Route
             exact
+            path="/purchase-data/:id"
+            element={<Main visible={"edit-purchase-data"} />}
+          />
+
+          <Route
+            exact
             path="/attributes"
             element={<Main visible={"attributes"} />}
           />
@@ -483,12 +489,11 @@ function App() {
             path="/users/view/unapprove/permission"
             element={<Main visible={"permission"} />}
           />
-          
         </Route>
 
         {/* ------------------------Superadmin---------------- */}
         <Route element={<ProtectedRoute visible="superadmin" />}>
-        <Route
+          <Route
             exact
             path="/users/view/unapprove/need-help"
             element={<Main visible={"need-help"} />}
@@ -599,7 +604,6 @@ function App() {
             element={<Main visible={"merchant-details"} />}
           />
         </Route>
-        
 
         {/* -----------------=============superadmin===========------------------- */}
 

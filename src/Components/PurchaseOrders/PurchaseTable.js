@@ -169,7 +169,12 @@ const PurchaseTable = ({ seVisible }) => {
                           (purchaseData, index) => (
                             <StyledTableRow key={index}>
                               <StyledTableCell align="center">
-                                <Link to="">{purchaseData.po_number}</Link>
+                                <Link
+                                  to={`/purchase-data/${purchaseData.id}`}
+                                  className={"text-[#0A64F9]"}
+                                >
+                                  {purchaseData.po_number}
+                                </Link>
                               </StyledTableCell>
 
                               <StyledTableCell align="center">

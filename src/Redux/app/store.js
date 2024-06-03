@@ -13,6 +13,7 @@ import CurrentInventoryReducer from "../features/CurrentInventoryValue/currentIn
 import settingstorealtersReducer from "../features/SettingStoreAlters/SettingStoreAltersSlice";
 import SettingReceiptReducer from "../features/StoreSettings/SettingsReceipt/SettingsReceiptSlice";
 import PurchaseOrderReducer from "../features/PurchaseOrder/purchaseOrderSlice";
+import PurchaseOrderByIdReducer from "../features/PurchaseOrder/purchaseOrderByIdSlice";
 import CheckIDVerifyListReducer from "../features/Reports/CheckIDVerify/CheckIDVerifySlice";
 import DailyReportList from "../features/DailyReport/dailyreportSlice";
 import EmployeeListReducer from "../features/EmployeeList/EmployeeListSlice";
@@ -69,6 +70,7 @@ const store = configureStore({
     categories: categoriesReducer,
     attributes: attributesReducer,
     purchase: PurchaseOrderReducer,
+    purchaseOrderById: PurchaseOrderByIdReducer,
     inStoreOrder: inStoreOrderReducer,
     onlineStoreOrder: onlineStoreOrderReducer,
     employeelistData: addEmployeeReducer,
@@ -138,7 +140,7 @@ const store = configureStore({
     orderSummeryList: orderSummeryReducer,
 
     NavBarToggle: MenuSlice,
-    timeSheet:TimesheetSlice,
+    timeSheet: TimesheetSlice,
     SalesReportList: SalesReportSlice,
     TipReportList: TipReportSlice,
     CouponReportList: CouponReportSlice,

@@ -275,7 +275,8 @@
   border-bottom: 1px solid #e8e8e8;
 }
 
-.q-add-categories-section-header > span {
+.q-add-categories-section-header > span,
+.q-add-categories-section-header > a {
   display: flex;
   width: auto;
   justify-content: space-between;
@@ -478,7 +479,7 @@ h3.popup_msg {
   margin-top: 1.2rem;
 }
 
-.default-Edit-Delete{
+.default-Edit-Delete {
   display: flex;
   justify-content: end;
   margin-right: 0.5rem;
