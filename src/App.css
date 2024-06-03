@@ -1092,6 +1092,8 @@ div.q_label_details::after {
   flex-direction: column;
   box-shadow: 0px 3px 6px #0000001f;
   border-radius: 8px;
+  padding: 24px 20px;
+  margin: 12px 0px;
 }
 
 .store-items-address {

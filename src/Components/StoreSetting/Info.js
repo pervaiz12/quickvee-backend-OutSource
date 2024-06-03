@@ -204,6 +204,118 @@ const Info = () => {
             </div>
           </div>
         </div>
+        <div className="infoheader">
+          <div className="qvrow">
+            <div className="col-qv-12">
+              <h1 className="info-menu info-menu-margin">QR Code</h1>
+              <div
+                className={"info-banner"}
+                style={{ background: "none" }}
+                // style={{
+                //   backgroundImage: !BannersBoolean
+                //     ? `url('${BASE_URL}upload/banner/${
+                //         infoRecord.banners ? infoRecord.banners : ""
+                //       }')`
+                //     : `url('${infoRecord.banners}')`,
+                //   backgroundSize: "cover",
+                // }}
+              >
+                {/* {infoRecord.banners ? (
+                  <div className="info-delete-banner">
+                    <div
+                      className="verifiedTableIcon"
+                      onClick={() => handleDelete("banners")}
+                    >
+                      {" "}
+                      <img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img>
+                    </div>
+                  </div>
+                ) : (
+                  ""
+                )} */}
+                <div className="info-banner-image-div">
+                  {infoRecord.image ? (
+                    <div className="info-delete">
+                      <div
+                        className="verifiedTableIcon"
+                        onClick={() => handleDelete("image")}
+                      >
+                        {" "}
+                        <img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img>
+                      </div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                  <div className="info-file-upload">
+                    {
+                      infoRecord.image == "" ? (
+                        <>
+                          <label htmlFor="file-input1" className="file-input1">
+                            <img
+                              src={infoImage}
+                              alt="Upload Image"
+                              className="info-image-icon"
+                            />
+                            <div className="info-image-logo-position">
+                              <p className="inforecord-email">Add Logo</p>
+                            </div>
+                          </label>
+                          <input
+                            id="file-input1"
+                            name="image"
+                            style={{ visibility: "hidden" }}
+                            type="file"
+                            onChange={onChangeHandle}
+                          />
+                        </>
+                      ) : (
+                        ""
+                      )
+                      // (
+                      //   <>
+                      //     <label
+                      //       htmlFor="file-input2"
+                      //       className="file-input1 info-background"
+                      //       style={{
+                      //         backgroundImage: `url(${
+                      //           !imageBoolean
+                      //             ? BASE_URL + "upload/" + infoRecord.image
+                      //             : infoRecord.image
+                      //         })`,
+                      //       }}
+                      //     ></label>
+                      //     <input
+                      //       id="file-input2"
+                      //       name="image"
+                      //       style={{ display: "none" }}
+                      //       type="file"
+                      //       onChange={onChangeHandle}
+                      //     />
+                      //   </>
+                      // )
+                    }
+                  </div>
+                </div>
+                {/* <div className="info-upload-image-button">
+                  <label htmlFor="fileInput3" className="inforecord-email">
+                    Add Banner
+                  </label>
+                  <input
+                    type="file"
+                    id="fileInput3"
+                    style={{ display: "none" }}
+                    name="banners"
+                    onChange={onChangeHandle}
+                  />
+                </div> */}
+              </div>
+              {/* <span className="error">{errors.imageErrors}</span>
+              <br />
+              <span className="error">{errors.bannerErrors}</span> */}
+            </div>
+          </div>
+        </div>
       </div>
 
       <div className="box_shadow_div">
@@ -298,6 +410,40 @@ const Info = () => {
               </div>
             </div>
             {/* ------*/}
+          </div>
+        </div>
+      </div>
+      {/* // ---- */}
+      <div className="box_shadow_div">
+        <div className="infoheader">
+          <h1 className="info-menu">Social</h1>
+          <div className="qvrow">
+            <div className="col-qv-6">
+              <div className="input_area">
+                <BasicTextFields
+                  type={"text"}
+                  name={"address_1"}
+                  placeholder="Facebook Url"
+                  // value={infoRecord.address_1}
+                  // onChangeFun={onChangeHandle}
+                />
+
+                {/* <span className='error'>{store.errors.ownerName}</span> */}
+              </div>
+            </div>
+            <div className="col-qv-6">
+              <div className="input_area">
+                <BasicTextFields
+                  type={"text"}
+                  name={"address_1"}
+                  placeholder="Instagram Url"
+                  // value={infoRecord.address_1}
+                  // onChangeFun={onChangeHandle}
+                />
+
+                {/* <span className='error'>{store.errors.ownerName}</span> */}
+              </div>
+            </div>
             <div className="col-qv-12">
               <div className="qvrow">
                 <div className="col-qv-6"></div>
@@ -308,6 +454,56 @@ const Info = () => {
                       className="blue_btn inforecord-email"
                       value="Update"
                       onClick={handleSubmitInfo}
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* // ---- */}
+      <div className="box_shadow_div">
+        <div className="infoheader">
+          <h1 className="info-menu">Change Password</h1>
+          <div className="qvrow">
+            <div className="col-qv-6">
+              <div className="input_area">
+                <BasicTextFields
+                  type={"text"}
+                  name={"address_1"}
+                  placeholder="New Password"
+                  // value={infoRecord.address_1}
+                  // onChangeFun={onChangeHandle}
+                />
+
+                {/* <span className='error'>{store.errors.ownerName}</span> */}
+              </div>
+            </div>
+            <div className="col-qv-6">
+              <div className="input_area">
+                <BasicTextFields
+                  type={"text"}
+                  name={"address_1"}
+                  placeholder="Confirm New Password"
+                  // value={infoRecord.address_1}
+                  // onChangeFun={onChangeHandle}
+                />
+
+                {/* <span className='error'>{store.errors.ownerName}</span> */}
+              </div>
+            </div>
+            <div className="col-qv-12">
+              <div className="qvrow">
+                <div className="col-qv-6"></div>
+                <div className="col-qv-6">
+                  <div className="info-update">
+                    <input
+                      type="button"
+                      className="blue_btn inforecord-email"
+                      value="UPDATE PASSWORD"
+                      // onClick={handleSubmitInfo}
                     />
                   </div>
                 </div>

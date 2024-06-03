@@ -4,6 +4,43 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchOrderRefundData } from "../../../Redux/features/Reports/OrderRefundReport/OrderRefundReportSlice";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 
+import { Grid } from "@mui/material";
+
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+
+const StyledTable = styled(Table)(({ theme }) => ({
+  padding: 2, // Adjust padding as needed
+}));
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#253338",
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+    fontFamily: "CircularSTDMedium",
+  },
+  [`&.${tableCellClasses.table}`]: {
+    fontSize: 14,
+    fontFamily: "CircularSTDMedium",
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  "&:last-child td, &:last-child th": {
+    // backgroundColor: "#F5F5F5",
+  },
+}));
+
 const OrderRefundReportList = (props) => {
   // console.log(props)
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -26,7 +63,7 @@ const OrderRefundReportList = (props) => {
         start_date: StartDateData,
         end_date: EndDateData,
         // category_id: props.categoryId,
-        reason_name: props.reasonTitle,
+        reason_name: props.reasonTitle === "All" ? "all" : props.reasonTitle,
         ...userTypeData,
       };
       console.log(data);
@@ -59,9 +96,95 @@ const OrderRefundReportList = (props) => {
 
   const isAllOrderDataValid =
     Array.isArray(allOrderData) && allOrderData.length > 0;
+  function formatAmount(value) {
+    // Convert empty or undefined values to 0
+    const formattedValue = value || 0;
+
+    // Format the number to have two decimal places
+    const roundedValue = Number(formattedValue).toFixed(2);
+
+    return roundedValue;
+  }
+  const dateFormattedFunction = (createdAtDate) => {
+    return new Date(createdAtDate).toLocaleDateString("en-US", {
+      day: "numeric",
+      month: "short",
+      year: "numeric",
+    });
+  };
 
   return (
     <>
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <TableContainer>
+            <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
+              <TableHead>
+                <StyledTableCell>Order ID</StyledTableCell>
+                <StyledTableCell>Date</StyledTableCell>
+                <StyledTableCell>Employee</StyledTableCell>
+                <StyledTableCell>Reason</StyledTableCell>
+                <StyledTableCell>Debit/Credit</StyledTableCell>
+                <StyledTableCell>Cash</StyledTableCell>
+                <StyledTableCell>LP</StyledTableCell>
+                <StyledTableCell>SC</StyledTableCell>
+                <StyledTableCell>NCA</StyledTableCell>
+                <StyledTableCell>TIP</StyledTableCell>
+                <StyledTableCell>Total</StyledTableCell>
+              </TableHead>
+              <TableBody>
+                {Array.isArray(allOrderData) &&
+                  allOrderData.length > 0 &&
+                  allOrderData?.map((CheckData, index) => (
+                    <StyledTableRow key={index}>
+                      <StyledTableCell>
+                        <p>{CheckData.order_id}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{dateFormattedFunction(CheckData?.created_at)}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{CheckData.employee}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{CheckData.reason}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>${formatAmount(CheckData.debit_amt)}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>${formatAmount(CheckData.cash_amt)}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>${formatAmount(CheckData.loyalty_point_amt)}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>${formatAmount(CheckData.store_credit_amt)}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>${formatAmount(CheckData.nca_amt)}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>${formatAmount(CheckData.tip_amt)}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>${formatAmount(CheckData.amount)}</p>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+              </TableBody>
+            </StyledTable>
+          </TableContainer>
+          {!isAllOrderDataValid && (
+            <div className="box">
+              <div className="q-category-bottom-categories-single-category">
+                <p>No data found</p>
+              </div>
+            </div>
+          )}
+        </Grid>
+      </Grid>
+{/* 
       {isAllOrderDataValid && (
         <div className="box">
           <div className="q-daily-report-bottom-report-header">
@@ -76,35 +199,14 @@ const OrderRefundReportList = (props) => {
             <p className="report-sort">NCA</p>
             <p className="report-sort">TIP</p>
             <p className="report-sort">Total</p>
-            {/* <p className="report-sort">NCA</p> */}
+       
           </div>
         </div>
-      )}
+      )} */}
 
-      {isAllOrderDataValid ? (
+      {/* {isAllOrderDataValid ? (
         <>
           {allOrderData.map((CheckData, index) => {
-            const formattedDate = new Date(
-              CheckData.created_at
-            ).toLocaleDateString("en-US", {
-              day: "numeric",
-              month: "short",
-              year: "numeric",
-            });
-
-            function formatAmount(value) {
-              // Convert empty or undefined values to 0
-              const formattedValue = value || 0;
-
-              // Format the number to have two decimal places
-              const roundedValue = Number(formattedValue).toFixed(2);
-
-              return roundedValue;
-            }
-
-            // const formattedPrice = parseFloat(CheckData.debit_amt).toFixed(2);
-            // const formattedRefundQty = parseFloat(CheckData.refund_qty).toFixed(2);
-
             return (
               <div className="box">
                 <div
@@ -113,7 +215,9 @@ const OrderRefundReportList = (props) => {
                 >
                   <div className="q-category-bottom-categories-single-category">
                     <p className="report-title">{CheckData.order_id}</p>
-                    <p className="report-title">{formattedDate}</p>
+                    <p className="report-title">
+                      {dateFormattedFunction(CheckData?.created_at)}
+                    </p>
                     <p className="report-title">{CheckData.employee}</p>
                     <p className="report-title">{CheckData.reason}</p>
                     <p className="report-title">
@@ -143,14 +247,14 @@ const OrderRefundReportList = (props) => {
             );
           })}
 
-          {/* Grand Total Row */}
+        
           <div className="box">
             <div className="q-category-bottom-categories-listing">
               <div className="q-category-bottom-categories-single-category">
                 <p className="report-title"></p>
                 <p className="report-title"></p>
                 <p className="report-title">Grand Total</p>
-                {/* <p className="report-title">{parseFloat(calculateGrandTotal(allOrderData, 'refund_qty')).toFixed(2)}</p> */}
+                
                 <p className="report-title">
                   $
                   {parseFloat(
@@ -170,7 +274,7 @@ const OrderRefundReportList = (props) => {
             <p>No data found</p>
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 };

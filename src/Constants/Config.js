@@ -32,6 +32,7 @@ module.exports = Object.freeze({
 
   //Loyalty Program
   LOYALTY_PROGRAM_LIST: "LoyaltyProgramReactAPI/loyalty_program_list",
+  GET_LOYATY_DATA_COUNT: "LoyaltyProgramReactAPI/loyalty_program_count",
 
   // Order API Calls (Offline and Online)
   LIST_ALL_IN_STORE_ORDER: "api/orderoffline",
@@ -192,8 +193,11 @@ module.exports = Object.freeze({
   GET_CUSTOMER_COUNT: "UserController/get_customer_count", // get customer count
   // GET_EDIT_CUSTOMER:'UserController/edit_customer',
   // GET_EDIT_CUSTOMER:'UserController/edit_customer',
+  GET_MANAGER_LISTING: "Manager_react/manager_list",
   GET_MANAGER_RECORD: "UserController/maneger_view", // manager view
   GET_MANAGER_RECORD_COUNT: "UserController/maneger_view_count", // manager view
+  ADD_MANAGER:"Manager_react/add_update_manager", // manager view
+  DELETE_MANAGER:"Manager_react/delete_manager",
   GET_ADMIN_RECORD: "UserController/admin_view", // admin view data
   GET_ADMIN_RECORD_COUNT: "UserController/admin_view_count", // admin records count
   GET_MANAGER_MERCHANT: "UserController/get_manager_merchant", // get manager merchant
@@ -223,8 +227,9 @@ module.exports = Object.freeze({
   VENDORS_LIST: "vendor_report_api/get_vendor_list",
 
   // Order Refund Report
-  ORDER_REFUND_REPORT: "vendor_report_api/refund_report",
-
+  ORDER_REFUND_REPORT: "vendor_report_api/order_refund_report",
+  REFUND_REPORT: "ReportingReactapi/refund_report",
+  
   // Vendors API calls
   LIST_ALL_VENDORS: "Vendor_api/vendor_list",
 

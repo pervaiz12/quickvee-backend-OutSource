@@ -303,12 +303,12 @@ font-weight: 400;}
 
 
   .q_receipt_page_main .checkmark_section:after {
-       top: 3px;
-    left: 2.5px;
-    width: 14PX;
-    height: 14PX;
-    border: 1px solid #0A64F9;
-    border-radius: 50%;
+    top: 2px;
+    left: 2px;
+    width: 16PX;
+    height: 16PX;
+    border: 0px solid #0A64F9;
+    border-radius: 100px;
     background: #0A64F9;
 }
 
@@ -323,7 +323,7 @@ font-weight: 400;}
     width: 24px;
     height: 24px;
     border: 2px solid #0A64F9;
-    border-radius: 50%;
+    border-radius:100px;
     margin-right: 10px;
     display: inline-block;
     position: absolute;

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { fetchloyaltyprogramData } from "../../Redux/features/LoyaltyProgram/loyaltyprogramSlice";
+import { fetchloyaltyprogramData, getLoyaltyCount} from "../../Redux/features/LoyaltyProgram/loyaltyprogramSlice";
 import { useSelector, useDispatch } from "react-redux";
 import $ from 'jquery'
 import 'datatables.net-dt/css/jquery.dataTables.min.css';
@@ -54,13 +54,38 @@ const LoyaltyProgramList = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } = useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
+
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [totalCount, setTotalCount] = useState(0);
+  const [searchRecord, setSearchRecord] = useState("");
+  const debouncedValue = useDebounce(searchRecord);
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+
   useEffect(() => {
     let data = {
       merchant_id: merchant_id,
+      page: currentPage,
+      perpage: rowsPerPage,
+      search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
       ...userTypeData,
     };
     dispatch(fetchloyaltyprogramData(data));
-  }, [dispatch]);
+  }, [currentPage,debouncedValue,rowsPerPage]);
+
+  useEffect(() => {
+    const data = {
+      merchant_id: merchant_id,
+      search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+      ...userTypeData,
+    };
+    dispatch(getLoyaltyCount(data));
+  }, [debouncedValue]);
+  useEffect(() => {
+    setTotalCount(loyaltyprogramDataState.loyaltyOrderCount);
+  }, [loyaltyprogramDataState.loyaltyOrderCount]);
 
   useEffect(() => {
     if (
@@ -114,12 +139,7 @@ const LoyaltyProgramList = () => {
     }
   }, [loyaltyprogram]);
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [totalCount, setTotalCount] = useState(0);
-  const [searchRecord, setSearchRecord] = useState("");
-  const debouncedValue = useDebounce(searchRecord);
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+ 
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
     setCurrentPage(1);
@@ -135,13 +155,16 @@ const LoyaltyProgramList = () => {
 
   return (
     <>
-    <div className="box">
+    {/* <div className="box">
          <div className="box_shadow_div">
             <table  id="loyaltyProgramTable"></table>
          </div>
-    </div>
+    </div> */}
 
-    {/* <Grid container className="box_shadow_div">
+    <Grid container className="box_shadow_div">
+      <Grid item className="q-category-bottom-header" xs={12}>
+          <h1 className="text-xl font-medium">Loyalty Program</h1>
+        </Grid>
         <Grid item xs={12}>
           <Grid container sx={{ padding: 2.5 }}>
             <Grid item xs={12}>
@@ -237,7 +260,7 @@ const LoyaltyProgramList = () => {
             )}
           </Grid>
         </Grid>
-      </Grid> */}
+      </Grid>
 
 
     </>

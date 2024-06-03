@@ -3,6 +3,8 @@ import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import { BASE_URL, TAXE_CATEGORY_LIST } from "../../../Constants/Config";
 import axios from "axios";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { Grid } from "@mui/material";
+import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 
 const ItemSalesFilter = ({ onFilterDataChange }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -11,39 +13,22 @@ const ItemSalesFilter = ({ onFilterDataChange }) => {
   const [selectedOrderType, setSelectedOrderType] = useState("All");
   const [selectedCategory, setSelectedCategory] = useState("All");
 
-  const [orderSourceVisible, setOrderSourdeDropdownVisible] = useState(false);
-  const [orderTypeVisible, setOrderTypeDropdownVisible] = useState(false);
-  const [CategoryVisible, setCategoryDropdownVisible] = useState(false);
   const [filteredData, setFilteredData] = useState({ category_id: "all" });
 
-  const toggleDropdown = (dropdown) => {
-    switch (dropdown) {
-      case "odersource":
-        setOrderSourdeDropdownVisible(!orderSourceVisible);
-        break;
-      case "ordertype":
-        setOrderTypeDropdownVisible(!orderTypeVisible);
-        break;
-      case "category":
-        setCategoryDropdownVisible(!CategoryVisible);
-      default:
-        break;
-    }
-  };
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
       case "odersource":
-        setSelectedOrderSource(option);
-        setOrderSourdeDropdownVisible(false);
+        setSelectedOrderSource(option.title);
+
         break;
       case "ordertype":
-        setSelectedOrderType(option);
-        setOrderTypeDropdownVisible(false);
+        setSelectedOrderType(option.title);
+
         break;
       case "category":
         if (option === "All") {
           setSelectedCategory("All");
-          setCategoryDropdownVisible(false);
+
           setFilteredData({
             ...filteredData,
             category_id: "all",
@@ -54,7 +39,7 @@ const ItemSalesFilter = ({ onFilterDataChange }) => {
         } else {
           const category_id = option.id;
           setSelectedCategory(option.title);
-          setCategoryDropdownVisible(false);
+
           setFilteredData({
             ...filteredData,
             category_id,
@@ -118,9 +103,67 @@ const ItemSalesFilter = ({ onFilterDataChange }) => {
     );
   }, [selectedOrderSource, selectedOrderType, selectedCategory]);
 
+  const orderSourceList = ["All", "Online Order", "Store Order"];
+  const orderTypeList = ["All", "Pickup", "Delivery"];
   return (
     <>
-      <div className="q-category-bottom-detail-section">
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <div className="q_details_header">Item Sales</div>
+            </Grid>
+          </Grid>
+          <Grid container sx={{ px: 2.5 }}>
+            <Grid item xs={12}>
+              <div className="q_details_header ">Filter by</div>
+            </Grid>
+          </Grid>
+          <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
+            <Grid item xs={12} sm={6} md={4}>
+              <label
+                className="q-details-page-label"
+                htmlFor="orderSourceFilter"
+              >
+                Order Source
+              </label>
+              <SelectDropDown
+                listItem={orderSourceList.map((item) => ({ title: item }))}
+                title="title"
+                dropdownFor="odersource"
+                selectedOption={selectedOrderSource}
+                onClickHandler={handleOptionClick}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <label className="q-details-page-label" htmlFor="orderTypeFilter">
+                Order Type
+              </label>
+              <SelectDropDown
+                listItem={orderTypeList.map((item) => ({ title: item }))}
+                title="title"
+                dropdownFor="ordertype"
+                selectedOption={selectedOrderType}
+                onClickHandler={handleOptionClick}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <label className="q-details-page-label" htmlFor="orderTypeFilter">
+                Category
+              </label>
+              <SelectDropDown
+                heading={"All"}
+                listItem={categoryOptions}
+                title="title"
+                dropdownFor="category"
+                selectedOption={selectedCategory}
+                onClickHandler={handleOptionClick}
+              />
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
+      {/* <div className="q-category-bottom-detail-section">
         <div className="">
           <div className="q-category-bottom-header">
             <div className="q_details_header ml-2">Item Sales</div>
@@ -198,7 +241,7 @@ const ItemSalesFilter = ({ onFilterDataChange }) => {
             </div>
           </div>
 
-          {/* Order Status Dropdown */}
+        
           <div className="q-order-page-filter">
             <label className="q-details-page-label" htmlFor="employeeFilter">
               Category
@@ -229,7 +272,7 @@ const ItemSalesFilter = ({ onFilterDataChange }) => {
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 };

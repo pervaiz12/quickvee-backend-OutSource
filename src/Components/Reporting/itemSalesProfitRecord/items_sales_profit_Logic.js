@@ -28,10 +28,12 @@ export default function Items_sales_profit_Logic() {
           },
         })
         .then((res) => {
-          // console.log(res);
+          console.log(res?.data);
           if (res?.data?.status == "Success") {
+            console.log("111");
             setItemRecord(res?.data?.profit_data);
           } else {
+            console.log("222");
             setgetMessageRecord(res?.data?.msg);
           }
         });

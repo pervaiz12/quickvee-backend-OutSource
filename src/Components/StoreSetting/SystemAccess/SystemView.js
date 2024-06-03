@@ -313,7 +313,7 @@ const SystemAccessData = () => {
                 <label>Default Cash Drawer Start</label>
                 <input
                   type="text"
-                  placeholder="%0.00"
+                  placeholder="0.00"
                   maxlength="8"
                   name="default_cash_drawer"
                   id="cash_drawer"
@@ -483,12 +483,24 @@ const SystemAccessData = () => {
                 />
               </div>
             </div>
+            <div className="col-qv-6">
+              <div className="input_area">
+                <label>Number of Station</label>
+                <input
+                  type="number"
+                  placeholder="0"
+                  name="no_of_station"
+                  value={systemAccess.no_of_station}
+                  onChange={handleNoOfStationChange}
+                />
+              </div>
+            </div>
           </div>
         </div>
       </div>
       <div className="box">
         <div className="box_shadow_div" style={{ padding: "20px" }}>
-          <div className="qvrow">
+          {/* <div className="qvrow">
             <h5 className="box_shadow_heading">
               Viewable Sales Report History
               <div className="fr">
@@ -508,7 +520,7 @@ const SystemAccessData = () => {
                 </label>
                 <input
                   type="text"
-                  placeholder="%0.00"
+                  placeholder="0.00"
                   name="emp_permission"
                   value={systemAccess.emp_permission}
                   onChange={handleEmPermissionChange}
@@ -520,14 +532,14 @@ const SystemAccessData = () => {
                 <label>Number of Station</label>
                 <input
                   type="text"
-                  placeholder="%0.00"
+                  placeholder="0.00"
                   name="no_of_station"
                   value={systemAccess.no_of_station}
                   onChange={handleNoOfStationChange}
                 />
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="qvrow">
             <div className="col-md-6">
               <button class="save_btn" onClick={handleSave}>

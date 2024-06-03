@@ -28,21 +28,21 @@ const RegisterSettingFormLogic = () => {
     regi_setting: "",
     ebt_type: "",
     idel_logout: "",
-    device_name: "",
-    customer_loyalty: "",
+    // device_name: "",
+    // customer_loyalty: "",
     barcode_msg: "",
-    round_invoice: "",
-    discount_prompt: "",
+    // round_invoice: "",
+    // discount_prompt: "",
     denomination: "",
     errors: {
       regi_setting: "",
       ebt_type: "",
       idel_logout: "",
-      device_name: "",
-      customer_loyalty: "",
+      // device_name: "",
+      // customer_loyalty: "",
       barcode_msg: "",
-      round_invoice: "",
-      discount_prompt: "",
+      // round_invoice: "",
+      // discount_prompt: "",
       denomination: "",
     },
   });
@@ -73,26 +73,26 @@ const RegisterSettingFormLogic = () => {
         registerData && registerData.idel_logout
           ? registerData.idel_logout
           : "",
-      device_name:
-        registerData && registerData.device_name
-          ? registerData.device_name
-          : "",
-      customer_loyalty:
-        registerData && registerData.customer_loyalty
-          ? registerData.customer_loyalty
-          : "",
+      // device_name:
+      //   registerData && registerData.device_name
+      //     ? registerData.device_name
+      //     : "",
+      // customer_loyalty:
+      //   registerData && registerData.customer_loyalty
+      //     ? registerData.customer_loyalty
+      //     : "",
       barcode_msg:
         registerData && registerData.barcode_msg
           ? registerData.barcode_msg
           : "",
-      round_invoice:
-        registerData && registerData.round_invoice
-          ? registerData.round_invoice
-          : "",
-      discount_prompt:
-        registerData && registerData.discount_prompt
-          ? registerData.discount_prompt
-          : "",
+      // round_invoice:
+      //   registerData && registerData.round_invoice
+      //     ? registerData.round_invoice
+      //     : "",
+      // discount_prompt:
+      //   registerData && registerData.discount_prompt
+      //     ? registerData.discount_prompt
+      //     : "",
       denomination:
         registerData &&
         registerData.denomination &&
@@ -115,9 +115,9 @@ const RegisterSettingFormLogic = () => {
       case "idel_logout":
         await isNumber(fieldValue, fieldName, errors);
         break;
-      case "device_name":
-        await isText(fieldValue, fieldName, errors);
-        break;
+      // case "device_name":
+      //   await isText(fieldValue, fieldName, errors);
+      //   break;
       case "denomination":
         let newval = parseInt(event.target.value) === 1 ? 0 : 1;
         let newval1 = event.target.checked ? 1 : 0;
@@ -180,20 +180,21 @@ const RegisterSettingFormLogic = () => {
     e.preventDefault();
     let { errors } = values;
     await isNumber(values.idel_logout, "idel_logout", errors);
-    await isText(values.device_name, "device_name", errors);
+    // await isText(values.device_name, "device_name", errors);
     // await isNumber(values.paid_breaks,'paid_breaks', errors);
     // await validateRadioBtn(values.role,errors);
+    // && errors.device_name === ""
 
-    if (errors.idel_logout === "" && errors.device_name === "") {
+    if (errors.idel_logout === "") {
       const data = {
         merchant_id,
         regi_setting: values.regi_setting,
         ebt: values.ebt_type,
         idel_logout: values.idel_logout,
-        discount_prompt: values.discount_prompt,
-        round_invoice: values.round_invoice,
-        customer_loyalty: values.customer_loyalty,
-        device_name: values.device_name,
+        // discount_prompt: values.discount_prompt,
+        // round_invoice: values.round_invoice,
+        // customer_loyalty: values.customer_loyalty,
+        // device_name: values.device_name,
         barcode_msg: values.barcode_msg,
         denomination: values.denomination === true ? "1" : "0",
         token_id: userTypeData?.token_id,

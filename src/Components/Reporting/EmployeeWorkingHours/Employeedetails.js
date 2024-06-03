@@ -81,17 +81,20 @@ const Employeedetails = (props) => {
     AllEmpWorkingHrsDataState.loading,
     AllEmpWorkingHrsDataState.ItemSalesData,
   ]);
-  console.log("hahaha", allEmpWorkingHrsData);
+  // console.log("hahaha", allEmpWorkingHrsData);
 
   const calTotalWork = (totalworkdata) => {
     if (!Array.isArray(totalworkdata)) {
       return 0;
     }
-    return totalworkdata.reduce(
-      (total, workData) => total + parseFloat(workData.total_seconds_worked),
-      0
-    );
+    return totalworkdata.reduce((total, workData) => {
+      const parsedSeconds = parseFloat(workData.total_seconds_worked);
+      const validSeconds = isNaN(parsedSeconds) ? 0 : parsedSeconds;
+      return total + validSeconds;
+    }, 0); 
   };
+  
+
   const calTotalBreak = (totalbreakdata) => {
     if (!Array.isArray(totalbreakdata)) {
       return 0;
@@ -105,12 +108,14 @@ const Employeedetails = (props) => {
     if (!Array.isArray(totalactualworkdata)) {
       return 0;
     }
-    return totalactualworkdata.reduce(
-      (total, workData) =>
-        total + parseFloat(workData.effective_seconds_worked),
-      0
-    );
+    
+    return totalactualworkdata.reduce((total, workData) => {
+      const parsedSeconds = parseFloat(workData.effective_seconds_worked);
+      const validSeconds = isNaN(parsedSeconds) ? 0 : parsedSeconds;
+      return total + validSeconds;
+    }, 0); // Initial value of the accumulator is 0
   };
+  
 
   if (!allEmpWorkingHrsData || Object.keys(allEmpWorkingHrsData).length === 0) {
     return (
@@ -164,23 +169,23 @@ const Employeedetails = (props) => {
                                   </StyledTableCell>
                                   <StyledTableCell>
                                     <p>
-                                      {parseFloat(
+                                      {(parseFloat(
                                         workData.total_seconds_worked
-                                      ).toFixed(2)}
+                                      ) || 0).toFixed(2)}
                                     </p>
                                   </StyledTableCell>
                                   <StyledTableCell>
                                     <p>
-                                      {parseFloat(
+                                      {(parseFloat(
                                         workData.total_seconds_break
-                                      ).toFixed(2)}
+                                      ) || 0).toFixed(2)}
                                     </p>
                                   </StyledTableCell>
                                   <StyledTableCell>
                                     <p>
-                                      {parseFloat(
+                                      {(parseFloat(
                                         workData.effective_seconds_worked
-                                      ).toFixed(2)}
+                                      ) || 0).toFixed(2)}
                                     </p>
                                   </StyledTableCell>
                                 </StyledTableRow>
@@ -206,11 +211,7 @@ const Employeedetails = (props) => {
                                   color: "#0A64F9",
                                 }}
                               >
-                                {parseFloat(
-                                  calTotalWork(
-                                    allEmpWorkingHrsData[employeeName]
-                                  )
-                                ).toFixed(2)}
+                                {calTotalWork(allEmpWorkingHrsData[employeeName]).toFixed(2)} 
                               </p>
                             </StyledTableCell>
                             <StyledTableCell>

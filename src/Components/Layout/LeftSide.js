@@ -73,6 +73,7 @@ import CouponReportMain from "../Reporting/CouponReport/CouponReportMain";
 import SalesReportMain from "../Reporting/SalesReport/SalesReportMain";
 import Discount_Per_Sales from "../Reporting/Discount_Per_Sales/discount_per_sales";
 import Items_sales_profit_record from "../Reporting/itemSalesProfitRecord/items_sales_profit_record";
+import RefundSummary from "../Reporting/RefundSummary/RefundSummary";
 import EditPurchaseOrder from "../PurchaseOrders/EditPurchaseOrder";
 
 const LeftSide = ({ visible }) => {
@@ -154,6 +155,7 @@ const LeftSide = ({ visible }) => {
 
           {visible === "vendors-sales-reports" && <VendorSalesReportMain />}
           {visible === "order-refund-report" && <OrderRefundReportMain />}
+          {visible === "refund-report" && <RefundSummary />}
           {visible === "tip-report" && <TipReportMain />}
           {visible === "coupon-report" && <CouponReportMain />}
           {visible === "sales-report" && <SalesReportMain />}

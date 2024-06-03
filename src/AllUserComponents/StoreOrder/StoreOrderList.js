@@ -168,7 +168,7 @@ const StoreOrderList = (props) => {
                         <StyledTableCell>Date</StyledTableCell>
                         <StyledTableCell>Order ID</StyledTableCell>
                         <StyledTableCell>Order Status</StyledTableCell>
-                        <StyledTableCell>Order Status</StyledTableCell>
+                        <StyledTableCell>Fail Result</StyledTableCell>
                         <StyledTableCell>Merchant</StyledTableCell>
                       </TableHead>
                       <TableBody>

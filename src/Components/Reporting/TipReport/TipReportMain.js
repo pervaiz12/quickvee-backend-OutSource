@@ -1,37 +1,28 @@
-import React, { useState } from 'react';
-import DateRange from '../../Orders/InstoreOrder/DateRange'
-import TipReportList from './TipReportList';
+import React, { useState } from "react";
+import TipReportList from "./TipReportList";
+import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
+import { Grid } from "@mui/material";
 
 const TipReportMain = () => {
-
-    const [selectedDateRange, setSelectedDateRange] = useState(null);
-    const handleDateRangeChange = (dateRange) => {
-        setSelectedDateRange(dateRange);
-    };
+  const [selectedDateRange, setSelectedDateRange] = useState(null);
+  const handleDateRangeChange = (dateRange) => {
+    setSelectedDateRange(dateRange);
+  };
 
   return (
     <>
-    <div className="q-attributes-main-page">
-        <div className='box'>
-          <DateRange 
-            onDateRangeChange={handleDateRangeChange}
-          />
-        </div>
-    </div><br></br>
+      <Grid container sx={{my: 3.7}}>
+        <Grid item xs={12}>
+          <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
+        </Grid>
+      </Grid>
 
-
-    <div className='mt-10'>
-      <div className="q-attributes-main-page">
-        <TipReportList 
-          selectedDateRange={selectedDateRange} 
-          // VendorIdData={VendorIdData} 
-                        
-          />
-         </div>
-     </div>
-    
+      <TipReportList
+        selectedDateRange={selectedDateRange}
+        // VendorIdData={VendorIdData}
+      />
     </>
-  )
-}
+  );
+};
 
 export default TipReportMain;

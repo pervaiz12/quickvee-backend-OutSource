@@ -3,6 +3,43 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchVendorListData } from "../../../Redux/features/Reports/VendorList/VendorListSlice";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 
+import { Grid } from "@mui/material";
+
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+
+const StyledTable = styled(Table)(({ theme }) => ({
+  padding: 2, // Adjust padding as needed
+}));
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#253338",
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+    fontFamily: "CircularSTDMedium",
+  },
+  [`&.${tableCellClasses.table}`]: {
+    fontSize: 14,
+    fontFamily: "CircularSTDMedium",
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  "&:last-child td, &:last-child th": {
+    // backgroundColor: "#F5F5F5",
+  },
+}));
+
 const VendorReportList = (props) => {
   const dispatch = useDispatch();
   const {
@@ -41,7 +78,48 @@ const VendorReportList = (props) => {
 
   return (
     <>
-      <div className="box">
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <TableContainer>
+            <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
+              <TableHead>
+                <StyledTableCell>Vendor Name</StyledTableCell>
+                <StyledTableCell>Contact</StyledTableCell>
+                <StyledTableCell>Email</StyledTableCell>
+                <StyledTableCell>Address</StyledTableCell>
+              </TableHead>
+              <TableBody>
+                {allVendorData &&
+                  allVendorData?.length >= 1 &&
+                  allVendorData?.map((CheckData, index) => (
+                    <StyledTableRow key={index}>
+                      <StyledTableCell>
+                        <p>{CheckData.name}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{CheckData.phone}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{CheckData.email}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{CheckData.full_address}</p>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))}
+              </TableBody>
+            </StyledTable>
+          </TableContainer>
+          {!allVendorData && (
+            <div className="box">
+              <div className="q-category-bottom-categories-single-category">
+                <p>No data found</p>
+              </div>
+            </div>
+          )}
+        </Grid>
+      </Grid>
+      {/* <div className="box">
         <div className="q-daily-report-bottom-report-header">
           <p className="report-sort">Vendor Name</p>
           <p className="report-sort">Contact</p>
@@ -60,11 +138,11 @@ const VendorReportList = (props) => {
                 <p className="report-title">{CheckData.phone}</p>
                 <p className="report-title">{CheckData.email}</p>
                 <p className="report-title">{CheckData.full_address}</p>
-                {/* <p className="report-title">{CheckData.name}</p> */}
+      
               </div>
             </div>
           </div>
-        ))}
+        ))} */}
     </>
   );
 };

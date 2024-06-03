@@ -59,6 +59,11 @@ import PermissionIcon from "../../Assests/MultipleUserIcon/permission.svg";
 import PermissionActive from "../../Assests/MultipleUserIcon/permissionactive.svg";
 import InverntoryIcon from "../../Assests/MultipleUserIcon/inventory.svg";
 import InvertoryActive from "../../Assests/MultipleUserIcon/inventoryactive.svg";
+import storeIcon from "../../Assests/Manager/storeIcon.svg";
+import storeIconActive from "../../Assests/Manager/storeIconActive.svg";
+import ManagerIcon from "../../Assests/Manager/managerIcon.svg";
+import ManagerIconActive from "../../Assests/Manager/managerIconActive.svg";
+
 import MerchantIcon from "../../Assests/MultipleUserIcon/merchant.svg";
 import MerchantActive from "../../Assests/MultipleUserIcon/merchantactive.svg";
 import NestedDropdownMenu from "./NestedDropdownMenu";
@@ -125,7 +130,7 @@ const SideMenu = () => {
           {isMenuOpenRedux
             ? (LoginGetDashBoardRecordJson?.final_login == 1
                 ? temp["superadmin"]
-                : temp[LoginGetDashBoardRecordJson?.data?.login_type]
+                : temp[LoginGetDashBoardRecordJson?.data?.login_type] // admin
               )?.map((item) => (
                 <div
                   key={item.id}
@@ -253,8 +258,8 @@ const DropdownMenuItem = ({
     const foundItem = item?.dropdownItems?.find(
       (item) => item?.link === activeItem
     );
-    console.log("foundItem: ",foundItem,isMenuOpenRedux)
-    if (!isMenuOpenRedux && foundItem) {
+    // console.log("foundItem: ",foundItem,"isMenuOpenRedux",isMenuOpenRedux)
+    if (isMenuOpenRedux && foundItem) {
       setDropDownItem(foundItem?.link);
       activeDropDownItem(item?.id);
     }
@@ -495,11 +500,11 @@ const menuItems = [
             text: "Payment Method Details",
             link: "/store-reporting/payment-method-details",
           },
-          {
-            id: 78,
-            text: "Discount Per Sales Report",
-            link: "/store-reporting/discount-per-sales-report",
-          },
+          // {
+          //   id: 78,
+          //   text: "Discount Per Sales Report",
+          //   link: "/store-reporting/discount-per-sales-report",
+          // },
         ],
       },
       {
@@ -557,18 +562,18 @@ const menuItems = [
           {
             id: 84,
             text: "Refund Summary",
-            link: "/store-settings/#",
+            link: "/store-settings/refund-report",
           },
           {
             id: 82,
             text: "Order Refund Report",
             link: "/store-settings/order-refund-report",
           },
-          {
-            id: 85,
-            text: "Refunded Order ID's",
-            link: "/store-settings/#",
-          },
+          // {
+          //   id: 85,
+          //   text: "Refunded Order ID's",
+          //   link: "/store-settings/#",
+          // },
         ],
       },
       {
@@ -583,7 +588,7 @@ const menuItems = [
           {
             id: 86,
             text: "Vendors Payout",
-            link: "/store-settings/#",
+            link: "/store-reporting/vendors-sales-reports",
           },
         ],
       },
@@ -594,7 +599,7 @@ const menuItems = [
       },
       {
         id: 90,
-        text: "item-sales-profit-report",
+        text: "Item Sales Profit Report",
         link: "/store-reporting/item-sale-profit-report",
       },
       {
@@ -603,9 +608,9 @@ const menuItems = [
         link: "/store-reporting/credit-debit-sales",
       },
 
-      { id: 70, text: "Flash Report", link: "/store-reporting/flash-resigter" },
+      // { id: 70, text: "Flash Report", link: "/store-reporting/flash-resigter" },
 
-      { id: 76, text: "Shift Summary", link: "/store-reporting/shift-summary" },
+      // { id: 76, text: "Shift Summary", link: "/store-reporting/shift-summary" },
 
       // { id: 77, text: " Item Sales ", link: "/store-settings/item-sales" },
       // {
@@ -785,7 +790,7 @@ const menuItems = [
         text: "Store",
         className: "flex items-center gap-2",
         dropDownItems: [
-          { id: 1, text: "Profile", link: "#" },
+          // { id: 1, text: "Profile", link: "#" },
           { id: 61, text: "Info", link: "/store-settings/info" },
           { id: 62, text: "Setup", link: "/store-settings/setup" },
           {
@@ -834,7 +839,7 @@ const menuItems = [
         text: "Add Employee",
         link: "/store-settings/addemployee",
       },
-      { id: 67, text: "Receipt", link: "/store-settings/receipt" },
+      // { id: 67, text: "Receipt", link: "/store-settings/receipt" },
       { id: 68, text: "Inventory", link: "/store-settings/inventory" },
       { id: 69, text: "Register Settings", link: "/store-settings/register" },
       // { id: 70, text: "Quick Add", link: "/store-settings/quick-add" },
@@ -1218,11 +1223,37 @@ const merchant = [
     // id: 82,
     text: "Store",
     link: "/store",
+    icon: (
+      <img
+        src={storeIcon}
+        alt="labal"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={storeIconActive}
+        alt="menu-defaults"
+        className="h-6 w-10 mt-4 mb-4"
+      />)
   },
   {
     // id: 82,
-    text: "Manager",
+    text: "Manager ",
     link: "/manager",
+    icon: (
+      <img
+        src={ManagerIcon}
+        alt="labal"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={ManagerIconActive}
+        alt="menu-defaults"
+        className="h-6 w-10 mt-4 mb-4"
+      />)
   },
 ];
 const ManagerLink = [

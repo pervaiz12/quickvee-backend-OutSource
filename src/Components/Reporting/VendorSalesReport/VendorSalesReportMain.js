@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import FilterVendorList from "../VendorDetails/FilterVendorList";
-import DateRange from "../../Orders/InstoreOrder/DateRange";
 import VendorSalesReportList from "./VendorSalesReportList";
+import DateRangeComponent from '../../../reuseableComponents/DateRangeComponent';
 
 const VendorSalesReportMain = () => {
   const [selectedDateRange, setSelectedDateRange] = useState(null);
@@ -11,31 +11,34 @@ const VendorSalesReportMain = () => {
 
   const [VendorIdData, setVendorIdData] = useState(null);
 
-  const handleFilterDataChange = (VendorId) => {
-    setVendorIdData(VendorId);
+  const handleFilterDataChange = (option) => {
+    if(option == "All") {
+      setVendorIdData("all")
+    }else{
+      setVendorIdData(option.id)
+    }
+
+    
   };
 
   return (
     <>
-      <div className="q-order-main-page">
-        <FilterVendorList
-          title={"Vendor Payout Report"}
-          onVendorChange={handleFilterDataChange}
-        />
-      </div>
+      <FilterVendorList
+        title={"Vendor Payout Report"}
+        onVendorChange={handleFilterDataChange}
+      />
+
       <div className="q-attributes-main-page">
         <div className="box">
-          <DateRange onDateRangeChange={handleDateRangeChange} />
+          <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
         </div>
       </div>
-      <div className="mt-10">
-        <div className="q-attributes-main-page">
+    
           <VendorSalesReportList
             selectedDateRange={selectedDateRange}
             VendorIdData={VendorIdData}
           />
-        </div>
-      </div>
+        
     </>
   );
 };

@@ -1,12 +1,13 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
-import { BASE_URL, LOYALTY_PROGRAM_LIST} from "../../../Constants/Config"
+import { BASE_URL, LOYALTY_PROGRAM_LIST, GET_LOYATY_DATA_COUNT} from "../../../Constants/Config"
 
 
 const initialState = {
     loading: false,
     loyaltyprogramData: [],
+    loyaltyOrderCount: 0,
     successMessage: "",
     error: '',
 }
@@ -28,6 +29,26 @@ export const fetchloyaltyprogramData = createAsyncThunk('loyaltyprogram/fetchloy
     }
 })
 // Generate pening , fulfilled and rejected action type
+export const getLoyaltyCount = createAsyncThunk(
+    "loyaltyprogram/getLoyaltyCount",
+    async (data) => {
+      const { token, ...dataNew } = data;
+      const response = await axios.post(
+        BASE_URL + GET_LOYATY_DATA_COUNT,
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // Use data?.token directly
+          },
+        }
+      );
+     
+      if (response.data.status == "Success") {
+        return response.data.result[0].data_count;
+      }
+    }
+  );
 
 const loyaltyprogramSlice = createSlice({
     name: 'loyaltyprogram',
@@ -46,6 +67,12 @@ const loyaltyprogramSlice = createSlice({
             state.loyaltyprogramData = {};
             state.error = action.error.message;
         })
+        builder.addCase(getLoyaltyCount.fulfilled, (state, action) => {
+            state.loyaltyOrderCount = action.payload;
+          });
+          builder.addCase(getLoyaltyCount.rejected, (state, action) => {
+            state.loyaltyOrderCount = 0;
+          });
 
     }
 })

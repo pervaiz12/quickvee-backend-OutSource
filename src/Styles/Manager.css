@@ -1,0 +1,232 @@
+@font-face {
+  font-family: CircularMedium;
+  src: url("../Assests/Fonts/circulur-medium.TTF");
+}
+@font-face {
+  font-family: CircularSTDBook;
+  src: url("../Assests/Fonts/circulur-std-book.TTF");
+}
+
+@font-face {
+  font-family: CircularSTDMedium;
+  src: url("../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
+}
+
+@font-face {
+  font-family: CircularBold;
+  src: url("../Assests/Fonts/circular-bold.TTF");
+}
+
+.store-items {
+  /* background-color: red; */
+}
+.store-items .store-item-card-manager {
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 3px 6px #0000001f;
+  border-radius: 8px;
+  opacity: 1;
+}
+.store-items .store-items-store-name {
+  font-family: CircularSTDMedium !important;
+  color: #000000;
+  text-align: left;
+  font: normal normal normal 18px/26px Circular Std Medium;
+  letter-spacing: 0px;
+  color: #000000;
+  opacity: 1;
+  text-transform: capitalize;
+}
+ 
+/* .store-items .store-item-card-manager button {
+  font-family: CircularSTDMedium !important;
+  color: #0a64f9;
+  text-align: left;
+  font: normal normal normal 14px/20px Circular Std Medium;
+  letter-spacing: 0px;
+  color: #0a64f9;
+  opacity: 1;
+} */
+
+
+.store-items .user-operation{
+  display: flex;
+  flex-direction: row;
+  margin-bottom: 8px;
+}
+
+.store-items .user-operation button{
+  min-width: 0px;
+}
+.store-items .user-operation img{
+  cursor: pointer;
+}
+.store-items-store-name-address {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin: 5px 0px;
+}
+
+.store-items-store-name-address div {
+  display: flex;
+}
+
+.store-items-store-name-address div img {
+  margin-right: 10px;
+}
+
+.store-items-store-name-address div span {
+  font-family: CircularSTDBook !important;
+  font-size: 14px;
+  letter-spacing: normal;
+  text-align: left;
+  letter-spacing: 0px;
+  color: #7b7b7b;
+  opacity: 1;
+}
+
+.store-items .merchant-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.store-items .merchant-list p {
+  font-family: CircularSTDMedium !important;
+  margin-top: 5px;
+  display: inline-block;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  border: 1px solid #e8e8e8;
+  border-radius: 6px;
+  opacity: 1;
+  padding: 7px 13px;
+  letter-spacing: normal;
+  color: #000000;
+  text-align: left;
+  font-size: 14px;
+  letter-spacing: 0px;
+  color: #000000;
+  opacity: 1;
+}
+
+.store-items .name-logo {
+  background: #ddf0ff;
+  opacity: 1;
+  padding: 17px;
+  box-sizing: border-box;
+  border-radius: 8px;
+}
+
+.store-items .name-logo span {
+  font-family: CircularBold !important;
+
+  letter-spacing: normal;
+  color: #0a64f9;
+  text-align: left;
+  font: normal normal normal 21px/29px Circular Std Bold;
+  opacity: 1;
+}
+
+
+.managerStore-btn-add{
+    font-family: CircularSTDMedium !important;
+
+text-align: right;
+font-size: 16px;
+letter-spacing: 0px;
+color: #0A64F9;
+opacity: 1;
+text-transform: capitalize;
+}
+
+
+/* add manager modal */
+
+
+
+.add-manager-modal .header{
+    padding: 17px 22px;
+    border-bottom: 1px solid #d2d2d2;
+}
+
+.add-manager-modal .header .quic-btn-cancle {
+    position: absolute;
+    right: 5px;
+    width: 20px;
+}
+
+.add-manager-modal .header .MuiGrid-root {
+    display: flex;
+    flex-direction: row;
+}
+
+.add-manager-modal .header img{
+    display: inline-block;
+    margin-right: 7px;
+}
+.add-manager-modal .header span{
+    font-family: CircularSTDMedium !important;
+font-size: 18px;
+text-align: left;
+font: normal normal normal 18px/26px Circular Std Medium;
+letter-spacing: 0px;
+color: #000000;
+opacity: 1;
+}
+
+.add-manager-modal .manager-form{
+    padding: 14px 25px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.manager-form .input-box{
+    margin: 14px 0px 19px 0px;
+}
+  
+.manager-form .store-box{
+  margin-top: 14px;
+}
+
+.manager-form .input-box label{
+    font-family: CircularSTDBook !important;
+margin-bottom: 4px;
+text-align: left;
+font: normal normal normal 14px/20px Circular Std Book;
+letter-spacing: 0px;
+color: #6A6A6A;
+opacity: 1;
+display: block;
+}
+
+
+.manager-form .input-box input{
+    background: #FFFFFF 0% 0% no-repeat padding-box;
+    border: 1px solid #E3E3E3;
+    border-radius: 4px;
+    opacity: 1;
+    padding: 9px 7px;
+}
+
+
+.manager-form .input-box input::placeholder{
+    font-family: CircularSTDBook !important;
+    font-size: 14px;
+    text-align: left;
+    font: normal normal normal 14px/20px Circular Std Book;
+    letter-spacing: 0px;
+    color: #6A6A6A;
+    opacity: 0.5;
+}
+
+.manager-form .dropdownBox{
+  padding-top: 4px !important;
+}
+.manager-form .dropdownBox .search-selected-item{
+
+}
+.manager-form .dropdownBox .search-selected-item input{
+  outline: none;
+  padding: 0px 2px 0px 4px;
+}
