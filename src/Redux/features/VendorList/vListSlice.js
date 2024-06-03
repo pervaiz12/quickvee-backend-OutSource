@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BASE_URL, LIST_ALL_VENDORS } from "../../../Constants/Config";
-
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 const initialState = {
   loading: false,
   vendorListData: [],
@@ -13,14 +13,18 @@ const initialState = {
 export const fetchVendorsListData = createAsyncThunk(
   "vendors/fetchVendorsListData.",
   async (data) => {
+    const { userTypeData } = useAuthDetails();
+
     try {
-      const { token, ...dataNew } = data;
-      const response = await axios.post(BASE_URL + LIST_ALL_VENDORS, dataNew, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const { token, ...otherUserData } = userTypeData;
+      const response = await axios.post(
+        BASE_URL + LIST_ALL_VENDORS,
+        { ...data, ...otherUserData },
+        { headers: { 
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+        } }
+      );
 
       if (response.data.status === "true") {
         const listdata = [
@@ -28,7 +32,8 @@ export const fetchVendorsListData = createAsyncThunk(
           response.data.vendor_payout_list,
           response.data.states,
         ];
-
+        // const statdata = [response.data.states , response.data.states ]
+        // console.log(listdata[1])
         return listdata;
       }
     } catch (error) {

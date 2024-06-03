@@ -12,7 +12,7 @@ import ViewItemsModal from "./ViewItemsModal";
 // import EditVendorsModal from './EditVendorsModal';
 import Switch from "@mui/material/Switch";
 import { Link } from "react-router-dom";
-
+import { useAuthDetails } from "../../Common/cookiesHelper";
 const VendorsDetail = ({ setVisible }) => {
   const label = { inputProps: { "aria-label": "Switch demo" } };
 
@@ -41,16 +41,20 @@ const VendorsDetail = ({ setVisible }) => {
     AllVendorsDataState.loading,
     AllVendorsDataState.vendorListData,
   ]);
-
+  const { userTypeData } = useAuthDetails();
   const handleUpdateStatus = async (event, label, vendorId) => {
+   
     const updData = {
       // merchant_id: "MAL0100CA",
       status: event.target.checked ? 1 : 0,
       id: vendorId,
     };
-
-    const response = await axios.post(BASE_URL + STATUS_UPD_VENDORS, updData, {
-      headers: { "Content-Type": "multipart/form-data" },
+    const { token, ...otherUserData } = userTypeData;
+    const response = await axios.post(BASE_URL + STATUS_UPD_VENDORS, {...updData,...otherUserData}, {
+      headers: {
+         "Content-Type": "multipart/form-data" ,
+         Authorization: `Bearer ${token}`,
+        },
     });
 
     if (response.status === 200) {

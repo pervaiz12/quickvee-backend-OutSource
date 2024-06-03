@@ -291,7 +291,10 @@ module.exports = Object.freeze({
   ADD_TIME_SHEET: "Timesheet_react_api/addNewTimeclock",
   ADD_TIME_BREAK: "Timesheet_react_api/addBreak",
   DELETE_TIMESHEET: "Timesheet_react_api/delete_timeclock",
-  DELETE_BREAK: "Timesheet_react_api/delete_breaks",
+  DELETE_BREAK:"Timesheet_react_api/delete_breaks",
+
+
+  CHANGE_PASSWORD_STORE: "Store_setting_react_api/change_password"
 });
 
 // All api calls are initialized in this component for this application
