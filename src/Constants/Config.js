@@ -89,7 +89,7 @@ module.exports = Object.freeze({
 
   // Get Store Setting Receipt List and Update API
   GET_STORE_RECEIPT_DATA: "StoreReact_setting_api/get_receipt_list",
-  UPDATE_RECEIPT_INFO_DATA: "StoreReact_setting_api/update_receipt_info_list",
+  UPDATE_RECEIPT_INFO_DATA: "StoreReact_setting_api1/update_receipt_info_list",
 
   // Purchase API Calls
   LIST_ALL_PARCHASE: "Purchase_ordersReactApi/purchase_order_list",
