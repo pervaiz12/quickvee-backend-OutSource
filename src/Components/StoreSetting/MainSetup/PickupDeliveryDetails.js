@@ -12,6 +12,7 @@ import { TimePicker } from "@mui/x-date-pickers/TimePicker";
 import { event } from "jquery";
 import { Grid } from "@mui/material";
 import BasicTextFields from "../../../reuseableComponents/TextInputField";
+import useCurrencyInput from "../../../hooks/useCurrencyInput";
 
 const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
   const setupDataState = useSelector(
@@ -21,16 +22,15 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
   const [isEnableOrderNumber, setisEnableOrderNumber] = useState(true);
   const [isDelveryEnbale, setIsDelveryEnbale] = useState(true);
   const [minTime, setMinTime] = useState();
-  const [convenience, SetConvenience] = useState();
-  const [conveniencepik, SetConveniencepik] = useState();
+  const [convenience, SetConvenience] = useCurrencyInput("0.00");
+  const [conveniencepik, SetConveniencepik] = useCurrencyInput("0.00");
   const [amountdelivery, setAmountdelivery] = useState();
-  const [rateDelivery, SetRateDelivery] = useState();
+  const [rateDelivery, SetRateDelivery] = useCurrencyInput("0.00");
   const [MinPickupTime, setMinPickupTime] = useState();
   const [MaxPickupTime, setMaxPickupTime] = useState();
   const [MinDeliveryTime, setMinDeliveryTime] = useState();
   const [MaxDeliveryTime, setMaxDeliveryTime] = useState();
-  const [MinAmountdelivery, setMinAmountdelivery] = useState();
-
+  const [MinAmountdelivery, setMinAmountdelivery] = useCurrencyInput("0.00");
   const dispatch = useDispatch();
   // const [timeValues, setTimeValues] = useState({
   //   minPickupTime:"",
@@ -49,28 +49,17 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
 
   //const [minTime, setMinTime] = useState();
 
-  const handleConvenChange = (event) => {
-    SetConvenience(event.target.value);
-  };
-
-  const handleAmountdel = (event) => {
-    setAmountdelivery(event.target.value);
-  };
-
-  const handleRateDel = (event) => {
-    SetRateDelivery(event.target.value);
-  };
-  const handleDelconv = (event) => {
-    SetConveniencepik(event.target.value);
-  };
-
   useEffect(() => {
     //console.log(setupDataState?.deliver_min_time)
     if (setupDataState?.cfee_pik) {
-      SetConvenience(setupDataState.cfee_pik);
+      SetConvenience({
+        target: { value: parseFloat(setupDataState.cfee_pik).toFixed(2) },
+      });
     }
     if (setupDataState?.min_delivery_amt) {
-      setMinAmountdelivery(setupDataState.min_delivery_amt);
+      setMinAmountdelivery({
+        target: { value: setupDataState.min_delivery_amt },
+      });
     }
 
     if (setupDataState?.rate_per_miles) {
@@ -78,7 +67,9 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
     }
 
     if (setupDataState?.cfee_del) {
-      SetConveniencepik(setupDataState.cfee_del);
+      SetConveniencepik({
+        target: { value: parseFloat(setupDataState.cfee_del).toFixed(2) },
+      });
     }
 
     if (setupDataState?.pickup_min_time) {
@@ -95,7 +86,9 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
     }
 
     if (setupDataState?.max_delivery_radius) {
-      SetRateDelivery(setupDataState.max_delivery_radius);
+      SetRateDelivery({
+        target: { value: setupDataState.max_delivery_radius },
+      });
     }
   }, [setupDataState]);
 
@@ -111,10 +104,6 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
   const handleMaxDeliveryTime = (event) => {
     setMaxDeliveryTime(event.target.value);
   };
-  const handleMinAmountdelivery = (event) => {
-    setMinAmountdelivery(event.target.value);
-  };
-
   useEffect(() => {
     pickupdeliverydata(
       isEnableOrderNumber,
@@ -156,7 +145,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
             sx={{ marginTop: 3 }}
           >
             <Grid item>
-              <h5 class="box_shadow_heading">Enable Pickup</h5>
+              <h5 style={{marginBottom:0}} className="box_shadow_heading">Enable Pickup</h5>
             </Grid>
             <Grid item>
               <Switch
@@ -170,7 +159,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
           <Grid container spacing={3}>
             <Grid item xs={6}>
               <Grid container spacing={3}>
-                <Grid item xs={6} className="input_area">
+                <Grid item xs={6}>
                   <label>Minimum Time:</label>
                   <BasicTextFields
                     type="number"
@@ -179,7 +168,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
                     onChangeFun={handleMinPickupTime}
                   />
                 </Grid>
-                <Grid item xs={6} className="input_area">
+                <Grid item xs={6}>
                   <label>Maximum Time</label>
                   <BasicTextFields
                     type="number"
@@ -190,17 +179,17 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={6} className="input_area">
+            <Grid item xs={6}>
               <div>
                 <label>Convenience Fee ($)</label>
                 <BasicTextFields
-                  type="number"
+                  type="text"
                   placeholder="%0.00"
                   maxLength={10}
                   name="default_cash_drawer"
                   id="cash_drawer"
                   value={convenience}
-                  onChangeFun={handleConvenChange}
+                  onChangeFun={SetConvenience}
                 />
               </div>
             </Grid>
@@ -213,7 +202,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
             sx={{ marginTop: 3 }}
           >
             <Grid item>
-              <h5 class="box_shadow_heading">Enable Delivery</h5>
+              <h5 style={{marginBottom:0}} class="box_shadow_heading">Enable Delivery</h5>
             </Grid>
             <Grid>
               <Switch
@@ -225,7 +214,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
             </Grid>
           </Grid>
           <Grid container spacing={3}>
-            <Grid item xs={6} className="input_area">
+            <Grid item xs={6}>
               <label>Minimum Amount for Delivery ($)</label>
               <BasicTextFields
                 type="text"
@@ -234,10 +223,10 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
                 name="default_cash_drawer"
                 id="cash_drawer"
                 value={MinAmountdelivery}
-                onChangeFun={handleMinAmountdelivery}
+                onChangeFun={setMinAmountdelivery}
               />
             </Grid>
-            <Grid item xs={6} className="input_area">
+            <Grid item xs={6}>
               <label>Delivery Radius (Miles)</label>
               <BasicTextFields
                 type="text"
@@ -246,14 +235,14 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
                 name="default_cash_drawer"
                 id="cash_drawer"
                 value={rateDelivery}
-                onChangeFun={handleRateDel}
+                onChangeFun={SetRateDelivery}
               />
             </Grid>
           </Grid>
           <Grid container spacing={3} sx={{ marginTop: 0 }}>
             <Grid item xs={6}>
               <Grid container spacing={3}>
-                <Grid item xs={6} className="input_area">
+                <Grid item xs={6}>
                   <label> Delivery Time (Min)</label>
                   <BasicTextFields
                     type="number"
@@ -262,7 +251,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
                     onChangeFun={handleMinDeliveryTime}
                   />
                 </Grid>
-                <Grid item xs={6} className="input_area">
+                <Grid item xs={6}>
                   <label>Delivery Time (Max)</label>
                   <BasicTextFields
                     type="number"
@@ -273,7 +262,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid item xs={6} className="input_area">
+            <Grid item xs={6}>
               <label>Convenience Fee ($)</label>
               <BasicTextFields
                 type="text"
@@ -282,176 +271,12 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
                 name="default_cash_drawer"
                 id="cash_drawer"
                 value={conveniencepik}
-                onChangeFun={handleDelconv}
+                onChangeFun={SetConveniencepik}
               />
             </Grid>
           </Grid>
         </Grid>
       </Grid>
-      {/* <div className="box">
-        <div class="box_shadow_div" style={{ padding: "20px" }}>
-          <div className="">
-            <h5 class="box_shadow_heading">Pickup & Delivery Details</h5>
-          </div>
-
-          <div class="qvrow">
-            <div
-              className=""
-              style={{ display: "flex", justifyContent: "space-between" }}
-            >
-              <div className="">
-                <h5 class="box_shadow_heading">Enable Pickup</h5>
-              </div>
-
-              <div className="fr">
-                <Switch
-                  name="cost_method"
-                  onChange={handleCheckedSwitch}
-                  checked={isEnableOrderNumber}
-                />
-              </div>
-            </div>
-          </div>
-
-          <div className="">
-            <div className="qvrow">
-              <div className="col-qv-3">
-                <div className="input_area">
-                  <label>Minimum Time:</label>
-                  <input
-                    type="number"
-                    value={MinPickupTime}
-                    required
-                    onChange={handleMinPickupTime}
-                  />
-                </div>
-              </div>
-
-              <div className="col-qv-3">
-                <div className="input_area">
-                  <label>Maximum Time</label>
-                  <input
-                    type="number"
-                    value={MaxPickupTime}
-                    required
-                    onChange={handleMaxPickupTime}
-                  />
-                </div>
-              </div>
-
-              <div className="col-qv-6">
-                <div className="input_area">
-                  <label>Convenience Fee ($)</label>
-                  <input
-                    type="text"
-                    placeholder="%0.00"
-                    maxlength="8"
-                    name="default_cash_drawer"
-                    id="cash_drawer"
-                    value={convenience}
-                    onChange={handleConvenChange}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div class="qvrow">
-              <div
-                className=""
-                style={{ display: "flex", justifyContent: "space-between" }}
-              >
-                <div className="">
-                  <h5 class="box_shadow_heading">Enable Delivery</h5>
-                </div>
-
-                <div className="fr">
-                  <Switch
-                    name="cost_method"
-                    onChange={handleCheckedclicked}
-                    checked={isDelveryEnbale}
-                  />
-                </div>
-              </div>
-            </div>
-            <div className="qvrow">
-              <div className="col-qv-6">
-                <div className="input_area">
-                  <label>Minimum Amount for Delivery ($)</label>
-
-                  <input
-                    type="text"
-                    placeholder="%0.00"
-                    maxlength="8"
-                    name="default_cash_drawer"
-                    id="cash_drawer"
-                    value={MinAmountdelivery}
-                    onChange={handleMinAmountdelivery}
-                  />
-                </div>
-              </div>
-              <div className="col-qv-6">
-                <div className="input_area">
-                  <label>Delivery Radius (Miles)</label>
-
-                  <input
-                    type="text"
-                    placeholder="%0.00"
-                    maxlength="8"
-                    name="default_cash_drawer"
-                    id="cash_drawer"
-                    value={rateDelivery}
-                    onChange={handleRateDel}
-                  />
-                </div>
-              </div>
-            </div>
-
-            <div className="qvrow">
-              <div className="col-qv-3">
-                <div className="input_area">
-                  <label> Delivery Time (Min)</label>
-                  <input
-                    type="number"
-                    value={MinDeliveryTime}
-                    // id="start_tym"
-                    required
-                    onChange={handleMinDeliveryTime}
-                  />
-                </div>
-              </div>
-
-              <div className="col-qv-3">
-                <div className="input_area">
-                  <label>Delivery Time (Max)</label>
-                  <input
-                    type="number"
-                    value={MaxDeliveryTime}
-                    // id="start_tym"
-                    required
-                    onChange={handleMaxDeliveryTime}
-                  />
-                </div>
-              </div>
-
-              <div className="col-qv-6">
-                <div className="input_area">
-                  <label>Convenience Fee ($)</label>
-
-                  <input
-                    type="text"
-                    placeholder="%0.00"
-                    maxlength="8"
-                    name="default_cash_drawer"
-                    id="cash_drawer"
-                    value={conveniencepik}
-                    onChange={handleDelconv}
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
     </>
   );
 };

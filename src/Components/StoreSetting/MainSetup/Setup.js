@@ -1,4 +1,4 @@
-import React, { useState , useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import OnlineOrderingPage from "./OnlineOrderingPage";
 import StoreWorkingHrs from "./StoreWorkingHrs";
 import PickupDeliveryDetails from "./PickupDeliveryDetails";
@@ -6,9 +6,7 @@ import FlatDelivery from "./FlatDelivery";
 import DelveryPickupDetails from "./DelveryPickupDetails";
 import { useDispatch } from "react-redux";
 import { fetchStoreSettingSetupData } from "../../../Redux/features/SettingSetup/SettingSetupSlice";
-
-
-
+import { Grid } from "@mui/material";
 
 const Setup = () => {
   // const [updateDetails, setUpdateDetails] = useState(true);
@@ -30,17 +28,15 @@ const Setup = () => {
   const [pickDefTip, setpickDefTip] = useState("");
   const [delDefTip, setdelDefTip] = useState("");
 
-
   const dispatch = useDispatch();
 
-  const data={
-    merchant_id:'MAL0100CA'
-  }
+  const data = {
+    merchant_id: "MAL0100CA",
+  };
 
   useEffect(() => {
-    dispatch(fetchStoreSettingSetupData(data))
-  
-  }, [])
+    dispatch(fetchStoreSettingSetupData(data));
+  }, []);
 
   // const handleUpdateClick = () => {
   //   console.log(OnlineOrderStatus);
@@ -50,58 +46,69 @@ const Setup = () => {
   // };
 
   const handleonlineorderstatus = (onlinestatus) => {
-    setOnlineOrderStatus(onlinestatus)
-  }
-  const handlepickupdeliverydata = (OdrNumData, MinPickData, MaxPickData, convData, DelEnbale, MinAmtdel, rateDel, MinDelData, MaxDelData, conepikData) => {
-    setEnableOrderNumber(OdrNumData)
-    setMinPickData(MinPickData)
-    setMaxPickData(MaxPickData)
-    setconvData(convData)
-    setDelEnbale(DelEnbale)
-    setMinAmtdel(MinAmtdel)
-    setrateDel(rateDel)
-    setMinDelData(MinDelData)
-    setMaxDelData(MaxDelData)
-    setconepikData(conepikData)
-  }
+    setOnlineOrderStatus(onlinestatus);
+  };
+  const handlepickupdeliverydata = (
+    OdrNumData,
+    MinPickData,
+    MaxPickData,
+    convData,
+    DelEnbale,
+    MinAmtdel,
+    rateDel,
+    MinDelData,
+    MaxDelData,
+    conepikData
+  ) => {
+    setEnableOrderNumber(OdrNumData);
+    setMinPickData(MinPickData);
+    setMaxPickData(MaxPickData);
+    setconvData(convData);
+    setDelEnbale(DelEnbale);
+    setMinAmtdel(MinAmtdel);
+    setrateDel(rateDel);
+    setMinDelData(MinDelData);
+    setMaxDelData(MaxDelData);
+    setconepikData(conepikData);
+  };
 
   const handleDeliveryFeeData = (FeeData, delChange, delRates) => {
-    setFeeData(FeeData)
-    setdelChange(delChange)
-    setdelRates(delRates)
-  }
+    setFeeData(FeeData);
+    setdelChange(delChange);
+    setdelRates(delRates);
+  };
 
   const handleDeliveryPickupData = (delpickData, pickDefTip, delDefTip) => {
-    setdelpickData(delpickData)
-    setpickDefTip(pickDefTip)
-    setdelDefTip(delDefTip)
-  }
+    setdelpickData(delpickData);
+    setpickDefTip(pickDefTip);
+    setdelDefTip(delDefTip);
+  };
 
   const handleUpdateClick = async (e) => {
     e.preventDefault();
 
     const FormData = {
-      merchant_id:"MAL0100CA",
-      offline:OnlineOrderStatus,
-      min_delivery_amt:MinAmtdel,
-      max_delivery_radius:rateDel,
-      enable_tip:delpickData,
-      is_pickup:EnableOrderNumber,
-      is_deliver:DelEnbale,
-      pickup_min_time:MinPickData,
-      pickup_max_time:MaxPickData,
-      deliver_min_time:MinDelData,
-      deliver_max_time:MaxDelData,
-      float_fee:FeeData,
-      delivery_fee:delChange,
-      rate_per_miles:delRates,
-      cf_del:"",
-      cf_pik:"",
-      cf_del_price:conepikData,
-      cf_pik_price:convData,
-      tax:"",
-      default_tip_p:pickDefTip,
-      default_tip_d:delDefTip,
+      merchant_id: "MAL0100CA",
+      offline: OnlineOrderStatus,
+      min_delivery_amt: MinAmtdel,
+      max_delivery_radius: rateDel,
+      enable_tip: delpickData,
+      is_pickup: EnableOrderNumber,
+      is_deliver: DelEnbale,
+      pickup_min_time: MinPickData,
+      pickup_max_time: MaxPickData,
+      deliver_min_time: MinDelData,
+      deliver_max_time: MaxDelData,
+      float_fee: FeeData,
+      delivery_fee: delChange,
+      rate_per_miles: delRates,
+      cf_del: "",
+      cf_pik: "",
+      cf_del_price: conepikData,
+      cf_pik_price: convData,
+      tax: "",
+      default_tip_p: pickDefTip,
+      default_tip_d: delDefTip,
     };
     console.log(FormData);
 
@@ -123,46 +130,39 @@ const Setup = () => {
 
   return (
     <>
-      <div className="q-order-main-page">
-        <OnlineOrderingPage 
-          onlineorderstatus={handleonlineorderstatus}
-        />
-      </div>
+      <OnlineOrderingPage onlineorderstatus={handleonlineorderstatus} />
 
-      <div className="q-order-main-page">
-        <div className="box">
-          <StoreWorkingHrs />
+      <StoreWorkingHrs />
+
+      <PickupDeliveryDetails pickupdeliverydata={handlepickupdeliverydata} />
+
+      <FlatDelivery DeliveryFeeData={handleDeliveryFeeData} />
+
+      <DelveryPickupDetails DeliveryPickupData={handleDeliveryPickupData} />
+
+      <Grid
+        container
+        direction="row"
+        justifyContent="flex-end"
+        alignItems="center"
+      >
+        <Grid item>
+          <button class="quic-btn quic-btn-save" onClick={handleUpdateClick}>
+            Update
+          </button>
+        </Grid>
+      </Grid>
+      {/* <div className="">
+        <div class="q-add-categories-section-middle-footer">
+          <div class="q-category-bottom-header" style={{ marginRight: "67px" }}>
+            <button class="quic-btn quic-btn-save" onClick={handleUpdateClick}>
+              Update
+            </button>
+
+            <button class="quic-btn quic-btn-cancle">Cancel</button>
+          </div>
         </div>
-      </div>
-
-      <div className="q-order-main-page">
-        <PickupDeliveryDetails 
-          pickupdeliverydata={handlepickupdeliverydata}
-        />
-      </div>
-
-      <div className="q-order-main-page">
-        <FlatDelivery 
-          DeliveryFeeData={handleDeliveryFeeData}
-        />
-      </div>
-
-      <div className="q-order-main-page">
-        <DelveryPickupDetails 
-          DeliveryPickupData={handleDeliveryPickupData}
-        />
-      </div>
-
-      <div className="">
-
-      <div class="q-add-categories-section-middle-footer">
-        <div class="q-category-bottom-header" style={{marginRight: "67px"}}>
-        <button class="quic-btn quic-btn-save" onClick={handleUpdateClick}>Update</button>
-
-        {/* <button class="quic-btn quic-btn-cancle">Cancel</button> */}
-        </div>
-        </div>
-      </div>
+      </div> */}
     </>
   );
 };

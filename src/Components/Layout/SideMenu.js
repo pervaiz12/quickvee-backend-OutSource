@@ -592,11 +592,11 @@ const menuItems = [
           },
         ],
       },
-      {
-        id: 66,
-        text: "Vendor Sales Report",
-        link: "/store-reporting/vendors-sales-reports",
-      },
+      // {
+      //   id: 66,
+      //   text: "Vendor Sales Report",
+      //   link: "/store-reporting/vendors-sales-reports",
+      // },
       {
         id: 90,
         text: "Item Sales Profit Report",
