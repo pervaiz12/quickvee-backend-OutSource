@@ -98,6 +98,7 @@ module.exports = Object.freeze({
   AUTO_PO_LIST: "Purchase_ordersReactApi/auto_po_list",
   PURCHASE_ORDER_DETAILS_BY_ID: "Purchase_orders_api/get_po_by_id",
   VOID_PO: "Purchase_orders_api/void_po",
+  RECEIVE_PURCHASE_ORDER_ITEMS: "Purchase_orders_api/recieve_po",
 
   // Taxes API Calls
   ADD_TAXES: "Taxesapi/add_Tax",
@@ -196,8 +197,8 @@ module.exports = Object.freeze({
   GET_MANAGER_LISTING: "Manager_react/manager_list",
   GET_MANAGER_RECORD: "UserController/maneger_view", // manager view
   GET_MANAGER_RECORD_COUNT: "UserController/maneger_view_count", // manager view
-  ADD_MANAGER:"Manager_react/add_update_manager", // manager view
-  DELETE_MANAGER:"Manager_react/delete_manager",
+  ADD_MANAGER: "Manager_react/add_update_manager", // manager view
+  DELETE_MANAGER: "Manager_react/delete_manager",
   GET_ADMIN_RECORD: "UserController/admin_view", // admin view data
   GET_ADMIN_RECORD_COUNT: "UserController/admin_view_count", // admin records count
   GET_MANAGER_MERCHANT: "UserController/get_manager_merchant", // get manager merchant
@@ -229,7 +230,7 @@ module.exports = Object.freeze({
   // Order Refund Report
   ORDER_REFUND_REPORT: "vendor_report_api/order_refund_report",
   REFUND_REPORT: "ReportingReactapi/refund_report",
-  
+
   // Vendors API calls
   LIST_ALL_VENDORS: "Vendor_api/vendor_list",
 
@@ -291,10 +292,9 @@ module.exports = Object.freeze({
   ADD_TIME_SHEET: "Timesheet_react_api/addNewTimeclock",
   ADD_TIME_BREAK: "Timesheet_react_api/addBreak",
   DELETE_TIMESHEET: "Timesheet_react_api/delete_timeclock",
-  DELETE_BREAK:"Timesheet_react_api/delete_breaks",
+  DELETE_BREAK: "Timesheet_react_api/delete_breaks",
 
-
-  CHANGE_PASSWORD_STORE: "Store_setting_react_api/change_password"
+  CHANGE_PASSWORD_STORE: "Store_setting_react_api/change_password",
 });
 
 // All api calls are initialized in this component for this application

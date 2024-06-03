@@ -14,7 +14,11 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { BASE_URL, VOID_PO } from "../../Constants/Config";
+import {
+  BASE_URL,
+  RECEIVE_PURCHASE_ORDER_ITEMS,
+  VOID_PO,
+} from "../../Constants/Config";
 import axios from "axios";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
@@ -57,22 +61,35 @@ const EditPurchaseOrder = () => {
 
   const [purchaseOrder, setPurchaseOrder] = useState({});
   const [headerCheckboxChecked, setHeaderCheckboxChecked] = useState(false);
+  const [isUpdated, setIsUpdated] = useState(false);
 
+  // setting purchaseOrder state data
   useEffect(() => {
-    console.log("puchaseOrderDetail: ", puchaseOrderDetail);
     const { order_items, ...data } = puchaseOrderDetail;
     setPurchaseOrder({
       ...data,
       order_items:
         order_items && order_items.length > 0
           ? order_items.map((item) =>
-              item.pending_qty === "0" ? { ...item, isChecked: true } : item
+              item.pending_qty === "0"
+                ? {
+                    ...item,
+                    isChecked: true,
+                  }
+                : {
+                    ...item,
+                    newPendingQty: item.pending_qty,
+                    newReceivedQty: item.recieved_qty,
+                    toReceiveQty: item.pending_qty,
+                  }
             )
           : [],
     });
   }, [puchaseOrderDetail]);
 
+  // setting main checkbox to true if all items have isChecked: true
   useEffect(() => {
+    console.log("items: ", purchaseOrder.order_items);
     const bool =
       purchaseOrder.order_items &&
       purchaseOrder.order_items.length > 0 &&
@@ -84,8 +101,9 @@ const EditPurchaseOrder = () => {
   useEffect(() => {
     const data = { merchant_id: "MAL0100CA", po_id: id, ...userTypeData };
     dispatch(fetchPurchaseOrderById(data));
-  }, []);
+  }, [isUpdated]);
 
+  // voiding a purchase order
   const voidPurchaseOrder = async () => {
     try {
       const { token } = userTypeData;
@@ -113,10 +131,6 @@ const EditPurchaseOrder = () => {
     } catch (e) {
       console.log("Error: ", e);
     }
-  };
-
-  const handlePOItems = (e) => {
-    const { value } = e.target;
   };
 
   // all items checkbox
@@ -148,6 +162,62 @@ const EditPurchaseOrder = () => {
         : [];
 
     setPurchaseOrder((prev) => ({ ...prev, order_items: temp }));
+  };
+
+  // receiving purchase order items api
+  const receivePOItems = async () => {
+    try {
+      const bool = purchaseOrder?.order_items?.some(
+        (item) => item.isChecked && Number(item.pending_qty) > 0
+      );
+      if (bool) {
+        console.log(purchaseOrder?.order_items);
+        const { token } = userTypeData;
+
+        const purchaseOrderItems =
+          purchaseOrder?.order_items &&
+          purchaseOrder?.order_items?.map((item) =>
+            Number(item.pending_qty) > 0
+              ? {
+                  ...item,
+                  pending_qty: item.newPendingQty,
+                  recieved_qty: item.newReceivedQty,
+                }
+              : item
+          );
+
+        console.log("purchaseOrderItems: ", purchaseOrderItems);
+
+        const formData = new FormData();
+        formData.append("merchant_id", "MAL0100CA");
+        formData.append("po_id", id);
+        formData.append("token_id", userTypeData.token_id);
+        formData.append("login_type", userTypeData.login_type);
+        formData.append("po_items", JSON.stringify(purchaseOrderItems));
+
+        const response = await axios.post(
+          BASE_URL + RECEIVE_PURCHASE_ORDER_ITEMS,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`, // Use data?.token directly
+            },
+          }
+        );
+
+        if (response.data.status) {
+          ToastifyAlert(response.data.message, "success");
+          setIsUpdated((prev) => !prev);
+        }
+
+        console.log("receive po: ", response);
+      } else {
+        ToastifyAlert("Please Select an Item to Receive", "error");
+      }
+    } catch (e) {
+      console.log("Error: ", e);
+    }
   };
 
   return (
@@ -298,7 +368,11 @@ const EditPurchaseOrder = () => {
                             <TextField
                               id="outlined-basic"
                               inputProps={{ type: "number" }}
-                              value={data?.pending_qty}
+                              value={
+                                data.pending_qty === "0"
+                                  ? 0
+                                  : data?.toReceiveQty
+                              }
                               onChange={(e) => {
                                 if (
                                   Number(e.target.value) >= 0 &&
@@ -313,28 +387,36 @@ const EditPurchaseOrder = () => {
                                         item.id === data.id
                                           ? {
                                               ...item,
-                                              pending_qty: e.target.value,
+                                              toReceiveQty: e.target.value,
+                                              newPendingQty: e.target.value
+                                                ? (Number(item.pending_qty) ||
+                                                    0) -
+                                                  (Number(e.target.value) || 0)
+                                                : Number(item.pending_qty),
+                                              newReceivedQty:
+                                                Number(item.recieved_qty) +
+                                                Number(e.target.value),
                                             }
                                           : item
                                     ),
                                   }));
+                                } else {
+                                  ToastifyAlert(
+                                    "Receive Quantity can not be more than required quantity",
+                                    "error"
+                                  );
                                 }
                               }}
                               placeholder="Received Qty"
                               variant="outlined"
                               size="small"
-                              disabled={
-                                data?.required_qty &&
-                                data?.recieved_qty &&
-                                Number(data?.required_qty) ===
-                                  Number(data?.recieved_qty)
-                              }
+                              disabled={Number(data.pending_qty) <= 0}
                             />
                           </StyledTableCell>
                         )}
                       {purchaseOrder?.is_void === "0" && (
                         <StyledTableCell>
-                          {(Number(data?.pending_qty) || 0) +
+                          {(Number(data?.toReceiveQty) || 0) +
                             (Number(data?.item_qty) || 0)}
                         </StyledTableCell>
                       )}
@@ -384,16 +466,16 @@ const EditPurchaseOrder = () => {
               </div>
               <div className="button-container end gap-4">
                 <button
-                  // onClick={handleCancel}
+                  onClick={() => navigate("/purchase-data")}
                   className="quic-btn quic-btn-cancle"
                 >
                   Back
                 </button>
                 <button
                   className="quic-btn quic-btn-save"
-                  // onClick={() => savePurchaseOrder("0")}
+                  onClick={receivePOItems}
                 >
-                  {headerCheckboxChecked ? "Receive All" : "Receive"}
+                  Receive
                 </button>
               </div>
             </div>
