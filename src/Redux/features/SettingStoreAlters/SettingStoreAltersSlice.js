@@ -10,8 +10,9 @@ const initialState = {
 
 // Generate pening , fulfilled and rejected action type
 export const fetchStoreSettingalertsData = createAsyncThunk('SettingStoreAltersSlice/fetchStoreSettingalertsData.', async (data) => {
+    const { token, ...dataNew } = data;
     try {
-        const response = await axios.post(BASE_URL + GET_STORE_ALERTS_DATA, data, { headers: { "Content-Type": "multipart/form-data" } })
+        const response = await axios.post(BASE_URL + GET_STORE_ALERTS_DATA, dataNew, { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`, } })
         if (response.status === 200) {
            return response.data
         }
