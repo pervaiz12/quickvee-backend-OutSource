@@ -17,6 +17,28 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors, seVisible }) => {
   const { userTypeData } = useAuthDetails();
   const [selectedProducts, setSelectedProducts] = useState([]);
 
+  const handleProductPrice = (e) => {
+    const { value } = e.target;
+
+    let val = value.replace(/[^\d]/g, "");
+
+    if (val === "") {
+      return "0.00";
+    }
+
+    val = val.replace(/^0+/, "");
+
+    while (val.length < 3) {
+      val = "0" + val;
+    }
+
+    const integerPart = val.slice(0, val.length - 2);
+    const decimalPart = val.slice(val.length - 2);
+    const formattedValue = `${integerPart}.${decimalPart}`;
+
+    return formattedValue;
+  };
+
   const handleCancel = () => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete all products?"
@@ -133,18 +155,19 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors, seVisible }) => {
 
   // helper fn
   const getFinalPrice = (type, prod, e) => {
+    const amount = handleProductPrice(e);
+
     const temp =
-      type === "newPrice" &&
-      parseFloat(e.target.value) > 0 &&
-      Number(prod.newQty) > 0
-        ? parseFloat(e.target.value) * Number(prod.newQty)
+      type === "newPrice" && parseFloat(amount) > 0 && Number(prod.newQty) > 0
+        ? parseFloat(amount) * Number(prod.newQty)
         : type === "newQty" &&
             Number(e.target.value) > 0 &&
             parseFloat(prod.newPrice) > 0
           ? Number(e.target.value) * parseFloat(prod.newPrice)
           : "0.00";
 
-    return temp;
+    const res = parseFloat(temp).toFixed(2);
+    return res;
   };
 
   // helper fn
@@ -167,9 +190,12 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors, seVisible }) => {
       prod.id === productId
         ? {
             ...prod,
-            [type]: e.target.value,
-            finalPrice: getFinalPrice(type, prod, e),
-            finalQty: getFinalQty(type, prod, e),
+            [type]:
+              type === "newPrice" ? handleProductPrice(e) : e.target.value,
+            finalPrice:
+              type === "notes" ? prod.finalPrice : getFinalPrice(type, prod, e),
+            finalQty:
+              type === "notes" ? prod.finalQty : getFinalQty(type, prod, e),
             priceError:
               type === "newPrice" && e.target.value && prod.priceError
                 ? ""

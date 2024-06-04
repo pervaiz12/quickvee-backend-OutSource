@@ -79,7 +79,8 @@ const EditPurchaseOrder = () => {
                 : {
                     ...item,
                     newPendingQty: item.pending_qty,
-                    newReceivedQty: item.recieved_qty,
+                    // newReceivedQty: item.recieved_qty,
+                    newReceivedQty: item.pending_qty,
                     toReceiveQty: item.pending_qty,
                   }
             )
@@ -171,29 +172,34 @@ const EditPurchaseOrder = () => {
         (item) => item.isChecked && Number(item.pending_qty) > 0
       );
       if (bool) {
-        console.log(purchaseOrder?.order_items);
         const { token } = userTypeData;
 
         const purchaseOrderItems =
           purchaseOrder?.order_items &&
           purchaseOrder?.order_items?.map((item) =>
-            Number(item.pending_qty) > 0
+            Number(item.pending_qty) > 0 && item.isChecked
               ? {
                   ...item,
-                  pending_qty: item.newPendingQty,
-                  recieved_qty: item.newReceivedQty,
+                  pending_qty:
+                    item.recieved_status === "2" ? "0" : item.newPendingQty,
+                  recieved_qty:
+                    item.recieved_status === "2" ? "0" : item.newReceivedQty,
+                  // recieved_qty: item.toReceiveQty,
                 }
-              : item
+              : { ...item, recieved_qty: "0" }
           );
 
-        console.log("purchaseOrderItems: ", purchaseOrderItems);
+        const items = purchaseOrderItems.map(({ id, ...item }) => ({
+          ...item,
+          po_item_id: id,
+        }));
 
         const formData = new FormData();
         formData.append("merchant_id", "MAL0100CA");
         formData.append("po_id", id);
         formData.append("token_id", userTypeData.token_id);
         formData.append("login_type", userTypeData.login_type);
-        formData.append("po_items", JSON.stringify(purchaseOrderItems));
+        formData.append("po_items", JSON.stringify(items));
 
         const response = await axios.post(
           BASE_URL + RECEIVE_PURCHASE_ORDER_ITEMS,
@@ -393,9 +399,12 @@ const EditPurchaseOrder = () => {
                                                     0) -
                                                   (Number(e.target.value) || 0)
                                                 : Number(item.pending_qty),
-                                              newReceivedQty:
-                                                Number(item.recieved_qty) +
-                                                Number(e.target.value),
+                                              newReceivedQty: Number(
+                                                e.target.value
+                                              ),
+                                              // newReceivedQty:
+                                              //   Number(item.recieved_qty) +
+                                              //   Number(e.target.value),
                                             }
                                           : item
                                     ),

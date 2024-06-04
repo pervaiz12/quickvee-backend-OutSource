@@ -145,7 +145,9 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
             sx={{ marginTop: 3 }}
           >
             <Grid item>
-              <h5 style={{marginBottom:0}} className="box_shadow_heading">Enable Pickup</h5>
+              <h5 style={{ marginBottom: 0 }} className="box_shadow_heading">
+                Enable Pickup
+              </h5>
             </Grid>
             <Grid item>
               <Switch
@@ -202,7 +204,9 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
             sx={{ marginTop: 3 }}
           >
             <Grid item>
-              <h5 style={{marginBottom:0}} class="box_shadow_heading">Enable Delivery</h5>
+              <h5 style={{ marginBottom: 0 }} class="box_shadow_heading">
+                Enable Delivery
+              </h5>
             </Grid>
             <Grid>
               <Switch
