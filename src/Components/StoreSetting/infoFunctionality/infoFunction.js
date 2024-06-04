@@ -5,6 +5,7 @@ import {
   BASE_URL,
   GET_Edit_STORE_INFO,
   UPDATE_STORE_INFO,
+  CHANGE_PASSWORD_STORE
 } from "../../../Constants/Config";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 export default function InfoFunction() {
@@ -33,11 +34,75 @@ export default function InfoFunction() {
     state: "",
     phone: "",
   });
+
+  // ============================password ======================
+  const [passwordInput, setPassowordInput] = useState({
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [passwordError, setPasswordError] = useState({
+    password: "",
+    confirmPassword: "",
+  });
+  const onPasswordInputChange = (e) => {
+    const { name, value } = e.target;
+    setPassowordInput((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+    validatePasswordInput(e);
+  };
+
+  const validatePasswordInput = (e) => {
+    let { name, value } = e.target;
+
+    setPasswordError((prev) => {
+      const stateObj = { ...prev, [name]: "" };
+
+      switch (name) {
+        case "password":
+          if (!value) {
+            stateObj[name] = "Please enter Password.";
+          } else if (
+            passwordInput.confirmPassword &&
+            value !== passwordInput.confirmPassword
+          ) {
+            stateObj["confirmPassword"] =
+              "Password and Confirm Password does not match.";
+          } else {
+            stateObj["confirmPassword"] = passwordInput.confirmPassword
+              ? ""
+              : passwordError.confirmPassword;
+          }
+          break;
+
+        case "confirmPassword":
+          if (!value) {
+            stateObj[name] = "Please enter Confirm Password.";
+          } else if (
+            passwordInput.password &&
+            value !== passwordInput.password
+          ) {
+            stateObj[name] = "Password and Confirm Password does not match.";
+          }
+          break;
+
+        default:
+          break;
+      }
+
+      return stateObj;
+    });
+  };
+  // =======================end password ==========================
+
   const [errors, setErrors] = useState({
     imageErrors: "",
     bannerErrors: "",
     phoneError: "",
   });
+
   const [imageBoolean, setImageBoolean] = useState(false);
   const [BannersBoolean, setBannersBoolean] = useState(false);
   const [approve, setApprove] = useState("");
@@ -92,6 +157,7 @@ export default function InfoFunction() {
         Authorization: `Bearer ${userTypeData?.token}`,
       },
     });
+
     if (response.data.status == 200) {
       const merchant_id =
         response.data.message.merchant_id !== null
@@ -271,6 +337,35 @@ export default function InfoFunction() {
       }
     }
   };
+  const currentPassordValidate = (passwordError) => {
+    if (passwordError.password === "" && passwordError.confirmPassword === "") {
+      return true;
+    } else {
+      return false;
+    }
+  };
+  const handleSubmitChangePassword  = async (e) => {
+    e.preventDefault();
+    let CurrentPassordValidate = currentPassordValidate(passwordError);
+    if (CurrentPassordValidate === true) {
+      let data = {
+        new_password: passwordInput.password,
+        confirm_password: passwordInput.confirmPassword,
+        merchant_id: infoRecord.merchant_id,
+        user_id: 100,
+        login_type: userTypeData?.login_type,
+      };
+      let response = await axios.post(BASE_URL + CHANGE_PASSWORD_STORE, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userTypeData?.token}`,
+        },
+      });
+      if (response.status == 200) {
+        console.log("password changes")
+      }
+    }
+  };
   return {
     handleSubmitInfo,
     imageBanner,
@@ -285,5 +380,9 @@ export default function InfoFunction() {
     hideSucess,
     errors,
     handleKeyPress,
+    onPasswordInputChange,
+    passwordInput,
+    passwordError,
+    handleSubmitChangePassword
   };
 }

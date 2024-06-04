@@ -93,6 +93,12 @@ module.exports = Object.freeze({
 
   // Purchase API Calls
   LIST_ALL_PARCHASE: "Purchase_ordersReactApi/purchase_order_list",
+  PURCHASE_ORDER_COUNT: "Purchase_ordersReactApi/purchase_order_count",
+  SAVE_PO: "Purchase_ordersReactApi/save_po",
+  AUTO_PO_LIST: "Purchase_ordersReactApi/auto_po_list",
+  PURCHASE_ORDER_DETAILS_BY_ID: "Purchase_orders_api/get_po_by_id",
+  VOID_PO: "Purchase_orders_api/void_po",
+  RECEIVE_PURCHASE_ORDER_ITEMS: "Purchase_orders_api/recieve_po",
 
   // Taxes API Calls
   ADD_TAXES: "Taxesapi/add_Tax",
@@ -191,8 +197,8 @@ module.exports = Object.freeze({
   GET_MANAGER_LISTING: "Manager_react/manager_list",
   GET_MANAGER_RECORD: "UserController/maneger_view", // manager view
   GET_MANAGER_RECORD_COUNT: "UserController/maneger_view_count", // manager view
-  ADD_MANAGER:"Manager_react/add_update_manager", // manager view
-  DELETE_MANAGER:"Manager_react/delete_manager",
+  ADD_MANAGER: "Manager_react/add_update_manager", // manager view
+  DELETE_MANAGER: "Manager_react/delete_manager",
   GET_ADMIN_RECORD: "UserController/admin_view", // admin view data
   GET_ADMIN_RECORD_COUNT: "UserController/admin_view_count", // admin records count
   GET_MANAGER_MERCHANT: "UserController/get_manager_merchant", // get manager merchant
@@ -224,7 +230,7 @@ module.exports = Object.freeze({
   // Order Refund Report
   ORDER_REFUND_REPORT: "vendor_report_api/order_refund_report",
   REFUND_REPORT: "ReportingReactapi/refund_report",
-  
+
   // Vendors API calls
   LIST_ALL_VENDORS: "Vendor_api/vendor_list",
 
@@ -243,6 +249,8 @@ module.exports = Object.freeze({
 
   // PRODUCTS
   PRODUCTS_LIST: "Product_api_react/Products_list",
+  ALL_PRODUCTS_LIST: "Productapi/products_list",
+  ALL_PRODUCTS_LIST_WITH_VARIANTS: "Productapi/variant_list",
   PRODUCT_DEFAULT_IMAGE: this.BASE_URL + "upload/products/MaskGroup4542.png",
   UPDATE_TYPE: "Product_api_react/update_type",
 
@@ -264,11 +272,6 @@ module.exports = Object.freeze({
   // EMPLOYEE_WORK_HOURS: "Report_api/employee_work_hours1",
   EMPLOYEE_WORK_HOURS: "Report_api/employee_work_hours1_api",
 
-  // Add Po
-
-  ADD_PO_LIST: "Purchase_orders_api/po_list",
-  // -----------------
-
   LOGIN_AUTHENICATE_API: "LoginApiReact/chk_merchant",
   LOGIN_AUTHENICATE2_API: "LoginApiReact/send_otp_session", //
   LOGIN_OTP_AUTHENTICATION: "LoginApiReact/chk_otp", //
@@ -283,13 +286,15 @@ module.exports = Object.freeze({
   EXPORTCSV: "UserController/exportCSV",
   DISCOUNT_PER_PERSON: "Reportingreactapi_pcr/discount_per_sales_person_report",
 
-   // For TimeSheet 
+  // For TimeSheet
   TIME_SHEET_LIST: "Timesheet_react_api/timesheet_list",
-  TIME_SHEET_GETBREAKS:"Timesheet_react_api/getBreaks",
+  TIME_SHEET_GETBREAKS: "Timesheet_react_api/getBreaks",
   ADD_TIME_SHEET: "Timesheet_react_api/addNewTimeclock",
   ADD_TIME_BREAK: "Timesheet_react_api/addBreak",
   DELETE_TIMESHEET: "Timesheet_react_api/delete_timeclock",
-  DELETE_BREAK:"Timesheet_react_api/delete_breaks",
+  DELETE_BREAK: "Timesheet_react_api/delete_breaks",
+
+  CHANGE_PASSWORD_STORE: "Store_setting_react_api/change_password",
 });
 
 // All api calls are initialized in this component for this application

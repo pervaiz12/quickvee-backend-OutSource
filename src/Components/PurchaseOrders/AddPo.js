@@ -1,174 +1,245 @@
-import React, { useState  ,useEffect} from "react";
-import { Grid, TextField, MenuItem } from "@mui/material";
-import AutoPo from "./AutoPo";
-import { FormControl } from "@mui/material";  
-import "react-datepicker/dist/react-datepicker.css";
-import SelectDropDown from "../../reuseableComponents/SelectDropDown";
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import BasicTextFields from "../../reuseableComponents/TextInputField";
-import AddNewCategory from '../../Assests/Dashboard/Left.svg'
-import { fetchaddpopurchaseData } from '../../Redux/features/PurchaseOrder/AddpurchaseOrderSlice'
+import React, { useState, useEffect } from "react";
+import { Grid } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 
-import { Link } from "react-router-dom";
-import { event } from "jquery";
+import AutoPo from "./AutoPo";
+import SelectDropDown from "../../reuseableComponents/SelectDropDown";
+import BasicTextFields from "../../reuseableComponents/TextInputField";
+import AddNewCategory from "../../Assests/Dashboard/Left.svg";
+import { fetchaddpopurchaseData } from "../../Redux/features/PurchaseOrder/AddpurchaseOrderSlice";
+import { fetchVendorsListData } from "../../Redux/features/VendorList/vListSlice";
 
-const AddPo = (listItem) => {
-  // const [isHide, setIsHide] = useState(false);
-  const [visible, seVisible] = useState("MainPurchase");
-  const [issueDate, setIssueDate] = useState(null);
-  
-  const [addpostock , setAddpostock] = useState('')
+import "react-datepicker/dist/react-datepicker.css";
+import dayjs from "dayjs";
+import { useAuthDetails } from "../../Common/cookiesHelper";
+
+const AddPo = ({ seVisible }) => {
+  const dispatch = useDispatch();
+  const { userTypeData } = useAuthDetails();
+
   const [purchaseInfo, setPurchaseInfo] = useState({
+    issuedDate: null,
+    stockDate: null,
+    email: "",
+    reference: "",
+    selectedVendor: "",
+    vendorId: "",
+  });
+
+  const [purchaseInfoErrors, setPurchaseInfoErrors] = useState({
     issuedDate: "",
     stockDate: "",
     email: "",
-    reference: ""
+    selectedVendor: "",
+    reference: "",
   });
 
-  
-
-  const dispatch = useDispatch();
-  const addpoData = useSelector((state) => state.Addpolist);
-  const adpoDataList = addpoData?.addpoData?.result;
-
- // console.log(adpoDataList);
-  // const dispatch = useDispatch();
-  // const addpoData = useSelector((state) => state.Addpolist);
-  // console.log(addpoData?.addpoData?.result);
-
-  // const adpoDataList = addpoData?.addpoData?.result
+  const allVendors = useSelector((state) => state.vendors);
 
   useEffect(() => {
-    const data = { merchant_id: 'MAL0100CA', admin_id: 'MAL0100CA' }
-    dispatch(fetchaddpopurchaseData(data)); 
-    //console.log('purchaseData', data)
-  }, [dispatch]); 
- 
-
-useEffect(() => {
-  // console.log("hello");
-  // console.log('addpoData',addpoData)
-
-
-  
-}, [addpoData.lenght])
-
+    const data = { merchant_id: "MAL0100CA", ...userTypeData };
+    dispatch(fetchaddpopurchaseData({ ...data, admin_id: "MAL0100CA" }));
+    dispatch(fetchVendorsListData(data));
+  }, [dispatch]);
 
   const handleVendorClick = (data) => {
-    const { email, reference, issued_date, stock_date } = data;
+    const { email, name, id } = data;
 
     // Update state with the extracted data
-    setPurchaseInfo(prevState => ({
+    setPurchaseInfo((prevState) => ({
       ...prevState,
-      issuedDate: issued_date,
-      stockDate: stock_date,
       email: email,
-      reference: reference
+      selectedVendor: name,
+      vendorId: id,
+    }));
+
+    setPurchaseInfoErrors((prev) => ({
+      ...prev,
+      selectedVendor:
+        purchaseInfoErrors.selectedVendor && name && id
+          ? ""
+          : prev.selectedVendor,
+      email: purchaseInfoErrors.email && email ? "" : prev.email,
     }));
   };
 
-  const { issuedDate, stockDate, email, reference } = purchaseInfo;
+  const handleValue = (e) => {
+    const { value, name } = e.target;
 
-  console.log('purchaseInfo', issuedDate);
-
-  useEffect(() => {
-    if (adpoDataList) {
-      const { issued_date, stock_date, email, reference  } = adpoDataList;
-      setPurchaseInfo({
-        issuedDate: issued_date,
-        stockDate: stock_date,
-        email: email,
-        reference: reference,
-      });
+    switch (name) {
+      case "reference":
+        setPurchaseInfo((prev) => ({ ...prev, reference: value }));
+        break;
+      case "email":
+        setPurchaseInfo((prev) => ({ ...prev, email: value }));
+        setPurchaseInfoErrors((prev) => ({
+          ...prev,
+          email: Boolean(value.trim()) ? "" : prev.email,
+        }));
+        break;
+      default:
+        setPurchaseInfo((prev) => prev);
     }
-  }, [adpoDataList]);
+  };
 
+  const handleDate = (date, type) => {
+    const dayjsDate = dayjs(date); // Convert to dayjs object
+    const formattedStartDate = dayjsDate.format("YYYY-MM-DD");
+    setPurchaseInfo((prev) => ({
+      ...prev,
+      [type]: formattedStartDate,
+    }));
 
+    if (type === "issuedDate" && purchaseInfoErrors.issuedDate) {
+      setPurchaseInfoErrors((prev) => ({ ...prev, issuedDate: "" }));
+    }
 
-
+    if (type === "stockDate" && purchaseInfoErrors.stockDate) {
+      setPurchaseInfoErrors((prev) => ({ ...prev, stockDate: "" }));
+    }
+  };
 
   return (
     <>
-     
-        <div className="box">
-      <div className="box_shadow_div" style={{ height: "300px" }}>
-        <div className="q-add-categories-section-header">
-          <span>
-            <span onClick={() => seVisible("MainPurchase")}>
-              <img src={AddNewCategory} alt="Add New Category" className="w-6 h-6" />
+      <div className="box">
+        <div className="box_shadow_div">
+          <div className="q-add-categories-section-header">
+            <span onClick={() => seVisible("PurchaseTable")}>
+              <img
+                src={AddNewCategory}
+                alt="Add New Category"
+                className="w-6 h-6"
+              />
+              <span>Create Purchase Order</span>
             </span>
-            <span>Create Purchase Order</span>
-          </span>
-        </div>
-      
-         <div>
-           
-              
-              <div className="px-6" >
-                <Grid container spacing={2}>
-                  <Grid item xs={4}>
-                    <label>vendor</label>
-                  
-                    <SelectDropDown
-                      heading={"All"}
-                      selectedOption={"lll"}
-                      listItem={adpoDataList}
-                      onClickHandler={handleVendorClick}
-                      title={'vendor_name'}
-                    />
-                  </Grid>
-                <Grid item xs={4}>
+          </div>
+
+          <div>
+            <div className="px-6 py-7">
+              <Grid container spacing={2}>
+                <Grid item xs={12} sm={6} md={4}>
+                  <label>Vendor</label>
+                  <SelectDropDown
+                    selectedOption={purchaseInfo.selectedVendor}
+                    listItem={allVendors.vendorListData[0]}
+                    onClickHandler={handleVendorClick}
+                    title={"name"}
+                  />
+                  {purchaseInfoErrors.selectedVendor && (
+                    <p className="error-message">
+                      {purchaseInfoErrors.selectedVendor}
+                    </p>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={6} md={4}>
                   <label>Issued Date</label>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={['DatePicker']}>
-                      <DatePicker title={issuedDate} /> 
+                    <DemoContainer
+                      sx={{ paddingTop: 0 }}
+                      components={["DatePicker"]}
+                    >
+                      <DatePicker
+                        sx={{ width: "100%" }}
+                        className="issued-date"
+                        size="small"
+                        slotProps={{
+                          textField: {
+                            size: "small",
+                          },
+                        }}
+                        format={"MM/DD/YYYY"}
+                        disablePast
+                        onChange={(newDate) => {
+                          handleDate(newDate, "issuedDate");
+                          setPurchaseInfo((prev) => ({
+                            ...prev,
+                            stockDate: null,
+                          }));
+                        }}
+                        value={purchaseInfo.issuedDate}
+                      />
                     </DemoContainer>
                   </LocalizationProvider>
+                  {purchaseInfoErrors.issuedDate && (
+                    <p className="error-message">
+                      {purchaseInfoErrors.issuedDate}
+                    </p>
+                  )}
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={12} sm={6} md={4}>
                   <label>Stock Due</label>
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer components={['DatePicker']}>
-                      <DatePicker title={stockDate} /> 
+                    <DemoContainer
+                      sx={{ paddingTop: 0 }}
+                      components={["DatePicker"]}
+                    >
+                      <DatePicker
+                        sx={{ width: "100%" }}
+                        className="stock-due-date"
+                        size="small"
+                        slotProps={{
+                          textField: {
+                            size: "small",
+                          },
+                        }}
+                        disablePast
+                        format={"MM/DD/YYYY"}
+                        shouldDisableDate={(date) => {
+                          return date < dayjs(purchaseInfo.issuedDate);
+                        }}
+                        onChange={(newDate) => handleDate(newDate, "stockDate")}
+                        value={purchaseInfo.stockDate}
+                      />
                     </DemoContainer>
                   </LocalizationProvider>
+                  {purchaseInfoErrors.stockDate && (
+                    <p className="error-message">
+                      {purchaseInfoErrors.stockDate}
+                    </p>
+                  )}
                 </Grid>
-
-                <Grid item xs={6}>
+                <Grid item xs={12} sm={6} md={4}>
                   <label>Reference</label>
                   <BasicTextFields
-                  
-                    value={reference} 
-                    onClickHandler={handleVendorClick}
+                    value={purchaseInfo.reference}
+                    onChangeFun={handleValue}
+                    name={"reference"}
                     type={"text"}
+                    required={true}
+                    placeholder={"Note or Info or Invoice Number"}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid item xs={12} sm={6} md={4}>
                   <label>Vendor Email</label>
                   <BasicTextFields
-                    value={email} 
-                    onClickHandler={handleVendorClick}
+                    value={purchaseInfo.email}
+                    onChangeFun={handleValue}
+                    name={"email"}
                     type={"email"}
+                    required={true}
+                    placeholder={"Vendor Email Address"}
                   />
+                  {purchaseInfoErrors.email && (
+                    <p className="error-message">{purchaseInfoErrors.email}</p>
+                  )}
                 </Grid>
-                </Grid>
-              </div>
-            
-          </div>    
+              </Grid>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>
-     
-     
-       <div className="second-component">
-          <AutoPo />
-      </div> 
-       
-      
-   
+
+      <div className="second-component">
+        <AutoPo
+          purchaseInfo={purchaseInfo}
+          setPurchaseInfoErrors={setPurchaseInfoErrors}
+          seVisible={seVisible}
+        />
+      </div>
     </>
   );
 };

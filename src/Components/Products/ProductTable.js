@@ -26,6 +26,7 @@ const ProductTable = ({
   const { hasMore, offset, limit } = useSelector(
     (state) => state.productsListData
   );
+  const { userTypeData } = useAuthDetails();
 
   const { userTypeData } = useAuthDetails();
 
@@ -120,6 +121,7 @@ const ProductTable = ({
       offset: offset,
       limit: 10,
       page: page,
+      ...userTypeData,
     };
     if (data1) {
       dispatch(fetchProductsData(data1));

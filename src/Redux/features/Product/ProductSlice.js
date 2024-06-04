@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import {
+  ALL_PRODUCTS_LIST_WITH_VARIANTS,
   BASE_URL,
   PRODUCTS_LIST,
   UPDATE_TYPE,
@@ -9,6 +10,7 @@ import {
 const initialState = {
   loading: false,
   productsData: [],
+  allProductsData: [],
   page: 0,
   offset: 0,
   limit: 10,
@@ -20,21 +22,47 @@ const initialState = {
   // for add product varient
   isLoading: false,
   isError: false,
-
   // for edit product
   isEditError: false,
-
   // for fetchDataBy Id
   isFetchLoading: false,
 };
+// Generate pening , fulfilled and rejected action type
+export const fetchAllProducts = createAsyncThunk(
+  "products/fetchAllProducts",
+  async (data) => {
+    try {
+      const { token, ...dataNew } = data;
+      const response = await axios.post(
+        BASE_URL + ALL_PRODUCTS_LIST_WITH_VARIANTS,
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.status === 200) {
+        return response.data.result;
+      }
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
 
 // Generate pening , fulfilled and rejected action type
 export const fetchProductsData = createAsyncThunk(
-  "products/fetchProductsData.",
+  "products/fetchProductsData",
   async (data) => {
     try {
-      const response = await axios.post(BASE_URL + PRODUCTS_LIST, data, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const { token, ...dataNew } = data;
+      const response = await axios.post(BASE_URL + PRODUCTS_LIST, dataNew, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
       });
       // console.log(response)
       if (response.status === 200) {
@@ -47,7 +75,7 @@ export const fetchProductsData = createAsyncThunk(
 );
 
 export const updateProductsType = createAsyncThunk(
-  "products/updateProductsType.",
+  "products/updateProductsType",
   async (data) => {
     try {
       const response = await axios.post(BASE_URL + UPDATE_TYPE, data, {
@@ -62,7 +90,6 @@ export const updateProductsType = createAsyncThunk(
     }
   }
 );
-
 export const getInventorySetting = createAsyncThunk(
   "products/getInventorySetting",
   async (payload) => {
@@ -418,6 +445,16 @@ const productsSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
+    builder.addCase(fetchAllProducts.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchAllProducts.fulfilled, (state, action) => {
+      state.allProductsData = action.payload;
+    });
+    builder.addCase(fetchAllProducts.rejected, (state, action) => {
+      state.allProductsData = [];
+    });
+
     builder.addCase(fetchProductsData.pending, (state) => {
       state.loading = true;
     });
@@ -430,6 +467,7 @@ const productsSlice = createSlice({
         state.productsData = [];
       }
       // Append new items to the productsData array
+      // console.log(state);
       state.productsData.push(...action.payload);
       state.offset += 10;
       state.hasMore = action.payload.length > 0;
@@ -440,7 +478,6 @@ const productsSlice = createSlice({
       state.productsData = {};
       state.error = action.error.message;
     });
-
     builder.addCase(updateProductsType.pending, (state) => {
       state.loading = true;
     });
@@ -452,20 +489,6 @@ const productsSlice = createSlice({
       state.productsData = {};
       state.error = action.error.message;
     });
-
-    /*  builder.addCase(addToWishlist.pending, (state) => {
-            state.loading = true;
-        });
-        builder.addCase(addToWishlist.fulfilled, (state, action) => {
-            state.loading = false;
-            state.successMessage = action.payload;
-            state.error = ''; // Reset the error message
-        });
-        builder.addCase(addToWishlist.rejected, (state, action) => {
-            state.loading = false;
-            state.error = action.error.message;
-        });
-    */
 
     // add product varient
     builder.addCase(addProduct.pending, (state) => {

@@ -8,6 +8,7 @@ import {
   emptyProduct,
   updateProductsType,
 } from "../../Redux/features/Product/ProductSlice";
+import { useAuthDetails } from "../../Common/cookiesHelper";
 
 const MainProducts = () => {
   const dispatch = useDispatch();
@@ -15,7 +16,7 @@ const MainProducts = () => {
   const [offset, setoffset] = useState(0);
   const [limit, setlimit] = useState(10);
   const [selectedEmployee, setSelectedEmployee] = useState("Select");
-  console.log("setSelectedEmployee ", selectedEmployee);
+  // console.log("setSelectedEmployee ", selectedEmployee);
   const [selectedStatus, setSelectedStatus] = useState("all");
   const [selectedStatusValue, setSelectedStatusValue] = useState("all");
 
@@ -33,6 +34,8 @@ const MainProducts = () => {
 
   const [searchId, setSearchId] = useState(""); // State to track search ID
 
+  const { userTypeData } = useAuthDetails();
+
   // Function to update the category ID, which will be passed to the child
   const handleCategoryChange = (catId) => {
     setCategoryId(catId);
@@ -49,6 +52,7 @@ const MainProducts = () => {
       limit: 10,
       name: searchId,
       page: 0,
+      ...userTypeData,
     };
     if (name_data) {
       dispatch(emptyProduct([]));
@@ -97,7 +101,7 @@ const MainProducts = () => {
             dispatch(updateProductsType(type_date))
               .then((actionResult) => {
                 const responseData = actionResult.payload;
-                console.log("Response Data:", responseData);
+                // console.log("Response Data:", responseData);
                 if (responseData) {
                   let del_pic_data = {
                     merchant_id: "MAL0100CA",
@@ -107,6 +111,7 @@ const MainProducts = () => {
                     offset: 0,
                     limit: 10,
                     page: 0,
+                    ...userTypeData,
                   };
                   if (del_pic_data) {
                     dispatch(fetchProductsData(del_pic_data));
@@ -137,6 +142,7 @@ const MainProducts = () => {
           offset: 0,
           limit: 10,
           page: 0,
+          ...userTypeData,
         };
         if (status_data) {
           dispatch(fetchProductsData(status_data));

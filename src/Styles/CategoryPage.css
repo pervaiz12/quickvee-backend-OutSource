@@ -213,6 +213,7 @@
   width: 20px;
   background-color: #eee;
   border-radius: 5px;
+  border: 1px solid #0000003b;
 }
 
 /* When the checkbox is checked, add a blue background */
@@ -269,7 +270,8 @@
   border-bottom: 1px solid #e8e8e8;
 }
 
-.q-add-categories-section-header > span {
+.q-add-categories-section-header > span,
+.q-add-categories-section-header > a {
   display: flex;
   width: 190px;
   justify-content: space-between;
@@ -490,7 +492,7 @@
 
 .viewModal-width {
   max-height: 50vh;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 .viewModal-Btn {
   color: #0a64f9;
