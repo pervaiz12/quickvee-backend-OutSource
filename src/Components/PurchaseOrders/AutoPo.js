@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DeleteIcon from "../../Assests/Dashboard/deleteIcon.svg";
-import { FormControl } from "@mui/material";
-import { TextField, Grid } from "@mui/material";
+import { TextField, Grid, FormControl } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { fetchProductsData } from "../../Redux/features/Product/ProductSlice";
 import { useAuthDetails } from "../../Common/cookiesHelper";
@@ -17,6 +16,15 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors, seVisible }) => {
   const { userTypeData } = useAuthDetails();
   const [selectedProducts, setSelectedProducts] = useState([]);
 
+  useEffect(() => {
+    console.log("purchaseInfo: ", purchaseInfo);
+  }, [purchaseInfo]);
+
+  useEffect(() => {
+    console.log("selectedProducts: ", selectedProducts);
+  }, [selectedProducts]);
+
+  // handling price of product items, 0.00 format
   const handleProductPrice = (e) => {
     const { value } = e.target;
 

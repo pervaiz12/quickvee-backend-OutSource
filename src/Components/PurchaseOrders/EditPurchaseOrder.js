@@ -461,7 +461,7 @@ const EditPurchaseOrder = () => {
                   Print
                 </button>
                 <button
-                  // onClick={() => savePurchaseOrder("1")}
+                  onClick={() => navigate(`/purchase-data/edit/${id}`)}
                   className="quic-btn quic-btn-draft"
                 >
                   Edit PO
