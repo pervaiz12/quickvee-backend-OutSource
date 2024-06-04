@@ -1,6 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios';
-import { BASE_URL, GET_STORE_OPTIONS_DATA } from "../../../Constants/Config";
+import { BASE_URL, GET_STORE_OPTIONS_DATA, UPDATE_STORE_OPTIONS_DATA } from "../../../Constants/Config";
 
 const initialState = {
     loading: false,
@@ -11,11 +11,21 @@ const initialState = {
 
 // Generate pening , fulfilled and rejected action type
 export const fetchStoreSettingOptionData = createAsyncThunk('StoreSettingOptionSlice/fetchStoreSettingOptionData.', async (data) => {
+    const {token, ...dataNew} = data;
     try {
-        const response = await axios.post(BASE_URL + GET_STORE_OPTIONS_DATA, data, { headers: { "Content-Type": "multipart/form-data" } })
+        const response = await axios.post(BASE_URL + GET_STORE_OPTIONS_DATA, dataNew, { headers: { "Content-Type": "multipart/form-data",  Authorization: `Bearer ${token}` } })
         if (response.status === 200) {
            return response.data
         }
+    } catch (error) {
+        throw new Error(error.response.data.message);
+    }
+})
+
+export const updateStoreOption = createAsyncThunk('StoreSettingOptionSlice/updateStoreOption', async(data)=>{
+    try {
+        const response = await axios.post(BASE_URL + UPDATE_STORE_OPTIONS_DATA, data, { headers: { "Content-Type": "multipart/form-data" } })
+        return response?.data
     } catch (error) {
         throw new Error(error.response.data.message);
     }

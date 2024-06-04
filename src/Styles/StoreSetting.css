@@ -123,9 +123,9 @@
     --tw-border-opacity: 1;
     border-color: rgb(225 225 225 / var(--tw-border-opacity));
 }
-.store-setting-switch{
+/* .store-setting-switch{
     float: right;
-}
+} */
 .react-datepicker-wrapper{
     width: 100%;
 }
@@ -149,7 +149,7 @@
     opacity: 1;
     padding: 8px 25px;
     float: right;
-    /* margin-right: 2.5rem; */
+    width: 140px;
 }
 
 .box-padding-5{
@@ -315,4 +315,25 @@
 }
 .store-setting-checkmark-td .category-checkmark-div {
     display: unset;
+}
+
+.store-setting-div .d-flex{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.card-surchanger{
+    display: flex;
+}
+
+.card-surchanger .card{
+    width: 49%;
+    margin-right: 1%;
+}
+.btnarea{
+    width: 100%;
+    padding: 0px 40px 40px 40px;
+    box-sizing: border-box;
+    text-align: right;
 }

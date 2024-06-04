@@ -180,7 +180,9 @@ const DraggableTable = ({
                 <TableBody ref={provided.innerRef} {...provided.droppableProps}>
                   {tableRow &&
                     tableRow.length >= 1 &&
-                    tableRow.map((item, index) => (
+                    tableRow.map((item, index) => {
+      
+                      return (
                       <Draggable
                         key={item.id}
                         draggableId={item.id}
@@ -291,7 +293,7 @@ const DraggableTable = ({
                           </StyledTableRow>
                         )}
                       </Draggable>
-                    ))}
+                    )})}
                   {provided.placeholder}
                 </TableBody>
               )}

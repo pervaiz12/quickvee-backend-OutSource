@@ -124,6 +124,8 @@ const ManagerStore = () => {
     .then((res) => {
       if (res?.payload?.msg === "Data found.") {
         setManagerList(res?.payload?.result);
+      }else if(res?.payload?.msg === "No data found."){
+        setManagerList([]);
       }
     })
     .catch(() => {

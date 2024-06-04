@@ -233,7 +233,7 @@ export const fetchVendorList = createAsyncThunk(
   async (payload) => {
     try {
       const response = await axios.post(
-        BASE_URL + "Productapi/product_vendors_list",
+        BASE_URL + "Product_api_react/product_vendors_list",
         payload
       );
       return response?.data;
@@ -325,6 +325,89 @@ export const saveVendorList = createAsyncThunk(
       const response = await axios.post(
         BASE_URL + "Productapi/save_vendor_list",
         payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const getAlreadyAssignVendor = createAsyncThunk(
+  "products/getAlreadyAssignVendor",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/assign_product_vendors_list",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const bulkVendorAssign = createAsyncThunk(
+  "products/bulkVendorAssign",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/bulk_assign_vendors",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const saveSingleVarientPO = createAsyncThunk(
+  "products/saveSingleVarientPO",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/save_instant_po",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const saveBulkInstantPo = createAsyncThunk(
+  "products/saveBulkInstantPo",
+  async (payload) => {
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/bulk_instant_po",
+        payload
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const changeOnlineOrderMethod = createAsyncThunk(
+  "products/changeOnlineOrderMethod",
+  async (payload) => {
+    console.log(payload);
+    const {token, ...payloadNew} = payload;
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/product_show_status_update",
+        payloadNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response?.data;
     } catch (error) {

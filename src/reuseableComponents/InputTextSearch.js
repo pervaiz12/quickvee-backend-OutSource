@@ -9,6 +9,7 @@ const InputTextSearch = ({
   value,
   handleChange,
   handleSearchButton,
+  handlefocus
 }) => {
   return (
     <>
@@ -20,6 +21,7 @@ const InputTextSearch = ({
           onChange={(e) => {
             handleChange(e.target.value);
           }}
+          onKeyDown={handlefocus}
           id="outlined-adornment-password"
           endAdornment={
             <InputAdornment position="end">
