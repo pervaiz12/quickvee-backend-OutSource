@@ -8,6 +8,7 @@ import { BASE_URL, UPDATE_STORE_ALERTS_DATA } from "../../../Constants/Config";
 import { fetchStoreSettingalertsData } from "../../../Redux/features/SettingStoreAlters/SettingStoreAltersSlice";
 import { el } from "date-fns/locale";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 
 export default function SettingStoreAlters() {
   const [formData, setFormData] = useState({
@@ -471,7 +472,8 @@ export default function SettingStoreAlters() {
       },
     });
 
-    if (response) {
+    if (response?.data?.status) {
+      ToastifyAlert(response?.data?.message, "success");
       let merchantdata = {
         merchant_id: merchant_id,
         ...userTypeData,
