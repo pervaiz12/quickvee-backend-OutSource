@@ -149,7 +149,7 @@
     opacity: 1;
     padding: 8px 25px;
     float: right;
-    margin-right: 2.5rem;
+    /* margin-right: 2.5rem; */
 }
 
 .box-padding-5{
@@ -191,7 +191,7 @@
 .store-setting-main-div{
     opacity: 1;
     border-radius: 0.5rem;
-    margin: 2rem 2.5rem;
+    /* margin: 2rem 2.5rem; */
     padding: 2rem 2rem 1rem 2rem;
     --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
     --tw-shadow-colored: 0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);
@@ -227,7 +227,7 @@
     border-radius: 4px;
     overflow: hidden;
     opacity: 1;
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
 }
 
 .store-setting-alert-input{
@@ -243,7 +243,7 @@
 .store-setting-table-div{
     opacity: 1;
     border-radius: 0.5rem;
-    margin: 2rem 2.5rem;
+    margin: 2rem 0rem;
     padding-top: 1.5rem;
     padding-bottom: 0.5rem;
     --tw-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
@@ -264,7 +264,7 @@
     padding: 1rem 2rem 1rem 2rem;
 }
 .store-setting-table thead {
-    background: #000;
+    background: #253338;
     color: #fff;
 }
 
@@ -302,4 +302,17 @@
     font-family:  CircularSTDBook !important;
     color: red;
     font-size: 14px;
+}
+.storeAlert_Enable_SMS{
+    padding: 0rem 2rem;
+    padding-bottom: 1rem;
+}
+.store-setting-checkmark-td .category-checkmark{
+    top: -0.70rem;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+}
+.store-setting-checkmark-td .category-checkmark-div {
+    display: unset;
 }
