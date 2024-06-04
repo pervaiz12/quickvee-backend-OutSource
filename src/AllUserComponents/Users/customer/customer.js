@@ -157,9 +157,9 @@ const Customer = () => {
                 <span>Customer</span>
               </div>
             </Grid>
-            <Grid item>
+            {/* <Grid item>
               <Grid container direction="row" alignItems="center">
-                {/* <Grid item>
+                <Grid item>
                   <Link
                     to="/users/addMerchant"
                     className="flex q-category-bottom-header"
@@ -168,9 +168,9 @@ const Customer = () => {
                     <p className="me-2">ADD</p>
                     <img src={AddIcon} alt="add icon" />
                   </Link>
-                </Grid> */}
+                </Grid>
               </Grid>
-            </Grid>
+            </Grid> */}
           </Grid>
           <Grid container sx={{ padding: 2.5 }}>
             <Grid item xs={12}>
@@ -217,7 +217,7 @@ const Customer = () => {
                         <StyledTableCell>Email</StyledTableCell>
                         <StyledTableCell>Phone</StyledTableCell>
                         <StyledTableCell>User Type</StyledTableCell>
-                        <StyledTableCell></StyledTableCell>
+                        {/* <StyledTableCell>Action</StyledTableCell> */}
                       </TableHead>
                       <TableBody>
                         {customerRecord.CustomerRecord?.map((data, index) => (
@@ -230,7 +230,7 @@ const Customer = () => {
                               </div>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <div class="text-[#000000] order_method capitalize">
+                              <div class="text-[#000000] order_method">
                                 {data.email || ""}
                               </div>
                             </StyledTableCell>

@@ -7,6 +7,7 @@ import {
 } from "../../../../Constants/Config";
 import { useNavigate } from "react-router-dom";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../../../CommonComponents/ToastifyAlert";
 
 export default function Add_adminFunctionality() {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -25,6 +26,7 @@ export default function Add_adminFunctionality() {
       phone: "",
     },
   });
+  const [loader, setLoader] = useState(false);
 
   const handleChange = async (e) => {
     const { name, value } = e.target;
@@ -32,7 +34,13 @@ export default function Add_adminFunctionality() {
     let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
     if (name === "owner_name") {
-      errors[name] = value === "" ? `Please fill in the ${name} field` : "";
+      // errors[name] = value === " " ? `Please fill in the ${name} field` : "";
+      errors[name] =
+        value.trim() === ""
+          ? `Please fill in the ${name} field`
+          : value[0] === " "
+            ? `The ${name} field cannot start with a space`
+            : "";
     }
     if (name === "email") {
       errors[name] =
@@ -56,12 +64,12 @@ export default function Add_adminFunctionality() {
         errors[name] = "";
       }
     }
-    const trimmedValue = value.replace(/^\s+|\s+$/g, "");
+    // const trimmedValue = value.replace(/^\s+|\s+$/g, "");
 
     setAddAdminData((prev) => ({
       ...prev,
       errors: errors,
-      [name]: trimmedValue,
+      [name]: value,
     }));
   };
 
@@ -197,6 +205,7 @@ export default function Add_adminFunctionality() {
           ...newData,
         };
         // console.log(packet)
+        setLoader(true);
 
         await axios
           .post(BASE_URL + GET_ADD_ADMIN, packet, {
@@ -206,7 +215,9 @@ export default function Add_adminFunctionality() {
             },
           })
           .then((res) => {
+            setLoader(false);
             if (res.data.status == 200) {
+              ToastifyAlert("Admin Added  Successfully!", "success");
               setAddAdminData({
                 owner_name: "",
                 email: "",
@@ -220,6 +231,8 @@ export default function Add_adminFunctionality() {
                 },
               });
               navigate("/users/admin");
+            } else {
+              ToastifyAlert("Admin not Added!", "warn");
             }
           });
       }
@@ -231,5 +244,6 @@ export default function Add_adminFunctionality() {
     handleSubmit,
     handleBlur,
     handleKeyPress,
+    loader,
   };
 }

@@ -205,7 +205,14 @@ export default function EditMerchantFunctionality() {
   };
   const handleChangeMerchant = (e) => {
     const { name, value } = e.target;
-    const trimmedValue = value.replace(/^\s+|\s+$/g, "");
+    // const trimmedValue = value.replace(/^\s+|\s+$/g, "");
+    const trimmedValue = value.replace(/^\s+/, "");
+
+    // setEditMerchant((prev) => ({
+    //   ...prev,
+    //   [name]: trimmedValue,
+    // }));
+
     setEditMerchant((prev) => ({
       ...prev,
       [name]: trimmedValue,
@@ -315,6 +322,8 @@ export default function EditMerchantFunctionality() {
           handleSuccessMessage();
           navigate(`/users/editMerchant/${response?.data?.id}`);
           // navigate(`/users/editMerchant/${getEditMerchant.id}`)
+        } else {
+          ToastifyAlert("Merchant not  Updated!", "warn");
         }
       } catch (e) {
         console.log("Exception", e);

@@ -173,7 +173,7 @@ export default function Manager() {
                                     </div>
                                   </StyledTableCell>
                                   <StyledTableCell>
-                                    <div className="text-[#000000] order_method capitalize">
+                                    <div className="text-[#000000] order_method">
                                       {data?.email}
                                     </div>
                                   </StyledTableCell>

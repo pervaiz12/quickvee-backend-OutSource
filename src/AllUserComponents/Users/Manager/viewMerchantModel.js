@@ -68,7 +68,10 @@ function ViewMerchant({ data, userTypeData }) {
                 <span>{data?.name} </span>
               </span>
               <div>
-                <div className="flex justify-between gap-4">
+                <div
+                  className="flex justify-between gap-4"
+                  style={{ cursor: "pointer" }}
+                >
                   {/* <select className="custom-selecter cursor-pointer">
                     <option>Recently Added</option>
                     <option> Month</option>
@@ -112,11 +115,7 @@ function ViewMerchant({ data, userTypeData }) {
             <div className="q-add-categories-section-middles-footer">
               <button
                 onClick={() => handleClose()}
-
                 className="quic-btn quic-btn-ok"
-
-               
-
               >
                 Ok{" "}
               </button>

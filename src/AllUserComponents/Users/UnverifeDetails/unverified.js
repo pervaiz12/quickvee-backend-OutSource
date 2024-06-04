@@ -131,11 +131,11 @@ export default function Unverified() {
         );
 
         if (response) {
-          const updatedVendorDetails = VerifiedMerchantListState.filter(
-            (vendor) => vendor.id !== tableData.id
-          );
-          setVerifiedMerchantListState(updatedVendorDetails);
-          setFilteredMerchants(updatedVendorDetails);
+          // const updatedVendorDetails = VerifiedMerchantListState.filter(
+          //   (vendor) => vendor.id !== tableData.id
+          // );
+          // setVerifiedMerchantListState(updatedVendorDetails);
+          // setFilteredMerchants(updatedVendorDetails);
           dispatch(getUnVerifiedMerchant(unverify_data));
         } else {
           console.error(response);
@@ -271,11 +271,13 @@ export default function Unverified() {
         );
 
         if (response) {
-          const updatedVendorDetails = VerifiedMerchantListState.filter(
-            (vendor) => vendor.id !== merchant_id
-          );
-          setVerifiedMerchantListState(updatedVendorDetails);
-          setFilteredMerchants(updatedVendorDetails);
+          // const updatedVendorDetails = VerifiedMerchantListState.filter(
+          //   (vendor) => vendor.id !== merchant_id
+          // );
+          // setVerifiedMerchantListState(updatedVendorDetails);
+          // setFilteredMerchants(updatedVendorDetails);
+
+          dispatch(getUnVerifiedMerchant(unverify_data));
         } else {
           console.error(response);
         }
@@ -457,13 +459,14 @@ export default function Unverified() {
                               </StyledTableCell>
                               <StyledTableCell>
                                 <div class="text-[#000000] order_method capitalize">
-                                  {data.name.length < 18
-                                    ? data.name
-                                    : data.name.slice(0, 18) + `...` || ""}
+                                  {data.owner_name.length < 18
+                                    ? data?.owner_name
+                                    : data?.owner_name.slice(0, 18) + `...` ||
+                                      ""}
                                 </div>
                               </StyledTableCell>
                               <StyledTableCell>
-                                <div class="text-[#000000] order_method capitalize">
+                                <div class="text-[#000000] order_method ">
                                   {data.merchant_id}
                                 </div>
                               </StyledTableCell>
