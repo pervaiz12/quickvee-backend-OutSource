@@ -10,6 +10,7 @@ import {
 } from "../../../../Constants/Config";
 import { useNavigate } from "react-router-dom";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../../../CommonComponents/ToastifyAlert";
 
 const MerchantFunction = () => {
   const navigate = useNavigate();
@@ -491,6 +492,7 @@ const MerchantFunction = () => {
           })
           .then((result) => {
             if (result.data.status == 200) {
+              ToastifyAlert("Merchant Added Successfully!", "success");
               setUserRadioData("");
               setUserRadio(false);
               setStore({

@@ -87,17 +87,16 @@ export default function Verified() {
   const debouncedValue = useDebounce(searchRecord);
 
   // only when user changes Page number, Page size & searches something
+  const data_verified = {
+    type: "approve",
+    ...userTypeData,
+    perpage: rowsPerPage,
+    page: currentPage,
+    search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+  };
   useEffect(() => {
-    const data = {
-      type: "approve",
-      ...userTypeData,
-      perpage: rowsPerPage,
-      page: currentPage,
-      search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
-    };
-
-    dispatch(getVerifiedMerchant(data));
-  }, [currentPage, debouncedValue, rowsPerPage]);
+    dispatch(getVerifiedMerchant(data_verified));
+  }, [currentPage, debouncedValue, rowsPerPage, VerifiedMerchantListState]);
 
   // only when user searches
   useEffect(() => {
@@ -138,33 +137,39 @@ export default function Verified() {
 
   const handleDeleteMerchant = async (tableData) => {
     try {
-      const { token, ...otherUserData } = userTypeData;
-      const delVendor = {
-        merchant_id: tableData.merchant_id,
-        id: tableData.id,
-        ...otherUserData,
-      };
-
-      const response = await axios.post(
-        BASE_URL + DELETE_SINGLE_STORE,
-        delVendor,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const userConfirmed = window.confirm(
+        "Are you sure you want to delete? Once The store is deleted Inventory and settings cannot be restored."
       );
+      if (userConfirmed) {
+        const { token, ...otherUserData } = userTypeData;
+        const delVendor = {
+          merchant_id: tableData.merchant_id,
+          id: tableData.id,
+          ...otherUserData,
+        };
 
-      if (response) {
-        const updatedVendorDetails =
-          verifiedMerchantList.verifiedMerchantData.filter(
-            (vendor) => vendor.id !== tableData.id
-          );
-        setVerifiedMerchantListState(updatedVendorDetails);
-        setFilteredMerchants(updatedVendorDetails);
-      } else {
-        console.error(response);
+        const response = await axios.post(
+          BASE_URL + DELETE_SINGLE_STORE,
+          delVendor,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response) {
+          const updatedVendorDetails =
+            verifiedMerchantList.verifiedMerchantData.filter(
+              (vendor) => vendor.id !== tableData.id
+            );
+          setVerifiedMerchantListState(updatedVendorDetails);
+          setFilteredMerchants(updatedVendorDetails);
+          dispatch(getVerifiedMerchant(data_verified));
+        } else {
+          console.error(response);
+        }
       }
     } catch (error) {
       console.error(error);
@@ -195,32 +200,37 @@ export default function Verified() {
 
   const hadleDislikeMerchant = async (merchant_id) => {
     try {
-      const { token, ...otherUserData } = userTypeData;
-      const delVendor = {
-        id: merchant_id,
-        ...otherUserData,
-      };
-
-      const response = await axios.post(
-        BASE_URL + UNAPPROVE_SINGLE_STORE,
-        delVendor,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const userConfirmed = window.confirm(
+        "Are you sure you want to unapprove this store"
       );
+      if (userConfirmed) {
+        const { token, ...otherUserData } = userTypeData;
+        const delVendor = {
+          id: merchant_id,
+          ...otherUserData,
+        };
 
-      if (response) {
-        const updatedVendorDetails =
-          verifiedMerchantList.verifiedMerchantData.filter(
-            (vendor) => vendor.id !== merchant_id
-          );
-        setVerifiedMerchantListState(updatedVendorDetails);
-        setFilteredMerchants(updatedVendorDetails);
-      } else {
-        console.error(response);
+        const response = await axios.post(
+          BASE_URL + UNAPPROVE_SINGLE_STORE,
+          delVendor,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response) {
+          const updatedVendorDetails =
+            verifiedMerchantList.verifiedMerchantData.filter(
+              (vendor) => vendor.id !== merchant_id
+            );
+          setVerifiedMerchantListState(updatedVendorDetails);
+          setFilteredMerchants(updatedVendorDetails);
+        } else {
+          console.error(response);
+        }
       }
     } catch (error) {
       console.error(error);
@@ -363,7 +373,7 @@ export default function Verified() {
                         <StyledTableCell>Store Info</StyledTableCell>
                         <StyledTableCell>Owner Name</StyledTableCell>
                         <StyledTableCell>Merchant ID</StyledTableCell>
-                        <StyledTableCell></StyledTableCell>
+                        <StyledTableCell>Action</StyledTableCell>
                       </TableHead>
                       <TableBody>
                         {verifiedMerchantList.verifiedMerchantData?.map(

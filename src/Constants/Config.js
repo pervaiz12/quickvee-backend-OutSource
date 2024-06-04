@@ -60,7 +60,9 @@ module.exports = Object.freeze({
   GET_STORE_OPTIONS_DATA: "Store_setting_api/get_store_options_data",
 
   // Update Store Setting options api
-  UPDATE_STORE_OPTIONS_DATA: "Store_setting_api/update_store_options_data",
+  // UPDATE_STORE_OPTIONS_DATA: "Store_setting_api/update_store_options_data",
+  UPDATE_STORE_OPTIONS_DATA: "Store_setting_react_api/update_store_option",
+
 
   //Coupon API Calls
   COUPON_LIST: "CouponReactApi/get_coupon_details",
@@ -85,7 +87,7 @@ module.exports = Object.freeze({
   GET_STORE_ALERTS_DATA: "Store_setting_api/store_alerts_list",
 
   // get Store Setting alerts list api
-  UPDATE_STORE_ALERTS_DATA: "Store_setting_api/store_alerts_update",
+  UPDATE_STORE_ALERTS_DATA: "StoreReact_setting_api1/update_store_alerts",
 
   // Get Store Setting Receipt List and Update API
   GET_STORE_RECEIPT_DATA: "StoreReact_setting_api/get_receipt_list",

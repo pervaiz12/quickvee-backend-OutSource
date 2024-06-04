@@ -144,7 +144,7 @@ export default function AddMerchan() {
                           <label>Password</label>
                           <input
                             className=""
-                            type="text"
+                            type="password"
                             name="password"
                             onChange={handleChange}
                             value={store.password}
@@ -311,7 +311,7 @@ export default function AddMerchan() {
                         <label>Password</label>
                         <input
                           className=""
-                          type="text"
+                          type="password"
                           name="password"
                           value={store.password}
                           onChange={handleChange}
