@@ -244,6 +244,21 @@ input[type="number"] {
     left: 10px;
     position: absolute; */
 }
+.Asterisk_error{
+  color: #fa0000 !important;
+
+}
+.password-show-input{
+  position: relative;
+} 
+.Show-password{
+  position: absolute;
+    right: 0;
+    top: 23px;
+    display: inline-block;
+    padding: 10px;
+    cursor: pointer;
+}
 
 /* Media Queries for Responsive Font Sizes */
 @media (max-width: 840px) {

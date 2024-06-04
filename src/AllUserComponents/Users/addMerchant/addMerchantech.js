@@ -1,9 +1,10 @@
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 import "../../../Styles/Common.css";
 // import {Col, Form, Row } from 'react-bootstrap'../../Styles/Common.css
 import MerchantFunction from "./UserFunctionality/merchantFunction";
 import AddSvg from "../../../Assests/Dashboard/Left.svg";
 import { useLocation, useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 // import Form from 'react-bootstrap/Form';
 
 export default function AddMerchan() {
@@ -25,13 +26,23 @@ export default function AddMerchan() {
     errorAdminId,
     errorPin,
     handleKeyPress,
+    loader,
   } = MerchantFunction();
 
   const location = useLocation();
 
   console.log("location: ", location);
+  const [showpPassword, setShowPassword] = useState(false);
 
   const navigate = useNavigate();
+
+  const handleMouseDown = () => {
+    setShowPassword(true);
+  };
+
+  const handleMouseUp = () => {
+    setShowPassword(false);
+  };
 
   return (
     <>
@@ -56,7 +67,9 @@ export default function AddMerchan() {
             <div className="pd_20">
               <div className="qvrow">
                 <div className="col-qv-3">
-                  <label htmlFor="">User Type</label>
+                  <label htmlFor="">
+                    User Type <span className="Asterisk_error">*</span>
+                  </label>
                   {/* <div className="input_rediobutton_area">
                     <input
                       className="inputredio"
@@ -92,7 +105,9 @@ export default function AddMerchan() {
                     <div className="qvrow">
                       <div className="col-qv-6">
                         <div className="input_area">
-                          <label>Store Name</label>
+                          <label>
+                            Store Name <span className="Asterisk_error">*</span>
+                          </label>
                           <input
                             className=""
                             type="text"
@@ -110,7 +125,9 @@ export default function AddMerchan() {
 
                       <div className="col-qv-6">
                         <div className="input_area">
-                          <label>Owner Name</label>
+                          <label>
+                            Owner Name <span className="Asterisk_error">*</span>
+                          </label>
                           <input
                             className=""
                             type="text"
@@ -262,7 +279,9 @@ export default function AddMerchan() {
                   <div className="qvrow">
                     <div className="col-qv-6">
                       <div className="input_area">
-                        <label>Store Name</label>
+                        <label>
+                          Store Name <span className="Asterisk_error">*</span>
+                        </label>
                         <input
                           className=""
                           type="text"
@@ -279,7 +298,9 @@ export default function AddMerchan() {
                     </div>
                     <div className="col-qv-6">
                       <div className="input_area">
-                        <label>Owner Name</label>
+                        <label>
+                          Owner Name <span className="Asterisk_error">*</span>
+                        </label>
                         <input
                           className=""
                           type="text"
@@ -294,7 +315,9 @@ export default function AddMerchan() {
                   <div className="qvrow">
                     <div className="col-qv-6">
                       <div className="input_area">
-                        <label>Email</label>
+                        <label>
+                          Email <span className="Asterisk_error">*</span>
+                        </label>
                         <input
                           className=""
                           type="text"
@@ -307,11 +330,13 @@ export default function AddMerchan() {
                       </div>
                     </div>
                     <div className="col-qv-6">
-                      <div className="input_area">
-                        <label>Password</label>
+                      <div className="input_area password-show-input">
+                        <label>
+                          Password <span className="Asterisk_error">*</span>
+                        </label>
                         <input
                           className=""
-                          type="password"
+                          type={showpPassword ? "text" : "password"}
                           name="password"
                           value={store.password}
                           onChange={handleChange}
@@ -319,6 +344,14 @@ export default function AddMerchan() {
                           // value={merchantStore.mer_password}
                           // onChange={handleChangeMerchant}
                         />
+                        <span
+                          className="Show-password"
+                          // onClick={handleClick}
+                          onMouseUp={handleMouseUp}
+                          onMouseDown={handleMouseDown}
+                        >
+                          {showpPassword ? "Hide" : "Show"}
+                        </span>
                         <span className="error">{store.errors.password}</span>
                       </div>
                     </div>
@@ -341,7 +374,9 @@ export default function AddMerchan() {
                     </div>
                     <div className="col-qv-6">
                       <div className="input_area">
-                        <label>State</label>
+                        <label>
+                          State <span className="Asterisk_error">*</span>
+                        </label>
                         <select
                           value={store.state}
                           name="state"
@@ -373,7 +408,7 @@ export default function AddMerchan() {
                       className="quic-btn quic-btn-save"
                       onClick={handleSubmitMerchant}
                     >
-                      Add
+                      {loader ? <CircularProgress /> : "Add"}
                     </button>
                     {location.state?.from && (
                       <button

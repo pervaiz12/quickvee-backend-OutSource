@@ -3,6 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import EditAdminFunctionality from "./editAdminFunctionality";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
 import AddSvg from "../../../../Assests/Dashboard/Left.svg";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function EditAdmin() {
   const {
@@ -12,6 +13,7 @@ export default function EditAdmin() {
     handleSubmitAdmin,
     errors,
     handleKeyPress,
+    loader,
   } = EditAdminFunctionality();
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -100,7 +102,7 @@ export default function EditAdmin() {
             className="quic-btn quic-btn-save"
             onClick={handleSubmitAdmin}
           >
-            Edit
+            {loader ? <CircularProgress /> : "Update"}
           </button>
           <button
             onClick={() => navigate("/users/admin")}

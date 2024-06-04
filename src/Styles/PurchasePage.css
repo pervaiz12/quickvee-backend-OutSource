@@ -338,6 +338,10 @@ button.quic-btn.quic-btn-save {
   cursor: pointer;
   background-color: #0a64f9;
 }
+.quic-btn-save > span{
+  height: 16px !important;
+  width: 16px !important;
+}
 
 button.quic-btn.quic-btn-draft {
   font-family: CircularSTDBook !important;
