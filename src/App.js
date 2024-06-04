@@ -98,6 +98,7 @@ import ProtectedRoute from "./protected/protectedRoute";
 import ProtectedOrderSummery from "./protected/protectedOrderSummery";
 import ProtectedStoreRoute from "./protected/protectedStoreRoute";
 import PaymentCalDetails from "./Components/Reporting/SalesByPerson/MainOrderSumaaryDetails/PaymentCalDetails";
+import PageNotFound from "./Components/PageNotFound/PageNotFound";
 
 function App() {
   const location = useLocation();
@@ -120,19 +121,6 @@ function App() {
 
   return (
     <>
-      {}
-      {location.pathname !== "/login" &&
-      location.pathname.split("/").slice(0, 3).join("/") !==
-        "/store-reporting/order-summary" ? (
-        <SideMenu
-          setIsMenuOpen={setIsMenuOpen}
-          isTabletNav={isTabletNav}
-          isMenuOpen={isMenuOpen}
-        />
-      ) : (
-        ""
-      )}
-
       <Routes>
         {/* <Route exact path="/" element={<Main />} /> */}
         {/* <Route exact path="/" element={<Layout />} /> */}
@@ -178,6 +166,7 @@ function App() {
             path="/product/saleshistory/:id/:varientId"
             element={<Main visible={"product-sales"} />}
           />
+          <Route path="*" element={<PageNotFound />} />
 
           <Route
             exact
@@ -196,6 +185,12 @@ function App() {
             path="/purchase-data"
             element={<Main visible={"purchase-data"} />}
           />
+          <Route
+            exact
+            path="/purchase-data/:id"
+            element={<Main visible={"edit-purchase-data"} />}
+          />
+
           <Route
             exact
             path="/attributes"
@@ -499,12 +494,11 @@ function App() {
             path="/users/view/unapprove/permission"
             element={<Main visible={"permission"} />}
           />
-          
         </Route>
 
         {/* ------------------------Superadmin---------------- */}
         <Route element={<ProtectedRoute visible="superadmin" />}>
-        <Route
+          <Route
             exact
             path="/users/view/unapprove/need-help"
             element={<Main visible={"need-help"} />}
@@ -615,7 +609,6 @@ function App() {
             element={<Main visible={"merchant-details"} />}
           />
         </Route>
-        
 
         {/* -----------------=============superadmin===========------------------- */}
 

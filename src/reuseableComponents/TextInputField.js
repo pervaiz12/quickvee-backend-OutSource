@@ -10,7 +10,7 @@ export default function BasicTextFields({
   readOnly,
   required,
   name,
-  disable
+  disable,
 }) {
   return (
     <FormControl fullWidth>

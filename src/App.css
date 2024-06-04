@@ -1151,3 +1151,17 @@ div.q_label_details::after {
 .custom-datepicker-remove-border fieldset {
   border-width: 0 !important;
 }
+
+.stock-due-date svg.MuiSvgIcon-root,
+.issued-date svg.MuiSvgIcon-root {
+  position: relative !important;
+  right: 0px !important;
+  top: 0px !important;
+  color: rgba(0, 0, 0, 0.5) !important;
+}
+
+.stock-due-date .MuiPickersDay-root.MuiPickersDay-today,
+.issued-date .MuiPickersDay-root.MuiPickersDay-today {
+  color: #0056b3 !important;
+  background-color: transparent !important;
+}

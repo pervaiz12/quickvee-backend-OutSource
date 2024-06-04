@@ -1,16 +1,29 @@
-import React from "react";
+import React, { useState } from "react";
 import Layout from "./Components/Layout/Index";
 import IndexAllUsers from "./AllUserComponents/MainAllUserMenu/IndexAllUsers";
+import SideMenu from "./Components/Layout/SideMenu";
+import { useMediaQuery } from "@mui/material";
 
 const Main = ({ visible }) => {
+  const isTabletNav = useMediaQuery("(max-width:1024px)");
+  const [isMenuOpen, setIsMenuOpen] = useState(!isTabletNav);
   return (
     <>
+      {/* Sidebar */}
+      <SideMenu
+        setIsMenuOpen={setIsMenuOpen}
+        isTabletNav={isTabletNav}
+        isMenuOpen={isMenuOpen}
+      />
+
       {/* signle user layout */}
       {visible === "dashboard" && <Layout visible={visible} />}
       {visible === "order" && <Layout visible={visible} />}
       {visible === "category" && <Layout visible={visible} />}
       {visible === "products" && <Layout visible={visible} />}
       {visible === "purchase-data" && <Layout visible={visible} />}
+      {visible === "edit-purchase-data" && <Layout visible={visible} />}
+
       {visible === "attributes" && <Layout visible={visible} />}
       {visible === "import-data" && <Layout visible={visible} />}
       {visible === "loyalty-program" && <Layout visible={visible} />}
@@ -22,8 +35,8 @@ const Main = ({ visible }) => {
       {/* {visible === "product-edit-cat" && <Layout visible={visible} />} */}
       {visible === "toptraders" && <Layout visible={visible} />}
       {visible === "product-edit" && <Layout visible={visible} />}
-      {visible === "product-add" && <Layout visible={visible} />}
       {visible === "product-sales" && <Layout visible={visible} />}
+      {visible === "product-add" && <Layout visible={visible} />}
       {visible === "add-po" && <Layout visible={visible} />}
       {visible === "store" && <Layout visible={visible} />}
       {visible === "manager" && <Layout visible={visible} />}
@@ -54,7 +67,6 @@ const Main = ({ visible }) => {
       {visible === "shift-summary" && <Layout visible={visible} />}
       {visible === "payment-method-details" && <Layout visible={visible} />}
       {visible === "order-type" && <Layout visible={visible} />}
-
       {visible === "current-inventory-value" && <Layout visible={visible} />}
       {visible === "discount-per-sales-person" && <Layout visible={visible} />}
       {visible === "item-sales-profit-report" && <Layout visible={visible} />}

@@ -9,6 +9,7 @@ import { fetchProductsData } from "../../Redux/features/Product/ProductSlice";
 import { BASE_URL } from "../../Constants/Config";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ProductRow from "./ProductRow";
+import { useAuthDetails } from "../../Common/cookiesHelper";
 
 const ProductTable = ({
   seVisible,
@@ -25,6 +26,7 @@ const ProductTable = ({
   const { hasMore, offset, limit } = useSelector(
     (state) => state.productsListData
   );
+  const { userTypeData } = useAuthDetails();
 
   useEffect(() => {
     if (!ProductsListDataState.loading && ProductsListDataState.productsData) {
@@ -46,6 +48,7 @@ const ProductTable = ({
       offset: 0,
       limit: 10,
       page: 0,
+      ...userTypeData,
     };
     if (data) {
       dispatch(fetchProductsData(data));
@@ -96,8 +99,8 @@ const ProductTable = ({
     }
     //let page = productsList.length / 10 + 1 ;
 
-    console.log(page + "page");
-    console.log(productsList);
+    // console.log(page + "page");
+    // console.log(productsList);
     let data1 = {
       merchant_id: "MAL0100CA",
       format: "json",
@@ -107,6 +110,7 @@ const ProductTable = ({
       offset: offset,
       limit: 10,
       page: page,
+      ...userTypeData,
     };
     if (data1) {
       dispatch(fetchProductsData(data1));
