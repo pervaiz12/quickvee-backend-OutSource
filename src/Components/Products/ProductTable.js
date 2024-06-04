@@ -28,8 +28,6 @@ const ProductTable = ({
   );
   const { userTypeData } = useAuthDetails();
 
-  const { userTypeData } = useAuthDetails();
-
   const [showType, setShowType]= useState("")
 
   useEffect(() => {
