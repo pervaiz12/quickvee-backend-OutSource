@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -40,19 +40,16 @@ function createData(name, calories, fat, carbs, protein) {
   return { name, calories, fat, carbs, protein };
 }
 
-const rows = [
-  createData("Frozen yoghurt", 159, 6.0, 24, 4.0),
-  createData("Ice cream sandwich", 237, 9.0, 37, 4.3),
-  createData("Eclair", 262, 16.0, 24, 6.0),
-  createData("Cupcake", 305, 3.7, 67, 4.3),
-  createData("Gingerbread", 356, 16.0, 49, 3.9),
-];
-
-const isJsonObject = (data) => {
-  return data && typeof data === "object" && !Array.isArray(data);
-};
 export default function DashboardTables(props) {
   const navigate = useNavigate();
+  const [totalCost, setTotalCost] = useState({
+    soldQty: 0,
+    costItem: 0.0,
+    totalSelling: 0.0,
+    sellingPrice: 0.0,
+    profit: 0.0,
+    profitPercentage: 0.0,
+  });
   //   const [totalRecord, setTotalRecord] = React.useState("");
   // const handleSummeryPage = (order_id) => {
   //   navigate("/store-reporting/order-summary", {
@@ -64,34 +61,86 @@ export default function DashboardTables(props) {
       getDiscountRecord();
     }
   }, [props.getItemRecord]);
-
   const getDiscountRecord = () => {
     if (Array.isArray(props.getItemRecord) && props.getItemRecord.length > 0) {
-      const { costTotal, priceTotal, profit } = props.getItemRecord.reduce(
-        (acc, item) => {
-          const costPrice = parseFloat(item?.cost_price) || 0;
-          const price = parseFloat(item?.price) || 0;
-          const itemProfit = price - costPrice;
-          return {
-            costTotal: acc.costTotal + costPrice,
-            priceTotal: acc.priceTotal + price,
-            profit: acc.profit + itemProfit,
-          };
-        },
-        { costTotal: 0, priceTotal: 0, profit: 0 }
-      );
+      const { sold, costTotal, sellingTotal, profitTotal } =
+        props.getItemRecord.reduce(
+          (acc, item) => {
+            const soldQty = item?.total_qty || 0;
+            const costItem = (parseFloat(item?.cost_price) || 0) * soldQty;
+            const sellingPrice = (parseFloat(item?.price) || 0) * soldQty;
+            const profit = sellingPrice - costItem;
 
-      console.log("Cost Total:", costTotal.toFixed(2));
-      console.log("Price Total:", priceTotal.toFixed(2));
-      console.log("profit Total:", profit.toFixed(2));
-      // setTotals({
-      //   costTotal: costTotal.toFixed(2),
-      //   priceTotal: priceTotal.toFixed(2),
-      // });
+            return {
+              sold: parseInt(acc.sold) + parseInt(soldQty),
+              costTotal: acc.costTotal + costItem,
+              sellingTotal: acc.sellingTotal + sellingPrice,
+              profitTotal: acc.profitTotal + profit,
+            };
+          },
+          { sold: 0, costTotal: 0, sellingTotal: 0, profitTotal: 0 }
+        );
+      // soldQty: 0,
+      // costItem: 0.0,
+      // totalSelling: 0.0,
+      // sellingPrice: 0.0,
+      // profit: 0.0,
+      // profitPercentage: 0.0,
+
+      const profitPercentage = (profitTotal / sellingTotal) * 100 || 0;
+      setTotalCost({
+        soldQty: sold,
+        costItem: costTotal.toFixed(2),
+        totalSelling: sellingTotal.toFixed(2),
+        profit: profitTotal.toFixed(2),
+        profitPercentage: profitPercentage.toFixed(2),
+      });
+
+      // console.log("Sold:", sold);
+      // console.log("Cost Total:", costTotal.toFixed(2));
+      // console.log("Selling Total:", sellingTotal.toFixed(2));
+      // console.log("Total Profit:", profitTotal.toFixed(2));
+      // console.log("Profit Percentage:", profitPercentage.toFixed(2));
+
+      // Uncomment and use the following line if you need to set these values in a state
+      // setTotals({ costTotal: costTotal.toFixed(2), sellingTotal: sellingTotal.toFixed(2), profitPercentage: profitPercentage.toFixed(2) });
     } else {
       console.log("No report data available");
     }
   };
+
+  // const getDiscountRecord = () => {
+  //   if (Array.isArray(props.getItemRecord) && props.getItemRecord.length > 0) {
+  //     const { sold, costTotal, priceTotal, profit } =
+  //       props.getItemRecord.reduce(
+  //         (acc, item) => {
+  //           const Sold = item?.total_qty;
+  //           const costPrice =
+  //             parseFloat(item?.cost_price * item?.total_qty) || 0;
+  //           const price = parseFloat(item?.price) || 0;
+  //           const itemProfit = price - costPrice;
+  //           return {
+  //             Sold: acc.sold + Sold,
+  //             costTotal: acc.costTotal + costPrice,
+  //             priceTotal: acc.priceTotal + price,
+  //             profit: acc.profit + itemProfit,
+  //           };
+  //         },
+  //         { costTotal: 0, priceTotal: 0, profit: 0 }
+  //       );
+  //     console.log("sold:", sold);
+  //     console.log("Cost Total:", costTotal.toFixed(2));
+
+  //     console.log("Price Total:", priceTotal.toFixed(2));
+  //     console.log("profit Total:", profit.toFixed(2));
+  //     // setTotals({
+  //     //   costTotal: costTotal.toFixed(2),
+  //     //   priceTotal: priceTotal.toFixed(2),
+  //     // });
+  //   } else {
+  //     console.log("No report data available");
+  //   }
+  // };
 
   return (
     <TableContainer component={Paper}>
@@ -112,7 +161,7 @@ export default function DashboardTables(props) {
               props.getItemRecord.map((item, index) => (
                 <StyledTableRow key={index}>
                   <StyledTableCell align="center">
-                    {item?.category}
+                    {!!item?.category ? item?.category : "Deleted"}
                   </StyledTableCell>
                   <StyledTableCell align="center">{item?.name}</StyledTableCell>
                   <StyledTableCell align="center">
@@ -128,18 +177,14 @@ export default function DashboardTables(props) {
                   </StyledTableCell>
                   <StyledTableCell align="center">
                     {(() => {
-                      const price = parseFloat(item?.price) || 0;
-                      const totalQty = parseFloat(item?.total_qty) || 0;
-                      const costPrice = parseFloat(item?.cost_price) || 0;
-                      const totalRevenue = price * totalQty;
-
-                      if (totalRevenue === 0) {
-                        return "0.00"; // Return "0.00" to avoid division by zero
+                      const cost_item = item?.cost_price * item?.total_qty;
+                      const selling_price = item?.price * item?.total_qty;
+                      if (selling_price === 0) {
+                        return "0.00%";
                       }
-
-                      const margin =
-                        ((totalRevenue - costPrice) / totalRevenue) * 100;
-                      return `${margin.toFixed(2)}%`; // Format to two decimal places
+                      const profit_per =
+                        ((selling_price - cost_item) / selling_price) * 100;
+                      return `${profit_per.toFixed(2)}%`;
                     })()}
                   </StyledTableCell>
                   <StyledTableCell align="center">
@@ -161,7 +206,21 @@ export default function DashboardTables(props) {
                 <StyledTableCell colSpan={2} align="center">
                   Total
                 </StyledTableCell>
-                <StyledTableCell align="center">23</StyledTableCell>
+                <StyledTableCell align="center">
+                  {totalCost?.soldQty}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {`$${totalCost?.costItem}`}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {`$${totalCost?.totalSelling}`}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {`${totalCost?.profitPercentage}%`}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {`$${totalCost?.profit}`}
+                </StyledTableCell>
               </StyledTableRow>
             ) : (
               ""
