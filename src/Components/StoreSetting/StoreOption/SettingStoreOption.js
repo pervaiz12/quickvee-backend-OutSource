@@ -28,27 +28,13 @@ export default function SettingStoreOption() {
 
   const [loading, setLoading] = useState(false);
   const [fetchLoading, setFetchLoading] = useState(false);
-  // Get the current time using dayjs
-  // const [surchargeCount, setSurcharge] = useState("");
 
   // State to track the input box status
   const [isFutureOrderEnabled, setIsFutureOrderEnabled] = useState(false);
   const [error, setError] = useState("");
-  // const [isEnableDispatchCenter, setIsEnableDispatchCenter] = useState(false);
-  // const [isEnableEmailNote, setIsEnableEmailNote] = useState(false);
-  // const [isEnableSmsNote, setIsEnableSmsNote] = useState(false);
-
-  // const [isEnableOrderNumber, setisEnableOrderNumber] = useState(false);
-  // const [isResetOrderTime, setisResetOrderTime] = useState(false);
-  // const [isCashPayDeliver, setisCashPayDeliver] = useState(false);
-  // const [isCashPayPickup, setisCashPayPickup] = useState(false);
-  // const [isAutoPrintKitchen, setisAutoPrintKitchen] = useState(false);
-  // const [isAutoPrintPayment, setisAutoPrintPayment] = useState(false);
-  // const [isGuestCheckout, setisGuestCheckout] = useState(false);
 
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-  console.log(LoginGetDashBoardRecordJson, LoginAllStore, userTypeData);
 
   const checkBoxList = [
     "orderNumebrEnabled",
@@ -63,6 +49,7 @@ export default function SettingStoreOption() {
   ];
   const inputValueList = ["dayCount"];
 
+  // states
   const [orderState, setOrderState] = useState({
     orderNumebrEnabled: false,
     resetOrderNumberTime: "00:00",
@@ -82,12 +69,27 @@ export default function SettingStoreOption() {
     enabledGuestCheckout: false,
   });
 
+
+  // onchange
   const handleOrderChange = (e) => {
     const { name, value, checked } = e.target;
-    console.log(name, value, checked);
     const updateData = { ...orderState };
     if (checkBoxList?.includes(name)) {
-      updateData[name] = checked;
+      if(name === 'orderNumebrEnabled'){
+        updateData[name] = checked
+        updateData['resetOrderNumberTime'] = "00.00"
+      }else if(name === 'enabledNca'){
+        updateData[name] = checked;
+        updateData['enabledDualPrice'] = false
+      }
+      else if(name === 'enabledDualPrice'){
+        updateData[name] = checked;
+        updateData['enabledNca'] = false
+      }
+      else{
+        updateData[name] = checked;
+      }
+      
     } else if (inputValueList?.includes(name)) {
       updateData[name] = value;
     } else if (name === "enabledFutureOrder") {
@@ -131,6 +133,7 @@ export default function SettingStoreOption() {
   };
 
   const dispatch = useDispatch();
+  // fetch data when page load
   useEffect(() => {
     let data = {
       merchant_id: "MAL0100CA",
@@ -151,14 +154,6 @@ export default function SettingStoreOption() {
     }
   }, []);
 
-  // const [allStoreUserData, setallStoreUserData] = useState();
-  // const [allStoreUserOption, setStoreUserOption] = useState();
-  // const [newDayCountValue, setnewDayCountValue] = useState("");
-  // const [newSurchargeValue, setnewSurchargeValue] = useState("");
-  // const AllStoreSettingOptionDataState = useSelector(
-  //   (state) => state.settingstoreoption
-  // );
-
   const storeData = useSelector((state) => state?.settingstoreoption);
   const userData = useSelector(
     (state) => state?.settingstoreoption?.storeoptionData?.user_data
@@ -166,43 +161,22 @@ export default function SettingStoreOption() {
   const userOptionData = useSelector(
     (state) => state?.settingstoreoption?.storeoptionData?.user_option_data
   );
-  console.log("storeData", userData, storeData, userOptionData);
 
-  // console.log('states', orderState?.creditCardSurcharge, orderState?.debitCardSurcharge)
-  // console.log('AllStoreSettingOptionDataState', storeData)
-  // useEffect(() => {
-  //   if (
-  //     !AllStoreSettingOptionDataState.loading &&
-  //     AllStoreSettingOptionDataState.storeoptionData &&
-  //     AllStoreSettingOptionDataState.storeoptionData.user_data &&
-  //     AllStoreSettingOptionDataState.storeoptionData.user_option_data
-  //   ) {
-  //     // console.log(AllStoreSettingOptionDataState)
-  //     setallStoreUserData(
-  //       AllStoreSettingOptionDataState.storeoptionData.user_data
-  //     );
-  //     setStoreUserOption(
-  //       AllStoreSettingOptionDataState.storeoptionData.user_option_data
-  //     );
-  //   }
-  // }, [
-  //   AllStoreSettingOptionDataState,
-  //   AllStoreSettingOptionDataState.loading,
-  //   AllStoreSettingOptionDataState.storeoptionData,
-  // ]);
-
+  // fill the state when data load
   useEffect(() => {
     setOrderState((prev) => ({
       ...prev,
       ["orderNumebrEnabled"]: Boolean(+userData?.enable_order_number),
-      ["resetOrderNumberTime"]: userData?.reset_order_time,
+      ["resetOrderNumberTime"]:  userData?.reset_order_time,
       ["enabledFutureOrder"]: Boolean(+userData?.future_ordering),
-      ["dayCount"]: userData?.advance_count,
-      ["enabledDispatchCenter"]: userOptionData?.dispatch_status,
-      ["enabledEmailNotification"]: userData?.enable_email,
-      ["enabledSmsNotification"]: userData?.enable_message,
-      ["enabledCashPaymentDelivery"]: Boolean(+userData?.cash_payment_delivery),
-      ["enabledCashPaymenyPickup"]: Boolean(+userData?.cash_payment_pickup),
+      ["dayCount"]: Boolean(+userData?.future_ordering) === true ? userData?.advance_count : '',
+      ["enabledDispatchCenter"]: Boolean(+userOptionData?.dispatch_status),
+
+      ["enabledEmailNotification"]: userOptionData?.driver_notify === '0' ? false : userOptionData?.driver_notify === '1' ? true: userOptionData?.driver_notify === '3' ? true : false,
+      ["enabledSmsNotification"]:userOptionData?.driver_notify === '0' ? false : userOptionData?.driver_notify === '2' ? true : userOptionData?.driver_notify === '3' ? true:false,
+
+      ["enabledCashPaymentDelivery"]: Boolean(+userOptionData?.cash_payment_delivery),
+      ["enabledCashPaymenyPickup"]: Boolean(+userOptionData?.cash_payment_pickup),
       ["enabledNca"]:
         userOptionData?.is_surcharge === "0"
           ? false
@@ -219,130 +193,13 @@ export default function SettingStoreOption() {
       ["debitCardSurcharge"]: userOptionData?.debit_surcharge,
       ["autoPrintOrder"]: Boolean(+userData?.auto_print_kitchen),
       ["autoPrintPaymentReceipt"]: Boolean(+userData?.auto_print_payment),
-      ["enabledGuestCheckout"]: userOptionData?.is_guest_checkout,
+      ["enabledGuestCheckout"]: Boolean(+userOptionData?.is_guest_checkout),
     }));
   }, [userData, storeData, userOptionData]);
 
-  // useEffect(() => {
-  //   // console.log(allStoreUserData);
-  //   if (allStoreUserData && allStoreUserData.advance_count) {
-  //     setnewDayCountValue(allStoreUserData.advance_count);
-  //   }
-  //   if (allStoreUserOption && allStoreUserOption.surcharge_per) {
-  //     setnewSurchargeValue(allStoreUserOption.surcharge_per);
-  //   }
-  //   if (allStoreUserData && allStoreUserData.reset_order_time) {
-  //     console.log(allStoreUserData.reset_order_time);
-  //     setisResetOrderTime(allStoreUserData.reset_order_time);
-  //   }
-  //   if (
-  //     allStoreUserData &&
-  //     allStoreUserData.future_ordering &&
-  //     allStoreUserData.future_ordering == 1
-  //   ) {
-  //     setIsFutureOrderEnabled(true);
-  //   }
-  //   if (
-  //     allStoreUserData &&
-  //     allStoreUserData.enable_order_number &&
-  //     allStoreUserData.enable_order_number == 1
-  //   ) {
-  //     setisEnableOrderNumber(true);
-  //   }
-  //   // if (allStoreUserOption && allStoreUserOption.dispatch_status && allStoreUserOption.dispatch_status == 1) {
-  //   //   setIsEnableDispatchCenter(true);
-  //   // }
-  //   // if (allStoreUserOption && allStoreUserOption.driver_notify && allStoreUserOption.driver_notify == 1) {
-  //   //   setIsEnableEmailNote(true);
-  //   // }
-  //   // if (allStoreUserOption && allStoreUserOption.driver_notify && allStoreUserOption.driver_notify == 2) {
-  //   //   setIsEnableSmsNote(true);
-  //   // }
-  //   if (
-  //     allStoreUserOption &&
-  //     allStoreUserOption.cash_payment_delivery &&
-  //     allStoreUserOption.cash_payment_delivery == 1
-  //   ) {
-  //     setisCashPayDeliver(true);
-  //   }
-  //   if (
-  //     allStoreUserOption &&
-  //     allStoreUserOption.cash_payment_pickup &&
-  //     allStoreUserOption.cash_payment_pickup == 1
-  //   ) {
-  //     setisCashPayPickup(true);
-  //   }
-  //   if (
-  //     allStoreUserData &&
-  //     allStoreUserData.auto_print_kitchen &&
-  //     allStoreUserData.auto_print_kitchen == 1
-  //   ) {
-  //     setisAutoPrintKitchen(true);
-  //   }
-  //   if (
-  //     allStoreUserData &&
-  //     allStoreUserData.auto_print_payment &&
-  //     allStoreUserData.auto_print_payment == 1
-  //   ) {
-  //     setisAutoPrintPayment(true);
-  //   }
-  //   if (
-  //     allStoreUserOption &&
-  //     allStoreUserOption.is_guest_checkout &&
-  //     allStoreUserOption.is_guest_checkout == 1
-  //   ) {
-  //     setisGuestCheckout(true);
-  //   }
-  // }, [allStoreUserData, allStoreUserOption]);
 
-  // const changeDayCountHandler = (event) => {
-  //   // console.log(event.target.value);
-  //   setnewDayCountValue(event.target.value);
-  // };
-  // const changeSurchargeHandler = (event) => {
-  //   // console.log(event.target.value);
-  //   setnewSurchargeValue(event.target.value);
-  // };
-
-  // const ResetOrderTimeHandler = (event) => {
-  //   // console.log(event.target.value);
-  //   setisResetOrderTime(event.target.value);
-  // };
-  // // Function to toggle the input box status
-  // const FutureOrdertoggleInput = () => {
-  //   setIsFutureOrderEnabled(!isFutureOrderEnabled);
-  // };
-  // const EnableDispatchCentertoggleInput = () => {
-  //   setIsEnableDispatchCenter(!isEnableDispatchCenter);
-  // };
-  // const EnableEmailNotetoggleInput = () => {
-  //   setIsEnableEmailNote(!isEnableEmailNote);
-  // };
-  // const EnableSmsNotetoggleInput = () => {
-  //   setIsEnableSmsNote(!isEnableSmsNote);
-  // };
-
-  // const EnableOrderNumbertoggleInput = () => {
-  //   setisEnableOrderNumber(!isEnableOrderNumber);
-  // };
-  // const CashPayDelivertoggleInput = () => {
-  //   setisCashPayDeliver(!isCashPayDeliver);
-  // };
-  // const CashPayPickuptoggleInput = () => {
-  //   setisCashPayPickup(!isCashPayPickup);
-  // };
-  // const AutoPrintKitchentoggleInput = () => {
-  //   setisAutoPrintKitchen(!isAutoPrintKitchen);
-  // };
-  // const AutoPrintPaymenttoggleInput = () => {
-  //   setisAutoPrintPayment(!isAutoPrintPayment);
-  // };
-  // const GuestCheckouttoggleInput = () => {
-  //   setisGuestCheckout(!isGuestCheckout);
-  // };
-
+  // onsubmit
   const handleUpdateSettingOption = async () => {
-    console.log(orderState?.orderNumebrEnabled);
     if (userOptionData?.cc_payment === "2") {
       if (
         !orderState?.enabledCashPaymentDelivery &&
@@ -362,7 +219,7 @@ export default function SettingStoreOption() {
         enable_order_number: orderState?.orderNumebrEnabled ? "1" : "0",
         reset_order_time: orderState?.resetOrderNumberTime,
         enable_future_order: orderState?.enabledFutureOrder ? "1" : "0",
-        advance_day_count: orderState?.dayCount,
+        advance_day_count: orderState?.dayCount ? orderState?.dayCount : "0",
         enable_auto_print_order: orderState?.autoPrintOrder ? "1" : "0",
         enable_auto_print_payment: orderState?.autoPrintPaymentReceipt
           ? "1"
@@ -382,9 +239,7 @@ export default function SettingStoreOption() {
         email_notification: orderState?.enabledEmailNotification ? "1" : "0",
         sms_notification: orderState?.enabledSmsNotification ? "1" : "0",
       };
-      // console.log(newItem);
       const data = newItem;
-      console.log("data", data);
       dispatch(updateStoreOption(data))
         .then((res) => {
           if (res?.payload?.status) {
@@ -403,27 +258,9 @@ export default function SettingStoreOption() {
           setLoading(false);
         });
     }
-    // const response = await axios.post(
-    //   BASE_URL + UPDATE_STORE_OPTIONS_DATA,
-    //   data,
-    //   {
-    //     headers: { "Content-Type": "multipart/form-data" },
-    //   }
-    // );
-    // console.log(response);
-    // if (response) {
-    //   let merchantdata = {
-    //     merchant_id: "MAL0100CA",
-    //   };
-    //   if (merchantdata) {
-    //     dispatch(fetchStoreSettingOptionData(merchantdata));
-    //   }
-    // } else {
-    //   // setsubmitmessage(response.data.message);
-    // }
+
   };
 
-  // console.log('allStoreUserData.reset_order_time', allStoreUserData.reset_order_time)
 
   return (
     <>
@@ -480,6 +317,7 @@ export default function SettingStoreOption() {
                     required
                     onChange={handleOrderChange}
                     onClick={(e) => e.target.showPicker()}
+                    disabled={!orderState?.orderNumebrEnabled}
                   />
                   {/* <span>{formatTime(systemAccess.start_time)}</span> */}
                 </div>
@@ -569,55 +407,8 @@ export default function SettingStoreOption() {
                 </label>
               </div>
 
-              {/* <div className="relative store-setting-pb-1">
-            <div className="store-setting-gry Admin_std">Advance Day Count</div>
-          </div>
-          <div className="flex border store-setting-border-gry store-setting-border-radius overflow-hidden">
-            <input
-              type="number"
-              value={newDayCountValue}
-              className="w-full store-setting-px-4 store-setting-py-2 store-setting-input"
-              onChange={changeDayCountHandler}
-              disabled={!isFutureOrderEnabled}
-            />
-          </div> */}
+          
             </div>
-
-            {/* Dispatch Center */}
-            {/* <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4 store-setting-mx-10 store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
-          <h2 className="store-setting-h1 store-setting-pb-1-5 store-setting-inline-block"><b>Dispatch Center</b></h2>
-          <div className="relative store-setting-pb-1">
-            <div className="store-setting-gry Admin_std store-setting-inline-block">Enable Dispatch Center</div>
-            <span className="store-setting-switch">
-              <Switch {...label} 
-                checked={isEnableDispatchCenter} 
-                onChange={EnableDispatchCentertoggleInput} 
-              />
-            </span>
-          </div>
-
-          <div className="relative store-setting-pb-1">
-            <div className="store-setting-gry Admin_std store-setting-inline-block">Enable Email Notification?</div>
-            <span className="store-setting-switch">
-              <Switch {...label} 
-                checked={isEnableEmailNote} 
-                onChange={EnableEmailNotetoggleInput} 
-                disabled={!isEnableDispatchCenter} 
-              />
-            </span>
-          </div>
-
-          <div className="relative store-setting-pb-1">
-            <div className="store-setting-gry Admin_std store-setting-inline-block">Enable SMS Notification?</div>
-            <span className="store-setting-switch">
-              <Switch {...label} 
-                checked={isEnableSmsNote} 
-                onChange={EnableSmsNotetoggleInput} 
-                disabled={!isEnableDispatchCenter} 
-              />
-            </span>
-          </div>
-        </div> */}
 
             {/* Payment Options */}
             <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4 store-setting-mx-10 store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
