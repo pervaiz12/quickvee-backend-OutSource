@@ -15,14 +15,14 @@ import { useEffect } from "react";
 const EditPage = ({
   openEditModal,
   handleCloseEditModal,
-  editVarient,
   handleVarientTitleBasedItemList,
-  bulkEditPo,
   productData,
   modalType,
   varientData,
   varientIndex,
-  fetchDataLoadingVendor,
+  formData,
+  handleCopyAllVarientValue,
+  inventoryData,
 }) => {
   const [value, setValue] = React.useState("1");
 
@@ -92,7 +92,12 @@ const EditPage = ({
                 </Box>
 
                 <TabPanel value="1">
-                  <BulkVarientEdit editVarient={editVarient} />
+                  <BulkVarientEdit
+                    formData={formData}
+                    handleCopyAllVarientValue={handleCopyAllVarientValue}
+                    handleCloseEditModal={handleCloseEditModal}
+                    inventoryData={inventoryData}
+                  />
                 </TabPanel>
 
                 <TabPanel value="2">
@@ -101,17 +106,17 @@ const EditPage = ({
                     varientData={varientData}
                     varientIndex={varientIndex}
                     modalType={modalType}
-                    fetchDataLoadingVendor={fetchDataLoadingVendor}
                   />
                 </TabPanel>
                 <TabPanel value="3">
                   <BulkInstantPo
-                    bulkEditPoState={bulkEditPo}
+                    productData={productData}
                     handleVarientTitleBasedItemList={
                       handleVarientTitleBasedItemList
                     }
                     modalType={modalType}
                     varientIndex={varientIndex}
+                    varientData={varientData}
                   />
                 </TabPanel>
               </TabContext>

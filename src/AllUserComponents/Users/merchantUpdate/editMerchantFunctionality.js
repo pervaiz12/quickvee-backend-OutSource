@@ -10,6 +10,8 @@ import {
   useAuthDetails,
   handleLogoutTokenExpire,
 } from "../../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
+
 export default function EditMerchantFunctionality() {
   const navigate = useNavigate();
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -20,7 +22,7 @@ export default function EditMerchantFunctionality() {
     username: "",
     name: "",
     merchant_id: "",
-    password: "",
+    newPassword: "",
     live_account: "",
     owner_name: "",
     otp: "",
@@ -35,6 +37,10 @@ export default function EditMerchantFunctionality() {
     user_type: "",
     id: "",
     states: [],
+  });
+  const [errors, setErrors] = useState({
+    usa_pin: "",
+    merchant_token: "",
   });
 
   const [paymentModeOnline, setPaymentModeOnline] = useState(false);
@@ -78,25 +84,25 @@ export default function EditMerchantFunctionality() {
           }
           // console.log(inventory)
           const a_zipCode =
-            response.data.message.row.a_zip !== null
-              ? response.data.message.row.a_zip
+            response.data.message?.row?.a_zip !== null
+              ? response.data.message.row?.a_zip
               : "";
           const account_Type =
-            response.data.message.row.flag !== null &&
-            response.data.message.row.flag !== ""
-              ? response.data.message.row.flag
+            response.data.message?.row?.flag !== null &&
+            response.data.message?.row?.flag !== ""
+              ? response.data.message?.row?.flag
               : "0";
           const Ownername =
-            response.data.message.row.owner_name !== null
-              ? response.data.message.row.owner_name
+            response.data.message?.row?.owner_name !== null
+              ? response.data.message?.row?.owner_name
               : "";
           const City =
-            response.data.message.row.a_city !== null
-              ? response.data.message.row.a_city
+            response.data.message?.row?.a_city !== null
+              ? response.data.message?.row?.a_city
               : "";
           const username =
-            response.data.message.row.email !== null
-              ? response.data.message.row.email
+            response.data.message?.row?.email !== null
+              ? response.data.message?.row?.email
               : "";
           const name =
             response.data.message.row.name !== null
@@ -138,7 +144,7 @@ export default function EditMerchantFunctionality() {
           setEditMerchant({
             id: data,
             live_account: account_Type,
-            password: "",
+            newPassword: "",
             username: username,
             name: name,
             merchant_id: merchant_id,
@@ -162,24 +168,25 @@ export default function EditMerchantFunctionality() {
             setPaymentModeOnline(false);
             setPaymentCredits(false);
           } else if (
-            response.data.message.Paymentmode.cc_payment == null ||
-            response.data.message.Paymentmode.cc_payment == 0
+            response.data.message.Paymentmode.cc_payment !== null &&
+            parseInt(response.data.message.Paymentmode.cc_payment) === 0
           ) {
             setPaymentModeRecord(response.data.message.Paymentmode.cc_payment);
             setPaymentModeOffline(true);
             setPaymentModeOnline(false);
             setPaymentCredits(false);
           } else if (
-            response.data.message.Paymentmode.cc_payment !== null ||
-            response.data.message.Paymentmode.cc_payment == 2
+            response.data.message.Paymentmode.cc_payment !== null &&
+            parseInt(response.data.message.Paymentmode.cc_payment) === 2
           ) {
+            console.log(response.data.message.Paymentmode.cc_payment);
             setPaymentModeRecord(response.data.message.Paymentmode.cc_payment);
             setPaymentModeOnline(true);
             setPaymentModeOffline(false);
             setPaymentCredits(false);
           } else if (
-            response.data.message.Paymentmode.cc_payment !== null ||
-            response.data.message.Paymentmode.cc_payment == 1
+            response.data.message.Paymentmode.cc_payment !== null &&
+            parseInt(response.data.message.Paymentmode.cc_payment) === 1
           ) {
             setPaymentModeRecord(response.data.message.Paymentmode.cc_payment);
             setPaymentCredits(true);
@@ -198,7 +205,14 @@ export default function EditMerchantFunctionality() {
   };
   const handleChangeMerchant = (e) => {
     const { name, value } = e.target;
-    const trimmedValue = value.replace(/^\s+|\s+$/g, "");
+    // const trimmedValue = value.replace(/^\s+|\s+$/g, "");
+    const trimmedValue = value.replace(/^\s+/, "");
+
+    // setEditMerchant((prev) => ({
+    //   ...prev,
+    //   [name]: trimmedValue,
+    // }));
+
     setEditMerchant((prev) => ({
       ...prev,
       [name]: trimmedValue,
@@ -212,16 +226,46 @@ export default function EditMerchantFunctionality() {
       setPaymentCredits(true);
       setPaymentModeOnline(false);
       setPaymentModeOffline(false);
+      setErrors({ usa_pin: "", merchant_token: "" });
     } else if (e.target.value == 0) {
       setPaymentModeOffline(true);
       setPaymentModeOnline(false);
       setPaymentCredits(false);
+      setErrors({ usa_pin: "", merchant_token: "" });
     } else if (e.target.value == 2) {
       setPaymentModeOnline(true);
       setPaymentModeOffline(false);
       setPaymentCredits(false);
+      setErrors({ usa_pin: "", merchant_token: "" });
     }
   };
+  // -------------------------------validation-----------------
+  const validateForm = () => {
+    let error = false;
+    let updatedErrors = { errors };
+
+    if (
+      (paymentCredits || paymentModeOnline) &&
+      getEditMerchant.usa_pin == ""
+    ) {
+      updatedErrors.usa_pin = "please fill the usa_pin";
+      error = true;
+    }
+    if (
+      (paymentCredits || paymentModeOnline) &&
+      getEditMerchant.merchant_token == ""
+    ) {
+      updatedErrors.merchant_token = "please fill the merchant_token";
+      error = true;
+    }
+    setErrors(updatedErrors);
+    if (error == true) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+  // -----------------------validation-------------------
 
   const handleUpdateMerchant = async (e) => {
     e.preventDefault();
@@ -232,50 +276,60 @@ export default function EditMerchantFunctionality() {
     const { token, ...dataNew } = userTypeData;
     // console.log(dataNew)
     // console.log(token)
-    console.log(getEditMerchant);
-    const packet = {
-      id: getEditMerchant?.id.id,
-      username: getEditMerchant?.username,
-      ...dataNew,
-      inventory: inventoryNew,
-      mer_id: getEditMerchant?.id.id,
-      name: getEditMerchant.name,
-      merchant_id: getEditMerchant.merchant_id,
-      ownername: getEditMerchant.owner_name,
-      password: getEditMerchant.password,
-      address: {
-        address1: getEditMerchant.a_address_line_1,
-        address2: getEditMerchant.a_address_line_2,
-        phoneNumber: getEditMerchant.a_phone,
-        city: getEditMerchant.a_city,
-        a_zip: getEditMerchant.a_zip,
-        state: getEditMerchant.a_state,
-      },
-      cc_payment: paymentModeRecord,
-      account_type: getEditMerchant.live_account,
-      merchant_token: getEditMerchant.merchant_token,
-      usa_pin: getEditMerchant.usa_pin,
-    };
-    console.log(packet);
-    // console.log(userTypeData?.token)
-    try {
-      let response = await axios.post(BASE_URL + GET_UPDATE_MERCHANT, packet, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`, // Use data?.token directly
+    const validateBlank = validateForm();
+    // console.log(validateBlank);
+    if (validateBlank) {
+      const packet = {
+        id: getEditMerchant?.id.id,
+        username: getEditMerchant?.username,
+        ...dataNew,
+        inventory: inventoryNew,
+        mer_id: getEditMerchant?.id.id,
+        name: getEditMerchant.name,
+        merchant_id: getEditMerchant.merchant_id,
+        ownername: getEditMerchant.owner_name,
+        password: getEditMerchant.newPassword,
+        address: {
+          address1: getEditMerchant.a_address_line_1,
+          address2: getEditMerchant.a_address_line_2,
+          phoneNumber: getEditMerchant.a_phone,
+          city: getEditMerchant.a_city,
+          a_zip: getEditMerchant.a_zip,
+          state: getEditMerchant.a_state,
         },
-      });
-      if (response.data.status == 200) {
-        setMessage(response?.data?.message);
-        setSuccessMessageHandle(true);
-        handleSuccessMessage();
-        navigate(`/users/editMerchant/${response?.data?.id}`);
-        // navigate(`/users/editMerchant/${getEditMerchant.id}`)
+        cc_payment: paymentModeRecord,
+        account_type: getEditMerchant.live_account,
+        merchant_token: getEditMerchant.merchant_token,
+        usa_pin: getEditMerchant.usa_pin,
+      };
+      console.log(packet);
+      // console.log(userTypeData?.token)
+      try {
+        let response = await axios.post(
+          BASE_URL + GET_UPDATE_MERCHANT,
+          packet,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`, // Use data?.token directly
+            },
+          }
+        );
+        if (response.data.status == 200) {
+          ToastifyAlert("Update Merchant  Successfully!", "success");
+          // setMessage(response?.data?.message);
+          setSuccessMessageHandle(true);
+          handleSuccessMessage();
+          navigate(`/users/editMerchant/${response?.data?.id}`);
+          // navigate(`/users/editMerchant/${getEditMerchant.id}`)
+        } else {
+          ToastifyAlert("Merchant not  Updated!", "warn");
+        }
+      } catch (e) {
+        console.log("Exception", e);
+        handleLogoutTokenExpire();
+        navigate("/");
       }
-    } catch (e) {
-      console.log("Exception", e);
-      handleLogoutTokenExpire();
-      navigate("/");
     }
   };
   return {
@@ -295,5 +349,6 @@ export default function EditMerchantFunctionality() {
     handleKeyPress,
     inventory,
     inventoryApprove,
+    errors,
   };
 }

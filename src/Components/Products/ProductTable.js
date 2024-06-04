@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 // import EditIcon from "../../Assests/Category/editIcon.svg";
 import SortIcon from "../../Assests/Category/Sorting.svg";
-import { fetchProductsData } from "../../Redux/features/Product/ProductSlice";
+import { changeOnlineOrderMethod, fetchProductsData } from "../../Redux/features/Product/ProductSlice";
 import { BASE_URL } from "../../Constants/Config";
 import InfiniteScroll from "react-infinite-scroll-component";
 import ProductRow from "./ProductRow";
@@ -28,9 +28,12 @@ const ProductTable = ({
   );
   const { userTypeData } = useAuthDetails();
 
+  const [showType, setShowType]= useState("")
+
   useEffect(() => {
     if (!ProductsListDataState.loading && ProductsListDataState.productsData) {
       setproductsList(ProductsListDataState.productsData);
+      console.log('again call')
     }
   }, [
     ProductsListDataState,
@@ -39,27 +42,23 @@ const ProductTable = ({
   ]);
 
   const dispatch = useDispatch();
+  let payloadData = {
+    merchant_id: "MAL0100CA",
+    category_id: categoryId,
+    show_status: selectedStatusValue,
+    listing_type: selectedListingTypeValue,
+    offset: 0,
+    limit: 10,
+    page: 0,
+  };
   useEffect(() => {
-    let data = {
-      merchant_id: "MAL0100CA",
-      category_id: categoryId,
-      show_status: selectedStatusValue,
-      listing_type: selectedListingTypeValue,
-      offset: 0,
-      limit: 10,
-      page: 0,
-      ...userTypeData,
-    };
-    if (data) {
-      dispatch(fetchProductsData(data));
+    if (payloadData) {
+      dispatch(fetchProductsData(payloadData));
     }
   }, []);
 
   const [count, setCount] = useState(0);
-  const defaultUrl = BASE_URL + "upload/products/MaskGroup4542.png";
-  const handleError = (e) => {
-    e.target.src = defaultUrl;
-  };
+
 
   const checkStatus = (status) => {
     switch (status) {
@@ -74,9 +73,20 @@ const ProductTable = ({
     }
   };
 
-  const Avail_Online = (event) => {
-    console.log(event.target.id);
-    console.log(event.target.name);
+  const Avail_Online = (event, showtype) => {
+    const {name, value, id} = event?.target;
+    console.log(value, name, id);
+    const data ={
+      product_id:592660,
+      status:value,
+      merchant_id:'MAL0100CA',
+      ...userTypeData,
+    }
+    dispatch(changeOnlineOrderMethod(data)).then((res)=>{
+      if(res?.payload?.status){
+        dispatch(fetchProductsData(payloadData));
+      }
+    })
   };
 
   const [items, setItems] = useState(Array.from({ length: 10 }));
@@ -86,6 +96,8 @@ const ProductTable = ({
     margin: 6,
     padding: 8,
   };
+
+
   const fetchMoreData = () => {
     let page = 0;
     if (productsList.length > 0) {
@@ -98,9 +110,6 @@ const ProductTable = ({
       listing_type = 0;
     }
     //let page = productsList.length / 10 + 1 ;
-
-    // console.log(page + "page");
-    // console.log(productsList);
     let data1 = {
       merchant_id: "MAL0100CA",
       format: "json",
@@ -116,9 +125,9 @@ const ProductTable = ({
       dispatch(fetchProductsData(data1));
     }
 
-    setTimeout(() => {
-      setItems(items.concat(Array.from({ length: 15 })));
-    }, 150);
+    // setTimeout(() => {
+    //   setItems(items.concat(Array.from({ length: 15 })));
+    // }, 150);
   };
 
   return (
@@ -138,25 +147,18 @@ const ProductTable = ({
             <div className="q-category-bottom-detail-section">
               <div className="q-category-bottom-header-sticky">
                 <div
-                  className="q-category-bottom-categories-header"
+                  className="q-category-bottom-categories-header product-data-table-header"
                   style={{ position: "sticky", top: "0px" }}
                 >
                   <p className="categories-sort">Sort</p>
-                  <p className="categories-sort"></p>
                   <p className="categories-title">Title</p>
-                  <p className="categories-sort"></p>
                   <p className="categories-items">Category</p>
-                  <p className="categories-sort"></p>
                   <p className="categories-enable-disable">
                     Enable online ordering?
                   </p>
-                  <p className="categories-sort"></p>
                   <p className="categories-items">Product Status</p>
-                  <p className="categories-sort"></p>
                   <p className="categories-items">Images</p>
-                  <p className="categories-sort"></p>
                   <p className="categories-items">Delete</p>
-                  <p className=""></p>
                 </div>
 
                 <div
@@ -175,12 +177,13 @@ const ProductTable = ({
                       productsList.map((product, index) => (
                         <ProductRow
                           key={index}
+                          setShowType={setShowType}
+                          showType={showType}
                           {...{
                             Avail_Online,
                             index,
                             product,
-                            checkStatus,
-                            handleError,
+                            checkStatus
                           }}
                         />
                       ))}

@@ -56,6 +56,9 @@
 
 .store-items .user-operation button{
   min-width: 0px;
+  padding: 0px !important;
+ margin: 0px;
+ background: none;
 }
 .store-items .user-operation img{
   cursor: pointer;

@@ -109,31 +109,37 @@ export default function Unverified() {
 
     try {
       const { token, ...otherUserData } = userTypeData;
-      const delVendor = {
-        merchant_id: tableData.merchant_id,
-        id: tableData.id,
-        ...otherUserData,
-      };
-
-      const response = await axios.post(
-        BASE_URL + DELETE_SINGLE_STORE,
-        delVendor,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const userConfirmed = window.confirm(
+        "Are you sure you want to delete? Once The store is deleted Inventory and settings cannot be restored."
       );
+      if (userConfirmed) {
+        const delVendor = {
+          merchant_id: tableData.merchant_id,
+          id: tableData.id,
+          ...otherUserData,
+        };
 
-      if (response) {
-        const updatedVendorDetails = VerifiedMerchantListState.filter(
-          (vendor) => vendor.id !== tableData.id
+        const response = await axios.post(
+          BASE_URL + DELETE_SINGLE_STORE,
+          delVendor,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        setVerifiedMerchantListState(updatedVendorDetails);
-        setFilteredMerchants(updatedVendorDetails);
-      } else {
-        console.error(response);
+
+        if (response) {
+          // const updatedVendorDetails = VerifiedMerchantListState.filter(
+          //   (vendor) => vendor.id !== tableData.id
+          // );
+          // setVerifiedMerchantListState(updatedVendorDetails);
+          // setFilteredMerchants(updatedVendorDetails);
+          dispatch(getUnVerifiedMerchant(unverify_data));
+        } else {
+          console.error(response);
+        }
       }
     } catch (error) {
       console.error(error);
@@ -149,17 +155,16 @@ export default function Unverified() {
   const merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   // =======================
+  const unverify_data = {
+    type: "unapprove",
+    ...userTypeData,
+    perpage: rowsPerPage,
+    page: currentPage,
+    search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+  };
   useEffect(() => {
-    const data = {
-      type: "unapprove",
-      ...userTypeData,
-      perpage: rowsPerPage,
-      page: currentPage,
-      search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
-    };
-
-    dispatch(getUnVerifiedMerchant(data));
-  }, [currentPage, debouncedValue, rowsPerPage]);
+    dispatch(getUnVerifiedMerchant(unverify_data));
+  }, [currentPage, debouncedValue, rowsPerPage, VerifiedMerchantListState]);
 
   // only when user searches
   useEffect(() => {
@@ -244,31 +249,38 @@ export default function Unverified() {
 
   const hadleDislikeMerchant = async (merchant_id) => {
     try {
-      const { token, ...otherUserData } = userTypeData;
-      const delVendor = {
-        id: merchant_id,
-        ...otherUserData,
-      };
-
-      const response = await axios.post(
-        BASE_URL + APPROVE_SINGLE_STORE,
-        delVendor,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
+      const userConfirmed = window.confirm(
+        "Are you sure you want approve this store?"
       );
+      if (userConfirmed) {
+        const { token, ...otherUserData } = userTypeData;
+        const delVendor = {
+          id: merchant_id,
+          ...otherUserData,
+        };
 
-      if (response) {
-        const updatedVendorDetails = VerifiedMerchantListState.filter(
-          (vendor) => vendor.id !== merchant_id
+        const response = await axios.post(
+          BASE_URL + APPROVE_SINGLE_STORE,
+          delVendor,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        setVerifiedMerchantListState(updatedVendorDetails);
-        setFilteredMerchants(updatedVendorDetails);
-      } else {
-        console.error(response);
+
+        if (response) {
+          // const updatedVendorDetails = VerifiedMerchantListState.filter(
+          //   (vendor) => vendor.id !== merchant_id
+          // );
+          // setVerifiedMerchantListState(updatedVendorDetails);
+          // setFilteredMerchants(updatedVendorDetails);
+
+          dispatch(getUnVerifiedMerchant(unverify_data));
+        } else {
+          console.error(response);
+        }
       }
     } catch (error) {
       console.error(error);
@@ -321,9 +333,9 @@ export default function Unverified() {
   const indexOfFirstMerchant = indexOfLastMerchant - rowsPerPage;
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  // ========================= END PAGINATION LOGIC ======================================
+  // ========================= END PAGINATION LOGIC ====================================== "OTP"
 
-  const columns = ["Store Info", "Owner Name", "Merchant ID", "OTP", ""];
+  const columns = ["Store Info", "Owner Name", "Merchant ID", "Action"];
 
   return (
     <>
@@ -419,8 +431,8 @@ export default function Unverified() {
                         <StyledTableCell>Store Info</StyledTableCell>
                         <StyledTableCell>Owner Name</StyledTableCell>
                         <StyledTableCell>Merchant ID</StyledTableCell>
-                        <StyledTableCell>OTP</StyledTableCell>
-                        <StyledTableCell></StyledTableCell>
+                        {/* <StyledTableCell>OTP</StyledTableCell> */}
+                        <StyledTableCell>Action</StyledTableCell>
                       </TableHead>
                       <TableBody>
                         {UnVerifiedMerchantList.unverifiedMerchantData?.map(
@@ -447,22 +459,23 @@ export default function Unverified() {
                               </StyledTableCell>
                               <StyledTableCell>
                                 <div class="text-[#000000] order_method capitalize">
-                                  {data.name.length < 18
-                                    ? data.name
-                                    : data.name.slice(0, 18) + `...` || ""}
+                                  {data.owner_name.length < 18
+                                    ? data?.owner_name
+                                    : data?.owner_name.slice(0, 18) + `...` ||
+                                      ""}
                                 </div>
                               </StyledTableCell>
                               <StyledTableCell>
-                                <div class="text-[#000000] order_method capitalize">
+                                <div class="text-[#000000] order_method ">
                                   {data.merchant_id}
                                 </div>
                               </StyledTableCell>
-                              <StyledTableCell>
+                              {/* <StyledTableCell>
                                 <div class="text-[#000000] order_method capitalize">
                                   {data.ver_code}
                                 </div>
-                              </StyledTableCell>
-                              <StyledTableCell>
+                              </StyledTableCell> */}
+                              <StyledTableCell align="right">
                                 <div className="flex">
                                   <img
                                     className="mx-1 view cursor-pointer"
@@ -481,7 +494,7 @@ export default function Unverified() {
                                     alt="Edit"
                                   />
                                   <img
-                                    class="mx-1 delete cursor-pointer" 
+                                    class="mx-1 delete cursor-pointer"
                                     onClick={() => handleDeleteMerchant(data)}
                                     src={Delete}
                                     alt="Delete"

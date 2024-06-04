@@ -43,7 +43,6 @@ const AddProducts = () => {
   const navigate = useNavigate();
 
   const [fetchDataLoading, setFetchDataLoading] = useState(false);
-  const [fetchDataLoadingVendor, setFetchDataLoadingVendor] = useState(false);
 
   // find add or edit url
   const pageUrl = window.location.pathname?.split("/")[1];
@@ -63,15 +62,6 @@ const AddProducts = () => {
     relatedProduct: [],
     frequentlyBought: [],
     files: [],
-  });
-
-  // modal of bulk varientedit states
-  const [editVarient, setEditVarient] = useState({
-    costPerItem: "",
-    compareAtPrice: "",
-    price: "",
-    reorderQty: "",
-    reorderLevel: "",
   });
 
   const [bulkEditPo, setBulkEditPo] = useState([
@@ -465,6 +455,41 @@ const AddProducts = () => {
         }
       });
     }
+  };
+
+  // copy Bulk varient value from modal
+  const handleCopyAllVarientValue = (values) => {
+    setFormValue((prev) => {
+      // Create a copy of the previous state
+      let newFormValue = { ...prev };
+
+      // Loop through the keys of the input values object
+      for (let key in values) {
+        if (values.hasOwnProperty(key)) {
+          // Only update if the value is not empty
+          if (values[key] !== "") {
+            // Loop through nested objects to update the keys
+            for (let nestedKey in newFormValue) {
+              if (newFormValue.hasOwnProperty(nestedKey) && !isNaN(nestedKey)) {
+                if (newFormValue[nestedKey].hasOwnProperty(key)) {
+                  newFormValue[nestedKey][key] = values[key];
+                }
+              }
+            }
+          }
+        }
+      }
+
+      // Convert the updated form values state into an array of objects
+      let resultArray = Object.keys(newFormValue)
+        .filter((key) => !isNaN(key)) // Filter to include only numeric keys
+        .map((key) => newFormValue[key]);
+
+      // Log the resulting array
+
+      // Return the updated array of objects
+      return resultArray;
+    });
   };
 
   useEffect(() => {
@@ -990,11 +1015,7 @@ const AddProducts = () => {
   }, [varientLength]);
 
   const fetchProductDataById = () => {
-    if (modalType !== "single_vendor") {
-      setFetchDataLoading(true);
-    } else {
-      setFetchDataLoadingVendor(true);
-    }
+    setFetchDataLoading(true);
     const formData = new FormData();
     formData.append("merchant_id", "MAL0100CA");
     formData.append("id", productId?.id);
@@ -1016,7 +1037,6 @@ const AddProducts = () => {
         })
         .finally(() => {
           setFetchDataLoading(false);
-          setFetchDataLoadingVendor(false);
         });
     } else {
       navigate("/products");
@@ -1025,19 +1045,10 @@ const AddProducts = () => {
 
   useEffect(() => {
     // called fetchproduct data api based on id
-    console.log("modal---type", modalType);
     if (pageUrl === "product-edit") {
       fetchProductDataById();
     }
   }, [pageUrl]);
-
-  useEffect(() => {
-    // called fetchproduct data api based on id
-    console.log("modalType", modalType);
-    if (modalType === "single_vendor") {
-      fetchProductDataById();
-    }
-  }, [modalType]);
 
   const selectedItemsFromdata = (items, filterListName) => {
     const arr = items?.map((i) => {
@@ -1260,7 +1271,7 @@ const AddProducts = () => {
         ?.map((file) => file)
         .filter((i) => typeof i === "object")
         ?.map((i) => i?.file),
-      media: productInfo?.files
+      previous_media: productInfo?.files
         ?.map((file) => file)
         .filter((i) => typeof i === "string")
         .toString(),
@@ -1275,31 +1286,31 @@ const AddProducts = () => {
       //created_on:
       //productid:111
       optionarray: isMultipleVarient
-        ? varientLength[0]?.varientName?.value
+        ? varientLength[0]?.varientName?.value ?? ""
         : "",
       optionarray1: isMultipleVarient
-        ? varientLength[1]?.varientName?.value
+        ? varientLength[1]?.varientName?.value ?? ""
         : "",
       optionarray2: isMultipleVarient
-        ? varientLength[2]?.varientName?.value
+        ? varientLength[2]?.varientName?.value ?? ""
         : "",
       optionvalue: isMultipleVarient
         ? varientLength[0]?.varientAttributeList
             ?.map((item) => item)
             ?.map((i) => i?.value)
-            ?.toString()
+            ?.toString() ?? ""
         : "",
       optionvalue1: isMultipleVarient
         ? varientLength[1]?.varientAttributeList
             ?.map((item) => item)
             ?.map((i) => i?.value)
-            ?.toString()
+            ?.toString() ?? ""
         : "",
       optionvalue2: isMultipleVarient
         ? varientLength[2]?.varientAttributeList
             ?.map((item) => item)
             ?.map((i) => i?.value)
-            ?.toString()
+            ?.toString() ?? ""
         : "",
       varvarient: isMultipleVarient
         ? varientTitle.filter(Boolean)?.toString()
@@ -1355,19 +1366,11 @@ const AddProducts = () => {
       varreorder_level: isMultipleVarient
         ? formValue?.map((i) => i?.reorderLevel).join(",")
         : "",
+      varcompareprice: isMultipleVarient
+        ? formValue?.map((i) => i?.compareAtPrice).join(",")
+        : "",
       // reorder_cost: [10, 10, 10, 10],
     };
-
-    // console.log(
-    //   productInfo?.files
-    //     ?.map((file) => file)
-    //     .filter((i) => typeof i === "object")
-    //     .map((i) => i?.file),
-    //   productInfo?.files
-    //     ?.map((file) => file)
-    //     .filter((i) => typeof i === "string")
-    //     .toString()
-    // );
 
     if (pageUrl === "product-edit") {
       data["productid"] = productData?.id ? productData?.id : "";
@@ -1433,6 +1436,7 @@ const AddProducts = () => {
               .then((res) => {
                 if (res?.payload?.data?.status) {
                   ToastifyAlert("Product Added Successfully!", "success");
+                  navigate("/products");
                 }
               })
               .catch((err) => {
@@ -1481,14 +1485,14 @@ const AddProducts = () => {
           <EditPage
             openEditModal={openEditModal}
             handleCloseEditModal={handleCloseEditModal}
-            editVarient={editVarient}
-            bulkEditPo={bulkEditPo}
             productData={productData}
             handleVarientTitleBasedItemList={handleVarientTitleBasedItemList}
             modalType={modalType}
             varientData={varientData}
             varientIndex={varientIndex}
-            fetchDataLoadingVendor={fetchDataLoadingVendor}
+            formData={formValue}
+            handleCopyAllVarientValue={handleCopyAllVarientValue}
+            inventoryData={inventoryData}
           />
           {/* alert modal */}
           <AlertModal

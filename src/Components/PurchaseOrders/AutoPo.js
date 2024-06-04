@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import DeleteIcon from "../../Assests/Dashboard/deleteIcon.svg";
-import { FormControl } from "@mui/material";
-import { TextField, Grid } from "@mui/material";
+import { TextField, Grid, FormControl } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { fetchProductsData } from "../../Redux/features/Product/ProductSlice";
 import { useAuthDetails } from "../../Common/cookiesHelper";
@@ -16,6 +15,37 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors, seVisible }) => {
 
   const { userTypeData } = useAuthDetails();
   const [selectedProducts, setSelectedProducts] = useState([]);
+
+  useEffect(() => {
+    console.log("purchaseInfo: ", purchaseInfo);
+  }, [purchaseInfo]);
+
+  useEffect(() => {
+    console.log("selectedProducts: ", selectedProducts);
+  }, [selectedProducts]);
+
+  // handling price of product items, 0.00 format
+  const handleProductPrice = (e) => {
+    const { value } = e.target;
+
+    let val = value.replace(/[^\d]/g, "");
+
+    if (val === "") {
+      return "0.00";
+    }
+
+    val = val.replace(/^0+/, "");
+
+    while (val.length < 3) {
+      val = "0" + val;
+    }
+
+    const integerPart = val.slice(0, val.length - 2);
+    const decimalPart = val.slice(val.length - 2);
+    const formattedValue = `${integerPart}.${decimalPart}`;
+
+    return formattedValue;
+  };
 
   const handleCancel = () => {
     const confirmDelete = window.confirm(
@@ -133,18 +163,19 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors, seVisible }) => {
 
   // helper fn
   const getFinalPrice = (type, prod, e) => {
+    const amount = handleProductPrice(e);
+
     const temp =
-      type === "newPrice" &&
-      parseFloat(e.target.value) > 0 &&
-      Number(prod.newQty) > 0
-        ? parseFloat(e.target.value) * Number(prod.newQty)
+      type === "newPrice" && parseFloat(amount) > 0 && Number(prod.newQty) > 0
+        ? parseFloat(amount) * Number(prod.newQty)
         : type === "newQty" &&
             Number(e.target.value) > 0 &&
             parseFloat(prod.newPrice) > 0
           ? Number(e.target.value) * parseFloat(prod.newPrice)
           : "0.00";
 
-    return temp;
+    const res = parseFloat(temp).toFixed(2);
+    return res;
   };
 
   // helper fn
@@ -167,9 +198,12 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors, seVisible }) => {
       prod.id === productId
         ? {
             ...prod,
-            [type]: e.target.value,
-            finalPrice: getFinalPrice(type, prod, e),
-            finalQty: getFinalQty(type, prod, e),
+            [type]:
+              type === "newPrice" ? handleProductPrice(e) : e.target.value,
+            finalPrice:
+              type === "notes" ? prod.finalPrice : getFinalPrice(type, prod, e),
+            finalQty:
+              type === "notes" ? prod.finalQty : getFinalQty(type, prod, e),
             priceError:
               type === "newPrice" && e.target.value && prod.priceError
                 ? ""

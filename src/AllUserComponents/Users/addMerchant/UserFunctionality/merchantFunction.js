@@ -10,6 +10,7 @@ import {
 } from "../../../../Constants/Config";
 import { useNavigate } from "react-router-dom";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../../../CommonComponents/ToastifyAlert";
 
 const MerchantFunction = () => {
   const navigate = useNavigate();
@@ -31,6 +32,7 @@ const MerchantFunction = () => {
       state: "",
     },
   });
+  const [loader, setLoader] = useState(false);
 
   const [merchantStore, setMerchantStore] = useState({
     pin: "",
@@ -372,7 +374,7 @@ const MerchantFunction = () => {
       }
 
       if (store.phone === "") {
-        errors.phone = "Please select the Phone";
+        errors.phone = "Please fill the Phone";
         error = true;
       }
     }
@@ -480,7 +482,7 @@ const MerchantFunction = () => {
           user_type: userRadioData,
           ...newData,
         };
-        console.log(data);
+        setLoader(true);
 
         await axios
           .post(BASE_URL + ADD_MERCHAN_EMPLOYEE, data, {
@@ -490,7 +492,9 @@ const MerchantFunction = () => {
             },
           })
           .then((result) => {
+            setLoader(false);
             if (result.data.status == 200) {
+              ToastifyAlert("Merchant Added Successfully!", "success");
               setUserRadioData("");
               setUserRadio(false);
               setStore({
@@ -510,6 +514,8 @@ const MerchantFunction = () => {
                 },
               });
               navigate(`/users/editMerchant/${result.data.id}`);
+            } else {
+              ToastifyAlert("Merchant not Added!", "warn");
             }
           });
       }
@@ -599,6 +605,7 @@ const MerchantFunction = () => {
     handleKeyPress,
     handleBlur,
     userRadioData,
+    loader,
   };
 };
 export default MerchantFunction;

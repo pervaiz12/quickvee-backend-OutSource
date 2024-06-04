@@ -1,14 +1,193 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { bulkInstantPo } from "./data";
+import { useParams } from "react-router-dom";
+import { useDispatch } from "react-redux";
+import {
+  saveBulkInstantPo,
+  saveSingleVarientPO,
+} from "../../Redux/features/Product/ProductSlice";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const BulkInstantPo = ({
-  bulkEditPoState,
+  productData,
   handleVarientTitleBasedItemList,
   modalType,
   varientIndex,
+  varientData,
 }) => {
-  console.log("vartient bukllllll", modalType, varientIndex);
+  const dispatch = useDispatch();
+  const productId = useParams();
+  const [instantPoSingle, setInstantPoSingle] = useState({
+    qty: "",
+    cost: "",
+    description: "",
+  });
+
+  const [instancePoMultiple, setInstancePoMultiple] = useState({
+    instantPoState: [],
+    description: "",
+  });
+
   const varientTitle = handleVarientTitleBasedItemList();
+
+  const instantPoForm = useMemo(() => {
+    if (modalType === "bulk-edit") {
+      return [...new Set(varientTitle)]?.map(() => ({
+        qty: "",
+        cost: "",
+      }));
+    }
+    return [];
+  }, [modalType]);
+
+  useEffect(() => {
+    if (modalType === "bulk-edit") {
+      setInstancePoMultiple({
+        instantPoState: instantPoForm,
+        description: "",
+      });
+    }
+  }, [modalType, instantPoForm]);
+
+  const handleChangeSinglePo = (e, index) => {
+    const { name, value } = e.target;
+
+    /// allowed value in 0.00 format
+    let fieldValue;
+    fieldValue = value
+      // Remove extra dots and ensure only one dot exists at most
+      .replace(/[^\d.]/g, "") // Allow digits and dots only
+      .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
+      .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+
+    let inputStr = fieldValue.replace(/\D/g, "");
+    inputStr = inputStr.replace(/^0+/, "");
+
+    if (inputStr.length == "") {
+      fieldValue = "";
+    } else if (inputStr.length === 1) {
+      fieldValue = "0.0" + inputStr;
+    } else if (inputStr.length === 2) {
+      fieldValue = "0." + inputStr;
+    } else {
+      fieldValue =
+        inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
+    }
+
+    setInstantPoSingle((prev) => ({
+      ...prev,
+      [name]: name !== "description" && name !== "qty" ? fieldValue : value,
+    }));
+  };
+
+  const handleChangeMultiplePo = (e, index) => {
+    const { name, value } = e.target;
+
+    /// allowed value in 0.00 format
+    let fieldValue;
+    fieldValue = value
+      // Remove extra dots and ensure only one dot exists at most
+      .replace(/[^\d.]/g, "") // Allow digits and dots only
+      .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
+      .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+
+    let inputStr = fieldValue.replace(/\D/g, "");
+    inputStr = inputStr.replace(/^0+/, "");
+
+    if (inputStr.length == "") {
+      fieldValue = "";
+    } else if (inputStr.length === 1) {
+      fieldValue = "0.0" + inputStr;
+    } else if (inputStr.length === 2) {
+      fieldValue = "0." + inputStr;
+    } else {
+      fieldValue =
+        inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
+    }
+
+    if (name !== "description") {
+      const multiplePoData = [...instancePoMultiple?.instantPoState];
+      multiplePoData[index][name] = name !== "qty" ? fieldValue : value;
+      setInstancePoMultiple((prev) => ({
+        instantPoState: multiplePoData,
+        description: prev?.description,
+      }));
+    } else {
+      setInstancePoMultiple((prev) => ({
+        instantPoState: prev?.instantPoState,
+        description: value,
+      }));
+    }
+  };
+
+  const handlSumbitInstantPo = () => {
+    const formData = new FormData();
+    if (modalType !== "bulk-edit") {
+      formData.append("product_id", productId?.id);
+      formData.append(
+        "variant_id",
+        !Boolean(+productData?.isvarient)
+          ? ""
+          : modalType === "bulk-edit"
+            ? ""
+            : varientData[varientIndex]?.id
+      );
+      formData.append("merchant_id", "MAL0100CA");
+      formData.append("description", instantPoSingle?.description);
+      formData.append("qty", instantPoSingle?.qty);
+      formData.append("price", instantPoSingle?.cost);
+
+      dispatch(saveSingleVarientPO(formData))
+        .then((res) => {
+          if (res?.payload?.status) {
+            setInstantPoSingle({
+              qty: "",
+              cost: "",
+              description: "",
+            });
+            ToastifyAlert("Instance PO Updated!", "success");
+          }
+        })
+        .catch((err) => {
+          ToastifyAlert("Error!", "error");
+        });
+    } else {
+      formData.append("product_id", productId?.id);
+      formData.append(
+        "variant_id",
+        !Boolean(+productData?.isvarient)
+          ? ""
+          : modalType === "bulk-edit"
+            ? varientData?.map((i) => i?.id)?.toString()
+            : varientData[varientIndex]?.id
+      );
+      formData.append("merchant_id", "MAL0100CA");
+      formData.append("description", instancePoMultiple?.description);
+      formData.append(
+        "qty",
+        instancePoMultiple?.instantPoState?.map((i) => i?.qty)?.toString()
+      );
+      formData.append(
+        "price",
+        instancePoMultiple?.instantPoState?.map((i) => i?.cost)?.toString()
+      );
+
+      dispatch(saveBulkInstantPo(formData))
+        .then((res) => {
+          if (res?.payload?.status) {
+            setInstancePoMultiple({
+              instantPoState: [],
+              description: "",
+            });
+            ToastifyAlert("Instance PO Updated!", "success");
+          }
+        })
+        .catch((err) => {
+          ToastifyAlert("Error!", "error");
+        });
+    }
+  };
+
   return (
     <>
       <div>
@@ -38,36 +217,17 @@ const BulkInstantPo = ({
                                           type={inp?.type}
                                           name={inp?.name}
                                           value={
-                                            bulkEditPoState?.[formindex]?.[
+                                            instancePoMultiple
+                                              ?.instantPoState?.[index]?.[
                                               inp?.name
                                             ]
                                           }
                                           placeholder={inp?.placeholder}
-                                          // onChange={(e) => handleOnChange(e, index)}
-                                          // onBlur={(e) => handleBlur(e, index)}
-                                          // maxLength={setInputMaxLength(inp?.name)}
-                                          // disabled={
-                                          //   pageUrl !== "product-edit"
-                                          //     ? disabledFields.includes(inp?.name)
-                                          //     : disabledFieldsOnEdit.includes(
-                                          //         inp?.name
-                                          //       )
-                                          // }
+                                          onChange={(e) =>
+                                            handleChangeMultiplePo(e, index)
+                                          }
+                                          maxLength={9}
                                         />
-
-                                        {/* {error[
-                                      `formValue[${index}].${inp?.name}`
-                                    ] ? (
-                                      <span className="error-alert">
-                                        {
-                                          error[
-                                            `formValue[${index}].${inp?.name}`
-                                          ]
-                                        }
-                                      </span>
-                                    ) : (
-                                      ""
-                                    )} */}
                                       </div>
                                     </div>
                                   </div>
@@ -89,8 +249,9 @@ const BulkInstantPo = ({
                           type="text"
                           name="description"
                           style={{ height: "140px" }}
-                          // value={bulkEditPoState?.[formindex]?.[inp?.name]}
-                          // placeholder={inp?.placeholder}
+                          onChange={(e) => handleChangeMultiplePo(e, null)}
+                          value={instancePoMultiple?.description}
+                          placeholder="Type here..."
                         />
                       </div>
                     </div>
@@ -121,37 +282,13 @@ const BulkInstantPo = ({
                                           class="varient-input-field"
                                           type={inp?.type}
                                           name={inp?.name}
-                                          value={
-                                            bulkEditPoState?.[formindex]?.[
-                                              inp?.name
-                                            ]
-                                          }
+                                          value={instantPoSingle?.[inp?.name]}
                                           placeholder={inp?.placeholder}
-                                          // onChange={(e) => handleOnChange(e, index)}
-                                          // onBlur={(e) => handleBlur(e, index)}
-                                          // maxLength={setInputMaxLength(inp?.name)}
-                                          // disabled={
-                                          //   pageUrl !== "product-edit"
-                                          //     ? disabledFields.includes(inp?.name)
-                                          //     : disabledFieldsOnEdit.includes(
-                                          //         inp?.name
-                                          //       )
-                                          // }
+                                          onChange={(e) =>
+                                            handleChangeSinglePo(e, index)
+                                          }
+                                          maxLength={9}
                                         />
-
-                                        {/* {error[
-                                      `formValue[${index}].${inp?.name}`
-                                    ] ? (
-                                      <span className="error-alert">
-                                        {
-                                          error[
-                                            `formValue[${index}].${inp?.name}`
-                                          ]
-                                        }
-                                      </span>
-                                    ) : (
-                                      ""
-                                    )} */}
                                       </div>
                                     </div>
                                   </div>
@@ -173,8 +310,8 @@ const BulkInstantPo = ({
                           type="text"
                           name="description"
                           style={{ height: "140px" }}
-                          // value={bulkEditPoState?.[formindex]?.[inp?.name]}
-                          // placeholder={inp?.placeholder}
+                          value={instantPoSingle?.["description"]}
+                          onChange={handleChangeSinglePo}
                         />
                       </div>
                     </div>
@@ -204,6 +341,7 @@ const BulkInstantPo = ({
                       style={{
                         backgroundColor: "#0A64F9",
                       }}
+                      onClick={handlSumbitInstantPo}
                     >
                       Update
                     </button>

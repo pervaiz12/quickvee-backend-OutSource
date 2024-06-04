@@ -161,7 +161,7 @@ created_by_id:  LoginGetDashBoardRecordJson?.data?.user_id,
             ToastifyAlert("Manager Edited Successfully!", "success")
             // call here fetch api of all manager 
             fetchManagerListing()
-            // handleClose();
+            handleClose();
             setSelectedOption([]);
             setFormInputs(FormInputFields);
           } else if (res?.payload?.status === false && res?.payload?.msg === "Email already exists, please enter a different email.") {

@@ -9,6 +9,7 @@ import "../../../Styles/Settings/Employee.css"
 import EditEmployeeModal from "./EditEmployeeModal";
 import AddEmployeeFormLogic from "../../StoreSetting/AddEmployee/AddEmployeeFormLogic";
 import { Link } from "react-router-dom";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 
 
 const EmployeeList = () => {
@@ -20,6 +21,10 @@ const EmployeeList = () => {
     // const [value, setValue] = useState();
     // const [inputValue, setInputValue] = useState('');
     // const [showModal, setShowModal] = useState(false);
+    const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+    let AuthDecryptDataDashBoardJSONFormat=LoginGetDashBoardRecordJson
+    const merchant_id=AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id
+
     const {
         handleAddEmployeeInput,
         values,
@@ -33,7 +38,8 @@ const EmployeeList = () => {
     
     useEffect(() => {
         let data = {
-            merchant_id: "MAL0100CA",
+            merchant_id: merchant_id,
+            ...userTypeData
         };
         if (data) {
             dispatch(fetchEmployeeListsData(data));
@@ -87,8 +93,9 @@ const EmployeeList = () => {
 
       const handleDeleteEmployee = (id) => {
         const del_data = {
-                    merchant_id:"MAL0100CA",
-                    employee_id:id
+                    merchant_id:merchant_id,
+                    employee_id:id,
+                    ...userTypeData
                 }
         if(id)
         {

@@ -198,6 +198,7 @@ export default function AdminView() {
                         <StyledTableCell>Email</StyledTableCell>
                         <StyledTableCell>Phone</StyledTableCell>
                         <StyledTableCell>View</StyledTableCell>
+                        <StyledTableCell>Action</StyledTableCell>
 
                         <StyledTableCell></StyledTableCell>
                       </TableHead>
@@ -217,7 +218,7 @@ export default function AdminView() {
                               </div>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <div className="text-[#000000] order_method capitalize">
+                              <div className="text-[#000000] order_method">
                                 {data.email || ""}
                               </div>
                             </StyledTableCell>

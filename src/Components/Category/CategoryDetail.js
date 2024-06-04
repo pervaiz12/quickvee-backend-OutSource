@@ -108,12 +108,12 @@ const CategoryDetail = ({ seVisible }) => {
       category.cat_show_status === "0" || category.cat_show_status === "1"
         ? "1"
         : "0";
-    console.log("category status: " + category);
-    console.log("category Custom status: " + status);
     const isOnlineChecked =
       category.cat_show_status === "0" || category.cat_show_status === "1";
     const isRegisterChecked =
       category.cat_show_status === "0" || category.cat_show_status === "2";
+
+      console.log('alls', category, isOnlineChecked, isRegisterChecked)
 
     if (!isOnlineChecked && !isRegisterChecked) {
       // console.log(isOnlineChecked);

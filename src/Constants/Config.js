@@ -60,7 +60,9 @@ module.exports = Object.freeze({
   GET_STORE_OPTIONS_DATA: "Store_setting_api/get_store_options_data",
 
   // Update Store Setting options api
-  UPDATE_STORE_OPTIONS_DATA: "Store_setting_api/update_store_options_data",
+  // UPDATE_STORE_OPTIONS_DATA: "Store_setting_api/update_store_options_data",
+  UPDATE_STORE_OPTIONS_DATA: "Store_setting_react_api/update_store_option",
+
 
   //Coupon API Calls
   COUPON_LIST: "CouponReactApi/get_coupon_details",
@@ -89,7 +91,7 @@ module.exports = Object.freeze({
   GET_STORE_ALERTS_DATA: "Store_setting_api/store_alerts_list",
 
   // get Store Setting alerts list api
-  UPDATE_STORE_ALERTS_DATA: "Store_setting_api/store_alerts_update",
+  UPDATE_STORE_ALERTS_DATA: "StoreReact_setting_api1/update_store_alerts",
 
   // Get Store Setting Receipt List and Update API
   GET_STORE_RECEIPT_DATA: "StoreReact_setting_api/get_receipt_list",
@@ -100,8 +102,9 @@ module.exports = Object.freeze({
   PURCHASE_ORDER_COUNT: "Purchase_ordersReactApi/purchase_order_count",
   SAVE_PO: "Purchase_ordersReactApi/save_po",
   AUTO_PO_LIST: "Purchase_ordersReactApi/auto_po_list",
-  PURCHASE_ORDER_DETAILS_BY_ID: "Purchase_orders_api/get_po_by_id",
-  VOID_PO: "Purchase_orders_api/void_po",
+  PURCHASE_ORDER_DETAILS_BY_ID: "Purchase_ordersReactApi/get_po_by_id",
+  VOID_PO: "Purchase_ordersReactApi/void_po",
+  RECEIVE_PURCHASE_ORDER_ITEMS: "Purchase_ordersReactApi/recieve_po",
 
   // Taxes API Calls
   ADD_TAXES: "Taxesapi/add_Tax",
@@ -200,8 +203,8 @@ module.exports = Object.freeze({
   GET_MANAGER_LISTING: "Manager_react/manager_list",
   GET_MANAGER_RECORD: "UserController/maneger_view", // manager view
   GET_MANAGER_RECORD_COUNT: "UserController/maneger_view_count", // manager view
-  ADD_MANAGER:"Manager_react/add_update_manager", // manager view
-  DELETE_MANAGER:"Manager_react/delete_manager",
+  ADD_MANAGER: "Manager_react/add_update_manager", // manager view
+  DELETE_MANAGER: "Manager_react/delete_manager",
   GET_ADMIN_RECORD: "UserController/admin_view", // admin view data
   GET_ADMIN_RECORD_COUNT: "UserController/admin_view_count", // admin records count
   GET_MANAGER_MERCHANT: "UserController/get_manager_merchant", // get manager merchant
@@ -233,7 +236,7 @@ module.exports = Object.freeze({
   // Order Refund Report
   ORDER_REFUND_REPORT: "vendor_report_api/order_refund_report",
   REFUND_REPORT: "ReportingReactapi/refund_report",
-  
+
   // Vendors API calls
   LIST_ALL_VENDORS: "Vendor_api/vendor_list",
 
@@ -295,10 +298,9 @@ module.exports = Object.freeze({
   ADD_TIME_SHEET: "Timesheet_react_api/addNewTimeclock",
   ADD_TIME_BREAK: "Timesheet_react_api/addBreak",
   DELETE_TIMESHEET: "Timesheet_react_api/delete_timeclock",
-  DELETE_BREAK:"Timesheet_react_api/delete_breaks",
+  DELETE_BREAK: "Timesheet_react_api/delete_breaks",
 
-
-  CHANGE_PASSWORD_STORE: "Store_setting_react_api/change_password"
+  CHANGE_PASSWORD_STORE: "Store_setting_react_api/change_password",
 });
 
 // All api calls are initialized in this component for this application

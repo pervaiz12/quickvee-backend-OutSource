@@ -99,6 +99,11 @@ export default function Header() {
     localStorage.removeItem("AllStore");
     navigate("/login");
   };
+
+  const handleNavigate=()=>{
+    navigate("/");
+    handleClose();
+  }
   const [isSticky, setIsSticky] = useState(false);
 
   const handleScroll = () => {
@@ -322,12 +327,12 @@ export default function Header() {
             {/* ================================ */}
             {LoginGetDashBoardRecordJson?.final_login == 1 ? (
               <>
-                <div className="ml-5 flex items-center">
+                {/* <div className="ml-5 flex items-center">
                   <img src={DownlIcon} alt="icon" className="ml-2" />
                   <p className="cursor-pointer ml-2 admin_medium">
                     Download App
                   </p>
-                </div>
+                </div> */}
 
                 {/* Online Store and Sync Data section */}
                 <div className="ml-5 flex items-center">
@@ -359,7 +364,7 @@ export default function Header() {
                 alt="icon"
                 className="mx-2"
               />
-              <p className="admin_medium">{storename?.slice(0, 1)}</p>
+              {/* <p className="admin_medium">{storename?.slice(0, 1)?.toUpperCase()}</p> */}
               <img src={DownIcon} alt="" />
             </div>
 
@@ -379,7 +384,7 @@ export default function Header() {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem>{storename}</MenuItem>
+              <MenuItem onClick={handleNavigate}>{storename}</MenuItem>
               <MenuItem onClick={handleLogout}>Logout</MenuItem>
             </Menu>
 

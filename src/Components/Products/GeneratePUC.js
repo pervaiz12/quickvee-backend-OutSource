@@ -244,45 +244,49 @@ const GeneratePUC = ({
                       </label> */}
                     </div>
 
-                    <div class="edit-profile-btns">
-                      <button
-                        className="quic-btn quic-btn-save vendor-btn"
-                        // onClick={handleSubmitForm}
-                        // disabled={isLoading}
-                        style={{
-                          backgroundColor: "#0A64F9",
-                        }}
-                        onClick={() =>
-                          handleCloseEditModal("single_vendor", index)
-                        }
-                      >
-                        Vendors
-                      </button>
-                      <button
-                        className="quic-btn quic-btn-save"
-                        // onClick={handleSubmitForm}
-                        // disabled={isLoading}
-                        style={{
-                          backgroundColor: "#0A64F9",
-                        }}
-                        onClick={() => handleRedirectHistory(index)}
-                      >
-                        Sales History
-                      </button>
-                      <button
-                        className="quic-btn quic-btn-save edit"
-                        // onClick={handleSubmitForm}
-                        // disabled={isLoading}
-                        style={{
-                          backgroundColor: "#0A64F9",
-                        }}
-                        onClick={() =>
-                          handleCloseEditModal("single_instant", index)
-                        }
-                      >
-                        Instant PO
-                      </button>
-                    </div>
+                    {pageUrl === "product-edit" ? (
+                      <div class="edit-profile-btns">
+                        <button
+                          className="quic-btn quic-btn-save vendor-btn"
+                          // onClick={handleSubmitForm}
+                          // disabled={isLoading}
+                          style={{
+                            backgroundColor: "#0A64F9",
+                          }}
+                          onClick={() =>
+                            handleCloseEditModal("single_vendor", index)
+                          }
+                        >
+                          Vendors
+                        </button>
+                        <button
+                          className="quic-btn quic-btn-save"
+                          // onClick={handleSubmitForm}
+                          // disabled={isLoading}
+                          style={{
+                            backgroundColor: "#0A64F9",
+                          }}
+                          onClick={() => handleRedirectHistory(index)}
+                        >
+                          Sales History
+                        </button>
+                        <button
+                          className="quic-btn quic-btn-save edit"
+                          // onClick={handleSubmitForm}
+                          // disabled={isLoading}
+                          style={{
+                            backgroundColor: "#0A64F9",
+                          }}
+                          onClick={() =>
+                            handleCloseEditModal("single_instant", index)
+                          }
+                        >
+                          Instant PO
+                        </button>
+                      </div>
+                    ) : (
+                      ""
+                    )}
                   </div>
                 );
               })
@@ -412,41 +416,45 @@ const GeneratePUC = ({
                 </label> */}
               </div>
 
-              <div class="edit-profile-btns">
-                <button
-                  className="quic-btn quic-btn-save vendor-btn"
-                  // onClick={handleSubmitForm}
-                  // disabled={isLoading}
-                  style={{
-                    backgroundColor: "#0A64F9",
-                  }}
-                  onClick={() => handleCloseEditModal("single_vendor", 0)}
-                >
-                  Vendors
-                </button>
-                <button
-                  className="quic-btn quic-btn-save"
-                  // onClick={handleSubmitForm}
-                  // disabled={isLoading}
-                  style={{
-                    backgroundColor: "#0A64F9",
-                  }}
-                  onClick={() => handleRedirectHistory(null)}
-                >
-                  Sales History
-                </button>
-                <button
-                  className="quic-btn quic-btn-save edit"
-                  // onClick={handleSubmitForm}
-                  // disabled={isLoading}
-                  style={{
-                    backgroundColor: "#0A64F9",
-                  }}
-                  onClick={() => handleCloseEditModal("single_instant", 0)}
-                >
-                  Instant PO
-                </button>
-              </div>
+              {pageUrl === "product-edit" ? (
+                <div class="edit-profile-btns">
+                  <button
+                    className="quic-btn quic-btn-save vendor-btn"
+                    // onClick={handleSubmitForm}
+                    // disabled={isLoading}
+                    style={{
+                      backgroundColor: "#0A64F9",
+                    }}
+                    onClick={() => handleCloseEditModal("single_vendor", 0)}
+                  >
+                    Vendors
+                  </button>
+                  <button
+                    className="quic-btn quic-btn-save"
+                    // onClick={handleSubmitForm}
+                    // disabled={isLoading}
+                    style={{
+                      backgroundColor: "#0A64F9",
+                    }}
+                    onClick={() => handleRedirectHistory(null)}
+                  >
+                    Sales History
+                  </button>
+                  <button
+                    className="quic-btn quic-btn-save edit"
+                    // onClick={handleSubmitForm}
+                    // disabled={isLoading}
+                    style={{
+                      backgroundColor: "#0A64F9",
+                    }}
+                    onClick={() => handleCloseEditModal("single_instant", 0)}
+                  >
+                    Instant PO
+                  </button>
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           ) : (
             ""

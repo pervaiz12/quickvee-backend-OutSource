@@ -15,8 +15,9 @@ const initialState = {
 
 // Generate pening , fulfilled and rejected action type
 export const fetchEmployeeListsData = createAsyncThunk('employeelist/fetchEmployeeListsData.', async (data) => {
+    const {token, ...dataNew}= data;
     try {
-        const response = await axios.post(BASE_URL + EMPLOYEE_LIST, data, { headers: { "Content-Type": "multipart/form-data" } })
+        const response = await axios.post(BASE_URL + EMPLOYEE_LIST, dataNew, { headers: { "Content-Type": "multipart/form-data", 'Authorization': `Bearer ${token}`  } })
         // console.log(response)
         if (response.status === 200) {
            return response.data
@@ -27,8 +28,9 @@ export const fetchEmployeeListsData = createAsyncThunk('employeelist/fetchEmploy
 })
 
 export const fetchEmployeeData = createAsyncThunk('employeelist/fetchEmployeeData.', async (data) => {
+    const {token, ...dataNew}= data;
     try {
-        const response = await axios.post(BASE_URL + EMPLOYEE_DATA, data, { headers: { "Content-Type": "multipart/form-data" } })
+        const response = await axios.post(BASE_URL + EMPLOYEE_DATA, dataNew, { headers: { "Content-Type": "multipart/form-data", 'Authorization': `Bearer ${token}` } })
         // console.log(response)
         if (response.status === 200) {
            return response.data
@@ -38,9 +40,10 @@ export const fetchEmployeeData = createAsyncThunk('employeelist/fetchEmployeeDat
     }
 })
 
-export const fetchPermissionData = createAsyncThunk('employeelist/fetchPermissionData.', async () => {
+export const fetchPermissionData = createAsyncThunk('employeelist/fetchPermissionData.', async (data) => {
+    const {token, ...dataNew}= data;
     try {
-        const response = await axios.post(BASE_URL + PERMISSIONS_LIST,  { headers: { "Content-Type": "multipart/form-data" } })
+    const response = await axios.post(BASE_URL + PERMISSIONS_LIST, { headers: { "Content-Type": "multipart/form-data", 'Authorization': `Bearer ${token}` } })
         // console.log(response)
         if (response.status === 200) {
            return response.data
@@ -51,8 +54,9 @@ export const fetchPermissionData = createAsyncThunk('employeelist/fetchPermissio
 })
 
 export const deleteEmployee = createAsyncThunk('employeeList/deleteEmployee',async(data) => {
+    const {token, ...dataNew}= data;
     try{
-        const response = await axios.post(BASE_URL + DELETE_EMPLOYEE , data , { headers:{"Content-Type":"multipart/form-data"} })
+        const response = await axios.post(BASE_URL + DELETE_EMPLOYEE , dataNew , { headers:{"Content-Type":"multipart/form-data", 'Authorization': `Bearer ${token}` } })
         if(response.data.status === true){
             const mydata = {
                 employee_id:data.employee_id,

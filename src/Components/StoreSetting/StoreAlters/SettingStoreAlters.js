@@ -7,11 +7,14 @@ import { useSelector, useDispatch } from "react-redux";
 import { BASE_URL, UPDATE_STORE_ALERTS_DATA } from "../../../Constants/Config";
 import { fetchStoreSettingalertsData } from "../../../Redux/features/SettingStoreAlters/SettingStoreAltersSlice";
 import { el } from "date-fns/locale";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 
 export default function SettingStoreAlters() {
   const [formData, setFormData] = useState({
     bccemail: "",
     msg_no: "",
+    store_name: "",
     report_email_id: "",
     phn_num: "",
   });
@@ -19,6 +22,7 @@ export default function SettingStoreAlters() {
   const [errors, setErrors] = useState({
     bccemail: "",
     msg_no: "",
+    store_name: "",
     report_email_id: "",
     phn_num: "",
   });
@@ -50,9 +54,15 @@ export default function SettingStoreAlters() {
   const label = { inputProps: { "aria-label": "Switch demo" } };
 
   const dispatch = useDispatch();
+  
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } = useAuthDetails();
+  let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
+  const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
+
   useEffect(() => {
     let data = {
-      merchant_id: "MAL0100CA",
+      merchant_id: merchant_id,
+      ...userTypeData,
     };
     if (data) {
       dispatch(fetchStoreSettingalertsData(data));
@@ -71,9 +81,11 @@ export default function SettingStoreAlters() {
   const [isBccEmail, setIsBccEmail] = useState("");
   const [isUserMsgEnabled, setIsUserMsgEnabled] = useState(false);
   const [isUserMsgNumber, setIsUserMsgNumber] = useState("");
+  const [isstoreName, setIsstoreName] = useState("");
   const [isOnlinePhoneNumber, setIsOnlinePhoneNumber] = useState("");
   const [isReportEmailId, setIsReportEmailId] = useState("");
   const [isOnlineOrderNotify, setIsOnlineOrderNotify] = useState(false);
+  const [isDefaultOnlineOrderNotify, setIsDefaultOnlineOrderNotify] = useState(false);
 
   const [isEmailAccepted, setEmailAccepted] = useState(false);
   const [isEmailPackaging, setEmailPackaging] = useState(false);
@@ -143,6 +155,9 @@ export default function SettingStoreAlters() {
     if (allStoreAlertsUserData && allStoreAlertsUserData.msg_no) {
       setIsUserMsgNumber(allStoreAlertsUserData.msg_no);
     }
+    if (allStoreAlertsUserOption && allStoreAlertsUserOption.store_name) {
+      setIsstoreName(allStoreAlertsUserOption.store_name);
+    }
     if (allStoreAlertsUserOption && allStoreAlertsUserOption.phn_num) {
       setIsOnlinePhoneNumber(allStoreAlertsUserOption.phn_num);
     }
@@ -155,6 +170,14 @@ export default function SettingStoreAlters() {
     ) {
       setReportEmailTime(allStoreAlertsUserOption.report_email_time);
     }
+    if (
+      allStoreAlertsUserOption &&
+      allStoreAlertsUserOption.default_notify_sms &&
+      allStoreAlertsUserOption.default_notify_sms == 1
+    ) {
+      setIsDefaultOnlineOrderNotify(true);
+    }
+
     if (
       allStoreAlertsUserData &&
       allStoreAlertsUserData.ol_fcm_notify &&
@@ -204,6 +227,10 @@ export default function SettingStoreAlters() {
   };
   const OnlineOrderNotifytoggleInput = () => {
     setIsOnlineOrderNotify(!isOnlineOrderNotify);
+  };
+
+  const DefaultOnlineOrderNotifytoggleInput = () => {
+    setIsDefaultOnlineOrderNotify(!isDefaultOnlineOrderNotify);
   };
 
   const IsEmailAcceptedtoggleInput = () => {
@@ -295,6 +322,16 @@ export default function SettingStoreAlters() {
     setPaypointReport(!isPaypointReport);
   };
 
+  const Userstore_nameInput = (event) => {
+    setIsstoreName(event.target.value);
+    const { name, value } = event.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
+
+
   const handleUpdateSettingAlerts = async (e) => {
     e.preventDefault();
     if (isBccEmail != "") {
@@ -306,7 +343,21 @@ export default function SettingStoreAlters() {
         return;
       }
     }
-    if (isUserMsgNumber != "") {
+    if (isstoreName == "") {
+      setErrors({
+        ...errors,
+        store_name: "This field is required.",
+      });
+      return;
+    }
+    if(isUserMsgNumber == ""){
+      setErrors({
+        ...errors,
+        msg_no: "This field is required.",
+      });
+      return;
+
+    }else if (isUserMsgNumber != "") {
       if (!validateMobile(isUserMsgNumber)) {
         setErrors({
           ...errors,
@@ -314,6 +365,11 @@ export default function SettingStoreAlters() {
         });
         return;
       }
+    }else{
+      setErrors({
+        ...errors,
+        msg_no: "",
+      });
     }
     if (isReportEmailId != "") {
       if (!validateEmail1(isReportEmailId)) {
@@ -325,7 +381,13 @@ export default function SettingStoreAlters() {
       }
     }
     // setErrors("");
-    if (isOnlinePhoneNumber != "") {
+    if(isOnlinePhoneNumber == ""){
+      setErrors({
+        ...errors,
+        phn_num: "This field is required.",
+      });
+      return;
+    }else if (isOnlinePhoneNumber != "") {
       if (!validateMobile1(isOnlinePhoneNumber)) {
         setErrors({
           ...errors,
@@ -333,54 +395,94 @@ export default function SettingStoreAlters() {
         });
         return;
       }
+    } else{
+      setErrors({
+        ...errors,
+        phn_num: "",
+      });
     }
+    const isEmailAccepted = document.getElementById('isEmailAccepted').checked;
+    const isEmailPackaging = document.getElementById('isEmailPackaging').checked;
+    const isEmailDeliveryReady = document.getElementById('isEmailDeliveryReady').checked;
+    const isEmailDeliveryCompletely = document.getElementById('isEmailDeliveryCompletely').checked;
+    const isEmailCancelled = document.getElementById('isEmailCancelled').checked;
+
+    const isSmsAccepted = document.getElementById('isSmsAccepted').checked;
+    const isSmsPackaging = document.getElementById('isSmsPackaging').checked;
+    const isSmsDeliveryReady = document.getElementById('isSmsDeliveryReady').checked;
+    const isSmsDeliveryCompletely = document.getElementById('isSmsDeliveryCompletely').checked;
+    const isSmsCancelled = document.getElementById('isSmsCancelled').checked;
+
+    const notifymail = [
+      isEmailAccepted ? "1" : "",
+      isEmailPackaging ? "2" : "",
+      isEmailDeliveryReady ? "3" : "",
+      isEmailDeliveryCompletely ? "4" : "",
+      isEmailCancelled ? "5" : ""
+    ].filter(Boolean).join(",");
+    const notifysms = [
+      isSmsAccepted ? "1" : "",
+      isSmsPackaging ? "2" : "",
+      isSmsDeliveryReady ? "3" : "",
+      isSmsDeliveryCompletely ? "4" : "",
+      isSmsCancelled ? "5" : ""
+    ].filter(Boolean).join(",");
 
     const FormData = {
-      id: "100",
-      merchant_id: "MAL0100CA",
-      name: isUserName,
-      timeZone: istimeZone,
+      user_id: allStoreAlertsUserData?.id,
+      merchant_id: merchant_id,
+      // name: isUserName,
+      store_name:isstoreName,
+      // timeZone: istimeZone,
       enable_email: isUserEmailEnabled ? "1" : "0",
       bcc_email: isBccEmail,
       enable_message: isUserMsgEnabled ? "1" : "0",
       msg_no: isUserMsgNumber,
-      emailaccepted: isEmailAccepted ? "1" : "0",
-      emailpackaging: isEmailPackaging ? "1" : "0",
-      emaildeliveryready: isEmailDeliveryReady ? "1" : "0",
-      emaildeliverycompletely: isEmailDeliveryCompletely ? "1" : "0",
-      emailcancelled: isEmailCancelled ? "1" : "0",
-      smsaccepted: isSmsAccepted ? "1" : "0",
-      smspackaging: isSmsPackaging ? "1" : "0",
-      smsdeliveryready: isSmsDeliveryReady ? "1" : "0",
-      smsdeliverycompletely: isSmsDeliveryCompletely ? "1" : "0",
-      smscancelled: isSmsCancelled ? "1" : "0",
+      // emailaccepted: isEmailAccepted ? "1" : "0",
+      // emailpackaging: isEmailPackaging ? "1" : "0",
+      // emaildeliveryready: isEmailDeliveryReady ? "1" : "0",
+      // emaildeliverycompletely: isEmailDeliveryCompletely ? "1" : "0",
+      // emailcancelled: isEmailCancelled ? "1" : "0",
+      notifymail:notifymail,
+      notifySMS:notifysms,
       phn_num: isOnlinePhoneNumber,
-      salesoverviewreport: isSalesOverviewReport ? "1" : "0",
-      ordertypereport: isOrderTypeReport ? "1" : "0",
-      taxesreport: isTaxesReport ? "1" : "0",
-      paypointreport: isPaypointReport ? "1" : "0",
-      report_email_id: isReportEmailId,
-      report_email_time: isReportEmailTime,
+      // smsaccepted: isSmsAccepted ? "1" : "0",
+      // smspackaging: isSmsPackaging ? "1" : "0",
+      // smsdeliveryready: isSmsDeliveryReady ? "1" : "0",
+      // smsdeliverycompletely: isSmsDeliveryCompletely ? "1" : "0",
+      // smscancelled: isSmsCancelled ? "1" : "0",
+      // salesoverviewreport: isSalesOverviewReport ? "1" : "0",
+      // ordertypereport: isOrderTypeReport ? "1" : "0",
+      // taxesreport: isTaxesReport ? "1" : "0",
+      // paypointreport: isPaypointReport ? "1" : "0",
+      // report_email_id: isReportEmailId,
+      // report_email_time: isReportEmailTime,
+      default_notify_sms_val:isDefaultOnlineOrderNotify ? "1" : "0",
+      token_id: userTypeData?.token_id,
+      login_type: userTypeData?.login_type,
       ol_fcm_notify: isOnlineOrderNotify ? "1" : "0",
     };
     console.log(FormData);
+    // return
 
-    const response = await axios.post(
-      BASE_URL + UPDATE_STORE_ALERTS_DATA,
-      FormData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
+    const response = await axios.post(BASE_URL + UPDATE_STORE_ALERTS_DATA, FormData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${userTypeData?.token}`,
+      },
+    });
 
-    if (response) {
+    if (response?.data?.status) {
+      ToastifyAlert(response?.data?.message, "success");
       let merchantdata = {
-        merchant_id: "MAL0100CA",
+        merchant_id: merchant_id,
+        ...userTypeData,
       };
       if (merchantdata) {
         setErrors({
           bccemail: "",
           msg_no: "",
+          store_name: "",
           report_email_id: "",
           phn_num: "",
         });
@@ -399,7 +501,7 @@ export default function SettingStoreAlters() {
           <h2 className="store-setting-h2">
             <b>Get Notification Via Email</b>
           </h2>
-          <span className="store-setting-switch">
+          <span className="store-setting-switch float-right">
             <Switch
               {...label}
               checked={isUserEmailEnabled}
@@ -427,7 +529,7 @@ export default function SettingStoreAlters() {
           <h2 className="store-setting-h2">
             <b>Get Notification Via SMS</b>
           </h2>
-          <span className="store-setting-switch">
+          <span className="store-setting-switch float-right">
             <Switch
               {...label}
               checked={isUserMsgEnabled}
@@ -444,6 +546,7 @@ export default function SettingStoreAlters() {
             <input
               type="number"
               name="msg_no"
+              maxLength="10"
               value={isUserMsgNumber}
               className="store-setting-alert-input"
               onChange={UserMsgNumbertoggleInput}
@@ -455,18 +558,18 @@ export default function SettingStoreAlters() {
           <div className="store-setting-input-div">
             <input
               type="text"
-              name="msg_no11"
-              value=""
+              name="store_name"
+              value={isstoreName}
               className="store-setting-alert-input"
-              //   onChange={UserMsgNumbertoggleInput}
+              onChange={Userstore_nameInput}
               //   disabled={!isUserMsgEnabled}
             />
-            <span className="store-setting-error">{errors.msg_no}</span>
+            <span className="store-setting-error">{errors.store_name}</span>
           </div>
         </div>
 
         {/* Online Order Status(Customers) */}
-        <div className="store-setting-table-div">
+        {/* <div className="store-setting-table-div">
           <h2 className="store-setting-h2 store-setting-px-8">
             <b>Online Order Status (Customers)</b>
           </h2>
@@ -605,7 +708,7 @@ export default function SettingStoreAlters() {
             <span className="store-setting-error">{errors.phn_num}</span>
           </div>
 
-          <div style={{ MarginLeft: "2rem", MarginRight: "2rem" }}>
+          <div style={{ MarginLeft: "2rem", MarginRight: "2rem" }} className="storeAlert_Enable_SMS">
             <h2 className="store-setting-h2">
               <b>Default Enable Receiving SMS Notification For Order Status</b>
             </h2>
@@ -617,7 +720,212 @@ export default function SettingStoreAlters() {
               />
             </span>
           </div>
+        </div> */}
+
+          {/* for Design Change start  */}
+        <div className="store-setting-table-div">
+          <h2 className="store-setting-h2 store-setting-px-8">
+            <b>Online Order Status (Customers)</b>
+          </h2>
+          <table className="store-setting-table">
+            <thead>
+              <tr>
+                <th></th>
+                <th>Notify Via Email</th>
+                <th>Notify Via SMS</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="store-setting-table-tr">
+                <td>Accepted</td>
+                <td className="store-setting-checkmark-td">
+                  <div className="category-checkmark-div ">
+                  <label className="category-checkmark-label">
+                    <input
+                      type="checkbox"
+                      defaultChecked={CheckBoxNotifyEmail(1)}
+                      value={isEmailAccepted}
+                      id="isEmailAccepted"
+                      onChange={IsEmailAcceptedtoggleInput}
+                    />
+                    <span className="category-checkmark"></span>
+                  </label>
+                  </div>
+                </td>
+                <td className="store-setting-checkmark-td">
+                <div className="category-checkmark-div ">
+                  <label className="category-checkmark-label">
+                    <input
+                      type="checkbox"
+                      defaultChecked={CheckBoxNotifySms(1)}
+                      value={isSmsAccepted}
+                      id="isSmsAccepted"
+                      onChange={IsSmsAcceptedtoggleInput}
+                    />
+                    <span className="category-checkmark"></span>
+                  </label>
+                  </div>
+                </td>
+              </tr>
+              <tr className="store-setting-table-tr">
+                <td>Packaging</td>
+                <td className="store-setting-checkmark-td">
+                  <div className="category-checkmark-div ">
+                    <label className="category-checkmark-label">
+                      <input
+                        type="checkbox"
+                        defaultChecked={CheckBoxNotifyEmail(2)}
+                        value={isEmailPackaging}
+                        id="isEmailPackaging"
+                        onChange={IsEmailPackagingtoggleInput}
+                      />
+                      <span className="category-checkmark"></span>
+                    </label>
+                  </div>
+                </td>
+                <td className="store-setting-checkmark-td">
+                  <div className="category-checkmark-div ">
+                    <label className="category-checkmark-label">
+                      <input
+                        type="checkbox"
+                        defaultChecked={CheckBoxNotifySms(2)}
+                        value={isSmsPackaging}
+                        id="isSmsPackaging"
+                        onChange={IsSmsPackagingtoggleInput}
+                      />
+                      <span className="category-checkmark"></span>
+                    </label>
+                  </div>
+                </td>
+              </tr>
+              <tr className="store-setting-table-tr">
+                <td>Out for Delivery/Ready</td>
+                <td className="store-setting-checkmark-td">
+                  <div className="category-checkmark-div ">
+                    <label className="category-checkmark-label">
+                      <input
+                        type="checkbox"
+                        defaultChecked={CheckBoxNotifyEmail(3)}
+                        value={isEmailDeliveryReady}
+                        id="isEmailDeliveryReady"
+                        onChange={IsEmailDeliveryReadytoggleInput}
+                      />
+                      <span className="category-checkmark"></span>
+                    </label>
+                  </div>
+                </td>
+                <td className="store-setting-checkmark-td">
+                  <div className="category-checkmark-div ">
+                    <label className="category-checkmark-label">
+                      <input
+                        type="checkbox"
+                        defaultChecked={CheckBoxNotifySms(3)}
+                        value={isSmsDeliveryReady}
+                        id="isSmsDeliveryReady"
+                        onChange={IsSmsDeliveryReadytoggleInput}
+                      />
+                      <span className="category-checkmark"></span>
+                    </label>
+                  </div>
+                </td>
+              </tr>
+              <tr className="store-setting-table-tr">
+                <td>Delivered/Completely</td>
+                <td className="store-setting-checkmark-td">
+                  <div className="category-checkmark-div ">
+                    <label className="category-checkmark-label">
+                      <input
+                        type="checkbox"
+                        defaultChecked={CheckBoxNotifyEmail(4)}
+                        value={isEmailDeliveryCompletely}
+                        id="isEmailDeliveryCompletely"
+                        onChange={IsEmailDeliveryCompletelytoggleInput}
+                      />
+                      <span className="category-checkmark"></span>
+                    </label>
+                  </div>
+                </td>
+                <td className="store-setting-checkmark-td">
+                  <div className="category-checkmark-div ">
+                    <label className="category-checkmark-label">
+                      <input
+                        type="checkbox"
+                        defaultChecked={CheckBoxNotifySms(4)}
+                        value={isSmsDeliveryCompletely}
+                        id="isSmsDeliveryCompletely"
+                        onChange={IsSmsDeliveryCompletelytoggleInput}
+                      />
+                      <span className="category-checkmark"></span>
+                    </label>
+                  </div>
+                </td>
+              </tr>
+              <tr className="store-setting-table-tr">
+                <td>Cancelled</td>
+                <td className="store-setting-checkmark-td">
+                  <div className="category-checkmark-div ">
+                    <label className="category-checkmark-label">
+                      <input
+                        type="checkbox"
+                        defaultChecked={CheckBoxNotifyEmail(5)}
+                        value={isEmailCancelled}
+                        id="isEmailCancelled"
+                        onChange={IsEmailCancelledtoggleInput}
+                      />
+                      <span className="category-checkmark"></span>
+                    </label>
+                  </div>
+                </td>
+                <td className="store-setting-checkmark-td">
+                  <div className="category-checkmark-div ">
+                    <label className="category-checkmark-label">
+                      <input
+                        type="checkbox"
+                        defaultChecked={CheckBoxNotifySms(5)}
+                        value={isSmsCancelled}
+                        id="isSmsCancelled"
+                        onChange={IsSmsCancelledtoggleInput}
+                      />
+                      <span className="category-checkmark"></span>
+                    </label>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p className="store-setting-p">
+            This number will be send to customers while he is on his way to
+            pickup his order.
+          </p>
+          <div className="store-setting-head-div store-setting-px-8">
+            Enter Phone Number
+          </div>
+          <div className="store-setting-input-div store-setting-mx-2">
+            <input
+              type="number"
+              name="phn_num"
+              value={isOnlinePhoneNumber}
+              className="store-setting-alert-input"
+              onChange={OnlinePhoneNumbertoggleInput}
+            />
+            <span className="store-setting-error">{errors.phn_num}</span>
+          </div>
+
+          <div style={{ MarginLeft: "2rem", MarginRight: "2rem" }} className="storeAlert_Enable_SMS">
+            <h2 className="store-setting-h2">
+              <b>Default Enable Receiving SMS Notification For Order Status</b>
+            </h2>
+            <span className="store-setting-switch float-right">
+              <Switch
+                {...label}
+                checked={isDefaultOnlineOrderNotify}
+                onChange={DefaultOnlineOrderNotifytoggleInput}
+              />
+            </span>
+          </div>
         </div>
+           {/* for Design Change End  */}
 
         {/* Email Reporting */}
         {/* <div className="store-setting-table-div">
@@ -729,7 +1037,7 @@ export default function SettingStoreAlters() {
           <h2 className="store-setting-h2">
             <b>Online Order Notification</b>
           </h2>
-          <span className="store-setting-switch">
+          <span className="store-setting-switch float-right">
             <Switch
               {...label}
               checked={isOnlineOrderNotify}
@@ -742,7 +1050,7 @@ export default function SettingStoreAlters() {
         </div>
       </div>
 
-      <button className="store-setting-btn" onClick={handleUpdateSettingAlerts}>
+      <button className="store-setting-btn mt-8 mb-8" onClick={handleUpdateSettingAlerts}>
         Update
       </button>
     </>

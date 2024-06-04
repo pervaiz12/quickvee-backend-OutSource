@@ -6,6 +6,7 @@ import { addToEmployeeList } from "../../../Redux/features/StoreSettings/AddEmpl
 import Validation from "../../../Constants/Validation";
 // import { useNavigate } from "react-router-dom";
 import { BASE_URL, ADDEDIT_EMPLOYEE } from "../../../Constants/Config";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 
 const AddEmployeeFormLogic = ({ employeeList }) => {
   const dispatch = useDispatch();
@@ -25,6 +26,10 @@ const AddEmployeeFormLogic = ({ employeeList }) => {
   // const Navigate = useNavigate();
   const scrollRef = useRef(null);
   const [showModal, setShowModal] = useState(false);
+
+  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+  let AuthDecryptDataDashBoardJSONFormat=LoginGetDashBoardRecordJson
+  const merchant_id=AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id
 
   const [values, setValues] = useState({
     firstname: "",
@@ -127,8 +132,9 @@ const AddEmployeeFormLogic = ({ employeeList }) => {
       errors.state === ""
     ) {
       const data = {
-        merchant_id: "MAL0100CA",
-        admin_id: "MAL0100CA",
+        merchant_id: merchant_id,
+        // admin_id: "MAL0100CA",
+        admin_id: "",
         f_name: values.firstname,
         l_name: values.lastname,
         email: values.email.toLowerCase(),
@@ -139,10 +145,13 @@ const AddEmployeeFormLogic = ({ employeeList }) => {
         city: values.city,
         zip: values.zipcode,
         state: values.state,
+        token_id:userTypeData?.token_id,
+        login_type:userTypeData?.login_type,
       };
+     
       try {
         const response = await axios.post(BASE_URL + ADDEDIT_EMPLOYEE, data, {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${userTypeData?.token}` },
         });
         console.log(response.data);
         if (response.data.status === true) {

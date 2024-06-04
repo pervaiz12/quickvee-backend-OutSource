@@ -190,6 +190,11 @@ function App() {
             path="/purchase-data/:id"
             element={<Main visible={"edit-purchase-data"} />}
           />
+          <Route
+            exact
+            path="/purchase-data/edit/:id"
+            element={<Main visible={"modify-purchase-order"} />}
+          />
 
           <Route
             exact
@@ -313,10 +318,10 @@ function App() {
             path="/store-reporting/vendors-sales-reports"
             element={<Main visible={"vendors-sales-reports"} />}
           />
-          <Route 
-          exact
-          path="/store-settings/refund-report"
-          element={<Main visible={"refund-report"} />}
+          <Route
+            exact
+            path="/store-settings/refund-report"
+            element={<Main visible={"refund-report"} />}
           />
 
           <Route
