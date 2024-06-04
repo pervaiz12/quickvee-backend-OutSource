@@ -5,17 +5,25 @@ import { useDispatch, useSelector } from "react-redux";
 import { Grid } from "@mui/material";
 
 const OnlineOrderingPage = ({ onlineorderstatus }) => {
-  const [isEnableOrderNumber, setisEnableOrderNumber] = useState(true);
+  const [isEnableOrderNumber, setisEnableOrderNumber] = useState("");
+  console.log("isEnableOrderNumber store", isEnableOrderNumber);
   const dispatch = useDispatch();
 
   const handleCheckedSwitch = (e) => {
-    setisEnableOrderNumber(!isEnableOrderNumber);
+    // console.log("handleCheckedSwitch", e.target.checked);
+    setisEnableOrderNumber(e.target.checked ? "1" : "0");
   };
 
   const setupDataState = useSelector(
     (state) => state?.StoreSetupList?.storesetupData
   );
 
+  // console.log("setupDataState", setupDataState);
+  useEffect(() => {
+    if (setupDataState?.offline) {
+      setisEnableOrderNumber(setupDataState?.offline);
+    }
+  }, [setupDataState]);
   useEffect(() => {
     // console.log(setupDataState?.clover_customer_id)
     onlineorderstatus(isEnableOrderNumber);
@@ -49,17 +57,19 @@ const OnlineOrderingPage = ({ onlineorderstatus }) => {
           </Grid>
         </Grid>
         <Grid item>
-        <div className="fr">
-                <Switch
-                  // {...label}
-                  name="cost_method"
-                  onChange={handleCheckedSwitch}
-                  checked={isEnableOrderNumber}
-                />
-              </div>
+          <div className="fr">
+            <Switch
+              // {...label}
+              name="cost_method"
+              onChange={handleCheckedSwitch}
+              defaultChecked={
+                (isEnableOrderNumber === "1" && true) ||
+                (isEnableOrderNumber === "0" && false)
+              }
+            />
+          </div>
         </Grid>
       </Grid>
-     
     </>
   );
 };

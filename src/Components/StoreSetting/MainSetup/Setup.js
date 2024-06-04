@@ -7,7 +7,15 @@ import DelveryPickupDetails from "./DelveryPickupDetails";
 import { useDispatch } from "react-redux";
 import { fetchStoreSettingSetupData } from "../../../Redux/features/SettingSetup/SettingSetupSlice";
 import { Grid } from "@mui/material";
-
+import axios from "axios";
+import {
+  BASE_URL,
+  UPDATE_RECEIPT_INFO_DATA,
+  UPDATE_STORE_SETUP,
+} from "../../../Constants/Config";
+import { fetchSettingReceiptData } from "../../../Redux/features/StoreSettings/SettingsReceipt/SettingsReceiptSlice";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { ToastifyAlert } from '../../../CommonComponents/ToastifyAlert';
 const Setup = () => {
   // const [updateDetails, setUpdateDetails] = useState(true);
   const [OnlineOrderStatus, setOnlineOrderStatus] = useState("");
@@ -27,9 +35,9 @@ const Setup = () => {
   const [delpickData, setdelpickData] = useState("");
   const [pickDefTip, setpickDefTip] = useState("");
   const [delDefTip, setdelDefTip] = useState("");
-
+  const [days, setDays] = useState([]);
   const dispatch = useDispatch();
-
+  const { userTypeData } = useAuthDetails();
   const data = {
     merchant_id: "MAL0100CA",
   };
@@ -44,7 +52,7 @@ const Setup = () => {
   //   setUpdateDetails(details);
   //   window.alert(`Updates: ${details}`);
   // };
-
+  // console.log("days",days)
   const handleonlineorderstatus = (onlinestatus) => {
     setOnlineOrderStatus(onlinestatus);
   };
@@ -88,51 +96,59 @@ const Setup = () => {
     e.preventDefault();
 
     const FormData = {
-      merchant_id: "MAL0100CA",
-      offline: OnlineOrderStatus,
-      min_delivery_amt: MinAmtdel,
-      max_delivery_radius: rateDel,
-      enable_tip: delpickData,
-      is_pickup: EnableOrderNumber,
-      is_deliver: DelEnbale,
-      pickup_min_time: MinPickData,
-      pickup_max_time: MaxPickData,
-      deliver_min_time: MinDelData,
-      deliver_max_time: MaxDelData,
-      float_fee: FeeData,
-      delivery_fee: delChange,
-      rate_per_miles: delRates,
-      cf_del: "",
-      cf_pik: "",
-      cf_del_price: conepikData,
-      cf_pik_price: convData,
-      tax: "",
-      default_tip_p: pickDefTip,
-      default_tip_d: delDefTip,
+      merchant_id: "MAL0100CA", //
+      user_id: 100, //
+      enable_online_order: OnlineOrderStatus,
+      is_pickup: EnableOrderNumber, //
+      is_deliver: DelEnbale, //
+      pickup_min_time: MinPickData, //
+      pickup_max_time: MaxPickData, //
+      deliver_min_time: MinDelData, //
+      deliver_max_time: MaxDelData, //
+      min_delivery_amt: MinAmtdel, //
+      max_delivery_radius: rateDel, //
+      cf_pik_price: convData, //
+      cf_del_price: conepikData, //
+      float_fee: FeeData, //
+      delivery_fee: delChange, //
+      rate_per_miles: delRates, //
+      enable_tip: delpickData, //
+      default_tip_pickup: pickDefTip, //
+      default_tip_delivery: delDefTip, //
+      day_data: JSON.stringify(days),
     };
     console.log(FormData);
+    const { token, ...otherUserData } = userTypeData;
+    const response = await axios.post(
+      BASE_URL + UPDATE_STORE_SETUP,
+      { ...FormData, ...otherUserData },
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log(response);
+    if (response.data.status === true) {  
+      ToastifyAlert(response.data.msg,"success")
 
-    // const response = await axios.post(BASE_URL + UPDATE_RECEIPT_INFO_DATA, FormData, {
-    //   headers: { "Content-Type": "multipart/form-data" },
-    // });
-
-    // if (response) {
-    //   let merchantdata = {
-    //     merchant_id: "MAL0100CA",
-    //   };
-    //   if (merchantdata) {
-    //     dispatch(fetchSettingReceiptData(merchantdata));
-    //   }
-    // } else {
-    //   setsubmitmessage(response.data.msg);
-    // }
+      let merchantdata = {
+        merchant_id: "MAL0100CA",
+      };
+      if (merchantdata) {
+        dispatch(fetchSettingReceiptData(merchantdata));
+      }
+    } else {
+      ToastifyAlert(response.data.msg,"unsuccess")
+    }
   };
 
   return (
     <>
       <OnlineOrderingPage onlineorderstatus={handleonlineorderstatus} />
 
-      <StoreWorkingHrs />
+      <StoreWorkingHrs days={days} setDays={setDays} />
 
       <PickupDeliveryDetails pickupdeliverydata={handlepickupdeliverydata} />
 
@@ -145,6 +161,7 @@ const Setup = () => {
         direction="row"
         justifyContent="flex-end"
         alignItems="center"
+        sx={{ pb: 2.5 }}
       >
         <Grid item>
           <button class="quic-btn quic-btn-save" onClick={handleUpdateClick}>

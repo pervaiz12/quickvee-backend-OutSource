@@ -43,19 +43,22 @@ const VendorsDetail = ({ setVisible }) => {
   ]);
   const { userTypeData } = useAuthDetails();
   const handleUpdateStatus = async (event, label, vendorId) => {
-   
     const updData = {
       // merchant_id: "MAL0100CA",
       status: event.target.checked ? 1 : 0,
       id: vendorId,
     };
     const { token, ...otherUserData } = userTypeData;
-    const response = await axios.post(BASE_URL + STATUS_UPD_VENDORS, {...updData,...otherUserData}, {
-      headers: {
-         "Content-Type": "multipart/form-data" ,
-         Authorization: `Bearer ${token}`,
+    const response = await axios.post(
+      BASE_URL + STATUS_UPD_VENDORS,
+      { ...updData, ...otherUserData },
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
         },
-    });
+      }
+    );
 
     if (response.status === 200) {
       alert("Vendor Status Updated Successfully.");

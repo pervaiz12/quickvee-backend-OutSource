@@ -81,6 +81,10 @@ module.exports = Object.freeze({
   LIST_INVENTORY: "api/SettingsReact_api/inventory_list",
   UPDATE_INVENTORY: "api/SettingsReact_api/update_inventory_info",
 
+
+  // Store setup 
+  UPDATE_STORE_SETUP : "Store_setting_react_api/update_store_setup",
+
   // get Store Setting alerts list api
   GET_STORE_ALERTS_DATA: "Store_setting_api/store_alerts_list",
 

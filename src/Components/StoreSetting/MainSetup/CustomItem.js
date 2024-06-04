@@ -1,36 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import "../../../Styles/EmployeeList/customeitem.css";
 
-const CustomTimePicker = ({ OpenTime, CloseTime }) => {
-  const convertTo24HourFormat = (time) => {
-    const [timePart, suffix] = time.split(" ");
-    let [hours, minutes] = timePart.split(":").map(Number);
-    if (suffix === "PM" && hours !== 12) hours += 12;
-    if (suffix === "AM" && hours === 12) hours = 0;
-    const formattedHours = hours < 10 ? `0${hours}` : `${hours}`;
-    const formattedMinutes = minutes < 10 ? `0${minutes}` : `${minutes}`;
-    return `${formattedHours}:${formattedMinutes}`;
-  };
+const CustomTimePicker = ({ OpenTime, CloseTime, days, id, setDays }) => {
   const formatTime = (time) => {
     let [hour, minutePeriod] = time?.split(":");
     let [minute, period] = minutePeriod?.split(" ");
-
-    // Ensure hour and minute are two digits
     hour = hour.length < 2 ? "0" + hour : hour;
     minute = minute.length < 2 ? "0" + minute : minute;
-
-    // Capitalize the period (am/pm)
     period = period.toUpperCase();
-
     return `${hour}:${minute} ${period}`;
   };
-
-  const [startTime, setStartTime] = useState(formatTime(OpenTime));
-  const [endTime, setEndTime] = useState(formatTime(CloseTime));
-  console.log("OpenTime: ", startTime, "CloseTime :", endTime);
-  // Generate time options with 15-minute intervals
+  // console.log("CustomTimePicker", days);
+  
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  useEffect(() => {
+    setStartTime(formatTime(OpenTime));
+    setEndTime(formatTime(CloseTime));
+  }, [OpenTime, CloseTime]);
   const generateTimeOptions = () => {
     const options = [];
     for (let hour = 0; hour < 24; hour++) {
@@ -58,12 +47,26 @@ const CustomTimePicker = ({ OpenTime, CloseTime }) => {
 
   const handleEndTimeChange = (event) => {
     setEndTime(event.target.value);
+
+    setDays((prevDays) => {
+      const updatedDays = prevDays.map((day) => {
+        if (day.id === id) {
+          return { ...day, close_time: event.target.value };
+        }
+        return day;
+      });
+      return updatedDays;
+    });
     if (startTime == event.target.value) {
       alert("The end time cannot be the same as the start time");
       setEndTime("");
     }
   };
-
+  const timeOptions = generateTimeOptions();
+  const startTimeIndex = timeOptions.indexOf(startTime);
+  const endTimeIndex = timeOptions.indexOf(endTime);
+  console.log("startTimeIndex",startTimeIndex,"endTimeIndex",endTimeIndex)
+  
   return (
     <>
       <div className="flex justify-between gap-2">
@@ -72,8 +75,13 @@ const CustomTimePicker = ({ OpenTime, CloseTime }) => {
           onChange={handleStartTimeChange}
           style={{ width: "200px", backgroundColor: "#fff", height: "50px" }}
         >
-          {generateTimeOptions().map((time) => (
-            <MenuItem className="customedateselector" key={time} value={time}>
+          {generateTimeOptions().map((time, index) => (
+            <MenuItem
+              className="customedateselector"
+              key={time}
+              value={time}
+              disabled={startTimeIndex !== -1 && index <= startTimeIndex}
+            >
               {time}
             </MenuItem>
           ))}
@@ -86,8 +94,13 @@ const CustomTimePicker = ({ OpenTime, CloseTime }) => {
           onChange={handleEndTimeChange}
           style={{ width: "200px", backgroundColor: "#fff", height: "50px" }}
         >
-          {generateTimeOptions().map((time) => (
-            <MenuItem className="customedateselector" key={time} value={time}>
+          {generateTimeOptions().map((time, index) => (
+            <MenuItem
+              className="customedateselector"
+              key={time}
+              value={time}
+              // disabled={endTimeIndex !== -1 && index <= endTimeIndex}
+            >
               {time}
             </MenuItem>
           ))}
