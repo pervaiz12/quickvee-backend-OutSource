@@ -11,11 +11,14 @@ import { DateCalendar } from "@mui/x-date-pickers/DateCalendar";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FormControl, Grid } from "@mui/material";
+import { useAuthDetails } from "../../Common/cookiesHelper";
+
 const Welcome = ({ isOpen, onClose, children }) => {
   const [visibleCalendar, setVisibleCalendar] = useState(false);
   const [selectedTransaction, setSelectedTransaction] = useState("All");
   const [transactionDropdownVisible, setTransactionDropdownVisible] =
     useState(false);
+  const { LoginGetDashBoardRecordJson } = useAuthDetails();
 
   const dataCalender = useRef(null);
 
@@ -34,6 +37,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
+  let owner_name = LoginGetDashBoardRecordJson?.data?.owner_name;
 
   // useEffect(() => {
   //   const handleOutsideClick = (event) => {
@@ -133,7 +137,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
       <div className="box" ref={dropdownRef}>
         <div className="flex justify-between mb-10 mt-12 ">
           <div className="q_dashboard_welcom_msg">
-            <h1>Welcome Malik Saleh</h1>
+            <h1>Welcome {!!owner_name ? owner_name : "to Dashboard"}</h1>
           </div>
           <div
             onClick={openCalendar}
@@ -628,7 +632,6 @@ const Welcome = ({ isOpen, onClose, children }) => {
                 </div>
               </div>
             </div>
-
           </div>
         </div>
       </div>
