@@ -3,6 +3,7 @@ import axios from "axios";
 import { useDispatch } from "react-redux";
 import Validation from "../../../Constants/Validation";
 import { BASE_URL, UPDATE_PERMISSION } from "../../../Constants/Config";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 
 const EditPermissionLogic = ({employeedata}) => {
     // console.log(employeedata)
@@ -11,6 +12,9 @@ const EditPermissionLogic = ({employeedata}) => {
     // const Navigate = useNavigate();
     const scrollRef = useRef(null);
     const [showModal, setShowModal] = useState(false);
+    const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+    let AuthDecryptDataDashBoardJSONFormat=LoginGetDashBoardRecordJson
+    const merchant_id=AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id
 
     const [values, setValues] = useState({
         role: "",
@@ -98,19 +102,21 @@ const EditPermissionLogic = ({employeedata}) => {
     
         if (errors.break_allowed === "" && errors.break_time === "" && errors.paid_breaks === "" && errors.role === ""  ) {
           const data = {
-            "merchant_id":"MAL0100CA",
-            "admin_id":"MAL0100CA",
+            "merchant_id":merchant_id,
+            // "admin_id":"MAL0100CA",
+            "admin_id":"",
             "employee_id":employeedata.id,
             "role":values.role,
             "break_allowed":values.break_allowed,
             "break_time":values.break_time,
             "paid_breaks":values.paid_breaks,
-            "permissions":values.permissions
-
+            "permissions":values.permissions,
+            "token_id":userTypeData?.token_id,
+            "login_type":userTypeData?.login_type,
           }
           // console.log(data);
           try {
-            const response = await axios.post(BASE_URL + UPDATE_PERMISSION, data, { headers: { "Content-Type": "multipart/form-data" } })
+            const response = await axios.post(BASE_URL + UPDATE_PERMISSION, data, { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}` } })
             
             if ( response.data.status === true) {
               alert(response.data.message)

@@ -10,6 +10,7 @@ import {
   fetchPermissionData,
 } from "../../../Redux/features/StoreSettings/AddEmployee/AddEmployeeSlice";
 import EditPermissionLogic from "../AddEmployee/EditPermissionLogic";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 
 const Permission = () => {
   const location = useLocation();
@@ -32,14 +33,18 @@ const Permission = () => {
     scrollRef,
     setsubmitmessage,
   } = EditPermissionLogic({ employeedata });
+  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+  let AuthDecryptDataDashBoardJSONFormat=LoginGetDashBoardRecordJson
+  const merchant_id=AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id
   useEffect(() => {
     let data = {
-      merchant_id: "MAL0100CA",
+      merchant_id: merchant_id,
       employee_id: employee_id,
+      ...userTypeData
     };
     if (data && employee_id != "undefined") {
       dispatch(fetchEmployeeData(data));
-      dispatch(fetchPermissionData());
+      dispatch(fetchPermissionData(data));
     }
   }, []);
 

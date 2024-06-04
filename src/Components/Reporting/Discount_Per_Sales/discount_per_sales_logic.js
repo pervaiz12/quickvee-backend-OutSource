@@ -21,12 +21,14 @@ export default function Discount_per_sales_logic() {
 
   let merchant_id = {
     merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+    token_id:userTypeData?.token_id,
+    login_type:userTypeData?.login_type,
   };
   const getAllEmployeeData = () => {
     try {
       let response = axios
         .post(BASE_URL + EMPLOYEE_LIST, merchant_id, {
-          headers: { "Content-Type": "multipart/form-data" },
+          headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}`  },
         })
         .then((res) => {
           setAllEmployee(res?.data?.result);

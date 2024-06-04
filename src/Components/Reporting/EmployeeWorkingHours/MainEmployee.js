@@ -4,6 +4,7 @@ import { BASE_URL, EMPLOYEE_LIST } from "../../../Constants/Config";
 import axios from "axios";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 
 const MainEmployee = ({ onFilterDataChange }) => {
   const [selectedEmployee, setSelectedEmployee] = useState("All");
@@ -16,6 +17,9 @@ const MainEmployee = ({ onFilterDataChange }) => {
   const [employeeList, setemployeeList] = useState([]);
   const [loadingEmpList, setLoadingEmpList] = useState(true);
 
+  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+  let AuthDecryptDataDashBoardJSONFormat=LoginGetDashBoardRecordJson
+  const merchant_id=AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id
 
 
   const handleOptionClick = (option, dropdown) => {
@@ -56,10 +60,8 @@ const MainEmployee = ({ onFilterDataChange }) => {
       try {
         const response = await axios.post(
           BASE_URL + EMPLOYEE_LIST,
-          {
-            merchant_id: "MAL0100CA",
-          },
-          { headers: { "Content-Type": "multipart/form-data" } }
+          { merchant_id: merchant_id,token_id:userTypeData?.token_id,login_type:userTypeData?.login_type },
+          { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}` } }
         );
         // Assuming the API response has a data property containing the category list
         const EmpList = response.data.result;

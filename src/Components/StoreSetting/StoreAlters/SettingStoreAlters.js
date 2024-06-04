@@ -501,7 +501,7 @@ export default function SettingStoreAlters() {
           <h2 className="store-setting-h2">
             <b>Get Notification Via Email</b>
           </h2>
-          <span className="store-setting-switch">
+          <span className="store-setting-switch float-right">
             <Switch
               {...label}
               checked={isUserEmailEnabled}
@@ -529,7 +529,7 @@ export default function SettingStoreAlters() {
           <h2 className="store-setting-h2">
             <b>Get Notification Via SMS</b>
           </h2>
-          <span className="store-setting-switch">
+          <span className="store-setting-switch float-right">
             <Switch
               {...label}
               checked={isUserMsgEnabled}
@@ -916,7 +916,7 @@ export default function SettingStoreAlters() {
             <h2 className="store-setting-h2">
               <b>Default Enable Receiving SMS Notification For Order Status</b>
             </h2>
-            <span className="store-setting-switch">
+            <span className="store-setting-switch float-right">
               <Switch
                 {...label}
                 checked={isDefaultOnlineOrderNotify}
@@ -1037,7 +1037,7 @@ export default function SettingStoreAlters() {
           <h2 className="store-setting-h2">
             <b>Online Order Notification</b>
           </h2>
-          <span className="store-setting-switch">
+          <span className="store-setting-switch float-right">
             <Switch
               {...label}
               checked={isOnlineOrderNotify}
