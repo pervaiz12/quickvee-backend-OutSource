@@ -84,6 +84,7 @@ export default function SettingStoreAlters() {
   const [isOnlinePhoneNumber, setIsOnlinePhoneNumber] = useState("");
   const [isReportEmailId, setIsReportEmailId] = useState("");
   const [isOnlineOrderNotify, setIsOnlineOrderNotify] = useState(false);
+  const [isDefaultOnlineOrderNotify, setIsDefaultOnlineOrderNotify] = useState(false);
 
   const [isEmailAccepted, setEmailAccepted] = useState(false);
   const [isEmailPackaging, setEmailPackaging] = useState(false);
@@ -169,6 +170,14 @@ export default function SettingStoreAlters() {
       setReportEmailTime(allStoreAlertsUserOption.report_email_time);
     }
     if (
+      allStoreAlertsUserOption &&
+      allStoreAlertsUserOption.default_notify_sms &&
+      allStoreAlertsUserOption.default_notify_sms == 1
+    ) {
+      setIsDefaultOnlineOrderNotify(true);
+    }
+
+    if (
       allStoreAlertsUserData &&
       allStoreAlertsUserData.ol_fcm_notify &&
       allStoreAlertsUserData.ol_fcm_notify == 1
@@ -217,6 +226,10 @@ export default function SettingStoreAlters() {
   };
   const OnlineOrderNotifytoggleInput = () => {
     setIsOnlineOrderNotify(!isOnlineOrderNotify);
+  };
+
+  const DefaultOnlineOrderNotifytoggleInput = () => {
+    setIsDefaultOnlineOrderNotify(!isDefaultOnlineOrderNotify);
   };
 
   const IsEmailAcceptedtoggleInput = () => {
@@ -387,6 +400,18 @@ export default function SettingStoreAlters() {
         phn_num: "",
       });
     }
+    const isEmailAccepted = document.getElementById('isEmailAccepted').checked;
+    const isEmailPackaging = document.getElementById('isEmailPackaging').checked;
+    const isEmailDeliveryReady = document.getElementById('isEmailDeliveryReady').checked;
+    const isEmailDeliveryCompletely = document.getElementById('isEmailDeliveryCompletely').checked;
+    const isEmailCancelled = document.getElementById('isEmailCancelled').checked;
+
+    const isSmsAccepted = document.getElementById('isSmsAccepted').checked;
+    const isSmsPackaging = document.getElementById('isSmsPackaging').checked;
+    const isSmsDeliveryReady = document.getElementById('isSmsDeliveryReady').checked;
+    const isSmsDeliveryCompletely = document.getElementById('isSmsDeliveryCompletely').checked;
+    const isSmsCancelled = document.getElementById('isSmsCancelled').checked;
+
     const notifymail = [
       isEmailAccepted ? "1" : "",
       isEmailPackaging ? "2" : "",
@@ -394,13 +419,20 @@ export default function SettingStoreAlters() {
       isEmailDeliveryCompletely ? "4" : "",
       isEmailCancelled ? "5" : ""
     ].filter(Boolean).join(",");
-    console.log("zvzxc",notifymail)
+    const notifysms = [
+      isSmsAccepted ? "1" : "",
+      isSmsPackaging ? "2" : "",
+      isSmsDeliveryReady ? "3" : "",
+      isSmsDeliveryCompletely ? "4" : "",
+      isSmsCancelled ? "5" : ""
+    ].filter(Boolean).join(",");
+
     const FormData = {
-      id: allStoreAlertsUserData?.id,
+      user_id: allStoreAlertsUserData?.id,
       merchant_id: merchant_id,
-      name: isUserName,
+      // name: isUserName,
       store_name:isstoreName,
-      timeZone: istimeZone,
+      // timeZone: istimeZone,
       enable_email: isUserEmailEnabled ? "1" : "0",
       bcc_email: isBccEmail,
       enable_message: isUserMsgEnabled ? "1" : "0",
@@ -411,32 +443,33 @@ export default function SettingStoreAlters() {
       // emaildeliverycompletely: isEmailDeliveryCompletely ? "1" : "0",
       // emailcancelled: isEmailCancelled ? "1" : "0",
       notifymail:notifymail,
-      smsaccepted: isSmsAccepted ? "1" : "0",
-      smspackaging: isSmsPackaging ? "1" : "0",
-      smsdeliveryready: isSmsDeliveryReady ? "1" : "0",
-      smsdeliverycompletely: isSmsDeliveryCompletely ? "1" : "0",
-      smscancelled: isSmsCancelled ? "1" : "0",
+      notifySMS:notifysms,
       phn_num: isOnlinePhoneNumber,
+      // smsaccepted: isSmsAccepted ? "1" : "0",
+      // smspackaging: isSmsPackaging ? "1" : "0",
+      // smsdeliveryready: isSmsDeliveryReady ? "1" : "0",
+      // smsdeliverycompletely: isSmsDeliveryCompletely ? "1" : "0",
+      // smscancelled: isSmsCancelled ? "1" : "0",
       // salesoverviewreport: isSalesOverviewReport ? "1" : "0",
       // ordertypereport: isOrderTypeReport ? "1" : "0",
       // taxesreport: isTaxesReport ? "1" : "0",
       // paypointreport: isPaypointReport ? "1" : "0",
       // report_email_id: isReportEmailId,
       // report_email_time: isReportEmailTime,
+      default_notify_sms_val:isDefaultOnlineOrderNotify ? "1" : "0",
       token_id: userTypeData?.token_id,
       login_type: userTypeData?.login_type,
       ol_fcm_notify: isOnlineOrderNotify ? "1" : "0",
     };
     console.log(FormData);
-    return
+    // return
 
-    const response = await axios.post(
-      BASE_URL + UPDATE_STORE_ALERTS_DATA,
-      FormData,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
+    const response = await axios.post(BASE_URL + UPDATE_STORE_ALERTS_DATA, FormData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${userTypeData?.token}`,
+      },
+    });
 
     if (response) {
       let merchantdata = {
@@ -710,6 +743,7 @@ export default function SettingStoreAlters() {
                       type="checkbox"
                       defaultChecked={CheckBoxNotifyEmail(1)}
                       value={isEmailAccepted}
+                      id="isEmailAccepted"
                       onChange={IsEmailAcceptedtoggleInput}
                     />
                     <span className="category-checkmark"></span>
@@ -723,6 +757,7 @@ export default function SettingStoreAlters() {
                       type="checkbox"
                       defaultChecked={CheckBoxNotifySms(1)}
                       value={isSmsAccepted}
+                      id="isSmsAccepted"
                       onChange={IsSmsAcceptedtoggleInput}
                     />
                     <span className="category-checkmark"></span>
@@ -739,6 +774,7 @@ export default function SettingStoreAlters() {
                         type="checkbox"
                         defaultChecked={CheckBoxNotifyEmail(2)}
                         value={isEmailPackaging}
+                        id="isEmailPackaging"
                         onChange={IsEmailPackagingtoggleInput}
                       />
                       <span className="category-checkmark"></span>
@@ -752,6 +788,7 @@ export default function SettingStoreAlters() {
                         type="checkbox"
                         defaultChecked={CheckBoxNotifySms(2)}
                         value={isSmsPackaging}
+                        id="isSmsPackaging"
                         onChange={IsSmsPackagingtoggleInput}
                       />
                       <span className="category-checkmark"></span>
@@ -768,6 +805,7 @@ export default function SettingStoreAlters() {
                         type="checkbox"
                         defaultChecked={CheckBoxNotifyEmail(3)}
                         value={isEmailDeliveryReady}
+                        id="isEmailDeliveryReady"
                         onChange={IsEmailDeliveryReadytoggleInput}
                       />
                       <span className="category-checkmark"></span>
@@ -781,6 +819,7 @@ export default function SettingStoreAlters() {
                         type="checkbox"
                         defaultChecked={CheckBoxNotifySms(3)}
                         value={isSmsDeliveryReady}
+                        id="isSmsDeliveryReady"
                         onChange={IsSmsDeliveryReadytoggleInput}
                       />
                       <span className="category-checkmark"></span>
@@ -797,6 +836,7 @@ export default function SettingStoreAlters() {
                         type="checkbox"
                         defaultChecked={CheckBoxNotifyEmail(4)}
                         value={isEmailDeliveryCompletely}
+                        id="isEmailDeliveryCompletely"
                         onChange={IsEmailDeliveryCompletelytoggleInput}
                       />
                       <span className="category-checkmark"></span>
@@ -810,6 +850,7 @@ export default function SettingStoreAlters() {
                         type="checkbox"
                         defaultChecked={CheckBoxNotifySms(4)}
                         value={isSmsDeliveryCompletely}
+                        id="isSmsDeliveryCompletely"
                         onChange={IsSmsDeliveryCompletelytoggleInput}
                       />
                       <span className="category-checkmark"></span>
@@ -826,6 +867,7 @@ export default function SettingStoreAlters() {
                         type="checkbox"
                         defaultChecked={CheckBoxNotifyEmail(5)}
                         value={isEmailCancelled}
+                        id="isEmailCancelled"
                         onChange={IsEmailCancelledtoggleInput}
                       />
                       <span className="category-checkmark"></span>
@@ -839,6 +881,7 @@ export default function SettingStoreAlters() {
                         type="checkbox"
                         defaultChecked={CheckBoxNotifySms(5)}
                         value={isSmsCancelled}
+                        id="isSmsCancelled"
                         onChange={IsSmsCancelledtoggleInput}
                       />
                       <span className="category-checkmark"></span>
@@ -874,8 +917,8 @@ export default function SettingStoreAlters() {
             <span className="store-setting-switch">
               <Switch
                 {...label}
-                checked={isUserEmailEnabled}
-                onChange={UserEmailEnabledtoggleInput}
+                checked={isDefaultOnlineOrderNotify}
+                onChange={DefaultOnlineOrderNotifytoggleInput}
               />
             </span>
           </div>

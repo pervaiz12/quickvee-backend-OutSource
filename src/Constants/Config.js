@@ -85,11 +85,11 @@ module.exports = Object.freeze({
   GET_STORE_ALERTS_DATA: "Store_setting_api/store_alerts_list",
 
   // get Store Setting alerts list api
-  UPDATE_STORE_ALERTS_DATA: "Store_setting_api/store_alerts_update",
+  UPDATE_STORE_ALERTS_DATA: "StoreReact_setting_api1/update_store_alerts",
 
   // Get Store Setting Receipt List and Update API
   GET_STORE_RECEIPT_DATA: "StoreReact_setting_api/get_receipt_list",
-  UPDATE_RECEIPT_INFO_DATA: "StoreReact_setting_api1/update_receipt_info_list",
+  UPDATE_RECEIPT_INFO_DATA: "StoreReact_setting_api/update_receipt_info_list",
 
   // Purchase API Calls
   LIST_ALL_PARCHASE: "Purchase_ordersReactApi/purchase_order_list",
