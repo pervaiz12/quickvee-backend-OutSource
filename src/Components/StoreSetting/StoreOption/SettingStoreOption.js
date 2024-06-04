@@ -574,7 +574,7 @@ export default function SettingStoreOption() {
               </div>
             </div>
 
-            <div class="btnarea  ">
+            <div class="btnarea mb-8 ">
               <button
                 className="store-setting-btn"
                 onClick={handleUpdateSettingOption}
