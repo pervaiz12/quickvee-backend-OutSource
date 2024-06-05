@@ -233,6 +233,7 @@ export default function EditMerchant() {
                     value={getEditMerchant.a_zip}
                     onChange={handleChangeMerchant}
                     maxLength={6}
+                    onKeyPress={handleKeyPress}
                   />
                 </div>
                 {/* <label>{store.errors.ownerName}</label> */}

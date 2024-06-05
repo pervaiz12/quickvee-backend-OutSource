@@ -6,7 +6,7 @@ import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 
 const DelveryPickupDetails = ({ DeliveryPickupData }) => {
   const dispatch = useDispatch();
-  const [delverypickup, setDelverypickup] = useState(true);
+  const [delverypickup, setDelverypickup] = useState("");
   const [pickupDefaultTip, setPickupDefaultTip] = useState("");
   const [deliveryDefaultTip, setDeliveryDefaultTip] = useState("");
   const [pickupTipDropDownTitle, setPickupTipDropDownTitle] = useState("None");
@@ -14,7 +14,7 @@ const DelveryPickupDetails = ({ DeliveryPickupData }) => {
     useState("None");
 
   const handleCheckedenbale = (e) => {
-    setDelverypickup(!delverypickup);
+    setDelverypickup( e.target.checked ? "1" : "0");
   };
   const TipList = [
     {
@@ -45,6 +45,9 @@ const DelveryPickupDetails = ({ DeliveryPickupData }) => {
 
   
   useEffect(() => {
+    if (setupDataState?.enable_tip) {
+      setDelverypickup(setupDataState?.enable_tip)
+    }
     if (setupDataState?.default_tip_d) {
       setDeliveryDefaultTip(setupDataState.default_tip_d);
       const selectedTip = TipList.find(
@@ -103,7 +106,7 @@ const DelveryPickupDetails = ({ DeliveryPickupData }) => {
                   // {...label}
                   name="cost_method"
                   onChange={handleCheckedenbale}
-                  checked={delverypickup}
+                  checked={delverypickup === "1"}
                 />
               </div>
             </Grid>

@@ -6,6 +6,7 @@ import { editEmployee } from "../../../Redux/features/StoreSettings/AddEmployee/
 import Validation from "../../../Constants/Validation";
 // import { useNavigate } from "react-router-dom";
 import { BASE_URL, ADDEDIT_EMPLOYEE } from "../../../Constants/Config";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 
 const AddEmployeeFormLogic = ({employee, employeeList}) => {
   const dispatch = useDispatch();
@@ -15,6 +16,9 @@ const AddEmployeeFormLogic = ({employee, employeeList}) => {
     const scrollRef = useRef(null);
     const [showModal, setShowModal] = useState(false);
 
+    const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+    let AuthDecryptDataDashBoardJSONFormat=LoginGetDashBoardRecordJson
+    const merchant_id=AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id
     const [values, setValues] = useState({
         firstname: "",
         lastname: "",
@@ -126,8 +130,9 @@ const AddEmployeeFormLogic = ({employee, employeeList}) => {
     
         if (errors.firstname === "" && errors.lastname === "" && errors.email === "" && errors.phone === "" && errors.pin === "" && errors.wages === "" && errors.address_line_1 === "" && errors.city === "" && errors.zipcode === "" && errors.state === "") {
           const data = {
-            "merchant_id":"MAL0100CA",
-            "admin_id":"MAL0100CA",
+            "merchant_id":merchant_id,
+            // "admin_id":"MAL0100CA",
+            admin_id: "",
             "employee_id":employee.id,
             "f_name": values.firstname,
             "l_name": values.lastname,
@@ -139,10 +144,12 @@ const AddEmployeeFormLogic = ({employee, employeeList}) => {
             "city": values.city,
             "zip": values.zipcode,
             "state": values.state,
+            "token_id":userTypeData?.token_id,
+            "login_type":userTypeData?.login_type,
           }
           
           try {
-            const response = await axios.post(BASE_URL + ADDEDIT_EMPLOYEE, data, { headers: { "Content-Type": "multipart/form-data" } })
+            const response = await axios.post(BASE_URL + ADDEDIT_EMPLOYEE, data, { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}` } })
             console.log(response.data);
             if ( response.data.status === true) {
               

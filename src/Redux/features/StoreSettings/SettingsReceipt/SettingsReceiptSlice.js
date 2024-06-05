@@ -1,7 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import { BASE_URL, GET_STORE_RECEIPT_DATA } from "../../../../Constants/Config";
-
+import { useAuthDetails } from "../../../../Common/cookiesHelper";
 const initialState = {
   loading: false,
   StoreReceiptData: [],
@@ -13,11 +13,13 @@ const initialState = {
 export const fetchSettingReceiptData = createAsyncThunk(
   "SettingsReceiptSlice/fetchSettingReceiptData.",
   async (data) => {
+    const { userTypeData } = useAuthDetails();
     try {
-      const { token, ...dataNew } = data;
+        const { token, ...otherUserData } = userTypeData;
+      
       const response = await axios.post(
         BASE_URL + GET_STORE_RECEIPT_DATA,
-        dataNew,
+        {...data,...otherUserData},
         {
           headers: {
             "Content-Type": "multipart/form-data",

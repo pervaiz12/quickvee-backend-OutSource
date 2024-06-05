@@ -19,8 +19,8 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
     (state) => state?.StoreSetupList?.storesetupData
   );
 
-  const [isEnableOrderNumber, setisEnableOrderNumber] = useState(true);
-  const [isDelveryEnbale, setIsDelveryEnbale] = useState(true);
+  const [isEnableOrderNumber, setisEnableOrderNumber] = useState("");
+  const [isDelveryEnbale, setIsDelveryEnbale] = useState("");
   const [minTime, setMinTime] = useState();
   const [convenience, SetConvenience] = useCurrencyInput("0.00");
   const [conveniencepik, SetConveniencepik] = useCurrencyInput("0.00");
@@ -38,19 +38,25 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
   //   minDeliveryTime:`00:${setupDataState.deliver_min_time}` ?? "",
   //   maxDeliveryTime:setupDataState?.deliver_max_time ?? "",
   // })
-
+  // console.log("isEnableOrderNumber",isEnableOrderNumber)
   const handleCheckedSwitch = (e) => {
-    setisEnableOrderNumber(!isEnableOrderNumber);
+    setisEnableOrderNumber(e.target.checked ? "Yes" : "No");
   };
 
   const handleCheckedclicked = (e) => {
-    setIsDelveryEnbale(!isDelveryEnbale);
+    setIsDelveryEnbale(e.target.checked ? "Yes" : "No");
   };
 
   //const [minTime, setMinTime] = useState();
 
   useEffect(() => {
     //console.log(setupDataState?.deliver_min_time)
+    if (setupDataState?.is_pickup) {
+      setisEnableOrderNumber((setupDataState?.is_pickup))
+    }
+    if (setupDataState?.is_deliver) {
+      setIsDelveryEnbale((setupDataState?.is_deliver))
+    }
     if (setupDataState?.cfee_pik) {
       SetConvenience({
         target: { value: parseFloat(setupDataState.cfee_pik).toFixed(2) },
@@ -145,14 +151,16 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
             sx={{ marginTop: 3 }}
           >
             <Grid item>
-              <h5 style={{marginBottom:0}} className="box_shadow_heading">Enable Pickup</h5>
+              <h5 style={{ marginBottom: 0 }} className="box_shadow_heading">
+                Enable Pickup
+              </h5>
             </Grid>
             <Grid item>
               <Switch
                 // {...label}
                 name="cost_method"
                 onChange={handleCheckedSwitch}
-                checked={isEnableOrderNumber}
+                checked={isEnableOrderNumber === "Yes"}
               />
             </Grid>
           </Grid>
@@ -202,14 +210,16 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
             sx={{ marginTop: 3 }}
           >
             <Grid item>
-              <h5 style={{marginBottom:0}} class="box_shadow_heading">Enable Delivery</h5>
+              <h5 style={{ marginBottom: 0 }} class="box_shadow_heading">
+                Enable Delivery
+              </h5>
             </Grid>
             <Grid>
               <Switch
                 // {...label}
                 name="cost_method"
                 onChange={handleCheckedclicked}
-                checked={isDelveryEnbale}
+                checked={isDelveryEnbale ==="Yes"}
               />
             </Grid>
           </Grid>

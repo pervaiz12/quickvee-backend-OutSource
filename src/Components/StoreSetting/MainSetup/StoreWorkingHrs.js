@@ -17,7 +17,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 
 const StyledTable = styled(Table)(({ theme }) => ({
-  padding: 2, // Adjust padding as needed
+  padding: 2,
 }));
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -43,7 +43,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const StoreWorkingHrs = () => {
+const StoreWorkingHrs = ({ days, setDays }) => {
   const dispatch = useDispatch();
   const [newDayAdded, setNewDayAdded] = useState(false);
   const [selectedTime, setSelectedTime] = useState(new Date());
@@ -51,14 +51,13 @@ const StoreWorkingHrs = () => {
   const [classItem, setClassItem] = useState(1);
   const [currentDay, setCurrentDay] = useState();
   const [lastIndices, setLastIndices] = useState({});
-  const [dayCount , setDayCount] = useState()
+  const [dayCount, setDayCount] = useState();
 
   const setupDataState = useSelector(
     (state) => state?.StoreSetupList?.storesetupData
   );
 
   const defaultDays = setupDataState?.time_slot ? setupDataState.time_slot : "";
-  const [days, setDays] = useState([]);
 
   useEffect(() => {
     if (setupDataState?.time_slot) {
@@ -75,7 +74,7 @@ const StoreWorkingHrs = () => {
       }
     }
   }, [setupDataState]);
-  console.log("days", days);
+
   const handleSwitchChange = (event, name) => {
     const isChecked = event.target.checked;
     setDays((prevDays) => {
@@ -88,48 +87,20 @@ const StoreWorkingHrs = () => {
     });
   };
 
-  const handledeletetimeslot = (dayName, timeslotIndex) => {
-    setDays((prevDays) => {
-      const updatedDays = [...prevDays];
-      const dayIndex = updatedDays.findIndex((day) => day.name === dayName);
-
-      if (dayIndex !== -1) {
-        // Remove the specified time slot from the day's timeSlot array
-        updatedDays[dayIndex].timeSlot = updatedDays[dayIndex].timeSlot.filter(
-          (_, index) => index !== timeslotIndex
-        );
-      }
-
-      // Additional logic if needed
-      setSelectedRow(dayIndex);
-      setNewDayAdded(true);
-      setClassItem(classItem + 1);
-
-      return updatedDays;
-    });
-  };
-
-  // const handleaddtimeslot = (name) => {
+  // const handledeletetimeslot = (dayName, timeslotIndex) => {
   //   setDays((prevDays) => {
   //     const updatedDays = [...prevDays];
-  //     const index = updatedDays.findIndex((day) => day.name === name);
+  //     const dayIndex = updatedDays.findIndex((day) => day.name === dayName);
 
-  //     if (index !== -1) {
-  //       // Add a new time slot to the specified day
-  //       const newTimeSlot = {
-  //         startTime: "",
-  //         endTime: "",
-  //         // Add any other properties needed for a time slot
-  //       };
-
-  //       updatedDays[index].timeSlot = [
-  //         ...updatedDays[index].timeSlot,
-  //         newTimeSlot,
-  //       ];
+  //     if (dayIndex !== -1) {
+  //       // Remove the specified time slot from the day's timeSlot array
+  //       updatedDays[dayIndex].timeSlot = updatedDays[dayIndex].timeSlot.filter(
+  //         (_, index) => index !== timeslotIndex
+  //       );
   //     }
 
   //     // Additional logic if needed
-  //     setSelectedRow(index);
+  //     setSelectedRow(dayIndex);
   //     setNewDayAdded(true);
   //     setClassItem(classItem + 1);
 
@@ -137,61 +108,86 @@ const StoreWorkingHrs = () => {
   //   });
   // };
 
+  const addMinutes = (time, minutes) => {
+    // Parse the time
+    let [hours, rest] = time.split(":");
+    let [mins, period] = rest.split(" ");
+    hours = parseInt(hours);
+    mins = parseInt(mins);
+
+    if (period === "am" && hours !== 12) {
+      hours += 12;
+    }
+    if (period === "pm" && hours === 12) {
+      hours = 0;
+    }
+
+    let totalMinutes = hours * 60 + mins + minutes;
+    hours = Math.floor(totalMinutes / 60) % 24;
+    mins = totalMinutes % 60;
+
+    period = hours >= 12 ? "am" : "pm";
+    hours = hours % 12;
+    if (hours === 0) hours = 12;
+
+    const formattedTime = `${hours}:${mins < 10 ? "0" : ""}${mins} ${period}`;
+    return formattedTime;
+  };
+
   const handleAddTimeSlot = (dayName) => {
     setDays((prevDays) => {
-      // Find the last index of the specified day
       const lastIndex = lastIndices[dayName];
-  
-      // Create a new day object (customize as needed)
+      const lastCloseTime = prevDays[lastIndex].close_time;
+
+      const newOpenTime = addMinutes(lastCloseTime, 0);
+      const newCloseTime = addMinutes(lastCloseTime, 15);
+
       const newDay = {
-        id: Date.now().toString(),  // Generate a unique ID for the new day
+        id: Date.now().toString(),
         day_name: dayName,
-        day_count: prevDays[lastIndex].day_count + 1,  // Increment the day_count
-        open_time: "",  // Default open time
-        close_time: "",  // Default close time
+        day_count: prevDays[lastIndex].day_count,
+        open_time: newOpenTime,
+        close_time: newCloseTime,
         day_code: prevDays[lastIndex].day_code,
         is_holiday: "0",
         merchant_clover_id: prevDays[lastIndex].merchant_clover_id,
-        multiple_flag: prevDays[lastIndex].multiple_flag + 1, // Increment the multiple_flag
+        multiple_flag: prevDays[lastIndex].multiple_flag + 1,
       };
-  
-      // Insert the new day below the last index of the specified day
+
       const updatedDays = [
         ...prevDays.slice(0, lastIndex + 1),
         newDay,
         ...prevDays.slice(lastIndex + 1),
       ];
-  
-      // Recalculate lastIndices for all days
+      const updatedDaysWthIndices = updatedDays.map((day) => {
+        if (day.day_name === dayName) {
+          return { ...day, day_count: day.day_count + 1 };
+        }
+        return day;
+      });
+
       const indicesMap = {};
-      updatedDays.forEach((day, index) => {
+      updatedDaysWthIndices.forEach((day, index) => {
         indicesMap[day.day_name] = index;
       });
-  
+
       setLastIndices(indicesMap);
-  
-      return updatedDays;
+
+      return updatedDaysWthIndices;
     });
   };
-  
+
   const handleDeleteDay = (dayName, id) => {
-    console.log("Deleting", dayName, "lastIndices", lastIndices);
-
-    // Update lastIndices state to reduce the count of the deleted day
-    
-
-    // Remove the day from the days state
     setDays((prevDays) => {
-      // Filter out the deleted day
       const filteredDays = prevDays.filter((day) => day.id !== id);
-    
+
       const updatedDays = filteredDays.map((day) => {
         if (day.day_name === dayName) {
           return { ...day, day_count: day.day_count - 1 };
         }
         return day;
       });
-      // Recalculate lastIndices for all remaining days
+
       const indicesMap = {};
       updatedDays.forEach((day, index) => {
         indicesMap[day.day_name] = index;
@@ -235,13 +231,37 @@ const StoreWorkingHrs = () => {
                           tempRenderedDays.add(dayData.day_name);
                         }
                         return (
-                          <StyledTableRow key={index}>
-                            <StyledTableCell sx={{ width: "10%" }}>
+                          <StyledTableRow
+                            sx={{
+                              display:
+                                dayData.is_holiday == "1" &&
+                                isDayAlreadyRendered &&
+                                "none",
+                            }}
+                            key={index}
+                          >
+                            <StyledTableCell
+                              sx={{
+                                width: "10%",
+                                borderBottom:
+                                  index === lastIndices[dayData.day_name]
+                                    ? "1px solid rgba(224, 224, 224, 1)"
+                                    : 0,
+                              }}
+                            >
                               {!isDayAlreadyRendered && (
                                 <p> {dayData.day_name}</p>
                               )}
                             </StyledTableCell>
-                            <StyledTableCell sx={{ width: "10%" }}>
+                            <StyledTableCell
+                              sx={{
+                                width: "10%",
+                                borderBottom:
+                                  index === lastIndices[dayData.day_name]
+                                    ? "1px solid rgba(224, 224, 224, 1)"
+                                    : 0,
+                              }}
+                            >
                               {!isDayAlreadyRendered && (
                                 <Switch
                                   defaultChecked={
@@ -254,14 +274,24 @@ const StoreWorkingHrs = () => {
                                 />
                               )}
                             </StyledTableCell>
-                            <StyledTableCell sx={{}}>
+                            <StyledTableCell
+                              sx={{
+                                borderBottom:
+                                  index === lastIndices[dayData.day_name]
+                                    ? "1px solid rgba(224, 224, 224, 1)"
+                                    : 0,
+                              }}
+                            >
                               {dayData.is_holiday === "1" ? (
-                                <div> </div>
+                                ""
                               ) : (
                                 <>
                                   <div className="flex">
                                     <div className="">
                                       <CustomItem
+                                        id={dayData.id}
+                                        setDays={setDays}
+                                        days={days}
                                         OpenTime={dayData.open_time}
                                         CloseTime={dayData.close_time}
                                       />
@@ -271,21 +301,19 @@ const StoreWorkingHrs = () => {
                                         {index ===
                                           lastIndices[dayData.day_name] && (
                                           <>
-                                            
-                                            { dayData.day_count > 1 
-                                               && 
+                                            {dayData.day_count > 1 && (
                                               <img
-                                              src={DeleteIcon}
-                                              alt=""
-                                              className="ml-6 mt-2"
-                                              onClick={() =>
-                                                handleDeleteDay(
-                                                  dayData.day_name,
-                                                  dayData.id
-                                                )
-                                              }
-                                            />
-                                            }
+                                                src={DeleteIcon}
+                                                alt=""
+                                                className="ml-6 mt-2"
+                                                onClick={() =>
+                                                  handleDeleteDay(
+                                                    dayData.day_name,
+                                                    dayData.id
+                                                  )
+                                                }
+                                              />
+                                            )}
                                             <img
                                               src={AddIcon}
                                               alt=""
@@ -310,151 +338,6 @@ const StoreWorkingHrs = () => {
                   </TableBody>
                 </StyledTable>
               </TableContainer>
-            </Grid>
-          </Grid>
-          <Grid container>
-            <Grid item xs={12}>
-              {/* {days &&
-                days.length >= 1 &&
-                days.map((dayData, index) => {
-                  const isDayAlreadyRendered = renderedDays.has(
-                    dayData.day_name
-                  );
-                  if (!isDayAlreadyRendered) {
-                    renderedDays.add(dayData.day_name);
-                  }
-
-                  return (
-                    <>
-                      <div
-                        key={index}
-                        className={`flex day-container ${
-                          "day_0_0 day_count_" + index
-                        } ${index % 2 === 0 ? "even" : "odd"}`}
-                      >
-                        {!isDayAlreadyRendered && (
-                          <>
-                            <div style={{ width: "15%" }}>
-                              {dayData.day_name}
-                            </div>
-                            <div style={{ width: "15%" }}>
-                              {dayData.is_holiday === "" ? (
-                                ""
-                              ) : (
-                                <>
-                                  <Switch
-                                    defaultChecked={
-                                      (dayData.is_holiday === "0" && true) ||
-                                      (dayData.is_holiday === "1" && false)
-                                    }
-                                    onChange={(e) =>
-                                      handleSwitchChange(e, dayData.day_name)
-                                    }
-                                  />
-                                  <span>
-                                    {" "}
-                                    {dayData.is_holiday
-                                      ? "Open"
-                                      : "Closed"}{" "}
-                                  </span>
-                                </>
-                              )}
-                            </div>
-                          </>
-                        )}
-
-                        {dayData.is_holiday === "1" ? (
-                          <div> </div>
-                        ) : (
-                          <>
-                            <div className="flex" style={{ width: "45%" }}>
-                              <div className="">
-                                <CustomItem
-                                  OpenTime={dayData.open_time}
-                                  CloseTime={dayData.close_time}
-                                />
-                              </div>
-                            </div>
-                            <div style={{ width: "5%" }}>
-                              <div className="flex justify-between">
-                                {dayData?.timeSlot?.length <= 0 ? (
-                                  <>
-                                    <img
-                                      src={DeleteIcon}
-                                      alt=""
-                                      className="ml-6 mt-2 "
-                                      // onClick={() => handleDeleteDay(index)}
-                                    />
-                                    <img
-                                      src={AddIcon}
-                                      alt=""
-                                      className="ml-6 mt-2"
-                                      onClick={() =>
-                                        handleaddtimeslot(dayData.day_name)
-                                      }
-                                    />
-                                  </>
-                                ) : (
-                                  ""
-                                )}
-                              </div>
-                            </div>
-                          </>
-                        )}
-                      </div>
-                      {dayData?.timeSlot?.map((timeSlotDay, ind) => (
-                        <>
-                          <div
-                            key={index}
-                            className={`flex day-container ${
-                              dayData.className
-                            } ${index % 2 === 0 ? "even" : "odd"}`}
-                          >
-                            <div style={{ width: "15%" }}></div>
-                            <div style={{ width: "15%" }}></div>
-                            <div className="flex" style={{ width: "45%" }}>
-                              <div className="">
-                                <CustomItem />
-                              </div>
-                            </div>
-                            <div style={{ width: "5%", zIndex: "999" }}>
-                              <div className="flex justify-between">
-                                {dayData?.timeSlot?.length - 1 === ind ? (
-                                  <>
-                                    <img
-                                      src={DeleteIcon}
-                                      alt=""
-                                      className="ml-6 mt-2 "
-                                      onClick={() =>
-                                        handledeletetimeslot(
-                                          dayData?.day_name,
-                                          ind
-                                        )
-                                      }
-                                    />
-                                    <img
-                                      src={AddIcon}
-                                      alt=""
-                                      className="ml-6 mt-2"
-                                      onClick={() =>
-                                        handleaddtimeslot(
-                                          dayData?.day_name,
-                                          ind
-                                        )
-                                      }
-                                    />
-                                  </>
-                                ) : (
-                                  ""
-                                )}
-                              </div>
-                            </div>
-                          </div>
-                        </>
-                      ))}
-                    </>
-                  );
-                })} */}
             </Grid>
           </Grid>
         </Grid>

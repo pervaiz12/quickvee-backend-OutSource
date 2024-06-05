@@ -2,6 +2,7 @@ import React from "react";
 import Add_adminFunctionality from "./add_adminFunctionality";
 import leftSvg from "../../../../Assests/Dashboard/Left.svg";
 import { useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function Add_Admin() {
   const {
@@ -10,6 +11,7 @@ export default function Add_Admin() {
     handleSubmit,
     handleBlur,
     handleKeyPress,
+    loader,
   } = Add_adminFunctionality();
 
   const navigate = useNavigate();
@@ -98,7 +100,7 @@ export default function Add_Admin() {
             </div>
             <div className="q-add-categories-section-middle-footer">
               <button className="quic-btn quic-btn-save" onClick={handleSubmit}>
-                Add
+                {loader ? <CircularProgress /> : "Add"}
               </button>
               <button
                 onClick={() => navigate("/users/admin")}

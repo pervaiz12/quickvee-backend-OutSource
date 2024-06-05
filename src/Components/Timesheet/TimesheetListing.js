@@ -67,8 +67,8 @@ const TimesheetListing = ({ data }) => {
       try {
         const response = await axios.post(
           BASE_URL + EMPLOYEE_LIST,
-          { merchant_id: merchant_id },
-          { headers: { "Content-Type": "multipart/form-data" } }
+          { merchant_id: merchant_id,token_id:userTypeData?.token_id,login_type:userTypeData?.login_type },
+          { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}` } }
         );
 
         const EmpList = response.data.result;

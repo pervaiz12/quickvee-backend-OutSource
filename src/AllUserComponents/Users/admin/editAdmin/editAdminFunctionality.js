@@ -1,134 +1,168 @@
-import axios from 'axios'
-import React,{useState,useEffect}  from 'react'
-import{BASE_URL,GET_EDIT_ADMIN,UPDATE_ADMIN_RECORD}from '../../../../Constants/Config'
-import { useNavigate } from 'react-router-dom';
-import { useAuthDetails } from '../../../../Common/cookiesHelper';
+import axios from "axios";
+import React, { useState, useEffect } from "react";
+import {
+  BASE_URL,
+  GET_EDIT_ADMIN,
+  UPDATE_ADMIN_RECORD,
+} from "../../../../Constants/Config";
+import { useNavigate } from "react-router-dom";
+import { useAuthDetails } from "../../../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../../../CommonComponents/ToastifyAlert";
 
+const EditAdminFunctionality = () => {
+  const navigate = useNavigate();
+  const [editData, setEditData] = useState({
+    owner_name: "",
+    email: "",
+    password1: "",
+    phone: "",
+    password: "",
+  });
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
 
-const EditAdminFunctionality=()=>{
-    const navigate = useNavigate();
-    const[editData,setEditData]=useState({owner_name:'',email:'',password1:'',phone:'',password:''})
-    const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+  const [errors, setErrors] = useState({
+    owner_name: "",
+    phone: "",
+    email: "",
+  });
+  const [loader, setLoader] = useState(false);
 
-    const[errors,setErrors]=useState({
-      owner_name:'',
-      phone:'',
-      email:'',
-  })
+  const handleEditAdmin = async (data) => {
+    const { token, ...newData } = data;
+    // console.log(newData)
+    // const dataNew={admin_id:data,newData}
+    await axios
+      .post(BASE_URL + GET_EDIT_ADMIN, newData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((response) => {
+        if (response.data.status == 200) {
+          //  console.log(response.data.message[0])
+          setEditData({ password1: "", ...response.data.message[0] });
+        }
+      });
+  };
+  const handleChangeAdmin = (e) => {
+    const { name, value } = e.target;
+    let updatedErrors = { ...errors };
+    let emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    // console.log(name)
 
-    const handleEditAdmin=async(data)=>{
-      const{token,...newData}=data
-      // console.log(newData)
-        // const dataNew={admin_id:data,newData}
-        await axios.post(BASE_URL+GET_EDIT_ADMIN,newData,{headers:{
-            "Content-Type":'multipart/form-data',
-            'Authorization': `Bearer ${token}`
-          }}).then(response=>{
-            if(response.data.status==200)
-            {
-              //  console.log(response.data.message[0])
-                setEditData({password1:'',...response.data.message[0]})
-
-            }
-
-          }
-           
-          )
+    if (name === "owner_name") {
+      // updatedErrors[name] = value === "" ? `please fill the ${name} field` : "";
+      updatedErrors[name] =
+        value.trim() === ""
+          ? `Please fill in the ${name} field`
+          : value[0] === " "
+            ? `The ${name} field cannot start with a space`
+            : "";
     }
-    const handleChangeAdmin=(e)=>{
-        const{name,value}=e.target
-        let updatedErrors = { ...errors };
-        let emailRegex=/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
-        // console.log(name)
-      
-        if (name === "owner_name") {
-          updatedErrors[name] = value === "" ? `please fill the ${name} field` : '';
-        }
-        if(name=='email')
-        {
-          updatedErrors[name] = value === "" ? `Please fill the ${name} field` 
-          : !emailRegex.test(value)?'Please fill valid email':'';
-
-        }
-        if (name === 'phone') {
-            const numericValue = value.replace(/[^0-9]/g, '');
-             if(numericValue=="")
-             {
-              updatedErrors[name] = '';
-
-             }else if (numericValue.length !== 10) {
-              updatedErrors[name] = 'Phone number must be 10 digits';
-            } else {
-              updatedErrors[name] = '';
-            }
-        //   updatedErrors['phone'] = value === "" ? `please fill the ${name} field` : '';
-        }
-       
-        setErrors(updatedErrors);
-        const trimmedValue = value.replace(/^\s+|\s+$/g, '')
-        setEditData((prevCustomerData) => ({
-          ...prevCustomerData,
-          [name]: trimmedValue,
-        }));
-        
-        // setEditData({...editData,[name]:value})
-        
-
+    if (name == "email") {
+      updatedErrors[name] =
+        value === ""
+          ? `Please fill the ${name} field`
+          : !emailRegex.test(value)
+            ? "Please fill valid email"
+            : "";
     }
-    const handleKeyPress = (e) => {
-      // Allow only numeric characters (key codes 48 to 57) and backspace (key code 8)
-      if ((e.charCode < 48 || e.charCode > 57) && e.charCode !== 8) {
-        e.preventDefault();
+    if (name === "phone") {
+      const numericValue = value.replace(/[^0-9]/g, "");
+      if (numericValue == "") {
+        updatedErrors[name] = "";
+      } else if (numericValue.length !== 10) {
+        updatedErrors[name] = "Phone number must be 10 digits";
+      } else {
+        updatedErrors[name] = "";
       }
+      //   updatedErrors['phone'] = value === "" ? `please fill the ${name} field` : '';
+    }
+
+    setErrors(updatedErrors);
+    // const trimmedValue = value.replace(/^\s+|\s+$/g, '')
+    setEditData((prevCustomerData) => ({
+      ...prevCustomerData,
+      // [name]: trimmedValue,
+      [name]: value,
+    }));
+
+    // setEditData({...editData,[name]:value})
+  };
+  const handleKeyPress = (e) => {
+    // Allow only numeric characters (key codes 48 to 57) and backspace (key code 8)
+    if ((e.charCode < 48 || e.charCode > 57) && e.charCode !== 8) {
+      e.preventDefault();
+    }
+  };
+  const validateForm = () => {
+    let error = false;
+    let updatedErrors = { ...errors };
+    if (editData.owner_name == "") {
+      updatedErrors.owner_name = "`please fill the owner_name field";
+      error = true;
+    }
+    if (editData.email == "") {
+      updatedErrors.email = "`please fill the email field";
+      error = true;
+    }
+    setErrors({ ...errors, updatedErrors });
+    if (error == true) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
+  const handleSubmitAdmin = async (e) => {
+    const { token, ...newData } = userTypeData;
+    // console.log(newData)
+    const data = {
+      admin_id: editData.id,
+      name: editData.owner_name,
+      owner_name: editData.owner_name,
+      password: editData.password1,
+      phone: editData.phone,
+      email: editData.email,
+      ...newData,
     };
-    const validateForm=()=>{
-      let error=false
-      let updatedErrors = { ...errors };
-      if(editData.owner_name=="")
-      {
-        updatedErrors.owner_name="`please fill the owner_name field"
-        error=true
+    let validate = Object.values(errors).filter((error) => error !== "").length;
+    const validateBlank = validateForm();
+    if (validateBlank) {
+      if (validate == 0) {
+        setLoader(true);
+        await axios
+          .post(BASE_URL + UPDATE_ADMIN_RECORD, data, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          })
+          .then((result) => {
+            setLoader(false);
+            setEditData({
+              owner_name: "",
+              email: "",
+              password: "",
+              phone: "",
+              password: "",
+            });
+            ToastifyAlert("Update Admin  Successfully!", "success");
+            navigate("/users/admin");
+          });
       }
-      if(editData.email=="")
-      {
-        updatedErrors.email="`please fill the email field"
-        error=true
-
-      }
-      setErrors({...errors,updatedErrors})
-      if(error==true)
-      {
-        return false
-      }else{
-        return true
-      }
-
     }
-
-    const handleSubmitAdmin=async(e)=>{
-        const{token,...newData}=userTypeData
-        // console.log(newData)
-        const data={admin_id:editData.id,name:editData.owner_name,owner_name:editData.owner_name,password:editData.password1,phone:editData.phone,email:editData.email,...newData}
-        let validate=Object.values(errors).filter(error => error !== '').length;
-        const validateBlank=validateForm()
-        if(validateBlank)
-        {
-          if(validate == 0)
-          {
-            await axios.post(BASE_URL+UPDATE_ADMIN_RECORD,data,{headers:{
-              "Content-Type":'multipart/form-data',
-              'Authorization': `Bearer ${token}`
-            }}).then(result=>{
-              setEditData({owner_name:'',email:'',password:'',phone:'',password:''})
-              navigate('/users/admin')
-            })
-
-          }
-        
-
-        }
-    }
-    return{handleEditAdmin,editData,handleChangeAdmin,handleSubmitAdmin,errors,handleKeyPress}
-
-}
-export default EditAdminFunctionality
+  };
+  return {
+    handleEditAdmin,
+    editData,
+    handleChangeAdmin,
+    handleSubmitAdmin,
+    errors,
+    handleKeyPress,
+    loader,
+  };
+};
+export default EditAdminFunctionality;

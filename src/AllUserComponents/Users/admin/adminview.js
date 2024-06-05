@@ -11,7 +11,6 @@ import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 
-import AdminFunctionality from "./adminFunctionality";
 import ViewAdmin from "./viewAdminModal";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
@@ -29,13 +28,6 @@ export default function AdminView() {
   const { userTypeData } = useAuthDetails();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const {
-    handleCloseAdminModel,
-    handleViewAdmin,
-    showAdmin,
-    showMerchantData,
-    adminName,
-  } = AdminFunctionality();
 
   // states
   const [searchRecord, setSearchRecord] = useState("");
@@ -198,8 +190,7 @@ export default function AdminView() {
                         <StyledTableCell>Email</StyledTableCell>
                         <StyledTableCell>Phone</StyledTableCell>
                         <StyledTableCell>View</StyledTableCell>
-
-                        <StyledTableCell></StyledTableCell>
+                        <StyledTableCell>Action</StyledTableCell>
                       </TableHead>
                       <TableBody>
                         {AdminRecord.AdminRecord?.map((data, index) => (
@@ -217,7 +208,7 @@ export default function AdminView() {
                               </div>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <div className="text-[#000000] order_method capitalize">
+                              <div className="text-[#000000] order_method">
                                 {data.email || ""}
                               </div>
                             </StyledTableCell>
@@ -227,18 +218,11 @@ export default function AdminView() {
                               </div>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <div
-                                className="text-[#000000] order_method capitalize cursor-pointer"
-                                onClick={() =>
-                                  handleViewAdmin(
-                                    data.email,
-                                    data.name,
-                                    userTypeData
-                                  )
-                                }
-                              >
-                                view merchant
-                              </div>
+                              <ViewAdmin
+                                email={data.email}
+                                name={data.name}
+                                userTypeData={userTypeData}
+                              />
                             </StyledTableCell>
                             <StyledTableCell>
                               <div className="flex">
@@ -266,13 +250,6 @@ export default function AdminView() {
           </Grid>
         </Grid>
       </Grid>
-
-      <ViewAdmin
-        showAdmin={showAdmin}
-        showMerchantData={showMerchantData}
-        adminName={adminName}
-        handleCloseAdminModel={handleCloseAdminModel}
-      />
     </>
   );
 }

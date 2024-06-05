@@ -4,6 +4,7 @@ import axios from "axios";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
 import { Grid } from "@mui/material";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 
 const transactionsList = [
   {
@@ -33,6 +34,9 @@ const FilterEmp = ({ onFilterEmpDataChange, searchId, setSearchId }) => {
   const handleSearch = () => {
     // console.log("Search ID:", searchId);
   };
+  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+  let AuthDecryptDataDashBoardJSONFormat=LoginGetDashBoardRecordJson
+  const merchant_id=AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id
 
   const toggleDropdown = (dropdown) => {
     switch (dropdown) {
@@ -144,8 +148,8 @@ const FilterEmp = ({ onFilterEmpDataChange, searchId, setSearchId }) => {
       try {
         const response = await axios.post(
           BASE_URL + EMPLOYEE_LIST,
-          { merchant_id: "MAL0100CA" },
-          { headers: { "Content-Type": "multipart/form-data" } }
+          { merchant_id: merchant_id,token_id:userTypeData?.token_id,login_type:userTypeData?.login_type },
+          { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}` } }
         );
 
         const EmpList = response.data.result;

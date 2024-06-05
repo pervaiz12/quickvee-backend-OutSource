@@ -9,7 +9,7 @@ import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import AutoPo from "./AutoPo";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
-import AddNewCategory from "../../Assests/Dashboard/Left.svg";
+import backIcon from "../../Assests/Dashboard/Left.svg";
 import { fetchaddpopurchaseData } from "../../Redux/features/PurchaseOrder/AddpurchaseOrderSlice";
 import { fetchVendorsListData } from "../../Redux/features/VendorList/vListSlice";
 
@@ -109,11 +109,7 @@ const AddPo = ({ seVisible }) => {
         <div className="box_shadow_div">
           <div className="q-add-categories-section-header">
             <span onClick={() => seVisible("PurchaseTable")}>
-              <img
-                src={AddNewCategory}
-                alt="Add New Category"
-                className="w-6 h-6"
-              />
+              <img src={backIcon} alt="Add New Category" className="w-6 h-6" />
               <span>Create Purchase Order</span>
             </span>
           </div>

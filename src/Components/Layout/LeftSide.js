@@ -75,6 +75,7 @@ import Discount_Per_Sales from "../Reporting/Discount_Per_Sales/discount_per_sal
 import Items_sales_profit_record from "../Reporting/itemSalesProfitRecord/items_sales_profit_record";
 import RefundSummary from "../Reporting/RefundSummary/RefundSummary";
 import EditPurchaseOrder from "../PurchaseOrders/EditPurchaseOrder";
+import ModifyPurchaseOrder from "../PurchaseOrders/ModifyPurchaseOrder";
 
 const LeftSide = ({ visible }) => {
   useEffect(() => {
@@ -90,6 +91,7 @@ const LeftSide = ({ visible }) => {
           {visible === "category" && <MainCategory />}
           {visible === "purchase-data" && <MainPurchase />}
           {visible === "edit-purchase-data" && <EditPurchaseOrder />}
+          {visible === "modify-purchase-order" && <ModifyPurchaseOrder />}
           {visible === "attributes" && <MainAttributes />}
           {visible === "products" && <MainProducts />}
           {visible === "store" && <StorePage />}

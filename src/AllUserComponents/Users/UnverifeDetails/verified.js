@@ -96,9 +96,9 @@ export default function Verified() {
   };
   useEffect(() => {
     dispatch(getVerifiedMerchant(data_verified));
-  }, [currentPage, debouncedValue, rowsPerPage, VerifiedMerchantListState]);
+  }, [currentPage, debouncedValue, rowsPerPage]);
 
-  // only when user searches
+  // only when user searches VerifiedMerchantListState
   useEffect(() => {
     dispatch(
       getVerifiedMerchantCount({
@@ -160,12 +160,12 @@ export default function Verified() {
         );
 
         if (response) {
-          const updatedVendorDetails =
-            verifiedMerchantList.verifiedMerchantData.filter(
-              (vendor) => vendor.id !== tableData.id
-            );
-          setVerifiedMerchantListState(updatedVendorDetails);
-          setFilteredMerchants(updatedVendorDetails);
+          // const updatedVendorDetails =
+          //   verifiedMerchantList.verifiedMerchantData.filter(
+          //     (vendor) => vendor.id !== tableData.id
+          //   );
+          // setVerifiedMerchantListState(updatedVendorDetails);
+          // setFilteredMerchants(updatedVendorDetails);
           dispatch(getVerifiedMerchant(data_verified));
         } else {
           console.error(response);
@@ -222,12 +222,13 @@ export default function Verified() {
         );
 
         if (response) {
-          const updatedVendorDetails =
-            verifiedMerchantList.verifiedMerchantData.filter(
-              (vendor) => vendor.id !== merchant_id
-            );
-          setVerifiedMerchantListState(updatedVendorDetails);
-          setFilteredMerchants(updatedVendorDetails);
+          // const updatedVendorDetails =
+          //   verifiedMerchantList.verifiedMerchantData.filter(
+          //     (vendor) => vendor.id !== merchant_id
+          //   );
+          // setVerifiedMerchantListState(updatedVendorDetails);
+          // setFilteredMerchants(updatedVendorDetails);
+          dispatch(getVerifiedMerchant(data_verified));
         } else {
           console.error(response);
         }
@@ -403,7 +404,7 @@ export default function Verified() {
                                 </div>
                               </StyledTableCell>
                               <StyledTableCell>
-                                <div className="text-[#000000] order_method capitalize">
+                                <div className="text-[#000000] order_method ">
                                   {data.merchant_id || ""}
                                 </div>
                               </StyledTableCell>
