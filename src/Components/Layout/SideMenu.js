@@ -730,11 +730,11 @@ const menuItems = [
     ),
     text: "Employees",
     dropdownItems: [
-      {
-        id: 1,
-        text: "Employees",
-        link: "/#",
-      },
+      // {
+      //   id: 1,
+      //   text: "Employees",
+      //   link: "/#",
+      // },
       {
         id: 2,
         icon: (

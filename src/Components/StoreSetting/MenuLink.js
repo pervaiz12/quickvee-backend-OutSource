@@ -39,7 +39,7 @@ const MenuLink = ({ infoRecord, onChangeHandle }) => {
                 value={infoRecord.menuLink}
                 disabled
               />
-              <span className="info-span store-info">@.com</span>
+              <span className="info-span store-info">.quickvee.com</span>
             </div>
           </Grid>
           <Grid item xs={12} sm={6} md={6}>
@@ -51,7 +51,13 @@ const MenuLink = ({ infoRecord, onChangeHandle }) => {
                 value={infoRecord.domain}
                 onChange={onChangeHandle}
               />
-              <span className="info-span store-info">@.com</span>
+              <span className="info-span-create-button store-info">Create</span>
+              {/* display: inline-block;
+                  width: 30% !important;
+                  background-color: #cccccc;
+                  text-align: center;
+                  line-height: 40px;
+                  border-radius: 0px 8px 8px 0px; */}
             </div>
           </Grid>
         </Grid>

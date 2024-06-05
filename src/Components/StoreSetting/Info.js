@@ -28,7 +28,7 @@ const Info = () => {
     onPasswordInputChange,
     passwordInput,
     passwordError,
-    handleSubmitChangePassword
+    handleSubmitChangePassword,
   } = InfoFunction();
   let data = {
     id: 100, //dynamic id give
@@ -58,7 +58,11 @@ const Info = () => {
       <form>
         <AddressForm infoRecord={infoRecord} onChangeHandle={onChangeHandle} />
 
-        <SocialMediaForm handleSubmitInfo={handleSubmitInfo} />
+        <SocialMediaForm
+          infoRecord={infoRecord}
+          onChangeHandle={onChangeHandle}
+          handleSubmitInfo={handleSubmitInfo}
+        />
       </form>
 
       <ChangePasswordForm

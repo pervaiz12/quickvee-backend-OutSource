@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 
-const SocialMediaForm = ({ handleSubmitInfo }) => {
+const SocialMediaForm = ({infoRecord,onChangeHandle, handleSubmitInfo }) => {
   return (
     <Grid sx={{ p: 2.5 }} className="box_shadow_div">
       <Grid item xs={12}>
@@ -16,7 +16,7 @@ const SocialMediaForm = ({ handleSubmitInfo }) => {
               type={"text"}
               name={"address_1"}
               placeholder="Facebook Url"
-              // value={infoRecord.address_1}
+              value={infoRecord.facebookUrl}
               // onChangeFun={onChangeHandle}
             />
             {/* <span className='error'>{store.errors.ownerName}</span> */}
@@ -26,7 +26,7 @@ const SocialMediaForm = ({ handleSubmitInfo }) => {
               type={"text"}
               name={"address_1"}
               placeholder="Instagram Url"
-              // value={infoRecord.address_1}
+              value={infoRecord.instagramUrl}
               // onChangeFun={onChangeHandle}
             />
             {/* <span className='error'>{store.errors.ownerName}</span> */}

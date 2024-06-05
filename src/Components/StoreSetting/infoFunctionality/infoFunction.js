@@ -5,7 +5,7 @@ import {
   BASE_URL,
   GET_Edit_STORE_INFO,
   UPDATE_STORE_INFO,
-  CHANGE_PASSWORD_STORE
+  CHANGE_PASSWORD_STORE,
 } from "../../../Constants/Config";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 export default function InfoFunction() {
@@ -33,6 +33,8 @@ export default function InfoFunction() {
     zip: "",
     state: "",
     phone: "",
+    facebookUrl:"",
+    instagramUrl:"",
   });
 
   // ============================password ======================
@@ -220,6 +222,8 @@ export default function InfoFunction() {
         zip: a_zip,
         state: state,
         phone: phone,
+        fb_url: "",
+        insta_url: "",
       });
     }
   };
@@ -344,7 +348,7 @@ export default function InfoFunction() {
       return false;
     }
   };
-  const handleSubmitChangePassword  = async (e) => {
+  const handleSubmitChangePassword = async (e) => {
     e.preventDefault();
     let CurrentPassordValidate = currentPassordValidate(passwordError);
     if (CurrentPassordValidate === true) {
@@ -362,7 +366,7 @@ export default function InfoFunction() {
         },
       });
       if (response.status == 200) {
-        console.log("password changes")
+        console.log("password changes");
       }
     }
   };
@@ -383,6 +387,6 @@ export default function InfoFunction() {
     onPasswordInputChange,
     passwordInput,
     passwordError,
-    handleSubmitChangePassword
+    handleSubmitChangePassword,
   };
 }

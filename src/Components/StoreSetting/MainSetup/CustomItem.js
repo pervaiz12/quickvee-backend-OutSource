@@ -3,23 +3,15 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import "../../../Styles/EmployeeList/customeitem.css";
 
-const CustomTimePicker = ({ OpenTime, CloseTime, days, id, setDays }) => {
-  const formatTime = (time) => {
-    let [hour, minutePeriod] = time?.split(":");
-    let [minute, period] = minutePeriod?.split(" ");
-    hour = hour.length < 2 ? "0" + hour : hour;
-    minute = minute.length < 2 ? "0" + minute : minute;
-    period = period.toUpperCase();
-    return `${hour}:${minute} ${period}`;
-  };
-  // console.log("CustomTimePicker", days);
-  
-  const [startTime, setStartTime] = useState("");
-  const [endTime, setEndTime] = useState("");
-  useEffect(() => {
-    setStartTime(formatTime(OpenTime));
-    setEndTime(formatTime(CloseTime));
-  }, [OpenTime, CloseTime]);
+const CustomTimePicker = ({
+  OpenTime,
+  CloseTime,
+  days,
+  id,
+  setDays,
+  dayName,
+  setLastCloseTimeState
+}) => {
   const generateTimeOptions = () => {
     const options = [];
     for (let hour = 0; hour < 24; hour++) {
@@ -34,39 +26,115 @@ const CustomTimePicker = ({ OpenTime, CloseTime, days, id, setDays }) => {
     }
     return options;
   };
+  const formatTime = (time) => {
+    if (!time) return "";
+    let [hour, minutePeriod] = time?.split(":");
+    let [minute, period] = minutePeriod?.split(" ");
+    hour = hour.length < 2 ? "0" + hour : hour;
+    minute = minute.length < 2 ? "0" + minute : minute;
+    period = period.toUpperCase();
+    return `${hour}:${minute} ${period}`;
+  };
+  // console.log("CustomTimePicker", days);
+  const timeOptions = generateTimeOptions();
+  const [startTime, setStartTime] = useState("");
+  const [endTime, setEndTime] = useState("");
+  const [startTimeIndex, setStartTimeIndex] = useState(0);
+  const [endTimeIndex, setEndTimeIndex] = useState(0);
+  console.log(
+    "startTimeIndex: ",
+    startTimeIndex,
+    "endTimeIndex: ",
+    endTimeIndex,
+    dayName
+  );
+  useEffect(() => {
+    setStartTime(formatTime(OpenTime));
+    setEndTime(CloseTime ? formatTime(CloseTime) : "");
+  }, [OpenTime, CloseTime]);
+  useEffect(() => {
+    setStartTimeIndex(timeOptions.indexOf(startTime));
+    setEndTimeIndex(timeOptions.indexOf(endTime));
+  }, [startTime, endTime]);
+
+  const checkOverlap = (start, end) => {
+    const startIdx = timeOptions.indexOf(start);
+    const endIdx = timeOptions.indexOf(end);
+    if (startIdx === -1 || endIdx === -1) return false;
+
+    for (let i = startIdx; i < endIdx; i++) {
+      if (unavailableTimes.has(timeOptions[i])) {
+        return true;
+      }
+    }
+    return false;
+  };
 
   const handleStartTimeChange = (event) => {
     const value = event.target.value;
-    console.log(value);
-    setStartTime(value);
 
-    if (endTime !== "" && value >= endTime) {
-      setEndTime("");
+    if (checkOverlap(value, endTime)) {
+      alert("The selected time range overlaps with an existing slot.");
+      return;
     }
-  };
 
-  const handleEndTimeChange = (event) => {
-    setEndTime(event.target.value);
-
+    setStartTimeIndex(timeOptions.indexOf(value));
+    setStartTime(value);
     setDays((prevDays) => {
       const updatedDays = prevDays.map((day) => {
         if (day.id === id) {
-          return { ...day, close_time: event.target.value };
+          return { ...day, open_time: event.target.value.toLowerCase() };
         }
         return day;
       });
       return updatedDays;
     });
-    if (startTime == event.target.value) {
-      alert("The end time cannot be the same as the start time");
-      setEndTime("");
-    }
   };
-  const timeOptions = generateTimeOptions();
-  const startTimeIndex = timeOptions.indexOf(startTime);
-  const endTimeIndex = timeOptions.indexOf(endTime);
-  console.log("startTimeIndex",startTimeIndex,"endTimeIndex",endTimeIndex)
-  
+
+  const handleEndTimeChange = (event) => {
+    const value = event.target.value;
+
+    if (checkOverlap(startTime, value)) {
+      alert("The selected time range overlaps with an existing slot");
+      return;
+    }
+
+    if (startTimeIndex >= timeOptions.indexOf(value)) {
+      alert("The end time cannot be the same as or before the start time");
+      setEndTime("");
+      return;
+    }
+    setEndTimeIndex(timeOptions.indexOf(value));
+    // Only set endTime and update state if there are no issues
+    setEndTime(value);
+    setLastCloseTimeState(true);
+    setDays((prevDays) => {
+      const updatedDays = prevDays.map((day) => {
+        if (day.id === id) {
+          return { ...day, close_time: value.toLowerCase() };
+        }
+        return day;
+      });
+      return updatedDays;
+    });
+  };
+
+  const getUnavailableTimes = () => {
+    const unavailableTimes = new Set();
+    days.forEach((day) => {
+      if (day.day_name === dayName && day.id !== id) {
+        const startIdx = timeOptions.indexOf(formatTime(day.open_time));
+        const endIdx = timeOptions.indexOf(formatTime(day.close_time));
+        for (let i = startIdx; i < endIdx; i++) {
+          unavailableTimes.add(timeOptions[i]);
+        }
+      }
+    });
+    return unavailableTimes;
+  };
+
+  const unavailableTimes = getUnavailableTimes();
+
   return (
     <>
       <div className="flex justify-between gap-2">
@@ -80,7 +148,7 @@ const CustomTimePicker = ({ OpenTime, CloseTime, days, id, setDays }) => {
               className="customedateselector"
               key={time}
               value={time}
-              disabled={startTimeIndex !== -1 && index <= startTimeIndex}
+              disabled={unavailableTimes.has(time)}
             >
               {time}
             </MenuItem>
@@ -99,7 +167,7 @@ const CustomTimePicker = ({ OpenTime, CloseTime, days, id, setDays }) => {
               className="customedateselector"
               key={time}
               value={time}
-              // disabled={endTimeIndex !== -1 && index <= endTimeIndex}
+              disabled={unavailableTimes.has(time)}
             >
               {time}
             </MenuItem>
