@@ -130,59 +130,62 @@ const SideMenu = () => {
           {isMenuOpenRedux
             ? (LoginGetDashBoardRecordJson?.final_login == 1
                 ? temp["superadmin"]
-                : temp[LoginGetDashBoardRecordJson?.data?.login_type] // admin
-              )?.map((item) => (
-                <div
-                  key={item.id}
-                  className={`text-[#9E9E9E] active:bg-[#414F54] hover:bg-[#414F54] hover:text-[#FFC400] px-0 ${
-                    activeItem === item.link ? "active" : ""
-                  }`}
-                >
-                  {item.dropdownItems ? (
-                    <DropdownMenuItem
-                      setHoveredItem={setHoveredItem}
-                      item={item}
-                      isMenuOpenRedux={isMenuOpenRedux}
-                      activeItem={activeItem}
-                      setActiveItem={setActiveItem}
-                      hoveredItem={hoveredItem}
-                      isDropdownOpen={isDropdownOpen}
-                      setIsDropdownOpen={setIsDropdownOpen}
-                      currentDropDownItem={currentDropDownItem}
-                      activeDropDownItem={activeDropDownItem}
-                      activeNestedItem={activeNestedItem}
-                      setActiveNestedItem={setActiveNestedItem}
-                    />
-                  ) : (
-                    <div
-                      onMouseEnter={() => setHoveredItem(item.id)}
-                      onMouseLeave={() => setHoveredItem(null)}
-                      onClick={() => handleItemClick(item)}
-                      style={{ cursor: "pointer" }}
-                      className={`flex items-center ${
-                        activeItem === item.link.trim()
-                          ? "bg-[#414F54] text-[#FFC400]"
-                          : ""
-                            ? "text-[#FFC400] active:bg-[#414F54] hover:bg-[#414F54] px-0"
+                : temp[LoginGetDashBoardRecordJson?.data?.login_type]
+              ) // admin
+                ?.map((item) => (
+                  <div
+                    key={item.id}
+                    className={`text-[#9E9E9E] active:bg-[#414F54] hover:bg-[#414F54] hover:text-[#FFC400] px-0 ${
+                      activeItem === item.link ? "active" : ""
+                    }`}
+                  >
+                    {item.dropdownItems ? (
+                      <DropdownMenuItem
+                        setHoveredItem={setHoveredItem}
+                        item={item}
+                        isMenuOpenRedux={isMenuOpenRedux}
+                        activeItem={activeItem}
+                        setActiveItem={setActiveItem}
+                        hoveredItem={hoveredItem}
+                        isDropdownOpen={isDropdownOpen}
+                        setIsDropdownOpen={setIsDropdownOpen}
+                        currentDropDownItem={currentDropDownItem}
+                        activeDropDownItem={activeDropDownItem}
+                        activeNestedItem={activeNestedItem}
+                        setActiveNestedItem={setActiveNestedItem}
+                      />
+                    ) : (
+                      <div
+                        onMouseEnter={() => setHoveredItem(item.id)}
+                        onMouseLeave={() => setHoveredItem(null)}
+                        onClick={() => handleItemClick(item)}
+                        style={{ cursor: "pointer" }}
+                        className={`flex items-center ${
+                          activeItem === item.link.trim()
+                            ? "bg-[#414F54] text-[#FFC400]"
                             : ""
-                      }`}
-                    >
-                      {activeItem === item.link.trim() ||
-                      hoveredItem === item.id
-                        ? item.activeIcon
-                        : item.icon}
-                      <Link
-                        className={`ml-2 menu-item text-[14px] Admin_std ${
-                          activeItem === item.link.trim() ? "bg-[#414F54]" : ""
+                              ? "text-[#FFC400] active:bg-[#414F54] hover:bg-[#414F54] px-0"
+                              : ""
                         }`}
-                        to={item.link}
                       >
-                        {item.text}
-                      </Link>
-                    </div>
-                  )}
-                </div>
-              ))
+                        {activeItem === item.link.trim() ||
+                        hoveredItem === item.id
+                          ? item.activeIcon
+                          : item.icon}
+                        <Link
+                          className={`ml-2 menu-item text-[14px] Admin_std ${
+                            activeItem === item.link.trim()
+                              ? "bg-[#414F54]"
+                              : ""
+                          }`}
+                          to={item.link}
+                        >
+                          {item.text}
+                        </Link>
+                      </div>
+                    )}
+                  </div>
+                ))
             : (LoginGetDashBoardRecordJson?.final_login == 1
                 ? temp["superadmin"]
                 : temp[LoginGetDashBoardRecordJson?.data?.login_type]
@@ -274,7 +277,6 @@ const DropdownMenuItem = ({
       }
     });
     if (NesedFoundItem) {
-      
       setActiveNestedItem(NesedFoundItem?.id);
       setDropDownItem(activeItem);
       activeDropDownItem(item.id);
@@ -355,7 +357,7 @@ const DropdownMenuItem = ({
           )}
         </div>
       </div>
-     
+
       {isDropdownOpen && currentDropDownItem === item.id && (
         <div
           onMouseEnter={(e) => {
@@ -985,25 +987,25 @@ const SuperAdminMenuItems = [
     ],
   },
 
-  {
-    id: 3,
-    icon: (
-      <img
-        src={NewsletterIcon}
-        alt="labal"
-        className="h-6 w-10 mt-4 mb-4 hoverable-image"
-      />
-    ),
-    activeIcon: (
-      <img
-        src={NewsletterActive}
-        alt="Newsletter"
-        className="h-6 w-10 mt-4 mb-4"
-      />
-    ),
-    text: "Newsletter",
-    link: "/users/view/unapprove/newsletter",
-  },
+  // {
+  //   id: 3,
+  //   icon: (
+  //     <img
+  //       src={NewsletterIcon}
+  //       alt="labal"
+  //       className="h-6 w-10 mt-4 mb-4 hoverable-image"
+  //     />
+  //   ),
+  //   activeIcon: (
+  //     <img
+  //       src={NewsletterActive}
+  //       alt="Newsletter"
+  //       className="h-6 w-10 mt-4 mb-4"
+  //     />
+  //   ),
+  //   text: "Newsletter",
+  //   link: "/users/view/unapprove/newsletter",
+  // },
   {
     id: 4,
     icon: (
@@ -1033,11 +1035,7 @@ const SuperAdminMenuItems = [
       />
     ),
     activeIcon: (
-      <img
-        src={OrderActive}
-        alt="Order Count"
-        className="h-6 w-10 mt-4 mb-4"
-      />
+      <img src={OrderActive} alt="Order Count" className="h-6 w-10 mt-4 mb-4" />
     ),
     text: "Order Count",
     link: "/users/view/unapprove/order-count",
@@ -1235,7 +1233,8 @@ const merchant = [
         src={storeIconActive}
         alt="menu-defaults"
         className="h-6 w-10 mt-4 mb-4"
-      />)
+      />
+    ),
   },
   {
     // id: 82,
@@ -1253,7 +1252,8 @@ const merchant = [
         src={ManagerIconActive}
         alt="menu-defaults"
         className="h-6 w-10 mt-4 mb-4"
-      />)
+      />
+    ),
   },
 ];
 const ManagerLink = [

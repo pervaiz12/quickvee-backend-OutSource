@@ -6,6 +6,7 @@ import AddSvg from "../../../Assests/Dashboard/Left.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 // import Form from 'react-bootstrap/Form';
+import PasswordShow from "../../../Common/passwordShow";
 
 export default function AddMerchan() {
   const {
@@ -29,20 +30,26 @@ export default function AddMerchan() {
     loader,
   } = MerchantFunction();
 
+  const navigate = useNavigate();
+
+  const { showpPassword, handleMouseDown, handleMouseUp, jsxData } =
+    PasswordShow();
+
   const location = useLocation();
 
   console.log("location: ", location);
-  const [showpPassword, setShowPassword] = useState(false);
 
-  const navigate = useNavigate();
+  // const [showpPassword, setShowPassword] = useState(false);
 
-  const handleMouseDown = () => {
-    setShowPassword(true);
-  };
+  // const navigate = useNavigate();
 
-  const handleMouseUp = () => {
-    setShowPassword(false);
-  };
+  // const handleMouseDown = () => {
+  //   setShowPassword(true);
+  // };
+
+  // const handleMouseUp = () => {
+  //   setShowPassword(false);
+  // };
 
   return (
     <>
@@ -341,17 +348,9 @@ export default function AddMerchan() {
                           value={store.password}
                           onChange={handleChange}
                           onBlur={() => handleBlur("password")}
-                          // value={merchantStore.mer_password}
-                          // onChange={handleChangeMerchant}
                         />
-                        <span
-                          className="Show-password"
-                          // onClick={handleClick}
-                          onMouseUp={handleMouseUp}
-                          onMouseDown={handleMouseDown}
-                        >
-                          {showpPassword ? "Hide" : "Show"}
-                        </span>
+                        {jsxData(store.password)}
+
                         <span className="error">{store.errors.password}</span>
                       </div>
                     </div>

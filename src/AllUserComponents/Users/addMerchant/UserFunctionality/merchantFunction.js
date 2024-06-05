@@ -235,10 +235,22 @@ const MerchantFunction = () => {
     let reg = /^[0-9\b]+$/;
 
     if (name === "storename") {
-      updatedErrors[name] = value === "" ? `Please fill the ${name} field` : "";
+      // updatedErrors[name] = value === "" ? `Please fill the ${name} field` : "";
+      updatedErrors[name] =
+        value.trim() === ""
+          ? `Please fill in the ${name} field`
+          : value[0] === " "
+            ? `The ${name} field cannot start with a space`
+            : "";
     }
     if (name == "ownerName") {
       updatedErrors[name] = value === "" ? `Please fill the ${name} field` : "";
+      // updatedErrors[name] =
+      //   value.trim() === ""
+      //     ? `Please fill in the ${name} field`
+      //     : value[0] === " "
+      //       ? `The ${name} field cannot start with a space`
+      //       : "";
     }
     if (name == "email") {
       updatedErrors[name] =
@@ -268,8 +280,14 @@ const MerchantFunction = () => {
     setStore({
       ...store,
       errors: updatedErrors,
-      [name]: trimmedValue,
+      [name]: value.replace(/^\s+/, ""),
     });
+
+    // setStore({
+    //   ...store,
+    //   errors: updatedErrors,
+    //   [name]: trimmedValue,
+    // });
   };
   const handleKeyPress = (e) => {
     if ((e.charCode < 48 || e.charCode > 57) && e.charCode !== 8) {
@@ -472,10 +490,10 @@ const MerchantFunction = () => {
         const data = {
           login_pin: merchantStore.pin,
           admin: adminId,
-          storename: store.storename,
-          ownerName: store.ownerName,
-          email: store.email,
-          password: store.password,
+          storename: store.storename.trim(),
+          ownerName: store.ownerName.trim(),
+          email: store.email.trim(),
+          password: store.password.trim(),
           phone: store.phone,
           state: store.state,
           created_by_user: "superadmin",

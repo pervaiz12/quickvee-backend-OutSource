@@ -122,7 +122,7 @@ const NewsLetterList = (props) => {
                           </div>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <div class="text-[#000000] order_method capitalize">
+                          <div class="text-[#000000] order_method ">
                             {data.email || ""}
                           </div>
                         </StyledTableCell>

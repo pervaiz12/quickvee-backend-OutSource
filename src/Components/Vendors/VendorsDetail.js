@@ -15,15 +15,17 @@ import { Link } from "react-router-dom";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 const VendorsDetail = ({ setVisible }) => {
   const label = { inputProps: { "aria-label": "Switch demo" } };
+  const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
 
   const [allvendors, setallvendors] = useState([]);
   const AllVendorsDataState = useSelector((state) => state.vendors);
   const authUserData = useSelector((state) => state.authUser);
   const dispatch = useDispatch();
+  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   useEffect(() => {
     let data = {
-      merchant_id: "MAL0100CA",
+      merchant_id: merchant_id,
     };
     dispatch(fetchVendorsListData(data));
   }, []);
@@ -41,7 +43,7 @@ const VendorsDetail = ({ setVisible }) => {
     AllVendorsDataState.loading,
     AllVendorsDataState.vendorListData,
   ]);
-  const { userTypeData } = useAuthDetails();
+
   const handleUpdateStatus = async (event, label, vendorId) => {
     const updData = {
       // merchant_id: "MAL0100CA",

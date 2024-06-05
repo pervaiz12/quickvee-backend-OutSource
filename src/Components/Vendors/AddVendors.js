@@ -12,10 +12,18 @@ import { FormControl, Grid } from "@mui/material";
 // import Stack from '@mui/material/Stack';
 import CreatableSelect from "react-select/creatable";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
+import { useAuthDetails } from "../../Common/cookiesHelper";
 const AddVendors = ({ setVisible }) => {
   const [allvendors, setallvendors] = useState([]);
 
   const [states, setStates] = useState([]);
+  const {
+    LoginGetDashBoardRecordJson,
+    LoginAllStore,
+    userTypeData,
+    GetSessionLogin,
+  } = useAuthDetails();
+  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   console.log("states", states);
   const AllVendorsDataState = useSelector((state) => state.vendors);
@@ -29,7 +37,8 @@ const AddVendors = ({ setVisible }) => {
 
   useEffect(() => {
     let data = {
-      merchant_id: "MAL0100CA",
+      merchant_id,
+      // ...userTypeData,
     };
     dispatch(fetchVendorsListData(data));
   }, []);
@@ -119,7 +128,7 @@ const AddVendors = ({ setVisible }) => {
         phone: matchedObject.phone,
         email: matchedObject.email,
         vendor_name: matchedObject.name,
-        merchant_id: "MAL0100CA",
+        merchant_id: merchant_id,
         vendor_id: matchedObject.id,
         city: matchedObject.city,
         zip_code: matchedObject.zip_code,
@@ -132,7 +141,7 @@ const AddVendors = ({ setVisible }) => {
         phone: "",
         email: "",
         vendor_name: selectedOption,
-        merchant_id: "MAL0100CA",
+        merchant_id: merchant_id,
         full_address: "",
         vendor_id: "",
         city: "",
@@ -152,15 +161,15 @@ const AddVendors = ({ setVisible }) => {
     e.preventDefault();
     const state = value;
     // Assuming `vendor` is an object that you want to send in the request
-    let updatedVendor = { ...vendor };
+    let updatedVendor = { ...vendor, ...userTypeData };
+    const { token, ...newData } = updatedVendor;
 
-    const response = await axios.post(
-      BASE_URL + ADD_VENDOR_DATA,
-      updatedVendor,
-      {
-        headers: { "Content-Type": "multipart/form-data" },
-      }
-    );
+    const response = await axios.post(BASE_URL + ADD_VENDOR_DATA, newData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`,
+      },
+    });
 
     if (response) {
       setVisible("VendorsDetail");
