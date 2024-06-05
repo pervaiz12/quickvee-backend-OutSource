@@ -43,7 +43,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const StoreWorkingHrs = ({ days, setDays }) => {
+const StoreWorkingHrs = ({
+  days,
+  setDays,
+  setLastCloseTimeState,
+}) => {
   const dispatch = useDispatch();
   const [newDayAdded, setNewDayAdded] = useState(false);
   const [selectedTime, setSelectedTime] = useState(new Date());
@@ -109,16 +113,14 @@ const StoreWorkingHrs = ({ days, setDays }) => {
   // };
 
   const addMinutes = (time, minutes) => {
-    // Parse the time
     let [hours, rest] = time.split(":");
     let [mins, period] = rest.split(" ");
     hours = parseInt(hours);
     mins = parseInt(mins);
 
-    if (period === "am" && hours !== 12) {
+    if (period.toLowerCase() === "pm" && hours < 12) {
       hours += 12;
-    }
-    if (period === "pm" && hours === 12) {
+    } else if (period.toLowerCase() === "am" && hours === 12) {
       hours = 0;
     }
 
@@ -126,7 +128,7 @@ const StoreWorkingHrs = ({ days, setDays }) => {
     hours = Math.floor(totalMinutes / 60) % 24;
     mins = totalMinutes % 60;
 
-    period = hours >= 12 ? "am" : "pm";
+    period = hours >= 12 ? "pm" : "am";
     hours = hours % 12;
     if (hours === 0) hours = 12;
 
@@ -138,46 +140,53 @@ const StoreWorkingHrs = ({ days, setDays }) => {
     setDays((prevDays) => {
       const lastIndex = lastIndices[dayName];
       const lastCloseTime = prevDays[lastIndex].close_time;
+      setLastCloseTimeState(false);
+      console.log("lastCloseTime", lastCloseTime);
+      if (lastCloseTime === "") {
+        alert("End time cannot be empty");
+        return prevDays;
+      } else {
+        const newOpenTime = addMinutes(lastCloseTime, 0);
+        const newCloseTime = addMinutes(lastCloseTime, 15);
 
-      const newOpenTime = addMinutes(lastCloseTime, 0);
-      const newCloseTime = addMinutes(lastCloseTime, 15);
+        const newDay = {
+          id: Date.now().toString(),
+          day_name: dayName,
+          day_count: prevDays[lastIndex].day_count,
+          open_time: newOpenTime,
+          close_time: "",
+          day_code: prevDays[lastIndex].day_code,
+          is_holiday: "0",
+          merchant_clover_id: prevDays[lastIndex].merchant_clover_id,
+          multiple_flag: prevDays[lastIndex].multiple_flag + 1,
+        };
 
-      const newDay = {
-        id: Date.now().toString(),
-        day_name: dayName,
-        day_count: prevDays[lastIndex].day_count,
-        open_time: newOpenTime,
-        close_time: newCloseTime,
-        day_code: prevDays[lastIndex].day_code,
-        is_holiday: "0",
-        merchant_clover_id: prevDays[lastIndex].merchant_clover_id,
-        multiple_flag: prevDays[lastIndex].multiple_flag + 1,
-      };
+        const updatedDays = [
+          ...prevDays.slice(0, lastIndex + 1),
+          newDay,
+          ...prevDays.slice(lastIndex + 1),
+        ];
+        const updatedDaysWthIndices = updatedDays.map((day) => {
+          if (day.day_name === dayName) {
+            return { ...day, day_count: day.day_count + 1 };
+          }
+          return day;
+        });
 
-      const updatedDays = [
-        ...prevDays.slice(0, lastIndex + 1),
-        newDay,
-        ...prevDays.slice(lastIndex + 1),
-      ];
-      const updatedDaysWthIndices = updatedDays.map((day) => {
-        if (day.day_name === dayName) {
-          return { ...day, day_count: day.day_count + 1 };
-        }
-        return day;
-      });
+        const indicesMap = {};
+        updatedDaysWthIndices.forEach((day, index) => {
+          indicesMap[day.day_name] = index;
+        });
 
-      const indicesMap = {};
-      updatedDaysWthIndices.forEach((day, index) => {
-        indicesMap[day.day_name] = index;
-      });
+        setLastIndices(indicesMap);
 
-      setLastIndices(indicesMap);
-
-      return updatedDaysWthIndices;
+        return updatedDaysWthIndices;
+      }
     });
   };
 
   const handleDeleteDay = (dayName, id) => {
+    setLastCloseTimeState(true);
     setDays((prevDays) => {
       const filteredDays = prevDays.filter((day) => day.id !== id);
 
@@ -294,6 +303,8 @@ const StoreWorkingHrs = ({ days, setDays }) => {
                                         days={days}
                                         OpenTime={dayData.open_time}
                                         CloseTime={dayData.close_time}
+                                        dayName={dayData.day_name}
+                                        setLastCloseTimeState={setLastCloseTimeState}
                                       />
                                     </div>
                                     <div style={{ width: "5%" }}>

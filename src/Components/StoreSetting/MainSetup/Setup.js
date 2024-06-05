@@ -15,7 +15,7 @@ import {
 } from "../../../Constants/Config";
 import { fetchSettingReceiptData } from "../../../Redux/features/StoreSettings/SettingsReceipt/SettingsReceiptSlice";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
-import { ToastifyAlert } from '../../../CommonComponents/ToastifyAlert';
+import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 const Setup = () => {
   // const [updateDetails, setUpdateDetails] = useState(true);
   const [OnlineOrderStatus, setOnlineOrderStatus] = useState("");
@@ -36,6 +36,7 @@ const Setup = () => {
   const [pickDefTip, setpickDefTip] = useState("");
   const [delDefTip, setdelDefTip] = useState("");
   const [days, setDays] = useState([]);
+  const [lastCloseTimeState, setLastCloseTimeState] = useState(true);
   const dispatch = useDispatch();
   const { userTypeData } = useAuthDetails();
   const data = {
@@ -93,6 +94,10 @@ const Setup = () => {
   };
 
   const handleUpdateClick = async (e) => {
+    if (lastCloseTimeState === false) {
+      alert("End time cannot be empty");
+      return;
+    }
     e.preventDefault();
 
     const FormData = {
@@ -130,8 +135,8 @@ const Setup = () => {
       }
     );
     console.log(response);
-    if (response.data.status === true) {  
-      ToastifyAlert(response.data.msg,"success")
+    if (response.data.status === true) {
+      ToastifyAlert(response.data.msg, "success");
 
       let merchantdata = {
         merchant_id: "MAL0100CA",
@@ -140,7 +145,7 @@ const Setup = () => {
         dispatch(fetchSettingReceiptData(merchantdata));
       }
     } else {
-      ToastifyAlert(response.data.msg,"unsuccess")
+      ToastifyAlert(response.data.msg, "unsuccess");
     }
   };
 
@@ -148,7 +153,12 @@ const Setup = () => {
     <>
       <OnlineOrderingPage onlineorderstatus={handleonlineorderstatus} />
 
-      <StoreWorkingHrs days={days} setDays={setDays} />
+      <StoreWorkingHrs
+        days={days}
+        setDays={setDays}
+
+        setLastCloseTimeState={setLastCloseTimeState}
+      />
 
       <PickupDeliveryDetails pickupdeliverydata={handlepickupdeliverydata} />
 
@@ -164,6 +174,7 @@ const Setup = () => {
         sx={{ pb: 2.5 }}
       >
         <Grid item>
+          
           <button class="quic-btn quic-btn-save" onClick={handleUpdateClick}>
             Update
           </button>
