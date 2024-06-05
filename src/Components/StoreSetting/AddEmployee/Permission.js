@@ -11,6 +11,7 @@ import {
 } from "../../../Redux/features/StoreSettings/AddEmployee/AddEmployeeSlice";
 import EditPermissionLogic from "../AddEmployee/EditPermissionLogic";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import AddNewCategory from "../../../Assests/Taxes/Left.svg";
 
 const Permission = () => {
   const location = useLocation();
@@ -100,11 +101,14 @@ const Permission = () => {
     <div className="box">
       <div className="q-attributes-main-page">
         <div className="box_shadow_div_heading">
-          <div className="page_heading_area">
+          <div className="page_heading_area ">
             <Link to="/store-settings/addemployee">
+              <div className="employeePromiss">
+              <img src={AddNewCategory} alt="Add-New-Category" />
               <h1>
                 {employeedata.f_name} {employeedata.l_name}'s Permissions
               </h1>
+              </div>
             </Link>
           </div>
           <div className="box_shadow_innerdiv">

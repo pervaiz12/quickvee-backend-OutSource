@@ -10,6 +10,12 @@ import EditEmployeeModal from "./EditEmployeeModal";
 import AddEmployeeFormLogic from "../../StoreSetting/AddEmployee/AddEmployeeFormLogic";
 import { Link } from "react-router-dom";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { Grid } from "@mui/material";
+import DraggableTable from "../../../reuseableComponents/DraggableTable";
+import { Box, Button, Modal } from "@mui/material";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 
 
 const EmployeeList = () => {
@@ -93,18 +99,33 @@ const EmployeeList = () => {
 
       const handleDeleteEmployee = (id) => {
         const del_data = {
-                    merchant_id:merchant_id,
-                    employee_id:id,
-                    ...userTypeData
-                }
-        if(id)
-        {
-            dispatch(deleteEmployee(del_data))
+            merchant_id:merchant_id,
+            employee_id:id,
+            ...userTypeData
         }
-      }
+        const userConfirmed = window.confirm(
+          "Are you sure you want to delete this employee?"
+        );
+        if (userConfirmed) {
+          if (id) {
+            dispatch(deleteEmployee(del_data));
+          }
+        } else {
+          console.log("Deletion canceled by employee");
+        }
+      };
+
+      const myStyles = {
+        width: "58rem",
+        position: "absolute",
+        top: "47%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        padding: "unset"
+      };
 
     return <>
-    <div className="box">
+    {/* <div className="box">
        <div className="box_shadow_div">
         <div className="q-attributes-bottom-header-sticky">
           <div className="q-attributes-bottom-header">
@@ -138,7 +159,6 @@ const EmployeeList = () => {
                     <p className="employee-email">{employee.email}</p>
                     <p className="employee-pin">{employee.pin}</p>     
                     <p className="employee-role">{employee.role}</p>      
-                    {/* <p className="employee-iconall"> */}
                         <div className="qvrow" >
                             <div className="col-qv-4">
                                 <div>
@@ -151,31 +171,78 @@ const EmployeeList = () => {
                             <div className="col-qv-4">
                                 <div>
                                 <EditEmployeeModal  employee={employee} states={states} employeeList={employeeList}/>
-                                    {/* <img className="employeeicon" alt="edit-icon" src={Permission} /> */}
                                 </div>
                             </div>
                             <div className="col-qv-4">
                                 <div>
-                                    <img className="employeeicon" alt="delete-icon" src={Delete} onClick={() => {
-                                            if (window.confirm("Are you sure you want to delete this employee?")) {
-                                                handleDeleteEmployee(employee.id);
-                                            }
-                                        }}  />
+                                    <img className="employeeicon" alt="delete-icon" src={Delete}  onClick={() => handleDeleteEmployee(employee.id) }/>
                                 </div>
                             </div>
-                        </div>
-                    {/* </p>       */}
-                               
+                        </div> 
                 </div>
                  ))}  
             </div>
+        </div>
+        </div> */}
 
-        {showModal && (
+
+
+        <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            style={{
+              borderBottom: "1px solid #E8E8E8",
+            }}
+          >
+            <Grid item>
+              <div className="q-category-bottom-header">
+                <span>Employee</span>
+              </div>
+            </Grid>
+            <Grid item>
+              <Grid container direction="row" alignItems="center">
+                <Grid item>
+                  <div className="q-category-bottom-header">
+                    <p onClick={openModal}>
+                    Add Employee <img src={AddIcon} alt="add-icon" />
+                    </p>
+                  </div>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
+
+          <DraggableTable
+              tableHead={["Sort", "Employee", "Phone", "Email", "Pin", "Role","","",""]}
+              tableRow={employeeList}
+              setFunction={setemployeeList}
+              employeeTable={true}
+              states={states} 
+              editBtnEmployee={{
+                editButtonEnableEmployee: true,
+                editButtonurlEmployee: "/store-settings/permission/",
+              }}
+              deleteButton={{
+                deleteButtonEnable: true,
+                deleteButtonFun: handleDeleteEmployee,
+              }}
+            //   table={"collection"}
+              className="q-category-bottom-categories-single-category"
+            />
+        </Grid>
+      </Grid>
+
+      {showModal && (
+        <>
           <div className="q-custom-modal-container" id="addemployee">
-            {/* Your modal JSX */}
-            <div className="q-custom-modal-content modal_custom">
-              {/* Your modal content */}
-              <div className="">
+
+            <div className="q-custom-modal-content modal_custom" style={myStyles}>
+
+              {/* <div className="">
                 <p className="q-custom-modal-header ">
                   Add New Employee
                   <img
@@ -185,19 +252,39 @@ const EmployeeList = () => {
                     onClick={closeModal}
                   />
                 </p>
-              </div>
-              {/* ... other modal content ... */}
+              </div> */}
+              <div className="q-add-categories-section-header" style={{justifyContent:"space-between"}}>
+                <span style={{cursor:"unset"}}>Add Employee</span>
+                    <div className="float-right">
+                        <img src={CrossIcon} alt="icon" className="quic-btn-cancle w-6 h-6 cursor-pointer" onClick={closeModal} />
+                    </div>
+                </div>
+
+                <div className="p-6">
+                
+
               <div className="qvrow">
                 <div className="col-qv-4">
                     <div className="input_area">
                         <label>First Name</label>
-                        <input
+                        {/* <input
                             type="text"
                             name="firstname"
                             placeholder="First Name"
                             value={values.firstname}
                             onChange={handleAddEmployeeInput}
                             className="q-custom-input-field"
+                        /> */}
+                         <TextField
+                          id="outlined-basic"
+                          type="text"
+                            name="firstname"
+                            placeholder="First Name"
+                            value={values.firstname}
+                            onChange={handleAddEmployeeInput}
+                            className="q-custom-input-field"
+                            variant="outlined"
+                            size="small"
                         />
                         <span className="input-error">
                             {values.errors.firstname !== "" ? values.errors.firstname : ""}
@@ -207,13 +294,24 @@ const EmployeeList = () => {
                 <div className="col-qv-4">
                     <div className="input_area">
                         <label>Last Name</label>
-                        <input
+                        {/* <input
                             type="text"
                             name="lastname"
                             placeholder="Last Name"
                             value={values.lastname}
                             onChange={handleAddEmployeeInput}
                             className="q-custom-input-field"
+                        /> */}
+                        <TextField
+                          id="outlined-basic"
+                          type="text"
+                          name="lastname"
+                          placeholder="Last Name"
+                          value={values.lastname}
+                          onChange={handleAddEmployeeInput}
+                          className="q-custom-input-field"
+                          variant="outlined"
+                          size="small"
                         />
                          <span className="input-error">
                             {values.errors.lastname !== "" ? values.errors.lastname : ""}
@@ -223,13 +321,24 @@ const EmployeeList = () => {
                 <div className="col-qv-4">
                     <div className="input_area">
                         <label>Email Address</label>
-                        <input
+                        {/* <input
                             type="text"
                             name="email"
                             placeholder="Email"
                             value={values.email}
                             onChange={handleAddEmployeeInput}
                             className="q-custom-input-field"
+                        /> */}
+                        <TextField
+                          id="outlined-basic"
+                          type="text"
+                          name="email"
+                          placeholder="Email"
+                          value={values.email}
+                          onChange={handleAddEmployeeInput}
+                          className="q-custom-input-field"
+                          variant="outlined"
+                          size="small"
                         />
                         <span className="input-error">
                             {values.errors.email !== "" ? values.errors.email : ""}
@@ -241,13 +350,24 @@ const EmployeeList = () => {
                 <div className="col-qv-4">
                     <div className="input_area">
                         <label>Phone Number</label>
-                        <input
+                        {/* <input
                             type="text"
                             name="phone"
                             placeholder="Phone"
                             value={values.phone}
                             onChange={handleAddEmployeeInput}
                             className="q-custom-input-field"
+                        /> */}
+                        <TextField
+                          id="outlined-basic"
+                          type="text"
+                            name="phone"
+                            placeholder="Phone"
+                            value={values.phone}
+                            onChange={handleAddEmployeeInput}
+                            className="q-custom-input-field"
+                          variant="outlined"
+                          size="small"
                         />
                         <span className="input-error">
                             {values.errors.phone !== "" ? values.errors.phone : ""}
@@ -257,13 +377,24 @@ const EmployeeList = () => {
                 <div className="col-qv-4">
                     <div className="input_area">
                         <label>PIN</label>
-                        <input
+                        {/* <input
                             type="text"
                             name="pin"
                             placeholder="Pin"
                             value={values.pin}
                             onChange={handleAddEmployeeInput}
                             className="q-custom-input-field"
+                        /> */}
+                         <TextField
+                          id="outlined-basic"
+                          type="text"
+                            name="pin"
+                            placeholder="Pin"
+                            value={values.pin}
+                            onChange={handleAddEmployeeInput}
+                            className="q-custom-input-field"
+                          variant="outlined"
+                          size="small"
                         />
                         <span className="input-error">
                             {values.errors.pin !== "" ? values.errors.pin : ""}
@@ -273,13 +404,24 @@ const EmployeeList = () => {
                 <div className="col-qv-4">
                     <div className="input_area">
                         <label>Wages ($/hr)</label>
-                        <input
+                        {/* <input
                             type="text"
                             name="wages"
                             placeholder="Wages Per Hour"
                             value={values.wages}
                             onChange={handleAddEmployeeInput}
                             className="q-custom-input-field"
+                        /> */}
+                        <TextField
+                          id="outlined-basic"
+                          type="text"
+                            name="wages"
+                            placeholder="Wages Per Hour"
+                            value={values.wages}
+                            onChange={handleAddEmployeeInput}
+                            className="q-custom-input-field"
+                          variant="outlined"
+                          size="small"
                         />
                         <span className="input-error">
                             {values.errors.wages !== "" ? values.errors.wages : ""}
@@ -291,13 +433,24 @@ const EmployeeList = () => {
                 <div className="col-qv-12">
                     <div className="input_area">
                         <label>Address</label>
-                        <input
+                        {/* <input
                             type="text"
                             name="address_line_1"
                             placeholder="Address"
                             value={values.address_line_1}
                             onChange={handleAddEmployeeInput}
                             className="q-custom-input-field"
+                        /> */}
+                        <TextField
+                          id="outlined-basic"
+                          type="text"
+                            name="address_line_1"
+                            placeholder="Address"
+                            value={values.address_line_1}
+                            onChange={handleAddEmployeeInput}
+                            className="q-custom-input-field"
+                          variant="outlined"
+                          size="small"
                         />
                         <span className="input-error">
                             {values.errors.address_line_1 !== "" ? values.errors.address_line_1 : ""}
@@ -307,13 +460,24 @@ const EmployeeList = () => {
                           
                 <div className="col-qv-4">
                     <div className="input_area">
-                        <input
+                        {/* <input
                             type="text"
                             name="city"
                             placeholder="City"
                             value={values.city}
                             onChange={handleAddEmployeeInput}
                             className="q-custom-input-field"
+                        /> */}
+                        <TextField
+                          id="outlined-basic"
+                          type="text"
+                            name="city"
+                            placeholder="City"
+                            value={values.city}
+                            onChange={handleAddEmployeeInput}
+                            className="q-custom-input-field"
+                          variant="outlined"
+                          size="small"
                         />
                         <span className="input-error">
                             {values.errors.city !== "" ? values.errors.city : ""}
@@ -322,13 +486,24 @@ const EmployeeList = () => {
                 </div>
                 <div className="col-qv-4">
                     <div className="input_area">
-                        <input
+                        {/* <input
                             type="text"
                             name="zipcode"
                             placeholder="Zip"
                             value={values.zipcode}
                             onChange={handleAddEmployeeInput}
                             className="q-custom-input-field"
+                        /> */}
+                        <TextField
+                          id="outlined-basic"
+                          type="text"
+                            name="zipcode"
+                            placeholder="Zip"
+                            value={values.zipcode}
+                            onChange={handleAddEmployeeInput}
+                            className="q-custom-input-field"
+                          variant="outlined"
+                          size="small"
                         />
                         <span className="input-error">
                             {values.errors.zipcode !== "" ? values.errors.zipcode : ""}
@@ -336,8 +511,8 @@ const EmployeeList = () => {
                     </div>
                 </div>
                 <div className="col-qv-4">
-                    <div className="input_area">
-                    <select
+                    <div className="input_area addEmployeeState">
+                    {/* <select
                         name="state"
                         placeholder="state"
                         className="q-custom-input-field"
@@ -347,38 +522,33 @@ const EmployeeList = () => {
                         {states && states.map((state, index) => (
                             <option key={index} value={state.State}>{state.State}</option>
                         ))}
-                    </select>
+                    </select> */}
+
+                    <Select size="small"  name="state"  value={values.state} onChange={handleAddEmployeeInput} className="q-custom-input-field"  displayEmpty >
+                        <MenuItem value="">Select a state</MenuItem>
+                        {states && states.map((state, index) => (
+                            <MenuItem key={index} value={state.State}>
+                                {state.State}
+                            </MenuItem>
+                        ))}
+                    </Select>
                         
                         <span className="input-error">
                             {values.errors.state !== "" ? values.errors.state : ""}
                         </span>
                     </div>
                 </div>
-                
               </div>
-              
-              
-            
-              
               <div className="q-add-categories-section-middle-footer plr0">
-                <button
-                    onClick={handleAddEmployee}
-                    className="quic-btn quic-btn-save"
-                >
-                  Add
-                </button>
-                <button
-                  onClick={closeModal}
-                  className="quic-btn quic-btn-cancle"
-                >
-                  Cancel
-                </button>
+                <button  onClick={handleAddEmployee} className="quic-btn quic-btn-save" > Add </button>
+                <button  onClick={closeModal} className="quic-btn quic-btn-cancle" >  Cancel  </button>
+              </div>
               </div>
             </div>
           </div>
+
+          </>
         )}
-        </div>
-        </div>
     </>
 }
 
