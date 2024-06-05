@@ -33,6 +33,9 @@ const EmployeeList = () => {
 
     const {
         handleAddEmployeeInput,
+        handlePhoneInput,
+        handlePinInput,
+        handleZipInput,
         values,
         handleAddEmployee,
         submitmessage,
@@ -116,7 +119,7 @@ const EmployeeList = () => {
       };
 
       const myStyles = {
-        width: "58rem",
+        // width: "58rem",
         position: "absolute",
         top: "47%",
         left: "50%",
@@ -238,7 +241,7 @@ const EmployeeList = () => {
 
       {showModal && (
         <>
-          <div className="q-custom-modal-container" id="addemployee">
+          <div className="q-custom-modal-container  box_shadow_div" id="addemployee">
 
             <div className="q-custom-modal-content modal_custom" style={myStyles}>
 
@@ -364,7 +367,8 @@ const EmployeeList = () => {
                             name="phone"
                             placeholder="Phone"
                             value={values.phone}
-                            onChange={handleAddEmployeeInput}
+                            inputProps={{ maxLength: 10 }}
+                            onChange={handlePhoneInput}
                             className="q-custom-input-field"
                           variant="outlined"
                           size="small"
@@ -391,7 +395,8 @@ const EmployeeList = () => {
                             name="pin"
                             placeholder="Pin"
                             value={values.pin}
-                            onChange={handleAddEmployeeInput}
+                            inputProps={{ maxLength: 4 }}
+                            onChange={handlePinInput}
                             className="q-custom-input-field"
                           variant="outlined"
                           size="small"
@@ -500,7 +505,8 @@ const EmployeeList = () => {
                             name="zipcode"
                             placeholder="Zip"
                             value={values.zipcode}
-                            onChange={handleAddEmployeeInput}
+                            inputProps={{ maxLength: 5 }}
+                            onChange={handleZipInput}
                             className="q-custom-input-field"
                           variant="outlined"
                           size="small"

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../../Styles/StoreSetting.css";
 import "../../../Styles/Settings/SystemAccess.css";
 import "../../../Styles/Common.css";
-import { Link } from "react-router-dom";
+import { Link ,useParams} from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -22,6 +22,8 @@ const Permission = () => {
     "/store-settings/permission/",
     ""
   );
+  const params = useParams();
+  // const employee_id = params.employee_id
   const employeeListDataState = useSelector((state) => state.employeelistData);
   const [permissionArray, setPermissionArray] = useState([]);
   const {

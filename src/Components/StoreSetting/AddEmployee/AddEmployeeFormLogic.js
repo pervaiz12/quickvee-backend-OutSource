@@ -105,6 +105,28 @@ const AddEmployeeFormLogic = ({ employeeList }) => {
     }));
   };
 
+  const handlePhoneInput = (event) => {
+    const value = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+    setValues((prevValues) => ({
+        ...prevValues,
+        phone: value,
+    }));
+};
+const handlePinInput = (event) => {
+    const value = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+    setValues((prevValues) => ({
+        ...prevValues,
+        pin: value,
+    }));
+};
+const handleZipInput = (event) => {
+  const value = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+  setValues((prevValues) => ({
+      ...prevValues,
+      zipcode: value,
+  }));
+};
+
   const handleAddEmployee = async (e) => {
     e.preventDefault();
     let { errors } = values;
@@ -197,6 +219,9 @@ const AddEmployeeFormLogic = ({ employeeList }) => {
 
   return {
     handleAddEmployeeInput,
+    handlePhoneInput,
+    handlePinInput,
+    handleZipInput,
     values,
     handleAddEmployee,
     submitmessage,
