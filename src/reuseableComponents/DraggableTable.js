@@ -22,6 +22,8 @@ import { fetchCategoriesData } from "../Redux/features/Categories/categoriesSlic
 import { fetchAttributesData } from "../Redux/features/Attributes/attributesSlice";
 import { useAuthDetails } from "../Common/cookiesHelper";
 import EditTaxesModal from "../Components/StoreSetting/Taxes/EditTaxesModal";
+import EditEmployeeModal from "../Components/StoreSetting/AddEmployee/EditEmployeeModal";
+import Permission from "../Assests/Employee/Permission.svg"
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
@@ -54,6 +56,9 @@ const DraggableTable = ({
   editTaxesObj = false,
   deleteTaxButton = false,
   table,
+  employeeTable = false,
+  editBtnEmployee= false,
+  states
 }) => {
   const dispatch = useDispatch();
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -62,6 +67,7 @@ const DraggableTable = ({
   const { deleteButtonEnable, deleteButtonFun } = deleteButton;
   const { deleteTaxButtonEnable, deletetaxButtonFun } = deleteTaxButton;
   const { editButtonEnable, editButtonurl } = editBtnCategory;
+  const { editButtonEnableEmployee, editButtonurlEmployee } = editBtnEmployee;
 
   const reorder = (list, startIndex, endIndex) => {
     const result = Array.from(list);
@@ -181,7 +187,6 @@ const DraggableTable = ({
                   {tableRow &&
                     tableRow.length >= 1 &&
                     tableRow.map((item, index) => {
-      
                       return (
                       <Draggable
                         key={item.id}
@@ -197,7 +202,13 @@ const DraggableTable = ({
                             <StyledTableCell>
                               <img src={SortIcon} alt="add-icon" />
                             </StyledTableCell>
-                            <StyledTableCell>{item.title}</StyledTableCell>
+                            { employeeTable  ?  (<StyledTableCell>{item.f_name} {item.l_name}</StyledTableCell>) : ""  }
+                            { employeeTable ?  (<StyledTableCell>{item.phone}</StyledTableCell>) :""  }
+                            { employeeTable ?  (<StyledTableCell>{item.email}</StyledTableCell>) : ""  }
+                            { employeeTable?  (<StyledTableCell>{item.pin}</StyledTableCell>) : "" }
+                            { employeeTable ?  (<StyledTableCell>{item.role}</StyledTableCell>) : ""  }
+
+                            { employeeTable ?  "" : <StyledTableCell>{item.title}</StyledTableCell>  }
                             {item.percent ? (
                               <StyledTableCell>{item.percent}</StyledTableCell>
                             ) : ""
@@ -270,7 +281,32 @@ const DraggableTable = ({
 
                               )
                             }
+
+                            {editButtonEnableEmployee && (
+                              <>
+                              <StyledTableCell>
+                                <Link to={`${editButtonurlEmployee}${item.id}`}>
+                                  <img
+                                    // className="edit_center w-8 h-8"
+                                    src={Permission}
+                                    alt="Permission-icon"
+                                  />
+                                </Link>
+                              </StyledTableCell>
+                              </>
+                            )}
                             
+                            {employeeTable && (
+                                  <>
+                                  <StyledTableCell align="right">
+                                    <EditEmployeeModal
+                                      selectedTaxe={item}
+                                      employee={item} 
+                                      states={states}
+                                    />
+                                  </StyledTableCell>
+                                  </>
+                                )}
                            
                             {deleteButton && (
                               <StyledTableCell>

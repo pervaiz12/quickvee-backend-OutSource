@@ -429,4 +429,10 @@
 }
 /* newcss End */
   
+.employeePromiss {
+    display: flex;
+}
 
+.addEmployeeState{
+    transform: translate(0px, 6px);
+}

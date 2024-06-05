@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../../../Styles/StoreSetting.css";
 import "../../../Styles/Settings/SystemAccess.css";
 import "../../../Styles/Common.css";
-import { Link } from "react-router-dom";
+import { Link ,useParams} from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -11,6 +11,7 @@ import {
 } from "../../../Redux/features/StoreSettings/AddEmployee/AddEmployeeSlice";
 import EditPermissionLogic from "../AddEmployee/EditPermissionLogic";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import AddNewCategory from "../../../Assests/Taxes/Left.svg";
 
 const Permission = () => {
   const location = useLocation();
@@ -21,6 +22,8 @@ const Permission = () => {
     "/store-settings/permission/",
     ""
   );
+  const params = useParams();
+  // const employee_id = params.employee_id
   const employeeListDataState = useSelector((state) => state.employeelistData);
   const [permissionArray, setPermissionArray] = useState([]);
   const {
@@ -100,11 +103,14 @@ const Permission = () => {
     <div className="box">
       <div className="q-attributes-main-page">
         <div className="box_shadow_div_heading">
-          <div className="page_heading_area">
+          <div className="page_heading_area ">
             <Link to="/store-settings/addemployee">
+              <div className="employeePromiss">
+              <img src={AddNewCategory} alt="Add-New-Category" />
               <h1>
                 {employeedata.f_name} {employeedata.l_name}'s Permissions
               </h1>
+              </div>
             </Link>
           </div>
           <div className="box_shadow_innerdiv">
