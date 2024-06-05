@@ -72,7 +72,7 @@ const EditAdminFunctionality = () => {
     if (name === "phone") {
       const numericValue = value.replace(/[^0-9]/g, "");
       if (numericValue == "") {
-        updatedErrors[name] = "";
+        updatedErrors[name] = `Please fill the ${name} field`;
       } else if (numericValue.length !== 10) {
         updatedErrors[name] = "Phone number must be 10 digits";
       } else {
@@ -101,14 +101,21 @@ const EditAdminFunctionality = () => {
     let error = false;
     let updatedErrors = { ...errors };
     if (editData.owner_name == "") {
-      updatedErrors.owner_name = "`please fill the owner_name field";
+      updatedErrors.owner_name = "Please fill the owner_name field";
       error = true;
     }
     if (editData.email == "") {
-      updatedErrors.email = "`please fill the email field";
+      updatedErrors.email = "Please fill the email field";
       error = true;
     }
-    setErrors({ ...errors, updatedErrors });
+    if (editData.phone == "") {
+      updatedErrors.phone = "Please fill the phone field";
+      error = true;
+    }
+
+    // setErrors({ ...errors, updatedErrors });
+    setErrors(updatedErrors);
+    // console.log(errors);
     if (error == true) {
       return false;
     } else {
@@ -121,11 +128,11 @@ const EditAdminFunctionality = () => {
     // console.log(newData)
     const data = {
       admin_id: editData.id,
-      name: editData.owner_name,
-      owner_name: editData.owner_name,
-      password: editData.password1,
+      name: editData.owner_name.trim(),
+      owner_name: editData.owner_name.trim(),
+      password: editData.password1.trim(),
       phone: editData.phone,
-      email: editData.email,
+      email: editData.email.trim(),
       ...newData,
     };
     let validate = Object.values(errors).filter((error) => error !== "").length;
@@ -149,7 +156,7 @@ const EditAdminFunctionality = () => {
               phone: "",
               password: "",
             });
-            ToastifyAlert("Update Admin  Successfully!", "success");
+            ToastifyAlert(result?.data?.message, "success");
             navigate("/users/admin");
           });
       }

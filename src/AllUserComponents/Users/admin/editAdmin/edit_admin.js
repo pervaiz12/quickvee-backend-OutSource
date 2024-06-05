@@ -4,6 +4,7 @@ import EditAdminFunctionality from "./editAdminFunctionality";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
 import AddSvg from "../../../../Assests/Dashboard/Left.svg";
 import CircularProgress from "@mui/material/CircularProgress";
+import PasswordShow from "../../../../Common/passwordShow";
 
 export default function EditAdmin() {
   const {
@@ -17,6 +18,7 @@ export default function EditAdmin() {
   } = EditAdminFunctionality();
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+  const { showpPassword, jsxData } = PasswordShow();
 
   const { id } = useParams();
   const navigate = useNavigate();
@@ -38,7 +40,9 @@ export default function EditAdmin() {
           <div className="qvrow">
             <div className="col-qv-6">
               <div className="input_area">
-                <label>Owner Name</label>
+                <label>
+                  Owner Name<span className="Asterisk_error">*</span>
+                </label>
                 <input
                   className=""
                   type="text"
@@ -52,7 +56,9 @@ export default function EditAdmin() {
 
             <div className="col-qv-6">
               <div className="input_area">
-                <label>Email</label>
+                <label>
+                  Email<span className="Asterisk_error">*</span>
+                </label>
                 <input
                   className=""
                   type="text"
@@ -61,6 +67,7 @@ export default function EditAdmin() {
                   // value={customerData && customerData.email}
                   // value={store.ownerName}
                   onChange={handleChangeAdmin}
+                  autoComplete="off"
                 />
                 <label className="error">{errors.email}</label>
               </div>
@@ -68,21 +75,25 @@ export default function EditAdmin() {
           </div>
           <div className="qvrow">
             <div className="col-qv-6">
-              <div className="input_area">
+              <div className="input_area password-show-input">
                 <label>Password</label>
                 <input
                   className=""
-                  type="text"
+                  type={showpPassword ? "text" : "password"}
                   name="password1"
                   value={editData.password1}
                   onChange={handleChangeAdmin}
+                  autoComplete="off"
                   // value={store.email}
                 />
+                {jsxData(editData.password1)}
               </div>
             </div>
             <div className="col-qv-6">
               <div className="input_area">
-                <label>Phone</label>
+                <label>
+                  Phone<span className="Asterisk_error">*</span>
+                </label>
                 <input
                   className=""
                   type="text"
