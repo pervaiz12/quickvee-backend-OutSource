@@ -35,6 +35,10 @@ export default function SettingStoreOption() {
 
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+    
+  const [storeData, setStoreData] = useState({});
+  const [userData, setUserData] = useState({});
+  const [userOptionData, setUserOptionData] = useState({});
 
   const checkBoxList = [
     "orderNumebrEnabled",
@@ -143,7 +147,11 @@ export default function SettingStoreOption() {
       setFetchLoading(true);
       dispatch(fetchStoreSettingOptionData(data))
         .then((res) => {
-          // console.log(res);
+          if(res?.payload?.status){
+            setStoreData(res?.payload);
+            setUserData(res?.payload?.user_data);
+            setUserOptionData(res?.payload?.user_option_data)
+          }
         })
         .catch(() => {
           ToastifyAlert("Error!", "error");
@@ -154,13 +162,6 @@ export default function SettingStoreOption() {
     }
   }, []);
 
-  const storeData = useSelector((state) => state?.settingstoreoption);
-  const userData = useSelector(
-    (state) => state?.settingstoreoption?.storeoptionData?.user_data
-  );
-  const userOptionData = useSelector(
-    (state) => state?.settingstoreoption?.storeoptionData?.user_option_data
-  );
 
   // fill the state when data load
   useEffect(() => {
@@ -258,7 +259,6 @@ export default function SettingStoreOption() {
           setLoading(false);
         });
     }
-
   };
 
 
@@ -271,7 +271,7 @@ export default function SettingStoreOption() {
           </div>
         ) : (
           <>
-            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4 store-setting-mx-10 store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
+            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
               <div class="d-flex">
                 <h2 className="store-setting-h1 store-setting-inline-block">
                   <b>Enable Order Number</b>
@@ -325,7 +325,7 @@ export default function SettingStoreOption() {
             </div>
 
             {/* Future Order */}
-            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4 store-setting-mx-10 store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
+            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
               <h2 className="store-setting-h1 store-setting-pb-1-5 store-setting-inline-block">
                 <b>Future Order</b>
               </h2>
@@ -359,7 +359,7 @@ export default function SettingStoreOption() {
                 />
               </div>
             </div>
-            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4 store-setting-mx-10 store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
+            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
               <h2 className="store-setting-h1 store-setting-pb-1-5 store-setting-inline-block">
                 <b>Dispatch Center</b>
               </h2>
@@ -411,7 +411,7 @@ export default function SettingStoreOption() {
             </div>
 
             {/* Payment Options */}
-            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4 store-setting-mx-10 store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
+            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
               <h2 className="store-setting-h1 store-setting-pb-1-5">
                 <b>Payment Options</b>
               </h2>
@@ -426,9 +426,9 @@ export default function SettingStoreOption() {
                     name="enabledCashPaymentDelivery"
                     onChange={handleOrderChange}
                     disabled={
-                      +storeData?.storeoptionData?.user_option_data
+                      +storeData?.user_option_data
                         ?.cc_payment === 0 ||
-                      +storeData?.storeoptionData?.user_option_data
+                      +storeData?.user_option_data
                         ?.cc_payment === 1
                     }
                   />
@@ -445,9 +445,9 @@ export default function SettingStoreOption() {
                     name="enabledCashPaymenyPickup"
                     onChange={handleOrderChange}
                     disabled={
-                      +storeData?.storeoptionData?.user_option_data
+                      +storeData?.user_option_data
                         ?.cc_payment === 0 ||
-                      +storeData?.storeoptionData?.user_option_data
+                      +storeData?.user_option_data
                         ?.cc_payment === 1
                     }
                   />
@@ -520,7 +520,7 @@ export default function SettingStoreOption() {
             </div>
 
             {/* Printing */}
-            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4 store-setting-mx-10 store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
+            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
               <h2 className="store-setting-h1 store-setting-pb-1-5">
                 <b>Printing</b>
               </h2>
@@ -553,7 +553,7 @@ export default function SettingStoreOption() {
             </div>
 
             {/* Guest Checkout */}
-            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4 store-setting-mx-10 store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
+            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
               <div class="d-flex">
                 <h2 className="store-setting-h1 store-setting-pb-1-5 store-setting-inline-block">
                   <b>Guest Checkout</b>
