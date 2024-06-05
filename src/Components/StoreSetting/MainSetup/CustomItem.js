@@ -41,13 +41,7 @@ const CustomTimePicker = ({
   const [endTime, setEndTime] = useState("");
   const [startTimeIndex, setStartTimeIndex] = useState(0);
   const [endTimeIndex, setEndTimeIndex] = useState(0);
-  console.log(
-    "startTimeIndex: ",
-    startTimeIndex,
-    "endTimeIndex: ",
-    endTimeIndex,
-    dayName
-  );
+ 
   useEffect(() => {
     setStartTime(formatTime(OpenTime));
     setEndTime(CloseTime ? formatTime(CloseTime) : "");

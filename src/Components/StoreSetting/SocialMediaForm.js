@@ -14,20 +14,20 @@ const SocialMediaForm = ({infoRecord,onChangeHandle, handleSubmitInfo }) => {
           <Grid item xs={12} sm={6}>
             <BasicTextFields
               type={"text"}
-              name={"address_1"}
+              name={"facebookUrl"}
               placeholder="Facebook Url"
               value={infoRecord.facebookUrl}
-              // onChangeFun={onChangeHandle}
+              onChangeFun={onChangeHandle}
             />
             {/* <span className='error'>{store.errors.ownerName}</span> */}
           </Grid>
           <Grid item xs={12} sm={6}>
             <BasicTextFields
               type={"text"}
-              name={"address_1"}
+              name={"instagramUrl"}
               placeholder="Instagram Url"
               value={infoRecord.instagramUrl}
-              // onChangeFun={onChangeHandle}
+              onChangeFun={onChangeHandle}
             />
             {/* <span className='error'>{store.errors.ownerName}</span> */}
           </Grid>

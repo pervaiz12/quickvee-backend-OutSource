@@ -4,8 +4,9 @@ import React, { useState } from "react";
 import {
   BASE_URL,
   GET_Edit_STORE_INFO,
-  UPDATE_STORE_INFO,
+  // UPDATE_STORE_INFO,
   CHANGE_PASSWORD_STORE,
+  UPDATE_STORE_INFO,
 } from "../../../Constants/Config";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 export default function InfoFunction() {
@@ -33,8 +34,8 @@ export default function InfoFunction() {
     zip: "",
     state: "",
     phone: "",
-    facebookUrl:"",
-    instagramUrl:"",
+    facebookUrl: "",
+    instagramUrl: "",
   });
 
   // ============================password ======================
@@ -159,7 +160,7 @@ export default function InfoFunction() {
         Authorization: `Bearer ${userTypeData?.token}`,
       },
     });
-
+    console.log(response);
     if (response.data.status == 200) {
       const merchant_id =
         response.data.message.merchant_id !== null
@@ -205,6 +206,14 @@ export default function InfoFunction() {
         response.data.message.a_phone !== null
           ? response.data.message.a_phone
           : "";
+      const fb_url =
+        response.data.message.a_phone !== null
+          ? response.data.message.fb_url
+          : "";
+      const insta_url =
+        response.data.message.a_phone !== null
+          ? response.data.message.insta_url
+          : "";
       setApprove("approve");
       setImageBanner(banner_img);
       setImage(img);
@@ -222,8 +231,8 @@ export default function InfoFunction() {
         zip: a_zip,
         state: state,
         phone: phone,
-        fb_url: "",
-        insta_url: "",
+        facebookUrl: fb_url,
+        instagramUrl: insta_url,
       });
     }
   };
@@ -321,6 +330,8 @@ export default function InfoFunction() {
           city: infoRecord.city,
           state: infoRecord.state,
           domain: infoRecord.domain,
+          fb_url: infoRecord.facebookUrl,
+          insta_url: infoRecord.instagramUrl,
           imageBanner: imageBanner,
           original_name: image,
           approve: approve,
@@ -342,6 +353,20 @@ export default function InfoFunction() {
     }
   };
   const currentPassordValidate = (passwordError) => {
+    if (passwordInput.password === "") {
+      setPasswordError((prevState) => ({
+        ...prevState,
+        password: "Please enter Password.",
+      }));
+      return;
+    }
+    if (passwordInput.confirmPassword === "") {
+      setPasswordError((prevState) => ({
+        ...prevState,
+        confirmPassword: "Please enter Confirm Password.",
+      }));
+      return;
+    }
     if (passwordError.password === "" && passwordError.confirmPassword === "") {
       return true;
     } else {

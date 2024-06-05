@@ -62,7 +62,7 @@ const StoreWorkingHrs = ({
   );
 
   const defaultDays = setupDataState?.time_slot ? setupDataState.time_slot : "";
-  console.log("CustomTimePicker", days);
+
   useEffect(() => {
     if (setupDataState?.time_slot) {
       try {

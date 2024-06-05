@@ -62,7 +62,7 @@ module.exports = Object.freeze({
   // Update Store Setting options api
   // UPDATE_STORE_OPTIONS_DATA: "Store_setting_api/update_store_options_data",
   UPDATE_STORE_OPTIONS_DATA: "Store_setting_react_api/update_store_option",
-
+  UPDATE_STORE_INFO: "Store_setting_react_api/update_store_info",
 
   //Coupon API Calls
   COUPON_LIST: "CouponReactApi/get_coupon_details",
@@ -218,7 +218,7 @@ module.exports = Object.freeze({
   GET_ADD_ADMIN: "UserController/insert_admin", //add admin
   GET_UPDATE_MERCHANT: "UserController/merchant_update",
   GET_Edit_STORE_INFO: "UserController/store_info",
-  UPDATE_STORE_INFO: "UserController/createMenuLink",
+  // UPDATE_STORE_INFO: "UserController/createMenuLink",
 
   // vendor Report List API
   VENDORS_REPORT_LIST: "vendor_report_api/vendor_list",

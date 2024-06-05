@@ -7,11 +7,11 @@ import { Grid } from "@mui/material";
 const OnlineOrderingPage = ({ onlineorderstatus }) => {
   const [isEnableOrderNumber, setisEnableOrderNumber] = useState("");
   const [isChecked, setisChecked] = useState("");
-  console.log("isEnableOrderNumber store", isEnableOrderNumber);
+
   const dispatch = useDispatch();
 
   const handleCheckedSwitch = (e) => {
-    console.log("handleCheckedSwitch", e.target.checked);
+
 
     setisChecked(e.target.checked ? "0" : "1");
     setisEnableOrderNumber(e.target.checked ? "1" : "0");
@@ -21,7 +21,6 @@ const OnlineOrderingPage = ({ onlineorderstatus }) => {
     (state) => state?.StoreSetupList?.storesetupData
   );
 
-  console.log("setupDataState", setupDataState);
   useEffect(() => {
     if (setupDataState?.offline) {
       setisChecked(setupDataState?.offline);
