@@ -538,6 +538,11 @@ const menuItems = [
             text: "Check ID verification",
             link: "/store-reporting/id-verification",
           },
+          {
+            id: 93,
+            text: "Inventory List",
+            link: "/store-reporting/inventory-list",
+          },
         ],
       },
       {

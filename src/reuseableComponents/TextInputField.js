@@ -11,6 +11,7 @@ export default function BasicTextFields({
   required,
   name,
   disable,
+  onBlurFunction,
 }) {
   return (
     <FormControl fullWidth>
@@ -25,6 +26,7 @@ export default function BasicTextFields({
         variant="outlined"
         size="small"
         disabled={disable}
+        onBlur={onBlurFunction}
       />
     </FormControl>
   );

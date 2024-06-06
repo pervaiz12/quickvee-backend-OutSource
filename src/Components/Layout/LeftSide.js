@@ -76,6 +76,7 @@ import Items_sales_profit_record from "../Reporting/itemSalesProfitRecord/items_
 import RefundSummary from "../Reporting/RefundSummary/RefundSummary";
 import EditPurchaseOrder from "../PurchaseOrders/EditPurchaseOrder";
 import ModifyPurchaseOrder from "../PurchaseOrders/ModifyPurchaseOrder";
+import InventoryList from "../Reporting/inventoryList/inventoryList";
 
 const LeftSide = ({ visible }) => {
   useEffect(() => {
@@ -125,6 +126,7 @@ const LeftSide = ({ visible }) => {
           {visible === "report-sales-person" && <MainSalesPerson />}
           {visible === "id-verification" && <CheckIDVerifyMain />}
           {/* {visible === "credit-debit-sales" && < />} */}
+          {visible === "inventory-list" && <InventoryList />}
           {visible === "instant-activity" && <InstantActvity />}
           {visible === "overall-top" && <TopSallerReport />}
           {visible === "employee-working-hours" && <EmployeeWorking />}
