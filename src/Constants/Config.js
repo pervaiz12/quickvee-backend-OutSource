@@ -1,6 +1,5 @@
 // All api calls are initialized in this component for this application
 //remove unwanted and credentials of other app
-
 module.exports = Object.freeze({
   BASE_URL: "https://sandbox.quickvee.net/",
 
@@ -84,9 +83,8 @@ module.exports = Object.freeze({
   // UPDATE_INVENTORY: "api/SettingsReact_api/update_inventory_info",
   UPDATE_INVENTORY: "StoreReact_setting_api1/update_inventory_info",
 
-
-  // Store setup 
-  UPDATE_STORE_SETUP : "Store_setting_react_api/update_store_setup",
+  // Store setup
+  UPDATE_STORE_SETUP: "Store_setting_react_api/update_store_setup",
 
   // get Store Setting alerts list api
   GET_STORE_ALERTS_DATA: "Store_setting_api/store_alerts_list",
@@ -302,6 +300,7 @@ module.exports = Object.freeze({
   DELETE_BREAK: "Timesheet_react_api/delete_breaks",
 
   CHANGE_PASSWORD_STORE: "Store_setting_react_api/change_password",
+  INVENTORY_LIST: "ReportingReactapi/JsonDataproductnew",
 });
 
 // All api calls are initialized in this component for this application

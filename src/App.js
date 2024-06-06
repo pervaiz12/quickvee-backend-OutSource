@@ -366,6 +366,11 @@ function App() {
             path="/store-reporting/id-verification"
             element={<Main visible={"id-verification"} />}
           />
+          <Route
+            exact
+            path="/store-reporting/inventory-list"
+            element={<Main visible={"inventory-list"} />}
+          />
 
           <Route
             exact
