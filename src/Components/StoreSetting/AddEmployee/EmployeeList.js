@@ -16,6 +16,7 @@ import { Box, Button, Modal } from "@mui/material";
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
+import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 
 
 const EmployeeList = () => {
@@ -100,7 +101,7 @@ const EmployeeList = () => {
         employeeListDataState.employeelistData,
       ]);
 
-      const handleDeleteEmployee = (id) => {
+      const handleDeleteEmployee = async (id) => {
         const del_data = {
             merchant_id:merchant_id,
             employee_id:id,
@@ -111,7 +112,9 @@ const EmployeeList = () => {
         );
         if (userConfirmed) {
           if (id) {
-            dispatch(deleteEmployee(del_data));
+            // dispatch(deleteEmployee(del_data));
+            const response = await dispatch(deleteEmployee(del_data)).unwrap();
+            ToastifyAlert(response.message, "success");
           }
         } else {
           console.log("Deletion canceled by employee");

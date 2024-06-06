@@ -247,8 +247,8 @@
 
 /* Style the checkmark/indicator */
 .category-checkmark-div .category-checkmark-label .category-checkmark:after {
-  left: 8px;
-  top: 4px;
+  left: 7px;
+  top: 3px;
   width: 5px;
   height: 10px;
   border: solid white;
@@ -421,6 +421,7 @@ h3.popup_msg {
   background-color: white;
   border-radius: 8px;
   margin-top: 1rem;
+  cursor: pointer;
 }
 
 .product_table_image_msg {

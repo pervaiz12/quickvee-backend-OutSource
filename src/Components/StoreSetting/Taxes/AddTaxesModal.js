@@ -11,6 +11,7 @@ import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { BASE_URL, ADD_TAXES } from "../../../Constants/Config";
 import BasicTextFields from "../../../reuseableComponents/TextInputField";
 import TextField from "@mui/material/TextField";
+import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 const AddTaxesModal = () => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -96,6 +97,7 @@ const AddTaxesModal = () => {
       // alert(update_message);
       if (data == "Success") {
         // alert(update_message);
+        ToastifyAlert(update_message, "success");
         let data = {
           merchant_id: merchant_id,
           ...userTypeData

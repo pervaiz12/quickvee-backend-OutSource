@@ -14,6 +14,7 @@ import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import CheckBoxField from "../../reuseableComponents/CheckBoxField";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const AddCategory = ({ seVisible }) => {
   const {
@@ -115,6 +116,7 @@ const AddCategory = ({ seVisible }) => {
       // alert(update_message);
       console.log(update_message);
       if (data == "Success") {
+        ToastifyAlert(update_message, "success");
         seVisible("CategoryDetail");
         // alert(update_message)
       } else if (

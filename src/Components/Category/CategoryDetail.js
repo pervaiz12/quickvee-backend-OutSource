@@ -21,6 +21,7 @@ import DraggableTable from "../../reuseableComponents/DraggableTable";
 import RadioSelect from "./RadioSelect";
 import { BASE_URL, SORT_CATOGRY_DATA } from "../../Constants/Config";
 import { useAuthDetails } from "./../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const CategoryDetail = ({ seVisible }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -75,6 +76,7 @@ const CategoryDetail = ({ seVisible }) => {
     if (userConfirmed) {
       if (id) {
         dispatch(deleteCategory(data));
+        ToastifyAlert("Category Deleted", "success");
       }
     } else {
       console.log("Deletion canceled by user");
@@ -94,6 +96,7 @@ const CategoryDetail = ({ seVisible }) => {
     const rep = await dispatch(updateCategoryStatus(data));
     if (rep.payload === "Success") {
       // alert("Status Success Updated");
+      ToastifyAlert("Status Success Updated", "success");
       let datas = {
         merchant_id,
       };
@@ -186,7 +189,7 @@ const CategoryDetail = ({ seVisible }) => {
     <>
       <div className="box">
         <div className="q-category-bottom-detail-section">
-          <div className="">
+          <div className="categoryTable">
             <div className="q-category-bottom-header">
               <span>Category</span>
               <p onClick={() => seVisible("CategoryAlert")}>

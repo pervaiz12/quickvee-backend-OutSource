@@ -98,6 +98,9 @@ const AddEmployeeSlice = createSlice({
                     return employee;
                 }
             });
+        },
+        clearPermission: (state)=>{
+            state.permissionData = []
         }
     },
     extraReducers: (builder) => {
@@ -165,5 +168,5 @@ const AddEmployeeSlice = createSlice({
     }
 })
 
-export const { addToEmployeeList, editEmployee } = AddEmployeeSlice.actions;
+export const { addToEmployeeList, editEmployee, clearPermission } = AddEmployeeSlice.actions;
 export default AddEmployeeSlice.reducer

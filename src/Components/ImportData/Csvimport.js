@@ -7,8 +7,11 @@ import Alert from '@mui/material/Alert';
 import IconButton from '@mui/material/IconButton';
 import Collapse from '@mui/material/Collapse';
 import CloseIcon from '@mui/icons-material/Close';
+import { useAuthDetails } from "../../Common/cookiesHelper";
+import { CircularProgress } from "@mui/material";
 
 import Modal from '@mui/material/Modal';
+import { ToastifyAlert } from '../../CommonComponents/ToastifyAlert';
 // import Box from '@mui/material/Box';
 // import Collapse from '@mui/material/Collapse';
 // import Alert from '@mui/material/Alert';
@@ -22,7 +25,11 @@ const FileUpload = () => {
   const [filename, setfilename] = useState(null);
   const [alertmsg,setalertmsg] = useState(null);
   const [openAlert, setOpenAlert] = useState();
+  const [loading, setLoading] = useState(false);
 
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } = useAuthDetails();
+  let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
+  const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
   const handleDrag = (e) => {
     e.preventDefault();
     e.stopPropagation();
@@ -78,29 +85,34 @@ const FileUpload = () => {
   const handleSubmit = async () => {
     // Handle your submit logic with fileData
     // console.log('Submitting data:', fileData);
-   
     const fileInput = document.getElementById('input-file-upload');
-    const csvfileData = fileInput.files[0];    
+    const csvfileData = fileInput.files[0]; 
+    if(!csvfileData){
+      return alert("Please Upload Files With .CSV Extenion Only.")
+    }
+    setLoading(true);
     const formData = new FormData();
-
     // Append the merchant_id and the file to the FormData
-    formData.append("merchant_id", "MAL0100CA");
+    formData.append("merchant_id", merchant_id);
     formData.append("file", csvfileData);
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("login_type", userTypeData?.login_type);
     
     const response = await axios.post(BASE_URL + IMPORT_DATA, formData, {
-      headers: { "Content-Type": "multipart/form-data" },
+      headers: { "Content-Type": "multipart/form-data", "Authorization": `Bearer ${userTypeData?.token}`, },
     });
     if (response) {
       // console.log(response);
-      
-      setalertmsg(response.data.message);
+      ToastifyAlert(response.data.message, "success");
+      // setalertmsg(response.data.message);
       // alert(response.data.message);
-      setOpenAlert(true);
+      // setOpenAlert(true);
       // console.log(alertmsg);
       setfilename('');
     } else {
       alert('Something went wrong !');
     }
+    setLoading(false);
     // Add your specific submit logic here
     // For example, you can send the data to a server
   };
@@ -211,8 +223,15 @@ const FileUpload = () => {
               handleOpenModal();
             }}
             className="imp_btn"
+            disabled={loading}
           >
-            Import
+            {loading ? (
+                  <Box className="loader-box">
+                    <CircularProgress />
+                  </Box>
+                ) : (
+                  "Import"
+                )}
           </button>
 </div>
 

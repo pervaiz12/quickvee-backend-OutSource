@@ -7,6 +7,7 @@ import Validation from "../../../Constants/Validation";
 // import { useNavigate } from "react-router-dom";
 import { BASE_URL, ADDEDIT_EMPLOYEE } from "../../../Constants/Config";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 
 const AddEmployeeFormLogic = ({employee, employeeList}) => {
   const dispatch = useDispatch();
@@ -174,7 +175,7 @@ const AddEmployeeFormLogic = ({employee, employeeList}) => {
             const response = await axios.post(BASE_URL + ADDEDIT_EMPLOYEE, data, { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}` } })
             console.log(response.data);
             if ( response.data.status === true) {
-              
+              ToastifyAlert(response?.data?.message, "success");
               dispatch(editEmployee(data));
               setShowModal(false);
               // Navigate("/");

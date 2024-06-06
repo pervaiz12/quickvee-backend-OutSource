@@ -436,3 +436,12 @@
 .addEmployeeState{
     transform: translate(0px, 6px);
 }
+
+.addEmployeeState .q-custom-input-field{
+    border-radius: 0.375rem; /* Adjust the border radius as needed */
+    padding-left: 0rem;
+    padding-right: 0rem;
+    padding-top: 0rem;
+    padding-bottom: 0rem;
+    margin-bottom: 1rem;
+}

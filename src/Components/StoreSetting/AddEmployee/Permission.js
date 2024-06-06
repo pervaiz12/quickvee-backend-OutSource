@@ -6,12 +6,14 @@ import { Link ,useParams} from "react-router-dom";
 import { useLocation } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  clearPermission,
   fetchEmployeeData,
   fetchPermissionData,
 } from "../../../Redux/features/StoreSettings/AddEmployee/AddEmployeeSlice";
 import EditPermissionLogic from "../AddEmployee/EditPermissionLogic";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import AddNewCategory from "../../../Assests/Taxes/Left.svg";
+import Loader from "../../../CommonComponents/Loader";
 
 const Permission = () => {
   const location = useLocation();
@@ -22,8 +24,9 @@ const Permission = () => {
     "/store-settings/permission/",
     ""
   );
-  const params = useParams();
+  // const params = useParams();
   // const employee_id = params.employee_id
+  const [fetchDataLoading, setFetchDataLoading] = useState(false);
   const employeeListDataState = useSelector((state) => state.employeelistData);
   const [permissionArray, setPermissionArray] = useState([]);
   const {
@@ -48,6 +51,9 @@ const Permission = () => {
     if (data && employee_id != "undefined") {
       dispatch(fetchEmployeeData(data));
       dispatch(fetchPermissionData(data));
+    }
+    return()=>{
+      dispatch(clearPermission())
     }
   }, []);
 
@@ -100,8 +106,16 @@ const Permission = () => {
   }, [permissionList, employeedata]);
 
   return (
+    // fro laoder Start 
     <div className="box">
-      <div className="q-attributes-main-page">
+      {/* edit modal */}
+      { employeeListDataState.loading ? (
+        <div class="loading-box">
+          <Loader />
+        </div>
+      ) : (
+        <>
+        <div className="q-attributes-main-page">
         <div className="box_shadow_div_heading">
           <div className="page_heading_area ">
             <Link to="/store-settings/addemployee">
@@ -319,7 +333,13 @@ const Permission = () => {
           </div>
         </div>
       </div>
-    </div>
+
+        </>
+        )}
+      </div>
+    // fro laoder End
+
+    
   );
 };
 

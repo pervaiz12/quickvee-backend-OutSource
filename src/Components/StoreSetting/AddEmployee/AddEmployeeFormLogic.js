@@ -7,6 +7,7 @@ import Validation from "../../../Constants/Validation";
 // import { useNavigate } from "react-router-dom";
 import { BASE_URL, ADDEDIT_EMPLOYEE } from "../../../Constants/Config";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 
 const AddEmployeeFormLogic = ({ employeeList }) => {
   const dispatch = useDispatch();
@@ -177,6 +178,7 @@ const handleZipInput = (event) => {
         });
         console.log(response.data);
         if (response.data.status === true) {
+          ToastifyAlert(response?.data?.message, "success");
           const latest_employee = response.data.inserted_data;
           dispatch(addToEmployeeList(latest_employee));
           setShowModal(false);

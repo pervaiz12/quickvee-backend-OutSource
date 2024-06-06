@@ -848,62 +848,62 @@ const menuItems = [
       { id: 71, text: "System Access", link: "/store-settings/system-access" },
     ],
   },
-  {
-    id: 10,
-    icon: (
-      <img
-        src={dataIcon}
-        alt="Import Data"
-        className="h-6 w-10 mt-4 mb-4 hoverable-image"
-      />
-    ),
-    activeIcon: (
-      <img src={DataIconActive} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
-    ),
-    text: "Import/Export",
-    dropdownItems: [
-      {
-        id: 1,
-        icon: (
-          <img
-            src={dataIcon}
-            alt="Import Data"
-            className="h-6 w-10 mt-4 mb-4 hoverable-image"
-          />
-        ),
-        activeIcon: (
-          <img
-            src={DataIconActive}
-            alt="Import"
-            className="h-6 w-10 mt-4 mb-4 "
-          />
-        ),
-        text: "Import Inventory",
-        link: "#",
-      },
-      {
-        id: 2,
-        icon: (
-          <img
-            src={dataIcon}
-            alt="Export Sold Items"
-            className="h-6 w-10 mt-4 mb-4 hoverable-image"
-          />
-        ),
-        activeIcon: (
-          <img
-            src={DataIconActive}
-            alt="Import"
-            className="h-6 w-10 mt-4 mb-4 "
-          />
-        ),
-        text: "Export Sold Items",
-        link: "/import-data",
-      },
-      // { id: 83, text: "Tip Report", link: "/store-reporting/tip-report" },
-      // { id: 84, text: "Coupon Report", link: "/store-reporting/coupon-report" },
-    ],
-  },
+  // {
+  //   id: 10,
+  //   icon: (
+  //     <img
+  //       src={dataIcon}
+  //       alt="Import Data"
+  //       className="h-6 w-10 mt-4 mb-4 hoverable-image"
+  //     />
+  //   ),
+  //   activeIcon: (
+  //     <img src={DataIconActive} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
+  //   ),
+  //   text: "Import/Export",
+  //   dropdownItems: [
+  //     {
+  //       id: 1,
+  //       icon: (
+  //         <img
+  //           src={dataIcon}
+  //           alt="Import Data"
+  //           className="h-6 w-10 mt-4 mb-4 hoverable-image"
+  //         />
+  //       ),
+  //       activeIcon: (
+  //         <img
+  //           src={DataIconActive}
+  //           alt="Import"
+  //           className="h-6 w-10 mt-4 mb-4 "
+  //         />
+  //       ),
+  //       text: "Import Inventory",
+  //       link: "#",
+  //     },
+  //     {
+  //       id: 2,
+  //       icon: (
+  //         <img
+  //           src={dataIcon}
+  //           alt="Export Sold Items"
+  //           className="h-6 w-10 mt-4 mb-4 hoverable-image"
+  //         />
+  //       ),
+  //       activeIcon: (
+  //         <img
+  //           src={DataIconActive}
+  //           alt="Import"
+  //           className="h-6 w-10 mt-4 mb-4 "
+  //         />
+  //       ),
+  //       text: "Export Sold Items",
+  //       link: "/import-data",
+  //     },
+  //     // { id: 83, text: "Tip Report", link: "/store-reporting/tip-report" },
+  //     // { id: 84, text: "Coupon Report", link: "/store-reporting/coupon-report" },
+  //   ],
+  // },
   // {
   //   id: 12,
   //   icon: (
@@ -919,6 +919,15 @@ const menuItems = [
   //   text: "Import Data",
   //   link: "/import-data",
   // },
+  {
+    id: 91,
+    icon:  <img src={dataIcon} alt="Export Sold Items"  className="h-6 w-10 mt-4 mb-4 hoverable-image" />,
+    activeIcon: (
+      <img src={DataIconActive}  alt="Import"  className="h-6 w-10 mt-4 mb-4 "  />
+    ),
+    text: "Import Data",
+    link: "/import-data",
+  },
   {
     id: 11,
     icon: (
