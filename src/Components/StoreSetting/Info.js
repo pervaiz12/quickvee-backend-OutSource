@@ -29,6 +29,8 @@ const Info = () => {
     passwordInput,
     passwordError,
     handleSubmitChangePassword,
+    qrCodeBoolean,
+
   } = InfoFunction();
   let data = {
     id: 100, //dynamic id give
@@ -36,7 +38,7 @@ const Info = () => {
   useEffect(() => {
     handleEditRecord(data);
   }, []);
-  console.log("infoRecord", infoRecord.store);
+  // console.log("infoRecord", infoRecord);
   return (
     <>
       <StoreHeading
@@ -54,6 +56,8 @@ const Info = () => {
         onChangeHandle={onChangeHandle}
         imageBoolean={imageBoolean}
         errors={errors}
+        qrCodeBoolean={qrCodeBoolean}
+
       />
       <form>
         <AddressForm infoRecord={infoRecord} onChangeHandle={onChangeHandle} />
