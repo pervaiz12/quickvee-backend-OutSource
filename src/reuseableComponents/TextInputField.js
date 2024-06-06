@@ -17,6 +17,7 @@ export default function BasicTextFields({
     <FormControl fullWidth>
       <TextField
         id="outlined-basic"
+        sx={{fontFamily: "inherit"}}
         name={name}
         value={value}
         inputProps={{ maxLength: maxLength, type: type, readOnly: readOnly }}
