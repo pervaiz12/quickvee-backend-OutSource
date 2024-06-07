@@ -6,7 +6,7 @@ import {
 } from "../../../Constants/Config";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import axios from "axios";
-export default function InventoryLogic() {
+export default function ProfitMarginReportLogic() {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const [inventory, setInventory] = useState();

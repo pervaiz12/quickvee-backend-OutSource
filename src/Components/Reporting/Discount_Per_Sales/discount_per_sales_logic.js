@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import {
   BASE_URL,
   EMPLOYEE_LIST,
@@ -12,6 +12,7 @@ export default function Discount_per_sales_logic() {
   const [selectedEmployee, setSelectedEmployee] = React.useState("");
   const [EmployeeFilterData, setEmployeeFilterData] = React.useState([]);
   const [selectedoption, setSelectedOption] = React.useState("All");
+  const [loader, setLoader] = useState(false);
   const {
     LoginGetDashBoardRecordJson,
     LoginAllStore,
@@ -21,14 +22,17 @@ export default function Discount_per_sales_logic() {
 
   let merchant_id = {
     merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-    token_id:userTypeData?.token_id,
-    login_type:userTypeData?.login_type,
+    token_id: userTypeData?.token_id,
+    login_type: userTypeData?.login_type,
   };
   const getAllEmployeeData = () => {
     try {
       let response = axios
         .post(BASE_URL + EMPLOYEE_LIST, merchant_id, {
-          headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}`  },
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${userTypeData?.token}`,
+          },
         })
         .then((res) => {
           setAllEmployee(res?.data?.result);
@@ -63,6 +67,7 @@ export default function Discount_per_sales_logic() {
       employee_id: selectedEmployee == "" ? "all" : selectedEmployee,
       ...merchant_id,
     };
+    setLoader(true);
     try {
       axios
         .post(BASE_URL + DISCOUNT_PER_PERSON, pakect, {
@@ -72,6 +77,7 @@ export default function Discount_per_sales_logic() {
           },
         })
         .then((res) => {
+          setLoader(false);
           if (res?.data?.status == true) {
             setEmployeeFilterData(res?.data);
           }
@@ -88,5 +94,6 @@ export default function Discount_per_sales_logic() {
     handleOptionClick,
     selectedoption,
     EmployeeFilterData,
+    loader,
   };
 }

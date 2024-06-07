@@ -110,7 +110,11 @@ export default function Add_Admin() {
               </div>
             </div>
             <div className="q-add-categories-section-middle-footer">
-              <button className="quic-btn quic-btn-save" onClick={handleSubmit}>
+              <button
+                className="quic-btn quic-btn-save"
+                onClick={handleSubmit}
+                disabled={loader}
+              >
                 {loader ? <CircularProgress /> : "Add"}
               </button>
               <button

@@ -48,24 +48,32 @@ export default function Pagination(props) {
             <TableHead>
               <StyledTableCell>Title </StyledTableCell>
               <StyledTableCell>Category</StyledTableCell>
-              <StyledTableCell>Quantity</StyledTableCell>
+              <StyledTableCell>Cost Per Item</StyledTableCell>
               <StyledTableCell>Price </StyledTableCell>
+              <StyledTableCell>Margin</StyledTableCell>
+              <StyledTableCell>Profit</StyledTableCell>
             </TableHead>
             <TableBody>
               {props.searchProduct.length > 0 ? (
                 props.searchProduct?.map((result, index) => (
                   <StyledTableRow key={index}>
-                    <StyledTableCell>
+                    <StyledTableCell sx={{ width: "40%" }}>
                       <p>{result?.title}</p>
                     </StyledTableCell>
-                    <StyledTableCell>
+                    <StyledTableCell sx={{ width: "20%" }}>
                       <p>{result?.category_name}</p>
                     </StyledTableCell>
-                    <StyledTableCell>
-                      <p>{result?.quantity}</p>
+                    <StyledTableCell sx={{ width: "10%" }}>
+                      <p>{`$${result?.costperItem}`}</p>
+                    </StyledTableCell>
+                    <StyledTableCell sx={{ width: "10%" }}>
+                      <p>{`$${result?.price}`}</p>
+                    </StyledTableCell>
+                    <StyledTableCell sx={{ width: "10%" }}>
+                      <p>{`${result?.margin}%`}</p>
                     </StyledTableCell>
                     <StyledTableCell>
-                      <p>{`$${result?.price}`}</p>
+                      <p>{`$${result?.profit}`}</p>
                     </StyledTableCell>
                   </StyledTableRow>
                 ))
@@ -78,14 +86,12 @@ export default function Pagination(props) {
               )}
             </TableBody>
             {props.laodMoreData ? (
-              // <div>
-              //   <button
-              //     className="btn btn-outline"
-              //     onClick={props.handleLoadMore}
-              //   >
-              //     Load More
-              //   </button>
-              // </div>
+              //   <div>
+              //     <button className="" onClick={props.handleLoadMore}>
+              //       Load More
+              //     </button>
+              //   </div>
+
               <Stack spacing={2} direction="row">
                 <Button
                   variant="outlined"

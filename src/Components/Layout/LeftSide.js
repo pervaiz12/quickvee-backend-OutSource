@@ -77,6 +77,7 @@ import RefundSummary from "../Reporting/RefundSummary/RefundSummary";
 import EditPurchaseOrder from "../PurchaseOrders/EditPurchaseOrder";
 import ModifyPurchaseOrder from "../PurchaseOrders/ModifyPurchaseOrder";
 import InventoryList from "../Reporting/inventoryList/inventoryList";
+import ProfitMarginReport from "../Reporting/ProfitMarginReport/profitMarginReport";
 
 const LeftSide = ({ visible }) => {
   useEffect(() => {
@@ -127,6 +128,7 @@ const LeftSide = ({ visible }) => {
           {visible === "id-verification" && <CheckIDVerifyMain />}
           {/* {visible === "credit-debit-sales" && < />} */}
           {visible === "inventory-list" && <InventoryList />}
+          {visible === "profit-Margin" && <ProfitMarginReport />}
           {visible === "instant-activity" && <InstantActvity />}
           {visible === "overall-top" && <TopSallerReport />}
           {visible === "employee-working-hours" && <EmployeeWorking />}

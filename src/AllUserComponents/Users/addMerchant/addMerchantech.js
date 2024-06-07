@@ -406,6 +406,7 @@ export default function AddMerchan() {
                     <button
                       className="quic-btn quic-btn-save"
                       onClick={handleSubmitMerchant}
+                      disabled={loader}
                     >
                       {loader ? <CircularProgress /> : "Add"}
                     </button>
