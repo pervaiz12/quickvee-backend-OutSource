@@ -5,6 +5,7 @@ import { BASE_URL, UPDATE_REGISTER_SETTINGS } from "../../../Constants/Config";
 import { fetchRegisterSettingsData } from "../../../Redux/features/StoreSettings/RegisterSettings/RegisterSettingsSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 
 const RegisterSettingFormLogic = () => {
   const {
@@ -215,6 +216,7 @@ const RegisterSettingFormLogic = () => {
         );
 
         if (response.data.status === true) {
+          ToastifyAlert(response?.data?.message, "success");
           setsubmitmessage(response.data.message);
         } else {
           setsubmitmessage(response.data.message);

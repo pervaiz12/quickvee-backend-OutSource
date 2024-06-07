@@ -17,6 +17,7 @@ import { Grid } from "@mui/material";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 // import Stack from '@mui/material/Stack';
+import { useAuthDetails } from "../../Common/cookiesHelper";
 const vendorFormValues = {
   merchant_id: "",
   id: "",
@@ -36,6 +37,12 @@ const EditVendors = ({ setVisible }) => {
   const AllVendorsDataState = useSelector((state) => state.vendors);
   const vendorId = searchParams.get("vendorId");
   const [states, setStates] = useState([]);
+  const {
+    LoginGetDashBoardRecordJson,
+    LoginAllStore,
+    userTypeData,
+    GetSessionLogin,
+  } = useAuthDetails();
 
   const [value, setValue] = useState();
   const [inputValue, setInputValue] = useState("");
@@ -43,6 +50,7 @@ const EditVendors = ({ setVisible }) => {
   const [errorMessage, setErrorMessage] = useState("");
 
   const [vendorData, setVendorData] = useState(vendorFormValues);
+  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   const handleOnChange = (event) => {
     const { name, value } = event.target;
@@ -54,20 +62,20 @@ const EditVendors = ({ setVisible }) => {
 
   async function fetchData() {
     const getvendorData = {
-      merchant_id: "MAL0100CA",
+      merchant_id: merchant_id,
       vendor_id: vendorId,
+      ...userTypeData,
     };
+    // console.log(getvendorData);
+    const { token, ...Newdata } = getvendorData;
 
     try {
-      const response = await axios.post(
-        BASE_URL + EDIT_VENDOR_DATA,
-        getvendorData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-          },
-        }
-      );
+      const response = await axios.post(BASE_URL + EDIT_VENDOR_DATA, Newdata, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
       // setVendorData(response.data);
 
@@ -115,14 +123,22 @@ const EditVendors = ({ setVisible }) => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
+    let packet = {
+      ...vendorData,
+      ...userTypeData,
+      // token_id: userTypeData?.token_id,
+      // login_type: userTypeData?.login_type,
+    };
+    const { token, ...newData } = packet;
     try {
       const response = await axios.post(
         BASE_URL + UPDATE_VENDOR_DATA,
         // updatedData,
-        { ...vendorData },
+        newData,
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -147,6 +163,10 @@ const EditVendors = ({ setVisible }) => {
       ...preState,
       state: newState["title"],
     }));
+  };
+  const handleCloseVendor = () => {
+    Navigate("/vendors");
+    // setVisible("VendorsDetail");
   };
   return (
     <>
@@ -275,7 +295,8 @@ const EditVendors = ({ setVisible }) => {
                     Save
                   </button>
                   <button
-                    onClick={() => setVisible("VendorsDetail")}
+                    // onClick={() => setVisible("VendorsDetail")}
+                    onClick={() => handleCloseVendor()}
                     className="quic-btn quic-btn-cancle"
                   >
                     Cancel

@@ -3,6 +3,7 @@ import Add_adminFunctionality from "./add_adminFunctionality";
 import leftSvg from "../../../../Assests/Dashboard/Left.svg";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
+import PasswordShow from "../../../../Common/passwordShow";
 
 export default function Add_Admin() {
   const {
@@ -15,6 +16,7 @@ export default function Add_Admin() {
   } = Add_adminFunctionality();
 
   const navigate = useNavigate();
+  const { showpPassword, jsxData } = PasswordShow();
   return (
     <>
       <div className="q-order-min-page">
@@ -30,7 +32,9 @@ export default function Add_Admin() {
               <div className="qvrow">
                 <div className="col-qv-6">
                   <div className="input_area">
-                    <label>Owner Name</label>
+                    <label>
+                      Owner Name<span className="Asterisk_error">*</span>
+                    </label>
                     <input
                       className=""
                       type="text"
@@ -48,7 +52,9 @@ export default function Add_Admin() {
 
                 <div className="col-qv-6">
                   <div className="input_area">
-                    <label>Email</label>
+                    <label>
+                      Email<span className="Asterisk_error">*</span>
+                    </label>
                     <input
                       className=""
                       type="text"
@@ -65,15 +71,18 @@ export default function Add_Admin() {
               </div>
               <div className="qvrow">
                 <div className="col-qv-6">
-                  <div className="input_area">
-                    <label>Password</label>
+                  <div className="input_area password-show-input">
+                    <label>
+                      Password<span className="Asterisk_error">*</span>
+                    </label>
                     <input
                       className=""
-                      type="password"
+                      type={showpPassword ? "text" : "password"}
                       name="password"
                       value={addAdminData.password}
                       onChange={handleChange}
                     />
+                    {jsxData(addAdminData.password)}
                     {addAdminData.errors.password && (
                       <span className="error">
                         {addAdminData.errors.password}
@@ -83,7 +92,9 @@ export default function Add_Admin() {
                 </div>
                 <div className="col-qv-6">
                   <div className="input_area">
-                    <label>Phone</label>
+                    <label>
+                      Phone<span className="Asterisk_error">*</span>
+                    </label>
                     <input
                       className=""
                       type="text"

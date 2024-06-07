@@ -10,6 +10,7 @@ import {
 } from "../../../Redux/features/Taxes/taxesSlice";
 import DraggableTable from "../../../reuseableComponents/DraggableTable";
 import { useSelector, useDispatch } from "react-redux";
+import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 
 const TaxesDetail = () => {
   const [alltaxes, setalltaxes] = useState([]);
@@ -50,6 +51,7 @@ const TaxesDetail = () => {
     if (userConfirmed) {
       if (id) {
         dispatch(deleteTax(data));
+        ToastifyAlert("Taxes Deleted", "success");
       }
     } else {
       console.log("Deletion canceled by user");

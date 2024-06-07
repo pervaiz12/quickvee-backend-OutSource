@@ -43,7 +43,7 @@ export const fetchEmployeeData = createAsyncThunk('employeelist/fetchEmployeeDat
 export const fetchPermissionData = createAsyncThunk('employeelist/fetchPermissionData.', async (data) => {
     const {token, ...dataNew}= data;
     try {
-    const response = await axios.post(BASE_URL + PERMISSIONS_LIST, { headers: { "Content-Type": "multipart/form-data", 'Authorization': `Bearer ${token}` } })
+    const response = await axios.post(BASE_URL + PERMISSIONS_LIST,dataNew, { headers: { "Content-Type": "multipart/form-data", 'Authorization': `Bearer ${token}` } })
         // console.log(response)
         if (response.status === 200) {
            return response.data
@@ -98,6 +98,9 @@ const AddEmployeeSlice = createSlice({
                     return employee;
                 }
             });
+        },
+        clearPermission: (state)=>{
+            state.permissionData = []
         }
     },
     extraReducers: (builder) => {
@@ -165,5 +168,5 @@ const AddEmployeeSlice = createSlice({
     }
 })
 
-export const { addToEmployeeList, editEmployee } = AddEmployeeSlice.actions;
+export const { addToEmployeeList, editEmployee, clearPermission } = AddEmployeeSlice.actions;
 export default AddEmployeeSlice.reducer

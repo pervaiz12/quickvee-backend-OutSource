@@ -515,3 +515,8 @@
 .select-cat-unique .category-select .css-1u9des2-indicatorSeparator {
   display: none !important;
 }
+
+
+.categoryTable .category-checkmark-div{
+  width: 200px;
+}

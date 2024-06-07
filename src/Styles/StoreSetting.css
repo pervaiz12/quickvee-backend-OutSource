@@ -337,3 +337,28 @@
     box-sizing: border-box;
     text-align: right;
 }
+
+.qvrow-inventory-row{
+    display: flex !important;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+.btm-margin{
+    margin-bottom: 10px;
+}
+.section-heading{
+    font-family:  CircularSTDMedium !important;
+
+    font-size: 16px !important;
+}
+
+.qv_checkbox .age-input{
+    font-family:  CircularSTDMedium !important;
+text-align: left !important;
+font-size: 15px !important;
+letter-spacing: 0px !important;
+color: #000000 !important;
+opacity: 1 !important;
+font-weight: 500;
+}

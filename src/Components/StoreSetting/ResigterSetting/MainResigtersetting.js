@@ -4,6 +4,7 @@ import { Box, Collapse, Alert, IconButton } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { Input } from "@material-tailwind/react";
 import RegisterSettingFormLogic from "./RegisterSettingFormLogic";
+import TextField from "@mui/material/TextField";
 
 const MainResigtersetting = () => {
   // const [alertmsg, setAlertMsg] = useState('');
@@ -29,8 +30,8 @@ const MainResigtersetting = () => {
   return (
     <>
       {/* resigter method */}
-      <div className="q-resigtersetting-main-page">
-        <div className="box">
+      <div className="box">
+      <div className="q-attributes-main-page">
           <div className="q-resigtersetting-top-detail-section">
             <div className="">
               <div className="q-resigtersetting-bottom-section">
@@ -106,7 +107,7 @@ const MainResigtersetting = () => {
 
       {/* payment method */}
 
-      <div className="q-resigtersetting-main-page">
+      <div className="q-attributes-main-page">
         <div className="box">
           <div className="q-resigtersetting-top-detail-section">
             <div>
@@ -289,7 +290,7 @@ const MainResigtersetting = () => {
         </div>
       </div> */}
       {/* quick add */}
-      <div className="q-resigtersetting-main-page">
+      <div className="q-attributes-main-page">
         <div className="box">
           <div className="q-resigtersetting-top-detail-section">
             <div className="">
@@ -366,7 +367,7 @@ const MainResigtersetting = () => {
       </div>
       {/* device  section */}
 
-      <div className="q-resigtersetting-main-page">
+      <div className="q-attributes-main-page">
         <div className="box">
           <div className="q-resigtersetting-top-detail-section">
             <div>
@@ -374,17 +375,27 @@ const MainResigtersetting = () => {
                 <div className="q_setting_main_Section"></div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="q_resigter_label">
-                    <label className="text-[#6A6A6A] ml-2" htmlFor="idlelogout">
+                    <label className="text-[#6A6A6A] " htmlFor="idlelogout">
                       Idle Logout Minutes
                     </label>
-                    <div className="w-full">
-                      <Input
+                    <div className="w-full mt-2">
+                      {/* <Input
                         className="q_input_resigter"
                         name="idel_logout"
                         onChange={handleRegisterSettingInput}
                         value={values.idel_logout}
                         placeholder="Enter idle logout"
-                      />
+                      /> */}
+                      <TextField
+                          id="outlined-basic"
+                          type="text"
+                          name="idel_logout"
+                          placeholder="Enter idle logout"
+                          onChange={handleRegisterSettingInput}
+                          value={values.idel_logout}
+                          variant="outlined"
+                          size="small"
+                        />
                     </div>
                     <span className="input-error">
                       {values.errors.idel_logout !== ""
@@ -412,6 +423,8 @@ const MainResigtersetting = () => {
                     </span>
                   </div> */}
                 </div>
+
+                    
               </div>
             </div>
           </div>
@@ -471,44 +484,10 @@ const MainResigtersetting = () => {
           </div>
         </div> */}
 
-        <div className="q-resigtersetting-bottom-section text-center mt-12">
-          <button
-            onClick={handleRegisterSettingSubmit}
-            className="bg-[#0A64F9] text-white px-4 py-2 rounded-md"
-          >
-            Submit
+        <div className="q-resigtersetting-main-page text-end mt-8">
+          <button className="store-setting-btn mt-8 mb-8" onClick={handleRegisterSettingSubmit}>
+            Update
           </button>
-          {submitmessage && (
-            <Box
-              sx={{
-                width: "40%",
-                position: "relative",
-                top: "2rem",
-                marginLeft: "auto",
-              }}
-              className={submitmessage ? "form-submit-info-message" : ""}
-            >
-              <Collapse in={openAlert}>
-                <Alert
-                  severity="info"
-                  action={
-                    <IconButton
-                      className="info-close-icon"
-                      aria-label="close"
-                      color="info"
-                      size="small"
-                      onClick={goToTop}
-                    >
-                      <CloseIcon />
-                    </IconButton>
-                  }
-                  sx={{ mb: 2 }}
-                >
-                  {submitmessage}
-                </Alert>
-              </Collapse>
-            </Box>
-          )}
         </div>
       </div>
     </>

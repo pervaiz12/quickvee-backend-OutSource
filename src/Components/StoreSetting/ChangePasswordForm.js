@@ -52,7 +52,12 @@ const ChangePasswordForm = ({
                         onMouseDown={handleMouseDownPassword}
                         edge="end"
                       >
-                        {showPassword ? <VisibilityOff /> : <Visibility />}
+                        {showPassword ? (
+                        
+                          <p className="text-sm">Hide</p>
+                        ) : (
+                          <p className="text-sm">Show</p>
+                        )}
                       </IconButton>
                     </InputAdornment>
                   }
@@ -82,9 +87,9 @@ const ChangePasswordForm = ({
                         edge="end"
                       >
                         {showConfirmPassword ? (
-                          <VisibilityOff />
+                          <p className="text-sm">Hide</p>
                         ) : (
-                          <Visibility />
+                          <p className="text-sm">Show</p>
                         )}
                       </IconButton>
                     </InputAdornment>

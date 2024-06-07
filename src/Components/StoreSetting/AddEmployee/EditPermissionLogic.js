@@ -4,6 +4,7 @@ import { useDispatch } from "react-redux";
 import Validation from "../../../Constants/Validation";
 import { BASE_URL, UPDATE_PERMISSION } from "../../../Constants/Config";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 
 const EditPermissionLogic = ({employeedata}) => {
     // console.log(employeedata)
@@ -34,7 +35,7 @@ const EditPermissionLogic = ({employeedata}) => {
       useEffect(() => {
         setValues((prevValues) => ({
           ...prevValues,
-          role: employeedata && employeedata.role ? employeedata.role : "",
+          role: employeedata && employeedata.role ? employeedata.role : "manager",
           break_allowed: employeedata && employeedata.break_allowed ? employeedata.break_allowed : "",
           break_time: employeedata && employeedata.break_time ? employeedata.break_time : "",
           paid_breaks: employeedata && employeedata.paid_breaks ? employeedata.paid_breaks : "",
@@ -119,12 +120,13 @@ const EditPermissionLogic = ({employeedata}) => {
             const response = await axios.post(BASE_URL + UPDATE_PERMISSION, data, { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}` } })
             
             if ( response.data.status === true) {
-              alert(response.data.message)
-              
+              // alert(response.data.message)
+              ToastifyAlert(response?.data?.message, "success");
             }
             else {
              
-              alert(response.data.message)
+              // alert(response.data.message)
+              ToastifyAlert(response?.data?.message, "warn");
             //   await handleScrollClick()
                setsubmitmessage(response.data.message);
                setShowModal(true)

@@ -12,6 +12,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import CircularProgress from "@mui/material/CircularProgress";
 
 import {
   getVerifiedMerchant,
@@ -74,6 +75,9 @@ export default function Verified() {
   const [searchRecord, setSearchRecord] = useState("");
   const [storename, setStorename] = useState();
   const [submitmessage, setsubmitmessage] = useState("");
+  const [loader, setLoader] = useState(false);
+  const [deleteLoader, setDeleteLoader] = useState(false);
+  const [deletedId, setDeletedId] = useState("");
 
   const verifiedMerchantList = useSelector(
     (state) => state.verifiedMerchantRecord
@@ -147,6 +151,8 @@ export default function Verified() {
           id: tableData.id,
           ...otherUserData,
         };
+        setDeleteLoader(true);
+        setDeletedId(tableData.id);
 
         const response = await axios.post(
           BASE_URL + DELETE_SINGLE_STORE,
@@ -166,8 +172,12 @@ export default function Verified() {
           //   );
           // setVerifiedMerchantListState(updatedVendorDetails);
           // setFilteredMerchants(updatedVendorDetails);
+          setDeleteLoader(false);
+          setDeletedId("");
           dispatch(getVerifiedMerchant(data_verified));
         } else {
+          setDeleteLoader(false);
+          setDeletedId("");
           console.error(response);
         }
       }
@@ -245,6 +255,7 @@ export default function Verified() {
         type: type,
         ...otherUserData,
       };
+      setLoader(true);
 
       const response = await axios.post(BASE_URL + EXPORTCSV, delVendor, {
         headers: {
@@ -254,6 +265,7 @@ export default function Verified() {
       });
 
       if (response) {
+        setLoader(false);
         const csvData = response.data;
         // Convert the data to a Blob
         const blob = new Blob([csvData], { type: "text/csv" });
@@ -272,6 +284,8 @@ export default function Verified() {
         document.body.removeChild(a);
         URL.revokeObjectURL(fileUrl);
         setsubmitmessage("Inventory Exported Successfully");
+      } else {
+        setLoader(false);
       }
     } catch (error) {
       console.error(error);
@@ -307,6 +321,9 @@ export default function Verified() {
                     }}
                     className="flex q-category-bottom-header"
                   >
+                    <span className="quic-btn-save excelLoader">
+                      {loader ? <CircularProgress /> : ""}
+                    </span>
                     <p className="me-2">Export Last Transaction</p>
                   </div>
                 </Grid>
@@ -426,12 +443,16 @@ export default function Verified() {
                                     src={Edit}
                                     alt="Edit"
                                   />
-                                  <img
-                                    className="mx-1 delete cursor-pointer"
-                                    onClick={() => handleDeleteMerchant(data)}
-                                    src={Delete}
-                                    alt="Delete"
-                                  />
+                                  {data.id == deletedId && deleteLoader ? (
+                                    <CircularProgress />
+                                  ) : (
+                                    <img
+                                      className="mx-1 delete cursor-pointer"
+                                      onClick={() => handleDeleteMerchant(data)}
+                                      src={Delete}
+                                      alt="Delete"
+                                    />
+                                  )}
                                   <img
                                     className="mx-1 cursor-pointer"
                                     onClick={() =>

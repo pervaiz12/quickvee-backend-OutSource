@@ -14,7 +14,7 @@ import { Link, useParams } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { deleteCategorybanner } from "../../Redux/features/Categories/categoriesSlice";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
-
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import { useNavigate } from "react-router-dom";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 
@@ -161,6 +161,7 @@ const EditCategory = () => {
       const update_message = await res.data.update_message;
       if (data == "Success") {
         // alert(update_message);
+        ToastifyAlert(update_message, "success");
         setErrorMessage(" ");
         let data = {
           merchant_id: merchant_id,
@@ -232,6 +233,7 @@ const EditCategory = () => {
     if (userConfirmed) {
       if (id) {
         dispatch(deleteCategorybanner(data));
+        ToastifyAlert("Category Image Deleted", "success");
         setSelectedImage(null);
         setCategory((prevValue) => ({
           ...prevValue,

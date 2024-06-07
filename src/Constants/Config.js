@@ -1,6 +1,5 @@
 // All api calls are initialized in this component for this application
 //remove unwanted and credentials of other app
-
 module.exports = Object.freeze({
   BASE_URL: "https://sandbox.quickvee.net/",
 
@@ -62,7 +61,7 @@ module.exports = Object.freeze({
   // Update Store Setting options api
   // UPDATE_STORE_OPTIONS_DATA: "Store_setting_api/update_store_options_data",
   UPDATE_STORE_OPTIONS_DATA: "Store_setting_react_api/update_store_option",
-
+  UPDATE_STORE_INFO: "Store_setting_react_api/update_store_info",
 
   //Coupon API Calls
   COUPON_LIST: "CouponReactApi/get_coupon_details",
@@ -81,11 +80,11 @@ module.exports = Object.freeze({
 
   //Inventory
   LIST_INVENTORY: "api/SettingsReact_api/inventory_list",
-  UPDATE_INVENTORY: "api/SettingsReact_api/update_inventory_info",
+  // UPDATE_INVENTORY: "api/SettingsReact_api/update_inventory_info",
+  UPDATE_INVENTORY: "StoreReact_setting_api1/update_inventory_info",
 
-
-  // Store setup 
-  UPDATE_STORE_SETUP : "Store_setting_react_api/update_store_setup",
+  // Store setup
+  UPDATE_STORE_SETUP: "Store_setting_react_api/update_store_setup",
 
   // get Store Setting alerts list api
   GET_STORE_ALERTS_DATA: "Store_setting_api/store_alerts_list",
@@ -218,7 +217,7 @@ module.exports = Object.freeze({
   GET_ADD_ADMIN: "UserController/insert_admin", //add admin
   GET_UPDATE_MERCHANT: "UserController/merchant_update",
   GET_Edit_STORE_INFO: "UserController/store_info",
-  UPDATE_STORE_INFO: "UserController/createMenuLink",
+  // UPDATE_STORE_INFO: "UserController/createMenuLink",
 
   // vendor Report List API
   VENDORS_REPORT_LIST: "vendor_report_api/vendor_list",
@@ -301,6 +300,7 @@ module.exports = Object.freeze({
   DELETE_BREAK: "Timesheet_react_api/delete_breaks",
 
   CHANGE_PASSWORD_STORE: "Store_setting_react_api/change_password",
+  INVENTORY_LIST: "ReportingReactapi/JsonDataproductnew",
 });
 
 // All api calls are initialized in this component for this application

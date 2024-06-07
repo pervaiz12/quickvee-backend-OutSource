@@ -8,6 +8,9 @@ import {
 } from "../../../Redux/features/Inventory/InventorySlice";
 import { useSelector, useDispatch } from "react-redux";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
+import Loader from "../../../CommonComponents/Loader";
+import { Box, CircularProgress } from "@mui/material";
 
 const InventoryData = () => {
   const {
@@ -26,11 +29,16 @@ const InventoryData = () => {
   const [checkedBirthDayChecked, setirthDayChecked] = useState(false);
   const [ExpirationIdChecked, setExpirationIdChecked] = useState(false);
 
+
   const [isUpdateItem, setUpdateItemVendor] = useState(false);
   // Require Description for Instant POs
   const [isInstantPos, setInstantPos] = useState(false);
 
-  const [disableCheckboxesCost, setDisableCheckboxesCost] = useState(false);
+
+  const [disableCheckboxesCost, setDisableCheckboxesCost] = useState(false);  
+
+  const [fetchLoading, setFetchLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const [inventory, setAllInventory] = useState({
     cost_method: "",
@@ -42,37 +50,52 @@ const InventoryData = () => {
     by_scanning: "",
   });
 
-  const AllInventoryAccessState = useSelector(
-    (state) => state.inventoryDataList
-  );
+  const [costPer, setCostPer] = useState("");
+
+  // const AllInventoryAccessState = useSelector(
+  //   (state) => state.inventoryDataList
+  // );
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   const dispatch = useDispatch();
 
-  useEffect(() => {
+  const fetchInventoryData = () => {
+    setFetchLoading(true);
     let data = {
       merchant_id,
       ...userTypeData,
     };
     if (data) {
-      dispatch(fetchInventoryListData(data));
+      dispatch(fetchInventoryListData(data))
+        .then((res) => {
+          setAllInventory(res?.payload)
+          setCostPer(res?.payload?.cost_per || "");
+        })
+        .catch((err) => {
+          ToastifyAlert("Error!", "error");
+        })
+        .finally(() => {
+          setFetchLoading(false);
+        });
     }
-  }, []);
+  };
 
   useEffect(() => {
-    if (
-      !AllInventoryAccessState.loading &&
-      AllInventoryAccessState.inventoryData
-    ) {
-      // console.log(AllInventoryAccessState.inventoryData)
-      setAllInventory(AllInventoryAccessState.inventoryData);
-    }
-  }, [AllInventoryAccessState.loading]);
+    fetchInventoryData();
+  }, []);
+
+  // useEffect(() => {
+  //   if (
+  //     !AllInventoryAccessState.loading &&
+  //     AllInventoryAccessState.inventoryData
+  //   ) {
+  //     setAllInventory(AllInventoryAccessState.inventoryData);
+  //     setCostPer(AllInventoryAccessState.inventoryData.cost_per || "");
+  //   }
+  // }, [AllInventoryAccessState.loading]);
 
   const IsBirthdaytoggleInput = () => {
     setCheckBirthday(!isCheckBirthday);
-    // setCheckBirthday(prevState => !prevState);
-    console.log(isCheckBirthday);
   };
 
   const IsExpirationtoggleInput = () => {
@@ -90,12 +113,29 @@ const InventoryData = () => {
 
   const handleCostPerChange = (e) => {
     const { name, value } = e.target;
-    const numericValue = value.replace(/[^0-9.]/g, "");
 
-    setAllInventory((prevState) => ({
-      ...prevState,
-      [name]: numericValue,
-    }));
+    let fieldValue;
+    fieldValue = value
+      // Remove extra dots and ensure only one dot exists at most
+      .replace(/[^\d.]/g, "") // Allow digits and dots only
+      .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
+      .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+
+    let inputStr = fieldValue.replace(/\D/g, "");
+    inputStr = inputStr.replace(/^0+/, "");
+
+    if (inputStr.length == "") {
+      fieldValue = "0.00";
+    } else if (inputStr.length === 1) {
+      fieldValue = "0.0" + inputStr;
+    } else if (inputStr.length === 2) {
+      fieldValue = "0." + inputStr;
+    } else {
+      fieldValue =
+        inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
+    }
+
+    setCostPer(fieldValue);
   };
 
   const handleCostMethod = () => {
@@ -110,18 +150,49 @@ const InventoryData = () => {
 
     setCheckBirthday(false);
     setExpiration(false);
+
     setirthDayChecked(!checkedBirthDayChecked);
     setExpirationIdChecked(!ExpirationIdChecked);
   };
 
+  const setAgeVerificationData=()=>{
+    if(inventory?.by_scanning === '0'){
+      if(inventory?.age_verify === ''){
+        setCheckBirthday(false);
+        setExpiration(false)
+      }else if(inventory?.age_verify === '1'){
+        setCheckBirthday(true);
+        setExpiration(false)
+      }else if(inventory?.age_verify === '2'){
+        setCheckBirthday(false);
+        setExpiration(true)
+      }else if(inventory?.age_verify === '1,2'){
+        setCheckBirthday(true);
+        setExpiration(true)
+      }
+    }else{
+      setCheckBirthday(false);
+      setExpiration(false)
+    }
+  }
+
+  useEffect(()=>{
+    if(isSwitchEnabled === false){
+      if(inventory?.age_verify){
+        setAgeVerificationData();
+      }
+    }
+  }, [isSwitchEnabled, inventory])
+
   useEffect(() => {
-    if (inventory && inventory.by_scanning && inventory.by_scanning == "1") {
+    if (inventory?.by_scanning === "1") {
       setIsSwitchEnabled(true);
       setCheckBirthday(false);
       setExpiration(false);
       setirthDayChecked(true);
       setExpirationIdChecked(true);
-    } else {
+    }
+    else {
       setIsSwitchEnabled(false);
       setCheckBirthday(true);
       setExpiration(true);
@@ -130,9 +201,7 @@ const InventoryData = () => {
     }
 
     if (
-      inventory &&
-      inventory.cost_method &&
-      inventory.cost_method.includes("1")
+      inventory?.cost_method === "1"
     ) {
       setDisableCheckboxesCost(true);
       setIsSwitchCost(true);
@@ -142,193 +211,204 @@ const InventoryData = () => {
       setUpdateItemVendor(true);
       setDisableCheckboxesCost(false);
     }
-    if (
-      inventory &&
-      inventory.inv_setting &&
-      inventory.inv_setting.includes("2")
-    ) {
-      setInstantPos(true);
-    } else {
-      setInstantPos(false);
+
+    if(inventory?.inv_setting === "3"){
+      setInstantPos(false)
+      setUpdateItemVendor(false)
+    }else if(inventory?.inv_setting === "1,3"){
+      setUpdateItemVendor(true)
+      setInstantPos(false)
+    }else if(inventory?.inv_setting === "2,3"){
+      setUpdateItemVendor(false)
+      setInstantPos(true)
+    }else if(inventory?.inv_setting === "1,2,3"){
+      setUpdateItemVendor(true)
+      setInstantPos(true)
     }
-    if (
-      inventory &&
-      inventory.inv_setting &&
-      inventory.inv_setting.includes("1")
-    ) {
-      setUpdateItemVendor(true);
-    } else {
-      setUpdateItemVendor(false);
-    }
-    if (
-      inventory &&
-      inventory.age_verify &&
-      inventory.age_verify.includes("1")
-    ) {
-      setCheckBirthday(true);
-      setIsSwitchEnabled(false);
-      setirthDayChecked(false);
-    } else {
-      setCheckBirthday(false);
-    }
-    if (
-      inventory &&
-      inventory.age_verify &&
-      inventory.age_verify.includes("2")
-    ) {
-      setExpiration(true);
-      setIsSwitchEnabled(false);
-      setExpirationIdChecked(false);
-    } else {
-      setExpiration(false);
-    }
+
+    setAgeVerificationData();
+
   }, [inventory]);
 
+
+
   const handleSave = () => {
+    setLoading(true);
     const data = {
       merchant_id,
-      cost_method: isSwitchEnabledCost ? "1" : "2",
-      age_verify_birthday: isCheckBirthday ? "1" : "0",
-      age_verify_expiration: isExpiration ? "1" : "0",
-      inv_setting_update: isUpdateItem ? "1" : "0",
-      inv_setting_require: isInstantPos ? "1" : "0",
-      by_scanning: isSwitchEnabled ? "1" : "0",
-      cost_per: inventory.cost_per,
+      cost_method:isSwitchEnabledCost ? "1" : "2",
+      age_verify:!!isCheckBirthday && !!isExpiration ? "1,2" : isCheckBirthday ? "1" : isExpiration ? "2":  "",
+      by_scanning:isSwitchEnabled ? "1" : "0",
+      inv_setting:!!isUpdateItem && !!isInstantPos ? "1,2" : isUpdateItem ? "1": isInstantPos ? "2":  "",
+      cost_per:costPer,
       ...userTypeData,
     };
 
-    console.log(data);
-    dispatch(updateInventoryData(data));
+    dispatch(updateInventoryData(data))
+      .then((res) => {
+        if (
+          res?.payload?.message === "Inventory settings Updated Successfully"
+        ) {
+          ToastifyAlert("Inventory Data Updated Successfully!", "success");
+          // called fetch APi again
+          fetchInventoryData();
+        }
+      })
+      .catch((err) => {
+        ToastifyAlert("Error!", "error");
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
 
   return (
     <>
       <div className="box">
-        <div className="box_shadow_div" style={{ padding: "20px" }}>
-          <div className="qvrow">
-            <h5 className="box_shadow_heading">
-              Average Cost Method
-              <div className="fr">
-                <Switch
-                  {...label}
-                  name="cost_method"
-                  checked={isSwitchEnabledCost}
-                  onChange={handleCostMethod}
-                />
-              </div>
-            </h5>
+        {fetchLoading ? (
+          <div class="loading-box">
+            <Loader />
           </div>
-        </div>
-        <div className="box_shadow_div" style={{ padding: "20px" }}>
-          <div className="qvrow">
-            <h5 className="box_shadow_heading">Age Verification</h5>
-            <h6 className="box_shadow_heading">
-              Enable By Scanning
-              <div className="fr">
-                <Switch
-                  {...label}
-                  name="by_scanning"
-                  checked={isSwitchEnabled}
-                  onChange={handleEnablePickup}
-                />
+        ) : (
+          <>
+            <div className="box_shadow_div" style={{ padding: "20px" }}>
+              <div className=" qvrow-inventory-row">
+                <h5 className="box_shadow_heading " style={{marginBottom:'0px'}}>
+                  Average Cost Method
+                </h5>
+                  <Switch
+                    {...label}
+                    name="cost_method"
+                    checked={isSwitchEnabledCost}
+                    onChange={handleCostMethod}
+                  />
+           
               </div>
-            </h6>
+            </div>
+            <div className="box_shadow_div" style={{ padding: "20px" }}>
+              <div className="qvrow">
+                <h5 className="box_shadow_heading btm-margin">Future Order</h5>
+                <div className="qvrow-inventory-row">
+                <h6 className="box_shadow_heading section-heading" >
+                Enable Pickup
+                </h6>
+                    <Switch
+                      {...label}
+                      name="by_scanning"
+                      checked={isSwitchEnabled}
+                      onChange={handleEnablePickup}
+                    />
+                </div>
 
-            <div className="qv_checkbox">
-              <label className="qv_checkbox_add_checkmark_label">
-                Check ID - Birthday Prompt
-                <input
-                  type="checkbox"
-                  className="psize-input psize-input"
-                  id="checkbox1"
-                  name="age_verify_birthday"
-                  value={isCheckBirthday}
-                  checked={isCheckBirthday}
-                  onChange={IsBirthdaytoggleInput}
-                  disabled={checkedBirthDayChecked}
-                />
-                <span className="qv_add_checkmark"></span>
-              </label>
-            </div>
-            <div className="qv_checkbox">
-              <label className="qv_checkbox_add_checkmark_label">
-                Check ID - Expiration
-                <input
-                  type="checkbox"
-                  id="checkbox2"
-                  name="age_verify_expiration"
-                  checked={isExpiration}
-                  value={isExpiration}
-                  onChange={IsExpirationtoggleInput}
-                  disabled={ExpirationIdChecked}
-                />
-                <span className="qv_add_checkmark"></span>
-              </label>
-            </div>
-          </div>
-        </div>
-        <div className="box_shadow_div" style={{ padding: "20px" }}>
-          <div className="qvrow">
-            <h5 className="box_shadow_heading">Inventory Setting</h5>
 
-            <div className="qvrow chkpp">
-              <div className="qv_checkbox">
-                <label className="qv_checkbox_add_checkmark_label">
-                  Update Item Vendor Cost from POs
-                  <input
-                    type="checkbox"
-                    className="psize-input psize-input"
-                    id="inv_setting1"
-                    name="inv_setting_update"
-                    checked={isUpdateItem}
-                    value={isUpdateItem}
-                    onChange={IsUpdatetoggleInput}
-                    disabled={disableCheckboxesCost || isSwitchEnabledCost}
-                  />
-                  <span className="qv_add_checkmark"></span>
-                </label>
-              </div>
-              <div className="qv_checkbox">
-                <label className="qv_checkbox_add_checkmark_label">
-                  Require Description for Instant POs
-                  <input
-                    type="checkbox"
-                    id="inv_setting2"
-                    name="inv_setting_require"
-                    checked={isInstantPos}
-                    value={isInstantPos}
-                    onChange={IsInstanttoggleInput}
-                  />
-                  <span className="qv_add_checkmark"></span>
-                </label>
-              </div>
-            </div>
-            <div className="qvrow">
-              <div className="col-qv-6">
-                <div className="input_area">
-                  <label>Automatic Cost Percent Markup</label>
-                  <input
-                    type="text"
-                    id="cost_per"
-                    maxLength="8"
-                    placeholder="%0.00"
-                    name="cost_per"
-                    inputMode="numeric"
-                    value={inventory.cost_per}
-                    onChange={handleCostPerChange}
-                  />
+                <div className="qv_checkbox btm-margin">
+                  <label className="qv_checkbox_add_checkmark_label age-input">
+                    Check ID - Birthday Prompt
+                    <input
+                      type="checkbox"
+                      className="psize-input psize-input"
+                      id="checkbox1"
+                      name="age_verify_birthday"
+                      value={isCheckBirthday}
+                      checked={isCheckBirthday}
+                      onChange={IsBirthdaytoggleInput}
+                      disabled={checkedBirthDayChecked}
+                    />
+                    <span className="qv_add_checkmark"></span>
+                  </label>
+                </div>
+                <div className="qv_checkbox">
+                  <label className="qv_checkbox_add_checkmark_label age-input">
+                    Check ID - Expiration
+                    <input
+                      type="checkbox"
+                      id="checkbox2"
+                      name="age_verify_expiration"
+                      checked={isExpiration}
+                      value={isExpiration}
+                      onChange={IsExpirationtoggleInput}
+                      disabled={ExpirationIdChecked}
+                    />
+                    <span className="qv_add_checkmark"></span>
+                  </label>
                 </div>
               </div>
             </div>
-          </div>
-          <div className="qvrow">
-            <div className="col-md-6">
-              <button className="save_btn" onClick={handleSave}>
-                Save
-              </button>
+            <div className="box_shadow_div" style={{ padding: "20px" }}>
+              <div className="qvrow">
+                <h5 className="box_shadow_heading section-heading">Inventory Setting</h5>
+
+                <div className="qvrow chkpp">
+                  <div className="qv_checkbox">
+                    <label className="qv_checkbox_add_checkmark_label age-input">
+                      Update Item Vendor Cost from POs
+                      <input
+                        type="checkbox"
+                        className="psize-input psize-input"
+                        checked={isUpdateItem}
+                        id="inv_setting1"
+                        name="inv_setting_update"
+                        value={isUpdateItem}
+                        onChange={IsUpdatetoggleInput}
+                        disabled={disableCheckboxesCost || isSwitchEnabledCost}
+                      />
+                      <span className="qv_add_checkmark"></span>
+                    </label>
+                  </div>
+                  <div className="qv_checkbox">
+                    <label className="qv_checkbox_add_checkmark_label age-input">
+                      Require Description for Instant POs
+                      <input
+                        type="checkbox"
+                        id="inv_setting2"
+                        name="inv_setting_require"
+                        checked={isInstantPos}
+                        value={isInstantPos}
+                        onChange={IsInstanttoggleInput}
+                      />
+                      <span className="qv_add_checkmark"></span>
+                    </label>
+                  </div>
+                </div>
+                <div className="qvrow">
+                  <div className="col-qv-6">
+                    <div className="input_area">
+                      <label>Automatic Cost Percent Markup</label>
+                      <input
+                        type="text"
+                        id="cost_per"
+                        maxLength="8"
+                        placeholder="0.00"
+                        name="cost_per"
+                        inputMode="numeric"
+                        value={costPer}
+                        onChange={handleCostPerChange}
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+              <div className="qvrow">
+                <div className="col-md-6 ">
+                  <button
+                    className="save_btn float-right"
+                    onClick={handleSave}
+                    disabled={loading}
+                    style={{width:"140px", marginRight:"20px"}}
+                  >
+                    {loading ? (
+                      <Box className="loader-box">
+                        <CircularProgress />
+                      </Box>
+                    ) : (
+                      "Save"
+                    )}
+                  </button>
+                </div>
+              </div>
+          </>
+        )}
       </div>
     </>
   );

@@ -16,6 +16,7 @@ import {
 import BasicTextFields from "../../../reuseableComponents/TextInputField";
 import TextField from "@mui/material/TextField";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
+import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 
 const EditTaxesModal = ({ selectedTaxe }) => {
   const [open, setOpen] = useState(false);
@@ -133,6 +134,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
         console.log(update_message);
         if (update_message == "Success") {
           // alert(msg)
+          ToastifyAlert(msg, "success");
           let data = {
             merchant_id: merchant_id,
             ...userTypeData
@@ -178,6 +180,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
         console.log(update_message);
         if (update_message == "Success") {
           // alert(msg)
+          ToastifyAlert(msg, "success");
           let data = {
             merchant_id: merchant_id,
             ...userTypeData

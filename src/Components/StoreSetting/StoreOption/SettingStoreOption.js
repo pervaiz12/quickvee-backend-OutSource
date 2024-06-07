@@ -19,9 +19,10 @@ import {
 // import { TextField } from "@mui/material";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
-import { CircularProgress } from "@mui/material";
+import { CircularProgress, Grid } from "@mui/material";
 import { Box } from "@mui/system";
 import Loader from "../../../CommonComponents/Loader";
+import BasicTextFields from "../../../reuseableComponents/TextInputField";
 
 export default function SettingStoreOption() {
   const label = { inputProps: { "aria-label": "Switch demo" } };
@@ -35,6 +36,10 @@ export default function SettingStoreOption() {
 
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+
+  const [storeData, setStoreData] = useState({});
+  const [userData, setUserData] = useState({});
+  const [userOptionData, setUserOptionData] = useState({});
 
   const checkBoxList = [
     "orderNumebrEnabled",
@@ -69,27 +74,23 @@ export default function SettingStoreOption() {
     enabledGuestCheckout: false,
   });
 
-
   // onchange
   const handleOrderChange = (e) => {
     const { name, value, checked } = e.target;
     const updateData = { ...orderState };
     if (checkBoxList?.includes(name)) {
-      if(name === 'orderNumebrEnabled'){
-        updateData[name] = checked
-        updateData['resetOrderNumberTime'] = "00.00"
-      }else if(name === 'enabledNca'){
+      if (name === "orderNumebrEnabled") {
         updateData[name] = checked;
-        updateData['enabledDualPrice'] = false
-      }
-      else if(name === 'enabledDualPrice'){
+        updateData["resetOrderNumberTime"] = "00.00";
+      } else if (name === "enabledNca") {
         updateData[name] = checked;
-        updateData['enabledNca'] = false
-      }
-      else{
+        updateData["enabledDualPrice"] = false;
+      } else if (name === "enabledDualPrice") {
+        updateData[name] = checked;
+        updateData["enabledNca"] = false;
+      } else {
         updateData[name] = checked;
       }
-      
     } else if (inputValueList?.includes(name)) {
       updateData[name] = value;
     } else if (name === "enabledFutureOrder") {
@@ -143,7 +144,11 @@ export default function SettingStoreOption() {
       setFetchLoading(true);
       dispatch(fetchStoreSettingOptionData(data))
         .then((res) => {
-          // console.log(res);
+          if (res?.payload?.status) {
+            setStoreData(res?.payload);
+            setUserData(res?.payload?.user_data);
+            setUserOptionData(res?.payload?.user_option_data);
+          }
         })
         .catch(() => {
           ToastifyAlert("Error!", "error");
@@ -154,29 +159,42 @@ export default function SettingStoreOption() {
     }
   }, []);
 
-  const storeData = useSelector((state) => state?.settingstoreoption);
-  const userData = useSelector(
-    (state) => state?.settingstoreoption?.storeoptionData?.user_data
-  );
-  const userOptionData = useSelector(
-    (state) => state?.settingstoreoption?.storeoptionData?.user_option_data
-  );
-
   // fill the state when data load
   useEffect(() => {
     setOrderState((prev) => ({
       ...prev,
       ["orderNumebrEnabled"]: Boolean(+userData?.enable_order_number),
-      ["resetOrderNumberTime"]:  userData?.reset_order_time,
+      ["resetOrderNumberTime"]: userData?.reset_order_time,
       ["enabledFutureOrder"]: Boolean(+userData?.future_ordering),
-      ["dayCount"]: Boolean(+userData?.future_ordering) === true ? userData?.advance_count : '',
+      ["dayCount"]:
+        Boolean(+userData?.future_ordering) === true
+          ? userData?.advance_count
+          : "",
       ["enabledDispatchCenter"]: Boolean(+userOptionData?.dispatch_status),
 
-      ["enabledEmailNotification"]: userOptionData?.driver_notify === '0' ? false : userOptionData?.driver_notify === '1' ? true: userOptionData?.driver_notify === '3' ? true : false,
-      ["enabledSmsNotification"]:userOptionData?.driver_notify === '0' ? false : userOptionData?.driver_notify === '2' ? true : userOptionData?.driver_notify === '3' ? true:false,
+      ["enabledEmailNotification"]:
+        userOptionData?.driver_notify === "0"
+          ? false
+          : userOptionData?.driver_notify === "1"
+            ? true
+            : userOptionData?.driver_notify === "3"
+              ? true
+              : false,
+      ["enabledSmsNotification"]:
+        userOptionData?.driver_notify === "0"
+          ? false
+          : userOptionData?.driver_notify === "2"
+            ? true
+            : userOptionData?.driver_notify === "3"
+              ? true
+              : false,
 
-      ["enabledCashPaymentDelivery"]: Boolean(+userOptionData?.cash_payment_delivery),
-      ["enabledCashPaymenyPickup"]: Boolean(+userOptionData?.cash_payment_pickup),
+      ["enabledCashPaymentDelivery"]: Boolean(
+        +userOptionData?.cash_payment_delivery
+      ),
+      ["enabledCashPaymenyPickup"]: Boolean(
+        +userOptionData?.cash_payment_pickup
+      ),
       ["enabledNca"]:
         userOptionData?.is_surcharge === "0"
           ? false
@@ -196,7 +214,6 @@ export default function SettingStoreOption() {
       ["enabledGuestCheckout"]: Boolean(+userOptionData?.is_guest_checkout),
     }));
   }, [userData, storeData, userOptionData]);
-
 
   // onsubmit
   const handleUpdateSettingOption = async () => {
@@ -247,7 +264,9 @@ export default function SettingStoreOption() {
               merchant_id: "MAL0100CA",
               ...userTypeData,
             };
-            dispatch(fetchStoreSettingOptionData(merchantdata)).catch((err)=> console.log('err', err));
+            dispatch(fetchStoreSettingOptionData(merchantdata)).catch((err) =>
+              console.log("err", err)
+            );
             ToastifyAlert("Store Setting Options is Updated.", "success");
           }
         })
@@ -258,9 +277,7 @@ export default function SettingStoreOption() {
           setLoading(false);
         });
     }
-
   };
-
 
   return (
     <>
@@ -271,7 +288,289 @@ export default function SettingStoreOption() {
           </div>
         ) : (
           <>
-            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4 store-setting-mx-10 store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
+            <Grid container className="box_shadow_div">
+              <Grid item xs={12}>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{ pt: 2.5, px: 2.5 }}
+                >
+                  <Grid item>
+                    <h2 className="store-setting-h1 store-setting-inline-block">
+                      <b>Enable Order Number</b>
+                    </h2>
+                  </Grid>
+                  <Grid item>
+                    <Switch
+                      {...label}
+                      checked={orderState?.orderNumebrEnabled}
+                      name="orderNumebrEnabled"
+                      onChange={handleOrderChange}
+                      // {...label}
+                      // checked={isFutureOrderEnabled}
+                      // onChange={FutureOrdertoggleInput}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid container sx={{ px: 2.5 }}>
+                  <Grid item xs={12}>
+                    <p className="store-setting-p store-setting-pb-1-5">
+                      The store will be able to accept online orders.
+                    </p>
+                  </Grid>
+                </Grid>
+                <Grid container sx={{ px: 2.5 }}>
+                  <Grid item xs={12}>
+                    <div className="store-setting-gry Admin_std">
+                      Select Time
+                    </div>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
+                  <Grid item xs={12}>
+                    <div className="input_area">
+                      <input
+                        type="time"
+                        name="resetOrderNumberTime"
+                        value={orderState?.resetOrderNumberTime}
+                        id="start_tym"
+                        required
+                        onChange={handleOrderChange}
+                        onClick={(e) => e.target.showPicker()}
+                        disabled={!orderState?.orderNumebrEnabled}
+                      />
+                      {/* <span>{formatTime(systemAccess.start_time)}</span> */}
+                    </div>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid container className="box_shadow_div">
+              <Grid item xs={12}>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{ pt: 2.5, px: 2.5 }}
+                >
+                  <Grid item>
+                    <h2 className="store-setting-h1 store-setting-inline-block">
+                      <b>Future Order</b>
+                    </h2>
+                    <div className="store-setting-gry Admin_std store-setting-inline-block ">
+                      Enable future orders?
+                    </div>
+                  </Grid>
+                  <Grid item>
+                    <span className="store-setting-switch">
+                      <Switch
+                        {...label}
+                        checked={orderState?.enabledFutureOrder}
+                        onChange={handleOrderChange}
+                        name="enabledFutureOrder"
+                      />
+                    </span>
+                  </Grid>
+                </Grid>
+                <Grid container sx={{ px: 2.5, pt: 1.5 }}>
+                  <Grid item xs={12}>
+                    <div className="store-setting-gry Admin_std">
+                      Advance Day Count
+                    </div>
+                  </Grid>
+                </Grid>
+                <Grid container sx={{ px: 2.5, pb: 2.5 }}>
+                  <Grid item xs={12}>
+                    <BasicTextFields
+                      type={"number"}
+                      value={orderState?.dayCount}
+                      name={"dayCount"}
+                      onChangeFun={handleOrderChange}
+                      disable={!orderState?.enabledFutureOrder}
+                    />
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid container sx={{ p: 2 }} className="box_shadow_div">
+              <Grid item xs={12}>
+                <Grid container sx={{ pb: 1.5 }}>
+                  <Grid item xs={12}>
+                    <h2 className="store-setting-h1  store-setting-inline-block">
+                      <b>Dispatch Center</b>
+                    </h2>
+                  </Grid>
+                </Grid>
+
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                >
+                  <Grid item>
+                    <div className="store-setting-gry Admin_std store-setting-inline-block">
+                      Enable Dispatch Center
+                    </div>
+                  </Grid>
+                  <Grid item>
+                    <span className="store-setting-switch">
+                      <Switch
+                        {...label}
+                        name="enabledDispatchCenter"
+                        checked={orderState?.enabledDispatchCenter}
+                        onChange={handleOrderChange}
+                      />
+                    </span>
+                  </Grid>
+                </Grid>
+                <Grid container sx={{ py: 1 }}>
+                  <Grid item xs={12}>
+                    <label className="q_resigter_setting_section">
+                      Enable Email Notification
+                      {/* <input type="checkbox" checked="checked" />  */}
+                      <input
+                        type="checkbox"
+                        name="enabledEmailNotification"
+                        value={orderState?.enabledEmailNotification}
+                        checked={orderState?.enabledEmailNotification}
+                        // checked={values.ebt_type.split(",").includes("1")}
+                        onChange={handleOrderChange}
+                        disabled={!orderState?.enabledDispatchCenter}
+                      />
+                      <span className="checkmark"></span>
+                    </label>
+                  </Grid>
+                </Grid>
+                <Grid container sx={{ py: 1 }}>
+                  <Grid item xs={12}>
+                    <label className="q_resigter_setting_section">
+                      Enable SMS Notification
+                      <input
+                        type="checkbox"
+                        name="enabledSmsNotification"
+                        value={orderState?.enabledSmsNotification}
+                        checked={orderState?.enabledSmsNotification}
+                        disabled={!orderState?.enabledDispatchCenter}
+                        // checked={values.ebt_type.split(",").includes("2")}
+                        onChange={handleOrderChange}
+                      />
+                      <span className="checkmark"></span>
+                    </label>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid container sx={{ p: 2 }} className="box_shadow_div">
+              <Grid item xs={12}>
+                <Grid container sx={{ pb: 1.5 }}>
+                  <Grid item xs={12}>
+                    <h2 className="store-setting-h1">
+                      <b>Payment Options</b>
+                    </h2>
+                  </Grid>
+                </Grid>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{ py: 0.5 }}
+                >
+                  <Grid item>
+                    <div className="store-setting-gry Admin_std store-setting-inline-block">
+                      Enable Cash Payment For Delivery
+                    </div>
+                  </Grid>
+                  <Grid item>
+                    <span className="store-setting-switch">
+                      <Switch
+                        {...label}
+                        checked={orderState?.enabledCashPaymentDelivery}
+                        name="enabledCashPaymentDelivery"
+                        onChange={handleOrderChange}
+                        disabled={
+                          +storeData?.user_option_data?.cc_payment === 0 ||
+                          +storeData?.user_option_data?.cc_payment === 1
+                        }
+                      />
+                    </span>
+                  </Grid>
+                </Grid>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{ py: 0.5 }}
+                >
+                  <Grid item>
+                    <div className="store-setting-gry Admin_std store-setting-inline-block">
+                      Enable Cash Payment For Pickup
+                    </div>
+                  </Grid>
+                  <Grid item>
+                    <span className="store-setting-switch">
+                      <Switch
+                        {...label}
+                        checked={orderState?.enabledCashPaymenyPickup}
+                        name="enabledCashPaymenyPickup"
+                        onChange={handleOrderChange}
+                        disabled={
+                          +storeData?.user_option_data?.cc_payment === 0 ||
+                          +storeData?.user_option_data?.cc_payment === 1
+                        }
+                      />
+                    </span>
+                    {!!error ? (
+                      <span className="error-alert">{error}</span>
+                    ) : (
+                      ""
+                    )}
+                  </Grid>
+                </Grid>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{ py: 0.5 }}
+                >
+                  <Grid item>
+                    <div className="store-setting-gry Admin_std store-setting-inline-block">
+                      Enable NCA
+                    </div>
+                  </Grid>
+                  <Grid item>
+                    <span className="store-setting-switch">
+                      <Switch
+                        {...label}
+                        checked={orderState?.enabledNca}
+                        name="enabledNca"
+                        onChange={handleOrderChange}
+                      />
+                    </span>
+                  </Grid>
+                </Grid>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{ py: 0.5 }}
+                >
+                  <Grid item>
+                    <div className="store-setting-gry Admin_std store-setting-inline-block">
+                      Enable NCA
+                    </div>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
               <div class="d-flex">
                 <h2 className="store-setting-h1 store-setting-inline-block">
                   <b>Enable Order Number</b>
@@ -325,7 +624,7 @@ export default function SettingStoreOption() {
             </div>
 
             {/* Future Order */}
-            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4 store-setting-mx-10 store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
+            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
               <h2 className="store-setting-h1 store-setting-pb-1-5 store-setting-inline-block">
                 <b>Future Order</b>
               </h2>
@@ -359,7 +658,7 @@ export default function SettingStoreOption() {
                 />
               </div>
             </div>
-            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4 store-setting-mx-10 store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
+            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
               <h2 className="store-setting-h1 store-setting-pb-1-5 store-setting-inline-block">
                 <b>Dispatch Center</b>
               </h2>
@@ -406,12 +705,10 @@ export default function SettingStoreOption() {
                   <span className="checkmark"></span>
                 </label>
               </div>
-
-          
             </div>
 
             {/* Payment Options */}
-            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4 store-setting-mx-10 store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
+            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
               <h2 className="store-setting-h1 store-setting-pb-1-5">
                 <b>Payment Options</b>
               </h2>
@@ -426,10 +723,8 @@ export default function SettingStoreOption() {
                     name="enabledCashPaymentDelivery"
                     onChange={handleOrderChange}
                     disabled={
-                      +storeData?.storeoptionData?.user_option_data
-                        ?.cc_payment === 0 ||
-                      +storeData?.storeoptionData?.user_option_data
-                        ?.cc_payment === 1
+                      +storeData?.user_option_data?.cc_payment === 0 ||
+                      +storeData?.user_option_data?.cc_payment === 1
                     }
                   />
                 </span>
@@ -445,10 +740,8 @@ export default function SettingStoreOption() {
                     name="enabledCashPaymenyPickup"
                     onChange={handleOrderChange}
                     disabled={
-                      +storeData?.storeoptionData?.user_option_data
-                        ?.cc_payment === 0 ||
-                      +storeData?.storeoptionData?.user_option_data
-                        ?.cc_payment === 1
+                      +storeData?.user_option_data?.cc_payment === 0 ||
+                      +storeData?.user_option_data?.cc_payment === 1
                     }
                   />
                 </span>
@@ -520,7 +813,7 @@ export default function SettingStoreOption() {
             </div>
 
             {/* Printing */}
-            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4 store-setting-mx-10 store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
+            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
               <h2 className="store-setting-h1 store-setting-pb-1-5">
                 <b>Printing</b>
               </h2>
@@ -553,7 +846,7 @@ export default function SettingStoreOption() {
             </div>
 
             {/* Guest Checkout */}
-            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4 store-setting-mx-10 store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
+            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
               <div class="d-flex">
                 <h2 className="store-setting-h1 store-setting-pb-1-5 store-setting-inline-block">
                   <b>Guest Checkout</b>

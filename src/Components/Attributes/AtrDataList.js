@@ -12,13 +12,19 @@ import BasicTextFields from "../../reuseableComponents/TextInputField";
 import DraggableTable from "../../reuseableComponents/DraggableTable";
 import { Box, Modal } from "@mui/material";
 import ModalCutom from "../../reuseableComponents/ModalCutom";
+import { useAuthDetails } from "../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const AtrDataList = ({ seVisible }) => {
   const [showModal, setShowModal] = useState(false);
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } = useAuthDetails();
+  let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
+  const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
   const dispatch = useDispatch();
   useEffect(() => {
     let data = {
-      merchant_id: "MAL0100CA",
+      merchant_id: merchant_id,
+      ...userTypeData,
     };
     if (data) {
       dispatch(fetchAttributesData(data));
@@ -84,18 +90,22 @@ const AtrDataList = ({ seVisible }) => {
       return;
     }
     const newItem = {
-      merchant_id: "MAL0100CA",
+      merchant_id: merchant_id,
       title: newAttribute,
+      token_id: userTypeData?.token_id,
+      login_type: userTypeData?.login_type,
     };
     const data = newItem;
-    const response = await axios.post(BASE_URL + ADD_ATTRIBUTE, data, {
-      headers: { "Content-Type": "multipart/form-data" },
+    const response = await axios.post(BASE_URL + ADD_ATTRIBUTE, newItem, {
+      headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${userTypeData?.token}` },
     });
     if (response) {
       setShowModal(false);
+      ToastifyAlert(response.data.response_message, "success");
       setNewAttribute("");
       let merchantdata = {
-        merchant_id: "MAL0100CA",
+        merchant_id: merchant_id,
+        ...userTypeData,
       };
       if (merchantdata) {
         dispatch(fetchAttributesData(merchantdata));

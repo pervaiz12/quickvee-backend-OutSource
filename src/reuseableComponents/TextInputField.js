@@ -11,11 +11,13 @@ export default function BasicTextFields({
   required,
   name,
   disable,
+  onBlurFunction,
 }) {
   return (
     <FormControl fullWidth>
       <TextField
         id="outlined-basic"
+        sx={{fontFamily: "inherit"}}
         name={name}
         value={value}
         inputProps={{ maxLength: maxLength, type: type, readOnly: readOnly }}
@@ -25,6 +27,7 @@ export default function BasicTextFields({
         variant="outlined"
         size="small"
         disabled={disable}
+        onBlur={onBlurFunction}
       />
     </FormControl>
   );

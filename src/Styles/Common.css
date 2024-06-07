@@ -283,49 +283,7 @@
   height: auto;
   margin-bottom: 10px;
 }
-.input_area input {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 0 0;
-  width: 100%;
-  /* height: 40px; */
-}
-.input_area textarea {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-}
-.input_area select {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-  height: 40px;
-}
-.box_shadow_heading {
-  color: #000000;
-  font-size: 18px;
-  font-family: qvstdmedium !important;
-}
+
 
 .qv_checkbox {
   width: auto;
@@ -446,49 +404,6 @@
   width: 100%;
   height: auto;
   margin-bottom: 10px;
-}
-.input_area input {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 0 0;
-  width: 100%;
-  height: 40px;
-}
-.input_area textarea {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-}
-.input_area select {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-  height: 40px;
-}
-.box_shadow_heading {
-  color: #000000;
-  font-size: 18px;
-  font-family: qvstdmedium !important;
 }
 
 .qv_checkbox {
@@ -924,49 +839,7 @@ input.blue_btn {
   height: auto;
   margin-bottom: 10px;
 }
-.input_area input {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-  /* height: 40px; */
-}
-.input_area textarea {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-}
-.input_area select {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-  height: 40px;
-}
-.box_shadow_heading {
-  color: #000000;
-  font-size: 18px;
-  font-family: qvstdmedium !important;
-}
+
 
 .qv_checkbox {
   width: auto;
@@ -1074,49 +947,7 @@ input.blue_btn {
   height: auto;
   margin-bottom: 10px;
 }
-.input_area input {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-  height: 40px;
-}
-.input_area textarea {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-}
-.input_area select {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-  height: 40px;
-}
-.box_shadow_heading {
-  color: #000000;
-  font-size: 18px;
-  font-family: qvstdmedium !important;
-}
+
 
 .qv_checkbox {
   width: auto;
@@ -1584,49 +1415,7 @@ select:active {
   height: auto;
   margin-bottom: 10px;
 }
-.input_area input {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-  /* height: 40px; */
-}
-.input_area textarea {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-}
-.input_area select {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-  height: 40px;
-}
-.box_shadow_heading {
-  color: #000000;
-  font-size: 18px;
-  font-family: qvstdmedium !important;
-}
+
 
 .qv_checkbox {
   width: auto;
@@ -1738,49 +1527,7 @@ select:active {
   height: auto;
   margin-bottom: 10px;
 }
-.input_area input {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-  height: 40px;
-}
-.input_area textarea {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-}
-.input_area select {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-  height: 40px;
-}
-.box_shadow_heading {
-  color: #000000;
-  font-size: 18px;
-  font-family: qvstdmedium !important;
-}
+
 
 .qv_checkbox {
   width: auto;
@@ -2199,49 +1946,7 @@ input.blue_btn {
   height: auto;
   margin-bottom: 10px;
 }
-.input_area input {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-  /* height: 40px; */
-}
-.input_area textarea {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-}
-.input_area select {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-  height: 40px;
-}
-.box_shadow_heading {
-  color: #000000;
-  font-size: 18px;
-  font-family: qvstdmedium !important;
-}
+
 
 .qv_checkbox {
   width: auto;
@@ -2348,49 +2053,6 @@ input.blue_btn {
   width: 100%;
   height: auto;
   margin-bottom: 10px;
-}
-.input_area input {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-  height: 40px;
-}
-.input_area textarea {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-}
-.input_area select {
-  font-family: qvmedium !important;
-  color: #000000;
-  font-size: 15px;
-  outline: none;
-  background: #ffffff;
-  border: 1px solid #e1e1e1;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 5px 0 15px 0;
-  width: 100%;
-  height: 40px;
-}
-.box_shadow_heading {
-  color: #000000;
-  font-size: 18px;
-  font-family: qvstdmedium !important;
 }
 
 .qv_checkbox {

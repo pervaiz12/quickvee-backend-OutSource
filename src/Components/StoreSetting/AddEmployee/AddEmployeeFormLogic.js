@@ -7,6 +7,7 @@ import Validation from "../../../Constants/Validation";
 // import { useNavigate } from "react-router-dom";
 import { BASE_URL, ADDEDIT_EMPLOYEE } from "../../../Constants/Config";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 
 const AddEmployeeFormLogic = ({ employeeList }) => {
   const dispatch = useDispatch();
@@ -105,6 +106,28 @@ const AddEmployeeFormLogic = ({ employeeList }) => {
     }));
   };
 
+  const handlePhoneInput = (event) => {
+    const value = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+    setValues((prevValues) => ({
+        ...prevValues,
+        phone: value,
+    }));
+};
+const handlePinInput = (event) => {
+    const value = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+    setValues((prevValues) => ({
+        ...prevValues,
+        pin: value,
+    }));
+};
+const handleZipInput = (event) => {
+  const value = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+  setValues((prevValues) => ({
+      ...prevValues,
+      zipcode: value,
+  }));
+};
+
   const handleAddEmployee = async (e) => {
     e.preventDefault();
     let { errors } = values;
@@ -155,6 +178,7 @@ const AddEmployeeFormLogic = ({ employeeList }) => {
         });
         console.log(response.data);
         if (response.data.status === true) {
+          ToastifyAlert(response?.data?.message, "success");
           const latest_employee = response.data.inserted_data;
           dispatch(addToEmployeeList(latest_employee));
           setShowModal(false);
@@ -197,6 +221,9 @@ const AddEmployeeFormLogic = ({ employeeList }) => {
 
   return {
     handleAddEmployeeInput,
+    handlePhoneInput,
+    handlePinInput,
+    handleZipInput,
     values,
     handleAddEmployee,
     submitmessage,

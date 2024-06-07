@@ -9,6 +9,8 @@ import { BASE_URL, ADD_ATTRIBUTE } from "../../Constants/Config";
 import EditIcon from "../../Assests/Category/editIcon.svg";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import { Box, Modal } from '@mui/material';
+import { useAuthDetails } from "../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const EditDeliveryAddress = ({ attribute, allattributes }) => {
 
@@ -19,6 +21,9 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
   const [newAttribute, setNewAttribute] = useState("");
   const [submitmessage, setsubmitmessage] = useState("");
 
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } = useAuthDetails();
+  let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
+  const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
   const openModal = () => {
     setShowModal(true);
     setNewAttribute(attribute.title);
@@ -54,18 +59,21 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
       return false;
     }
     const editItem = {
-      merchant_id: "MAL0100CA",
+      merchant_id: merchant_id,
       varient_id: attribute.id,
       title: newAttribute,
       old_title: attribute.title,
+      token_id: userTypeData?.token_id,
+      login_type: userTypeData?.login_type,
     };
     const data = editItem;
     console.log(data);
-    const response = await axios.post(BASE_URL + ADD_ATTRIBUTE, data, {
-      headers: { "Content-Type": "multipart/form-data" },
+    const response = await axios.post(BASE_URL + ADD_ATTRIBUTE, editItem, {
+      headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${userTypeData?.token}` },
     });
     if (response) {
       dispatch(editAttribute({ id: attribute.id, title: newAttribute }))
+      ToastifyAlert(response.data.response_message, "success");
       setShowModal(false);
 
     } else {

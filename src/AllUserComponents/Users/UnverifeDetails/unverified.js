@@ -41,6 +41,8 @@ import Delete from "../../../Assests/VerifiedMerchant/Delete.svg";
 import Like from "../../../Assests/VerifiedMerchant/Like.svg";
 import useDebounce from "../../../hooks/useDebouncs";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import CircularProgress from "@mui/material/CircularProgress";
+import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -87,6 +89,9 @@ export default function Unverified() {
   );
   const [storename, setStorename] = useState();
   const [submitmessage, setsubmitmessage] = useState("");
+  const [loader, setLoader] = useState(false);
+  const [deleteLoader, setDeleteLoader] = useState(false);
+  const [deletedId, setDeletedId] = useState("");
 
   const debouncedValue = useDebounce(searchRecord);
   //  ============= END DEFINED STATES =============================
@@ -118,6 +123,8 @@ export default function Unverified() {
           id: tableData.id,
           ...otherUserData,
         };
+        setDeleteLoader(true);
+        setDeletedId(tableData.id);
 
         const response = await axios.post(
           BASE_URL + DELETE_SINGLE_STORE,
@@ -131,6 +138,9 @@ export default function Unverified() {
         );
 
         if (response) {
+          setDeleteLoader(false);
+          setDeletedId("");
+          ToastifyAlert("Deleted Merchant  Successfully!", "success");
           // const updatedVendorDetails = VerifiedMerchantListState.filter(
           //   (vendor) => vendor.id !== tableData.id
           // );
@@ -138,6 +148,9 @@ export default function Unverified() {
           // setFilteredMerchants(updatedVendorDetails);
           dispatch(getUnVerifiedMerchant(unverify_data));
         } else {
+          setDeleteLoader(false);
+          setDeletedId("");
+          ToastifyAlert("Merchant not Deleted!", "warn");
           console.error(response);
         }
       }
@@ -237,7 +250,6 @@ export default function Unverified() {
           console.log("store page called");
         }
       } else {
-        console.log("hhhhhh");
         Cookies.remove("loginDetails");
         Cookies.remove("user_auth_record");
         // Cookies.remove('token_data');
@@ -294,6 +306,7 @@ export default function Unverified() {
         type: type,
         ...otherUserData,
       };
+      setLoader(true);
 
       const response = await axios.post(BASE_URL + EXPORTCSV, delVendor, {
         headers: {
@@ -303,6 +316,7 @@ export default function Unverified() {
       });
 
       if (response) {
+        setLoader(false);
         const csvData = response.data;
         // Convert the data to a Blob
         const blob = new Blob([csvData], { type: "text/csv" });
@@ -321,6 +335,8 @@ export default function Unverified() {
         document.body.removeChild(a);
         URL.revokeObjectURL(fileUrl);
         setsubmitmessage("Inventory Exported Successfully");
+      } else {
+        setLoader(false);
       }
     } catch (error) {
       console.error(error);
@@ -362,6 +378,9 @@ export default function Unverified() {
                     onClick={() => handleExportTransaction(1)}
                     className="flex q-category-bottom-header "
                   >
+                    <span className="quic-btn-save excelLoader">
+                      {loader ? <CircularProgress /> : ""}
+                    </span>{" "}
                     <p className="me-2 ">Export Last Transaction</p>
                   </div>
                 </Grid>
@@ -493,12 +512,16 @@ export default function Unverified() {
                                     src={Edit}
                                     alt="Edit"
                                   />
-                                  <img
-                                    class="mx-1 delete cursor-pointer"
-                                    onClick={() => handleDeleteMerchant(data)}
-                                    src={Delete}
-                                    alt="Delete"
-                                  />
+                                  {data.id == deletedId && deleteLoader ? (
+                                    <CircularProgress />
+                                  ) : (
+                                    <img
+                                      class="mx-1 delete cursor-pointer"
+                                      onClick={() => handleDeleteMerchant(data)}
+                                      src={Delete}
+                                      alt="Delete"
+                                    />
+                                  )}
                                   <img
                                     class="mx-1 cursor-pointer"
                                     onClick={() =>

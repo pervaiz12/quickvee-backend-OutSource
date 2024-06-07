@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import EditIcon from "../../../Assests/Category/editIcon.svg";
 import CrossIcon from "../../../Assests/Dashboard/cross.svg";
 import EditEmployeeFormLogic from "../../../Components/StoreSetting/AddEmployee/EditEmployeeFormLogic";
+import TextField from "@mui/material/TextField";
+import MenuItem from "@mui/material/MenuItem";
+import Select from "@mui/material/Select";
 
 const EditEmployeeModal =  ({employee, states , employeeList}) => {
     // const [open, setOpen] = useState(false);
@@ -24,6 +27,9 @@ const EditEmployeeModal =  ({employee, states , employeeList}) => {
 
     const {
         handleEditEmployeeInput,
+        handlePhoneInput,
+        handlePinInput,
+        handleZipInput,
         values,
         handleEditEmployee,
         submitmessage,
@@ -33,16 +39,24 @@ const EditEmployeeModal =  ({employee, states , employeeList}) => {
         setsubmitmessage,
       } = EditEmployeeFormLogic({employee, employeeList});
 
+      const myStyles = {
+        // width: "58rem",
+        position: "absolute",
+        top: "47%",
+        left: "50%",
+        transform: "translate(-50%, -50%)",
+        padding: "unset"
+      };
+
     return <>
         <div>
             <div className='box'>
         <span className='categories-items categories-items-btn' onClick={handleOpen}> <img src={EditIcon} alt="edit-icon" /> </span>
         {showModal && (
           <div className="q-custom-modal-container" id="addemployee">
-            {/* Your modal JSX */}
-            <div className="q-custom-modal-content modal_custom">
-              {/* Your modal content */}
-              <div className="">
+            <div className="q-custom-modal-content modal_custom" style={myStyles}>
+
+              {/* <div className="">
                 <p className="q-custom-modal-header ">
                   Edit Employee
                   <img
@@ -52,19 +66,37 @@ const EditEmployeeModal =  ({employee, states , employeeList}) => {
                     onClick={closeModal}
                   />
                 </p>
-              </div>
-              {/* ... other modal content ... */}
-              <div className="qvrow">
+              </div> */}
+              <div className="q-add-categories-section-header" style={{justifyContent:"space-between"}}>
+                <span style={{cursor:"unset"}}>Edit Employee</span>
+                    <div className="">
+                        <img src={CrossIcon} alt="icon" className="quic-btn-cancle w-6 h-6 cursor-pointer" onClick={closeModal} />
+                    </div>
+                </div>
+                <div className="p-6">
+
+              <div className="qvrow ">
                 <div className="col-qv-4">
-                    <div className="input_area">
+                    <div className="input_area text-left">
                         <label>First Name</label>
-                        <input
+                        {/* <input
                             type="text"
                             name="firstname"
                             placeholder="First Name"
                             value={values.firstname}
                             onChange={handleEditEmployeeInput}
                             className="q-custom-input-field"
+                        /> */}
+                        <TextField
+                          id="outlined-basic"
+                          type="text"
+                            name="firstname"
+                            placeholder="First Name"
+                            value={values.firstname}
+                            onChange={handleEditEmployeeInput}
+                            className="q-custom-input-field"
+                            variant="outlined"
+                            size="small"
                         />
                         <span className="input-error">
                             {values.errors.firstname !== "" ? values.errors.firstname : ""}
@@ -72,15 +104,26 @@ const EditEmployeeModal =  ({employee, states , employeeList}) => {
                     </div>
                 </div>
                 <div className="col-qv-4">
-                    <div className="input_area">
+                    <div className="input_area text-left">
                         <label>Last Name</label>
-                        <input
+                        {/* <input
                             type="text"
                             name="lastname"
                             placeholder="Last Name"
                             value={values.lastname}
                             onChange={handleEditEmployeeInput}
                             className="q-custom-input-field"
+                        /> */}
+                        <TextField
+                          id="outlined-basic"
+                          type="text"
+                            name="lastname"
+                            placeholder="Last Name"
+                            value={values.lastname}
+                            onChange={handleEditEmployeeInput}
+                            className="q-custom-input-field"
+                            variant="outlined"
+                            size="small"
                         />
                          <span className="input-error">
                             {values.errors.lastname !== "" ? values.errors.lastname : ""}
@@ -88,15 +131,26 @@ const EditEmployeeModal =  ({employee, states , employeeList}) => {
                     </div>
                 </div>
                 <div className="col-qv-4">
-                    <div className="input_area">
+                    <div className="input_area text-left">
                         <label>Email Address</label>
-                        <input
+                        {/* <input
                             type="text"
                             name="email"
                             placeholder="Email"
                             value={values.email}
                             onChange={handleEditEmployeeInput}
                             className="q-custom-input-field"
+                        /> */}
+                        <TextField
+                          id="outlined-basic"
+                          type="text"
+                            name="email"
+                            placeholder="Email"
+                            value={values.email}
+                            onChange={handleEditEmployeeInput}
+                            className="q-custom-input-field"
+                            variant="outlined"
+                            size="small"
                         />
                         <span className="input-error">
                             {values.errors.email !== "" ? values.errors.email : ""}
@@ -106,15 +160,27 @@ const EditEmployeeModal =  ({employee, states , employeeList}) => {
               </div>
               <div className="qvrow">
                 <div className="col-qv-4">
-                    <div className="input_area">
+                    <div className="input_area text-left">
                         <label>Phone Number</label>
-                        <input
+                        {/* <input
                             type="text"
                             name="phone"
                             placeholder="Phone"
                             value={values.phone}
                             onChange={handleEditEmployeeInput}
                             className="q-custom-input-field"
+                        /> */}
+                        <TextField
+                          id="outlined-basic"
+                          type="text"
+                            name="phone"
+                            placeholder="Phone"
+                            value={values.phone}
+                            inputProps={{ maxLength: 10 }}
+                            onChange={handlePhoneInput}
+                            className="q-custom-input-field"
+                            variant="outlined"
+                            size="small"
                         />
                         <span className="input-error">
                             {values.errors.phone !== "" ? values.errors.phone : ""}
@@ -122,15 +188,27 @@ const EditEmployeeModal =  ({employee, states , employeeList}) => {
                     </div>
                 </div>
                 <div className="col-qv-4">
-                    <div className="input_area">
+                    <div className="input_area text-left">
                         <label>PIN</label>
-                        <input
+                        {/* <input
                             type="text"
                             name="pin"
                             placeholder="Pin"
                             value={values.pin}
                             onChange={handleEditEmployeeInput}
                             className="q-custom-input-field"
+                        /> */}
+                        <TextField
+                          id="outlined-basic"
+                          type="text"
+                            name="pin"
+                            placeholder="Pin"
+                            value={values.pin}
+                            onChange={handlePinInput}
+                            inputProps={{ maxLength: 4 }}
+                            className="q-custom-input-field"
+                            variant="outlined"
+                            size="small"
                         />
                         <span className="input-error">
                             {values.errors.pin !== "" ? values.errors.pin : ""}
@@ -138,15 +216,26 @@ const EditEmployeeModal =  ({employee, states , employeeList}) => {
                     </div>
                 </div>
                 <div className="col-qv-4">
-                    <div className="input_area">
+                    <div className="input_area text-left">
                         <label>Wages ($/hr)</label>
-                        <input
+                        {/* <input
                             type="text"
                             name="wages"
                             placeholder="Wages Per Hour"
                             value={values.wages}
                             onChange={handleEditEmployeeInput}
                             className="q-custom-input-field"
+                        /> */}
+                        <TextField
+                          id="outlined-basic"
+                          type="text"
+                            name="wages"
+                            placeholder="Wages Per Hour"
+                            value={values.wages}
+                            onChange={handleEditEmployeeInput}
+                            className="q-custom-input-field"
+                            variant="outlined"
+                            size="small"
                         />
                         <span className="input-error">
                             {values.errors.wages !== "" ? values.errors.wages : ""}
@@ -156,15 +245,26 @@ const EditEmployeeModal =  ({employee, states , employeeList}) => {
               </div>
               <div className="qvrow">
                 <div className="col-qv-12">
-                    <div className="input_area">
+                    <div className="input_area text-left">
                         <label>Address</label>
-                        <input
+                        {/* <input
                             type="text"
                             name="address_line_1"
                             placeholder="Address"
                             value={values.address_line_1}
                             onChange={handleEditEmployeeInput}
                             className="q-custom-input-field"
+                        /> */}
+                        <TextField
+                          id="outlined-basic"
+                          type="text"
+                            name="address_line_1"
+                            placeholder="Address"
+                            value={values.address_line_1}
+                            onChange={handleEditEmployeeInput}
+                            className="q-custom-input-field"
+                            variant="outlined"
+                            size="small"
                         />
                         <span className="input-error">
                             {values.errors.address_line_1 !== "" ? values.errors.address_line_1 : ""}
@@ -173,14 +273,25 @@ const EditEmployeeModal =  ({employee, states , employeeList}) => {
                 </div>
                           
                 <div className="col-qv-4">
-                    <div className="input_area">
-                        <input
+                    <div className="input_area ">
+                        {/* <input
                             type="text"
                             name="city"
                             placeholder="City"
                             value={values.city}
                             onChange={handleEditEmployeeInput}
                             className="q-custom-input-field"
+                        /> */}
+                        <TextField
+                          id="outlined-basic"
+                          type="text"
+                            name="city"
+                            placeholder="City"
+                            value={values.city}
+                            onChange={handleEditEmployeeInput}
+                            className="q-custom-input-field"
+                            variant="outlined"
+                            size="small"
                         />
                         <span className="input-error">
                             {values.errors.city !== "" ? values.errors.city : ""}
@@ -188,14 +299,26 @@ const EditEmployeeModal =  ({employee, states , employeeList}) => {
                     </div>
                 </div>
                 <div className="col-qv-4">
-                    <div className="input_area">
-                        <input
+                    <div className="input_area ">
+                        {/* <input
                             type="text"
                             name="zipcode"
                             placeholder="Zip"
                             value={values.zipcode}
                             onChange={handleEditEmployeeInput}
                             className="q-custom-input-field"
+                        /> */}
+                        <TextField
+                          id="outlined-basic"
+                          type="text"
+                            name="zipcode"
+                            placeholder="Zip"
+                            value={values.zipcode}
+                            onChange={handleZipInput}
+                            inputProps={{ maxLength: 5 }}
+                            className="q-custom-input-field"
+                            variant="outlined"
+                            size="small"
                         />
                         <span className="input-error">
                             {values.errors.zipcode !== "" ? values.errors.zipcode : ""}
@@ -203,8 +326,8 @@ const EditEmployeeModal =  ({employee, states , employeeList}) => {
                     </div>
                 </div>
                 <div className="col-qv-4">
-                    <div className="input_area">
-                    <select
+                    <div className="input_area addEmployeeState text-left">
+                    {/* <select
                         name="state"
                         placeholder="state"
                         className="q-custom-input-field"
@@ -214,7 +337,15 @@ const EditEmployeeModal =  ({employee, states , employeeList}) => {
                         {states && states.map((state, index) => (
                             <option key={index} value={state.State} selected={(values.state === state.State ) ? 'selected' : '' } >{state.State}</option>
                         ))}
-                    </select>
+                    </select> */}
+                    <Select size="small"  name="state"  value={values.state} onChange={handleEditEmployeeInput} className="q-custom-input-field"  displayEmpty >
+                        <MenuItem value="">Select a state</MenuItem>
+                        {states && states.map((state, index) => (
+                            <MenuItem key={index} value={state.State} selected={(values.state === state.State ) ? 'selected' : '' }>
+                                {state.State}
+                            </MenuItem>
+                        ))}
+                    </Select>
                         
                         <span className="input-error">
                             {values.errors.state !== "" ? values.errors.state : ""}
@@ -223,10 +354,6 @@ const EditEmployeeModal =  ({employee, states , employeeList}) => {
                 </div>
                 
               </div>
-              
-              
-            
-              
               <div className="q-add-categories-section-middle-footer plr0">
                 <button
                     onClick={handleEditEmployee}
@@ -241,6 +368,11 @@ const EditEmployeeModal =  ({employee, states , employeeList}) => {
                   Cancel
                 </button>
               </div>
+              </div>
+              
+              
+            
+              
             </div>
           </div>
         )}

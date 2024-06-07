@@ -7,6 +7,7 @@ import Validation from "../../../Constants/Validation";
 // import { useNavigate } from "react-router-dom";
 import { BASE_URL, ADDEDIT_EMPLOYEE } from "../../../Constants/Config";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 
 const AddEmployeeFormLogic = ({employee, employeeList}) => {
   const dispatch = useDispatch();
@@ -112,6 +113,28 @@ const AddEmployeeFormLogic = ({employee, employeeList}) => {
         }));
       };
 
+      const handlePhoneInput = (event) => {
+        const value = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+        setValues((prevValues) => ({
+            ...prevValues,
+            phone: value,
+        }));
+    };
+    const handlePinInput = (event) => {
+        const value = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+        setValues((prevValues) => ({
+            ...prevValues,
+            pin: value,
+        }));
+    };
+    const handleZipInput = (event) => {
+      const value = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+      setValues((prevValues) => ({
+          ...prevValues,
+          zipcode: value,
+      }));
+    };
+
 
       const handleEditEmployee = async (e) => {
         console.log('222');
@@ -152,7 +175,7 @@ const AddEmployeeFormLogic = ({employee, employeeList}) => {
             const response = await axios.post(BASE_URL + ADDEDIT_EMPLOYEE, data, { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}` } })
             console.log(response.data);
             if ( response.data.status === true) {
-              
+              ToastifyAlert(response?.data?.message, "success");
               dispatch(editEmployee(data));
               setShowModal(false);
               // Navigate("/");
@@ -176,7 +199,7 @@ const AddEmployeeFormLogic = ({employee, employeeList}) => {
         }));
       };
 
-      return { handleEditEmployeeInput, values, handleEditEmployee, submitmessage, setsubmitmessage , showModal , setShowModal , scrollRef  };
+      return { handleEditEmployeeInput,handlePhoneInput,handlePinInput,handleZipInput, values, handleEditEmployee, submitmessage, setsubmitmessage , showModal , setShowModal , scrollRef  };
 }
 
 export default AddEmployeeFormLogic;

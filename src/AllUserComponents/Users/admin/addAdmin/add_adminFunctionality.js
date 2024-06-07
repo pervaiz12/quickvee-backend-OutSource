@@ -32,6 +32,7 @@ export default function Add_adminFunctionality() {
     const { name, value } = e.target;
     let errors = { ...addAdminData.errors };
     let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+    const trimmedValue = value.replace(/^\s+/, "");
 
     if (name === "owner_name") {
       // errors[name] = value === " " ? `Please fill in the ${name} field` : "";
@@ -57,7 +58,7 @@ export default function Add_adminFunctionality() {
     if (name === "phone") {
       const numericValue = value.replace(/[^0-9]/g, "");
       if (numericValue == "") {
-        errors[name] = "";
+        errors[name] = `Please fill in the ${name} field`;
       } else if (numericValue.length !== 10) {
         errors[name] = "Phone number must be 10 digits";
       } else {
@@ -69,7 +70,7 @@ export default function Add_adminFunctionality() {
     setAddAdminData((prev) => ({
       ...prev,
       errors: errors,
-      [name]: value,
+      [name]: value.replace(/^\s+/, ""),
     }));
   };
 
@@ -175,6 +176,10 @@ export default function Add_adminFunctionality() {
       errors.password = "Please fill in the password field";
       formIsValid = false;
     }
+    if (addAdminData.phone === "") {
+      errors.phone = "Please fill in the phone field";
+      formIsValid = false;
+    }
 
     setAddAdminData({
       ...addAdminData,
@@ -198,9 +203,9 @@ export default function Add_adminFunctionality() {
     if (formIsValid == false) {
       if (CurrentValidate == true) {
         const packet = {
-          owner_name: addAdminData.owner_name,
-          email: addAdminData.email,
-          password: addAdminData.password,
+          owner_name: addAdminData.owner_name.trim(),
+          email: addAdminData.email.trim(),
+          password: addAdminData.password.trim(),
           phone: addAdminData.phone,
           ...newData,
         };

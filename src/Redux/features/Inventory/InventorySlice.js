@@ -26,10 +26,7 @@ export const updateInventoryData = createAsyncThunk(
         },
       });
 
-      if (response.data.success === true) {
-        alert("Updated Successfully!");
-        return response.data.data;
-      }
+      return response?.data;
     } catch (error) {
       throw new Error(error.response.data.msg);
     }

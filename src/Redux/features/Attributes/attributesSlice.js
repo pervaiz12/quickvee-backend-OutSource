@@ -12,8 +12,9 @@ const initialState = {
 
 // Generate pening , fulfilled and rejected action type
 export const fetchAttributesData = createAsyncThunk('attributes/fetchAttributesData.', async (data) => {
+    const {token, ...dataNew}= data;
     try {
-        const response = await axios.post(BASE_URL + LIST_ALL_ATTRIBUTES, data, { headers: { "Content-Type": "multipart/form-data" } })
+        const response = await axios.post(BASE_URL + LIST_ALL_ATTRIBUTES, data, { headers: { "Content-Type": "multipart/form-data",'Authorization': `Bearer ${token}` } })
         if (response.status === 200) {
            return response.data.result
         }
