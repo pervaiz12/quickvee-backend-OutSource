@@ -49,7 +49,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const EditPurchaseOrder = () => {
+const ReceivePurchaseOrderItems = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -494,4 +494,4 @@ const EditPurchaseOrder = () => {
   );
 };
 
-export default EditPurchaseOrder;
+export default ReceivePurchaseOrderItems;

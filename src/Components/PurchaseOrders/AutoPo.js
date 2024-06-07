@@ -366,7 +366,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors, seVisible }) => {
       <div className="box">
         <div className="box_shadow_div" style={{ overflow: "unset" }}>
           <div className="mt-4 px-6">
-            <div className="q_searchBar sticky">
+            <div className="q_searchBar sticky z-index-2">
               <Grid container>
                 <Grid item xs={12}>
                   <AsyncSelect
@@ -383,7 +383,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors, seVisible }) => {
             </div>
           </div>
 
-          <div className="q-category-bottom-detail-section">
+          <div className="q-category-bottom-detail-section z-index-1">
             {selectedProducts.length > 0 && (
               <>
                 <div className="q-add-purchase-section-header">

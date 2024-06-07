@@ -96,7 +96,7 @@ module.exports = Object.freeze({
   GET_STORE_RECEIPT_DATA: "StoreReact_setting_api/get_receipt_list",
   UPDATE_RECEIPT_INFO_DATA: "StoreReact_setting_api/update_receipt_info_list",
 
-  // Purchase API Calls
+  // Purchase Order API Calls
   LIST_ALL_PARCHASE: "Purchase_ordersReactApi/purchase_order_list",
   PURCHASE_ORDER_COUNT: "Purchase_ordersReactApi/purchase_order_count",
   SAVE_PO: "Purchase_ordersReactApi/save_po",
@@ -104,6 +104,7 @@ module.exports = Object.freeze({
   PURCHASE_ORDER_DETAILS_BY_ID: "Purchase_ordersReactApi/get_po_by_id",
   VOID_PO: "Purchase_ordersReactApi/void_po",
   RECEIVE_PURCHASE_ORDER_ITEMS: "Purchase_ordersReactApi/recieve_po",
+  UPDATE_PO: "Purchase_ordersReactApi/update_po",
 
   // Taxes API Calls
   ADD_TAXES: "Taxesapi/add_Tax",
