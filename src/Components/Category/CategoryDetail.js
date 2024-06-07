@@ -22,6 +22,7 @@ import RadioSelect from "./RadioSelect";
 import { BASE_URL, SORT_CATOGRY_DATA } from "../../Constants/Config";
 import { useAuthDetails } from "./../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import DeleteModal from "../../reuseableComponents/DeleteModal";
 
 const CategoryDetail = ({ seVisible }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -64,23 +65,45 @@ const CategoryDetail = ({ seVisible }) => {
     AllCategoriesDataState.categoriesData,
   ]);
 
-  const handleDeleteCategory = (id) => {
-    const data = {
-      id: id,
-      ...userTypeData,
-    };
+  // const handleDeleteCategory = (id) => {
+  //   const data = {
+  //     id: id,
+  //     ...userTypeData,
+  //   };
 
-    const userConfirmed = window.confirm(
-      "Are you sure you want to delete this Category?"
-    );
-    if (userConfirmed) {
-      if (id) {
+  //   const userConfirmed = window.confirm(
+  //     "Are you sure you want to delete this Category?"
+  //   );
+  //   if (userConfirmed) {
+  //     if (id) {
+  //       // dispatch(deleteCategory(data));
+  //       // ToastifyAlert("Category Deleted", "success");
+  //     }
+  //   } else {
+  //     console.log("Deletion canceled by user");
+  //   }
+  // };
+
+  const [deleteCategoryId, setDeleteCategoryId] = useState(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const handleDeleteCategory = (id) => {
+    setDeleteCategoryId(id);
+    setDeleteModalOpen(true);
+  };
+  const confirmDeleteCategory = () => {
+    if(deleteCategoryId){
+      const data = {
+        id: deleteCategoryId,
+        ...userTypeData,
+      };
+      if (data) {
         dispatch(deleteCategory(data));
         ToastifyAlert("Category Deleted", "success");
       }
-    } else {
-      console.log("Deletion canceled by user");
     }
+    setDeleteCategoryId(null)
+    setDeleteModalOpen(false);
   };
 
   // for  Category Status update
@@ -426,6 +449,12 @@ const CategoryDetail = ({ seVisible }) => {
               )}
             </Droppable>
           </DragDropContext> */}
+          <DeleteModal
+            headerText="Category"
+            open={deleteModalOpen}
+            onClose={() => {setDeleteModalOpen(false)}}
+            onConfirm={confirmDeleteCategory}
+          />
         </div>
       </div>
     </>

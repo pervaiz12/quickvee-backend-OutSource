@@ -18,6 +18,8 @@ import { useAuthDetails } from "../../Common/cookiesHelper";
 import { BASE_URL, COUPON_STATUS_UPDATE } from "../../Constants/Config";
 
 import moment from "moment";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import DeleteModal from "../../reuseableComponents/DeleteModal";
 
 const CouponDiscount = ({ seVisible }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -92,20 +94,42 @@ const CouponDiscount = ({ seVisible }) => {
     [dispatch]
   );
 
+  // const handleDeleteCoupon = (id) => {
+  //   const isConfirmed = window.confirm(
+  //     "Are you sure you want to delete this coupon?"
+  //   );
+  //   if (isConfirmed) {
+  //     const data = {
+  //       merchant_id,
+  //       coupon_id: id,
+  //       ...userTypeData,
+  //     };
+  //     if (id) {
+  //       dispatch(deleteCoupon(data));
+  //     }
+  //   }
+  // };
+  const [deleteCouponId, setDeleteCouponId] = useState(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
   const handleDeleteCoupon = (id) => {
-    const isConfirmed = window.confirm(
-      "Are you sure you want to delete this coupon?"
-    );
-    if (isConfirmed) {
+    setDeleteCouponId(id);
+    setDeleteModalOpen(true);
+  };
+  const confirmDeleteCategory = () => {
+    if(deleteCouponId){
       const data = {
-        merchant_id,
-        coupon_id: id,
+        coupon_id: deleteCouponId,
+        merchant_id: merchant_id,
         ...userTypeData,
       };
-      if (id) {
+      if (data) {
         dispatch(deleteCoupon(data));
+        ToastifyAlert("Coupon Deleted", "success");
       }
     }
+    setDeleteCouponId(null)
+    setDeleteModalOpen(false);
   };
 
   const label = { inputProps: { "aria-label": "Switch demo" } };
@@ -242,6 +266,12 @@ const CouponDiscount = ({ seVisible }) => {
             </div>
           </div>
         </div>
+        <DeleteModal 
+        headerText="Coupon"
+        open={deleteModalOpen}
+        onClose={() => {setDeleteModalOpen(false)}}
+        onConfirm={confirmDeleteCategory}
+        />
       </div>
     </>
   );

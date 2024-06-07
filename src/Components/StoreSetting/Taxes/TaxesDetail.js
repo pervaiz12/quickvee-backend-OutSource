@@ -11,6 +11,7 @@ import {
 import DraggableTable from "../../../reuseableComponents/DraggableTable";
 import { useSelector, useDispatch } from "react-redux";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
+import DeleteModal from "../../../reuseableComponents/DeleteModal";
 
 const TaxesDetail = () => {
   const [alltaxes, setalltaxes] = useState([]);
@@ -39,23 +40,46 @@ const TaxesDetail = () => {
     AlltaxesDataState.taxesData,
   ]);
 
+  // const handleDeleteTax = (id) => {
+  //   const data = {
+  //     id: id,
+  //     merchant_id: merchant_id,
+  //     ...userTypeData,
+  //   };
+  //   const userConfirmed = window.confirm(
+  //     "Are you sure you want to delete this tax?"
+  //   );
+  //   if (userConfirmed) {
+  //     if (id) {
+  //       dispatch(deleteTax(data));
+  //       ToastifyAlert("Taxes Deleted", "success");
+  //     }
+  //   } else {
+  //     console.log("Deletion canceled by user");
+  //   }
+  // };
+
+  const [deleteTaxeId, setDeleteTaxeId] = useState(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
   const handleDeleteTax = (id) => {
-    const data = {
-      id: id,
-      merchant_id: merchant_id,
-      ...userTypeData,
-    };
-    const userConfirmed = window.confirm(
-      "Are you sure you want to delete this tax?"
-    );
-    if (userConfirmed) {
-      if (id) {
+    setDeleteTaxeId(id);
+    setDeleteModalOpen(true);
+  };
+  const confirmDeleteCategory = () => {
+    if(deleteTaxeId){
+      const data = {
+        id: deleteTaxeId,
+        merchant_id: merchant_id,
+        ...userTypeData,
+      };
+      if (data) {
         dispatch(deleteTax(data));
         ToastifyAlert("Taxes Deleted", "success");
       }
-    } else {
-      console.log("Deletion canceled by user");
     }
+    setDeleteTaxeId(null)
+    setDeleteModalOpen(false);
   };
 
 
@@ -146,6 +170,12 @@ const TaxesDetail = () => {
             />
             </div>
           </div>
+          <DeleteModal 
+            headerText="Taxe"
+            open={deleteModalOpen}
+            onClose={() => {setDeleteModalOpen(false)}}
+            onConfirm={confirmDeleteCategory}
+            />
       </div>
     </>
   );

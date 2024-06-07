@@ -143,7 +143,7 @@ export const fetchVarientList = createAsyncThunk(
   async (payload) => {
     try {
       const response = await axios.post(
-        BASE_URL + "Varientsapi/varients_list",
+        BASE_URL + "Varient_react_api/varients_list",
         payload
       );
       return response?.data;
