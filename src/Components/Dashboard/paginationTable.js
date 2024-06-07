@@ -84,7 +84,7 @@ export default function DashboardTables(props) {
                   {/* <StyledTableCell align="center">
                     {row.cvvResult}
                   </StyledTableCell> */}
-                  <StyledTableCell align="center">{row.amt}</StyledTableCell>
+                  <StyledTableCell align="center">{`$${row.amt}`}</StyledTableCell>
                   <StyledTableCell align="center">
                     <Link
                       to={`/store-reporting/order-summary/${props.merchant_id}/${row.order_id}`}

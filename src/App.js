@@ -371,6 +371,11 @@ function App() {
             path="/store-reporting/inventory-list"
             element={<Main visible={"inventory-list"} />}
           />
+          <Route
+            exact
+            path="/store-reporting/profit-margin-report"
+            element={<Main visible={"profit-Margin"} />}
+          />
 
           <Route
             exact

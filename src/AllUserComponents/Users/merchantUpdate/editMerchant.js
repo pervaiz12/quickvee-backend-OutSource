@@ -3,6 +3,8 @@ import EditMerchantFunctionality from "./editMerchantFunctionality";
 import Switch from "@mui/material/Switch";
 import Alert from "@mui/material/Alert";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import CircularProgress from "@mui/material/CircularProgress";
+
 import { useParams } from "react-router-dom";
 
 export default function EditMerchant() {
@@ -29,6 +31,7 @@ export default function EditMerchant() {
     inventory,
     inventoryApprove,
     errors,
+    loader,
   } = EditMerchantFunctionality();
   const { id } = useParams();
   // console.log(id)
@@ -171,7 +174,7 @@ export default function EditMerchant() {
               <h3>Address</h3>
               <div className="col-qv-6">
                 <div className="input_area">
-                  <label>Address Line1</label>
+                  <label>Address Line 1</label>
                   <input
                     className=""
                     type="text"
@@ -184,7 +187,7 @@ export default function EditMerchant() {
 
               <div className="col-qv-6">
                 <div className="input_area">
-                  <label>Address Line2</label>
+                  <label>Address Line 2</label>
                   <input
                     className=""
                     type="text"
@@ -341,12 +344,19 @@ export default function EditMerchant() {
               )}
             </div>
             <br />
-            <input
+            <button
+              className="quic-btn quic-btn-save"
+              onClick={handleUpdateMerchant}
+              disabled={loader}
+            >
+              {loader ? <CircularProgress /> : "Update"}
+            </button>
+            {/* <input
               type="button"
               className="blue_btn"
               value="Update"
               onClick={handleUpdateMerchant}
-            />
+            /> */}
           </div>
         </div>
       </div>

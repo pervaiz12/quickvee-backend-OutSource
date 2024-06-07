@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 export default function PasswordShow() {
   const [showpPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
   const handleMouseDown = () => {
     setShowPassword(true);
   };
@@ -23,5 +26,19 @@ export default function PasswordShow() {
     </>
   );
 
-  return { showpPassword, handleMouseDown, handleMouseUp, jsxData };
+  const handleCoockieExpire = () => {
+    Cookies.remove("loginDetails");
+    Cookies.remove("token_data");
+    Cookies.remove("user_auth_record");
+    localStorage.removeItem("AllStore");
+    navigate("/login");
+  };
+
+  return {
+    showpPassword,
+    handleMouseDown,
+    handleMouseUp,
+    jsxData,
+    handleCoockieExpire,
+  };
 }
