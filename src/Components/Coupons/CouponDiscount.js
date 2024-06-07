@@ -18,6 +18,7 @@ import { useAuthDetails } from "../../Common/cookiesHelper";
 import { BASE_URL, COUPON_STATUS_UPDATE } from "../../Constants/Config";
 
 import moment from "moment";
+import { Grid } from "@mui/material";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 
@@ -135,70 +136,164 @@ const CouponDiscount = ({ seVisible }) => {
   const label = { inputProps: { "aria-label": "Switch demo" } };
   return (
     <>
-      <div className="box">
-        <div className="box_shadow_div">
-          <div className="q-coupon-bottom-detail-section">
-            <div className="q-coupon-bottom-header">
-              <span>Coupon</span>
-
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            className="q-coupon-bottom-header"
+          >
+            <Grid item>
+              <div>
+                <span>Coupon</span>
+              </div>
+            </Grid>
+            <Grid item>
               <p onClick={() => seVisible("AddCoupon")}>
                 Add New Coupon <img src={AddIcon} alt="add-icon" />
               </p>
-            </div>
-            <div className="container_q_main_section_coupon">
-              <div className="q_main_section_coupon">
-                {/* {couponList && couponList.length >= 1 && couponList.map((coupons, index) => (
-                  <div key={index} className={`q_copuon_header mx-6 ${coupons.show_online == 1 ? "active" : ""}`}>
-                    <div className="flex justify-between w-full">
-                      <div className="q_coupon_code">
-                        <p>{coupons.name}</p>
-                      </div>
-                      <div className="flex space-x-2 p-4">
-                        <Link to={`/coupons/edit-coupons/${coupons.id}`}>
-                          <img src={Edit} alt="" className="h-8 w-8" />
+            </Grid>
+          </Grid>
+          <Grid container spacing={3} sx={{ p: 2.5 }}>
+            {Object.values(couponList) &&
+              Object.values(couponList).length >= 1 &&
+              Object.values(couponList).map((coupons, index) => (
+                <Grid item xs={12} sm={6}>
+                  <Grid
+                    container
+                    key={index}
+                    className={`q_copuon_header w-full ${
+                      coupons.show_online == 1 ? "active" : ""
+                    }`}
+                  >
+                    <Grid item xs={12}>
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        sx={{ p: 1 }}
+                      >
+                        <Grid item>
+                          <div style={{ padding: 0 }} className="q_coupon_code">
+                            <p>{coupons.name}</p>
+                          </div>
+                        </Grid>
+                        <Grid item>
+                          <Grid container spacing={1}>
+                            <Grid item>
+                              <Link to={`/coupons/edit-coupons/${coupons.id}`}>
+                                <img src={Edit} alt="" className="h-8 w-8" />
+                              </Link>
+                            </Grid>
+                            <Grid item>
+                              <img
+                                src={DeletIcon}
+                                alt="delet"
+                                className="h-8 w-8 delet-icon"
+                                onClick={() => handleDeleteCoupon(coupons.id)}
+                              />
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                      <Grid container sx={{ px: 1 }}>
+                        <Grid item xs={12}>
+                          <div
+                            style={{ paddingLeft: "0 !important" }}
+                            className="q_discount_coupon_Code"
+                          >
+                            <div className="">
+                              {coupons.flag == 1 ? "$" : ""}
+                              {coupons.discount} {coupons.flag == 0 ? "%" : ""}{" "}
+                              OFF on minimum order of $
+                              {parseFloat(coupons.min_amount).toFixed(2)}
+                            </div>
+                          </div>
+                        </Grid>
+                      </Grid>
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        sx={{ p: 1 }}
+                      >
+                        <Grid item>
+                          <div
+                            style={{ padding: 0 }}
+                            className="q_coupon_deatails_validtimes"
+                          >
+                            <p>Valid from</p>
+                          </div>
+                        </Grid>
+                        <Grid
+                          item
+                          style={{ padding: 0 }}
+                          className="q_coupon_deatails_validtimes"
+                        >
+                          <p className="q_date_details">
+                            {moment(coupons.date_valid).format("MM/DD/YYYY")} -{" "}
+                            {moment(coupons.time_valid, "HH:mm:ss").format(
+                              "hh:mm A"
+                            )}{" "}
+                            to{" "}
+                            {moment(coupons.date_expire).format("MM/DD/YYYY")} -{" "}
+                            {moment(coupons.time_expire, "HH:mm:ss").format(
+                              "hh:mm A"
+                            )}
+                          </p>
+                        </Grid>
+                      </Grid>
 
-                        </Link>
-                        <img src={DeletIcon} alt="delet" className="h-8 w-8 delet-icon" onClick={() => handleDeleteCoupon(coupons.id)} />
-                      </div>
-                    </div>
-                    <div className="q_discount_coupon_Code">
-                      <div className="">{coupons.flag == 1 ? '$' : ''}{coupons.discount} {coupons.flag == 0 ? '%' : ''} OFF on minimum order of ${parseFloat(coupons.min_amount).toFixed(2)}</div>
-                    </div>
-                    <div className="q_coupon_deatails_validtimes">
-                      <p>Valid from</p>
-                      <p className="q_date_details">{moment(coupons.date_valid).format('MM/DD/YYYY')} - {moment(coupons.time_valid, "HH:mm:ss").format('hh:mm A')} to {moment(coupons.date_expire).format('MM/DD/YYYY')} - {moment(coupons.time_expire, "HH:mm:ss").format('hh:mm A')}</p>
-                    </div>
-                    <div className="q_coupon_discountCode">
-                      <p>Max Discount</p>
-                      <p className="q_date_details">${parseFloat(coupons.maximum_discount).toFixed(2)}</p>
-                    </div>
-                    <div className="q_coupon_status_btn">
-                      <p>Show online</p>
+                      <Grid
+                        container
+                        direction="row"
+                        justifyContent="space-between"
+                        alignItems="center"
+                        sx={{ px: 1 }}
+                      >
+                        <Grid
+                          item
+                          sx={{ p: 0 }}
+                          className="q_coupon_discountCode"
+                        >
+                          <p>Max Discount</p>
+                        </Grid>
+                        <Grid item>
+                          <p className="q_date_details">
+                            ${parseFloat(coupons.maximum_discount).toFixed(2)}
+                          </p>
+                        </Grid>
+                      </Grid>
+                      <Grid container>
+                        <Grid item xs={12}>
+                          <div className="q_coupon_status_btn">
+                            <p>Show online</p>
 
-                      <Switch checked={coupons.show_online == 1 ? true : false} onChange={(e) => handleCheckboxChange(coupons.id, e.target.checked)}
-                        sx={{
-                          '& .MuiSwitch-switchBase.Mui-checked': {
-                            color: '#0A64F9', // Change color when switch is checked
-                          },
-                          '& .MuiSwitch-track': {
-                            backgroundColor: '#0A64F9', // Change background color of the track
-
-                          },
-                        }} />
-                    </div>
-                  </div>
-                ))} */}
-
-                {Object.values(couponList) &&
-                  Object.values(couponList).length >= 1 &&
-                  Object.values(couponList).map((coupons, index) => (
-                    <div
-                      key={index}
-                      className={`q_copuon_header mx-6 ${
-                        coupons.show_online == 1 ? "active" : ""
-                      }`}
-                    >
-                      <div className="flex justify-between w-full">
+                            <Switch
+                              checked={coupons.show_online == 1 ? true : false}
+                              onChange={(e) =>
+                                handleCheckboxChange(
+                                  coupons.id,
+                                  e.target.checked
+                                )
+                              }
+                              sx={{
+                                "& .MuiSwitch-switchBase.Mui-checked": {
+                                  color: "#0A64F9", // Change color when switch is checked
+                                },
+                                "& .MuiSwitch-track": {
+                                  backgroundColor: "#0A64F9", // Change background color of the track
+                                },
+                              }}
+                            />
+                          </div>
+                        </Grid>
+                      </Grid>
+                      {/* <div className=" flex justify-between w-full">
                         <div className="q_coupon_code">
                           <p>{coupons.name}</p>
                         </div>
@@ -259,13 +354,15 @@ const CouponDiscount = ({ seVisible }) => {
                             },
                           }}
                         />
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </div>
-          </div>
-        </div>
+                      </div> */}
+                    </Grid>
+                  </Grid>
+                </Grid>
+              ))}
+          </Grid>
+        </Grid>
+      </Grid>
+      <div>              
         <DeleteModal 
         headerText="Coupon"
         open={deleteModalOpen}

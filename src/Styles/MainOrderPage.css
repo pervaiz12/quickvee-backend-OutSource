@@ -279,7 +279,7 @@
 .q-add-categories-section-header > a {
   display: flex;
   width: auto;
-  justify-content: space-between;
+  /* justify-content: space-between; */
   cursor: pointer;
   color: #000000;
   font-size: 18px;

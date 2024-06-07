@@ -49,14 +49,14 @@ const OnlineOrderingPage = ({ onlineorderstatus }) => {
               </h5>
             </Grid>
           </Grid>
-          <Grid container>
+          {/* <Grid container>
             <Grid item xs={12}>
               <label className="text-[12px]">
                 Select Default Image if in case some color image is not
                 available.
               </label>
             </Grid>
-          </Grid>
+          </Grid> */}
         </Grid>
         <Grid item>
           <div className="fr">

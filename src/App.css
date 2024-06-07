@@ -1184,6 +1184,9 @@ div.q_label_details::after {
 .excelLoader{
   margin-right: 10px;
 }
+.DatePicker-coupon > div >  fieldset{
+  border: 0 !important;
+}
 .button-load{
   margin: 10px !important;
   border: 1px solid rgba(7, 145, 138, 0.5) !important;
