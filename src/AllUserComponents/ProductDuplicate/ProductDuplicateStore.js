@@ -455,7 +455,7 @@ const ProductDuplicateStore = () => {
               </Grid>
             </Grid>
           </div>
-          <div className="q-order-page-filter mt-6"></div>
+
 
           <div className="q-add-inventory-section-header mx-2">
             <div className="qv_checkbox">

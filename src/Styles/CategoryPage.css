@@ -270,16 +270,7 @@
   border-bottom: 1px solid #e8e8e8;
 }
 
-.q-add-categories-section-header > span,
-.q-add-categories-section-header > a {
-  display: flex;
-  width: 190px;
-  justify-content: space-between;
-  cursor: pointer;
-  color: #000000;
-  font-size: 18px;
-  font-family: CircularSTDMedium !important;
-}
+
 
 .q-add-categories-section-middle-form {
   padding: 20px;
