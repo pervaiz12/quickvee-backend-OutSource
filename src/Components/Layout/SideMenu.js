@@ -102,9 +102,9 @@ const SideMenu = () => {
     activeDropDownItem(null);
   };
 
-  useEffect(() => {
-    dispatch(setMenuOpen(!isTabletNav));
-  }, [isTabletNav]);
+  // useEffect(() => {
+  //   dispatch(setMenuOpen(!isTabletNav));
+  // }, [isTabletNav]);
 
   useEffect(() => {
     if (currentUrl.split("/")[1] === "users") {
@@ -262,7 +262,7 @@ const DropdownMenuItem = ({
       (item) => item?.link === activeItem
     );
     // console.log("foundItem: ",foundItem,"isMenuOpenRedux",isMenuOpenRedux)
-    if (isMenuOpenRedux && foundItem) {
+    if ( foundItem) {
       setDropDownItem(foundItem?.link);
       activeDropDownItem(item?.id);
     }
@@ -287,7 +287,7 @@ const DropdownMenuItem = ({
 
   const handleToggleDropdownItems = (link, e) => {
     if (isTabletNav) {
-      // dispatch(setIsDropdownOpen(false));
+      dispatch(setIsDropdownOpen(false));
     }
     setActiveItem(link);
     setDropDownItem(link);
@@ -299,10 +299,12 @@ const DropdownMenuItem = ({
     dispatch(setIsDropdownOpen(true));
   };
 
-  const HandleDropdownClick = (event, id) => {
+  const HandleDropdownClick = ( id) => {
     activeDropDownItem((prevId) => (prevId === id ? null : id));
   };
-
+  const HandleDropdownIconClick=(id)=>{
+    activeDropDownItem(id)
+  }
   return (
     <>
       <div
@@ -315,7 +317,8 @@ const DropdownMenuItem = ({
         onMouseEnter={() => setHoveredItem(item.id)}
         onMouseLeave={() => setHoveredItem(null)}
         onClick={(e) => {
-          HandleDropdownClick(e, item.id);
+          HandleDropdownClick( item.id);
+          dispatch(setIsDropdownOpen(true));
         }}
       >
         <div className="flex">
@@ -346,18 +349,18 @@ const DropdownMenuItem = ({
                 onClick={(e) => {
                   handleToggleSideBar();
                   e.stopPropagation();
-                  HandleDropdownClick(e, item.id);
+                  HandleDropdownIconClick( item.id);
                 }}
               >
                 {activeItem === dropDownItem || hoveredItem === item.id
                   ? item.activeIcon
-                  : item.icon}
+                  : item.icon} 
               </div>
             </>
           )}
         </div>
       </div>
-
+          {console.log("isDropdownOpen",isDropdownOpen,"currentDropDownItem",currentDropDownItem,"item.id",item.id)}
       {isDropdownOpen && currentDropDownItem === item.id && (
         <div
           onMouseEnter={(e) => {
@@ -401,7 +404,7 @@ const DropdownMenuItem = ({
                     e.stopPropagation();
                   }}
                 >
-                  {nestedDropdownItem.text}
+                  {nestedDropdownItem.text} 
                 </Link>
               )}
             </>

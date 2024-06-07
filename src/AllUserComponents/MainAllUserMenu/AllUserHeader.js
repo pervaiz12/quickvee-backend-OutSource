@@ -9,7 +9,10 @@ import DownIcon from "../../Assests/Dashboard/Down.svg";
 import UserIcon from "../../Assests/MultipleUserIcon/useractive.svg";
 import Cookies from "js-cookie";
 import { useSelector, useDispatch } from "react-redux"; //,localAuthCheck
-import { setMenuOpen } from "../../Redux/features/NavBar/MenuSlice";
+import {
+  setMenuOpen,
+  setIsDropdownOpen,
+} from "../../Redux/features/NavBar/MenuSlice";
 import { Navigate, useNavigate } from "react-router-dom";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
@@ -36,10 +39,18 @@ const AllUserHeader = () => {
     setAnchorEl(null);
   };
 
+  const handleDropdownToggle = () => {
+    dispatch(setMenuOpen(!isMenuOpenRedux));
+    dispatch(setIsDropdownOpen(!isDropdownOpen));
+  };
+
   // ================ handle dropdown menu end =============================
 
   const dispatch = useDispatch();
   const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
+  const isDropdownOpen = useSelector(
+    (state) => state.NavBarToggle.isDropdownOpen
+  );
   let AuthFinalLogin =
     Cookies.get("loginDetails") !== undefined
       ? Cookies.get("loginDetails")
@@ -124,9 +135,7 @@ const AllUserHeader = () => {
             <Grid item sx={{ marginRight: 2 }}>
               <BiMenu
                 className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out cursor-pointer`}
-                onClick={(e) => {
-                  dispatch(setMenuOpen(!isMenuOpenRedux));
-                }}
+                onClick={handleDropdownToggle}
               />
             </Grid>
             <Grid item>

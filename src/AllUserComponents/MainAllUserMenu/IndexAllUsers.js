@@ -24,7 +24,7 @@ const IndexAllUsers = ({ visible }) => {
   }, [isTabletNav]);
   const onClickHandler = () => {
     isTabletNav &&
-      dispatch(setMenuOpen(false)) &&
+      dispatch(setMenuOpen(false)) 
       dispatch(setIsDropdownOpen(false));
   };
   return (
