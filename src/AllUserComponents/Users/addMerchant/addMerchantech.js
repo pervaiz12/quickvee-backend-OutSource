@@ -7,6 +7,9 @@ import { useLocation, useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 // import Form from 'react-bootstrap/Form';
 import PasswordShow from "../../../Common/passwordShow";
+import { Grid } from "@mui/material";
+import BasicTextFields from "../../../reuseableComponents/TextInputField";
+import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 
 export default function AddMerchan() {
   const {
@@ -53,10 +56,313 @@ export default function AddMerchan() {
 
   return (
     <>
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <Grid container>
+            <Grid item xs={12}>
+              <div className="q-add-categories-section-header">
+                <span
+                  onClick={() => {
+                    if (location.state?.from) {
+                      navigate(location.state?.from);
+                    }
+                  }}
+                >
+                  {location.state?.from && (
+                    <img src={AddSvg} alt="Add-New-Category" />
+                  )}
+                  <span>Add {location.state && location.state?.heading}</span>
+                </span>
+              </div>
+            </Grid>
+          </Grid>
+          <Grid container sx={{ px: 2.5, pt: 2.5 }}>
+            <Grid item xs={12}>
+              <label htmlFor="">
+                User Type <span className="Asterisk_error">*</span>
+              </label>
+            </Grid>
+          </Grid>
+          <Grid container sx={{ px: 2.5, pb: 2.5 }}>
+            <Grid item xs={12}>
+              <div className="input_rediobutton_area">
+                <input
+                  className="inputredio"
+                  type="radio"
+                  id="radio1"
+                  name="radio"
+                  value="merchant"
+                  onClick={onClickUserRadio}
+                  checked={userRadio}
+                />
+                <label htmlFor="radio1">Merchant</label>
+                <div className="error">{radioErros}</div>
+              </div>
+            </Grid>
+          </Grid>
+          {!userRadio ? (
+            <>
+              {" "}
+              <Grid container spacing={3} sx={{ px: 2.5, pb: 2.5 }}>
+                <Grid item xs={12} sm={6}>
+                  <label>
+                    Store Name <span className="Asterisk_error">*</span>
+                  </label>
+                  <BasicTextFields
+                    type="text"
+                    name="storename"
+                    value={store.storename}
+                    sx={{ pt: 0.5 }}
+                    onChangeFun={handleChange}
+                  />
+                  {store.errors.storename && (
+                    <span className="error">{store.errors.storename}</span>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <label>
+                    Owner Name <span className="Asterisk_error">*</span>
+                  </label>
+                  <BasicTextFields
+                    type="text"
+                    name="ownerName"
+                    value={store.ownerName}
+                    onChangeFun={handleChange}
+                    sx={{ pt: 0.5 }}
+                  />
+                  {store.errors.ownerName && (
+                    <span className="error">{store.errors.ownerName}</span>
+                  )}
+                </Grid>
+              </Grid>
+              <Grid container sx={{ px: 2.5, pb: 2.5 }} spacing={3}>
+                <Grid item xs={12} sm={6}>
+                  <label>Email</label>
+                  <BasicTextFields
+                    type="text"
+                    name="email"
+                    onChangeFun={handleChange}
+                    value={store.email}
+                    onBlurFunction={() => handleBlur("email")}
+                    sx={{ pt: 0.5 }}
+                  />
+                  {store.errors.email && (
+                    <span className="error">{store.errors.email}</span>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <div className="password-show-input">
+                    <label>Password</label>
+                    <BasicTextFields
+                      type={showpPassword ? "text" : "password"}
+                      name="password"
+                      onChangeFun={handleChange}
+                      onBlurFunction={() => handleBlur("password")}
+                      value={store.password}
+                      sx={{ pt: 0.5 }}
+                    />
+                    {jsxData(store.password)}
+                  </div>
+                  {store.errors.password && (
+                    <span className="error">{store.errors.password}</span>
+                  )}
+                </Grid>
+              </Grid>
+              <Grid container sx={{ px: 2.5, pb: 2.5 }} spacing={3}>
+                <Grid item xs={12} sm={6}>
+                  <label>Phone</label>
+                  <BasicTextFields
+                    type="text"
+                    name="phone"
+                    onChangeFun={handleChange}
+                    value={store.phone}
+                    maxLength={10}
+                    onKeyPressFun={handleKeyPress}
+                    sx={{ pt: 0.5 }}
+                  />
+                  {store.errors.phone && (
+                    <span className="error">{store.errors.phone}</span>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <label>State</label>
+                  <SelectDropDown
+                    default_title={"Select States"}
+                    listItem={stateList}
+                    title={"State"}
+                    onClickHandler={handleChange}
+                    sx={{ pt: 0.5 }}
+                  />
+                  {store.errors.state && (
+                    <span className="error">{store.errors.state}</span>
+                  )}
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                direction="row"
+                justifyContent="flex-end"
+                alignItems="center"
+                sx={{ px: 2.5, pb: 2.5 }}
+              >
+                <Grid item>
+                  <button
+                    className="quic-btn quic-btn-save"
+                    onClick={handleSubmit}
+                  >
+                    Add
+                  </button>
+                </Grid>
+                {location.state?.from && (
+                  <Grid>
+                    <button
+                      onClick={() => navigate(`${location.state?.from}`)}
+                      className="quic-btn quic-btn-cancle"
+                    >
+                      Cancel
+                    </button>
+                  </Grid>
+                )}
+              </Grid>
+            </>
+          ) : (
+            <>
+              <Grid container spacing={3} sx={{ px: 2.5, pb: 2.5 }}>
+                <Grid item xs={12} sm={6}>
+                  <label>
+                    Store Name <span className="Asterisk_error">*</span>
+                  </label>
+                  <BasicTextFields
+                    type="text"
+                    name="storename"
+                    value={store.storename}
+                    onChangeFun={handleChange}
+                    sx={{ pt: 0.5 }}
+                  />
+                  {store.errors.ownerName && (
+                    <span className="error">{store.errors.ownerName}</span>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <label>
+                    Owner Name <span className="Asterisk_error">*</span>
+                  </label>
+                  <BasicTextFields
+                    type="text"
+                    name="ownerName"
+                    value={store.ownerName}
+                    onChangeFun={handleChange}
+                    sx={{ pt: 0.5 }}
+                  />
+                  {store.errors.ownerName && (
+                    <span className="error">{store.errors.ownerName}</span>
+                  )}
+                </Grid>
+              </Grid>
+              <Grid container spacing={3} sx={{ px: 2.5, pb: 2.5 }}>
+                <Grid item xs={12} sm={6}>
+                  <label>
+                    Email <span className="Asterisk_error">*</span>
+                  </label>
+                  <BasicTextFields
+                    type="text"
+                    name="email"
+                    value={store.email}
+                    onChangeFun={handleChange}
+                    onBlurFunction={() => handleBlur("email")}
+                  />
+                  {store.errors.email && (
+                    <span className="error">{store.errors.email}</span>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <div className="password-show-input">
+                    <label>
+                      Password <span className="Asterisk_error">*</span>
+                    </label>
+                    <BasicTextFields
+                      type={showpPassword ? "text" : "password"}
+                      name="password"
+                      value={store.password}
+                      onChangeFun={handleChange}
+                      onBlurFunction={() => handleBlur("password")}
+                      sx={{ pt: 0.5 }}
+                    />
+                    {jsxData(store.password)}
+                  </div>
+                  {store.errors.password && (
+                    <span className="error">{store.errors.password}</span>
+                  )}
+                </Grid>
+              </Grid>
+              <Grid container spacing={3} sx={{ px: 2.5, pb: 2.5 }}>
+                <Grid item xs={12} sm={6}>
+                  <label>Phone</label>
+                  <BasicTextFields
+                    className=""
+                    type="text"
+                    name="phone"
+                    onChangeFun={handleChange}
+                    value={store.phone}
+                    maxLength={10}
+                    onKeyPressFun={handleKeyPress}
+                    sx={{ pt: 0.5 }}
+                  />
+                  {store.errors.phone && (
+                    <span className="error">{store.errors.phone}</span>
+                  )}
+                </Grid>
+                <Grid item xs={12} sm={6}>
+                  <label>
+                    State <span className="Asterisk_error">*</span>
+                  </label>
+                  <SelectDropDown
+                    name="state"
+                    default_title={"Select States"}
+                    listItem={stateList}
+                    title={"State"}
+                    onClickHandler={handleChange}
+                    sx={{ pt: 0.5 }}
+                  />
+                  {store.errors.state && (
+                    <span className="error">{store.errors.state}</span>
+                  )}
+                </Grid>
+              </Grid>
+              <Grid
+                container
+                direction="row"
+                justifyContent="flex-end"
+                alignItems="center"
+                sx={{ px: 2.5, pb: 2.5 }}
+              >
+                <Grid item>
+                  <button
+                    className="quic-btn quic-btn-save"
+                    onClick={handleSubmitMerchant}
+                  >
+                    {loader ? <CircularProgress /> : "Add"}
+                  </button>
+                </Grid>
+                {location.state?.from && (
+                  <Grid item>
+                    <button
+                      onClick={() => navigate(`${location.state?.from}`)}
+                      className="quic-btn quic-btn-cancle"
+                    >
+                      Cancel
+                    </button>
+                  </Grid>
+                )}
+              </Grid>
+            </>
+          )}
+        </Grid>
+      </Grid>
       <div className="q-order-main-page">
         <div className="box">
           <div className="box_shadow_div">
-            <div className="q-add-categories-section-header">
+            {/* <div className="q-add-categories-section-header">
               <span
                 onClick={() => {
                   if (location.state?.from) {
@@ -69,7 +375,7 @@ export default function AddMerchan() {
                 )}
                 <span>Add {location.state && location.state?.heading}</span>
               </span>
-            </div>
+            </div> */}
 
             <div className="pd_20">
               <div className="qvrow">
@@ -89,7 +395,7 @@ export default function AddMerchan() {
                     />
                     <label htmlFor="radio2">Admin</label>
                   </div> */}
-                  <div className="input_rediobutton_area">
+                  {/* <div className="input_rediobutton_area">
                     <input
                       className="inputredio"
                       type="radio"
@@ -100,9 +406,9 @@ export default function AddMerchan() {
                       checked={userRadio}
                     />
                     <label htmlFor="radio1">Merchant</label>
-                  </div>
+                  </div> */}
                 </div>
-                <span className="error">{radioErros}</span>
+                {/* <span className="error">{radioErros}</span> */}
               </div>
               <br />
 
@@ -325,14 +631,14 @@ export default function AddMerchan() {
                         <label>
                           Email <span className="Asterisk_error">*</span>
                         </label>
-                        <input
+                        {/* <input
                           className=""
                           type="text"
                           name="email"
                           value={store.email}
                           onChange={handleChange}
                           onBlur={() => handleBlur("email")}
-                        />
+                        /> */}
                         <span className="error">{store.errors.email}</span>
                       </div>
                     </div>

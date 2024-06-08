@@ -13,6 +13,7 @@ export default function BasicTextFields({
   disable,
   onBlurFunction,
   sx,
+  onKeyPressFun
 }) {
   return (
     <FormControl fullWidth>
@@ -29,7 +30,7 @@ export default function BasicTextFields({
         size="small"
         disabled={disable}
         onBlur={onBlurFunction}
-      
+        onKeyPress={onKeyPressFun}
       />
     </FormControl>
   );

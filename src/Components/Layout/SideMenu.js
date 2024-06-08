@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { FaChevronDown } from "react-icons/fa";
+import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import DashboardIcon from "../../Assests/Dashboard/dashboard.svg";
 import ShoppingCartIcon from "../../Assests/Dashboard/orders.svg";
@@ -87,8 +87,10 @@ const SideMenu = () => {
   const isDropdownOpen = useSelector(
     (state) => state.NavBarToggle.isDropdownOpen
   );
+
   const [activeItem, setActiveItem] = useState(currentUrl);
   const [hoveredItem, setHoveredItem] = useState(null);
+  console.log("hoveredItem",hoveredItem)
   const [currentDropDownItem, activeDropDownItem] = useState(null);
   const [activeNestedItem, setActiveNestedItem] = useState();
   const navigate = useNavigate();
@@ -102,11 +104,14 @@ const SideMenu = () => {
     activeDropDownItem(null);
   };
 
-  // useEffect(() => {
-  //   dispatch(setMenuOpen(!isTabletNav));
-  // }, [isTabletNav]);
+  // console.log("active item", activeItem)
 
   useEffect(() => {
+    dispatch(setMenuOpen(!isTabletNav));
+  }, [isTabletNav]);
+
+  useEffect(() => {
+    setActiveItem(currentUrl);
     if (currentUrl.split("/")[1] === "users") {
       setMenuItemSwitcher(SuperAdminMenuItems);
       dispatch(setMenuOpen(true));
@@ -168,6 +173,14 @@ const SideMenu = () => {
                               : ""
                         }`}
                       >
+                        {/* {console.log(
+                          "activeItem",
+                          activeItem,
+                          "item.link",
+                          item.link.trim(),
+                          "activeItem === item.link.trim()",
+                          activeItem === item.link.trim()
+                        )} */}
                         {activeItem === item.link.trim() ||
                         hoveredItem === item.id
                           ? item.activeIcon
@@ -224,8 +237,20 @@ const SideMenu = () => {
                         handleItemClick(item);
                       }}
                     >
+                      {/* {console.log(
+                        "activeItem",
+                        activeItem,
+                        "item.link",
+                        item.link.trim(),
+                        "activeItem === item.link.trim()",
+                        activeItem === item.link.trim(),
+                        hoveredItem === item.id,
+                        "hoveredItem",
+                        hoveredItem
+                      )} */}
                       {/* {activeItem === item.id ? item.activeIcon : item.icon} */}
-                      {activeItem === item.link || hoveredItem === item.id
+                      {activeItem === item.link.trim() ||
+                      hoveredItem === item.id
                         ? item.activeIcon
                         : item.icon}
                     </div>
@@ -262,7 +287,8 @@ const DropdownMenuItem = ({
       (item) => item?.link === activeItem
     );
     // console.log("foundItem: ",foundItem,"isMenuOpenRedux",isMenuOpenRedux)
-    if ( foundItem) {
+
+    if (foundItem) {
       setDropDownItem(foundItem?.link);
       activeDropDownItem(item?.id);
     }
@@ -285,9 +311,11 @@ const DropdownMenuItem = ({
     dispatch(setIsDropdownOpen(!isTabletNav));
   }, [isTabletNav, dropDownItem, isTabletNav]);
 
-  const handleToggleDropdownItems = (link, e) => {
+  const handleToggleDropdownItems = (link, e) => { 
     if (isTabletNav) {
       dispatch(setIsDropdownOpen(false));
+      dispatch(setMenuOpen(false));
+      setHoveredItem(null)
     }
     setActiveItem(link);
     setDropDownItem(link);
@@ -299,12 +327,12 @@ const DropdownMenuItem = ({
     dispatch(setIsDropdownOpen(true));
   };
 
-  const HandleDropdownClick = ( id) => {
+  const HandleDropdownClick = (id) => {
     activeDropDownItem((prevId) => (prevId === id ? null : id));
   };
-  const HandleDropdownIconClick=(id)=>{
-    activeDropDownItem(id)
-  }
+  const HandleDropdownIconClick = (id) => {
+    activeDropDownItem(id);
+  };
   return (
     <>
       <div
@@ -317,13 +345,13 @@ const DropdownMenuItem = ({
         onMouseEnter={() => setHoveredItem(item.id)}
         onMouseLeave={() => setHoveredItem(null)}
         onClick={(e) => {
-          HandleDropdownClick( item.id);
+          HandleDropdownClick(item.id);
           dispatch(setIsDropdownOpen(true));
         }}
       >
         <div className="flex">
           {isMenuOpenRedux ? (
-            <div className="w-full flex items-center cursor-pointer">
+            <div className={`w-full flex items-center cursor-pointer ${activeItem === dropDownItem ? "bg-[#414F54]": ""}`}>
               {/* {console.log("activeItem",activeItem," ===","dropDownItem", dropDownItem,  activeItem === dropDownItem  )} */}
               {activeItem === dropDownItem || hoveredItem === item.id
                 ? item.activeIcon
@@ -335,13 +363,22 @@ const DropdownMenuItem = ({
               >
                 {item.text}
               </p>
-
-              <FaChevronDown
+                {
+                  currentDropDownItem === item.id ? (
+                    <FaChevronUp className={`quickarrow_icon ml-4 me-5 text-${
+                      (activeItem === dropDownItem  || hoveredItem === item.id) &&
+                      "[#FFC400]"
+                    }`}/>
+                  ):(
+                    <FaChevronDown
                 className={`quickarrow_icon ml-4 me-5 text-${
-                  (activeItem === dropDownItem || hoveredItem === item.id) &&
+                  (activeItem === dropDownItem  || hoveredItem === item.id) &&
                   "[#FFC400]"
                 }`}
               />
+                  )
+                }
+              
             </div>
           ) : (
             <>
@@ -349,18 +386,18 @@ const DropdownMenuItem = ({
                 onClick={(e) => {
                   handleToggleSideBar();
                   e.stopPropagation();
-                  HandleDropdownIconClick( item.id);
+                  HandleDropdownIconClick(item.id);
                 }}
               >
                 {activeItem === dropDownItem || hoveredItem === item.id
                   ? item.activeIcon
-                  : item.icon} 
+                  : item.icon}
               </div>
             </>
           )}
         </div>
       </div>
-          {console.log("isDropdownOpen",isDropdownOpen,"currentDropDownItem",currentDropDownItem,"item.id",item.id)}
+      {/* {console.log("isDropdownOpen",isDropdownOpen,"currentDropDownItem",currentDropDownItem,"item.id",item.id)} */}
       {isDropdownOpen && currentDropDownItem === item.id && (
         <div
           onMouseEnter={(e) => {
@@ -404,7 +441,7 @@ const DropdownMenuItem = ({
                     e.stopPropagation();
                   }}
                 >
-                  {nestedDropdownItem.text} 
+                  {nestedDropdownItem.text}
                 </Link>
               )}
             </>
@@ -444,7 +481,7 @@ const menuItems = [
       />
     ),
     activeIcon: (
-      <img src={OrderYellow} alt="order" className="h-6 w-10 mt-4 mb-4 " />
+      <img src={OrderYellow} alt="order" className="h-6 w-10 mt-4 mb-4" />
     ),
     text: "Order",
     link: "/order",
@@ -929,9 +966,15 @@ const menuItems = [
   // },
   {
     id: 91,
-    icon:  <img src={dataIcon} alt="Export Sold Items"  className="h-6 w-10 mt-4 mb-4 hoverable-image" />,
+    icon: (
+      <img
+        src={dataIcon}
+        alt="Export Sold Items"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
     activeIcon: (
-      <img src={DataIconActive}  alt="Import"  className="h-6 w-10 mt-4 mb-4 "  />
+      <img src={DataIconActive} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
     ),
     text: "Import Data",
     link: "/import-data",

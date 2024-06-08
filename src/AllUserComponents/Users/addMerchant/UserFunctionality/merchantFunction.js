@@ -228,67 +228,73 @@ const MerchantFunction = () => {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    let updatedErrors = { ...store.errors };
-    let emailRegex =
-      /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-    let reg = /^[0-9\b]+$/;
+    console.log("handleChange, ",e)
+    if(e?.target?.name){
+      const { name, value } = e.target;
 
-    if (name === "storename") {
-      // updatedErrors[name] = value === "" ? `Please fill the ${name} field` : "";
-      updatedErrors[name] =
-        value.trim() === ""
-          ? `Please fill in the ${name} field`
-          : value[0] === " "
-            ? `The ${name} field cannot start with a space`
-            : "";
-    }
-    if (name == "ownerName") {
-      updatedErrors[name] = value === "" ? `Please fill the ${name} field` : "";
-      // updatedErrors[name] =
-      //   value.trim() === ""
-      //     ? `Please fill in the ${name} field`
-      //     : value[0] === " "
-      //       ? `The ${name} field cannot start with a space`
-      //       : "";
-    }
-    if (name == "email") {
-      updatedErrors[name] =
-        value === ""
-          ? `Please fill the ${name} field`
-          : !emailRegex.test(value)
-            ? "Please fill valid email"
-            : "";
-    }
-    if (name == "password") {
-      updatedErrors[name] = value === "" ? `Please fill the ${name} field` : "";
-    }
-    if (name == "state") {
-      updatedErrors[name] = value === "" ? `Please fill the ${name} field` : "";
-    }
-    if (name === "phone") {
-      const numericValue = value.replace(/[^0-9]/g, "");
-      if (numericValue == "") {
-        updatedErrors[name] = "";
-      } else if (numericValue.length !== 10) {
-        updatedErrors[name] = "Phone number must be 10 digits";
-      } else {
-        updatedErrors[name] = "";
+      let updatedErrors = { ...store.errors };
+      let emailRegex =
+        /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      let reg = /^[0-9\b]+$/;
+  
+      if (name === "storename") {
+        // updatedErrors[name] = value === "" ? `Please fill the ${name} field` : "";
+        updatedErrors[name] =
+          value.trim() === ""
+            ? `Please fill in the ${name} field`
+            : value[0] === " "
+              ? `The ${name} field cannot start with a space`
+              : "";
       }
+      if (name == "ownerName") {
+        updatedErrors[name] = value === "" ? `Please fill the ${name} field` : "";
+        // updatedErrors[name] =
+        //   value.trim() === ""
+        //     ? `Please fill in the ${name} field`
+        //     : value[0] === " "
+        //       ? `The ${name} field cannot start with a space`
+        //       : "";
+      }
+      if (name == "email") {
+        updatedErrors[name] =
+          value === ""
+            ? `Please fill the ${name} field`
+            : !emailRegex.test(value)
+              ? "Please fill valid email"
+              : "";
+      }
+      if (name == "password") {
+        updatedErrors[name] = value === "" ? `Please fill the ${name} field` : "";
+      }
+      if (name == "state") {
+        updatedErrors[name] = value === "" ? `Please fill the ${name} field` : "";
+      }
+      if (name === "phone") {
+        const numericValue = value.replace(/[^0-9]/g, "");
+        if (numericValue == "") {
+          updatedErrors[name] = "";
+        } else if (numericValue.length !== 10) {
+          updatedErrors[name] = "Phone number must be 10 digits";
+        } else {
+          updatedErrors[name] = "";
+        }
+      }
+      const trimmedValue = value.replace(/^\s+|\s+$/g, "");
+      setStore({
+        ...store,
+        errors: updatedErrors,
+       
+        [name]:  value.replace(/^\s+/, "")
+      });
+    }else{
+      setStore(prevState =>({
+        ...prevState,
+        state: e.State
+      }))
     }
-    const trimmedValue = value.replace(/^\s+|\s+$/g, "");
-    setStore({
-      ...store,
-      errors: updatedErrors,
-      [name]: value.replace(/^\s+/, ""),
-    });
-
-    // setStore({
-    //   ...store,
-    //   errors: updatedErrors,
-    //   [name]: trimmedValue,
-    // });
+   
   };
+  console.log("store updated ",store)
   const handleKeyPress = (e) => {
     if ((e.charCode < 48 || e.charCode > 57) && e.charCode !== 8) {
       e.preventDefault();
@@ -426,6 +432,7 @@ const MerchantFunction = () => {
   };
   // ------------------------
   const handleBlur = async (name) => {
+    console.log("HandleBlur", name);
     if (name === "password" || name === "email") {
       if (store.errors.password == "" && store.errors.email == "") {
         let result = await passwordValidate(store.email, store.password);
