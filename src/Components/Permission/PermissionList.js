@@ -10,6 +10,7 @@ import View from "../../Assests/VerifiedMerchant/View.svg";
 import Edit from "../../Assests/VerifiedMerchant/Edit.svg";
 import Delete from "../../Assests/Category/deleteIcon.svg";
 import DisLike from "../../Assests/VerifiedMerchant/DisLike.svg";
+import DeleteModal from "../../reuseableComponents/DeleteModal";
 
 import {
   fetchPermissionData,
@@ -90,7 +91,7 @@ const PermissionList = () => {
     }
   }, [AllPermissionDataState.loading, AllPermissionDataState.permissionData]);
 
-  const handleDeletePermission = (id) => {
+  /*const handleDeletePermission = (id) => {
     const data = {
       id: id,
       ...userTypeData,
@@ -105,7 +106,29 @@ const PermissionList = () => {
     } else {
       console.log("Deletion canceled by user");
     }
+  };*/
+
+  const [deletePermissionId, setDeletePermissionId] = useState(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const handleDeletePermission = (id) => {
+    setDeletePermissionId(id);
+    setDeleteModalOpen(true);
   };
+  const confirmDeleteCategory = () => {
+    if(deletePermissionId){
+      const data = {
+        id: deletePermissionId,
+        ...userTypeData,
+      };
+      if (data) {
+        dispatch(deletePermission(data));
+      }
+    }
+    setDeletePermissionId(null)
+    setDeleteModalOpen(false);
+  };
+
 
   // const handleSearchInputChange = (value) => {
   //   console.log(value);
@@ -264,6 +287,12 @@ const PermissionList = () => {
             </Grid>
           </Grid>
         </Grid>
+        <DeleteModal
+            headerText="Permission"
+            open={deleteModalOpen}
+            onClose={() => {setDeleteModalOpen(false)}}
+            onConfirm={confirmDeleteCategory}
+          />
 
         {/* <div className="q-attributes-bottom-header-sticky">
           <div className="q-attributes-bottom-header">

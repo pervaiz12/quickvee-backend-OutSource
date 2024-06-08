@@ -22,6 +22,8 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import DeleteModal from "../../reuseableComponents/DeleteModal";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const DefaultsDetail = ({ seVisible }) => {
   const myStyles = {
@@ -99,6 +101,7 @@ const DefaultsDetail = ({ seVisible }) => {
   };
 
   // for Delete star
+  /*
   const handleDeleteDefaults = (id) => {
     const data = {
       id: id,
@@ -117,9 +120,19 @@ const DefaultsDetail = ({ seVisible }) => {
     } else {
       console.log("Deletion canceled by Default");
     }
+  }; */
+
+  const [deleteDefaultId, setDeleteDefaultId] = useState(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const handleDeleteDefaults = (id) => {
+    setDeleteDefaultId(id);
+    setDeleteModalOpen(true);
   };
 
+
   // for selected check box item Delete start
+  /*
   const handleDeleteDefaultSelected = () => {
     const checkedIds = defaults
       .filter((item) => item.isChecked)
@@ -143,7 +156,50 @@ const DefaultsDetail = ({ seVisible }) => {
         console.log("Deletion canceled by Default");
       }
     }
+  };*/ 
+  
+  const [deleteSelectDefaultId, setDeleteSelectDefaultId] = useState([]);
+  const handleDeleteDefaultSelected = () => {
+    const checkedIds = defaults
+      .filter((item) => item.isChecked)
+      .map((checkedItem) => checkedItem.id);
+    if (checkedIds.length === 0) {
+        alert("Please select defaults for delete");
+    }else{
+      setDeleteSelectDefaultId(checkedIds);
+      setDeleteModalOpen(true);
+    }
   };
+
+  const confirmDeleteCategory = () => {
+    if(deleteDefaultId){
+      const data = {
+        id: deleteDefaultId,
+        ...userTypeData,
+      };
+      if (data) {
+        dispatch(deleteDefaultsData(data)).then(() => {
+          dispatch(fetchdefaultsData({ merchant_id, ...userTypeData }));
+        });
+        ToastifyAlert("Default Menu Deleted", "success");
+      }
+    }else if(deleteSelectDefaultId){
+        const data = {
+          selectedIds: deleteSelectDefaultId,
+          ...userTypeData,
+        };
+        if (data) {
+          ToastifyAlert("Default Menu Deleted", "success");
+          dispatch(deleteDefaultsMultiData(data)).then(() => {
+            dispatch(fetchdefaultsData({ merchant_id, ...userTypeData }));
+          });
+        }
+    }
+    setDeleteSelectDefaultId([]);
+    setDeleteDefaultId(null)
+    setDeleteModalOpen(false);
+  };
+
   // for selected check box item Delete End
 
   const StyledTable = styled(Table)(({ theme }) => ({
@@ -311,6 +367,12 @@ const DefaultsDetail = ({ seVisible }) => {
           </Grid>
         </Grid>
       </Grid>
+      <DeleteModal
+            headerText="Default"
+            open={deleteModalOpen}
+            onClose={() => {setDeleteModalOpen(false)}}
+            onConfirm={confirmDeleteCategory}
+          />
 
 
     </>

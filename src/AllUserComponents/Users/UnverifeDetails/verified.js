@@ -35,6 +35,8 @@ import {
 } from "../../../Constants/Config";
 import Pagination from "./Pagination";
 import useDebounce from "../../../hooks/useDebouncs";
+import DeleteModal from "../../../reuseableComponents/DeleteModal";
+import DislikeModal from "../../../reuseableComponents/DislikeModal";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -139,50 +141,93 @@ export default function Verified() {
     navigate(`/users/editMerchant/${data}`);
   };
 
+  const [deleteTableId, setDeleteTableId] = useState(null);
+  const [deleteMerchantId, setDeleteMerchantId] = useState(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [dislikeModalOpen, setDislikeModalOpen] = useState(false);
   const handleDeleteMerchant = async (tableData) => {
-    try {
-      const userConfirmed = window.confirm(
-        "Are you sure you want to delete? Once The store is deleted Inventory and settings cannot be restored."
-      );
-      if (userConfirmed) {
-        const { token, ...otherUserData } = userTypeData;
-        const delVendor = {
-          merchant_id: tableData.merchant_id,
-          id: tableData.id,
-          ...otherUserData,
-        };
-        setDeleteLoader(true);
-        setDeletedId(tableData.id);
+    setDeleteTableId(tableData);
+    setDeleteModalOpen(true);
+  };
 
-        const response = await axios.post(
-          BASE_URL + DELETE_SINGLE_STORE,
-          delVendor,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
+  const confirmDeleteCategory = async ( ) => {
+    if(deleteTableId){
+      try {
+          const { token, ...otherUserData } = userTypeData;
+          const delVendor = {
+            merchant_id: deleteTableId.merchant_id,
+            id: deleteTableId.id,
+            ...otherUserData,
+          };
+          setDeleteModalOpen(false);
+          setDeleteLoader(true);
+          setDeletedId(deleteTableId.id);
+  
+          const response = await axios.post(
+            BASE_URL + DELETE_SINGLE_STORE,
+            delVendor,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+  
+          if (response) {
+            // const updatedVendorDetails =
+            //   verifiedMerchantList.verifiedMerchantData.filter(
+            //     (vendor) => vendor.id !== tableData.id
+            //   );
+            // setVerifiedMerchantListState(updatedVendorDetails);
+            // setFilteredMerchants(updatedVendorDetails);
+            setDeleteLoader(false);
+            setDeletedId("");
+            dispatch(getVerifiedMerchant(data_verified));
+          } else {
+            setDeleteLoader(false);
+            setDeletedId("");
+            console.error(response);
           }
-        );
-
-        if (response) {
-          // const updatedVendorDetails =
-          //   verifiedMerchantList.verifiedMerchantData.filter(
-          //     (vendor) => vendor.id !== tableData.id
-          //   );
-          // setVerifiedMerchantListState(updatedVendorDetails);
-          // setFilteredMerchants(updatedVendorDetails);
-          setDeleteLoader(false);
-          setDeletedId("");
-          dispatch(getVerifiedMerchant(data_verified));
-        } else {
-          setDeleteLoader(false);
-          setDeletedId("");
-          console.error(response);
-        }
+      } catch (error) {
+        console.error(error);
       }
-    } catch (error) {
-      console.error(error);
+    }
+    setDeleteModalOpen(false);
+    setDeleteTableId(null);
+  };  
+
+  const confirmDislikeStore = async () => {
+    if(deleteMerchantId){
+      try {
+          const { token, ...otherUserData } = userTypeData;
+          const delVendor = {
+            id: deleteMerchantId,
+            ...otherUserData,
+          };
+  
+          const response = await axios.post(
+            BASE_URL + UNAPPROVE_SINGLE_STORE,
+            delVendor,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
+              },
+            }
+          );
+  
+          if (response) {
+            dispatch(getVerifiedMerchant(data_verified));
+          } else {
+            console.error(response);
+          }
+      } catch (error) {
+        console.error(error);
+      }
+      setDeleteMerchantId(null)
+      setDislikeModalOpen(false)
+
     }
   };
 
@@ -209,6 +254,9 @@ export default function Verified() {
   };
 
   const hadleDislikeMerchant = async (merchant_id) => {
+    setDeleteMerchantId(merchant_id)
+    setDislikeModalOpen(true);
+    /*
     try {
       const userConfirmed = window.confirm(
         "Are you sure you want to unapprove this store"
@@ -245,7 +293,7 @@ export default function Verified() {
       }
     } catch (error) {
       console.error(error);
-    }
+    }*/
   };
 
   const handleExportTransaction = async (type) => {
@@ -477,6 +525,19 @@ export default function Verified() {
           </Grid>
         </Grid>
       </Grid>
+      <DeleteModal
+            headerText="Verified Merchant"
+            otherMSG="Once The store is deleted Inventory and settings cannot be restored."
+            open={deleteModalOpen}
+            onClose={() => {setDeleteModalOpen(false)}}
+            onConfirm={confirmDeleteCategory}
+          />
+          <DislikeModal
+          headerText="Are you sure you want to unapprove this store"
+          open={dislikeModalOpen}
+          onClose={() => {setDislikeModalOpen(false)}}
+          onConfirm={confirmDislikeStore}
+          />
     </>
   );
 }

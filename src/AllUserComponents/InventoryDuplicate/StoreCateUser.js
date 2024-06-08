@@ -10,9 +10,12 @@ import { useSelector } from "react-redux";
 import InventoryExportLogic from "./InventoryDuplicatLogic";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
+import AlertModal from "../../reuseableComponents/AlertModal";
 
 const StoreCateUser = () => {
   const [openAlert, setOpenAlert] = useState(true);
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
 
   const goToTop = () => {
     setsubmitmessage();
@@ -70,6 +73,11 @@ const StoreCateUser = () => {
   const [storeFromError, setStoreFromError] = useState("");
   const [storeToError, setStoreToError] = useState("");
 
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
+  };
+
   // const handleOptionClick = async (option, dropdown) => {
   const handleOptionClick = async (value, dropdown) => {
     switch (dropdown) {
@@ -105,8 +113,10 @@ const StoreCateUser = () => {
   const dupplicateInventoryHandler = (e) => {
     if (selectedStorefrom === "-- Select Store --") {
       alert("Please select Store From");
+      //showModal("Please select Store From");
     } else if (selectedStoreto === "-- Select Store --") {
       alert("Please select Store To");
+      //showModal("Please select Store To");
     } else {
       dupplicateInventory(e);
       setSelectedStorefrom("-- Select Store --");
@@ -265,6 +275,11 @@ const StoreCateUser = () => {
           </div>
         </div>
       </div>
+      <AlertModal
+      headerText={alertModalHeaderText}
+      open={alertModalOpen}
+      onClose={() => {setAlertModalOpen(false)}}
+       />
     </>
   );
 };

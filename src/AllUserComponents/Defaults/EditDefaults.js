@@ -11,6 +11,7 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Grid } from '@mui/material';
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const EditDefaults = () => {
   const navigate = useNavigate();
@@ -144,6 +145,7 @@ const EditDefaults = () => {
       const data = await res.data.status;
       const update_message = await res.data.msg;
       if (data == "Success") {
+        ToastifyAlert("Default Menu Updated", "success");
         navigate("/users/view/unapprove/menu/defaults");
       } else if (
         data == "Failed" &&

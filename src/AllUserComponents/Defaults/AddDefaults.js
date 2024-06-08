@@ -8,6 +8,7 @@ import { useAuthDetails } from "./../../Common/cookiesHelper";
 import Upload from "../../Assests/Category/upload.svg";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const AddDefaults = ({ seVisible }) => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -104,6 +105,7 @@ const AddDefaults = ({ seVisible }) => {
       const data = await res.data.status;
       const update_message = await res.data.msg;
       if (data === "Success") {
+        ToastifyAlert("Default Menu Created", "success");
         seVisible("DefaultsDetail");
       } else if (
         data === "Failed" &&
