@@ -15,6 +15,7 @@ import {
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import AlertModal from "../../reuseableComponents/AlertModal";
 
 const CateDuplicateStore = () => {
   const [selectedStorefrom, setSelectedStorefrom] =
@@ -24,6 +25,8 @@ const CateDuplicateStore = () => {
   const [storeFromDropdownVisible, setStoreFromDropdownVisible] =
     useState(false);
   const [storeToDropdownVisible, setStoreToDropdownVisible] = useState(false);
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
 
   const toggleDropdown = (dropdown) => {
     switch (dropdown) {
@@ -50,6 +53,11 @@ const CateDuplicateStore = () => {
 
   const handlFocusCategory = () => {
     setCategoryFocus(true);
+  };
+
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
   };
 
   const handleOptionClick = async (value, dropdown) => {
@@ -182,11 +190,14 @@ const CateDuplicateStore = () => {
     e.preventDefault();
 
     if (selectedStorefrom === "-- Select Store --") {
-      alert("Please select Store From");
+      // alert("Please select Store From");
+      showModal("Please select Store From");
     } else if (selectedStoreto === "-- Select Store --") {
-      alert("Please select Store To");
+      // alert("Please select Store To");
+      showModal("Please select Store To");
     } else if (selectedStorefrom === selectedStoreto) {
-      alert("Both the selected store are same.");
+      // alert("Both the selected store are same.");
+      showModal("Both the stores cannot be same.")
     } else {
       const upcCheckbox = document.getElementById("upc_check");
 
@@ -196,10 +207,12 @@ const CateDuplicateStore = () => {
         (category) => category.value
       );
       if (categoryValues.length === 0) {
-        alert("Please select at least one category");
+        // alert("Please select at least one category");
+        showModal("Please select at least one category")
         return;
       } else if (categoryValues.includes("No categories found")) {
-        alert("No categories found is not a Category");
+        // alert("No categories found is not a Category");
+        showModal("No categories found is not a Category")
         return;
       }
 
@@ -461,6 +474,11 @@ const CateDuplicateStore = () => {
           </div>
         </div>
       </div>
+      <AlertModal
+      headerText={alertModalHeaderText}
+      open={alertModalOpen}
+      onClose={() => {setAlertModalOpen(false)}}
+       />
     </>
   );
 };

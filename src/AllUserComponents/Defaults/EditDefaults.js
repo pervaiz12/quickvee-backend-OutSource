@@ -12,7 +12,7 @@ import { useDispatch } from "react-redux";
 import { Grid } from '@mui/material';
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
-
+import AlertModal from "../../reuseableComponents/AlertModal";
 const EditDefaults = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -29,6 +29,13 @@ const EditDefaults = () => {
     type: "",
     image: "",
   });
+
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
+  };
 
   const params = useParams();
   async function fetchData() {
@@ -193,7 +200,8 @@ const EditDefaults = () => {
     if (file) {
       const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
       if (!allowedExtensions.exec(file.name)) {
-        alert(file.name + " is not an image. Only jpeg, png, jpg files can be uploaded.");
+        // alert(file.name + " is not an image. Only jpeg, png, jpg files can be uploaded.");
+        showModal(file.name + " is not an image. Only jpeg, png, jpg files can be uploaded.")
       } else {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -440,6 +448,11 @@ const EditDefaults = () => {
           </div>
         </div>
       </div>
+      <AlertModal
+      headerText={alertModalHeaderText}
+      open={alertModalOpen}
+      onClose={() => {setAlertModalOpen(false)}}
+       />
     </>
   );
 };

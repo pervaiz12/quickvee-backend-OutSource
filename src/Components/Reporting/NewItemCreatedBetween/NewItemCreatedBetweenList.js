@@ -82,6 +82,15 @@ const NewItemCreatedBetweenList = (props) => {
     AllNewItemDataState.NewItemData,
   ]);
 
+  const formatDate = (dateString) => {
+    const options = { day: "2-digit", month: "short", year: "numeric" };
+    const formattedDate = new Date(dateString).toLocaleDateString(
+      "en-US",
+      options
+    );
+    return formattedDate;
+  };
+
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -92,14 +101,14 @@ const NewItemCreatedBetweenList = (props) => {
                 <StyledTableCell>Date</StyledTableCell>
                 <StyledTableCell>Category</StyledTableCell>
                 <StyledTableCell>Item Name</StyledTableCell>
-                <StyledTableCell>Date</StyledTableCell>
+                <StyledTableCell>Price</StyledTableCell>
               </TableHead>
               <TableBody>
                 {allNewItemData && allNewItemData.length >= 1 ? (
                   allNewItemData.map((ItemData, index) => (
                     <StyledTableRow key={index}>
                       <StyledTableCell>
-                        <p>{ItemData.created_on}</p>
+                        <p>{formatDate(ItemData.created_on)}</p>
                       </StyledTableCell>
                       <StyledTableCell>
                         <p>{ItemData.category}</p>

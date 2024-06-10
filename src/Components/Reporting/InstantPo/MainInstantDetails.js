@@ -65,6 +65,14 @@ const MainInstantDetails = ({ data }) => {
     instantactivityDataState.instantactivityData,
   ]);
 
+  const formatDateTime = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+    const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+    const formattedDate = date.toLocaleDateString('en-US', dateOptions);
+    return `${formattedDate}`;
+  };
+
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -109,14 +117,15 @@ const MainInstantDetails = ({ data }) => {
                                 }}
                                 className="me-3"
                               >
-                                {new Date(instantactivity.created_at)
+                                {/* {new Date(instantactivity.created_at)
                                   .toLocaleDateString("en-US", {
                                     month: "2-digit",
                                     day: "2-digit",
                                     year: "numeric",
                                   })
                                   .split("/")
-                                  .join("-")}
+                                  .join("-")} */}
+                                  {formatDateTime(instantactivity.created_at)}
                               </p>
                               <p
                                 style={{

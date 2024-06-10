@@ -80,6 +80,15 @@ const CouponReportList = (props) => {
     }
   }, [CouponReportDataState.loading, CouponReportDataState.CouponReportData]);
 
+  const formatDate = (dateString) => {
+    const options = { day: "2-digit", month: "short", year: "numeric" };
+    const formattedDate = new Date(dateString).toLocaleDateString(
+      "en-US",
+      options
+    );
+    return formattedDate;
+  };
+
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -96,7 +105,7 @@ const CouponReportList = (props) => {
                   CouponReportData.map((couponData, index) => (
                     <StyledTableRow>
                       <StyledTableCell>
-                        <p className="report-title">{couponData.date}</p>
+                        <p className="report-title">{formatDate(couponData.date)}</p>
                       </StyledTableCell>
                       <StyledTableCell>
                         <p className="report-title">

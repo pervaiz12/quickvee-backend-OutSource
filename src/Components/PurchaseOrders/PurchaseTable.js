@@ -267,9 +267,11 @@ const PurchaseTable = ({ seVisible }) => {
                                   <p className="purchaseData">
                                     {purchaseData.stock_date === "0000-00-00"
                                       ? "-"
-                                      : new Date(
-                                          purchaseData.stock_date
-                                        ).toLocaleDateString("en-US")}{" "}
+                                      : new Date(purchaseData.stock_date).toLocaleDateString("en-US", {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                      })}
                                   </p>
                                 </div>
                               </StyledTableCell>
@@ -278,12 +280,16 @@ const PurchaseTable = ({ seVisible }) => {
                                   <p className=" purchaseData ">
                                     {purchaseData.updated_at ===
                                     "0000-00-00 00:00:00"
-                                      ? new Date(
-                                          purchaseData.created_at
-                                        ).toLocaleDateString("en-US")
-                                      : new Date(
-                                          purchaseData.updated_at
-                                        ).toLocaleDateString("en-US")}
+                                      ? new Date(purchaseData.created_at).toLocaleDateString("en-US", {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                      })
+                                      : new Date(purchaseData.updated_at).toLocaleDateString("en-US", {
+                                        year: 'numeric',
+                                        month: 'long',
+                                        day: 'numeric'
+                                      })}
                                   </p>
                                 </div>
                               </StyledTableCell>
@@ -293,9 +299,11 @@ const PurchaseTable = ({ seVisible }) => {
                                     {purchaseData.received_status === "2"
                                       ? purchaseData.received_at !==
                                         "0000-00-00 00:00:00"
-                                        ? new Date(
-                                            purchaseData.received_at
-                                          ).toLocaleDateString("en-US")
+                                        ? new Date(purchaseData.received_at).toLocaleDateString("en-US", {
+                                          year: 'numeric',
+                                          month: 'long',
+                                          day: 'numeric'
+                                        })
                                         : "11/30/-0001"
                                       : "-"}
                                   </p>

@@ -64,7 +64,7 @@ const OrderRefundFilter = ({ title, onCategoryChange, onReasonChange,selectedRea
         <Grid item xs={12}>
           <Grid container sx={{ padding: 2.5 }}>
             <Grid item xs={12}>
-              <div className="q_details_header">Category Sale Report</div>
+              <div className="q_details_header">Order Refund Report</div>
             </Grid>
           </Grid>
           <Grid container sx={{ px: 2.5 }}>

@@ -629,7 +629,7 @@ const AddCoupon = ({ seVisible }) => {
                           shouldDisableDate={(date) =>
                             date.format("YYYY-MM-DD") === coupon.date_valid
                           }
-                          format={"DD-MM-YYYY"}
+                          format={"MMMM d, YYYY"}
                           disablePast
                           views={["year", "month", "day"]}
                           slotProps={{
@@ -702,7 +702,7 @@ const AddCoupon = ({ seVisible }) => {
                           shouldDisableDate={(date) =>
                             date.format("YYYY-MM-DD") === coupon.date_expire
                           }
-                          format={"DD-MM-YYYY"}
+                          format={"MMMM d, YYYY"}
                           disablePast
                           views={["year", "month", "day"]}
                           slotProps={{

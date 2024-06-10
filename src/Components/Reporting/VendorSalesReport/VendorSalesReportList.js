@@ -86,6 +86,14 @@ const VendorSalesReportList = (props) => {
       0
     );
   };
+  const formatDateTime = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+    const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+    const formattedDate = date.toLocaleDateString('en-US', dateOptions);
+    const formattedTime = date.toLocaleTimeString('en-US', timeOptions);
+    return `${formattedDate} ${formattedTime}`;
+  };
 
   return (
     <>
@@ -126,7 +134,7 @@ const VendorSalesReportList = (props) => {
                               <p>{`${index + 1}`}</p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p>{salesData.payment_datetime}</p>
+                              <p>{formatDateTime(salesData.payment_datetime)}</p>
                             </StyledTableCell>
                             <StyledTableCell>
                               <p>{salesData.remark}</p>

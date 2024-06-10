@@ -9,6 +9,7 @@ import Upload from "../../Assests/Category/upload.svg";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import AlertModal from "../../reuseableComponents/AlertModal";
 
 const AddDefaults = ({ seVisible }) => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -25,6 +26,12 @@ const AddDefaults = ({ seVisible }) => {
     type: "",
     image: "",
   });
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
+  };
 
   const inputChange = (e) => {
     const { name, value } = e.target;
@@ -165,9 +172,10 @@ const AddDefaults = ({ seVisible }) => {
         };
         reader.readAsDataURL(file);
       } else {
-        alert(
-          `${file.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`
-        );
+        // alert(
+        //   `${file.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`
+        // );
+        showModal(`${file.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`)
         e.target.value = null;
       }
     }
@@ -188,7 +196,8 @@ const AddDefaults = ({ seVisible }) => {
     // Check if the pressed key is a number
     if (/\d/.test(e.key)) {
       e.preventDefault(); // Prevent input of numbers
-      alert("Only Alphabets are allowed.");
+      // alert("Only Alphabets are allowed.");
+      showModal("Only Alphabets are allowed.")
     }
   };
 
@@ -392,6 +401,11 @@ const AddDefaults = ({ seVisible }) => {
           </div>
         </div>
       </div>
+      <AlertModal
+      headerText={alertModalHeaderText}
+      open={alertModalOpen}
+      onClose={() => {setAlertModalOpen(false)}}
+       />
     </>
   );
 };
