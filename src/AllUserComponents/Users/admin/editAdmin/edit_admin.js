@@ -112,6 +112,7 @@ export default function EditAdmin() {
           <button
             className="quic-btn quic-btn-save"
             onClick={handleSubmitAdmin}
+            disabled={loader}
           >
             {loader ? <CircularProgress /> : "Update"}
           </button>

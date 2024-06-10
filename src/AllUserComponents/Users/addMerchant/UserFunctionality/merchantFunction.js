@@ -8,14 +8,21 @@ import {
   GET_ADMIN_DATA,
   ADMIN_CHECK_USER,
 } from "../../../../Constants/Config";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../../CommonComponents/ToastifyAlert";
+import PasswordShow from "../../../../Common/passwordShow";
+import { getAuthInvalidMessage } from "../../../../Redux/features/Authentication/loginSlice";
 
 const MerchantFunction = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+
+  const { handleCoockieExpire } = PasswordShow();
   const [store, setStore] = useState({
     storename: "",
     ownerName: "",
@@ -421,6 +428,9 @@ const MerchantFunction = () => {
       return response.data;
     } catch (error) {
       console.error("Error validating email:", error);
+      // console.log("hellooo", error?.message);
+      // dispatch(getAuthInvalidMessage(error?.message));
+      handleCoockieExpire();
       throw error;
     }
   };
@@ -483,60 +493,66 @@ const MerchantFunction = () => {
     const currentValidate = validateFormNew(store.errors);
     const isValidate = await validate();
     // && validateMerchant
-    if (isValidate) {
-      if (currentValidate) {
-        const { token, ...newData } = userTypeData;
+    try {
+      if (isValidate) {
+        if (currentValidate) {
+          const { token, ...newData } = userTypeData;
 
-        const data = {
-          login_pin: merchantStore.pin,
-          admin: adminId,
-          storename: store.storename.trim(),
-          ownerName: store.ownerName.trim(),
-          email: store.email.trim(),
-          password: store.password.trim(),
-          phone: store.phone,
-          state: store.state,
-          created_by_user: "superadmin",
-          user_type: userRadioData,
-          ...newData,
-        };
-        setLoader(true);
-
-        await axios
-          .post(BASE_URL + ADD_MERCHAN_EMPLOYEE, data, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          .then((result) => {
-            setLoader(false);
-            if (result.data.status == 200) {
-              ToastifyAlert("Merchant Added Successfully!", "success");
-              setUserRadioData("");
-              setUserRadio(false);
-              setStore({
-                storename: "",
-                ownerName: "",
-                email: "",
-                password: "",
-                phone: "",
-                state: "",
-                errors: {
+          const data = {
+            login_pin: merchantStore.pin,
+            admin: adminId,
+            storename: store.storename.trim(),
+            ownerName: store.ownerName.trim(),
+            email: store.email.trim(),
+            password: store.password.trim(),
+            phone: store.phone,
+            state: store.state,
+            created_by_user: "superadmin",
+            user_type: userRadioData,
+            ...newData,
+          };
+          setLoader(true);
+          // ${token}
+          await axios
+            .post(BASE_URL + ADD_MERCHAN_EMPLOYEE, data, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
+              },
+            })
+            .then((result) => {
+              setLoader(false);
+              if (result.data.status == 200) {
+                ToastifyAlert("Merchant Added Successfully!", "success");
+                setUserRadioData("");
+                setUserRadio(false);
+                setStore({
                   storename: "",
                   ownerName: "",
                   email: "",
                   password: "",
                   phone: "",
                   state: "",
-                },
-              });
-              navigate(`/users/editMerchant/${result.data.id}`);
-            } else {
-              ToastifyAlert("Merchant not Added!", "warn");
-            }
-          });
+                  errors: {
+                    storename: "",
+                    ownerName: "",
+                    email: "",
+                    password: "",
+                    phone: "",
+                    state: "",
+                  },
+                });
+                navigate(`/users/editMerchant/${result.data.id}`);
+              } else {
+                ToastifyAlert("Merchant not Added!", "warn");
+              }
+            });
+        }
       }
+    } catch (error) {
+      // console.log("hellooo", error?.message);
+      // dispatch(getAuthInvalidMessage(error?.message));
+      handleCoockieExpire();
     }
   };
 

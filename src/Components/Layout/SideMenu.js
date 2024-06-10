@@ -543,6 +543,11 @@ const menuItems = [
             text: "Inventory List",
             link: "/store-reporting/inventory-list",
           },
+          {
+            id: 94,
+            text: "Profit Margin Report",
+            link: "/store-reporting/profit-margin-report",
+          },
         ],
       },
       {
@@ -926,9 +931,15 @@ const menuItems = [
   // },
   {
     id: 91,
-    icon:  <img src={dataIcon} alt="Export Sold Items"  className="h-6 w-10 mt-4 mb-4 hoverable-image" />,
+    icon: (
+      <img
+        src={dataIcon}
+        alt="Export Sold Items"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
     activeIcon: (
-      <img src={DataIconActive}  alt="Import"  className="h-6 w-10 mt-4 mb-4 "  />
+      <img src={DataIconActive} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
     ),
     text: "Import Data",
     link: "/import-data",

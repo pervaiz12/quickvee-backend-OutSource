@@ -23,8 +23,8 @@ module.exports = Object.freeze({
   DELETE_MULTI_DEFAULTS: "DefaultReactapi/deleteSelectedDefaults",
 
   //Attributes API Calls
-  LIST_ALL_ATTRIBUTES: "Varientsapi/varients_list",
-  ADD_ATTRIBUTE: "Varientsapi/add_varient",
+  LIST_ALL_ATTRIBUTES: "Varient_react_api/varients_list",
+  ADD_ATTRIBUTE: "Varient_react_api/add_varient",
 
   //Importdata API Calls
   IMPORT_DATA: "Import_data_api/import",

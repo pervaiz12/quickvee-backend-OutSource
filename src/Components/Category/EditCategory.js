@@ -17,6 +17,7 @@ import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import { useNavigate } from "react-router-dom";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import DeleteModal from "../../reuseableComponents/DeleteModal";
 
 const EditCategory = () => {
   const navigate = useNavigate();
@@ -219,19 +220,58 @@ const EditCategory = () => {
     return null;
   };
 
+  // const handleRemoveBanner = (event, id, removeitem) => {
+  //   event.stopPropagation();
+  //   const data = {
+  //     id: id,
+  //     merchant_id,
+  //     removeitem: removeitem,
+  //     ...userTypeData,
+  //   };
+  //   const userConfirmed = window.confirm(
+  //     "Are you sure you want to delete this Category Image ?"
+  //   );
+  //   if (userConfirmed) {
+  //     if (id) {
+  //       dispatch(deleteCategorybanner(data));
+  //       ToastifyAlert("Category Image Deleted", "success");
+  //       setSelectedImage(null);
+  //       setCategory((prevValue) => ({
+  //         ...prevValue,
+  //         image: "",
+  //       }));
+  //     }
+  //   } else {
+  //     event.preventDefault();
+  //     setCategory((prevValue) => ({
+  //       ...prevValue,
+  //       image: category.image,
+  //     }));
+  //     console.log("Deletion canceled by user");
+  //   }
+  // };
+
+
+
+  const [deleteCategoryId, setDeleteCategoryId] = useState(null);
+  const [deleteCategoryIMG, setDeleteCategoryIMG] = useState(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
   const handleRemoveBanner = (event, id, removeitem) => {
     event.stopPropagation();
-    const data = {
-      id: id,
-      merchant_id,
-      removeitem: removeitem,
-      ...userTypeData,
-    };
-    const userConfirmed = window.confirm(
-      "Are you sure you want to delete this Category Image ?"
-    );
-    if (userConfirmed) {
-      if (id) {
+    setDeleteCategoryId(id);
+    setDeleteCategoryIMG(removeitem)
+    setDeleteModalOpen(true);
+  };
+  const confirmDeleteCategory = (event) => {
+    if(deleteCategoryId){
+      const data = {
+            id: deleteCategoryId,
+            merchant_id,
+            removeitem: deleteCategoryIMG,
+            ...userTypeData,
+      };
+      if (data) {
         dispatch(deleteCategorybanner(data));
         ToastifyAlert("Category Image Deleted", "success");
         setSelectedImage(null);
@@ -239,15 +279,18 @@ const EditCategory = () => {
           ...prevValue,
           image: "",
         }));
+      }else{
+        event.preventDefault();
+        setCategory((prevValue) => ({
+          ...prevValue,
+          image: category.image,
+        }));
+        console.log("Deletion canceled by user");
       }
-    } else {
-      event.preventDefault();
-      setCategory((prevValue) => ({
-        ...prevValue,
-        image: category.image,
-      }));
-      console.log("Deletion canceled by user");
     }
+    setDeleteCategoryId(null)
+    setDeleteCategoryIMG(null)
+    setDeleteModalOpen(false);
   };
 
   // Function to prevent default behavior for drag over
@@ -494,6 +537,12 @@ const EditCategory = () => {
           </form>
         </div>
       </div>
+      <DeleteModal
+            headerText="Category"
+            open={deleteModalOpen}
+            onClose={() => {setDeleteModalOpen(false)}}
+            onConfirm={confirmDeleteCategory}
+          />
     </div>
   );
 };

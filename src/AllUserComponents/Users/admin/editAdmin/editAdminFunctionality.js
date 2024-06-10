@@ -124,6 +124,7 @@ const EditAdminFunctionality = () => {
   };
 
   const handleSubmitAdmin = async (e) => {
+    e.preventDefault();
     const { token, ...newData } = userTypeData;
     // console.log(newData)
     const data = {

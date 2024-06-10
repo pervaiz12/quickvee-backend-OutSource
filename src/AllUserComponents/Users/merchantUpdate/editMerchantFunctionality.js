@@ -50,6 +50,8 @@ export default function EditMerchantFunctionality() {
   const [message, setMessage] = useState("");
   const [successMessagehandle, setSuccessMessageHandle] = useState(false);
   const [inventory, setInventory] = useState(false);
+  const [loader, setLoader] = useState(false);
+
   const handleSuccessMessage = () => {
     setTimeout(() => {
       setSuccessMessageHandle(false);
@@ -302,8 +304,9 @@ export default function EditMerchantFunctionality() {
         merchant_token: getEditMerchant.merchant_token,
         usa_pin: getEditMerchant.usa_pin,
       };
+      setLoader(true);
       console.log(packet);
-      // console.log(userTypeData?.token)
+      console.log(userTypeData?.token);
       try {
         let response = await axios.post(
           BASE_URL + GET_UPDATE_MERCHANT,
@@ -316,6 +319,7 @@ export default function EditMerchantFunctionality() {
           }
         );
         if (response.data.status == 200) {
+          setLoader(false);
           ToastifyAlert("Update Merchant  Successfully!", "success");
           // setMessage(response?.data?.message);
           setSuccessMessageHandle(true);
@@ -323,6 +327,7 @@ export default function EditMerchantFunctionality() {
           navigate(`/users/editMerchant/${response?.data?.id}`);
           // navigate(`/users/editMerchant/${getEditMerchant.id}`)
         } else {
+          setLoader(false);
           ToastifyAlert("Merchant not  Updated!", "warn");
         }
       } catch (e) {
@@ -350,5 +355,6 @@ export default function EditMerchantFunctionality() {
     inventory,
     inventoryApprove,
     errors,
+    loader,
   };
 }

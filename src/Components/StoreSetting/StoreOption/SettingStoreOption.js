@@ -40,7 +40,7 @@ export default function SettingStoreOption() {
   const [storeData, setStoreData] = useState({});
   const [userData, setUserData] = useState({});
   const [userOptionData, setUserOptionData] = useState({});
-
+  console.log("storeData: ", storeData);
   const checkBoxList = [
     "orderNumebrEnabled",
     "enabledEmailNotification",
@@ -564,13 +564,170 @@ export default function SettingStoreOption() {
                 >
                   <Grid item>
                     <div className="store-setting-gry Admin_std store-setting-inline-block">
-                      Enable NCA
+                      Enable Dual Price
                     </div>
+                  </Grid>
+                  <Grid item>
+                    <span className="store-setting-switch">
+                      <Switch
+                        {...label}
+                        checked={orderState?.enabledDualPrice}
+                        name="enabledDualPrice"
+                        onChange={handleOrderChange}
+                      />
+                    </span>
+                  </Grid>
+                </Grid>
+                <Grid container spacing={2} sx={{ py: 0.5 }}>
+                  <Grid item xs={12} sm={6}>
+                    <Grid container>
+                      <Grid Item xs={12}>
+                        <div className="store-setting-gry Admin_std">
+                          Credit Card Surcharge %
+                        </div>
+                      </Grid>
+                      <Grid xs={12}>
+                        <BasicTextFields
+                          type={"number"}
+                          value={orderState?.creditCardSurcharge}
+                          name={"creditCardSurcharge"}
+                          onChangeFun={handleOrderChange}
+                          placeholder={"0.00"}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                  <Grid item xs={12} sm={6}>
+                    <Grid container>
+                      <Grid Item xs={12}>
+                        <div className="store-setting-gry Admin_std">
+                          Debit Card Surcharge %
+                        </div>
+                      </Grid>
+                      <Grid xs={12}>
+                        <BasicTextFields
+                          type={"number"}
+                          name={"debitCardSurcharge"}
+                          value={orderState?.debitCardSurcharge}
+                          onChangeFun={handleOrderChange}
+                          placeholder="0.00"
+                        />
+                      </Grid>
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>
             </Grid>
-            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
+            <Grid container sx={{ p: 2 }} className="box_shadow_div">
+              <Grid item xs={12}>
+                <Grid container sx={{ pb: 1.5 }}>
+                  <Grid item xs={12}>
+                    <h2 className="store-setting-h1">
+                      <b>Printing</b>
+                    </h2>
+                  </Grid>
+                </Grid>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{ py: 0.5 }}
+                >
+                  <Grid item>
+                    <div className="store-setting-gry Admin_std store-setting-inline-block">
+                      Auto Print Orders To Order Printer ?
+                    </div>
+                  </Grid>
+                  <Grid>
+                    <span className="store-setting-switch">
+                      <Switch
+                        {...label}
+                        checked={orderState?.autoPrintOrder}
+                        name="autoPrintOrder"
+                        onChange={handleOrderChange}
+                      />
+                    </span>
+                  </Grid>
+                </Grid>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{ py: 0.5 }}
+                >
+                  <Grid item>
+                    <div className="store-setting-gry Admin_std store-setting-inline-block">
+                      Auto Print Payment Receipt ?
+                    </div>
+                  </Grid>
+                  <Grid item>
+                    <span className="store-setting-switch">
+                      <Switch
+                        {...label}
+                        checked={orderState?.autoPrintPaymentReceipt}
+                        name="autoPrintPaymentReceipt"
+                        onChange={handleOrderChange}
+                      />
+                    </span>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid container sx={{ p: 2 }} className="box_shadow_div">
+              <Grid item xs={12}>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{ pb: 1.5 }}
+                >
+                  <Grid item>
+                    <h2 className="store-setting-h1">
+                      <b>Guest Checkout</b>
+                    </h2>
+                    <div className="store-setting-gry Admin_std">
+                      Enable Guest Checkout for Online Order?
+                    </div>
+                  </Grid>
+                  <Grid item>
+                    <span className="store-setting-switch">
+                      <Switch
+                        {...label}
+                        checked={orderState?.enabledGuestCheckout}
+                        name="enabledGuestCheckout"
+                        onChange={handleOrderChange}
+                      />
+                    </span>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid
+              container
+              direction="row"
+              justifyContent="flex-end"
+              alignItems="center"
+            >
+              <Grid item>
+                <button
+                  className="store-setting-btn"
+                  onClick={handleUpdateSettingOption}
+                  disabled={loading}
+                >
+                  {loading ? (
+                    <Box className="loader-box">
+                      <CircularProgress />
+                    </Box>
+                  ) : (
+                    "Update"
+                  )}
+                </button>
+              </Grid>
+            </Grid>
+            {/* <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
               <div class="d-flex">
                 <h2 className="store-setting-h1 store-setting-inline-block">
                   <b>Enable Order Number</b>
@@ -593,19 +750,7 @@ export default function SettingStoreOption() {
 
               <div className="relative store-setting-pb-1">
                 <div className="store-setting-gry Admin_std">Select Time</div>
-                {/* <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={["MobileTimePicker"]}>
-                <DemoItem>
-                  <MobileTimePicker
-                    defaultValue={dayjs(
-                      allStoreUserData && allStoreUserData.reset_order_time
-                    )}
-                    // slotProps={{ textField: { variant: 'filled' } }}
-                    // format="HH:mm:ss"
-                  />
-                </DemoItem>
-              </DemoContainer>
-            </LocalizationProvider> */}
+                
 
                 <div className="input_area">
                   <input
@@ -618,12 +763,11 @@ export default function SettingStoreOption() {
                     onClick={(e) => e.target.showPicker()}
                     disabled={!orderState?.orderNumebrEnabled}
                   />
-                  {/* <span>{formatTime(systemAccess.start_time)}</span> */}
+     
                 </div>
               </div>
-            </div>
-
-            {/* Future Order */}
+            </div> */}
+            {/* 
             <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
               <h2 className="store-setting-h1 store-setting-pb-1-5 store-setting-inline-block">
                 <b>Future Order</b>
@@ -657,8 +801,8 @@ export default function SettingStoreOption() {
                   disabled={!orderState?.enabledFutureOrder}
                 />
               </div>
-            </div>
-            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
+            </div> */}
+            {/* <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
               <h2 className="store-setting-h1 store-setting-pb-1-5 store-setting-inline-block">
                 <b>Dispatch Center</b>
               </h2>
@@ -678,13 +822,13 @@ export default function SettingStoreOption() {
               <div>
                 <label className="q_resigter_setting_section">
                   Enable Email Notification
-                  {/* <input type="checkbox" checked="checked" />  */}
+          
                   <input
                     type="checkbox"
                     name="enabledEmailNotification"
                     value={orderState?.enabledEmailNotification}
                     checked={orderState?.enabledEmailNotification}
-                    // checked={values.ebt_type.split(",").includes("1")}
+    
                     onChange={handleOrderChange}
                     disabled={!orderState?.enabledDispatchCenter}
                   />
@@ -699,16 +843,15 @@ export default function SettingStoreOption() {
                     value={orderState?.enabledSmsNotification}
                     checked={orderState?.enabledSmsNotification}
                     disabled={!orderState?.enabledDispatchCenter}
-                    // checked={values.ebt_type.split(",").includes("2")}
+   
                     onChange={handleOrderChange}
                   />
                   <span className="checkmark"></span>
                 </label>
               </div>
-            </div>
+            </div> */}
 
-            {/* Payment Options */}
-            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
+            {/* <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
               <h2 className="store-setting-h1 store-setting-pb-1-5">
                 <b>Payment Options</b>
               </h2>
@@ -810,10 +953,9 @@ export default function SettingStoreOption() {
                   </div>
                 </div>
               </div>
-            </div>
+            </div> */}
 
-            {/* Printing */}
-            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
+            {/* <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
               <h2 className="store-setting-h1 store-setting-pb-1-5">
                 <b>Printing</b>
               </h2>
@@ -843,10 +985,9 @@ export default function SettingStoreOption() {
                   />
                 </span>
               </div>
-            </div>
+            </div> */}
 
-            {/* Guest Checkout */}
-            <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
+            {/* <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">
               <div class="d-flex">
                 <h2 className="store-setting-h1 store-setting-pb-1-5 store-setting-inline-block">
                   <b>Guest Checkout</b>
@@ -865,8 +1006,8 @@ export default function SettingStoreOption() {
                   Enable Guest Checkout for Online Order?
                 </div>
               </div>
-            </div>
-
+            </div> */}
+            {/* 
             <div class="btnarea mb-8 ">
               <button
                 className="store-setting-btn"
@@ -881,7 +1022,7 @@ export default function SettingStoreOption() {
                   "Update"
                 )}
               </button>
-            </div>
+            </div> */}
           </>
         )}
       </div>

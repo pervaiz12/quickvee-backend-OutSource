@@ -17,6 +17,7 @@ import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
+import DeleteModal from "../../../reuseableComponents/DeleteModal";
 
 
 const EmployeeList = () => {
@@ -101,24 +102,47 @@ const EmployeeList = () => {
         employeeListDataState.employeelistData,
       ]);
 
-      const handleDeleteEmployee = async (id) => {
-        const del_data = {
-            merchant_id:merchant_id,
-            employee_id:id,
-            ...userTypeData
-        }
-        const userConfirmed = window.confirm(
-          "Are you sure you want to delete this employee?"
-        );
-        if (userConfirmed) {
-          if (id) {
-            // dispatch(deleteEmployee(del_data));
-            const response = await dispatch(deleteEmployee(del_data)).unwrap();
+      // const handleDeleteEmployee = async (id) => {
+      //   const del_data = {
+      //       merchant_id:merchant_id,
+      //       employee_id:id,
+      //       ...userTypeData
+      //   }
+      //   const userConfirmed = window.confirm(
+      //     "Are you sure you want to delete this employee?"
+      //   );
+      //   if (userConfirmed) {
+      //     if (id) {
+      //       // dispatch(deleteEmployee(del_data));
+      //       const response = await dispatch(deleteEmployee(del_data)).unwrap();
+      //       ToastifyAlert(response.message, "success");
+      //     }
+      //   } else {
+      //     console.log("Deletion canceled by employee");
+      //   }
+      // };
+
+      const [deleteEmployeeId, setDeleteEmployeeId] = useState(null);
+      const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+      const handleDeleteEmployee = (id) => {
+        setDeleteEmployeeId(id);
+        setDeleteModalOpen(true);
+      };
+      const confirmDeleteCategory = async () => {
+        if(deleteEmployeeId){
+          const data = {
+            employee_id: deleteEmployeeId,
+            merchant_id: merchant_id,
+            ...userTypeData,
+          };
+          if (data) {
+            const response = await dispatch(deleteEmployee(data)).unwrap();
             ToastifyAlert(response.message, "success");
           }
-        } else {
-          console.log("Deletion canceled by employee");
         }
+        setDeleteEmployeeId(null)
+        setDeleteModalOpen(false);
       };
 
       const myStyles = {
@@ -241,6 +265,12 @@ const EmployeeList = () => {
             />
         </Grid>
       </Grid>
+          <DeleteModal 
+            headerText="Employee"
+            open={deleteModalOpen}
+            onClose={() => {setDeleteModalOpen(false)}}
+            onConfirm={confirmDeleteCategory} 
+            />
 
       {showModal && (
         <>

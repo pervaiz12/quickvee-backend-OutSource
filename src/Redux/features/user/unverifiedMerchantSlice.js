@@ -21,21 +21,25 @@ export const getUnVerifiedMerchant = createAsyncThunk(
   "UnVerified/getUnVerifiedMerchant",
   async (data) => {
     // console.log(data)
-    const { token, ...dataNew } = data;
+    try {
+      const { token, ...dataNew } = data;
 
-    const response = await axios.post(
-      BASE_URL + GET_VERIFIED_MERCHANT,
-      dataNew,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`, // Use data?.token directly
-        },
+      const response = await axios.post(
+        BASE_URL + GET_VERIFIED_MERCHANT,
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // Use data?.token directly
+          },
+        }
+      );
+      //    console.log(response)
+      if (response.data.status == 200) {
+        return response.data.message;
       }
-    );
-    //    console.log(response)
-    if (response.data.status == 200) {
-      return response.data.message;
+    } catch (error) {
+      console.log(error);
     }
   }
 );

@@ -170,8 +170,8 @@ const EditVendors = ({ setVisible }) => {
   };
   return (
     <>
-      <Grid container>
-        <Grid item xs={12} className="q-add-categories-section">
+      <Grid container style={{marginTop: "1.5rem"}}>
+        <Grid item xs={12} className="q-add-categories-section ">
           <Grid container sx={{ marginTop: 0, marginLeft: 0 }}>
             <Grid item xs={12}>
               <div

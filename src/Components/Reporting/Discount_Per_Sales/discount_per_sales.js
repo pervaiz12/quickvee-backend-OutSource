@@ -16,13 +16,14 @@ export default function Discount_Per_Sales() {
     handleOptionClick,
     EmployeeFilterData,
     selectedoption,
+    loader,
   } = Discount_per_sales_logic();
 
   return (
     <>
       <Grid container>
         <Grid item xs={12}>
-          <Grid container sx={{ padding: 2.5, }} className="box_shadow_div">
+          <Grid container sx={{ padding: 2.5 }} className="box_shadow_div">
             <Grid item xs={6}>
               <label htmlFor="orderSourceFilter">Select Employee</label>
               <SelectDropDown
@@ -41,7 +42,10 @@ export default function Discount_Per_Sales() {
           </Grid>
           <Grid container sx={{ marginY: 3.8 }}>
             <Grid item xs={12}>
-              <DashboardTables EmployeeFilterData={EmployeeFilterData} />
+              <DashboardTables
+                EmployeeFilterData={EmployeeFilterData}
+                loader={loader}
+              />
             </Grid>
           </Grid>
         </Grid>

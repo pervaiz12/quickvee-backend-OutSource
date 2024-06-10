@@ -11,6 +11,7 @@ import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
+import Loader from "../../../CommonComponents/Loader";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -94,123 +95,134 @@ export default function DashboardTables(props) {
   };
 
   return (
-    <TableContainer component={Paper}>
-      {
-        // console.log(Array.isArray(props.EmployeeFilterData?.report_data).length)
-        props.EmployeeFilterData?.report_data
-          ? Object.entries(props.EmployeeFilterData.report_data).map(
-              ([key, result], index) => {
-                if (Array.isArray(result)) {
-                  return (
-                    <>
-                      <h1 className="heading p-4 pb-0">{key}</h1>
-                      <TableContainer sx={{}} aria-label="customized table">
-                        <StyledTable>
-                          <TableHead>
-                            <StyledTableCell align="center">
-                              Employee
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              Discount($)
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              Discount Type
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              Item Discount($)
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              Adjusted Item Price($)
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              Order ID
-                            </StyledTableCell>
-                            <StyledTableCell align="center">
-                              Date & Time
-                            </StyledTableCell>
-                          </TableHead>
-                          <TableBody>
-                            {result.map((item, innerIndex) => (
-                              <StyledTableRow key={innerIndex}>
-                                <StyledTableCell align="center">
-                                  {item?.f_name + " " + item?.l_name}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  {parseFloat(item?.discount).toFixed(2)}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  {item?.coupon_code}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  {item?.line_item_discount}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  {item?.cash_discounting}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  {item?.order_id}
-                                </StyledTableCell>
-                                <StyledTableCell align="center">
-                                  {item?.merchant_time}
-                                </StyledTableCell>
-                              </StyledTableRow>
-                            ))}
-                            <StyledTableRow>
+    <>
+      {props.loader ? (
+        <Loader />
+      ) : (
+        <TableContainer component={Paper}>
+          {
+            // console.log(props.EmployeeFilterData?.report_data?.length)
+            props.EmployeeFilterData?.report_data &&
+            props.EmployeeFilterData.report_data.length !== 0 ? (
+              Object.entries(props.EmployeeFilterData.report_data).map(
+                ([key, result], index) => {
+                  if (Array.isArray(result)) {
+                    return (
+                      <>
+                        <h1 className="heading p-4 pb-0">{key}</h1>
+                        <TableContainer sx={{}} aria-label="customized table">
+                          <StyledTable>
+                            <TableHead>
                               <StyledTableCell align="center">
-                                Grand Total
+                                Employee
                               </StyledTableCell>
                               <StyledTableCell align="center">
-                                {`$${result
-                                  .reduce((total, item) => {
-                                    return (
-                                      total + (parseFloat(item?.discount) || 0)
-                                    );
-                                  }, 0)
-                                  .toFixed(2)}`}
+                                Discount($)
                               </StyledTableCell>
-                              <StyledTableCell></StyledTableCell>
-                              <StyledTableCell></StyledTableCell>
-                              <StyledTableCell></StyledTableCell>
-                              <StyledTableCell></StyledTableCell>
-                              <StyledTableCell></StyledTableCell>
-                            </StyledTableRow>
-                            {Object.entries(
-                              props.EmployeeFilterData.report_data
-                            ).length-1 === index && (
+                              <StyledTableCell align="center">
+                                Discount Type
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                Item Discount($)
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                Adjusted Item Price($)
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                Order ID
+                              </StyledTableCell>
+                              <StyledTableCell align="center">
+                                Date & Time
+                              </StyledTableCell>
+                            </TableHead>
+                            <TableBody>
+                              {result.map((item, innerIndex) => (
+                                <StyledTableRow key={innerIndex}>
+                                  <StyledTableCell align="center">
+                                    {item?.f_name + " " + item?.l_name}
+                                  </StyledTableCell>
+                                  <StyledTableCell align="center">
+                                    {parseFloat(item?.discount).toFixed(2)}
+                                  </StyledTableCell>
+                                  <StyledTableCell align="center">
+                                    {item?.coupon_code}
+                                  </StyledTableCell>
+                                  <StyledTableCell align="center">
+                                    {item?.line_item_discount}
+                                  </StyledTableCell>
+                                  <StyledTableCell align="center">
+                                    {item?.cash_discounting}
+                                  </StyledTableCell>
+                                  <StyledTableCell align="center">
+                                    {item?.order_id}
+                                  </StyledTableCell>
+                                  <StyledTableCell align="center">
+                                    {item?.merchant_time}
+                                  </StyledTableCell>
+                                </StyledTableRow>
+                              ))}
                               <StyledTableRow>
                                 <StyledTableCell align="center">
-                                  <div className="q-category-bottom-report-listing">
-                                    <div>
-                                      <p className="">Grand Total</p>
-                                    </div>
-                                  </div>
-                                </StyledTableCell >
-                                <StyledTableCell align="center">
-                                  <div className="q-category-bottom-report-listing">
-                                    <div>
-                                      <p className="">${totalRecord}</p>
-                                    </div>
-                                  </div>
+                                  Grand Total
                                 </StyledTableCell>
+                                <StyledTableCell align="center">
+                                  {`$${result
+                                    .reduce((total, item) => {
+                                      return (
+                                        total +
+                                        (parseFloat(item?.discount) || 0)
+                                      );
+                                    }, 0)
+                                    .toFixed(2)}`}
+                                </StyledTableCell>
+                                <StyledTableCell></StyledTableCell>
+                                <StyledTableCell></StyledTableCell>
+                                <StyledTableCell></StyledTableCell>
+                                <StyledTableCell></StyledTableCell>
+                                <StyledTableCell></StyledTableCell>
                               </StyledTableRow>
-                            )}
-                          </TableBody>
-                        </StyledTable>
-                      </TableContainer>
-                    </>
-                  );
-                } else {
-                  return null; // Handle non-array values if needed
+                              {Object.entries(
+                                props.EmployeeFilterData.report_data
+                              ).length -
+                                1 ===
+                                index && (
+                                <StyledTableRow>
+                                  <StyledTableCell align="center">
+                                    <div className="q-category-bottom-report-listing">
+                                      <div>
+                                        <p className="">Grand Total</p>
+                                      </div>
+                                    </div>
+                                  </StyledTableCell>
+                                  <StyledTableCell align="center">
+                                    <div className="q-category-bottom-report-listing">
+                                      <div>
+                                        <p className="">${totalRecord}</p>
+                                      </div>
+                                    </div>
+                                  </StyledTableCell>
+                                </StyledTableRow>
+                              )}
+                            </TableBody>
+                          </StyledTable>
+                        </TableContainer>
+                      </>
+                    );
+                  } else {
+                    return null; // Handle non-array values if needed
+                  }
                 }
-              }
+              )
+            ) : (
+              <Grid container sx={{ padding: 2.5 }}>
+                <Grid item>
+                  <p>no record found </p>
+                </Grid>
+              </Grid>
             )
-          : <Grid container sx={{padding:2.5}}>
-            <Grid item>
-              <p>no record found </p>
-            </Grid>
-          </Grid> 
-      }
-    
-    </TableContainer>
+          }
+        </TableContainer>
+      )}
+    </>
   );
 }
