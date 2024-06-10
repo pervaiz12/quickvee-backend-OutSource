@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import PasswordShow from "../../../../Common/passwordShow";
 
-export default function Add_Admin() {
+export default function Add_Admin({setVisible}) {
   const {
     handleChange,
     addAdminData,
@@ -14,7 +14,10 @@ export default function Add_Admin() {
     handleKeyPress,
     loader,
   } = Add_adminFunctionality();
-
+  const handleClick = () => {
+  
+    setVisible("AdminView")
+  }
   const navigate = useNavigate();
   const { showpPassword, jsxData } = PasswordShow();
   return (
@@ -23,7 +26,7 @@ export default function Add_Admin() {
         <div className="box" style={{ marginTop: "2.5rem" }}>
           <div className="box_shadow_div">
             <div className="q-add-categories-section-header">
-              <span onClick={() => navigate("/users/admin")}>
+              <span onClick={handleClick}>
                 <img src={leftSvg} alt="Add-New-Category" />
                 <span>Add New Admin</span>
               </span>

@@ -33,7 +33,7 @@ import {
   UNAPPROVE_SINGLE_STORE,
   EXPORTCSV,
 } from "../../../Constants/Config";
-import Pagination from "./Pagination";
+import Pagination from "../UnverifeDetails/Pagination";
 import useDebounce from "../../../hooks/useDebouncs";
 import DeleteModal from "../../../reuseableComponents/DeleteModal";
 import DislikeModal from "../../../reuseableComponents/DislikeModal";
@@ -65,7 +65,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function Verified() {
+export default function Verified({setVisible,setMerchantId}) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -138,7 +138,10 @@ export default function Verified() {
   };
 
   const handleEditMerchant = (data) => {
-    navigate(`/users/editMerchant/${data}`);
+    console.log("handleEditMerchant",data);
+    setMerchantId(data)
+    setVisible("editVerirmedMerchant")
+    // navigate(`/users/editMerchant/${data}`);
   };
 
   const [deleteTableId, setDeleteTableId] = useState(null);

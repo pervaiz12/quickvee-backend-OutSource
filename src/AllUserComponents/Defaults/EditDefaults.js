@@ -13,7 +13,7 @@ import { Grid } from '@mui/material';
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
-const EditDefaults = () => {
+const EditDefaults = ({setVisible,defaultEditId}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = useState("");
@@ -33,7 +33,7 @@ const EditDefaults = () => {
   const params = useParams();
   async function fetchData() {
     const getdefaultsData = {
-      id: params.defaultsCode,
+      id: defaultEditId,
       token_id:userTypeData.token_id,
       login_type:userTypeData.login_type,
     };
@@ -290,12 +290,15 @@ const EditDefaults = () => {
           <div className="mt-10 mb-4">
             <form onSubmit={handleSubmit} enctype="multipart/form-data">
               <div className="q-add-categories-section-header">
-                <Link to={`/users/view/unapprove/menu/defaults`}>
+                <span 
+                onClick={()=>{setVisible("DefaultsDetail")}}
+                // to={`/users/view/unapprove/menu/defaults`}
+                >
                   <span style={myStyles}>
                     <img src={AddNewCategory} alt="Add-New-Category" />
                     <span>Edit Defaults</span>
                   </span>
-                </Link>
+                </span>
               </div>
               <div className="q-add-categories-section-middle-form">
                 <div className="q-add-categories-single-input">
@@ -432,9 +435,9 @@ const EditDefaults = () => {
 
               <div className="q-add-categories-section-middle-footer">
                 <button className="quic-btn quic-btn-save">Save</button>
-                <Link to={`/users/view/unapprove/menu/defaults`}>
+                <div onClick={()=>{setVisible("DefaultsDetail")}}>
                   <button className="quic-btn quic-btn-cancle">Cancel</button>
-                </Link>
+                </div>
               </div>
             </form>
           </div>

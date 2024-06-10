@@ -60,7 +60,7 @@ const Info = () => {
 
       />
       <form>
-        <AddressForm infoRecord={infoRecord} onChangeHandle={onChangeHandle} />
+        <AddressForm handleKeyPress={handleKeyPress}  errors={errors} infoRecord={infoRecord} onChangeHandle={onChangeHandle} />
 
         <SocialMediaForm
           infoRecord={infoRecord}

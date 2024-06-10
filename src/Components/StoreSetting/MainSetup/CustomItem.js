@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import "../../../Styles/EmployeeList/customeitem.css";
+import AlertModal from "../../../reuseableComponents/AlertModal";
 
 const CustomTimePicker = ({
   OpenTime,
@@ -64,11 +65,19 @@ const CustomTimePicker = ({
     return false;
   };
 
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
+
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
+  };
+
   const handleStartTimeChange = (event) => {
     const value = event.target.value;
 
     if (checkOverlap(value, endTime)) {
-      alert("The selected time range overlaps with an existing slot.");
+      showModal("The selected time range overlaps with an existing slot.");
       return;
     }
 
@@ -89,12 +98,12 @@ const CustomTimePicker = ({
     const value = event.target.value;
 
     if (checkOverlap(startTime, value)) {
-      alert("The selected time range overlaps with an existing slot");
+      showModal("The selected time range overlaps with an existing slot");
       return;
     }
 
     if (startTimeIndex >= timeOptions.indexOf(value)) {
-      alert("The end time cannot be the same as or before the start time");
+      showModal("The end time cannot be the same as or before the start time");
       setEndTime("");
       return;
     }
@@ -168,6 +177,11 @@ const CustomTimePicker = ({
           ))}
         </Select>
       </div>
+      <AlertModal
+      headerText={alertModalHeaderText}
+      open={alertModalOpen}
+      onClose={() => {setAlertModalOpen(false)}}
+       />
     </>
   );
 };

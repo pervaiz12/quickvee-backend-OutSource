@@ -104,12 +104,16 @@ export default function InfoFunction() {
       return stateObj;
     });
   };
-  // =======================end password ==========================
+  // ======================= end password ==========================
 
   const [errors, setErrors] = useState({
     imageErrors: "",
     bannerErrors: "",
     qrCodeError: "",
+    address_1Error: "",
+    cityError: "",
+    zipCodeError: "",
+    stateNameError: "",
     phoneError: "",
   });
 
@@ -156,6 +160,47 @@ export default function InfoFunction() {
       errorMessage.bannerErrors = "";
     }
 
+    if (infoRecord.qrCode === "") {
+      errorMessage.qrCodeError = "QR Code field is required.";
+      isValidate = false;
+    } else {
+      errorMessage.qrCodeError = "";
+    }
+
+    if (infoRecord.address_1 === "") {
+      errorMessage.address_1Error = "Address Line 1 field is required.";
+      isValidate = false;
+    } else {
+      errorMessage.address_1Error = "";
+    }
+
+    if (infoRecord.city === "") {
+      errorMessage.cityError = "City field is required.";
+      isValidate = false;
+    } else {
+      errorMessage.cityError = "";
+    }
+
+    if (infoRecord.zip === "") {
+      errorMessage.zipCodeError = "Zip Code field is required.";
+      isValidate = false;
+    } else {
+      errorMessage.zipCodeError = "";
+    }
+
+    if (infoRecord.state === "") {
+      errorMessage.stateNameError = "State field is required.";
+      isValidate = false;
+    } else {
+      errorMessage.stateNameError = "";
+    }
+
+    if (infoRecord.phone === "") {
+      errorMessage.phoneError = "Phone field is required.";
+      isValidate = false;
+    } else {
+      errorMessage.phoneError = "";
+    }
     setErrors(errorMessage);
 
     return isValidate;
@@ -345,7 +390,10 @@ export default function InfoFunction() {
       }
     }
     setErrors(errorMessage);
-    setInfoRecord({ ...infoRecord, [name]: value });
+    setInfoRecord((prevInfoRecord) => ({
+      ...prevInfoRecord,
+      [name]: value,
+    }));
   };
   const handleKeyPress = (e) => {
     // Allow only numeric characters (key codes 48 to 57) and backspace (key code 8)
