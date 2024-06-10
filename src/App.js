@@ -560,7 +560,7 @@ function App() {
           />
           <Route
             exact
-            path="/users/addmerchant"
+            path="/users/addMerchant"
             element={<Main visible={"addMerchant"} />}
           />
           <Route

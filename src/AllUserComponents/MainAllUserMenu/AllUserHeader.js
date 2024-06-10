@@ -132,7 +132,7 @@ const AllUserHeader = () => {
       >
         <Grid item>
           <Grid container>
-            <Grid item sx={{ marginRight: 2 }}>
+            <Grid item sx={{ ml: 1, mr: 2}}>
               <BiMenu
                 className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out cursor-pointer`}
                 onClick={handleDropdownToggle}

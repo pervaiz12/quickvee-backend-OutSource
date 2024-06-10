@@ -67,9 +67,10 @@ export default function AddMerchan() {
                       navigate(location.state?.from);
                     }
                   }}
+                   className="text-center items-center"
                 >
                   {location.state?.from && (
-                    <img src={AddSvg} alt="Add-New-Category" />
+                    <img src={AddSvg} alt="Add-New-Category"  className="h-9 w-9" />
                   )}
                   <span>Add {location.state && location.state?.heading}</span>
                 </span>
@@ -336,7 +337,7 @@ export default function AddMerchan() {
                 alignItems="center"
                 sx={{ px: 2.5, pb: 2.5 }}
               >
-                <Grid item>
+                <Grid item sx={{px:2}}>
                   <button
                     className="quic-btn quic-btn-save"
                     onClick={handleSubmitMerchant}
@@ -359,10 +360,10 @@ export default function AddMerchan() {
           )}
         </Grid>
       </Grid>
-      <div className="q-order-main-page">
+      {/* <div className="q-order-main-page">
         <div className="box">
           <div className="box_shadow_div">
-            {/* <div className="q-add-categories-section-header">
+            <div className="q-add-categories-section-header">
               <span
                 onClick={() => {
                   if (location.state?.from) {
@@ -375,7 +376,7 @@ export default function AddMerchan() {
                 )}
                 <span>Add {location.state && location.state?.heading}</span>
               </span>
-            </div> */}
+            </div>
 
             <div className="pd_20">
               <div className="qvrow">
@@ -383,7 +384,7 @@ export default function AddMerchan() {
                   <label htmlFor="">
                     User Type <span className="Asterisk_error">*</span>
                   </label>
-                  {/* <div className="input_rediobutton_area">
+                  <div className="input_rediobutton_area">
                     <input
                       className="inputredio"
                       type="radio"
@@ -394,8 +395,8 @@ export default function AddMerchan() {
                       // checked={userRadio}
                     />
                     <label htmlFor="radio2">Admin</label>
-                  </div> */}
-                  {/* <div className="input_rediobutton_area">
+                  </div>
+                  <div className="input_rediobutton_area">
                     <input
                       className="inputredio"
                       type="radio"
@@ -406,9 +407,9 @@ export default function AddMerchan() {
                       checked={userRadio}
                     />
                     <label htmlFor="radio1">Merchant</label>
-                  </div> */}
+                  </div>
                 </div>
-                {/* <span className="error">{radioErros}</span> */}
+                <span className="error">{radioErros}</span>
               </div>
               <br />
 
@@ -525,12 +526,7 @@ export default function AddMerchan() {
                         </div>
                       </div>
                     </div>
-                    {/* <input
-                    type="button"
-                    className="blue_btn"
-                    value="Submit"
-                    onClick={handleSubmit}
-                  /> */}
+                    
                   </div>
                   <div className="q-add-categories-section-middle-footer">
                     <button
@@ -552,42 +548,7 @@ export default function AddMerchan() {
               ) : (
                 <>
                   <div className="qvrow">
-                    {/* <div className="col-qv-6">
-                      <div className="input_area">
-                        <label>Select Admin</label>
-                        <select value={adminId} onChange={onChangeAdminId}>
-                          <option value="">Select an Admin</option>
-                          {adminList.map((option) => {
-                            return (
-                              <option
-                                key={option.id}
-                                value={option.merchant_id}
-                              >
-                                {option.name}
-                              </option>
-                            );
-                          })}
-                        </select>
-                        {errorAdminId && (
-                          <span className="error">{errorAdminId}</span>
-                        )}
-                      </div>
-                    </div>
-                    <div className="col-qv-6">
-                      <div className="input_area">
-                        <label>Login Pin</label>
-                        <input
-                          className=""
-                          type="text"
-                          name="pin"
-                          value={merchantStore.pin}
-                          onChange={handleChangeMerchant}
-                          maxLength={4}
-                          onKeyPress={handleKeyPress}
-                        />
-                        {errorPin && <span className="error">{errorPin}</span>}
-                      </div>
-                    </div> */}
+                  
                   </div>
                   <div className="qvrow">
                     <div className="col-qv-6">
@@ -631,14 +592,14 @@ export default function AddMerchan() {
                         <label>
                           Email <span className="Asterisk_error">*</span>
                         </label>
-                        {/* <input
+                        <input
                           className=""
                           type="text"
                           name="email"
                           value={store.email}
                           onChange={handleChange}
                           onBlur={() => handleBlur("email")}
-                        /> */}
+                        />
                         <span className="error">{store.errors.email}</span>
                       </div>
                     </div>
@@ -701,12 +662,7 @@ export default function AddMerchan() {
                         <span className="error">{store.errors.state}</span>
                       </div>
                     </div>
-                    {/* <input
-                      type="button"
-                      className="blue_btn"
-                      value="Submit"
-                      onClick={handleSubmitMerchant}
-                    /> */}
+                    
                   </div>
                   <div className="q-add-categories-section-middle-footer">
                     <button
@@ -724,18 +680,13 @@ export default function AddMerchan() {
                       </button>
                     )}
                   </div>
-                  {/* <input 
-                                type='button'
-                                className="blue_btn"
-                                value="Submit"
-                                onClick={handleSubmit}
-                            /> */}
+                
                 </>
               )}
             </div>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }

@@ -1027,7 +1027,7 @@ const SuperAdminMenuItems = [
     link: "/users/view/unapprove/users/add",
     className: "flex items-center gap-2",
     dropdownItems: [
-      { id: 21, text: "Add", link: "/users/addmerchant" },
+      { id: 21, text: "Add", link: "/users/addMerchant" },
       { id: 22, text: "Verified Merchant", link: "/users/view/approve" },
       {
         id: 23,

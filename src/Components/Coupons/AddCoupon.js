@@ -447,7 +447,7 @@ const AddCoupon = ({ seVisible }) => {
                     paddingBottom: "20px",
                     paddingLeft: "10px",
                   }}
-                  className="q-add-categories-section-header"
+                  className="q-add-categories-section-header text-center"
                 >
                   <span
                     onClick={() => seVisible("CouponDiscount")}
