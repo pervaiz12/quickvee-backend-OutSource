@@ -300,7 +300,8 @@ module.exports = Object.freeze({
   DELETE_BREAK: "Timesheet_react_api/delete_breaks",
 
   CHANGE_PASSWORD_STORE: "Store_setting_react_api/change_password",
-  INVENTORY_LIST: "ReportingReactapi/JsonDataproductnew",
+  INVENTORY_LIST: "ReportingReactapi/JsonDataproductnew1",
+  EMAIL_VARIFICATION: "LoginApiReact/reset_password_send",
 });
 
 // All api calls are initialized in this component for this application

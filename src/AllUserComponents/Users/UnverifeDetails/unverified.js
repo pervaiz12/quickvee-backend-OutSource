@@ -169,8 +169,8 @@ export default function Unverified() {
     */
   };
 
-  const confirmDeleteCategory = async ( ) => {
-    if(deleteTableId){
+  const confirmDeleteCategory = async () => {
+    if (deleteTableId) {
       try {
         const { token, ...otherUserData } = userTypeData;
         const delVendor = {
@@ -210,7 +210,7 @@ export default function Unverified() {
     }
     setDeleteModalOpen(false);
     setDeleteTableId(null);
-  };  
+  };
 
   //  ============================= END HANDLEING FUNCT  ==============================
   const dispatch = useDispatch();
@@ -313,7 +313,7 @@ export default function Unverified() {
   };
 
   const hadleDislikeMerchant = async (merchant_id) => {
-    setDeleteMerchantId(merchant_id)
+    setDeleteMerchantId(merchant_id);
     setDislikeModalOpen(true);
     /*
     try {
@@ -356,9 +356,8 @@ export default function Unverified() {
     */
   };
 
-
   const confirmDislikeStore = async () => {
-    if(deleteMerchantId){
+    if (deleteMerchantId) {
       try {
         const { token, ...otherUserData } = userTypeData;
         const delVendor = {
@@ -384,9 +383,8 @@ export default function Unverified() {
       } catch (error) {
         console.error(error);
       }
-      setDeleteMerchantId(null)
-      setDislikeModalOpen(false)
-
+      setDeleteMerchantId(null);
+      setDislikeModalOpen(false);
     }
   };
 
@@ -549,10 +547,28 @@ export default function Unverified() {
                           (data, index) => (
                             <StyledTableRow>
                               <StyledTableCell>
+                                <div className="flex">
+                                  <div className="text-[#000000] order_method capitalize">
+                                    {data.name.length < 18
+                                      ? data.name
+                                      : data.name.slice(0, 18) + `...` || ""}
+                                  </div>
+                                  <div className="mx-2 ">
+                                    (State: {data.a_state})
+                                  </div>
+                                </div>
+                                <div className="text-[#818181] lowercase">
+                                  {data.email || ""}
+                                </div>
+                                <div className="text-[#818181]">
+                                  {data.a_phone || ""}
+                                </div>
+                              </StyledTableCell>
+                              {/* <StyledTableCell>
                                 <div class="flex">
                                   <div class="text-[#000000] order_method capitalize">
                                     {data.owner_name.length < 18
-                                      ? data.owner_name
+                                      ? data?.name
                                       : data.owner_name.slice(0, 18) + `...` ||
                                         ""}
                                   </div>
@@ -566,7 +582,7 @@ export default function Unverified() {
                                 <div class="text-[#818181]">
                                   {data.a_phone || ""}
                                 </div>
-                              </StyledTableCell>
+                              </StyledTableCell> */}
                               <StyledTableCell>
                                 <div class="text-[#000000] order_method capitalize">
                                   {data.owner_name.length < 18
@@ -638,18 +654,22 @@ export default function Unverified() {
         </Grid>
       </Grid>
       <DeleteModal
-            headerText="UnVerified Merchant"
-            otherMSG="Once The store is deleted Inventory and settings cannot be restored."
-            open={deleteModalOpen}
-            onClose={() => {setDeleteModalOpen(false)}}
-            onConfirm={confirmDeleteCategory}
-          />
-          <DislikeModal
-          headerText="Are you sure you want to approve this store"
-          open={dislikeModalOpen}
-          onClose={() => {setDislikeModalOpen(false)}}
-          onConfirm={confirmDislikeStore}
-        />
+        headerText="UnVerified Merchant"
+        otherMSG="Once The store is deleted Inventory and settings cannot be restored."
+        open={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+        }}
+        onConfirm={confirmDeleteCategory}
+      />
+      <DislikeModal
+        headerText="Are you sure you want to approve this store"
+        open={dislikeModalOpen}
+        onClose={() => {
+          setDislikeModalOpen(false);
+        }}
+        onConfirm={confirmDislikeStore}
+      />
     </>
   );
 }

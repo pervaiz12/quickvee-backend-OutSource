@@ -244,20 +244,19 @@ input[type="number"] {
     left: 10px;
     position: absolute; */
 }
-.Asterisk_error{
+.Asterisk_error {
   color: #fa0000 !important;
-
 }
-.password-show-input{
+.password-show-input {
   position: relative;
-} 
-.Show-password{
+}
+.Show-password {
   position: absolute;
-    right: 0;
-    top: 23px;
-    display: inline-block;
-    padding: 10px;
-    cursor: pointer;
+  right: 0;
+  top: 23px;
+  display: inline-block;
+  padding: 10px;
+  cursor: pointer;
 }
 
 /* Media Queries for Responsive Font Sizes */
@@ -860,7 +859,7 @@ a.flex.text-center.submenu-item.text-gray-400.py-4.CircularSTDBook:hover {
 
   font-family: "CircularSTDBook", sans-serif;
 }
-.nested-submenu-item{
+.nested-submenu-item {
   display: flex;
   background-color: #334247;
   font-family: "CircularSTDBook", sans-serif;
@@ -1181,14 +1180,34 @@ div.q_label_details::after {
   color: #0056b3 !important;
   background-color: transparent !important;
 }
-.excelLoader{
+.excelLoader {
   margin-right: 10px;
 }
-.DatePicker-coupon > div >  fieldset{
+.DatePicker-coupon > div > fieldset {
   border: 0 !important;
 }
-.button-load{
+.button-load {
   margin: 10px !important;
   border: 1px solid rgba(7, 145, 138, 0.5) !important;
-  color:rgba(7, 145, 138) !important;
+  color: rgba(7, 145, 138) !important;
+}
+.forgot-password {
+  align-self: end !important;
+  font-size: 14px !important;
+  text-decoration: underline !important;
+  color: #0a64f9 !important;
+  font-family: QuicksandMedium, "Quicksand" !important;
+}
+.login-customer-form .sub-heading-from {
+  font-family: QuicksandMedium, 'Quicksand' !important;
+  font-size: 14px;
+  color: #232323 !important;
+  margin: 10px 0 25px 0;
+}
+
+.sub-heading-from {
+  width: 300px;
+}
+.input-field>div>input, .input-field>label {
+  font-family:  CircularBold !important;
 }
