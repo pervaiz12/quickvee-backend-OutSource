@@ -22,6 +22,7 @@ export default function ProfitMarginReportLogic() {
   const [laodMoreData, setLoadMoreData] = useState(false); //load button hide and show
 
   const [loader, setLoader] = useState(false);
+  const { token, ...newData } = userTypeData;
 
   const handleChangeInventory = (e) => {
     setInventory(e.target.value);
@@ -34,7 +35,7 @@ export default function ProfitMarginReportLogic() {
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   // search button click function ----
   const handleBlur = async (name) => {
-    const { token, ...newData } = userTypeData;
+    // const { token, ...newData } = userTypeData;
     setLoader(true);
     let packet = { ...newData, name: inventory, merchant_id };
     if (name == "product") {
@@ -58,7 +59,7 @@ export default function ProfitMarginReportLogic() {
   // search button click function ----
 
   const getAllCategoryList = async () => {
-    const { token, ...newData } = userTypeData;
+    // const { token, ...newData } = userTypeData;
     const packet = { merchant_id, ...newData };
     let response = await axios.post(BASE_URL + LIST_ALL_CATEGORIES, packet, {
       headers: {
@@ -80,9 +81,10 @@ export default function ProfitMarginReportLogic() {
     );
     let id = data == "All" || data == undefined ? "all" : data?.id;
     const packet = {
-      id: id,
+      cat_id: id,
       offset,
       limit,
+      format: "json",
       merchant_id,
       listing_type: listingType,
       ...userTypeData,
@@ -116,10 +118,13 @@ export default function ProfitMarginReportLogic() {
   // button click when loadmore display
   const handleLoadMore = async () => {
     const packet = {
-      id: selectCategoryId,
+      // id: selectCategoryId,
+      cat_id: selectCategoryId,
       offset,
       limit,
       merchant_id,
+      format: "json",
+      // format: "json",
       listing_type: listingType,
       ...userTypeData,
     };

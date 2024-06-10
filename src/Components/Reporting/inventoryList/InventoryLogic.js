@@ -80,7 +80,9 @@ export default function InventoryLogic() {
     );
     let id = data == "All" || data == undefined ? "all" : data?.id;
     const packet = {
-      id: id,
+      // id: id,
+      format: "json",
+      cat_id: id,
       offset,
       limit,
       merchant_id,
@@ -116,9 +118,11 @@ export default function InventoryLogic() {
   // button click when loadmore display
   const handleLoadMore = async () => {
     const packet = {
-      id: selectCategoryId,
+      // id: selectCategoryId,
+      cat_id: selectCategoryId,
       offset,
       limit,
+      format: "json",
       merchant_id,
       listing_type: listingType,
       ...userTypeData,
