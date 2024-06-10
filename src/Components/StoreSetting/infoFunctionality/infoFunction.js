@@ -276,7 +276,7 @@ export default function InfoFunction() {
             setInfoRecord((prevState) => ({
               ...prevState,
               image: reader.result,
-              is_logo_change: prevState.image === selectedFile.name ? "1" : "0",
+              is_logo_change: prevState.image === selectedFile.name ? "0" : "1",
             }));
           };
           reader.readAsDataURL(selectedFile);
@@ -298,7 +298,7 @@ export default function InfoFunction() {
               ...prevState,
               banners: reader.result,
               is_banner_change:
-                prevState.banners === selectedFile.name ? "1" : "0",
+                prevState.banners === selectedFile.name ? "0" : "1",
             }));
           };
 
@@ -322,7 +322,7 @@ export default function InfoFunction() {
               ...prevState,
               qrCode: reader.result,
               is_qr_code_change:
-                prevState.qrCode === selectedFile.name ? "1" : "0",
+                prevState.qrCode === selectedFile.name ? "0" : "1",
             }));
           };
 
