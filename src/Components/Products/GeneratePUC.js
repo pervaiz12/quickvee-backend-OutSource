@@ -1,6 +1,7 @@
 import React from "react";
 import { formData } from "./data";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const GeneratePUC = ({
   handleVarientTitleBasedItemList,
@@ -19,6 +20,9 @@ const GeneratePUC = ({
   const navigate = useNavigate();
   const pageUrl = window.location.pathname?.split("/")[1];
   const varientTitle = handleVarientTitleBasedItemList();
+  const { varientProduct } = useSelector(
+    (state) => state?.productsListData
+  );
   const setInputMaxLength = (fieldname) => {
     switch (fieldname) {
       case "costPerItem":
@@ -69,6 +73,10 @@ const GeneratePUC = ({
       );
     }
   };
+
+
+  console.log('generate', formValue)
+
   return (
     <>
       <div className="mx-0">
@@ -91,7 +99,7 @@ const GeneratePUC = ({
             ""
           )}
           {varientTitle?.length && isMultipleVarient
-            ? varientTitle?.map((_, index) => {
+            ? varientTitle?.map((title, index) => {
                 return (
                   <div className="qvrow" key={index}>
                     {isMultipleVarient ? (
@@ -114,10 +122,10 @@ const GeneratePUC = ({
                                     class="varient-input-field"
                                     type={inp?.type}
                                     name={inp?.name}
-                                    value={formValue?.[index]?.[inp?.name]}
+                                    value={formValue?.[index]?.[title]?.[inp?.name]}
                                     placeholder={inp?.placeholder}
-                                    onChange={(e) => handleOnChange(e, index)}
-                                    onBlur={(e) => handleBlur(e, index)}
+                                    onChange={(e) => handleOnChange(e, index, title)}
+                                    onBlur={(e) => handleBlur(e, index, title)}
                                     maxLength={setInputMaxLength(inp?.name)}
                                     disabled={disabledInput(inp)}
                                   />
@@ -133,6 +141,7 @@ const GeneratePUC = ({
                                   ) : (
                                     ""
                                   )}
+                                
                                 </div>
                               </div>
                             </div>

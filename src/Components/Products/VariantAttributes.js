@@ -22,6 +22,7 @@ const VariantAttributes = ({
   const pageUrl = window.location.pathname?.split("/")[1];
   const [showAttributes, setShowAttributes] = useState(false);
 
+
   const animatedComponents = makeAnimated();
 
   const handleDeleteClick = (category, id) => {
@@ -63,13 +64,14 @@ const VariantAttributes = ({
 
   const handlechange = (value, index, name) => {
     // validation for add varient item => only ' is allowed and " is not allowed in varient item text
+    console.log('value', value, name, index);
     let filterValue;
     // if value comes from createble varient
     if (Array.isArray(value)) {
       filterValue = value?.filter((item) => {
         let checkValidation =
           !(item?.label?.split("").filter((p) => p === "'")?.length > 1) &&
-          !item?.label?.includes(`"`);
+          !item?.label?.includes(`"`);  
 
         if (!checkValidation) {
           alert("special character is not allowed.");
@@ -79,10 +81,11 @@ const VariantAttributes = ({
           !item?.label?.includes(`"`)
         );
       });
-    } else {
-      // when value comes from varient title dropdown
-      filterValue = value;
-    }
+    } 
+    
+
+
+
 
     // clear the all input fields value when add new varient first item
     // here using varientLength length and value is less that current varientLength
@@ -234,6 +237,7 @@ const VariantAttributes = ({
                             }}
                             onKeyDown={handleOnBlurAttributes}
                             isMulti
+                            
 
                             // options={colourOptions}
                           />

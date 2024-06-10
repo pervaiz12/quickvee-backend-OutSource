@@ -15,6 +15,7 @@ import {
   fetchTaxList,
   fetchVarientList,
   getInventorySetting,
+  setVarientList,
   updateFormValue,
 } from "../../Redux/features/Product/ProductSlice";
 import Validation from "../../Constants/Validation";
@@ -54,7 +55,7 @@ const AddProducts = () => {
 
   const { validatTitle, validatDescription, addVarientFormValidation } =
     Validation();
-  const [formValue, setFormValue] = useState([]);
+  const [formValue, setFormValue] = useState({});
   const [filterOptionList, setFilterOptionList] = useState([]);
   const [productInfo, setProductInfo] = useState({
     title: "",
@@ -65,6 +66,7 @@ const AddProducts = () => {
     frequentlyBought: [],
     files: [],
   });
+
 
 
   const [bulkEditPo, setBulkEditPo] = useState([
@@ -98,11 +100,15 @@ const AddProducts = () => {
     formValue: [],
   });
 
+
   const [clearInput, setClearInput] = useState(false);
   const [openAlertModal, setOpenAlertModal] = useState(false);
   const [openEditModal, setOpenEditModal] = useState(false);
   const [modalType, setModalType] = useState("");
   const [varientIndex, setVarientIndex] = useState(null);
+
+  console.log('formValue', formValue);
+  console.log('varientLength', varientLength);
 
   // close alert
   const handleCloseAlertModal = () => {
@@ -235,7 +241,7 @@ const AddProducts = () => {
             varientAttributeList: [],
           },
         ]);
-        setFormValue([]);
+        setFormValue({});
         // setProductInfo({
         //   title: "",
         //   description: "",
@@ -262,8 +268,8 @@ const AddProducts = () => {
         formValue: [],
       });
       if (pageUrl !== "product-edit") {
-        setFormValue([
-          {
+        setFormValue({
+          0:{
             costPerItem: "",
             compareAtPrice: "",
             price: "",
@@ -278,10 +284,10 @@ const AddProducts = () => {
             sellOutOfStock: true,
             checkId: false,
             disable: false,
-            // itemForAllLinkedLocation: false,
             isFoodStamble: false,
+            // itemForAllLinkedLocation: false,
           },
-        ]);
+      });
         // setProductInfo({
         //   title: "",
         //   description: "",
@@ -588,7 +594,7 @@ const AddProducts = () => {
     }
   };
 
-  const handleBlur = (e, i) => {
+  const handleBlur = (e, i, title) => {
     const { name, value, type } = e.target;
     // margin and profit calculation
     // varient form onchange validation function
@@ -619,7 +625,7 @@ const AddProducts = () => {
     // if price value is change manually the recalculate margin and profit value
     if (name === "price") {
       if (value > 0) {
-        let costPerValue = formValue[i]["costPerItem"];
+        let costPerValue = formValue[i]?.[title]?.["costPerItem"];
         let marginvl = (costPerValue * 100) / value;
         let showmargin = 100 - marginvl;
         marginValue = parseFloat(showmargin).toFixed(2);
@@ -636,18 +642,22 @@ const AddProducts = () => {
         (index === i || i === 0) &&
         name === "compareAtPrice" &&
         value &&
-        !!formValue[i]["price"]
+        !!formValue[i][title]["price"]
       ) {
-        if (+value < +formValue[i]["price"]) {
+        if (+value < +formValue[i][title]["price"]) {
           setOpenAlertModal(true);
           return {
-            ...item,
-            ["compareAtPrice"]: "",
+            [title]:{
+              ...item[title],
+              ["compareAtPrice"]: "",
+            }
           };
         } else {
           return {
-            ...item,
-            [name]: value,
+            [title]:{
+              ...item[title],
+              [name]: value,
+            }
           };
         }
       }
@@ -657,50 +667,60 @@ const AddProducts = () => {
         (index === i || i === 0) &&
         name === "price" &&
         value &&
-        !!formValue[i]["compareAtPrice"]
+        !!formValue[i][title]["compareAtPrice"]
       ) {
-        if (+value > +formValue[i]["compareAtPrice"]) {
+        if (+value > +formValue[i][title]["compareAtPrice"]) {
           setOpenAlertModal(true);
           return {
-            ...item,
-            [name]: value,
-            ["compareAtPrice"]: "",
-            ["margin"]: !isNaN(marginValue) ? marginValue : "",
-            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+            [title]:{
+              ...item[title],
+              [name]: value,
+              ["compareAtPrice"]: "",
+              ["margin"]: !isNaN(marginValue) ? marginValue : "",
+              ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+            }
           };
         } else {
           return {
-            ...item,
-            [name]: value,
-            ["margin"]: !isNaN(marginValue) ? marginValue : "",
-            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+            [title]:{
+              ...item[title],
+              [name]: value,
+              ["margin"]: !isNaN(marginValue) ? marginValue : "",
+              ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+            }
           };
         }
       }
 
       /// if price value change manually and onblur and not depennd on compareAtPrice is empty or not
       else if (i === 0 && name === "price" && value) {
-        if (!formValue[i]["costPerItem"] || !formValue[i]["price"]) {
+        if (!formValue[i][title]["costPerItem"] || !formValue[i][title]["price"]) {
           return {
-            ...item,
-            [name]: value,
+            [title]:{
+              ...item[title],
+              [name]: value,
+            }
           };
         }
         return {
-          ...item,
-          [name]: value,
-          ["margin"]: !isNaN(marginValue) ? marginValue : "",
-          ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+          [title]:{
+            ...item[title],
+            [name]: value,
+            ["margin"]: !isNaN(marginValue) ? marginValue : "",
+            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+          }
         };
       }
 
       // when onchange price value and leave price input empty then clear margin/profit fields value
       else if (i === 0 && name === "price" && !value) {
         return {
-          ...item,
-          [name]: value,
-          ["margin"]: "",
-          ["Profit"]: "",
+          [title]:{
+            ...item[title],
+            [name]: value,
+            ["margin"]: "",
+            ["Profit"]: "",
+          }
         };
       }
 
@@ -710,22 +730,26 @@ const AddProducts = () => {
         (index === i || i === 0) &&
         name === "costPerItem" &&
         value &&
-        !!formValue[i]["compareAtPrice"] &&
-        !!formValue[i]["price"]
+        !!formValue[i][title]["compareAtPrice"] &&
+        !!formValue[i][title]["price"]
       ) {
-        if (+formValue[i]["compareAtPrice"] < +formValue[i]["price"]) {
+        if (+formValue[i][title]["compareAtPrice"] < +formValue[i][title]["price"]) {
           setOpenAlertModal(true);
           return {
-            ...item,
-            [name]: value,
-            ["compareAtPrice"]: "",
+            [title]:{
+              ...item[title],
+              [name]: value,
+              ["compareAtPrice"]: "",
+            }
           };
         } else {
           return {
-            ...item,
-            [name]: value,
-            ["margin"]: !isNaN(marginValue) ? marginValue : "",
-            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+            [title]:{
+              ...item[title],
+              [name]: value,
+              ["margin"]: !isNaN(marginValue) ? marginValue : "",
+              ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+            }
           };
         }
       }
@@ -735,20 +759,24 @@ const AddProducts = () => {
         if(costPer > 0){
 
           return {
-            ...item,
-            [name]: value,
-            ["compareAtPrice"]: "",
-            ["price"]: price_total_value ? price_total_value?.toFixed(2) : "",
-            ["margin"]: !isNaN(marginValue) ? marginValue : "",
-            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+            [title]:{
+              ...item[title],
+              [name]: value,
+              ["compareAtPrice"]: "",
+              ["price"]: price_total_value ? price_total_value?.toFixed(2) : "",
+              ["margin"]: !isNaN(marginValue) ? marginValue : "",
+              ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+            }
           };
         }else{
           return {
-            ...item,
-            [name]: value,
-            ["compareAtPrice"]: "",
-            ["margin"]: !isNaN(marginValue) ? marginValue : "",
-            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+            [title]:{
+              ...item[title],
+              [name]: value,
+              ["compareAtPrice"]: "",
+              ["margin"]: !isNaN(marginValue) ? marginValue : "",
+              ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+            }
           };
         }
       }
@@ -756,8 +784,10 @@ const AddProducts = () => {
       // when section is only 0 and name of field is any but not costPerItem => onblur
       else if (i === 0 && !nameArray.includes(name)) {
         return {
-          ...item,
-          [name]: value,
+          [title]:{
+            ...item[title],
+            [name]: value,
+          }
         };
       }
 
@@ -767,10 +797,10 @@ const AddProducts = () => {
     setFormValue(updatedFormValue);
   };
 
-  const handleOnChange = (e, i) => {
+  const handleOnChange = (e, i, title) => {
     const { name, value, type } = e.target;
-   
 
+    console.log(name, value, title);
     /// convert input value format 0.00
     let fieldValue;
     if (!notAllowDecimalValue.includes(name)) {
@@ -851,7 +881,7 @@ const AddProducts = () => {
     // if price value is change manually the recalculate margin and profit value
     if (name === "price") {
       if (value > 0) {
-        let costPerValue = formValue[i]["costPerItem"];
+        let costPerValue = formValue[i][title]["costPerItem"];
         let marginvl = (costPerValue * 100) / fieldValue;
         let showmargin = 100 - marginvl;
         marginValue = parseFloat(showmargin).toFixed(2);
@@ -860,27 +890,33 @@ const AddProducts = () => {
     }
 
     // manually onchange
-    const updatedFormValue = formValue.map((item, index) => {
-      // if section is 0 and name is costPerItem => onchange
+    console.log(Object.values(formValue?.[i]?.[title]))
+    const updatedFormValue = formValue?.map((item, index) => {
+      // // if section is 0 and name is costPerItem => onchange
       if (i === 0 && name === "costPerItem") {
         if(costPer > 0){
           return {
-            ...item,
-            ["costPerItem"]: index == 0 ? fieldValue : "",
-            ["price"]: price_total_value ? price_total_value.toFixed(2) : "",
-            ["margin"]:
-              index == 0 ? (!isNaN(marginValue) ? marginValue : "") : "",
-            ["Profit"]:
-              index == 0 ? (!isNaN(profitValue) ? profitValue : "") : "",
+            [title]: {
+              ...item[title],
+              ["costPerItem"]: index == 0 ? fieldValue : "",
+              ["price"]: price_total_value ? price_total_value.toFixed(2) : "",
+              ["margin"]:
+                index == 0 ? (!isNaN(marginValue) ? marginValue : "") : "",
+              ["Profit"]:
+                index == 0 ? (!isNaN(profitValue) ? profitValue : "") : "",
+            }
           };
         }else{
           return {
-            ...item,
-            ["costPerItem"]: index == 0 ? fieldValue : "",
-            ["margin"]:
-              index == 0 ? (!isNaN(marginValue) ? marginValue : "") : "",
-            ["Profit"]:
-              index == 0 ? (!isNaN(profitValue) ? profitValue : "") : "",
+
+            [title]:{
+              ...item[title],
+              ["costPerItem"]: index == 0 ? fieldValue : "",
+              ["margin"]:
+                index == 0 ? (!isNaN(marginValue) ? marginValue : "") : "",
+              ["Profit"]:
+                index == 0 ? (!isNaN(profitValue) ? profitValue : "") : "",
+            }
           };
         }
       }
@@ -888,29 +924,35 @@ const AddProducts = () => {
       else if (i === index && name === "costPerItem") {
         if(costPer > 0){
           return {
-            ...item,
-            ["costPerItem"]: fieldValue,
-            ["price"]: price_total_value ? price_total_value.toFixed(2) : "",
-            ["margin"]: !isNaN(marginValue) ? marginValue : "",
-            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+            [title]:{
+              ...item[title],
+              ["costPerItem"]: fieldValue,
+              ["price"]: price_total_value ? price_total_value.toFixed(2) : "",
+              ["margin"]: !isNaN(marginValue) ? marginValue : "",
+              ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+            }
           };
         }else {
           return {
-            ...item,
-            ["costPerItem"]: fieldValue,
-            ["margin"]: !isNaN(marginValue) ? marginValue : "",
-            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+            [title]:{
+              ...item[title],
+              ["costPerItem"]: fieldValue,
+              ["margin"]: !isNaN(marginValue) ? marginValue : "",
+              ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+            }
           };
         }
       }
       // when section is 0 and price field value is change manually and costPerItem field value is not empty => onchange
-      else if (i === 0 && name === "price" && !!formValue[i]["costPerItem"]) {
+      else if (i === 0 && name === "price" && !!formValue[i][title]["costPerItem"]) {
         if (index === 0) {
           return {
-            ...item,
-            ["price"]: fieldValue ? fieldValue : "",
-            ["margin"]: !isNaN(marginValue) ? marginValue : "",
-            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+            [title]:{
+              ...item[title],
+              ["price"]: fieldValue ? fieldValue : "",
+              ["margin"]: !isNaN(marginValue) ? marginValue : "",
+              ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+            }
           };
         }
       }
@@ -918,13 +960,15 @@ const AddProducts = () => {
       else if (
         index === i &&
         name === "price" &&
-        !!formValue[i]["costPerItem"]
+        !!formValue[i][title]["costPerItem"]
       ) {
         return {
-          ...item,
-          ["price"]: fieldValue ? fieldValue : "",
-          ["margin"]: !isNaN(marginValue) ? marginValue : "",
-          ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+          [title]:{
+            ...item[title],
+            ["price"]: fieldValue ? fieldValue : "",
+            ["margin"]: !isNaN(marginValue) ? marginValue : "",
+            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+          }
         };
       }
       // when section is any and field index is any and name is any => onchange
@@ -932,13 +976,15 @@ const AddProducts = () => {
         // if checkbox is already check make it false
         // fieldValue is decimal value => 0.00
         return {
-          ...item,
-          [name]:
-            type === "checkbox"
-              ? value === "true"
-                ? false
-                : true
-              : fieldValue,
+          [title]:{
+            ...item[title],
+            [name]:
+              type === "checkbox"
+                ? value === "true"
+                  ? false
+                  : true
+                : fieldValue,
+          }
         };
       }
       return item;
@@ -989,6 +1035,7 @@ const AddProducts = () => {
     }
   };
 
+
   useEffect(() => {
     if (varientLength?.length > 0 && isMultipleVarient) {
       handleVarientTitleBasedItemList();
@@ -996,67 +1043,107 @@ const AddProducts = () => {
       // when adding new varient and add first item in varient then clear all the form input value
       if (clearInput) {
         setFormValue((_) => {
-          const newFormValue = [...new Set(varientTitle)].map((_, index) => {
+          const newFormValue = [...new Set(varientTitle)].map((title, index) => {
             return {
-              costPerItem: "",
-              compareAtPrice: "",
-              price: "",
-              margin: "",
-              Profit: "",
-              qty: "",
-              upcCode: "",
-              customCode: "",
-              reorderQty: "",
-              reorderLevel: "",
-              trackQuantity: true,
-              sellOutOfStock: true,
-              checkId: false,
-              disable: false,
-              // itemForAllLinkedLocation: false,
-              isFoodStamble: false,
+              [title]:{
+                costPerItem: "",
+                compareAtPrice: "",
+                price: "",
+                margin: "",
+                Profit: "",
+                qty: "",
+                upcCode: "",
+                customCode: "",
+                reorderQty: "",
+                reorderLevel: "",
+                trackQuantity: true,
+                sellOutOfStock: true,
+                checkId: false,
+                disable: false,
+                // itemForAllLinkedLocation: false,
+                isFoodStamble: false,
+              }
             };
             // }
           });
           return newFormValue;
         });
       } else {
+        // setFormValue((prevFormValue) => {
+        //   const newFormValue = [...new Set(varientTitle)].map((_, index) => {
+        //     const previousData = prevFormValue[index] || {};
+        //     return {
+        //       costPerItem: previousData.costPerItem || "",
+        //       compareAtPrice: previousData.compareAtPrice || "",
+        //       price: previousData.price || "",
+        //       margin: previousData.margin || "",
+        //       Profit: previousData.Profit || "",
+        //       qty: previousData.qty || "",
+        //       upcCode: previousData.upcCode || "",
+        //       customCode: previousData.customCode || "",
+        //       reorderQty: previousData.reorderQty || "",
+        //       reorderLevel: previousData.reorderLevel || "",
+        //       // here when fetching prodcut data and track and sellout was false but still showing true and check that's why using this condition
+        //       trackQuantity:
+        //         previousData.trackQuantity || pageUrl !== "product-edit"
+        //           ? true
+        //           : false,
+        //       sellOutOfStock:
+        //         previousData.sellOutOfStock || pageUrl !== "product-edit"
+        //           ? true
+        //           : false,
+        //       checkId: previousData.checkId || false,
+        //       disable: previousData.disable || false,
+        //       // itemForAllLinkedLocation:
+        //       //   previousData.itemForAllLinkedLocation || false,
+        //       isFoodStamble: previousData?.isFoodStamble || false,
+        //     };
+        //     // }
+        //   });
+        //   return newFormValue;
+        // });
+
+
         setFormValue((prevFormValue) => {
-          const newFormValue = [...new Set(varientTitle)].map((_, index) => {
+          const newFormValue = [...new Set(varientTitle)].map((title, index) => {
             const previousData = prevFormValue[index] || {};
             return {
-              costPerItem: previousData.costPerItem || "",
-              compareAtPrice: previousData.compareAtPrice || "",
-              price: previousData.price || "",
-              margin: previousData.margin || "",
-              Profit: previousData.Profit || "",
-              qty: previousData.qty || "",
-              upcCode: previousData.upcCode || "",
-              customCode: previousData.customCode || "",
-              reorderQty: previousData.reorderQty || "",
-              reorderLevel: previousData.reorderLevel || "",
-              // here when fetching prodcut data and track and sellout was false but still showing true and check that's why using this condition
-              trackQuantity:
-                previousData.trackQuantity || pageUrl !== "product-edit"
-                  ? true
-                  : false,
-              sellOutOfStock:
-                previousData.sellOutOfStock || pageUrl !== "product-edit"
-                  ? true
-                  : false,
-              checkId: previousData.checkId || false,
-              disable: previousData.disable || false,
-              // itemForAllLinkedLocation:
-              //   previousData.itemForAllLinkedLocation || false,
-              isFoodStamble: previousData?.isFoodStamble || false,
+              [title]:{
+                costPerItem: previousData.costPerItem || "",
+                compareAtPrice: previousData.compareAtPrice || "",
+                price: previousData.price || "",
+                margin: previousData.margin || "",
+                Profit: previousData.Profit || "",
+                qty: previousData.qty || "",
+                upcCode: previousData.upcCode || "",
+                customCode: previousData.customCode || "",
+                reorderQty: previousData.reorderQty || "",
+                reorderLevel: previousData.reorderLevel || "",
+                // here when fetching prodcut data and track and sellout was false but still showing true and check that's why using this condition
+                trackQuantity:
+                  previousData.trackQuantity || pageUrl !== "product-edit"
+                    ? true
+                    : false,
+                sellOutOfStock:
+                  previousData.sellOutOfStock || pageUrl !== "product-edit"
+                    ? true
+                    : false,
+                checkId: previousData.checkId || false,
+                disable: previousData.disable || false,
+                // itemForAllLinkedLocation:
+                //   previousData.itemForAllLinkedLocation || false,
+                isFoodStamble: previousData?.isFoodStamble || false,
+              }
             };
             // }
           });
+          console.log('newFormValue', newFormValue);
           return newFormValue;
         });
       }
     } else if (!isMultipleVarient) {
-      setFormValue([
-        {
+      setFormValue({
+        0:{
           costPerItem: "",
           compareAtPrice: "",
           price: "",
@@ -1074,7 +1161,7 @@ const AddProducts = () => {
           isFoodStamble: false,
           // itemForAllLinkedLocation: false,
         },
-      ]);
+    });
     }
   }, [varientLength]);
 
@@ -1229,48 +1316,54 @@ const AddProducts = () => {
         setFormValue((_) => {
           const newFormValue = varientData?.map((val, index) => {
             return {
-              costPerItem: val?.costperItem || "",
-              compareAtPrice: val?.compare_price || "",
-              price: val?.price || "",
-              margin: val?.margin || "",
-              Profit: val?.profit || "",
-              qty: val?.quantity || "",
-              upcCode: val?.upc || "",
-              customCode: val?.custom_code || "",
-              reorderQty: val?.reorder_qty || "",
-              reorderLevel: val?.reorder_level || "",
-              trackQuantity: Boolean(+val?.trackqnty) || false,
-              sellOutOfStock: Boolean(+val?.isstockcontinue) || false,
-              checkId: Boolean(+val?.is_tobacco) || false,
-              disable: Boolean(+val?.disable) || false,
-              // itemForAllLinkedLocation: val?.,
-              isFoodStamble: Boolean(+val?.food_stampable) || false,
+              [val]:{
+                costPerItem: val?.costperItem || "",
+                compareAtPrice: val?.compare_price || "",
+                price: val?.price || "",
+                margin: val?.margin || "",
+                Profit: val?.profit || "",
+                qty: val?.quantity || "",
+                upcCode: val?.upc || "",
+                customCode: val?.custom_code || "",
+                reorderQty: val?.reorder_qty || "",
+                reorderLevel: val?.reorder_level || "",
+                trackQuantity: Boolean(+val?.trackqnty) || false,
+                sellOutOfStock: Boolean(+val?.isstockcontinue) || false,
+                checkId: Boolean(+val?.is_tobacco) || false,
+                disable: Boolean(+val?.disable) || false,
+                // itemForAllLinkedLocation: val?.,
+                isFoodStamble: Boolean(+val?.food_stampable) || false,
+              }
             };
             // }
           });
           return newFormValue;
         });
       } else {
-        setFormValue(() => [
-          {
-            costPerItem: productData?.costperItem || "",
-            compareAtPrice: productData?.compare_price || "",
-            price: productData?.price || "",
-            margin: productData?.margin || "",
-            Profit: productData?.profit || "",
-            qty: productData?.quantity || "",
-            upcCode: productData?.upc || "",
-            customCode: productData?.custom_code || "",
-            reorderQty: productData?.reorder_qty || "",
-            reorderLevel: productData?.reorder_level || "",
-            trackQuantity: Boolean(+productData?.trackqnty) || false,
-            sellOutOfStock: Boolean(+productData?.isstockcontinue) || false,
-            checkId: Boolean(+productData?.is_tobacco) || false,
-            disable: Boolean(+productData?.disable) || false,
-            // itemForAllLinkedLocation: productData?.,
-            isFoodStamble: Boolean(+productData?.food_stampable) || false,
-          },
-        ]);
+        setFormValue(() => {
+          const formValue = {
+            0: {
+              costPerItem: productData?.costperItem || "",
+              compareAtPrice: productData?.compare_price || "",
+              price: productData?.price || "",
+              margin: productData?.margin || "",
+              Profit: productData?.profit || "",
+              qty: productData?.quantity || "",
+              upcCode: productData?.upc || "",
+              customCode: productData?.custom_code || "",
+              reorderQty: productData?.reorder_qty || "",
+              reorderLevel: productData?.reorder_level || "",
+              trackQuantity: Boolean(+productData?.trackqnty) || false,
+              sellOutOfStock: Boolean(+productData?.isstockcontinue) || false,
+              checkId: Boolean(+productData?.is_tobacco) || false,
+              disable: Boolean(+productData?.disable) || false,
+              isFoodStamble: Boolean(+productData?.food_stampable) || false,
+            },
+            // You can add more keys dynamically if needed
+          };
+        
+          return formValue;
+        });
       }
     }
   }, [productData, dropdownData, options, isMultipleVarient]);
