@@ -267,7 +267,7 @@ const PermissionList = () => {
                                 <div className="flex">
                                   <EditPermissionModal selected={data} />
                                   <img
-                                    class="mx-6 delete"
+                                    class="mx-6 delete cursor-pointer"
                                     data-id="${[data.id,data.merchant_id,]}"
                                     onClick={() =>
                                       handleDeletePermission(data?.id)

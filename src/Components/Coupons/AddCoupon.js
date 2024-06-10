@@ -25,6 +25,7 @@ import { FormControl } from "@mui/material";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import CurrencyInputHelperFun from "../../helperFunctions/CurrencyInputHelperFun";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import AlertModal from "../../reuseableComponents/AlertModal";
 
 const AddCoupon = ({ seVisible }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -46,6 +47,13 @@ const AddCoupon = ({ seVisible }) => {
   const [inputValue, setInputValue] = useState("");
   const [isUnique, setIsUnique] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
+
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
+  };
 
   // Function to check uniqueness in the database
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
@@ -146,14 +154,14 @@ const AddCoupon = ({ seVisible }) => {
   const handleStartDateChange = (newDate) => {
     const formattedStartDate = newDate.format("YYYY-MM-DD");
     if (formattedStartDate === coupon.date_expire) {
-      alert("Start date cannot be the same as the end date");
+      showModal("Start date cannot be the same as the end date");
       setCoupon({
         ...coupon,
         date_valid: null,
       });
       setDateStartError("Start Date is required");
     } else if (dayjs(formattedStartDate).isAfter(dayjs(coupon.date_expire))) {
-      alert("Start date cannot be greater than the end date");
+      showModal("Start date cannot be greater than the end date");
       setCoupon({
         ...coupon,
         date_valid: null,
@@ -172,7 +180,7 @@ const AddCoupon = ({ seVisible }) => {
     const formattedEndDate = newDate.format("YYYY-MM-DD");
 
     if (formattedEndDate === coupon.date_valid) {
-      alert("End date cannot be the same as the start date");
+      showModal("End date cannot be the same as the start date");
       setCoupon({
         ...coupon,
         date_expire: null,
@@ -180,7 +188,7 @@ const AddCoupon = ({ seVisible }) => {
       setDateEndError("End Date is required");
       // return; // Do not update the state
     } else if (dayjs(formattedEndDate).isBefore(dayjs(coupon.date_valid))) {
-      alert("End date cannot be less than the start date");
+      showModal("End date cannot be less than the start date");
       setCoupon({
         ...coupon,
         date_expire: null,
@@ -254,7 +262,7 @@ const AddCoupon = ({ seVisible }) => {
       }
     }
     if (parseFloat(coupon.min_amount) <= parseFloat(coupon.discount)) {
-      alert("Minimum order amount must be greater than the discount amount.");
+      showModal("Minimum order amount must be greater than the discount amount.");
       setDiscountError("Discount Amount is required");
       setCoupon({ ...coupon, discount: "0.00" });
       return; // Stop further execution
@@ -1216,6 +1224,11 @@ const AddCoupon = ({ seVisible }) => {
           </div>
         </div>
       </div> */}
+      <AlertModal
+      headerText={alertModalHeaderText}
+      open={alertModalOpen}
+      onClose={() => {setAlertModalOpen(false)}}
+       />
     </>
   );
 };

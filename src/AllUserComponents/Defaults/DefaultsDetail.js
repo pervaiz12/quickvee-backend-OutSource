@@ -26,7 +26,7 @@ import DeleteModal from "../../reuseableComponents/DeleteModal";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
 
-const DefaultsDetail = ({ seVisible }) => {
+const DefaultsDetail = ({ setVisible,setDefaultEditId }) => {
   const myStyles = {
     left: "1rem",
     // transform: "translate(0px, 5px)",
@@ -238,8 +238,10 @@ const DefaultsDetail = ({ seVisible }) => {
 
   const navigate = useNavigate();
   const handleEditDefault = (data) => {
+    setDefaultEditId(data)
+    setVisible("EditDefaults")
     // console.log("handleEditMerchant ", data);
-    navigate(`/users/view/unapprove/menu/defaults/edit-defaults/${data}`);
+    // navigate(`/users/view/unapprove/menu/defaults/edit-defaults/${data}`);
   };
 
   return (
@@ -265,7 +267,7 @@ const DefaultsDetail = ({ seVisible }) => {
               <Grid container direction="row" alignItems="center">
                 <Grid item>
                   <div className="q-category-bottom-header">
-                    <p onClick={() => seVisible("DefaultsAlert")}>
+                    <p onClick={() => setVisible("DefaultsAlert")}>
                       Add Default <img src={AddIcon} alt="add-icon" />
                     </p>
                   </div>

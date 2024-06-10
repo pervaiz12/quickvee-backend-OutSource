@@ -11,7 +11,7 @@ import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
 
-const AddDefaults = ({ seVisible }) => {
+const AddDefaults = ({ setVisible }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -113,7 +113,7 @@ const AddDefaults = ({ seVisible }) => {
       const update_message = await res.data.msg;
       if (data === "Success") {
         ToastifyAlert("Default Menu Created", "success");
-        seVisible("DefaultsDetail");
+        setVisible("DefaultsDetail");
       } else if (
         data === "Failed" &&
         update_message === "Default Menu Entered Already Exits"
@@ -265,7 +265,7 @@ const AddDefaults = ({ seVisible }) => {
           <div className="mt-10 mb-4">
             <form onSubmit={handleSubmit} enctype="multipart/form-data">
               <div className="q-add-categories-section-header">
-                <span onClick={() => seVisible("DefaultsDetail")}>
+                <span onClick={() => setVisible("DefaultsDetail")}>
                   <img src={AddNewCategory} alt="Add-New-Category" />
                   <span>Add New Defaults</span>
                 </span>
@@ -391,7 +391,7 @@ const AddDefaults = ({ seVisible }) => {
               <div className="q-add-categories-section-middle-footer">
                 <button className="quic-btn quic-btn-save">Add</button>
                 <button
-                  onClick={() => seVisible("DefaultsDetail")}
+                  onClick={() => setVisible("DefaultsDetail")}
                   className="quic-btn quic-btn-cancle"
                 >
                   Cancel

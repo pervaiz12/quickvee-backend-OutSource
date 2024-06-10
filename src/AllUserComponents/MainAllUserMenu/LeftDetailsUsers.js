@@ -21,12 +21,15 @@ import Manager from "../Users/Manager/manager";
 import Unverified from "../Users/UnverifeDetails/unverified";
 import Customer from "../Users/customer/customer";
 import Adminview from "../Users/admin/adminview";
-import Verified from "../Users/UnverifeDetails/verified";
+import Verified from "../Users/VerifiedMerchant/verified";
 import EditCustomer from "../Users/customer/EditCustomer/editCustomer";
 import EditAdmin from "../Users/admin/editAdmin/edit_admin";
 import AddMerchan from "../Users/addMerchant/addMerchantech";
 import EditMerchant from "../Users/merchantUpdate/editMerchant";
 import Add_Admin from "../Users/admin/addAdmin/add_admin";
+import MainAdmin from "../Users/admin/MainAdmin";
+import MainVerifiedMerchantPage from "../Users/VerifiedMerchant/MainVerifiedMerchantPage";
+import MainUnverifiedMerchant from "../Users/UnverifeDetails/MainUnverifiedMerchant";
 // verified
 
 const LeftDetailsUsers = ({ visible }) => {
@@ -50,10 +53,11 @@ const LeftDetailsUsers = ({ visible }) => {
       {visible === "need-help" && <MainNeedHelp />}
       {/* manager view */}
       {visible === "manager_view" && <Manager />}
-      {visible === "unverified" && <Unverified />}
-      {visible === "verified" && <Verified />}
+      {visible === "unverified" && <MainUnverifiedMerchant />}
+
+      {visible === "verified" && <MainVerifiedMerchantPage />}
       {visible === "customer" && <Customer />}
-      {visible === "admin" && <Adminview />}
+      {visible === "admin" && <MainAdmin />}
       {visible === "editCustomer" && <EditCustomer />}
       {visible === "editAdmin" && <EditAdmin />}
       {visible === "addMerchant" && <AddMerchan />}

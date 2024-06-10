@@ -15,6 +15,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import AlertModal from "../../../reuseableComponents/AlertModal";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2,
@@ -135,6 +136,13 @@ const StoreWorkingHrs = ({
     const formattedTime = `${hours}:${mins < 10 ? "0" : ""}${mins} ${period}`;
     return formattedTime;
   };
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
+
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
+  };
 
   const handleAddTimeSlot = (dayName) => {
     setDays((prevDays) => {
@@ -143,7 +151,7 @@ const StoreWorkingHrs = ({
       setLastCloseTimeState(false);
       console.log("lastCloseTime", lastCloseTime);
       if (lastCloseTime === "") {
-        alert("End time cannot be empty");
+        showModal("End time cannot be empty");
         return prevDays;
       } else {
         const newOpenTime = addMinutes(lastCloseTime, 0);
@@ -353,6 +361,11 @@ const StoreWorkingHrs = ({
           </Grid>
         </Grid>
       </Grid>
+      <AlertModal
+      headerText={alertModalHeaderText}
+      open={alertModalOpen}
+      onClose={() => {setAlertModalOpen(false)}}
+       />
     </>
   );
 };

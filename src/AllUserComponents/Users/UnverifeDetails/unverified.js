@@ -69,7 +69,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   // hide last border
 }));
 
-export default function Unverified() {
+export default function Unverified({setMerchantId,setVisible}) {
   //  ============== DEFINED REDUX STATES ============================
 
   const UnVerifiedMerchantList = useSelector(
@@ -285,7 +285,9 @@ export default function Unverified() {
   // ====================================
   // ====================================
   const handleEditMerchant = (data) => {
-    navigate(`/users/editMerchant/${data}`);
+    setMerchantId(data)
+    setVisible("editVerirmedMerchant")
+    // navigate(`/users/editMerchant/${data}`);
   };
   const handleGetVerifiedMerchant = (merchant_id) => {
     let data = {
