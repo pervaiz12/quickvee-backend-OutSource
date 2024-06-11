@@ -31,14 +31,13 @@ const SelectDropDown = ({
   title,
   default_title,
   sx,
-  name
+  name,
 }) => {
   return (
     <>
-      <FormControl  sx={{...sx}} fullWidth>
+      <FormControl sx={{ ...sx }} fullWidth>
         <ThemeProvider theme={theme}>
           <Select
-          name={name}
             size="small"
             value={selectedOption}
             displayEmpty
@@ -62,7 +61,7 @@ const SelectDropDown = ({
                 <MenuItem
                   key={index}
                   onClick={(e) => {
-                    onClickHandler(item, dropdownFor,name);
+                    onClickHandler(item, dropdownFor, name);
                   }}
                   value={item[title]}
                 >

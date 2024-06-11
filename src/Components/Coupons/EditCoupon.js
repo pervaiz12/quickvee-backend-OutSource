@@ -30,7 +30,7 @@ import { FormControl } from "@mui/material";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
 
-const EditCoupon = () => {
+const EditCoupon = ({couponId,seVisible}) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const myStyles = {
@@ -50,7 +50,7 @@ const EditCoupon = () => {
   async function fetchData() {
     const getcouponData = {
       merchant_id,
-      coupon_id: params.couponsCode,
+      coupon_id:couponId,
       ...userTypeData,
     };
 
@@ -479,14 +479,14 @@ const EditCoupon = () => {
                 }}
                 className="q-add-categories-section-header"
               >
-                <Link to={`/coupons`} className="add_coupon_span">
+                <span onClick={()=>{seVisible("CouponDiscount")}} className="add_coupon_span">
                   <img
                     src={AddNewCategory}
                     alt="Add-New-Category"
                     className="h-9 w-9"
                   />
                   <span>Edit Coupon</span>
-                </Link>
+                </span>
               </div>
             </Grid>
           </Grid>
@@ -849,9 +849,9 @@ const EditCoupon = () => {
               </button>
             </Grid>
             <Grid item>
-              <Link to={`/coupons`}>
+              <spam onClick={()=>{seVisible("CouponDiscount")}}>
                 <button className="quic-btn quic-btn-cancle">Cancel</button>
-              </Link>
+              </spam>
             </Grid>
           </Grid>
         </Grid>

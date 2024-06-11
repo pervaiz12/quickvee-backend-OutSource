@@ -334,7 +334,7 @@ export default function EditMerchantFunctionality() {
           // setMessage(response?.data?.message);
           setSuccessMessageHandle(true);
           handleSuccessMessage();
-          navigate(`/users/editMerchant/${response?.data?.id}`);
+          // navigate(`/users/editMerchant/${response?.data?.id}`);
           // navigate(`/users/editMerchant/${getEditMerchant.id}`)
         } else {
           setLoader(false);

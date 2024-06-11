@@ -20,7 +20,7 @@ import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 import DeleteModal from "../../../reuseableComponents/DeleteModal";
 
 
-const EmployeeList = () => {
+const EmployeeList = ({setVisible,setEmployeeId}) => {
     const employeeListDataState = useSelector((state) => state.employeelistData);
     const [employeeList, setemployeeList] = useState([]);
     const dispatch = useDispatch();
@@ -256,6 +256,8 @@ const EmployeeList = () => {
                 editButtonEnableEmployee: true,
                 editButtonurlEmployee: "/store-settings/permission/",
               }}
+              setVisible={setVisible}
+              setEmployeeId={setEmployeeId}
               deleteButton={{
                 deleteButtonEnable: true,
                 deleteButtonFun: handleDeleteEmployee,

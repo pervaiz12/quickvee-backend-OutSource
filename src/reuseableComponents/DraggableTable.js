@@ -60,7 +60,9 @@ const DraggableTable = ({
   table,
   employeeTable = false,
   editBtnEmployee= false,
-  states
+  states,
+  setVisible,
+  setEmployeeId,
 }) => {
   const dispatch = useDispatch();
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -178,6 +180,11 @@ const DraggableTable = ({
       console.log("Sorting canceled by user");
     }
   };
+  const handleEditEmployeePermission = (id)=>{
+
+    setVisible("EmployeePermission")
+    setEmployeeId(id)
+  }
   return (
     <>
       <TableContainer component={Paper}>
@@ -296,13 +303,17 @@ const DraggableTable = ({
                             {editButtonEnableEmployee && (
                               <>
                               <StyledTableCell>
-                                <Link to={`${editButtonurlEmployee}${item.id}`}>
+                                <span
+                                onClick={()=>{handleEditEmployeePermission(item.id)}}
+                                //  to={`${editButtonurlEmployee}${item.id}`}
+                                 
+                                 >
                                   <img
                                     // className="edit_center w-8 h-8"
                                     src={Permission}
                                     alt="Permission-icon"
                                   />
-                                </Link>
+                                </span>
                               </StyledTableCell>
                               </>
                             )}

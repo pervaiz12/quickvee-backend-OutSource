@@ -3,21 +3,22 @@ import AddNewCategory from "../../Assests/Taxes/Left.svg";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import DownIcon from "../../Assests/Dashboard/Down.svg";
 import axios from "axios";
-import { useAuthDetails } from './../../Common/cookiesHelper';
+import { useAuthDetails } from "./../../Common/cookiesHelper";
 import Upload from "../../Assests/Category/upload.svg";
 import { Link, useParams } from "react-router-dom";
 import { BASE_URL, DEFAULTDATA, EDIT_DEFAULTS } from "../../Constants/Config";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { Grid } from '@mui/material';
+import { Grid } from "@mui/material";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
-const EditDefaults = ({setVisible,defaultEditId}) => {
+const EditDefaults = ({ setVisible, defaultEditId }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = useState("");
-  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
   const [defaults, setDefaults] = useState({
     name: "",
     type: "",
@@ -41,8 +42,8 @@ const EditDefaults = ({setVisible,defaultEditId}) => {
   async function fetchData() {
     const getdefaultsData = {
       id: defaultEditId,
-      token_id:userTypeData.token_id,
-      login_type:userTypeData.login_type,
+      token_id: userTypeData.token_id,
+      login_type: userTypeData.login_type,
     };
 
     try {
@@ -52,7 +53,7 @@ const EditDefaults = ({setVisible,defaultEditId}) => {
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            'Authorization': `Bearer ${userTypeData.token}`
+            Authorization: `Bearer ${userTypeData.token}`,
           },
         }
       );
@@ -146,7 +147,10 @@ const EditDefaults = ({setVisible,defaultEditId}) => {
     formData.append("login_type", userTypeData.login_type);
     try {
       const res = await axios.post(BASE_URL + EDIT_DEFAULTS, formData, {
-        headers: { "Content-Type": "multipart/form-data",'Authorization': `Bearer ${userTypeData.token}` },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userTypeData.token}`,
+        },
       });
 
       const data = await res.data.status;
@@ -201,7 +205,10 @@ const EditDefaults = ({setVisible,defaultEditId}) => {
       const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
       if (!allowedExtensions.exec(file.name)) {
         // alert(file.name + " is not an image. Only jpeg, png, jpg files can be uploaded.");
-        showModal(file.name + " is not an image. Only jpeg, png, jpg files can be uploaded.")
+        showModal(
+          file.name +
+            " is not an image. Only jpeg, png, jpg files can be uploaded."
+        );
       } else {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -286,7 +293,6 @@ const EditDefaults = ({setVisible,defaultEditId}) => {
     {
       title: "Category",
     },
-
   ];
 
   //   for dropdown select End
@@ -298,9 +304,11 @@ const EditDefaults = ({setVisible,defaultEditId}) => {
           <div className="mt-10 mb-4">
             <form onSubmit={handleSubmit} enctype="multipart/form-data">
               <div className="q-add-categories-section-header">
-                <span 
-                onClick={()=>{setVisible("DefaultsDetail")}}
-                // to={`/users/view/unapprove/menu/defaults`}
+                <span
+                  onClick={() => {
+                    setVisible("DefaultsDetail");
+                  }}
+                  // to={`/users/view/unapprove/menu/defaults`}
                 >
                   <span style={myStyles}>
                     <img src={AddNewCategory} alt="Add-New-Category" />
@@ -363,15 +371,15 @@ const EditDefaults = ({setVisible,defaultEditId}) => {
                 </div> */}
 
                 <Grid item xs={6}>
-                            <label className="q-details-page-label ">Type</label>
-                            <SelectDropDown
-                                listItem={category}
-                                title={"title"}
-                                onClickHandler={handleOptionClick}
-                                selectedOption={selectedCatSource}
-                            dropdownFor={"category"}
-                            />
-                        </Grid>
+                  <label className="q-details-page-label ">Type</label>
+                  <SelectDropDown
+                    listItem={category}
+                    title={"title"}
+                    onClickHandler={handleOptionClick}
+                    selectedOption={selectedCatSource}
+                    dropdownFor={"category"}
+                  />
+                </Grid>
                 {fieldErrors.type && (
                   <span className="error-message">{fieldErrors.type}</span>
                 )}
@@ -442,8 +450,12 @@ const EditDefaults = ({setVisible,defaultEditId}) => {
               </div>
 
               <div className="q-add-categories-section-middle-footer">
-                <button className="quic-btn quic-btn-save">Save</button>
-                <div onClick={()=>{setVisible("DefaultsDetail")}}>
+                <button className="quic-btn quic-btn-save">Update</button>
+                <div
+                  onClick={() => {
+                    setVisible("DefaultsDetail");
+                  }}
+                >
                   <button className="quic-btn quic-btn-cancle">Cancel</button>
                 </div>
               </div>
@@ -452,10 +464,12 @@ const EditDefaults = ({setVisible,defaultEditId}) => {
         </div>
       </div>
       <AlertModal
-      headerText={alertModalHeaderText}
-      open={alertModalOpen}
-      onClose={() => {setAlertModalOpen(false)}}
-       />
+        headerText={alertModalHeaderText}
+        open={alertModalOpen}
+        onClose={() => {
+          setAlertModalOpen(false);
+        }}
+      />
     </>
   );
 };
