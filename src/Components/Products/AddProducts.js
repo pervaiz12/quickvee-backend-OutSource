@@ -107,9 +107,6 @@ const AddProducts = () => {
   const [modalType, setModalType] = useState("");
   const [varientIndex, setVarientIndex] = useState(null);
 
-  console.log('formValue', formValue);
-  console.log('varientLength', varientLength);
-
   // close alert
   const handleCloseAlertModal = () => {
     setOpenAlertModal((prev) => !prev);
@@ -594,6 +591,8 @@ const AddProducts = () => {
     }
   };
 
+  console.log('formValue', formValue);
+
   const handleBlur = (e, i, title) => {
     const { name, value, type } = e.target;
     // margin and profit calculation
@@ -605,374 +604,299 @@ const AddProducts = () => {
     let profitValue;
     let price_total_value;
 
-    if (name === "costPerItem") {
-      // price field total value
-      if(costPer > 0){
+    // if (name === "costPerItem") {
+    //   // price field total value
+    //   if(costPer > 0){
 
-        totalPriceValue = (costPer / 100) * value;
-        price_total_value = parseFloat(value) + parseFloat(totalPriceValue);
+    //     totalPriceValue = (costPer / 100) * value;
+    //     price_total_value = parseFloat(value) + parseFloat(totalPriceValue);
   
-        // margin and profit total value
-        let marginvl = (value * 100) / price_total_value.toFixed(2);
+    //     // margin and profit total value
+    //     let marginvl = (value * 100) / price_total_value.toFixed(2);
+    //     let showmargin = 100 - marginvl;
+    //     marginValue = parseFloat(showmargin).toFixed(2);
+    //     profitValue = parseFloat(price_total_value - value).toFixed(2);
+    //   }else{
+    //     price_total_value = ""
+    //   }
+    // }
+
+    // // if price value is change manually the recalculate margin and profit value
+    // if (name === "price") {
+    //   if (value > 0) {
+    //     let costPerValue = formValue[i]["costPerItem"];
+    //     let marginvl = (costPerValue * 100) / value;
+    //     let showmargin = 100 - marginvl;
+    //     marginValue = parseFloat(showmargin).toFixed(2);
+    //     profitValue = parseFloat(value - costPerValue).toFixed(2);
+    //   }
+    // }
+
+    // when remove focus on input value
+    // const updatedFormValue = formValue.map((item, index) => {
+    //   console.log('item', item);
+      // console.log('item', item);
+      // here.... index => each section index
+      // i => each input field index inside section
+      // show alert "Compare Price must be greater than price." when compare value < price && price > compare value / when compareAtPrice field value change manually
+      // if (
+      //   (index === i || i === 0) &&
+      //   name === "compareAtPrice" &&
+      //   value &&
+      //   !!formValue[i]["price"]
+      // ) {
+      //   if (+value < +formValue[i]["price"]) {
+      //     setOpenAlertModal(true);
+      //     return {
+      //       ...item,
+      //       ["compareAtPrice"]: "",
+      //     };
+      //   } else {
+      //     return {
+      //       ...item,
+      //       [name]: value,
+      //     };
+      //   }
+      // }
+
+      // // show alert "Compare Price must be greater than price." when compare value < price && price > compare value / when price field value change manually
+      // else if (
+      //   (index === i || i === 0) &&
+      //   name === "price" &&
+      //   value &&
+      //   !!formValue[i]["compareAtPrice"]
+      // ) {
+      //   if (+value > +formValue[i]["compareAtPrice"]) {
+      //     setOpenAlertModal(true);
+      //     return {
+      //       ...item,
+      //       [name]: value,
+      //       ["compareAtPrice"]: "",
+      //       ["margin"]: !isNaN(marginValue) ? marginValue : "",
+      //       ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+      //     };
+      //   } else {
+      //     return {
+      //       ...item,
+      //       [name]: value,
+      //       ["margin"]: !isNaN(marginValue) ? marginValue : "",
+      //       ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+      //     };
+      //   }
+      // }
+
+      // /// if price value change manually and onblur and not depennd on compareAtPrice is empty or not
+      // else if (i === 0 && name === "price" && value) {
+      //   if (!formValue[i]["costPerItem"] || !formValue[i]["price"]) {
+      //     return {
+      //       [title]:{
+      //         ...item[title],
+      //         [name]: value,
+      //       }
+      //     };
+      //   }
+      //   return {
+      //     [title]:{
+      //       ...item[title],
+      //       [name]: value,
+      //       ["margin"]: !isNaN(marginValue) ? marginValue : "",
+      //       ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+      //     }
+      //   };
+      // }
+
+      // // when onchange price value and leave price input empty then clear margin/profit fields value
+      // else if (i === 0 && name === "price" && !value) {
+      //   return {
+      //     ...item,
+      //     [name]: value,
+      //     ["margin"]: "",
+      //     ["Profit"]: "",
+      //   };
+      // }
+
+      // // when compareAtPrice and price value is already exist and when costPerItem is try to change then we run this condition.
+      // // here compareAtPrice and price value need to not empty
+      // else if (
+      //   (index === i || i === 0) &&
+      //   name === "costPerItem" &&
+      //   value &&
+      //   !!formValue[i]["compareAtPrice"] &&
+      //   !!formValue[i]["price"]
+      // ) {
+      //   if (+formValue[i]["compareAtPrice"] < +formValue[i]["price"]) {
+      //     setOpenAlertModal(true);
+      //     return {
+      //       ...item,
+      //       [name]: value,
+      //       ["compareAtPrice"]: "",
+      //     };
+      //   } else {
+      //     return {
+      //       ...item,
+      //       [name]: value,
+      //       ["margin"]: !isNaN(marginValue) ? marginValue : "",
+      //       ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+      //     };
+      //   }
+      // }
+
+      // // when costPerItem value is change manually and not depend on compareAtPrice empty or not
+      // else if (i === 0 && name === "costPerItem" && value) {
+      //   if(costPer > 0){
+
+      //     return {
+      //       ...item,
+      //       [name]: value,
+      //       ["compareAtPrice"]: "",
+      //       ["price"]: price_total_value ? price_total_value?.toFixed(2) : "",
+      //       ["margin"]: !isNaN(marginValue) ? marginValue : "",
+      //       ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+      //     };
+      //   }else{
+      //     return {
+      //       ...item,
+      //       [name]: value,
+      //       ["compareAtPrice"]: "",
+      //       ["margin"]: !isNaN(marginValue) ? marginValue : "",
+      //       ["Profit"]: !isNaN(profitValue) ? profitValue : "",
+      //     };
+      //   }
+      // }
+
+      // // when section is only 0 and name of field is any but not costPerItem => onblur
+      // else if (i === 0 && !nameArray.includes(name)) {
+      //   return {
+      //     ...item,
+      //     [name]: value,
+      //   };
+      // }
+
+      // return item;
+    // });
+
+    // setFormValue(updatedFormValue);
+  };
+
+
+ 
+  const handleOnChange = (e, i, title) => {
+    const { name, value, type } = e.target;
+
+    console.log(name, value, title);
+    const updatedFormValue = [...formValue];
+
+    /// convert input value format 0.00
+    let fieldValue;
+    if (!notAllowDecimalValue.includes(name)) {
+      fieldValue = value
+        // Remove extra dots and ensure only one dot exists at most
+        .replace(/[^\d.]/g, "") // Allow digits and dots only
+        .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
+        .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+
+      let inputStr = fieldValue.replace(/\D/g, "");
+      inputStr = inputStr.replace(/^0+/, "");
+
+      if (inputStr.length == "") {
+        fieldValue = "";
+      } else if (inputStr.length === 1) {
+        fieldValue = "0.0" + inputStr;
+      } else if (inputStr.length === 2) {
+        fieldValue = "0." + inputStr;
+      } else {
+        fieldValue =
+          inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
+      }
+    }
+    // allowed alphanumeric value in upcCode field but not allowed decimal value
+    else if (name === "upcCode") {
+      fieldValue = fieldValue = value
+        // Remove extra dots and ensure only one dot exists at most
+        .replace(/[^\w.]/g, "") // Allow alphanumeric characters, digits, and dots only
+        .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
+        .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+
+      let inputStr = fieldValue.replace(/[^\w]/g, "");
+      if (inputStr == "0") {
+        fieldValue = "0";
+      } else {
+        fieldValue = inputStr.toUpperCase();
+      }
+    }
+    // normal input value format
+    else {
+      fieldValue = value
+        // Remove extra dots and ensure only one dot exists at most
+        .replace(/[^\d.]/g, "") // Allow digits and dots only
+        .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
+        .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+
+      let inputStr = fieldValue.replace(/\D/g, "");
+      // inputStr = inputStr.replace(/^+/, "");
+      if (inputStr == "0") {
+        fieldValue = "0";
+      } else {
+        fieldValue = inputStr;
+      }
+    }
+
+    // margin and profit calculation
+    let totalPriceValue;
+    let marginValue;
+    let profitValue;
+    let price_total_value;
+
+    // price field total value calculation based on costPer value which is fetch from API.
+    if (name === "costPerItem") {
+      if(costPer > 0){
+        totalPriceValue = (costPer / 100) * fieldValue;
+        price_total_value = parseFloat(fieldValue) + parseFloat(totalPriceValue);
+  
+        // margin and profit total value calculation
+        let marginvl = (fieldValue * 100) / price_total_value.toFixed(2);
         let showmargin = 100 - marginvl;
         marginValue = parseFloat(showmargin).toFixed(2);
-        profitValue = parseFloat(price_total_value - value).toFixed(2);
+        profitValue = parseFloat(price_total_value - fieldValue).toFixed(2);
       }else{
-        price_total_value = ""
+        price_total_value= ""
       }
     }
 
     // if price value is change manually the recalculate margin and profit value
     if (name === "price") {
       if (value > 0) {
-        let costPerValue = formValue[i]["costPerItem"];
-        let marginvl = (costPerValue * 100) / value;
+        let costPerValue = formValue?.[i]?.[title]?.["costPerItem"];
+        let marginvl = (costPerValue * 100) / fieldValue;
         let showmargin = 100 - marginvl;
         marginValue = parseFloat(showmargin).toFixed(2);
-        profitValue = parseFloat(value - costPerValue).toFixed(2);
+        profitValue = parseFloat(fieldValue - costPerValue).toFixed(2);
       }
     }
 
-    // when remove focus on input value
-    const updatedFormValue = formValue.map((item, index) => {
-      console.log('item', item);
-      // here.... index => each section index
-      // i => each input field index inside section
-      // show alert "Compare Price must be greater than price." when compare value < price && price > compare value / when compareAtPrice field value change manually
-  //     if (
-  //       (index === i || i === 0) &&
-  //       name === "compareAtPrice" &&
-  //       value &&
-  //       !!formValue[i]["price"]
-  //     ) {
-  //       if (+value < +formValue[i]["price"]) {
-  //         setOpenAlertModal(true);
-  //         return {
-  //           ...item,
-  //           ["compareAtPrice"]: "",
-  //         };
-  //       } else {
-  //         return {
-  //           ...item,
-  //           [name]: value,
-  //         };
-  //       }
-  //     }
+    console.log('fieldValue', fieldValue);
+    // manually onchange
+    const updatedValues = formValue.map((item, index) => {
+      
+      return Object.keys(item).includes(title) ? ({
+        ...item,
+        [title]: {
+          ...item[title],
+          [name]: fieldValue,
+          ['price']: parseFloat(price_total_value ? price_total_value : "" ),
+          compareAtPriceErrorOnPrice: (name === "price") && (parseFloat(item[title]?.compareAtPrice) > 0 && fieldValue > parseFloat(item[title]?.compareAtPrice)) ? "Price Should be Less than Compare Price" : "",
+          compareAtPriceErrorOnCompare: (name === "compareAtPrice") && (parseFloat(item[title]?.price) > 0 &&  parseFloat(item[title]?.price) > fieldValue) ? "Price Should be Less than Compare Price" : "",
+          compareAtPriceErrorOnCostPer: (name === "costperItem") && (parseFloat(item[title]?.price) > 0 && parseFloat(item[title]?.compareAtPrice) > 0) &&  (parseFloat(item[title]?.price) > (parseFloat(item[title]?.compareAtPrice)))   ? "Price Should be Less than Compare Price" : "",
 
-  //     // show alert "Compare Price must be greater than price." when compare value < price && price > compare value / when price field value change manually
-  //     else if (
-  //       (index === i || i === 0) &&
-  //       name === "price" &&
-  //       value &&
-  //       !!formValue[i]["compareAtPrice"]
-  //     ) {
-  //       if (+value > +formValue[i]["compareAtPrice"]) {
-  //         setOpenAlertModal(true);
-  //         return {
-  //           ...item,
-  //           [name]: value,
-  //           ["compareAtPrice"]: "",
-  //           ["margin"]: !isNaN(marginValue) ? marginValue : "",
-  //           ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-  //         };
-  //       } else {
-  //         return {
-  //           ...item,
-  //           [name]: value,
-  //           ["margin"]: !isNaN(marginValue) ? marginValue : "",
-  //           ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-  //         };
-  //       }
-  //     }
+        }
+      }) : item
+    })
 
-  //     /// if price value change manually and onblur and not depennd on compareAtPrice is empty or not
-  //     else if (i === 0 && name === "price" && value) {
-  //       if (!formValue[i]["costPerItem"] || !formValue[i]["price"]) {
-  //         return {
-  //           [title]:{
-  //             ...item[title],
-  //             [name]: value,
-  //           }
-  //         };
-  //       }
-  //       return {
-  //         [title]:{
-  //           ...item[title],
-  //           [name]: value,
-  //           ["margin"]: !isNaN(marginValue) ? marginValue : "",
-  //           ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-  //         }
-  //       };
-  //     }
-
-  //     // when onchange price value and leave price input empty then clear margin/profit fields value
-  //     else if (i === 0 && name === "price" && !value) {
-  //       return {
-  //         ...item,
-  //         [name]: value,
-  //         ["margin"]: "",
-  //         ["Profit"]: "",
-  //       };
-  //     }
-
-  //     // when compareAtPrice and price value is already exist and when costPerItem is try to change then we run this condition.
-  //     // here compareAtPrice and price value need to not empty
-  //     else if (
-  //       (index === i || i === 0) &&
-  //       name === "costPerItem" &&
-  //       value &&
-  //       !!formValue[i]["compareAtPrice"] &&
-  //       !!formValue[i]["price"]
-  //     ) {
-  //       if (+formValue[i]["compareAtPrice"] < +formValue[i]["price"]) {
-  //         setOpenAlertModal(true);
-  //         return {
-  //           ...item,
-  //           [name]: value,
-  //           ["compareAtPrice"]: "",
-  //         };
-  //       } else {
-  //         return {
-  //           ...item,
-  //           [name]: value,
-  //           ["margin"]: !isNaN(marginValue) ? marginValue : "",
-  //           ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-  //         };
-  //       }
-  //     }
-
-  //     // when costPerItem value is change manually and not depend on compareAtPrice empty or not
-  //     else if (i === 0 && name === "costPerItem" && value) {
-  //       if(costPer > 0){
-
-  //         return {
-  //           ...item,
-  //           [name]: value,
-  //           ["compareAtPrice"]: "",
-  //           ["price"]: price_total_value ? price_total_value?.toFixed(2) : "",
-  //           ["margin"]: !isNaN(marginValue) ? marginValue : "",
-  //           ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-  //         };
-  //       }else{
-  //         return {
-  //           ...item,
-  //           [name]: value,
-  //           ["compareAtPrice"]: "",
-  //           ["margin"]: !isNaN(marginValue) ? marginValue : "",
-  //           ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-  //         };
-  //       }
-  //     }
-
-  //     // when section is only 0 and name of field is any but not costPerItem => onblur
-  //     else if (i === 0 && !nameArray.includes(name)) {
-  //       return {
-  //         ...item,
-  //         [name]: value,
-  //       };
-  //     }
-
-  //     return item;
-  //   });
-
-  //   setFormValue(updatedFormValue);
-  // };
-
-  // const handleOnChange = (e, i, title) => {
-  //   const { name, value, type } = e.target;
-
-  //   console.log(name, value, title);
-  //   /// convert input value format 0.00
-  //   let fieldValue;
-  //   if (!notAllowDecimalValue.includes(name)) {
-  //     fieldValue = value
-  //       // Remove extra dots and ensure only one dot exists at most
-  //       .replace(/[^\d.]/g, "") // Allow digits and dots only
-  //       .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
-  //       .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
-
-  //     let inputStr = fieldValue.replace(/\D/g, "");
-  //     inputStr = inputStr.replace(/^0+/, "");
-
-  //     if (inputStr.length == "") {
-  //       fieldValue = "";
-  //     } else if (inputStr.length === 1) {
-  //       fieldValue = "0.0" + inputStr;
-  //     } else if (inputStr.length === 2) {
-  //       fieldValue = "0." + inputStr;
-  //     } else {
-  //       fieldValue =
-  //         inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
-  //     }
-  //   }
-  //   // allowed alphanumeric value in upcCode field but not allowed decimal value
-  //   else if (name === "upcCode") {
-  //     fieldValue = fieldValue = value
-  //       // Remove extra dots and ensure only one dot exists at most
-  //       .replace(/[^\w.]/g, "") // Allow alphanumeric characters, digits, and dots only
-  //       .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
-  //       .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
-
-  //     let inputStr = fieldValue.replace(/[^\w]/g, "");
-  //     if (inputStr == "0") {
-  //       fieldValue = "0";
-  //     } else {
-  //       fieldValue = inputStr.toUpperCase();
-  //     }
-  //   }
-  //   // normal input value format
-  //   else {
-  //     fieldValue = value
-  //       // Remove extra dots and ensure only one dot exists at most
-  //       .replace(/[^\d.]/g, "") // Allow digits and dots only
-  //       .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
-  //       .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
-
-  //     let inputStr = fieldValue.replace(/\D/g, "");
-  //     // inputStr = inputStr.replace(/^+/, "");
-  //     if (inputStr == "0") {
-  //       fieldValue = "0";
-  //     } else {
-  //       fieldValue = inputStr;
-  //     }
-  //   }
-
-  //   // margin and profit calculation
-  //   let totalPriceValue;
-  //   let marginValue;
-  //   let profitValue;
-  //   let price_total_value;
-
-  //   // price field total value calculation based on costPer value which is fetch from API.
-  //   if (name === "costPerItem") {
-  //     if(costPer > 0){
-  //       totalPriceValue = (costPer / 100) * fieldValue;
-  //       price_total_value = parseFloat(fieldValue) + parseFloat(totalPriceValue);
+    console.log("updatedValues: ", updatedValues)
   
-  //       // margin and profit total value calculation
-  //       let marginvl = (fieldValue * 100) / price_total_value.toFixed(2);
-  //       let showmargin = 100 - marginvl;
-  //       marginValue = parseFloat(showmargin).toFixed(2);
-  //       profitValue = parseFloat(price_total_value - fieldValue).toFixed(2);
-  //     }else{
-  //       price_total_value= ""
-  //     }
-  //   }
-
-  //   // if price value is change manually the recalculate margin and profit value
-  //   if (name === "price") {
-  //     if (value > 0) {
-  //       let costPerValue = formValue?.[i]?.[title]?.["costPerItem"];
-  //       let marginvl = (costPerValue * 100) / fieldValue;
-  //       let showmargin = 100 - marginvl;
-  //       marginValue = parseFloat(showmargin).toFixed(2);
-  //       profitValue = parseFloat(fieldValue - costPerValue).toFixed(2);
-  //     }
-  //   }
-
-  //   // manually onchange
-  //   console.log(Object.values(formValue?.[i]?.[title]))
-  //   const updatedFormValue = formValue?.map((item, index) => {
-  //     // // if section is 0 and name is costPerItem => onchange
-  //     if (i === 0 && name === "costPerItem") {
-  //       if(costPer > 0){
-  //         return {
-  //           [title]: {
-  //             ...item[title],
-  //             ["costPerItem"]: index == 0 ? fieldValue : "",
-  //             ["price"]: price_total_value ? price_total_value.toFixed(2) : "",
-  //             ["margin"]:
-  //               index == 0 ? (!isNaN(marginValue) ? marginValue : "") : "",
-  //             ["Profit"]:
-  //               index == 0 ? (!isNaN(profitValue) ? profitValue : "") : "",
-  //           }
-  //         };
-  //       }else{
-  //         return {
-
-  //           [title]:{
-  //             ...item[title],
-  //             ["costPerItem"]: index == 0 ? fieldValue : "",
-  //             ["margin"]:
-  //               index == 0 ? (!isNaN(marginValue) ? marginValue : "") : "",
-  //             ["Profit"]:
-  //               index == 0 ? (!isNaN(profitValue) ? profitValue : "") : "",
-  //           }
-  //         };
-  //       }
-  //     }
-  //     // if section is any but field is 1 and field name is costPerItem => onchange
-  //     else if (i === index && name === "costPerItem") {
-  //       if(costPer > 0){
-  //         return {
-  //           [title]:{
-  //             ...item[title],
-  //             ["costPerItem"]: fieldValue,
-  //             ["price"]: price_total_value ? price_total_value.toFixed(2) : "",
-  //             ["margin"]: !isNaN(marginValue) ? marginValue : "",
-  //             ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-  //           }
-  //         };
-  //       }else {
-  //         return {
-  //           [title]:{
-  //             ...item[title],
-  //             ["costPerItem"]: fieldValue,
-  //             ["margin"]: !isNaN(marginValue) ? marginValue : "",
-  //             ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-  //           }
-  //         };
-  //       }
-  //     }
-  //     // when section is 0 and price field value is change manually and costPerItem field value is not empty => onchange
-  //     else if (i === 0 && name === "price" && !!formValue[i]?.[title]?.["costPerItem"]) {
-  //       if (index === 0) {
-  //         return {
-  //           [title]:{
-  //             ...item[title],
-  //             ["price"]: fieldValue ? fieldValue : "",
-  //             ["margin"]: !isNaN(marginValue) ? marginValue : "",
-  //             ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-  //           }
-  //         };
-  //       }
-  //     }
-  //     // when section is any and price field value is change manually and costPerItem field value is not empty => onchange
-  //     else if (
-  //       index === i &&
-  //       name === "price" &&
-  //       !!formValue[i][title]["costPerItem"]
-  //     ) {
-  //       return {
-  //         [title]:{
-  //           ...item[title],
-  //           ["price"]: fieldValue ? fieldValue : "",
-  //           ["margin"]: !isNaN(marginValue) ? marginValue : "",
-  //           ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-  //         }
-  //       };
-  //     }
-  //     // when section is any and field index is any and name is any => onchange
-  //     else if (index === i) {
-  //       // if checkbox is already check make it false
-  //       // fieldValue is decimal value => 0.00
-  //       return {
-  //         [title]:{
-  //           ...item[title],
-  //           [name]:
-  //             type === "checkbox"
-  //               ? value === "true"
-  //                 ? false
-  //                 : true
-  //               : fieldValue,
-  //         }
-  //       };
-  //     }
-  //     return item;
-    });
-
-    setFormValue(updatedFormValue);
-  };
+    setFormValue(updatedValues);
+  }
+    
 
   const handleVarientTitleBasedItemList = () => {
     if (varientLength.length) {
@@ -1086,39 +1010,53 @@ const AddProducts = () => {
 
 
         setFormValue((prevFormValue) => {
+          console.log('varientTitle', varientTitle)
           const newFormValue = [...new Set(varientTitle)].map((title, index) => {
-            const previousData = prevFormValue[index] || {};
+            // console.log("=> ",index, prevFormValue[index], prevFormValue[index]?.title)
+          
+            //  const  previousData = prevFormValue[index]?.title || {};
+
+            const previousData = prevFormValue.find((item) => title in item) || {}
+            const result = previousData[title]
+            //  title = b
+            // prevFormValue data = [{0: {a}},{1: {b}}]
+            
+            console.log("previousData: ", previousData, )
+            console.log("result: ", result)
+            // console.log('previousData', previousData, prevFormValue?.[index]?.title)
+            console.log('prevFormValue', prevFormValue, previousData?.price)
+          
             return {
               [title]:{
-                costPerItem: previousData.costPerItem || "",
-                compareAtPrice: previousData.compareAtPrice || "",
-                price: previousData.price || "",
-                margin: previousData.margin || "",
-                Profit: previousData.Profit || "",
-                qty: previousData.qty || "",
-                upcCode: previousData.upcCode || "",
-                customCode: previousData.customCode || "",
-                reorderQty: previousData.reorderQty || "",
-                reorderLevel: previousData.reorderLevel || "",
+                costPerItem: result?.costPerItem || "",
+                compareAtPrice: result?.compareAtPrice || "",
+                price: result?.price || "",
+                margin: result?.margin || "",
+                Profit: result?.Profit || "",
+                qty: result?.qty || "",
+                upcCode: result?.upcCode || "",
+                customCode: result?.customCode || "",
+                reorderQty: result?.reorderQty || "",
+                reorderLevel: result?.reorderLevel || "",
                 // here when fetching prodcut data and track and sellout was false but still showing true and check that's why using this condition
                 trackQuantity:
-                  previousData.trackQuantity || pageUrl !== "product-edit"
+                  result?.trackQuantity || pageUrl !== "product-edit"
                     ? true
                     : false,
                 sellOutOfStock:
-                  previousData.sellOutOfStock || pageUrl !== "product-edit"
+                  result?.sellOutOfStock || pageUrl !== "product-edit"
                     ? true
                     : false,
-                checkId: previousData.checkId || false,
-                disable: previousData.disable || false,
+                checkId: result?.checkId || false,
+                disable: result?.disable || false,
                 // itemForAllLinkedLocation:
                 //   previousData.itemForAllLinkedLocation || false,
-                isFoodStamble: previousData?.isFoodStamble || false,
+                isFoodStamble: result?.isFoodStamble || false,
               }
             };
-            // }
-          });
-          console.log('newFormValue', newFormValue);
+          }); 
+
+          console.log('newformvalue', newFormValue);
           return newFormValue;
         });
       }
@@ -1360,12 +1298,17 @@ const AddProducts = () => {
   }
 
   const handleGenerateUPC = () => {
-    const updatedUpcData = formValue?.map((item) => {
+    const updatedUpcData = formValue?.map((item, index) => {
+      const title = Object.keys(item)[0];
       return {
         ...item,
-        ["upcCode"]: generateString(20),
+        [title]: {
+          ...item[index],
+          upcCode: generateString(20),
+        }
       };
     });
+    console.log('updatedUpcData', updatedUpcData);
     setFormValue(updatedUpcData);
   };
 
