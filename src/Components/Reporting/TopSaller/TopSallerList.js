@@ -10,6 +10,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -98,7 +99,7 @@ const TopSallerList = ({ data }) => {
                           <p className="report-title">{topsaller.variant}</p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <p className="report-title">{topsaller.total_sold}</p>
+                          <p className="report-title">{priceFormate(topsaller.total_sold)}</p>
                         </StyledTableCell>
                       </StyledTableRow>
                     ))}

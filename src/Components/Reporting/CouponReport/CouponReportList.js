@@ -12,6 +12,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -116,7 +117,7 @@ const CouponReportList = (props) => {
                       </StyledTableCell>
                       <StyledTableCell>
                         <p className="report-title">
-                          {couponData.total_coupons_used}
+                          {priceFormate(couponData.total_coupons_used)}
                         </p>
                       </StyledTableCell>
                     </StyledTableRow>

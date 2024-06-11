@@ -30,6 +30,7 @@ import {
   ADD_TIME_BREAK,
 } from "../../Constants/Config";
 import { useAuthDetails } from "./../../Common/cookiesHelper";
+import { priceFormate } from "../../hooks/priceFormate";
 
 const TimesheetListing = ({ data }) => {
   const dispatch = useDispatch();
@@ -642,12 +643,21 @@ const TimesheetListing = ({ data }) => {
   };
   // for Delete Break End
 
+  // const formatDate = (dateString) => {
+  //   const date = new Date(dateString);
+  //   const month = (date.getMonth() + 1).toString().padStart(2, "0");
+  //   const day = date.getDate().toString().padStart(2, "0");
+  //   const year = date.getFullYear();
+  //   return `${month}/${day}/${year}`;
+  // };
+
   const formatDate = (dateString) => {
-    const date = new Date(dateString);
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    const year = date.getFullYear();
-    return `${month}/${day}/${year}`;
+    const options = { day: "2-digit", month: "short", year: "numeric" };
+    const formattedDate = new Date(dateString).toLocaleDateString(
+      "en-US",
+      options
+    );
+    return formattedDate;
   };
 
   const [currentDate, setCurrentDate] = useState(getDate());
@@ -721,7 +731,7 @@ const TimesheetListing = ({ data }) => {
                     </p>
                     <p className="q-catereport-item">
                       {entry.wages_per_hr && entry.wages_per_hr > 0
-                        ? `$${entry.wages_per_hr}/hr`
+                        ? `$${priceFormate(entry.wages_per_hr)}/hr`
                         : "-"}{" "}
                     </p>
                     {/* <p className="q-catereport-item">{formatTime(entry.check_in_time)}</p> */}
@@ -1067,7 +1077,7 @@ const TimesheetListing = ({ data }) => {
             <div className="viewTextBark">
               <span className="borderRight ">
                 {modalDate} -{" "}
-                {modalDateOUT ? formatDateBrake(modalDateOUT) : "-"}
+                {modalDateOUT ? formatDate(modalDateOUT) : "-"}
               </span>{" "}
               <span className="pl-1"> Break-in/Break-out</span>
             </div>
@@ -1206,7 +1216,7 @@ const TimesheetListing = ({ data }) => {
                 <span className="viewTextBark">
                   {formatDate(EmployeeWorkDate)} -{" "}
                   {EmployeeWorkDateOUT
-                    ? formatDateBrake(EmployeeWorkDateOUT)
+                    ? formatDate(EmployeeWorkDateOUT)
                     : "-"}
                 </span>{" "}
               </span>

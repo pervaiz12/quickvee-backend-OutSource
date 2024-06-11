@@ -12,6 +12,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 // ==================== TABLE STYLE ADDED ===================================================
 const StyledTable = styled(Table)(({ theme }) => ({
@@ -139,7 +140,7 @@ const DailyReportList = ({ data }) => {
                               </p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p className="report-title">${dailyreport.amt}</p>
+                              <p className="report-title">${priceFormate(dailyreport.amt)}</p>
                             </StyledTableCell>
                           </StyledTableRow>
                         ))}
@@ -154,7 +155,7 @@ const DailyReportList = ({ data }) => {
                           <div className="q-category-bottom-report-listing">
                             <div>
                               <p className="report-title">
-                                ${totalAmt.toFixed(2)}
+                                ${priceFormate(totalAmt.toFixed(2))}
                               </p>
                             </div>
                           </div>

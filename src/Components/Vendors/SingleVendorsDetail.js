@@ -24,6 +24,8 @@ import CustomizedTable from "./CustomizedTable";
 import { useSelector } from "react-redux";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { useParams } from "react-router-dom";
+import DeleteModal from "../../reuseableComponents/DeleteModal";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 const options = [
   "Select Range",
   "Today",
@@ -35,7 +37,9 @@ const options = [
 
 const SingleVendorsDetail = ({ setVisible }) => {
   const Navigate = useNavigate()
-  const { userTypeData } = useAuthDetails();
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } = useAuthDetails();
+  let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
+  const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
   const [showModal, setShowModal] = useState(false);
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -108,13 +112,15 @@ const SingleVendorsDetail = ({ setVisible }) => {
       const { payAmount, id } = modalData;
 
       const updSingleVendor = {
-        merchant_id: "MAL0100CA",
+        merchant_id: merchant_id,
         vendor_id: vendorId,
         det_id: id,
         start: currentDateTime,
         end: currentDateTime,
         amount: selectedPayAmount,
         remark: selectedRemark,
+        token_id: userTypeData?.token_id,
+        login_type: userTypeData?.login_type,
       };
 
       try {
@@ -122,11 +128,12 @@ const SingleVendorsDetail = ({ setVisible }) => {
           BASE_URL + UPDATE_SINGLE_VENDOR_DATA,
           updSingleVendor,
           {
-            headers: { "Content-Type": "multipart/form-data" },
+            headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}` },
           }
         );
 
         if (response) {
+          ToastifyAlert("Vendor Details", "success");
           const updatedDetails = vendorDetails.map((vendor) => {
             const currentDateTime = dayjs().format("YYYY-MM-DD HH:mm:ss");
             if (vendor.id === id) {
@@ -153,40 +160,58 @@ const SingleVendorsDetail = ({ setVisible }) => {
     }
   };
 
-  const handleDeleteClick = async (id, vendorId) => {
-    const currentDateTime = dayjs().format("YYYY-MM-DD HH:mm:ss");
+  const [deleteId, setDeleteId] = useState(null);
+  const [deleteVendorId, setDeleteVendorId] = useState(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
-    const delSingleVendor = {
-      merchant_id: "MAL0100CA",
-      id: id,
-      vendor_id: vendorId,
-      start: currentDateTime,
-      end: currentDateTime,
-    };
-
-    try {
-      const response = await axios.post(
-        BASE_URL + DELETE_SINGLE_VENDOR_DATA,
-        delSingleVendor,
-        {
-          headers: { "Content-Type": "multipart/form-data" },
-        }
-      );
-
-      if (response) {
-        const updatedVendorDetails = vendorDetails.filter(
-          (vendor) => vendor.id !== id
-        );
-        setVendorDetails(updatedVendorDetails);
-
-        // alert(response.data.message);
-      } else {
-        console.error(response);
-      }
-    } catch (error) {
-      console.error(error);
-    }
+  const handleDeleteClick = (id, vendorId) => {
+    setDeleteId(id)
+    setDeleteVendorId(vendorId)
+    setDeleteModalOpen(true);
   };
+
+  const confirmDeleteCategory = async () => {
+    if(deleteId){
+      const currentDateTime = dayjs().format("YYYY-MM-DD HH:mm:ss");
+      const delSingleVendor = {
+        merchant_id: merchant_id,
+        id: deleteId,
+        vendor_id: deleteVendorId,
+        start: currentDateTime,
+        end: currentDateTime,
+        token_id: userTypeData?.token_id,
+        login_type: userTypeData?.login_type,
+      };
+  
+      try {
+        const response = await axios.post(
+          BASE_URL + DELETE_SINGLE_VENDOR_DATA,
+          delSingleVendor,
+          {
+            headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}` },
+          }
+        );
+  
+        if (response) {
+          const updatedVendorDetails = vendorDetails.filter(
+            (vendor) => vendor.id !== deleteId
+          );
+          setVendorDetails(updatedVendorDetails);
+  
+          // alert(response.data.message);
+        } else {
+          console.error(response);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+    setDeleteId(null)
+    setDeleteVendorId(null)
+    setDeleteModalOpen(false);
+  };
+
+
 
   function calculateTotal() {
     let total = 0;
@@ -199,9 +224,7 @@ const SingleVendorsDetail = ({ setVisible }) => {
   return (
     <>
       <Grid container sx={{ paddingTop: 2 }}>
-        <Grid item>
           <DateRangeComponent onDateRangeChange={handleGetReport} />
-        </Grid>
       </Grid>
       <Grid
         container
@@ -211,8 +234,8 @@ const SingleVendorsDetail = ({ setVisible }) => {
         <Grid xs={12} item>
           <Grid item xs={12}>
             <div className="q-add-categories-section-header">
-              <span>
-                <img src={LeftArrow} onClick={()=>{Navigate(-1)}} />
+              <span onClick={()=>{Navigate(-1)}}>
+                <img src={LeftArrow}  />
                 <span>{vendor_name}</span>
               </span>
             </div>
@@ -459,6 +482,13 @@ const SingleVendorsDetail = ({ setVisible }) => {
           </form>
         </div>
       </div> */}
+
+        <DeleteModal
+            headerText="Vendor Details"
+            open={deleteModalOpen}
+            onClose={() => {setDeleteModalOpen(false)}}
+            onConfirm={confirmDeleteCategory}
+          />
     </>
   );
 };

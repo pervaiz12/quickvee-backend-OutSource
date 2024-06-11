@@ -21,7 +21,7 @@ export default function InventoryList() {
   return (
     <>
       <Grid container className="box_shadow_div">
-        <Grid item xs={12}>
+        <Grid item xs={12} >
           {/* <Grid container sx={{ padding: 2.5 }}>
             <Grid item xs={12}>
               <div className="q_details_header">
@@ -34,7 +34,7 @@ export default function InventoryList() {
               <div className="q_details_header ">Filter by</div>
             </Grid>
           </Grid> */}
-          <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
+          <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }} style={{marginTop: "0.75rem"}}>
             <Grid item xs={12} sm={6} md={4}>
               <label
                 className="q-details-page-label"

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchshiftsummaryData } from "../../../Redux/features/Reports/ShiftSummary/ShiftSummarySlice";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 const SiftSummaryDetails = (props) => {
   const dispatch = useDispatch();
@@ -79,32 +80,32 @@ const SiftSummaryDetails = (props) => {
                         <p className="report-sort">{shiftDetail.device_name}</p>
                         <p className="report-sort">{shiftDetail.in_time}</p>
                         <p className="report-sort">{shiftDetail.out_time}</p>
-                        <p className="report-sort">{shiftDetail.drawer_cash}</p>
+                        <p className="report-sort">{priceFormate(shiftDetail.drawer_cash)}</p>
                         <p className="report-sort">
-                          {shiftDetail.expected_amt}
+                          {priceFormate(shiftDetail.expected_amt)}
                         </p>
-                        <p className="report-sort">{shiftDetail.actual_amt}</p>
-                        <p className="report-sort">{shiftDetail.drop_cash}</p>
+                        <p className="report-sort">{priceFormate(shiftDetail.actual_amt)}</p>
+                        <p className="report-sort">{priceFormate(shiftDetail.drop_cash)}</p>
 
-                        <p className="report-sort">{shiftDetail.shift_type}</p>
-
-                        <p className="report-sort">
-                          {shiftDetail.total_refund}
-                        </p>
+                        <p className="report-sort">{priceFormate(shiftDetail.shift_type)}</p>
 
                         <p className="report-sort">
-                          {shiftDetail.total_vendor_payout}
+                          {priceFormate(shiftDetail.total_refund)}
                         </p>
-                        <p className="report-sort">{shiftDetail.total_sale}</p>
-                        <p className="report-sort">{shiftDetail.refunds}</p>
-                        <p className="report-sort">{shiftDetail.tip}</p>
+
                         <p className="report-sort">
-                          {shiftDetail.card_collected_wr}
+                          {priceFormate(shiftDetail.total_vendor_payout)}
+                        </p>
+                        <p className="report-sort">{priceFormate(shiftDetail.total_sale)}</p>
+                        <p className="report-sort">{priceFormate(shiftDetail.refunds)}</p>
+                        <p className="report-sort">{priceFormate(shiftDetail.tip)}</p>
+                        <p className="report-sort">
+                          {priceFormate(shiftDetail.card_collected_wr)}
                         </p>
                         <p className="report-sort">
-                          {shiftDetail.cash_collected_wr}
+                          {priceFormate(shiftDetail.cash_collected_wr)}
                         </p>
-                        <p className="report-sort">{shiftDetail.cash_drop}</p>
+                        <p className="report-sort">{priceFormate(shiftDetail.cash_drop)}</p>
                       </div>
                     ))}
                   </div>
