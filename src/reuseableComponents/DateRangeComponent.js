@@ -87,6 +87,7 @@ const DateRangeComponent = ({ onDateRangeChange }) => {
   };
 
   useEffect(() => {
+    handleSearch()
     setDatesBasedOnOption(activeOption);
   }, [activeOption]);
   return (
@@ -201,7 +202,7 @@ const DateRangeComponent = ({ onDateRangeChange }) => {
           <Grid item alignSelf={"center"} xs={12} sm={6} md={4}>
             <div className="pt-4">
               <button onClick={handleSearch} className="save_btn">
-                Search
+              Get Report
               </button>
             </div>
           </Grid>

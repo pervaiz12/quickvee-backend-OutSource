@@ -22,8 +22,11 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import DeleteModal from "../../reuseableComponents/DeleteModal";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import AlertModal from "../../reuseableComponents/AlertModal";
 
-const DefaultsDetail = ({ seVisible }) => {
+const DefaultsDetail = ({ setVisible,setDefaultEditId }) => {
   const myStyles = {
     left: "1rem",
     // transform: "translate(0px, 5px)",
@@ -78,6 +81,12 @@ const DefaultsDetail = ({ seVisible }) => {
   }, [defaultsDataState]);
 
   const [headerCheckboxChecked, setHeaderCheckboxChecked] = useState(false);
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
+  };
 
   const handleHeaderCheckboxChange = () => {
     setHeaderCheckboxChecked(!headerCheckboxChecked);
@@ -99,6 +108,7 @@ const DefaultsDetail = ({ seVisible }) => {
   };
 
   // for Delete star
+  /*
   const handleDeleteDefaults = (id) => {
     const data = {
       id: id,
@@ -117,9 +127,19 @@ const DefaultsDetail = ({ seVisible }) => {
     } else {
       console.log("Deletion canceled by Default");
     }
+  }; */
+
+  const [deleteDefaultId, setDeleteDefaultId] = useState(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const handleDeleteDefaults = (id) => {
+    setDeleteDefaultId(id);
+    setDeleteModalOpen(true);
   };
 
+
   // for selected check box item Delete start
+  /*
   const handleDeleteDefaultSelected = () => {
     const checkedIds = defaults
       .filter((item) => item.isChecked)
@@ -143,7 +163,51 @@ const DefaultsDetail = ({ seVisible }) => {
         console.log("Deletion canceled by Default");
       }
     }
+  };*/ 
+  
+  const [deleteSelectDefaultId, setDeleteSelectDefaultId] = useState([]);
+  const handleDeleteDefaultSelected = () => {
+    const checkedIds = defaults
+      .filter((item) => item.isChecked)
+      .map((checkedItem) => checkedItem.id);
+    if (checkedIds.length === 0) {
+        // alert("Please select defaults for delete");
+        showModal("Please select defaults for delete")
+    }else{
+      setDeleteSelectDefaultId(checkedIds);
+      setDeleteModalOpen(true);
+    }
   };
+
+  const confirmDeleteCategory = () => {
+    if(deleteDefaultId){
+      const data = {
+        id: deleteDefaultId,
+        ...userTypeData,
+      };
+      if (data) {
+        dispatch(deleteDefaultsData(data)).then(() => {
+          dispatch(fetchdefaultsData({ merchant_id, ...userTypeData }));
+        });
+        ToastifyAlert("Default Menu Deleted", "success");
+      }
+    }else if(deleteSelectDefaultId){
+        const data = {
+          selectedIds: deleteSelectDefaultId,
+          ...userTypeData,
+        };
+        if (data) {
+          ToastifyAlert("Default Menu Deleted", "success");
+          dispatch(deleteDefaultsMultiData(data)).then(() => {
+            dispatch(fetchdefaultsData({ merchant_id, ...userTypeData }));
+          });
+        }
+    }
+    setDeleteSelectDefaultId([]);
+    setDeleteDefaultId(null)
+    setDeleteModalOpen(false);
+  };
+
   // for selected check box item Delete End
 
   const StyledTable = styled(Table)(({ theme }) => ({
@@ -174,8 +238,10 @@ const DefaultsDetail = ({ seVisible }) => {
 
   const navigate = useNavigate();
   const handleEditDefault = (data) => {
+    setDefaultEditId(data)
+    setVisible("EditDefaults")
     // console.log("handleEditMerchant ", data);
-    navigate(`/users/view/unapprove/menu/defaults/edit-defaults/${data}`);
+    // navigate(`/users/view/unapprove/menu/defaults/edit-defaults/${data}`);
   };
 
   return (
@@ -201,7 +267,7 @@ const DefaultsDetail = ({ seVisible }) => {
               <Grid container direction="row" alignItems="center">
                 <Grid item>
                   <div className="q-category-bottom-header">
-                    <p onClick={() => seVisible("DefaultsAlert")}>
+                    <p onClick={() => setVisible("DefaultsAlert")}>
                       Add Default <img src={AddIcon} alt="add-icon" />
                     </p>
                   </div>
@@ -311,6 +377,17 @@ const DefaultsDetail = ({ seVisible }) => {
           </Grid>
         </Grid>
       </Grid>
+      <DeleteModal
+            headerText="Default"
+            open={deleteModalOpen}
+            onClose={() => {setDeleteModalOpen(false)}}
+            onConfirm={confirmDeleteCategory}
+          />
+      <AlertModal
+      headerText={alertModalHeaderText}
+      open={alertModalOpen}
+      onClose={() => {setAlertModalOpen(false)}}
+       />
 
 
     </>

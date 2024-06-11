@@ -117,6 +117,15 @@ const StoreOrderList = (props) => {
     "Merchant",
   ];
 
+  const formatDateTime = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+    const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+    const formattedDate = date.toLocaleDateString('en-US', dateOptions);
+    const formattedTime = date.toLocaleTimeString('en-US', timeOptions);
+    return `${formattedDate} ${formattedTime}`;
+  };
+
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -200,7 +209,7 @@ const StoreOrderList = (props) => {
                               </StyledTableCell>
                               <StyledTableCell>
                                 <div className="text-[#000000] order_method capitalize">
-                                  {StoreData.date_time}
+                                  {formatDateTime(StoreData.date_time)}
                                 </div>
                               </StyledTableCell>
                               <StyledTableCell>

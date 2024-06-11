@@ -3,7 +3,7 @@ import { Box, Modal } from "@mui/material";
 import DeleteIcon from "../Assests/Category/deleteIcon.svg";
 import Slide from "@mui/material/Slide";
 
-const DeleteModal = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
+const AlertModal = ({ headerText, otherMSG, open, onClose }) => {
   const myStyles = {
     width: "45vh",
     position: "absolute",
@@ -25,20 +25,13 @@ const DeleteModal = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
           <Box className="delete-Box-modal" style={myStyles}>
             <div className="delete-modal">
               <div className="delete-modal-content">
-                <img src={DeleteIcon} alt={`Delete-icon`} loading="lazy" />
+                {/* <img src={DeleteIcon} alt={`Delete-icon`} loading="lazy" /> */}
                 <span>
-                  Are You Sure You Want To <br /> Delete this{" "}
-                  {headerText ? headerText : "delete"} ? {otherMSG ? <><br/>{otherMSG}</> :""}
+                  {headerText ? headerText : ""} <br/> {otherMSG ? <><br/>{otherMSG}</> :""}
                 </span>
               </div>
-              <div className="delete-modal-button">
-                <button onClick={onClose}>Cancel</button>
-                <button
-                  onClick={onConfirm}
-                  style={{ background: " #FF4040", color: "#fff" }}
-                >
-                  Delete
-                </button>
+              <div className="info_alertBTN">
+              <button className="save_btn" onClick={onClose}>Ok</button>
               </div>
             </div>
           </Box>
@@ -48,4 +41,4 @@ const DeleteModal = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
   );
 };
 
-export default DeleteModal;
+export default AlertModal;

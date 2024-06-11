@@ -15,6 +15,7 @@ import {
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import AlertModal from "../../reuseableComponents/AlertModal";
 
 const ProductDuplicateStore = () => {
   const [storeFromError, setStoreFromError] = useState("");
@@ -25,11 +26,18 @@ const ProductDuplicateStore = () => {
   const [selectedStoreto, setSelectedStoreto] = useState("-- Select Store --");
   const [selectedProducts, setselectedProducts] = useState([]);
   const [categoryFocus, setCategoryFocus] = useState(false);
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
 
   const handlFocusCategory = () => {
     setCategoryFocus(true);
   };
 
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
+  };
+  
   const { userTypeData } = useAuthDetails();
   const { token, ...userTypeDataNew } = userTypeData;
 
@@ -127,7 +135,8 @@ const ProductDuplicateStore = () => {
     if (selectedOptions.length <= MAX_OPTIONS) {
       setselectedProducts(selectedOptions);
     } else {
-      alert("You can select up to 5 options.");
+      // alert("You can select up to 5 options.");
+      showModal("You can select up to 5 options.")
     }
     // setselectedProducts(selectedOptions);
   };
@@ -188,11 +197,15 @@ const ProductDuplicateStore = () => {
     e.preventDefault();
 
     if (selectedStorefrom === "-- Select Store --") {
-      alert("Please select Store From");
+      // alert("Please select Store From");
+      showModal("Please select Store From");
     } else if (selectedStoreto === "-- Select Store --") {
-      alert("Please select Store To");
+      // alert("Please select Store To");
+      showModal("Please select Store To");
     } else if (selectedStorefrom === selectedStoreto) {
-      alert("Both the selected store are same.");
+      // alert("Both the selected store are same.");
+      showModal("Both the stores cannot be same.")
+
     } else {
       const upcCheckbox = document.getElementById("upc_check");
 
@@ -200,10 +213,12 @@ const ProductDuplicateStore = () => {
       const isUpcChecked = upcCheckbox ? upcCheckbox.checked : false;
       const productValues = selectedProducts.map((product) => product.value);
       if (productValues.length === 0) {
-        alert("Please select at least one Product");
+        // alert("Please select at least one Product");
+        showModal("Please select at least one Product")
         return;
       } else if (productValues.includes("No Products found")) {
-        alert("No Products found is not a Product");
+        // alert("No Products found is not a Product");
+        showModal("No Products found is not a Product")
         return;
       }
 
@@ -482,6 +497,11 @@ const ProductDuplicateStore = () => {
       </div>
 
       {/* </div> */}
+      <AlertModal
+      headerText={alertModalHeaderText}
+      open={alertModalOpen}
+      onClose={() => {setAlertModalOpen(false)}}
+       />
     </>
   );
 };

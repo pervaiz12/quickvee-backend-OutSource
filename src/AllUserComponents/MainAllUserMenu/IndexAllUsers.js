@@ -19,13 +19,13 @@ const IndexAllUsers = ({ visible }) => {
 
   useEffect(() => {
     dispatch(setMenuOpen(!isTabletNav));
-    if (!isTabletNav) {
-    }
+    
   }, [isTabletNav]);
   const onClickHandler = () => {
-    isTabletNav &&
-      dispatch(setMenuOpen(false)) &&
+    if (isTabletNav) {
+      dispatch(setMenuOpen(false));
       dispatch(setIsDropdownOpen(false));
+    }
   };
   return (
     <>

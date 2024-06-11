@@ -15,6 +15,7 @@ import TextField from "@mui/material/TextField";
 import CheckBoxField from "../../reuseableComponents/CheckBoxField";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import AlertModal from "../../reuseableComponents/AlertModal";
 
 const AddCategory = ({ seVisible }) => {
   const {
@@ -26,6 +27,8 @@ const AddCategory = ({ seVisible }) => {
   const [errorMessage, setErrorMessage] = useState("");
   const [value, setValue] = useState(null);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
 
   const [category, setCategory] = useState({
     title: "",
@@ -39,6 +42,11 @@ const AddCategory = ({ seVisible }) => {
 
   const myStyles = {
     display: "flex",
+  };
+
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
   };
 
   const inputChange = (e) => {
@@ -69,9 +77,10 @@ const AddCategory = ({ seVisible }) => {
         };
         reader.readAsDataURL(file);
       } else {
-        alert(
-          `${file.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`
-        );
+        // alert(
+        //   `${file.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`
+        // );
+        showModal(`${file.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`)
         e.target.value = null;
       }
     }
@@ -111,14 +120,11 @@ const AddCategory = ({ seVisible }) => {
 
       const data = await res.data.status;
       //console.log(data);
-      // alert(data);
       const update_message = await res.data.msg;
-      // alert(update_message);
       console.log(update_message);
       if (data == "Success") {
         ToastifyAlert(update_message, "success");
         seVisible("CategoryDetail");
-        // alert(update_message)
       } else if (
         data == "Failed" &&
         update_message == "The name is Already exist"
@@ -127,7 +133,8 @@ const AddCategory = ({ seVisible }) => {
       } else if (data == "Failed" && update_message == "*Please enter title") {
         setErrorMessage(update_message);
       } else {
-        alert(update_message);
+        // alert(update_message);
+        showModal(update_message)
         seVisible("CategoryDetail");
       }
     } catch (error) {
@@ -382,6 +389,11 @@ const AddCategory = ({ seVisible }) => {
           </form>
         </div>
       </div>
+      <AlertModal
+      headerText={alertModalHeaderText}
+      open={alertModalOpen}
+      onClose={() => {setAlertModalOpen(false)}}
+       />
     </>
   );
 };

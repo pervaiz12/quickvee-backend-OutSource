@@ -10,9 +10,12 @@ import { useSelector } from "react-redux";
 import InventoryExportLogic from "./InventoryDuplicatLogic";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
+import AlertModal from "../../reuseableComponents/AlertModal";
 
 const StoreCateUser = () => {
   const [openAlert, setOpenAlert] = useState(true);
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
 
   const goToTop = () => {
     setsubmitmessage();
@@ -24,7 +27,11 @@ const StoreCateUser = () => {
     submitmessage,
     setsubmitmessage,
     values,
+    alertOpen,
+    modalHeaderText,
   } = InventoryExportLogic();
+  console.log("alertOpen",alertOpen)
+  console.log("modalHeaderText",modalHeaderText)
 
   const { userTypeData } = useAuthDetails();
 
@@ -70,6 +77,20 @@ const StoreCateUser = () => {
   const [storeFromError, setStoreFromError] = useState("");
   const [storeToError, setStoreToError] = useState("");
 
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
+  };
+
+  useEffect(() => {
+    if(alertOpen){
+      if(modalHeaderText === "Both the stores cannot be same."){
+        setAlertModalHeaderText("Both the stores cannot be same.")
+        setAlertModalOpen(alertOpen);
+      }
+    }
+  }, [alertOpen,modalHeaderText]);
+
   // const handleOptionClick = async (option, dropdown) => {
   const handleOptionClick = async (value, dropdown) => {
     switch (dropdown) {
@@ -104,9 +125,11 @@ const StoreCateUser = () => {
 
   const dupplicateInventoryHandler = (e) => {
     if (selectedStorefrom === "-- Select Store --") {
-      alert("Please select Store From");
+      // alert("Please select Store From");
+      showModal("Please select Store From");
     } else if (selectedStoreto === "-- Select Store --") {
-      alert("Please select Store To");
+      // alert("Please select Store To");
+      showModal("Please select Store To");
     } else {
       dupplicateInventory(e);
       setSelectedStorefrom("-- Select Store --");
@@ -116,9 +139,11 @@ const StoreCateUser = () => {
 
   const dupplicateSettingsHandler = (e) => {
     if (selectedStorefrom === "-- Select Store --") {
-      alert("Please select Store From");
+      // alert("Please select Store From");
+      showModal("Please select Store From");
     } else if (selectedStoreto === "-- Select Store --") {
-      alert("Please select Store To");
+      // alert("Please select Store To");
+      showModal("Please select Store To");
     } else {
       dupplicateSettings(e);
       setSelectedStorefrom("-- Select Store --");
@@ -265,6 +290,11 @@ const StoreCateUser = () => {
           </div>
         </div>
       </div>
+      <AlertModal
+      headerText={alertModalHeaderText}
+      open={alertModalOpen}
+      onClose={() => {setAlertModalOpen(false)}}
+       />
     </>
   );
 };

@@ -96,6 +96,15 @@ const SalesPersonReport = (props) => {
     console.log(allSalesByPersonData);
   }, [allSalesByPersonData]);
 
+  const formatDateTime = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+    const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+    const formattedDate = date.toLocaleDateString('en-US', dateOptions);
+    const formattedTime = date.toLocaleTimeString('en-US', timeOptions);
+    return `${formattedDate} ${formattedTime}`;
+  };
+
   if (!allSalesByPersonData ||  Object.keys(allSalesByPersonData).length === 0) {
     return (
       <>
@@ -146,7 +155,7 @@ const SalesPersonReport = (props) => {
                                 width: "33%",
                               }}
                             >
-                              <p>{SalesData.merchant_time}</p>
+                              <p>{formatDateTime(SalesData.merchant_time)}</p>
                             </StyledTableCell>
                             <StyledTableCell
                               align="center"

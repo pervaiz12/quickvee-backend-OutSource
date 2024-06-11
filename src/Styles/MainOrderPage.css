@@ -485,3 +485,14 @@ h3.popup_msg {
   justify-content: end;
   margin-right: 0.5rem;
 }
+
+.default-Edit-Delete .edit{
+  margin-right: 2rem;
+}
+
+.delete-Box-modal .info_alertBTN{
+  /* width: inherit;
+  display: flex;
+  justify-content: flex-end; */
+  margin-top: 2rem;
+}

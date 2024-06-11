@@ -14,9 +14,10 @@ const Index = ({ visible }) => {
   const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
 
   const onClickHandler = () => {
-    isTabletNav &&
-      dispatch(setMenuOpen(false)) &&
+    if (isTabletNav) {
+      dispatch(setMenuOpen(false));
       dispatch(setIsDropdownOpen(false));
+    }
   };
   return (
     <>

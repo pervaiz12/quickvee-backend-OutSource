@@ -235,12 +235,14 @@ const CouponDiscount = ({ seVisible }) => {
                           className="q_coupon_deatails_validtimes"
                         >
                           <p className="q_date_details">
-                            {moment(coupons.date_valid).format("MM/DD/YYYY")} -{" "}
+                            {/* {moment(coupons.date_valid).format("MM/DD/YYYY")} -{" "} */}
+                            {moment(coupons.date_valid).format("MMMM D, YYYY")} -{" "}
                             {moment(coupons.time_valid, "HH:mm:ss").format(
                               "hh:mm A"
                             )}{" "}
                             to{" "}
-                            {moment(coupons.date_expire).format("MM/DD/YYYY")} -{" "}
+                            {/* {moment(coupons.date_expire).format("MM/DD/YYYY")} -{" "} */}
+                            {moment(coupons.date_expire).format("MMMM D, YYYY")} -{" "}
                             {moment(coupons.time_expire, "HH:mm:ss").format(
                               "hh:mm A"
                             )}

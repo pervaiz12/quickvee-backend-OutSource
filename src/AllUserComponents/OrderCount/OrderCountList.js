@@ -284,7 +284,7 @@ const OrderCountList = () => {
                 <div className='px-6  '>
                     <Grid container spacing={4} className="">
                         <Grid item xs={6}>
-                            <label> Order Status</label>
+                            <label className="lable_OrderCount"> Order Status</label>
                             <SelectDropDown
                                 listItem={OrderStatus}
                                 title={"title"}
@@ -294,7 +294,7 @@ const OrderCountList = () => {
                             />
                         </Grid>
                         <Grid item xs={6}>
-                            <label> Order Type</label>
+                            <label className="lable_OrderCount"> Order Type</label>
                             <SelectDropDown
                                 listItem={orderType}
                                 title={"title"}
@@ -308,7 +308,7 @@ const OrderCountList = () => {
 
             </div>
 
-            <div className="q-category-bottom-detail-section mt-5 pb-5 ">
+            <div className="q-category-bottom-detail-section mt-5 pb-5 box_shadow_div_order">
                 <div className="store-setting-flex">
                     
                 </div>
@@ -346,7 +346,7 @@ const OrderCountList = () => {
                                 maxDate={dayjs()}
                                   style={{ border: "none" }} // Remove border
                                   size="small"
-                                  format={"DD-MM-YYYY"}
+                                  format={"MMMM d, YYYY"}
                                   views={["year", "month", "day"]}
                                   slotProps={{
                                     textField: {
@@ -394,7 +394,7 @@ const OrderCountList = () => {
                                   value={dayjs(selectedEndDate)}
                                   onChange={handleDateChange(setSelectedEndDate)}
                                   maxDate={dayjs()}
-                                  format={"DD-MM-YYYY"}
+                                  format={"MMMM d, YYYY"}
                                   views={["year", "month", "day"]}
                                   slotProps={{
                                     textField: {

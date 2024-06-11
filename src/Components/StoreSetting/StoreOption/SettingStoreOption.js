@@ -23,6 +23,7 @@ import { CircularProgress, Grid } from "@mui/material";
 import { Box } from "@mui/system";
 import Loader from "../../../CommonComponents/Loader";
 import BasicTextFields from "../../../reuseableComponents/TextInputField";
+import AlertModal from "../../../reuseableComponents/AlertModal";
 
 export default function SettingStoreOption() {
   const label = { inputProps: { "aria-label": "Switch demo" } };
@@ -54,6 +55,12 @@ export default function SettingStoreOption() {
   ];
   const inputValueList = ["dayCount"];
 
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
+  };
   // states
   const [orderState, setOrderState] = useState({
     orderNumebrEnabled: false,
@@ -225,7 +232,8 @@ export default function SettingStoreOption() {
         setError("Please Select Cash Payment method.");
       }
     } else if (orderState?.dayCount > 12) {
-      alert("Advance Day Count Must Be Less Than 12");
+      // alert("Advance Day Count Must Be Less Than 12");
+      showModal("Advance Day Count Must Be Less Than 12");
     } else {
       setError("");
       setLoading(true);
@@ -1026,6 +1034,11 @@ export default function SettingStoreOption() {
           </>
         )}
       </div>
+      <AlertModal
+      headerText={alertModalHeaderText}
+      open={alertModalOpen}
+      onClose={() => {setAlertModalOpen(false)}}
+       />
     </>
   );
 }

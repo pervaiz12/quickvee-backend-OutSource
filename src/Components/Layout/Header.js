@@ -79,7 +79,7 @@ export default function Header() {
     setSelection("");
     setAnchorElForDropDown(null);
   };
-
+  // console.log("isDropdownOpen",isDropdownOpen)
   const handleSearchChange = (e) => {
     setSearchText(e.target.value);
   };

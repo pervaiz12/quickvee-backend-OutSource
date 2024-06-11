@@ -45,9 +45,9 @@ function ViewAdmin({ email, name, userTypeData }) {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box>
-            <div className="q-custom-modal-container" id="addtributes_">
-              <div className="q-custom-modal-content">
+          <Box  className="view-category-item-modal"  style={myStyles}>
+         
+            
                 <div
                   className="q-add-categories-section-header text-[18px]"
                   style={{
@@ -55,7 +55,7 @@ function ViewAdmin({ email, name, userTypeData }) {
                     fontFamily: "CircularSTDBook",
                   }}
                 >
-                  <p className="q-custom-modal-header ">{adminName}</p>
+                  <p className="">{adminName}</p>
                   <div>
                     <div
                       className="flex justify-between gap-4"
@@ -90,7 +90,8 @@ function ViewAdmin({ email, name, userTypeData }) {
                         ))
                       ) : (
                         <p className="q_view_modal_details">
-                          {showMerchantData}
+                          {/* {showMerchantData} */}
+                        No Data Available
                         </p>
                       )}
                     </div>
@@ -100,13 +101,13 @@ function ViewAdmin({ email, name, userTypeData }) {
                 <div className="q-add-categories-section-middle-footer">
                   <button
                     onClick={handleClose}
-                    className="quic-btn quic-btn-cancle"
+                    className="quic-btn quic-btn-ok"
                   >
                     Ok
                   </button>
                 </div>
-              </div>
-            </div>
+    
+            
           </Box>
         </Modal>
       </div>

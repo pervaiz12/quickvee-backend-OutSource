@@ -11,8 +11,9 @@ import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { Grid } from '@mui/material';
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
-
-const EditDefaults = () => {
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import AlertModal from "../../reuseableComponents/AlertModal";
+const EditDefaults = ({setVisible,defaultEditId}) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [errorMessage, setErrorMessage] = useState("");
@@ -29,10 +30,17 @@ const EditDefaults = () => {
     image: "",
   });
 
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
+  };
+
   const params = useParams();
   async function fetchData() {
     const getdefaultsData = {
-      id: params.defaultsCode,
+      id: defaultEditId,
       token_id:userTypeData.token_id,
       login_type:userTypeData.login_type,
     };
@@ -144,6 +152,7 @@ const EditDefaults = () => {
       const data = await res.data.status;
       const update_message = await res.data.msg;
       if (data == "Success") {
+        ToastifyAlert("Default Menu Updated", "success");
         navigate("/users/view/unapprove/menu/defaults");
       } else if (
         data == "Failed" &&
@@ -191,7 +200,8 @@ const EditDefaults = () => {
     if (file) {
       const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
       if (!allowedExtensions.exec(file.name)) {
-        alert(file.name + " is not an image. Only jpeg, png, jpg files can be uploaded.");
+        // alert(file.name + " is not an image. Only jpeg, png, jpg files can be uploaded.");
+        showModal(file.name + " is not an image. Only jpeg, png, jpg files can be uploaded.")
       } else {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -288,12 +298,15 @@ const EditDefaults = () => {
           <div className="mt-10 mb-4">
             <form onSubmit={handleSubmit} enctype="multipart/form-data">
               <div className="q-add-categories-section-header">
-                <Link to={`/users/view/unapprove/menu/defaults`}>
+                <span 
+                onClick={()=>{setVisible("DefaultsDetail")}}
+                // to={`/users/view/unapprove/menu/defaults`}
+                >
                   <span style={myStyles}>
                     <img src={AddNewCategory} alt="Add-New-Category" />
                     <span>Edit Defaults</span>
                   </span>
-                </Link>
+                </span>
               </div>
               <div className="q-add-categories-section-middle-form">
                 <div className="q-add-categories-single-input">
@@ -430,14 +443,19 @@ const EditDefaults = () => {
 
               <div className="q-add-categories-section-middle-footer">
                 <button className="quic-btn quic-btn-save">Save</button>
-                <Link to={`/users/view/unapprove/menu/defaults`}>
+                <div onClick={()=>{setVisible("DefaultsDetail")}}>
                   <button className="quic-btn quic-btn-cancle">Cancel</button>
-                </Link>
+                </div>
               </div>
             </form>
           </div>
         </div>
       </div>
+      <AlertModal
+      headerText={alertModalHeaderText}
+      open={alertModalOpen}
+      onClose={() => {setAlertModalOpen(false)}}
+       />
     </>
   );
 };

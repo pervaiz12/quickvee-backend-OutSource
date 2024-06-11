@@ -3,7 +3,7 @@ import { Box, Modal } from "@mui/material";
 import DeleteIcon from "../Assests/Category/deleteIcon.svg";
 import Slide from "@mui/material/Slide";
 
-const DeleteModal = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
+const DislikeModal = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
   const myStyles = {
     width: "45vh",
     position: "absolute",
@@ -27,8 +27,7 @@ const DeleteModal = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
               <div className="delete-modal-content">
                 <img src={DeleteIcon} alt={`Delete-icon`} loading="lazy" />
                 <span>
-                  Are You Sure You Want To <br /> Delete this{" "}
-                  {headerText ? headerText : "delete"} ? {otherMSG ? <><br/>{otherMSG}</> :""}
+                  {headerText ? headerText : ""} ? {otherMSG ? <><br/>{otherMSG}</> :""}
                 </span>
               </div>
               <div className="delete-modal-button">
@@ -37,7 +36,7 @@ const DeleteModal = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
                   onClick={onConfirm}
                   style={{ background: " #FF4040", color: "#fff" }}
                 >
-                  Delete
+                  Ok
                 </button>
               </div>
             </div>
@@ -48,4 +47,4 @@ const DeleteModal = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
   );
 };
 
-export default DeleteModal;
+export default DislikeModal;

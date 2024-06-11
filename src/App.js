@@ -84,6 +84,7 @@ import MainEmployeelist from "./Components/Reporting/Employelist/MainEmployeelis
 import MainTaxesReport from "./Components/Reporting/Taxes/MainTaxesReport";
 import MainSalesPerson from "./Components/Reporting/SalesByPerson/MainSalesPerson";
 import Login from "./Components/Authenticate/login";
+import ForgetPassword from "./Components/Authenticate/forgetPassword/forgetPassword";
 // import StoreList from './Components/StoreRcord/storeList'
 // import MainInvDuplicates from "./Components/InventoryDuplicates/MainInvDuplicates";
 import Main from "./Main";
@@ -129,9 +130,14 @@ function App() {
         {/* <Route
         exact  props.merchant_id
         path="/users/view/unapprove"
-        element={<Main visible={"multimerchant"} />}
+        element={<Main visible={"multimerchant"} />}/forgot-password
       /> */}
         <Route exact path="/login" element={<Login visible={"login"} />} />
+        <Route
+          exact
+          path="/forgot-password"
+          element={<ForgetPassword visible={"forgot-password"} />}
+        />
         <Route
           exact
           path="/users/view/unapprove/menu/defaults/edit-defaults/:defaultsCode"
@@ -567,7 +573,7 @@ function App() {
           />
           <Route
             exact
-            path="/users/addmerchant"
+            path="/users/addMerchant"
             element={<Main visible={"addMerchant"} />}
           />
           <Route

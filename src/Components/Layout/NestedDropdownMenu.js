@@ -13,13 +13,9 @@ const NestedDropdownMenu = ({
   setActiveNestedItem,
   setDropDownItem,
   activeDropDownItem,
-  isTabletNav
+  isTabletNav,
 }) => {
-
-  
-
   const dispatch = useDispatch();
- 
 
   const handleNestedClick = (id) => {
     setActiveNestedItem((prevId) => (prevId === id ? null : id));
@@ -62,7 +58,7 @@ const NestedDropdownMenu = ({
                   className={`quickarrow_icon me-4 text-${
                     (activeNestedItem === item.id ||
                       hoveredItem === item?.id) &&
-                    "[#F5F9FF]"
+                    "[#]"
                   }`}
                 />
               )}

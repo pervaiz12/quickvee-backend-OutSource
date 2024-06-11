@@ -92,12 +92,12 @@ const RefundSummaryList = ({ data }) => {
         0
       );
       const formatDate = (dateString) => {
-        const date = new Date(dateString);
-        return date.toLocaleDateString("en-GB", {
-          day: "2-digit",
-          month: "short",
-          year: "numeric",
-        });
+        const options = { day: "2-digit", month: "short", year: "numeric" };
+        const formattedDate = new Date(dateString).toLocaleDateString(
+          "en-US",
+          options
+        );
+        return formattedDate;
       };
       return (
         <>
