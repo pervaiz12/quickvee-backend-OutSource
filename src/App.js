@@ -99,6 +99,7 @@ import ProtectedOrderSummery from "./protected/protectedOrderSummery";
 import ProtectedStoreRoute from "./protected/protectedStoreRoute";
 import PaymentCalDetails from "./Components/Reporting/SalesByPerson/MainOrderSumaaryDetails/PaymentCalDetails";
 import PageNotFound from "./Components/PageNotFound/PageNotFound";
+import PrintPurchaseOrder from "./Components/PurchaseOrders/PrintPurchaseOrder";
 
 function App() {
   const location = useLocation();
@@ -146,6 +147,7 @@ function App() {
           <Route exact path="/store" element={<Main visible={"store"} />} />
           <Route exact path="/manager" element={<Main visible={"manager"} />} />
         </Route>
+        <Route path="/print-purchase-order" element={<PrintPurchaseOrder />} />
         {/* <Route exact path="/store" element={<Main visible={"store"} />} /> */}
         <Route element={<ProtectedRoute visible="manager" />}>
           {/* <Route exact path="/manager" element={<Main visible={"manager"} />} /> */}
