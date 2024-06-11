@@ -284,7 +284,6 @@
   margin-bottom: 10px;
 }
 
-
 .qv_checkbox {
   width: auto;
   height: auto;
@@ -840,7 +839,6 @@ input.blue_btn {
   margin-bottom: 10px;
 }
 
-
 .qv_checkbox {
   width: auto;
   height: auto;
@@ -947,7 +945,6 @@ input.blue_btn {
   height: auto;
   margin-bottom: 10px;
 }
-
 
 .qv_checkbox {
   width: auto;
@@ -1416,7 +1413,6 @@ select:active {
   margin-bottom: 10px;
 }
 
-
 .qv_checkbox {
   width: auto;
   height: auto;
@@ -1527,7 +1523,6 @@ select:active {
   height: auto;
   margin-bottom: 10px;
 }
-
 
 .qv_checkbox {
   width: auto;
@@ -1946,7 +1941,6 @@ input.blue_btn {
   height: auto;
   margin-bottom: 10px;
 }
-
 
 .qv_checkbox {
   width: auto;
@@ -2774,14 +2768,14 @@ padding: 15px 0px;
   flex-direction: row !important;
 }
 
-.delete-Box-modal:focus-visible{
+.delete-Box-modal:focus-visible {
   outline: unset;
 }
-.delete-Box-modal{
-  transform: "translate(50%, 50p%) !important"
+.delete-Box-modal {
+  transform: "translate(50%, 50p%) !important";
 }
 
-.delete-modal{
+.delete-modal {
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -2835,4 +2829,9 @@ padding: 15px 0px;
 }
 .z-index-1 {
   z-index: 1;
+}
+
+.issued-date.default-border-color fieldset,
+.stock-due-date.default-border-color fieldset {
+  border-color: rgba(0, 0, 0, 0.23) !important;
 }

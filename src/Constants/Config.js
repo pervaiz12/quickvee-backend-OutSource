@@ -106,6 +106,7 @@ module.exports = Object.freeze({
   RECEIVE_PURCHASE_ORDER_ITEMS: "Purchase_ordersReactApi/recieve_po",
   UPDATE_PO: "Purchase_ordersReactApi/update_po",
   EMAIL_PO: "Purchase_ordersReactApi/email_po",
+  DELETE_PO_ITEM: "Purchase_ordersReactApi/delete_po_item",
 
   // Taxes API Calls
   ADD_TAXES: "Taxesapi/add_Tax",

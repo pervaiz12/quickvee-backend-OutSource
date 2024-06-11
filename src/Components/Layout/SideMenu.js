@@ -90,7 +90,7 @@ const SideMenu = () => {
 
   const [activeItem, setActiveItem] = useState(currentUrl);
   const [hoveredItem, setHoveredItem] = useState(null);
-  console.log("hoveredItem",hoveredItem)
+  // console.log("hoveredItem",hoveredItem)
   const [currentDropDownItem, activeDropDownItem] = useState(null);
   const [activeNestedItem, setActiveNestedItem] = useState();
   const navigate = useNavigate();
@@ -311,11 +311,11 @@ const DropdownMenuItem = ({
     dispatch(setIsDropdownOpen(!isTabletNav));
   }, [isTabletNav, dropDownItem, isTabletNav]);
 
-  const handleToggleDropdownItems = (link, e) => { 
+  const handleToggleDropdownItems = (link, e) => {
     if (isTabletNav) {
       dispatch(setIsDropdownOpen(false));
       dispatch(setMenuOpen(false));
-      setHoveredItem(null)
+      setHoveredItem(null);
     }
     setActiveItem(link);
     setDropDownItem(link);
@@ -351,7 +351,11 @@ const DropdownMenuItem = ({
       >
         <div className="flex">
           {isMenuOpenRedux ? (
-            <div className={`w-full flex items-center cursor-pointer ${activeItem === dropDownItem ? "bg-[#414F54]": ""}`}>
+            <div
+              className={`w-full flex items-center cursor-pointer ${
+                activeItem === dropDownItem ? "bg-[#414F54]" : ""
+              }`}
+            >
               {/* {console.log("activeItem",activeItem," ===","dropDownItem", dropDownItem,  activeItem === dropDownItem  )} */}
               {activeItem === dropDownItem || hoveredItem === item.id
                 ? item.activeIcon
@@ -363,22 +367,21 @@ const DropdownMenuItem = ({
               >
                 {item.text}
               </p>
-                {
-                  currentDropDownItem === item.id ? (
-                    <FaChevronUp className={`quickarrow_icon ml-4 me-5 text-${
-                      (activeItem === dropDownItem  || hoveredItem === item.id) &&
-                      "[#FFC400]"
-                    }`}/>
-                  ):(
-                    <FaChevronDown
-                className={`quickarrow_icon ml-4 me-5 text-${
-                  (activeItem === dropDownItem  || hoveredItem === item.id) &&
-                  "[#FFC400]"
-                }`}
-              />
-                  )
-                }
-              
+              {currentDropDownItem === item.id ? (
+                <FaChevronUp
+                  className={`quickarrow_icon ml-4 me-5 text-${
+                    (activeItem === dropDownItem || hoveredItem === item.id) &&
+                    "[#FFC400]"
+                  }`}
+                />
+              ) : (
+                <FaChevronDown
+                  className={`quickarrow_icon ml-4 me-5 text-${
+                    (activeItem === dropDownItem || hoveredItem === item.id) &&
+                    "[#FFC400]"
+                  }`}
+                />
+              )}
             </div>
           ) : (
             <>

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { Grid, TextField } from "@mui/material";
 import backLinkSvg from "../../Assests/Dashboard/Left.svg";
@@ -16,6 +16,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import {
   BASE_URL,
+  EMAIL_PO,
   RECEIVE_PURCHASE_ORDER_ITEMS,
   VOID_PO,
 } from "../../Constants/Config";
@@ -53,11 +54,17 @@ const ReceivePurchaseOrderItems = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userTypeData } = useAuthDetails();
+  const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
+
+  // console.log("LoginGetDashBoardRecordJson: ", LoginGetDashBoardRecordJson);
 
   const puchaseOrderDetail = useSelector(
     (state) => state.purchaseOrderById.purchaseOrderDetail
   );
+
+  // useEffect(() => {
+  //   console.log("puchaseOrderDetail: ", puchaseOrderDetail);
+  // }, [puchaseOrderDetail]);
 
   const [purchaseOrder, setPurchaseOrder] = useState({});
   const [headerCheckboxChecked, setHeaderCheckboxChecked] = useState(false);
@@ -90,7 +97,7 @@ const ReceivePurchaseOrderItems = () => {
 
   // setting main checkbox to true if all items have isChecked: true
   useEffect(() => {
-    console.log("items: ", purchaseOrder.order_items);
+    // console.log("items: ", purchaseOrder.order_items);
     const bool =
       purchaseOrder.order_items &&
       purchaseOrder.order_items.length > 0 &&
@@ -128,7 +135,7 @@ const ReceivePurchaseOrderItems = () => {
         ToastifyAlert(response.data.message, "error");
       }
 
-      console.log("response void po: ", response);
+      // console.log("response void po: ", response);
     } catch (e) {
       console.log("Error: ", e);
     }
@@ -144,7 +151,7 @@ const ReceivePurchaseOrderItems = () => {
             isChecked: item.pending_qty === "0" ? true : !headerCheckboxChecked,
           }))
         : [];
-    console.log("temp: ", temp);
+    // console.log("temp: ", temp);
     setPurchaseOrder((prev) => ({ ...prev, order_items: temp }));
   };
 
@@ -189,10 +196,12 @@ const ReceivePurchaseOrderItems = () => {
               : { ...item, recieved_qty: "0" }
           );
 
-        const items = purchaseOrderItems.map(({ id, ...item }) => ({
-          ...item,
-          po_item_id: id,
-        }));
+        const items = purchaseOrderItems
+          .filter((item) => item.isChecked)
+          .map(({ id, ...item }) => ({
+            ...item,
+            po_item_id: id,
+          }));
 
         const formData = new FormData();
         formData.append("merchant_id", "MAL0100CA");
@@ -215,9 +224,10 @@ const ReceivePurchaseOrderItems = () => {
         if (response.data.status) {
           ToastifyAlert(response.data.message, "success");
           setIsUpdated((prev) => !prev);
+          // navigate("/purchase-data");
+        } else {
+          ToastifyAlert(response.data.message, "error");
         }
-
-        console.log("receive po: ", response);
       } else {
         ToastifyAlert("Please Select an Item to Receive", "error");
       }
@@ -225,6 +235,57 @@ const ReceivePurchaseOrderItems = () => {
       console.log("Error: ", e);
     }
   };
+
+  // emailing purchase order to vendor api
+  const handleEmail = async () => {
+    try {
+      if (!purchaseOrder.email) {
+        ToastifyAlert("Vendor Email not found!", "error");
+        return;
+      }
+
+      const { token } = userTypeData;
+
+      const formData = new FormData();
+      formData.append("merchant_id", "MAL0100CA");
+      formData.append("po_id", id);
+      formData.append("token_id", userTypeData.token_id);
+      formData.append("login_type", userTypeData.login_type);
+
+      const response = await axios.post(BASE_URL + EMAIL_PO, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`, // Use data?.token directly
+        },
+      });
+
+      // console.log("response: ", response);
+
+      if (response.data.status) {
+        ToastifyAlert(response.data.message, "success");
+      }
+    } catch (e) {
+      console.log("Error: ", e);
+    }
+  };
+
+  const purchaseOrderDetails = useMemo(() => {
+    // const merchantAddress = `${LoginGetDashBoardRecordJson?.data?.a_address_line_1},
+    // ${LoginGetDashBoardRecordJson?.data?.a_address_line_2}, ${LoginGetDashBoardRecordJson?.data?.a_city},
+    //  ${LoginGetDashBoardRecordJson?.data?.a_state}, ${LoginGetDashBoardRecordJson?.data?.a_zip}`;
+
+    const data = {
+      // merchantName: LoginGetDashBoardRecordJson?.name,
+      // merchantAddress,
+      merchant: LoginGetDashBoardRecordJson?.data,
+      orderNumber: puchaseOrderDetail?.po_number,
+      issueDate: puchaseOrderDetail?.issued_date,
+      vendorName: puchaseOrderDetail?.vendor_name,
+      orderItems: puchaseOrderDetail?.order_items,
+    };
+
+    return data;
+  }, [LoginGetDashBoardRecordJson, puchaseOrderDetail]);
 
   return (
     <div className="box">
@@ -448,14 +509,17 @@ const ReceivePurchaseOrderItems = () => {
           purchaseOrder?.received_status !== "2" && (
             <div className="flex justify-between py-7 px-6">
               <div className="button-container start gap-4">
-                <button
-                  // onClick={handleAutoPO}
-                  className="quic-btn quic-btn-add"
-                >
+                <button onClick={handleEmail} className="quic-btn quic-btn-add">
                   Email
                 </button>
                 <button
-                  // onClick={() => savePurchaseOrder("1")}
+                  onClick={() =>
+                    navigate("/print-purchase-order", {
+                      state: {
+                        data: purchaseOrderDetails,
+                      },
+                    })
+                  }
                   className="quic-btn quic-btn-draft"
                 >
                   Print

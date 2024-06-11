@@ -1,189 +1,180 @@
-import React from "react";
+import React, { useEffect, useMemo } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { Grid } from "@mui/material";
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import { formatDate } from "../../Constants/utils";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+
+const StyledTable = styled(Table)(({ theme }) => ({
+  padding: 2, // Adjust padding as needed
+}));
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#253338",
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+  [`&.${tableCellClasses.table}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
 
 const PrintPurchaseOrder = () => {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!location.state.data) {
+      ToastifyAlert("Sorry, couldn't find Purchase Order details!", "error");
+      navigate(-1);
+    }
+
+    window.print();
+    navigate(-1);
+  }, [location]);
+
+  const purchaseOrderDetails = useMemo(() => {
+    // console.log("po data: ", location?.state?.data);
+    return location?.state?.data;
+  }, [location]);
+
+  const total = (type) => {
+    const sum =
+      purchaseOrderDetails &&
+      purchaseOrderDetails?.orderItems &&
+      purchaseOrderDetails?.orderItems?.length > 0
+        ? purchaseOrderDetails?.orderItems?.reduce(
+            (acc, curr) => (acc += parseFloat(curr[type])),
+            0
+          )
+        : 0;
+    return sum;
+  };
+
   return (
     <>
-      <table
-        id="printableArea"
-        border="0"
-        width="100%"
-        cellpadding="10"
-        cellspacing="0"
-        align="center"
-        style={{
-          maxWidth: "100%",
-          margin: "auto",
-          borderSpacing: "0",
-          borderCollapse: "collapse",
-          background: "white",
-          borderRadius: "0px 0px 10px 10px",
-          fontFamily: "sans-serif",
-          display: "none",
-        }}
-      >
-        <tbody>
-          <tr>
-            <td style={{ background: "#fafafa" }}>
-              <table
-                border="0"
-                width="100%"
-                cellpadding="10"
-                cellspacing="0"
-                align="center"
-                style={{
-                  maxWidth: "100%",
-                  borderSpacing: "0",
-                  borderCollapse: "collapse",
-                  margin: "20px auto",
-                  width: "100%",
-                  fontSize: "16px",
-                }}
-              >
-                <tbody>
-                  <tr>
-                    <td>
-                      <b>merchant name</b>
-                    </td>
-                    <td style={{ textAlign: "right" }}>
-                      <b>Purchase Order</b>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </td>
-          </tr>
-          <tr>
-            <td style={{ background: "#fafafa" }}>
-              <table
-                border="0"
-                width="100%"
-                cellpadding="10"
-                cellspacing="0"
-                align="center"
-                style={{
-                  maxWidth: "100%",
-                  borderSpacing: "0",
-                  borderCollapse: "collapse",
-                  margin: "20px auto",
-                  width: "100%",
-                  fontSize: "16px",
-                }}
-              >
-                <tbody>
-                  <tr>
-                    <td>
-                      <b>Ship/Bill to</b>
-                    </td>
-                    <td style={{ width: "230px" }}>
-                      <p style={{ marginBottom: "0px" }}>
-                        <b>Order Number</b>{" "}
-                        <span style={{ float: "right" }}>po number</span>
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <tr>
-                      <td>merchant name</td>
-                      <td>
-                        <p style={{ marginBottom: "0px" }}>
-                          <b>Issue Date </b>{" "}
-                          <span style={{ float: "right" }}>issue date</span>
-                        </p>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>address line 2 address line 1</td>
-                    </tr>
-                  </tr>
-                </tbody>
-              </table>
-            </td>
-          </tr>
-          <tr>
-            <td style={{ background: "#fafafa" }}>
-              <table
-                border="1"
-                width="100%"
-                cellpadding="10"
-                cellspacing="0"
-                align="center"
-                style={{
-                  maxWidth: "100%",
-                  borderSpacing: "0",
-                  borderCollapse: "collapse",
-                  margin: "20px auto",
-                  width: "100%",
-                  fontSize: "16px",
-                }}
-              >
-                <tbody>
-                  <tr>
-                    <th>NAME</th>
-                    <th>QTY</th>
-                    <th>PRICE</th>
-                    <th style={{ width: "130px", textAlign: "right" }}>
-                      TOTAL (USD)
-                    </th>
-                  </tr>
-                  <tr>
-                    <td>product title or variant title</td>
-                    <td>required by</td>
-                    <td>cost per item</td>
-                    <td style={{ textAlign: "right" }}>total pricing</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <th colspan="2">TOTAL UNITS</th>
-                    <td style={{ textAlign: "right" }}>total units</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <th colspan="2">SUBTOTAL</th>
-                    <td style={{ textAlign: "right" }}>sub total</td>
-                  </tr>
-                  <tr>
-                    <td></td>
-                    <th colspan="2">TOTAL (USD)</th>
-                    <td style={{ textAlign: "right" }}>total</td>
-                  </tr>
-                </tbody>
-              </table>
-            </td>
-          </tr>
-          <tr>
-            <td style={{ background: "#fafafa" }}>
-              <table
-                border="0"
-                width="100%"
-                cellpadding="0"
-                cellspacing="0"
-                align="center"
-                style={{
-                  maxWidth: "100%",
-                  borderSpacing: "0",
-                  borderCollapse: "collapse",
-                  margin: "20px auto",
-                  width: "100%",
-                  fontSize: "16px",
-                }}
-              >
-                <tbody>
-                  <tr>
-                    <td>
-                      <p style={{ marginBottom: "0px" }}>
-                        <b>Supplier,</b>
-                      </p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td>Vendor Name</td>
-                  </tr>
-                </tbody>
-              </table>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <Grid container p={4}>
+        <Grid container>
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            p={1}
+          >
+            <Grid item>
+              <p className="text-lg font-semibold">Vape Store</p>
+            </Grid>
+            <Grid item>
+              <p className="text-lg font-semibold">Purchase Order</p>
+            </Grid>
+          </Grid>
+
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            p={1}
+          >
+            <Grid item>
+              <p className="text-sm font-semibold">Ship / Bill to</p>
+              <p className="text-sm font-light">Vape Store</p>
+              <p className="text-sm font-light">
+                {purchaseOrderDetails?.merchant?.a_address_line_1}
+                {purchaseOrderDetails?.merchant?.a_address_line_2},{" "}
+                {purchaseOrderDetails?.merchant?.a_city},{" "}
+                {purchaseOrderDetails?.merchant?.a_state}{" "}
+                {purchaseOrderDetails?.merchant?.a_zip}
+              </p>
+            </Grid>
+            <Grid item>
+              <p className="text-sm font-semibold">
+                Order Number: {purchaseOrderDetails?.orderNumber}
+              </p>
+              <p className="text-sm font-semibold">
+                Issue Date:{" "}
+                {purchaseOrderDetails?.issueDate
+                  ? formatDate(purchaseOrderDetails?.issueDate)
+                  : ""}
+              </p>
+            </Grid>
+          </Grid>
+        </Grid>
+
+        <Grid container>
+          <TableContainer>
+            <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
+              <TableHead>
+                <StyledTableCell>Item Name</StyledTableCell>
+                <StyledTableCell>Qty</StyledTableCell>
+                <StyledTableCell>Price</StyledTableCell>
+                <StyledTableCell>Total (USD)</StyledTableCell>
+              </TableHead>
+              <TableBody>
+                {purchaseOrderDetails?.orderItems &&
+                purchaseOrderDetails?.orderItems?.length > 0
+                  ? purchaseOrderDetails?.orderItems?.map((item) => (
+                      <StyledTableRow key={item.id}>
+                        <StyledTableCell>{item?.item_fullname}</StyledTableCell>
+                        <StyledTableCell>{item?.required_qty}</StyledTableCell>
+                        <StyledTableCell>
+                          ${item?.cost_per_item}
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          ${item?.total_pricing}
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))
+                  : null}
+                <StyledTableRow>
+                  <StyledTableCell></StyledTableCell>
+                  <StyledTableCell colSpan={2}>Total Units</StyledTableCell>
+                  <StyledTableCell>{total("required_qty")}</StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell></StyledTableCell>
+                  <StyledTableCell colSpan={2}>Subtotal</StyledTableCell>
+                  <StyledTableCell>${total("total_pricing")}</StyledTableCell>
+                </StyledTableRow>
+                <StyledTableRow>
+                  <StyledTableCell></StyledTableCell>
+                  <StyledTableCell colSpan={2}>Total (USD)</StyledTableCell>
+                  <StyledTableCell>${total("total_pricing")}</StyledTableCell>
+                </StyledTableRow>
+              </TableBody>
+            </StyledTable>
+          </TableContainer>
+        </Grid>
+
+        <Grid container>
+          <Grid item xs={6}>
+            <p className="text-lg font-semibold">Supplier: </p>
+            <p className="text-sm font-light">
+              {purchaseOrderDetails?.vendorName}
+            </p>
+          </Grid>
+        </Grid>
+      </Grid>
     </>
   );
 };

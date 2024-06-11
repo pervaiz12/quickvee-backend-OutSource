@@ -15,7 +15,7 @@ import { fetchPurchaseOrderById } from "../../Redux/features/PurchaseOrder/purch
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import dayjs from "dayjs";
 import { fetchProductsData } from "../../Redux/features/Product/ProductSlice";
-import { BASE_URL, UPDATE_PO } from "../../Constants/Config";
+import { BASE_URL, DELETE_PO_ITEM, UPDATE_PO } from "../../Constants/Config";
 import axios from "axios";
 import { ThemeProvider } from "@mui/material/styles";
 import Select from "@mui/material/Select";
@@ -94,7 +94,7 @@ const ModifyPurchaseOrder = () => {
     ) {
       const data = puchaseOrderDetail.order_items.map((item) => ({
         ...item,
-        po_item_id: item.id,
+        order_item_id: item.id,
         newPrice: item.cost_per_item,
         newQty: item.pending_qty,
         finalQty:
@@ -116,15 +116,59 @@ const ModifyPurchaseOrder = () => {
     dispatch(fetchPurchaseOrderById(data));
   }, []);
 
-  const handleDelete = (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this product?"
+  // removing from local state
+  const removeItem = (productId) => {
+    const updatedProducts = selectedProducts?.filter(
+      (prod) => prod.id !== productId
     );
-    if (confirmDelete) {
-      const updatedProducts = selectedProducts?.filter(
-        (product) => product.id !== id
+    setSelectedProducts(updatedProducts);
+  };
+
+  // deleting a purchase order item api
+  const deletePOItem = async (productId) => {
+    try {
+      const { token } = userTypeData;
+      const formData = new FormData();
+      formData.append("merchant_id", "MAL0100CA");
+      formData.append("po_item_id", productId);
+      formData.append("token_id", userTypeData.token_id);
+      formData.append("login_type", userTypeData.login_type);
+
+      const response = await axios.post(BASE_URL + DELETE_PO_ITEM, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log("response: ", response);
+
+      if (response.data.status) {
+        removeItem(productId);
+        ToastifyAlert(response.data.message, "success");
+      } else {
+        ToastifyAlert(response.data.message, "error");
+      }
+    } catch (e) {
+      console.log("Error: ", e);
+    }
+  };
+
+  const handleDelete = (product) => {
+    // console.log("prod: ", product);
+
+    // if product has po_id then removing from Local state as well as from backend
+    if (product.po_id) {
+      const confirmDelete = window.confirm(
+        "Are you sure you want to delete this product?"
       );
-      setSelectedProducts(updatedProducts);
+
+      if (confirmDelete) {
+        // delete po item from backend api call
+        deletePOItem(product.id);
+      }
+    } else {
+      removeItem(product.id);
     }
   };
 
@@ -383,7 +427,7 @@ const ModifyPurchaseOrder = () => {
           total_pricing: prod.finalPrice.toString(), // Number(prod.newQty) * parseFloat(prod.newPrice),
           upc: prod.upc,
           note: prod.note,
-          po_item_id: prod.po_item_id ? prod.po_item_id : "",
+          order_item_id: prod.order_item_id ? prod.order_item_id : "",
         }));
 
         console.log("selectedProducts: ", selectedProducts);
@@ -505,7 +549,7 @@ const ModifyPurchaseOrder = () => {
                   >
                     <DatePicker
                       sx={{ width: "100%" }}
-                      className="issued-date"
+                      className="issued-date default-border-color"
                       size="small"
                       slotProps={{
                         textField: {
@@ -540,7 +584,7 @@ const ModifyPurchaseOrder = () => {
                   >
                     <DatePicker
                       sx={{ width: "100%" }}
-                      className="stock-due-date"
+                      className="stock-due-date default-border-color"
                       size="small"
                       slotProps={{
                         textField: {
@@ -718,14 +762,14 @@ const ModifyPurchaseOrder = () => {
                       </p>
                       <p className="purchase-data-upc mt-3">{product?.upc}</p>
                       <p className="purchase-data-delete">
-                        {product?.recieved_status ? null : (
+                        {product?.recieved_status === "0" || !product.po_id ? (
                           <img
                             src={DeleteIcon}
                             alt=""
                             className="w-8 h-8 cursor-pointer"
-                            onClick={() => handleDelete(product?.id)}
+                            onClick={() => handleDelete(product)}
                           />
-                        )}
+                        ) : null}
                       </p>
                     </div>
                   ))}
