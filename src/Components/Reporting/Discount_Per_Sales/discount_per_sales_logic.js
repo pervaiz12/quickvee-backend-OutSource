@@ -5,9 +5,14 @@ import {
   DISCOUNT_PER_PERSON,
 } from "../../../Constants/Config";
 import axios from "axios";
+import { useSelector, useDispatch } from "react-redux";
 import { useAuthDetails } from "./../../../Common/cookiesHelper";
+import PasswordShow from "../../../Common/passwordShow";
+import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
 
 export default function Discount_per_sales_logic() {
+  const dispatch = useDispatch();
+  const { handleCoockieExpire } = PasswordShow();
   const [allEmployee, setAllEmployee] = React.useState([]);
   const [selectedEmployee, setSelectedEmployee] = React.useState("");
   const [EmployeeFilterData, setEmployeeFilterData] = React.useState([]);
@@ -39,6 +44,8 @@ export default function Discount_per_sales_logic() {
           // Array.isArray(res?.data?.result)
         });
     } catch (error) {
+      dispatch(getAuthInvalidMessage("your session has been expired"));
+      handleCoockieExpire();
       console.error("Error fetching Employee List:", error);
     }
   };
@@ -84,6 +91,8 @@ export default function Discount_per_sales_logic() {
         });
     } catch (error) {
       console.error("Error fetching Employee List:", error);
+      dispatch(getAuthInvalidMessage("your session has been expired"));
+      handleCoockieExpire();
     }
 
     // console.log(newData);

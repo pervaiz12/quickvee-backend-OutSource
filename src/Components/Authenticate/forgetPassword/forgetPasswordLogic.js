@@ -8,6 +8,7 @@ export default function ForgetPasswordLogic() {
   const [errors, setErrors] = useState("");
   const { UsernameValidate } = Validate({ setErrors, errors });
   const [message, setMessage] = useState("");
+  const [status, setStatus] = useState("");
   let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
   const handleOnChange = (e) => {
@@ -36,6 +37,23 @@ export default function ForgetPasswordLogic() {
       return false;
     }
   }
+  const isValidate = () => {
+    let newErrors = { ...errors };
+    let error = false;
+    if (email == "") {
+      newErrors["email"] = "Please fill in the email field";
+      error = true;
+    } else {
+      newErrors["email"] = "";
+      error = false;
+    }
+    setErrors({ ...newErrors });
+    if (error == true) {
+      return false;
+    } else {
+      return true;
+    }
+  };
 
   const handleHideErrorMessage = () => {
     setMessage("");
@@ -47,17 +65,25 @@ export default function ForgetPasswordLogic() {
   const handleSubmitData = async (e) => {
     e.preventDefault();
     let IsValidate = Currentvalidate(errors);
-    if (IsValidate) {
-      try {
-        let emailRecord = { email: email.trim() };
-        let response = await axios.post(
-          BASE_URL + EMAIL_VARIFICATION,
-          emailRecord
-        );
-        console.log(response?.data?.message);
-        setMessage(response?.data?.message);
-      } catch (error) {
-        console.log(error);
+    let IsCheckValidate = isValidate();
+    if (IsCheckValidate) {
+      if (IsValidate) {
+        try {
+          let emailRecord = { email: email.trim() };
+          let response = await axios.post(
+            BASE_URL + EMAIL_VARIFICATION,
+            emailRecord,
+            { headers: { "Content-Type": "multipart/form-data" } }
+          );
+          // console.log(response?.data?.message_code==1);
+
+          if (!!response?.data?.message) {
+            setStatus(response?.data?.message_code);
+            setMessage(response?.data?.message);
+          }
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
   };
@@ -68,5 +94,6 @@ export default function ForgetPasswordLogic() {
     errors,
     message,
     handleHideErrorMessage,
+    status,
   };
 }

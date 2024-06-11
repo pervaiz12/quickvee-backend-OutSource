@@ -12,6 +12,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
+import PasswordShow from "../../../Common/passwordShow";
+import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
 import { priceFormate } from "../../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
@@ -39,16 +42,28 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const SalesReportList = (props) => {
   const dispatch = useDispatch();
+  const { handleCoockieExpire } = PasswordShow();
+  const {
+    LoginGetDashBoardRecordJson,
+    LoginAllStore,
+    userTypeData,
+    GetSessionLogin,
+  } = useAuthDetails();
+  const merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   const [SalesReportData, setSalesReportData] = useState({});
   const SalesReportDataState = useSelector((state) => state.SalesReportList);
   // console.log(props)
   useEffect(() => {
+    getAllRecord();
+  }, [props, dispatch]);
+
+  const getAllRecord = async () => {
     if (props && props.selectedDateRange) {
       const StartDateData = props.selectedDateRange.start_date;
       const EndDateData = props.selectedDateRange.end_date;
 
       let data = {
-        merchant_id: "MAL0100CA",
+        merchant_id: merchant_id,
         start_date: StartDateData,
         end_date: EndDateData,
         order_env: 9,
@@ -56,10 +71,15 @@ const SalesReportList = (props) => {
       };
       // console.log(data)
       if (data) {
-        dispatch(fetchSalesReportData(data));
+        try {
+          await dispatch(fetchSalesReportData(data)).unwrap();
+        } catch (error) {
+          handleCoockieExpire();
+          dispatch(getAuthInvalidMessage("your session has been expired"));
+        }
       }
     }
-  }, [props, dispatch]);
+  };
 
   useEffect(() => {
     if (!SalesReportDataState.loading && SalesReportDataState.SalesReportData) {
@@ -503,7 +523,7 @@ const SalesReportList = (props) => {
           </div> */}
         </>
       ) : (
-        <Grid sx={{padding:2.5 ,margin: 0}} className="box_shadow_div">
+        <Grid sx={{ padding: 2.5, margin: 0 }} className="box_shadow_div">
           <Grid item xs={12}>
             <p>No record found.</p>
           </Grid>
