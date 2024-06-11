@@ -14,6 +14,8 @@ import Switch from "@mui/material/Switch";
 import { Link } from "react-router-dom";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import AlertModal from "../../reuseableComponents/AlertModal";
+import { priceFormate } from "../../hooks/priceFormate";
+
 const VendorsDetail = ({ setVisible }) => {
   const label = { inputProps: { "aria-label": "Switch demo" } };
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
@@ -121,12 +123,12 @@ const VendorsDetail = ({ setVisible }) => {
                       key={index}
                     >
                       <p className="table20">{singleVender.vendor_name}</p>
-                      <p className="table15">{singleVender.pay_count}</p>
+                      <p className="table15">{priceFormate(singleVender.pay_count)}</p>
                       <p className="table15">
                         $
                         {typeof singleVender.amount === "number"
-                          ? singleVender.amount.toFixed(2)
-                          : parseFloat(singleVender.amount).toFixed(2)}
+                          ? priceFormate(singleVender.amount.toFixed(2))
+                          : priceFormate(parseFloat(singleVender.amount).toFixed(2))}
                       </p>
 
                       <p className="table30">

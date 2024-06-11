@@ -11,6 +11,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -117,28 +118,28 @@ const ItemSalesDetails = (props) => {
                         <p>{ItemData.name}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>{ItemData.total_qty}</p>
+                        <p>{priceFormate(ItemData.total_qty)}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>{ItemData.total_price}</p>
+                        <p>{priceFormate(ItemData.total_price)}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>{ItemData.adjust_price}</p>
+                        <p>{priceFormate(ItemData.adjust_price)}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>{ItemData.discount_amt}</p>
+                        <p>{priceFormate(ItemData.discount_amt)}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>{ItemData.saletx}</p>
+                        <p>{priceFormate(ItemData.saletx)}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>{ItemData.othertx}</p>
+                        <p>{priceFormate(ItemData.othertx)}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>{ItemData.refund_amount}</p>
+                        <p>{priceFormate(ItemData.refund_amount)}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>{ItemData.discount_price}</p>
+                        <p>{priceFormate(ItemData.discount_price)}</p>
                       </StyledTableCell>
                     </StyledTableRow>
                   ))}

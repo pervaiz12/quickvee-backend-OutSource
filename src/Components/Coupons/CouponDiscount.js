@@ -21,6 +21,7 @@ import moment from "moment";
 import { Grid } from "@mui/material";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
+import { priceFormate } from "../../hooks/priceFormate";
 
 const CouponDiscount = ({ seVisible }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -207,9 +208,9 @@ const CouponDiscount = ({ seVisible }) => {
                           >
                             <div className="">
                               {coupons.flag == 1 ? "$" : ""}
-                              {coupons.discount} {coupons.flag == 0 ? "%" : ""}{" "}
+                              {priceFormate(coupons.discount)} {coupons.flag == 0 ? "%" : ""}{" "}
                               OFF on minimum order of $
-                              {parseFloat(coupons.min_amount).toFixed(2)}
+                              {priceFormate(parseFloat(coupons.min_amount).toFixed(2))}
                             </div>
                           </div>
                         </Grid>
@@ -266,7 +267,7 @@ const CouponDiscount = ({ seVisible }) => {
                         </Grid>
                         <Grid item>
                           <p className="q_date_details">
-                            ${parseFloat(coupons.maximum_discount).toFixed(2)}
+                            ${priceFormate(parseFloat(coupons.maximum_discount).toFixed(2))}
                           </p>
                         </Grid>
                       </Grid>

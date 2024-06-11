@@ -5,6 +5,7 @@ import { fetchOrderTypeData } from "../../../Redux/features/OrderType/OrderTypeS
 import { useSelector, useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
 import { Grid } from "@mui/material";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 const Itemdatadetails = ({ data }) => {
   const dispatch = useDispatch();
@@ -70,13 +71,13 @@ const Itemdatadetails = ({ data }) => {
                   <p className="q-employee-item">
                     {orderReportDa.order_method}
                   </p>
-                  <p className="q-employee-in">{orderReportDa.total_count}</p>
+                  <p className="q-employee-in">{priceFormate(orderReportDa.total_count)}</p>
                   <p className="q-employee-in">
-                    {orderReportDa.amt_without_tip}
+                    {priceFormate(orderReportDa.amt_without_tip)}
                   </p>
-                  <p className="q-employee-in">{orderReportDa.tip}</p>
+                  <p className="q-employee-in">{priceFormate(orderReportDa.tip)}</p>
                   <p className="q-employee-in">
-                    {orderReportDa.amount_with_tip}
+                    {priceFormate(orderReportDa.amount_with_tip)}
                   </p>
                   <Link
                   // to={`/Order`}

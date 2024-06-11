@@ -11,6 +11,8 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -43,6 +45,14 @@ const VendorSalesReportList = (props) => {
   const dispatch = useDispatch();
   const [allVendorData, setallVendorData] = useState("");
   const AllVendorDataState = useSelector((state) => state.VendorSalesList);
+
+  const {
+    LoginGetDashBoardRecordJson,
+    LoginAllStore,
+    userTypeData,
+    GetSessionLogin,
+  } = useAuthDetails();
+  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   // console.log(AllVendorDataState)
   useEffect(() => {
     if (props && props.selectedDateRange) {
@@ -54,7 +64,7 @@ const VendorSalesReportList = (props) => {
       const EndDateData = props.selectedDateRange.end_date;
 
       let data = {
-        merchant_id: "MAL0100CA",
+        merchant_id: merchant_id,
         start_date: StartDateData,
         end_date: EndDateData,
         vendor_id: props.VendorIdData,
@@ -141,7 +151,7 @@ const VendorSalesReportList = (props) => {
                             </StyledTableCell>
                             <StyledTableCell>
                               <p>
-                                ${parseFloat(salesData.pay_amount).toFixed(2)}
+                                ${priceFormate(parseFloat(salesData.pay_amount).toFixed(2))}
                               </p>
                             </StyledTableCell>
                           </StyledTableRow>
@@ -150,9 +160,9 @@ const VendorSalesReportList = (props) => {
                           <StyledTableCell>
                             <p>
                               Total: $
-                              {parseFloat(
+                              {priceFormate(parseFloat(
                                 calculateTotal(allVendorData[vendorName])
-                              ).toFixed(2)}
+                              ).toFixed(2))}
                             </p>
                           </StyledTableCell>
                         </StyledTableRow>

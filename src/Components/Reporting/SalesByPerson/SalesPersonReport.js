@@ -13,7 +13,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
-
+import { priceFormate } from "../../../hooks/priceFormate";
 // ==================== TABLE STYLE ADDED ===================================================
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -161,7 +161,7 @@ const SalesPersonReport = (props) => {
                               align="center"
                               sx={{ width: "33%" }}
                             >
-                              <p> ${SalesData.amt}</p>
+                              <p> ${priceFormate(SalesData.amt)}</p>
                             </StyledTableCell>
                           </StyledTableRow>
                         )

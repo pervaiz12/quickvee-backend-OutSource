@@ -14,6 +14,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -164,7 +165,7 @@ const DetailsSaleReport = ({ data }) => {
                         <StyledTableCell align="center">
                           $
                           {item.product_total
-                            ? parseFloat(item.product_total).toFixed(2)
+                            ? priceFormate(parseFloat(item.product_total).toFixed(2))
                             : "0.00"}
                         </StyledTableCell>
                       </StyledTableRow>
@@ -176,12 +177,12 @@ const DetailsSaleReport = ({ data }) => {
                       <StyledTableCell></StyledTableCell>
                       <StyledTableCell align="center">
                         $
-                        {items
+                        {priceFormate(items
                           .reduce(
                             (acc, item) => acc + parseFloat(item.product_total),
                             0
                           )
-                          .toFixed(2)}
+                          .toFixed(2))}
                       </StyledTableCell>
                     </StyledTableRow>
                   </TableBody>
@@ -277,7 +278,7 @@ const DetailsSaleReport = ({ data }) => {
                   <StyledTableCell></StyledTableCell>
 
                   <StyledTableCell align="center">
-                    ${grandTotal.toFixed(2)}
+                    ${priceFormate(grandTotal.toFixed(2))}
                   </StyledTableCell>
                 </StyledTableRow>
               </TableBody>

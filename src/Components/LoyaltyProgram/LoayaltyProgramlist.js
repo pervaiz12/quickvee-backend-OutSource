@@ -19,6 +19,7 @@ import Pagination from "../../AllUserComponents/Users/UnverifeDetails/Pagination
 import useDebounce from "../../hooks/useDebouncs";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import InputTextSearch from "../../reuseableComponents/InputTextSearch";
+import { priceFormate } from "../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -239,12 +240,12 @@ const LoyaltyProgramList = () => {
                               </StyledTableCell>
                               <StyledTableCell>
                                 <div className="text-[#000000] order_method capitalize">
-                                  {Loyaltydata.total_loyalty_pts}
+                                  {priceFormate(Loyaltydata.total_loyalty_pts)}
                                 </div>
                               </StyledTableCell>
                               <StyledTableCell>
                                 <div className="text-[#000000] order_method capitalize">
-                                  {Loyaltydata.total_store_credit}
+                                  {priceFormate(Loyaltydata.total_store_credit)}
                                 </div>
                               </StyledTableCell>
                             </StyledTableRow>

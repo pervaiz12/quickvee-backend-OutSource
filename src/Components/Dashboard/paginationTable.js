@@ -9,7 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-
+import { priceFormate } from "../../hooks/priceFormate";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
@@ -93,7 +93,7 @@ export default function DashboardTables(props) {
                   {/* <StyledTableCell align="center">
                     {row.cvvResult}
                   </StyledTableCell> */}
-                  <StyledTableCell align="center">{`$${row.amt}`}</StyledTableCell>
+                  <StyledTableCell align="center">{`$${priceFormate(row.amt)}`}</StyledTableCell>
                   <StyledTableCell align="center">
                     <Link
                       to={`/store-reporting/order-summary/${props.merchant_id}/${row.order_id}`}

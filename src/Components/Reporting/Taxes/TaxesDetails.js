@@ -10,6 +10,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -117,7 +118,7 @@ const TaxesDetails = ({ data }) => {
                           <StyledTableCell>
                             {taxesreport.data2.final_arr2[key] ? (
                               <p>
-                                ${taxesreport.data2.final_arr2[key].toFixed(2)}
+                                ${priceFormate(taxesreport.data2.final_arr2[key].toFixed(2))}
                               </p>
                             ) : (
                               <p>$0.00</p>
@@ -125,7 +126,7 @@ const TaxesDetails = ({ data }) => {
                           </StyledTableCell>
                           <StyledTableCell>
                             <p>
-                              ${taxesreport.data1.final_arr[key].toFixed(2)}
+                              ${priceFormate(taxesreport.data1.final_arr[key].toFixed(2))}
                             </p>
                           </StyledTableCell>
                         </StyledTableRow>
