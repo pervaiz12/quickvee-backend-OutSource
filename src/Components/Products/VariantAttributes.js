@@ -64,7 +64,6 @@ const VariantAttributes = ({
 
   const handlechange = (value, index, name) => {
     // validation for add varient item => only ' is allowed and " is not allowed in varient item text
-    console.log('value', value, name, index);
     let filterValue;
     // if value comes from createble varient
     if (Array.isArray(value)) {

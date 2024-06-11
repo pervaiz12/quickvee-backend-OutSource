@@ -75,8 +75,6 @@ const GeneratePUC = ({
   };
 
 
-  console.log('generate', formValue)
-
   return (
     <>
       <div className="mx-0">
