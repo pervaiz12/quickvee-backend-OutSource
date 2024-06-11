@@ -63,7 +63,7 @@ import TipReportSlice from "../features/Reports/TipReport/TipReportSlice";
 import CouponReportSlice from "../features/Reports/CouponReport/CouponReportSlice";
 import TimesheetSlice from "../features/Timesheet/timesheetSlice";
 import RefundReportSlice from "../features/Reports/RefundReport/RefundReportSlice";
-
+import StocktakeListSlice from "../features/Stocktake/StocktakeListSlice";
 const store = configureStore({
   reducer: {
     VendorList: VendorListReducer,
@@ -71,6 +71,7 @@ const store = configureStore({
     categories: categoriesReducer,
     attributes: attributesReducer,
     purchase: PurchaseOrderReducer,
+    stocktakeList : StocktakeListSlice,
     purchaseOrderById: PurchaseOrderByIdReducer,
     inStoreOrder: inStoreOrderReducer,
     onlineStoreOrder: onlineStoreOrderReducer,

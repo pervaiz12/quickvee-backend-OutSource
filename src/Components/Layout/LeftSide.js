@@ -78,6 +78,7 @@ import ReceivePurchaseOrderItems from "../PurchaseOrders/ReceivePurchaseOrderIte
 import ModifyPurchaseOrder from "../PurchaseOrders/ModifyPurchaseOrder";
 import InventoryList from "../Reporting/inventoryList/inventoryList";
 import ProfitMarginReport from "../Reporting/ProfitMarginReport/profitMarginReport";
+import MainStocktake from "../Stocktake/MainStocktake";
 
 const LeftSide = ({ visible }) => {
   useEffect(() => {
@@ -92,6 +93,7 @@ const LeftSide = ({ visible }) => {
           {visible === "order" && <MainOrder />}
           {visible === "category" && <MainCategory />}
           {visible === "purchase-data" && <MainPurchase />}
+          {visible === "stocktake" && <MainStocktake /> }
           {visible === "edit-purchase-data" && <ReceivePurchaseOrderItems />}
           {visible === "modify-purchase-order" && <ModifyPurchaseOrder />}
           {visible === "attributes" && <MainAttributes />}

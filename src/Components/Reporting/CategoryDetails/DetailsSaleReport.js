@@ -38,7 +38,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     // backgroundColor: theme.palette.action.hover,
   },
   "&:last-child td, &:last-child th": {
-    backgroundColor: "#F5F5F5",
+    // backgroundColor: "#F5F5F5",
   },
 }));
 
