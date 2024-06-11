@@ -28,6 +28,7 @@ export default function ForgetPassword() {
     errors,
     message,
     handleHideErrorMessage,
+    status,
   } = ForgetPasswordLogic();
 
   return (
@@ -36,16 +37,20 @@ export default function ForgetPassword() {
         <div className=" login-customer-form ">
           <Collapse in={message}>
             <Alert
-              severity="error"
+              severity={status !== 1 ? "error" : "success"}
               action={
                 <IconButton
                   className="error-close-icon"
                   aria-label="close"
-                  color="error"
+                  color={status !== 1 ? "error" : "inherit"}
                   size="small"
                   onClick={handleHideErrorMessage}
                 >
-                  <CloseIcon />
+                  {status !== 1 ? (
+                    <CloseIcon />
+                  ) : (
+                    <CloseIcon fontSize="inherit" />
+                  )}
                 </IconButton>
               }
               sx={{ mb: 4 }}
@@ -54,7 +59,7 @@ export default function ForgetPassword() {
             </Alert>
           </Collapse>
 
-          <Link>
+          <Link to="/login">
             <img
               src={Quickvee}
               className="quickvee-logo-authentication"
@@ -90,45 +95,45 @@ export default function ForgetPassword() {
                   </FormControl>
                   <span className="input-error">{errors?.email}</span>
                 </div>
-                <div
+                {/* <div
                   className="col-md-12"
                   style={{ position: "relative", marginBottom: "24px" }}
                 >
-                  {/* <FormControl fullWidth>
+                  <FormControl fullWidth>
                     <TextField
                       className="input-field"
                       label="Password"
                       variant="outlined"
-                      // size="small"
+                      size="small"
                       autoComplete="off"
-                      //   type={showPassword === true ? "text" : "password"}
-                      //   onChange={handleChangeLogin}
+                        type={showPassword === true ? "text" : "password"}
+                        onChange={handleChangeLogin}
                       name="password"
-                      //   value={formData.password}
-                      //   inputProps={{
-                      //     "data-field": "password",
-                      //     autoComplete: "off",
-                      //     ref: (input) => (inputRefs.current["password"] = input),
-                      //     selectionstart: formData.password,
-                      //   }}
+                        value={formData.password}
+                        inputProps={{
+                          "data-field": "password",
+                          autoComplete: "off",
+                          ref: (input) => (inputRefs.current["password"] = input),
+                          selectionstart: formData.password,
+                        }}
                     />
-                  </FormControl> */}
+                  </FormControl>
                   <span
                     className="show-hide-button"
-                    // onTouchStart={handleTouchStart}
-                    // onTouchEnd={handleTouchEnd}
-                    // onMouseDown={handleTouchStart}
-                    // onMouseUp={handleTouchEnd}
+                    onTouchStart={handleTouchStart}
+                    onTouchEnd={handleTouchEnd}
+                    onMouseDown={handleTouchStart}
+                    onMouseUp={handleTouchEnd}
                   >
-                    {/* {" "}
+                    {" "}
                 {showPassword === true && formData?.password?.length > 0
                   ? "Hide"
-                  : "Show"}{" "} */}
+                  : "Show"}{" "}
                   </span>
                   <span className="input-error">
-                    {/* {errors.passwordError} */}
+                    {errors.passwordError}
                   </span>
-                </div>
+                </div> */}
               </div>
             </div>
 

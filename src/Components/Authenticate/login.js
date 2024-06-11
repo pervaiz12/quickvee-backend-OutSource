@@ -25,8 +25,10 @@ import { useAuthDetails } from "../../Common/cookiesHelper";
 import IconButton from "@mui/material/IconButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
+import { getAuthInvalidMessage } from "../../Redux/features/Authentication/loginSlice";
 export default function Login() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
 
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -38,7 +40,6 @@ export default function Login() {
   const errorMessageRecord = useSelector(
     (state) => state?.loginAuthentication?.errors
   );
-
   const {
     handleChangeLogin,
     handleSubmitForm,
@@ -49,9 +50,13 @@ export default function Login() {
     errorMessage,
     handleWrongPasswordError,
   } = LoginLogic();
+  useEffect(() => {
+    setErrorMessage(errorMessageRecord);
+  }, []);
 
   const handleHideErrorMessage = () => {
     setErrorMessage(errorMessageRecord);
+    dispatch(getAuthInvalidMessage(""));
 
     setErrorMessage("");
   };
