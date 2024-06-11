@@ -8,6 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import DeleteIcon from "./../../Assests/Vendors/DeleteIcon.svg";
+import { priceFormate } from "../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -34,6 +35,15 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
+
+const formatDateTime = (dateTimeString) => {
+  const date = new Date(dateTimeString);
+  const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+  const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+  const formattedDate = date.toLocaleDateString('en-US', dateOptions);
+  const formattedTime = date.toLocaleTimeString('en-US', timeOptions);
+  return `${formattedDate} ${formattedTime}`;
+};
 
 export default function CustomizedTable({
   tableRowData,
@@ -70,8 +80,8 @@ export default function CustomizedTable({
               <>
                 <StyledTableRow key={index}>
                   <StyledTableCell>{index + 1}</StyledTableCell>
-                  <StyledTableCell>{vendor.pay_amount}</StyledTableCell>
-                  <StyledTableCell>{vendor.payment_datetime}</StyledTableCell>
+                  <StyledTableCell>${priceFormate(vendor.pay_amount)}</StyledTableCell>
+                  <StyledTableCell>{formatDateTime(vendor.payment_datetime)}</StyledTableCell>
                   <StyledTableCell>{vendor.remark || "-"}</StyledTableCell>
                   <StyledTableCell>
                     <img
@@ -79,6 +89,7 @@ export default function CustomizedTable({
                       onClick={() => {
                         handleDeleteClick(vendor.id, vendor.vendor_id);
                       }}
+                      className="cursor-pointer"
                     />
                   </StyledTableCell>
                 </StyledTableRow>

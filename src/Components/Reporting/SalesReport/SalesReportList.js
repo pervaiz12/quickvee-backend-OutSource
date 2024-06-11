@@ -12,6 +12,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -178,6 +179,10 @@ const SalesReportList = (props) => {
     },
   ];
 
+  const formatter = new Intl.NumberFormat('en-US', {
+    style: 'currency',
+    currency: 'USD',
+  });
   return (
     <>
       {SalesReportData && SalesReportData.subtotal > 0 ? (
@@ -189,7 +194,9 @@ const SalesReportList = (props) => {
                   <b>Gross Sale</b>
                 </div>
                 <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
-                  ${parseFloat(gross_sale).toFixed(2)}
+                  ${priceFormate(parseFloat(gross_sale).toFixed(2))}
+                  {/* ${formatter.format(gross_sale)} */}
+                  {/* {format("2000000.00")} */}
                 </div>
                 {/* <div className="flex items-center text-green-500">
                     <BiCaretUp className="mr-1" />
@@ -203,7 +210,7 @@ const SalesReportList = (props) => {
                   <b>Net Sale</b>
                 </div>
                 <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
-                  ${parseFloat(netSales).toFixed(2)}
+                  ${priceFormate(parseFloat(netSales).toFixed(2))}
                 </div>
                 {/* <div className="flex items-center text-green-500">
                     <BiCaretUp className="mr-1" />
@@ -217,7 +224,7 @@ const SalesReportList = (props) => {
                   <b>Amount Collected</b>
                 </div>
                 <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
-                  ${parseFloat(amountCollected).toFixed(2)}
+                  ${priceFormate(parseFloat(amountCollected).toFixed(2))}
                 </div>
                 {/* <div className="flex items-center text-green-500">
                         <BiCaretUp className="mr-1" />
@@ -275,7 +282,7 @@ const SalesReportList = (props) => {
                                 : "",
                           }}
                         >
-                          <p>${parseFloat(item.amount).toFixed(2)}</p>
+                          <p>${priceFormate(parseFloat(item.amount).toFixed(2))}</p>
                         </StyledTableCell>
                       </StyledTableRow>
                     ))}
@@ -327,7 +334,7 @@ const SalesReportList = (props) => {
                               item.name === "Amount Collected" ? "#0A64F9" : "",
                           }}
                         >
-                          <p>${parseFloat(item.amount).toFixed(2)}</p>
+                          <p>${priceFormate(parseFloat(item.amount).toFixed(2))}</p>
                         </StyledTableCell>
                       </StyledTableRow>
                     ))}

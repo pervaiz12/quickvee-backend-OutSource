@@ -11,6 +11,7 @@ import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
+import { priceFormate } from "../../../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -168,12 +169,12 @@ export default function DashboardTables(props) {
                     {item?.total_qty}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    {`$${parseFloat(item?.cost_price * item?.total_qty).toFixed(
+                    {`$${priceFormate(parseFloat(item?.cost_price * item?.total_qty).toFixed(
                       2
-                    )}`}
+                    ))}`}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    {`$${parseFloat(item?.price * item?.total_qty).toFixed(2)}`}
+                    {`$${priceFormate(parseFloat(item?.price * item?.total_qty).toFixed(2))}`}
                   </StyledTableCell>
                   <StyledTableCell align="center">
                     {(() => {
@@ -188,10 +189,10 @@ export default function DashboardTables(props) {
                     })()}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    {`$${(
+                    {`$${priceFormate((
                       (item?.price - item?.cost_price) *
                       item?.total_qty
-                    ).toFixed(2)}`}
+                    ).toFixed(2))}`}
                   </StyledTableCell>
                 </StyledTableRow>
               ))
@@ -207,19 +208,19 @@ export default function DashboardTables(props) {
                   Total
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {totalCost?.soldQty}
+                  {priceFormate(totalCost?.soldQty)}
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {`$${totalCost?.costItem}`}
+                  {`$${priceFormate(totalCost?.costItem)}`}
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {`$${totalCost?.totalSelling}`}
+                  {`$${priceFormate(totalCost?.totalSelling)}`}
                 </StyledTableCell>
                 <StyledTableCell align="center">
                   {`${totalCost?.profitPercentage}%`}
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {`$${totalCost?.profit}`}
+                  {`$${priceFormate(totalCost?.profit)}`}
                 </StyledTableCell>
               </StyledTableRow>
             ) : (

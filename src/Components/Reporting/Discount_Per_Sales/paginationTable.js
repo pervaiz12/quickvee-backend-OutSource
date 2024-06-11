@@ -12,6 +12,7 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 import Loader from "../../../CommonComponents/Loader";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -151,16 +152,16 @@ export default function DashboardTables(props) {
                                     {item?.f_name + " " + item?.l_name}
                                   </StyledTableCell>
                                   <StyledTableCell align="center">
-                                    {parseFloat(item?.discount).toFixed(2)}
+                                    {priceFormate(parseFloat(item?.discount).toFixed(2))}
                                   </StyledTableCell>
                                   <StyledTableCell align="center">
                                     {item?.coupon_code}
                                   </StyledTableCell>
                                   <StyledTableCell align="center">
-                                    {item?.line_item_discount}
+                                    {priceFormate(item?.line_item_discount)}
                                   </StyledTableCell>
                                   <StyledTableCell align="center">
-                                    {item?.cash_discounting}
+                                    {priceFormate(item?.cash_discounting)}
                                   </StyledTableCell>
                                   <StyledTableCell align="center">
                                     {item?.order_id}
@@ -175,14 +176,14 @@ export default function DashboardTables(props) {
                                   Grand Total
                                 </StyledTableCell>
                                 <StyledTableCell align="center">
-                                  {`$${result
+                                  {`$${priceFormate(result
                                     .reduce((total, item) => {
                                       return (
                                         total +
                                         (parseFloat(item?.discount) || 0)
                                       );
                                     }, 0)
-                                    .toFixed(2)}`}
+                                    .toFixed(2))}`}
                                 </StyledTableCell>
                                 <StyledTableCell></StyledTableCell>
                                 <StyledTableCell></StyledTableCell>
@@ -206,7 +207,7 @@ export default function DashboardTables(props) {
                                   <StyledTableCell align="center">
                                     <div className="q-category-bottom-report-listing">
                                       <div>
-                                        <p className="">${totalRecord}</p>
+                                        <p className="">${priceFormate(totalRecord)}</p>
                                       </div>
                                     </div>
                                   </StyledTableCell>

@@ -13,6 +13,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -150,25 +151,25 @@ const OrderRefundReportList = (props) => {
                         <p>{CheckData.reason}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>${formatAmount(CheckData.debit_amt)}</p>
+                        <p>${priceFormate(formatAmount(CheckData.debit_amt))}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>${formatAmount(CheckData.cash_amt)}</p>
+                        <p>${priceFormate(formatAmount(CheckData.cash_amt))}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>${formatAmount(CheckData.loyalty_point_amt)}</p>
+                        <p>${priceFormate(formatAmount(CheckData.loyalty_point_amt))}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>${formatAmount(CheckData.store_credit_amt)}</p>
+                        <p>${priceFormate(formatAmount(CheckData.store_credit_amt))}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>${formatAmount(CheckData.nca_amt)}</p>
+                        <p>${priceFormate(formatAmount(CheckData.nca_amt))}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>${formatAmount(CheckData.tip_amt)}</p>
+                        <p>${priceFormate(formatAmount(CheckData.tip_amt))}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>${formatAmount(CheckData.amount)}</p>
+                        <p>${priceFormate(formatAmount(CheckData.amount))}</p>
                       </StyledTableCell>
                     </StyledTableRow>
                   ))}

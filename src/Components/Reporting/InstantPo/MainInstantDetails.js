@@ -12,6 +12,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -171,22 +172,22 @@ const MainInstantDetails = ({ data }) => {
                           <p>{instantactivity.variant}</p>
                         </StyledTableCell> */}
                         <StyledTableCell>
-                          <p>{instantactivity.current_qty}</p>
+                          <p>{priceFormate(instantactivity.current_qty)}</p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <p>{instantactivity.qty}</p>
+                          <p>{priceFormate(instantactivity.qty)}</p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <p>{AfterAdjustQty}</p>
+                          <p>{priceFormate(AfterAdjustQty)}</p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <p>{instantactivity.price}</p>
+                          <p>${priceFormate(instantactivity.price)}</p>
                         </StyledTableCell>
                         <StyledTableCell>
                           <p>
-                            {calculatedTotal % 1 !== 0
-                              ? calculatedTotal.toFixed(2)
-                              : calculatedTotal}
+                            ${calculatedTotal % 1 !== 0
+                              ? priceFormate(calculatedTotal.toFixed(2))
+                              : priceFormate(calculatedTotal)}
                           </p>
                         </StyledTableCell>
                       </StyledTableRow>

@@ -11,6 +11,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -117,7 +118,7 @@ const NewItemCreatedBetweenList = (props) => {
                         <p>{ItemData.item_name}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>{ItemData.price}</p>
+                        <p>${priceFormate(ItemData.price)}</p>
                       </StyledTableCell>
                     </StyledTableRow>
                   ))

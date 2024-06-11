@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { BiCaretUp } from "react-icons/bi";
 import "../../Styles/Settings/Side.css";
+import { priceFormate } from "../../hooks/priceFormate";
+import Skeleton from "react-loading-skeleton";
 
 const CardForm = (props) => {
   const [isTablet, setIsTablet] = useState(false);
@@ -97,7 +99,7 @@ const CardForm = (props) => {
               </div>
               <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
                 {/* 76.55% */}
-                {props?.dashboardCount?.total_order}
+                { props?.dashboardCount ?  priceFormate(Number(props?.dashboardCount?.total_order)) : <Skeleton /> }
               </div>
               {/* <div className="flex items-center text-green-500">
                 <BiCaretUp className="mr-1" />
@@ -114,7 +116,7 @@ const CardForm = (props) => {
                 Delivered Orders
               </div>
               <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
-                {props?.dashboardCount?.deliver_order}
+                { props?.dashboardCount ?  priceFormate(Number(props?.dashboardCount?.deliver_order)) : <Skeleton /> }
               </div>
               {/* <div className="flex items-center text-green-500">
                 <BiCaretUp className="mr-1" />
@@ -130,7 +132,7 @@ const CardForm = (props) => {
                 Open Orders
               </div>
               <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
-                {props?.dashboardCount?.open_order}
+                { props?.dashboardCount ?  priceFormate(Number(props?.dashboardCount?.open_order)) : <Skeleton /> }
               </div>
               {/* <div className="flex items-center text-green-500">
                 <BiCaretUp className="mr-1" />
@@ -146,7 +148,7 @@ const CardForm = (props) => {
                 Cancelled Orders
               </div>
               <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
-                {props?.dashboardCount?.cancel_order}
+                { props?.dashboardCount ?  priceFormate(Number(props?.dashboardCount?.cancel_order)) : <Skeleton /> }
               </div>
               {/* <div className="flex items-center text-green-500">
                 <BiCaretUp className="mr-1" />

@@ -12,6 +12,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -110,7 +111,7 @@ const TipReportList = (props) => {
                           <p>{tipData.l_name}</p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <p>${parseFloat(tipData.net_tip).toFixed(2)}</p>
+                          <p>${priceFormate(parseFloat(tipData.net_tip).toFixed(2))}</p>
                         </StyledTableCell>
                       </StyledTableRow>
                     </>
@@ -123,7 +124,7 @@ const TipReportList = (props) => {
                       <p>Grand Total:</p>
                     </StyledTableCell>
                     <StyledTableCell>
-                      <p className="report-title">${totalNetTip.toFixed(2)}</p>
+                      <p className="report-title">${priceFormate(totalNetTip.toFixed(2))}</p>
                     </StyledTableCell>
                   </StyledTableRow>
                 )}
