@@ -69,6 +69,7 @@
     "react-select": "^5.8.0",
     "react-sortable-hoc": "^2.0.0",
     "react-time-picker": "^6.6.0",
+    "react-to-print": "^2.15.1",
     "react-toastify": "^10.0.5",
     "recharts": "^2.10.1",
     "sortablejs": "^1.15.2",

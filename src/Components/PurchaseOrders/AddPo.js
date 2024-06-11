@@ -114,117 +114,115 @@ const AddPo = ({ seVisible }) => {
             </span>
           </div>
 
-          <div>
-            <div className="px-6 py-7">
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6} md={4}>
-                  <label>Vendor</label>
-                  <SelectDropDown
-                    selectedOption={purchaseInfo.selectedVendor}
-                    listItem={allVendors.vendorListData[0]}
-                    onClickHandler={handleVendorClick}
-                    title={"name"}
-                  />
-                  {purchaseInfoErrors.selectedVendor && (
-                    <p className="error-message">
-                      {purchaseInfoErrors.selectedVendor}
-                    </p>
-                  )}
-                </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <label>Issued Date</label>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer
-                      sx={{ paddingTop: 0 }}
-                      components={["DatePicker"]}
-                    >
-                      <DatePicker
-                        sx={{ width: "100%" }}
-                        className="issued-date"
-                        size="small"
-                        slotProps={{
-                          textField: {
-                            size: "small",
-                          },
-                        }}
-                        format={"MM/DD/YYYY"}
-                        disablePast
-                        onChange={(newDate) => {
-                          handleDate(newDate, "issuedDate");
-                          setPurchaseInfo((prev) => ({
-                            ...prev,
-                            stockDate: null,
-                          }));
-                        }}
-                        value={purchaseInfo.issuedDate}
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider>
-                  {purchaseInfoErrors.issuedDate && (
-                    <p className="error-message">
-                      {purchaseInfoErrors.issuedDate}
-                    </p>
-                  )}
-                </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <label>Stock Due</label>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer
-                      sx={{ paddingTop: 0 }}
-                      components={["DatePicker"]}
-                    >
-                      <DatePicker
-                        sx={{ width: "100%" }}
-                        className="stock-due-date"
-                        size="small"
-                        slotProps={{
-                          textField: {
-                            size: "small",
-                          },
-                        }}
-                        disablePast
-                        format={"MM/DD/YYYY"}
-                        shouldDisableDate={(date) => {
-                          return date < dayjs(purchaseInfo.issuedDate);
-                        }}
-                        onChange={(newDate) => handleDate(newDate, "stockDate")}
-                        value={purchaseInfo.stockDate}
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider>
-                  {purchaseInfoErrors.stockDate && (
-                    <p className="error-message">
-                      {purchaseInfoErrors.stockDate}
-                    </p>
-                  )}
-                </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <label>Reference</label>
-                  <BasicTextFields
-                    value={purchaseInfo.reference}
-                    onChangeFun={handleValue}
-                    name={"reference"}
-                    type={"text"}
-                    required={true}
-                    placeholder={"Note or Info or Invoice Number"}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <label>Vendor Email</label>
-                  <BasicTextFields
-                    value={purchaseInfo.email}
-                    onChangeFun={handleValue}
-                    name={"email"}
-                    type={"email"}
-                    required={true}
-                    placeholder={"Vendor Email Address"}
-                  />
-                  {purchaseInfoErrors.email && (
-                    <p className="error-message">{purchaseInfoErrors.email}</p>
-                  )}
-                </Grid>
+          <div className="px-6 py-7">
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6} md={4}>
+                <label>Vendor</label>
+                <SelectDropDown
+                  selectedOption={purchaseInfo.selectedVendor}
+                  listItem={allVendors.vendorListData[0]}
+                  onClickHandler={handleVendorClick}
+                  title={"name"}
+                />
+                {purchaseInfoErrors.selectedVendor && (
+                  <p className="error-message">
+                    {purchaseInfoErrors.selectedVendor}
+                  </p>
+                )}
               </Grid>
-            </div>
+              <Grid item xs={12} sm={6} md={4}>
+                <label>Issued Date</label>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer
+                    sx={{ paddingTop: 0 }}
+                    components={["DatePicker"]}
+                  >
+                    <DatePicker
+                      sx={{ width: "100%" }}
+                      className="issued-date"
+                      size="small"
+                      slotProps={{
+                        textField: {
+                          size: "small",
+                        },
+                      }}
+                      format={"MM/DD/YYYY"}
+                      disablePast
+                      onChange={(newDate) => {
+                        handleDate(newDate, "issuedDate");
+                        setPurchaseInfo((prev) => ({
+                          ...prev,
+                          stockDate: null,
+                        }));
+                      }}
+                      value={purchaseInfo.issuedDate}
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+                {purchaseInfoErrors.issuedDate && (
+                  <p className="error-message">
+                    {purchaseInfoErrors.issuedDate}
+                  </p>
+                )}
+              </Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <label>Stock Due</label>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer
+                    sx={{ paddingTop: 0 }}
+                    components={["DatePicker"]}
+                  >
+                    <DatePicker
+                      sx={{ width: "100%" }}
+                      className="stock-due-date"
+                      size="small"
+                      slotProps={{
+                        textField: {
+                          size: "small",
+                        },
+                      }}
+                      disablePast
+                      format={"MM/DD/YYYY"}
+                      shouldDisableDate={(date) => {
+                        return date < dayjs(purchaseInfo.issuedDate);
+                      }}
+                      onChange={(newDate) => handleDate(newDate, "stockDate")}
+                      value={purchaseInfo.stockDate}
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+                {purchaseInfoErrors.stockDate && (
+                  <p className="error-message">
+                    {purchaseInfoErrors.stockDate}
+                  </p>
+                )}
+              </Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <label>Reference</label>
+                <BasicTextFields
+                  value={purchaseInfo.reference}
+                  onChangeFun={handleValue}
+                  name={"reference"}
+                  type={"text"}
+                  required={true}
+                  placeholder={"Note or Info or Invoice Number"}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <label>Vendor Email</label>
+                <BasicTextFields
+                  value={purchaseInfo.email}
+                  onChangeFun={handleValue}
+                  name={"email"}
+                  type={"email"}
+                  required={true}
+                  placeholder={"Vendor Email Address"}
+                />
+                {purchaseInfoErrors.email && (
+                  <p className="error-message">{purchaseInfoErrors.email}</p>
+                )}
+              </Grid>
+            </Grid>
           </div>
         </div>
       </div>

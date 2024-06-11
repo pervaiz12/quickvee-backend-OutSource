@@ -74,7 +74,7 @@ import SalesReportMain from "../Reporting/SalesReport/SalesReportMain";
 import Discount_Per_Sales from "../Reporting/Discount_Per_Sales/discount_per_sales";
 import Items_sales_profit_record from "../Reporting/itemSalesProfitRecord/items_sales_profit_record";
 import RefundSummary from "../Reporting/RefundSummary/RefundSummary";
-import EditPurchaseOrder from "../PurchaseOrders/EditPurchaseOrder";
+import ReceivePurchaseOrderItems from "../PurchaseOrders/ReceivePurchaseOrderItems";
 import ModifyPurchaseOrder from "../PurchaseOrders/ModifyPurchaseOrder";
 import InventoryList from "../Reporting/inventoryList/inventoryList";
 import ProfitMarginReport from "../Reporting/ProfitMarginReport/profitMarginReport";
@@ -92,7 +92,7 @@ const LeftSide = ({ visible }) => {
           {visible === "order" && <MainOrder />}
           {visible === "category" && <MainCategory />}
           {visible === "purchase-data" && <MainPurchase />}
-          {visible === "edit-purchase-data" && <EditPurchaseOrder />}
+          {visible === "edit-purchase-data" && <ReceivePurchaseOrderItems />}
           {visible === "modify-purchase-order" && <ModifyPurchaseOrder />}
           {visible === "attributes" && <MainAttributes />}
           {visible === "products" && <MainProducts />}

@@ -267,7 +267,6 @@
   margin: 0px;
 }
 
-
 .pd_20 {
   padding: 20px;
 }
@@ -284,7 +283,6 @@
   height: auto;
   margin-bottom: 10px;
 }
-
 
 .qv_checkbox {
   width: auto;
@@ -841,7 +839,6 @@ input.blue_btn {
   margin-bottom: 10px;
 }
 
-
 .qv_checkbox {
   width: auto;
   height: auto;
@@ -932,7 +929,6 @@ input.blue_btn {
   width: 100%;
 }
 
-
 .pd_20 {
   padding: 20px;
 }
@@ -949,7 +945,6 @@ input.blue_btn {
   height: auto;
   margin-bottom: 10px;
 }
-
 
 .qv_checkbox {
   width: auto;
@@ -1418,7 +1413,6 @@ select:active {
   margin-bottom: 10px;
 }
 
-
 .qv_checkbox {
   width: auto;
   height: auto;
@@ -1513,7 +1507,6 @@ select:active {
   font-size: 12px !important;
 }
 
-
 .pd_20 {
   padding: 20px;
 }
@@ -1530,7 +1523,6 @@ select:active {
   height: auto;
   margin-bottom: 10px;
 }
-
 
 .qv_checkbox {
   width: auto;
@@ -1949,7 +1941,6 @@ input.blue_btn {
   height: auto;
   margin-bottom: 10px;
 }
-
 
 .qv_checkbox {
   width: auto;
@@ -2728,62 +2719,63 @@ padding: 15px 0px;
   top: 10px;
 } */
 
-
-.q-catereport-quantity,.attriButes-title{
+.q-catereport-quantity,
+.attriButes-title {
   display: flex !important;
-  cursor:pointer;
+  cursor: pointer;
 }
-.q-catereport-quantity span, .attriButes-title span{
+.q-catereport-quantity span,
+.attriButes-title span {
   padding-left: 0.75rem;
 }
 
-.timesheet{
+.timesheet {
   padding: 0px !important;
   text-align: center;
   background: #f9f9f900;
 }
-.borderRight{
+.borderRight {
   border-right: 1px solid #000000;
   padding: 0rem 0.5rem;
 }
-.viewbreak{
-  color: #6A6A6A;
+.viewbreak {
+  color: #6a6a6a;
 }
-.viewTextBark{
+.viewTextBark {
   color: #000000;
   font-weight: 500;
 }
-.viewTaleBreak{
+.viewTaleBreak {
   display: flex;
-    justify-content: space-between;
-    padding: 0.5rem 2rem;
+  justify-content: space-between;
+  padding: 0.5rem 2rem;
 }
-.viewTaleBreak p{
+.viewTaleBreak p {
   padding: 4px;
   font-size: 16px;
 }
-.viewTableRow{
-  border-bottom: 1px solid #E8E8E8;
+.viewTableRow {
+  border-bottom: 1px solid #e8e8e8;
 }
 
-.viewTimesheet-AddBreak{
+.viewTimesheet-AddBreak {
   justify-content: end !important;
   display: inline-block;
   float: right;
 }
 
-.taxesApplyCategory{
+.taxesApplyCategory {
   flex-direction: row !important;
 }
 
-.delete-Box-modal:focus-visible{
+.delete-Box-modal:focus-visible {
   outline: unset;
 }
-.delete-Box-modal{
-  transform: "translate(50%, 50p%) !important"
+.delete-Box-modal {
+  transform: "translate(50%, 50p%) !important";
 }
 
-.delete-modal{
+.delete-modal {
   align-items: center;
   display: flex;
   flex-direction: column;
@@ -2831,4 +2823,15 @@ padding: 15px 0px;
 }
 .delete-modal .delete-modal-button button:first-child {
   border: 1px solid #232323;
+}
+.z-index-2 {
+  z-index: 2;
+}
+.z-index-1 {
+  z-index: 1;
+}
+
+.issued-date.default-border-color fieldset,
+.stock-due-date.default-border-color fieldset {
+  border-color: rgba(0, 0, 0, 0.23) !important;
 }
