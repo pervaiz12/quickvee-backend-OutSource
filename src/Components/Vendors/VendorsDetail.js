@@ -13,6 +13,7 @@ import ViewItemsModal from "./ViewItemsModal";
 import Switch from "@mui/material/Switch";
 import { Link } from "react-router-dom";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import AlertModal from "../../reuseableComponents/AlertModal";
 const VendorsDetail = ({ setVisible }) => {
   const label = { inputProps: { "aria-label": "Switch demo" } };
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
@@ -44,6 +45,13 @@ const VendorsDetail = ({ setVisible }) => {
     AllVendorsDataState.vendorListData,
   ]);
 
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
+  };
+
   const handleUpdateStatus = async (event, label, vendorId) => {
     const updData = {
       // merchant_id: "MAL0100CA",
@@ -63,10 +71,21 @@ const VendorsDetail = ({ setVisible }) => {
     );
 
     if (response.status === 200) {
-      alert("Vendor Status Updated Successfully.");
+      // alert("Vendor Status Updated Successfully.");
+      showModal("Vendor Status Updated Successfully.");
     } else {
-      alert("something went wrong.");
+      // alert("something went wrong.");
+      showModal("Something went wrong !");
     }
+  };
+
+  const formatDate = (dateString) => {
+    const options = { year: 'numeric', month: 'short', day: '2-digit' };
+    const timeOptions = { hour: '2-digit', minute: '2-digit', hour12: true };
+    const date = new Date(dateString);
+    const formattedDate = date.toLocaleDateString('en-US', options);
+    const formattedTime = date.toLocaleTimeString('en-US', timeOptions);
+    return `${formattedDate} ${formattedTime}`;
   };
 
   return (
@@ -178,6 +197,11 @@ const VendorsDetail = ({ setVisible }) => {
           </div>
         </div>
       </div>
+      <AlertModal
+      headerText={alertModalHeaderText}
+      open={alertModalOpen}
+      onClose={() => {setAlertModalOpen(false)}}
+       />
     </>
   );
 };

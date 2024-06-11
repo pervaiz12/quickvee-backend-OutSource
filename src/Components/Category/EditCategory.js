@@ -18,6 +18,7 @@ import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import { useNavigate } from "react-router-dom";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
+import AlertModal from "../../reuseableComponents/AlertModal";
 
 const EditCategory = () => {
   const navigate = useNavigate();
@@ -102,16 +103,26 @@ const EditCategory = () => {
   };
 
   const [selectedImage, setSelectedImage] = useState(null);
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
+
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
+  };
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
       const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
       if (!allowedExtensions.exec(file.name)) {
-        alert(
-          file.name +
-            " is not an image. Only jpeg, png, jpg files can be uploaded."
-        );
+        // alert(
+        //   file.name +
+        //     " is not an image. Only jpeg, png, jpg files can be uploaded."
+        // );
+        showModal(file.name +
+          " is not an image. Only jpeg, png, jpg files can be uploaded."
+          )
       } else {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -543,6 +554,11 @@ const EditCategory = () => {
             onClose={() => {setDeleteModalOpen(false)}}
             onConfirm={confirmDeleteCategory}
           />
+        <AlertModal
+        headerText={alertModalHeaderText}
+        open={alertModalOpen}
+        onClose={() => {setAlertModalOpen(false)}}
+        />
     </div>
   );
 };

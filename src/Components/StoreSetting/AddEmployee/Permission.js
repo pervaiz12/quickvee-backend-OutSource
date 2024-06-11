@@ -15,17 +15,17 @@ import { useAuthDetails } from "../../../Common/cookiesHelper";
 import AddNewCategory from "../../../Assests/Taxes/Left.svg";
 import Loader from "../../../CommonComponents/Loader";
 
-const Permission = () => {
+const Permission = ({EmployeeId,setVisible}) => {
   const location = useLocation();
   const dispatch = useDispatch();
   const [employeedata, setemployeedata] = useState([]);
   const [permissionList, setpermissionList] = useState([]);
-  const employee_id = location.pathname.replace(
-    "/store-settings/permission/",
-    ""
-  );
+  // const employee_id = location.pathname.replace(
+  //   "/store-settings/permission/",
+  //   ""
+  // );
   // const params = useParams();
-  // const employee_id = params.employee_id
+  const employee_id =EmployeeId
   const [fetchDataLoading, setFetchDataLoading] = useState(false);
   const employeeListDataState = useSelector((state) => state.employeelistData);
   const [permissionArray, setPermissionArray] = useState([]);
@@ -118,14 +118,18 @@ const Permission = () => {
         <div className="q-attributes-main-page">
         <div className="box_shadow_div_heading">
           <div className="page_heading_area ">
-            <Link to="/store-settings/addemployee">
+            <span
+            onClick={()=>{setVisible("EmployeeList")}} 
+            className="cursor-pointer"
+            // to="/store-settings/addemployee"
+            >
               <div className="employeePromiss">
               <img src={AddNewCategory} alt="Add-New-Category" />
               <h1>
                 {employeedata.f_name} {employeedata.l_name}'s Permissions
               </h1>
               </div>
-            </Link>
+            </span>
           </div>
           <div className="box_shadow_innerdiv">
             <h2 className="heading_black">Preset Permissions</h2>

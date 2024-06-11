@@ -115,7 +115,15 @@ const Employeedetails = (props) => {
       return total + validSeconds;
     }, 0); // Initial value of the accumulator is 0
   };
-  
+
+  const formatDate = (dateString) => {
+    const options = { day: "2-digit", month: "short", year: "numeric" };
+    const formattedDate = new Date(dateString).toLocaleDateString(
+      "en-US",
+      options
+    );
+    return formattedDate;
+  };
 
   if (!allEmpWorkingHrsData || Object.keys(allEmpWorkingHrsData).length === 0) {
     return (
@@ -159,7 +167,7 @@ const Employeedetails = (props) => {
                               <>
                                 <StyledTableRow>
                                   <StyledTableCell>
-                                    <p>{workData.work_date}</p>
+                                    <p>{formatDate(workData.work_date)}</p>
                                   </StyledTableCell>
                                   <StyledTableCell>
                                     <p>{workData.first_check_in_time}</p>

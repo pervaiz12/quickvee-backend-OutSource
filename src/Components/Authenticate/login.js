@@ -24,13 +24,16 @@ import { useNavigate, Navigate } from "react-router-dom";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import IconButton from "@mui/material/IconButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from "@mui/icons-material/Close";
 export default function Login() {
   const navigate = useNavigate();
 
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const inputRefs = useRef({});
+  const merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
+  // console.log(merchant_id);
+  // console.log(userTypeData);
 
   const errorMessageRecord = useSelector(
     (state) => state?.loginAuthentication?.errors
@@ -44,31 +47,47 @@ export default function Login() {
     handleBlur,
     setErrorMessage,
     errorMessage,
-    handleWrongPasswordError
+    handleWrongPasswordError,
   } = LoginLogic();
 
   const handleHideErrorMessage = () => {
     setErrorMessage(errorMessageRecord);
-    
-      setErrorMessage("");
-    
+
+    setErrorMessage("");
   };
-  // useEffect(() => {
-  //   handleHideErrorMessage();
-  // }, []);
-  // console.log(userTypeData);
+
   // useEffect(() => {
   //   if (
   //     !!userTypeData?.login_type &&
-  //     userTypeData?.login_type !== "" &&
-  //     !!userTypeData?.data?.merchant_id &&
-  //     userTypeData?.data?.merchant_id !== ""
+  //     userTypeData?.login_type == "superadmin"
   //   ) {
-  //     console.log(navigate(-2));
+  //     console.log("1");
+  //     navigate("/users/view/unapprove");
+  //   } else if (
+  //     (userTypeData?.login_type === "admin" ||
+  //       userTypeData?.login_type === "merchant" ||
+  //       userTypeData?.login_type === "manager" ||
+  //       userTypeData?.login_type == "superadmin") &&
+  //     !!merchant_id
+  //   ) {
+  //     console.log("2");
+
+  //     navigate("/");
+  //   } else if (
+  //     (userTypeData?.login_type === "admin" ||
+  //       userTypeData?.login_type === "merchant" ||
+  //       userTypeData?.login_type === "manager") &&
+  //     (merchant_id == undefined || merchant_id == "")
+  //   ) {
+  //     console.log("3");
+
+  //     navigate("/store");
   //   } else {
+  //     console.log("4");
+
   //     navigate("/login");
   //   }
-  // }, [userTypeData]);
+  // }, []);
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -88,9 +107,8 @@ export default function Login() {
   return (
     <>
       <div className="main-authentication-component">
-     
         <div className=" login-customer-form ">
-        <Collapse in={errorMessage}>
+          <Collapse in={errorMessage}>
             <Alert
               severity="error"
               action={
@@ -101,7 +119,7 @@ export default function Login() {
                   size="small"
                   onClick={handleHideErrorMessage}
                 >
-                  <CloseIcon  />
+                  <CloseIcon />
                 </IconButton>
               }
               sx={{ mb: 4 }}
@@ -109,7 +127,7 @@ export default function Login() {
               {errorMessage}
             </Alert>
           </Collapse>
-     
+
           <Link>
             <img
               src={Quickvee}
@@ -119,7 +137,7 @@ export default function Login() {
           </Link>
           <form className="login-customer-form">
             <h1>Merchant Login</h1>
-            
+
             <div
               style={{
                 width: "300px",
@@ -216,6 +234,13 @@ export default function Login() {
                             } */}
               </div>
             </div>
+            <Link
+              className="forgot-password"
+              underline="always"
+              to="/forgot-password"
+            >
+              Forgot Password ?
+            </Link>
 
             <FormControl fullWidth>
               {

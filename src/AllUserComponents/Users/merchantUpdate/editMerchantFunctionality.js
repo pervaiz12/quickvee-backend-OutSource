@@ -38,11 +38,12 @@ export default function EditMerchantFunctionality() {
     id: "",
     states: [],
   });
+  // console.log("getEditMerchant: ", getEditMerchant);
   const [errors, setErrors] = useState({
     usa_pin: "",
     merchant_token: "",
   });
-
+  // console.log("getEditMerchant:", getEditMerchant)
   const [paymentModeOnline, setPaymentModeOnline] = useState(false);
   const [paymentModeOffline, setPaymentModeOffline] = useState(false);
   const [paymentCredits, setPaymentCredits] = useState(false);
@@ -72,7 +73,7 @@ export default function EditMerchantFunctionality() {
         },
       })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
         if (response.data.status == 200) {
           const inventory =
             response.data.message.inventory !== null &&
@@ -181,7 +182,7 @@ export default function EditMerchantFunctionality() {
             response.data.message.Paymentmode.cc_payment !== null &&
             parseInt(response.data.message.Paymentmode.cc_payment) === 2
           ) {
-            console.log(response.data.message.Paymentmode.cc_payment);
+            // console.log(response.data.message.Paymentmode.cc_payment);
             setPaymentModeRecord(response.data.message.Paymentmode.cc_payment);
             setPaymentModeOnline(true);
             setPaymentModeOffline(false);
@@ -206,7 +207,8 @@ export default function EditMerchantFunctionality() {
     }
   };
   const handleChangeMerchant = (e) => {
-    const { name, value } = e.target;
+    if(e?.target?.name){
+      const { name, value } = e.target;
     // const trimmedValue = value.replace(/^\s+|\s+$/g, "");
     const trimmedValue = value.replace(/^\s+/, "");
 
@@ -219,6 +221,14 @@ export default function EditMerchantFunctionality() {
       ...prev,
       [name]: trimmedValue,
     }));
+    }else{
+      console.log("value of object:",e)
+      setEditMerchant((prev) => ({
+        ...prev,
+        [e.name]: e.value,
+      }));
+    } 
+    
   };
 
   const handleChangePaymentMode = (e) => {
@@ -324,7 +334,7 @@ export default function EditMerchantFunctionality() {
           // setMessage(response?.data?.message);
           setSuccessMessageHandle(true);
           handleSuccessMessage();
-          navigate(`/users/editMerchant/${response?.data?.id}`);
+          // navigate(`/users/editMerchant/${response?.data?.id}`);
           // navigate(`/users/editMerchant/${getEditMerchant.id}`)
         } else {
           setLoader(false);

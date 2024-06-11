@@ -16,6 +16,7 @@ import {
 import { fetchSettingReceiptData } from "../../../Redux/features/StoreSettings/SettingsReceipt/SettingsReceiptSlice";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
+import AlertModal from "../../../reuseableComponents/AlertModal";
 const Setup = () => {
   // const [updateDetails, setUpdateDetails] = useState(true);
   const [OnlineOrderStatus, setOnlineOrderStatus] = useState("");
@@ -38,9 +39,19 @@ const Setup = () => {
   const [days, setDays] = useState([]);
   const [lastCloseTimeState, setLastCloseTimeState] = useState(true);
   const dispatch = useDispatch();
-  const { userTypeData } = useAuthDetails();
+  const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
+  let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
+  const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
   const data = {
-    merchant_id: "MAL0100CA",
+    merchant_id: merchant_id,
+  };
+
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
+
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
   };
 
   useEffect(() => {
@@ -95,13 +106,13 @@ const Setup = () => {
 
   const handleUpdateClick = async (e) => {
     if (lastCloseTimeState === false) {
-      alert("End time cannot be empty");
+      showModal("End time cannot be empty");
       return;
     }
     e.preventDefault();
 
     const FormData = {
-      merchant_id: "MAL0100CA", //
+      merchant_id: merchant_id, //
       user_id: 100, //
       enable_online_order: OnlineOrderStatus,
       is_pickup: EnableOrderNumber, //
@@ -139,7 +150,7 @@ const Setup = () => {
       ToastifyAlert(response.data.msg, "success");
 
       let merchantdata = {
-        merchant_id: "MAL0100CA",
+        merchant_id: merchant_id,
       };
       if (merchantdata) {
         dispatch(fetchSettingReceiptData(merchantdata));
@@ -191,6 +202,11 @@ const Setup = () => {
           </div>
         </div>
       </div> */}
+      <AlertModal
+      headerText={alertModalHeaderText}
+      open={alertModalOpen}
+      onClose={() => {setAlertModalOpen(false)}}
+       />
     </>
   );
 };

@@ -28,8 +28,9 @@ import _ from "lodash";
 import CurrencyInputHelperFun from "../../helperFunctions/CurrencyInputHelperFun";
 import { FormControl } from "@mui/material";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import AlertModal from "../../reuseableComponents/AlertModal";
 
-const EditCoupon = () => {
+const EditCoupon = ({couponId,seVisible}) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const myStyles = {
@@ -49,7 +50,7 @@ const EditCoupon = () => {
   async function fetchData() {
     const getcouponData = {
       merchant_id,
-      coupon_id: params.couponsCode,
+      coupon_id:couponId,
       ...userTypeData,
     };
 
@@ -119,6 +120,13 @@ const EditCoupon = () => {
   const [inputValue, setInputValue] = useState("");
   const [isUnique, setIsUnique] = useState(true);
   const [errorMessage, setErrorMessage] = useState("");
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
+
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
+  };
 
   // Function to check uniqueness in the database
   const checkUniqueness = async (value) => {
@@ -222,13 +230,13 @@ const EditCoupon = () => {
     // Create a new FormData object
 
     if (parseFloat(coupon.min_amount) <= parseFloat(coupon.discount)) {
-      alert("Minimum order amount must be greater than the discount amount.");
+      showModal("Minimum order amount must be greater than the discount amount.");
       setCoupon({ ...coupon, discount: "0.00" });
       setDiscountError("Discount Amount is required");
       return; // Stop further execution
     }
     if (!coupon.date_valid || !coupon.date_expire) {
-      alert("Start date and end date are required.");
+      showModal("Start date and end date are required.");
       return; // Stop further execution
     }
     if (!coupon.min_amount) {
@@ -363,14 +371,14 @@ const EditCoupon = () => {
   const handleStartDateChange = (newDate) => {
     const formattedStartDate = newDate.format("YYYY-MM-DD");
     if (formattedStartDate === coupon.date_expire) {
-      alert("Start date cannot be the same as the end date");
+      showModal("Start date cannot be the same as the end date");
       setCoupon({
         ...coupon,
         date_valid: "",
       });
       setDateStartError("Start Date is required");
     } else if (dayjs(formattedStartDate).isAfter(dayjs(coupon.date_expire))) {
-      alert("Start date cannot be greater than the end date");
+      showModal("Start date cannot be greater than the end date");
       setCoupon({
         ...coupon,
         date_valid: "",
@@ -389,7 +397,7 @@ const EditCoupon = () => {
     const formattedEndDate = newDate.format("YYYY-MM-DD");
 
     if (formattedEndDate === coupon.date_valid) {
-      alert("End date cannot be the same as the start date");
+      showModal("End date cannot be the same as the start date");
       setCoupon({
         ...coupon,
         date_expire: "",
@@ -397,7 +405,7 @@ const EditCoupon = () => {
       setDateEndError("End Date is required");
       return; // Do not update the state
     } else if (dayjs(formattedEndDate).isBefore(dayjs(coupon.date_valid))) {
-      alert("End date cannot be less than the start date");
+      showModal("End date cannot be less than the start date");
       setCoupon({
         ...coupon,
         date_expire: "",
@@ -471,14 +479,14 @@ const EditCoupon = () => {
                 }}
                 className="q-add-categories-section-header"
               >
-                <Link to={`/coupons`} className="add_coupon_span">
+                <span onClick={()=>{seVisible("CouponDiscount")}} className="add_coupon_span">
                   <img
                     src={AddNewCategory}
                     alt="Add-New-Category"
                     className="h-9 w-9"
                   />
                   <span>Edit Coupon</span>
-                </Link>
+                </span>
               </div>
             </Grid>
           </Grid>
@@ -673,7 +681,7 @@ const EditCoupon = () => {
                         shouldDisableDate={(date) =>
                           date.format("YYYY-MM-DD") === coupon.date_valid
                         }
-                        format={"DD-MM-YYYY"}
+                        format={"MMMM d, YYYY"}
                         disablePast
                         views={["year", "month", "day"]}
                         renderInput={() => (
@@ -746,7 +754,7 @@ const EditCoupon = () => {
                         shouldDisableDate={(date) =>
                           date.format("YYYY-MM-DD") === coupon.date_expire
                         }
-                        format={"DD-MM-YYYY"}
+                        format={"MMMM d, YYYY"}
                         disablePast
                         views={["year", "month", "day"]}
                         renderInput={() => (
@@ -841,9 +849,9 @@ const EditCoupon = () => {
               </button>
             </Grid>
             <Grid item>
-              <Link to={`/coupons`}>
+              <spam onClick={()=>{seVisible("CouponDiscount")}}>
                 <button className="quic-btn quic-btn-cancle">Cancel</button>
-              </Link>
+              </spam>
             </Grid>
           </Grid>
         </Grid>

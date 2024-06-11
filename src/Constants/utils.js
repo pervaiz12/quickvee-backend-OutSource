@@ -42,13 +42,14 @@ export function formatDate(inputDate) {
   const formattedDate = `${monthName} ${parseInt(day, 10)}, ${year}`;
   return formattedDate;
 }
+
 export const CurrencyInputHelperFun = (value) => {
   let val = value.replace(/[^\d]/g, "");
-  
+
   if (val === "") {
     return "0.00";
   }
-  
+
   val = val.replace(/^0+/, "");
 
   while (val.length < 3) {
@@ -59,5 +60,3 @@ export const CurrencyInputHelperFun = (value) => {
   const decimalPart = val.slice(val.length - 2);
   return `${integerPart}.${decimalPart}`;
 };
-
-

@@ -16,7 +16,7 @@ import CryptoJS from "crypto-js";
 import UserLogo from "../../Assests/Dashboard/UserLogo.svg";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux"; //,localAuthCheck
 import InputLabel from "@mui/material/InputLabel";
 // import MenuItem from '@mui/material/MenuItem';
@@ -100,10 +100,10 @@ export default function Header() {
     navigate("/login");
   };
 
-  const handleNavigate=()=>{
+  const handleNavigate = () => {
     navigate("/");
     handleClose();
-  }
+  };
   const [isSticky, setIsSticky] = useState(false);
 
   const handleScroll = () => {
@@ -232,9 +232,9 @@ export default function Header() {
           ) : (
             ""
           )}
-          <a href="/dashboard">
+          <Link to="/">
             <img src={Quick} alt="Logo" className="ml-6" />
-          </a>
+          </Link>
           {
             //  console.log(localStorage.getItem("AllStore"))
             LoginGetDashBoardRecordJson?.final_login == 1 ? (

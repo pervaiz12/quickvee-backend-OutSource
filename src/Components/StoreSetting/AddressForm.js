@@ -1,7 +1,7 @@
 import { Grid } from "@mui/material";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 
-const AddressForm = ({ infoRecord, onChangeHandle }) => {
+const AddressForm = ({ infoRecord, onChangeHandle, errors,handleKeyPress }) => {
   return (
     <Grid container sx={{ p: 2.5 }} className="box_shadow_div">
       <Grid item xs={12}>
@@ -19,6 +19,7 @@ const AddressForm = ({ infoRecord, onChangeHandle }) => {
               value={infoRecord.address_1}
               onChangeFun={onChangeHandle}
             />
+            {errors.address_1Error && <span className="error">{errors.address_1Error}</span>}
           </Grid>
         </Grid>
         <Grid container sx={{ my: 2 }}>
@@ -42,6 +43,7 @@ const AddressForm = ({ infoRecord, onChangeHandle }) => {
               value={infoRecord.city}
               onChangeFun={onChangeHandle}
             />
+            {errors.cityError && <span className="error">{errors.cityError}</span>}
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <BasicTextFields
@@ -51,6 +53,7 @@ const AddressForm = ({ infoRecord, onChangeHandle }) => {
               value={infoRecord.zip}
               onChangeFun={onChangeHandle}
             />
+            {errors.zipCodeError && <span className="error">{errors.zipCodeError}</span>}
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <BasicTextFields
@@ -60,6 +63,7 @@ const AddressForm = ({ infoRecord, onChangeHandle }) => {
               value={infoRecord.state}
               onChangeFun={onChangeHandle}
             />
+             {errors.stateNameError && <span className="error">{errors.stateNameError}</span>}
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
             <BasicTextFields
@@ -69,7 +73,9 @@ const AddressForm = ({ infoRecord, onChangeHandle }) => {
               value={infoRecord.phone}
               maxLength={10}
               onChangeFun={onChangeHandle}
+              onKeyPressFun={handleKeyPress}
             />
+             {errors.phoneError && <span className="error">{errors.phoneError}</span>}
           </Grid>
         </Grid>
       </Grid>

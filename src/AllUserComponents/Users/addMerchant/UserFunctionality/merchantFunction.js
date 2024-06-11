@@ -296,7 +296,7 @@ const MerchantFunction = () => {
     }else{
       setStore(prevState =>({
         ...prevState,
-        state: e.State
+        [e.name]: e.title
       }))
     }
    

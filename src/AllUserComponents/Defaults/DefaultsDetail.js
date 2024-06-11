@@ -24,8 +24,9 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import AlertModal from "../../reuseableComponents/AlertModal";
 
-const DefaultsDetail = ({ seVisible }) => {
+const DefaultsDetail = ({ setVisible,setDefaultEditId }) => {
   const myStyles = {
     left: "1rem",
     // transform: "translate(0px, 5px)",
@@ -80,6 +81,12 @@ const DefaultsDetail = ({ seVisible }) => {
   }, [defaultsDataState]);
 
   const [headerCheckboxChecked, setHeaderCheckboxChecked] = useState(false);
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
+  };
 
   const handleHeaderCheckboxChange = () => {
     setHeaderCheckboxChecked(!headerCheckboxChecked);
@@ -164,7 +171,8 @@ const DefaultsDetail = ({ seVisible }) => {
       .filter((item) => item.isChecked)
       .map((checkedItem) => checkedItem.id);
     if (checkedIds.length === 0) {
-        alert("Please select defaults for delete");
+        // alert("Please select defaults for delete");
+        showModal("Please select defaults for delete")
     }else{
       setDeleteSelectDefaultId(checkedIds);
       setDeleteModalOpen(true);
@@ -230,8 +238,10 @@ const DefaultsDetail = ({ seVisible }) => {
 
   const navigate = useNavigate();
   const handleEditDefault = (data) => {
+    setDefaultEditId(data)
+    setVisible("EditDefaults")
     // console.log("handleEditMerchant ", data);
-    navigate(`/users/view/unapprove/menu/defaults/edit-defaults/${data}`);
+    // navigate(`/users/view/unapprove/menu/defaults/edit-defaults/${data}`);
   };
 
   return (
@@ -257,7 +267,7 @@ const DefaultsDetail = ({ seVisible }) => {
               <Grid container direction="row" alignItems="center">
                 <Grid item>
                   <div className="q-category-bottom-header">
-                    <p onClick={() => seVisible("DefaultsAlert")}>
+                    <p onClick={() => setVisible("DefaultsAlert")}>
                       Add Default <img src={AddIcon} alt="add-icon" />
                     </p>
                   </div>
@@ -373,6 +383,11 @@ const DefaultsDetail = ({ seVisible }) => {
             onClose={() => {setDeleteModalOpen(false)}}
             onConfirm={confirmDeleteCategory}
           />
+      <AlertModal
+      headerText={alertModalHeaderText}
+      open={alertModalOpen}
+      onClose={() => {setAlertModalOpen(false)}}
+       />
 
 
     </>

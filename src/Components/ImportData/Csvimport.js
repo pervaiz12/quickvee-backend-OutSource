@@ -17,6 +17,7 @@ import { ToastifyAlert } from '../../CommonComponents/ToastifyAlert';
 // import Alert from '@mui/material/Alert';
 // import IconButton from '@mui/material/IconButton';
 // import CloseIcon from '@mui/icons-material/Close';
+import AlertModal from "../../reuseableComponents/AlertModal";
 
 const FileUpload = () => {
   const [dragActive, setDragActive] = useState(false);
@@ -82,13 +83,20 @@ const FileUpload = () => {
     setfilename(files[0].name);
   };
 
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
+  };
+
   const handleSubmit = async () => {
     // Handle your submit logic with fileData
     // console.log('Submitting data:', fileData);
     const fileInput = document.getElementById('input-file-upload');
     const csvfileData = fileInput.files[0]; 
     if(!csvfileData){
-      return alert("Please Upload Files With .CSV Extenion Only.")
+      return showModal("Please Upload Files With .CSV Extenion Only.")
     }
     setLoading(true);
     const formData = new FormData();
@@ -110,7 +118,7 @@ const FileUpload = () => {
       // console.log(alertmsg);
       setfilename('');
     } else {
-      alert('Something went wrong !');
+      showModal('Something went wrong !');
     }
     setLoading(false);
     // Add your specific submit logic here
@@ -234,6 +242,11 @@ const FileUpload = () => {
                 )}
           </button>
 </div>
+      <AlertModal
+      headerText={alertModalHeaderText}
+      open={alertModalOpen}
+      onClose={() => {setAlertModalOpen(false)}}
+       />
 
       </div>
     </div>

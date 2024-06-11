@@ -15,13 +15,15 @@ import { fetchPurchaseOrderById } from "../../Redux/features/PurchaseOrder/purch
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import dayjs from "dayjs";
 import { fetchProductsData } from "../../Redux/features/Product/ProductSlice";
-import { BASE_URL } from "../../Constants/Config";
+import { BASE_URL, DELETE_PO_ITEM, UPDATE_PO } from "../../Constants/Config";
 import axios from "axios";
 import { ThemeProvider } from "@mui/material/styles";
 import Select from "@mui/material/Select";
 import { createTheme } from "@mui/material/styles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MenuItem from "@mui/material/MenuItem";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import { createdAt } from "../../Constants/utils";
 
 const theme = createTheme({
   components: {
@@ -92,15 +94,21 @@ const ModifyPurchaseOrder = () => {
     ) {
       const data = puchaseOrderDetail.order_items.map((item) => ({
         ...item,
+        order_item_id: item.id,
         newPrice: item.cost_per_item,
         newQty: item.pending_qty,
         finalQty:
           (Number(item.item_qty) || 0) + (Number(item.pending_qty) || 0),
         finalPrice: item.total_pricing,
       }));
+
       setSelectedProducts(data);
     }
   }, [puchaseOrderDetail]);
+
+  useEffect(() => {
+    console.log("selectedProducts: ", selectedProducts);
+  }, [selectedProducts]);
 
   // fetching Purchase Order details
   useEffect(() => {
@@ -108,15 +116,59 @@ const ModifyPurchaseOrder = () => {
     dispatch(fetchPurchaseOrderById(data));
   }, []);
 
-  const handleDelete = (id) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this product?"
+  // removing from local state
+  const removeItem = (productId) => {
+    const updatedProducts = selectedProducts?.filter(
+      (prod) => prod.id !== productId
     );
-    if (confirmDelete) {
-      const updatedProducts = selectedProducts?.filter(
-        (product) => product.id !== id
+    setSelectedProducts(updatedProducts);
+  };
+
+  // deleting a purchase order item api
+  const deletePOItem = async (productId) => {
+    try {
+      const { token } = userTypeData;
+      const formData = new FormData();
+      formData.append("merchant_id", "MAL0100CA");
+      formData.append("po_item_id", productId);
+      formData.append("token_id", userTypeData.token_id);
+      formData.append("login_type", userTypeData.login_type);
+
+      const response = await axios.post(BASE_URL + DELETE_PO_ITEM, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      console.log("response: ", response);
+
+      if (response.data.status) {
+        removeItem(productId);
+        ToastifyAlert(response.data.message, "success");
+      } else {
+        ToastifyAlert(response.data.message, "error");
+      }
+    } catch (e) {
+      console.log("Error: ", e);
+    }
+  };
+
+  const handleDelete = (product) => {
+    // console.log("prod: ", product);
+
+    // if product has po_id then removing from Local state as well as from backend
+    if (product.po_id) {
+      const confirmDelete = window.confirm(
+        "Are you sure you want to delete this product?"
       );
-      setSelectedProducts(updatedProducts);
+
+      if (confirmDelete) {
+        // delete po item from backend api call
+        deletePOItem(product.id);
+      }
+    } else {
+      removeItem(product.id);
     }
   };
 
@@ -181,20 +233,31 @@ const ModifyPurchaseOrder = () => {
           label: prod.title,
           value: prod.id,
           variantId: prod.isvarient === "1" ? prod.var_id : null,
-        }))
-        .filter((prod) => {
-          const productFound = selectedProducts.find(
-            (product) =>
-              (product.variant &&
-                product.id === prod.variantId &&
-                product.product_id === prod.value) ||
-              (!product.variant && product.id === prod.value)
-          );
+        }));
 
-          return !productFound;
+      const filterProducts =
+        data &&
+        data.length > 0 &&
+        data.filter((product) => {
+          const productExists =
+            selectedProducts &&
+            selectedProducts.length > 0 &&
+            selectedProducts.find((item) => {
+              const productIdMatching = item.product_id === product.value;
+
+              // item is variant
+              if (Number(item.variant_id) > 0) {
+                const variantIdMatching = item.variant_id === product.variantId;
+                return variantIdMatching && productIdMatching;
+              } else {
+                return productIdMatching;
+              }
+            });
+
+          return !Boolean(productExists);
         });
 
-      return data;
+      return filterProducts;
     }
   };
 
@@ -209,8 +272,10 @@ const ModifyPurchaseOrder = () => {
         formData
       );
 
+      console.log("product info: ", response.data.data);
+
       let obj = {
-        notes: "",
+        note: "",
         newQty: "",
         newPrice: "",
         finalPrice: "0.00",
@@ -292,11 +357,13 @@ const ModifyPurchaseOrder = () => {
   const getFinalQty = (type, prod, e) => {
     const temp =
       type === "newQty" && Number(e.target.value)
-        ? Number(e.target.value) + (Number(prod.item_qty) || 0)
+        ? Number(e.target.value) +
+          (Number(prod.item_qty) || Number(prod.quantity) || 0)
         : type === "newPrice" && Number(prod.newQty)
-          ? (Number(prod.item_qty) || 0) + Number(prod.newQty)
-          : Number(prod.item_qty)
-            ? Number(prod.item_qty)
+          ? (Number(prod.item_qty) || Number(prod.quantity) || 0) +
+            Number(prod.newQty)
+          : Number(prod.item_qty) || Number(prod.quantity)
+            ? Number(prod.item_qty) || Number(prod.quantity)
             : 0;
 
     return temp;
@@ -311,9 +378,9 @@ const ModifyPurchaseOrder = () => {
             [type]:
               type === "newPrice" ? handleProductPrice(e) : e.target.value,
             finalPrice:
-              type === "notes" ? prod.finalPrice : getFinalPrice(type, prod, e),
+              type === "note" ? prod.finalPrice : getFinalPrice(type, prod, e),
             finalQty:
-              type === "notes" ? prod.finalQty : getFinalQty(type, prod, e),
+              type === "note" ? prod.finalQty : getFinalQty(type, prod, e),
             priceError:
               type === "newPrice" && e.target.value && prod.priceError
                 ? ""
@@ -325,7 +392,115 @@ const ModifyPurchaseOrder = () => {
           }
         : prod
     );
+
     setSelectedProducts(() => updatedProducts);
+  };
+
+  // modifying purchase order api
+  const modifyPurchaseOrder = async () => {
+    const { issuedDate, stockDate, selectedVendor } = purchaseInfo;
+
+    // validating purchase order info dataset
+    const purchaseInfoDetails = [selectedVendor].every((a) =>
+      Boolean(a && a.trim())
+    );
+
+    // validating purchase order products dataset
+    const validateProducts = selectedProducts.every(
+      (prod) => prod.newQty && prod.newPrice
+    );
+
+    if (purchaseInfoDetails && stockDate && issuedDate && validateProducts) {
+      try {
+        const orderItems = selectedProducts?.map((prod) => ({
+          product_id:
+            prod.variant || prod.variant_id ? prod.product_id : prod.id,
+          variant_id: prod.variant
+            ? prod.id
+            : Number(prod.variant_id) > 0
+              ? prod.variant_id
+              : "",
+          required_qty: prod.newQty.toString(),
+          // after_qty: (Number(prod.quantity) + Number(prod.newQty)).toString(),
+          after_qty: Number(prod.finalQty).toString(),
+          cost_per_item: prod.newPrice.toString(),
+          total_pricing: prod.finalPrice.toString(), // Number(prod.newQty) * parseFloat(prod.newPrice),
+          upc: prod.upc,
+          note: prod.note,
+          order_item_id: prod.order_item_id ? prod.order_item_id : "",
+        }));
+
+        console.log("selectedProducts: ", selectedProducts);
+        console.log("orderItems: ", orderItems);
+
+        const orderItemsObject = orderItems?.reduce((acc, curr, index) => {
+          acc[index] = curr;
+          return acc;
+        }, {});
+
+        const { token } = userTypeData;
+        const formData = new FormData();
+        formData.append("merchant_id", "MAL0100CA");
+        formData.append("admin_id", "MAL0100CA");
+        formData.append("po_id", id);
+        formData.append("vendor_id", Number(purchaseInfo?.vendorId));
+        formData.append(
+          "issue_date",
+          dayjs(purchaseInfo?.issuedDate).format("YYYY-MM-DD")
+        );
+        formData.append(
+          "stock_date",
+          dayjs(purchaseInfo?.stockDate).format("YYYY-MM-DD")
+        );
+        formData.append("reference", purchaseInfo?.reference);
+        formData.append("is_draft", 0);
+        formData.append("created_at", createdAt(new Date()));
+        formData.append("vendor_email", purchaseInfo?.email);
+        formData.append("order_items", JSON.stringify(orderItemsObject));
+        formData.append("token_id", userTypeData.token_id);
+        formData.append("login_type", userTypeData.login_type);
+
+        const response = await axios.post(BASE_URL + UPDATE_PO, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // Use data?.token directly
+          },
+        });
+        console.log("response modifyPurchaseOrder: ", response);
+
+        if (response.data.status) {
+          ToastifyAlert(response.data.message, "success");
+        } else {
+          ToastifyAlert(response.data.message, "error");
+        }
+      } catch (e) {
+        console.log("Error: ", e);
+      }
+    } else {
+      if (!purchaseInfoDetails || !stockDate || !issuedDate) {
+        setPurchaseInfoErrors((prev) => ({
+          ...prev,
+          issuedDate: issuedDate ? "" : "Issued Date is required",
+          stockDate: stockDate ? "" : "Stock Due Date is required",
+          // email: email ? "" : "Email is required",
+          selectedVendor: selectedVendor ? "" : "Vendor is required",
+        }));
+      }
+
+      if (!validateProducts) {
+        const temp = selectedProducts.map((prod) =>
+          !prod.newQty || !prod.newPrice
+            ? {
+                ...prod,
+                priceError: !prod.newPrice ? "Cost Per Item is required" : "",
+                qtyError: !prod.newQty ? "Quantity is required" : "",
+              }
+            : prod
+        );
+
+        setSelectedProducts(() => temp);
+      }
+    }
   };
 
   return (
@@ -340,126 +515,124 @@ const ModifyPurchaseOrder = () => {
             </span>
           </div>
 
-          <div>
-            <div className="px-6 py-7">
-              <Grid container spacing={2}>
-                <Grid item xs={12} sm={6} md={4}>
-                  <label>Vendor</label>
-                  <FormControl fullWidth>
-                    <ThemeProvider theme={theme}>
-                      <Select
-                        size="small"
-                        value={purchaseInfo?.selectedVendor}
-                        displayEmpty
-                        defaultValue={purchaseInfo?.selectedVendor}
-                      >
-                        <MenuItem value={purchaseInfo?.selectedVendor}>
-                          {purchaseInfo?.selectedVendor}
-                        </MenuItem>
-                      </Select>
-                    </ThemeProvider>
-                  </FormControl>
+          <div className="px-6 py-7">
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6} md={4}>
+                <label>Vendor</label>
+                <FormControl fullWidth>
+                  <ThemeProvider theme={theme}>
+                    <Select
+                      size="small"
+                      value={purchaseInfo?.selectedVendor}
+                      displayEmpty
+                      defaultValue={purchaseInfo?.selectedVendor}
+                    >
+                      <MenuItem value={purchaseInfo?.selectedVendor}>
+                        {purchaseInfo?.selectedVendor}
+                      </MenuItem>
+                    </Select>
+                  </ThemeProvider>
+                </FormControl>
 
-                  {purchaseInfoErrors.selectedVendor && (
-                    <p className="error-message">
-                      {purchaseInfoErrors.selectedVendor}
-                    </p>
-                  )}
-                </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <label>Issued Date</label>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer
-                      sx={{ paddingTop: 0 }}
-                      components={["DatePicker"]}
-                    >
-                      <DatePicker
-                        sx={{ width: "100%" }}
-                        className="issued-date"
-                        size="small"
-                        slotProps={{
-                          textField: {
-                            size: "small",
-                          },
-                        }}
-                        format={"MM/DD/YYYY"}
-                        disablePast
-                        onChange={(newDate) => {
-                          handleDate(newDate, "issuedDate");
-                          setPurchaseInfo((prev) => ({
-                            ...prev,
-                            stockDate: null,
-                          }));
-                        }}
-                        value={purchaseInfo.issuedDate}
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider>
-                  {purchaseInfoErrors.issuedDate && (
-                    <p className="error-message">
-                      {purchaseInfoErrors.issuedDate}
-                    </p>
-                  )}
-                </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <label>Stock Due</label>
-                  <LocalizationProvider dateAdapter={AdapterDayjs}>
-                    <DemoContainer
-                      sx={{ paddingTop: 0 }}
-                      components={["DatePicker"]}
-                    >
-                      <DatePicker
-                        sx={{ width: "100%" }}
-                        className="stock-due-date"
-                        size="small"
-                        slotProps={{
-                          textField: {
-                            size: "small",
-                          },
-                        }}
-                        disablePast
-                        format={"MM/DD/YYYY"}
-                        shouldDisableDate={(date) => {
-                          return date < dayjs(purchaseInfo.issuedDate);
-                        }}
-                        onChange={(newDate) => handleDate(newDate, "stockDate")}
-                        value={purchaseInfo.stockDate}
-                      />
-                    </DemoContainer>
-                  </LocalizationProvider>
-                  {purchaseInfoErrors.stockDate && (
-                    <p className="error-message">
-                      {purchaseInfoErrors.stockDate}
-                    </p>
-                  )}
-                </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <label>Reference</label>
-                  <BasicTextFields
-                    value={purchaseInfo.reference}
-                    onChangeFun={handleValue}
-                    name={"reference"}
-                    type={"text"}
-                    required={true}
-                    placeholder={"Note or Info or Invoice Number"}
-                  />
-                </Grid>
-                <Grid item xs={12} sm={6} md={4}>
-                  <label>Vendor Email</label>
-                  <BasicTextFields
-                    value={purchaseInfo.email}
-                    onChangeFun={handleValue}
-                    name={"email"}
-                    type={"email"}
-                    required={true}
-                    placeholder={"Vendor Email Address"}
-                  />
-                  {purchaseInfoErrors.email && (
-                    <p className="error-message">{purchaseInfoErrors.email}</p>
-                  )}
-                </Grid>
+                {purchaseInfoErrors.selectedVendor && (
+                  <p className="error-message">
+                    {purchaseInfoErrors.selectedVendor}
+                  </p>
+                )}
               </Grid>
-            </div>
+              <Grid item xs={12} sm={6} md={4}>
+                <label>Issued Date</label>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer
+                    sx={{ paddingTop: 0 }}
+                    components={["DatePicker"]}
+                  >
+                    <DatePicker
+                      sx={{ width: "100%" }}
+                      className="issued-date default-border-color"
+                      size="small"
+                      slotProps={{
+                        textField: {
+                          size: "small",
+                        },
+                      }}
+                      format={"MM/DD/YYYY"}
+                      disablePast
+                      onChange={(newDate) => {
+                        handleDate(newDate, "issuedDate");
+                        setPurchaseInfo((prev) => ({
+                          ...prev,
+                          stockDate: null,
+                        }));
+                      }}
+                      value={purchaseInfo.issuedDate}
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+                {purchaseInfoErrors.issuedDate && (
+                  <p className="error-message">
+                    {purchaseInfoErrors.issuedDate}
+                  </p>
+                )}
+              </Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <label>Stock Due</label>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                  <DemoContainer
+                    sx={{ paddingTop: 0 }}
+                    components={["DatePicker"]}
+                  >
+                    <DatePicker
+                      sx={{ width: "100%" }}
+                      className="stock-due-date default-border-color"
+                      size="small"
+                      slotProps={{
+                        textField: {
+                          size: "small",
+                        },
+                      }}
+                      disablePast
+                      format={"MM/DD/YYYY"}
+                      shouldDisableDate={(date) => {
+                        return date < dayjs(purchaseInfo.issuedDate);
+                      }}
+                      onChange={(newDate) => handleDate(newDate, "stockDate")}
+                      value={purchaseInfo.stockDate}
+                    />
+                  </DemoContainer>
+                </LocalizationProvider>
+                {purchaseInfoErrors.stockDate && (
+                  <p className="error-message">
+                    {purchaseInfoErrors.stockDate}
+                  </p>
+                )}
+              </Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <label>Reference</label>
+                <BasicTextFields
+                  value={purchaseInfo.reference}
+                  onChangeFun={handleValue}
+                  name={"reference"}
+                  type={"text"}
+                  required={true}
+                  placeholder={"Note or Info or Invoice Number"}
+                />
+              </Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <label>Vendor Email</label>
+                <BasicTextFields
+                  value={purchaseInfo.email}
+                  onChangeFun={handleValue}
+                  name={"email"}
+                  type={"email"}
+                  required={true}
+                  placeholder={"Vendor Email Address"}
+                />
+                {purchaseInfoErrors.email && (
+                  <p className="error-message">{purchaseInfoErrors.email}</p>
+                )}
+              </Grid>
+            </Grid>
           </div>
         </div>
       </div>
@@ -469,7 +642,7 @@ const ModifyPurchaseOrder = () => {
         <div className="box">
           <div className="box_shadow_div" style={{ overflow: "unset" }}>
             <div className="mt-4 px-6">
-              <div className="q_searchBar sticky">
+              <div className="q_searchBar sticky z-index-2">
                 <Grid container>
                   <Grid item xs={12}>
                     <AsyncSelect
@@ -486,7 +659,7 @@ const ModifyPurchaseOrder = () => {
               </div>
             </div>
 
-            <div className="q-category-bottom-detail-section">
+            <div className="q-category-bottom-detail-section z-index-1">
               {selectedProducts.length > 0 && (
                 <>
                   <div className="q-add-purchase-section-header">
@@ -512,10 +685,10 @@ const ModifyPurchaseOrder = () => {
                             ? product.title
                             : ""}
                         <br />
-                        {product.variant_title ? (
+                        {product.variant_title || product.variant ? (
                           <>
                             <span className="text-[14px]">
-                              {product.variant_title}
+                              {product.variant_title || product.variant}
                             </span>
                             <br />
                           </>
@@ -523,13 +696,12 @@ const ModifyPurchaseOrder = () => {
                         <TextField
                           id="outlined-basic"
                           inputProps={{ type: "text" }}
-                          value={product.notes}
-                          onChange={(e) =>
-                            handleProduct(e, product.id, "notes")
-                          }
+                          value={product.note}
+                          onChange={(e) => handleProduct(e, product.id, "note")}
                           placeholder="Add Note"
                           variant="outlined"
                           size="small"
+                          disabled={product.recieved_status === "2"}
                         />
                       </p>
                       <p className="purchase-data-qty">
@@ -549,6 +721,7 @@ const ModifyPurchaseOrder = () => {
                                 }}
                                 variant="outlined"
                                 size="small"
+                                disabled={product.recieved_status === "2"}
                               />
                               {product.qtyError && (
                                 <p className="error-message">Qty is required</p>
@@ -573,6 +746,7 @@ const ModifyPurchaseOrder = () => {
                                 }}
                                 variant="outlined"
                                 size="small"
+                                disabled={product.recieved_status === "2"}
                               />
                               {product.priceError && (
                                 <p className="error-message">
@@ -588,12 +762,14 @@ const ModifyPurchaseOrder = () => {
                       </p>
                       <p className="purchase-data-upc mt-3">{product?.upc}</p>
                       <p className="purchase-data-delete">
-                        <img
-                          src={DeleteIcon}
-                          alt=""
-                          className="w-8 h-8 cursor-pointer"
-                          onClick={() => handleDelete(product?.id)}
-                        />
+                        {product?.recieved_status === "0" || !product.po_id ? (
+                          <img
+                            src={DeleteIcon}
+                            alt=""
+                            className="w-8 h-8 cursor-pointer"
+                            onClick={() => handleDelete(product)}
+                          />
+                        ) : null}
                       </p>
                     </div>
                   ))}
@@ -604,12 +780,12 @@ const ModifyPurchaseOrder = () => {
                 <div className="button-container end gap-4">
                   <button
                     className="quic-btn quic-btn-save"
-                    // onClick={() => savePurchaseOrder("0")}
+                    onClick={modifyPurchaseOrder}
                   >
                     Update
                   </button>
                   <button
-                    // onClick={handleCancel}
+                    onClick={() => navigate("/purchase-data")}
                     className="quic-btn quic-btn-cancle"
                   >
                     Cancel

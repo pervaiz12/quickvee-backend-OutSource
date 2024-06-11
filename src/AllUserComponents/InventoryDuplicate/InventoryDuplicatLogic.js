@@ -24,6 +24,9 @@ const InventoryExportLogic = () => {
   });
   const { userTypeData } = useAuthDetails();
 
+  const [alertOpen, setAlertOpen] = useState(false);
+  const [modalHeaderText, setModalHeaderText] = useState("");
+
   const handleStoreInput = async (event) => {
     let { errors } = values;
     const fieldName = event.target.name;
@@ -72,7 +75,9 @@ const InventoryExportLogic = () => {
 
     if (errors.store_name_from === "" && errors.store_name_to === "") {
       if (values.store_name_from == values.store_name_to) {
-        alert("Both the stores cannot be same.");
+        // alert("Both the stores cannot be same.");
+        setModalHeaderText("Both the stores cannot be same.")
+        setAlertOpen(true)
         return false;
       } else {
         const data = {
@@ -122,7 +127,9 @@ const InventoryExportLogic = () => {
 
     if (errors.store_name_from === "" && errors.store_name_to === "") {
       if (values.store_name_from == values.store_name_to) {
-        alert("Both the stores cannot be same.");
+        // alert("Both the stores cannot be same.");
+        setModalHeaderText("Both the stores cannot be same.")
+        setAlertOpen(true)
         return false;
       } else {
         const data = {
@@ -171,6 +178,8 @@ const InventoryExportLogic = () => {
     values,
     submitmessage,
     setsubmitmessage,
+    alertOpen,
+    modalHeaderText,
   };
 };
 

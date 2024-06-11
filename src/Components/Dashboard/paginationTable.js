@@ -42,6 +42,15 @@ const rows = [
   createData("Gingerbread", 356, 16.0, 49, 3.9),
 ];
 
+const formatDateTime = (dateTimeString) => {
+  const date = new Date(dateTimeString);
+  const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+  const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+  const formattedDate = date.toLocaleDateString('en-US', dateOptions);
+  const formattedTime = date.toLocaleTimeString('en-US', timeOptions);
+  return `${formattedDate} ${formattedTime}`;
+};
+
 export default function DashboardTables(props) {
   const navigate = useNavigate();
   // const handleSummeryPage = (order_id) => {
@@ -73,7 +82,7 @@ export default function DashboardTables(props) {
                     {row.customer_id}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    {row.date_time}
+                    {formatDateTime(row.date_time)}
                   </StyledTableCell>
                   <StyledTableCell align="center">
                     {row.order_id}

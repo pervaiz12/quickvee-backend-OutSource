@@ -6,7 +6,7 @@ import AddSvg from "../../../../Assests/Dashboard/Left.svg";
 import CircularProgress from "@mui/material/CircularProgress";
 import PasswordShow from "../../../../Common/passwordShow";
 
-export default function EditAdmin() {
+export default function EditAdmin({EditAdminId,setVisible}) {
   const {
     handleEditAdmin,
     editData,
@@ -20,18 +20,20 @@ export default function EditAdmin() {
     useAuthDetails();
   const { showpPassword, jsxData } = PasswordShow();
 
-  const { id } = useParams();
+  // const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    handleEditAdmin({ admin_id: id, ...userTypeData });
-  }, [id]);
-
+    handleEditAdmin({ admin_id: EditAdminId, ...userTypeData });
+  }, [EditAdminId]);
+  const handleClick=()=>{
+    setVisible("AdminView")
+  }
   return (
     <div className="box">
       <div className="box_shadow_div">
         <div className="q-add-categories-section-header">
-          <span onClick={() => navigate("/users/admin")}>
+          <span onClick={ handleClick}>
             <img src={AddSvg} alt="Add-New-Category" />
             <span>Edit Admin</span>
           </span>

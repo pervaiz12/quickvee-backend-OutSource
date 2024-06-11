@@ -22,7 +22,7 @@ import { Grid } from "@mui/material";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 
-const CouponDiscount = ({ seVisible }) => {
+const CouponDiscount = ({ seVisible,setCouponId }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const [isChecked, setIsChecked] = useState(true);
@@ -113,6 +113,11 @@ const CouponDiscount = ({ seVisible }) => {
   const [deleteCouponId, setDeleteCouponId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
+  const handleEditCoupon =(id) =>{
+      seVisible("EditCopon")
+      setCouponId(id)
+  }
+
   const handleDeleteCoupon = (id) => {
     setDeleteCouponId(id);
     setDeleteModalOpen(true);
@@ -184,9 +189,12 @@ const CouponDiscount = ({ seVisible }) => {
                         <Grid item>
                           <Grid container spacing={1}>
                             <Grid item>
-                              <Link to={`/coupons/edit-coupons/${coupons.id}`}>
+                              <span 
+                              // to={`/coupons/edit-coupons/${coupons.id}`}
+                              onClick={()=> {handleEditCoupon(coupons.id)}}
+                              >
                                 <img src={Edit} alt="" className="h-8 w-8" />
-                              </Link>
+                              </span>
                             </Grid>
                             <Grid item>
                               <img
@@ -235,12 +243,14 @@ const CouponDiscount = ({ seVisible }) => {
                           className="q_coupon_deatails_validtimes"
                         >
                           <p className="q_date_details">
-                            {moment(coupons.date_valid).format("MM/DD/YYYY")} -{" "}
+                            {/* {moment(coupons.date_valid).format("MM/DD/YYYY")} -{" "} */}
+                            {moment(coupons.date_valid).format("MMMM D, YYYY")} -{" "}
                             {moment(coupons.time_valid, "HH:mm:ss").format(
                               "hh:mm A"
                             )}{" "}
                             to{" "}
-                            {moment(coupons.date_expire).format("MM/DD/YYYY")} -{" "}
+                            {/* {moment(coupons.date_expire).format("MM/DD/YYYY")} -{" "} */}
+                            {moment(coupons.date_expire).format("MMMM D, YYYY")} -{" "}
                             {moment(coupons.time_expire, "HH:mm:ss").format(
                               "hh:mm A"
                             )}

@@ -94,6 +94,15 @@ export default function DashboardTables(props) {
     return grandTotal; // Return the overall grand total
   };
 
+  const formatDateTime = (dateTimeString) => {
+    const date = new Date(dateTimeString);
+    const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
+    const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
+    const formattedDate = date.toLocaleDateString('en-US', dateOptions);
+    const formattedTime = date.toLocaleTimeString('en-US', timeOptions);
+    return `${formattedDate} ${formattedTime}`;
+  };
+
   return (
     <>
       {props.loader ? (
@@ -157,7 +166,7 @@ export default function DashboardTables(props) {
                                     {item?.order_id}
                                   </StyledTableCell>
                                   <StyledTableCell align="center">
-                                    {item?.merchant_time}
+                                    {formatDateTime(item?.merchant_time)}
                                   </StyledTableCell>
                                 </StyledTableRow>
                               ))}

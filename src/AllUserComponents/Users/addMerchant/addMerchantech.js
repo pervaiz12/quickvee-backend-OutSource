@@ -40,7 +40,16 @@ export default function AddMerchan() {
 
   const location = useLocation();
 
-  console.log("location: ", location);
+  // console.log("location: ", location);
+
+  const [selectedState, setSelectedState] = useState("Select State");
+
+  const handleChangedState = (option) => {
+    if (option !== "Select State") {
+      handleChange(option);
+      setSelectedState(option.title);
+    }
+  };
 
   // const [showpPassword, setShowPassword] = useState(false);
 
@@ -67,10 +76,14 @@ export default function AddMerchan() {
                       navigate(location.state?.from);
                     }
                   }}
-                   className="text-center items-center"
+                  className="text-center items-center"
                 >
                   {location.state?.from && (
-                    <img src={AddSvg} alt="Add-New-Category"  className="h-9 w-9" />
+                    <img
+                      src={AddSvg}
+                      alt="Add-New-Category"
+                      className="h-9 w-9"
+                    />
                   )}
                   <span>Add {location.state && location.state?.heading}</span>
                 </span>
@@ -318,11 +331,14 @@ export default function AddMerchan() {
                     State <span className="Asterisk_error">*</span>
                   </label>
                   <SelectDropDown
-                    name="state"
-                    default_title={"Select States"}
-                    listItem={stateList}
-                    title={"State"}
-                    onClickHandler={handleChange}
+                    heading={"Select State"}
+                    selectedOption={selectedState}
+                    listItem={stateList.map((state) => ({
+                      title: state.State,
+                      name: "state",
+                    }))}
+                    title={"title"}
+                    onClickHandler={handleChangedState}
                     sx={{ pt: 0.5 }}
                   />
                   {store.errors.state && (
@@ -337,7 +353,7 @@ export default function AddMerchan() {
                 alignItems="center"
                 sx={{ px: 2.5, pb: 2.5 }}
               >
-                <Grid item sx={{px:2}}>
+                <Grid item sx={{ px: 2 }}>
                   <button
                     className="quic-btn quic-btn-save"
                     onClick={handleSubmitMerchant}

@@ -1,4 +1,5 @@
 import * as React from "react";
+import  { useState } from "react";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -24,6 +25,7 @@ import { useAuthDetails } from "../Common/cookiesHelper";
 import EditTaxesModal from "../Components/StoreSetting/Taxes/EditTaxesModal";
 import EditEmployeeModal from "../Components/StoreSetting/AddEmployee/EditEmployeeModal";
 import Permission from "../Assests/Employee/Permission.svg"
+import AlertModal from "./AlertModal";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
@@ -58,7 +60,9 @@ const DraggableTable = ({
   table,
   employeeTable = false,
   editBtnEmployee= false,
-  states
+  states,
+  setVisible,
+  setEmployeeId,
 }) => {
   const dispatch = useDispatch();
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -77,16 +81,25 @@ const DraggableTable = ({
     return result;
   };
 
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
+  };
+
   const onDragEnd = async (result) => {
     // Check if the drag ended outside of the droppable area
     if (!result.destination) {
-      alert("You can't drop outside the list!");
+      // alert("You can't drop outside the list!");
+      showModal("You can't drop outside the list!");
       return;
     }
 
     // Check if the item was dropped at the same position
     if (result.destination.index === result.source.index) {
-      alert("You haven't moved the item!");
+      // alert("You haven't moved the item!");
+      showModal("You haven't moved the item!");
       return;
     }
 
@@ -167,6 +180,11 @@ const DraggableTable = ({
       console.log("Sorting canceled by user");
     }
   };
+  const handleEditEmployeePermission = (id)=>{
+
+    setVisible("EmployeePermission")
+    setEmployeeId(id)
+  }
   return (
     <>
       <TableContainer component={Paper}>
@@ -285,13 +303,17 @@ const DraggableTable = ({
                             {editButtonEnableEmployee && (
                               <>
                               <StyledTableCell>
-                                <Link to={`${editButtonurlEmployee}${item.id}`}>
+                                <span
+                                onClick={()=>{handleEditEmployeePermission(item.id)}}
+                                //  to={`${editButtonurlEmployee}${item.id}`}
+                                 
+                                 >
                                   <img
                                     // className="edit_center w-8 h-8"
                                     src={Permission}
                                     alt="Permission-icon"
                                   />
-                                </Link>
+                                </span>
                               </StyledTableCell>
                               </>
                             )}
@@ -337,6 +359,11 @@ const DraggableTable = ({
           </DragDropContext>
         </Table>
       </TableContainer>
+      <AlertModal
+      headerText={alertModalHeaderText}
+      open={alertModalOpen}
+      onClose={() => {setAlertModalOpen(false)}}
+       />
     </>
   );
 };
