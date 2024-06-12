@@ -3,10 +3,10 @@ import StocktakeList from "./StocktakeList";
 import AddNewStocktake from "./AddNewStocktake";
 
 const MainStocktake = () => {
-    const [visible, setVisible] = useState("StocktakeLiat");
+    const [visible, setVisible] = useState("StocktakeList");
   return (
     <>
-     {visible === "StocktakeLiat" && <StocktakeList setVisible={setVisible}/>}
+     {visible === "StocktakeList" && <StocktakeList setVisible={setVisible}/>}
      {visible === "AddNewStocktake" && <AddNewStocktake setVisible={setVisible}/>}
 
     </>

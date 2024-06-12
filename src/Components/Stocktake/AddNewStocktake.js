@@ -18,7 +18,11 @@ import { useDispatch } from "react-redux";
 import { fetchProductsData } from "../../Redux/features/Product/ProductSlice";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import axios from "axios";
-import { BASE_URL } from "../../Constants/Config";
+import { BASE_URL, CREATE_UPDATE_STOCKTAKE } from "../../Constants/Config";
+import BasicTextFields from "../../reuseableComponents/TextInputField";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import DeleteModal from "../../reuseableComponents/DeleteModal";
+import AlertModal from "../../reuseableComponents/AlertModal";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -48,10 +52,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 const AddNewStocktake = ({ setVisible }) => {
   const dispatch = useDispatch();
-  const { userTypeData } = useAuthDetails();
+  const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
   const [selectedProducts, setSelectedProducts] = useState([]);
-  console.log("setSelectedProducts", selectedProducts)
-  const [productList, setProductList] = useState([
+  let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
+
+  const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
+
+  const [stocktake_items, setProductList] = useState([
     {
       upc: "",
       category_id: "",
@@ -62,38 +69,87 @@ const AddNewStocktake = ({ setVisible }) => {
       current_qty: "",
       new_qty: "",
       discrepancy: "",
-      discrepancy_cost: "",
+      discrepancy_cost: "0",
       stocktake_item_id: "",
+      price: "",
     },
   ]);
+  const [deleteCategoryId, setDeleteCategoryId] = useState(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
+
+  const [errorMessages, setErrorMessages] = useState([]);
+  const validate = () => {
+    const errors = [];
+    let isValid = true;
+    stocktake_items.forEach((item, index) => {
+      const itemErrors = {};
+      if (!item.product_name) {
+        itemErrors.product_name = "Please select item.";
+        isValid = false;
+      }
+      if (!item.new_qty) {
+        itemErrors.new_qty = "Please enter new quantity.";
+        isValid = false;
+      }
+      errors[index] = itemErrors;
+    });
+    setErrorMessages(errors);
+    return isValid;
+  };
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
+  };
+  console.log("setSelectedProductsList", stocktake_items);
+  console.log("setSelectedProducts", selectedProducts);
   const handleAddProduct = () => {
-    setProductList([
-      ...productList,
-      {
-        upc: "",
-        category_id: "",
-        product_id: "",
-        variant_id: "",
-        product_name: "",
-        variant: "",
-        current_qty: "",
-        new_qty: "",
-        discrepancy: "",
-        discrepancy_cost: "",
-        stocktake_item_id: "",
-      },
-    ]);
+    if (validate()) {
+      setProductList([
+        ...stocktake_items,
+        {
+          upc: "",
+          category_id: "", //
+          product_id: "",
+          variant_id: "",
+          product_name: "", //
+          variant: "",
+          current_qty: "",
+          new_qty: "",
+          discrepancy: "0",
+          discrepancy_cost: "0",
+          stocktake_item_id: "",
+          price: "",
+        },
+      ]);
+      setErrorMessages([]);
+    }
   };
 
   const handleDeleteProduct = (index) => {
-    const newList = productList.filter((_, i) => i !== index);
+    // const newList = stocktake_items.filter((_, i) => i !== index);
+    // setProductList(newList);
+    setDeleteCategoryId(index);
+    setDeleteModalOpen(true);
+  };
+
+  const confirmDeleteCategory = () => {
+    const newList = stocktake_items.filter((_, i) => i !== deleteCategoryId);
     setProductList(newList);
+
+    const newErrors = errorMessages.filter((_, i) => i !== deleteCategoryId);
+    setErrorMessages(newErrors);
+
+    setDeleteCategoryId(null);
+    setDeleteModalOpen(false);
   };
 
   const loadOptions = async (inputValue) => {
     if (inputValue && inputValue.length > 2) {
       let name_data = {
-        merchant_id: "MAL0100CA",
+        merchant_id: merchant_id,
         category_id: "all",
         show_status: "all",
         listing_type: 1,
@@ -105,37 +161,50 @@ const AddNewStocktake = ({ setVisible }) => {
       };
 
       const res = await dispatch(fetchProductsData(name_data));
-      console.log(res);
+      setSelectedProducts(res.payload);
       const data = res.payload
-        ?.filter((prod) =>
-          prod.title.toLowerCase().includes(inputValue.toLowerCase())
-        )
-        .map((prod) => ({
+        ?.map((prod) => ({
           label: prod.title,
           value: prod.id,
-          variantId: prod.isvarient === "1" ? prod.var_id : null,
-        }))
-        .filter((prod) => {
-          const productFound = selectedProducts.find(
-            (product) =>
-              (product.variant &&
-                product.id === prod.variantId &&
-                product.product_id === prod.value) ||
-              (!product.variant && product.id === prod.value)
-          );
-
-          return !productFound;
-        });
-
+        }));
       return data;
     }
   };
+  const handleNewQtyChange = (e, index) => {
+    const { value } = e.target;
+    setProductList((prevList) => {
+      const updatedList = [...prevList];
+      const currentQty = updatedList[index].current_qty;
+      const newQty = value;
+      const unitPrice = updatedList[index]?.price;
+      const discrepancy = newQty ? newQty - currentQty : 0;
+      const discrepancyCost = discrepancy * unitPrice;
 
-  const handleOnChangeSelectDropDown = async (productId,variantId,index)=>{
-    console.log("option.value, option.variantId,index",productId,variantId,index)
+      updatedList[index] = {
+        ...updatedList[index],
+        new_qty: newQty,
+        discrepancy: discrepancy,
+        discrepancy_cost: discrepancyCost,
+      };
+      return updatedList;
+    });
+    setErrorMessages((prevErrors) => {
+      const updatedErrors = [...prevErrors];
+      if (!value) {
+        updatedErrors[index] = {
+          ...updatedErrors[index],
+          new_qty: "Please enter new quantity.",
+        };
+      } else {
+        delete updatedErrors[index]?.new_qty;
+      }
+      return updatedErrors;
+    });
+  };
+  const handleOnChangeSelectDropDown = async (productId, variantId, index) => {
     try {
       const formData = new FormData();
-      formData.append("merchant_id", "MAL0100CA");
+      formData.append("merchant_id", merchant_id);
       formData.append("id", productId);
       const response = await axios.post(
         BASE_URL + "Product_api_react/get_productdata_ById",
@@ -155,23 +224,53 @@ const AddNewStocktake = ({ setVisible }) => {
           const product = response.data.data.product_variants.find(
             (prod) => prod.id === variantId
           );
+          console.log("Product variant", product);
 
           obj.newPrice =
             parseFloat(product.price) > 0 ? parseFloat(product.price) : 0;
           obj.finalQty = Number(product.quantity) ?? 0;
+          const sortedProduct = selectedProducts.find(
+            (prod) => prod.var_id === product.id
+          );
 
-          setSelectedProducts((prev) => [
-            { ...product, ...obj, title: response.data.data.productdata.title },
-            ...prev,
-          ]);
+          // console.log("Sorted products", sortedProduct);
+          setProductList((prevList) => {
+            const updatedList = [...prevList];
+            updatedList[index] = {
+              ...updatedList[index],
+              upc: product?.upc || "", //
+              category_id: sortedProduct?.cotegory || "", //
+              product_id: product?.product_id || "", //
+              variant_id: product?.id || "", //
+              product_name: sortedProduct?.title || "", //
+              variant: product?.variant || "", //
+              current_qty: product?.quantity || "", //
+              stocktake_item_id: "0" || "",
+              price: product?.price || "",
+            };
+            return updatedList;
+          });
         } else {
           const product = response.data.data.productdata;
-
+          console.log("product price", product);
           obj.newPrice =
             parseFloat(product.price) > 0 ? parseFloat(product.price) : 0;
           obj.finalQty = Number(product.quantity) ?? 0;
 
-          setSelectedProducts((prev) => [{ ...product, ...obj }, ...prev]);
+          setProductList((prevList) => {
+            const updatedList = [...prevList];
+            updatedList[index] = {
+              ...updatedList[index],
+              upc: product.upc || "", //
+              category_id: selectedProducts[0]?.cotegory || "", //
+              product_id: product.id || "", //
+              product_name: product.title || "", //
+              current_qty: product.quantity || "", //
+              stocktake_item_id: "0" || "",
+              price: product?.price || "",
+            };
+            return updatedList;
+          });
         }
       } else {
         console.log("Product Not available!");
@@ -179,7 +278,89 @@ const AddNewStocktake = ({ setVisible }) => {
     } catch (e) {
       console.log("e: ", e);
     }
-  }
+    setErrorMessages((prevErrors) => {
+      const updatedErrors = [...prevErrors];
+      if (!productId) {
+        updatedErrors[index] = {
+          ...updatedErrors[index],
+          product_name: "Please select item.",
+        };
+      } else {
+        delete updatedErrors[index]?.product_name;
+      }
+      return updatedErrors;
+    });
+  };
+
+  const handleCreateStocktake = async (stocktakeStatus) => {
+    if (validate()) {
+      const total_qty = stocktake_items.reduce(
+        (sum, item) => sum + Number(item.new_qty || 0),
+        0
+      );
+      const total_discrepancy_cost = stocktake_items.reduce(
+        (sum, item) => sum + Number(item.discrepancy_cost || 0),
+        0
+      );
+      const total_discrepancy = stocktake_items.reduce(
+        (sum, item) => sum + Number(item.discrepancy || 0),
+        0
+      );
+      const padToTwoDigits = (num) => num.toString().padStart(2, "0");
+      const formatDateTime = (date) => {
+        const year = date.getFullYear();
+        const month = padToTwoDigits(date.getMonth() + 1);
+        const day = padToTwoDigits(date.getDate());
+        const hours = padToTwoDigits(date.getHours());
+        const minutes = padToTwoDigits(date.getMinutes());
+        const seconds = padToTwoDigits(date.getSeconds());
+        return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+      };
+      const datetime = formatDateTime(new Date());
+      const updatedStocktakeItem = stocktake_items?.reduce(
+        (acc, curr, index) => {
+          acc[index] = curr;
+          return acc;
+        },
+        {}
+      );
+      const stocktakeData = {
+        merchant_id: merchant_id,
+        total_qty,
+        total_discrepancy_cost: total_discrepancy_cost.toFixed(2),
+        total_discrepancy,
+        status: stocktakeStatus,
+        datetime: datetime,
+        stocktake_items: JSON.stringify(updatedStocktakeItem),
+        stocktake_id: "0",
+      };
+
+      console.log("stocktakeData", stocktakeData);
+      try {
+        const { token, ...otherUserData } = userTypeData;
+        const response = await axios.post(
+          BASE_URL + CREATE_UPDATE_STOCKTAKE,
+          { ...stocktakeData, ...otherUserData },
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.data.status) {
+          // Handle success (e.g., navigate to stocktake list, show success message, etc.)
+          ToastifyAlert(response.data.message, "success");
+        } else {
+          // Handle failure (e.g., show error message, etc.)
+          ToastifyAlert(response.data.message, "error");
+        }
+      } catch (error) {
+        console.error("Error creating stocktake:", error);
+      }
+      setVisible("StocktakeList");
+    }
+  };
 
   const customStyles = {
     menu: (provided) => ({
@@ -192,16 +373,22 @@ const AddNewStocktake = ({ setVisible }) => {
       zIndex: 9999,
     }),
   };
+
+  const handleKeyPress = (e) => {
+    if ((e.charCode < 48 || e.charCode > 57) && e.charCode !== 8) {
+      e.preventDefault();
+    }
+  };
   return (
     <>
-      <Grid container className="">
+      <Grid container className="box_shadow_div">
         <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
               <div className="q-add-categories-section-header">
                 <span
                   onClick={() => {
-                    setVisible("StocktakeLiat");
+                    setVisible("StocktakeList");
                   }}
                   className="text-center items-center"
                 >
@@ -229,7 +416,7 @@ const AddNewStocktake = ({ setVisible }) => {
                   <StyledTableCell></StyledTableCell>
                 </TableHead>
                 <TableBody>
-                  {productList.map((product, index) => {
+                  {stocktake_items.map((product, index) => {
                     return (
                       <>
                         <StyledTableRow key={index}>
@@ -239,14 +426,39 @@ const AddNewStocktake = ({ setVisible }) => {
                                 loadOptions={loadOptions}
                                 styles={customStyles}
                                 menuPortalTarget={document.body}
-                                onChange={(option)=>{handleOnChangeSelectDropDown(option.value, option.variantId,index)}}
+                                onChange={(option) => {
+                                  handleOnChangeSelectDropDown(
+                                    option.value,
+                                    option.variantId,
+                                    index
+                                  );
+                                }}
+                               
+                                
                               />
+                              {errorMessages[index]?.product_name && (
+                                <div className="error">
+                                  {errorMessages[index].product_name}
+                                </div>
+                              )}
                             </div>
                           </StyledTableCell>
                           <StyledTableCell>
                             {product.current_qty}
                           </StyledTableCell>
-                          <StyledTableCell>{product.new_qty}</StyledTableCell>
+                          <StyledTableCell sx={{ width: "15%" }}>
+                            <BasicTextFields
+                              onChangeFun={(e) => {
+                                handleNewQtyChange(e, index);
+                              }}
+                              onKeyPressFun={handleKeyPress}
+                            />
+                            {errorMessages[index]?.new_qty && (
+                              <div className="error">
+                                {errorMessages[index].new_qty}
+                              </div>
+                            )}
+                          </StyledTableCell>
                           <StyledTableCell>
                             {product.discrepancy}
                           </StyledTableCell>
@@ -278,7 +490,7 @@ const AddNewStocktake = ({ setVisible }) => {
               <Grid item>
                 <button
                   onClick={() => {
-                    //   setVisible(currentMerchant);
+                    setVisible("StocktakeList");
                   }}
                   className="quic-btn quic-btn-cancle"
                 >
@@ -302,7 +514,7 @@ const AddNewStocktake = ({ setVisible }) => {
               <Grid item>
                 <button
                   onClick={() => {
-                    //   setVisible(currentMerchant);
+                    handleCreateStocktake("1");
                   }}
                   className="quic-btn quic-btn-save"
                 >
@@ -312,7 +524,9 @@ const AddNewStocktake = ({ setVisible }) => {
               <Grid item>
                 <button
                   className="quic-btn quic-btn-save"
-                  //   onClick={handleUpdateMerchant}
+                  onClick={() => {
+                    handleCreateStocktake("0");
+                  }}
                   //   disabled={loader}
                 >
                   Create
@@ -323,6 +537,21 @@ const AddNewStocktake = ({ setVisible }) => {
           </Grid>
         </Grid>
       </Grid>
+      <DeleteModal
+        headerText="Stocktake"
+        open={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+        }}
+        onConfirm={confirmDeleteCategory}
+      />
+      <AlertModal
+        headerText={alertModalHeaderText}
+        open={alertModalOpen}
+        onClose={() => {
+          setAlertModalOpen(false);
+        }}
+      />
     </>
   );
 };

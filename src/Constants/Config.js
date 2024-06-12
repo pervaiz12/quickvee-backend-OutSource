@@ -306,7 +306,8 @@ module.exports = Object.freeze({
   INVENTORY_LIST: "ReportingReactapi/JsonDataproductnew1",
   EMAIL_VARIFICATION: "LoginApiReact/reset_password_send",
 
-  GET_STOCKTAKE_LIST: "Stocktake_react_api/stocktake_list"
+  GET_STOCKTAKE_LIST: "Stocktake_react_api/stocktake_list",
+  CREATE_UPDATE_STOCKTAKE: "Stocktake_react_api/create_update_stocktake"
 });
 
 // All api calls are initialized in this component for this application
