@@ -121,25 +121,25 @@ const ItemSalesDetails = (props) => {
                         <p>{priceFormate(ItemData.total_qty)}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>{priceFormate(ItemData.total_price)}</p>
+                        <p>${priceFormate(ItemData.total_price)}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>{priceFormate(ItemData.adjust_price)}</p>
+                        <p>${priceFormate(ItemData.adjust_price)}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>{priceFormate(ItemData.discount_amt)}</p>
+                        <p>${priceFormate(ItemData.discount_amt)}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>{priceFormate(ItemData.saletx)}</p>
+                        <p>${priceFormate(ItemData.saletx)}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>{priceFormate(ItemData.othertx)}</p>
+                        <p>${priceFormate(ItemData.othertx)}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>{priceFormate(ItemData.refund_amount)}</p>
+                        <p>${priceFormate(ItemData.refund_amount)}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>{priceFormate(ItemData.discount_price)}</p>
+                        <p>${priceFormate(ItemData.discount_price)}</p>
                       </StyledTableCell>
                     </StyledTableRow>
                   ))}

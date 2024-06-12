@@ -138,6 +138,7 @@ const DetailsSaleReport = ({ data }) => {
                 onClick={handleCategoryClick}
               >
                 <span>{category}</span>
+                <img src={SortIcon} alt="" className="" />
               </div>
               <TableContainer>
                 <StyledTable
@@ -145,12 +146,20 @@ const DetailsSaleReport = ({ data }) => {
                   aria-label="customized table"
                 >
                   <TableHead>
-                    <StyledTableCell>Item Name</StyledTableCell>
+                    <StyledTableCell sx={{ width: "55%" }}>Item Name</StyledTableCell>
                     <StyledTableCell align="center">
-                      <p>Quantity </p>
+                      <p
+                    className="q-catereport-quantity "
+                    onClick={handleQuantityClick}
+                  >
+                    Quantity {" "}
+                    <img src={SortIconW} alt="" className="pl-1" />
+                  </p>
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                      <p>Amount </p>
+                    <p className="attriButes-title" onClick={handleQuantityClick}>
+                      Amount <img src={SortIconW} alt=""  className="pl-1" />
+                    </p>
                     </StyledTableCell>
                   </TableHead>
                   <TableBody>
@@ -159,10 +168,10 @@ const DetailsSaleReport = ({ data }) => {
                         <StyledTableCell>
                           <p className="q-catereport-item">{item.name}</p>
                         </StyledTableCell>
-                        <StyledTableCell align="center">
+                        <StyledTableCell align="left">
                           <p className="">{item.pro_qty}</p>
                         </StyledTableCell>
-                        <StyledTableCell align="center">
+                        <StyledTableCell align="left">
                           $
                           {item.product_total
                             ? priceFormate(parseFloat(item.product_total).toFixed(2))
@@ -175,7 +184,7 @@ const DetailsSaleReport = ({ data }) => {
                         <p>Total</p>
                       </StyledTableCell>
                       <StyledTableCell></StyledTableCell>
-                      <StyledTableCell align="center">
+                      <StyledTableCell align="left">
                         $
                         {priceFormate(items
                           .reduce(
@@ -272,13 +281,21 @@ const DetailsSaleReport = ({ data }) => {
             <StyledTable>
               <TableBody>
                 <StyledTableRow>
-                  <StyledTableCell>Grand Total</StyledTableCell>
-                  <StyledTableCell></StyledTableCell>
-                  <StyledTableCell></StyledTableCell>
+                  <StyledTableCell  sx={{ width: "50%" }} >
+                    <div className="q-category-bottom-report-listing">
+                                      <div>
+                                        <p className="">Grand Total</p>
+                                      </div>
+                                    </div>
+                  </StyledTableCell>
                   <StyledTableCell></StyledTableCell>
 
                   <StyledTableCell align="center">
-                    ${priceFormate(grandTotal.toFixed(2))}
+                      <div className="q-category-bottom-report-listing">
+                        <div>
+                        ${priceFormate(grandTotal.toFixed(2))}
+                        </div>
+                      </div>
                   </StyledTableCell>
                 </StyledTableRow>
               </TableBody>

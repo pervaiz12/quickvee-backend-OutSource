@@ -950,7 +950,7 @@ const TimesheetListing = ({ data }) => {
                           : null
                       }
                       size="medium"
-                      format={"DD-MM-YYYY"}
+                      format={"MMMM DD, YYYY"}
                       views={["year", "month", "day"]}
                       slotProps={{
                         textField: { placeholder: "Select Date" },
@@ -1033,7 +1033,7 @@ const TimesheetListing = ({ data }) => {
                       disableFuture
                       name="add_out_date"
                       size="medium"
-                      format={"DD-MM-YYYY"}
+                      format={"MMMM DD, YYYY"}
                       views={["year", "month", "day"]}
                       slotProps={{
                         textField: { placeholder: "Select Date" },

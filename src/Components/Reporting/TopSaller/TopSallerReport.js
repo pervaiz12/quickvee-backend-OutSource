@@ -154,7 +154,7 @@ const TopSallerReport = () => {
           <Grid container sx={{ padding: 2.5 }}>
             <Grid item xs={12}>
               <div className="q_details_header">
-                Top Sellers - Overall Top 10
+                Top Sellers
               </div>
             </Grid>
           </Grid>

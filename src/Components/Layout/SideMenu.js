@@ -532,12 +532,12 @@ const menuItems = [
           { id: 79, text: " Order Type ", link: "/store-reporting/order-type" },
           {
             id: 64,
-            text: "Report by Sales Person",
+            text: "Detailed Sales Person Report",
             link: "/store-reporting/report-sales-person",
           },
           {
             id: 69,
-            text: "Top Seller - Overall Top 10",
+            text: "Top Sellers",
             link: "/store-reporting/overall-top",
           },
           {
