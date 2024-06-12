@@ -9,6 +9,8 @@ import TableRow from "@mui/material/TableRow";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Loader from "../../../CommonComponents/Loader";
+import { priceFormate } from "../../../hooks/priceFormate";
+
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -64,16 +66,16 @@ export default function Pagination(props) {
                       <p>{result?.category_name}</p>
                     </StyledTableCell>
                     <StyledTableCell sx={{ width: "10%" }}>
-                      <p>{`$${result?.costperItem}`}</p>
+                      <p>{`$${priceFormate(result?.costperItem)}`}</p>
                     </StyledTableCell>
                     <StyledTableCell sx={{ width: "10%" }}>
-                      <p>{`$${result?.price}`}</p>
+                      <p>{`$${priceFormate(result?.price)}`}</p>
                     </StyledTableCell>
                     <StyledTableCell sx={{ width: "10%" }}>
                       <p>{`${result?.margin}%`}</p>
                     </StyledTableCell>
                     <StyledTableCell>
-                      <p>{`$${result?.profit}`}</p>
+                      <p>{`$${priceFormate(result?.profit)}`}</p>
                     </StyledTableCell>
                   </StyledTableRow>
                 ))

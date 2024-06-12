@@ -50,6 +50,21 @@ const CheckIDVerifyList = (props) => {
     AllCheckIDVerifyDataState.CheckIDVerifyData,
   ]);
 
+  const formatDate = (dateString) => {
+    const [month, day, year] = dateString.split('-');
+    const date = new Date(year, month - 1, day);
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
+    return date.toLocaleDateString('en-US', options);
+  };
+  const formatTime = (timeString) => {
+    const [hours, minutes, seconds] = timeString.split(':');
+    const date = new Date();
+    date.setHours(hours, minutes, seconds);
+    const options = { hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: true };
+    return date.toLocaleTimeString('en-US', options);
+  };
+  
+
   return (
     <>
       <div className="box">
@@ -72,8 +87,8 @@ const CheckIDVerifyList = (props) => {
               style={{ borderRadius: "unset" }}
             >
               <div className="q-category-bottom-categories-single-category">
-                <p className="report-title">{CheckData.merchant_date}</p>
-                <p className="report-title">{CheckData.merchant_time}</p>
+                <p className="report-title">{formatDate(CheckData.merchant_date)}</p>
+                <p className="report-title">{formatTime(CheckData.merchant_time)}</p>
                 <p className="report-title">{CheckData.full_name}</p>
                 <p className="report-title">{CheckData.order_id}</p>
                 <p className="report-title">{CheckData.name}</p>

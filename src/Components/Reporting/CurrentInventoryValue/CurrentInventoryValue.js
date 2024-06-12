@@ -3,6 +3,8 @@ import { fetchcurrentInventoryreportData } from "../../../Redux/features/Current
 import { useSelector, useDispatch } from "react-redux";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { Grid } from "@mui/material";
+import { priceFormate } from "../../../hooks/priceFormate";
+import Skeleton from "react-loading-skeleton";
 
 const CurrentInventoryValue = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -71,7 +73,8 @@ const CurrentInventoryValue = () => {
               Total Quantity
             </div>
             <div className="text-[20px] font-bold mt-4">
-              {currentInventory.final_quantity}
+              {/* {priceFormate(formatNumber(currentInventory.final_quantity))} */}
+              { currentInventory.final_quantity ?  priceFormate(formatNumber(currentInventory.final_quantity)) : <Skeleton /> }
             </div>
           </div>
         </Grid>
@@ -81,7 +84,8 @@ const CurrentInventoryValue = () => {
               Total Selling Price
             </div>
             <div className="text-[20px] font-bold mt-4">
-              $ {formatNumber(currentInventory.total_sale_price)}
+              {/* $ {priceFormate(formatNumber(currentInventory.total_sale_price))} */}
+              { currentInventory.total_sale_price ?  "$"+priceFormate(formatNumber(currentInventory.total_sale_price)) : <Skeleton /> }
             </div>
           </div>
         </Grid>
@@ -91,7 +95,8 @@ const CurrentInventoryValue = () => {
               Total Cost Per Item
             </div>
             <div className="text-[20px] font-bold mt-4">
-              $ {formatNumber(currentInventory.total_cpi_price)}
+              {/* $ {priceFormate(formatNumber(currentInventory.total_cpi_price))} */}
+              { currentInventory.total_cpi_price ?  "$"+priceFormate(formatNumber(currentInventory.total_cpi_price)) : <Skeleton /> }
             </div>
           </div>
         </Grid>

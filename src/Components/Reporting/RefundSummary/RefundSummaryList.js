@@ -10,6 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
 import { fetchRefundData } from "../../../Redux/features/Reports/RefundReport/RefundReportSlice";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -125,10 +126,10 @@ const RefundSummaryList = ({ data }) => {
                           <p>{data.reason}</p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <p>{data.refund_qty}</p>
+                          <p>{priceFormate(data.refund_qty)}</p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <p>${(data.refund_qty * data.price).toFixed(2)}</p>
+                          <p>${priceFormate((data.refund_qty * data.price).toFixed(2))}</p>
                         </StyledTableCell>
                       </StyledTableRow>
                     </>
@@ -147,12 +148,12 @@ const RefundSummaryList = ({ data }) => {
                         </p>
                       </StyledTableCell>
                       <StyledTableCell style={{ color: "#0A64F9" }}>
-                        {totalAmt}
+                        {priceFormate(totalAmt)}
                       </StyledTableCell>
 
                       <StyledTableCell>
                         <p style={{ color: "#0A64F9" }}>
-                          ${totalRefundAmount.toFixed(2)}
+                          ${priceFormate(totalRefundAmount.toFixed(2))}
                         </p>
                       </StyledTableCell>
                     </StyledTableRow>

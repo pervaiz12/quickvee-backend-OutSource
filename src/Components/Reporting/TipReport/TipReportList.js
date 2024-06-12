@@ -12,6 +12,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -101,7 +102,7 @@ const TipReportList = (props) => {
                     <>
                       <StyledTableRow key={index}>
                         <StyledTableCell>
-                          <p>{tipData.employee_id}</p>
+                          <p>{priceFormate(tipData.employee_id)}</p>
                         </StyledTableCell>
                         <StyledTableCell>
                           <p>{tipData.f_name}</p>
@@ -110,7 +111,7 @@ const TipReportList = (props) => {
                           <p>{tipData.l_name}</p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <p>${parseFloat(tipData.net_tip).toFixed(2)}</p>
+                          <p>${priceFormate(parseFloat(tipData.net_tip).toFixed(2))}</p>
                         </StyledTableCell>
                       </StyledTableRow>
                     </>
@@ -120,10 +121,10 @@ const TipReportList = (props) => {
                     <StyledTableCell></StyledTableCell>
                     <StyledTableCell></StyledTableCell>
                     <StyledTableCell>
-                      <p>Grand Total:</p>
+                      <p style={{   color: "#0A64F9"}}>Grand Total</p>
                     </StyledTableCell>
                     <StyledTableCell>
-                      <p className="report-title">${totalNetTip.toFixed(2)}</p>
+                      <p className="report-title" style={{   color: "#0A64F9"}}>${priceFormate(totalNetTip.toFixed(2))}</p>
                     </StyledTableCell>
                   </StyledTableRow>
                 )}

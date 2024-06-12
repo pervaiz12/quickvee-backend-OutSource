@@ -24,6 +24,7 @@ import useDebounce from "../../hooks/useDebouncs";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import Pagination from "../../AllUserComponents/Users/UnverifeDetails/Pagination";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
+import { priceFormate } from "../../hooks/priceFormate";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -237,7 +238,7 @@ const PurchaseTable = ({ seVisible }) => {
                               <StyledTableCell align="center">
                                 <div className="flex justify-center">
                                   <p className="purchase-data-sort purchaseData ">
-                                    {purchaseData.total_qty}
+                                    {priceFormate(Number(purchaseData.total_qty))}
                                   </p>
                                 </div>
                               </StyledTableCell>

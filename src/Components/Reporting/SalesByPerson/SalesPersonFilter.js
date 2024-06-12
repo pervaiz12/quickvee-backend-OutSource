@@ -119,7 +119,7 @@ const SalesPersonFilter = ({ onFilterDataChange }) => {
     );
   }, [selectedOrderSource, selectedOrderType, selectedEmployeeID]);
 
-  const orderSourceList = ["All", "Online", "Offline"];
+  const orderSourceList = ["All", "Online Order", "Offline Order"];
   const orderTypeList = ["All", "Pickup", "Delivery"];
 
   return (
@@ -128,7 +128,7 @@ const SalesPersonFilter = ({ onFilterDataChange }) => {
         <Grid item xs={12}>
           <Grid container sx={{ p: 2.5 }}>
             <Grid item xs={12}>
-              <div className="q_details_header">Report By Sales Person</div>
+              <div className="q_details_header">Detailed Sales Person Report</div>
             </Grid>
           </Grid>
           <Grid container sx={{ px: 2.5 }}>

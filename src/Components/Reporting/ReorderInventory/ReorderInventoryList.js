@@ -12,6 +12,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -112,16 +113,16 @@ const ReorderInventoryList = (props) => {
                         <p>{InvData.cost_vendor}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>{InvData.instock}</p>
+                        <p>{priceFormate(InvData.instock)}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>{InvData.item_price}</p>
+                        <p>${priceFormate(InvData.item_price)}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>{InvData.reorder_level}</p>
+                        <p>{priceFormate(InvData.reorder_level)}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>{InvData.reorder_qty}</p>
+                        <p>{priceFormate(InvData.reorder_qty)}</p>
                       </StyledTableCell>
                     </StyledTableRow>
                   ))

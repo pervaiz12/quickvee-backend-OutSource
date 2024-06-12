@@ -91,7 +91,7 @@ const EmployeelistReport = () => {
         <Grid item xs={12}>
           <Grid container sx={{ padding: 2.5 }}>
             <Grid item xs={12}>
-              <div className="q_details_header">Employee List</div>
+              <div className="q_details_header">Employee List </div>
             </Grid>
           </Grid>
           <Grid container>
@@ -103,6 +103,7 @@ const EmployeelistReport = () => {
                 >
                   <TableHead>
                     <StyledTableCell>Employee Name</StyledTableCell>
+                    <StyledTableCell>PIN</StyledTableCell>
                     <StyledTableCell>Contact</StyledTableCell>
                     <StyledTableCell>Email</StyledTableCell>
                     <StyledTableCell>Address</StyledTableCell>
@@ -115,6 +116,9 @@ const EmployeelistReport = () => {
                             <p>
                               {employee?.f_name} {employee?.l_name}
                             </p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>{employee?.pin}</p>
                           </StyledTableCell>
                           <StyledTableCell>
                             <p>{employee?.phone}</p>

@@ -12,6 +12,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
+import PasswordShow from "../../../Common/passwordShow";
+import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 // ==================== TABLE STYLE ADDED ===================================================
 const StyledTable = styled(Table)(({ theme }) => ({
@@ -43,6 +46,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const DailyReportList = ({ data }) => {
   const dispatch = useDispatch();
+  const { handleCoockieExpire } = PasswordShow();
   const {
     LoginGetDashBoardRecordJson,
     LoginAllStore,
@@ -59,10 +63,19 @@ const DailyReportList = ({ data }) => {
 
   // ==================== USEEFFECT ===========================================
   useEffect(() => {
-    let newData = { ...data, ...userTypeData, merchant_id };
-    // Dispatch the action to fetch data when the component mounts
-    dispatch(fetchdailyreportData(newData));
+    getAllDailyReport();
   }, [dispatch, data]);
+  const getAllDailyReport = async () => {
+    try {
+      let newData = { ...data, ...userTypeData, merchant_id };
+      // Dispatch the action to fetch data when the component mounts
+
+      await dispatch(fetchdailyreportData(newData)).unwrap();
+    } catch (error) {
+      handleCoockieExpire();
+      dispatch(getAuthInvalidMessage("your session has been expired"));
+    }
+  };
 
   useEffect(() => {
     if (!dailyreportDataState.loading && dailyreportDataState.dailyreportData) {
@@ -139,7 +152,7 @@ const DailyReportList = ({ data }) => {
                               </p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p className="report-title">${dailyreport.amt}</p>
+                              <p className="report-title">${priceFormate(dailyreport.amt)}</p>
                             </StyledTableCell>
                           </StyledTableRow>
                         ))}
@@ -154,7 +167,7 @@ const DailyReportList = ({ data }) => {
                           <div className="q-category-bottom-report-listing">
                             <div>
                               <p className="report-title">
-                                ${totalAmt.toFixed(2)}
+                                ${priceFormate(totalAmt.toFixed(2))}
                               </p>
                             </div>
                           </div>

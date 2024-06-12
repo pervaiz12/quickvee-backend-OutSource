@@ -9,6 +9,7 @@ import TableRow from "@mui/material/TableRow";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Loader from "../../../CommonComponents/Loader";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -65,7 +66,7 @@ export default function Pagination(props) {
                       <p>{result?.quantity}</p>
                     </StyledTableCell>
                     <StyledTableCell>
-                      <p>{`$${result?.price}`}</p>
+                      <p>{`$${priceFormate(result?.price)}`}</p>
                     </StyledTableCell>
                   </StyledTableRow>
                 ))

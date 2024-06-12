@@ -13,7 +13,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
-
+import { priceFormate } from "../../../hooks/priceFormate";
 // ==================== TABLE STYLE ADDED ===================================================
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -58,6 +58,7 @@ const SalesPersonReport = (props) => {
     (state) => state.SalesByPersonList
   );
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
+  const [totalRecord, setTotalRecord] = React.useState("");
 
   useEffect(() => {
     if (props && props.selectedDateRange) {
@@ -116,6 +117,13 @@ const SalesPersonReport = (props) => {
       </>
     );
   }
+  let grandTotal = 0;
+  Object.keys(allSalesByPersonData).map((EmpData, index) => {
+    const totalAmount = allSalesByPersonData[EmpData]?.reduce((total, SalesData) => {
+      return total + (parseFloat(SalesData?.amt) || 0);
+    }, 0);
+    grandTotal += totalAmount;
+    })
   return (
     <>
       {allSalesByPersonData &&
@@ -144,7 +152,8 @@ const SalesPersonReport = (props) => {
                           <StyledTableRow key={index}>
                             <StyledTableCell sx={{ width: "33%" }}>
                               <Link
-                                to={`/store-reporting/order-summary/${SalesData.order_id}`}
+                                to={`/store-reporting/order-summary/${merchant_id}/${SalesData.order_id}`}
+                                target="_blank"
                               >
                                 <p>{SalesData.order_id}</p>
                               </Link>
@@ -161,47 +170,62 @@ const SalesPersonReport = (props) => {
                               align="center"
                               sx={{ width: "33%" }}
                             >
-                              <p> ${SalesData.amt}</p>
+                              <p> ${priceFormate(SalesData.amt)}</p>
                             </StyledTableCell>
                           </StyledTableRow>
                         )
                       )}
+                        <StyledTableRow>
+                                <StyledTableCell></StyledTableCell>
+                                <StyledTableCell align="center">
+                                      <div className="q-category-bottom-report-listing">
+                                          <div>Total </div>
+                                      </div>
+                                      </StyledTableCell>
+                                <StyledTableCell align="center">
+                                <div className="q-category-bottom-report-listing">
+                                          <div>
+                                  {`$${priceFormate(allSalesByPersonData[EmpData]
+                                    .reduce((total, SalesData) => {
+                                      return (
+                                        total +
+                                        (parseFloat(SalesData?.amt) || 0)
+                                      );
+                                    }, 0)
+                                    .toFixed(2))}`}</div>
+                                    </div>
+                                </StyledTableCell> 
+                        </StyledTableRow>
+
+                        
+
                     </TableBody>
                   </StyledTable>
                 </TableContainer>
               </Grid>
             </Grid>
-            {/* <div key={index} className="q-attributes-bottom-detail-section">
-              <div className="q-category-bottom-header">
-                <div className="q_details_header ml-2">
-                  Employee Name: {EmpData}
-                </div>
-              </div>
-
-              <div className="q-attributes-bottom-attriButes-header">
-                <p className="q-sales-item">Order ID</p>
-                <p className="q-sales-in ">Date Time</p>
-                <p className="q-sales-total ">Total</p>
-              </div>
-              {allSalesByPersonData[EmpData].map((SalesData, index1) => (
-                <div
-                  key={index1}
-                  className="q-attributes-bottom-attriButes-listing "
-                >
-                  <div className="q-employee-bottom-attriButes-single-attributes text-center ">
-                    <Link
-                      to={`/store-reporting/order-summary/${SalesData.order_id}`}
-                    >
-                      <p className="q-sales-item">{SalesData.order_id}</p>
-                    </Link>
-                    <p className="q-sales-in">{SalesData.merchant_time}</p>
-                    <p className="q-sales-total"> ${SalesData.amt}</p>
-                  </div>
-                </div>
-              ))}
-            </div> */}
           </>
         ))}
+
+               <StyledTable    sx={{ minWidth: 500 }} aria-label="customized table"  style={{ marginBottom: "1rem", transform: "translate(0rem, -1rem)" }} >
+                  <StyledTableRow>
+                      <StyledTableCell sx={{ width: "33%" }}></StyledTableCell>
+                      <StyledTableCell align="center" sx={{ width: "33%" }}>
+                                    <div className="q-category-bottom-report-listing">
+                                      <div>
+                                        <p className="">Grand Total</p>
+                                      </div>
+                                    </div>
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                                    <div className="q-category-bottom-report-listing">
+                                      <div>
+                                        <p className="">${priceFormate(grandTotal)}</p>
+                                      </div>
+                                    </div>
+                      </StyledTableCell>
+                  </StyledTableRow>
+                </StyledTable>
     </>
   );
 };

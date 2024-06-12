@@ -12,6 +12,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -177,23 +178,23 @@ const Employeedetails = (props) => {
                                   </StyledTableCell>
                                   <StyledTableCell>
                                     <p>
-                                      {(parseFloat(
+                                      {priceFormate((parseFloat(
                                         workData.total_seconds_worked
-                                      ) || 0).toFixed(2)}
+                                      ) || 0).toFixed(2))}
                                     </p>
                                   </StyledTableCell>
                                   <StyledTableCell>
                                     <p>
-                                      {(parseFloat(
+                                      {priceFormate((parseFloat(
                                         workData.total_seconds_break
-                                      ) || 0).toFixed(2)}
+                                      ) || 0).toFixed(2))}
                                     </p>
                                   </StyledTableCell>
                                   <StyledTableCell>
                                     <p>
-                                      {(parseFloat(
+                                      {priceFormate((parseFloat(
                                         workData.effective_seconds_worked
-                                      ) || 0).toFixed(2)}
+                                      ) || 0).toFixed(2))}
                                     </p>
                                   </StyledTableCell>
                                 </StyledTableRow>
@@ -202,6 +203,8 @@ const Employeedetails = (props) => {
                           )}
                         {Array.isArray(allEmpWorkingHrsData[employeeName]) && (
                           <StyledTableRow>
+                            <StyledTableCell></StyledTableCell>
+                            <StyledTableCell></StyledTableCell>
                             <StyledTableCell>
                               <p
                                 style={{
@@ -211,15 +214,13 @@ const Employeedetails = (props) => {
                                 Total
                               </p>
                             </StyledTableCell>
-                            <StyledTableCell></StyledTableCell>
-                            <StyledTableCell></StyledTableCell>
                             <StyledTableCell>
                               <p
                                 style={{
                                   color: "#0A64F9",
                                 }}
                               >
-                                {calTotalWork(allEmpWorkingHrsData[employeeName]).toFixed(2)} 
+                                {priceFormate(calTotalWork(allEmpWorkingHrsData[employeeName]).toFixed(2))} 
                               </p>
                             </StyledTableCell>
                             <StyledTableCell>
@@ -228,11 +229,11 @@ const Employeedetails = (props) => {
                                   color: "#0A64F9",
                                 }}
                               >
-                                {parseFloat(
+                                {priceFormate(parseFloat(
                                   calTotalBreak(
                                     allEmpWorkingHrsData[employeeName]
                                   )
-                                ).toFixed(2)}
+                                ).toFixed(2))}
                               </p>
                             </StyledTableCell>
                             <StyledTableCell>
@@ -241,11 +242,11 @@ const Employeedetails = (props) => {
                                   color: "#0A64F9",
                                 }}
                               >
-                                {parseFloat(
+                                {priceFormate(parseFloat(
                                   calTotalActualWork(
                                     allEmpWorkingHrsData[employeeName]
                                   )
-                                ).toFixed(2)}
+                                ).toFixed(2))}
                               </p>
                             </StyledTableCell>
                           </StyledTableRow>
