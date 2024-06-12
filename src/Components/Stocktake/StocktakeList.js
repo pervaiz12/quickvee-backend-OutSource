@@ -115,7 +115,7 @@ const StocktakeList = ({setVisible}) => {
           >
             <Grid item>
               <div className="q-category-bottom-header">
-                <span>Purchase Order</span>
+                <span>Stocktake List</span>
               </div>
             </Grid>
             <Grid item>
