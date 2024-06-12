@@ -165,8 +165,11 @@ const AddNewStocktake = ({ setVisible }) => {
       const data = res.payload
         ?.map((prod) => ({
           label: prod.title,
-          value: prod.id,
+          value: prod.var_id || prod.id,
+          variantId: prod.isvarient === "1" ? prod.var_id : null,
+          prodId: prod.id,
         }));
+       
       return data;
     }
   };
@@ -428,7 +431,7 @@ const AddNewStocktake = ({ setVisible }) => {
                                 menuPortalTarget={document.body}
                                 onChange={(option) => {
                                   handleOnChangeSelectDropDown(
-                                    option.value,
+                                    option.prodId,
                                     option.variantId,
                                     index
                                   );
