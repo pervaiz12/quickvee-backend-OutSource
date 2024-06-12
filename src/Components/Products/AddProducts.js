@@ -265,8 +265,8 @@ const AddProducts = () => {
         formValue: [],
       });
       if (pageUrl !== "product-edit") {
-        setFormValue({
-          0:{
+        setFormValue([
+          {
             costPerItem: "",
             compareAtPrice: "",
             price: "",
@@ -284,7 +284,7 @@ const AddProducts = () => {
             isFoodStamble: false,
             // itemForAllLinkedLocation: false,
           },
-      });
+        ]);
         // setProductInfo({
         //   title: "",
         //   description: "",
@@ -591,199 +591,152 @@ const AddProducts = () => {
     }
   };
 
-  console.log('formValue', formValue);
 
   const handleBlur = (e, i, title) => {
-    const { name, value, type } = e.target;
-    // margin and profit calculation
-    // varient form onchange validation function
-    // handleFormDuplicateFormValidation(name, value, i);
 
+    if(isMultipleVarient){
+    const { name, value, type, checked } = e.target;
+
+    console.log(name, value, type, title, checked, i);
+
+    /// convert input value format 0.00
+    let fieldValue;
+    if (!notAllowDecimalValue.includes(name)) {
+      fieldValue = value
+        // Remove extra dots and ensure only one dot exists at most
+        .replace(/[^\d.]/g, "") // Allow digits and dots only
+        .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
+        .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+
+      let inputStr = fieldValue.replace(/\D/g, "");
+      inputStr = inputStr.replace(/^0+/, "");
+
+      if (inputStr.length == "") {
+        fieldValue = "";
+      } else if (inputStr.length === 1) {
+        fieldValue = "0.0" + inputStr;
+      } else if (inputStr.length === 2) {
+        fieldValue = "0." + inputStr;
+      } else {
+        fieldValue =
+          inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
+      }
+    }
+    // allowed alphanumeric value in upcCode field but not allowed decimal value
+    else if (name === "upcCode") {
+      fieldValue = fieldValue = value
+        // Remove extra dots and ensure only one dot exists at most
+        .replace(/[^\w.]/g, "") // Allow alphanumeric characters, digits, and dots only
+        .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
+        .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+
+      let inputStr = fieldValue.replace(/[^\w]/g, "");
+      if (inputStr == "0") {
+        fieldValue = "0";
+      } else {
+        fieldValue = inputStr.toUpperCase();
+      }
+    }
+    // normal input value format
+    else {
+      fieldValue = value
+        // Remove extra dots and ensure only one dot exists at most
+        .replace(/[^\d.]/g, "") // Allow digits and dots only
+        .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
+        .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+
+      let inputStr = fieldValue.replace(/\D/g, "");
+      // inputStr = inputStr.replace(/^+/, "");
+      if (inputStr == "0") {
+        fieldValue = "0";
+      } else {
+        fieldValue = inputStr;
+      }
+    }
+
+    // margin and profit calculation
     let totalPriceValue;
     let marginValue;
     let profitValue;
     let price_total_value;
 
-    // if (name === "costPerItem") {
-    //   // price field total value
-    //   if(costPer > 0){
-
-    //     totalPriceValue = (costPer / 100) * value;
-    //     price_total_value = parseFloat(value) + parseFloat(totalPriceValue);
+    // price field total value calculation based on costPer value which is fetch from API.
+    if (name === "costPerItem") {
+      if(costPer > 0){
+        totalPriceValue = (costPer / 100) * fieldValue;
+        price_total_value = parseFloat(fieldValue) + parseFloat(totalPriceValue);
   
-    //     // margin and profit total value
-    //     let marginvl = (value * 100) / price_total_value.toFixed(2);
-    //     let showmargin = 100 - marginvl;
-    //     marginValue = parseFloat(showmargin).toFixed(2);
-    //     profitValue = parseFloat(price_total_value - value).toFixed(2);
-    //   }else{
-    //     price_total_value = ""
-    //   }
-    // }
+        // margin and profit total value calculation
+        let marginvl = (fieldValue * 100) / price_total_value.toFixed(2);
+        let showmargin = 100 - marginvl;
+        marginValue = parseFloat(showmargin).toFixed(2);
+        profitValue = parseFloat(price_total_value - fieldValue).toFixed(2);
+      }else{
+        price_total_value= "";
+      }
+    }
 
-    // // if price value is change manually the recalculate margin and profit value
-    // if (name === "price") {
-    //   if (value > 0) {
-    //     let costPerValue = formValue[i]["costPerItem"];
-    //     let marginvl = (costPerValue * 100) / value;
-    //     let showmargin = 100 - marginvl;
-    //     marginValue = parseFloat(showmargin).toFixed(2);
-    //     profitValue = parseFloat(value - costPerValue).toFixed(2);
-    //   }
-    // }
+    // if price value is change manually the recalculate margin and profit value
+    const costPerValue = isMultipleVarient ? formValue?.[i]?.[title]?.["costPerItem"] :formValue?.[0]?.["costPerItem"];
+    if (name === "price") {
+      if(+costPerValue > 0 && value > 0){
+        let marginvl = (costPerValue * 100) / fieldValue;
+        let showmargin = 100 - marginvl;
+        marginValue = parseFloat(showmargin).toFixed(2);
+        profitValue = parseFloat(fieldValue - costPerValue).toFixed(2);
+      }
+      else if (!costPerValue && value > 0) {
+        marginValue =""
+        profitValue=""
+      }
+    }
 
-    // when remove focus on input value
-    // const updatedFormValue = formValue.map((item, index) => {
-    //   console.log('item', item);
-      // console.log('item', item);
-      // here.... index => each section index
-      // i => each input field index inside section
-      // show alert "Compare Price must be greater than price." when compare value < price && price > compare value / when compareAtPrice field value change manually
-      // if (
-      //   (index === i || i === 0) &&
-      //   name === "compareAtPrice" &&
-      //   value &&
-      //   !!formValue[i]["price"]
-      // ) {
-      //   if (+value < +formValue[i]["price"]) {
-      //     setOpenAlertModal(true);
-      //     return {
-      //       ...item,
-      //       ["compareAtPrice"]: "",
-      //     };
-      //   } else {
-      //     return {
-      //       ...item,
-      //       [name]: value,
-      //     };
-      //   }
-      // }
 
-      // // show alert "Compare Price must be greater than price." when compare value < price && price > compare value / when price field value change manually
-      // else if (
-      //   (index === i || i === 0) &&
-      //   name === "price" &&
-      //   value &&
-      //   !!formValue[i]["compareAtPrice"]
-      // ) {
-      //   if (+value > +formValue[i]["compareAtPrice"]) {
-      //     setOpenAlertModal(true);
-      //     return {
-      //       ...item,
-      //       [name]: value,
-      //       ["compareAtPrice"]: "",
-      //       ["margin"]: !isNaN(marginValue) ? marginValue : "",
-      //       ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-      //     };
-      //   } else {
-      //     return {
-      //       ...item,
-      //       [name]: value,
-      //       ["margin"]: !isNaN(marginValue) ? marginValue : "",
-      //       ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-      //     };
-      //   }
-      // }
+    const isValue = (input) => Boolean(parseFloat(input))
 
-      // /// if price value change manually and onblur and not depennd on compareAtPrice is empty or not
-      // else if (i === 0 && name === "price" && value) {
-      //   if (!formValue[i]["costPerItem"] || !formValue[i]["price"]) {
-      //     return {
-      //       [title]:{
-      //         ...item[title],
-      //         [name]: value,
-      //       }
-      //     };
-      //   }
-      //   return {
-      //     [title]:{
-      //       ...item[title],
-      //       [name]: value,
-      //       ["margin"]: !isNaN(marginValue) ? marginValue : "",
-      //       ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-      //     }
-      //   };
-      // }
+    const oldMargin = (data) => {
+      return ((name === "price" || name === "costPerItem") && !fieldValue) ?  "" : data.every((item) => isValue(item)) 
+    }
 
-      // // when onchange price value and leave price input empty then clear margin/profit fields value
-      // else if (i === 0 && name === "price" && !value) {
-      //   return {
-      //     ...item,
-      //     [name]: value,
-      //     ["margin"]: "",
-      //     ["Profit"]: "",
-      //   };
-      // }
+    // {small: {..data}}, {large: {... data}}
 
-      // // when compareAtPrice and price value is already exist and when costPerItem is try to change then we run this condition.
-      // // here compareAtPrice and price value need to not empty
-      // else if (
-      //   (index === i || i === 0) &&
-      //   name === "costPerItem" &&
-      //   value &&
-      //   !!formValue[i]["compareAtPrice"] &&
-      //   !!formValue[i]["price"]
-      // ) {
-      //   if (+formValue[i]["compareAtPrice"] < +formValue[i]["price"]) {
-      //     setOpenAlertModal(true);
-      //     return {
-      //       ...item,
-      //       [name]: value,
-      //       ["compareAtPrice"]: "",
-      //     };
-      //   } else {
-      //     return {
-      //       ...item,
-      //       [name]: value,
-      //       ["margin"]: !isNaN(marginValue) ? marginValue : "",
-      //       ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-      //     };
-      //   }
-      // }
-
-      // // when costPerItem value is change manually and not depend on compareAtPrice empty or not
-      // else if (i === 0 && name === "costPerItem" && value) {
-      //   if(costPer > 0){
-
-      //     return {
-      //       ...item,
-      //       [name]: value,
-      //       ["compareAtPrice"]: "",
-      //       ["price"]: price_total_value ? price_total_value?.toFixed(2) : "",
-      //       ["margin"]: !isNaN(marginValue) ? marginValue : "",
-      //       ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-      //     };
-      //   }else{
-      //     return {
-      //       ...item,
-      //       [name]: value,
-      //       ["compareAtPrice"]: "",
-      //       ["margin"]: !isNaN(marginValue) ? marginValue : "",
-      //       ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-      //     };
-      //   }
-      // }
-
-      // // when section is only 0 and name of field is any but not costPerItem => onblur
-      // else if (i === 0 && !nameArray.includes(name)) {
-      //   return {
-      //     ...item,
-      //     [name]: value,
-      //   };
-      // }
-
-      // return item;
-    // });
-
-    // setFormValue(updatedFormValue);
+      const updatedValues = formValue.map((item, index) => {
+        const currentTitle = Object.keys(item)[0];
+        const showError = parseFloat(name === "price" ? fieldValue : name === "costPerItem" ? price_total_value : item[currentTitle]?.price) > parseFloat(name === "compareAtPrice" ? fieldValue : item[currentTitle]?.compareAtPrice)
+        // console.log('1st: ', i === 0 ? currentTitle : title, i, currentTitle, title)
+        console.log("here: ", item, currentTitle, item[currentTitle])
+        return !["upcCode", "customCode"].includes(name) ? {
+          ...item,
+          [i === 0 ? currentTitle : title]: {
+            ...title[i === 0 ? currentTitle : title],
+            [name]: fieldValue,
+            price: !isNaN(parseFloat(price_total_value)) 
+              ? parseFloat(price_total_value).toFixed(2) 
+              : name === "price" 
+                ? fieldValue 
+                : item[currentTitle]?.price && (name === "costPerItem" && !fieldValue)
+                  ? ""
+                  : item[currentTitle]?.price,
+              margin: !isNaN(parseFloat(marginValue)) ? marginValue : oldMargin([item[currentTitle]?.costPerItem, item[currentTitle]?.margin, item[currentTitle]?.price]) ? item[currentTitle]?.margin : "",
+              profit: !isNaN(parseFloat(profitValue)) ? profitValue : oldMargin([item[currentTitle]?.costPerItem, item[currentTitle]?.margin, item[currentTitle]?.price]) ? item[currentTitle]?.profit : "",
+              comparePriceError: 
+              ((["price", "compareAtPrice", "costPerItem"]?.includes(name)) && showError)
+                  ? "Price Should be Less than Compare Price"
+                  : (["qty", "upcCode", "customCode", "reorderLevel", "reorderQty"]?.includes(name)) && item[currentTitle]?.comparePriceError ? item[currentTitle]?.comparePriceError : ""
+          }
+        }: item
+      })
+  
+      console.log('updatedValues', updatedValues)
+      setFormValue(updatedValues);
+    }
   };
-
 
  
   const handleOnChange = (e, i, title) => {
-    const { name, value, type } = e.target;
+    const { name, value, type, checked } = e.target;
 
-    console.log(name, value, title);
+    console.log(name, value, type, title, checked);
     const updatedFormValue = [...formValue];
 
     /// convert input value format 0.00
@@ -859,38 +812,95 @@ const AddProducts = () => {
         marginValue = parseFloat(showmargin).toFixed(2);
         profitValue = parseFloat(price_total_value - fieldValue).toFixed(2);
       }else{
-        price_total_value= ""
+        price_total_value= "";
       }
     }
 
     // if price value is change manually the recalculate margin and profit value
+    const costPerValue = isMultipleVarient ? formValue?.[i]?.[title]?.["costPerItem"] :formValue?.[0]?.["costPerItem"];
     if (name === "price") {
-      if (value > 0) {
-        let costPerValue = formValue?.[i]?.[title]?.["costPerItem"];
+      if(+costPerValue > 0 && value > 0){
         let marginvl = (costPerValue * 100) / fieldValue;
         let showmargin = 100 - marginvl;
         marginValue = parseFloat(showmargin).toFixed(2);
         profitValue = parseFloat(fieldValue - costPerValue).toFixed(2);
       }
+      else if (!costPerValue && value > 0) {
+        marginValue =""
+        profitValue=""
+      }
     }
 
-    console.log('fieldValue', fieldValue);
-    // manually onchange
-    const updatedValues = formValue.map((item, index) => {
-      
-      return Object.keys(item).includes(title) ? ({
-        ...item,
-        [title]: {
-          ...item[title],
-          [name]: fieldValue,
-          ['price']: parseFloat(price_total_value ? price_total_value : "" ),
-          compareAtPriceErrorOnPrice: (name === "price") && (parseFloat(item[title]?.compareAtPrice) > 0 && fieldValue > parseFloat(item[title]?.compareAtPrice)) ? "Price Should be Less than Compare Price" : "",
-          compareAtPriceErrorOnCompare: (name === "compareAtPrice") && (parseFloat(item[title]?.price) > 0 &&  parseFloat(item[title]?.price) > fieldValue) ? "Price Should be Less than Compare Price" : "",
-          compareAtPriceErrorOnCostPer: (name === "costperItem") && (parseFloat(item[title]?.price) > 0 && parseFloat(item[title]?.compareAtPrice) > 0) &&  (parseFloat(item[title]?.price) > (parseFloat(item[title]?.compareAtPrice)))   ? "Price Should be Less than Compare Price" : "",
+    const isValue = (input) => Boolean(parseFloat(input))
 
+    const oldMargin = (data) => {
+      console.log('data', data);
+      return ((name === "price" || name === "costPerItem") && !fieldValue) ?  "" : data.every((item) => isValue(item)) 
+    }
+
+
+    let showError;
+    let updatedValues;
+    // manually onchange
+    if(isMultipleVarient){
+      updatedValues = formValue.map((item, index) => {
+
+          showError = parseFloat(name === "price" ? fieldValue : name === "costPerItem" ? price_total_value : item[title]?.price) > parseFloat(name === "compareAtPrice" ? fieldValue : item[title]?.compareAtPrice)
+        
+  
+        return Object.keys(item).includes(title) ? ({
+          ...item,
+          [title]: {
+            ...item[title],
+            [name]: type === "checkbox" ? checked : fieldValue,
+            price: !isNaN(parseFloat(price_total_value)) 
+            ? parseFloat(price_total_value).toFixed(2) 
+            : name === "price" 
+              ? fieldValue 
+              : item[title].price && (name === "costPerItem" && !fieldValue)
+                ? ""
+                : item[title].price,
+            margin: !isNaN(parseFloat(marginValue)) ? marginValue : oldMargin([item[title].costPerItem, item[title].margin, item[title].price]) ? item[title].margin : "",
+            profit: !isNaN(parseFloat(profitValue)) ? profitValue : oldMargin([item[title].costPerItem, item[title].margin, item[title].price]) ? item[title].profit : "",
+            // comparePriceError: 
+            //     ((["price", "compareAtPrice", "costPerItem"].includes(name)) && showError)
+            //         ? "Price Should be Less than Compare Price"
+            //         : ""
+            comparePriceError: 
+            ((["price", "compareAtPrice", "costPerItem"]?.includes(name)) && showError)
+                ? "Price Should be Less than Compare Price"
+                : (["qty", "upcCode", "customCode", "reorderLevel", "reorderQty"]?.includes(name)) && item[title]?.comparePriceError ? item[title]?.comparePriceError : ""
+          }
+        }) : item
+      })
+
+
+    }else {
+      
+      updatedValues = formValue.map((item, index) => {
+
+          showError = parseFloat(name === "price" ? fieldValue : name === "costPerItem" ? price_total_value : item?.price) > parseFloat(name === "compareAtPrice" ? fieldValue : item?.compareAtPrice)
+
+        return {
+          ...item,
+          [name]: type === "checkbox" ? checked : fieldValue,
+          price: !isNaN(parseFloat(price_total_value)) 
+            ? parseFloat(price_total_value).toFixed(2) 
+            : name === "price" 
+              ? fieldValue 
+              : item.price && (name === "costPerItem" && !fieldValue)
+                ? ""
+                : item.price,
+            margin: !isNaN(parseFloat(marginValue)) ? marginValue : oldMargin([item.costPerItem, item.margin, item.price]) ? item.margin : "",
+            profit: !isNaN(parseFloat(profitValue)) ? profitValue : oldMargin([item.costPerItem, item.margin, item.price]) ? item.profit : "",
+            comparePriceError: 
+                ((["price", "compareAtPrice", "costPerItem"].includes(name)) && showError)
+                    ? "Price Should be Less than Compare Price"
+                    : ""
         }
-      }) : item
-    })
+      })
+    }
+
 
     console.log("updatedValues: ", updatedValues)
   
@@ -1010,21 +1020,11 @@ const AddProducts = () => {
 
 
         setFormValue((prevFormValue) => {
-          console.log('varientTitle', varientTitle)
           const newFormValue = [...new Set(varientTitle)].map((title, index) => {
-            // console.log("=> ",index, prevFormValue[index], prevFormValue[index]?.title)
-          
-            //  const  previousData = prevFormValue[index]?.title || {};
 
             const previousData = prevFormValue.find((item) => title in item) || {}
             const result = previousData[title]
-            //  title = b
-            // prevFormValue data = [{0: {a}},{1: {b}}]
-            
-            console.log("previousData: ", previousData, )
-            console.log("result: ", result)
-            // console.log('previousData', previousData, prevFormValue?.[index]?.title)
-            console.log('prevFormValue', prevFormValue, previousData?.price)
+
           
             return {
               [title]:{
@@ -1056,13 +1056,12 @@ const AddProducts = () => {
             };
           }); 
 
-          console.log('newformvalue', newFormValue);
           return newFormValue;
         });
       }
     } else if (!isMultipleVarient) {
-      setFormValue({
-        0:{
+      setFormValue([
+        {
           costPerItem: "",
           compareAtPrice: "",
           price: "",
@@ -1080,7 +1079,7 @@ const AddProducts = () => {
           isFoodStamble: false,
           // itemForAllLinkedLocation: false,
         },
-    });
+      ]);
     }
   }, [varientLength]);
 
@@ -1236,7 +1235,7 @@ const AddProducts = () => {
           const newFormValue = varientData?.map((val, index) => {
             return {
               [val]:{
-                costPerItem: val?.costperItem || "",
+                costPerItem: val?.costPerItem || "",
                 compareAtPrice: val?.compare_price || "",
                 price: val?.price || "",
                 margin: val?.margin || "",
@@ -1262,7 +1261,7 @@ const AddProducts = () => {
         setFormValue(() => {
           const formValue = {
             0: {
-              costPerItem: productData?.costperItem || "",
+              costPerItem: productData?.costPerItem || "",
               compareAtPrice: productData?.compare_price || "",
               price: productData?.price || "",
               margin: productData?.margin || "",
@@ -1298,17 +1297,26 @@ const AddProducts = () => {
   }
 
   const handleGenerateUPC = () => {
-    const updatedUpcData = formValue?.map((item, index) => {
-      const title = Object.keys(item)[0];
-      return {
-        ...item,
-        [title]: {
-          ...item[index],
-          upcCode: generateString(20),
-        }
-      };
-    });
-    console.log('updatedUpcData', updatedUpcData);
+    let updatedUpcData;
+    if(!isMultipleVarient){
+       updatedUpcData = formValue?.map((item) => {
+        return {
+          ...item,
+          ["upcCode"]: generateString(20),
+        };
+      });
+    }else{
+       updatedUpcData = formValue?.map((item, index) => {
+        const title = Object.keys(item)[0];
+        return {
+          ...item,
+          [title]: {
+            ...item[index],
+            upcCode: generateString(20),
+          }
+        };
+      });
+    }
     setFormValue(updatedUpcData);
   };
 
@@ -1321,7 +1329,7 @@ const AddProducts = () => {
       description: productInfo?.description,
       price: !isMultipleVarient ? formValue[0]?.price : "",
       compare_price: !isMultipleVarient ? formValue[0]?.compareAtPrice : "",
-      costperItem: !isMultipleVarient ? formValue[0]?.costPerItem : "",
+      costPerItem: !isMultipleVarient ? formValue[0]?.costPerItem : "",
       margin: !isMultipleVarient ? formValue[0]?.margin : "",
       profit: !isMultipleVarient ? formValue[0]?.Profit : "",
       ischargeTax: 0,
@@ -1415,7 +1423,7 @@ const AddProducts = () => {
             ?.map((i) => (!!i?.customCode ? i?.customCode : ""))
             .join(",")
         : "",
-      varcostperitem: isMultipleVarient
+      varcostPerItem: isMultipleVarient
         ? formValue
             ?.map((i) => (!!i?.costPerItem ? i?.costPerItem : ""))
             .join(",")

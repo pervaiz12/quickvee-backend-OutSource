@@ -43,7 +43,7 @@ export const formData = [
     label: "Margin (%)",
   },
   {
-    name: "Profit",
+    name: "profit",
     placeholder: "",
     type: "text",
     label: "Profit ($)",
