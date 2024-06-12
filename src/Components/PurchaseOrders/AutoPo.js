@@ -157,7 +157,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors, seVisible }) => {
         console.log("Product Not available!");
       }
     } catch (e) {
-      console.log("e: ", e);
+      console.log("exczxvcxzcz: ", e);
     }
   };
 

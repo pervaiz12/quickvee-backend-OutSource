@@ -24,7 +24,7 @@ import { useAuthDetails } from "./../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 
-const CategoryDetail = ({ seVisible }) => {
+const CategoryDetail = ({ seVisible,setProductId }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
 
@@ -240,6 +240,8 @@ const CategoryDetail = ({ seVisible }) => {
               }}
               table={"collection"}
               className="q-category-bottom-categories-single-category"
+              seVisible={seVisible}
+              setProductId={setProductId}
             />
             {/* <div className="q-category-bottom-categories-header">
               <p className="categories-data-sort">Sort</p>
