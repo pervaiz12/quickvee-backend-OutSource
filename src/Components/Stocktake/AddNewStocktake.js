@@ -17,6 +17,8 @@ import AsyncSelect from "react-select/async";
 import { useDispatch } from "react-redux";
 import { fetchProductsData } from "../../Redux/features/Product/ProductSlice";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import axios from "axios";
+import { BASE_URL } from "../../Constants/Config";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -48,6 +50,7 @@ const AddNewStocktake = ({ setVisible }) => {
   const dispatch = useDispatch();
   const { userTypeData } = useAuthDetails();
   const [selectedProducts, setSelectedProducts] = useState([]);
+  console.log("setSelectedProducts", selectedProducts)
   const [productList, setProductList] = useState([
     {
       upc: "",
@@ -102,6 +105,7 @@ const AddNewStocktake = ({ setVisible }) => {
       };
 
       const res = await dispatch(fetchProductsData(name_data));
+      console.log(res);
       const data = res.payload
         ?.filter((prod) =>
           prod.title.toLowerCase().includes(inputValue.toLowerCase())
@@ -126,6 +130,56 @@ const AddNewStocktake = ({ setVisible }) => {
       return data;
     }
   };
+
+  const handleOnChangeSelectDropDown = async (productId,variantId,index)=>{
+    console.log("option.value, option.variantId,index",productId,variantId,index)
+    try {
+      const formData = new FormData();
+      formData.append("merchant_id", "MAL0100CA");
+      formData.append("id", productId);
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/get_productdata_ById",
+        formData
+      );
+
+      let obj = {
+        notes: "",
+        newQty: "",
+        newPrice: "",
+        finalPrice: "0.00",
+        finalQty: 0,
+      };
+
+      if (response.data.status) {
+        if (variantId && response.data.data.product_variants.length > 0) {
+          const product = response.data.data.product_variants.find(
+            (prod) => prod.id === variantId
+          );
+
+          obj.newPrice =
+            parseFloat(product.price) > 0 ? parseFloat(product.price) : 0;
+          obj.finalQty = Number(product.quantity) ?? 0;
+
+          setSelectedProducts((prev) => [
+            { ...product, ...obj, title: response.data.data.productdata.title },
+            ...prev,
+          ]);
+        } else {
+          const product = response.data.data.productdata;
+
+          obj.newPrice =
+            parseFloat(product.price) > 0 ? parseFloat(product.price) : 0;
+          obj.finalQty = Number(product.quantity) ?? 0;
+
+          setSelectedProducts((prev) => [{ ...product, ...obj }, ...prev]);
+        }
+      } else {
+        console.log("Product Not available!");
+      }
+    } catch (e) {
+      console.log("e: ", e);
+    }
+  }
 
   const customStyles = {
     menu: (provided) => ({
@@ -185,6 +239,7 @@ const AddNewStocktake = ({ setVisible }) => {
                                 loadOptions={loadOptions}
                                 styles={customStyles}
                                 menuPortalTarget={document.body}
+                                onChange={(option)=>{handleOnChangeSelectDropDown(option.value, option.variantId,index)}}
                               />
                             </div>
                           </StyledTableCell>
