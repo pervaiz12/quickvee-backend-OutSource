@@ -1,14 +1,6 @@
 import "../../../Styles/TableOrderPage.css";
 import React, { useEffect, useState } from "react";
 import CrossIcon from "../../../Assests/Dashboard/cross.svg";
-import { Grid } from "@mui/material";
-import { styled } from "@mui/material/styles";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell, { tableCellClasses } from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 // import Pagination from "react-js-pagination";
 // import DefaultPagination from "../onlineStoreOrder/DefaultPagination";
 import {
@@ -25,33 +17,6 @@ import UpArrow from "../../../Assests/Dashboard/Up.svg";
 
 import $ from "jquery";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
-import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
-
-const StyledTableCell = styled(TableCell)(({ theme }) => ({
-  [`&.${tableCellClasses.head}`]: {
-    backgroundColor: "#253338",
-    color: theme.palette.common.white,
-  },
-  [`&.${tableCellClasses.body}`]: {
-    fontSize: 14,
-  },
-  [`&.${tableCellClasses.table}`]: {
-    fontSize: 14,
-  },
-}));
-
-const StyledTable = styled(Table)(({ theme }) => ({
-  padding: 2, // Adjust padding as needed
-}));
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    backgroundColor: theme.palette.action.hover,
-  },
-  // hide last border
-  "&:last-child td, &:last-child th": {
-    border: 0,
-  },
-}));
 
 const OnlineTableViewData = (props) => {
   // console.log(props)
@@ -63,13 +28,14 @@ const OnlineTableViewData = (props) => {
     const fetchData = async () => {
       if (props?.OrderTypeData) {
         let data = {
-          merchant_id: "MAL0100CA",
+          merchant_id: props.merchant_id,
           order_type: props.OrderTypeData,
           trans_type: props.OrderSourceData,
           start_date: props.selectedDateRange?.start_date,
           end_date: props.selectedDateRange?.end_date,
           customer_id: "0",
           search_by: props?.OnlSearchIdData,
+          ...props.userTypeData
         };
 
         if (data) {
@@ -100,7 +66,7 @@ const OnlineTableViewData = (props) => {
         var success = window.confirm("Are you sure you want to change status");
         if (success == true) {
           const FormData = {
-            merchant_id: "MAL0100CA",
+            merchant_id: props.merchant_id,
             order_id: orderId,
             m_status: selectedOption,
           };
@@ -111,12 +77,12 @@ const OnlineTableViewData = (props) => {
         }
       }
     };
-    // const onlineStoreTable = document.getElementById("OnlineStoreTable");
-    // onlineStoreTable.addEventListener("change", handleSelectChange);
+    const onlineStoreTable = document.getElementById("OnlineStoreTable");
+    onlineStoreTable.addEventListener("change", handleSelectChange);
 
-    // return () => {
-    //   onlineStoreTable.removeEventListener("change", handleSelectChange);
-    // };
+    return () => {
+      onlineStoreTable.removeEventListener("change", handleSelectChange);
+    };
   }, []);
   // for New order dropdown end.
 
@@ -148,12 +114,12 @@ const OnlineTableViewData = (props) => {
         setNewOrderAmount(Neworderamt);
       }
     };
-    // const onlineStoreTable = document.getElementById("OnlineStoreTable");
-    // onlineStoreTable.addEventListener("click", handleSelectclick);
+    const onlineStoreTable = document.getElementById("OnlineStoreTable");
+    onlineStoreTable.addEventListener("click", handleSelectclick);
 
-    // return () => {
-    //   onlineStoreTable.removeEventListener("click", handleSelectclick);
-    // };
+    return () => {
+      onlineStoreTable.removeEventListener("click", handleSelectclick);
+    };
   }, []);
   // for closed order edit button end.
 
@@ -164,7 +130,7 @@ const OnlineTableViewData = (props) => {
 
   const handleAddReceivingAmount = async () => {
     const newItem = {
-      merchant_id: "MAL0100CA",
+      merchant_id: props.merchant_id,
       order_id: newOrderId,
       cash_collected: newReceivingAmount,
       order_amt: newOrderAmount,
@@ -243,47 +209,23 @@ const OnlineTableViewData = (props) => {
         } else if (props?.OrderTypeData == "New") {
           let cancelOption = "";
           if (data.payment_id === "Cash") {
-            cancelOption = `<option value="5" ${
-              data.m_status == "5" ? `selected` : ""
-            }>Cancel</option>`;
+            cancelOption = `<option value="5" ${data.m_status == "5" ? `selected` : ""}>Cancel</option>`;
           }
           if (data.order_method == "pickup") {
-            PayStatus = `<select class="custom-selecttable w-52 cursor-pointer" data-order-id="${
-              data.order_id
-            }">
-              <option value="1" ${
-                data.m_status == "1" ? `selected` : ""
-              }>Accepted</option>
-              <option value="2" ${
-                data.m_status == "2" ? `selected` : ""
-              }>Packing</option>
-              <option value="3" ${
-                data.m_status == "3" ? `selected` : ""
-              }>Ready</option>
-              <option value="4" ${
-                data.m_status == "4" ? `selected` : ""
-              }>Completed</option>
+            PayStatus = `<select class="custom-selecttable w-52 cursor-pointer" data-order-id="${data.order_id}">
+              <option value="1" ${data.m_status == "1" ? `selected` : ""}>Accepted</option>
+              <option value="2" ${data.m_status == "2" ? `selected` : ""}>Packing</option>
+              <option value="3" ${data.m_status == "3" ? `selected` : ""}>Ready</option>
+              <option value="4" ${data.m_status == "4" ? `selected` : ""}>Completed</option>
               ${cancelOption}
             </select>`;
           } else {
-            PayStatus = `<select class="custom-selecttable w-52 cursor-pointer" data-order-id="${
-              data.order_id
-            }">
-              <option value="1" ${
-                data.m_status == "1" ? `selected` : ""
-              }>Accepted</option>
-              <option value="2" ${
-                data.m_status == "2" ? `selected` : ""
-              }>Packing</option>
-              <option value="6" ${
-                data.m_status == "6" ? `selected` : ""
-              }>Ready</option>
-              <option value="3" ${
-                data.m_status == "3" ? `selected` : ""
-              }>Out for Delivery</option>
-              <option value="4" ${
-                data.m_status == "4" ? `selected` : ""
-              }>Delivered</option>
+            PayStatus = `<select class="custom-selecttable w-52 cursor-pointer" data-order-id="${data.order_id}">
+              <option value="1" ${data.m_status == "1" ? `selected` : ""}>Accepted</option>
+              <option value="2" ${data.m_status == "2" ? `selected` : ""}>Packing</option>
+              <option value="6" ${data.m_status == "6" ? `selected` : ""}>Ready</option>
+              <option value="3" ${data.m_status == "3" ? `selected` : ""}>Out for Delivery</option>
+              <option value="4" ${data.m_status == "4" ? `selected` : ""}>Delivered</option>
               ${cancelOption}
             </select>`;
           }
@@ -312,131 +254,46 @@ const OnlineTableViewData = (props) => {
       }
     );
 
-    // const table = $("#OnlineStoreTable").DataTable({
-    //   data: modifiedData,
-    //   columns: [
-    //     { title: "Customer", data: "Customer", orderable: false },
-    //     { title: "Order", data: "Order", orderable: false },
-    //     { title: "Amount", data: "Amount", orderable: false },
-    //     // { title: "Status", data: "Status", orderable: false },
-    //     { title: "Order Status", data: "OrderStatus", orderable: false },
-    //     { title: " ", data: "View", orderable: false },
-    //   ],
-    //   destroy: true,
-    //   searching: true,
-    //   dom: "<'row 'l<'col-sm-12'b>><'row'<'col-sm-7 mt-2'p><'col-sm-5'>>",
-    //   lengthMenu: [10, 20, 50],
-    //   lengthChange: true,
-    //   ordering: false,
-    //   language: {
-    //     paginate: {
-    //       previous: "<",
-    //       next: ">",
-    //     },
-    //   },
-    // });
+    const table = $("#OnlineStoreTable").DataTable({
+      data: modifiedData,
+      columns: [
+        { title: "Customer", data: "Customer", orderable: false },
+        { title: "Order", data: "Order", orderable: false },
+        { title: "Amount", data: "Amount", orderable: false },
+        // { title: "Status", data: "Status", orderable: false },
+        { title: "Order Status", data: "OrderStatus", orderable: false },
+        { title: " ", data: "View", orderable: false },
+      ],
+      destroy: true,
+      searching: true,
+      dom: "<'row 'l<'col-sm-12'b>><'row'<'col-sm-7 mt-2'p><'col-sm-5'>>",
+      lengthMenu: [10, 20, 50],
+      lengthChange: true,
+      ordering: false,
+      language: {
+        paginate: {
+          previous: "<",
+          next: ">",
+        },
+      },
+    });
 
-    // $("#searchInput").on("input", function () {
-    //   table.search(this.value).draw();
-    // });
+    $("#searchInput").on("input", function () {
+      table.search(this.value).draw();
+    });
 
-    // return () => {
-    //   table.destroy();
-    // };
+    return () => {
+      table.destroy();
+    };
   }, [allOnlineStoreOrder, props]);
-  const columns = ["Customer", "Order", "Amount", "Order Status", "View"];
 
   return (
     <>
-      {/* <div className="q-attributes-bottom-detail-section">AllInStoreDataState.onlineStoreOrderData
+      <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
           <table className="" id="OnlineStoreTable"></table>
         </div>
-      </div> */}
-      <Grid container>
-        {AllInStoreDataState.loading ? (
-          <>
-            <SkeletonTable columns={columns} />
-          </>
-        ) : (
-          <>
-            {
-              console.log(AllInStoreDataState)
-              // AllInStoreDataState &&
-              // Array.isArray(AllInStoreDataState.onlineStoreOrderData) &&
-              // AdminRecord.AdminRecord?.length > 0 ? (
-              //   <TableContainer>
-              //     <StyledTable
-              //       sx={{ minWidth: 500 }}
-              //       aria-label="customized table"
-              //     >
-              //       <TableHead>
-              //         <StyledTableCell>Customer</StyledTableCell>
-              //         <StyledTableCell>Order</StyledTableCell>
-              //         <StyledTableCell>Amount</StyledTableCell>
-              //         <StyledTableCell>Order Status</StyledTableCell>
-              //         <StyledTableCell>View</StyledTableCell>
-              //         {/* <StyledTableCell>Action</StyledTableCell> */}
-              //       </TableHead>
-              //       <TableBody>
-              //         {/* {AdminRecord.AdminRecord?.map((data, index) => (
-              //           <StyledTableRow key={data.id}>
-              //             <StyledTableCell>
-              //               <div className="text-[#000000] order_method capitalize">
-              //                 {data.owner_name?.length < 18
-              //                   ? data.owner_name
-              //                   : data.owner_name?.slice(0, 18) + `...` || ""}
-              //               </div>
-              //             </StyledTableCell>
-              //             <StyledTableCell>
-              //               <div className="text-[#000000] order_method capitalize">
-              //                 {data.name || ""}
-              //               </div>
-              //             </StyledTableCell>
-              //             <StyledTableCell>
-              //               <div className="text-[#000000] order_method">
-              //                 {data.email || ""}
-              //               </div>
-              //             </StyledTableCell>
-              //             <StyledTableCell>
-              //               <div className="text-[#000000] order_method capitalize">
-              //                 {data.phone || ""}
-              //               </div>
-              //             </StyledTableCell>
-              //             <StyledTableCell>
-              //               <ViewAdmin
-              //                 email={data.email}
-              //                 name={data.name}
-              //                 userTypeData={userTypeData}
-              //               />
-              //             </StyledTableCell>
-              //             <StyledTableCell>
-              //               <div className="flex">
-              //                 <img
-              //                   title="Edit"
-              //                   className="mx-1 edit cursor-pointer"
-              //                   onClick={
-              //                     () => handleEditAdminClick(data.id)
-              //                     // setEditAdminId(data.id)
-              //                     // navigate(`/users/editAdmin/${data.id}`)
-              //                   }
-              //                   src={Edit}
-              //                   alt="Edit"
-              //                 />
-              //               </div>
-              //             </StyledTableCell>
-              //           </StyledTableRow>
-              //         ))} */}
-              //       </TableBody>
-              //     </StyledTable>
-              //   </TableContainer>
-              // ) : (
-              //   <p className="px-5 py-4">No Data Found</p>
-              // )
-            }
-          </>
-        )}
-      </Grid>
+      </div>
 
       {showPriceModal && (
         <div className="q-custom-modal-container" id="addtributes_">

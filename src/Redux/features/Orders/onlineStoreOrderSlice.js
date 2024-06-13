@@ -18,11 +18,12 @@ const initialState = {
 export const fetchOnlieStoreOrderData = createAsyncThunk(
   "onlineStoreOrder/fetchOnlieStoreOrderData.",
   async (data) => {
+    const{token,...newData}=data
     try {
       const response = await axios.post(
         BASE_URL + LIST_ALL_STORE_ORDER_LIST,
-        data,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        newData,
+        { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`,} }
       );
       // console.log(response)
       if (response.data.status === true) {
