@@ -314,6 +314,7 @@ created_by_id:  LoginGetDashBoardRecordJson?.data?.user_id,
                       handleDeleteSelectedOption={handleDeleteSelectedOption}
                       //  selectedOption={productInfo?.relatedProduct}
                        error={error}
+                       placeholder="Enter Store Name"
                       // handleUpdateError={handleUpdateError}
                     />
                   </div>

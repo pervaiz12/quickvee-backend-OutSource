@@ -15,6 +15,7 @@ import { Link } from "react-router-dom";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import AlertModal from "../../reuseableComponents/AlertModal";
 import { priceFormate } from "../../hooks/priceFormate";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import PasswordShow from "../../Common/passwordShow";
 
 const VendorsDetail = ({ setVisible }) => {
@@ -71,27 +72,27 @@ const VendorsDetail = ({ setVisible }) => {
       const updData = {
         // merchant_id: "MAL0100CA",
       status: event.target.checked ? 1 : 0,
-    id: vendorId,
-  };
-const { token, ...otherUserData } = userTypeData;
-const response = await axios.post(
-  BASE_URL + STATUS_UPD_VENDORS,
-{ ...updData, ...otherUserData },
-{
-  headers: {
-    "Content-Type": "multipart/form-data",
-    Authorization: `Bearer ${token}`,
-},
-}
-);
-
-if (response.status === 200) {
-  // alert("Vendor Status Updated Successfully.");
-showModal("Vendor Status Updated Successfully.");
-} else {
-  // alert("something went wrong.");
-showModal("Something went wrong !");
-}
+        id: vendorId,
+      };
+      const { token, ...otherUserData } = userTypeData;
+      const response = await axios.post(
+        BASE_URL + STATUS_UPD_VENDORS,
+      { ...updData, ...otherUserData },
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+      },
+      }
+      );
+            console.log(response)
+      if (response.data.status === "true" ) {
+        // alert("Vendor Status Updated Successfully.");
+      ToastifyAlert("Vendor Status Updated Successfully.", "success");
+      } else {
+        // alert("something went wrong.");
+      showModal("Something went wrong !");
+      }
   }catch(error){
     handleCoockieExpire()
     getUnAutherisedTokenMessage()

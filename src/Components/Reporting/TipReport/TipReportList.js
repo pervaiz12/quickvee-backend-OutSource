@@ -102,7 +102,7 @@ const TipReportList = (props) => {
                     <>
                       <StyledTableRow key={index}>
                         <StyledTableCell>
-                          <p>{tipData.employee_id}</p>
+                          <p>{priceFormate(tipData.employee_id)}</p>
                         </StyledTableCell>
                         <StyledTableCell>
                           <p>{tipData.f_name}</p>
@@ -121,10 +121,10 @@ const TipReportList = (props) => {
                     <StyledTableCell></StyledTableCell>
                     <StyledTableCell></StyledTableCell>
                     <StyledTableCell>
-                      <p>Grand Total:</p>
+                      <p style={{   color: "#0A64F9"}}>Grand Total</p>
                     </StyledTableCell>
                     <StyledTableCell>
-                      <p className="report-title">${priceFormate(totalNetTip.toFixed(2))}</p>
+                      <p className="report-title" style={{   color: "#0A64F9"}}>${priceFormate(totalNetTip.toFixed(2))}</p>
                     </StyledTableCell>
                   </StyledTableRow>
                 )}

@@ -163,7 +163,7 @@ export default function DashboardTables(props) {
                                     {item?.coupon_code}
                                   </StyledTableCell>
                                   <StyledTableCell align="center">
-                                    {priceFormate(item?.line_item_discount)}
+                                    {priceFormate(parseFloat(item?.line_item_discount).toFixed(2))}
                                   </StyledTableCell>
                                   <StyledTableCell align="center">
                                     {priceFormate(item?.cash_discounting)}
@@ -193,7 +193,7 @@ export default function DashboardTables(props) {
                               ))}
                               <StyledTableRow>
                                 <StyledTableCell align="center">
-                                  Grand Total
+                                Total Discount
                                 </StyledTableCell>
                                 <StyledTableCell align="center">
                                   {`$${priceFormate(
@@ -222,7 +222,7 @@ export default function DashboardTables(props) {
                                   <StyledTableCell align="center">
                                     <div className="q-category-bottom-report-listing">
                                       <div>
-                                        <p className="">Grand Total</p>
+                                        <p className="">Final Discount Total</p>
                                       </div>
                                     </div>
                                   </StyledTableCell>

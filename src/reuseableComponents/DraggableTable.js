@@ -26,6 +26,7 @@ import EditTaxesModal from "../Components/StoreSetting/Taxes/EditTaxesModal";
 import EditEmployeeModal from "../Components/StoreSetting/AddEmployee/EditEmployeeModal";
 import Permission from "../Assests/Employee/Permission.svg"
 import AlertModal from "./AlertModal";
+import SortModal from "./SortModal";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
@@ -63,6 +64,8 @@ const DraggableTable = ({
   states,
   setVisible,
   setEmployeeId,
+  setProductId,
+  seVisible
 }) => {
   const dispatch = useDispatch();
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -88,6 +91,9 @@ const DraggableTable = ({
     setAlertModalOpen(true);
   };
 
+  const [dragresult, setDragresult] = useState("");
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
   const onDragEnd = async (result) => {
     // Check if the drag ended outside of the droppable area
     if (!result.destination) {
@@ -108,6 +114,7 @@ const DraggableTable = ({
     //   result.source.index,
     //   result.destination.index
     // );
+    setDragresult(result)
     const sourceIndex = result.source.index;
     const targetIndex = result.destination.index;
 
@@ -134,6 +141,68 @@ const DraggableTable = ({
     updatedItems.forEach((category, index) => {
       alternameList[`values[${category.id}]`] = tableRow[index].alternateName;
     });
+    setDeleteModalOpen(true);
+
+    // let data = {
+    //   table: table,
+    //   merchant_id: merchant_id,
+    //   token_id: userTypeData?.token_id,
+    //   login_type: userTypeData?.login_type,
+    // };
+    // const userConfirmed = window.confirm(
+    //   "Are you sure you want to sort items?"
+    // );
+    // if (userConfirmed) {
+    //   setFunction(updatedItems);
+    //   try {
+    //     const response = await axios.post(
+    //       BASE_URL + SORT_CATOGRY_DATA,
+    //       { ...data, ...alternameList },
+    //       {
+    //         headers: {
+    //           "Content-Type": "multipart/form-data",
+    //           Authorization: `Bearer ${userTypeData?.token}`,
+    //         },
+    //       }
+    //     );
+    //     let data_merchant_id = {
+    //       merchant_id: merchant_id,
+    //       ...userTypeData,
+    //     };
+    //     if (table === "collection") {
+    //       if (data_merchant_id) {
+    //         dispatch(fetchCategoriesData(data_merchant_id));
+    //       }
+    //     }
+    //     if (table === "varients") {
+    //       if (data_merchant_id) {
+    //         dispatch(fetchAttributesData(data_merchant_id));
+    //       }
+    //     }
+    //     console.log("API response:", response.data);
+    //   } catch (error) {
+    //     console.error("API call failed:", error);
+    //   }
+    // } else {
+    //   console.log("Sorting canceled by user");
+    // }
+  };
+  const handleEditEmployeePermission = (id)=>{
+
+    setVisible("EmployeePermission")
+    setEmployeeId(id)
+  }
+  const handleEditCategory = (id)=>{
+    seVisible("EditCategory")
+    setProductId(id)
+  }
+
+
+  const confirmDeleteCategory = async () => {
+    const sourceIndex = dragresult.source.index;
+    const targetIndex = dragresult.destination.index;
+    const reorderedItems = reorder(tableRow, sourceIndex, targetIndex);
+    let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
     let data = {
       table: table,
@@ -141,11 +210,17 @@ const DraggableTable = ({
       token_id: userTypeData?.token_id,
       login_type: userTypeData?.login_type,
     };
+    const updatedItems = reorderedItems.map((item, index) => {
+      return item;
+    });
+    const alternameList = {};
+    updatedItems.forEach((category, index) => {
+      alternameList[`values[${category.id}]`] = tableRow[index].alternateName;
+    });
+    // console.log("altername",alternameList)
+    // return
 
-    const userConfirmed = window.confirm(
-      "Are you sure you want to sort items?"
-    );
-    if (userConfirmed) {
+    if(dragresult){
       setFunction(updatedItems);
       try {
         const response = await axios.post(
@@ -176,15 +251,10 @@ const DraggableTable = ({
       } catch (error) {
         console.error("API call failed:", error);
       }
-    } else {
-      console.log("Sorting canceled by user");
     }
+    setDragresult(null)
+    setDeleteModalOpen(false);
   };
-  const handleEditEmployeePermission = (id)=>{
-
-    setVisible("EmployeePermission")
-    setEmployeeId(id)
-  }
   return (
     <>
       <TableContainer component={Paper}>
@@ -250,14 +320,20 @@ const DraggableTable = ({
                             )}
                             {editButtonEnable && (
                               <StyledTableCell>
-                                <Link to={`${editButtonurl}${item.id}`}>
+                                <span
+                                // to={`${editButtonurl}${item.id}`}
+                                  onClick={()=>{handleEditCategory(item.id)}}
+                                >
                                   <img
                                     // className="edit_center w-8 h-8"
                                     selectedCategory={item}
                                     src={EditIcon}
                                     alt="Edit"
+                                    
                                   />
-                                </Link>
+
+                                  
+                                </span>
                               </StyledTableCell>
                             )}
                             {
@@ -364,6 +440,12 @@ const DraggableTable = ({
       open={alertModalOpen}
       onClose={() => {setAlertModalOpen(false)}}
        />
+      <SortModal
+            headerText="sort items"
+            open={deleteModalOpen}
+            onClose={() => {setDeleteModalOpen(false)}}
+            onConfirm={confirmDeleteCategory}
+      />
     </>
   );
 };

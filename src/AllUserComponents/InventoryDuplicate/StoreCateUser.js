@@ -77,7 +77,7 @@ const StoreCateUser = () => {
   const [storeFromError, setStoreFromError] = useState("");
   const [storeToError, setStoreToError] = useState("");
 
-  const showModal = (headerText) => {
+  const showModal = (headerText,img) => {
     setAlertModalHeaderText(headerText);
     setAlertModalOpen(true);
   };
@@ -126,7 +126,8 @@ const StoreCateUser = () => {
   const dupplicateInventoryHandler = (e) => {
     if (selectedStorefrom === "-- Select Store --") {
       // alert("Please select Store From");
-      showModal("Please select Store From");
+      // showModal("Please select Store From");
+      showModal("Select where you want to move inventory from");
     } else if (selectedStoreto === "-- Select Store --") {
       // alert("Please select Store To");
       showModal("Please select Store To");
@@ -140,7 +141,8 @@ const StoreCateUser = () => {
   const dupplicateSettingsHandler = (e) => {
     if (selectedStorefrom === "-- Select Store --") {
       // alert("Please select Store From");
-      showModal("Please select Store From");
+      // showModal("Please select Store From");
+      showModal("Select where you want to move inventory from");
     } else if (selectedStoreto === "-- Select Store --") {
       // alert("Please select Store To");
       showModal("Please select Store To");

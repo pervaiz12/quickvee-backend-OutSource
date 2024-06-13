@@ -18,8 +18,7 @@ import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
 
 const CateDuplicateStore = () => {
-  const [selectedStorefrom, setSelectedStorefrom] =
-    useState("-- Select Store --");
+  const [selectedStorefrom, setSelectedStorefrom] = useState("-- Select Store --");
   const [selectedStoreto, setSelectedStoreto] = useState("-- Select Store --");
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [storeFromDropdownVisible, setStoreFromDropdownVisible] =
@@ -113,7 +112,8 @@ const CateDuplicateStore = () => {
         }
         break;
       case "storeto":
-        setSelectedStoreto(value?.title);
+        // setSelectedStoreto(value?.title);
+        setSelectedStoreto(value?.title ? value?.title : value);
         setStoreToDropdownVisible(false);
         if (value?.id !== "-- Select Store --") {
           setStoreto(value?.id);
@@ -191,7 +191,7 @@ const CateDuplicateStore = () => {
 
     if (selectedStorefrom === "-- Select Store --") {
       // alert("Please select Store From");
-      showModal("Please select Store From");
+      showModal("Select where you want to move category from");
     } else if (selectedStoreto === "-- Select Store --") {
       // alert("Please select Store To");
       showModal("Please select Store To");
@@ -208,7 +208,7 @@ const CateDuplicateStore = () => {
       );
       if (categoryValues.length === 0) {
         // alert("Please select at least one category");
-        showModal("Please select at least one category")
+        showModal("Please select at least on category")
         return;
       } else if (categoryValues.includes("No categories found")) {
         // alert("No categories found is not a Category");

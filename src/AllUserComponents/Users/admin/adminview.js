@@ -193,7 +193,7 @@ export default function AdminView({setVisible,setEditAdminId}) {
                       aria-label="customized table"
                     >
                       <TableHead>
-                        <StyledTableCell>Owner Name</StyledTableCell>
+                        {/* <StyledTableCell>Owner Name</StyledTableCell> */}
                         <StyledTableCell>Name</StyledTableCell>
                         <StyledTableCell>Email</StyledTableCell>
                         <StyledTableCell>Phone</StyledTableCell>
@@ -203,13 +203,13 @@ export default function AdminView({setVisible,setEditAdminId}) {
                       <TableBody>
                         {AdminRecord.AdminRecord?.map((data, index) => (
                           <StyledTableRow key={data.id}>
-                            <StyledTableCell>
+                            {/* <StyledTableCell>
                               <div className="text-[#000000] order_method capitalize">
                                 {data.owner_name?.length < 18
                                   ? data.owner_name
                                   : data.owner_name?.slice(0, 18) + `...` || ""}
                               </div>
-                            </StyledTableCell>
+                            </StyledTableCell> */}
                             <StyledTableCell>
                               <div className="text-[#000000] order_method capitalize">
                                 {data.name || ""}

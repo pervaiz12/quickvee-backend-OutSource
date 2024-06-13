@@ -80,7 +80,7 @@ const AddCategory = ({ seVisible }) => {
         // alert(
         //   `${file.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`
         // );
-        showModal(`${file.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`)
+        showModal("Only jpeg, png, jpg files can be uploaded")
         e.target.value = null;
       }
     }

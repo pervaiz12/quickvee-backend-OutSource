@@ -27,7 +27,7 @@ const DeleteModal = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
               <div className="delete-modal-content">
                 <img src={DeleteIcon} alt={`Delete-icon`} loading="lazy" />
                 <span>
-                  Are You Sure You Want To <br /> Delete this{" "}
+                Are you sure you want to <br /> delete this{" "}
                   {headerText ? headerText : "delete"} ? {otherMSG ? <><br/>{otherMSG}</> :""}
                 </span>
               </div>

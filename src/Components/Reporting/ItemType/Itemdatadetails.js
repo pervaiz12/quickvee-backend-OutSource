@@ -7,6 +7,43 @@ import { Link } from "react-router-dom";
 import { Grid } from "@mui/material";
 import { priceFormate } from "../../../hooks/priceFormate";
 
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+
+
+const StyledTable = styled(Table)(({ theme }) => ({
+  padding: 2, // Adjust padding as needed
+}));
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#253338",
+    color: theme.palette.common.white,
+    fontFamily: "CircularSTDBook !important",
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+    fontFamily: "CircularSTDMedium",
+  },
+  [`&.${tableCellClasses.table}`]: {
+    fontSize: 14,
+    fontFamily: "CircularSTDMedium",
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  "&:last-child td, &:last-child th": {
+    // backgroundColor: "#F5F5F5",
+  },
+}));
+
 const Itemdatadetails = ({ data }) => {
   const dispatch = useDispatch();
 
@@ -49,7 +86,8 @@ const Itemdatadetails = ({ data }) => {
     } else if (orderReport && orderReport.length >= 1) {
       return (
         <>
-          <div className="q-attributes-bottom-detail-section text-center">
+        
+          {/* <div className="q-attributes-bottom-detail-section text-center">
             <div className="q-attributes-bottom-attriButes-header text-center">
               <p className="q-employee-item">Name</p>
               <p className="q-employee-in text-center"># Of Payments </p>
@@ -79,19 +117,62 @@ const Itemdatadetails = ({ data }) => {
                   <p className="q-employee-in">
                     {priceFormate(orderReportDa.amount_with_tip)}
                   </p>
-                  <Link
-                  // to={`/Order`}
-                  >
+                  <Link  to={`/Order`} >
                     <p className="q-employee-in">Details</p>
                   </Link>
-                  {/* <Link
-                    to={`/Order/close/0/${orderReportDa.order_method}/${data.start_date}/${data.end_date}/${data.order_env}`}
-                  >
-                    <p className="q-employee-out">Details</p>
-                  </Link> */}
+
                 </div>
               </div>
             ))}
+          </div> */}
+
+          <div className="q-attributes-bottom-detail-section text-center">
+
+          <TableContainer>
+                <StyledTable
+                  sx={{ minWidth: 500 }}
+                  aria-label="customized table"
+                >
+                  <TableHead>
+                    <StyledTableCell>Name</StyledTableCell>
+                    <StyledTableCell># Of Payments</StyledTableCell>
+                    <StyledTableCell>Net Revenue Without Tips</StyledTableCell>
+                    <StyledTableCell>Tips</StyledTableCell>
+                    <StyledTableCell>Net Revenue With Tips</StyledTableCell>
+                    <StyledTableCell>Details</StyledTableCell>
+                  </TableHead>
+                  <TableBody>
+                  {orderReport.map((orderReportDa, index) => (
+                    <StyledTableRow key={index}>
+                    <StyledTableCell>
+                      <p>
+                        {orderReportDa.order_method}
+                      </p>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <p>{priceFormate(orderReportDa.total_count)}</p>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                    <p>${Number(orderReportDa.amt_without_tip).toFixed(2)}</p>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                    <p>${Number(orderReportDa.tip).toFixed(2)}</p>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                    <p>${Number(orderReportDa.amount_with_tip).toFixed(2)}</p>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                    <Link   to={`/order`}  target="_blank" >
+                     <p className="q-employee-in">Details</p>
+                    </Link>
+                    </StyledTableCell>
+                  </StyledTableRow>
+    
+                  ))}
+                   
+                  </TableBody>
+                </StyledTable>
+          </TableContainer>
           </div>
         </>
       );

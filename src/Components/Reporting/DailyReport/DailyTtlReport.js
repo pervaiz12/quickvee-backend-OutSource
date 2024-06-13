@@ -113,7 +113,7 @@ const DailyTtlReport = () => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
-  const orderSourceList = ["All", "Online Order", "Order Source"];
+  const orderSourceList = ["All", "Online Order", "Store Order"];
   const orderTypeList = ["All", "Pickup", "Delivery"];
   return (
     <>

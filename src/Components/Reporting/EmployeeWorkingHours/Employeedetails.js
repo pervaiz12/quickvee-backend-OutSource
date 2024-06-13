@@ -203,6 +203,8 @@ const Employeedetails = (props) => {
                           )}
                         {Array.isArray(allEmpWorkingHrsData[employeeName]) && (
                           <StyledTableRow>
+                            <StyledTableCell></StyledTableCell>
+                            <StyledTableCell></StyledTableCell>
                             <StyledTableCell>
                               <p
                                 style={{
@@ -212,8 +214,6 @@ const Employeedetails = (props) => {
                                 Total
                               </p>
                             </StyledTableCell>
-                            <StyledTableCell></StyledTableCell>
-                            <StyledTableCell></StyledTableCell>
                             <StyledTableCell>
                               <p
                                 style={{

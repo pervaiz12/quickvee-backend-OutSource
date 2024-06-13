@@ -20,7 +20,7 @@ import { useAuthDetails } from "../../Common/cookiesHelper";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 import AlertModal from "../../reuseableComponents/AlertModal";
 
-const EditCategory = () => {
+const EditCategory = ({ productId,seVisible }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
@@ -45,7 +45,7 @@ const EditCategory = () => {
   async function fetchData() {
     const getcategoryData = {
       merchant_id: merchant_id,
-      id: params.categoryCode,
+      id: productId,
       ...userTypeData,
     };
 
@@ -120,9 +120,11 @@ const EditCategory = () => {
         //   file.name +
         //     " is not an image. Only jpeg, png, jpg files can be uploaded."
         // );
-        showModal(file.name +
-          " is not an image. Only jpeg, png, jpg files can be uploaded."
-          )
+        // showModal(
+        //   file.name +
+        //     " is not an image. Only jpeg, png, jpg files can be uploaded."
+        // );
+        showModal("Only jpeg, png, jpg files can be uploaded")
       } else {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -262,8 +264,6 @@ const EditCategory = () => {
   //   }
   // };
 
-
-
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
   const [deleteCategoryIMG, setDeleteCategoryIMG] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -271,16 +271,16 @@ const EditCategory = () => {
   const handleRemoveBanner = (event, id, removeitem) => {
     event.stopPropagation();
     setDeleteCategoryId(id);
-    setDeleteCategoryIMG(removeitem)
+    setDeleteCategoryIMG(removeitem);
     setDeleteModalOpen(true);
   };
   const confirmDeleteCategory = (event) => {
-    if(deleteCategoryId){
+    if (deleteCategoryId) {
       const data = {
-            id: deleteCategoryId,
-            merchant_id,
-            removeitem: deleteCategoryIMG,
-            ...userTypeData,
+        id: deleteCategoryId,
+        merchant_id,
+        removeitem: deleteCategoryIMG,
+        ...userTypeData,
       };
       if (data) {
         dispatch(deleteCategorybanner(data));
@@ -290,7 +290,7 @@ const EditCategory = () => {
           ...prevValue,
           image: "",
         }));
-      }else{
+      } else {
         event.preventDefault();
         setCategory((prevValue) => ({
           ...prevValue,
@@ -299,8 +299,8 @@ const EditCategory = () => {
         console.log("Deletion canceled by user");
       }
     }
-    setDeleteCategoryId(null)
-    setDeleteCategoryIMG(null)
+    setDeleteCategoryId(null);
+    setDeleteCategoryIMG(null);
     setDeleteModalOpen(false);
   };
 
@@ -365,7 +365,9 @@ const EditCategory = () => {
         <div className="q-add-categories-section">
           <form>
             <div className="q-add-categories-section-header">
-              <Link to={`/category`}>
+              <Link 
+                onClick={()=>{seVisible("CategoryDetail")}}
+              to={`/category`}>
                 <span style={myStyles}>
                   <img src={AddNewCategory} alt="Add-New-Category" />
                   <span className="pl-4">Edit Category</span>
@@ -549,16 +551,20 @@ const EditCategory = () => {
         </div>
       </div>
       <DeleteModal
-            headerText="Category"
-            open={deleteModalOpen}
-            onClose={() => {setDeleteModalOpen(false)}}
-            onConfirm={confirmDeleteCategory}
-          />
-        <AlertModal
+        headerText="Category"
+        open={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+        }}
+        onConfirm={confirmDeleteCategory}
+      />
+      <AlertModal
         headerText={alertModalHeaderText}
         open={alertModalOpen}
-        onClose={() => {setAlertModalOpen(false)}}
-        />
+        onClose={() => {
+          setAlertModalOpen(false);
+        }}
+      />
     </div>
   );
 };
