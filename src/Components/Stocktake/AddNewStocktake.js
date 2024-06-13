@@ -9,8 +9,8 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import { useState } from "react";
-import { Button } from "react-bootstrap";
+import { useEffect, useState } from "react";
+
 
 // end table imports ----------------------------------------------------
 import AsyncSelect from "react-select/async";
@@ -50,10 +50,16 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     // backgroundColor: "#F5F5F5",
   },
 }));
-const AddNewStocktake = ({ setVisible }) => {
+const AddNewStocktake = ({
+  setVisible,
+  singleStocktakeState,
+  setSingleStocktakeState,
+  gotDatafromPo,
+}) => {
   const dispatch = useDispatch();
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
   const [selectedProducts, setSelectedProducts] = useState([]);
+
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
 
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
@@ -74,6 +80,55 @@ const AddNewStocktake = ({ setVisible }) => {
       price: "",
     },
   ]);
+
+  useEffect(() => {
+    if (singleStocktakeState) {
+      const newStocktakeItems = singleStocktakeState.stocktake_item.map(
+        (item,index) => ({
+          upc: item.upc || "", //
+          category_id: item.category_id || "", //
+          product_id: item.product_id || "", //
+          variant_id: item.variant_id || "", //
+          product_name: item.product_name || "", //
+          variant: item.variant || "", //
+          current_qty: item.current_qty || "", //
+          new_qty: item.new_qty || "", //
+          discrepancy: item.discrepancy || "", //
+          discrepancy_cost: item.discrepancy_cost || "0", //
+          stocktake_item_id: item.id || "",
+          price: gotDatafromPo[index].price || "",
+        })
+      );
+      setProductList(newStocktakeItems);
+    }
+  }, [singleStocktakeState]);
+
+  const loadOptions = async (inputValue) => {
+    if (inputValue && inputValue.length > 2) {
+      let name_data = {
+        merchant_id: merchant_id,
+        category_id: "all",
+        show_status: "all",
+        listing_type: 1,
+        offset: 0,
+        limit: 100000,
+        name: inputValue,
+        page: 0,
+        ...userTypeData,
+      };
+
+      const res = await dispatch(fetchProductsData(name_data));
+      setSelectedProducts(res.payload);
+      const data = res.payload?.map((prod) => ({
+        label: prod.title,
+        value: prod.var_id || prod.id,
+        variantId: prod.isvarient === "1" ? prod.var_id : null,
+        prodId: prod.id,
+      }));
+      // console.log("loadOptions", data);
+      return data;
+    }
+  };
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
@@ -104,7 +159,7 @@ const AddNewStocktake = ({ setVisible }) => {
     setAlertModalOpen(true);
   };
   console.log("setSelectedProductsList", stocktake_items);
-  console.log("setSelectedProducts", selectedProducts);
+  // console.log("setSelectedProducts", selectedProducts);
   const handleAddProduct = () => {
     if (validate()) {
       setProductList([
@@ -146,33 +201,6 @@ const AddNewStocktake = ({ setVisible }) => {
     setDeleteModalOpen(false);
   };
 
-  const loadOptions = async (inputValue) => {
-    if (inputValue && inputValue.length > 2) {
-      let name_data = {
-        merchant_id: merchant_id,
-        category_id: "all",
-        show_status: "all",
-        listing_type: 1,
-        offset: 0,
-        limit: 100000,
-        name: inputValue,
-        page: 0,
-        ...userTypeData,
-      };
-
-      const res = await dispatch(fetchProductsData(name_data));
-      setSelectedProducts(res.payload);
-      const data = res.payload
-        ?.map((prod) => ({
-          label: prod.title,
-          value: prod.var_id || prod.id,
-          variantId: prod.isvarient === "1" ? prod.var_id : null,
-          prodId: prod.id,
-        }));
-       
-      return data;
-    }
-  };
   const handleNewQtyChange = (e, index) => {
     const { value } = e.target;
     setProductList((prevList) => {
@@ -250,6 +278,7 @@ const AddNewStocktake = ({ setVisible }) => {
               current_qty: product?.quantity || "", //
               stocktake_item_id: "0" || "",
               price: product?.price || "",
+              // variant_id: "",
             };
             return updatedList;
           });
@@ -335,7 +364,7 @@ const AddNewStocktake = ({ setVisible }) => {
         status: stocktakeStatus,
         datetime: datetime,
         stocktake_items: JSON.stringify(updatedStocktakeItem),
-        stocktake_id: "0",
+        stocktake_id: singleStocktakeState ? singleStocktakeState.id : "0",
       };
 
       console.log("stocktakeData", stocktakeData);
@@ -352,10 +381,8 @@ const AddNewStocktake = ({ setVisible }) => {
           }
         );
         if (response.data.status) {
-          // Handle success (e.g., navigate to stocktake list, show success message, etc.)
           ToastifyAlert(response.data.message, "success");
         } else {
-          // Handle failure (e.g., show error message, etc.)
           ToastifyAlert(response.data.message, "error");
         }
       } catch (error) {
@@ -392,6 +419,7 @@ const AddNewStocktake = ({ setVisible }) => {
                 <span
                   onClick={() => {
                     setVisible("StocktakeList");
+                    setSingleStocktakeState();
                   }}
                   className="text-center items-center"
                 >
@@ -425,6 +453,9 @@ const AddNewStocktake = ({ setVisible }) => {
                         <StyledTableRow key={index}>
                           <StyledTableCell>
                             <div style={{ position: "relative", zIndex: 100 }}>
+                              {/* <Button>
+                                {product.product_name || product.title}
+                              </Button> */}
                               <AsyncSelect
                                 loadOptions={loadOptions}
                                 styles={customStyles}
@@ -436,8 +467,11 @@ const AddNewStocktake = ({ setVisible }) => {
                                     index
                                   );
                                 }}
-                               
-                                
+                                value={{
+                                  label: product && product?.product_name,
+                                  value:
+                                    (product && product?.var_id) || product?.id,
+                                }}
                               />
                               {errorMessages[index]?.product_name && (
                                 <div className="error">
@@ -451,6 +485,7 @@ const AddNewStocktake = ({ setVisible }) => {
                           </StyledTableCell>
                           <StyledTableCell sx={{ width: "15%" }}>
                             <BasicTextFields
+                              value={product.new_qty}
                               onChangeFun={(e) => {
                                 handleNewQtyChange(e, index);
                               }}

@@ -19,7 +19,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchStocktakeList } from "../../Redux/features/Stocktake/StocktakeListSlice";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 
-
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -46,10 +45,15 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     // backgroundColor: "#F5F5F5",
   },
 }));
-const StocktakeList = ({setVisible}) => {
-    const [currentPage, setCurrentPage] = useState(1);
-    const [totalCount, setTotalCount] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+const StocktakeList = ({
+  setVisible,
+  singleStocktakeState,
+  getSingleStocktakeData,
+  setSingleStocktakeState,
+}) => {
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const StocktakeListReducerState = useSelector((state) => state.stocktakeList);
   console.log("StocktakeList", StocktakeListReducerState);
   const dispatch = useDispatch();
@@ -83,6 +87,19 @@ const StocktakeList = ({setVisible}) => {
       title: "void",
     },
   ];
+
+  const handleStocktakeIdClick = async (id) => {
+    const result = await getSingleStocktakeData(id);
+
+    if (result?.stocktake_item?.length > 0) {
+      if (result?.status === "0") {
+        setVisible("StocktakeReoport");
+      }
+      if (result?.status === "1") {
+        setVisible("AddNewStocktake");
+      }
+    }
+  };
   const formatDate = (dateString) => {
     const options = { day: "2-digit", month: "short", year: "numeric" };
     const formattedDate = new Date(dateString).toLocaleDateString(
@@ -121,7 +138,10 @@ const StocktakeList = ({setVisible}) => {
             <Grid item>
               <div className="q-category-bottom-header">
                 <p
-                  onClick={() => setVisible("AddNewStocktake")}
+                  onClick={() => {
+                    setVisible("AddNewStocktake");
+                    setSingleStocktakeState();
+                  }}
                 >
                   Add New Stocktake <img src={AddIcon} alt="add-icon" />{" "}
                 </p>
@@ -131,13 +151,13 @@ const StocktakeList = ({setVisible}) => {
           <Grid container sx={{ padding: 2.5 }}>
             <Grid item xs={12}>
               <Pagination
-              currentPage={currentPage}
-              totalItems={totalCount}
-              itemsPerPage={rowsPerPage}
-              onPageChange={paginate}
-              rowsPerPage={rowsPerPage}
-              setRowsPerPage={setRowsPerPage}
-              setCurrentPage={setCurrentPage}
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
               />
             </Grid>
           </Grid>
@@ -168,8 +188,15 @@ const StocktakeList = ({setVisible}) => {
                               );
                               return (
                                 <StyledTableRow key={index}>
-                                  <StyledTableCell align="center">
-                                    <p>{item.st_id}</p>
+                                  <StyledTableCell
+                                    onClick={() => {
+                                      handleStocktakeIdClick(item.id);
+                                    }}
+                                    align="center"
+                                  >
+                                    <p className="text-[#0A64F9] cursor-pointer">
+                                      {item.st_id}
+                                    </p>
                                   </StyledTableCell>
                                   <StyledTableCell align="center">
                                     <p>{statusObj ? statusObj.title : ""}</p>
