@@ -21,11 +21,11 @@ const CategoryListDropDown = ({ type, onCategoryChange }) => {
   const AllCategoriesDataState = useSelector((state) => state.categories);
   const [isTablet, setIsTablet] = useState(false);
   const dispatch = useDispatch();
-  const { userTypeData } = useAuthDetails();
+  const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
 
   useEffect(() => {
     let cat_data = {
-      merchant_id: "MAL0100CA",
+      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
       ...userTypeData,
     };
     if (cat_data) {
@@ -62,7 +62,7 @@ const CategoryListDropDown = ({ type, onCategoryChange }) => {
         setCategoryDropdownVisible(false);
         dispatch(emptyProduct([]));
         let data1 = {
-          merchant_id: "MAL0100CA",
+          merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
           format: "json",
           category_id: option === 'All' ? 'all' : option,
           show_status: "all",

@@ -205,10 +205,11 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
       const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
       if (!allowedExtensions.exec(file.name)) {
         // alert(file.name + " is not an image. Only jpeg, png, jpg files can be uploaded.");
-        showModal(
-          file.name +
-            " is not an image. Only jpeg, png, jpg files can be uploaded."
-        );
+        // showModal(
+        //   file.name +
+        //     " is not an image. Only jpeg, png, jpg files can be uploaded."
+        // );
+        showModal("Only jpeg, png, jpg files can be uploaded")
       } else {
         const reader = new FileReader();
         reader.onloadend = () => {

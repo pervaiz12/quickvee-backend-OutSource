@@ -77,7 +77,7 @@ const CustomTimePicker = ({
     const value = event.target.value;
 
     if (checkOverlap(value, endTime)) {
-      showModal("The selected time range overlaps with an existing slot.");
+      showModal("The selected time range overlaps with an existing slot");
       return;
     }
 

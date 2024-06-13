@@ -17,6 +17,7 @@ const SearchableDropdown = ({
   name,
   hideSelectedValue,
   hideSelectedList,
+  placeholder
 }) => {
   // console.log("optionList", keyName, optionList);
   const { checkLength } = Validation();
@@ -133,7 +134,7 @@ const SearchableDropdown = ({
             <input
               ref={ref}
               type="text"
-              placeholder="Enter category Name"
+              placeholder={placeholder}
               name={keyName}
               className="search-item"
               value={filterValue}

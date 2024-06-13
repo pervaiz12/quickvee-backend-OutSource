@@ -236,7 +236,7 @@ const EditCoupon = ({couponId,seVisible}) => {
       return; // Stop further execution
     }
     if (!coupon.date_valid || !coupon.date_expire) {
-      showModal("Start date and end date are required.");
+      showModal("Start date and end date are required");
       return; // Stop further execution
     }
     if (!coupon.min_amount) {

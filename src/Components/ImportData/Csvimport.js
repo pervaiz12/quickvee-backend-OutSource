@@ -96,7 +96,7 @@ const FileUpload = () => {
     const fileInput = document.getElementById('input-file-upload');
     const csvfileData = fileInput.files[0]; 
     if(!csvfileData){
-      return showModal("Please Upload Files With .CSV Extenion Only.")
+      return showModal("Only files with .CSV extension is supported")
     }
     setLoading(true);
     const formData = new FormData();

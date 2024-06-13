@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../../CommonComponents/ToastifyAlert";
 
-const EditAdminFunctionality = () => {
+const EditAdminFunctionality = (handleClick) => {
   const navigate = useNavigate();
   const [editData, setEditData] = useState({
     owner_name: "",
@@ -158,7 +158,8 @@ const EditAdminFunctionality = () => {
               password: "",
             });
             ToastifyAlert(result?.data?.message, "success");
-            navigate("/users/admin");
+            handleClick();
+            // navigate("/users/admin");
           });
       }
     }

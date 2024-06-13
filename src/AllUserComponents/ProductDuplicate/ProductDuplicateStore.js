@@ -114,7 +114,8 @@ const ProductDuplicateStore = () => {
         }
         break;
       case "storeto":
-        setSelectedStoreto(value?.title);
+        // setSelectedStoreto(value?.title);
+        setSelectedStoreto(value?.title ? value?.title : value);
         setStoreToDropdownVisible(false);
         if (value?.id !== "-- Select Store --") {
           setStoreto(value?.id);
@@ -198,7 +199,7 @@ const ProductDuplicateStore = () => {
 
     if (selectedStorefrom === "-- Select Store --") {
       // alert("Please select Store From");
-      showModal("Please select Store From");
+      showModal("Select where you want to move product from");
     } else if (selectedStoreto === "-- Select Store --") {
       // alert("Please select Store To");
       showModal("Please select Store To");
@@ -214,7 +215,7 @@ const ProductDuplicateStore = () => {
       const productValues = selectedProducts.map((product) => product.value);
       if (productValues.length === 0) {
         // alert("Please select at least one Product");
-        showModal("Please select at least one Product")
+        showModal("Please select at least on product")
         return;
       } else if (productValues.includes("No Products found")) {
         // alert("No Products found is not a Product");
