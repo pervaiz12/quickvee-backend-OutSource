@@ -28,7 +28,7 @@ const GeneratePUC = ({
       case "costPerItem":
       case "compareAtPrice":
       case "price":
-      case "Profit":
+      case "profit":
       case "margin":
         return 9;
       case "reorderQty":
@@ -66,10 +66,11 @@ const GeneratePUC = ({
 
   const handleRedirectHistory = (varientIndex) => {
     if (varientIndex === null) {
-      navigate(`/product/saleshistory/${productData?.id}`);
+      navigate(`/product/saleshistory/${productData?.id}`, {state: productInfo});
     } else {
       navigate(
-        `/product/saleshistory/${productData?.id}/${varientData[varientIndex]?.id}`
+        `/product/saleshistory/${productData?.id}/${varientData[varientIndex]?.id}`,
+        {state: productInfo}
       );
     }
   };
@@ -136,11 +137,11 @@ const GeneratePUC = ({
                                   ) : (
                                     ""
                                   )}
-                                  {error[`formValue[${index}].${inp?.name}`] ? (
+                                  {error[`formValue[${index}].${title}.${inp?.name}`] ? (
                                     <span className="error-alert">
                                       {
                                         error[
-                                          `formValue[${index}].${inp?.name}`
+                                          `formValue[${index}].${title}.${inp?.name}`
                                         ]
                                       }
                                     </span>

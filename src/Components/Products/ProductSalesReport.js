@@ -118,7 +118,7 @@ const ProductSalesReport = () => {
     setTotalCount(filterList?.length);
   };
 
-  console.log(filterData);
+  console.log(filterData, salesData);
 
   return (
     <div className="box">
@@ -135,10 +135,12 @@ const ProductSalesReport = () => {
                 <span>
                   <img src={AddNewCategory} alt="Add-New-Category" />
                   <span style={{ width: "100%" }}>
-                    Sales History - Product Name
+                    Sales History - {location?.state?.title}
                   </span>
                 </span>
               </div>
+              {
+                salesData?.length ? 
               <Grid container sx={{ padding: 2.5 }}>
                 <Grid item xs={12}>
                   <InputTextSearch
@@ -150,10 +152,11 @@ const ProductSalesReport = () => {
                     autoComplete="off"
                   />
                 </Grid>
-              </Grid>
+              </Grid>:""
+              }
               <div className="q-add-categories-section-middle-form sales-history-table">
                     {
-                      filterData?.length ?
+                      salesData?.length ?
                       
                     <Grid container sx={{ padding: 2.5 }}>
                       <Grid item xs={12}>
