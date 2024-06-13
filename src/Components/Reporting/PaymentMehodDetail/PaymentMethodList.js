@@ -12,6 +12,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
 import { priceFormate } from "../../../hooks/priceFormate";
+import PasswordShow from "../../../Common/passwordShow";
+import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -42,6 +44,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const PaymentMethodList = ({ data }) => {
   const dispatch = useDispatch();
+  const { handleCoockieExpire } = PasswordShow();
 
   const [paymentReport, setpaymentReport] = useState([]);
 
@@ -51,8 +54,18 @@ const PaymentMethodList = ({ data }) => {
 
   useEffect(() => {
     // Dispatch the action to fetch data when the component mounts
+    // fetchPaymentReportData();
     dispatch(fetchPaymentMethodReportData(data));
-  }, [dispatch, data]);
+  }, []);
+
+  const fetchPaymentReportData = async () => {
+    try {
+      await dispatch(fetchPaymentMethodReportData(data)).unwrap();
+    } catch (error) {
+      handleCoockieExpire();
+      dispatch(getAuthInvalidMessage("your session has been expired"));
+    }
+  };
 
   useEffect(() => {
     if (
@@ -160,13 +173,15 @@ const PaymentMethodList = ({ data }) => {
                             <StyledTableCell>
                               <p className="report-title">
                                 {typeof paymentData.amt != ""
-                                  ? `$${priceFormate(Number(paymentData.amt).toFixed(2))}`
+                                  ? `$${priceFormate(
+                                      Number(paymentData.amt).toFixed(2)
+                                    )}`
                                   : "N/A"}
                               </p>
                             </StyledTableCell>
                           </StyledTableRow>
                         );
-                      }else {
+                      } else {
                         return null;
                       }
                     })}

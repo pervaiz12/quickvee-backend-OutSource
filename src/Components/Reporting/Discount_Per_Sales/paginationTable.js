@@ -97,10 +97,10 @@ export default function DashboardTables(props) {
 
   const formatDateTime = (dateTimeString) => {
     const date = new Date(dateTimeString);
-    const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
-    const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
-    const formattedDate = date.toLocaleDateString('en-US', dateOptions);
-    const formattedTime = date.toLocaleTimeString('en-US', timeOptions);
+    const dateOptions = { year: "numeric", month: "short", day: "numeric" };
+    const timeOptions = { hour: "numeric", minute: "numeric", hour12: true };
+    const formattedDate = date.toLocaleDateString("en-US", dateOptions);
+    const formattedTime = date.toLocaleTimeString("en-US", timeOptions);
     return `${formattedDate} ${formattedTime}`;
   };
 
@@ -144,6 +144,9 @@ export default function DashboardTables(props) {
                               <StyledTableCell align="center">
                                 Date & Time
                               </StyledTableCell>
+                              {/* <StyledTableCell align="center">
+                                Order Details
+                              </StyledTableCell> */}
                             </TableHead>
                             <TableBody>
                               {result.map((item, innerIndex) => (
@@ -152,7 +155,9 @@ export default function DashboardTables(props) {
                                     {item?.f_name + " " + item?.l_name}
                                   </StyledTableCell>
                                   <StyledTableCell align="center">
-                                    {priceFormate(parseFloat(item?.discount).toFixed(2))}
+                                    {priceFormate(
+                                      parseFloat(item?.discount).toFixed(2)
+                                    )}
                                   </StyledTableCell>
                                   <StyledTableCell align="center">
                                     {item?.coupon_code}
@@ -164,11 +169,26 @@ export default function DashboardTables(props) {
                                     {priceFormate(item?.cash_discounting)}
                                   </StyledTableCell>
                                   <StyledTableCell align="center">
-                                    {item?.order_id}
+                                    <Link
+                                      to={`/store-reporting/order-summary/${props.merchant_id}/${item.order_id}`}
+                                      // onClick={() => handleSummeryPage(row.order_id)}
+                                      target="_blank"
+                                    >
+                                      {item?.order_id}
+                                    </Link>
                                   </StyledTableCell>
                                   <StyledTableCell align="center">
                                     {formatDateTime(item?.merchant_time)}
                                   </StyledTableCell>
+                                  {/* <StyledTableCell align="center">
+                                    <Link
+                                      to={`/store-reporting/order-summary/${props.merchant_id}/${item.order_id}`}
+                                      // onClick={() => handleSummeryPage(row.order_id)}
+                                      target="_blank"
+                                    >
+                                      Order Summery
+                                    </Link>
+                                  </StyledTableCell> */}
                                 </StyledTableRow>
                               ))}
                               <StyledTableRow>
@@ -176,14 +196,16 @@ export default function DashboardTables(props) {
                                   Grand Total
                                 </StyledTableCell>
                                 <StyledTableCell align="center">
-                                  {`$${priceFormate(result
-                                    .reduce((total, item) => {
-                                      return (
-                                        total +
-                                        (parseFloat(item?.discount) || 0)
-                                      );
-                                    }, 0)
-                                    .toFixed(2))}`}
+                                  {`$${priceFormate(
+                                    result
+                                      .reduce((total, item) => {
+                                        return (
+                                          total +
+                                          (parseFloat(item?.discount) || 0)
+                                        );
+                                      }, 0)
+                                      .toFixed(2)
+                                  )}`}
                                 </StyledTableCell>
                                 <StyledTableCell></StyledTableCell>
                                 <StyledTableCell></StyledTableCell>
@@ -207,7 +229,9 @@ export default function DashboardTables(props) {
                                   <StyledTableCell align="center">
                                     <div className="q-category-bottom-report-listing">
                                       <div>
-                                        <p className="">${priceFormate(totalRecord)}</p>
+                                        <p className="">
+                                          ${priceFormate(totalRecord)}
+                                        </p>
                                       </div>
                                     </div>
                                   </StyledTableCell>

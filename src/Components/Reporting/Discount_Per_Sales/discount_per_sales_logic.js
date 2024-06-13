@@ -24,7 +24,7 @@ export default function Discount_per_sales_logic() {
     userTypeData,
     GetSessionLogin,
   } = useAuthDetails();
-
+  let merchant_new_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   let merchant_id = {
     merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
     token_id: userTypeData?.token_id,
@@ -104,5 +104,6 @@ export default function Discount_per_sales_logic() {
     selectedoption,
     EmployeeFilterData,
     loader,
+    merchant_new_id,
   };
 }

@@ -11,6 +11,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { priceFormate } from "../../../hooks/priceFormate";
+import PasswordShow from "../../../Common/passwordShow";
+import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -44,14 +46,24 @@ const TopSallerList = ({ data }) => {
 
   const [topsaller, settopsaller] = useState([]);
   const topsallerDataState = useSelector((state) => state.topsaller);
+  const { handleCoockieExpire } = PasswordShow();
 
   useEffect(() => {
-    if (!data.merchant_id) {
-      console.log("empty");
-    } else {
-      dispatch(fetchtopsallerData(data));
-    }
+    getTopSellerData();
   }, [dispatch, data]);
+
+  const getTopSellerData = async () => {
+    try {
+      if (!data.merchant_id) {
+        console.log("empty");
+      } else {
+        await dispatch(fetchtopsallerData(data)).unwrap();
+      }
+    } catch (error) {
+      handleCoockieExpire();
+      dispatch(getAuthInvalidMessage("your session has been expired"));
+    }
+  };
 
   useEffect(() => {
     if (!topsallerDataState.loading && topsallerDataState.topsallerData) {
@@ -65,13 +77,15 @@ const TopSallerList = ({ data }) => {
 
   const renderDataTable = () => {
     if (topsaller.status === "Failed" && topsaller.msg === "No. Data found.") {
-      return <>
-        <Grid container sx={{ padding: 2.5 }} className="box_shadow_div">
-          <Grid item xs={12}>
-            <p>No. Data found.</p>
+      return (
+        <>
+          <Grid container sx={{ padding: 2.5 }} className="box_shadow_div">
+            <Grid item xs={12}>
+              <p>No. Data found.</p>
+            </Grid>
           </Grid>
-        </Grid>
-      </>
+        </>
+      );
     } else if (topsaller && topsaller.length >= 1) {
       return (
         <>
@@ -99,7 +113,9 @@ const TopSallerList = ({ data }) => {
                           <p className="report-title">{topsaller.variant}</p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <p className="report-title">{priceFormate(topsaller.total_sold)}</p>
+                          <p className="report-title">
+                            {priceFormate(topsaller.total_sold)}
+                          </p>
                         </StyledTableCell>
                       </StyledTableRow>
                     ))}

@@ -152,7 +152,9 @@ const DailyReportList = ({ data }) => {
                               </p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p className="report-title">${priceFormate(dailyreport.amt)}</p>
+                              <p className="report-title">
+                                ${priceFormate(dailyreport.amt)}
+                              </p>
                             </StyledTableCell>
                           </StyledTableRow>
                         ))}
