@@ -11,6 +11,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
 import { priceFormate } from "../../../hooks/priceFormate";
+import PasswordShow from "../../../Common/passwordShow";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -46,11 +47,31 @@ const TaxesDetails = ({ data }) => {
   const [taxesreport, settaxesreport] = useState([]);
 
   const taxesreportDataState = useSelector((state) => state.taxesreport);
+  const{handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
 
   useEffect(() => {
     // Dispatch the action to fetch data when the component mounts
-    dispatch(fetchtaxesreportData(data));
-  }, [dispatch, data]);
+    console.log(data.length)
+    console.log(data)
+    if(data)
+      {
+        getAllReportData()
+
+      }
+    
+    }, [dispatch, data]);
+    const getAllReportData=async()=>{
+      try{
+      await dispatch(fetchtaxesreportData(data)).unwrap();
+
+    }catch(error){
+      console.log("hello rinkesh")
+      console.log(error)
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage();
+    }
+
+  }
 
   useEffect(() => {
     if (!taxesreportDataState.loading && taxesreportDataState.taxesreportData) {

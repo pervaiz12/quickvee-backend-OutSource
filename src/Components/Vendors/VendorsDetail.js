@@ -15,10 +15,12 @@ import { Link } from "react-router-dom";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import AlertModal from "../../reuseableComponents/AlertModal";
 import { priceFormate } from "../../hooks/priceFormate";
+import PasswordShow from "../../Common/passwordShow";
 
 const VendorsDetail = ({ setVisible }) => {
   const label = { inputProps: { "aria-label": "Switch demo" } };
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
 
   const [allvendors, setallvendors] = useState([]);
   const AllVendorsDataState = useSelector((state) => state.vendors);
@@ -27,11 +29,20 @@ const VendorsDetail = ({ setVisible }) => {
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   useEffect(() => {
-    let data = {
-      merchant_id: merchant_id,
-    };
-    dispatch(fetchVendorsListData(data));
-  }, []);
+    getVendorListData()
+    }, []);
+    const getVendorListData=async()=>{
+      try{
+        let data = {
+          merchant_id: merchant_id,
+        };
+      await dispatch(fetchVendorsListData(data)).unwrap();
+
+    }catch(error){
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
+    }
+  }
 
   useEffect(() => {
     if (
@@ -55,30 +66,36 @@ const VendorsDetail = ({ setVisible }) => {
   };
 
   const handleUpdateStatus = async (event, label, vendorId) => {
-    const updData = {
-      // merchant_id: "MAL0100CA",
-      status: event.target.checked ? 1 : 0,
-      id: vendorId,
-    };
-    const { token, ...otherUserData } = userTypeData;
-    const response = await axios.post(
-      BASE_URL + STATUS_UPD_VENDORS,
-      { ...updData, ...otherUserData },
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    try{
 
-    if (response.status === 200) {
-      // alert("Vendor Status Updated Successfully.");
-      showModal("Vendor Status Updated Successfully.");
-    } else {
-      // alert("something went wrong.");
-      showModal("Something went wrong !");
-    }
+      const updData = {
+        // merchant_id: "MAL0100CA",
+      status: event.target.checked ? 1 : 0,
+    id: vendorId,
+  };
+const { token, ...otherUserData } = userTypeData;
+const response = await axios.post(
+  BASE_URL + STATUS_UPD_VENDORS,
+{ ...updData, ...otherUserData },
+{
+  headers: {
+    "Content-Type": "multipart/form-data",
+    Authorization: `Bearer ${token}`,
+},
+}
+);
+
+if (response.status === 200) {
+  // alert("Vendor Status Updated Successfully.");
+showModal("Vendor Status Updated Successfully.");
+} else {
+  // alert("something went wrong.");
+showModal("Something went wrong !");
+}
+  }catch(error){
+    handleCoockieExpire()
+    getUnAutherisedTokenMessage()
+  }
   };
 
   const formatDate = (dateString) => {

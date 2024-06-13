@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchOrderRefundData } from "../../../Redux/features/Reports/OrderRefundReport/OrderRefundReportSlice";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import PasswordShow from "../../../Common/passwordShow";
 
 import { Grid } from "@mui/material";
 
@@ -47,32 +48,44 @@ const OrderRefundReportList = (props) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const dispatch = useDispatch();
+  const{handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow() 
   const [allOrderData, setOrderData] = useState("");
   const AllOrderRefundData = useSelector((state) => state.OrderRefundList);
   // console.log(AllOrderRefundData)
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
-    if (props && props.selectedDateRange) {
-      // const StartDateData = props.selectedDateRange.startDate.toISOString().split('T')[0];
-      // const EndDateData = props.selectedDateRange.endDate.toISOString().split('T')[0];
-
-      const StartDateData = props.selectedDateRange.start_date;
-      const EndDateData = props.selectedDateRange.end_date;
-
-      let data = {
-        merchant_id,
-        start_date: StartDateData,
-        end_date: EndDateData,
-        // category_id: props.categoryId,
-        reason_name: props.reasonTitle === "All" ? "all" : props.reasonTitle,
-        ...userTypeData,
-      };
-      console.log(data);
-      if (data) {
-        dispatch(fetchOrderRefundData(data));
-      }
-    }
+    getOrderRefundData()
+   
   }, [props]);
+  const getOrderRefundData=async()=>{
+    try{
+      if (props && props.selectedDateRange) {
+        // const StartDateData = props.selectedDateRange.startDate.toISOString().split('T')[0];
+        // const EndDateData = props.selectedDateRange.endDate.toISOString().split('T')[0];
+  
+        const StartDateData = props.selectedDateRange.start_date;
+        const EndDateData = props.selectedDateRange.end_date;
+  
+        let data = {
+          merchant_id,
+          start_date: StartDateData,
+          end_date: EndDateData,
+          // category_id: props.categoryId,
+          reason_name: props.reasonTitle === "All" ? "all" : props.reasonTitle,
+          ...userTypeData,
+        };
+        console.log(data);
+        if (data) {
+          await dispatch(fetchOrderRefundData(data)).unwrap();
+        }
+      }
+    }catch(error){
+      // console.log("hello main")
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
+    }
+
+  }
 
   useEffect(() => {
     if (!AllOrderRefundData.loading && AllOrderRefundData.OrderRefundData) {
