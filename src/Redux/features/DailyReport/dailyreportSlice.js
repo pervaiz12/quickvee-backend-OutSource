@@ -14,9 +14,8 @@ const initialState = {
 export const fetchdailyreportData = createAsyncThunk(
   "dailyreport/fetchdailyreportData.",
   async (data) => {
-    console.log("data",data)
-    const { userTypeData } =
-      useAuthDetails();
+    console.log("data", data);
+    const { userTypeData } = useAuthDetails();
     try {
       const { token, ...otherUserData } = userTypeData;
       const response = await axios.post(

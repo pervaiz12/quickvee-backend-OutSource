@@ -203,7 +203,11 @@ function App() {
             path="/purchase-data/edit/:id"
             element={<Main visible={"modify-purchase-order"} />}
           />
-
+           <Route
+            exact
+            path="/stocktake"
+            element={<Main visible={"stocktake"} />}
+          />
           <Route
             exact
             path="/attributes"

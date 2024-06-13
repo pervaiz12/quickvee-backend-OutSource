@@ -532,12 +532,12 @@ const menuItems = [
           { id: 79, text: " Order Type ", link: "/store-reporting/order-type" },
           {
             id: 64,
-            text: "Report by Sales Person",
+            text: "Detailed Sales Person Report",
             link: "/store-reporting/report-sales-person",
           },
           {
             id: 69,
-            text: "Top Seller - Overall Top 10",
+            text: "Top Sellers",
             link: "/store-reporting/overall-top",
           },
           {
@@ -657,11 +657,11 @@ const menuItems = [
         text: "Item Sales Profit Report",
         link: "/store-reporting/item-sale-profit-report",
       },
-      {
-        id: 67,
-        text: "Credit Debit Sales Report",
-        link: "/store-reporting/credit-debit-sales",
-      },
+      // {
+      //   id: 67,
+      //   text: "Credit Debit Sales Report",
+      //   link: "/store-reporting/credit-debit-sales",
+      // },
 
       // { id: 70, text: "Flash Report", link: "/store-reporting/flash-resigter" },
 
@@ -761,6 +761,21 @@ const menuItems = [
     ),
     text: "Purchase Orders",
     link: "/purchase-data",
+  },
+  {
+    id: 12,
+    icon: (
+      <img
+        src={PurchaseIcon}
+        alt="Purchase Data"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img src={PurIcon} alt="Purchase" className="h-6 w-10 mt-4 mb-4" />
+    ),
+    text: "Stocktake",
+    link: "/stocktake",
   },
   {
     id: 6,

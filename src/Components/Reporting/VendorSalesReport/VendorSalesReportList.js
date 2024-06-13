@@ -115,7 +115,7 @@ const VendorSalesReportList = (props) => {
             <React.Fragment key={vendorName}>
               <Grid container className="box_shadow_div">
                 <Grid item xs={12}>
-                  <div className="q-attributes-bottom-header bg-[#ffffff] cursor-pointer">
+                  <div className="q-attributes-bottom-header bg-[#ffffff] ">
                     <span>{vendorName}</span>
                   </div>
                   <TableContainer>
@@ -157,14 +157,17 @@ const VendorSalesReportList = (props) => {
                           </StyledTableRow>
                         ))}
                         <StyledTableRow>
-                          <StyledTableCell>
-                            <p>
-                              Total: $
+                        <StyledTableCell> </StyledTableCell>
+                        <StyledTableCell> </StyledTableCell>
+                          <StyledTableCell align="right">
+                            <p style={{color: "#0A64F9" }}>Total</p>
+                          </StyledTableCell>
+                          <StyledTableCell> 
+                            <p style={{   color: "#0A64F9"}}>
+                              $
                               {priceFormate(parseFloat(
                                 calculateTotal(allVendorData[vendorName])
-                              ).toFixed(2))}
-                            </p>
-                          </StyledTableCell>
+                              ).toFixed(2))} </p></StyledTableCell>
                         </StyledTableRow>
                       </TableBody>
                     </StyledTable>

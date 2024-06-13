@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import FilterTimesheet from './FilterTimesheet'
-import DateRange from '../Orders/InstoreOrder/DateRange'
+import DateRange from "../../reuseableComponents/DateRangeComponent";
 import TimesheetListing from './TimesheetListing'
 import { useAuthDetails } from './../../Common/cookiesHelper';
 

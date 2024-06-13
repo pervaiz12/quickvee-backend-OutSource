@@ -1,6 +1,7 @@
 import { Grid } from "@mui/material";
 import React from "react";
 import { useSelector } from "react-redux";
+import { priceFormate } from "../../../hooks/priceFormate";
 
 const NetSalesFilter = () => {
   const NetSalesData = useSelector((state) => state.ItemSalesReportList);
@@ -16,7 +17,7 @@ const NetSalesFilter = () => {
                   <div className="flex items-center gap-2 flex-col">
                     <div className="q_details_header ml-5"> # Sold</div>
                     <div className="q_details_header ml-5">
-                      {NetSalesData.ItemSalesData[2]}
+                      {priceFormate(Number(NetSalesData.ItemSalesData[2]))}
                     </div>
                   </div>
                 </div>
@@ -28,7 +29,7 @@ const NetSalesFilter = () => {
                   <div className="flex items-center gap-2 flex-col">
                     <div className="q_details_header ml-5">Net Sales</div>
                     <div className="q_details_header ml-5">
-                      {NetSalesData.ItemSalesData[1]}
+                      ${priceFormate(Number(NetSalesData.ItemSalesData[1]))}
                     </div>
                   </div>
                 </div>

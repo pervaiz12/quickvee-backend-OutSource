@@ -621,7 +621,11 @@ export default function Unverified({setMerchantId,setVisible}) {
                                     src={Edit}
                                     alt="Edit"
                                   />
-                                  {data.id == deletedId && deleteLoader ? (
+                                  
+                                  {
+                                  data.id == deletedId && deleteLoader
+                                  
+                                  ? (
                                     <CircularProgress />
                                   ) : (
                                     <img

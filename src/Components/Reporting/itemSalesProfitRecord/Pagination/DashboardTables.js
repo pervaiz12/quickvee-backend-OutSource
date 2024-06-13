@@ -205,22 +205,22 @@ export default function DashboardTables(props) {
             props.getItemRecord.length > 0 ? (
               <StyledTableRow>
                 <StyledTableCell colSpan={2} align="center">
-                  Total
+                  <p style={{   color: "#0A64F9"}}>Total</p>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {priceFormate(totalCost?.soldQty)}
+                <p style={{   color: "#0A64F9"}}>{priceFormate(totalCost?.soldQty)}</p>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {`$${priceFormate(totalCost?.costItem)}`}
+                <p style={{   color: "#0A64F9"}}>{`$${priceFormate(totalCost?.costItem)}`}</p>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {`$${priceFormate(totalCost?.totalSelling)}`}
+                <p style={{   color: "#0A64F9"}}>{`$${priceFormate(totalCost?.totalSelling)}`}</p>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {`${totalCost?.profitPercentage}%`}
+                <p style={{   color: "#0A64F9"}}>{`${totalCost?.profitPercentage}%`}</p>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                  {`$${priceFormate(totalCost?.profit)}`}
+                <p style={{   color: "#0A64F9"}}>{`$${priceFormate(totalCost?.profit)}`}</p>
                 </StyledTableCell>
               </StyledTableRow>
             ) : (

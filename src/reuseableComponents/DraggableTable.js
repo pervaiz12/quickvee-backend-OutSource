@@ -63,6 +63,8 @@ const DraggableTable = ({
   states,
   setVisible,
   setEmployeeId,
+  setProductId,
+  seVisible
 }) => {
   const dispatch = useDispatch();
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -185,6 +187,10 @@ const DraggableTable = ({
     setVisible("EmployeePermission")
     setEmployeeId(id)
   }
+  const handleEditCategory = (id)=>{
+    seVisible("EditCategory")
+    setProductId(id)
+  }
   return (
     <>
       <TableContainer component={Paper}>
@@ -250,14 +256,20 @@ const DraggableTable = ({
                             )}
                             {editButtonEnable && (
                               <StyledTableCell>
-                                <Link to={`${editButtonurl}${item.id}`}>
+                                <span
+                                // to={`${editButtonurl}${item.id}`}
+                                  onClick={()=>{handleEditCategory(item.id)}}
+                                >
                                   <img
                                     // className="edit_center w-8 h-8"
                                     selectedCategory={item}
                                     src={EditIcon}
                                     alt="Edit"
+                                    
                                   />
-                                </Link>
+
+                                  
+                                </span>
                               </StyledTableCell>
                             )}
                             {
