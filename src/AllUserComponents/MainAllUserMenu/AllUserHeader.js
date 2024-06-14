@@ -4,7 +4,8 @@ import Quick from "../../Assests/Dashboard/quickveeLG.png";
 import { BiMenu, BiChevronDown } from "react-icons/bi";
 
 import OnlineData from "../../Assests/Dashboard/store.svg";
-
+import logoutLogo from "../../Assests/Dashboard/logout.svg";
+import needHelpLogo from "../../Assests/Dashboard/need_help.svg";
 import DownIcon from "../../Assests/Dashboard/Down.svg";
 import UserIcon from "../../Assests/MultipleUserIcon/useractive.svg";
 import Cookies from "js-cookie";
@@ -112,6 +113,7 @@ const AllUserHeader = () => {
     localStorage.removeItem("AllStore");
     Cookies.remove("token_data");
     navigate("/login");
+    // handleClose()
   };
 
   const handleNavigateToNeedHelp = () => [
@@ -174,23 +176,21 @@ const AllUserHeader = () => {
                 },
               }}
             >
-              {/* <MenuItem onClick={handleClose}>
+              <MenuItem onClick={handleClose}>
                 <div
                   className="flex justify-items-start items-center"
                   onClick={handleNavigateToNeedHelp}
                 >
-                  <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />
+                  <img src={needHelpLogo} alt="" className="w-6 h-6 mr-2" />
                   <p>Need Help</p>
                 </div>
-              </MenuItem> */}
-              <MenuItem onClick={handleClose}>
+              </MenuItem>
+              <MenuItem onClick={handleLogout }>
                 <div
                   className="flex justify-items-start items-center"
-                  onClick={() => {
-                    handleLogout();
-                  }}
+                 
                 >
-                  <img src={OnlineData} alt="" className="w-6 h-6 mr-2" />
+                  <img src={logoutLogo} alt="" className="w-6 h-6 mr-2" />
                   Logout
                 </div>{" "}
               </MenuItem>

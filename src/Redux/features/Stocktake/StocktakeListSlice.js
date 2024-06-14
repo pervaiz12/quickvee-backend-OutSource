@@ -12,8 +12,10 @@ const initialState = {
 export const fetchStocktakeList = createAsyncThunk(
   "stocktake/fetchStocktakeList",
   async (data) => {
+    
     try {
       const { token, ...dataNew } = data;
+      console.log("dataNew",dataNew)
       const response = await axios.post(
         BASE_URL + GET_STOCKTAKE_LIST,
         dataNew,

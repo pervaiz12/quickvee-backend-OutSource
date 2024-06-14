@@ -14,6 +14,9 @@ import axios from "axios";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { BASE_URL, VOID_STOCKTAKE } from "../../Constants/Config";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import EmailModel from "./EmailModel";
+import StocktakeReportPrint from "./StocktakeReportPrint";
+import { Navigate, useNavigate } from "react-router-dom";
 
 // end table imports --------------------------------------------
 
@@ -44,6 +47,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 const StocktakeReoport = ({ setVisible, singleStocktakeState }) => {
+  const navigate = useNavigate();
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
@@ -83,6 +87,14 @@ const StocktakeReoport = ({ setVisible, singleStocktakeState }) => {
     }
     setVisible("StocktakeList");
   };
+
+  const handlePrint = () => {
+    navigate("/stocktake/print-stocktake-report", {
+      state: {
+        data: singleStocktakeState,
+      },
+    })
+  };
   console.log("singleStocktakeState", singleStocktakeState);
   return (
     <>
@@ -102,7 +114,7 @@ const StocktakeReoport = ({ setVisible, singleStocktakeState }) => {
                     alt="Add-New-Category"
                     className="h-9 w-9"
                   />
-                  <span>Stocktake Report</span>
+                  <span>Stocktake Report - {singleStocktakeState.st_id}</span>
                 </span>
               </div>
             </Grid>
@@ -172,48 +184,49 @@ const StocktakeReoport = ({ setVisible, singleStocktakeState }) => {
                     Cancel
                   </button>
                 </Grid>
-                <Grid item>
-                  <button
-                    className="quic-btn 
-                  quic-btn-save
-                  "
-                    onClick={handleVoidClick}
-                    //   disabled={loader}
-                  >
-                    void
-                    {/* {loader ? <CircularProgress /> : "Update"} */}
-                  </button>
-                </Grid>
+                {singleStocktakeState.status === "0" && (
+                   <Grid item>
+                   <button
+                     className="quic-btn 
+                   quic-btn-save
+                   "
+                     onClick={handleVoidClick}
+                     //   disabled={loader}
+                   >
+                     void
+                     {/* {loader ? <CircularProgress /> : "Update"} */}
+                   </button>
+                 </Grid>
+                )}
+               
               </Grid>
             </Grid>
+          
             <Grid item>
-              <Grid container spacing={3}>
-                <Grid item>
-                  <button
-                    onClick={() => {
-                      // handleCreateStocktake("1");
-                    }}
-                    className="quic-btn quic-btn-save"
-                  >
-                    Email
-                  </button>
+              {singleStocktakeState.status === "0"  &&(
+                  <Grid container spacing={3}>
+                  <Grid item>
+                    <EmailModel singleStocktakeState={singleStocktakeState}/>
+                  </Grid>
+                  <Grid item>
+                    <button
+                      className="quic-btn quic-btn-save"
+                      onClick={handlePrint}
+                      //   disabled={loader}
+                    >
+                      Print
+                      {/* {loader ? <CircularProgress /> : "Update"} */}
+                    </button>
+                  </Grid>
                 </Grid>
-                <Grid item>
-                  <button
-                    className="quic-btn quic-btn-save"
-                    onClick={() => {
-                      // handleCreateStocktake("0");
-                    }}
-                    //   disabled={loader}
-                  >
-                    Print
-                    {/* {loader ? <CircularProgress /> : "Update"} */}
-                  </button>
-                </Grid>
-              </Grid>
+              )}
+              
             </Grid>
           </Grid>
         </Grid>
+        <div style={{ display: "none" }}>
+      
+      </div>
       </Grid>
     </>
   );

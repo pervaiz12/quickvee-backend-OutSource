@@ -37,7 +37,8 @@ import Pagination from "../UnverifeDetails/Pagination";
 import useDebounce from "../../../hooks/useDebouncs";
 import DeleteModal from "../../../reuseableComponents/DeleteModal";
 import DislikeModal from "../../../reuseableComponents/DislikeModal";
-
+import emailLogo from "../../../Assests/Dashboard/email.svg"
+import phoneLogo from "../../../Assests/Dashboard/phone.svg"
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -459,11 +460,12 @@ export default function Verified({setVisible,setMerchantId}) {
                                     (State: {data.a_state})
                                   </div>
                                 </div>
-                                <div className="text-[#818181] lowercase">
-                                  {data.email || ""}
+                                <div className="text-[#818181] lowercase flex">
+                                {data.email && <img src={emailLogo} className="pe-1" />}   <p>{data.email || ""}</p> 
                                 </div>
-                                <div className="text-[#818181]">
-                                  {data.a_phone || ""}
+                                <div className="text-[#818181] flex">
+                                {data.a_phone && <img src={phoneLogo} className="pe-1" />}  <p> {data.a_phone || ""}</p> 
+                                 
                                 </div>
                               </StyledTableCell>
                               <StyledTableCell>

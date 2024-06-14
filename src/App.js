@@ -101,6 +101,8 @@ import ProtectedStoreRoute from "./protected/protectedStoreRoute";
 import PaymentCalDetails from "./Components/Reporting/SalesByPerson/MainOrderSumaaryDetails/PaymentCalDetails";
 import PageNotFound from "./Components/PageNotFound/PageNotFound";
 import PrintPurchaseOrder from "./Components/PurchaseOrders/PrintPurchaseOrder";
+import StocktakeReportPrint from "./Components/Stocktake/StocktakeReportPrint";
+import MainNeedHelp from "./AllUserComponents/NeedHelp/MainNeedHelp";
 
 function App() {
   const location = useLocation();
@@ -154,6 +156,16 @@ function App() {
           <Route exact path="/manager" element={<Main visible={"manager"} />} />
         </Route>
         <Route path="/print-purchase-order" element={<PrintPurchaseOrder />} />
+        <Route
+            
+            path="/stocktake/print-stocktake-report"
+            element={<StocktakeReportPrint />}
+          />
+          <Route
+            exact
+            path="/users/view/unapprove/need-help"
+            element={ <MainNeedHelp  />}
+          />
         {/* <Route exact path="/store" element={<Main visible={"store"} />} /> */}
         <Route element={<ProtectedRoute visible="manager" />}>
           {/* <Route exact path="/manager" element={<Main visible={"manager"} />} /> */}
@@ -208,6 +220,7 @@ function App() {
             path="/stocktake"
             element={<Main visible={"stocktake"} />}
           />
+         
           <Route
             exact
             path="/attributes"
@@ -525,11 +538,7 @@ function App() {
 
         {/* ------------------------Superadmin---------------- */}
         <Route element={<ProtectedRoute visible="superadmin" />}>
-          <Route
-            exact
-            path="/users/view/unapprove/need-help"
-            element={<Main visible={"need-help"} />}
-          />
+          
           <Route
             exact
             path="/users/manager_view"

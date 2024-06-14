@@ -11,7 +11,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
 
-
 // end table imports ----------------------------------------------------
 import AsyncSelect from "react-select/async";
 import { useDispatch } from "react-redux";
@@ -84,7 +83,7 @@ const AddNewStocktake = ({
   useEffect(() => {
     if (singleStocktakeState) {
       const newStocktakeItems = singleStocktakeState.stocktake_item.map(
-        (item,index) => ({
+        (item, index) => ({
           upc: item.upc || "", //
           category_id: item.category_id || "", //
           product_id: item.product_id || "", //
@@ -158,7 +157,7 @@ const AddNewStocktake = ({
     setAlertModalHeaderText(headerText);
     setAlertModalOpen(true);
   };
-  console.log("setSelectedProductsList", stocktake_items);
+  // console.log("setSelectedProductsList", stocktake_items);
   // console.log("setSelectedProducts", selectedProducts);
   const handleAddProduct = () => {
     if (validate()) {
@@ -189,13 +188,96 @@ const AddNewStocktake = ({
     setDeleteCategoryId(index);
     setDeleteModalOpen(true);
   };
+  // console.log(
+  //   "confirmDeleteCategorysingleStocktakeState",
+  //   singleStocktakeState.stocktake_item
+  // );
+  const confirmDeleteCategory = async () => {
+    // Check if the singleStocktakeState object and stocktake_item array are present
+    if (
+      !singleStocktakeState ||
+      !singleStocktakeState.stocktake_item ||
+      singleStocktakeState.stocktake_item.length === 0
+    ) {
+      // If singleStocktakeState or stocktake_item array is empty, filter the stocktake_items array and update the state
+      const newList = stocktake_items.filter((_, i) => i !== deleteCategoryId);
+      setProductList(newList);
 
-  const confirmDeleteCategory = () => {
-    const newList = stocktake_items.filter((_, i) => i !== deleteCategoryId);
-    setProductList(newList);
+      // Close the delete modal
+      setDeleteModalOpen(false);
+      return;
+    }
 
-    const newErrors = errorMessages.filter((_, i) => i !== deleteCategoryId);
-    setErrorMessages(newErrors);
+    try {
+      const { token, ...otherUserData } = userTypeData;
+      const total_qty = stocktake_items.reduce(
+        (sum, item) => sum + Number(item.new_qty || 0),
+        0
+      );
+      const total_discrepancy_cost = stocktake_items.reduce(
+        (sum, item) => sum + Number(item.discrepancy_cost || 0),
+        0
+      );
+      const total_discrepancy = stocktake_items.reduce(
+        (sum, item) => sum + Number(item.discrepancy || 0),
+        0
+      );
+
+      // Check if the item to be deleted is in the original stocktake_item list
+      const itemToDelete = stocktake_items[deleteCategoryId];
+      const isOriginalItem = singleStocktakeState.stocktake_item.some(
+        (item) => item.id === itemToDelete.stocktake_item_id
+      );
+      // console.log("isOriginalItem isOriginalItem ",isOriginalItem)
+      if (isOriginalItem) {
+        const formData = {
+          merchant_id: merchant_id,
+          stocktake_id: singleStocktakeState.id,
+          stocktake_item_id: itemToDelete.stocktake_item_id,
+          total_qty,
+          total_discrepancy,
+          total_discrepancy_cost: total_discrepancy_cost.toFixed(2),
+        };
+
+        const response = await axios.post(
+          BASE_URL + "Stocktake_react_api/delete_stocktake_item",
+          { ...formData, ...otherUserData },
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.data.status) {
+          const newList = stocktake_items.filter(
+            (_, i) => i !== deleteCategoryId
+          );
+          const newList2 = singleStocktakeState.stocktake_item.filter(
+            (_, i) => i !== deleteCategoryId
+          );
+          setSingleStocktakeState({
+            ...singleStocktakeState,
+            stocktake_item: newList2,
+          });
+          setProductList(newList);
+          ToastifyAlert(response.data.message, "success");
+        } else {
+          console.log("Product Not available!");
+          ToastifyAlert(response.data.message, "error");
+        }
+      } else {
+        // If the item is newly added, just remove it from the list
+        const newList = stocktake_items.filter(
+          (_, i) => i !== deleteCategoryId
+        );
+        setProductList(newList);
+        
+      }
+    } catch (e) {
+      console.log("e: ", e);
+    }
 
     setDeleteCategoryId(null);
     setDeleteModalOpen(false);
@@ -255,7 +337,7 @@ const AddNewStocktake = ({
           const product = response.data.data.product_variants.find(
             (prod) => prod.id === variantId
           );
-          console.log("Product variant", product);
+          // console.log("Product variant", product);
 
           obj.newPrice =
             parseFloat(product.price) > 0 ? parseFloat(product.price) : 0;
@@ -284,7 +366,7 @@ const AddNewStocktake = ({
           });
         } else {
           const product = response.data.data.productdata;
-          console.log("product price", product);
+          // console.log("product price", product);
           obj.newPrice =
             parseFloat(product.price) > 0 ? parseFloat(product.price) : 0;
           obj.finalQty = Number(product.quantity) ?? 0;
@@ -357,17 +439,17 @@ const AddNewStocktake = ({
         {}
       );
       const stocktakeData = {
-        merchant_id: merchant_id,
+        merchant_id: merchant_id, //
         total_qty,
         total_discrepancy_cost: total_discrepancy_cost.toFixed(2),
-        total_discrepancy,
+        total_discrepancy, //
         status: stocktakeStatus,
         datetime: datetime,
         stocktake_items: JSON.stringify(updatedStocktakeItem),
-        stocktake_id: singleStocktakeState ? singleStocktakeState.id : "0",
+        stocktake_id: singleStocktakeState ? singleStocktakeState.id : "0", //
       };
 
-      console.log("stocktakeData", stocktakeData);
+      // console.log("stocktakeData", stocktakeData);
       try {
         const { token, ...otherUserData } = userTypeData;
         const response = await axios.post(
@@ -409,6 +491,7 @@ const AddNewStocktake = ({
       e.preventDefault();
     }
   };
+  console.log("singleStocktakeState",singleStocktakeState)
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -428,7 +511,7 @@ const AddNewStocktake = ({
                     alt="Add-New-Category"
                     className="h-9 w-9"
                   />
-                  <span>New Stocktake</span>
+                  <span>{singleStocktakeState  ? "Update" : "New" } Stocktake</span>
                 </span>
               </div>
             </Grid>

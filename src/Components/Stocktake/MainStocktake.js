@@ -21,8 +21,8 @@ const MainStocktake = () => {
   const [visible, setVisible] = useState("StocktakeList");
   const [singleStocktakeState, setSingleStocktakeState] = useState();
   const [gotDatafromPo, setDataFromPo] = useState();
-  console.log("gotDatafromPo gotDatafromPo", gotDatafromPo);
-  console.log("StocktakeList from stocktake main ", singleStocktakeState);
+  // console.log("gotDatafromPo gotDatafromPo", gotDatafromPo);
+  // console.log("StocktakeList from stocktake main ", singleStocktakeState);
 
   const getSingleStocktakeData = async (id) => {
     let singleStocktakeData = {

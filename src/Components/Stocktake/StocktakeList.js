@@ -18,6 +18,8 @@ import { useAuthDetails } from "../../Common/cookiesHelper";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchStocktakeList } from "../../Redux/features/Stocktake/StocktakeListSlice";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
+import useDebounce from "../../hooks/useDebouncs";
+
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -51,21 +53,32 @@ const StocktakeList = ({
   getSingleStocktakeData,
   setSingleStocktakeState,
 }) => {
+   const [searchId, setSearchId] = useState(""); // State to track search ID
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const StocktakeListReducerState = useSelector((state) => state.stocktakeList);
+ 
   console.log("StocktakeList", StocktakeListReducerState);
   const dispatch = useDispatch();
   const { userTypeData } = useAuthDetails();
+  const debouncedValue = useDebounce(searchId);
   useEffect(() => {
     const data = {
       ...userTypeData,
+      perpage: rowsPerPage,
       merchant_id: "MAL0100CA",
+      page: currentPage,
+      search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
     };
+   
     dispatch(fetchStocktakeList(data));
-  }, []);
+  }, [currentPage, debouncedValue, rowsPerPage]);
 
+  const handleSearchInputChange = (value) => {
+    setSearchId(value);
+    setCurrentPage(1);
+  };
   const tableRow = [
     "Stocktake",
     "Status",
@@ -91,12 +104,15 @@ const StocktakeList = ({
   const handleStocktakeIdClick = async (id) => {
     const result = await getSingleStocktakeData(id);
 
-    if (result?.stocktake_item?.length > 0) {
+    if (result) {
       if (result?.status === "0") {
         setVisible("StocktakeReoport");
       }
       if (result?.status === "1") {
         setVisible("AddNewStocktake");
+      }
+      if (result?.status === "2") {
+        setVisible("StocktakeReoport");
       }
     }
   };
@@ -116,8 +132,8 @@ const StocktakeList = ({
           <InputTextSearch
             type="text"
             placeholder="Search Purchase Order"
-            //   value={searchId}
-            //   handleChange={handleSearchInputChange}
+              value={searchId}
+              handleChange={handleSearchInputChange}
             autoComplete="off"
           />
         </Grid>
