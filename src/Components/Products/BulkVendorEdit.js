@@ -466,7 +466,7 @@ const BulkVendorEdit = ({
                           </TableCell>
                         </TableRow>
                       ))
-                    : "No Vendor Selected"}
+                    : <p className="no-vendor-text">No Vendor Selected</p>}
                 </TableBody>
               </Table>
             </TableContainer>

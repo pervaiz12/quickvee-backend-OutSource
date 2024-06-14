@@ -29,6 +29,8 @@ const initialState = {
 
   // showType initial state
   showType: 3,
+
+  varientProduct:[],
 };
 // Generate pening , fulfilled and rejected action type
 export const fetchAllProducts = createAsyncThunk(
@@ -478,6 +480,9 @@ const productsSlice = createSlice({
       if (obj) {
           obj.show_type = updateValue;
       }
+    },
+    setVarientList: (state, action)=>{
+      state.varientProduct = action.payload;
     }
     
   },
@@ -571,6 +576,6 @@ const productsSlice = createSlice({
   },
 });
 
-export const { editProduct, emptyProduct, updateFormValue, changeShowType } =
+export const { editProduct, emptyProduct, updateFormValue, changeShowType, setVarientList } =
   productsSlice.actions;
 export default productsSlice.reducer;

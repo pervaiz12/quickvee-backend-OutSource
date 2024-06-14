@@ -15,6 +15,7 @@ import {
   fetchTaxList,
   fetchVarientList,
   getInventorySetting,
+  setVarientList,
   updateFormValue,
 } from "../../Redux/features/Product/ProductSlice";
 import Validation from "../../Constants/Validation";
@@ -47,14 +48,17 @@ const AddProducts = () => {
   const [fetchDataLoading, setFetchDataLoading] = useState(false);
 
   // find add or edit url
-  const pageUrl = window.location.pathname?.split("/")[1];
+  const pageUrl =
+    window.location.pathname.split("/")[1] +
+    "/" +
+    window.location.pathname.split("/")[2];
 
   // find productId from Url
   const productId = useParams();
 
   const { validatTitle, validatDescription, addVarientFormValidation } =
     Validation();
-  const [formValue, setFormValue] = useState([]);
+  const [formValue, setFormValue] = useState({});
   const [filterOptionList, setFilterOptionList] = useState([]);
   const [productInfo, setProductInfo] = useState({
     title: "",
@@ -65,7 +69,6 @@ const AddProducts = () => {
     frequentlyBought: [],
     files: [],
   });
-
 
   const [bulkEditPo, setBulkEditPo] = useState([
     {
@@ -80,9 +83,16 @@ const AddProducts = () => {
   const [options, setOptions] = useState({});
   const [varientData, setVarientData] = useState([]);
 
-  const [varientLength, setVarientLength] = useState([
+
+  const orderOptions = (values) => {
+    return values
+      .filter((v) => v?.isFixed)
+      .concat(values.filter((v) => !v?.isFixed));
+  };
+
+  const [varientLength, setVarientLength] = useState(orderOptions([
     { id: 1, varientName: "", varientAttributeList: [] },
-  ]);
+  ]));
 
   /// varientTitle combination list
   let varientTitle = [];
@@ -97,6 +107,8 @@ const AddProducts = () => {
     files: "",
     formValue: [],
   });
+
+  const [isMultipleVarient, setIsMultipleVaient] = useState(true);
 
   const [clearInput, setClearInput] = useState(false);
   const [openAlertModal, setOpenAlertModal] = useState(false);
@@ -120,6 +132,46 @@ const AddProducts = () => {
     setClearInput(value);
   };
 
+  // formValue Schema
+
+  const formValueInnerSchema = yup.object().shape({
+    // costPerItem: yup.string().required("This Field is Required"),
+    // compareAtPrice: yup.string().required("This Field is Required"),
+    price: yup.string().required("This Field is Required"),
+    // margin: yup.string().required("This Field is Required"),
+    // profit: yup.string().required("This Field is Required"),
+    qty: yup.string().required("This Field is Required"),
+    upcCode: yup.string().required("This Field is Required"),
+    // customCode: yup.string().required("This Field is Required"),
+    // reorderQty: yup.string().required("This Field is Required"),
+    // reorderLevel: yup.string().required("This Field is Required"),
+  });
+
+  const formInnerSchemaOnSingle = yup.array().of(
+    yup.object({
+      // costPerItem: yup.string().required("This Field is Required"),
+      // compareAtPrice: yup.string().required("This Field is Required"),
+      price: yup.string().required("This Field is Required"),
+      // margin: yup.string().required("This Field is Required"),
+      // Profit: yup.string().required("This Field is Required"),
+      qty: yup.string().required("This Field is Required"),
+      upcCode: yup.string().required("This Field is Required"),
+      // customCode: yup.string().required("This Field is Required"),
+      // reorderQty: yup.string().required("This Field is Required"),
+      // reorderLevel: yup.string().required("This Field is Required"),
+    })
+  );
+
+  // Define the schema for the dynamic formValue array
+  const formValueSchema = yup.array().of(
+    yup.lazy((value) => {
+      const key = Object.keys(value)[0];
+      return yup.object().shape({
+        [key]: formValueInnerSchema,
+      });
+    })
+  );
+
   // formschema for validation
   const formSchema = yup.object().shape({
     title: yup
@@ -141,20 +193,7 @@ const AddProducts = () => {
     //   .array()
     //   .min(1, "please upload image..")
     //   .required("please upload image.."),
-    formValue: yup.array(
-      yup.object({
-        // costPerItem: yup.string().required("This Field is Required"),
-        // compareAtPrice: yup.string().required("This Field is Required"),
-        price: yup.string().required("This Field is Required"),
-        // margin: yup.string().required("This Field is Required"),
-        // Profit: yup.string().required("This Field is Required"),
-        qty: yup.string().required("This Field is Required"),
-        upcCode: yup.string().required("This Field is Required"),
-        // customCode: yup.string().required("This Field is Required"),
-        // reorderQty: yup.string().required("This Field is Required"),
-        // reorderLevel: yup.string().required("This Field is Required"),
-      })
-    ),
+    formValue: !isMultipleVarient ? formInnerSchemaOnSingle : formValueSchema,
   });
 
   // add varient form validation fetch previous and add new updated object
@@ -168,7 +207,7 @@ const AddProducts = () => {
   //         compareAtPrice: previousData.compareAtPrice || "",
   //         price: previousData.price || "",
   //         margin: previousData.margin || "",
-  //         Profit: previousData.Profit || "",
+  //         profit: previousData.profit || "",
   //         qty: previousData.qty || "",
   //         upcCode: previousData.upcCode || "",
   //         customCode: previousData.customCode || "",
@@ -187,7 +226,6 @@ const AddProducts = () => {
 
   const [costPer, setCostPer] = useState(null);
   // const [varientTitle, setVarientTitle] = useState([]);
-  const [isMultipleVarient, setIsMultipleVaient] = useState(true);
 
   const [uploadImage, setUploadImage] = useState([]);
 
@@ -222,7 +260,7 @@ const AddProducts = () => {
         varientLength: "",
         formValue: [],
       });
-      if (pageUrl !== "product-edit") {
+      if (pageUrl !== "product/edit") {
         setVarientLength([
           {
             id: 1,
@@ -235,7 +273,7 @@ const AddProducts = () => {
             varientAttributeList: [],
           },
         ]);
-        setFormValue([]);
+        setFormValue({});
         // setProductInfo({
         //   title: "",
         //   description: "",
@@ -261,14 +299,14 @@ const AddProducts = () => {
         varientLength: "",
         formValue: [],
       });
-      if (pageUrl !== "product-edit") {
+      if (pageUrl !== "products/edit") {
         setFormValue([
           {
             costPerItem: "",
             compareAtPrice: "",
             price: "",
             margin: "",
-            Profit: "",
+            profit: "",
             qty: "",
             upcCode: "",
             customCode: "",
@@ -278,8 +316,8 @@ const AddProducts = () => {
             sellOutOfStock: true,
             checkId: false,
             disable: false,
-            // itemForAllLinkedLocation: false,
             isFoodStamble: false,
+            // itemForAllLinkedLocation: false,
           },
         ]);
         // setProductInfo({
@@ -319,13 +357,11 @@ const AddProducts = () => {
   };
 
   const handleProductInfo = async (e, ckEditorData) => {
-
     let name, value;
-    if(e?.target?.name === "title"){
-     name = e?.target?.name;
+    if (e?.target?.name === "title") {
+      name = e?.target?.name;
       value = e?.target?.value;
     }
-
 
     if (name === "title") {
       const formData = new FormData();
@@ -352,10 +388,10 @@ const AddProducts = () => {
       }, 500);
     }
     // update only when CkEditor value change
-    else if(e?.name === "change:data"){
+    else if (e?.name === "change:data") {
       setProductInfo((prev) => ({
         ...prev,
-        ['description']: ckEditorData,
+        ["description"]: ckEditorData,
       }));
     }
 
@@ -378,7 +414,7 @@ const AddProducts = () => {
   };
 
   const handleSetVarientLength = (updatedVarient) => {
-    setVarientLength(updatedVarient);
+    setVarientLength(orderOptions(updatedVarient));
   };
   const addMoreVarientItems = () => {
     const checkEmpty = varientLength?.map((item, i) => {
@@ -513,7 +549,10 @@ const AddProducts = () => {
   useEffect(() => {
     // called API
     const formData = new FormData();
-    formData.append("merchant_id", LoginGetDashBoardRecordJson?.data?.merchant_id,);
+    formData.append(
+      "merchant_id",
+      LoginGetDashBoardRecordJson?.data?.merchant_id
+    );
 
     dispatch(getInventorySetting(formData)).then((res) => {
       if (!!+res?.payload) {
@@ -522,13 +561,15 @@ const AddProducts = () => {
     });
 
     const inventoryData = new FormData();
-    inventoryData.append("merchant_id", LoginGetDashBoardRecordJson?.data?.merchant_id);
+    inventoryData.append(
+      "merchant_id",
+      LoginGetDashBoardRecordJson?.data?.merchant_id
+    );
 
     const inventoryList = {
-      merchant_id:LoginGetDashBoardRecordJson?.data?.merchant_id,
+      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
       ...userTypeData,
-    }
-
+    };
 
     dispatch(fetchVarientList(inventoryList)).then((res) => {
       setDropdowndata((prev) => ({
@@ -588,188 +629,302 @@ const AddProducts = () => {
     }
   };
 
-  const handleBlur = (e, i) => {
-    const { name, value, type } = e.target;
-    // margin and profit calculation
-    // varient form onchange validation function
-    // handleFormDuplicateFormValidation(name, value, i);
+  const handleBlur = (e, i, title) => {
+    if (isMultipleVarient) {
+      const { name, value, type, checked } = e.target;
 
-    let totalPriceValue;
-    let marginValue;
-    let profitValue;
-    let price_total_value;
+      /// convert input value format 0.00
+      let fieldValue;
+      if (!notAllowDecimalValue.includes(name)) {
+        fieldValue = value
+          // Remove extra dots and ensure only one dot exists at most
+          .replace(/[^\d.]/g, "") // Allow digits and dots only
+          .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
+          .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
 
-    if (name === "costPerItem") {
-      // price field total value
-      if(costPer > 0){
+        let inputStr = fieldValue.replace(/\D/g, "");
+        inputStr = inputStr.replace(/^0+/, "");
 
-        totalPriceValue = (costPer / 100) * value;
-        price_total_value = parseFloat(value) + parseFloat(totalPriceValue);
-  
-        // margin and profit total value
-        let marginvl = (value * 100) / price_total_value.toFixed(2);
-        let showmargin = 100 - marginvl;
-        marginValue = parseFloat(showmargin).toFixed(2);
-        profitValue = parseFloat(price_total_value - value).toFixed(2);
-      }else{
-        price_total_value = ""
+        if (inputStr.length == "") {
+          fieldValue = "";
+        } else if (inputStr.length === 1) {
+          fieldValue = "0.0" + inputStr;
+        } else if (inputStr.length === 2) {
+          fieldValue = "0." + inputStr;
+        } else {
+          fieldValue =
+            inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
+        }
       }
+      // allowed alphanumeric value in upcCode field but not allowed decimal value
+      else if (name === "upcCode") {
+        fieldValue = fieldValue = value
+          // Remove extra dots and ensure only one dot exists at most
+          .replace(/[^\w.]/g, "") // Allow alphanumeric characters, digits, and dots only
+          .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
+          .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+
+        let inputStr = fieldValue.replace(/[^\w]/g, "");
+        if (inputStr == "0") {
+          fieldValue = "0";
+        } else {
+          fieldValue = inputStr.toUpperCase();
+        }
+      }
+      // normal input value format
+      else {
+        fieldValue = value
+          // Remove extra dots and ensure only one dot exists at most
+          .replace(/[^\d.]/g, "") // Allow digits and dots only
+          .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
+          .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+
+        let inputStr = fieldValue.replace(/\D/g, "");
+        // inputStr = inputStr.replace(/^+/, "");
+        if (inputStr == "0") {
+          fieldValue = "0";
+        } else {
+          fieldValue = inputStr;
+        }
+      }
+
+      // margin and profit calculation
+      let totalPriceValue;
+      let marginValue;
+      let profitValue;
+      let price_total_value;
+
+      // price field total value calculation based on costPer value which is fetch from API.
+      if (name === "costPerItem") {
+        if (costPer > 0) {
+          totalPriceValue = (costPer / 100) * fieldValue;
+          price_total_value =
+            parseFloat(fieldValue) + parseFloat(totalPriceValue);
+
+          // margin and profit total value calculation
+          let marginvl = (fieldValue * 100) / price_total_value.toFixed(2);
+          let showmargin = 100 - marginvl;
+          marginValue = parseFloat(showmargin).toFixed(2);
+          profitValue = parseFloat(price_total_value - fieldValue).toFixed(2);
+        } else {
+          price_total_value = "";
+        }
+      }
+
+      // if price value is change manually the recalculate margin and profit value
+      const costPerValue = isMultipleVarient
+        ? formValue?.[i]?.[title]?.["costPerItem"]
+        : formValue?.[0]?.["costPerItem"];
+      if (name === "price") {
+        if (+costPerValue > 0 && value > 0) {
+          let marginvl = (costPerValue * 100) / fieldValue;
+          let showmargin = 100 - marginvl;
+          marginValue = parseFloat(showmargin).toFixed(2);
+          profitValue = parseFloat(fieldValue - costPerValue).toFixed(2);
+        } else if (!costPerValue && value > 0) {
+          marginValue = "";
+          profitValue = "";
+        }
+      }
+
+      const isValue = (input) => Boolean(parseFloat(input));
+
+      const oldMargin = (data) => {
+        return (name === "price" || name === "costPerItem") && !fieldValue
+          ? ""
+          : data.every((item) => isValue(item));
+      };
+
+      // {small: {..data}}, {large: {... data}}
+
+      const updatedValues = formValue.map((item, index) => {
+        const currentTitle = Object.keys(item)[0];
+        const showError =
+          parseFloat(
+            name === "price"
+              ? fieldValue
+              : name === "costPerItem"
+                ? price_total_value
+                : item[currentTitle]?.price
+          ) >
+          parseFloat(
+            name === "compareAtPrice"
+              ? fieldValue
+              : item[currentTitle]?.compareAtPrice
+          );
+        /*
+
+        [i===0 ? currentTitle : title]
+
+        large.. clicked.. 2... title - large.. currentTitle.. small, medium, large..
+
+        {
+          ...item,
+          item[large]: {
+            ...data,
+            [name]: value..
+          }
+        }
+
+        item 0 index- {small: {...data}}  => item[title] = item[large]
+
+        small, medium, large..
+        
+        [
+          {small: {...data}, large: {...data}},
+          {medium: {...data}, large: {...data}}
+          {large: {...newdata}},
+        ]
+        
+        */
+
+        if (i > 0) {
+          return !["upcCode", "customCode"].includes(name) && item[title]
+            ? {
+                ...item,
+                [currentTitle]: {
+                  ...item[currentTitle],
+                  [name]: fieldValue,
+                  price: !isNaN(parseFloat(price_total_value))
+                    ? parseFloat(price_total_value).toFixed(2)
+                    : name === "price"
+                      ? fieldValue
+                      : item[currentTitle]?.price &&
+                          name === "costPerItem" &&
+                          !fieldValue
+                        ? ""
+                        : item[currentTitle]?.price,
+                  margin: !isNaN(parseFloat(marginValue))
+                    ? marginValue
+                    : oldMargin([
+                          item[currentTitle]?.costPerItem,
+                          item[currentTitle]?.margin,
+                          item[currentTitle]?.price,
+                        ])
+                      ? item[currentTitle]?.margin
+                      : "",
+                  profit: !isNaN(parseFloat(profitValue))
+                    ? profitValue
+                    : oldMargin([
+                          item[currentTitle]?.costPerItem,
+                          item[currentTitle]?.margin,
+                          item[currentTitle]?.price,
+                        ])
+                      ? item[currentTitle]?.profit
+                      : "",
+                  comparePriceError:
+                    ["price", "compareAtPrice", "costPerItem"]?.includes(
+                      name
+                    ) && showError
+                      ? "Compare Price must be greater than price."
+                      : [
+                            "qty",
+                            "upcCode",
+                            "customCode",
+                            "reorderLevel",
+                            "reorderQty",
+                            "checkId",
+                            "disable",
+                            "isFoodStamble",
+                            "sellOutOfStock",
+                            "trackQuantity",
+                          ]?.includes(name) &&
+                          item[currentTitle]?.comparePriceError
+                        ? item[currentTitle]?.comparePriceError
+                        : "",
+                },
+              }
+            : item;
+        } else if (i === 0) {
+          return !["upcCode", "customCode"].includes(name)
+            ? {
+                ...item,
+                [currentTitle]: {
+                  ...item[currentTitle],
+                  [name]: fieldValue,
+                  price: !isNaN(parseFloat(price_total_value))
+                    ? parseFloat(price_total_value).toFixed(2)
+                    : name === "price"
+                      ? fieldValue
+                      : item[currentTitle]?.price &&
+                          name === "costPerItem" &&
+                          !fieldValue
+                        ? ""
+                        : item[currentTitle]?.price,
+                  margin: !isNaN(parseFloat(marginValue))
+                    ? marginValue
+                    : oldMargin([
+                          item[currentTitle]?.costPerItem,
+                          item[currentTitle]?.margin,
+                          item[currentTitle]?.price,
+                        ])
+                      ? item[currentTitle]?.margin
+                      : "",
+                  profit: !isNaN(parseFloat(profitValue))
+                    ? profitValue
+                    : oldMargin([
+                          item[currentTitle]?.costPerItem,
+                          item[currentTitle]?.margin,
+                          item[currentTitle]?.price,
+                        ])
+                      ? item[currentTitle]?.profit
+                      : "",
+                  comparePriceError:
+                    ["price", "compareAtPrice", "costPerItem"]?.includes(
+                      name
+                    ) && showError
+                      ? "Compare Price must be greater than price."
+                      : [
+                            "qty",
+                            "upcCode",
+                            "customCode",
+                            "reorderLevel",
+                            "reorderQty",
+                            "checkId",
+                            "disable",
+                            "isFoodStamble",
+                            "sellOutOfStock",
+                            "trackQuantity",
+                          ]?.includes(name) &&
+                          item[currentTitle]?.comparePriceError
+                        ? item[currentTitle]?.comparePriceError
+                        : "",
+                },
+              }
+            : item;
+        }
+        //   else {
+        //   return !["upcCode", "customCode"].includes(name) ? {
+        //     ...item,
+        //     [title]: {
+        //       ...title[title],
+        //       [name]: fieldValue,
+        //       price: !isNaN(parseFloat(price_total_value))
+        //         ? parseFloat(price_total_value).toFixed(2)
+        //         : name === "price"
+        //           ? fieldValue
+        //           : item[currentTitle]?.price && (name === "costPerItem" && !fieldValue)
+        //             ? ""
+        //             : item[currentTitle]?.price,
+        //         margin: !isNaN(parseFloat(marginValue)) ? marginValue : oldMargin([item[currentTitle]?.costPerItem, item[currentTitle]?.margin, item[currentTitle]?.price]) ? item[currentTitle]?.margin : "",
+        //         profit: !isNaN(parseFloat(profitValue)) ? profitValue : oldMargin([item[currentTitle]?.costPerItem, item[currentTitle]?.margin, item[currentTitle]?.price]) ? item[currentTitle]?.profit : "",
+        //         comparePriceError:
+        //         ((["price", "compareAtPrice", "costPerItem"]?.includes(name)) && showError)
+        //             ? "Compare Price must be greater than price."
+        //             : (["qty", "upcCode", "customCode", "reorderLevel", "reorderQty"]?.includes(name)) && item[currentTitle]?.comparePriceError ? item[currentTitle]?.comparePriceError : ""
+        //     }
+        //   }: item
+        // }
+      });
+
+      setFormValue(updatedValues);
     }
-
-    // if price value is change manually the recalculate margin and profit value
-    if (name === "price") {
-      if (value > 0) {
-        let costPerValue = formValue[i]["costPerItem"];
-        let marginvl = (costPerValue * 100) / value;
-        let showmargin = 100 - marginvl;
-        marginValue = parseFloat(showmargin).toFixed(2);
-        profitValue = parseFloat(value - costPerValue).toFixed(2);
-      }
-    }
-
-    // when remove focus on input value
-    const updatedFormValue = formValue.map((item, index) => {
-      // here.... index => each section index
-      // i => each input field index inside section
-      // show alert "Compare Price must be greater than price." when compare value < price && price > compare value / when compareAtPrice field value change manually
-      if (
-        (index === i || i === 0) &&
-        name === "compareAtPrice" &&
-        value &&
-        !!formValue[i]["price"]
-      ) {
-        if (+value < +formValue[i]["price"]) {
-          setOpenAlertModal(true);
-          return {
-            ...item,
-            ["compareAtPrice"]: "",
-          };
-        } else {
-          return {
-            ...item,
-            [name]: value,
-          };
-        }
-      }
-
-      // show alert "Compare Price must be greater than price." when compare value < price && price > compare value / when price field value change manually
-      else if (
-        (index === i || i === 0) &&
-        name === "price" &&
-        value &&
-        !!formValue[i]["compareAtPrice"]
-      ) {
-        if (+value > +formValue[i]["compareAtPrice"]) {
-          setOpenAlertModal(true);
-          return {
-            ...item,
-            [name]: value,
-            ["compareAtPrice"]: "",
-            ["margin"]: !isNaN(marginValue) ? marginValue : "",
-            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-          };
-        } else {
-          return {
-            ...item,
-            [name]: value,
-            ["margin"]: !isNaN(marginValue) ? marginValue : "",
-            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-          };
-        }
-      }
-
-      /// if price value change manually and onblur and not depennd on compareAtPrice is empty or not
-      else if (i === 0 && name === "price" && value) {
-        if (!formValue[i]["costPerItem"] || !formValue[i]["price"]) {
-          return {
-            ...item,
-            [name]: value,
-          };
-        }
-        return {
-          ...item,
-          [name]: value,
-          ["margin"]: !isNaN(marginValue) ? marginValue : "",
-          ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-        };
-      }
-
-      // when onchange price value and leave price input empty then clear margin/profit fields value
-      else if (i === 0 && name === "price" && !value) {
-        return {
-          ...item,
-          [name]: value,
-          ["margin"]: "",
-          ["Profit"]: "",
-        };
-      }
-
-      // when compareAtPrice and price value is already exist and when costPerItem is try to change then we run this condition.
-      // here compareAtPrice and price value need to not empty
-      else if (
-        (index === i || i === 0) &&
-        name === "costPerItem" &&
-        value &&
-        !!formValue[i]["compareAtPrice"] &&
-        !!formValue[i]["price"]
-      ) {
-        if (+formValue[i]["compareAtPrice"] < +formValue[i]["price"]) {
-          setOpenAlertModal(true);
-          return {
-            ...item,
-            [name]: value,
-            ["compareAtPrice"]: "",
-          };
-        } else {
-          return {
-            ...item,
-            [name]: value,
-            ["margin"]: !isNaN(marginValue) ? marginValue : "",
-            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-          };
-        }
-      }
-
-      // when costPerItem value is change manually and not depend on compareAtPrice empty or not
-      else if (i === 0 && name === "costPerItem" && value) {
-        if(costPer > 0){
-
-          return {
-            ...item,
-            [name]: value,
-            ["compareAtPrice"]: "",
-            ["price"]: price_total_value ? price_total_value?.toFixed(2) : "",
-            ["margin"]: !isNaN(marginValue) ? marginValue : "",
-            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-          };
-        }else{
-          return {
-            ...item,
-            [name]: value,
-            ["compareAtPrice"]: "",
-            ["margin"]: !isNaN(marginValue) ? marginValue : "",
-            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-          };
-        }
-      }
-
-      // when section is only 0 and name of field is any but not costPerItem => onblur
-      else if (i === 0 && !nameArray.includes(name)) {
-        return {
-          ...item,
-          [name]: value,
-        };
-      }
-
-      return item;
-    });
-
-    setFormValue(updatedFormValue);
   };
 
-  const handleOnChange = (e, i) => {
-    const { name, value, type } = e.target;
-   
+  const handleOnChange = (e, i, title) => {
+    const { name, value, type, checked } = e.target;
+
+    const updatedFormValue = [...formValue];
 
     /// convert input value format 0.00
     let fieldValue;
@@ -834,117 +989,176 @@ const AddProducts = () => {
 
     // price field total value calculation based on costPer value which is fetch from API.
     if (name === "costPerItem") {
-      if(costPer > 0){
+      if (costPer > 0) {
         totalPriceValue = (costPer / 100) * fieldValue;
-        price_total_value = parseFloat(fieldValue) + parseFloat(totalPriceValue);
-  
+        price_total_value =
+          parseFloat(fieldValue) + parseFloat(totalPriceValue);
+
         // margin and profit total value calculation
         let marginvl = (fieldValue * 100) / price_total_value.toFixed(2);
         let showmargin = 100 - marginvl;
         marginValue = parseFloat(showmargin).toFixed(2);
         profitValue = parseFloat(price_total_value - fieldValue).toFixed(2);
-      }else{
-        price_total_value= ""
+      } else {
+        price_total_value = "";
       }
     }
 
     // if price value is change manually the recalculate margin and profit value
+    const costPerValue = isMultipleVarient
+      ? formValue?.[i]?.[title]?.["costPerItem"]
+      : formValue?.[0]?.["costPerItem"];
     if (name === "price") {
-      if (value > 0) {
-        let costPerValue = formValue[i]["costPerItem"];
+      if (+costPerValue > 0 && value > 0) {
         let marginvl = (costPerValue * 100) / fieldValue;
         let showmargin = 100 - marginvl;
         marginValue = parseFloat(showmargin).toFixed(2);
         profitValue = parseFloat(fieldValue - costPerValue).toFixed(2);
+      } else if (!costPerValue && value > 0) {
+        marginValue = "";
+        profitValue = "";
       }
     }
 
-    // manually onchange
-    const updatedFormValue = formValue.map((item, index) => {
-      // if section is 0 and name is costPerItem => onchange
-      if (i === 0 && name === "costPerItem") {
-        if(costPer > 0){
-          return {
-            ...item,
-            ["costPerItem"]: index == 0 ? fieldValue : "",
-            ["price"]: price_total_value ? price_total_value.toFixed(2) : "",
-            ["margin"]:
-              index == 0 ? (!isNaN(marginValue) ? marginValue : "") : "",
-            ["Profit"]:
-              index == 0 ? (!isNaN(profitValue) ? profitValue : "") : "",
-          };
-        }else{
-          return {
-            ...item,
-            ["costPerItem"]: index == 0 ? fieldValue : "",
-            ["margin"]:
-              index == 0 ? (!isNaN(marginValue) ? marginValue : "") : "",
-            ["Profit"]:
-              index == 0 ? (!isNaN(profitValue) ? profitValue : "") : "",
-          };
-        }
-      }
-      // if section is any but field is 1 and field name is costPerItem => onchange
-      else if (i === index && name === "costPerItem") {
-        if(costPer > 0){
-          return {
-            ...item,
-            ["costPerItem"]: fieldValue,
-            ["price"]: price_total_value ? price_total_value.toFixed(2) : "",
-            ["margin"]: !isNaN(marginValue) ? marginValue : "",
-            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-          };
-        }else {
-          return {
-            ...item,
-            ["costPerItem"]: fieldValue,
-            ["margin"]: !isNaN(marginValue) ? marginValue : "",
-            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-          };
-        }
-      }
-      // when section is 0 and price field value is change manually and costPerItem field value is not empty => onchange
-      else if (i === 0 && name === "price" && !!formValue[i]["costPerItem"]) {
-        if (index === 0) {
-          return {
-            ...item,
-            ["price"]: fieldValue ? fieldValue : "",
-            ["margin"]: !isNaN(marginValue) ? marginValue : "",
-            ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-          };
-        }
-      }
-      // when section is any and price field value is change manually and costPerItem field value is not empty => onchange
-      else if (
-        index === i &&
-        name === "price" &&
-        !!formValue[i]["costPerItem"]
-      ) {
-        return {
-          ...item,
-          ["price"]: fieldValue ? fieldValue : "",
-          ["margin"]: !isNaN(marginValue) ? marginValue : "",
-          ["Profit"]: !isNaN(profitValue) ? profitValue : "",
-        };
-      }
-      // when section is any and field index is any and name is any => onchange
-      else if (index === i) {
-        // if checkbox is already check make it false
-        // fieldValue is decimal value => 0.00
-        return {
-          ...item,
-          [name]:
-            type === "checkbox"
-              ? value === "true"
-                ? false
-                : true
-              : fieldValue,
-        };
-      }
-      return item;
-    });
+    const isValue = (input) => Boolean(parseFloat(input));
 
-    setFormValue(updatedFormValue);
+    const oldMargin = (data) => {
+      return (name === "price" || name === "costPerItem") && !fieldValue
+        ? ""
+        : data.every((item) => isValue(item));
+    };
+
+    let showError;
+    let updatedValues;
+    // manually onchange
+    if (isMultipleVarient) {
+      updatedValues = formValue.map((item, index) => {
+        showError =
+          parseFloat(
+            name === "price"
+              ? fieldValue
+              : name === "costPerItem"
+                ? price_total_value
+                : item[title]?.price
+          ) >
+          parseFloat(
+            name === "compareAtPrice" ? fieldValue : item[title]?.compareAtPrice
+          );
+
+        return Object.keys(item).includes(title)
+          ? {
+              ...item,
+              [title]: {
+                ...item[title],
+                [name]: type === "checkbox" ? checked : fieldValue,
+                price: !isNaN(parseFloat(price_total_value))
+                  ? parseFloat(price_total_value).toFixed(2)
+                  : name === "price"
+                    ? fieldValue
+                    : item[title].price && name === "costPerItem" && !fieldValue
+                      ? ""
+                      : item[title].price,
+                margin: !isNaN(parseFloat(marginValue))
+                  ? marginValue
+                  : oldMargin([
+                        item[title].costPerItem,
+                        item[title].margin,
+                        item[title].price,
+                      ])
+                    ? item[title].margin
+                    : "",
+                profit: !isNaN(parseFloat(profitValue))
+                  ? profitValue
+                  : oldMargin([
+                        item[title].costPerItem,
+                        item[title].margin,
+                        item[title].price,
+                      ])
+                    ? item[title].profit
+                    : "",
+                // comparePriceError:
+                //     ((["price", "compareAtPrice", "costPerItem"].includes(name)) && showError)
+                //         ? "Compare Price must be greater than price."
+                //         : ""
+                comparePriceError:
+                  ["price", "compareAtPrice", "costPerItem"]?.includes(name) &&
+                  showError
+                    ? "Compare Price must be greater than price."
+                    : [
+                          "qty",
+                          "upcCode",
+                          "customCode",
+                          "reorderLevel",
+                          "reorderQty",
+                          "checkId",
+                          "disable",
+                          "isFoodStamble",
+                          "sellOutOfStock",
+                          "trackQuantity",
+                        ]?.includes(name) && item[title]?.comparePriceError
+                      ? item[title]?.comparePriceError
+                      : "",
+              },
+            }
+          : item;
+      });
+    } else {
+      updatedValues = formValue.map((item, index) => {
+        showError =
+          parseFloat(
+            name === "price"
+              ? fieldValue
+              : name === "costPerItem"
+                ? price_total_value
+                : item?.price
+          ) >
+          parseFloat(
+            name === "compareAtPrice" ? fieldValue : item?.compareAtPrice
+          );
+
+        return {
+          ...item,
+          [name]: type === "checkbox" ? checked : fieldValue,
+          price: !isNaN(parseFloat(price_total_value))
+            ? parseFloat(price_total_value).toFixed(2)
+            : name === "price"
+              ? fieldValue
+              : item.price && name === "costPerItem" && !fieldValue
+                ? ""
+                : item.price,
+          margin: !isNaN(parseFloat(marginValue))
+            ? marginValue
+            : oldMargin([item.costPerItem, item.margin, item.price])
+              ? item.margin
+              : "",
+          profit: !isNaN(parseFloat(profitValue))
+            ? profitValue
+            : oldMargin([item.costPerItem, item.margin, item.price])
+              ? item.profit
+              : "",
+          comparePriceError:
+            ["price", "compareAtPrice", "costPerItem"]?.includes(name) &&
+            showError
+              ? "Compare Price must be greater than price."
+              : [
+                    "qty",
+                    "upcCode",
+                    "customCode",
+                    "reorderLevel",
+                    "reorderQty",
+                    "checkId",
+                    "disable",
+                    "isFoodStamble",
+                    "sellOutOfStock",
+                    "trackQuantity",
+                  ]?.includes(name) && item?.comparePriceError
+                ? item?.comparePriceError
+                : "",
+        };
+      });
+    }
+
+    setFormValue(updatedValues);
   };
 
   const handleVarientTitleBasedItemList = () => {
@@ -996,61 +1210,108 @@ const AddProducts = () => {
       // when adding new varient and add first item in varient then clear all the form input value
       if (clearInput) {
         setFormValue((_) => {
-          const newFormValue = [...new Set(varientTitle)].map((_, index) => {
-            return {
-              costPerItem: "",
-              compareAtPrice: "",
-              price: "",
-              margin: "",
-              Profit: "",
-              qty: "",
-              upcCode: "",
-              customCode: "",
-              reorderQty: "",
-              reorderLevel: "",
-              trackQuantity: true,
-              sellOutOfStock: true,
-              checkId: false,
-              disable: false,
-              // itemForAllLinkedLocation: false,
-              isFoodStamble: false,
-            };
-            // }
-          });
+          const newFormValue = [...new Set(varientTitle)].map(
+            (title, index) => {
+              return {
+                [title]: {
+                  costPerItem: "",
+                  compareAtPrice: "",
+                  price: "",
+                  margin: "",
+                  profit: "",
+                  qty: "",
+                  upcCode: "",
+                  customCode: "",
+                  reorderQty: "",
+                  reorderLevel: "",
+                  trackQuantity: true,
+                  sellOutOfStock: true,
+                  checkId: false,
+                  disable: false,
+                  // itemForAllLinkedLocation: false,
+                  isFoodStamble: false,
+                },
+              };
+              // }
+            }
+          );
           return newFormValue;
         });
       } else {
+        // setFormValue((prevFormValue) => {
+        //   const newFormValue = [...new Set(varientTitle)].map((_, index) => {
+        //     const previousData = prevFormValue[index] || {};
+        //     return {
+        //       costPerItem: previousData.costPerItem || "",
+        //       compareAtPrice: previousData.compareAtPrice || "",
+        //       price: previousData.price || "",
+        //       margin: previousData.margin || "",
+        //       profit: previousData.profit || "",
+        //       qty: previousData.qty || "",
+        //       upcCode: previousData.upcCode || "",
+        //       customCode: previousData.customCode || "",
+        //       reorderQty: previousData.reorderQty || "",
+        //       reorderLevel: previousData.reorderLevel || "",
+        //       // here when fetching prodcut data and track and sellout was false but still showing true and check that's why using this condition
+        //       trackQuantity:
+        //         previousData.trackQuantity || pageUrl !== "products/edit"
+        //           ? true
+        //           : false,
+        //       sellOutOfStock:
+        //         previousData.sellOutOfStock || pageUrl !== "products/edit"
+        //           ? true
+        //           : false,
+        //       checkId: previousData.checkId || false,
+        //       disable: previousData.disable || false,
+        //       // itemForAllLinkedLocation:
+        //       //   previousData.itemForAllLinkedLocation || false,
+        //       isFoodStamble: previousData?.isFoodStamble || false,
+        //     };
+        //     // }
+        //   });
+        //   return newFormValue;
+        // });
+
         setFormValue((prevFormValue) => {
-          const newFormValue = [...new Set(varientTitle)].map((_, index) => {
-            const previousData = prevFormValue[index] || {};
-            return {
-              costPerItem: previousData.costPerItem || "",
-              compareAtPrice: previousData.compareAtPrice || "",
-              price: previousData.price || "",
-              margin: previousData.margin || "",
-              Profit: previousData.Profit || "",
-              qty: previousData.qty || "",
-              upcCode: previousData.upcCode || "",
-              customCode: previousData.customCode || "",
-              reorderQty: previousData.reorderQty || "",
-              reorderLevel: previousData.reorderLevel || "",
-              // here when fetching prodcut data and track and sellout was false but still showing true and check that's why using this condition
-              trackQuantity:
-                previousData.trackQuantity || pageUrl !== "product-edit"
-                  ? true
-                  : false,
-              sellOutOfStock:
-                previousData.sellOutOfStock || pageUrl !== "product-edit"
-                  ? true
-                  : false,
-              checkId: previousData.checkId || false,
-              disable: previousData.disable || false,
-              // itemForAllLinkedLocation:
-              //   previousData.itemForAllLinkedLocation || false,
-              isFoodStamble: previousData?.isFoodStamble || false,
-            };
-            // }
-          });
+          const newFormValue = [...new Set(varientTitle)].map(
+            (title, index) => {
+              const previousData =
+                prevFormValue.find((item) => title in item) || {};
+              const result = previousData[title];
+
+              return {
+                [title]: {
+                  notEditable: result?.notEditable || "",
+                  productEditId: result?.productEditId || "",
+                  costPerItem: result?.costPerItem || "",
+                  compareAtPrice: result?.compareAtPrice || "",
+                  price: result?.price || "",
+                  margin: result?.margin || "",
+                  profit: result?.profit || "",
+                  qty: result?.qty || "",
+                  upcCode: result?.upcCode || "",
+                  customCode: result?.customCode || "",
+                  reorderQty: result?.reorderQty || "",
+                  reorderLevel: result?.reorderLevel || "",
+                  // here when fetching prodcut data and track and sellout was false but still showing true and check that's why using this condition
+                  trackQuantity:
+                    result?.trackQuantity || pageUrl !== "products/edit"
+                      ? true
+                      : false,
+                  sellOutOfStock:
+                    result?.sellOutOfStock || pageUrl !== "products/edit"
+                      ? true
+                      : false,
+                  checkId: result?.checkId || false,
+                  disable: result?.disable || false,
+                  // itemForAllLinkedLocation:
+                  //   previousData.itemForAllLinkedLocation || false,
+                  isFoodStamble: result?.isFoodStamble || false,
+                },
+              };
+            }
+          );
+
           return newFormValue;
         });
       }
@@ -1061,7 +1322,7 @@ const AddProducts = () => {
           compareAtPrice: "",
           price: "",
           margin: "",
-          Profit: "",
+          profit: "",
           qty: "",
           upcCode: "",
           customCode: "",
@@ -1109,7 +1370,7 @@ const AddProducts = () => {
 
   useEffect(() => {
     // called fetchproduct data api based on id
-    if (pageUrl === "product-edit") {
+    if (pageUrl === "products/edit") {
       fetchProductDataById();
     }
   }, [pageUrl]);
@@ -1123,7 +1384,7 @@ const AddProducts = () => {
   };
 
   useEffect(() => {
-    if (pageUrl === "product-edit") {
+    if (pageUrl === "products/edit") {
       // fill data fields after fetcing data
       setProductInfo({
         title: productData?.title,
@@ -1175,6 +1436,7 @@ const AddProducts = () => {
                   ?.map((i) => ({
                     label: i,
                     value: i,
+                    isFixed: true,
                   })),
               });
             }
@@ -1197,6 +1459,7 @@ const AddProducts = () => {
                   ?.map((i) => ({
                     label: i,
                     value: i,
+                    isFixed: true,
                   })),
               });
             }
@@ -1219,6 +1482,7 @@ const AddProducts = () => {
                   ?.map((i) => ({
                     label: i,
                     value: i,
+                    isFixed: true,
                   })),
               });
             }
@@ -1229,48 +1493,56 @@ const AddProducts = () => {
         setFormValue((_) => {
           const newFormValue = varientData?.map((val, index) => {
             return {
-              costPerItem: val?.costperItem || "",
-              compareAtPrice: val?.compare_price || "",
-              price: val?.price || "",
-              margin: val?.margin || "",
-              Profit: val?.profit || "",
-              qty: val?.quantity || "",
-              upcCode: val?.upc || "",
-              customCode: val?.custom_code || "",
-              reorderQty: val?.reorder_qty || "",
-              reorderLevel: val?.reorder_level || "",
-              trackQuantity: Boolean(+val?.trackqnty) || false,
-              sellOutOfStock: Boolean(+val?.isstockcontinue) || false,
-              checkId: Boolean(+val?.is_tobacco) || false,
-              disable: Boolean(+val?.disable) || false,
-              // itemForAllLinkedLocation: val?.,
-              isFoodStamble: Boolean(+val?.food_stampable) || false,
+              [val?.variant]: {
+                notEditable: true,
+                productEditId: val?.id,
+                costPerItem: val?.costperItem || "",
+                compareAtPrice: val?.compare_price || "",
+                price: val?.price || "",
+                margin: val?.margin || "",
+                profit: val?.profit || "",
+                qty: val?.quantity || "",
+                upcCode: val?.upc || "",
+                customCode: val?.custom_code || "",
+                reorderQty: val?.reorder_qty || "",
+                reorderLevel: val?.reorder_level || "",
+                trackQuantity: Boolean(+val?.trackqnty) || false,
+                sellOutOfStock: Boolean(+val?.isstockcontinue) || false,
+                checkId: Boolean(+val?.is_tobacco) || false,
+                disable: Boolean(+val?.disable) || false,
+                // itemForAllLinkedLocation: val?.,
+                isFoodStamble: Boolean(+val?.food_stampable) || false,
+              },
             };
             // }
           });
           return newFormValue;
         });
       } else {
-        setFormValue(() => [
-          {
-            costPerItem: productData?.costperItem || "",
-            compareAtPrice: productData?.compare_price || "",
-            price: productData?.price || "",
-            margin: productData?.margin || "",
-            Profit: productData?.profit || "",
-            qty: productData?.quantity || "",
-            upcCode: productData?.upc || "",
-            customCode: productData?.custom_code || "",
-            reorderQty: productData?.reorder_qty || "",
-            reorderLevel: productData?.reorder_level || "",
-            trackQuantity: Boolean(+productData?.trackqnty) || false,
-            sellOutOfStock: Boolean(+productData?.isstockcontinue) || false,
-            checkId: Boolean(+productData?.is_tobacco) || false,
-            disable: Boolean(+productData?.disable) || false,
-            // itemForAllLinkedLocation: productData?.,
-            isFoodStamble: Boolean(+productData?.food_stampable) || false,
-          },
-        ]);
+        setFormValue(() => {
+          const formValue = [
+            {
+              productEditId: productData?.id || "",
+              costPerItem: productData?.costperItem || "",
+              compareAtPrice: productData?.compare_price || "",
+              price: productData?.price || "",
+              margin: productData?.margin || "",
+              profit: productData?.profit || "",
+              qty: productData?.quantity || "",
+              upcCode: productData?.upc || "",
+              customCode: productData?.custom_code || "",
+              reorderQty: productData?.reorder_qty || "",
+              reorderLevel: productData?.reorder_level || "",
+              trackQuantity: Boolean(+productData?.trackqnty) || false,
+              sellOutOfStock: Boolean(+productData?.isstockcontinue) || false,
+              checkId: Boolean(+productData?.is_tobacco) || false,
+              disable: Boolean(+productData?.disable) || false,
+              isFoodStamble: Boolean(+productData?.food_stampable) || false,
+            },
+            // You can add more keys dynamically if needed
+          ];
+          return formValue;
+        });
       }
     }
   }, [productData, dropdownData, options, isMultipleVarient]);
@@ -1286,13 +1558,73 @@ const AddProducts = () => {
   }
 
   const handleGenerateUPC = () => {
-    const updatedUpcData = formValue?.map((item) => {
-      return {
-        ...item,
-        ["upcCode"]: generateString(20),
-      };
-    });
+    let updatedUpcData;
+    if (!isMultipleVarient) {
+      updatedUpcData = formValue?.map((item) => {
+        return {
+          ...item,
+          ["upcCode"]: generateString(20),
+        };
+      });
+    } else {
+      updatedUpcData = formValue?.map((item, index) => {
+        const title = Object.keys(item)[0];
+        return {
+          ...item,
+          [title]: {
+            ...item[title],
+            upcCode: generateString(20),
+          },
+        };
+      });
+    }
     setFormValue(updatedUpcData);
+  };
+
+  const checkFormErrorExist = () => {
+    let isValidation;
+    if (!isMultipleVarient) {
+      isValidation =
+        formValue?.length &&
+        formValue?.map((item, index) => {
+          if (!!item.comparePriceError) {
+            return false;
+          } else {
+            return true;
+          }
+        });
+    } else {
+      isValidation =
+        formValue?.length &&
+        formValue?.map((item, index) => {
+          const title = Object.keys(item)[0];
+          if (!!item[title]?.comparePriceError) {
+            return false;
+          } else {
+            return true;
+          }
+        });
+    }
+    if (isValidation?.every((i) => Boolean(i))) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
+  const varientCategory = (name, boolean, defaultValue) => {
+    let result = [];
+    formValue?.map((item) => {
+      const title = Object.keys(item)[0];
+      result.push(
+        !!boolean
+          ? +item[title]?.[name]
+          : item[title]?.[name]
+            ? item[title]?.[name]
+            : defaultValue
+      );
+    });
+    return result;
   };
 
   const handleSubmitForm = async (e) => {
@@ -1303,10 +1635,26 @@ const AddProducts = () => {
       title: productInfo?.title,
       description: productInfo?.description,
       price: !isMultipleVarient ? formValue[0]?.price : "",
-      compare_price: !isMultipleVarient ? formValue[0]?.compareAtPrice : "",
-      costperItem: !isMultipleVarient ? formValue[0]?.costPerItem : "",
-      margin: !isMultipleVarient ? formValue[0]?.margin : "",
-      profit: !isMultipleVarient ? formValue[0]?.Profit : "",
+      compare_price: !isMultipleVarient
+        ? formValue[0]?.compareAtPrice
+          ? formValue[0]?.compareAtPrice
+          : "0.00"
+        : "",
+      costperItem: !isMultipleVarient
+        ? formValue[0]?.costPerItem
+          ? formValue[0]?.costPerItem
+          : "0.00"
+        : "",
+      margin: !isMultipleVarient
+        ? formValue[0]?.margin
+          ? formValue[0]?.margin
+          : "0.00"
+        : "",
+      profit: !isMultipleVarient
+        ? formValue[0]?.profit
+          ? formValue[0]?.profit
+          : "0.00"
+        : "",
       ischargeTax: 0,
       //sku:
       //barcode:
@@ -1315,11 +1663,23 @@ const AddProducts = () => {
       disable: !isMultipleVarient ? +formValue[0]?.disable : "",
       is_tobacco: !isMultipleVarient ? +formValue[0]?.checkId : "",
       food_stampable: !isMultipleVarient ? +formValue[0]?.isFoodStamble : "",
-      quantity: !isMultipleVarient ? formValue[0]?.qty : "",
-      reorder_level: !isMultipleVarient ? formValue[0]?.reorderLevel : "",
+      quantity: !isMultipleVarient
+        ? formValue[0]?.qty
+          ? formValue[0]?.qty
+          : "0"
+        : "",
+      reorder_level: !isMultipleVarient
+        ? formValue[0]?.reorderLevel
+          ? formValue[0]?.reorderLevel
+          : "0"
+        : "",
       upc: !isMultipleVarient ? formValue[0]?.upcCode : "",
       custom_code: !isMultipleVarient ? formValue[0]?.customCode : "",
-      reorder_qty: !isMultipleVarient ? formValue[0]?.reorderQty : "",
+      reorder_qty: !isMultipleVarient
+        ? formValue[0]?.reorderQty
+          ? formValue[0]?.reorderQty
+          : "0"
+        : "",
       // reorder_cost: !isMultipleVarient ? formValue[0]?.reorderQty : "",
       //ispysical_product:
       //country_region:
@@ -1379,67 +1739,81 @@ const AddProducts = () => {
       varvarient: isMultipleVarient
         ? varientTitle.filter(Boolean)?.toString()
         : "",
+
+      /// new changes start from here
+
       varprice: isMultipleVarient
-        ? formValue?.map((i) => i?.price).join(",")
+        ? varientCategory("price").join(",").trim()
         : "",
+
       varquantity: isMultipleVarient
-        ? formValue?.map((i) => i?.qty).join(",")
+        ? varientCategory("qty", "", "0").join(",").trim()
         : "",
       // varsku: formValue?.map((i) => i),
       //varbarcode[]:123321,5456464
       //optionarray2:Material
       //optionvalue2:glass
       //upc:abcupc
+
       varupc: isMultipleVarient
-        ? formValue?.map((i) => (!!i?.upcCode ? i?.upcCode : "")).join(",")
+        ? varientCategory("upcCode").join(",").trim()
         : "",
+
       varcustomcode: isMultipleVarient
-        ? formValue
-            ?.map((i) => (!!i?.customCode ? i?.customCode : ""))
-            .join(",")
+        ? varientCategory("customCode", "", "0").join(",").trim()
         : "",
+
       varcostperitem: isMultipleVarient
-        ? formValue
-            ?.map((i) => (!!i?.costPerItem ? i?.costPerItem : ""))
-            .join(",")
+        ? varientCategory("costPerItem", "", "0.00").join(",").trim()
         : "",
+
       vartrackqnty: isMultipleVarient
-        ? formValue?.map((i) => +i?.trackQuantity)?.toString()
+        ? varientCategory("trackQuantity", "boolean").toString()
         : "",
+
       varcontinue_selling: isMultipleVarient
-        ? formValue?.map((i) => +i?.sellOutOfStock)?.toString()
+        ? varientCategory("sellOutOfStock", "boolean").toString()
         : "",
+
       varcheckid: isMultipleVarient
-        ? formValue?.map((i) => +i?.checkId)?.toString()
+        ? varientCategory("checkId", "boolean").toString()
         : "",
+
       vardisable: isMultipleVarient
-        ? formValue?.map((i) => +i?.disable)?.toString()
+        ? varientCategory("disable", "boolean").toString()
         : "",
+
       varfood_stampable: isMultipleVarient
-        ? formValue?.map((i) => +i?.isFoodStamble)?.toString()
+        ? varientCategory("isFoodStamble", "boolean").toString()
         : "",
+
       varmargin: isMultipleVarient
-        ? formValue?.map((i) => i?.margin).join(",")
+        ? varientCategory("margin", "", "0.00").join(",").trim()
         : "",
+
       varprofit: isMultipleVarient
-        ? formValue?.map((i) => i?.Profit).join(",")
+        ? varientCategory("profit", "", "0.00").join(",").trim()
         : "",
+
       varreorder_qty: isMultipleVarient
-        ? formValue?.map((i) => i?.reorderQty).join(",")
+        ? varientCategory("reorderQty", "", "0").join(",").trim()
         : "",
+
       varreorder_level: isMultipleVarient
-        ? formValue?.map((i) => i?.reorderLevel).join(",")
+        ? varientCategory("reorderLevel", "", "0").join(",").trim()
         : "",
+
       varcompareprice: isMultipleVarient
-        ? formValue?.map((i) => i?.compareAtPrice).join(",")
+        ? varientCategory("compareAtPrice", "", "0.00").join(",").trim()
         : "",
       // reorder_cost: [10, 10, 10, 10],
     };
 
-    if (pageUrl === "product-edit") {
+    if (pageUrl === "products/edit") {
       data["productid"] = productData?.id ? productData?.id : "";
       data["optionid"] = options?.id ? options?.id : "";
     }
+
 
     let checkEmpty;
     if (isMultipleVarient) {
@@ -1473,7 +1847,8 @@ const AddProducts = () => {
       if (
         checkEmpty.every((i) => Boolean(i)) &&
         !!response &&
-        !productTitleError
+        !productTitleError &&
+        checkFormErrorExist()
       ) {
         const formdata = new FormData();
         for (let i in data) {
@@ -1484,7 +1859,7 @@ const AddProducts = () => {
         for (let i = 0; i < uploadImage.length; i++) {
           formdata.append("files[]", uploadImage[i]);
         }
-        pageUrl === "product-edit"
+        pageUrl === "products/edit"
           ? dispatch(editProductData(formdata))
               .then((res) => {
                 if (res?.payload?.data?.status) {
@@ -1536,9 +1911,8 @@ const AddProducts = () => {
   //   await addVarientFormValidation(name, value, index, error);
   //   handleUpdateError(error);
   // };
-
   return (
-    <div className="box">
+    <div className="box ">
       {/* edit modal */}
       {fetchDataLoading ? (
         <div class="loading-box">
@@ -1565,12 +1939,19 @@ const AddProducts = () => {
             text="Compare Price must be greater than price."
           />
 
-          <div className="q-attributes-main-page">
+          <div className="q-attributes-main-page box_shadow_div">
             <div className="q-add-categories-section">
               <div className="q-add-categories-section-header">
-                <span>
+                <span
+                  onClick={() => {
+                    navigate("/products");
+                  }}
+                >
                   <img src={AddNewCategory} alt="Add-New-Category" />
-                  <span style={{ width: "153px" }}>Add Product</span>
+
+                  <span style={{ width: "153px" }}>
+                    {pageUrl === "products/edit" ? "Edit" : "Add"} Product
+                  </span>
                 </span>
               </div>
               <div className="q-add-categories-section-middle-form">
@@ -1598,7 +1979,10 @@ const AddProducts = () => {
                 </div>
 
                 <div className="q-add-categories-single-input">
-                <CkEditorInput     value={productInfo?.description} onChange={handleProductInfo}/>
+                  <CkEditorInput
+                    value={productInfo?.description}
+                    onChange={handleProductInfo}
+                  />
                 </div>
                 {/* <div className="q-add-categories-single-input">
                   <label htmlFor="description">Description</label>
@@ -1868,7 +2252,7 @@ const AddProducts = () => {
                     {/* Your existing JSX for variant attributes */}
 
                     <div className="q-add-categories-section-middle-footer  ">
-                      {pageUrl === "product-edit" &&
+                      {pageUrl === "products/edit" &&
                       productData?.isvarient === "1" ? (
                         <div
                           className="q-category-bottom-header"
@@ -1888,7 +2272,7 @@ const AddProducts = () => {
                         className="q-category-bottom-header"
                         style={{ marginRight: "67px" }}
                       >
-                        {pageUrl !== "product-edit" ? (
+                        {pageUrl !== "products/edit" ? (
                           <button
                             className="quic-btn quic-btn-save"
                             onClick={handleSubmitForm}

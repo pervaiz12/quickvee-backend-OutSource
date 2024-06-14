@@ -193,6 +193,16 @@
   font-weight: 500 !important;
 }
 
+.checkbox-area{
+  display: flex;
+  align-items: center;
+}
+
+.checkbox-area label{
+  margin-left: 10px;
+  margin-top: 3px;
+}
+
 /* varient add section */
 .varientAddSection {
   display: flex;
@@ -218,6 +228,7 @@
   font-size: 11px;
   font-weight: 400;
 }
+
 
 /* product page edit modal css */
 .product-edit-modal {
@@ -420,6 +431,18 @@
   height: 24px !important;
 }
 
+.no-vendor-text{
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+
+.bulk-varient-edit-form .q-add-categories-section-middle-footer  {
+  display: flex;
+  justify-content: space-between;
+  padding: 0px 30px 20px 30px;
+  box-sizing: border-box;
+}
 /* alert toast css */
 .toast-modal {
   position: absolute;

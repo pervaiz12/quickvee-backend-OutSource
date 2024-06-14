@@ -217,7 +217,7 @@ const ProductTable = ({
           <div className="">
             <div className="q-category-bottom-header">
               <span>Products</span>
-              <Link to="/product-add">
+              <Link to="/products/add">
                 <p className="">
                   Add New Product
                   <img src={AddIcon} alt="add-icon" />
@@ -277,7 +277,7 @@ const ProductTable = ({
                                 </StyledTableCell>
                                 <StyledTableCell>
                                   <p className="categories-title">
-                                    <Link to={`/product-edit/${product?.id}`}>
+                                    <Link to={`/products/edit/${product?.id}`}>
                                       {product.title}
                                     </Link>
                                   </p>

@@ -1,6 +1,7 @@
 import React from "react";
 import { formData } from "./data";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const GeneratePUC = ({
   handleVarientTitleBasedItemList,
@@ -17,14 +18,17 @@ const GeneratePUC = ({
   varientData,
 }) => {
   const navigate = useNavigate();
-  const pageUrl = window.location.pathname?.split("/")[1];
+  const pageUrl = window.location.pathname.split("/")[1] + "/" + window.location.pathname.split("/")[2];
   const varientTitle = handleVarientTitleBasedItemList();
+  const { varientProduct } = useSelector(
+    (state) => state?.productsListData
+  );
   const setInputMaxLength = (fieldname) => {
     switch (fieldname) {
       case "costPerItem":
       case "compareAtPrice":
       case "price":
-      case "Profit":
+      case "profit":
       case "margin":
         return 9;
       case "reorderQty":
@@ -38,37 +42,43 @@ const GeneratePUC = ({
         return 9;
     }
   };
-  const disabledFields = ["margin", "Profit"];
-  const disabledFieldsOnEdit = ["margin", "Profit", "qty"];
+  const disabledFields = ["margin", "profit"];
+  const disabledFieldsOnEdit = ["margin", "profit", "qty"];
 
-  const disabledInput = (inp) => {
-    if (pageUrl !== "product-edit" && disabledFields.includes(inp?.name)) {
+  const disabledInput = (inp, formDisabledKey) => {
+    if (pageUrl !== "products/edit" && disabledFields.includes(inp?.name) ) {
       return true;
-    } else if (
-      pageUrl === "product-edit" &&
-      disabledFieldsOnEdit.includes(inp?.name)
+    }else if(pageUrl === "products/edit" &&  inp?.name === 'qty' && !formDisabledKey?.notEditable){
+      return false
+    }
+    else if (
+     ( pageUrl === "products/edit" &&
+      disabledFieldsOnEdit.includes(inp?.name)) 
     ) {
       return true;
     } else if (
-      pageUrl === "product-edit" &&
-      +inventoryData?.cost_method === 1 &&
-      inp?.name === "costPerItem"
+     ( pageUrl === "products/edit" &&
+      +inventoryData?.cost_method === 1) &&
+    (  inp?.name === "costPerItem" &&
+      !!formDisabledKey?.notEditable)
     ) {
       return true;
     }
-
     return false;
   };
 
   const handleRedirectHistory = (varientIndex) => {
     if (varientIndex === null) {
-      navigate(`/product/saleshistory/${productData?.id}`);
+      navigate(`/products/saleshistory/${productData?.id}`, {state: productInfo});
     } else {
       navigate(
-        `/product/saleshistory/${productData?.id}/${varientData[varientIndex]?.id}`
+        `/products/saleshistory/${productData?.id}/${varientData[varientIndex]?.id}`,
+        {state: productInfo}
       );
     }
   };
+
+
   return (
     <>
       <div className="mx-0">
@@ -91,7 +101,7 @@ const GeneratePUC = ({
             ""
           )}
           {varientTitle?.length && isMultipleVarient
-            ? varientTitle?.map((_, index) => {
+            ? varientTitle?.map((title, index) => {
                 return (
                   <div className="qvrow" key={index}>
                     {isMultipleVarient ? (
@@ -114,25 +124,34 @@ const GeneratePUC = ({
                                     class="varient-input-field"
                                     type={inp?.type}
                                     name={inp?.name}
-                                    value={formValue?.[index]?.[inp?.name]}
+                                    value={formValue?.[index]?.[title]?.[inp?.name]}
                                     placeholder={inp?.placeholder}
-                                    onChange={(e) => handleOnChange(e, index)}
-                                    onBlur={(e) => handleBlur(e, index)}
+                                    onChange={(e) => handleOnChange(e, index, title)}
+                                    onBlur={(e) => handleBlur(e, index, title)}
                                     maxLength={setInputMaxLength(inp?.name)}
-                                    disabled={disabledInput(inp)}
+                                    disabled={disabledInput(inp, formValue?.[index]?.[title])}
                                   />
-
-                                  {error[`formValue[${index}].${inp?.name}`] ? (
+                                  {!!formValue?.[index]?.[title]?.['comparePriceError'] && inp?.name === "compareAtPrice" ? (
+                                    <span className="error-alert">
+                                      {
+                                        formValue?.[index]?.[title]?.['comparePriceError']
+                                      }
+                                    </span>
+                                  ) : (
+                                    ""
+                                  )}
+                                  {error[`formValue[${index}].${title}.${inp?.name}`] ? (
                                     <span className="error-alert">
                                       {
                                         error[
-                                          `formValue[${index}].${inp?.name}`
+                                          `formValue[${index}].${title}.${inp?.name}`
                                         ]
                                       }
                                     </span>
                                   ) : (
                                     ""
                                   )}
+                                
                                 </div>
                               </div>
                             </div>
@@ -148,10 +167,10 @@ const GeneratePUC = ({
                         <input
                           type="checkbox"
                           name="trackQuantity"
-                          value={formValue?.[index]?.["trackQuantity"]}
-                          onChange={(e) => handleOnChange(e, index)}
+                          value={formValue?.[index]?.[title]?.["trackQuantity"]}
+                          onChange={(e) => handleOnChange(e, index, title)}
                           checked={
-                            formValue?.[index]?.["trackQuantity"] ? true : false
+                            formValue?.[index]?.[title]?.["trackQuantity"] 
                           }
                         />
                         <span class="checkmark"></span>
@@ -164,10 +183,10 @@ const GeneratePUC = ({
                         <input
                           type="checkbox"
                           name="sellOutOfStock"
-                          value={formValue?.[index]?.["sellOutOfStock"]}
-                          onChange={(e) => handleOnChange(e, index)}
+                          value={formValue?.[index]?.[title]?.["sellOutOfStock"]}
+                          onChange={(e) => handleOnChange(e, index, title)}
                           checked={
-                            formValue?.[index]?.["sellOutOfStock"]
+                            formValue?.[index]?.[title]?.["sellOutOfStock"]
                               ? true
                               : false
                           }
@@ -182,10 +201,10 @@ const GeneratePUC = ({
                         <input
                           type="checkbox"
                           name="checkId"
-                          value={formValue?.[index]?.["checkId"]}
-                          onChange={(e) => handleOnChange(e, index)}
+                          value={formValue?.[index]?.[title]?.["checkId"]}
+                          onChange={(e) => handleOnChange(e, index, title)}
                           checked={
-                            formValue?.[index]?.["checkId"] ? true : false
+                            formValue?.[index]?.[title]?.["checkId"] ? true : false
                           }
                         />
                         <span class="checkmark"></span>
@@ -198,10 +217,10 @@ const GeneratePUC = ({
                         <input
                           type="checkbox"
                           name="disable"
-                          value={formValue?.[index]?.["disable"]}
-                          onChange={(e) => handleOnChange(e, index)}
+                          value={formValue?.[index]?.[title]?.["disable"]}
+                          onChange={(e) => handleOnChange(e, index, title)}
                           checked={
-                            formValue?.[index]?.["disable"] ? true : false
+                            formValue?.[index]?.[title]?.["disable"] ? true : false
                           }
                         />
                         <span class="checkmark"></span>
@@ -214,10 +233,10 @@ const GeneratePUC = ({
                         <input
                           type="checkbox"
                           name="isFoodStamble"
-                          value={formValue?.[index]?.["isFoodStamble"]}
-                          onChange={(e) => handleOnChange(e, index)}
+                          value={formValue?.[index]?.[title]?.["isFoodStamble"]}
+                          onChange={(e) => handleOnChange(e, index, title)}
                           checked={
-                            formValue?.[index]?.["isFoodStamble"] ? true : false
+                            formValue?.[index]?.[title]?.["isFoodStamble"] ? true : false
                           }
                         />
                         <span class="checkmark"></span>
@@ -244,7 +263,7 @@ const GeneratePUC = ({
                       </label> */}
                     </div>
 
-                    {pageUrl === "product-edit" ? (
+                    {pageUrl === "products/edit" && formValue?.[index]?.[title]?.notEditable ? (
                       <div class="edit-profile-btns">
                         <button
                           className="quic-btn quic-btn-save vendor-btn"
@@ -254,7 +273,7 @@ const GeneratePUC = ({
                             backgroundColor: "#0A64F9",
                           }}
                           onClick={() =>
-                            handleCloseEditModal("single_vendor", index)
+                            handleCloseEditModal("single_vendor", formValue?.[index]?.[title]?.productEditId)
                           }
                         >
                           Vendors
@@ -278,7 +297,7 @@ const GeneratePUC = ({
                             backgroundColor: "#0A64F9",
                           }}
                           onClick={() =>
-                            handleCloseEditModal("single_instant", index)
+                            handleCloseEditModal("single_instant", formValue?.[index]?.[title]?.productEditId)
                           }
                         >
                           Instant PO
@@ -291,6 +310,7 @@ const GeneratePUC = ({
                 );
               })
             : ""}
+            
           {!isMultipleVarient ? (
             <div className="qvrow">
               <div className="mx-4 my-4">{varientTitle?.[0]}</div>
@@ -312,6 +332,15 @@ const GeneratePUC = ({
                               maxLength={setInputMaxLength(inp?.name)}
                               disabled={disabledInput(inp)}
                             />
+                              {!!formValue?.[0]?.['comparePriceError'] && inp?.name === "compareAtPrice" ? (
+                                    <span className="error-alert">
+                                      {
+                                        formValue?.[0]?.['comparePriceError']
+                                      }
+                                    </span>
+                                  ) : (
+                                    ""
+                                  )}
                             {error[`formValue[0].${inp?.name}`] ? (
                               <span className="error-alert">
                                 {error[`formValue[0].${inp?.name}`]}
@@ -336,7 +365,7 @@ const GeneratePUC = ({
                     name="trackQuantity"
                     value={formValue?.[0]?.["trackQuantity"]}
                     onChange={(e) => handleOnChange(e, 0)}
-                    checked={formValue?.[0]?.["trackQuantity"] ? true : false}
+                    checked={formValue?.[0]?.["trackQuantity"]}
                   />
                   <span class="checkmark"></span>
                 </label>
@@ -416,7 +445,7 @@ const GeneratePUC = ({
                 </label> */}
               </div>
 
-              {pageUrl === "product-edit" ? (
+              {pageUrl === "products/edit" ? (
                 <div class="edit-profile-btns">
                   <button
                     className="quic-btn quic-btn-save vendor-btn"
@@ -425,7 +454,7 @@ const GeneratePUC = ({
                     style={{
                       backgroundColor: "#0A64F9",
                     }}
-                    onClick={() => handleCloseEditModal("single_vendor", 0)}
+                    onClick={() => handleCloseEditModal("single_vendor", formValue?.[0]?.productEditId)}
                   >
                     Vendors
                   </button>
@@ -447,7 +476,7 @@ const GeneratePUC = ({
                     style={{
                       backgroundColor: "#0A64F9",
                     }}
-                    onClick={() => handleCloseEditModal("single_instant", 0)}
+                    onClick={() => handleCloseEditModal("single_instant", formValue[0]?.productEditId)}
                   >
                     Instant PO
                   </button>
