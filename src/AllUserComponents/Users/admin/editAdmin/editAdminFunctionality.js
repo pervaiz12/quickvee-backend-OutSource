@@ -41,7 +41,7 @@ const EditAdminFunctionality = (handleClick) => {
       })
       .then((response) => {
         if (response.data.status == 200) {
-          //  console.log(response.data.message[0])
+           console.log(response.data.message[0])
           setEditData({ password1: "", ...response.data.message[0] });
         }
       });
@@ -50,7 +50,7 @@ const EditAdminFunctionality = (handleClick) => {
     const { name, value } = e.target;
     let updatedErrors = { ...errors };
     let emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    // console.log(name)
+    console.log(editData)
 
     if (name === "owner_name") {
       // updatedErrors[name] = value === "" ? `please fill the ${name} field` : "";
@@ -62,6 +62,7 @@ const EditAdminFunctionality = (handleClick) => {
             : "";
     }
     if (name == "email") {
+      console.log(value)
       updatedErrors[name] =
         value === ""
           ? `Please fill the ${name} field`

@@ -18,6 +18,7 @@ import BasicTextFields from "../../reuseableComponents/TextInputField";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 // import Stack from '@mui/material/Stack';
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import PasswordShow from "../../Common/passwordShow";
 const vendorFormValues = {
   merchant_id: "",
   id: "",
@@ -32,6 +33,7 @@ const vendorFormValues = {
 const EditVendors = ({ setVisible }) => {
   const Navigate = useNavigate();
   const location = useLocation();
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
   const searchParams = new URLSearchParams(location.search);
   const [allvendors, setallvendors] = useState([]);
   const AllVendorsDataState = useSelector((state) => state.vendors);
@@ -88,9 +90,11 @@ const EditVendors = ({ setVisible }) => {
         }
         return newData;
       });
-      // console.log(response.data);
+      console.log(response.data);
     } catch (error) {
       console.error("Error:", error);
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
     }
   }
 
@@ -155,6 +159,8 @@ const EditVendors = ({ setVisible }) => {
       }
     } catch (error) {
       console.error("Error updating data:", error);
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
     }
   };
 

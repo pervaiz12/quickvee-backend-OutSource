@@ -190,12 +190,13 @@ export default function LoginLogic() {
   // }
   const handleSubmitForm = async (e) => {
     e.preventDefault();
+    try{
     let isValidateForm = validateForm();
     if (!isValidateForm) {
       // console.log('hello')
       // console.log(formData)
       let data = { username: formData.username, password: formData.password };
-      dispatch(handleUserType(data)).then((res) => {
+        dispatch(handleUserType(data)).then((res) => {
         if (res?.payload?.status == false) {
           dispatch(getAuthInvalidMessage(res?.payload?.msg));
           setErrorMessage(res?.payload?.msg);
@@ -221,6 +222,9 @@ export default function LoginLogic() {
       //   console.log(response?.payload)
       //  })
     }
+  }catch(error){
+    console.log("hello")
+  }
   };
   return {
     handleChangeLogin,

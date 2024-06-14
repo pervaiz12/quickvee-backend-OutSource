@@ -29,10 +29,12 @@ import CurrencyInputHelperFun from "../../helperFunctions/CurrencyInputHelperFun
 import { FormControl } from "@mui/material";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
+import PasswordShow from "../../Common/passwordShow";
 
 const EditCoupon = ({couponId,seVisible}) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
   const myStyles = {
     display: "flex",
   };
@@ -352,6 +354,8 @@ const EditCoupon = ({couponId,seVisible}) => {
       }
     } catch (error) {
       console.error("API Error:", error);
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
     }
   };
 

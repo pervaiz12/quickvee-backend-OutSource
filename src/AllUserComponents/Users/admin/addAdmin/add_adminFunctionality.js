@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../../CommonComponents/ToastifyAlert";
 
-export default function Add_adminFunctionality() {
+export default function Add_adminFunctionality({setVisible}) {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
 
@@ -223,6 +223,7 @@ export default function Add_adminFunctionality() {
             setLoader(false);
             if (res.data.status == 200) {
               ToastifyAlert("Admin Added  Successfully!", "success");
+              setVisible("AdminView")
               setAddAdminData({
                 owner_name: "",
                 email: "",
@@ -235,6 +236,7 @@ export default function Add_adminFunctionality() {
                   phone: "",
                 },
               });
+              
               navigate("/users/admin");
             } else {
               ToastifyAlert("Admin not Added!", "warn");

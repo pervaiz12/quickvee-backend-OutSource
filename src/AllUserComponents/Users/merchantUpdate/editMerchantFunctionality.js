@@ -63,7 +63,11 @@ export default function EditMerchantFunctionality() {
   };
   const getEditMerchantData = async (data) => {
     const { token, ...dataNew } = data;
+    console.log(data)
+    console.log(dataNew)
     // const dataNew={id:data}
+    // const packet={}
+    console.log()
     await axios
       .post(BASE_URL + GET_EDIT_CUSTOMER, dataNew, {
         headers: {

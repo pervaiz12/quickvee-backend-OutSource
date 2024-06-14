@@ -236,15 +236,17 @@ const MerchantFunction = () => {
 
   const handleChange = (e) => {
     console.log("handleChange, ",e)
+    let updatedErrors = { ...store.errors };
+    // const { name, value } = e.target;
+    const { name, value } = e.target || {};
     if(e?.target?.name){
-      const { name, value } = e.target;
-
-      let updatedErrors = { ...store.errors };
       let emailRegex =
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       let reg = /^[0-9\b]+$/;
+      console.log(value)
   
       if (name === "storename") {
+        console.log(name)
         // updatedErrors[name] = value === "" ? `Please fill the ${name} field` : "";
         updatedErrors[name] =
           value.trim() === ""
@@ -294,12 +296,17 @@ const MerchantFunction = () => {
         [name]:  value.replace(/^\s+/, "")
       });
     }else{
+      if(e.name=="state")
+        {
+          updatedErrors[e.name] = e.title === "" ? `Please fill the ${e.name} field` : "";
+        }
       setStore(prevState =>({
         ...prevState,
+        errors: updatedErrors,
         [e.name]: e.title
       }))
     }
-   
+  
   };
   console.log("store updated ",store)
   const handleKeyPress = (e) => {
@@ -331,7 +338,7 @@ const MerchantFunction = () => {
       errors.phone == "" &&
       errors.state == "" &&
       errors.email == "" &&
-      // errors.ownerName == "" &&
+      errors.ownerName == "" &&
       errors.password == ""
       // &&
       // errorPin == ""
@@ -550,9 +557,10 @@ const MerchantFunction = () => {
                   },
                 });
                 navigate(`/users/editMerchant/${result.data.id}`);
-              } else {
-                ToastifyAlert("Merchant not Added!", "warn");
-              }
+              } 
+              // else {
+              //   ToastifyAlert("Merchant not Added!", "warn");
+              // }
             });
         }
       }

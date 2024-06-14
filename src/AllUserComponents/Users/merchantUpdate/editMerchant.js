@@ -11,6 +11,7 @@ import AddSvg from "../../../Assests/Dashboard/Left.svg";
 import BasicTextFields from "../../../reuseableComponents/TextInputField";
 import PasswordShow from "../../../Common/passwordShow";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
+// import { useParams } from 'react-router-dom';
 export default function EditMerchant({
   merchantId,
   currentMerchant,
@@ -42,12 +43,12 @@ export default function EditMerchant({
     errors,
     loader,
   } = EditMerchantFunctionality();
-  const id = merchantId;
+  const { id } = useParams();
+  const ids = !!merchantId?merchantId:id;
   useEffect(() => {
-    let data = { id, ...userTypeData };
-
+    let data = { id:ids, ...userTypeData };
     getEditMerchantData(data);
-  }, [id]);
+  }, [ids]);
   const { showpPassword, handleMouseDown, handleMouseUp, jsxData } =
     PasswordShow();
   const accountTtype = [
