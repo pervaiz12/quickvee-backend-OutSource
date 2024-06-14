@@ -6,6 +6,7 @@ import {
   UPDATE_SYSTEM_ACCESS,
   END_DAY_ACTUAL_AMT,
 } from "../../../Constants/Config";
+import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 
 const initialState = {
   loading: false,
@@ -58,7 +59,7 @@ export const updateSystemAccessData = createAsyncThunk(
       );
 
       if (response.data.success === true) {
-        alert("Updated Successfully!");
+        ToastifyAlert("Updated Successfully!","success");
         return response.data.data;
       }
     } catch (error) {

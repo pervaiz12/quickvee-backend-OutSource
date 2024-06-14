@@ -94,7 +94,7 @@ const MainInventoryExport = () => {
     
         <div className="box_shadow_div_order">
           <div className="">
-            <div className="alert">
+            {/* <div className="alert">
               {submitmessage && (
                 <Box
                   sx={{
@@ -126,7 +126,7 @@ const MainInventoryExport = () => {
                   </Collapse>
                 </Box>
               )}
-            </div>
+            </div> */}
             <div className="q-add-categories-section-header">
               <span>
                 {" "}

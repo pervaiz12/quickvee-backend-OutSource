@@ -21,6 +21,8 @@ import TableRow from "@mui/material/TableRow";
 import Pagination from "../Users/UnverifeDetails/Pagination";
 import useDebounce from "../../hooks/useDebouncs";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
+import PasswordShow from "./../../Common/passwordShow";
+import { Link } from "react-router-dom";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -62,22 +64,24 @@ const StoreOrderList = (props) => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const { userTypeData } = useAuthDetails();
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
 
   useEffect(() => {
-    if (props && props.OrderStatusData && props.OrderTypeData) {
-      let data = {
-        pay_status: props.OrderStatusData,
-        order_env: props.OrderTypeData,
-        page: currentPage,
-        perpage: rowsPerPage,
-        search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
-        ...userTypeData,
-      };
-      // console.log("data: ", data);
-      if (data) {
-        dispatch(fetchStoreOrderData(data));
-      }
-    }
+    // if (props && props.OrderStatusData && props.OrderTypeData) {
+    //   let data = {
+    //     pay_status: props.OrderStatusData,
+    //     order_env: props.OrderTypeData,
+    //     page: currentPage,
+    //     perpage: rowsPerPage,
+    //     search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+    //     ...userTypeData,
+    //   };
+    //   // console.log("data: ", data);
+    //   if (data) {
+    //     dispatch(fetchStoreOrderData(data));
+    //   }
+    // }
+    getfetchStoreOrderData()
   }, [
     props.OrderStatusData,
     props.OrderTypeData,
@@ -86,17 +90,58 @@ const StoreOrderList = (props) => {
     rowsPerPage,
   ]);
 
+  const getfetchStoreOrderData=async()=>{
+    try{
+      if(props && props.OrderStatusData && props.OrderTypeData){
+        let data = {
+          pay_status: props.OrderStatusData,
+          order_env: props.OrderTypeData,
+          page: currentPage,
+          perpage: rowsPerPage,
+          search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+          ...userTypeData,
+        };
+        if (data) {
+          await dispatch(fetchStoreOrderData(data)).unwrap();
+        }
+      }
+  }catch(error){
+    handleCoockieExpire()
+    getUnAutherisedTokenMessage()
+  }
+}
+
   // only when user searches
   useEffect(() => {
-    const data = {
-      pay_status: props.OrderStatusData,
-      order_env: props.OrderTypeData,
-      search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
-      ...userTypeData,
-    };
+    // const data = {
+    //   pay_status: props.OrderStatusData,
+    //   order_env: props.OrderTypeData,
+    //   search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+    //   ...userTypeData,
+    // };
 
-    dispatch(getStoreOrderCount(data));
+    // dispatch(getStoreOrderCount(data));
+    getStoreOrderCountFun();
   }, [debouncedValue]);
+
+  const getStoreOrderCountFun=async()=>{
+    try{
+      if(props && props.OrderStatusData && props.OrderTypeData){
+        const data = {
+          pay_status: props.OrderStatusData,
+          order_env: props.OrderTypeData,
+          search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+          ...userTypeData,
+        };
+        if (data) {
+          await dispatch(getStoreOrderCount(data)).unwrap();
+        }
+      }
+  }catch(error){
+    handleCoockieExpire()
+    getUnAutherisedTokenMessage()
+  }
+}
 
   // on load setting count of Verified Merchant list & on every change...
   useEffect(() => {
@@ -213,9 +258,11 @@ const StoreOrderList = (props) => {
                                 </div>
                               </StyledTableCell>
                               <StyledTableCell>
+                              {/* <Link  to={`/store-reporting/order-summary/${StoreData.merchant_id}/${StoreData.order_id}`} target="_blank" > */}
                                 <div className="text-[#000000] capitalize">
                                   {StoreData.order_id}
                                 </div>
+                                {/* </Link> */}
                               </StyledTableCell>
                               <StyledTableCell>
                                 <div className="text-[#000000] order_method capitalize">

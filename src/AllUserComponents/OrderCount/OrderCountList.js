@@ -12,6 +12,7 @@ import caleIcon from "../../Assests/Filter/Calender.svg";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 
 import { useAuthDetails } from "./../../Common/cookiesHelper";
+import PasswordShow from "../../Common/passwordShow";
 
 const OrderCountList = () => {
   const OrderStatus = [
@@ -72,6 +73,7 @@ const OrderCountList = () => {
     }
   };
   const { userTypeData } = useAuthDetails();
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
 
   const handleSubmitData = async () => {
     if (
@@ -124,7 +126,8 @@ const OrderCountList = () => {
           URL.revokeObjectURL(fileUrl);
         }
       } catch (error) {
-        console.error("An error occurred:", error);
+        handleCoockieExpire()
+        getUnAutherisedTokenMessage()
       }
     }
   };
@@ -329,15 +332,15 @@ const OrderCountList = () => {
                             )}
                         </div> */}
               <label>Start Date</label>
-              <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DatePicker"]}>
+              <LocalizationProvider dateAdapter={AdapterDayjs} >
+                <DemoContainer components={["DatePicker"]} >
                   <DatePicker
                     value={dayjs(selectedStartDate)}
                     onChange={handleDateChange(setSelectedStartDate)}
                     maxDate={dayjs()}
                     style={{ border: "none" }} // Remove border
                     size="small"
-                    format={"MMMM d, YYYY"}
+                    format={"MMMM DD, YYYY"}
                     views={["year", "month", "day"]}
                     slotProps={{
                       textField: {
@@ -354,6 +357,7 @@ const OrderCountList = () => {
                         />
                       ),
                     }}
+                    className="orderCount_StartDate"
                   />
                 </DemoContainer>
               </LocalizationProvider>
@@ -388,7 +392,7 @@ const OrderCountList = () => {
                     value={dayjs(selectedEndDate)}
                     onChange={handleDateChange(setSelectedEndDate)}
                     maxDate={dayjs()}
-                    format={"MMMM d, YYYY"}
+                    format={"MMMM DD, YYYY"}
                     views={["year", "month", "day"]}
                     slotProps={{
                       textField: {
@@ -396,6 +400,10 @@ const OrderCountList = () => {
                         size: "small",
                       },
                     }}
+                     shouldDisableDate={(date) => {
+                        const start = selectedStartDate;
+                        return date.format("YYYY-MM-DD") < start ;
+                      }}
                     components={{
                       OpenPickerIcon: () => (
                         <img
@@ -405,6 +413,7 @@ const OrderCountList = () => {
                         />
                       ),
                     }}
+                    className="orderCount_StartDate"
                   />
                 </DemoContainer>
               </LocalizationProvider>

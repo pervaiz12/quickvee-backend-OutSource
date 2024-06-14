@@ -681,7 +681,7 @@ const EditCoupon = ({couponId,seVisible}) => {
                         shouldDisableDate={(date) =>
                           date.format("YYYY-MM-DD") === coupon.date_valid
                         }
-                        format={"MMMM d, YYYY"}
+                        format={"MMMM DD, YYYY"}
                         disablePast
                         views={["year", "month", "day"]}
                         renderInput={() => (
@@ -754,7 +754,7 @@ const EditCoupon = ({couponId,seVisible}) => {
                         shouldDisableDate={(date) =>
                           date.format("YYYY-MM-DD") === coupon.date_expire
                         }
-                        format={"MMMM d, YYYY"}
+                        format={"MMMM DD, YYYY"}
                         disablePast
                         views={["year", "month", "day"]}
                         renderInput={() => (
