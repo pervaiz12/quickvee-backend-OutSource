@@ -22,23 +22,34 @@ import { Grid } from "@mui/material";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 import { priceFormate } from "../../hooks/priceFormate";
+import PasswordShow from "../../Common/passwordShow";
 
 const CouponDiscount = ({ seVisible,setCouponId }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+    const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
   const [isChecked, setIsChecked] = useState(true);
 
   const dispatch = useDispatch();
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
-    let data = {
-      merchant_id,
-      ...userTypeData,
-    };
-    if (data) {
-      dispatch(fetchCouponList(data));
-    }
+    getCouponList();
+    
   }, []);
+  const getCouponList=async()=>{
+    try{
+      let data = {
+        merchant_id,
+        ...userTypeData,
+      };
+      if (data) {
+        await dispatch(fetchCouponList(data)).unwrap();
+      }
+    }catch(error){
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
+    }
+  }
 
   const [couponList, setAllCoupon] = useState([]);
   const AllCouponDataState = useSelector((state) => state.couponList);

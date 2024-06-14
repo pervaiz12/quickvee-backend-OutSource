@@ -13,7 +13,7 @@ export default function Add_Admin({setVisible}) {
     handleBlur,
     handleKeyPress,
     loader,
-  } = Add_adminFunctionality();
+  } = Add_adminFunctionality({setVisible});
   const handleClick = () => {
   
     setVisible("AdminView")

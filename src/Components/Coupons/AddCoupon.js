@@ -26,10 +26,12 @@ import { useAuthDetails } from "../../Common/cookiesHelper";
 import CurrencyInputHelperFun from "../../helperFunctions/CurrencyInputHelperFun";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
+import PasswordShow from "../../Common/passwordShow";
 
 const AddCoupon = ({ seVisible }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+    const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
   const [activeTab, setActiveTab] = useState("amount");
 
   const [couponStates, setCouponStates] = useState({
@@ -85,6 +87,8 @@ const AddCoupon = ({ seVisible }) => {
       }
     } catch (error) {
       console.error("Error checking name uniqueness", error);
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
     }
   };
 
@@ -393,6 +397,8 @@ const AddCoupon = ({ seVisible }) => {
       }
     } catch (error) {
       console.error("API Error:", error);
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
     }
   };
 

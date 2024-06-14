@@ -13,8 +13,10 @@ import { FormControl, Grid } from "@mui/material";
 import CreatableSelect from "react-select/creatable";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import PasswordShow from "../../Common/passwordShow";
 const AddVendors = ({ setVisible }) => {
   const [allvendors, setallvendors] = useState([]);
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
 
   const [states, setStates] = useState([]);
   const {
@@ -42,6 +44,7 @@ const AddVendors = ({ setVisible }) => {
     };
     dispatch(fetchVendorsListData(data));
   }, []);
+
 
   const [vendor, setVendor] = useState({
     vendor_name: "",
@@ -159,6 +162,7 @@ const AddVendors = ({ setVisible }) => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try{
     const state = value;
     // Assuming `vendor` is an object that you want to send in the request
     let updatedVendor = { ...vendor, ...userTypeData };
@@ -179,6 +183,10 @@ const AddVendors = ({ setVisible }) => {
       console.error(response);
       // alert(response.data.message);
     }
+  }catch(error){
+    handleCoockieExpire()
+    getUnAutherisedTokenMessage()      
+  }
   };
 
   return (

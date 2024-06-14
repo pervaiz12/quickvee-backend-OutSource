@@ -253,8 +253,8 @@ export default function AddMerchan() {
                     onChangeFun={handleChange}
                     sx={{ pt: 0.5 }}
                   />
-                  {store.errors.ownerName && (
-                    <span className="error">{store.errors.ownerName}</span>
+                  {store.errors.storename && (
+                    <span className="error">{store.errors.storename}</span>
                   )}
                 </Grid>
                 <Grid item xs={12} sm={6}>
@@ -338,7 +338,7 @@ export default function AddMerchan() {
                       name: "state",
                     }))}
                     title={"title"}
-                    onClickHandler={handleChangedState}
+                    onClickHandler={handleChangedState}handleChange
                     sx={{ pt: 0.5 }}
                   />
                   {store.errors.state && (
