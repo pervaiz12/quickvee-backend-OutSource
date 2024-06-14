@@ -20,15 +20,11 @@ const Permission = ({ EmployeeId, setVisible }) => {
   const dispatch = useDispatch();
   const [employeedata, setemployeedata] = useState([]);
   const [permissionList, setpermissionList] = useState([]);
-  // const employee_id = location.pathname.replace(
-  //   "/store-settings/permission/",
-  //   ""
-  // );
-  // const params = useParams();
   const employee_id = EmployeeId;
-  const [fetchDataLoading, setFetchDataLoading] = useState(false);
   const employeeListDataState = useSelector((state) => state.employeelistData);
+
   const [permissionArray, setPermissionArray] = useState([]);
+
   const {
     handleEditEmpPermissionInput,
     values,
@@ -39,10 +35,12 @@ const Permission = ({ EmployeeId, setVisible }) => {
     scrollRef,
     setsubmitmessage,
   } = EditPermissionLogic({ employeedata });
+
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
+
   useEffect(() => {
     let data = {
       merchant_id: merchant_id,
@@ -101,8 +99,6 @@ const Permission = ({ EmployeeId, setVisible }) => {
   }
 
   useEffect(() => {
-    //   console.log(employeedata)
-    //    console.log(permissionList)
     MyComponent(permissionList);
   }, [permissionList, employeedata]);
 
@@ -201,29 +197,6 @@ const Permission = ({ EmployeeId, setVisible }) => {
                 <span className="input-error">
                   {values.errors.role !== "" ? values.errors.role : ""}
                 </span>
-                {/* <div className="qvrow">
-                    <div className="col-qv-6">
-                        <div className="input_area">
-                            <label>Jeffrey Thompson's Permissions</label>
-                            <input
-                                type="text"
-                                placeholder="%0.00"
-                            />
-                        </div>
-                        <div className="qv_checkbox">
-                            <label className="qv_checkbox_add_checkmark_label">Clock In/Out Receipt
-                                <input type="checkbox" />
-                                <span className="qv_add_checkmark"></span>
-                            </label>
-                        </div>
-                        <div className="qv_checkbox">
-                            <label className="qv_checkbox_add_checkmark_label">Hide Inactive Employees
-                                <input type="checkbox" />
-                                <span className="qv_add_checkmark"></span>
-                            </label>
-                        </div>
-                    </div>
-                </div> */}
               </div>
             </div>
 
@@ -251,9 +224,12 @@ const Permission = ({ EmployeeId, setVisible }) => {
                                   name="permission[]"
                                   onChange={handleEditEmpPermissionInput}
                                   value={subItem.id}
-                                  defaultChecked={idArray.includes(
+                                  // defaultChecked={idArray?.includes(
+                                  //   String(subItem.id)
+                                  // )}
+                                  checked={idArray?.includes(
                                     String(subItem.id)
-                                  )} // Convert subItem.id to string if necessary
+                                  )}
                                 />
                                 <span className="qv_add_checkmark"></span>
                               </label>

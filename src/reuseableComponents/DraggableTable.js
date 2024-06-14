@@ -114,7 +114,7 @@ const DraggableTable = ({
     //   result.source.index,
     //   result.destination.index
     // );
-    setDragresult(result)
+    setDragresult(result);
     const sourceIndex = result.source.index;
     const targetIndex = result.destination.index;
 
@@ -187,16 +187,14 @@ const DraggableTable = ({
     //   console.log("Sorting canceled by user");
     // }
   };
-  const handleEditEmployeePermission = (id)=>{
-
-    setVisible("EmployeePermission")
-    setEmployeeId(id)
-  }
-  const handleEditCategory = (id)=>{
-    seVisible("EditCategory")
-    setProductId(id)
-  }
-
+  const handleEditEmployeePermission = (id) => {
+    setVisible("EmployeePermission");
+    setEmployeeId(id);
+  };
+  const handleEditCategory = (id) => {
+    seVisible("EditCategory");
+    setProductId(id);
+  };
 
   const confirmDeleteCategory = async () => {
     const sourceIndex = dragresult.source.index;
@@ -220,7 +218,7 @@ const DraggableTable = ({
     // console.log("altername",alternameList)
     // return
 
-    if(dragresult){
+    if (dragresult) {
       setFunction(updatedItems);
       try {
         const response = await axios.post(
@@ -252,7 +250,7 @@ const DraggableTable = ({
         console.error("API call failed:", error);
       }
     }
-    setDragresult(null)
+    setDragresult(null);
     setDeleteModalOpen(false);
   };
   return (
@@ -263,7 +261,7 @@ const DraggableTable = ({
             <TableRow>
               {tableHead &&
                 tableHead.map((item, index) => (
-                  <StyledTableCell>{item}</StyledTableCell>
+                  <StyledTableCell key={item}>{item}</StyledTableCell>
                 ))}
             </TableRow>
           </TableHead>
@@ -465,15 +463,19 @@ const DraggableTable = ({
         </Table>
       </TableContainer>
       <AlertModal
-      headerText={alertModalHeaderText}
-      open={alertModalOpen}
-      onClose={() => {setAlertModalOpen(false)}}
-       />
+        headerText={alertModalHeaderText}
+        open={alertModalOpen}
+        onClose={() => {
+          setAlertModalOpen(false);
+        }}
+      />
       <SortModal
-            headerText="sort items"
-            open={deleteModalOpen}
-            onClose={() => {setDeleteModalOpen(false)}}
-            onConfirm={confirmDeleteCategory}
+        headerText="sort items"
+        open={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+        }}
+        onConfirm={confirmDeleteCategory}
       />
     </>
   );
