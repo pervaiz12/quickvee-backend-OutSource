@@ -6,8 +6,11 @@ import { useSelector } from "react-redux";
 import { BASE_URL, INVENTORY_EXPORT } from "../../Constants/Config";
 import axios from "axios";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import PasswordShow from "../../Common/passwordShow";
 
 const InventoryExportLogic = () => {
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
 
     const [submitmessage, setsubmitmessage] = useState("");
     const { userTypeData } = useAuthDetails();
@@ -51,13 +54,17 @@ const InventoryExportLogic = () => {
               // Cleanup: remove the anchor element and revoke the Blob URL
               document.body.removeChild(a);
               URL.revokeObjectURL(fileUrl);
-              setsubmitmessage("Inventory Exported Successfully");
+              // setsubmitmessage("Inventory Exported Successfully");
+              ToastifyAlert("Inventory Exported Successfully","success")
             }
             else {
-              setsubmitmessage("Something Went Wrong");
+              // setsubmitmessage("Something Went Wrong");
+              ToastifyAlert("Something Went Wrong","warn")
             }
           } catch (error) {
             // console.log('33 catch err');
+            handleCoockieExpire()
+            getUnAutherisedTokenMessage()
             return new Error(error)
           }
         }

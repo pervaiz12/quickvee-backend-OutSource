@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import "../../../Styles/StoreSetting.css";
 import "../../../Styles/Settings/SystemAccess.css";
 import CrossIcon from "../../../Assests/Dashboard/cross.svg";
+import TimeIcon from "../../../Assests/Filter/Clock.svg";
 import Switch from "@mui/material/Switch";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import {
@@ -10,9 +11,16 @@ import {
   addActualAmountData,
 } from "../../../Redux/features/SystemAccess/systemAccessSlice";
 import { useSelector, useDispatch } from "react-redux";
-
+import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import Grid from "@mui/material/Grid";
 import dayjs from "dayjs";
-
+import BasicTextFields from "../../../reuseableComponents/TextInputField";
+import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
+import MenuItem from "@mui/material/MenuItem";
+import FormControl from "@mui/material/FormControl";
+import Select from "@mui/material/Select";
 const SystemAccessData = () => {
   const {
     LoginGetDashBoardRecordJson,
@@ -52,10 +60,38 @@ const SystemAccessData = () => {
     no_of_station: "",
     report_history: "",
   });
+  console.log(systemAccess)
 
   const AllInSystemAccessState = useSelector((state) => state.systemAccessList);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
+  const startDay = (day) => {
+    if(day == 1){
+      return "Yesterday" 
+    }else if(day == 2){
+      return "Today"
+    }
+  }
+  const endDay = (day) => {
+    if(day == 2){
+      return "Tomorrow" 
+    }else if (day == 1){
+      return "Today"
+    }
+  }
+  const DayAll = (day) => {
+    if(day == 1){
+      return "Deny if staff clocked in" 
+    }else if (day == 2){
+      return "Mass clock out staff clocked in"
+    }else if (day == 3){
+      return "Ignore Time Clock"
+    }
+  }
+  const [selectedStartDay, setSelectedStartDay] = useState("");
+  const [selectedEndDay, setSelectedEndDay] = useState("");
+  const [selectedDayAllow, setSelectedDayAllow] = useState("");
+  console.log(selectedStartDay)
   const dispatch = useDispatch();
   useEffect(() => {
     let data = {
@@ -66,6 +102,12 @@ const SystemAccessData = () => {
       dispatch(fetchsystemAccessListData(data));
     }
   }, []);
+  
+  useEffect(() => {
+    setSelectedStartDay(startDay(systemAccess.start_date))
+    setSelectedEndDay(endDay(systemAccess.end_date))
+    setSelectedDayAllow(DayAll(systemAccess.end_day_Allow))
+  }, [systemAccess]);
 
   useEffect(() => {
     if (
@@ -140,6 +182,7 @@ const SystemAccessData = () => {
 
   //Handle shift Assignment
   const handleShiftAssignmentChange = (e) => {
+    // alert("First perform end of to make changes here.")
     const { name, value } = e.target;
     setallSystemAccess((prevState) => ({
       ...prevState,
@@ -196,24 +239,25 @@ const SystemAccessData = () => {
   };
 
   //Handle Start Time
-  const handleStartTimeChange = (e) => {
-    const { value } = e.target;
-    setallSystemAccess((prevState) => ({
-      ...prevState,
-      start_time: value,
-    }));
-    console.log("Start Time:", value);
-  };
+  // const handleStartTimeChange = (e) => {
+  //   const { value } = e.target;
+  //   setallSystemAccess((prevState) => ({
+  //     ...prevState,
+  //     start_time: value,
+  //   }));
+  //   console.log("Start Time:", value);
+  // };
+
 
   //Handle End Time
-  const handleEndTimeChange = (e) => {
-    const { value } = e.target;
-    setallSystemAccess((prevState) => ({
-      ...prevState,
-      end_time: value,
-    }));
-    console.log("End Time:", value);
-  };
+  // const handleEndTimeChange = (e) => {
+  //   const { value } = e.target;
+  //   setallSystemAccess((prevState) => ({
+  //     ...prevState,
+  //     end_time: value,
+  //   }));
+  //   console.log("End Time:", value);
+  // };
   //Handle Employee Permission
   const handleEmPermissionChange = (e) => {
     const { name, value } = e.target;
@@ -285,6 +329,8 @@ const SystemAccessData = () => {
       emp_permission: systemAccess.emp_permission,
       ...userTypeData,
     };
+    // console.log("data",data)
+    // return
     dispatch(updateSystemAccessData(data));
   };
 
@@ -292,7 +338,8 @@ const SystemAccessData = () => {
   const loginType = "login_via_superadmin"; //
   // Condition to check if the button should be shown
   const shouldShowEndOfDayButton =
-    loginType == "login_via_superadmin" && systemAccess.shift_assign == 3;
+    // loginType == "login_via_superadmin" && systemAccess.shift_assign == 3;
+    loginType == "login_via_superadmin" && systemAccess.shift_assign == 3 || systemAccess.shift_assign == 2;
 
   //
   useEffect(() => {
@@ -302,6 +349,138 @@ const SystemAccessData = () => {
       );
     }
   }, [shouldShowEndOfDayButton]);
+
+  // start Sumesh
+  const handleStartTimeChange = (newTime) => {
+    setallSystemAccess((prevState) => ({
+      ...prevState,
+      start_time: newTime.format("HH:mm:ss"),
+    }));
+    // console.log("Start Time:", newTime.format("HH:mm:ss"));
+  };
+  const handleEndTimeChange = (newTime) => {
+    setallSystemAccess((prevState) => ({
+      ...prevState,
+      end_time: newTime.format("HH:mm:ss"),
+    }));
+  };
+
+  const StartDay = [
+    {
+      title: "Yesterday",
+    },
+    {
+      title: "Today",
+    },
+  ];
+  const EndDay = [
+    {
+      title: "Today",
+    },
+    {
+      title: "Tomorrow",
+    },
+  ];
+  const DayAllow = [
+    {
+      title: "Deny if staff clocked in",
+    },
+    {
+      title: "Mass clock out staff clocked in",
+    },
+    {
+      title: "Ignore Time Clock",
+    },
+  ];
+  const SiftAssign = [
+    {
+      title: "Don’t Track Shifts",
+    },
+    {
+      title: "Track Shifts by Cashier",
+    },
+    {
+      title: "Track Shifts by Station",
+    },
+  ];
+
+  
+
+
+  const handleOptionClick = (option, dropdown) => {
+    switch (dropdown) {
+      case "StartDay":
+        setSelectedStartDay(option.title);
+        // Set defaults.type based on the selected option
+        let StartDay;
+        switch (option.title) {
+          case "Yesterday":
+            StartDay = 1; // You can set it to an empty string or another default value
+            break;
+          case "Today":
+            StartDay = 2;
+            break;
+          // Add more cases if needed
+          default:
+            StartDay = ""; // Set a default value if necessary
+            break;
+        }
+        setallSystemAccess((prevValue) => ({
+          ...prevValue,
+          start_date: StartDay,
+        }));
+        break;
+      case "EndDay":
+          setSelectedEndDay(option.title);
+          // Set defaults.type based on the selected option
+          let EndDay;
+          switch (option.title) {
+            case "Today":
+              EndDay = 1; // You can set it to an empty string or another default value
+              break;
+            case "Tomorrow":
+              EndDay = 2;
+              break;
+            // Add more cases if needed
+            default:
+              EndDay = ""; // Set a default value if necessary
+              break;
+          }
+          setallSystemAccess((prevValue) => ({
+            ...prevValue,
+            end_date: EndDay,
+          }));
+          break;
+        case "DayAllow":
+            setSelectedStartDay(option.title);
+            // Set defaults.type based on the selected option
+            let DayAllow;
+            switch (option.title) {
+              case "Deny if staff clocked in":
+                DayAllow = 1; // You can set it to an empty string or another default value
+                break;
+              case "Mass clock out staff clocked in":
+                DayAllow = 2;
+                break;
+              // Add more cases if needed
+              case "Ignore Time Clock":
+                DayAllow = 3;
+                break;
+              default:
+                DayAllow = ""; // Set a default value if necessary
+                break;
+            }
+            setallSystemAccess((prevValue) => ({
+              ...prevValue,
+              end_day_Allow: DayAllow,
+            }));
+            break;
+
+      default:
+        break;
+    }
+  };
+
 
   return (
     <>
@@ -362,7 +541,7 @@ const SystemAccessData = () => {
           <div className="qvrow">
             <h5 className="box_shadow_heading">Time Clock</h5>
             <div className="col-qv-6">
-              <div className="input_area">
+              {/* <div className="input_area">
                 <label>End of Day Allowance</label>
                 <select
                   name="end_day_Allow"
@@ -379,7 +558,18 @@ const SystemAccessData = () => {
                     Ignore Time Clock
                   </option>
                 </select>
-              </div>
+              </div> */}
+
+              <Grid item md={6} xs={6} >
+                <label  style={{ marginBottom: "3px" }}>End of Day Allowance</label>
+                <SelectDropDown
+                    listItem={DayAllow}
+                    title={"title"}
+                    onClickHandler={handleOptionClick}
+                    selectedOption={selectedDayAllow}
+                    dropdownFor={"DayAllow"}
+                  />
+                </Grid>
             </div>
             <div className="col-qv-6">
               <div className="input_area">
@@ -414,7 +604,7 @@ const SystemAccessData = () => {
       </div>
       <div className="box">
         <div className="box_shadow_div" style={{ padding: "20px" }}>
-          <div className="qvrow">
+          {/* <div className="qvrow">
             <h5 className="box_shadow_heading">
               Default Reporting Start & End Date/Time
             </h5>
@@ -454,23 +644,22 @@ const SystemAccessData = () => {
                 </select>
               </div>
             </div>
-          </div>
+          </div> */}
           <div className="qvrow">
-            <div className="col-qv-6">
+            {/* <div className="col-qv-6">
               <div className="input_area">
                 <label>Start Time</label>
                 <input
                   type="time"
                   name="start_time"
-                  value={systemAccess.deliver_min_time}
+                  value={systemAccess.start_time}
                   id="start_tym"
                   required
                   onChange={handleStartTimeChange}
                 />
-                {/* <span>{formatTime(systemAccess.start_time)}</span> */}
               </div>
-            </div>
-            <div className="col-qv-6">
+            </div> */}
+            {/* <div className="col-qv-6">
               <div className="input_area">
                 <label>End Time</label>
                 <input
@@ -482,7 +671,9 @@ const SystemAccessData = () => {
                   onChange={handleEndTimeChange}
                 />
               </div>
-            </div>
+            </div> */}
+
+            {/* {shouldShowEndOfDayButton && (
             <div className="col-qv-6">
               <div className="input_area">
                 <label>Number of Station</label>
@@ -495,7 +686,112 @@ const SystemAccessData = () => {
                 />
               </div>
             </div>
+            )}
+             */}
+            <h5 className="box_shadow_heading">
+                  Default Reporting Start & End Date/Time
+            </h5>
+           
           </div>
+
+          <Grid container spacing={4}>
+              {/* <Grid item xs={12}> */}
+                  
+              {/* </Grid> */}
+                <Grid item md={6} xs={6}>
+                <label >Start Day</label>
+                <SelectDropDown
+                    listItem={StartDay}
+                    title={"title"}
+                    onClickHandler={handleOptionClick}
+                    selectedOption={selectedStartDay}
+                    dropdownFor={"StartDay"}
+                  />
+                </Grid>
+                <Grid item md={6} xs={6}>
+                <label >End Day</label>
+                <SelectDropDown
+                    listItem={EndDay}
+                    title={"title"}
+                    onClickHandler={handleOptionClick}
+                    selectedOption={selectedEndDay}
+                    dropdownFor={"EndDay"}
+                  />
+
+                </Grid>
+          </Grid>
+
+          <Grid container spacing={4} >
+                <Grid item md={6} xs={6} style={{ marginTop: "10px" }}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <label htmlFor=" " className="pb-1">
+                      Start Time
+                    </label>
+                    <TimePicker
+                      name="start_time"
+                      slotProps={{
+                        textField: { placeholder: "Select Time" },
+                      }}
+                      onChange={(newTime) => handleStartTimeChange(newTime)}
+                      value={
+                        systemAccess.start_time
+                          ? dayjs(systemAccess.start_time, "HH:mm")
+                          : null
+                      }
+                      components={{
+                        OpenPickerIcon: () => (
+                          <img src={TimeIcon} alt="time-icon" />
+                        ),
+                      }}
+                      sx={{ width: "100%" }}
+                    />
+                  </LocalizationProvider>
+                </Grid>
+
+                <Grid item md={6} xs={6} style={{ marginTop: "10px" }}>
+                <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <label htmlFor=" " className="pb-1">
+                      End Time
+                    </label>
+                    <TimePicker
+                      name="end_time"
+                      slotProps={{
+                        textField: { placeholder: "Select Time" },
+                      }}
+                      onChange={(newTime) => handleEndTimeChange(newTime)}
+                      value={
+                        systemAccess.end_time
+                          ? dayjs(systemAccess.end_time, "HH:mm")
+                          : null
+                      }
+                      components={{
+                        OpenPickerIcon: () => (
+                          <img src={TimeIcon} alt="time-icon" />
+                        ),
+                      }}
+                      sx={{ width: "100%" }}
+                    />
+                  </LocalizationProvider>
+                </Grid>
+            </Grid>
+            {shouldShowEndOfDayButton && (
+
+              <Grid container sx={{  pb: 1 }} className="mt-2">
+              <Grid item xs={12}>
+              <label>Number of Station</label>
+                <BasicTextFields
+                  className=""
+                  type={"number"}
+                  value={systemAccess.no_of_station}
+                  onChangeFun={handleNoOfStationChange}
+                  sx={{ mt: 0.5 }}
+                />
+                {errorMessage && (
+                  <p className="error-message">{errorMessage}</p>
+                )}
+              </Grid>
+            </Grid>
+            )}
         </div>
       </div>
       <div className="box">

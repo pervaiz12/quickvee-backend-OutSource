@@ -62,3 +62,7 @@
 .lable_OrderCount{
     margin-bottom: 0.75rem !important;
 }
+.orderCount_StartDate{
+    width: 100%;
+    overflow: hidden;
+}
