@@ -23,6 +23,7 @@ const Main = ({ visible }) => {
       {visible === "products" && <Layout visible={visible} />}
       {visible === "purchase-data" && <Layout visible={visible} />}
       {visible === "stocktake" && <Layout visible={visible} />}
+   
       {visible === "edit-purchase-data" && <Layout visible={visible} />}
       {visible === "modify-purchase-order" && <Layout visible={visible} />}
 
@@ -107,7 +108,6 @@ const Main = ({ visible }) => {
       {visible === "invertory-export" && <IndexAllUsers visible={visible} />}
       {visible === "merchant-details" && <IndexAllUsers visible={visible} />}
 
-      {visible === "need-help" && <IndexAllUsers visible={visible} />}
 
       {visible === "edit-defaults" && <IndexAllUsers visible={visible} />}
 

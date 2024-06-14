@@ -50,7 +50,7 @@ const LeftDetailsUsers = ({ visible }) => {
       {visible === "create_permission" && <MainPermission />}
       {visible === "invertory-export" && <MainInventoryExport />}
       {visible === "merchant-details" && <MainMerchantDetails />}
-      {visible === "need-help" && <MainNeedHelp />}
+    
       {/* manager view */}
       {visible === "manager_view" && <Manager />}
       {visible === "unverified" && <MainUnverifiedMerchant />}

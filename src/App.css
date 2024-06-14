@@ -1216,3 +1216,19 @@ div.q_label_details::after {
 .input-field > label {
   font-family: CircularBold !important;
 }
+
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .print-container, .print-container * {
+    visibility: visible;
+  }
+  .print-container {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    background: white;
+  }
+}
