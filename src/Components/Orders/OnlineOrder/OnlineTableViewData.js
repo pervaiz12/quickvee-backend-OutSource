@@ -28,13 +28,14 @@ const OnlineTableViewData = (props) => {
     const fetchData = async () => {
       if (props?.OrderTypeData) {
         let data = {
-          merchant_id: "MAL0100CA",
+          merchant_id: props.merchant_id,
           order_type: props.OrderTypeData,
           trans_type: props.OrderSourceData,
           start_date: props.selectedDateRange?.start_date,
           end_date: props.selectedDateRange?.end_date,
           customer_id: "0",
           search_by: props?.OnlSearchIdData,
+          ...props.userTypeData
         };
 
         if (data) {
@@ -65,7 +66,7 @@ const OnlineTableViewData = (props) => {
         var success = window.confirm("Are you sure you want to change status");
         if (success == true) {
           const FormData = {
-            merchant_id: "MAL0100CA",
+            merchant_id: props.merchant_id,
             order_id: orderId,
             m_status: selectedOption,
           };
@@ -129,7 +130,7 @@ const OnlineTableViewData = (props) => {
 
   const handleAddReceivingAmount = async () => {
     const newItem = {
-      merchant_id: "MAL0100CA",
+      merchant_id: props.merchant_id,
       order_id: newOrderId,
       cash_collected: newReceivingAmount,
       order_amt: newOrderAmount,

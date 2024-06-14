@@ -5,6 +5,7 @@ import ContentList from "./ContentList";
 import InstoreTableViewData from "./InstoreTableViewData";
 import OnlineTableViewData from "../OnlineOrder/OnlineTableViewData";
 import MainOnline from "../OnlineOrder/MainOnline";
+import {useAuthDetails} from "../../../Common/cookiesHelper"
 
 const MainInStore = () => {
   const [activeTab, setActiveTab] = useState("offline");
@@ -16,6 +17,8 @@ const MainInStore = () => {
   const [EmployeeIDData, setEmployeeIDData] = useState(null);
   const [searchId, setSearchId] = useState("");
   const [selectedDateRange, setSelectedDateRange] = useState(null);
+  const{LoginGetDashBoardRecordJson,LoginAllStore,userTypeData,GetSessionLogin}=useAuthDetails()
+  const merchant_id=LoginGetDashBoardRecordJson?.data?.merchant_id
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
   };
@@ -111,6 +114,8 @@ const MainInStore = () => {
                 EmployeeIDData={EmployeeIDData}
                 OffSearchIdData={OffSearchIdData}
                 selectedDateRange={selectedDateRange}
+                merchant_id={merchant_id}
+                userTypeData={userTypeData}
               />
             ) : (
               <OnlineTableViewData
@@ -118,6 +123,8 @@ const MainInStore = () => {
                 OrderTypeData={OrderTypeData}
                 OnlSearchIdData={OnlSearchIdData}
                 selectedDateRange={selectedDateRange}
+                merchant_id={merchant_id}
+                userTypeData={userTypeData}
               />
             )}
           </div>

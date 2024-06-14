@@ -90,22 +90,22 @@ const Validation = () => {
     } else if (emoji.test(fname)) {
       updatedErrors.firstname = "Emoji not allowed";
     } else if (!Space.test(fname)) {
-      updatedErrors.firstname = "Space is not allow";
+      updatedErrors.firstname = "Space is not allowed";
     } else if (!Nameval.test(fname)) {
-      updatedErrors.firstname = "Name only contain alphabet";
+      updatedErrors.firstname = "First Name can only contain alphabet";
     } else {
       updatedErrors.firstname = "";
     }
   };
   const validateLastName = (lname, updatedErrors) => {
     if (lname === "") {
-      updatedErrors.lastname = "Please enter lastname field ";
+      updatedErrors.lastname = "";
     } else if (emoji.test(lname)) {
       updatedErrors.lastname = "Emoji not allowed";
     } else if (!Space.test(lname)) {
-      updatedErrors.lastname = "Space is not allow";
+      updatedErrors.lastname = "Space is not allowed";
     } else if (!Nameval.test(lname)) {
-      updatedErrors.lastname = "Name only contain alphabet";
+      updatedErrors.lastname = "Last Name can only contain alphabet";
     } else {
       updatedErrors.lastname = "";
     }
@@ -122,9 +122,10 @@ const Validation = () => {
   };
 
   const Address_line_1 = (street, updatedErrors) => {
-    if (street === "") {
-      updatedErrors.address_line_1 = "Please enter Address ";
-    } else if (emoji.test(street)) {
+    // if (street === "") {
+    //   updatedErrors.address_line_1 = "Please enter Address ";
+    // } else
+    if (emoji.test(street)) {
       updatedErrors.address_line_1 = "Emoji not allowed";
     } else {
       updatedErrors.address_line_1 = "";
@@ -133,7 +134,7 @@ const Validation = () => {
 
   const validateState = (state, updatedErrors) => {
     if (state === "") {
-      updatedErrors.state = "Please enter state field ";
+      updatedErrors.state = "";
     } else if (emoji.test(state)) {
       updatedErrors.state = "Emoji not allowed";
     } else {
@@ -153,11 +154,11 @@ const Validation = () => {
 
   const validateCity = (city, updatedErrors) => {
     if (city === "") {
-      updatedErrors.city = "Please enter city field ";
+      updatedErrors.city = "";
     } else if (emoji.test(city)) {
       updatedErrors.city = "Emoji not allowed";
     } else if (!Characterval.test(city)) {
-      updatedErrors.city = "City only contain character";
+      updatedErrors.city = "City can only contain character";
     } else {
       updatedErrors.city = "";
     }
@@ -165,13 +166,13 @@ const Validation = () => {
 
   const validateZipCode = (zipcode, updatedErrors) => {
     if (zipcode === "") {
-      updatedErrors.zipcode = "Please enter zipcode  ";
+      updatedErrors.zipcode = "";
     } else if (emoji.test(zipcode)) {
       updatedErrors.zipcode = "Emoji not allowed";
     } else if (zipcode.length !== 5) {
-      updatedErrors.zipcode = "Max 5 number should be enter";
+      updatedErrors.zipcode = "Max 5 number should be entered";
     } else if (!Numberval.test(zipcode)) {
-      updatedErrors.zipcode = "Zipcode only contain number ";
+      updatedErrors.zipcode = "Zipcode can only contain number ";
     } else {
       updatedErrors.zipcode = "";
     }
@@ -207,7 +208,7 @@ const Validation = () => {
 
   const validateWages = (wages, updatedErrors) => {
     if (wages === "") {
-      updatedErrors.wages = "Please enter wage  ";
+      updatedErrors.wages = "";
     } else if (emoji.test(wages)) {
       updatedErrors.wages = "Emoji not allowed";
     } else if (wages.length > 8) {

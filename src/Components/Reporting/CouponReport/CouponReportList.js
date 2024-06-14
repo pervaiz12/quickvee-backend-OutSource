@@ -98,7 +98,7 @@ const CouponReportList = (props) => {
             <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
               <TableHead>
                 <StyledTableCell>Date</StyledTableCell>
-                <StyledTableCell>Coupon Type</StyledTableCell>
+                <StyledTableCell>Coupon Name</StyledTableCell>
                 <StyledTableCell>Total Coupon Used</StyledTableCell>
               </TableHead>
               <TableBody>
@@ -106,7 +106,9 @@ const CouponReportList = (props) => {
                   CouponReportData.map((couponData, index) => (
                     <StyledTableRow>
                       <StyledTableCell>
-                        <p className="report-title">{formatDate(couponData.date)}</p>
+                        <p className="report-title">
+                          {formatDate(couponData.date)}
+                        </p>
                       </StyledTableCell>
                       <StyledTableCell>
                         <p className="report-title">

@@ -116,7 +116,7 @@ const PermissionList = () => {
     setDeleteModalOpen(true);
   };
   const confirmDeleteCategory = () => {
-    if(deletePermissionId){
+    if (deletePermissionId) {
       const data = {
         id: deletePermissionId,
         ...userTypeData,
@@ -125,10 +125,9 @@ const PermissionList = () => {
         dispatch(deletePermission(data));
       }
     }
-    setDeletePermissionId(null)
+    setDeletePermissionId(null);
     setDeleteModalOpen(false);
   };
-
 
   // const handleSearchInputChange = (value) => {
   //   console.log(value);
@@ -228,8 +227,7 @@ const PermissionList = () => {
                   ))} */}
                     <StyledTableCell>Sub Permission</StyledTableCell>
                     <StyledTableCell>Permission</StyledTableCell>
-
-                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell>Action</StyledTableCell>
                   </TableHead>
                   <TableBody>
                     {allpermission?.length
@@ -288,11 +286,13 @@ const PermissionList = () => {
           </Grid>
         </Grid>
         <DeleteModal
-            headerText="Permission"
-            open={deleteModalOpen}
-            onClose={() => {setDeleteModalOpen(false)}}
-            onConfirm={confirmDeleteCategory}
-          />
+          headerText="Permission"
+          open={deleteModalOpen}
+          onClose={() => {
+            setDeleteModalOpen(false);
+          }}
+          onConfirm={confirmDeleteCategory}
+        />
 
         {/* <div className="q-attributes-bottom-header-sticky">
           <div className="q-attributes-bottom-header">

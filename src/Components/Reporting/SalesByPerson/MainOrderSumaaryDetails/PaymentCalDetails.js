@@ -367,7 +367,7 @@ export default function PaymentCalDetails() {
   // -------------------------------------------------
   function CouponData(data) {
     let cuopondetails = JSON.parse(data);
-    // console.log(cuopondetails);
+    console.log(cuopondetails);
     setCouponDetails(cuopondetails);
   }
 
@@ -502,111 +502,120 @@ export default function PaymentCalDetails() {
       (refund == undefined || nonrefund == undefined) ? (
         <div style={setPositionLoader}>
           <div className="loaderarea">
-            <Loaderfile />
+           
           </div>
         </div> */}
       {/* ) : ( */}
-      <>
-        <div className="headerSummery">
-          {/* <TopBar merchantId={merchantId} orderMethod={orderMethod} /> */}
+      {OrderSummeryDetails?.loading ? (
+        <div style={setPositionLoader}>
+          <div className="loaderarea">
+            <Loaderfile />
+          </div>
         </div>
-        {/* --------------------------- */}
+      ) : (
+        <>
+          <div className="headerSummery">
+            {/* <TopBar merchantId={merchantId} orderMethod={orderMethod} /> */}
+          </div>
+          {/* --------------------------- */}
 
-        <div className="mainSection">
-          <div className="MidMainSection">
-            <div className="LeftMidMainSection">
-              <div className="left-font-header">
-                <h1 className="orderSummery_head">Order Status</h1>
-                <div className="container">
-                  <div className="row justify-content-center ">
-                    <div className="col-12 order-status-svg">
-                      <OrderSummery_pickup_delivery_status
-                        orderSummeryData={orderSummeryData}
-                      />
+          <div className="mainSection">
+            <div className="MidMainSection">
+              <div className="LeftMidMainSection">
+                <div className="left-font-header">
+                  <h1 className="orderSummery_head">Order Status</h1>
+                  <div className="container">
+                    <div className="row justify-content-center ">
+                      <div className="col-12 order-status-svg">
+                        <OrderSummery_pickup_delivery_status
+                          orderSummeryData={orderSummeryData}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
 
-              <div className="deliverySection">
-                {nonrefund && nonrefund.length > 0 && (
-                  <>
-                    <h1 className="orderSummery_head">
-                      {orderSummeryData &&
-                      orderSummeryData.order_detail &&
-                      orderSummeryData.order_detail.order_method.toLowerCase() ===
-                        "pickup"
-                        ? "Pickup"
-                        : "Delivery"}
+                <div className="deliverySection">
+                  {nonrefund && nonrefund.length > 0 && (
+                    <>
+                      <h1 className="orderSummery_head">
+                        {orderSummeryData &&
+                        orderSummeryData.order_detail &&
+                        orderSummeryData.order_detail.order_method.toLowerCase() ===
+                          "pickup"
+                          ? "Pickup"
+                          : "Delivery"}
 
-                      {orderSummeryData.future_order_data &&
-                      orderSummeryData.future_order_data !== "NOW" ? (
-                        <>
-                          <div
-                            style={{ marginTop: "0px" }}
-                            className="OrderSummeryItemDiv"
-                          >
-                            <p>
-                              Future Order -{" "}
-                              {formatDate(orderSummeryData.future_order_data)}
-                            </p>
-                          </div>
-                        </>
-                      ) : null}
-                    </h1>
-                    <div className="OrderSummeryProductArea">
-                      {nonrefund?.length
-                        ? nonrefund?.map((result) => {
-                            return (
-                              <div
-                                className="OrderSummeryProductDiv"
-                                key={result?.line_item_id}
-                              >
-                                <div className="OrderSummeryProductR">
-                                  <div className="OrderSummeryProductL">
-                                    <img
-                                      onError={(e) => {
-                                        e.target.src = ProductDefaultImage;
-                                      }}
-                                      alt=""
-                                      src={
-                                        result?.img
-                                          ? result.img.split(",")[0]
-                                          : ProductDefaultImage
-                                      }
-                                      className="deliveryImageSize"
-                                      onLoad={() => setImageLoading(false)}
-                                    ></img>
-                                  </div>
-                                  <div className="OrderSummeryProductRTop">
-                                    <h4>{result?.name}</h4>
-                                  </div>
-                                  <div className="OrderSummeryProductRBottom">
-                                    <div className="OrderSummeryProductRBottomL">
-                                      <span>
-                                        ${parseFloat(result?.price).toFixed(2)}
-                                      </span>
+                        {orderSummeryData.future_order_data &&
+                        orderSummeryData.future_order_data !== "NOW" ? (
+                          <>
+                            <div
+                              style={{ marginTop: "0px" }}
+                              className="OrderSummeryItemDiv"
+                            >
+                              <p>
+                                Future Order -{" "}
+                                {formatDate(orderSummeryData.future_order_data)}
+                              </p>
+                            </div>
+                          </>
+                        ) : null}
+                      </h1>
+                      <div className="OrderSummeryProductArea">
+                        {nonrefund?.length
+                          ? nonrefund?.map((result) => {
+                              return (
+                                <div
+                                  className="OrderSummeryProductDiv"
+                                  key={result?.line_item_id}
+                                >
+                                  <div className="OrderSummeryProductR">
+                                    <div className="OrderSummeryProductL">
+                                      <img
+                                        onError={(e) => {
+                                          e.target.src = ProductDefaultImage;
+                                        }}
+                                        alt=""
+                                        src={
+                                          result?.img
+                                            ? result.img.split(",")[0]
+                                            : ProductDefaultImage
+                                        }
+                                        className="deliveryImageSize"
+                                        onLoad={() => setImageLoading(false)}
+                                      ></img>
                                     </div>
-                                    <div className="OrderSummeryProductRBottomM">
-                                      {result?.is_refunded === "1"
-                                        ? `X${result?.refund_qty}`
-                                        : `X${result?.qty}`}
+                                    <div className="OrderSummeryProductRTop">
+                                      <h4>{result?.name}</h4>
                                     </div>
-                                    <div className="OrderSummeryProductRBottomR">
-                                      <span>
-                                        $
+                                    <div className="OrderSummeryProductRBottom">
+                                      <div className="OrderSummeryProductRBottomL">
+                                        <span>
+                                          $
+                                          {parseFloat(result?.price).toFixed(2)}
+                                        </span>
+                                      </div>
+                                      <div className="OrderSummeryProductRBottomM">
                                         {result?.is_refunded === "1"
-                                          ? parseFloat(
-                                              result?.refund_qty * result?.price
-                                            ).toFixed(2)
-                                          : parseFloat(
-                                              result?.qty * result?.price
-                                            ).toFixed(2)}
-                                      </span>
+                                          ? `X${result?.refund_qty}`
+                                          : `X${result?.qty}`}
+                                      </div>
+                                      <div className="OrderSummeryProductRBottomR">
+                                        <span>
+                                          $
+                                          {result?.is_refunded === "1"
+                                            ? parseFloat(
+                                                result?.refund_qty *
+                                                  result?.price
+                                              ).toFixed(2)
+                                            : parseFloat(
+                                                result?.qty * result?.price
+                                              ).toFixed(2)}
+                                        </span>
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                                {/* <div className="OrderSummeryProductRBottomM">
+                                  {/* <div className="OrderSummeryProductRBottomM">
                                     {result?.is_refunded === '1'
                                       ? `X${result?.refund_qty}`
                                       : `X${result?.qty}`}
@@ -623,65 +632,66 @@ export default function PaymentCalDetails() {
                                           ).toFixed(2)}
                                     </span>
                                   </div> */}
-                              </div>
-                            );
-                          })
-                        : ""}
-                    </div>
-                  </>
-                )}
+                                </div>
+                              );
+                            })
+                          : ""}
+                      </div>
+                    </>
+                  )}
 
-                {refund && refund.length > 0 && (
-                  <>
-                    <div className="refund-orderSummeryPage">
-                      <h5 style={{ margin: "0px" }}>Refunded Products</h5>
-                      <span style={{ fontSize: "14px" }}>
-                        (Amount will be refunded within 48 hours)
-                      </span>
-                    </div>
+                  {refund && refund.length > 0 && (
+                    <>
+                      <div className="refund-orderSummeryPage">
+                        <h5 style={{ margin: "0px" }}>Refunded Products</h5>
+                        <span style={{ fontSize: "14px" }}>
+                          (Amount will be refunded within 48 hours)
+                        </span>
+                      </div>
 
-                    <div className="OrderSummeryProductArea">
-                      {refund?.length
-                        ? refund?.map((result) => {
-                            return (
-                              <div
-                                className="OrderSummeryProductDiv"
-                                key={result?.line_item_id}
-                              >
-                                <div className="OrderSummeryProductR">
-                                  <div className="OrderSummeryProductL">
-                                    <img
-                                      alt=""
-                                      onError={(e) => {
-                                        e.target.src = ProductDefaultImage;
-                                      }}
-                                      src={
-                                        result?.img
-                                          ? result.img.split(",")[0]
-                                          : ProductDefaultImage
-                                      }
-                                      className="deliveryImageSize"
-                                    ></img>
-                                  </div>
-                                  <div className="OrderSummeryProductRTop">
-                                    <h4>{result?.name}</h4>
-                                  </div>
-                                  <div className="OrderSummeryProductRBottom">
-                                    <div className="OrderSummeryProductRBottomL">
-                                      <span>
-                                        ${parseFloat(result?.price).toFixed(2)}
-                                      </span>
+                      <div className="OrderSummeryProductArea">
+                        {refund?.length
+                          ? refund?.map((result) => {
+                              return (
+                                <div
+                                  className="OrderSummeryProductDiv"
+                                  key={result?.line_item_id}
+                                >
+                                  <div className="OrderSummeryProductR">
+                                    <div className="OrderSummeryProductL">
+                                      <img
+                                        alt=""
+                                        onError={(e) => {
+                                          e.target.src = ProductDefaultImage;
+                                        }}
+                                        src={
+                                          result?.img
+                                            ? result.img.split(",")[0]
+                                            : ProductDefaultImage
+                                        }
+                                        className="deliveryImageSize"
+                                      ></img>
                                     </div>
-                                    <div className="OrderSummeryProductRBottomM">
-                                      {/* {result?.is_refunded === '1'
+                                    <div className="OrderSummeryProductRTop">
+                                      <h4>{result?.name}</h4>
+                                    </div>
+                                    <div className="OrderSummeryProductRBottom">
+                                      <div className="OrderSummeryProductRBottomL">
+                                        <span>
+                                          $
+                                          {parseFloat(result?.price).toFixed(2)}
+                                        </span>
+                                      </div>
+                                      <div className="OrderSummeryProductRBottomM">
+                                        {/* {result?.is_refunded === '1'
                                           ? `X${result?.refund_qty}`
                                           : `X${result?.qty}`} */}
-                                      {`X${result?.refund_qty}`}
-                                    </div>
-                                    <div className="OrderSummeryProductRBottomR">
-                                      <span>
-                                        $
-                                        {/* {result?.is_refunded === '1'
+                                        {`X${result?.refund_qty}`}
+                                      </div>
+                                      <div className="OrderSummeryProductRBottomR">
+                                        <span>
+                                          $
+                                          {/* {result?.is_refunded === '1'
                                             ? parseFloat(
                                                 result?.refund_qty *
                                                   result?.price,
@@ -689,14 +699,14 @@ export default function PaymentCalDetails() {
                                             : parseFloat(
                                                 result?.qty * result?.price,
                                               ).toFixed(2)} */}
-                                        {parseFloat(
-                                          result?.refund_qty * result?.price
-                                        ).toFixed(2)}
-                                      </span>
+                                          {parseFloat(
+                                            result?.refund_qty * result?.price
+                                          ).toFixed(2)}
+                                        </span>
+                                      </div>
                                     </div>
                                   </div>
-                                </div>
-                                {/* <div className="OrderSummeryProductRBottomM">
+                                  {/* <div className="OrderSummeryProductRBottomM">
                                     {result?.is_refunded === '1'
                                       ? `X${result?.refund_qty}`
                                       : `X${result?.qty}`}
@@ -713,170 +723,177 @@ export default function PaymentCalDetails() {
                                           ).toFixed(2)}
                                     </span>
                                   </div> */}
-                              </div>
-                            );
-                          })
-                        : ""}
-                    </div>
-                  </>
-                )}
+                                </div>
+                              );
+                            })
+                          : ""}
+                      </div>
+                    </>
+                  )}
 
-                <div className="OrderSummeryItemArea">
-                  <h1 className="orderSummery_head">
-                    Order Summary
-                    <span>
-                      (
-                      {orderSummeryData &&
-                        orderSummeryData.order_detail &&
-                        orderSummeryData.cart_data.length}{" "}
-                      Items)
-                    </span>
-                  </h1>
-                  <div className="OrderSummeryItemDiv">
-                    <p>
-                      Subtotal
+                  <div className="OrderSummeryItemArea">
+                    <h1 className="orderSummery_head">
+                      Order Summary
                       <span>
-                        $
+                        (
                         {orderSummeryData &&
                           orderSummeryData.order_detail &&
-                          parseFloat(
-                            orderSummeryData.order_detail.subtotal
-                          ).toFixed(2)}
+                          orderSummeryData.cart_data.length}{" "}
+                        Items)
                       </span>
-                    </p>
-                    {orderSummeryData?.order_detail?.del_fee === "" ||
-                    orderSummeryData?.order_detail?.del_fee === "0" ? (
-                      " "
-                    ) : (
+                    </h1>
+                    <div className="OrderSummeryItemDiv">
                       <p>
-                        Delivery Fee
+                        Subtotal
                         <span>
                           $
-                          {parseFloat(
-                            orderSummeryData &&
-                              orderSummeryData.order_detail &&
-                              orderSummeryData.order_detail.del_fee
-                          ).toFixed(2)}
+                          {orderSummeryData &&
+                            orderSummeryData.order_detail &&
+                            parseFloat(
+                              orderSummeryData.order_detail.subtotal
+                            ).toFixed(2)}
                         </span>
                       </p>
-                    )}
-                    {couponDetails.coupon_code !== "" ? (
-                      <p>
-                        Coupon ({couponDetails.coupon_code})
-                        <span>
-                          $
-                          {parseFloat(couponDetails.coupon_code_amt).toFixed(2)}
-                        </span>
-                      </p>
-                    ) : (
-                      ""
-                    )}
-                    {orderSummeryData &&
-                      orderSummeryData.order_detail &&
-                      orderSummeryData.order_detail.con_fee !== "0" && (
+                      {orderSummeryData?.order_detail?.del_fee === "" ||
+                      orderSummeryData?.order_detail?.del_fee === "0" ? (
+                        " "
+                      ) : (
                         <p>
-                          Convenience Fee
+                          Delivery Fee
                           <span>
                             $
                             {parseFloat(
-                              orderSummeryData.order_detail.con_fee
+                              orderSummeryData &&
+                                orderSummeryData.order_detail &&
+                                orderSummeryData.order_detail.del_fee
                             ).toFixed(2)}
                           </span>
                         </p>
                       )}
-                    <p>
-                      Sales Tax (
+                      {
+                        // console.log(couponDetails.coupon_code_amt)
+                        couponDetails.coupon_code !== "" &&
+                        !!couponDetails.coupon_code_amt ? (
+                          <p>
+                            Coupon ({couponDetails.coupon_code})
+                            <span>
+                              $
+                              {parseFloat(
+                                couponDetails.coupon_code_amt
+                              ).toFixed(2)}
+                            </span>
+                          </p>
+                        ) : (
+                          ""
+                        )
+                      }
                       {orderSummeryData &&
                         orderSummeryData.order_detail &&
-                        orderSummeryData.order_detail.tax_rate}
-                      %)
-                      <span>
-                        $
-                        {orderSummeryData &&
-                          orderSummeryData?.order_detail &&
-                          orderSummeryData?.order_detail?.tax &&
-                          parseFloat(
-                            orderSummeryData?.order_detail?.tax
-                          ).toFixed(2)}
-                      </span>
-                    </p>
-                    {orderSummeryData?.order_detail?.tip &&
-                    parseFloat(orderSummeryData?.order_detail?.tip) > 0 ? (
+                        orderSummeryData.order_detail.con_fee !== "0" && (
+                          <p>
+                            Convenience Fee
+                            <span>
+                              $
+                              {parseFloat(
+                                orderSummeryData.order_detail.con_fee
+                              ).toFixed(2)}
+                            </span>
+                          </p>
+                        )}
                       <p>
-                        Tip{" "}
+                        Sales Tax (
+                        {orderSummeryData &&
+                          orderSummeryData.order_detail &&
+                          orderSummeryData.order_detail.tax_rate}
+                        %)
                         <span>
                           $
-                          {parseFloat(
-                            orderSummeryData?.order_detail?.tip
-                          ).toFixed(2)}
-                        </span>
-                      </p>
-                    ) : (
-                      ""
-                    )}
-                    {orderSummeryData?.order_detail?.other_taxes_desc
-                      ? getOtherTaxes(
-                          JSON.parse(
-                            orderSummeryData?.order_detail?.other_taxes_desc
-                          )
-                        )
-                      : ""}
-                    {orderSummeryData &&
-                    orderSummeryData.order_detail &&
-                    orderSummeryData.order_detail.is_refunded == "1" ? (
-                      <p className="yellowclr">
-                        Refunded Amount
-                        <span>
-                          - $
                           {orderSummeryData &&
-                            orderSummeryData.order_detail &&
+                            orderSummeryData?.order_detail &&
+                            orderSummeryData?.order_detail?.tax &&
                             parseFloat(
-                              orderSummeryData.order_detail.refund_amount
+                              orderSummeryData?.order_detail?.tax
                             ).toFixed(2)}
                         </span>
                       </p>
-                    ) : (
-                      ""
-                    )}
-                    {orderSummeryData && orderSummeryData.order_detail ? (
-                      <p className="blackclr">
-                        Grand Total
-                        <span>
-                          {(() => {
-                            let grandTotal = parseFloat(
-                              orderSummeryData.order_detail.amt
-                            );
-
-                            // Assuming $coupon_desc is also part of your orderSummeryData
-                            if (couponDetails.loyalty_point_spent > 0) {
-                              grandTotal += parseFloat(
-                                couponDetails.loyalty_point_amt_spent
-                              );
-                            }
-
-                            // Adjust for refund if applicable
-                            if (
-                              orderSummeryData.order_detail.is_refunded === "1"
-                            ) {
-                              grandTotal -= parseFloat(
+                      {orderSummeryData?.order_detail?.tip &&
+                      parseFloat(orderSummeryData?.order_detail?.tip) > 0 ? (
+                        <p>
+                          Tip{" "}
+                          <span>
+                            $
+                            {parseFloat(
+                              orderSummeryData?.order_detail?.tip
+                            ).toFixed(2)}
+                          </span>
+                        </p>
+                      ) : (
+                        ""
+                      )}
+                      {orderSummeryData?.order_detail?.other_taxes_desc
+                        ? getOtherTaxes(
+                            JSON.parse(
+                              orderSummeryData?.order_detail?.other_taxes_desc
+                            )
+                          )
+                        : ""}
+                      {orderSummeryData &&
+                      orderSummeryData.order_detail &&
+                      orderSummeryData.order_detail.is_refunded == "1" ? (
+                        <p className="yellowclr">
+                          Refunded Amount
+                          <span>
+                            - $
+                            {orderSummeryData &&
+                              orderSummeryData.order_detail &&
+                              parseFloat(
                                 orderSummeryData.order_detail.refund_amount
+                              ).toFixed(2)}
+                          </span>
+                        </p>
+                      ) : (
+                        ""
+                      )}
+                      {orderSummeryData && orderSummeryData.order_detail ? (
+                        <p className="blackclr">
+                          Grand Total
+                          <span>
+                            {(() => {
+                              let grandTotal = parseFloat(
+                                orderSummeryData.order_detail.amt
                               );
-                            }
 
-                            return `$${
-                              parseFloat(grandTotal) <= 0.02 &&
-                              orderSummeryData?.order_detail?.m_status === "7"
-                                ? "0.00"
-                                : grandTotal.toFixed(2)
-                            }`;
-                          })()}
-                        </span>
-                      </p>
-                    ) : (
-                      ""
-                    )}
-                    <style>
-                      {`
+                              // Assuming $coupon_desc is also part of your orderSummeryData
+                              if (couponDetails.loyalty_point_spent > 0) {
+                                grandTotal += parseFloat(
+                                  couponDetails.loyalty_point_amt_spent
+                                );
+                              }
+
+                              // Adjust for refund if applicable
+                              if (
+                                orderSummeryData.order_detail.is_refunded ===
+                                "1"
+                              ) {
+                                grandTotal -= parseFloat(
+                                  orderSummeryData.order_detail.refund_amount
+                                );
+                              }
+
+                              return `$${
+                                parseFloat(grandTotal) <= 0.02 &&
+                                orderSummeryData?.order_detail?.m_status === "7"
+                                  ? "0.00"
+                                  : grandTotal.toFixed(2)
+                              }`;
+                            })()}
+                          </span>
+                        </p>
+                      ) : (
+                        ""
+                      )}
+                      <style>
+                        {`
                     .MuiAccordion-root:before {
                       background-color: unset;
                     }
@@ -910,306 +927,323 @@ export default function PaymentCalDetails() {
                         color: #000;
                       }
                       `}
-                    </style>
-                    {(couponDetails.loyalty_point_spent > 0 ||
-                      couponDetails.store_credit_amt_spent > 0 ||
-                      orderSummeryData?.order_detail ||
-                      couponDetails.loyalty_point_earned > 0) && (
-                      <Accordion
-                        // style={{}}
-                        className="moreordersummary"
-                      >
-                        <AccordionSummary
-                          expandIcon={<ExpandMoreIcon />}
-                          className="moreordersummary-container ps-0"
+                      </style>
+                      {(couponDetails.loyalty_point_spent > 0 ||
+                        couponDetails.store_credit_amt_spent > 0 ||
+                        orderSummeryData?.order_detail ||
+                        couponDetails.loyalty_point_earned > 0) && (
+                        <Accordion
+                          // style={{}}
+                          className="moreordersummary"
                         >
-                          <p className="blackclr pb-0"> View Details</p>
-                        </AccordionSummary>
-                        <AccordionDetails className="dropOrdersummary">
-                          {couponDetails.loyalty_point_spent > 0 ? (
-                            <p className="">
-                              Points Applied (
-                              {parseFloat(
-                                couponDetails.loyalty_point_spent
-                              ).toFixed(2)}
-                              )
-                              <span>
-                                - $
+                          <AccordionSummary
+                            expandIcon={<ExpandMoreIcon />}
+                            className="moreordersummary-container ps-0"
+                          >
+                            <p className="blackclr pb-0"> View Details</p>
+                          </AccordionSummary>
+                          <AccordionDetails className="dropOrdersummary">
+                            {couponDetails.loyalty_point_spent > 0 ? (
+                              <p className="">
+                                Points Applied (
                                 {parseFloat(
-                                  couponDetails.loyalty_point_amt_spent
+                                  couponDetails.loyalty_point_spent
                                 ).toFixed(2)}
-                              </span>
-                            </p>
-                          ) : (
-                            ""
-                          )}
-                          {couponDetails.store_credit_amt_spent > 0 ? (
-                            <p className="">
-                              Paid via Store Credit{" "}
-                              <span>
-                                $
-                                {parseFloat(
-                                  couponDetails.store_credit_amt_spent
-                                ).toFixed(2)}
-                              </span>
-                            </p>
-                          ) : (
-                            ""
-                          )}
-                          {orderSummeryData && orderSummeryData.order_detail ? (
-                            <p className="">
-                              {paymentMethod &&
-                              paymentMethod.toLowerCase() === "cash"
-                                ? "Paid via Cash"
-                                : "Paid via Card"}
-                              <span>
-                                {(() => {
-                                  let payment = parseFloat(
-                                    orderSummeryData.order_detail.amt
-                                  );
-
-                                  // if (couponDetails.loyalty_point_spent > 0) {
-                                  //   payment += parseFloat(
-                                  //     couponDetails.loyalty_point_amt_spent,
-                                  //   );
-                                  // }
-
-                                  // if (
-                                  //   orderSummeryData.order_detail
-                                  //     .is_refunded === '1' ||
-                                  //   orderSummeryData.order_detail
-                                  //     .is_refunded === '2'
-                                  // ) {
-                                  //   payment -= parseFloat(
-                                  //     orderSummeryData.order_detail
-                                  //       .refund_amount,
-                                  //   );
-                                  // }
-
-                                  // if (couponDetails.loyalty_point_spent > 0) {
-                                  //   payment -= parseFloat(
-                                  //     couponDetails.loyalty_point_amt_spent,
-                                  //   );
-                                  // }
-
-                                  if (
-                                    couponDetails.store_credit_amt_spent > 0
-                                  ) {
-                                    payment -= parseFloat(
-                                      couponDetails.store_credit_amt_spent
+                                )
+                                <span>
+                                  - $
+                                  {parseFloat(
+                                    couponDetails.loyalty_point_amt_spent
+                                  ).toFixed(2)}
+                                </span>
+                              </p>
+                            ) : (
+                              ""
+                            )}
+                            {couponDetails.store_credit_amt_spent > 0 ? (
+                              <p className="">
+                                Paid via Store Credit{" "}
+                                <span>
+                                  $
+                                  {parseFloat(
+                                    couponDetails.store_credit_amt_spent
+                                  ).toFixed(2)}
+                                </span>
+                              </p>
+                            ) : (
+                              ""
+                            )}
+                            {orderSummeryData &&
+                            orderSummeryData.order_detail ? (
+                              <p className="">
+                                {paymentMethod &&
+                                paymentMethod.toLowerCase() === "cash"
+                                  ? "Paid via Cash"
+                                  : "Paid via Card"}
+                                <span>
+                                  {(() => {
+                                    let payment = parseFloat(
+                                      orderSummeryData.order_detail.amt
                                     );
-                                  }
-                                  return `$${payment.toFixed(2)}`;
-                                })()}
-                              </span>
-                            </p>
-                          ) : (
-                            ""
-                          )}
 
-                          {couponDetails.loyalty_point_earned > 0 ? (
-                            <p className="yellowclr">
-                              {" "}
-                              Points Awarded{" "}
-                              <span>
-                                {parseFloat(
-                                  couponDetails.loyalty_point_earned
-                                ).toFixed(2)}
-                              </span>
-                            </p>
-                          ) : (
-                            ""
-                          )}
-                        </AccordionDetails>
-                      </Accordion>
-                    )}
+                                    // if (couponDetails.loyalty_point_spent > 0) {
+                                    //   payment += parseFloat(
+                                    //     couponDetails.loyalty_point_amt_spent,
+                                    //   );
+                                    // }
+
+                                    // if (
+                                    //   orderSummeryData.order_detail
+                                    //     .is_refunded === '1' ||
+                                    //   orderSummeryData.order_detail
+                                    //     .is_refunded === '2'
+                                    // ) {
+                                    //   payment -= parseFloat(
+                                    //     orderSummeryData.order_detail
+                                    //       .refund_amount,
+                                    //   );
+                                    // }
+
+                                    // if (couponDetails.loyalty_point_spent > 0) {
+                                    //   payment -= parseFloat(
+                                    //     couponDetails.loyalty_point_amt_spent,
+                                    //   );
+                                    // }
+
+                                    if (
+                                      couponDetails.store_credit_amt_spent > 0
+                                    ) {
+                                      payment -= parseFloat(
+                                        couponDetails.store_credit_amt_spent
+                                      );
+                                    }
+                                    return `$${payment.toFixed(2)}`;
+                                  })()}
+                                </span>
+                              </p>
+                            ) : (
+                              ""
+                            )}
+
+                            {couponDetails.loyalty_point_earned > 0 ? (
+                              <p className="yellowclr">
+                                {" "}
+                                Points Awarded{" "}
+                                <span>
+                                  {parseFloat(
+                                    couponDetails.loyalty_point_earned
+                                  ).toFixed(2)}
+                                </span>
+                              </p>
+                            ) : (
+                              ""
+                            )}
+                          </AccordionDetails>
+                        </Accordion>
+                      )}
+                    </div>
                   </div>
                 </div>
-              </div>
-              <div className="orderStatus">
-                {/* <h5>Order Summery (3 -items)</h5> */}
-                <div className="orderSummeryList">
-                  <div className="orderSummeryLeftList">
-                    {/* {
+                <div className="orderStatus">
+                  {/* <h5>Order Summery (3 -items)</h5> */}
+                  <div className="orderSummeryList">
+                    <div className="orderSummeryLeftList">
+                      {/* {
                         orderSummeryData && orderSummeryData.order_detail && orderSummeryData.order_detail.del_fee !=='0'? <p className='orderSumeryText'>Delivery fee</p>:''
                       } */}
 
-                    <p className="orderSumeryText-number"></p>
+                      <p className="orderSumeryText-number"></p>
 
-                    {/* {
+                      {/* {
                       couponDetails.coupon_code_amt !== "" ? <p className='orderSumeryText-number'>${couponDetails.coupon_code_amt}</p> : ''
                     } */}
 
-                    {/* <p className='orderSumeryText-number'>${orderSummeryData?.order_detail?.con_fee}</p> */}
-                    <p className="orderSumeryText-number"></p>
+                      {/* <p className='orderSumeryText-number'>${orderSummeryData?.order_detail?.con_fee}</p> */}
+                      <p className="orderSumeryText-number"></p>
 
-                    <h6 className="order-summery-grand-total"></h6>
+                      <h6 className="order-summery-grand-total"></h6>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="RightMidMainSection">
-              <div className="orderSummeryRightTop">
-                <div className="orderSummeryRightTopL">
-                  <h1 className="orderSummery_head">Payment Details</h1>
+              <div className="RightMidMainSection">
+                <div className="orderSummeryRightTop">
+                  <div className="orderSummeryRightTopL">
+                    <h1 className="orderSummery_head">Payment Details</h1>
+                  </div>
+                  <div className="orderSummeryRightTopR">
+                    <span className="successbtn">SUCCESS</span>
+                  </div>
                 </div>
-                <div className="orderSummeryRightTopR">
-                  <span className="successbtn">SUCCESS</span>
-                </div>
-              </div>
 
-              <div className="orderSummeryRightTopC">
-                <p>
-                  Order Id
-                  <span>
-                    {orderSummeryData &&
-                      orderSummeryData.order_detail &&
-                      orderSummeryData.order_detail.order_id}
-                  </span>
-                </p>
-                <p>
-                  Payment Date
-                  <span>
-                    {orderSummeryData &&
-                      orderSummeryData.order_detail &&
-                      formatDate(orderSummeryData.order_detail.date_time)}
-                  </span>
-                </p>
-                <p>
-                  Order Number
-                  <span>
-                    {orderSummeryData &&
-                      orderSummeryData.order_detail &&
-                      orderSummeryData.order_detail.order_number}
-                  </span>
-                </p>
-                <p>
-                  Payment Id
-                  <span>
-                    {orderSummeryData &&
-                      orderSummeryData.order_detail &&
-                      orderSummeryData.order_detail.payment_id}
-                  </span>
-                </p>
-
-                {orderSummeryData && orderSummeryData.order_detail ? (
-                  <p className="amountrow">
-                    Amount
-                    <span>
-                      {(() => {
-                        let grandTotal = parseFloat(
-                          orderSummeryData.order_detail.amt
-                        );
-
-                        // Assuming $coupon_desc is also part of your orderSummeryData
-                        if (couponDetails.loyalty_point_spent > 0) {
-                          grandTotal += parseFloat(
-                            couponDetails.loyalty_point_amt_spent
-                          );
-                        }
-
-                        // Adjust for refund if applicable
-                        if (orderSummeryData.order_detail.is_refunded === "1") {
-                          grandTotal -= parseFloat(
-                            orderSummeryData.order_detail.refund_amount
-                          );
-                        }
-                        return `$${
-                          parseFloat(grandTotal) <= 0.02 &&
-                          orderSummeryData?.order_detail?.m_status === "7"
-                            ? "0.00"
-                            : parseFloat(grandTotal).toFixed(2)
-                        }`;
-                      })()}
-                    </span>
-                  </p>
-                ) : (
-                  ""
-                )}
-              </div>
-
-              <div className="orderSummeryCustomerDetailsArea">
-                <h1 className="orderSummery_head">Customer Details</h1>
-                {orderSummeryData &&
-                  orderSummeryData.order_detail &&
-                  orderSummeryData.order_detail.order_method.toLowerCase() ===
-                    "pickup" && (
-                    <div className="orderSummeryCustomerDetailsInner">
-                      <h5>
-                        {orderSummeryData &&
-                          orderSummeryData.order_detail &&
-                          orderSummeryData.order_detail?.billing_name}{" "}
-                      </h5>
-                      <p>
-                        <img src={imagePhone} alt="Pickup phone" />
-                        {"    "}
-                        {orderSummeryData &&
-                          orderSummeryData.order_detail &&
-                          orderSummeryData.order_detail.delivery_phn}
-                      </p>
-                    </div>
-                  )}
-
-                {orderSummeryData &&
-                  orderSummeryData.order_detail &&
-                  orderSummeryData.order_detail.order_method.toLowerCase() ===
-                    "delivery" && (
-                    <div className="orderSummeryCustomerDetailsInner">
-                      <h5>
-                        {orderSummeryData &&
-                          orderSummeryData.order_detail &&
-                          orderSummeryData.order_detail.deliver_name}{" "}
-                        <span className="btngreen_orderSummery">
-                          Delivery Address
-                        </span>
-                      </h5>
-                      <p>
-                        {orderSummeryData &&
-                        orderSummeryData.order_detail &&
-                        orderSummeryData.order_detail.delivery_addr ? (
-                          <img src={imageAddress} alt="delivery address" />
-                        ) : (
-                          ""
-                        )}{" "}
-                        {""}
-                        {orderSummeryData && orderSummeryData.order_detail
-                          ? removeHtmlTags(
-                              orderSummeryData.order_detail.delivery_addr
-                            )
-                          : ""}
-                      </p>
-                      <p>
-                        <img src={imagePhone} alt="Pickup phone" />
-                        {"  "}
-                        {orderSummeryData &&
-                          orderSummeryData.order_detail &&
-                          orderSummeryData.order_detail.delivery_phn}
-                      </p>
-                    </div>
-                  )}
-              </div>
-
-              <div className="orderSummeryIdentification">
-                <h1 className="orderSummery_head">Identification Card</h1>
                 <div className="orderSummeryRightTopC">
                   <p>
-                    ID Number
+                    Order Id
                     <span>
                       {orderSummeryData &&
-                        orderSummeryData.id_card_detail &&
-                        orderSummeryData.id_card_detail.i_card_number}
+                        orderSummeryData.order_detail &&
+                        orderSummeryData.order_detail.order_id}
                     </span>
                   </p>
                   <p>
-                    Expiration Date
+                    Payment Date
                     <span>
                       {orderSummeryData &&
-                        orderSummeryData.id_card_detail &&
-                        dateFormat}
+                        orderSummeryData.order_detail &&
+                        formatDate(orderSummeryData.order_detail.date_time)}
                     </span>
                   </p>
-                  {/* {console.log('dobhhh', orderSummeryData.id_card_detail)} */}
-                  {/* {orderSummeryData &&
+                  <p>
+                    Order Number
+                    <span>
+                      {orderSummeryData &&
+                        orderSummeryData.order_detail &&
+                        orderSummeryData.order_detail.order_number}
+                    </span>
+                  </p>
+                  <p>
+                    Payment Id
+                    <span>
+                      {orderSummeryData &&
+                        orderSummeryData.order_detail &&
+                        orderSummeryData.order_detail.payment_id}
+                    </span>
+                  </p>
+
+                  {orderSummeryData && orderSummeryData.order_detail ? (
+                    <p className="amountrow">
+                      Amount
+                      <span>
+                        {(() => {
+                          let grandTotal = parseFloat(
+                            orderSummeryData.order_detail.amt
+                          );
+
+                          // Assuming $coupon_desc is also part of your orderSummeryData
+                          if (couponDetails.loyalty_point_spent > 0) {
+                            grandTotal += parseFloat(
+                              couponDetails.loyalty_point_amt_spent
+                            );
+                          }
+
+                          // Adjust for refund if applicable
+                          if (
+                            orderSummeryData.order_detail.is_refunded === "1"
+                          ) {
+                            grandTotal -= parseFloat(
+                              orderSummeryData.order_detail.refund_amount
+                            );
+                          }
+                          return `$${
+                            parseFloat(grandTotal) <= 0.02 &&
+                            orderSummeryData?.order_detail?.m_status === "7"
+                              ? "0.00"
+                              : parseFloat(grandTotal).toFixed(2)
+                          }`;
+                        })()}
+                      </span>
+                    </p>
+                  ) : (
+                    ""
+                  )}
+                </div>
+
+                <div className="orderSummeryCustomerDetailsArea">
+                  <h1 className="orderSummery_head">Customer Details</h1>
+                  {orderSummeryData &&
+                    orderSummeryData.order_detail &&
+                    orderSummeryData.order_detail.order_method.toLowerCase() ===
+                      "pickup" && (
+                      <div className="orderSummeryCustomerDetailsInner">
+                        <h5>
+                          {orderSummeryData &&
+                            orderSummeryData.order_detail &&
+                            orderSummeryData.order_detail?.billing_name}{" "}
+                        </h5>
+                        <p>
+                          {orderSummeryData.order_detail &&
+                          !!orderSummeryData.order_detail.delivery_phn ? (
+                            <img src={imagePhone} alt="Pickup phone" />
+                          ) : (
+                            ""
+                          )}
+                          {"    "}
+                          {orderSummeryData &&
+                            orderSummeryData.order_detail &&
+                            orderSummeryData.order_detail.delivery_phn}
+                        </p>
+                      </div>
+                    )}
+
+                  {orderSummeryData &&
+                    orderSummeryData.order_detail &&
+                    orderSummeryData.order_detail.order_method.toLowerCase() ===
+                      "delivery" && (
+                      <div className="orderSummeryCustomerDetailsInner">
+                        <h5>
+                          {orderSummeryData &&
+                            orderSummeryData.order_detail &&
+                            orderSummeryData.order_detail.deliver_name}{" "}
+                          <span className="btngreen_orderSummery">
+                            Delivery Address
+                          </span>
+                        </h5>
+                        <p>
+                          {orderSummeryData &&
+                          orderSummeryData.order_detail &&
+                          orderSummeryData.order_detail.delivery_addr ? (
+                            <img src={imageAddress} alt="delivery address" />
+                          ) : (
+                            ""
+                          )}{" "}
+                          {""}
+                          {orderSummeryData && orderSummeryData.order_detail
+                            ? removeHtmlTags(
+                                orderSummeryData.order_detail.delivery_addr
+                              )
+                            : ""}
+                        </p>
+                        <p>
+                          <img src={imagePhone} alt="Pickup phone" />
+                          {"  "}
+                          {orderSummeryData &&
+                            orderSummeryData.order_detail &&
+                            orderSummeryData.order_detail.delivery_phn}
+                        </p>
+                      </div>
+                    )}
+                </div>
+
+                <div className="orderSummeryIdentification">
+                  <h1 className="orderSummery_head">Identification Card</h1>
+                  <div className="orderSummeryRightTopC">
+                    {orderSummeryData.id_card_detail &&
+                    orderSummeryData.id_card_detail.i_card_number ? (
+                      <p>
+                        ID Number
+                        <span>
+                          {orderSummeryData &&
+                            orderSummeryData.id_card_detail &&
+                            orderSummeryData.id_card_detail.i_card_number}
+                        </span>
+                      </p>
+                    ) : (
+                      ""
+                    )}
+                    {orderSummeryData.id_card_detail && dateFormat ? (
+                      <p>
+                        Expiration Date
+                        <span>
+                          {orderSummeryData &&
+                            orderSummeryData.id_card_detail &&
+                            dateFormat}
+                        </span>
+                      </p>
+                    ) : (
+                      ""
+                    )}
+                    {/* {console.log('dobhhh', orderSummeryData.id_card_detail)} */}
+                    {/* {orderSummeryData &&
                 orderSummeryData.id_card_detail &&
                 dateOfBirth ? (
                   <p className="orderSumeryText">
@@ -1228,49 +1262,49 @@ export default function PaymentCalDetails() {
                   ''
                 )} */}
 
-                  {orderSummeryData &&
-                    orderSummeryData.id_card_detail &&
-                    dateOfBirth &&
-                    dateOfBirth !== "31 Dec 1969" && ( // Add a condition here to check if dateOfBirth is not '31 Dec 1969'
-                      <p className="orderSumeryText">
-                        Date Of Birth <span>{dateOfBirth}</span>
-                      </p>
-                    )}
-                </div>
-                <div className="ordersummaryR_div_file">
-                  <label className="photo_area">
-                    <div
-                      id="img_container"
-                      data-toggle="modal"
-                      data-target="#id_cart_popup_front_side"
-                      onClick={handleClickOpen}
-                    >
-                      {/* {console.log('orderSummeryData: ', orderSummeryData)} */}
-                      {/* `https://sandbox.quickvee.com/upload/customer/id_proof/${orderSummeryData.id_card_detail.i_card_front_img}` */}
-                      <img
-                        src={
-                          orderSummeryData &&
-                          orderSummeryData.id_card_detail &&
-                          orderSummeryData.id_card_detail.image_url
-                            ? orderSummeryData.id_card_detail?.image_url
-                            : ""
-                        }
-                        alt=""
-                        className="id-cart-image"
-                      ></img>
+                    {orderSummeryData &&
+                      orderSummeryData.id_card_detail &&
+                      dateOfBirth &&
+                      dateOfBirth !== "31 Dec 1969" && ( // Add a condition here to check if dateOfBirth is not '31 Dec 1969'
+                        <p className="orderSumeryText">
+                          Date Of Birth <span>{dateOfBirth}</span>
+                        </p>
+                      )}
+                  </div>
+                  <div className="ordersummaryR_div_file">
+                    <label className="photo_area">
+                      <div
+                        id="img_container"
+                        data-toggle="modal"
+                        data-target="#id_cart_popup_front_side"
+                        onClick={handleClickOpen}
+                      >
+                        {/* {console.log('orderSummeryData: ', orderSummeryData)} */}
+                        {/* `https://sandbox.quickvee.com/upload/customer/id_proof/${orderSummeryData.id_card_detail.i_card_front_img}` */}
+                        <img
+                          src={
+                            orderSummeryData &&
+                            orderSummeryData.id_card_detail &&
+                            orderSummeryData.id_card_detail.image_url
+                              ? orderSummeryData.id_card_detail?.image_url
+                              : ""
+                          }
+                          alt=""
+                          className="id-cart-image"
+                        ></img>
+                      </div>
+                    </label>
+                    <div className="photo_area_text">
+                      <span>Front Side</span>
+                      <div className="custom-file"></div>
                     </div>
-                  </label>
-                  <div className="photo_area_text">
-                    <span>Front Side</span>
-                    <div className="custom-file"></div>
                   </div>
                 </div>
-              </div>
 
-              <br></br>
-              <br></br>
+                <br></br>
+                <br></br>
 
-              {/* <div className='order-summery-right-header'>
+                {/* <div className='order-summery-right-header'>
               <div className='font-header-right'>
                 <h5>Payment Details</h5>
               </div>
@@ -1395,7 +1429,7 @@ export default function PaymentCalDetails() {
 
 
             </div> */}
-              {/* <BootstrapDialog
+                {/* <BootstrapDialog
               onClose={handleClose}
               aria-labelledby="customized-dialog-title"
               open={open}
@@ -1454,56 +1488,57 @@ export default function PaymentCalDetails() {
               </DialogContent>
             </BootstrapDialog> */}
 
-              <Modal
-                className="for-scroll"
-                open={open}
-                onClose={handleClose}
-                aria-labelledby="modal-modal-title"
-                aria-describedby="modal-modal-description"
-              >
-                <div className="basic-modal">
-                  <div id="modal-modal-title">
-                    <span>Identification Card</span>
-                    <CloseIcon
-                      onClick={handleClose}
-                      className="modal-close-icon"
-                    />
-                  </div>
+                <Modal
+                  className="for-scroll"
+                  open={open}
+                  onClose={handleClose}
+                  aria-labelledby="modal-modal-title"
+                  aria-describedby="modal-modal-description"
+                >
+                  <div className="basic-modal">
+                    <div id="modal-modal-title">
+                      <span>Identification Card</span>
+                      <CloseIcon
+                        onClick={handleClose}
+                        className="modal-close-icon"
+                      />
+                    </div>
 
-                  <div
-                    data-toggle="modal"
-                    style={{
-                      display: "flex",
-                      justifyContent: "center",
-                      margin: "1rem",
-                    }}
-                  >
-                    <img
-                      src={
-                        orderSummeryData &&
-                        orderSummeryData.id_card_detail &&
-                        orderSummeryData.id_card_detail.image_url
-                          ? orderSummeryData.id_card_detail?.image_url
-                          : ""
-                      }
-                      // src={
-                      //   orderSummeryData && orderSummeryData.id_card_detail
-                      //     ? `https://sandbox.quickvee.com/upload/customer/id_proof/${orderSummeryData.id_card_detail.i_card_front_img}`
-                      //     : ''
-                      // }
-                      onError={(e) => {
-                        e.target.src = ProductDefaultImage;
+                    <div
+                      data-toggle="modal"
+                      style={{
+                        display: "flex",
+                        justifyContent: "center",
+                        margin: "1rem",
                       }}
-                      className="id-cart-image"
-                    />
+                    >
+                      <img
+                        src={
+                          orderSummeryData &&
+                          orderSummeryData.id_card_detail &&
+                          orderSummeryData.id_card_detail.image_url
+                            ? orderSummeryData.id_card_detail?.image_url
+                            : ""
+                        }
+                        // src={
+                        //   orderSummeryData && orderSummeryData.id_card_detail
+                        //     ? `https://sandbox.quickvee.com/upload/customer/id_proof/${orderSummeryData.id_card_detail.i_card_front_img}`
+                        //     : ''
+                        // }
+                        onError={(e) => {
+                          e.target.src = ProductDefaultImage;
+                        }}
+                        className="id-cart-image"
+                      />
+                    </div>
                   </div>
-                </div>
-              </Modal>
+                </Modal>
+              </div>
             </div>
           </div>
-        </div>
-        <Footer />
-      </>
+          <Footer />
+        </>
+      )}
       {/* )} */}
       {/* --------------------------- */}
     </>

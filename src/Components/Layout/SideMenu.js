@@ -414,7 +414,7 @@ const DropdownMenuItem = ({
           className="mt-0 bg-[#334247]  shadow w-full text-center z-10"
         >
           {item?.dropdownItems?.map((nestedDropdownItem) => (
-            <>
+            <React.Fragment key={nestedDropdownItem.id}>
               {nestedDropdownItem?.dropDownItems ? (
                 <>
                   <NestedDropdownMenu
@@ -434,7 +434,7 @@ const DropdownMenuItem = ({
                 </>
               ) : (
                 <Link
-                  key={nestedDropdownItem.id}
+                  // key={nestedDropdownItem.id}
                   to={nestedDropdownItem.link}
                   className={`flex text-center submenu-item text-gray-400 p-4 text-[14px] ${
                     activeItem === nestedDropdownItem.link ? "active" : ""
@@ -447,7 +447,7 @@ const DropdownMenuItem = ({
                   {nestedDropdownItem.text}
                 </Link>
               )}
-            </>
+            </React.Fragment>
           ))}
         </div>
       )}
@@ -616,7 +616,7 @@ const menuItems = [
         dropDownItems: [
           {
             id: 84,
-            text: "Refund Summary",
+            text: "Item Refund Report",
             link: "/store-settings/refund-report",
           },
           {

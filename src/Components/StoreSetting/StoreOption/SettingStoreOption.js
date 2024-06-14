@@ -144,7 +144,7 @@ export default function SettingStoreOption() {
   // fetch data when page load
   useEffect(() => {
     let data = {
-      merchant_id: "MAL0100CA",
+      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
       ...userTypeData,
     };
     if (data) {
@@ -232,14 +232,15 @@ export default function SettingStoreOption() {
         setError("Please Select Cash Payment method.");
       }
     } else if (orderState?.dayCount > 12) {
-      // alert("Advance Day Count Must Be Less Than 12");
-      showModal("Advance Day Count Must Be Less Than 12");
+      alert("Advance Day Count Must Be Less Than 12");
+      showModal("Advance day count must be less than 12");
     } else {
       setError("");
       setLoading(true);
       const newItem = {
         login_type: userTypeData?.login_type,
-        merchant_id: "MAL0100CA",
+        // merchant_id: "MAL0100CA",
+        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
         user_id: LoginGetDashBoardRecordJson?.data?.id,
         enable_order_number: orderState?.orderNumebrEnabled ? "1" : "0",
         reset_order_time: orderState?.resetOrderNumberTime,
@@ -269,7 +270,7 @@ export default function SettingStoreOption() {
         .then((res) => {
           if (res?.payload?.status) {
             let merchantdata = {
-              merchant_id: "MAL0100CA",
+              merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
               ...userTypeData,
             };
             dispatch(fetchStoreSettingOptionData(merchantdata)).catch((err) =>

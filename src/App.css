@@ -68,6 +68,10 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
+img {
+  max-width: unset !important;
+}
+
 /* Firefox */
 input[type="number"] {
   -moz-appearance: textfield;
@@ -1199,7 +1203,7 @@ div.q_label_details::after {
   font-family: QuicksandMedium, "Quicksand" !important;
 }
 .login-customer-form .sub-heading-from {
-  font-family: QuicksandMedium, 'Quicksand' !important;
+  font-family: QuicksandMedium, "Quicksand" !important;
   font-size: 14px;
   color: #232323 !important;
   margin: 10px 0 25px 0;
@@ -1208,6 +1212,7 @@ div.q_label_details::after {
 .sub-heading-from {
   width: 300px;
 }
-.input-field>div>input, .input-field>label {
-  font-family:  CircularBold !important;
+.input-field > div > input,
+.input-field > label {
+  font-family: CircularBold !important;
 }

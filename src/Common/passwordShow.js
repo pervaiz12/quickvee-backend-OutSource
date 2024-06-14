@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import Cookies from "js-cookie";
+import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { getAuthInvalidMessage } from "../Redux/features/Authentication/loginSlice";
 
 export default function PasswordShow() {
+  const dispatch = useDispatch();
   const [showpPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const handleMouseDown = () => {
@@ -33,6 +36,9 @@ export default function PasswordShow() {
     localStorage.removeItem("AllStore");
     navigate("/login");
   };
+  const getUnAutherisedTokenMessage=()=>{
+    dispatch(getAuthInvalidMessage("your session has been expired"))
+  }
 
   return {
     showpPassword,
@@ -40,5 +46,6 @@ export default function PasswordShow() {
     handleMouseUp,
     jsxData,
     handleCoockieExpire,
+    getUnAutherisedTokenMessage
   };
 }

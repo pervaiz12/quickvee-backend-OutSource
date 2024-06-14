@@ -17,6 +17,7 @@ export default function Discount_Per_Sales() {
     EmployeeFilterData,
     selectedoption,
     loader,
+    merchant_new_id,
   } = Discount_per_sales_logic();
 
   return (
@@ -45,6 +46,7 @@ export default function Discount_Per_Sales() {
               <DashboardTables
                 EmployeeFilterData={EmployeeFilterData}
                 loader={loader}
+                merchant_id={merchant_new_id}
               />
             </Grid>
           </Grid>
