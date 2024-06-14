@@ -1,5 +1,5 @@
 import * as React from "react";
-import  { useState } from "react";
+import { useState } from "react";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -24,7 +24,7 @@ import { fetchAttributesData } from "../Redux/features/Attributes/attributesSlic
 import { useAuthDetails } from "../Common/cookiesHelper";
 import EditTaxesModal from "../Components/StoreSetting/Taxes/EditTaxesModal";
 import EditEmployeeModal from "../Components/StoreSetting/AddEmployee/EditEmployeeModal";
-import Permission from "../Assests/Employee/Permission.svg"
+import Permission from "../Assests/Employee/Permission.svg";
 import AlertModal from "./AlertModal";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -59,12 +59,12 @@ const DraggableTable = ({
   deleteTaxButton = false,
   table,
   employeeTable = false,
-  editBtnEmployee= false,
+  editBtnEmployee = false,
   states,
   setVisible,
   setEmployeeId,
   setProductId,
-  seVisible
+  seVisible,
 }) => {
   const dispatch = useDispatch();
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -182,15 +182,14 @@ const DraggableTable = ({
       console.log("Sorting canceled by user");
     }
   };
-  const handleEditEmployeePermission = (id)=>{
-
-    setVisible("EmployeePermission")
-    setEmployeeId(id)
-  }
-  const handleEditCategory = (id)=>{
-    seVisible("EditCategory")
-    setProductId(id)
-  }
+  const handleEditEmployeePermission = (id) => {
+    setVisible("EmployeePermission");
+    setEmployeeId(id);
+  };
+  const handleEditCategory = (id) => {
+    seVisible("EditCategory");
+    setProductId(id);
+  };
   return (
     <>
       <TableContainer component={Paper}>
@@ -212,158 +211,187 @@ const DraggableTable = ({
                     tableRow.length >= 1 &&
                     tableRow.map((item, index) => {
                       return (
-                      <Draggable
-                        key={item.id}
-                        draggableId={item.id}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <StyledTableRow
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            <StyledTableCell>
-                              <img src={SortIcon} alt="add-icon" />
-                            </StyledTableCell>
-                            { employeeTable  ?  (<StyledTableCell>{item.f_name} {item.l_name}</StyledTableCell>) : ""  }
-                            { employeeTable ?  (<StyledTableCell>{item.phone}</StyledTableCell>) :""  }
-                            { employeeTable ?  (<StyledTableCell>{item.email}</StyledTableCell>) : ""  }
-                            { employeeTable?  (<StyledTableCell>{item.pin}</StyledTableCell>) : "" }
-                            { employeeTable ?  (<StyledTableCell>{item.role}</StyledTableCell>) : ""  }
+                        <Draggable
+                          key={item.id}
+                          draggableId={item.id}
+                          index={index}
+                        >
+                          {(provided) => (
+                            <StyledTableRow
+                              ref={provided.innerRef}
+                              {...provided.draggableProps}
+                              {...provided.dragHandleProps}
+                            >
+                              <StyledTableCell>
+                                <img src={SortIcon} alt="add-icon" />
+                              </StyledTableCell>
+                              {employeeTable ? (
+                                <StyledTableCell>
+                                  {item.f_name} {item.l_name}
+                                </StyledTableCell>
+                              ) : (
+                                ""
+                              )}
+                              {employeeTable ? (
+                                <StyledTableCell>{item.phone}</StyledTableCell>
+                              ) : (
+                                ""
+                              )}
+                              {employeeTable ? (
+                                <StyledTableCell>{item.email}</StyledTableCell>
+                              ) : (
+                                ""
+                              )}
+                              {employeeTable ? (
+                                <StyledTableCell>{item.pin}</StyledTableCell>
+                              ) : (
+                                ""
+                              )}
+                              {employeeTable ? (
+                                <StyledTableCell>{item.role}</StyledTableCell>
+                              ) : (
+                                ""
+                              )}
 
-                            { employeeTable ?  "" : <StyledTableCell>{item.title}</StyledTableCell>  }
-                            {item.percent ? (
-                              <StyledTableCell>{item.percent}</StyledTableCell>
-                            ) : ""
-                            }
-                            {viewSelectedOption && (
-                              <StyledTableCell>
-                                <ViewItemsModal
-                                  selectedView={item}
-                                  onViewClick={viewSelectedOptionFun}
-                                />
-                              </StyledTableCell>
-                            )}
-                            {viewSelectedOptionEnable && (
-                              <StyledTableCell>
-                                <RadioSelect
-                                  item={item}
-                                  handleOnlineChange={fun1}
-                                  handleRegisterChange={fun2}
-                                />
-                              </StyledTableCell>
-                            )}
-                            {editButtonEnable && (
-                              <StyledTableCell>
-                                <span
-                                // to={`${editButtonurl}${item.id}`}
-                                  onClick={()=>{handleEditCategory(item.id)}}
-                                >
-                                  <img
-                                    // className="edit_center w-8 h-8"
-                                    selectedCategory={item}
-                                    src={EditIcon}
-                                    alt="Edit"
-                                    
+                              {employeeTable ? (
+                                ""
+                              ) : (
+                                <StyledTableCell>{item.title}</StyledTableCell>
+                              )}
+                              {item.percent ? (
+                                <StyledTableCell>
+                                  {item.percent}
+                                </StyledTableCell>
+                              ) : (
+                                ""
+                              )}
+                              {viewSelectedOption && (
+                                <StyledTableCell>
+                                  <ViewItemsModal
+                                    selectedView={item}
+                                    onViewClick={viewSelectedOptionFun}
                                   />
-
-                                  
-                                </span>
-                              </StyledTableCell>
-                            )}
-                            {
-                              item.title === "DefaultTax" ? (
-                                <>
-                                {editTaxesObj && (
-                                  <>
-                                  <StyledTableCell align="right" className="categories_add_delete ">
-                                    <EditTaxesModal
-                                      selectedTaxe={item}
+                                </StyledTableCell>
+                              )}
+                              {viewSelectedOptionEnable && (
+                                <StyledTableCell>
+                                  <RadioSelect
+                                    item={item}
+                                    handleOnlineChange={fun1}
+                                    handleRegisterChange={fun2}
+                                  />
+                                </StyledTableCell>
+                              )}
+                              {editButtonEnable && (
+                                <StyledTableCell>
+                                  <span
+                                    // to={`${editButtonurl}${item.id}`}
+                                    onClick={() => {
+                                      handleEditCategory(item.id);
+                                    }}
+                                    className="cursor-pointer"
+                                  >
+                                    <img
+                                      // className="edit_center w-8 h-8"
+                                      selectedCategory={item}
+                                      src={EditIcon}
+                                      alt="Edit"
                                     />
-                                  </StyledTableCell>
-                                  <StyledTableCell></StyledTableCell>
-                                  </>
-                                )}
+                                  </span>
+                                </StyledTableCell>
+                              )}
+                              {item.title === "DefaultTax" ? (
+                                <>
+                                  {editTaxesObj && (
+                                    <>
+                                      <StyledTableCell
+                                        align="right"
+                                        className="categories_add_delete "
+                                      >
+                                        <EditTaxesModal selectedTaxe={item} />
+                                      </StyledTableCell>
+                                      <StyledTableCell></StyledTableCell>
+                                    </>
+                                  )}
                                 </>
-                              ):(
+                              ) : (
                                 <>
-                                {editTaxesObj && (
-                                  <>
-                                  <StyledTableCell align="right">
-                                    <EditTaxesModal
-                                      selectedTaxe={item}
-                                    />
-                                  </StyledTableCell>
-                                  </>
-                                )}
-                                 {deleteTaxButton && (
+                                  {editTaxesObj && (
+                                    <>
+                                      <StyledTableCell align="right">
+                                        <EditTaxesModal selectedTaxe={item} />
+                                      </StyledTableCell>
+                                    </>
+                                  )}
+                                  {deleteTaxButton && (
                                     <StyledTableCell>
                                       <img
-                                        // className="edit_center w-8 h-8"
+                                        className="cursor-pointer"
                                         src={DeleteIcon}
                                         alt="delete-icon"
-                                        onClick={() => deletetaxButtonFun(item.id)}
+                                        onClick={() =>
+                                          deletetaxButtonFun(item.id)
+                                        }
                                       />
                                     </StyledTableCell>
                                   )}
                                 </>
+                              )}
 
-                              )
-                            }
+                              {editButtonEnableEmployee && (
+                                <>
+                                  <StyledTableCell>
+                                    <span
+                                      onClick={() => {
+                                        handleEditEmployeePermission(item.id);
+                                      }}
+                                      className="cursor-pointer"
+                                    >
+                                      <img
+                                        // className="edit_center w-8 h-8"
+                                        src={Permission}
+                                        alt="Permission-icon"
+                                      />
+                                    </span>
+                                  </StyledTableCell>
+                                </>
+                              )}
 
-                            {editButtonEnableEmployee && (
-                              <>
-                              <StyledTableCell>
-                                <span
-                                onClick={()=>{handleEditEmployeePermission(item.id)}}
-                                //  to={`${editButtonurlEmployee}${item.id}`}
-                                 
-                                 >
-                                  <img
-                                    // className="edit_center w-8 h-8"
-                                    src={Permission}
-                                    alt="Permission-icon"
-                                  />
-                                </span>
-                              </StyledTableCell>
-                              </>
-                            )}
-                            
-                            {employeeTable && (
-                                  <>
+                              {employeeTable && (
+                                <>
                                   <StyledTableCell align="right">
                                     <EditEmployeeModal
                                       selectedTaxe={item}
-                                      employee={item} 
+                                      employee={item}
                                       states={states}
                                     />
                                   </StyledTableCell>
-                                  </>
-                                )}
-                           
-                            {deleteButton && (
-                              <StyledTableCell>
-                                <img
-                                  // className="edit_center w-8 h-8"
-                                  src={DeleteIcon}
-                                  alt="delete-icon"
-                                  onClick={() => deleteButtonFun(item.id)}
-                                />
-                              </StyledTableCell>
-                            )}
-                            {editAttributeObj && (
-                              <StyledTableCell align="right">
-                                <EditDeliveryAddress
-                                  attribute={item}
-                                  allattributes={tableRow}
-                                />
-                              </StyledTableCell>
-                            )}
-                          </StyledTableRow>
-                        )}
-                      </Draggable>
-                    )})}
+                                </>
+                              )}
+
+                              {deleteButton && (
+                                <StyledTableCell>
+                                  <img
+                                    className="cursor-pointer"
+                                    src={DeleteIcon}
+                                    alt="delete-icon"
+                                    onClick={() => deleteButtonFun(item.id)}
+                                  />
+                                </StyledTableCell>
+                              )}
+                              {editAttributeObj && (
+                                <StyledTableCell align="right">
+                                  <EditDeliveryAddress
+                                    attribute={item}
+                                    allattributes={tableRow}
+                                  />
+                                </StyledTableCell>
+                              )}
+                            </StyledTableRow>
+                          )}
+                        </Draggable>
+                      );
+                    })}
                   {provided.placeholder}
                 </TableBody>
               )}
@@ -372,10 +400,12 @@ const DraggableTable = ({
         </Table>
       </TableContainer>
       <AlertModal
-      headerText={alertModalHeaderText}
-      open={alertModalOpen}
-      onClose={() => {setAlertModalOpen(false)}}
-       />
+        headerText={alertModalHeaderText}
+        open={alertModalOpen}
+        onClose={() => {
+          setAlertModalOpen(false);
+        }}
+      />
     </>
   );
 };

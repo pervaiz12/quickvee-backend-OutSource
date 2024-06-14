@@ -10,14 +10,16 @@ import { BASE_URL, TAXE_CATEGORY_LIST } from "../../../Constants/Config";
 import axios from "axios";
 const RefundSummary = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
-  useAuthDetails();
-  const [filteredData, setFilteredData] = useState({ category_id: "all",  reason_name: "all"});
+    useAuthDetails();
+  const [filteredData, setFilteredData] = useState({
+    category_id: "all",
+    reason_name: "all",
+  });
   const [seletedReason, setSelectedReason] = useState("All");
   const [selectedLCategoryType, setselectedLCategoryType] = useState("All");
   const [isTablet, setIsTablet] = useState(false);
 
   const handleDataFiltered = (data) => {
-
     if (typeof data === "object") {
       const updatedData = {
         ...filteredData,
@@ -30,41 +32,39 @@ const RefundSummary = () => {
     }
   };
 
- 
-
-
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
       case "seletedReason":
-            if(option.title === "All"){
-                setSelectedReason(option.title)
-                setFilteredData({
-                    ...filteredData,
-                    reason_name: "all",
-                });
-            }else{
-                setSelectedReason(option.title)
-                setFilteredData({
-                    ...filteredData,
-                    reason_name: option.title,
-                });
-            }
+        if (option.title === "All") {
+          setSelectedReason(option.title);
+          setFilteredData({
+            ...filteredData,
+            reason_name: "all",
+          });
+        } else {
+          setSelectedReason(option.title);
+          setFilteredData({
+            ...filteredData,
+            reason_name: option.title,
+          });
+        }
         break;
-        case "category":
-            if (option === "All") {
-              setselectedLCategoryType("All");
-              setFilteredData({
-                ...filteredData,
-                category_id: "all",
-              });
-            } else {
-              const category_id = option.id;
-              setselectedLCategoryType(option.title);
-              setFilteredData({
-                ...filteredData,
-                category_id,
-              });
-            }
+      case "category":
+        if (option === "All") {
+          setselectedLCategoryType("All");
+          setFilteredData({
+            ...filteredData,
+            category_id: "all",
+          });
+        } else {
+          const category_id = option.id;
+          setselectedLCategoryType(option.title);
+          setFilteredData({
+            ...filteredData,
+            category_id,
+          });
+        }
+        break;
       default:
         break;
     }
@@ -84,7 +84,14 @@ const RefundSummary = () => {
     };
   }, []);
 
-  const reasonList = ["All", "Accidental Charge", "Cancelled Order","Defective Item","Fraudulent Order","Returned Goods"];
+  const reasonList = [
+    "All",
+    "Accidental Charge",
+    "Cancelled Order",
+    "Defective Item",
+    "Fraudulent Order",
+    "Returned Goods",
+  ];
 
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
@@ -134,7 +141,7 @@ const RefundSummary = () => {
         <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
-              <h1 className="heading">Refund Summary</h1>
+              <h1 className="heading">Item Refund Report</h1>
             </Grid>
           </Grid>
           <Grid container>

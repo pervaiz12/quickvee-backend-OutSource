@@ -28,9 +28,10 @@ const AddEmployeeFormLogic = ({ employeeList }) => {
   const scrollRef = useRef(null);
   const [showModal, setShowModal] = useState(false);
 
-  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
-  let AuthDecryptDataDashBoardJSONFormat=LoginGetDashBoardRecordJson
-  const merchant_id=AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
+  let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
+  const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
 
   const [values, setValues] = useState({
     firstname: "",
@@ -109,24 +110,24 @@ const AddEmployeeFormLogic = ({ employeeList }) => {
   const handlePhoneInput = (event) => {
     const value = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
     setValues((prevValues) => ({
-        ...prevValues,
-        phone: value,
+      ...prevValues,
+      phone: value,
     }));
-};
-const handlePinInput = (event) => {
+  };
+  const handlePinInput = (event) => {
     const value = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
     setValues((prevValues) => ({
-        ...prevValues,
-        pin: value,
+      ...prevValues,
+      pin: value,
     }));
-};
-const handleZipInput = (event) => {
-  const value = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
-  setValues((prevValues) => ({
+  };
+  const handleZipInput = (event) => {
+    const value = event.target.value.replace(/\D/g, ""); // Remove non-numeric characters
+    setValues((prevValues) => ({
       ...prevValues,
       zipcode: value,
-  }));
-};
+    }));
+  };
 
   const handleAddEmployee = async (e) => {
     e.preventDefault();
@@ -168,13 +169,16 @@ const handleZipInput = (event) => {
         city: values.city,
         zip: values.zipcode,
         state: values.state,
-        token_id:userTypeData?.token_id,
-        login_type:userTypeData?.login_type,
+        token_id: userTypeData?.token_id,
+        login_type: userTypeData?.login_type,
       };
-     
+
       try {
         const response = await axios.post(BASE_URL + ADDEDIT_EMPLOYEE, data, {
-          headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${userTypeData?.token}` },
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${userTypeData?.token}`,
+          },
         });
         console.log(response.data);
         if (response.data.status === true) {

@@ -98,10 +98,10 @@ const VendorSalesReportList = (props) => {
   };
   const formatDateTime = (dateTimeString) => {
     const date = new Date(dateTimeString);
-    const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
-    const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
-    const formattedDate = date.toLocaleDateString('en-US', dateOptions);
-    const formattedTime = date.toLocaleTimeString('en-US', timeOptions);
+    const dateOptions = { year: "numeric", month: "short", day: "numeric" };
+    const timeOptions = { hour: "numeric", minute: "numeric", hour12: true };
+    const formattedDate = date.toLocaleDateString("en-US", dateOptions);
+    const formattedTime = date.toLocaleTimeString("en-US", timeOptions);
     return `${formattedDate} ${formattedTime}`;
   };
 
@@ -124,14 +124,14 @@ const VendorSalesReportList = (props) => {
                       aria-label="customized table"
                     >
                       <TableHead>
-                        <StyledTableCell>
+                        {/* <StyledTableCell>
                           <p>Sr. No</p>
-                        </StyledTableCell>
+                        </StyledTableCell> */}
                         <StyledTableCell>
                           <p>Transaction Date</p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <p>Remark</p>
+                          <p>Description</p>
                         </StyledTableCell>
                         <StyledTableCell>
                           <p>Amount</p>
@@ -140,34 +140,43 @@ const VendorSalesReportList = (props) => {
                       <TableBody>
                         {allVendorData[vendorName]?.map((salesData, index) => (
                           <StyledTableRow key={index}>
-                            <StyledTableCell>
+                            {/* <StyledTableCell>
                               <p>{`${index + 1}`}</p>
-                            </StyledTableCell>
+                            </StyledTableCell> */}
                             <StyledTableCell>
-                              <p>{formatDateTime(salesData.payment_datetime)}</p>
+                              <p>
+                                {formatDateTime(salesData.payment_datetime)}
+                              </p>
                             </StyledTableCell>
                             <StyledTableCell>
                               <p>{salesData.remark}</p>
                             </StyledTableCell>
                             <StyledTableCell>
                               <p>
-                                ${priceFormate(parseFloat(salesData.pay_amount).toFixed(2))}
+                                $
+                                {priceFormate(
+                                  parseFloat(salesData.pay_amount).toFixed(2)
+                                )}
                               </p>
                             </StyledTableCell>
                           </StyledTableRow>
                         ))}
                         <StyledTableRow>
-                        <StyledTableCell> </StyledTableCell>
-                        <StyledTableCell> </StyledTableCell>
+                          {/* <StyledTableCell> </StyledTableCell> */}
+                          <StyledTableCell> </StyledTableCell>
                           <StyledTableCell align="right">
-                            <p style={{color: "#0A64F9" }}>Total</p>
+                            <p style={{ color: "#0A64F9" }}>Total</p>
                           </StyledTableCell>
-                          <StyledTableCell> 
-                            <p style={{   color: "#0A64F9"}}>
+                          <StyledTableCell>
+                            <p style={{ color: "#0A64F9" }}>
                               $
-                              {priceFormate(parseFloat(
-                                calculateTotal(allVendorData[vendorName])
-                              ).toFixed(2))} </p></StyledTableCell>
+                              {priceFormate(
+                                parseFloat(
+                                  calculateTotal(allVendorData[vendorName])
+                                ).toFixed(2)
+                              )}{" "}
+                            </p>
+                          </StyledTableCell>
                         </StyledTableRow>
                       </TableBody>
                     </StyledTable>
@@ -208,7 +217,6 @@ const VendorSalesReportList = (props) => {
               </div> */}
             </React.Fragment>
           ))}
-          
         </>
       ) : (
         <div className="box">

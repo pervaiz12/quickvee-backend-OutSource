@@ -616,7 +616,7 @@ const menuItems = [
         dropDownItems: [
           {
             id: 84,
-            text: "Refund Summary",
+            text: "Item Refund Report",
             link: "/store-settings/refund-report",
           },
           {

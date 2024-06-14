@@ -150,10 +150,10 @@ export default function DashboardTables(props) {
           <TableHead>
             <StyledTableCell align="center">Category</StyledTableCell>
             <StyledTableCell align="center">Name</StyledTableCell>
-            <StyledTableCell align="center">#Sold</StyledTableCell>
+            <StyledTableCell align="center">Sold</StyledTableCell>
             <StyledTableCell align="center">Cost of Item</StyledTableCell>
             <StyledTableCell align="center">Selling Price</StyledTableCell>
-            <StyledTableCell align="center">Profit Percent</StyledTableCell>
+            <StyledTableCell align="center">Profit Margin</StyledTableCell>
             <StyledTableCell align="center">Profit amount</StyledTableCell>
           </TableHead>
           <TableBody>
@@ -169,12 +169,14 @@ export default function DashboardTables(props) {
                     {item?.total_qty}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    {`$${priceFormate(parseFloat(item?.cost_price * item?.total_qty).toFixed(
-                      2
-                    ))}`}
+                    {`$${priceFormate(
+                      parseFloat(item?.cost_price * item?.total_qty).toFixed(2)
+                    )}`}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    {`$${priceFormate(parseFloat(item?.price * item?.total_qty).toFixed(2))}`}
+                    {`$${priceFormate(
+                      parseFloat(item?.price * item?.total_qty).toFixed(2)
+                    )}`}
                   </StyledTableCell>
                   <StyledTableCell align="center">
                     {(() => {
@@ -189,10 +191,12 @@ export default function DashboardTables(props) {
                     })()}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    {`$${priceFormate((
-                      (item?.price - item?.cost_price) *
-                      item?.total_qty
-                    ).toFixed(2))}`}
+                    {`$${priceFormate(
+                      (
+                        (item?.price - item?.cost_price) *
+                        item?.total_qty
+                      ).toFixed(2)
+                    )}`}
                   </StyledTableCell>
                 </StyledTableRow>
               ))
@@ -205,22 +209,32 @@ export default function DashboardTables(props) {
             props.getItemRecord.length > 0 ? (
               <StyledTableRow>
                 <StyledTableCell colSpan={2} align="center">
-                  <p style={{   color: "#0A64F9"}}>Total</p>
+                  <p style={{ color: "#0A64F9" }}>Total</p>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                <p style={{   color: "#0A64F9"}}>{priceFormate(totalCost?.soldQty)}</p>
+                  <p style={{ color: "#0A64F9" }}>
+                    {priceFormate(totalCost?.soldQty)}
+                  </p>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                <p style={{   color: "#0A64F9"}}>{`$${priceFormate(totalCost?.costItem)}`}</p>
+                  <p style={{ color: "#0A64F9" }}>{`$${priceFormate(
+                    totalCost?.costItem
+                  )}`}</p>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                <p style={{   color: "#0A64F9"}}>{`$${priceFormate(totalCost?.totalSelling)}`}</p>
+                  <p style={{ color: "#0A64F9" }}>{`$${priceFormate(
+                    totalCost?.totalSelling
+                  )}`}</p>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                <p style={{   color: "#0A64F9"}}>{`${totalCost?.profitPercentage}%`}</p>
+                  <p
+                    style={{ color: "#0A64F9" }}
+                  >{`${totalCost?.profitPercentage}%`}</p>
                 </StyledTableCell>
                 <StyledTableCell align="center">
-                <p style={{   color: "#0A64F9"}}>{`$${priceFormate(totalCost?.profit)}`}</p>
+                  <p style={{ color: "#0A64F9" }}>{`$${priceFormate(
+                    totalCost?.profit
+                  )}`}</p>
                 </StyledTableCell>
               </StyledTableRow>
             ) : (

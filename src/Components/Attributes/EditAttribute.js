@@ -1,4 +1,3 @@
-
 import React, { useState } from "react";
 import axios from "axios";
 import Button from "@mui/material/Button";
@@ -8,12 +7,11 @@ import CrossIcon from "../../Assests/Dashboard/cross.svg";
 import { BASE_URL, ADD_ATTRIBUTE } from "../../Constants/Config";
 import EditIcon from "../../Assests/Category/editIcon.svg";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
-import { Box, Modal } from '@mui/material';
+import { Box, Modal } from "@mui/material";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const EditDeliveryAddress = ({ attribute, allattributes }) => {
-
   const [nameExists, setNameExists] = useState("");
   const [old_title, setold_title] = useState("");
   const [showModal, setShowModal] = useState(false);
@@ -21,7 +19,8 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
   const [newAttribute, setNewAttribute] = useState("");
   const [submitmessage, setsubmitmessage] = useState("");
 
-  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } = useAuthDetails();
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
   const openModal = () => {
@@ -29,7 +28,6 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
     setNewAttribute(attribute.title);
     setold_title(attribute.title);
   };
-
 
   const closeModal = () => {
     setShowModal(false);
@@ -69,23 +67,23 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
     const data = editItem;
     console.log(data);
     const response = await axios.post(BASE_URL + ADD_ATTRIBUTE, editItem, {
-      headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${userTypeData?.token}` },
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${userTypeData?.token}`,
+      },
     });
     if (response) {
-      dispatch(editAttribute({ id: attribute.id, title: newAttribute }))
+      dispatch(editAttribute({ id: attribute.id, title: newAttribute }));
       ToastifyAlert(response.data.response_message, "success");
       setShowModal(false);
-
     } else {
       setsubmitmessage(response.data.message);
     }
   };
 
-
   setTimeout(() => {
-    setsubmitmessage("")
+    setsubmitmessage("");
   }, 4000);
-
 
   const handleOpen = () => setShowModal(true);
   const handleClose = () => setShowModal(false);
@@ -102,8 +100,12 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
   return (
     <>
       <div>
-        <Button className="modal-main-button edit-delivery-address-button" onClick={openModal}>
-          {/* <img src={Edit}  alt="edit" /> */}<img src={EditIcon} alt="" className="" />
+        <Button
+          className="modal-main-button edit-delivery-address-button"
+          onClick={openModal}
+        >
+          {/* <img src={Edit}  alt="edit" /> */}
+          <img src={EditIcon} alt="" className="" />
         </Button>
         {/* {showModal && (
           <Modal
@@ -147,10 +149,6 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
           </Modal>
         )} */}
 
-
-
-
-
         <Modal
           open={showModal}
           onClose={handleClose}
@@ -158,40 +156,55 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
           aria-describedby="modal-modal-description"
         >
           <Box className="view-category-item-modal" style={myStyles}>
-          <div className="q-add-categories-section-header text-[18px]" style={{ justifyContent:"space-between" ,fontFamily:"CircularSTDBook" }}>
-             
-                <span style={{cursor:"unset"}}>Update Attribute</span>
-              
+            <div
+              className="q-add-categories-section-header text-[18px]"
+              style={{
+                justifyContent: "space-between",
+                fontFamily: "CircularSTDBook",
+              }}
+            >
+              <span style={{ cursor: "unset" }}>Update Attribute</span>
+
               <div>
-              <img src={CrossIcon} alt="icon" className="  quic-btn-cancle w-6 h-6 cursor-pointer" onClick={() => handleClose()} />
+                <img
+                  src={CrossIcon}
+                  alt="icon"
+                  className="  quic-btn-cancle w-6 h-6 cursor-pointer"
+                  onClick={() => handleClose()}
+                />
               </div>
             </div>
 
             <div className="view-category-item-modal-header">
-            <div className="title_attributes_section" style={{margin: "1rem 1rem"}}>
-              <label className="mb-2">Title</label>
-              <BasicTextFields
-                    value={newAttribute}
-                    onChangeFun={changeTittleHandler}
-                    placeholder="Enter attribute title"
-                  />
-              <span className="input-error">
-                {errorMessage !== "" ? errorMessage : ""}
-              </span>
+              <div
+                className="title_attributes_section"
+                style={{ margin: "1rem 1rem" }}
+              >
+                <label className="mb-2">Title</label>
+                <BasicTextFields
+                  value={newAttribute}
+                  onChangeFun={changeTittleHandler}
+                  placeholder="Enter attribute title"
+                />
+                <span className="input-error">
+                  {errorMessage !== "" ? errorMessage : ""}
+                </span>
               </div>
             </div>
 
             <div className="q-add-categories-section-middle-footer">
-              <button onClick={(handleEditAttribute)} className='quic-btn quic-btn-save'>
-                  Update
-                </button>
-                <button onClick={(closeModal)} className='quic-btn quic-btn-cancle'>
-                  Cancel
-                </button>
+              <button
+                onClick={handleEditAttribute}
+                className="quic-btn quic-btn-save"
+              >
+                Update
+              </button>
+              <button onClick={closeModal} className="quic-btn quic-btn-cancle">
+                Cancel
+              </button>
             </div>
           </Box>
         </Modal>
-
       </div>
     </>
   );
