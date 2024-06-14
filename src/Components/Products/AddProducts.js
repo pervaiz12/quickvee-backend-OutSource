@@ -48,7 +48,10 @@ const AddProducts = () => {
   const [fetchDataLoading, setFetchDataLoading] = useState(false);
 
   // find add or edit url
-  const pageUrl = window.location.pathname?.split("/")[1];
+  const pageUrl =
+    window.location.pathname.split("/")[1] +
+    "/" +
+    window.location.pathname.split("/")[2];
 
   // find productId from Url
   const productId = useParams();
@@ -79,11 +82,17 @@ const AddProducts = () => {
   const [inventoryData, setInventoryData] = useState({});
   const [options, setOptions] = useState({});
   const [varientData, setVarientData] = useState([]);
-  console.log("varientData", varientData);
 
-  const [varientLength, setVarientLength] = useState([
+
+  const orderOptions = (values) => {
+    return values
+      .filter((v) => v?.isFixed)
+      .concat(values.filter((v) => !v?.isFixed));
+  };
+
+  const [varientLength, setVarientLength] = useState(orderOptions([
     { id: 1, varientName: "", varientAttributeList: [] },
-  ]);
+  ]));
 
   /// varientTitle combination list
   let varientTitle = [];
@@ -251,7 +260,7 @@ const AddProducts = () => {
         varientLength: "",
         formValue: [],
       });
-      if (pageUrl !== "product-edit") {
+      if (pageUrl !== "product/edit") {
         setVarientLength([
           {
             id: 1,
@@ -290,7 +299,7 @@ const AddProducts = () => {
         varientLength: "",
         formValue: [],
       });
-      if (pageUrl !== "product-edit") {
+      if (pageUrl !== "products/edit") {
         setFormValue([
           {
             costPerItem: "",
@@ -324,7 +333,6 @@ const AddProducts = () => {
     }
   };
 
-  console.log("formValue", formValue);
   const handleOnBlurAttributes = (e) => {
     if (e.key === "Enter" || e.key === "Tab") {
       handleVarientTitleBasedItemList();
@@ -406,7 +414,7 @@ const AddProducts = () => {
   };
 
   const handleSetVarientLength = (updatedVarient) => {
-    setVarientLength(updatedVarient);
+    setVarientLength(orderOptions(updatedVarient));
   };
   const addMoreVarientItems = () => {
     const checkEmpty = varientLength?.map((item, i) => {
@@ -808,7 +816,7 @@ const AddProducts = () => {
                     ["price", "compareAtPrice", "costPerItem"]?.includes(
                       name
                     ) && showError
-                      ? "Price Should be Less than Compare Price"
+                      ? "Compare Price must be greater than price."
                       : [
                             "qty",
                             "upcCode",
@@ -865,7 +873,7 @@ const AddProducts = () => {
                     ["price", "compareAtPrice", "costPerItem"]?.includes(
                       name
                     ) && showError
-                      ? "Price Should be Less than Compare Price"
+                      ? "Compare Price must be greater than price."
                       : [
                             "qty",
                             "upcCode",
@@ -902,7 +910,7 @@ const AddProducts = () => {
         //         profit: !isNaN(parseFloat(profitValue)) ? profitValue : oldMargin([item[currentTitle]?.costPerItem, item[currentTitle]?.margin, item[currentTitle]?.price]) ? item[currentTitle]?.profit : "",
         //         comparePriceError:
         //         ((["price", "compareAtPrice", "costPerItem"]?.includes(name)) && showError)
-        //             ? "Price Should be Less than Compare Price"
+        //             ? "Compare Price must be greater than price."
         //             : (["qty", "upcCode", "customCode", "reorderLevel", "reorderQty"]?.includes(name)) && item[currentTitle]?.comparePriceError ? item[currentTitle]?.comparePriceError : ""
         //     }
         //   }: item
@@ -1070,12 +1078,12 @@ const AddProducts = () => {
                     : "",
                 // comparePriceError:
                 //     ((["price", "compareAtPrice", "costPerItem"].includes(name)) && showError)
-                //         ? "Price Should be Less than Compare Price"
+                //         ? "Compare Price must be greater than price."
                 //         : ""
                 comparePriceError:
                   ["price", "compareAtPrice", "costPerItem"]?.includes(name) &&
                   showError
-                    ? "Price Should be Less than Compare Price"
+                    ? "Compare Price must be greater than price."
                     : [
                           "qty",
                           "upcCode",
@@ -1131,7 +1139,7 @@ const AddProducts = () => {
           comparePriceError:
             ["price", "compareAtPrice", "costPerItem"]?.includes(name) &&
             showError
-              ? "Price Should be Less than Compare Price"
+              ? "Compare Price must be greater than price."
               : [
                     "qty",
                     "upcCode",
@@ -1246,11 +1254,11 @@ const AddProducts = () => {
         //       reorderLevel: previousData.reorderLevel || "",
         //       // here when fetching prodcut data and track and sellout was false but still showing true and check that's why using this condition
         //       trackQuantity:
-        //         previousData.trackQuantity || pageUrl !== "product-edit"
+        //         previousData.trackQuantity || pageUrl !== "products/edit"
         //           ? true
         //           : false,
         //       sellOutOfStock:
-        //         previousData.sellOutOfStock || pageUrl !== "product-edit"
+        //         previousData.sellOutOfStock || pageUrl !== "products/edit"
         //           ? true
         //           : false,
         //       checkId: previousData.checkId || false,
@@ -1273,6 +1281,8 @@ const AddProducts = () => {
 
               return {
                 [title]: {
+                  notEditable: result?.notEditable || "",
+                  productEditId: result?.productEditId || "",
                   costPerItem: result?.costPerItem || "",
                   compareAtPrice: result?.compareAtPrice || "",
                   price: result?.price || "",
@@ -1285,11 +1295,11 @@ const AddProducts = () => {
                   reorderLevel: result?.reorderLevel || "",
                   // here when fetching prodcut data and track and sellout was false but still showing true and check that's why using this condition
                   trackQuantity:
-                    result?.trackQuantity || pageUrl !== "product-edit"
+                    result?.trackQuantity || pageUrl !== "products/edit"
                       ? true
                       : false,
                   sellOutOfStock:
-                    result?.sellOutOfStock || pageUrl !== "product-edit"
+                    result?.sellOutOfStock || pageUrl !== "products/edit"
                       ? true
                       : false,
                   checkId: result?.checkId || false,
@@ -1338,7 +1348,6 @@ const AddProducts = () => {
       dispatch(fetchProductsDataById(formData))
         .then((res) => {
           if (res?.payload?.message === "Success") {
-            console.log("payload", res?.payload);
             setProductData(res?.payload?.data?.productdata);
             setInventoryData(res?.payload?.data?.inventory_setting_data);
             setOptions(res?.payload?.data?.options);
@@ -1361,7 +1370,7 @@ const AddProducts = () => {
 
   useEffect(() => {
     // called fetchproduct data api based on id
-    if (pageUrl === "product-edit") {
+    if (pageUrl === "products/edit") {
       fetchProductDataById();
     }
   }, [pageUrl]);
@@ -1375,7 +1384,7 @@ const AddProducts = () => {
   };
 
   useEffect(() => {
-    if (pageUrl === "product-edit") {
+    if (pageUrl === "products/edit") {
       // fill data fields after fetcing data
       setProductInfo({
         title: productData?.title,
@@ -1427,6 +1436,7 @@ const AddProducts = () => {
                   ?.map((i) => ({
                     label: i,
                     value: i,
+                    isFixed: true,
                   })),
               });
             }
@@ -1449,6 +1459,7 @@ const AddProducts = () => {
                   ?.map((i) => ({
                     label: i,
                     value: i,
+                    isFixed: true,
                   })),
               });
             }
@@ -1471,6 +1482,7 @@ const AddProducts = () => {
                   ?.map((i) => ({
                     label: i,
                     value: i,
+                    isFixed: true,
                   })),
               });
             }
@@ -1482,6 +1494,8 @@ const AddProducts = () => {
           const newFormValue = varientData?.map((val, index) => {
             return {
               [val?.variant]: {
+                notEditable: true,
+                productEditId: val?.id,
                 costPerItem: val?.costperItem || "",
                 compareAtPrice: val?.compare_price || "",
                 price: val?.price || "",
@@ -1502,13 +1516,13 @@ const AddProducts = () => {
             };
             // }
           });
-          console.log("all formValue", newFormValue);
           return newFormValue;
         });
       } else {
         setFormValue(() => {
           const formValue = [
             {
+              productEditId: productData?.id || "",
               costPerItem: productData?.costperItem || "",
               compareAtPrice: productData?.compare_price || "",
               price: productData?.price || "",
@@ -1749,7 +1763,7 @@ const AddProducts = () => {
         ? varientCategory("customCode", "", "0").join(",").trim()
         : "",
 
-      varcostperItem: isMultipleVarient
+      varcostperitem: isMultipleVarient
         ? varientCategory("costPerItem", "", "0.00").join(",").trim()
         : "",
 
@@ -1795,12 +1809,12 @@ const AddProducts = () => {
       // reorder_cost: [10, 10, 10, 10],
     };
 
-    if (pageUrl === "product-edit") {
+    if (pageUrl === "products/edit") {
       data["productid"] = productData?.id ? productData?.id : "";
       data["optionid"] = options?.id ? options?.id : "";
     }
 
-    console.log("data", data);
+
     let checkEmpty;
     if (isMultipleVarient) {
       checkEmpty = varientLength?.map((item, i) => {
@@ -1845,7 +1859,7 @@ const AddProducts = () => {
         for (let i = 0; i < uploadImage.length; i++) {
           formdata.append("files[]", uploadImage[i]);
         }
-        pageUrl === "product-edit"
+        pageUrl === "products/edit"
           ? dispatch(editProductData(formdata))
               .then((res) => {
                 if (res?.payload?.data?.status) {
@@ -1897,11 +1911,6 @@ const AddProducts = () => {
   //   await addVarientFormValidation(name, value, index, error);
   //   handleUpdateError(error);
   // };
-
-  const handleBack=()=>{
-    navigate('/products');
-  }
-
   return (
     <div className="box ">
       {/* edit modal */}
@@ -1933,9 +1942,16 @@ const AddProducts = () => {
           <div className="q-attributes-main-page box_shadow_div">
             <div className="q-add-categories-section">
               <div className="q-add-categories-section-header">
-                <span onclick={handleBack}>
+                <span
+                  onClick={() => {
+                    navigate("/products");
+                  }}
+                >
                   <img src={AddNewCategory} alt="Add-New-Category" />
-                  <span style={{ width: "153px" }}>Add Product</span>
+
+                  <span style={{ width: "153px" }}>
+                    {pageUrl === "products/edit" ? "Edit" : "Add"} Product
+                  </span>
                 </span>
               </div>
               <div className="q-add-categories-section-middle-form">
@@ -2236,7 +2252,7 @@ const AddProducts = () => {
                     {/* Your existing JSX for variant attributes */}
 
                     <div className="q-add-categories-section-middle-footer  ">
-                      {pageUrl === "product-edit" &&
+                      {pageUrl === "products/edit" &&
                       productData?.isvarient === "1" ? (
                         <div
                           className="q-category-bottom-header"
@@ -2256,7 +2272,7 @@ const AddProducts = () => {
                         className="q-category-bottom-header"
                         style={{ marginRight: "67px" }}
                       >
-                        {pageUrl !== "product-edit" ? (
+                        {pageUrl !== "products/edit" ? (
                           <button
                             className="quic-btn quic-btn-save"
                             onClick={handleSubmitForm}

@@ -19,7 +19,15 @@ const VariantAttributes = ({
   addMoreVarientItems,
   handleClearFormData,
 }) => {
-  const pageUrl = window.location.pathname?.split("/")[1];
+
+
+  const styles = {
+
+    multiValueRemove: (base, state) => {
+      return state.data.isFixed ? { ...base, display: "none" } : base;
+    },
+  };
+  const pageUrl = window.location.pathname.split("/")[1] + "/" + window.location.pathname.split("/")[2];
   const [showAttributes, setShowAttributes] = useState(false);
 
 
@@ -62,7 +70,7 @@ const VariantAttributes = ({
     return false;
   };
 
-  const handlechange = (value, index, name) => {
+  const handlechange = (value, index, name, actionMeta) => {
     // validation for add varient item => only ' is allowed and " is not allowed in varient item text
     let filterValue;
     // if value comes from createble varient
@@ -80,9 +88,9 @@ const VariantAttributes = ({
           !item?.label?.includes(`"`)
         );
       });
-    } 
-    
-
+    }else{
+      filterValue = value
+    }
 
 
 
@@ -101,6 +109,18 @@ const VariantAttributes = ({
 
     if (filterVarientListIfAllItemsDelete(index, filterValue)) {
       return;
+    }
+
+    switch (actionMeta.action) {
+      case "remove-value":
+      case "pop-value":
+        if (actionMeta.removedValue.isFixed) {
+          return;
+        }
+        break;
+      case "clear":
+        filterValue = value.filter((v) => v.isFixed);
+        break;
     }
 
     let updateVarientLength = [...varientLength];
@@ -146,6 +166,10 @@ const VariantAttributes = ({
     }
   }, [varientDropdownList]);
 
+
+
+  
+
   const filterDefaultvalue = () => {
     if (filterOptionList?.length > 0) {
       return filterOptionList?.map((option) => ({
@@ -168,7 +192,8 @@ const VariantAttributes = ({
         </div>
       </div>
 
-      {pageUrl !== "product-edit" ? (
+
+      {pageUrl !== "products/edit" ? (
         <div class="multiple-items">
           <span>Multiple Items?*</span>
           <div class="checkbox-area">
@@ -221,7 +246,7 @@ const VariantAttributes = ({
                             //   value: varientDropdownList[0]?.title,
                             //   label: varientDropdownList[0]?.title,
                             // }}
-                            isDisabled={index + 1 < varientLength?.length}
+                            isDisabled={index + 1 < varientLength?.length || pageUrl === "products/edit"}
                           />
                         </div>
                       </div>
@@ -230,15 +255,15 @@ const VariantAttributes = ({
                           <CreatableSelect
                             closeMenuOnSelect={true}
                             components={{ ...animatedComponents }}
+                            styles={styles}
                             value={varient?.varientAttributeList}
-                            onChange={(e) => {
-                              handlechange(e, index, "varientAttributeList");
+                            options={varient?.varientAttributeList}
+                            onChange={(e, actionMeta) => {
+                              handlechange(e, index, "varientAttributeList", actionMeta);
                             }}
                             onKeyDown={handleOnBlurAttributes}
                             isMulti
-                            
-
-                            // options={colourOptions}
+                            isClearable={varient?.varientAttributeList?.some((v) => !v.isFixed)}
                           />
                         </div>
                         {!!varientError?.error &&
@@ -250,6 +275,8 @@ const VariantAttributes = ({
                           ""
                         )}
                       </div>
+                      {
+                        pageUrl !== 'products/edit' ? 
                       <div className="col-qv-2">
                         {varientLength[varientLength?.length - 1]?.id ===
                           varient?.id && varient?.id !== 1 ? (
@@ -267,13 +294,14 @@ const VariantAttributes = ({
                         ) : (
                           ""
                         )}
-                      </div>
+                      </div>:""
+                      }
                     </div>
                   );
                 })
               : ""}
 
-            {varientLength.length < 3 ? (
+            {(+varientLength?.length < 3 &&  pageUrl === "products/add") && pageUrl !== "products/edit" ? (
               <div className="flex">
                 <button
                   className="px-4 py-2 bg-[#0A64F9] text-white rounded-md"

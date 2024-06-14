@@ -18,7 +18,7 @@ const GeneratePUC = ({
   varientData,
 }) => {
   const navigate = useNavigate();
-  const pageUrl = window.location.pathname?.split("/")[1];
+  const pageUrl = window.location.pathname.split("/")[1] + "/" + window.location.pathname.split("/")[2];
   const varientTitle = handleVarientTitleBasedItemList();
   const { varientProduct } = useSelector(
     (state) => state?.productsListData
@@ -45,31 +45,34 @@ const GeneratePUC = ({
   const disabledFields = ["margin", "profit"];
   const disabledFieldsOnEdit = ["margin", "profit", "qty"];
 
-  const disabledInput = (inp) => {
-    if (pageUrl !== "product-edit" && disabledFields.includes(inp?.name)) {
+  const disabledInput = (inp, formDisabledKey) => {
+    if (pageUrl !== "products/edit" && disabledFields.includes(inp?.name) ) {
       return true;
-    } else if (
-      pageUrl === "product-edit" &&
-      disabledFieldsOnEdit.includes(inp?.name)
+    }else if(pageUrl === "products/edit" &&  inp?.name === 'qty' && !formDisabledKey?.notEditable){
+      return false
+    }
+    else if (
+     ( pageUrl === "products/edit" &&
+      disabledFieldsOnEdit.includes(inp?.name)) 
     ) {
       return true;
     } else if (
-      pageUrl === "product-edit" &&
-      +inventoryData?.cost_method === 1 &&
-      inp?.name === "costPerItem"
+     ( pageUrl === "products/edit" &&
+      +inventoryData?.cost_method === 1) &&
+    (  inp?.name === "costPerItem" &&
+      !!formDisabledKey?.notEditable)
     ) {
       return true;
     }
-
     return false;
   };
 
   const handleRedirectHistory = (varientIndex) => {
     if (varientIndex === null) {
-      navigate(`/product/saleshistory/${productData?.id}`, {state: productInfo});
+      navigate(`/products/saleshistory/${productData?.id}`, {state: productInfo});
     } else {
       navigate(
-        `/product/saleshistory/${productData?.id}/${varientData[varientIndex]?.id}`,
+        `/products/saleshistory/${productData?.id}/${varientData[varientIndex]?.id}`,
         {state: productInfo}
       );
     }
@@ -126,7 +129,7 @@ const GeneratePUC = ({
                                     onChange={(e) => handleOnChange(e, index, title)}
                                     onBlur={(e) => handleBlur(e, index, title)}
                                     maxLength={setInputMaxLength(inp?.name)}
-                                    disabled={disabledInput(inp)}
+                                    disabled={disabledInput(inp, formValue?.[index]?.[title])}
                                   />
                                   {!!formValue?.[index]?.[title]?.['comparePriceError'] && inp?.name === "compareAtPrice" ? (
                                     <span className="error-alert">
@@ -260,7 +263,7 @@ const GeneratePUC = ({
                       </label> */}
                     </div>
 
-                    {pageUrl === "product-edit" ? (
+                    {pageUrl === "products/edit" && formValue?.[index]?.[title]?.notEditable ? (
                       <div class="edit-profile-btns">
                         <button
                           className="quic-btn quic-btn-save vendor-btn"
@@ -270,7 +273,7 @@ const GeneratePUC = ({
                             backgroundColor: "#0A64F9",
                           }}
                           onClick={() =>
-                            handleCloseEditModal("single_vendor", index)
+                            handleCloseEditModal("single_vendor", formValue?.[index]?.[title]?.productEditId)
                           }
                         >
                           Vendors
@@ -294,7 +297,7 @@ const GeneratePUC = ({
                             backgroundColor: "#0A64F9",
                           }}
                           onClick={() =>
-                            handleCloseEditModal("single_instant", index)
+                            handleCloseEditModal("single_instant", formValue?.[index]?.[title]?.productEditId)
                           }
                         >
                           Instant PO
@@ -442,7 +445,7 @@ const GeneratePUC = ({
                 </label> */}
               </div>
 
-              {pageUrl === "product-edit" ? (
+              {pageUrl === "products/edit" ? (
                 <div class="edit-profile-btns">
                   <button
                     className="quic-btn quic-btn-save vendor-btn"
@@ -451,7 +454,7 @@ const GeneratePUC = ({
                     style={{
                       backgroundColor: "#0A64F9",
                     }}
-                    onClick={() => handleCloseEditModal("single_vendor", 0)}
+                    onClick={() => handleCloseEditModal("single_vendor", formValue?.[0]?.productEditId)}
                   >
                     Vendors
                   </button>
@@ -473,7 +476,7 @@ const GeneratePUC = ({
                     style={{
                       backgroundColor: "#0A64F9",
                     }}
-                    onClick={() => handleCloseEditModal("single_instant", 0)}
+                    onClick={() => handleCloseEditModal("single_instant", formValue[0]?.productEditId)}
                   >
                     Instant PO
                   </button>
