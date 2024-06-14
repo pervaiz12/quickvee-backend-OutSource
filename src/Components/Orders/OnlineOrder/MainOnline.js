@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Grid, TextField } from "@mui/material";
 import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
-const MainOnline = ({ onFilterDataChange ,searchId,setSearchId}) => {
+const MainOnline = ({ onFilterDataChange, searchId, setSearchId }) => {
   const transactionsList = [
     {
       title: "Both",
@@ -26,7 +26,6 @@ const MainOnline = ({ onFilterDataChange ,searchId,setSearchId}) => {
       title: "Failed",
     },
   ];
-
 
   console.log("setSearchId", searchId);
   const handleSearch = () => {
@@ -175,7 +174,6 @@ const MainOnline = ({ onFilterDataChange ,searchId,setSearchId}) => {
           )}
         </Grid>
       </Grid>
-   
     </>
   );
 };

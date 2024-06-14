@@ -1,9 +1,9 @@
 import React, { useState, forwardRef } from "react";
 import { Box, Modal } from "@mui/material";
-import DeleteIcon from "../Assests/Category/deleteIcon.svg";
+import Move from "../Assests/ModalImages/moved.svg"
 import Slide from "@mui/material/Slide";
 
-const DeleteModal = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
+const SortModal = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
   const myStyles = {
     width: "45vh",
     position: "absolute",
@@ -25,9 +25,9 @@ const DeleteModal = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
           <Box className="delete-Box-modal" style={myStyles}>
             <div className="delete-modal">
               <div className="delete-modal-content">
-                <img src={DeleteIcon} alt={`Delete-icon`} loading="lazy" />
+                <img src={Move} alt={`Delete-icon`} loading="lazy" />
                 <span>
-                Are you sure you want to <br /> delete this{" "}
+                Are you sure you want to <br />{" "}
                   {headerText ? headerText : "delete"} ? {otherMSG ? <><br/>{otherMSG}</> :""}
                 </span>
               </div>
@@ -37,7 +37,7 @@ const DeleteModal = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
                   onClick={onConfirm}
                   style={{ background: " #FF4040", color: "#fff" }}
                 >
-                  Delete
+                  Sort
                 </button>
               </div>
             </div>
@@ -48,4 +48,4 @@ const DeleteModal = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
   );
 };
 
-export default DeleteModal;
+export default SortModal;

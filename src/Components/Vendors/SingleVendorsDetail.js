@@ -26,6 +26,7 @@ import { useAuthDetails } from "../../Common/cookiesHelper";
 import { useParams } from "react-router-dom";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import PasswordShow from "../../Common/passwordShow";
 const options = [
   "Select Range",
   "Today",
@@ -37,6 +38,7 @@ const options = [
 
 const SingleVendorsDetail = ({ setVisible }) => {
   const Navigate = useNavigate()
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } = useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
@@ -88,13 +90,14 @@ const SingleVendorsDetail = ({ setVisible }) => {
       const response = await axios.post(BASE_URL + GET_VENDOR_DETAILS, data, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`, // Use data?.token directly
+          Authorization: `Bearer ${token}`,
         },
       });
 
       setVendorDetails(response.data.vendor_details);
     } catch (error) {
-      console.error("Error:", error);
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
     }
   };
 

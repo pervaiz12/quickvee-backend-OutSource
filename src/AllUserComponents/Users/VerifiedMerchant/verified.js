@@ -536,7 +536,7 @@ export default function Verified({setVisible,setMerchantId}) {
             onConfirm={confirmDeleteCategory}
           />
           <DislikeModal
-          headerText="Are you sure you want to unapprove this store"
+          headerText="Are you sure you want to Disapprove this store"
           open={dislikeModalOpen}
           onClose={() => {setDislikeModalOpen(false)}}
           onConfirm={confirmDislikeStore}

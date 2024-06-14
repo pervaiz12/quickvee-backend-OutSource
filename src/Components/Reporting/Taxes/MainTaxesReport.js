@@ -11,7 +11,7 @@ import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent"
 const MainTaxesReport = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-  const [filteredData, setFilteredData] = useState([]);
+  const [filteredData, setFilteredData] = useState('');
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   const handleDataFiltered = (data) => {
     if (typeof data === "object") {

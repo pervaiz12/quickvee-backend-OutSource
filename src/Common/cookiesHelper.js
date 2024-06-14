@@ -32,10 +32,3 @@ export const useAuthDetails=()=>{
    
     return {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData,GetSessionLogin}
 }
-export const handleLogoutTokenExpire=()=>{
-    Cookies.remove('loginDetails');
-    Cookies.remove('user_auth_record');
-    Cookies.remove('token_data');
-    localStorage.removeItem("AllStore")
-  
-}

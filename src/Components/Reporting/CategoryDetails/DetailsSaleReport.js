@@ -15,6 +15,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { priceFormate } from "../../../hooks/priceFormate";
+import PasswordShow from "../../../Common/passwordShow";
+import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -45,6 +47,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const DetailsSaleReport = ({ data }) => {
   const dispatch = useDispatch();
+
+  const { handleCoockieExpire } = PasswordShow();
   const {
     LoginGetDashBoardRecordJson,
     LoginAllStore,
@@ -61,23 +65,31 @@ const DetailsSaleReport = ({ data }) => {
   );
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
-    if (!merchant_id) {
-      console.log("empty");
-    } else {
-      let NewData = {
-        ...data,
-        merchant_id,
-        // merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-        order,
-        sorting_type,
-        ...userTypeData,
-      };
-      // console.log(data);
-      // console.log(NewData);
-
-      dispatch(fetchdetailCategorySaleData(NewData));
-    }
+    getDetailedCategorySalesData();
   }, [dispatch, data, order, sorting_type]);
+  const getDetailedCategorySalesData = async () => {
+    try {
+      if (!merchant_id) {
+        console.log("empty");
+      } else {
+        let NewData = {
+          ...data,
+          merchant_id,
+          // merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+          order,
+          sorting_type,
+          ...userTypeData,
+        };
+        // console.log(data);
+        // console.log(NewData);
+
+        await dispatch(fetchdetailCategorySaleData(NewData)).unwrap();
+      }
+    } catch (error) {
+      handleCoockieExpire();
+      dispatch(getAuthInvalidMessage("your session has been expired"));
+    }
+  };
 
   useEffect(() => {
     if (
@@ -174,7 +186,9 @@ const DetailsSaleReport = ({ data }) => {
                         <StyledTableCell align="left">
                           $
                           {item.product_total
-                            ? priceFormate(parseFloat(item.product_total).toFixed(2))
+                            ? priceFormate(
+                                parseFloat(item.product_total).toFixed(2)
+                              )
                             : "0.00"}
                         </StyledTableCell>
                       </StyledTableRow>
@@ -186,12 +200,15 @@ const DetailsSaleReport = ({ data }) => {
                       <StyledTableCell></StyledTableCell>
                       <StyledTableCell align="left">
                         $
-                        {priceFormate(items
-                          .reduce(
-                            (acc, item) => acc + parseFloat(item.product_total),
-                            0
-                          )
-                          .toFixed(2))}
+                        {priceFormate(
+                          items
+                            .reduce(
+                              (acc, item) =>
+                                acc + parseFloat(item.product_total),
+                              0
+                            )
+                            .toFixed(2)
+                        )}
                       </StyledTableCell>
                     </StyledTableRow>
                   </TableBody>

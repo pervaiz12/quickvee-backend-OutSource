@@ -8,7 +8,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import {
   useAuthDetails,
-  handleLogoutTokenExpire,
 } from "../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 
@@ -85,7 +84,7 @@ export default function EditMerchantFunctionality() {
           } else {
             setInventory(true);
           }
-          // console.log(inventory)
+          console.log(response)
           const a_zipCode =
             response.data.message?.row?.a_zip !== null
               ? response.data.message.row?.a_zip
@@ -104,19 +103,19 @@ export default function EditMerchantFunctionality() {
               ? response.data.message?.row?.a_city
               : "";
           const username =
-            response.data.message?.row?.email !== null
-              ? response.data.message?.row?.email
+            response?.data?.message?.row?.email !== null
+              ? response?.data?.message?.row?.email
               : "";
           const name =
-            response.data.message.row.name !== null
-              ? response.data.message.row.name
+            response?.data?.message?.row?.name !== null
+              ? response?.data?.message?.row?.name
               : "";
           const State =
             response.data.message.row.a_state !== null
               ? response.data.message.row.a_state
               : "";
           const Merchant_token =
-            response.data.message.row.merchant_token !== null
+            response.data?.message?.row?.merchant_token !== null
               ? response.data.message.row.merchant_token
               : "";
           const Phone =
@@ -342,7 +341,6 @@ export default function EditMerchantFunctionality() {
         }
       } catch (e) {
         console.log("Exception", e);
-        handleLogoutTokenExpire();
         navigate("/");
       }
     }

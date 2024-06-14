@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="104" height="104" viewBox="0 0 104 104">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="path451" d="M0-682.665H43.333v43.333H0Z" transform="translate(0 682.665)"/>
+    </clipPath>
+  </defs>
+  <g id="Group_5989" data-name="Group 5989" transform="translate(-908 -401)">
+    <circle id="Ellipse_329" data-name="Ellipse 329" cx="52" cy="52" r="52" transform="translate(908 401)" fill="#e8f1ff"/>
+    <g id="check-mark" transform="translate(938.333 432.664)">
+      <g id="g441" transform="translate(0 0.002)">
+        <g id="g443" transform="translate(13.286 15.989)">
+          <path id="path445" d="M-247.3,0l-11.356,11.356-5.406-5.406" transform="translate(264.062)" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"/>
+        </g>
+        <g id="g447" transform="translate(0 0)">
+          <g id="g449" clip-path="url(#clip-path)">
+            <g id="g455" transform="translate(1.693 1.693)">
+              <path id="path457" d="M-589.384-294.692a19.974,19.974,0,0,1-19.974,19.974,19.974,19.974,0,0,1-19.974-19.974,19.974,19.974,0,0,1,19.974-19.974A19.974,19.974,0,0,1-589.384-294.692Z" transform="translate(629.332 314.666)" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"/>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>

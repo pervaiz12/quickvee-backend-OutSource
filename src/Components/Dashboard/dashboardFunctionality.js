@@ -23,18 +23,26 @@ export default function DashboardFunctionality() {
     merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
   };
   const getDashboardCountRecord = async () => {
-    const response = await axios.post(BASE_URL + DASHBOARD_COUNT_STORE, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (response?.data?.status == true) {
-      setDashboardCount(response?.data);
+    try{
+      const response = await axios.post(BASE_URL + DASHBOARD_COUNT_STORE, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response?.data?.status == true) {
+        setDashboardCount(response?.data);
+      }
+
+    }catch(error){
+      console.log("token expire")
+
     }
+   
   };
 
   const getDashboardTableRecord = async () => {
+    try{
     const response = await axios.post(BASE_URL + DASHBOARD_TABLE_LIST, data, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -46,6 +54,9 @@ export default function DashboardFunctionality() {
       setDashboardRecord(response?.data?.data);
       // setDashboardCount(response?.data);
     }
+  }catch(error){
+    console.log("error")
+  }
   };
   useEffect(() => {
     getDashboardCountRecord();

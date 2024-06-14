@@ -7,6 +7,9 @@ import CircularProgress from "@mui/material/CircularProgress";
 import PasswordShow from "../../../../Common/passwordShow";
 
 export default function EditAdmin({EditAdminId,setVisible}) {
+  const handleClick=()=>{
+    setVisible("AdminView")
+  }
   const {
     handleEditAdmin,
     editData,
@@ -15,7 +18,7 @@ export default function EditAdmin({EditAdminId,setVisible}) {
     errors,
     handleKeyPress,
     loader,
-  } = EditAdminFunctionality();
+  } = EditAdminFunctionality(handleClick);
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const { showpPassword, jsxData } = PasswordShow();
@@ -26,9 +29,6 @@ export default function EditAdmin({EditAdminId,setVisible}) {
   useEffect(() => {
     handleEditAdmin({ admin_id: EditAdminId, ...userTypeData });
   }, [EditAdminId]);
-  const handleClick=()=>{
-    setVisible("AdminView")
-  }
   return (
     <div className="box">
       <div className="box_shadow_div">
@@ -119,7 +119,8 @@ export default function EditAdmin({EditAdminId,setVisible}) {
             {loader ? <CircularProgress /> : "Update"}
           </button>
           <button
-            onClick={() => navigate("/users/admin")}
+            // onClick={() => navigate("/users/admin")}
+            onClick={ handleClick}
             className="quic-btn quic-btn-cancle"
           >
             Cancel

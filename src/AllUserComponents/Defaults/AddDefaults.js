@@ -175,7 +175,8 @@ const AddDefaults = ({ setVisible }) => {
         // alert(
         //   `${file.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`
         // );
-        showModal(`${file.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`)
+        // showModal(`${file.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`)
+        showModal("Only jpeg, png, jpg files can be uploaded")
         e.target.value = null;
       }
     }
@@ -197,7 +198,7 @@ const AddDefaults = ({ setVisible }) => {
     if (/\d/.test(e.key)) {
       e.preventDefault(); // Prevent input of numbers
       // alert("Only Alphabets are allowed.");
-      showModal("Only Alphabets are allowed.")
+      showModal("Only alphabet characters are allowed")
     }
   };
 
