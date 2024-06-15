@@ -6,6 +6,7 @@ import InstoreTableViewData from "./InstoreTableViewData";
 import OnlineTableViewData from "../OnlineOrder/OnlineTableViewData";
 import MainOnline from "../OnlineOrder/MainOnline";
 import {useAuthDetails} from "../../../Common/cookiesHelper"
+import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 
 const MainInStore = () => {
   const [activeTab, setActiveTab] = useState("offline");
@@ -99,7 +100,7 @@ const MainInStore = () => {
           {!searchId && (
             <>
               <div className="q_dateRange_header">
-                <DateRange onDateRangeChange={handleDateRangeChange} />
+                <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
               </div>
               <div className="q_dateRange_header">
                 <ContentList />

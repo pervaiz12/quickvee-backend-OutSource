@@ -16,7 +16,7 @@ import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchStocktakeList } from "../../Redux/features/Stocktake/StocktakeListSlice";
+import { fetchStocktakeList, getStocktakeListCount } from "../../Redux/features/Stocktake/StocktakeListSlice";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import useDebounce from "../../hooks/useDebouncs";
 
@@ -74,6 +74,20 @@ const StocktakeList = ({
    
     dispatch(fetchStocktakeList(data));
   }, [currentPage, debouncedValue, rowsPerPage]);
+
+  useEffect(() => {
+    dispatch(
+      getStocktakeListCount({
+        ...userTypeData,
+        merchant_id: "MAL0100CA",
+        search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+      })
+    );
+  }, [debouncedValue]);
+
+  useEffect(() => {
+    setTotalCount(StocktakeListReducerState.stocktakeListCount);
+  }, [StocktakeListReducerState.stocktakeListCount]);
 
   const handleSearchInputChange = (value) => {
     setSearchId(value);

@@ -309,7 +309,8 @@ module.exports = Object.freeze({
   GET_STOCKTAKE_LIST: "Stocktake_react_api/stocktake_list",
   CREATE_UPDATE_STOCKTAKE: "Stocktake_react_api/create_update_stocktake",
 
-  VOID_STOCKTAKE: "Stocktake_react_api/void_stocktake"
+  VOID_STOCKTAKE: "Stocktake_react_api/void_stocktake",
+  STOCKTAKE_LIST_COUNT: "Stocktake_react_api/stocktake_count",
 });
 
 // All api calls are initialized in this component for this application

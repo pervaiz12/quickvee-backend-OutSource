@@ -38,9 +38,10 @@ export const fetchOnlieStoreOrderData = createAsyncThunk(
 export const fetchOrderChangeStatusData = createAsyncThunk(
   "onlineStoreOrder/fetchOrderChangeStatusData.",
   async (data) => {
+    const{token,...newData}=data
     try {
-      const response = await axios.post(BASE_URL + UPDATE_ORDER_STATUS, data, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const response = await axios.post(BASE_URL + UPDATE_ORDER_STATUS, newData, {
+        headers: { "Content-Type": "multipart/form-data" ,Authorization: `Bearer ${token}`},
       });
       console.log(response);
       if (response.data.status === true) {

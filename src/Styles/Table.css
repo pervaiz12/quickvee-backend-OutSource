@@ -102,12 +102,14 @@ table.dataTable tbody td {
     color: #0A64F9;
 }
 
-.view_details_order{
-    border-bottom: 1px solid #0A64F9;
-    color:#0A64F9;
+.view_details_order {
+    color: #0A64F9;
     font-family: CircularSTDMedium !important;
     font-size: 15px;
     cursor: pointer;
+    text-decoration: underline; /* Adds an underline to the text */
+    text-decoration-color: #0A64F9; /* Sets the color of the underline */
+    text-underline-offset: 2px; /* Optional: Adjusts the distance between text and underline */
 }
 
 /* .order_status_details_quivkwee{

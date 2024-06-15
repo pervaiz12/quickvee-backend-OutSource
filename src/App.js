@@ -147,7 +147,7 @@ function App() {
         />
         <Route element={<ProtectedOrderSummery visible="manager" />}>
           <Route
-            path="/store-reporting/order-summary/:merchant_id/:order_id"
+            path="/order/store-reporting/order-summary/:merchant_id/:order_id"
             element={<PaymentCalDetails visible={"order-summary"} />}
           />
         </Route>

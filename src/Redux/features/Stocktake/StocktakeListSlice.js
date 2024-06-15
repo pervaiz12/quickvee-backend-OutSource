@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { BASE_URL, GET_STOCKTAKE_LIST } from "../../../Constants/Config";
+import { BASE_URL, GET_STOCKTAKE_LIST,STOCKTAKE_LIST_COUNT } from "../../../Constants/Config";
 
 const initialState = {
   loading: false,
   StocktakeList: [],
+  stocktakeListCount:0,
   successMessage: "",
   error: "",
 };
@@ -36,6 +37,26 @@ export const fetchStocktakeList = createAsyncThunk(
   }
 );
 
+export const getStocktakeListCount = createAsyncThunk(
+  "purchase/getPurchaseOrderCount",
+  async (data) => {
+    const { token, ...dataNew } = data;
+    const response = await axios.post(
+      BASE_URL + STOCKTAKE_LIST_COUNT,
+      dataNew,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`, // Use data?.token directly
+        },
+      }
+    );
+    // console.log("getPurchaseOrderCount: ", response);
+    if (response.status == 200) {
+      return response.data.result;
+    }
+  }
+);
 const StocktakeListSlice = createSlice({
   name: "stocktake",
   initialState,
@@ -52,6 +73,12 @@ const StocktakeListSlice = createSlice({
       state.loading = false;
       state.StocktakeList = {};
       state.error = action.error.message;
+    });
+    builder.addCase(getStocktakeListCount.fulfilled, (state, action) => {
+      state.stocktakeListCount = action.payload;
+    });
+    builder.addCase(getStocktakeListCount.rejected, (state, action) => {
+      state.stocktakeListCount = 0;
     });
   },
 });

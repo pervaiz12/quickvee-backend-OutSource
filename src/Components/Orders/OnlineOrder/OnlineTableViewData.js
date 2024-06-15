@@ -3,6 +3,16 @@ import React, { useEffect, useState } from "react";
 import CrossIcon from "../../../Assests/Dashboard/cross.svg";
 // import Pagination from "react-js-pagination";
 // import DefaultPagination from "../onlineStoreOrder/DefaultPagination";
+
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import { Grid } from "@mui/material";
+
 import {
   fetchOnlieStoreOrderData,
   fetchOrderChangeStatusData,
@@ -17,8 +27,42 @@ import UpArrow from "../../../Assests/Dashboard/Up.svg";
 
 import $ from "jquery";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import Pagination from "../../../AllUserComponents/Users/UnverifeDetails/Pagination";
+import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
+import { useNavigate } from "react-router-dom";
+import EditCashModel from "./EditCashModel";
+import { CurrencyInputHelperFun } from "../../../Constants/utils";
 
+const StyledTable = styled(Table)(({ theme }) => ({
+  padding: 2, // Adjust padding as needed
+}));
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#253338",
+    color: theme.palette.common.white,
+    fontFamily: "CircularSTDBook !important",
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+    fontFamily: "CircularSTDMedium",
+  },
+  [`&.${tableCellClasses.table}`]: {
+    fontSize: 14,
+    fontFamily: "CircularSTDMedium",
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  "&:last-child td, &:last-child th": {
+    // backgroundColor: "#F5F5F5",
+  },
+}));
 const OnlineTableViewData = (props) => {
+  const navigate = useNavigate();
   // console.log(props)
   const [allOnlineStoreOrder, setAllOnlineStoreOrders] = useState([]);
   const AllInStoreDataState = useSelector((state) => state.onlineStoreOrder);
@@ -35,7 +79,7 @@ const OnlineTableViewData = (props) => {
           end_date: props.selectedDateRange?.end_date,
           customer_id: "0",
           search_by: props?.OnlSearchIdData,
-          ...props.userTypeData
+          ...props.userTypeData,
         };
 
         if (data) {
@@ -69,6 +113,7 @@ const OnlineTableViewData = (props) => {
             merchant_id: props.merchant_id,
             order_id: orderId,
             m_status: selectedOption,
+            ...props.userTypeData,
           };
           if (FormData) {
             // console.log("API call hogai");
@@ -124,11 +169,12 @@ const OnlineTableViewData = (props) => {
   // for closed order edit button end.
 
   const changeReceivingAmount = (event) => {
-    const inputValue = event.target.value;
+    const inputValue = CurrencyInputHelperFun(event.target.value);
     setNewReceivingAmount(inputValue);
   };
 
   const handleAddReceivingAmount = async () => {
+    const { token, ...otherUserData } = props.userTypeData;
     const newItem = {
       merchant_id: props.merchant_id,
       order_id: newOrderId,
@@ -139,9 +185,12 @@ const OnlineTableViewData = (props) => {
     // console.log(data);
     const response = await axios.post(
       BASE_URL + CLOSE_ORDER_COLLECT_CASH,
-      data,
+      {...data,...otherUserData},
       {
-        headers: { "Content-Type": "multipart/form-data" },
+        headers: { 
+          "Content-Type": "multipart/form-data" ,
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
     // console.log(response);
@@ -158,7 +207,7 @@ const OnlineTableViewData = (props) => {
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
-  // console.log(allOnlineStoreOrder);
+  console.log(allOnlineStoreOrder);
   useEffect(() => {
     const modifiedData = Object.entries(allOnlineStoreOrder).map(
       ([key, data], i) => {
@@ -209,23 +258,47 @@ const OnlineTableViewData = (props) => {
         } else if (props?.OrderTypeData == "New") {
           let cancelOption = "";
           if (data.payment_id === "Cash") {
-            cancelOption = `<option value="5" ${data.m_status == "5" ? `selected` : ""}>Cancel</option>`;
+            cancelOption = `<option value="5" ${
+              data.m_status == "5" ? `selected` : ""
+            }>Cancel</option>`;
           }
           if (data.order_method == "pickup") {
-            PayStatus = `<select class="custom-selecttable w-52 cursor-pointer" data-order-id="${data.order_id}">
-              <option value="1" ${data.m_status == "1" ? `selected` : ""}>Accepted</option>
-              <option value="2" ${data.m_status == "2" ? `selected` : ""}>Packing</option>
-              <option value="3" ${data.m_status == "3" ? `selected` : ""}>Ready</option>
-              <option value="4" ${data.m_status == "4" ? `selected` : ""}>Completed</option>
+            PayStatus = `<select class="custom-selecttable w-52 cursor-pointer" data-order-id="${
+              data.order_id
+            }">
+              <option value="1" ${
+                data.m_status == "1" ? `selected` : ""
+              }>Accepted</option>
+              <option value="2" ${
+                data.m_status == "2" ? `selected` : ""
+              }>Packing</option>
+              <option value="3" ${
+                data.m_status == "3" ? `selected` : ""
+              }>Ready</option>
+              <option value="4" ${
+                data.m_status == "4" ? `selected` : ""
+              }>Completed</option>
               ${cancelOption}
             </select>`;
           } else {
-            PayStatus = `<select class="custom-selecttable w-52 cursor-pointer" data-order-id="${data.order_id}">
-              <option value="1" ${data.m_status == "1" ? `selected` : ""}>Accepted</option>
-              <option value="2" ${data.m_status == "2" ? `selected` : ""}>Packing</option>
-              <option value="6" ${data.m_status == "6" ? `selected` : ""}>Ready</option>
-              <option value="3" ${data.m_status == "3" ? `selected` : ""}>Out for Delivery</option>
-              <option value="4" ${data.m_status == "4" ? `selected` : ""}>Delivered</option>
+            PayStatus = `<select class="custom-selecttable w-52 cursor-pointer" data-order-id="${
+              data.order_id
+            }">
+              <option value="1" ${
+                data.m_status == "1" ? `selected` : ""
+              }>Accepted</option>
+              <option value="2" ${
+                data.m_status == "2" ? `selected` : ""
+              }>Packing</option>
+              <option value="6" ${
+                data.m_status == "6" ? `selected` : ""
+              }>Ready</option>
+              <option value="3" ${
+                data.m_status == "3" ? `selected` : ""
+              }>Out for Delivery</option>
+              <option value="4" ${
+                data.m_status == "4" ? `selected` : ""
+              }>Delivered</option>
               ${cancelOption}
             </select>`;
           }
@@ -287,8 +360,300 @@ const OnlineTableViewData = (props) => {
     };
   }, [allOnlineStoreOrder, props]);
 
+  const tableRow = ["Customer", "Order", "Amount", "Order Status", ""];
+  const pickupStatusList = [
+    {
+      title: "Accepted",
+      value: "1",
+    },
+    {
+      title: "Packing",
+      value: "2",
+    },
+    {
+      title: "Ready",
+      value: "3",
+    },
+    {
+      title: "Completed",
+      value: "4",
+    },
+  ];
+  const deliveryStatusList = [
+    {
+      title: "Accepted",
+      value: "1",
+    },
+    {
+      title: "Packing",
+      value: "2",
+    },
+    {
+      title: "Ready",
+      value: "6",
+    },
+    {
+      title: "Out for Delivery",
+      value: "3",
+    },
+    {
+      title: "Delivered",
+      value: "4",
+    },
+  ];
+  const handleDropDownChange = async (option) => {
+    console.log("handleDropDownChange", option);
+
+    // Confirming with the user before proceeding
+    var success = window.confirm("Are you sure you want to change status");
+
+    // Proceed if the user confirms
+    if (success === true) {
+      // Constructing form data to send to the server
+      const FormData = {
+        merchant_id: props.merchant_id,
+        order_id: option.orderId,
+        m_status: option.value,
+        ...props.userTypeData,
+      };
+
+      // Dispatching an action to change the order status
+      if (FormData) {
+        try {
+          const res = await dispatch(fetchOrderChangeStatusData(FormData));
+
+          // Checking if the API call was successful
+          if (res.status === true) {
+            // Update the local state with the updated order data
+            setAllOnlineStoreOrders((prevState) => {
+              // Find the index of the order to update
+              const index = prevState.findIndex(
+                (order) => order.order_id === option.orderId
+              );
+
+              if (index !== -1) {
+                // Create a copy of the order object
+                const updatedOrder = { ...prevState[index] };
+
+                // Update the m_status field with the new value
+                updatedOrder.m_status = option.value;
+
+                // Create a new array with updated order object
+                const updatedOrders = [...prevState];
+                updatedOrders[index] = updatedOrder;
+
+                return updatedOrders;
+              } else {
+                // Order not found, return previous state unchanged
+                return prevState;
+              }
+            });
+          } else {
+            // Handle other status codes or errors if needed
+            console.error("Failed to update order status:", res.statusText);
+            // Optionally show an error message or handle the error state
+          }
+        } catch (error) {
+          console.error("Error while updating order status:", error.message);
+          // Handle any network or other errors that may occur during the API call
+        }
+      }
+    }
+  };
+  const orderStatus = (data) => {
+    if (props?.OrderTypeData === "New") {
+      const currentList =
+        data && data.order_method === "pickup"
+          ? pickupStatusList
+          : deliveryStatusList;
+      const cancelOption = {
+        title: "Cancel",
+        value: "5",
+      };
+      const withCanceledOption =
+        data.payment_id === "Cash"
+          ? [...currentList, cancelOption]
+          : currentList;
+      const selectedItem = currentList.find(
+        (item) => item.value === data.m_status
+      ) || { title: "" };
+      return (
+        <SelectDropDown
+          listItem={withCanceledOption.map((item) => ({
+            ...item,
+            orderId: data.order_id,
+          }))}
+          title={"title"}
+          selectedOption={selectedItem.title}
+          onClickHandler={handleDropDownChange}
+        />
+      );
+    }
+
+    let PayStatus = "";
+    let OrderStatus = "";
+
+    if (data.m_status == 5) {
+      OrderStatus = "Cancelled";
+    } else if (data.payment_id === "Cash") {
+      OrderStatus = "Cash";
+    } else {
+      OrderStatus = "Online-Paid";
+    }
+
+    if (props?.OrderTypeData === "Closed") {
+      if (
+        OrderStatus === "Cash" &&
+        parseFloat(data?.cash_collected)?.toFixed(2) !=
+          parseFloat(data?.amt)?.toFixed(2)
+      ) {
+        return (
+          <>
+            <EditCashModel
+              changeReceivingAmount={changeReceivingAmount}
+              newReceivingAmount={newReceivingAmount}
+              handleAddReceivingAmount={handleAddReceivingAmount}
+              data={data}
+              setNewOrderId={setNewOrderId}
+              setNewOrderAmount={setNewOrderAmount}
+            />
+          </>
+        );
+      } else if (OrderStatus == "Cancelled") {
+        return "Cancelled";
+      } else {
+        return "Paid";
+      }
+    }
+  };
+  
   return (
     <>
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <Pagination
+              // currentPage={currentPage}
+              // totalItems={totalCount}
+              // itemsPerPage={rowsPerPage}
+              // onPageChange={paginate}
+              // rowsPerPage={rowsPerPage}
+              // setRowsPerPage={setRowsPerPage}
+              // setCurrentPage={setCurrentPage}
+              />
+            </Grid>
+          </Grid>
+          <Grid container>
+            <Grid item xs={12}>
+              {AllInStoreDataState.loading ? (
+                <>
+                  <SkeletonTable columns={tableRow} />
+                </>
+              ) : (
+                <>
+                  <TableContainer>
+                    <StyledTable
+                      sx={{ minWidth: 500 }}
+                      aria-label="customized table"
+                    >
+                      <TableHead>
+                        {tableRow.map((item, index) => (
+                          <StyledTableCell key={item}>{item}</StyledTableCell>
+                        ))}
+                      </TableHead>
+                      <TableBody>
+                        {allOnlineStoreOrder &&
+                        Object.entries(allOnlineStoreOrder).length > 0 ? (
+                          Object.entries(allOnlineStoreOrder)?.map(
+                            ([key, data], index) => {
+                              ////////////////////Showing Status///////////////////////////
+                              let status = "";
+                              if (props?.OrderTypeData == "Failed") {
+                                if (data.is_tried == "0") {
+                                  status = "Incomplete order";
+                                } else {
+                                  status = "Failed payment";
+                                }
+                              } else {
+                                if (data.payment_id === "Cash") {
+                                  if (data.m_status === "4") {
+                                    status = "Cash-Paid";
+                                  } else {
+                                    status = "Cash-Pending";
+                                  }
+                                } else {
+                                  status = "Online-Paid";
+                                }
+                              }
+                              /////////////////////end of Showing Stat////////////////////////////////
+
+                              ////////////////////////pickup and delovery dropdown//////////////////////////////////////////
+
+                              /////////////////////end pickup and delovery dropdown//////////////////////////////////////////
+
+                              return (
+                                <>
+                                  <StyledTableRow key={index}>
+                                    <StyledTableCell>
+                                      <p className="text-[#000000] order_method">
+                                        {data.deliver_name || ""}
+                                      </p>
+                                      <p className="text-[#818181]">
+                                        {data.delivery_phn || ""}
+                                      </p>
+                                    </StyledTableCell>
+                                    <StyledTableCell>
+                                      <p className="text-[#000000] order_method">
+                                        {data.order_id || ""}
+                                      </p>
+                                      <p className="text-[#818181]">
+                                        {data.merchant_time || ""}
+                                      </p>
+                                      <p className="text-[#818181] order_method">
+                                        {data.order_method || ""}
+                                      </p>
+                                    </StyledTableCell>
+                                    <StyledTableCell>
+                                      <p>{"$" + data.amt || ""}</p>
+                                      <p className="text-[#1EC26B]">
+                                        {capitalizeFirstLetter(
+                                          data.order_status || ""
+                                        )}
+                                      </p>
+                                    </StyledTableCell>
+                                    <StyledTableCell>
+                                      {orderStatus(data)}
+                                    </StyledTableCell>
+                                    <StyledTableCell>
+                                      <span
+                                        className="view_details_order"
+                                        onClick={() =>
+                                          navigate(
+                                            `/order/store-reporting/order-summary/${"MAL0100CA"}/${data.order_id}`
+                                          )
+                                        }
+                                      >
+                                        View Details
+                                      </span>
+                                    </StyledTableCell>
+                                  </StyledTableRow>
+                                </>
+                              );
+                            }
+                          )
+                        ) : (
+                          <></>
+                        )}
+                      </TableBody>
+                    </StyledTable>
+                  </TableContainer>
+                </>
+              )}
+            </Grid>
+          </Grid>
+        </Grid>
+      </Grid>
       <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
           <table className="" id="OnlineStoreTable"></table>
