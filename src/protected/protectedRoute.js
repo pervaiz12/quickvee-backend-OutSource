@@ -4,8 +4,10 @@ import { Route, useNavigate, Navigate, Outlet } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux"; //,localAuthCheck
 import CryptoJS from "crypto-js";
 import Cookies from "js-cookie";
+import { setIsStoreActive } from "../Redux/features/NavBar/MenuSlice";
 
 export default function ProtectedRoute(props) {
+  const dispatch = useDispatch();
   const location = useLocation();
   const navigate = useNavigate();
   let AuthSessionRecord =
@@ -45,6 +47,7 @@ export default function ProtectedRoute(props) {
       AdminRocord?.data?.merchant_id == "no_id") &&
     AdminRocord?.data?.merchant_id !== undefined
   ) {
+    dispatch(setIsStoreActive(true))
     return <Outlet />;
   } else {
     handleClearCoockie();

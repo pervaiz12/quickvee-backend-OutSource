@@ -30,6 +30,7 @@ import Add_Admin from "../Users/admin/addAdmin/add_admin";
 import MainAdmin from "../Users/admin/MainAdmin";
 import MainVerifiedMerchantPage from "../Users/VerifiedMerchant/MainVerifiedMerchantPage";
 import MainUnverifiedMerchant from "../Users/UnverifeDetails/MainUnverifiedMerchant";
+import AddDefaults from "../Defaults/AddDefaults";
 // verified
 
 const LeftDetailsUsers = ({ visible }) => {
@@ -41,7 +42,7 @@ const LeftDetailsUsers = ({ visible }) => {
       {visible === "order-count" && <OrderCountMain />}
       {visible === "defaults" && <MainDefaults />}
       {visible === "edit-defaults" && <EditDefaults />}
-
+      {visible === "add-defaults" && <AddDefaults />}
       {visible === "release_apk" && <MainReleaseApk />}
       {visible === "inverntory-duplicate" && <MainInvDuplicates />}
       {visible === "category-duplicate" && <MainCateDuplicate />}

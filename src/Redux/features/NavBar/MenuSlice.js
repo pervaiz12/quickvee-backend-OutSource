@@ -4,13 +4,15 @@ const initialState = {
     
   isMenuOpen: false, // Initial value based on your useState
   isDropdownOpen: true,
-  isNestedDropdown: false
+  isNestedDropdown: false,
+  isStoreActive: false,
 };
 
 // Create a slice
 const MenuSlice = createSlice({
   name: 'menu',
   initialState,
+ 
   reducers: {
     // Reducer function for toggling menu
     toggleMenu: (state) => {
@@ -25,12 +27,15 @@ const MenuSlice = createSlice({
     },
     setNestedDropdown: (state, action) => {
       state.isNestedDropdown = action.payload;
+    },
+    setIsStoreActive: (state, action) => {
+      state.isStoreActive = action.payload;
     }
   }
 });
 
 // Export actions
-export const { toggleMenu, setMenuOpen,setIsDropdownOpen,setNestedDropdown } = MenuSlice.actions;
+export const { toggleMenu, setMenuOpen,setIsDropdownOpen,setNestedDropdown,setIsStoreActive } = MenuSlice.actions;
 
 // Export reducer
 export default MenuSlice.reducer;

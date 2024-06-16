@@ -111,7 +111,8 @@ export default function AdminView({setVisible,setEditAdminId}) {
 
   const columns = ["Owner Name", "Name", "Email", "Phone", "View", ""];
   const handleClick =()=>{
-    setVisible("AddAmin")
+    // setVisible("AddAmin")
+    navigate("/users/admin/addAdmin")
   }
 
   const handleEditAdminClick = (id)=>{
@@ -238,9 +239,9 @@ export default function AdminView({setVisible,setEditAdminId}) {
                                   title="Edit"
                                   className="mx-1 edit cursor-pointer"
                                   onClick={() =>
-                                    handleEditAdminClick(data.id)
+                                    // handleEditAdminClick(data.id)
                                     // setEditAdminId(data.id)
-                                    // navigate(`/users/editAdmin/${data.id}`)
+                                    navigate(`/users/admin/editAdmin/${data.id}`)
                                   }
                                   src={Edit}
                                   alt="Edit"

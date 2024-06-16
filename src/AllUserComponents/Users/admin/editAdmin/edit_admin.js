@@ -8,7 +8,8 @@ import PasswordShow from "../../../../Common/passwordShow";
 
 export default function EditAdmin({EditAdminId,setVisible}) {
   const handleClick=()=>{
-    setVisible("AdminView")
+    // setVisible("AdminView")
+    navigate(-1)
   }
   const {
     handleEditAdmin,
@@ -23,12 +24,12 @@ export default function EditAdmin({EditAdminId,setVisible}) {
     useAuthDetails();
   const { showpPassword, jsxData } = PasswordShow();
 
-  // const { id } = useParams();
+  const { id } = useParams();
   const navigate = useNavigate();
 
   useEffect(() => {
-    handleEditAdmin({ admin_id: EditAdminId, ...userTypeData });
-  }, [EditAdminId]);
+    handleEditAdmin({ admin_id: id, ...userTypeData });
+  }, [id]);
   return (
     <div className="box">
       <div className="box_shadow_div">

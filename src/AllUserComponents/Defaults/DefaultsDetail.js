@@ -238,10 +238,10 @@ const DefaultsDetail = ({ setVisible,setDefaultEditId }) => {
 
   const navigate = useNavigate();
   const handleEditDefault = (data) => {
-    setDefaultEditId(data)
-    setVisible("EditDefaults")
+    // setDefaultEditId(data)
+    // setVisible("EditDefaults")
     // console.log("handleEditMerchant ", data);
-    // navigate(`/users/view/unapprove/menu/defaults/edit-defaults/${data}`);
+    navigate(`/unapprove/defaults/edit-defaults/${data}`);
   };
 
   return (
@@ -267,7 +267,10 @@ const DefaultsDetail = ({ setVisible,setDefaultEditId }) => {
               <Grid container direction="row" alignItems="center">
                 <Grid item>
                   <div className="q-category-bottom-header">
-                    <p onClick={() => setVisible("DefaultsAlert")}>
+                    <p onClick={() =>
+                      //  setVisible("DefaultsAlert")
+                       navigate("/unapprove/defaults/add-defaults")
+                       }>
                       Add Default <img src={AddIcon} alt="add-icon" />
                     </p>
                   </div>

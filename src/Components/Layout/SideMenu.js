@@ -67,6 +67,7 @@ import ManagerIconActive from "../../Assests/Manager/managerIconActive.svg";
 import MerchantIcon from "../../Assests/MultipleUserIcon/merchant.svg";
 import MerchantActive from "../../Assests/MultipleUserIcon/merchantactive.svg";
 import NestedDropdownMenu from "./NestedDropdownMenu";
+import { BASE_URL } from "../../Constants/Config";
 const SideMenu = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -87,7 +88,9 @@ const SideMenu = () => {
   const isDropdownOpen = useSelector(
     (state) => state.NavBarToggle.isDropdownOpen
   );
-
+  const isStoreActive = useSelector(
+    (state) => state.NavBarToggle.isStoreActive
+  );
   const [activeItem, setActiveItem] = useState(currentUrl);
   const [hoveredItem, setHoveredItem] = useState(null);
   // console.log("hoveredItem",hoveredItem)
@@ -112,14 +115,32 @@ const SideMenu = () => {
 
   useEffect(() => {
     setActiveItem(currentUrl);
-    if (currentUrl.split("/")[1] === "users") {
+    // if (currentUrl.split("/")[1] === "users") {
+    //   setMenuItemSwitcher(SuperAdminMenuItems);
+    //   dispatch(setMenuOpen(true));
+    // } else {
+    //   setMenuItemSwitcher(menuItems);
+    // }
+    // console.log("setIsStoreActive setIsStoreActive0,",isStoreActive)
+    if (!isStoreActive) {
       setMenuItemSwitcher(SuperAdminMenuItems);
       dispatch(setMenuOpen(true));
     } else {
       setMenuItemSwitcher(menuItems);
     }
-  }, [currentUrl]);
+  }, [currentUrl,isStoreActive]);
+  function getFirstTwoSegmentsPath(pathname) {
+    // console.log("getFirstTwoSegmentsPath",pathname)
+    const segments = pathname.split('/').filter(Boolean);
+    return "/"+segments.slice(0, 2).join('/');
+}
+function getFirstTwoSegmentsPathIsStoreAvtive(pathname){
+  // console.log("getFirstTwoSegmentsPath",pathname)
+  const segments = pathname.split('/').filter(Boolean);
+  return isStoreActive ?  "/"+segments.slice(0, 1).join('/') : "/"+segments.slice(0, 2).join('/');
+}
 
+console.log("getFirstTwoSegmentsPath",getFirstTwoSegmentsPathIsStoreAvtive(activeItem))
   return (
     <>
       <div
@@ -158,6 +179,7 @@ const SideMenu = () => {
                         activeDropDownItem={activeDropDownItem}
                         activeNestedItem={activeNestedItem}
                         setActiveNestedItem={setActiveNestedItem}
+                        getFirstTwoSegmentsPath={getFirstTwoSegmentsPath}
                       />
                     ) : (
                       <div
@@ -166,7 +188,7 @@ const SideMenu = () => {
                         onClick={() => handleItemClick(item)}
                         style={{ cursor: "pointer" }}
                         className={`flex items-center ${
-                          activeItem === item.link.trim()
+                          getFirstTwoSegmentsPathIsStoreAvtive(activeItem) === item.link.trim()
                             ? "bg-[#414F54] text-[#FFC400]"
                             : ""
                               ? "text-[#FFC400] active:bg-[#414F54] hover:bg-[#414F54] px-0"
@@ -181,7 +203,7 @@ const SideMenu = () => {
                           "activeItem === item.link.trim()",
                           activeItem === item.link.trim()
                         )} */}
-                        {activeItem === item.link.trim() ||
+                        {getFirstTwoSegmentsPathIsStoreAvtive(activeItem) === item.link.trim() ||
                         hoveredItem === item.id
                           ? item.activeIcon
                           : item.icon}
@@ -223,6 +245,7 @@ const SideMenu = () => {
                       activeDropDownItem={activeDropDownItem}
                       activeNestedItem={activeNestedItem}
                       setActiveNestedItem={setActiveNestedItem}
+                      getFirstTwoSegmentsPath={getFirstTwoSegmentsPath}
                     />
                   ) : (
                     <div
@@ -276,6 +299,7 @@ const DropdownMenuItem = ({
   currentDropDownItem,
   activeNestedItem,
   setActiveNestedItem,
+  getFirstTwoSegmentsPath
 }) => {
   const dispatch = useDispatch();
 
@@ -309,7 +333,7 @@ const DropdownMenuItem = ({
     }
     // item.id === currentDropDownItem && dispatch(setIsDropdownOpen(true));
     dispatch(setIsDropdownOpen(!isTabletNav));
-  }, [isTabletNav, dropDownItem, isTabletNav]);
+  }, [isTabletNav, dropDownItem, isTabletNav,activeItem]);
 
   const handleToggleDropdownItems = (link, e) => {
     if (isTabletNav) {
@@ -353,16 +377,16 @@ const DropdownMenuItem = ({
           {isMenuOpenRedux ? (
             <div
               className={`w-full flex items-center cursor-pointer ${
-                activeItem === dropDownItem ? "bg-[#414F54]" : ""
+                getFirstTwoSegmentsPath(activeItem) === dropDownItem ? "bg-[#414F54]" : ""
               }`}
             >
-              {/* {console.log("activeItem",activeItem," ===","dropDownItem", dropDownItem,  activeItem === dropDownItem  )} */}
-              {activeItem === dropDownItem || hoveredItem === item.id
+              {/* {console.log("activeItem",getFirstTwoSegmentsPath(activeItem)," ===","dropDownItem", dropDownItem,  activeItem === dropDownItem  )} */}
+              {getFirstTwoSegmentsPath(activeItem) === dropDownItem || hoveredItem === item.id
                 ? item.activeIcon
                 : item.icon}
               <p
                 className={`ml-2 menu-item DropDown-memu text-[14px] flex-auto Admin_std ${
-                  activeItem === dropDownItem ? "activeTab" : ""
+                  getFirstTwoSegmentsPath(activeItem) === dropDownItem ? "activeTab" : ""
                 }`}
               >
                 {item.text}
@@ -370,14 +394,14 @@ const DropdownMenuItem = ({
               {currentDropDownItem === item.id ? (
                 <FaChevronUp
                   className={`quickarrow_icon ml-4 me-5 text-${
-                    (activeItem === dropDownItem || hoveredItem === item.id) &&
+                    (getFirstTwoSegmentsPath(activeItem) === dropDownItem || hoveredItem === item.id) &&
                     "[#FFC400]"
                   }`}
                 />
               ) : (
                 <FaChevronDown
                   className={`quickarrow_icon ml-4 me-5 text-${
-                    (activeItem === dropDownItem || hoveredItem === item.id) &&
+                    (getFirstTwoSegmentsPath(activeItem) === dropDownItem || hoveredItem === item.id) &&
                     "[#FFC400]"
                   }`}
                 />
@@ -437,14 +461,14 @@ const DropdownMenuItem = ({
                   // key={nestedDropdownItem.id}
                   to={nestedDropdownItem.link}
                   className={`flex text-center submenu-item text-gray-400 p-4 text-[14px] ${
-                    activeItem === nestedDropdownItem.link ? "active" : ""
+                    getFirstTwoSegmentsPath(activeItem) === getFirstTwoSegmentsPath(nestedDropdownItem.link) ? "active" : ""
                   }`}
                   onClick={(e) => {
                     handleToggleDropdownItems(nestedDropdownItem.link);
                     e.stopPropagation();
                   }}
                 >
-                  {nestedDropdownItem.text}
+                  {nestedDropdownItem.text}  
                 </Link>
               )}
             </React.Fragment>
@@ -1051,7 +1075,7 @@ const SuperAdminMenuItems = [
     className: "flex items-center gap-2",
     dropdownItems: [
       { id: 21, text: "Add", link: "/users/addMerchant" },
-      { id: 22, text: "Verified Merchant", link: "/users/view/approve" },
+      { id: 22, text: "Verified Merchant", link: "/users/approve" },
       {
         id: 23,
         icon: (
@@ -1061,7 +1085,7 @@ const SuperAdminMenuItems = [
           <img src={CouIcon} alt="option" className="h-6 w-10 mt-4 mb-4 " />
         ),
         text: "Unverified Merchant",
-        link: "/users/view/unapprove",
+        link: "/users/unapprove",
       },
 
       { id: 26, text: "Customer", link: "/users/customer" },
@@ -1106,7 +1130,7 @@ const SuperAdminMenuItems = [
       />
     ),
     text: "Store Order",
-    link: "/users/view/unapprove/store-order",
+    link: "/unapprove/store-order",
   },
   {
     id: 5,
@@ -1121,7 +1145,9 @@ const SuperAdminMenuItems = [
       <img src={OrderActive} alt="Order Count" className="h-6 w-10 mt-4 mb-4" />
     ),
     text: "Order Count",
-    link: "/users/view/unapprove/order-count",
+    // link: "/users/view/unapprove/order-count",
+    link: "/unapprove/order-count",
+    
   },
 
   {
@@ -1141,7 +1167,8 @@ const SuperAdminMenuItems = [
       />
     ),
     text: "Defaults",
-    link: "/users/view/unapprove/menu/defaults",
+    // link: "/users/view/unapprove/menu/defaults",
+    link: "/unapprove/defaults",
   },
 
   // {
@@ -1176,7 +1203,7 @@ const SuperAdminMenuItems = [
       />
     ),
     text: "Inventory Duplicate",
-    link: "/users/view/unapprove/inverntory-duplicate",
+    link: "/unapprove/inverntory-duplicate",
   },
 
   {
@@ -1196,7 +1223,7 @@ const SuperAdminMenuItems = [
       />
     ),
     text: "Category Duplicate",
-    link: "/users/view/unapprove/category-duplicate",
+    link: "/unapprove/category-duplicate",
   },
 
   {
@@ -1216,7 +1243,7 @@ const SuperAdminMenuItems = [
       />
     ),
     text: "Product Duplicate",
-    link: "/users/view/unapprove/product-duplicate",
+    link: "/unapprove/product-duplicate",
   },
 
   {
@@ -1236,7 +1263,7 @@ const SuperAdminMenuItems = [
       />
     ),
     text: "Permission",
-    link: "/users/view/unapprove/create_permission",
+    link: "/unapprove/create_permission",
   },
 
   {
@@ -1256,7 +1283,7 @@ const SuperAdminMenuItems = [
       />
     ),
     text: "Inventory Export",
-    link: "/users/view/unapprove/invertory-export",
+    link: "/unapprove/invertory-export",
   },
 
   // {

@@ -110,7 +110,7 @@ const Main = ({ visible }) => {
 
 
       {visible === "edit-defaults" && <IndexAllUsers visible={visible} />}
-
+      {visible === "add-defaults" && <IndexAllUsers visible={visible} />}
       {visible === "manager_view" && <IndexAllUsers visible={visible} />}
       {visible === "unverified" && <IndexAllUsers visible={visible} />}
       {visible === "customer" && <IndexAllUsers visible={visible} />}

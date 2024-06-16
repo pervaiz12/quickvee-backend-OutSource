@@ -10,6 +10,7 @@ import DownIcon from "../../Assests/Dashboard/Down.svg";
 import {
   setMenuOpen,
   setIsDropdownOpen,
+  setIsStoreActive,
 } from "../../Redux/features/NavBar/MenuSlice";
 import Cookies from "js-cookie";
 import CryptoJS from "crypto-js";
@@ -98,6 +99,7 @@ export default function Header() {
     Cookies.remove("token_data");
     localStorage.removeItem("AllStore");
     navigate("/login");
+    dispatch(setIsStoreActive(false))
   };
 
   const handleNavigate = () => {

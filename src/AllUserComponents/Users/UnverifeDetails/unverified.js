@@ -47,6 +47,7 @@ import DeleteModal from "../../../reuseableComponents/DeleteModal";
 import DislikeModal from "../../../reuseableComponents/DislikeModal";
 import emailLogo from "../../../Assests/Dashboard/email.svg"
 import phoneLogo from "../../../Assests/Dashboard/phone.svg"
+import { setIsStoreActive } from "../../../Redux/features/NavBar/MenuSlice";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -286,15 +287,16 @@ export default function Unverified({setMerchantId,setVisible}) {
   // ====================================
   // ====================================
   const handleEditMerchant = (data) => {
-    setMerchantId(data)
-    setVisible("editVerirmedMerchant")
-    // navigate(`/users/editMerchant/${data}`);
+    // setMerchantId(data)
+    // setVisible("editVerirmedMerchant")
+    navigate(`/users/unapprove/editMerchant/${data}`);
   };
   const handleGetVerifiedMerchant = (merchant_id) => {
     let data = {
       merchant_id: merchant_id,
       ...userTypeData,
     };
+   
     // const formdata = new FormData();
 
     dispatch(handleMoveDash(data)).then((result) => {
@@ -302,6 +304,7 @@ export default function Unverified({setMerchantId,setVisible}) {
       if (result?.payload?.status == true) {
         if (result?.payload?.final_login == 1) {
           navigate(`/`);
+          dispatch(setIsStoreActive(true))
         } else {
           console.log("store page called");
         }
@@ -487,7 +490,7 @@ export default function Unverified({setMerchantId,setVisible}) {
                     to="/users/addMerchant"
                     className="flex q-category-bottom-header "
                     state={{
-                      from: "/users/view/unapprove",
+                      from: "/users/unapprove",
                       heading: "Merchant",
                     }}
                   >

@@ -10,8 +10,10 @@ import { Grid } from "@mui/material";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
+import { useNavigate } from "react-router-dom";
 
 const AddDefaults = ({ setVisible }) => {
+  const navigate = useNavigate()
   const [errorMessage, setErrorMessage] = useState("");
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -113,7 +115,7 @@ const AddDefaults = ({ setVisible }) => {
       const update_message = await res.data.msg;
       if (data === "Success") {
         ToastifyAlert("Default Menu Created", "success");
-        setVisible("DefaultsDetail");
+        navigate(-1)
       } else if (
         data === "Failed" &&
         update_message === "Default Menu Entered Already Exits"
@@ -266,7 +268,10 @@ const AddDefaults = ({ setVisible }) => {
           <div className="mt-10 mb-4">
             <form onSubmit={handleSubmit} enctype="multipart/form-data">
               <div className="q-add-categories-section-header">
-                <span onClick={() => setVisible("DefaultsDetail")}>
+                <span onClick={() =>
+                  //  setVisible("DefaultsDetail")
+                  navigate(-1)
+                   }>
                   <img src={AddNewCategory} alt="Add-New-Category" />
                   <span>Add New Defaults</span>
                 </span>
@@ -392,7 +397,7 @@ const AddDefaults = ({ setVisible }) => {
               <div className="q-add-categories-section-middle-footer">
                 <button className="quic-btn quic-btn-save">Add</button>
                 <button
-                  onClick={() => setVisible("DefaultsDetail")}
+                  onClick={() => navigate(-1)}
                   className="quic-btn quic-btn-cancle"
                 >
                   Cancel

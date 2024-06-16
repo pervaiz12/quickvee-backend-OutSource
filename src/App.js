@@ -142,8 +142,15 @@ function App() {
         />
         <Route
           exact
-          path="/users/view/unapprove/menu/defaults/edit-defaults/:defaultsCode"
+          // path="/users/view/unapprove/menu/defaults/edit-defaults/:defaultsCode"
+          path="/unapprove/defaults/edit-defaults/:defaultsCode"
           element={<Main visible={"edit-defaults"} />}
+        />
+         <Route
+          exact
+          // path="/users/view/unapprove/menu/defaults/edit-defaults/:defaultsCode"
+          path="/unapprove/defaults/add-defaults"
+          element={<Main visible={"add-defaults"} />}
         />
         <Route element={<ProtectedOrderSummery visible="manager" />}>
           <Route
@@ -546,7 +553,7 @@ function App() {
           />
           <Route
             exact
-            path="/users/view/unapprove"
+            path="/users/unapprove"
             element={<Main visible={"unverified"} />}
           />
           <Route
@@ -561,7 +568,7 @@ function App() {
           />
           <Route
             exact
-            path="/users/view/approve"
+            path="/users/approve"
             element={<Main visible={"verified"} />}
           />
           <Route
@@ -571,17 +578,22 @@ function App() {
           />
           <Route
             exact
-            path="/users/addAdmin"
+            path="/users/admin/addAdmin"
             element={<Main visible={"addAdmin"} />}
           />
           <Route
             exact
-            path="/users/editMerchant/:id"
+            path="/users/unapprove/editMerchant/:id"
             element={<Main visible={"editMerchant"} />}
           />
           <Route
             exact
-            path="/users/editAdmin/:id"
+            path="/users/approve/editMerchant/:id"
+            element={<Main visible={"editMerchant"} />}
+          />
+          <Route
+            exact
+            path="/users/admin/editAdmin/:id"
             element={<Main visible={"editAdmin"} />}
           />
           <Route
@@ -596,17 +608,18 @@ function App() {
           />
           <Route
             exact
-            path="/users/view/unapprove/store-order"
+            path="/unapprove/store-order"
             element={<Main visible={"store-order"} />}
           />
           <Route
             exact
-            path="/users/view/unapprove/order-count"
+            path="/unapprove/order-count"
             element={<Main visible={"order-count"} />}
           />
           <Route
             exact
-            path="/users/view/unapprove/menu/defaults"
+            // path="/users/view/unapprove/menu/defaults"
+              path="/unapprove/defaults"
             element={<Main visible={"defaults"} />}
           />
           <Route
@@ -616,27 +629,27 @@ function App() {
           />
           <Route
             exact
-            path="/users/view/unapprove/inverntory-duplicate"
+            path="/unapprove/inverntory-duplicate"
             element={<Main visible={"inverntory-duplicate"} />}
           />
           <Route
             exact
-            path="/users/view/unapprove/category-duplicate"
+            path="unapprove/category-duplicate"
             element={<Main visible={"category-duplicate"} />}
           />
           <Route
             exact
-            path="/users/view/unapprove/product-duplicate"
+            path="/unapprove/product-duplicate"
             element={<Main visible={"product-duplicate"} />}
           />
           <Route
             exact
-            path="/users/view/unapprove/create_permission"
+            path="/unapprove/create_permission"
             element={<Main visible={"create_permission"} />}
           />
           <Route
             exact
-            path="/users/view/unapprove/invertory-export"
+            path="/unapprove/invertory-export"
             element={<Main visible={"invertory-export"} />}
           />
           <Route

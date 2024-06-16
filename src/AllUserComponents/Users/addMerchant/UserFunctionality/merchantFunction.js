@@ -556,7 +556,7 @@ const MerchantFunction = () => {
                     state: "",
                   },
                 });
-                navigate(`/users/editMerchant/${result.data.id}`);
+                navigate(`/users/unapprove/editMerchant/${result.data.id}`);
               } 
               // else {
               //   ToastifyAlert("Merchant not Added!", "warn");

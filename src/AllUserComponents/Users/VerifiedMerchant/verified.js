@@ -39,6 +39,7 @@ import DeleteModal from "../../../reuseableComponents/DeleteModal";
 import DislikeModal from "../../../reuseableComponents/DislikeModal";
 import emailLogo from "../../../Assests/Dashboard/email.svg"
 import phoneLogo from "../../../Assests/Dashboard/phone.svg"
+import { setIsStoreActive } from "../../../Redux/features/NavBar/MenuSlice";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -140,9 +141,9 @@ export default function Verified({setVisible,setMerchantId}) {
 
   const handleEditMerchant = (data) => {
     console.log("handleEditMerchant",data);
-    setMerchantId(data)
-    setVisible("editVerirmedMerchant")
-    // navigate(`/users/editMerchant/${data}`);
+    // setMerchantId(data)
+    // setVisible("editVerirmedMerchant")
+    navigate(`/users/approve/editMerchant/${data}`);
   };
 
   const [deleteTableId, setDeleteTableId] = useState(null);
@@ -245,6 +246,7 @@ export default function Verified({setVisible,setMerchantId}) {
       if (result?.payload?.status == true) {
         if (result?.payload?.final_login == 1) {
           navigate(`/`);
+          dispatch(setIsStoreActive(true))
         } else {
           console.log("store page called");
         }
@@ -389,7 +391,7 @@ export default function Verified({setVisible,setMerchantId}) {
                   <Link
                     to="/users/addMerchant"
                     className="flex q-category-bottom-header "
-                    state={{ from: "/users/view/approve", heading: "Merchant" }}
+                    state={{ from: "/users/approve", heading: "Merchant" }}
                   >
                     <p className="me-2">ADD</p>
                     <img src={AddIcon} alt="" />

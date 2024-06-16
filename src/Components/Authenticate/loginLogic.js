@@ -212,7 +212,7 @@ export default function LoginLogic() {
             }
           } else {
             if (res?.payload?.status == true) {
-              navigate(`/users/view/unapprove`);
+              navigate(`/users/unapprove`);
             }
           }
         }

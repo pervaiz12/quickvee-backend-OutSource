@@ -15,8 +15,8 @@ export default function Add_Admin({setVisible}) {
     loader,
   } = Add_adminFunctionality({setVisible});
   const handleClick = () => {
-  
-    setVisible("AdminView")
+    navigate(-1);
+    // setVisible("AdminView")
   }
   const navigate = useNavigate();
   const { showpPassword, jsxData } = PasswordShow();

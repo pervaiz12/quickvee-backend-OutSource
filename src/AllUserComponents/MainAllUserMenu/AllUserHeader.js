@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from "react-redux"; //,localAuthCheck
 import {
   setMenuOpen,
   setIsDropdownOpen,
+  setIsStoreActive,
 } from "../../Redux/features/NavBar/MenuSlice";
 import { Navigate, useNavigate } from "react-router-dom";
 import Menu from "@mui/material/Menu";
@@ -113,6 +114,7 @@ const AllUserHeader = () => {
     localStorage.removeItem("AllStore");
     Cookies.remove("token_data");
     navigate("/login");
+    dispatch(setIsStoreActive(false))
     // handleClose()
   };
 

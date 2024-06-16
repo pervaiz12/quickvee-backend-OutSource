@@ -5,7 +5,7 @@ import Alert from "@mui/material/Alert";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import CircularProgress from "@mui/material/CircularProgress";
 
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Grid } from "@mui/material";
 import AddSvg from "../../../Assests/Dashboard/Left.svg";
 import BasicTextFields from "../../../reuseableComponents/TextInputField";
@@ -17,7 +17,7 @@ export default function EditMerchant({
   currentMerchant,
   setVisible,
 }) {
-
+  const navigate = useNavigate()
   const {
     LoginGetDashBoardRecordJson,
     LoginAllStore,
@@ -78,7 +78,8 @@ export default function EditMerchant({
               <div className="q-add-categories-section-header">
                 <span
                   onClick={() => {
-                    setVisible(currentMerchant);
+                    // setVisible(currentMerchant);
+                    navigate(-1)
                   }}
                   className="text-center items-center"
                 >
@@ -343,7 +344,8 @@ export default function EditMerchant({
             <Grid item>
               <button
                 onClick={() => {
-                  setVisible(currentMerchant);
+                  // setVisible(currentMerchant);
+                  navigate(-1)
                 }}
                 className="quic-btn quic-btn-cancle"
               >

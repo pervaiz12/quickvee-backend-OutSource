@@ -25,7 +25,7 @@ const CustomTimePicker = ({
         options.push(time);
       }
     }
-    return options;
+    return [...options,"11:59 PM"];
   };
   const formatTime = (time) => {
     if (!time) return "";

@@ -223,13 +223,14 @@ export default function Add_adminFunctionality({setVisible}) {
             setLoader(false);
             if (res.data.status == 200) {
               ToastifyAlert("Admin Added  Successfully!", "success");
-              setVisible("AdminView")
+              // setVisible("AdminView")
+
               setAddAdminData({
                 owner_name: "",
                 email: "",
                 password: "",
                 phone: "",
-                errors: {
+                errors: { 
                   owner_name: "",
                   email: "",
                   password: "",

@@ -41,7 +41,7 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
   const params = useParams();
   async function fetchData() {
     const getdefaultsData = {
-      id: defaultEditId,
+      id: params?.defaultsCode,
       token_id: userTypeData.token_id,
       login_type: userTypeData.login_type,
     };
@@ -157,7 +157,8 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
       const update_message = await res.data.msg;
       if (data == "Success") {
         ToastifyAlert("Default Menu Updated", "success");
-        navigate("/users/view/unapprove/menu/defaults");
+        // navigate("/users/view/unapprove/menu/defaults");
+        navigate(-1)
       } else if (
         data == "Failed" &&
         update_message == "Default Title Already Exist!"
@@ -303,11 +304,12 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
       <div className="q-category-main-page ">
         <div className="q-add-categories-section">
           <div className="mt-10 mb-4">
-            <form onSubmit={handleSubmit} enctype="multipart/form-data">
+            <form  enctype="multipart/form-data">
               <div className="q-add-categories-section-header">
                 <span
                   onClick={() => {
-                    setVisible("DefaultsDetail");
+                    // setVisible("DefaultsDetail");
+                    navigate(-1);
                   }}
                   // to={`/users/view/unapprove/menu/defaults`}
                 >
@@ -451,13 +453,14 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
               </div>
 
               <div className="q-add-categories-section-middle-footer">
-                <button className="quic-btn quic-btn-save">Update</button>
+                <button onClick={handleSubmit} className="quic-btn quic-btn-save">Update</button>
                 <div
-                  onClick={() => {
-                    setVisible("DefaultsDetail");
-                  }}
+                
                 >
-                  <button className="quic-btn quic-btn-cancle">Cancel</button>
+                  <button   onClick={() => {
+                    // setVisible("DefaultsDetail");
+                    navigate("/unapprove/defaults");
+                  }}  className="quic-btn quic-btn-cancle">Cancel</button>
                 </div>
               </div>
             </form>
