@@ -18,7 +18,12 @@ const GeneratePUC = ({
   varientData,
 }) => {
   const navigate = useNavigate();
-  const pageUrl = window.location.pathname.split("/")[1] + "/" + window.location.pathname.split("/")[2];
+  const pageUrl =
+    window.location.pathname.split("/")[1] +
+    "/" +
+    window.location.pathname.split("/")[2] +
+    "/" + window.location.pathname.split("/")[3];
+
   const varientTitle = handleVarientTitleBasedItemList();
   const { varientProduct } = useSelector(
     (state) => state?.productsListData
@@ -46,18 +51,18 @@ const GeneratePUC = ({
   const disabledFieldsOnEdit = ["margin", "profit", "qty"];
 
   const disabledInput = (inp, formDisabledKey) => {
-    if (pageUrl !== "products/edit" && disabledFields.includes(inp?.name) ) {
+    if (pageUrl !== "inventory/products/edit" && disabledFields.includes(inp?.name) ) {
       return true;
-    }else if(pageUrl === "products/edit" &&  inp?.name === 'qty' && !formDisabledKey?.notEditable){
+    }else if(pageUrl === "inventory/products/edit" &&  inp?.name === 'qty' && !formDisabledKey?.notEditable){
       return false
     }
     else if (
-     ( pageUrl === "products/edit" &&
+     ( pageUrl === "inventory/products/edit" &&
       disabledFieldsOnEdit.includes(inp?.name)) 
     ) {
       return true;
     } else if (
-     ( pageUrl === "products/edit" &&
+     ( pageUrl === "inventory/products/edit" &&
       +inventoryData?.cost_method === 1) &&
     (  inp?.name === "costPerItem" &&
       !!formDisabledKey?.notEditable)
@@ -69,10 +74,10 @@ const GeneratePUC = ({
 
   const handleRedirectHistory = (varientIndex) => {
     if (varientIndex === null) {
-      navigate(`/products/saleshistory/${productData?.id}`, {state: productInfo});
+      navigate(`/inventory/products/saleshistory/${productData?.id}`, {state: productInfo});
     } else {
       navigate(
-        `/products/saleshistory/${productData?.id}/${varientData[varientIndex]?.id}`,
+        `/inventory/products/saleshistory/${productData?.id}/${varientData[varientIndex]?.id}`,
         {state: productInfo}
       );
     }
@@ -103,7 +108,7 @@ const GeneratePUC = ({
           {varientTitle?.length && isMultipleVarient
             ? varientTitle?.map((title, index) => {
                 return (
-                  <div className="qvrow" key={index}>
+                  <div className="qvrow product-varient-form" key={index}>
                     {isMultipleVarient ? (
                       <div className="mx-4 my-4">
                         {productInfo?.title
@@ -115,6 +120,7 @@ const GeneratePUC = ({
                     )}
                     {formData?.length
                       ? formData?.map((inp, i) => {
+                        console.log('formvalue', formValue);
                           return (
                             <div className="col-qv-3" key={i}>
                               <div className="q-add-categories-single-input">
@@ -263,7 +269,7 @@ const GeneratePUC = ({
                       </label> */}
                     </div>
 
-                    {pageUrl === "products/edit" && formValue?.[index]?.[title]?.notEditable ? (
+                    {pageUrl === "inventory/products/edit" && formValue?.[index]?.[title]?.notEditable ? (
                       <div class="edit-profile-btns">
                         <button
                           className="quic-btn quic-btn-save vendor-btn"
@@ -445,7 +451,7 @@ const GeneratePUC = ({
                 </label> */}
               </div>
 
-              {pageUrl === "products/edit" ? (
+              {pageUrl === "inventory/products/edit" ? (
                 <div class="edit-profile-btns">
                   <button
                     className="quic-btn quic-btn-save vendor-btn"
