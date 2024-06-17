@@ -1,10 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Validate from "./validationFile/validate";
-import { useSelector, useDispatch } from "react-redux"; //,localAuthCheck
-// import { fetchLoginData,handleCheckOTP,handleSubmitOtp,localAuthCheck,getAuthSessionRecord } from "../../Redux/features/Authentication/loginSlice";
+import { useSelector, useDispatch } from "react-redux";
 
-// import {localAuthCheck} from  "../../Redux/features/Authentication/loginSlice";
 import {
   handleUserType,
   getAuthInvalidMessage,
@@ -13,7 +11,7 @@ import { LOGIN_AUTHENICATE_API, BASE_URL } from "../../Constants/Config";
 
 import { useNavigate } from "react-router-dom";
 
-export default function LoginLogic() {
+export default function LoginLogic(setLoading) {
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
@@ -22,10 +20,7 @@ export default function LoginLogic() {
     password: "",
     otp: "",
   });
-  // const errorToken = useSelector(
-  //   (selector) => selector?.loginAuthentication?.errors
-  // );
-  // console.log(errorToken);
+
   const [errors, setErrors] = React.useState({
     usernameError: "",
     passwordError: "",
@@ -34,10 +29,6 @@ export default function LoginLogic() {
   const { UsernameValidate, validatePassword, validateForm, validateOTP } =
     Validate({ formData, setErrors, errors });
   const [errorMessage, setErrorMessage] = React.useState("");
-  // const authEmailValidate=useSelector((state)=>state?.loginAuthEmailCheck)
-  // const authEmailValidate=useSelector((state)=>state?.loginAuthEmailCheck)authEmailValidate?.CoockieEmailValidate
-  // console.log(authEmailValidate)
-  // let AuthEmailValidateCheck=Cookies.get('emailValidateOtp');
 
   const emailValidate = async (userdata) => {
     const data = { username: userdata };
@@ -116,115 +107,40 @@ export default function LoginLogic() {
       [name]: value,
     });
   };
-  const ValidOtpRes = () => {
-    setTimeout(() => {
-      setErrorMessage("");
-    }, 2000);
-  };
-  const handleWrongPasswordError = () => {
-    // setTimeout(() => {
-    //   setErrorMessage("");
-    // }, 10000);
-  };
-  // const handleSubmitForm=async(e)=>{
-  //     e.preventDefault();
-  //     let isValidateForm=validateForm()
-  //     if(!isValidateForm)
-  //     {
 
-  //         let emailValidate=await handleBlur('username')
-
-  //         if(errors.passwordError=="" && errors.usernameError=="")
-  //         {
-  //             if(emailValidate)
-  //             {
-  //               // fa_completed:!!AuthEmailValidateCheck? AuthEmailValidateCheck:''
-  //               // --------------------------------------------------------------
-  //               if(!authEmailValidate?.CoockieEmailValidate && authEmailValidate?.CoockieEmailValidate ==undefined)
-  //                 // if(!authEmailValidate?.CoockieEmailValidate)
-  //                 {
-  //                     if(!authEmailValidate?.checkemailValidate)
-  //                     {
-  //                       let data={username:formData.username,password:formData.password,merchant_login:'merchant_login',fa_completed:''}
-  //                       console.log(data)
-  //                       dispatch(fetchLoginData(data))
-
-  //                     }
-  //                     else{
-  //                       if(!isValidateForm)
-  //                       {
-  //                         let data={email:formData.username,otp:formData.otp}
-  //                          dispatch(handleCheckOTP(data)).then(isValidateotp => {
-
-  //                           if(isValidateotp?.payload)
-  //                           {
-  //                             let data={username:formData.username,password:formData.password,merchant_login:'merchant_login',otp:formData.otp,ref:''}
-  //                             dispatch(handleSubmitOtp(data))
-  //                           }else{
-  //                             setErrorMessage('Invalid Otp')
-  //                              ValidOtpRes()
-  //                           }
-
-  //                       })
-  //                       .catch(error => {
-  //                           console.error(error);
-  //                       });
-
-  //                       }
-
-  //                     }
-  //               }else{
-  //                 let data={username:formData.username,password:formData.password,merchant_login:'merchant_login',otp:"",ref:''}
-  //                 console.log(data)
-  //                 console.log("heloo coockie")
-  //                 console.log(isValidateForm)
-
-  //               }
-  //               // ============================================================
-
-  //             }
-
-  //         }
-  //     }
-
-  // }
   const handleSubmitForm = async (e) => {
-    e.preventDefault();
-    try{
-    let isValidateForm = validateForm();
-    if (!isValidateForm) {
-      // console.log('hello')
-      // console.log(formData)
-      let data = { username: formData.username, password: formData.password };
-        dispatch(handleUserType(data)).then((res) => {
-        if (res?.payload?.status == false) {
-          dispatch(getAuthInvalidMessage(res?.payload?.msg));
-          setErrorMessage(res?.payload?.msg);
-          handleWrongPasswordError();
-        } else {
-          if (res?.payload?.login_type !== "superadmin") {
-            if (res?.payload?.status == true) {
-              if (res?.payload?.final_login == 0) {
-                navigate(`/store`);
-              } else {
-                navigate(`/`);
+    try {
+      e.preventDefault();
+      setLoading(() => true);
+      let isValidateForm = validateForm();
+      if (!isValidateForm) {
+        let data = { username: formData.username, password: formData.password };
+        await dispatch(handleUserType(data)).then(async (res) => {
+          if (res?.payload?.status == false) {
+            await dispatch(getAuthInvalidMessage(res?.payload?.msg));
+            setErrorMessage(res?.payload?.msg);
+          } else {
+            if (res?.payload?.login_type !== "superadmin") {
+              if (res?.payload?.status == true) {
+                if (res?.payload?.final_login == 0) {
+                  navigate(`/store`);
+                } else {
+                  navigate(`/`);
+                }
+              }
+            } else {
+              if (res?.payload?.status == true) {
+                navigate(`/users/unapprove`);
               }
             }
-          } else {
-            if (res?.payload?.status == true) {
-              navigate(`/users/unapprove`);
-            }
           }
-        }
-      });
-
-      //  dispatch(handleUserType(data)).then(response=>{
-      //   console.log(response?.payload)
-      //  })
+        });
+      }
+    } catch (error) {
+      console.log("Error: ", e);
+    } finally {
+      setLoading(() => false);
     }
-  }catch(error){
-    console.log("hello")
-  }
   };
   return {
     handleChangeLogin,
@@ -234,8 +150,5 @@ export default function LoginLogic() {
     handleBlur,
     setErrorMessage,
     errorMessage,
-    // // handleSubmitFormPlace,
-    // authEmailValidate,
-    // errorMessage,
   };
 }

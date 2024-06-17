@@ -14,7 +14,13 @@ import { Grid } from "@mui/material";
 import BasicTextFields from "../../../reuseableComponents/TextInputField";
 import useCurrencyInput from "../../../hooks/useCurrencyInput";
 
-const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
+const PickupDeliveryDetails = ({
+  pickupdeliverydata,
+  errors,
+  setErrors,
+  pickupDeliveryDetailsRef,
+}) => {
+  const onlyNumbers = /^[0-9]*$/;
   const setupDataState = useSelector(
     (state) => state?.StoreSetupList?.storesetupData
   );
@@ -32,13 +38,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
   const [MaxDeliveryTime, setMaxDeliveryTime] = useState();
   const [MinAmountdelivery, setMinAmountdelivery] = useCurrencyInput("0.00");
   const dispatch = useDispatch();
-  // const [timeValues, setTimeValues] = useState({
-  //   minPickupTime:"",
-  //   maxPickupTime:"",
-  //   minDeliveryTime:`00:${setupDataState.deliver_min_time}` ?? "",
-  //   maxDeliveryTime:setupDataState?.deliver_max_time ?? "",
-  // })
-  // console.log("isEnableOrderNumber",isEnableOrderNumber)
+
   const handleCheckedSwitch = (e) => {
     setisEnableOrderNumber(e.target.checked ? "Yes" : "No");
   };
@@ -47,15 +47,13 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
     setIsDelveryEnbale(e.target.checked ? "Yes" : "No");
   };
 
-  //const [minTime, setMinTime] = useState();
-
   useEffect(() => {
     //console.log(setupDataState?.deliver_min_time)
     if (setupDataState?.is_pickup) {
-      setisEnableOrderNumber((setupDataState?.is_pickup))
+      setisEnableOrderNumber(setupDataState?.is_pickup);
     }
     if (setupDataState?.is_deliver) {
-      setIsDelveryEnbale((setupDataState?.is_deliver))
+      setIsDelveryEnbale(setupDataState?.is_deliver);
     }
     if (setupDataState?.cfee_pik) {
       SetConvenience({
@@ -98,18 +96,86 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
     }
   }, [setupDataState]);
 
-  const handleMinPickupTime = (event) => {
-    setMinPickupTime(event.target.value);
+  const isNotANumber = (e) => !onlyNumbers.test(e.target.value);
+
+  const handleMinPickupTime = (e) => {
+    if (isNotANumber(e)) return;
+
+    const timeError =
+      MaxPickupTime && e.target.value
+        ? Number(MaxPickupTime) <= Number(e.target.value)
+        : false;
+
+    setErrors((prev) => ({
+      ...prev,
+      minPickupTimeError: e.target.value ? "" : "Minimum Time is required",
+      maxPickupTimeError: timeError
+        ? "Maximum Time should be greater than Minimum Time"
+        : "",
+    }));
+
+    setMinPickupTime(e.target.value);
   };
-  const handleMaxPickupTime = (event) => {
-    setMaxPickupTime(event.target.value);
+
+  const handleMinDeliveryTime = (e) => {
+    if (isNotANumber(e)) return;
+
+    const timeError =
+      MaxDeliveryTime && e.target.value
+        ? Number(MaxDeliveryTime) <= Number(e.target.value)
+        : false;
+
+    setErrors((prev) => ({
+      ...prev,
+      minDeliveryTimeError: e.target.value ? "" : "Minimum Time is required",
+      maxDeliveryTimeError: timeError
+        ? "Maximum Time should be greater than Minimum Time"
+        : "",
+    }));
+
+    setMinDeliveryTime(e.target.value);
   };
-  const handleMinDeliveryTime = (event) => {
-    setMinDeliveryTime(event.target.value);
+
+  const handleMaxPickupTime = (e) => {
+    if (isNotANumber(e)) return;
+
+    const timeError =
+      MinPickupTime && e.target.value
+        ? Number(MinPickupTime) >= Number(e.target.value)
+        : false;
+
+    setErrors((prev) => ({
+      ...prev,
+      maxPickupTimeError: !e.target.value
+        ? "Maximum Time is required"
+        : timeError
+          ? "Maximum Time should be greater than Minimum Time"
+          : "",
+    }));
+
+    setMaxPickupTime(e.target.value);
   };
-  const handleMaxDeliveryTime = (event) => {
-    setMaxDeliveryTime(event.target.value);
+
+  const handleMaxDeliveryTime = (e) => {
+    if (isNotANumber(e)) return;
+
+    const timeError =
+      MinDeliveryTime && e.target.value
+        ? Number(MinDeliveryTime) >= Number(e.target.value)
+        : false;
+
+    setErrors((prev) => ({
+      ...prev,
+      maxDeliveryTimeError: !e.target.value
+        ? "Maximum Time is required"
+        : timeError
+          ? "Maximum Time should be greater than Minimum Time"
+          : "",
+    }));
+
+    setMaxDeliveryTime(e.target.value);
   };
+
   useEffect(() => {
     pickupdeliverydata(
       isEnableOrderNumber,
@@ -138,7 +204,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
 
   return (
     <>
-      <Grid container className="box">
+      <Grid container className="box" ref={pickupDeliveryDetailsRef}>
         <Grid item xs={12} sx={{ padding: 2.5 }} className="box_shadow_div">
           <Grid container>
             <h5 class="box_shadow_heading">Pickup & Delivery Details</h5>
@@ -170,36 +236,40 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
                 <Grid item xs={6}>
                   <label>Minimum Time:</label>
                   <BasicTextFields
-                    type="number"
+                    type="text"
                     value={MinPickupTime}
                     required
                     onChangeFun={handleMinPickupTime}
                   />
+                  {errors.minPickupTimeError && (
+                    <p className="error-message">{errors.minPickupTimeError}</p>
+                  )}
                 </Grid>
                 <Grid item xs={6}>
                   <label>Maximum Time</label>
                   <BasicTextFields
-                    type="number"
+                    type="text"
                     value={MaxPickupTime}
                     required
                     onChangeFun={handleMaxPickupTime}
                   />
+                  {errors.maxPickupTimeError && (
+                    <p className="error-message">{errors.maxPickupTimeError}</p>
+                  )}
                 </Grid>
               </Grid>
             </Grid>
             <Grid item xs={6}>
-              <div>
-                <label>Convenience Fee ($)</label>
-                <BasicTextFields
-                  type="text"
-                  placeholder="%0.00"
-                  maxLength={10}
-                  name="default_cash_drawer"
-                  id="cash_drawer"
-                  value={convenience}
-                  onChangeFun={SetConvenience}
-                />
-              </div>
+              <label>Convenience Fee ($)</label>
+              <BasicTextFields
+                type="text"
+                placeholder="%0.00"
+                maxLength={10}
+                name="default_cash_drawer"
+                id="cash_drawer"
+                value={convenience}
+                onChangeFun={SetConvenience}
+              />
             </Grid>
           </Grid>
           <Grid
@@ -219,7 +289,7 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
                 // {...label}
                 name="cost_method"
                 onChange={handleCheckedclicked}
-                checked={isDelveryEnbale ==="Yes"}
+                checked={isDelveryEnbale === "Yes"}
               />
             </Grid>
           </Grid>
@@ -255,20 +325,30 @@ const PickupDeliveryDetails = ({ pickupdeliverydata }) => {
                 <Grid item xs={6}>
                   <label> Delivery Time (Min)</label>
                   <BasicTextFields
-                    type="number"
+                    type="text"
                     value={MinDeliveryTime}
                     required
                     onChangeFun={handleMinDeliveryTime}
                   />
+                  {errors.minDeliveryTimeError && (
+                    <p className="error-message">
+                      {errors.minDeliveryTimeError}
+                    </p>
+                  )}
                 </Grid>
                 <Grid item xs={6}>
                   <label>Delivery Time (Max)</label>
                   <BasicTextFields
-                    type="number"
+                    type="text"
                     value={MaxDeliveryTime}
                     required
                     onChangeFun={handleMaxDeliveryTime}
                   />
+                  {errors.maxDeliveryTimeError && (
+                    <p className="error-message">
+                      {errors.maxDeliveryTimeError}
+                    </p>
+                  )}
                 </Grid>
               </Grid>
             </Grid>

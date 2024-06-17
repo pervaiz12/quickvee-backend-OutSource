@@ -140,6 +140,7 @@ const SearchableDropdown = ({
               value={filterValue}
               onFocus={handleFocus}
               onChange={handleFilterOptions}
+              autoComplete={false}
               disabled={
                 selectedOption?.length === 2 && keyName === "frequentlyBought"
               }

@@ -9,9 +9,11 @@ import { AUTO_PO_LIST, BASE_URL, SAVE_PO } from "../../Constants/Config";
 import axios from "axios";
 import { createdAt } from "../../Constants/utils";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import { useNavigate } from "react-router-dom";
 
-const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors, seVisible }) => {
+const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const { userTypeData } = useAuthDetails();
   const [selectedProducts, setSelectedProducts] = useState([]);
@@ -53,7 +55,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors, seVisible }) => {
     );
     if (confirmDelete) {
       setSelectedProducts([]);
-      seVisible("PurchaseTable");
+      navigate("/purchase-data");
     }
   };
 
@@ -276,7 +278,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors, seVisible }) => {
         // console.log("response: ", response);
         if (response.data.status) {
           ToastifyAlert(response.data.message, "success");
-          seVisible("PurchaseTable");
+          navigate("/purchase-data");
         } else {
           ToastifyAlert(response.data.message, "error");
         }

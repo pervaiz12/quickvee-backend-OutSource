@@ -13,6 +13,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import CircularProgress from "@mui/material/CircularProgress";
+import SmallLoader from "../../../Assests/Loader/loading-Animation.gif";
 
 import {
   getVerifiedMerchant,
@@ -37,8 +38,8 @@ import Pagination from "../UnverifeDetails/Pagination";
 import useDebounce from "../../../hooks/useDebouncs";
 import DeleteModal from "../../../reuseableComponents/DeleteModal";
 import DislikeModal from "../../../reuseableComponents/DislikeModal";
-import emailLogo from "../../../Assests/Dashboard/email.svg"
-import phoneLogo from "../../../Assests/Dashboard/phone.svg"
+import emailLogo from "../../../Assests/Dashboard/email.svg";
+import phoneLogo from "../../../Assests/Dashboard/phone.svg";
 import { setIsStoreActive } from "../../../Redux/features/NavBar/MenuSlice";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -67,7 +68,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-export default function Verified({setVisible,setMerchantId}) {
+export default function Verified({ setVisible, setMerchantId }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -82,6 +83,13 @@ export default function Verified({setVisible,setMerchantId}) {
   const [loader, setLoader] = useState(false);
   const [deleteLoader, setDeleteLoader] = useState(false);
   const [deletedId, setDeletedId] = useState("");
+
+  const [loaders, setLoaders] = useState({
+    view: {
+      id: "",
+      isLoading: false,
+    },
+  });
 
   const verifiedMerchantList = useSelector(
     (state) => state.verifiedMerchantRecord
@@ -140,7 +148,7 @@ export default function Verified({setVisible,setMerchantId}) {
   };
 
   const handleEditMerchant = (data) => {
-    console.log("handleEditMerchant",data);
+    console.log("handleEditMerchant", data);
     // setMerchantId(data)
     // setVisible("editVerirmedMerchant")
     navigate(`/users/approve/editMerchant/${data}`);
@@ -155,112 +163,118 @@ export default function Verified({setVisible,setMerchantId}) {
     setDeleteModalOpen(true);
   };
 
-  const confirmDeleteCategory = async ( ) => {
-    if(deleteTableId){
+  const confirmDeleteCategory = async () => {
+    if (deleteTableId) {
       try {
-          const { token, ...otherUserData } = userTypeData;
-          const delVendor = {
-            merchant_id: deleteTableId.merchant_id,
-            id: deleteTableId.id,
-            ...otherUserData,
-          };
-          setDeleteModalOpen(false);
-          setDeleteLoader(true);
-          setDeletedId(deleteTableId.id);
-  
-          const response = await axios.post(
-            BASE_URL + DELETE_SINGLE_STORE,
-            delVendor,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-  
-          if (response) {
-            // const updatedVendorDetails =
-            //   verifiedMerchantList.verifiedMerchantData.filter(
-            //     (vendor) => vendor.id !== tableData.id
-            //   );
-            // setVerifiedMerchantListState(updatedVendorDetails);
-            // setFilteredMerchants(updatedVendorDetails);
-            setDeleteLoader(false);
-            setDeletedId("");
-            dispatch(getVerifiedMerchant(data_verified));
-          } else {
-            setDeleteLoader(false);
-            setDeletedId("");
-            console.error(response);
+        const { token, ...otherUserData } = userTypeData;
+        const delVendor = {
+          merchant_id: deleteTableId.merchant_id,
+          id: deleteTableId.id,
+          ...otherUserData,
+        };
+        setDeleteModalOpen(false);
+        setDeleteLoader(true);
+        setDeletedId(deleteTableId.id);
+
+        const response = await axios.post(
+          BASE_URL + DELETE_SINGLE_STORE,
+          delVendor,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
           }
+        );
+
+        if (response) {
+          // const updatedVendorDetails =
+          //   verifiedMerchantList.verifiedMerchantData.filter(
+          //     (vendor) => vendor.id !== tableData.id
+          //   );
+          // setVerifiedMerchantListState(updatedVendorDetails);
+          // setFilteredMerchants(updatedVendorDetails);
+          setDeleteLoader(false);
+          setDeletedId("");
+          dispatch(getVerifiedMerchant(data_verified));
+        } else {
+          setDeleteLoader(false);
+          setDeletedId("");
+          console.error(response);
+        }
       } catch (error) {
         console.error(error);
       }
     }
     setDeleteModalOpen(false);
     setDeleteTableId(null);
-  };  
+  };
 
   const confirmDislikeStore = async () => {
-    if(deleteMerchantId){
+    if (deleteMerchantId) {
       try {
-          const { token, ...otherUserData } = userTypeData;
-          const delVendor = {
-            id: deleteMerchantId,
-            ...otherUserData,
-          };
-  
-          const response = await axios.post(
-            BASE_URL + UNAPPROVE_SINGLE_STORE,
-            delVendor,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-  
-          if (response) {
-            dispatch(getVerifiedMerchant(data_verified));
-          } else {
-            console.error(response);
+        const { token, ...otherUserData } = userTypeData;
+        const delVendor = {
+          id: deleteMerchantId,
+          ...otherUserData,
+        };
+
+        const response = await axios.post(
+          BASE_URL + UNAPPROVE_SINGLE_STORE,
+          delVendor,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
           }
+        );
+
+        if (response) {
+          dispatch(getVerifiedMerchant(data_verified));
+        } else {
+          console.error(response);
+        }
       } catch (error) {
         console.error(error);
       }
-      setDeleteMerchantId(null)
-      setDislikeModalOpen(false)
-
+      setDeleteMerchantId(null);
+      setDislikeModalOpen(false);
     }
   };
 
-  const handleGetVerifiedMerchant = (merchant_id) => {
-    let data = {
-      merchant_id: merchant_id,
-      ...userTypeData,
-    };
+  const handleGetVerifiedMerchant = async (merchant_id) => {
+    try {
+      setLoaders({ view: { id: merchant_id, isLoading: true } });
+      let data = {
+        merchant_id: merchant_id,
+        ...userTypeData,
+      };
 
-    dispatch(handleMoveDash(data)).then((result) => {
-      if (result?.payload?.status == true) {
-        if (result?.payload?.final_login == 1) {
-          navigate(`/`);
-          dispatch(setIsStoreActive(true))
+      await dispatch(handleMoveDash(data)).then((result) => {
+        if (result?.payload?.status == true) {
+          if (result?.payload?.final_login == 1) {
+            navigate(`/`);
+            dispatch(setIsStoreActive(true));
+          } else {
+            console.log("store page called");
+          }
         } else {
-          console.log("store page called");
+          Cookies.remove("loginDetails");
+          Cookies.remove("user_auth_record");
+          dispatch(getAuthInvalidMessage(result?.payload?.msg));
+          navigate("/login");
         }
-      } else {
-        Cookies.remove("loginDetails");
-        Cookies.remove("user_auth_record");
-        dispatch(getAuthInvalidMessage(result?.payload?.msg));
-        navigate("/login");
-      }
-    });
+      });
+    } catch (e) {
+      console.log("Error: ", e);
+    } finally {
+      setLoaders({ view: { id: "", isLoading: false } });
+    }
   };
 
   const hadleDislikeMerchant = async (merchant_id) => {
-    setDeleteMerchantId(merchant_id)
+    setDeleteMerchantId(merchant_id);
     setDislikeModalOpen(true);
     /*
     try {
@@ -463,11 +477,24 @@ export default function Verified({setVisible,setMerchantId}) {
                                   </div>
                                 </div>
                                 <div className="text-[#818181] lowercase flex">
-                                {data.email && <img src={emailLogo} className="pe-1" />}   <p>{data.email || ""}</p> 
+                                  {data.email && (
+                                    <img
+                                      src={emailLogo}
+                                      alt=""
+                                      className="pe-1"
+                                    />
+                                  )}{" "}
+                                  <p>{data.email || ""}</p>
                                 </div>
                                 <div className="text-[#818181] flex">
-                                {data.a_phone && <img src={phoneLogo} className="pe-1" />}  <p> {data.a_phone || ""}</p> 
-                                 
+                                  {data.a_phone && (
+                                    <img
+                                      src={phoneLogo}
+                                      alt=""
+                                      className="pe-1"
+                                    />
+                                  )}{" "}
+                                  <p> {data.a_phone || ""}</p>
                                 </div>
                               </StyledTableCell>
                               <StyledTableCell>
@@ -482,32 +509,43 @@ export default function Verified({setVisible,setMerchantId}) {
                               </StyledTableCell>
                               <StyledTableCell>
                                 <div className="flex">
-                                  <img
-                                    className="mx-1 view cursor-pointer"
-                                    onClick={() =>
-                                      handleGetVerifiedMerchant(
-                                        data.merchant_id
-                                      )
-                                    }
-                                    src={View}
-                                    alt="View"
-                                  />
+                                  {loaders.view.id === data.merchant_id &&
+                                  loaders.view.isLoading ? (
+                                    <img src={SmallLoader} alt="loading" />
+                                  ) : (
+                                    <img
+                                      className="mx-1 view cursor-pointer"
+                                      onClick={() =>
+                                        handleGetVerifiedMerchant(
+                                          data.merchant_id
+                                        )
+                                      }
+                                      src={View}
+                                      alt="View"
+                                      title="View"
+                                    />
+                                  )}
+
                                   <img
                                     className="mx-1 edit cursor-pointer"
                                     onClick={() => handleEditMerchant(data.id)}
                                     src={Edit}
                                     alt="Edit"
+                                    title="Edit"
                                   />
+
                                   {data.id == deletedId && deleteLoader ? (
-                                    <CircularProgress />
+                                    <img src={SmallLoader} alt="loading" />
                                   ) : (
                                     <img
                                       className="mx-1 delete cursor-pointer"
                                       onClick={() => handleDeleteMerchant(data)}
                                       src={Delete}
                                       alt="Delete"
+                                      title="Delete"
                                     />
                                   )}
+
                                   <img
                                     className="mx-1 cursor-pointer"
                                     onClick={() =>
@@ -515,6 +553,7 @@ export default function Verified({setVisible,setMerchantId}) {
                                     }
                                     src={DisLike}
                                     alt="DisLike"
+                                    title="Disapprove"
                                   />
                                 </div>
                               </StyledTableCell>
@@ -533,18 +572,22 @@ export default function Verified({setVisible,setMerchantId}) {
         </Grid>
       </Grid>
       <DeleteModal
-            headerText="Verified Merchant"
-            otherMSG="Once The store is deleted Inventory and settings cannot be restored."
-            open={deleteModalOpen}
-            onClose={() => {setDeleteModalOpen(false)}}
-            onConfirm={confirmDeleteCategory}
-          />
-          <DislikeModal
-          headerText="Are you sure you want to Disapprove this store"
-          open={dislikeModalOpen}
-          onClose={() => {setDislikeModalOpen(false)}}
-          onConfirm={confirmDislikeStore}
-          />
+        headerText="Verified Merchant"
+        otherMSG="Once The store is deleted Inventory and settings cannot be restored."
+        open={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+        }}
+        onConfirm={confirmDeleteCategory}
+      />
+      <DislikeModal
+        headerText="Are you sure you want to Disapprove this store"
+        open={dislikeModalOpen}
+        onClose={() => {
+          setDislikeModalOpen(false);
+        }}
+        onConfirm={confirmDislikeStore}
+      />
     </>
   );
 }

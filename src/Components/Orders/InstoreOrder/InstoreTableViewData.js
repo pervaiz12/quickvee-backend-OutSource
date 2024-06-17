@@ -20,6 +20,8 @@ import "datatables.net-dt/css/jquery.dataTables.min.css";
 import { saveBulkInstantPo } from "./../../../Redux/features/Product/ProductSlice";
 import Pagination from "../../../AllUserComponents/Users/UnverifeDetails/Pagination";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import { getOrderListCount } from "../../../Redux/features/Orders/onlineStoreOrderSlice";
+import useDebounce from "../../../hooks/useDebouncs";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -51,13 +53,16 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const InstoreTableViewData = (props, searchId) => {
   // console.log(props)
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
   const [inStoreOrder, setAllInStoreOrders] = useState([]);
-  console.log("inStoreOrder ", inStoreOrder);
+  console.log("inStoreOrder totalCount", totalCount);
   const AllInStoreDataState = useSelector((state) => state.inStoreOrder);
   const [selectedValue, setSelectedValue] = useState(1);
   const dispatch = useDispatch();
+  const debouncedValue = useDebounce(props?.OnlSearchIdData);
 
   const handleChange = (event) => {
     setSelectedValue(parseInt(event.target.value));
@@ -72,18 +77,38 @@ const InstoreTableViewData = (props, searchId) => {
   }
 
   useEffect(() => {
+   const res  =   dispatch(
+      getOrderListCount({
+        merchant_id: props.merchant_id, //
+        order_type: "Offline",
+        search_by: Boolean(debouncedValue?.trim()) ? debouncedValue : null,
+        trans_type: props.OrderSourceData, //
+        start_date: props.selectedDateRange?.start_date, //
+        end_date: props.selectedDateRange?.end_date, //
+     
+        ...props.userTypeData, //
+      })
+    );
+  }, [
+    props.selectedDateRange?.start_date,
+    props.selectedDateRange?.end_date,
+    props.OrderSourceData,
+  
+  ]);
+
+  useEffect(() => {
     const fetchData = async () => {
       if (props?.selectedDateRange?.start_date) {
         let data = {
-          merchant_id: "MAL0100CA",
+          merchant_id: props.merchant_id,
           order_type: "Offline",
           trans_type: props.OrderSourceData,
           start_date: props.selectedDateRange?.start_date,
           end_date: props.selectedDateRange?.end_date,
           emp_id: props?.EmployeeIDData,
           search_by: props?.OffSearchIdData,
-          // page: currentPage,
-          // entriesPerPage: 10,
+          perpage: rowsPerPage,
+          page: currentPage,
         };
         console.log("date data", data);
         if (data) {
@@ -92,7 +117,20 @@ const InstoreTableViewData = (props, searchId) => {
       }
     };
     fetchData();
-  }, [dispatch, props, searchId,props.selectedDateRange]);
+  }, [
+    dispatch,
+    props,
+    searchId,
+    props.selectedDateRange,
+    currentPage,
+    rowsPerPage,
+  ]);
+
+  useEffect(() => {
+    
+    setTotalCount(AllInStoreDataState.OrderListCount);
+    console.log("AllInStoreDataState.OrderListCount", AllInStoreDataState)
+  }, [AllInStoreDataState.OrderListCount]);
 
   useEffect(() => {
     if (!AllInStoreDataState.loading && AllInStoreDataState.inStoreOrderData) {
@@ -170,6 +208,7 @@ const InstoreTableViewData = (props, searchId) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
   const tableRow = ["Customer", "Order", "Amount", ""];
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -177,13 +216,13 @@ const InstoreTableViewData = (props, searchId) => {
           <Grid container sx={{ padding: 2.5 }}>
             <Grid item xs={12}>
               <Pagination
-              // currentPage={currentPage}
-              // totalItems={totalCount}
-              // itemsPerPage={rowsPerPage}
-              // onPageChange={paginate}
-              // rowsPerPage={rowsPerPage}
-              // setRowsPerPage={setRowsPerPage}
-              // setCurrentPage={setCurrentPage}
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
               />
             </Grid>
           </Grid>
@@ -229,7 +268,7 @@ const InstoreTableViewData = (props, searchId) => {
                                 </p>
                               </StyledTableCell>
                               <StyledTableCell>
-                                <p> Amount: { "$"+ data.amt || ""}</p>
+                                <p> Amount: {"$" + data.amt || ""}</p>
                                 <p class="text-[#1EC26B]">
                                   {capitalizeFirstLetter(
                                     data.order_status || ""
@@ -238,7 +277,11 @@ const InstoreTableViewData = (props, searchId) => {
                               </StyledTableCell>
                               <StyledTableCell>
                                 <p
-                                onClick={()=>navigate(`/order/store-reporting/order-summary/${"MAL0100CA"}/${data.order_id}`)}
+                                  onClick={() =>
+                                    navigate(
+                                      `/order/store-reporting/order-summary/${"MAL0100CA"}/${data.order_id}`
+                                    )
+                                  }
                                   // href="/store-reporting/order-summary/${data.order_id}"
                                   className="view_details_order"
                                 >
@@ -248,7 +291,9 @@ const InstoreTableViewData = (props, searchId) => {
                             </StyledTableRow>
                           ))
                         ) : (
-                          <><p className="px-5 py-4">No Data Found</p></>
+                          <>
+                            <p className="px-5 py-4">No Data Found</p>
+                          </>
                         )}
                       </TableBody>
                     </StyledTable>

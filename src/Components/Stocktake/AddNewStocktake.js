@@ -100,7 +100,7 @@ const AddNewStocktake = ({
       );
       setProductList(newStocktakeItems);
     }
-  }, [singleStocktakeState]);
+  }, []);
 
   const loadOptions = async (inputValue) => {
     if (inputValue && inputValue.length > 2) {
@@ -157,7 +157,7 @@ const AddNewStocktake = ({
     setAlertModalHeaderText(headerText);
     setAlertModalOpen(true);
   };
-  // console.log("setSelectedProductsList", stocktake_items);
+  console.log("setSelectedProductsList", stocktake_items);
   // console.log("setSelectedProducts", selectedProducts);
   const handleAddProduct = () => {
     if (validate()) {
@@ -210,21 +210,26 @@ const AddNewStocktake = ({
 
     try {
       const { token, ...otherUserData } = userTypeData;
-      const total_qty = stocktake_items.reduce(
+      const filteredStocktakeItems = singleStocktakeState.stocktake_item.filter(
+        (_, i) => i !== deleteCategoryId
+      );
+  
+      const total_qty = filteredStocktakeItems.reduce(
         (sum, item) => sum + Number(item.new_qty || 0),
         0
       );
-      const total_discrepancy_cost = stocktake_items.reduce(
+      const total_discrepancy_cost = filteredStocktakeItems.reduce(
         (sum, item) => sum + Number(item.discrepancy_cost || 0),
-        0
+        0     
       );
-      const total_discrepancy = stocktake_items.reduce(
+      const total_discrepancy = filteredStocktakeItems.reduce(
         (sum, item) => sum + Number(item.discrepancy || 0),
         0
       );
 
       // Check if the item to be deleted is in the original stocktake_item list
       const itemToDelete = stocktake_items[deleteCategoryId];
+      // console.log("itemToDelete ",itemToDelete)
       const isOriginalItem = singleStocktakeState.stocktake_item.some(
         (item) => item.id === itemToDelete.stocktake_item_id
       );
@@ -254,14 +259,15 @@ const AddNewStocktake = ({
           const newList = stocktake_items.filter(
             (_, i) => i !== deleteCategoryId
           );
-          const newList2 = singleStocktakeState.stocktake_item.filter(
-            (_, i) => i !== deleteCategoryId
-          );
+          setProductList(newList)
           setSingleStocktakeState({
             ...singleStocktakeState,
-            stocktake_item: newList2,
+            stocktake_item: filteredStocktakeItems,
+            total_qty: total_qty,
+            total_discrepancy:total_discrepancy,
+            total_discrepancy_cost: total_discrepancy_cost,
           });
-          setProductList(newList);
+          // setProductList(newList);
           ToastifyAlert(response.data.message, "success");
         } else {
           console.log("Product Not available!");
@@ -315,6 +321,16 @@ const AddNewStocktake = ({
     });
   };
   const handleOnChangeSelectDropDown = async (productId, variantId, index) => {
+    console.log("onChangeSelectDropDown", productId, variantId)
+    const productExists = stocktake_items.some(
+      (item) => item.product_id === productId 
+    );
+    if (productExists) {
+      // Show an error message or handle it as needed
+      showModal("Product is already added.");
+
+      return;
+    }
     try {
       const formData = new FormData();
       formData.append("merchant_id", merchant_id);
@@ -491,7 +507,7 @@ const AddNewStocktake = ({
       e.preventDefault();
     }
   };
-  console.log("singleStocktakeState",singleStocktakeState)
+  // console.log("singleStocktakeState",singleStocktakeState)
   return (
     <>
       <Grid container className="box_shadow_div">

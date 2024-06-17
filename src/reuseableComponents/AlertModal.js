@@ -39,6 +39,7 @@ const AlertModal = ({ headerText, otherMSG, open, onClose }) => {
       case "Please select at least on category":
         return OneCategorie;
       case "Please select at least on product":
+      case "Product is already added.":
         return Oneproduct;
       case "No categories found is not a Category":
       case "Something went wrong !":
@@ -68,6 +69,7 @@ const AlertModal = ({ headerText, otherMSG, open, onClose }) => {
         return timestop;
       case "The end time cannot be the same as or before the start time":
       case "The selected time range overlaps with an existing slot":
+      case "Pickup Minimum Time should be less than Maximum Time":
         return time;
 
       default:

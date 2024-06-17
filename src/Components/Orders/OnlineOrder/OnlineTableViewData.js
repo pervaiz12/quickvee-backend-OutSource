@@ -16,6 +16,7 @@ import { Grid } from "@mui/material";
 import {
   fetchOnlieStoreOrderData,
   fetchOrderChangeStatusData,
+  getOrderListCount,
 } from "../../../Redux/features/Orders/onlineStoreOrderSlice";
 import { useSelector, useDispatch } from "react-redux";
 // import DownIcon from "../../../Assests/Dashboard/Down.svg";
@@ -66,8 +67,12 @@ const OnlineTableViewData = (props) => {
   // console.log(props)
   const [allOnlineStoreOrder, setAllOnlineStoreOrders] = useState([]);
   const AllInStoreDataState = useSelector((state) => state.onlineStoreOrder);
-  const dispatch = useDispatch();
+  const [rowsPerPage, setRowsPerPage] = useState(10);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalCount, setTotalCount] = useState(0);
 
+  const dispatch = useDispatch();
+  // const debouncedValue = useDebounce(searchId);
   useEffect(() => {
     const fetchData = async () => {
       if (props?.OrderTypeData) {
@@ -79,6 +84,9 @@ const OnlineTableViewData = (props) => {
           end_date: props.selectedDateRange?.end_date,
           customer_id: "0",
           search_by: props?.OnlSearchIdData,
+          perpage: rowsPerPage,
+          page: currentPage,
+          // search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
           ...props.userTypeData,
         };
 
@@ -88,7 +96,30 @@ const OnlineTableViewData = (props) => {
       }
     };
     fetchData();
-  }, [dispatch, props]);
+  }, [dispatch, props,currentPage, rowsPerPage]);
+
+  useEffect(() => {
+    dispatch(
+      getOrderListCount({
+        merchant_id: props.merchant_id, //
+        order_type: props.OrderTypeData,
+        search_by: props?.OnlSearchIdData,
+        trans_type: props.OrderSourceData, //
+        start_date: props.selectedDateRange?.start_date, //
+        end_date: props.selectedDateRange?.end_date, //
+        ...props.userTypeData, //
+      })
+    );
+  }, [
+    props.selectedDateRange?.start_date,
+    props.selectedDateRange?.end_date,
+    props.OrderTypeData,
+    props.OrderSourceData,
+  ]);
+
+  useEffect(() => {
+    setTotalCount(AllInStoreDataState.OrderListCount);
+  }, [AllInStoreDataState.OrderListCount]);
 
   useEffect(() => {
     if (
@@ -98,37 +129,37 @@ const OnlineTableViewData = (props) => {
       setAllOnlineStoreOrders(AllInStoreDataState.onlineStoreOrderData);
     }
   }, [AllInStoreDataState.loading, AllInStoreDataState.onlineStoreOrderData]);
-
+  // console.log("AllInStoreDataState.stocktakeListCount",AllInStoreDataState)
   // for New order dropdown start.
-  useEffect(() => {
-    const handleSelectChange = (event) => {
-      const target = event.target;
-      if (target.classList.contains("custom-selecttable")) {
-        const orderId = target.getAttribute("data-order-id");
-        const selectedOption = target.value;
-        // console.log(`Order ID: ${orderId}, Selected Option: ${selectedOption}`);
-        var success = window.confirm("Are you sure you want to change status");
-        if (success == true) {
-          const FormData = {
-            merchant_id: props.merchant_id,
-            order_id: orderId,
-            m_status: selectedOption,
-            ...props.userTypeData,
-          };
-          if (FormData) {
-            // console.log("API call hogai");
-            dispatch(fetchOrderChangeStatusData(FormData));
-          }
-        }
-      }
-    };
-    const onlineStoreTable = document.getElementById("OnlineStoreTable");
-    onlineStoreTable.addEventListener("change", handleSelectChange);
+  // useEffect(() => {
+  //   const handleSelectChange = (event) => {
+  //     const target = event.target;
+  //     if (target.classList.contains("custom-selecttable")) {
+  //       const orderId = target.getAttribute("data-order-id");
+  //       const selectedOption = target.value;
+  //       // console.log(`Order ID: ${orderId}, Selected Option: ${selectedOption}`);
+  //       var success = window.confirm("Are you sure you want to change status");
+  //       if (success == true) {
+  //         const FormData = {
+  //           merchant_id: props.merchant_id,
+  //           order_id: orderId,
+  //           m_status: selectedOption,
+  //           ...props.userTypeData,
+  //         };
+  //         if (FormData) {
+  //           // console.log("API call hogai");
+  //           dispatch(fetchOrderChangeStatusData(FormData));
+  //         }
+  //       }
+  //     }
+  //   };
+  //   const onlineStoreTable = document.getElementById("OnlineStoreTable");
+  //   onlineStoreTable.addEventListener("change", handleSelectChange);
 
-    return () => {
-      onlineStoreTable.removeEventListener("change", handleSelectChange);
-    };
-  }, []);
+  //   return () => {
+  //     onlineStoreTable.removeEventListener("change", handleSelectChange);
+  //   };
+  // }, []);
   // for New order dropdown end.
 
   const [showPriceModal, setShowPricModal] = useState(false);
@@ -148,24 +179,24 @@ const OnlineTableViewData = (props) => {
   };
 
   // for closed order edit button start.
-  useEffect(() => {
-    const handleSelectclick = (event) => {
-      const target = event.target;
-      if (target.classList.contains("edit_center")) {
-        const NeworderId = target.getAttribute("order-id");
-        const Neworderamt = target.getAttribute("order-amt");
-        setShowPricModal(true);
-        setNewOrderId(NeworderId);
-        setNewOrderAmount(Neworderamt);
-      }
-    };
-    const onlineStoreTable = document.getElementById("OnlineStoreTable");
-    onlineStoreTable.addEventListener("click", handleSelectclick);
+  // useEffect(() => {
+  //   const handleSelectclick = (event) => {
+  //     const target = event.target;
+  //     if (target.classList.contains("edit_center")) {
+  //       const NeworderId = target.getAttribute("order-id");
+  //       const Neworderamt = target.getAttribute("order-amt");
+  //       setShowPricModal(true);
+  //       setNewOrderId(NeworderId);
+  //       setNewOrderAmount(Neworderamt);
+  //     }
+  //   };
+  //   const onlineStoreTable = document.getElementById("OnlineStoreTable");
+  //   onlineStoreTable.addEventListener("click", handleSelectclick);
 
-    return () => {
-      onlineStoreTable.removeEventListener("click", handleSelectclick);
-    };
-  }, []);
+  //   return () => {
+  //     onlineStoreTable.removeEventListener("click", handleSelectclick);
+  //   };
+  // }, []);
   // for closed order edit button end.
 
   const changeReceivingAmount = (event) => {
@@ -185,10 +216,10 @@ const OnlineTableViewData = (props) => {
     // console.log(data);
     const response = await axios.post(
       BASE_URL + CLOSE_ORDER_COLLECT_CASH,
-      {...data,...otherUserData},
+      { ...data, ...otherUserData },
       {
-        headers: { 
-          "Content-Type": "multipart/form-data" ,
+        headers: {
+          "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       }
@@ -320,7 +351,7 @@ const OnlineTableViewData = (props) => {
           }<br><span class="text-[#1EC26B]">${capitalizeFirstLetter(
             data.order_status || ""
           )}</span>`,
-          // Status: status,
+          Status: status,
           OrderStatus: PayStatus,
           View: `<ahref="/store-reporting/order-summary/${data.order_id}" class="view_details_order">View Details</ahref=>`,
         };
@@ -333,7 +364,7 @@ const OnlineTableViewData = (props) => {
         { title: "Customer", data: "Customer", orderable: false },
         { title: "Order", data: "Order", orderable: false },
         { title: "Amount", data: "Amount", orderable: false },
-        // { title: "Status", data: "Status", orderable: false },
+        { title: "Status", data: "Status", orderable: false },
         { title: "Order Status", data: "OrderStatus", orderable: false },
         { title: " ", data: "View", orderable: false },
       ],
@@ -421,16 +452,16 @@ const OnlineTableViewData = (props) => {
       if (FormData) {
         try {
           const res = await dispatch(fetchOrderChangeStatusData(FormData));
-
+          console.log("setAllOnlineStoreOrders", res);
           // Checking if the API call was successful
-          if (res.status === true) {
+          if (res.meta.requestStatus === "fulfilled") {
             // Update the local state with the updated order data
             setAllOnlineStoreOrders((prevState) => {
               // Find the index of the order to update
               const index = prevState.findIndex(
                 (order) => order.order_id === option.orderId
               );
-
+              // console.log("setAllOnlineStoreOrders",index)
               if (index !== -1) {
                 // Create a copy of the order object
                 const updatedOrder = { ...prevState[index] };
@@ -525,8 +556,16 @@ const OnlineTableViewData = (props) => {
         return "Paid";
       }
     }
+    if (props?.OrderTypeData === "Failed") {
+      console.log("props?.OrderTypeData ")
+      if (data.is_tried === "0") {
+        return  "Incomplete order";
+      } else {
+        return  "Failed payment";
+      }
+    }
   };
-  
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -534,13 +573,13 @@ const OnlineTableViewData = (props) => {
           <Grid container sx={{ padding: 2.5 }}>
             <Grid item xs={12}>
               <Pagination
-              // currentPage={currentPage}
-              // totalItems={totalCount}
-              // itemsPerPage={rowsPerPage}
-              // onPageChange={paginate}
-              // rowsPerPage={rowsPerPage}
-              // setRowsPerPage={setRowsPerPage}
-              // setCurrentPage={setCurrentPage}
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
               />
             </Grid>
           </Grid>
@@ -643,7 +682,9 @@ const OnlineTableViewData = (props) => {
                             }
                           )
                         ) : (
-                          <></>
+                          <>
+                          <p className="px-5 py-4">No Data Found</p>
+                        </>
                         )}
                       </TableBody>
                     </StyledTable>
@@ -654,11 +695,11 @@ const OnlineTableViewData = (props) => {
           </Grid>
         </Grid>
       </Grid>
-      <div className="q-attributes-bottom-detail-section">
+      {/* <div className="q-attributes-bottom-detail-section">
         <div className="q-attributes-bottom-header-sticky">
           <table className="" id="OnlineStoreTable"></table>
         </div>
-      </div>
+      </div> */}
 
       {showPriceModal && (
         <div className="q-custom-modal-container" id="addtributes_">

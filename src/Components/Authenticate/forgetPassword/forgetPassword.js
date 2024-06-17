@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   FormControl,
   Button,
@@ -21,6 +21,7 @@ import CloseIcon from "@mui/icons-material/Close";
 // /commonField/QSubmitButton
 
 export default function ForgetPassword() {
+  const [loading, setLoading] = useState(false);
   const {
     handleOnChange,
     email,
@@ -29,7 +30,7 @@ export default function ForgetPassword() {
     message,
     handleHideErrorMessage,
     status,
-  } = ForgetPasswordLogic();
+  } = ForgetPasswordLogic(setLoading);
 
   return (
     <>
@@ -90,50 +91,10 @@ export default function ForgetPassword() {
                       name="email"
                       value={email}
                       onChange={handleOnChange}
-                      //   handleBlur={handleBlur}
                     />
                   </FormControl>
                   <span className="input-error">{errors?.email}</span>
                 </div>
-                {/* <div
-                  className="col-md-12"
-                  style={{ position: "relative", marginBottom: "24px" }}
-                >
-                  <FormControl fullWidth>
-                    <TextField
-                      className="input-field"
-                      label="Password"
-                      variant="outlined"
-                      size="small"
-                      autoComplete="off"
-                        type={showPassword === true ? "text" : "password"}
-                        onChange={handleChangeLogin}
-                      name="password"
-                        value={formData.password}
-                        inputProps={{
-                          "data-field": "password",
-                          autoComplete: "off",
-                          ref: (input) => (inputRefs.current["password"] = input),
-                          selectionstart: formData.password,
-                        }}
-                    />
-                  </FormControl>
-                  <span
-                    className="show-hide-button"
-                    onTouchStart={handleTouchStart}
-                    onTouchEnd={handleTouchEnd}
-                    onMouseDown={handleTouchStart}
-                    onMouseUp={handleTouchEnd}
-                  >
-                    {" "}
-                {showPassword === true && formData?.password?.length > 0
-                  ? "Hide"
-                  : "Show"}{" "}
-                  </span>
-                  <span className="input-error">
-                    {errors.passwordError}
-                  </span>
-                </div> */}
               </div>
             </div>
 
@@ -142,6 +103,7 @@ export default function ForgetPassword() {
                 <QSubmitButton
                   name="submit"
                   handleSubmitForm={handleSubmitData}
+                  loading={loading}
                 />
               }
             </FormControl>
