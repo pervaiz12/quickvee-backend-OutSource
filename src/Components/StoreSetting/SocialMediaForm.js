@@ -12,6 +12,7 @@ const SocialMediaForm = ({infoRecord,onChangeHandle, handleSubmitInfo }) => {
         </Grid>
         <Grid container spacing={2} sx={{ pt: 1 }}>
           <Grid item xs={12} sm={6}>
+            <label>Facebook</label>
             <BasicTextFields
               type={"text"}
               name={"facebookUrl"}
@@ -22,6 +23,7 @@ const SocialMediaForm = ({infoRecord,onChangeHandle, handleSubmitInfo }) => {
             {/* <span className='error'>{store.errors.ownerName}</span> */}
           </Grid>
           <Grid item xs={12} sm={6}>
+          <label>instagram</label>
             <BasicTextFields
               type={"text"}
               name={"instagramUrl"}
@@ -31,6 +33,20 @@ const SocialMediaForm = ({infoRecord,onChangeHandle, handleSubmitInfo }) => {
             />
             {/* <span className='error'>{store.errors.ownerName}</span> */}
           </Grid>
+        </Grid>
+        <Grid container spacing={2} sx={{ pt: 1 }}>
+          <Grid item xs={12} sm={12}>
+          <label>Promotional</label>
+            <BasicTextFields
+              type={"text"}
+              name={"promotionalUrl"}
+              placeholder="Promotional Url"
+              value={infoRecord.promotionalUrl}
+              onChangeFun={onChangeHandle}
+            />
+           
+          </Grid>
+          
         </Grid>
         <Grid
           container

@@ -31,10 +31,10 @@ import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
 import PasswordShow from "../../Common/passwordShow";
 
-const EditCoupon = ({couponId,seVisible}) => {
+const EditCoupon = ({ couponId, seVisible }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const myStyles = {
     display: "flex",
   };
@@ -52,7 +52,7 @@ const EditCoupon = ({couponId,seVisible}) => {
   async function fetchData() {
     const getcouponData = {
       merchant_id,
-      coupon_id:couponId,
+      coupon_id: couponId,
       ...userTypeData,
     };
 
@@ -232,7 +232,9 @@ const EditCoupon = ({couponId,seVisible}) => {
     // Create a new FormData object
 
     if (parseFloat(coupon.min_amount) <= parseFloat(coupon.discount)) {
-      showModal("Minimum order amount must be greater than the discount amount.");
+      showModal(
+        "Minimum order amount must be greater than the discount amount."
+      );
       setCoupon({ ...coupon, discount: "0.00" });
       setDiscountError("Discount Amount is required");
       return; // Stop further execution
@@ -354,8 +356,8 @@ const EditCoupon = ({couponId,seVisible}) => {
       }
     } catch (error) {
       console.error("API Error:", error);
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
     }
   };
 
@@ -483,7 +485,12 @@ const EditCoupon = ({couponId,seVisible}) => {
                 }}
                 className="q-add-categories-section-header"
               >
-                <span onClick={()=>{seVisible("CouponDiscount")}} className="add_coupon_span">
+                <span
+                  onClick={() => {
+                    seVisible("CouponDiscount");
+                  }}
+                  className="add_coupon_span"
+                >
                   <img
                     src={AddNewCategory}
                     alt="Add-New-Category"
@@ -840,6 +847,35 @@ const EditCoupon = ({couponId,seVisible}) => {
               />
             </Grid>
           </Grid>
+          <Grid container sx={{ px: 2.5, pb: 2.5 }}>
+            <Grid item xs={12}>
+              {couponStates.enablelimit > 0 && (
+                <div className="q-add-coupon-single-input">
+                  <label htmlFor="count_limit">Redemption Limit</label>
+                  <input
+                  className="w-full"
+                    type="number"
+                    id="count_limit"
+                    name="count_limit"
+                    min={1}
+                    max={999}
+                    value={
+                      coupon.count_limit === null || coupon.count_limit === "0"
+                        ? 1
+                        : Math.min(coupon.count_limit, 999)
+                    }
+                    onChange={(e) =>
+                      setCoupon({
+                        ...coupon,
+                        count_limit: Math.min(parseInt(e.target.value), 999),
+                      })
+                    }
+                  />
+                </div>
+              )}
+            </Grid>
+          </Grid>
+
           <Grid
             container
             direction="row"
@@ -847,13 +883,17 @@ const EditCoupon = ({couponId,seVisible}) => {
             alignItems="center"
             sx={{ px: 2.5, pb: 2.5 }}
           >
-            <Grid item sx={{px:2}}>
+            <Grid item sx={{ px: 2 }}>
               <button className="quic-btn quic-btn-save" onClick={handleSave}>
                 Save
               </button>
             </Grid>
             <Grid item>
-              <spam onClick={()=>{seVisible("CouponDiscount")}}>
+              <spam
+                onClick={() => {
+                  seVisible("CouponDiscount");
+                }}
+              >
                 <button className="quic-btn quic-btn-cancle">Cancel</button>
               </spam>
             </Grid>
