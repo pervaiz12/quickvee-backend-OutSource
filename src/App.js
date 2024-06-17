@@ -24,7 +24,6 @@ import MainImportData from "./Components/ImportData/MainImportData";
 import TopTenders from "./Components/Dashboard/TopTenders";
 //import ProductTable from "./Components/Products/ProductTable";
 import ProductEdit from "./Components/Products/ProductEdit";
-import AddPo from "./Components/PurchaseOrders/AddPo";
 import AddCoupon from "./Components/Coupons/AddCoupon";
 // import MainStoreSetting from "./Components/StoreSetting/MainStoreSetting";
 import MainReport from "./Components/ReportSetting/MainReport";
@@ -146,7 +145,7 @@ function App() {
           path="/unapprove/defaults/edit-defaults/:defaultsCode"
           element={<Main visible={"edit-defaults"} />}
         />
-         <Route
+        <Route
           exact
           // path="/users/view/unapprove/menu/defaults/edit-defaults/:defaultsCode"
           path="/unapprove/defaults/add-defaults"
@@ -164,15 +163,14 @@ function App() {
         </Route>
         <Route path="/print-purchase-order" element={<PrintPurchaseOrder />} />
         <Route
-            
-            path="/stocktake/print-stocktake-report"
-            element={<StocktakeReportPrint />}
-          />
-          <Route
-            exact
-            path="/users/view/unapprove/need-help"
-            element={ <MainNeedHelp  />}
-          />
+          path="/stocktake/print-stocktake-report"
+          element={<StocktakeReportPrint />}
+        />
+        <Route
+          exact
+          path="/users/view/unapprove/need-help"
+          element={<MainNeedHelp />}
+        />
         {/* <Route exact path="/store" element={<Main visible={"store"} />} /> */}
         <Route element={<ProtectedRoute visible="manager" />}>
           {/* <Route exact path="/manager" element={<Main visible={"manager"} />} /> */}
@@ -214,6 +212,11 @@ function App() {
           />
           <Route
             exact
+            path="/purchase-data/add"
+            element={<Main visible={"add-purchase-data"} />}
+          />
+          <Route
+            exact
             path="/purchase-data/:id"
             element={<Main visible={"edit-purchase-data"} />}
           />
@@ -222,12 +225,12 @@ function App() {
             path="/purchase-data/edit/:id"
             element={<Main visible={"modify-purchase-order"} />}
           />
-           <Route
+          <Route
             exact
             path="/stocktake"
             element={<Main visible={"stocktake"} />}
           />
-         
+
           <Route
             exact
             path="/attributes"
@@ -545,7 +548,6 @@ function App() {
 
         {/* ------------------------Superadmin---------------- */}
         <Route element={<ProtectedRoute visible="superadmin" />}>
-          
           <Route
             exact
             path="/users/manager_view"
@@ -619,7 +621,7 @@ function App() {
           <Route
             exact
             // path="/users/view/unapprove/menu/defaults"
-              path="/unapprove/defaults"
+            path="/unapprove/defaults"
             element={<Main visible={"defaults"} />}
           />
           <Route

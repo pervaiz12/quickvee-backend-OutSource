@@ -68,6 +68,7 @@ const AlertModal = ({ headerText, otherMSG, open, onClose }) => {
         return timestop;
       case "The end time cannot be the same as or before the start time":
       case "The selected time range overlaps with an existing slot":
+      case "Pickup Minimum Time should be less than Maximum Time":
         return time;
 
       default:

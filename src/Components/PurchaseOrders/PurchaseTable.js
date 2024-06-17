@@ -17,7 +17,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 import InputTextSearch from "../../reuseableComponents/InputTextSearch";
 import useDebounce from "../../hooks/useDebouncs";
@@ -47,6 +47,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const PurchaseTable = ({ seVisible }) => {
   // for list Purchase Order
+  const navigate = useNavigate();
   const [searchId, setSearchId] = useState(""); // State to track search ID
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -129,7 +130,7 @@ const PurchaseTable = ({ seVisible }) => {
         <div className="q-category-bottom-header-sticky">
           <div className="q-category-bottom-header">
             <span>Purchase Order</span>
-            <p onClick={() => seVisible("AddPo")}>
+            <p onClick={() => navigate("/purchase-data/add")}>
               Add New PO <img src={AddIcon} alt="add-icon" />{" "}
             </p>
           </div>
@@ -238,7 +239,9 @@ const PurchaseTable = ({ seVisible }) => {
                               <StyledTableCell align="center">
                                 <div className="flex justify-center">
                                   <p className="purchase-data-sort purchaseData ">
-                                    {priceFormate(Number(purchaseData.total_qty))}
+                                    {priceFormate(
+                                      Number(purchaseData.total_qty)
+                                    )}
                                   </p>
                                 </div>
                               </StyledTableCell>
@@ -268,11 +271,13 @@ const PurchaseTable = ({ seVisible }) => {
                                   <p className="purchaseData">
                                     {purchaseData.stock_date === "0000-00-00"
                                       ? "-"
-                                      : new Date(purchaseData.stock_date).toLocaleDateString("en-US", {
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: 'numeric'
-                                      })}
+                                      : new Date(
+                                          purchaseData.stock_date
+                                        ).toLocaleDateString("en-US", {
+                                          year: "numeric",
+                                          month: "long",
+                                          day: "numeric",
+                                        })}
                                   </p>
                                 </div>
                               </StyledTableCell>
@@ -281,16 +286,20 @@ const PurchaseTable = ({ seVisible }) => {
                                   <p className=" purchaseData ">
                                     {purchaseData.updated_at ===
                                     "0000-00-00 00:00:00"
-                                      ? new Date(purchaseData.created_at).toLocaleDateString("en-US", {
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: 'numeric'
-                                      })
-                                      : new Date(purchaseData.updated_at).toLocaleDateString("en-US", {
-                                        year: 'numeric',
-                                        month: 'long',
-                                        day: 'numeric'
-                                      })}
+                                      ? new Date(
+                                          purchaseData.created_at
+                                        ).toLocaleDateString("en-US", {
+                                          year: "numeric",
+                                          month: "long",
+                                          day: "numeric",
+                                        })
+                                      : new Date(
+                                          purchaseData.updated_at
+                                        ).toLocaleDateString("en-US", {
+                                          year: "numeric",
+                                          month: "long",
+                                          day: "numeric",
+                                        })}
                                   </p>
                                 </div>
                               </StyledTableCell>
@@ -300,11 +309,13 @@ const PurchaseTable = ({ seVisible }) => {
                                     {purchaseData.received_status === "2"
                                       ? purchaseData.received_at !==
                                         "0000-00-00 00:00:00"
-                                        ? new Date(purchaseData.received_at).toLocaleDateString("en-US", {
-                                          year: 'numeric',
-                                          month: 'long',
-                                          day: 'numeric'
-                                        })
+                                        ? new Date(
+                                            purchaseData.received_at
+                                          ).toLocaleDateString("en-US", {
+                                            year: "numeric",
+                                            month: "long",
+                                            day: "numeric",
+                                          })
                                         : "11/30/-0001"
                                       : "-"}
                                   </p>

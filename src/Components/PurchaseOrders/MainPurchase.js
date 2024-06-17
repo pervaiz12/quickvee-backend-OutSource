@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 
 import PurchaseTable from "./PurchaseTable";
-import AddPo from "./AddPo";
+// import AddPo from "./AddPo";
 
 const MainPurchase = () => {
   const [visible, seVisible] = useState("PurchaseTable");
@@ -13,7 +13,6 @@ const MainPurchase = () => {
           {visible === "PurchaseTable" && (
             <PurchaseTable seVisible={seVisible} />
           )}
-          {visible === "AddPo" && <AddPo seVisible={seVisible} />}
         </div>
       </div>
     </>

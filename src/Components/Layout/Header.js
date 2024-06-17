@@ -99,7 +99,7 @@ export default function Header() {
     Cookies.remove("token_data");
     localStorage.removeItem("AllStore");
     navigate("/login");
-    dispatch(setIsStoreActive(false))
+    dispatch(setIsStoreActive(false));
   };
 
   const handleNavigate = () => {
@@ -221,7 +221,7 @@ export default function Header() {
           isSticky ? "sticky-header" : ""
         }`}
       >
-        <div className="flex items-center px-4 mx-2 cursor-pointer">
+        <div className="flex items-center px-4 mx-2">
           {LoginGetDashBoardRecordJson?.final_login == 1 ? (
             <BiMenu
               className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out cursor-pointer`}
@@ -337,15 +337,13 @@ export default function Header() {
                 </div> */}
 
                 {/* Online Store and Sync Data section */}
-                <div className="ml-5 flex items-center">
+                <div className="cursor-pointer ml-5 flex items-center">
                   <img src={OnlineData} alt="icon" className="ml-2" />
-                  <p className="cursor-pointer ml-2 admin_medium">
-                    Online Store
-                  </p>
+                  <p className="ml-2 admin_medium">Online Store</p>
                 </div>
-                <div className="mx-5 flex items-center">
+                <div className="cursor-pointer mx-5 flex items-center">
                   <img src={SynkData} alt="icon" className="ml-2" />
-                  <p className="cursor-pointer ml-2 admin_medium">Sync Data</p>
+                  <p className="ml-2 admin_medium">Sync Data</p>
                 </div>
               </>
             ) : (
@@ -353,7 +351,7 @@ export default function Header() {
             )}
             {/* ======================================== */}
             <div
-              className="flex  items-center cursor-pointer"
+              className="flex items-center cursor-pointer"
               id="basic-button"
               aria-controls={open ? "basic-menu" : undefined}
               aria-haspopup="true"
