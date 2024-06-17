@@ -16,9 +16,11 @@ import { fetchVendorsListData } from "../../Redux/features/VendorList/vListSlice
 import "react-datepicker/dist/react-datepicker.css";
 import dayjs from "dayjs";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import { useNavigate } from "react-router-dom";
 
 const AddPo = ({ seVisible }) => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { userTypeData } = useAuthDetails();
 
   const [purchaseInfo, setPurchaseInfo] = useState({
@@ -108,7 +110,7 @@ const AddPo = ({ seVisible }) => {
       <div className="box">
         <div className="box_shadow_div">
           <div className="q-add-categories-section-header">
-            <span onClick={() => seVisible("PurchaseTable")}>
+            <span onClick={() => navigate("/purchase-data")}>
               <img src={backIcon} alt="Add New Category" className="w-6 h-6" />
               <span>Create Purchase Order</span>
             </span>
@@ -231,7 +233,6 @@ const AddPo = ({ seVisible }) => {
         <AutoPo
           purchaseInfo={purchaseInfo}
           setPurchaseInfoErrors={setPurchaseInfoErrors}
-          seVisible={seVisible}
         />
       </div>
     </>

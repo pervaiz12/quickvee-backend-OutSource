@@ -95,8 +95,7 @@ const LeftSide = ({ visible }) => {
           {visible === "category" && <MainCategory />}
           {visible === "purchase-data" && <MainPurchase />}
           {visible === "stocktake" && <MainStocktake />}
-        
-
+          {visible === "add-purchase-data" && <AddPo />}
           {visible === "edit-purchase-data" && <ReceivePurchaseOrderItems />}
           {visible === "modify-purchase-order" && <ModifyPurchaseOrder />}
           {visible === "attributes" && <MainAttributes />}
