@@ -8,6 +8,7 @@ import {
   Collapse,
   Alert,
 } from "@mui/material";
+import CircularProgress from "@mui/material/CircularProgress";
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import LoginLogic from "./loginLogic";
@@ -34,8 +35,8 @@ export default function Login() {
     useAuthDetails();
   const inputRefs = useRef({});
   const merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-  // console.log(merchant_id);
-  // console.log(userTypeData);
+
+  const [loading, setLoading] = useState(false);
 
   const errorMessageRecord = useSelector(
     (state) => state?.loginAuthentication?.errors
@@ -49,7 +50,7 @@ export default function Login() {
     setErrorMessage,
     errorMessage,
     handleWrongPasswordError,
-  } = LoginLogic();
+  } = LoginLogic(setLoading);
   useEffect(() => {
     setErrorMessage(errorMessageRecord);
   }, []);
@@ -200,43 +201,8 @@ export default function Login() {
                       ? "Hide"
                       : "Show"}{" "}
                   </span>
-                  {/* <FormControl fullWidth>
-                    <TextInput
-                      label="Password"
-                      name="password"
-                      type="password"
-                      value={formData.password}
-                      onChange={handleChangeLogin}
-                    />
-                  </FormControl> */}
                   <span className="input-error">{errors.passwordError}</span>
                 </div>
-                {/* {
-                                //    (authEmailValidate?.checkemailValidate && authEmailValidate?.CoockieEmailValidate !=="true" ) 
-                                //    && (!authEmailValidate?.checkemailValidate && authEmailValidate?.CoockieEmailValidate !=="true")
-
-                                !authEmailValidate?.CoockieEmailValidate ?
-                                 authEmailValidate?.checkemailValidate 
-                                ?
-                                
-                            <div
-                                className="col-md-12"
-                                style={{ position: 'relative', marginBottom: '24px' }}
-                            >
-                                <FormControl fullWidth>
-                                <TextInput
-                                label="otp"
-                                name="otp"
-                                type="text"
-                                value={formData.otp.replace(/[^0-9]/g, '')}
-                                onChange={handleChangeLogin}
-                                />
-                                </FormControl>
-                                <span className="input-error">{errors.otpError}</span>
-                            </div>
-                            :''
-                            :''
-                            } */}
               </div>
             </div>
             <Link
@@ -249,13 +215,10 @@ export default function Login() {
 
             <FormControl fullWidth>
               {
-                //  (authEmailValidate?.checkemailValidate || authEmailValidate?.localEmailValidate=="true" ) && (!authEmailValidate?.checkemailValidate || authEmailValidate?.localEmailValidate=="true")
-                // authEmailValidate?.EmailValidateOtp ?
-                // <QSubmitButton name="submit" handleSubmitForm={handleSubmitFormPlace} />
-                // :
                 <QSubmitButton
                   name="submit"
                   handleSubmitForm={handleSubmitForm}
+                  loading={loading}
                 />
               }
             </FormControl>

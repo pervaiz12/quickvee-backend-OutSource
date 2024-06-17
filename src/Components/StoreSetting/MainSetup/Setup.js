@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import OnlineOrderingPage from "./OnlineOrderingPage";
 import StoreWorkingHrs from "./StoreWorkingHrs";
 import PickupDeliveryDetails from "./PickupDeliveryDetails";
@@ -46,6 +46,15 @@ const Setup = () => {
     merchant_id: merchant_id,
   };
 
+  const pickupDeliveryDetailsRef = useRef();
+
+  const [errors, setErrors] = useState({
+    minDeliveryTimeError: "",
+    maxDeliveryTimeError: "",
+    minPickupTimeError: "",
+    maxPickupTimeError: "",
+  });
+
   const [alertModalOpen, setAlertModalOpen] = useState(false);
   const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
 
@@ -58,13 +67,6 @@ const Setup = () => {
     dispatch(fetchStoreSettingSetupData(data));
   }, []);
 
-  // const handleUpdateClick = () => {
-  //   console.log(OnlineOrderStatus);
-  //   const details = "updated details";
-  //   setUpdateDetails(details);
-  //   window.alert(`Updates: ${details}`);
-  // };
-  // console.log("days",days)
   const handleonlineorderstatus = (onlinestatus) => {
     setOnlineOrderStatus(onlinestatus);
   };
@@ -109,6 +111,30 @@ const Setup = () => {
       showModal("End time cannot be empty");
       return;
     }
+
+    const {
+      minDeliveryTimeError,
+      maxDeliveryTimeError,
+      minPickupTimeError,
+      maxPickupTimeError,
+    } = errors;
+
+    const errorFree = [
+      minDeliveryTimeError,
+      maxDeliveryTimeError,
+      minPickupTimeError,
+      maxPickupTimeError,
+    ].every((error) => error === "");
+
+    // console.log("pickupDeliveryDetailsRef: ", pickupDeliveryDetailsRef);
+
+    if (!errorFree) {
+      pickupDeliveryDetailsRef.current.scrollIntoView({
+        behavior: "smooth",
+      });
+      return;
+    }
+
     e.preventDefault();
 
     const FormData = {
@@ -133,7 +159,7 @@ const Setup = () => {
       default_tip_delivery: delDefTip, //
       day_data: JSON.stringify(days),
     };
-    console.log(FormData);
+
     const { token, ...otherUserData } = userTypeData;
     const response = await axios.post(
       BASE_URL + UPDATE_STORE_SETUP,
@@ -167,11 +193,15 @@ const Setup = () => {
       <StoreWorkingHrs
         days={days}
         setDays={setDays}
-
         setLastCloseTimeState={setLastCloseTimeState}
       />
 
-      <PickupDeliveryDetails pickupdeliverydata={handlepickupdeliverydata} />
+      <PickupDeliveryDetails
+        pickupdeliverydata={handlepickupdeliverydata}
+        errors={errors}
+        setErrors={setErrors}
+        pickupDeliveryDetailsRef={pickupDeliveryDetailsRef}
+      />
 
       <FlatDelivery DeliveryFeeData={handleDeliveryFeeData} />
 
@@ -185,7 +215,6 @@ const Setup = () => {
         sx={{ pb: 2.5 }}
       >
         <Grid item>
-          
           <button class="quic-btn quic-btn-save" onClick={handleUpdateClick}>
             Update
           </button>
@@ -203,10 +232,12 @@ const Setup = () => {
         </div>
       </div> */}
       <AlertModal
-      headerText={alertModalHeaderText}
-      open={alertModalOpen}
-      onClose={() => {setAlertModalOpen(false)}}
-       />
+        headerText={alertModalHeaderText}
+        open={alertModalOpen}
+        onClose={() => {
+          setAlertModalOpen(false);
+        }}
+      />
     </>
   );
 };

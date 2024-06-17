@@ -6,6 +6,7 @@ import {
   APPROVE_SINGLE_STORE,
   EXPORTCSV,
 } from "../../../Constants/Config";
+import SmallLoader from "../../../Assests/Loader/loading-Animation.gif";
 import {
   getUnVerifiedMerchant,
   getUnVerifiedMerchantCount,
@@ -45,8 +46,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 import DeleteModal from "../../../reuseableComponents/DeleteModal";
 import DislikeModal from "../../../reuseableComponents/DislikeModal";
-import emailLogo from "../../../Assests/Dashboard/email.svg"
-import phoneLogo from "../../../Assests/Dashboard/phone.svg"
+import emailLogo from "../../../Assests/Dashboard/email.svg";
+import phoneLogo from "../../../Assests/Dashboard/phone.svg";
 import { setIsStoreActive } from "../../../Redux/features/NavBar/MenuSlice";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -71,14 +72,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   // hide last border
 }));
 
-export default function Unverified({setMerchantId,setVisible}) {
+export default function Unverified({ setMerchantId, setVisible }) {
   //  ============== DEFINED REDUX STATES ============================
 
   const UnVerifiedMerchantList = useSelector(
     (state) => state.unverifiedMerchantRecord
   );
-  // unverifiedMerchantData
-  // UnVerifiedMerchantList.unverifiedMerchantDataCount
 
   // ============= END DEFINED REDUX STATE =============================
 
@@ -97,6 +96,13 @@ export default function Unverified({setMerchantId,setVisible}) {
   const [deleteLoader, setDeleteLoader] = useState(false);
   const [deletedId, setDeletedId] = useState("");
 
+  const [loaders, setLoaders] = useState({
+    view: {
+      id: "",
+      isLoading: false,
+    },
+  });
+
   const debouncedValue = useDebounce(searchRecord);
 
   const [deleteTableId, setDeleteTableId] = useState(null);
@@ -107,68 +113,14 @@ export default function Unverified({setMerchantId,setVisible}) {
 
   // ============================= USEFFECTS ================================
 
-  // useEffect(() => {
-  //   if (UnVerifiedMerchantList.length >= 1) {
-  //     setVerifiedMerchantListState(UnVerifiedMerchantList);
-  //     setFilteredMerchants(UnVerifiedMerchantList);
-  //   }
-  // }, [UnVerifiedMerchantList]);
-
   // ============================= END USEFFECTS =============================
 
   //  ============================= HANDLIING FUNCTIONS =============================
 
   const handleDeleteMerchant = async (tableData) => {
-    console.log("handleDeleteMer", tableData);
+    // console.log("handleDeleteMer", tableData);
     setDeleteTableId(tableData);
     setDeleteModalOpen(true);
-    /*
-    try {
-      const { token, ...otherUserData } = userTypeData;
-      const userConfirmed = window.confirm(
-        "Are you sure you want to delete? Once The store is deleted Inventory and settings cannot be restored."
-      );
-      if (userConfirmed) {
-        const delVendor = {
-          merchant_id: tableData.merchant_id,
-          id: tableData.id,
-          ...otherUserData,
-        };
-        setDeleteLoader(true);
-        setDeletedId(tableData.id);
-
-        const response = await axios.post(
-          BASE_URL + DELETE_SINGLE_STORE,
-          delVendor,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (response) {
-          setDeleteLoader(false);
-          setDeletedId("");
-          ToastifyAlert("Deleted Merchant  Successfully!", "success");
-          // const updatedVendorDetails = VerifiedMerchantListState.filter(
-          //   (vendor) => vendor.id !== tableData.id
-          // );
-          // setVerifiedMerchantListState(updatedVendorDetails);
-          // setFilteredMerchants(updatedVendorDetails);
-          dispatch(getUnVerifiedMerchant(unverify_data));
-        } else {
-          setDeleteLoader(false);
-          setDeletedId("");
-          ToastifyAlert("Merchant not Deleted!", "warn");
-          console.error(response);
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-    */
   };
 
   const confirmDeleteCategory = async () => {
@@ -254,112 +206,50 @@ export default function Unverified({setMerchantId,setVisible}) {
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
     setCurrentPage(1);
-    // if (value === "") {
-    //   setFilteredMerchants(VerifiedMerchantListState);
-    //   setTotalCount(VerifiedMerchantListState.length);
-    // } else {
-    //   const filteredAdminRecord =
-    //     UnVerifiedMerchantList && Array.isArray(UnVerifiedMerchantList)
-    //       ? UnVerifiedMerchantList.filter(
-    //           (result) =>
-    //             (result.owner_name &&
-    //               result.owner_name
-    //                 .toLowerCase()
-    //                 .includes(searchRecord.toLowerCase())) ||
-    //             (result.name &&
-    //               result.name
-    //                 .toLowerCase()
-    //                 .includes(searchRecord.toLowerCase())) ||
-    //             (result.email &&
-    //               result.email
-    //                 .toLowerCase()
-    //                 .includes(searchRecord.toLowerCase())) ||
-    //             (result.phone && result.phone.includes(searchRecord)) ||
-    //             (result.a_state && result.a_state.includes(searchRecord))
-    //         )
-    //       : [];
-    //   setVerifiedMerchantListState(filteredAdminRecord);
-    //   setFilteredMerchants(filteredAdminRecord);
-    //   setTotalCount(filteredAdminRecord.length);
-    // }
   };
 
   // ====================================
   // ====================================
   const handleEditMerchant = (data) => {
-    // setMerchantId(data)
-    // setVisible("editVerirmedMerchant")
     navigate(`/users/unapprove/editMerchant/${data}`);
   };
-  const handleGetVerifiedMerchant = (merchant_id) => {
-    let data = {
-      merchant_id: merchant_id,
-      ...userTypeData,
-    };
-   
-    // const formdata = new FormData();
+  const handleGetVerifiedMerchant = async (merchant_id) => {
+    try {
+      setLoaders({ view: { id: merchant_id, isLoading: true } });
+      let data = {
+        merchant_id: merchant_id,
+        ...userTypeData,
+      };
 
-    dispatch(handleMoveDash(data)).then((result) => {
-      // console.log(result?.payload)
-      if (result?.payload?.status == true) {
-        if (result?.payload?.final_login == 1) {
-          navigate(`/`);
-          dispatch(setIsStoreActive(true))
+      // const formdata = new FormData();
+
+      await dispatch(handleMoveDash(data)).then((result) => {
+        // console.log(result?.payload)
+        if (result?.payload?.status == true) {
+          if (result?.payload?.final_login == 1) {
+            navigate(`/`);
+            dispatch(setIsStoreActive(true));
+          } else {
+            console.log("store page called");
+          }
         } else {
-          console.log("store page called");
+          Cookies.remove("loginDetails");
+          Cookies.remove("user_auth_record");
+          // Cookies.remove('token_data');
+          dispatch(getAuthInvalidMessage(result?.payload?.msg));
+          navigate("/login");
         }
-      } else {
-        Cookies.remove("loginDetails");
-        Cookies.remove("user_auth_record");
-        // Cookies.remove('token_data');
-        dispatch(getAuthInvalidMessage(result?.payload?.msg));
-        navigate("/login");
-      }
-    });
+      });
+    } catch (e) {
+      console.log("Error: ", e);
+    } finally {
+      setLoaders({ view: { id: "", isLoading: false } });
+    }
   };
 
   const hadleDislikeMerchant = async (merchant_id) => {
     setDeleteMerchantId(merchant_id);
     setDislikeModalOpen(true);
-    /*
-    try {
-      const userConfirmed = window.confirm(
-        "Are you sure you want approve this store?"
-      );
-      if (userConfirmed) {
-        const { token, ...otherUserData } = userTypeData;
-        const delVendor = {
-          id: merchant_id,
-          ...otherUserData,
-        };
-
-        const response = await axios.post(
-          BASE_URL + APPROVE_SINGLE_STORE,
-          delVendor,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (response) {
-          // const updatedVendorDetails = VerifiedMerchantListState.filter(
-          //   (vendor) => vendor.id !== merchant_id
-          // );
-          // setVerifiedMerchantListState(updatedVendorDetails);
-          // setFilteredMerchants(updatedVendorDetails);
-
-          dispatch(getUnVerifiedMerchant(unverify_data));
-        } else {
-          console.error(response);
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }
-    */
   };
 
   const confirmDislikeStore = async () => {
@@ -545,7 +435,6 @@ export default function Unverified({setMerchantId,setVisible}) {
                         <StyledTableCell>Store Info</StyledTableCell>
                         <StyledTableCell>Owner Name</StyledTableCell>
                         <StyledTableCell>Merchant ID</StyledTableCell>
-                        {/* <StyledTableCell>OTP</StyledTableCell> */}
                         <StyledTableCell>Action</StyledTableCell>
                       </TableHead>
                       <TableBody>
@@ -564,34 +453,26 @@ export default function Unverified({setMerchantId,setVisible}) {
                                   </div>
                                 </div>
                                 <div className="text-[#818181] lowercase flex">
-                                  
-                                {data.email && <img src={emailLogo} className="pe-1" />} <p>{data.email || ""}</p> 
+                                  {data.email && (
+                                    <img
+                                      src={emailLogo}
+                                      alt=""
+                                      className="pe-1"
+                                    />
+                                  )}{" "}
+                                  <p>{data.email || ""}</p>
                                 </div>
                                 <div className="text-[#818181] flex">
-                               {data.a_phone && <img src={phoneLogo} className="pe-1" />}  <p> {data.a_phone || ""}</p> 
-                                 
-                                  
+                                  {data.a_phone && (
+                                    <img
+                                      src={phoneLogo}
+                                      alt=""
+                                      className="pe-1"
+                                    />
+                                  )}{" "}
+                                  <p> {data.a_phone || ""}</p>
                                 </div>
                               </StyledTableCell>
-                              {/* <StyledTableCell>
-                                <div class="flex">
-                                  <div class="text-[#000000] order_method capitalize">
-                                    {data.owner_name.length < 18
-                                      ? data?.name
-                                      : data.owner_name.slice(0, 18) + `...` ||
-                                        ""}
-                                  </div>
-                                  <div class="mx-2 ">
-                                    (State: {data.a_state})
-                                  </div>
-                                </div>
-                                <div class="text-[#818181] lowercase">
-                                  {data.email || ""}
-                                </div>
-                                <div class="text-[#818181]">
-                                  {data.a_phone || ""}
-                                </div>
-                              </StyledTableCell> */}
                               <StyledTableCell>
                                 <div class="text-[#000000] order_method capitalize">
                                   {data.owner_name.length < 18
@@ -605,43 +486,45 @@ export default function Unverified({setMerchantId,setVisible}) {
                                   {data.merchant_id}
                                 </div>
                               </StyledTableCell>
-                              {/* <StyledTableCell>
-                                <div class="text-[#000000] order_method capitalize">
-                                  {data.ver_code}
-                                </div>
-                              </StyledTableCell> */}
                               <StyledTableCell align="right">
                                 <div className="flex">
-                                  <img
-                                    className="mx-1 view cursor-pointer"
-                                    onClick={() =>
-                                      handleGetVerifiedMerchant(
-                                        data.merchant_id
-                                      )
-                                    }
-                                    src={View}
-                                    alt="View"
-                                  />
+                                  {loaders.view.id === data.merchant_id &&
+                                  loaders.view.isLoading ? (
+                                    <img src={SmallLoader} alt="loading" />
+                                  ) : (
+                                    <img
+                                      className="mx-1 view cursor-pointer"
+                                      onClick={() =>
+                                        handleGetVerifiedMerchant(
+                                          data.merchant_id
+                                        )
+                                      }
+                                      src={View}
+                                      alt="View"
+                                      title="View"
+                                    />
+                                  )}
+
                                   <img
                                     className="mx-1 edit cursor-pointer"
                                     onClick={() => handleEditMerchant(data.id)}
                                     src={Edit}
                                     alt="Edit"
+                                    title="Edit"
                                   />
-                                  
-                                  {
-                                  data.id == deletedId && deleteLoader
-                                  
-                                  ? (
-                                    <CircularProgress />
+
+                                  {data.id == deletedId && deleteLoader ? (
+                                    <img src={SmallLoader} alt="loading" />
                                   ) : (
                                     <img
                                       class="mx-1 delete cursor-pointer"
                                       onClick={() => handleDeleteMerchant(data)}
                                       src={Delete}
                                       alt="Delete"
+                                      title="Delete"
                                     />
                                   )}
+
                                   <img
                                     class="mx-1 cursor-pointer"
                                     onClick={() =>
@@ -649,6 +532,7 @@ export default function Unverified({setMerchantId,setVisible}) {
                                     }
                                     src={Like}
                                     alt="Like"
+                                    title="Approve"
                                   />
                                 </div>
                               </StyledTableCell>

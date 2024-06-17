@@ -114,7 +114,7 @@ const AllUserHeader = () => {
     localStorage.removeItem("AllStore");
     Cookies.remove("token_data");
     navigate("/login");
-    dispatch(setIsStoreActive(false))
+    dispatch(setIsStoreActive(false));
     // handleClose()
   };
 
@@ -136,7 +136,7 @@ const AllUserHeader = () => {
       >
         <Grid item>
           <Grid container>
-            <Grid item sx={{ ml: 1, mr: 2}}>
+            <Grid item sx={{ ml: 1, mr: 2 }}>
               <BiMenu
                 className={`text-black text-[30px] hover:text-yellow-500 active:text-yellow-700 transition duration-300 ease-in-out cursor-pointer`}
                 onClick={handleDropdownToggle}
@@ -187,11 +187,8 @@ const AllUserHeader = () => {
                   <p>Need Help</p>
                 </div>
               </MenuItem>
-              <MenuItem onClick={handleLogout }>
-                <div
-                  className="flex justify-items-start items-center"
-                 
-                >
+              <MenuItem onClick={handleLogout}>
+                <div className="flex justify-items-start items-center">
                   <img src={logoutLogo} alt="" className="w-6 h-6 mr-2" />
                   Logout
                 </div>{" "}
