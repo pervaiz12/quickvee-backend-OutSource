@@ -69,14 +69,6 @@ const ProductTable = ({
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   const [productList, setproductsList] = useState([]);
-  const [showType, setShowType] = useState("");
-  console.log(
-    "ProductsListDataState",
-    ProductsListDataState,
-    selectedListingType,
-    selectedListingTypeValue,
-    selectedStatusValue
-  );
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -217,7 +209,7 @@ const ProductTable = ({
           <div className="">
             <div className="q-category-bottom-header">
               <span>Products</span>
-              <Link to="/products/add">
+              <Link to="/inventory/products/add">
                 <p className="">
                   Add New Product
                   <img src={AddIcon} alt="add-icon" />
@@ -277,7 +269,7 @@ const ProductTable = ({
                                 </StyledTableCell>
                                 <StyledTableCell>
                                   <p className="categories-title">
-                                    <Link to={`/products/edit/${product?.id}`}>
+                                    <Link to={`/inventory/products/edit/${product?.id}`}>
                                       {product.title}
                                     </Link>
                                   </p>

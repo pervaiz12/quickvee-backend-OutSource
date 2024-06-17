@@ -751,7 +751,7 @@ const menuItems = [
           <img src={ProdIcon} alt="Products" className="h-6 w-10 mt-4 mb-4 " />
         ),
         text: "Products",
-        link: "/products",
+        link: "/inventory/products",
       },
       {
         id: 3,

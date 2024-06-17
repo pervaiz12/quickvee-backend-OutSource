@@ -26,7 +26,7 @@ const   ProductRow = ({
           <img src={SortIcon} alt="" className="" />
         </p>
         <p className="categories-title">
-          <Link to={`/products/edit/${product?.id}`}>{product.title}</Link>
+          <Link to={`/inventory/products/edit/${product?.id}`}>{product.title}</Link>
         </p>
         <p className="categories-title">{product.category_name}</p>
 

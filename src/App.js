@@ -185,25 +185,25 @@ function App() {
           />
           <Route
             exact
-            path="/products"
+            path="inventory/products"
             element={<Main visible={"products"} />}
           />
           <Route
             exact
-            path="/products/saleshistory/:id/:varientId"
+            path="inventory/products/saleshistory/:id/:varientId"
             element={<Main visible={"product-sales"} />}
           />
           <Route path="*" element={<PageNotFound />} />
 
           <Route
             exact
-            path="/products/saleshistory/:id"
+            path="inventory/products/saleshistory/:id"
             element={<Main visible={"product-sales"} />}
           />
 
           <Route
             exact
-            path="/products/edit/:id"
+            path="inventory/products/edit/:id"
             element={<Main visible={"product-edit"} />}
           />
 
@@ -284,7 +284,7 @@ function App() {
           />
           <Route
             exact
-            path="/products/add"
+            path="inventory/products/add"
             element={<Main visible={"product-add"} />}
           />
 

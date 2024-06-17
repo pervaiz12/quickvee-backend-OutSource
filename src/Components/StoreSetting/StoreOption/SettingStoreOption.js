@@ -41,12 +41,12 @@ export default function SettingStoreOption() {
   const [storeData, setStoreData] = useState({});
   const [userData, setUserData] = useState({});
   const [userOptionData, setUserOptionData] = useState({});
-  console.log("storeData: ", storeData);
   const checkBoxList = [
     "orderNumebrEnabled",
     "enabledEmailNotification",
     "enabledSmsNotification",
     "enabledCashPaymentDelivery",
+    "enabledCashPaymenyPickup",
     "enabledNca",
     "enabledDualPrice",
     "autoPrintOrder",
@@ -224,15 +224,13 @@ export default function SettingStoreOption() {
 
   // onsubmit
   const handleUpdateSettingOption = async () => {
-    if (userOptionData?.cc_payment === "2") {
-      if (
-        !orderState?.enabledCashPaymentDelivery &&
-        !orderState?.enabledCashPaymenyPickup
-      ) {
-        setError("Please Select Cash Payment method.");
-      }
+    if (
+      userOptionData?.cc_payment === "2" &&
+      !orderState?.enabledCashPaymentDelivery &&
+      !orderState?.enabledCashPaymenyPickup
+    ) {
+      setError("Please Select Cash Payment method.");
     } else if (orderState?.dayCount > 12) {
-      alert("Advance Day Count Must Be Less Than 12");
       showModal("Advance day count must be less than 12");
     } else {
       setError("");
@@ -255,10 +253,10 @@ export default function SettingStoreOption() {
         enable_dp: orderState?.enabledDualPrice ? "1" : "0",
         credit_card_surcharge_per: orderState?.creditCardSurcharge,
         debit_card_surcharge_per: orderState?.debitCardSurcharge,
-        enable_cashpayment_delivery: orderState?.enabledCashPaymentDelivery
+        onoffswitchcashpayment_del: orderState?.enabledCashPaymentDelivery
           ? "1"
           : "0",
-        enable_cashpayment_pickup: orderState?.enabledCashPaymenyPickup
+        onoffswitchcashpayment_pic: orderState?.enabledCashPaymenyPickup
           ? "1"
           : "0",
         enable_dispatch: orderState?.enabledDispatchCenter ? "1" : "0",
@@ -534,13 +532,9 @@ export default function SettingStoreOption() {
                         }
                       />
                     </span>
-                    {!!error ? (
-                      <span className="error-alert">{error}</span>
-                    ) : (
-                      ""
-                    )}
                   </Grid>
                 </Grid>
+                {!!error ? <p className="error-alert">{error}</p> : ""}
                 <Grid
                   container
                   direction="row"
@@ -1036,10 +1030,12 @@ export default function SettingStoreOption() {
         )}
       </div>
       <AlertModal
-      headerText={alertModalHeaderText}
-      open={alertModalOpen}
-      onClose={() => {setAlertModalOpen(false)}}
-       />
+        headerText={alertModalHeaderText}
+        open={alertModalOpen}
+        onClose={() => {
+          setAlertModalOpen(false);
+        }}
+      />
     </>
   );
 }

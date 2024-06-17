@@ -51,7 +51,9 @@ const AddProducts = () => {
   const pageUrl =
     window.location.pathname.split("/")[1] +
     "/" +
-    window.location.pathname.split("/")[2];
+    window.location.pathname.split("/")[2] +
+    "/" +
+    window.location.pathname.split("/")[3];
 
   // find productId from Url
   const productId = useParams();
@@ -83,16 +85,15 @@ const AddProducts = () => {
   const [options, setOptions] = useState({});
   const [varientData, setVarientData] = useState([]);
 
-
   const orderOptions = (values) => {
     return values
       .filter((v) => v?.isFixed)
       .concat(values.filter((v) => !v?.isFixed));
   };
 
-  const [varientLength, setVarientLength] = useState(orderOptions([
-    { id: 1, varientName: "", varientAttributeList: [] },
-  ]));
+  const [varientLength, setVarientLength] = useState(
+    orderOptions([{ id: 1, varientName: "", varientAttributeList: [] }])
+  );
 
   /// varientTitle combination list
   let varientTitle = [];
@@ -260,7 +261,7 @@ const AddProducts = () => {
         varientLength: "",
         formValue: [],
       });
-      if (pageUrl !== "product/edit") {
+      if (pageUrl !== "inventory/product/edit") {
         setVarientLength([
           {
             id: 1,
@@ -299,7 +300,7 @@ const AddProducts = () => {
         varientLength: "",
         formValue: [],
       });
-      if (pageUrl !== "products/edit") {
+      if (pageUrl !== "inventory/products/edit") {
         setFormValue([
           {
             costPerItem: "",
@@ -735,8 +736,6 @@ const AddProducts = () => {
           : data.every((item) => isValue(item));
       };
 
-      // {small: {..data}}, {large: {... data}}
-
       const updatedValues = formValue.map((item, index) => {
         const currentTitle = Object.keys(item)[0];
         const showError =
@@ -746,37 +745,12 @@ const AddProducts = () => {
               : name === "costPerItem"
                 ? price_total_value
                 : item[currentTitle]?.price
-          ) >
+          ) >=
           parseFloat(
             name === "compareAtPrice"
               ? fieldValue
               : item[currentTitle]?.compareAtPrice
           );
-        /*
-
-        [i===0 ? currentTitle : title]
-
-        large.. clicked.. 2... title - large.. currentTitle.. small, medium, large..
-
-        {
-          ...item,
-          item[large]: {
-            ...data,
-            [name]: value..
-          }
-        }
-
-        item 0 index- {small: {...data}}  => item[title] = item[large]
-
-        small, medium, large..
-        
-        [
-          {small: {...data}, large: {...data}},
-          {medium: {...data}, large: {...data}}
-          {large: {...newdata}},
-        ]
-        
-        */
 
         if (i > 0) {
           return !["upcCode", "customCode"].includes(name) && item[title]
@@ -1040,7 +1014,7 @@ const AddProducts = () => {
               : name === "costPerItem"
                 ? price_total_value
                 : item[title]?.price
-          ) >
+          ) >=
           parseFloat(
             name === "compareAtPrice" ? fieldValue : item[title]?.compareAtPrice
           );
@@ -1111,7 +1085,7 @@ const AddProducts = () => {
               : name === "costPerItem"
                 ? price_total_value
                 : item?.price
-          ) >
+          ) >=
           parseFloat(
             name === "compareAtPrice" ? fieldValue : item?.compareAtPrice
           );
@@ -1254,11 +1228,11 @@ const AddProducts = () => {
         //       reorderLevel: previousData.reorderLevel || "",
         //       // here when fetching prodcut data and track and sellout was false but still showing true and check that's why using this condition
         //       trackQuantity:
-        //         previousData.trackQuantity || pageUrl !== "products/edit"
+        //         previousData.trackQuantity || pageUrl !== "inventory/products/edit"
         //           ? true
         //           : false,
         //       sellOutOfStock:
-        //         previousData.sellOutOfStock || pageUrl !== "products/edit"
+        //         previousData.sellOutOfStock || pageUrl !== "inventory/products/edit"
         //           ? true
         //           : false,
         //       checkId: previousData.checkId || false,
@@ -1295,13 +1269,19 @@ const AddProducts = () => {
                   reorderLevel: result?.reorderLevel || "",
                   // here when fetching prodcut data and track and sellout was false but still showing true and check that's why using this condition
                   trackQuantity:
-                    result?.trackQuantity || pageUrl !== "products/edit"
+                    result?.trackQuantity ||
+                    pageUrl !== "inventory/products/edit"
                       ? true
-                      : false,
+                      : false || !result?.notEditable
+                        ? true
+                        : false,
                   sellOutOfStock:
-                    result?.sellOutOfStock || pageUrl !== "products/edit"
+                    result?.sellOutOfStock ||
+                    pageUrl !== "inventory/products/edit"
                       ? true
-                      : false,
+                      : false || !result?.notEditable
+                        ? true
+                        : false,
                   checkId: result?.checkId || false,
                   disable: result?.disable || false,
                   // itemForAllLinkedLocation:
@@ -1364,13 +1344,13 @@ const AddProducts = () => {
           setFetchDataLoading(false);
         });
     } else {
-      navigate("/products");
+      navigate("/inventory/products");
     }
   };
 
   useEffect(() => {
     // called fetchproduct data api based on id
-    if (pageUrl === "products/edit") {
+    if (pageUrl === "inventory/products/edit") {
       fetchProductDataById();
     }
   }, [pageUrl]);
@@ -1384,7 +1364,7 @@ const AddProducts = () => {
   };
 
   useEffect(() => {
-    if (pageUrl === "products/edit") {
+    if (pageUrl === "inventory/products/edit") {
       // fill data fields after fetcing data
       setProductInfo({
         title: productData?.title,
@@ -1563,7 +1543,7 @@ const AddProducts = () => {
       updatedUpcData = formValue?.map((item) => {
         return {
           ...item,
-          ["upcCode"]: generateString(20),
+          ["upcCode"]: item?.upcCode ? item?.upcCode : generateString(20),
         };
       });
     } else {
@@ -1573,7 +1553,7 @@ const AddProducts = () => {
           ...item,
           [title]: {
             ...item[title],
-            upcCode: generateString(20),
+            upcCode: item[title]?.upcCode ? item[title]?.upcCode :  generateString(20),
           },
         };
       });
@@ -1760,7 +1740,7 @@ const AddProducts = () => {
         : "",
 
       varcustomcode: isMultipleVarient
-        ? varientCategory("customCode", "", "0").join(",").trim()
+        ? varientCategory("customCode").join(",").trim()
         : "",
 
       varcostperitem: isMultipleVarient
@@ -1809,11 +1789,10 @@ const AddProducts = () => {
       // reorder_cost: [10, 10, 10, 10],
     };
 
-    if (pageUrl === "products/edit") {
+    if (pageUrl === "inventory/products/edit") {
       data["productid"] = productData?.id ? productData?.id : "";
       data["optionid"] = options?.id ? options?.id : "";
     }
-
 
     let checkEmpty;
     if (isMultipleVarient) {
@@ -1859,7 +1838,7 @@ const AddProducts = () => {
         for (let i = 0; i < uploadImage.length; i++) {
           formdata.append("files[]", uploadImage[i]);
         }
-        pageUrl === "products/edit"
+        pageUrl === "inventory/products/edit"
           ? dispatch(editProductData(formdata))
               .then((res) => {
                 if (res?.payload?.data?.status) {
@@ -1875,7 +1854,7 @@ const AddProducts = () => {
               .then((res) => {
                 if (res?.payload?.data?.status) {
                   ToastifyAlert("Product Added Successfully!", "success");
-                  navigate("/products");
+                  navigate("/inventory/products");
                 }
               })
               .catch((err) => {
@@ -1944,13 +1923,14 @@ const AddProducts = () => {
               <div className="q-add-categories-section-header">
                 <span
                   onClick={() => {
-                    navigate("/products");
+                    navigate("/inventory/products");
                   }}
                 >
                   <img src={AddNewCategory} alt="Add-New-Category" />
 
                   <span style={{ width: "153px" }}>
-                    {pageUrl === "products/edit" ? "Edit" : "Add"} Product
+                    {pageUrl === "inventory/products/edit" ? "Edit" : "Add"}{" "}
+                    Product
                   </span>
                 </span>
               </div>
@@ -2012,6 +1992,7 @@ const AddProducts = () => {
                       selectedOption={productInfo?.category}
                       error={error}
                       handleUpdateError={handleUpdateError}
+                      placeholder="Search Category"
                     />
                   </div>
                 </div>
@@ -2027,6 +2008,7 @@ const AddProducts = () => {
                     selectedOption={productInfo?.taxes}
                     error={error}
                     // handleUpdateError={handleUpdateError}
+                    placeholder="Search Taxes"
                   />
                 </div>
 
@@ -2041,6 +2023,7 @@ const AddProducts = () => {
                     selectedOption={productInfo?.relatedProduct}
                     error={error}
                     // handleUpdateError={handleUpdateError}
+                    placeholder="Search Related Products"
                   />
                 </div>
 
@@ -2055,6 +2038,7 @@ const AddProducts = () => {
                     selectedOption={productInfo?.frequentlyBought}
                     error={error}
                     // handleUpdateError={handleUpdateError}
+                    placeholder="Search Products"
                   />
                 </div>
 
@@ -2252,7 +2236,7 @@ const AddProducts = () => {
                     {/* Your existing JSX for variant attributes */}
 
                     <div className="q-add-categories-section-middle-footer  ">
-                      {pageUrl === "products/edit" &&
+                      {pageUrl === "inventory/products/edit" &&
                       productData?.isvarient === "1" ? (
                         <div
                           className="q-category-bottom-header"
@@ -2272,7 +2256,7 @@ const AddProducts = () => {
                         className="q-category-bottom-header"
                         style={{ marginRight: "67px" }}
                       >
-                        {pageUrl !== "products/edit" ? (
+                        {pageUrl !== "inventory/products/edit" ? (
                           <button
                             className="quic-btn quic-btn-save"
                             onClick={handleSubmitForm}
@@ -2311,7 +2295,12 @@ const AddProducts = () => {
                             )}
                           </button>
                         )}
-                        <button className="quic-btn quic-btn-cancle">
+                        <button
+                          className="quic-btn quic-btn-cancle"
+                          onClick={() => {
+                            navigate("/inventory/products");
+                          }}
+                        >
                           Cancel
                         </button>
                       </div>

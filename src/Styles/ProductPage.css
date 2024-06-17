@@ -249,6 +249,10 @@
   overflow-y: scroll;
 }
 
+.product-varient-form{
+  margin-bottom: 22px;
+}
+
 .product-edit-modal .cancel-btn {
   width: 24px;
   height: 24px;
