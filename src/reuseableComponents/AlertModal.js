@@ -39,6 +39,7 @@ const AlertModal = ({ headerText, otherMSG, open, onClose }) => {
       case "Please select at least on category":
         return OneCategorie;
       case "Please select at least on product":
+      case "Product is already added.":
         return Oneproduct;
       case "No categories found is not a Category":
       case "Something went wrong !":

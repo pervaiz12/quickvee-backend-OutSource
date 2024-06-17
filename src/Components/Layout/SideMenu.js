@@ -272,7 +272,7 @@ console.log("getFirstTwoSegmentsPath",getFirstTwoSegmentsPathIsStoreAvtive(activ
                         hoveredItem
                       )} */}
                       {/* {activeItem === item.id ? item.activeIcon : item.icon} */}
-                      {activeItem === item.link.trim() ||
+                      {getFirstTwoSegmentsPath(activeItem) === item.link.trim() ||
                       hoveredItem === item.id
                         ? item.activeIcon
                         : item.icon}
@@ -308,7 +308,7 @@ const DropdownMenuItem = ({
   const isTabletNav = useMediaQuery("(max-width:1024px)");
   useEffect(() => {
     const foundItem = item?.dropdownItems?.find(
-      (item) => item?.link === activeItem
+      (item) => item?.link === getFirstTwoSegmentsPath(activeItem)
     );
     // console.log("foundItem: ",foundItem,"isMenuOpenRedux",isMenuOpenRedux)
 
@@ -416,7 +416,7 @@ const DropdownMenuItem = ({
                   HandleDropdownIconClick(item.id);
                 }}
               >
-                {activeItem === dropDownItem || hoveredItem === item.id
+                {getFirstTwoSegmentsPath(activeItem) === dropDownItem || hoveredItem === item.id
                   ? item.activeIcon
                   : item.icon}
               </div>

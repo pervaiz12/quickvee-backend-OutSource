@@ -10,6 +10,7 @@ const initialState = {
   loading: false,
   onlineStoreOrderData: [],
   OrderChangeStatusData: [],
+  OrderListCount:0,
   successMessage: "",
   error: "",
 };
@@ -53,6 +54,27 @@ export const fetchOrderChangeStatusData = createAsyncThunk(
   }
 );
 
+export const getOrderListCount = createAsyncThunk(
+  "purchase/getPurchaseOrderCount",
+  async (data) => {
+    const { token, ...dataNew } = data;
+    const response = await axios.post(
+      BASE_URL + "Order_list_api/all_order_list_count",
+      dataNew,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`, // Use data?.token directly
+        },
+      }
+    );
+    console.log("AllInStoreDataState OrderListCount: ", response.data.order_data);
+    if (response.status == 200) {
+      return response.data.order_data;
+    }
+  }
+);
+
 const onlineStoreOrderSlice = createSlice({
   name: "onlineStoreOrder",
   initialState,
@@ -83,6 +105,12 @@ const onlineStoreOrderSlice = createSlice({
       state.loading = false;
       state.OrderChangeStatusData = {};
       state.error = action.error.message;
+    });
+    builder.addCase(getOrderListCount.fulfilled, (state, action) => {
+      state.OrderListCount = action.payload;
+    });
+    builder.addCase(getOrderListCount.rejected, (state, action) => {
+      state.OrderListCount = 0;
     });
   },
 });
