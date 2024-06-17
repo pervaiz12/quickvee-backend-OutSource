@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState ,useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Box, Collapse, Alert, IconButton, Grid } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -16,6 +16,8 @@ import { useAuthDetails } from "../../Common/cookiesHelper";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
+import { LuRefreshCw } from "react-icons/lu";
+import BasicTextFields from "../../reuseableComponents/TextInputField";
 
 const ProductDuplicateStore = () => {
   const [storeFromError, setStoreFromError] = useState("");
@@ -28,6 +30,8 @@ const ProductDuplicateStore = () => {
   const [categoryFocus, setCategoryFocus] = useState(false);
   const [alertModalOpen, setAlertModalOpen] = useState(false);
   const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
+  const [userInput, setUserInput] = useState(''); 
+  const [captchaText, setCaptchaText] = useState(''); 
 
   const handlFocusCategory = () => {
     setCategoryFocus(true);
@@ -223,6 +227,8 @@ const ProductDuplicateStore = () => {
         return;
       }
 
+      if (userInput === captchaText) { 
+
       const data = {
         store_name_from: storefrom,
         store_name_to: storeto,
@@ -248,6 +254,7 @@ const ProductDuplicateStore = () => {
           const commaSeparatedString = temp_excludedproducts.join(", ");
           setexcludedproducts(commaSeparatedString);
           setsubmitmessage("Products Copied successfully ");
+          setUserInput("")
           setSelectedStorefrom("-- Select Store --");
           setSelectedStoreto("-- Select Store --");
           ToastifyAlert("Duplicate Inventory Success!", "success");
@@ -267,8 +274,68 @@ const ProductDuplicateStore = () => {
         ToastifyAlert("Error!", "error");
         return new Error(error);
       }
+      }else{
+        showModal("Please Fill Captcha Correctly!")
+        const canvas = canvasRef.current; 
+        const ctx = canvas.getContext('2d'); 
+        initializeCaptcha(ctx); 
+      }
     }
   };
+
+
+
+  // for captcha start
+  const canvasRef = useRef(null); 
+  useEffect(() => { 
+      const canvas = canvasRef.current; 
+      const ctx = canvas.getContext('2d'); 
+      initializeCaptcha(ctx); 
+  }, []); 
+
+  const generateRandomChar = (min, max) => 
+      String.fromCharCode(Math.floor 
+          (Math.random() * (max - min + 1) + min)); 
+  const generateCaptchaText = () => { 
+      let captcha = ''; 
+      for (let i = 0; i < 3; i++) { 
+          captcha += generateRandomChar(65, 90); 
+          // captcha += generateRandomChar(97, 122); 
+          captcha += generateRandomChar(48, 57); 
+      } 
+      return captcha.split('').sort( 
+          () => Math.random() - 0.5).join(''); 
+  }; 
+  const drawCaptchaOnCanvas = (ctx, captcha) => { 
+      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); 
+      const textColors = ['rgb(0,0,0)', 'rgb(130,130,130)']; 
+      const letterSpace = 150 / captcha.length; 
+      for (let i = 0; i < captcha.length; i++) { 
+          const xInitialSpace = 25; 
+          ctx.font = '20px Roboto Mono'; 
+          ctx.fillStyle = textColors[Math.floor( 
+              Math.random() * 2)]; 
+          ctx.fillText( 
+              captcha[i], 
+              xInitialSpace + i * letterSpace, 
+              // Randomize Y position slightly 
+              Math.floor(Math.random() * 16 + 25), 
+              100 
+          ); 
+      } 
+  }; 
+  const initializeCaptcha = (ctx) => { 
+      setUserInput(''); 
+      const newCaptcha = generateCaptchaText(); 
+      setCaptchaText(newCaptcha); 
+      drawCaptchaOnCanvas(ctx, newCaptcha); 
+  }; 
+
+  const handleUserInputChange = (e) => { 
+      setUserInput(e.target.value); 
+  }; 
+
+// for captcha End
 
   return (
     <>
@@ -315,7 +382,7 @@ const ProductDuplicateStore = () => {
             )}
           </div> */}
 
-          <div className="alert">
+          {/* <div className="alert">
             {excludedproducts && (
               <Box
                 sx={{
@@ -347,7 +414,7 @@ const ProductDuplicateStore = () => {
                 </Collapse>
               </Box>
             )}
-          </div>
+          </div> */}
 
           <div className="q-add-categories-section-header">
             <span>
@@ -482,6 +549,33 @@ const ProductDuplicateStore = () => {
               </label>
             </div>
           </div>
+
+          {/* for captcha start  */}
+
+          <div className="captcha_wrapper ">
+                  <div className="captue_Img_Reload"> 
+                    <canvas ref={canvasRef} width="200" height="50" onClick={  () => initializeCaptcha(canvasRef.current.getContext('2d'))}> 
+                    </canvas> 
+                    <button id="reload-button" onClick={   () => initializeCaptcha(canvasRef.current.getContext('2d'))}> 
+                        <LuRefreshCw /> 
+                    </button> 
+                  </div>
+              </div>
+              <div className="q-order-page-container mx-6 mb-6 md:flex-col d-flex">
+                <Grid container spacing={4} >
+                  <Grid item xs={6} sm={12} md={6}>
+                    <BasicTextFields
+                    type="text"
+                    id="user-input"
+                    name="actual_amt"
+                    onChangeFun={handleUserInputChange}
+                    value={userInput} 
+                    placeholder={"Enter the text in the image"}
+                    /> 
+                  </Grid>
+                </Grid>
+                </div>
+          {/* for captcha End */}
 
           <div
             className="q-add-categories-section-middle-footer "

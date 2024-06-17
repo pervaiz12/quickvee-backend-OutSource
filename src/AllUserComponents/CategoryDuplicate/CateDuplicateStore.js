@@ -219,11 +219,7 @@ const CateDuplicateStore = () => {
         showModal("No categories found is not a Category")
         return;
       }
-
       if (userInput === captchaText) { 
-        alert('Success'); 
-        return
-
         const data = {
           store_name_from: storefrom,
           store_name_to: storeto,
@@ -249,6 +245,7 @@ const CateDuplicateStore = () => {
             setSelectedStorefrom("-- Select Store --");
             setSelectedStoreto("-- Select Store --");
             ToastifyAlert("Duplicate Inventory Success!", "success");
+            setUserInput("")
             setStorefrom(null);
             setStoreto(null);
             setCategoryOptions([
@@ -266,7 +263,7 @@ const CateDuplicateStore = () => {
           return new Error(error);
         }
       } else { 
-          showModal("Incorrect Captcha")
+          showModal("Please Fill Captcha Correctly!")
           const canvas = canvasRef.current; 
           const ctx = canvas.getContext('2d'); 
           initializeCaptcha(ctx); 

@@ -81,18 +81,14 @@ const InventoryExportLogic = () => {
         setModalHeaderText("Both the stores cannot be same.")
         setAlertOpen(true)
         return false;
-      } else {
-        
+      }else {
         if (userInput === captchaText) { 
-          alert('Success'); 
-          return
           const data = {
             store_name_from: values.store_name_from,
             store_name_to: values.store_name_to,
             upc_check: values.upc_check,
             ...userTypeDataNew,
           };
-          console.log("data",data)
           try {
             const response = await axios.post(
               BASE_URL + INVENTORY_DUPLICATE,
@@ -115,10 +111,8 @@ const InventoryExportLogic = () => {
             ToastifyAlert("Error!", "error");
             return new Error(error);
           }
-
-        } else {
-          
-          setModalHeaderText("Incorrect Captcha")
+        }else{
+          setModalHeaderText("Please Fill Captcha Correctly!")
           setAlertOpen(true)
           return false;
         }
@@ -143,13 +137,13 @@ const InventoryExportLogic = () => {
         setAlertOpen(true)
         return false;
       } else {
+        if (userInput === captchaText) { 
         const data = {
           store_name_from: values.store_name_from,
           store_name_to: values.store_name_to,
           //   upc_check: values.upc_check,
           ...userTypeDataNew,
         };
-        // console.log(data);
 
         try {
           const response = await axios.post(
@@ -173,6 +167,11 @@ const InventoryExportLogic = () => {
           ToastifyAlert("Error!", "error");
           // console.log('33 catch err');
           return new Error(error);
+        }
+        }else{
+          setModalHeaderText("Please Fill Captcha Correctly!")
+          setAlertOpen(true)
+          return false;
         }
       }
     }

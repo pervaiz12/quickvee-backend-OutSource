@@ -93,6 +93,9 @@ const StoreCateUser = () => {
       if(modalHeaderText === "Both the stores cannot be same."){
         setAlertModalHeaderText("Both the stores cannot be same.")
         setAlertModalOpen(alertOpen);
+      }else if(modalHeaderText === "Please Fill Captcha Correctly!"){
+        setAlertModalHeaderText("Please Fill Captcha Correctly!")
+        setAlertModalOpen(alertOpen);
       }
     }
   }, [alertOpen,modalHeaderText]);
@@ -139,8 +142,8 @@ const StoreCateUser = () => {
       showModal("Please select Store To");
     } else {
       dupplicateInventory(e);
-      // setSelectedStorefrom("-- Select Store --");
-      // setSelectedStoreto("-- Select Store --");
+      setSelectedStorefrom("-- Select Store --");
+      setSelectedStoreto("-- Select Store --");
     }
   };
 
