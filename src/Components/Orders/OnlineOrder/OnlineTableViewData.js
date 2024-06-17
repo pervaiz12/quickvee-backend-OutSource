@@ -682,7 +682,9 @@ const OnlineTableViewData = (props) => {
                             }
                           )
                         ) : (
-                          <></>
+                          <>
+                          <p className="px-5 py-4">No Data Found</p>
+                        </>
                         )}
                       </TableBody>
                     </StyledTable>
