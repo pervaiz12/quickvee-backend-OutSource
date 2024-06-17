@@ -134,6 +134,7 @@ const AddCoupon = ({ seVisible }) => {
     maximum_discount: "",
     date_valid: "",
     date_expire: "",
+    count_limit:"1",
     time_valid: dayjs().format("HH:mm:ss"),
     time_expire: dayjs().format("HH:mm:ss"),
 
