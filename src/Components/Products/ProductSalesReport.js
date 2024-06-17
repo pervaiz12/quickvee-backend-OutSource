@@ -11,7 +11,7 @@ import { useEffect } from "react";
 import { fetchSalesHistory } from "../../Redux/features/Product/ProductSlice";
 import { useDispatch } from "react-redux";
 import { useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 import "../../Styles/ProductPage.css";
 import Loader from "../../CommonComponents/Loader";
@@ -52,6 +52,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const ProductSalesReport = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const productId = location?.pathname?.split("/")[3];
   const varientId = location?.pathname?.split("/")[4];
   const dispatch = useDispatch();
@@ -103,7 +104,6 @@ const ProductSalesReport = () => {
     setCurrentPage(1);
   };
 
-  console.log(salesData);
   const handleFilterHistory = (value) => {
     // const { value } = e.target;
     setSearchRecord(value);
@@ -118,7 +118,6 @@ const ProductSalesReport = () => {
     setTotalCount(filterList?.length);
   };
 
-  console.log(filterData, salesData);
 
   return (
     <div className="box">
@@ -133,8 +132,10 @@ const ProductSalesReport = () => {
             <div className="q-add-categories-section">
               <div className="q-add-categories-section-header">
                 <span>
-                  <img src={AddNewCategory} alt="Add-New-Category" />
-                  <span style={{ width: "100%" }}>
+                  <span style={{ width: "100%", display:'flex' }}  onClick={() => {
+                    navigate(`/inventory/products/edit/${location.pathname.split('/')[4]}`);
+                  }}>
+                    <img src={AddNewCategory} alt="Add-New-Category" />
                     Sales History - {location?.state?.title}
                   </span>
                 </span>

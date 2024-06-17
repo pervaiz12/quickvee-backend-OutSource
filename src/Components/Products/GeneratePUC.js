@@ -120,7 +120,6 @@ const GeneratePUC = ({
                     )}
                     {formData?.length
                       ? formData?.map((inp, i) => {
-                        console.log('formvalue', formValue);
                           return (
                             <div className="col-qv-3" key={i}>
                               <div className="q-add-categories-single-input">

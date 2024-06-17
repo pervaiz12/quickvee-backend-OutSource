@@ -745,7 +745,7 @@ const AddProducts = () => {
               : name === "costPerItem"
                 ? price_total_value
                 : item[currentTitle]?.price
-          ) >
+          ) >=
           parseFloat(
             name === "compareAtPrice"
               ? fieldValue
@@ -1014,7 +1014,7 @@ const AddProducts = () => {
               : name === "costPerItem"
                 ? price_total_value
                 : item[title]?.price
-          ) >
+          ) >=
           parseFloat(
             name === "compareAtPrice" ? fieldValue : item[title]?.compareAtPrice
           );
@@ -1085,7 +1085,7 @@ const AddProducts = () => {
               : name === "costPerItem"
                 ? price_total_value
                 : item?.price
-          ) >
+          ) >=
           parseFloat(
             name === "compareAtPrice" ? fieldValue : item?.compareAtPrice
           );
@@ -1272,12 +1272,16 @@ const AddProducts = () => {
                     result?.trackQuantity ||
                     pageUrl !== "inventory/products/edit"
                       ? true
-                      : false || !result?.notEditable ? true : false,
+                      : false || !result?.notEditable
+                        ? true
+                        : false,
                   sellOutOfStock:
                     result?.sellOutOfStock ||
                     pageUrl !== "inventory/products/edit"
                       ? true
-                      : false || !result?.notEditable ? true : false,
+                      : false || !result?.notEditable
+                        ? true
+                        : false,
                   checkId: result?.checkId || false,
                   disable: result?.disable || false,
                   // itemForAllLinkedLocation:
@@ -1539,7 +1543,7 @@ const AddProducts = () => {
       updatedUpcData = formValue?.map((item) => {
         return {
           ...item,
-          ["upcCode"]: generateString(20),
+          ["upcCode"]: item?.upcCode ? item?.upcCode : generateString(20),
         };
       });
     } else {
@@ -1549,7 +1553,7 @@ const AddProducts = () => {
           ...item,
           [title]: {
             ...item[title],
-            upcCode: generateString(20),
+            upcCode: item[title]?.upcCode ? item[title]?.upcCode :  generateString(20),
           },
         };
       });
@@ -1736,7 +1740,7 @@ const AddProducts = () => {
         : "",
 
       varcustomcode: isMultipleVarient
-        ? varientCategory("customCode", "", "0").join(",").trim()
+        ? varientCategory("customCode").join(",").trim()
         : "",
 
       varcostperitem: isMultipleVarient
@@ -2005,7 +2009,6 @@ const AddProducts = () => {
                     error={error}
                     // handleUpdateError={handleUpdateError}
                     placeholder="Search Taxes"
-
                   />
                 </div>
 
@@ -2021,7 +2024,6 @@ const AddProducts = () => {
                     error={error}
                     // handleUpdateError={handleUpdateError}
                     placeholder="Search Related Products"
-
                   />
                 </div>
 
@@ -2037,7 +2039,6 @@ const AddProducts = () => {
                     error={error}
                     // handleUpdateError={handleUpdateError}
                     placeholder="Search Products"
-
                   />
                 </div>
 
@@ -2294,7 +2295,12 @@ const AddProducts = () => {
                             )}
                           </button>
                         )}
-                        <button className="quic-btn quic-btn-cancle">
+                        <button
+                          className="quic-btn quic-btn-cancle"
+                          onClick={() => {
+                            navigate("/inventory/products");
+                          }}
+                        >
                           Cancel
                         </button>
                       </div>

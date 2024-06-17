@@ -115,10 +115,10 @@ const VariantAttributes = ({
       return;
     }
 
-    switch (actionMeta.action) {
+    switch (actionMeta?.action) {
       case "remove-value":
       case "pop-value":
-        if (actionMeta.removedValue.isFixed) {
+        if (actionMeta?.removedValue?.isFixed) {
           return;
         }
         break;
