@@ -1,5 +1,5 @@
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { Box, Collapse, Alert, IconButton, Grid } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -11,6 +11,8 @@ import InventoryExportLogic from "./InventoryDuplicatLogic";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import AlertModal from "../../reuseableComponents/AlertModal";
+import { LuRefreshCw } from "react-icons/lu";
+import BasicTextFields from "../../reuseableComponents/TextInputField";
 
 const StoreCateUser = () => {
   const [openAlert, setOpenAlert] = useState(true);
@@ -29,6 +31,10 @@ const StoreCateUser = () => {
     values,
     alertOpen,
     modalHeaderText,
+    userInput,
+    setUserInput,
+    captchaText,
+    setCaptchaText,
   } = InventoryExportLogic();
   console.log("alertOpen",alertOpen)
   console.log("modalHeaderText",modalHeaderText)
@@ -133,8 +139,8 @@ const StoreCateUser = () => {
       showModal("Please select Store To");
     } else {
       dupplicateInventory(e);
-      setSelectedStorefrom("-- Select Store --");
-      setSelectedStoreto("-- Select Store --");
+      // setSelectedStorefrom("-- Select Store --");
+      // setSelectedStoreto("-- Select Store --");
     }
   };
 
@@ -154,6 +160,65 @@ const StoreCateUser = () => {
   };
 
   // for change dropdown End
+
+  // for captcha start
+
+  
+   
+    const canvasRef = useRef(null); 
+  
+    useEffect(() => { 
+        const canvas = canvasRef.current; 
+        const ctx = canvas.getContext('2d'); 
+        initializeCaptcha(ctx); 
+    }, []); 
+  
+    const generateRandomChar = (min, max) => 
+        String.fromCharCode(Math.floor 
+            (Math.random() * (max - min + 1) + min)); 
+  
+    const generateCaptchaText = () => { 
+        let captcha = ''; 
+        for (let i = 0; i < 3; i++) { 
+            captcha += generateRandomChar(65, 90); 
+            // captcha += generateRandomChar(97, 122); 
+            captcha += generateRandomChar(48, 57); 
+        } 
+        return captcha.split('').sort( 
+            () => Math.random() - 0.5).join(''); 
+    }; 
+  
+    const drawCaptchaOnCanvas = (ctx, captcha) => { 
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); 
+        const textColors = ['rgb(0,0,0)', 'rgb(130,130,130)']; 
+        const letterSpace = 150 / captcha.length; 
+        for (let i = 0; i < captcha.length; i++) { 
+            const xInitialSpace = 25; 
+            ctx.font = '20px Roboto Mono'; 
+            ctx.fillStyle = textColors[Math.floor( 
+                Math.random() * 2)]; 
+            ctx.fillText( 
+                captcha[i], 
+                xInitialSpace + i * letterSpace, 
+                // Randomize Y position slightly 
+                Math.floor(Math.random() * 16 + 25), 
+                100 
+            ); 
+        } 
+    }; 
+  
+    const initializeCaptcha = (ctx) => { 
+        setUserInput(''); 
+        const newCaptcha = generateCaptchaText(); 
+        setCaptchaText(newCaptcha); 
+        drawCaptchaOnCanvas(ctx, newCaptcha); 
+    }; 
+  
+    const handleUserInputChange = (e) => { 
+        setUserInput(e.target.value); 
+    }; 
+   
+  // for captcha End
 
   return (
     <>
@@ -270,6 +335,34 @@ const StoreCateUser = () => {
               </span>
             </div>
           </div>
+
+
+          {/* for captcha start  */}
+
+              <div className="captcha_wrapper ">
+                  <div className="captue_Img_Reload"> 
+                    <canvas ref={canvasRef} width="200" height="50" onClick={  () => initializeCaptcha(canvasRef.current.getContext('2d'))}> 
+                    </canvas> 
+                    <button id="reload-button" onClick={   () => initializeCaptcha(canvasRef.current.getContext('2d'))}> 
+                        <LuRefreshCw /> 
+                    </button> 
+                  </div>
+              </div>
+              <div className="q-order-page-container mx-6 mb-6 md:flex-col d-flex">
+                <Grid container spacing={4} >
+                  <Grid item xs={6} sm={12} md={6}>
+                    <BasicTextFields
+                    type="text"
+                    id="user-input"
+                    name="actual_amt"
+                    onChangeFun={handleUserInputChange}
+                    value={userInput} 
+                    placeholder={"Enter the text in the image"}
+                    /> 
+                  </Grid>
+                </Grid>
+                </div>
+          {/* for captcha End */}
 
           <div
             className="q-add-categories-section-middle-footer "

@@ -77,6 +77,7 @@ module.exports = Object.freeze({
   LIST_ALL_SYSTEM_ACCESS: "api/SettingsReact_api/system_access",
   UPDATE_SYSTEM_ACCESS: "api/SettingsReact_api/update_system_access",
   END_DAY_ACTUAL_AMT: "api/SettingsReact_api/day_end_actual_amt",
+  CHECK_END_DAY: "api/SettingsReact_api/check_eod",
 
   //Inventory
   LIST_INVENTORY: "api/SettingsReact_api/inventory_list",

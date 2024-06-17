@@ -152,7 +152,7 @@ const SalesPersonReport = (props) => {
                           <StyledTableRow key={index}>
                             <StyledTableCell sx={{ width: "33%" }}>
                               <Link
-                                to={`/store-reporting/order-summary/${merchant_id}/${SalesData.order_id}`}
+                                to={`/order/store-reporting/order-summary/${merchant_id}/${SalesData.order_id}`}
                                 target="_blank"
                               >
                                 <p>{SalesData.order_id}</p>

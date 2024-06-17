@@ -18,3 +18,21 @@
 .alertModal button:hover {
   background-color: #2776ff;
 }
+
+
+/* for Duplicate pages start  */
+.captcha_wrapper{
+  padding: 1rem 2rem;
+}
+canvas { 
+  border: 2px solid #0a64f9; 
+  border-radius: 20px; 
+  cursor: pointer;
+} 
+.captue_Img_Reload{
+  display: flex;
+}
+#reload-button{
+ padding: 1rem;
+}
+/* for Duplicate pages End */

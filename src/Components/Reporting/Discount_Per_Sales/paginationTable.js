@@ -170,7 +170,7 @@ export default function DashboardTables(props) {
                                   </StyledTableCell>
                                   <StyledTableCell align="center">
                                     <Link
-                                      to={`/store-reporting/order-summary/${props.merchant_id}/${item.order_id}`}
+                                      to={`/order/store-reporting/order-summary/${props.merchant_id}/${item.order_id}`}
                                       // onClick={() => handleSummeryPage(row.order_id)}
                                       target="_blank"
                                     >

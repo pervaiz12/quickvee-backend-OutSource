@@ -62,6 +62,7 @@ const AlertModal = ({ headerText, otherMSG, open, onClose }) => {
       case "Start date and end date are required":
       case "Start date cannot be greater than the end date":
       case "End date cannot be less than the start date":
+      case "First perform end of day to make changes here.":
         return calender;
       case "End time cannot be empty":
         return timestop;
@@ -70,7 +71,7 @@ const AlertModal = ({ headerText, otherMSG, open, onClose }) => {
         return time;
 
       default:
-        return DeleteIcon;
+        return Categorie;
     }
   };
   return (

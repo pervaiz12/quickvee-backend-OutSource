@@ -4,8 +4,10 @@ import OrderStatusSummary from "./OrderStatusSummary";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchOrderData } from "../../../../Redux/features/OrderSummary/OrderSummarySlice";
 import { useLocation } from "react-router-dom";
+import { useAuthDetails } from "../../../../Common/cookiesHelper";
 
 const OrderSummaryDetails = () => {
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =useAuthDetails(); 
   const location = useLocation();
   const order_id = location.pathname.replace(
     "/store-reporting/order-summary/",
@@ -15,7 +17,7 @@ const OrderSummaryDetails = () => {
   const dispatch = useDispatch();
   useEffect(() => {
     let data = {
-      merchant_id: "MAL0100CA",
+      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
       order_id: order_id,
     };
     if (data) {

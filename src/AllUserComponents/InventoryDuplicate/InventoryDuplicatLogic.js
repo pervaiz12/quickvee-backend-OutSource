@@ -26,6 +26,8 @@ const InventoryExportLogic = () => {
 
   const [alertOpen, setAlertOpen] = useState(false);
   const [modalHeaderText, setModalHeaderText] = useState("");
+  const [userInput, setUserInput] = useState(''); 
+  const [captchaText, setCaptchaText] = useState(''); 
 
   const handleStoreInput = async (event) => {
     let { errors } = values;
@@ -72,7 +74,7 @@ const InventoryExportLogic = () => {
     let { errors } = values;
     await validateDropdown(values.store_name_from, "store_name_from", errors);
     await validateDropdown(values.store_name_to, "store_name_to", errors);
-
+    
     if (errors.store_name_from === "" && errors.store_name_to === "") {
       if (values.store_name_from == values.store_name_to) {
         // alert("Both the stores cannot be same.");
@@ -80,36 +82,45 @@ const InventoryExportLogic = () => {
         setAlertOpen(true)
         return false;
       } else {
-        const data = {
-          store_name_from: values.store_name_from,
-          store_name_to: values.store_name_to,
-          upc_check: values.upc_check,
-          ...userTypeDataNew,
-        };
-        // console.log(data);
-
-        try {
-          const response = await axios.post(
-            BASE_URL + INVENTORY_DUPLICATE,
-            data,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${token}`,
-              },
+        
+        if (userInput === captchaText) { 
+          alert('Success'); 
+          return
+          const data = {
+            store_name_from: values.store_name_from,
+            store_name_to: values.store_name_to,
+            upc_check: values.upc_check,
+            ...userTypeDataNew,
+          };
+          console.log("data",data)
+          try {
+            const response = await axios.post(
+              BASE_URL + INVENTORY_DUPLICATE,
+              data,
+              {
+                headers: {
+                  "Content-Type": "multipart/form-data",
+                  Authorization: `Bearer ${token}`,
+                },
+              }
+            );
+            if (response.data) {
+              setsubmitmessage(response.data);
+              ToastifyAlert("Duplicate Inventory Success!", "success");
+            } else {
+              setsubmitmessage(response.data);
             }
-          );
-
-          if (response.data) {
-            setsubmitmessage(response.data);
-            ToastifyAlert("Duplicate Inventory Success!", "success");
-          } else {
-            setsubmitmessage(response.data);
+          } catch (error) {
+            // console.log('33 catch err');
+            ToastifyAlert("Error!", "error");
+            return new Error(error);
           }
-        } catch (error) {
-          // console.log('33 catch err');
-          ToastifyAlert("Error!", "error");
-          return new Error(error);
+
+        } else {
+          
+          setModalHeaderText("Incorrect Captcha")
+          setAlertOpen(true)
+          return false;
         }
       }
     }
@@ -180,6 +191,10 @@ const InventoryExportLogic = () => {
     setsubmitmessage,
     alertOpen,
     modalHeaderText,
+    userInput,
+    setUserInput,
+    captchaText,
+    setCaptchaText,
   };
 };
 

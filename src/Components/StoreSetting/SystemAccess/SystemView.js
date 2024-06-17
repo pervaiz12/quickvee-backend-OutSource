@@ -21,6 +21,11 @@ import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
 import Select from "@mui/material/Select";
+import AlertModal from "../../../reuseableComponents/AlertModal";
+import { Box, Modal } from "@mui/material";
+import { BASE_URL,CHECK_END_DAY } from "../../../Constants/Config";
+import axios from "axios";
+
 const SystemAccessData = () => {
   const {
     LoginGetDashBoardRecordJson,
@@ -88,9 +93,19 @@ const SystemAccessData = () => {
       return "Ignore Time Clock"
     }
   }
+  const defaultSiftAssign = (day) => {
+    if(day == 1){
+      return "Don’t Track Shifts" 
+    }else if (day == 2){
+      return "Track Shifts by Cashier"
+    }else if (day == 3){
+      return "Track Shifts by Station"
+    }
+  }
   const [selectedStartDay, setSelectedStartDay] = useState("");
   const [selectedEndDay, setSelectedEndDay] = useState("");
   const [selectedDayAllow, setSelectedDayAllow] = useState("");
+  const [selectShiftAssign, setSelectShiftAssign] = useState("");
   console.log(selectedStartDay)
   const dispatch = useDispatch();
   useEffect(() => {
@@ -107,6 +122,7 @@ const SystemAccessData = () => {
     setSelectedStartDay(startDay(systemAccess.start_date))
     setSelectedEndDay(endDay(systemAccess.end_date))
     setSelectedDayAllow(DayAll(systemAccess.end_day_Allow))
+    setSelectShiftAssign(defaultSiftAssign(systemAccess.shift_assign))
   }, [systemAccess]);
 
   useEffect(() => {
@@ -143,9 +159,30 @@ const SystemAccessData = () => {
   //handle cash_drawer
   const handleCashDrawerChange = (e) => {
     const { name, value } = e.target;
+
+    let fieldValue;
+    fieldValue = value
+      // Remove extra dots and ensure only one dot exists at most
+      .replace(/[^\d.]/g, "") // Allow digits and dots only
+      .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
+      .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+
+    let inputStr = fieldValue.replace(/\D/g, "");
+    inputStr = inputStr.replace(/^0+/, "");
+
+    if (inputStr.length == "") {
+      fieldValue = "0.00";
+    } else if (inputStr.length === 1) {
+      fieldValue = "0.0" + inputStr;
+    } else if (inputStr.length === 2) {
+      fieldValue = "0." + inputStr;
+    } else {
+      fieldValue =
+        inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
+    }
     setallSystemAccess((prevState) => ({
       ...prevState,
-      [name]: value,
+      [name]: fieldValue,
     }));
     // console.log("name and value", name, value);
   };
@@ -280,10 +317,29 @@ const SystemAccessData = () => {
 
   const handleActualAmtInputChange = (e) => {
     const { name, value } = e.target;
+    let fieldValue;
+    fieldValue = value
+      // Remove extra dots and ensure only one dot exists at most
+      .replace(/[^\d.]/g, "") // Allow digits and dots only
+      .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
+      .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+    let inputStr = fieldValue.replace(/\D/g, "");
+    inputStr = inputStr.replace(/^0+/, "");
+
+    if (inputStr.length == "") {
+      fieldValue = "0.00";
+    } else if (inputStr.length === 1) {
+      fieldValue = "0.0" + inputStr;
+    } else if (inputStr.length === 2) {
+      fieldValue = "0." + inputStr;
+    } else {
+      fieldValue =
+        inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
+    }
     setActualAmount((preValue) => {
       return {
         ...preValue,
-        [name]: value,
+        [name]: fieldValue,
       };
     });
 
@@ -296,6 +352,8 @@ const SystemAccessData = () => {
       actual_amt: actualAmount.actual_amt,
       ...userTypeData,
     };
+    console.log("data",data)
+    return
     dispatch(addActualAmountData(data));
   };
   //   console.log("Actual Amount", actualAmount);
@@ -406,6 +464,8 @@ const SystemAccessData = () => {
 
   
 
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
 
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
@@ -452,7 +512,7 @@ const SystemAccessData = () => {
           }));
           break;
         case "DayAllow":
-            setSelectedStartDay(option.title);
+          setSelectedDayAllow(option.title);
             // Set defaults.type based on the selected option
             let DayAllow;
             switch (option.title) {
@@ -475,32 +535,95 @@ const SystemAccessData = () => {
               end_day_Allow: DayAllow,
             }));
             break;
-
+        case "SiftAssign":
+          checkEndofDay().then((res)=>{
+            if(res.status === false && res.msg ==="You not can change setting, perform End of Day first"){
+              setAlertModalHeaderText("First perform end of day to make changes here.");
+              setAlertModalOpen(true);
+              return;
+            }else{
+              setAlertModalHeaderText("");
+              setAlertModalOpen(false);
+              setSelectShiftAssign(option.title);
+              let siftAssValue;
+              switch (option.title) {
+                case "Don’t Track Shifts":
+                  siftAssValue = 1;
+                  break;
+                case "Track Shifts by Cashier":
+                  siftAssValue = 2;
+                  break;
+                case "Track Shifts by Station":
+                  siftAssValue = 3;
+                  break;
+                default:
+                  siftAssValue = "";
+                  break;
+              }
+              setallSystemAccess((prevValue) => ({
+                ...prevValue,
+                shift_assign: siftAssValue,
+              }));
+            }
+          });
+          break;
       default:
         break;
     }
   };
 
+  const handleKeyPress = (e) => {
+    if ((e.charCode < 48 || e.charCode > 57) && e.charCode !== 8) {
+      e.preventDefault();
+    }
+  };
+
+  const handleClose = () => setShowModal(false);
+  const myStyles = {
+    width: "60%",
+    position: "absolute",
+    top: "47%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    fontFamily: "'CircularSTDMedium', sans-serif !important",
+  };
+
+  const checkEndofDay = async() =>{
+    const checkdata = {merchant_id,...userTypeData}
+    try {
+      const res = await axios.post(BASE_URL + CHECK_END_DAY, checkdata, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userTypeData.token}`, // Use data?.token directly
+        },
+      });
+      return res.data
+    } catch (error) {
+      console.error("API Error:", error);
+    }
+  }
 
   return (
     <>
       <div className="box">
         <div className="box_shadow_div" style={{ padding: "20px" }}>
-          <div className="qvrow">
-            <div className="col-qv-6">
-              <div className="input_area">
-                <label>Default Cash Drawer Start</label>
-                <input
-                  type="text"
-                  placeholder="0.00"
-                  maxlength="8"
-                  name="default_cash_drawer"
-                  id="cash_drawer"
-                  value={systemAccess.default_cash_drawer || ""}
-                  onChange={handleCashDrawerChange}
+          <Grid container spacing={4}>
+              <Grid item md={6} xs={6} >
+              <label>Default Cash Drawer Start</label>
+                <BasicTextFields 
+                type="text"
+                name="default_cash_drawer"
+                onChangeFun={handleCashDrawerChange}
+                value={systemAccess.default_cash_drawer || ""}
+                maxLength={8}
+                placeholder={"0.00"}
+                onKeyPressFun={handleKeyPress}
+                sx={{ pt: 0.5 }}
                 />
-              </div>
-              <div className="qv_checkbox">
+
+              </Grid>
+          </Grid>
+          <div className="qv_checkbox">
                 <label className="qv_checkbox_add_checkmark_label">
                   Clock In/Out Receipt
                   <input
@@ -532,34 +655,14 @@ const SystemAccessData = () => {
                   <span className="qv_add_checkmark"></span>
                 </label>
               </div>
-            </div>
-          </div>
         </div>
       </div>
       <div className="box">
         <div className="box_shadow_div" style={{ padding: "20px" }}>
           <div className="qvrow">
             <h5 className="box_shadow_heading">Time Clock</h5>
-            <div className="col-qv-6">
-              {/* <div className="input_area">
-                <label>End of Day Allowance</label>
-                <select
-                  name="end_day_Allow"
-                  value={systemAccess.end_day_Allow || ""}
-                  onChange={handleEndOfDayAllowanceChange}
-                >
-                  <option value="1" selected={systemAccess.end_day_Allow == 1}>
-                    Deny if staff clocked in
-                  </option>
-                  <option value="2" selected={systemAccess.end_day_Allow == 2}>
-                    Mass clock out staff clocked in
-                  </option>
-                  <option value="3" selected={systemAccess.end_day_Allow == 3}>
-                    Ignore Time Clock
-                  </option>
-                </select>
-              </div> */}
-
+          </div>
+          <Grid container spacing={4}>
               <Grid item md={6} xs={6} >
                 <label  style={{ marginBottom: "3px" }}>End of Day Allowance</label>
                 <SelectDropDown
@@ -569,32 +672,20 @@ const SystemAccessData = () => {
                     selectedOption={selectedDayAllow}
                     dropdownFor={"DayAllow"}
                   />
-                </Grid>
-            </div>
-            <div className="col-qv-6">
-              <div className="input_area">
-                <label>Shift Assignment</label>
-                <select
-                  name="shift_assign"
-                  id="shift_assign"
-                  value={systemAccess.shift_assign || ""}
-                  onChange={handleShiftAssignmentChange}
-                >
-                  <option value="1" selected={systemAccess.shift_assign == 1}>
-                    Don’t Track Shifts
-                  </option>
-                  <option value="2" selected={systemAccess.shift_assign == 2}>
-                    Track Shifts by Cashier
-                  </option>
-                  <option value="3" selected={systemAccess.shift_assign == 3}>
-                    Track Shifts by Station
-                  </option>
-                </select>
-              </div>
-            </div>
-          </div>
+              </Grid>
+              <Grid item md={6} xs={6}>
+                <label style={{ marginBottom: "3px" }}>Shift Assignment</label>
+                <SelectDropDown
+                    listItem={SiftAssign}
+                    title={"title"}
+                    onClickHandler={handleOptionClick}
+                    selectedOption={selectShiftAssign}
+                    dropdownFor={"SiftAssign"}
+                  />
+              </Grid>
+            </Grid>
           {shouldShowEndOfDayButton && (
-            <div className="col-qv-12">
+            <div className="col-qv-12 mt-4">
               <button className="save_btn" onClick={openModal}>
                 End of Day
               </button>
@@ -604,90 +695,7 @@ const SystemAccessData = () => {
       </div>
       <div className="box">
         <div className="box_shadow_div" style={{ padding: "20px" }}>
-          {/* <div className="qvrow">
-            <h5 className="box_shadow_heading">
-              Default Reporting Start & End Date/Time
-            </h5>
-            <div className="col-qv-6">
-              <div className="input_area">
-                <label>Start Day</label>
-                <select
-                  name="start_date"
-                  id="start_date"
-                  value={systemAccess.start_date || ""}
-                  onChange={handleStartDateChange}
-                >
-                  <option value="1" selected={systemAccess.start_date == 1}>
-                    Yesterday
-                  </option>
-                  <option value="2" selected={systemAccess.start_date == 2}>
-                    Today
-                  </option>
-                </select>
-              </div>
-            </div>
-            <div className="col-qv-6">
-              <div className="input_area">
-                <label>End Day</label>
-                <select
-                  name="end_date"
-                  id="end_date"
-                  value={systemAccess.end_date || ""}
-                  onChange={handleEndDateChange}
-                >
-                  <option value="1" selected={systemAccess.end_date == 1}>
-                    Today
-                  </option>
-                  <option value="2" selected={systemAccess.end_date == 2}>
-                    Tomorrow
-                  </option>
-                </select>
-              </div>
-            </div>
-          </div> */}
           <div className="qvrow">
-            {/* <div className="col-qv-6">
-              <div className="input_area">
-                <label>Start Time</label>
-                <input
-                  type="time"
-                  name="start_time"
-                  value={systemAccess.start_time}
-                  id="start_tym"
-                  required
-                  onChange={handleStartTimeChange}
-                />
-              </div>
-            </div> */}
-            {/* <div className="col-qv-6">
-              <div className="input_area">
-                <label>End Time</label>
-                <input
-                  type="time"
-                  name="end_time"
-                  value={systemAccess.end_time || ""}
-                  id="end_tym"
-                  required
-                  onChange={handleEndTimeChange}
-                />
-              </div>
-            </div> */}
-
-            {/* {shouldShowEndOfDayButton && (
-            <div className="col-qv-6">
-              <div className="input_area">
-                <label>Number of Station</label>
-                <input
-                  type="number"
-                  placeholder="0"
-                  name="no_of_station"
-                  value={systemAccess.no_of_station}
-                  onChange={handleNoOfStationChange}
-                />
-              </div>
-            </div>
-            )}
-             */}
             <h5 className="box_shadow_heading">
                   Default Reporting Start & End Date/Time
             </h5>
@@ -699,7 +707,7 @@ const SystemAccessData = () => {
                   
               {/* </Grid> */}
                 <Grid item md={6} xs={6}>
-                <label >Start Day</label>
+                <label className="pb-1">Start Day</label>
                 <SelectDropDown
                     listItem={StartDay}
                     title={"title"}
@@ -709,7 +717,7 @@ const SystemAccessData = () => {
                   />
                 </Grid>
                 <Grid item md={6} xs={6}>
-                <label >End Day</label>
+                <label className="pb-1">End Day</label>
                 <SelectDropDown
                     listItem={EndDay}
                     title={"title"}
@@ -780,7 +788,7 @@ const SystemAccessData = () => {
               <Grid item xs={12}>
               <label>Number of Station</label>
                 <BasicTextFields
-                  className=""
+                  name="no_of_station"
                   type={"number"}
                   value={systemAccess.no_of_station}
                   onChangeFun={handleNoOfStationChange}
@@ -794,95 +802,66 @@ const SystemAccessData = () => {
             )}
         </div>
       </div>
-      <div className="box">
-        <div className="box_shadow_div" style={{ padding: "20px" }}>
-          {/* <div className="qvrow">
-            <h5 className="box_shadow_heading">
-              Viewable Sales Report History
-              <div className="fr">
-                <Switch
-                  {...label}
-                  name="report_history"
-                  checked={isSwitchEnabled}
-                  value={isSwitchEnabled}
-                  onChange={SwitchEnabledtoggleInput}
-                />
-              </div>
-            </h5>
-            <div className="col-qv-6">
-              <div className="input_area">
-                <label>
-                  Restricted by Employee permission (Number of Days)
-                </label>
-                <input
-                  type="text"
-                  placeholder="0.00"
-                  name="emp_permission"
-                  value={systemAccess.emp_permission}
-                  onChange={handleEmPermissionChange}
-                />
-              </div>
-            </div>
-            <div className="col-qv-6">
-              <div className="input_area">
-                <label>Number of Station</label>
-                <input
-                  type="text"
-                  placeholder="0.00"
-                  name="no_of_station"
-                  value={systemAccess.no_of_station}
-                  onChange={handleNoOfStationChange}
-                />
-              </div>
-            </div>
-          </div> */}
-          <div className="qvrow">
-            <div className="col-md-6">
-              <button class="save_btn" onClick={handleSave}>
+      <div className="box" style={{display:"flex", justifyContent:"flex-end"}}>
+        <button class="save_btn" onClick={handleSave}>
                 Save
-              </button>
-            </div>
-          </div>
-        </div>
+        </button>
       </div>
 
       {showModal && (
-        <div className="q-custom-modal-container" id="">
-          {/* Your modal JSX */}
-          <div className="q-custom-modal-content">
-            {/* Your modal content */}
-            <div className="">
-              <p className="q-custom-modal-header ">
-                Actual Amount
+        <>
+        <Modal
+          open={showModal}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box className="view-category-item-modal" style={myStyles}>
+            <div
+              className="q-add-categories-section-header text-[18px]"
+              style={{
+                justifyContent: "space-between",
+                fontFamily: "CircularSTDBook",
+              }}
+            >
+              <span style={{ cursor: "unset" }}>Actual Amount</span>
+              <div>
                 <img
                   src={CrossIcon}
                   alt="icon"
-                  className="ml-auto mb-4"
-                  onClick={closeModal}
+                  className="  quic-btn-cancle w-6 h-6 cursor-pointer"
+                  onClick={() => closeModal()}
                 />
-              </p>
+              </div>
             </div>
-            {/* ... other modal content ... */}
-            <label>Enter Actual Amount</label>
-            <input
-              type="text"
-              maxlength="9"
-              name="actual_amt"
-              id="actual_amt"
-              value={actualAmount.actual_amt}
-              placeholder="0.00"
-              onChange={handleActualAmtInputChange}
-              className="q-custom-input-field"
-            />
-            <span className="input-error">
-              {errorMessage !== "" ? errorMessage : ""}
-            </span>
+
+            <div className="view-category-item-modal-header">
+              <div
+                className="title_attributes_section"
+                style={{ margin: "1rem 1rem" }}
+              >
+                <label className="mb-2">Enter Actual Amount</label>
+                <BasicTextFields
+                  type="text"
+                  name="actual_amt"
+                  onChangeFun={handleActualAmtInputChange}
+                  value={actualAmount.actual_amt}
+                  maxLength={9}
+                  placeholder={"0.00"}
+                  onKeyPressFun={handleKeyPress}
+                  sx={{ pt: 0.5 }}
+
+                  />
+                <span className="input-error">
+                  {errorMessage !== "" ? errorMessage : ""}
+                </span>
+              </div>
+            </div>
+
             <div className="q-add-categories-section-middle-footer">
               <button
-                className="quic-btn quic-btn-save"
-                id="submit_actual_amt"
-                value=""
                 onClick={handleActualAmtSave}
+                className="quic-btn quic-btn-save"
               >
                 Save
               </button>
@@ -890,9 +869,16 @@ const SystemAccessData = () => {
                 Cancel
               </button>
             </div>
-          </div>
-        </div>
+          </Box>
+          </Modal>
+        </>
       )}
+
+      <AlertModal
+      headerText={alertModalHeaderText}
+      open={alertModalOpen}
+      onClose={() => {setAlertModalOpen(false)}}
+       />
     </>
   );
 };

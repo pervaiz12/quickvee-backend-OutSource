@@ -58,6 +58,57 @@ export default function DashboardTables(props) {
   //     state: { merchantId: props.merchant_id, order_id: order_id },
   //   });
   // };
+
+  const getCustomerName = (deliverName, billingName) => {
+    if (deliverName && deliverName !== '') {
+      return deliverName;
+    } else if (billingName && billingName !== '') {
+      return billingName;
+    } else {
+      return 'N/A';
+    }
+  };
+  
+  const getStatus = (orderMethod, mStatus) => {
+    if (orderMethod === "pickup") {
+      switch (mStatus) {
+        case "1":
+          return "Accepted";
+        case "2":
+          return "Packing";
+        case "3":
+          return "Ready";
+        case "4":
+          return "Completed";
+        case "5":
+          return "Cancel";
+        case "7":
+          return "Refunded";
+        default:
+          return "Accepted";
+      }
+    } else {
+      switch (mStatus) {
+        case "1":
+          return "Accepted";
+        case "2":
+          return "Packing";
+        case "3":
+          return "Out for Delivery";
+        case "4":
+          return "Delivered";
+        case "5":
+          return "Cancel";
+        case "6":
+          return "Ready";
+        case "7":
+          return "Refunded";
+        default:
+          return "Accepted";
+      }
+    }
+  };
+
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -68,7 +119,7 @@ export default function DashboardTables(props) {
             <StyledTableCell align="center">Order Date & Time</StyledTableCell>
             <StyledTableCell align="center">Order Id</StyledTableCell>
             <StyledTableCell align="center">Order Type</StyledTableCell>
-            {/* <StyledTableCell align="center">Status</StyledTableCell> */}
+            <StyledTableCell align="center">Status</StyledTableCell>
             <StyledTableCell align="center">Amount</StyledTableCell>
             <StyledTableCell align="center">Order Details</StyledTableCell>
           </TableRow>
@@ -77,9 +128,9 @@ export default function DashboardTables(props) {
           {props.dashboardRecord && Array.isArray(props.dashboardRecord)
             ? props.dashboardRecord.map((row) => (
                 <StyledTableRow key={row.id}>
-                  <StyledTableCell align="center">{row.name}</StyledTableCell>
+                  <StyledTableCell align="center">{getCustomerName(row.deliver_name, row.billing_name)}</StyledTableCell>
                   <StyledTableCell align="center">
-                    {row.customer_id}
+                    {row.delivery_phn}
                   </StyledTableCell>
                   <StyledTableCell align="center">
                     {formatDateTime(row.date_time)}
@@ -90,13 +141,13 @@ export default function DashboardTables(props) {
                   <StyledTableCell align="center">
                     {row.order_method}
                   </StyledTableCell>
-                  {/* <StyledTableCell align="center">
-                    {row.cvvResult}
-                  </StyledTableCell> */}
+                  <StyledTableCell align="center">
+                  {getStatus(row.order_method, row.m_status)}
+                  </StyledTableCell>
                   <StyledTableCell align="center">{`$${priceFormate(row.amt)}`}</StyledTableCell>
                   <StyledTableCell align="center">
                     <Link
-                      to={`/store-reporting/order-summary/${props.merchant_id}/${row.order_id}`}
+                      to={`/order/store-reporting/order-summary/${props.merchant_id}/${row.order_id}`}
                       // onClick={() => handleSummeryPage(row.order_id)}
                       target="_blank"
                     >
