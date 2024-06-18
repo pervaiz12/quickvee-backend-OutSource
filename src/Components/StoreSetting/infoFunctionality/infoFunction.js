@@ -38,6 +38,7 @@ export default function InfoFunction() {
     phone: "",
     facebookUrl: "",
     instagramUrl: "",
+    promotionalUrl:"",
     user_id: "",
     is_banner_change: "0",
     is_logo_change: "0",
@@ -273,6 +274,10 @@ export default function InfoFunction() {
         response.data.message.insta_url !== null
           ? response.data.message.insta_url
           : "";
+          const promotional_url =
+        response.data.message.promo_url !== null
+          ? response.data.message.promo_url
+          : "";
       const user_id =
         response.data.message.id !== null ? response.data.message.id : "";
       const qr_img =
@@ -299,6 +304,7 @@ export default function InfoFunction() {
         phone: phone,
         facebookUrl: fb_url,
         instagramUrl: insta_url,
+        promotionalUrl:promotional_url,
         user_id: user_id,
         qrCode: qr_img,
       }));
@@ -444,6 +450,7 @@ export default function InfoFunction() {
           state: infoRecord.state, //
           fb_url: infoRecord.facebookUrl,
           insta_url: infoRecord.instagramUrl,
+          promo_url: infoRecord.promotionalUrl,
           // imageBanner: imageBanner,
           // original_name: image,
           // approve: approve,
