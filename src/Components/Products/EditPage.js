@@ -15,7 +15,6 @@ import { useEffect } from "react";
 const EditPage = ({
   openEditModal,
   handleCloseEditModal,
-  handleVarientTitleBasedItemList,
   productData,
   modalType,
   varientData,
@@ -106,17 +105,16 @@ const EditPage = ({
                     varientData={varientData}
                     varientIndex={varientIndex}
                     modalType={modalType}
+                    handleCloseEditModal={handleCloseEditModal}
                   />
                 </TabPanel>
                 <TabPanel value="3">
                   <BulkInstantPo
                     productData={productData}
-                    handleVarientTitleBasedItemList={
-                      handleVarientTitleBasedItemList
-                    }
                     modalType={modalType}
                     varientIndex={varientIndex}
                     varientData={varientData}
+                    handleCloseEditModal={handleCloseEditModal}
                   />
                 </TabPanel>
               </TabContext>

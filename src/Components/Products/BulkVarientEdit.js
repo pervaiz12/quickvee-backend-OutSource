@@ -20,6 +20,7 @@ const BulkVarientEdit = ({
     reorderLevel: "",
   });
 
+
   const setInputMaxLength = (fieldname) => {
     switch (fieldname) {
       case "costPerItem":
@@ -66,6 +67,21 @@ const BulkVarientEdit = ({
     setBulkVarient(bulkDataUpdate);
   };
 
+  const hasDynamicPriceComparison = (formData, firstKey, lastKey, type) => {
+    return formData?.some((item) => {
+      // Get the nested object (e.g., "small/red", "large/green")
+      const nestedObjectKey = Object.keys(item)[0];
+      const nestedObject = item[nestedObjectKey];
+
+      // Check if the dynamic priceKey is greater than the dynamic compareAtPriceKey
+      if (type === "isCompareAtGreaterThanAllPrice") {
+        return +nestedObject[firstKey] > +bulkVarient[lastKey];
+      } else if (type === "isPriceLessThanAllCompareAtPrice") {
+        return +nestedObject[firstKey] < +bulkVarient[lastKey];
+      } 
+    });
+  };
+
   const handleCopyAll = () => {
     // if cmpareAt and notprice check in forminside and show error if errr else success duplicate
     // if price and notcompareAt check inside form and show error if errr else success duplicate
@@ -90,16 +106,20 @@ const BulkVarientEdit = ({
     if (!Object.values(bulkVarient).every((value) => value === "")) {
       handleCopyAllVarientValue(copyValue);
     }
-  
 
     // compareAtPrice check inside form with all price // compareAtPrice must be greater than price value
     if (bulkVarient["compareAtPrice"] && !bulkVarient["price"]) {
       if (
-        formData?.some((i) => +i?.["price"] > +bulkVarient["compareAtPrice"])
+        // formData?.some((i) => +i?.["price"] > +bulkVarient["compareAtPrice"])
+        hasDynamicPriceComparison(
+          formData,
+          "price",
+          "compareAtPrice",
+          "isCompareAtGreaterThanAllPrice"
+        )
       ) {
         alert("compareAtPrice must be greater than price.");
-      handleCopyAllVarientValue(copyValue);
-
+        handleCopyAllVarientValue(copyValue);
       } else {
         handleCopyAllVarientValue(copyAllValue);
         ToastifyAlert(
@@ -112,11 +132,16 @@ const BulkVarientEdit = ({
     // price value check inside form with all compareAtPrice value // price must be less than compareAtPrice
     else if (!bulkVarient["compareAtPrice"] && bulkVarient["price"]) {
       if (
-        formData?.some((i) => +i?.["compareAtPrice"] < +bulkVarient["price"])
+        // formData?.some((i) => +i?.["compareAtPrice"] < +bulkVarient["price"])
+        hasDynamicPriceComparison(
+          formData,
+          "compareAtPrice",
+          "price",
+          "isPriceLessThanAllCompareAtPrice"
+        )
       ) {
         alert("compareAtPrice must be greater than price.");
         handleCopyAllVarientValue(copyValue);
-
       } else {
         handleCopyAllVarientValue(copyAllValue);
         ToastifyAlert(
@@ -133,21 +158,32 @@ const BulkVarientEdit = ({
       if (+bulkVarient["compareAtPrice"] < +bulkVarient["price"]) {
         alert("compareAtPrice must be greater than price.");
         handleCopyAllVarientValue(copyValue);
-
       }
       // compare inside form
       else if (
-        formData?.some((i) => +i?.["price"] > +bulkVarient["compareAtPrice"])
+        // formData?.some((i) => +i?.["price"] > +bulkVarient["compareAtPrice"])
+        hasDynamicPriceComparison(
+          formData,
+          "price",
+          "compareAtPrice",
+          "isCompareAtGreaterThanAllPrice"
+        )
+        
       ) {
         handleCopyAllVarientValue(copyValue);
 
         alert("compareAtPrice must be greater than price.");
       } else if (
-        formData?.some((i) => +i?.["compareAtPrice"] < +bulkVarient["price"])
+        // formData?.some((i) => +i?.["compareAtPrice"] < +bulkVarient["price"])
+        hasDynamicPriceComparison(
+          formData,
+          "compareAtPrice",
+          "price",
+          "isPriceLessThanAllCompareAtPrice"
+        )
       ) {
         alert("compareAtPrice must be greater than price.");
         handleCopyAllVarientValue(copyValue);
-
       } else {
         handleCopyAllVarientValue(copyAllValue);
         ToastifyAlert(
@@ -159,7 +195,10 @@ const BulkVarientEdit = ({
     }
 
     // if any from reorderQty or reorderLevel is not empty
-    else if(bulkVarient['reorderQty'] !== "" || bulkVarient['reorderLevel'] !== ""){
+    else if (
+      bulkVarient["reorderQty"] !== "" ||
+      bulkVarient["reorderLevel"] !== ""
+    ) {
       handleCopyAllVarientValue(copyValue);
       ToastifyAlert(
         "Copied values! Plase Click on Update for Save!",
@@ -220,7 +259,12 @@ const BulkVarientEdit = ({
                 >
                   Copy ALL
                 </button>
-                <button className="quic-btn quic-btn-cancle">Cancel</button>
+                <button
+                  className="quic-btn quic-btn-cancle"
+                  onClick={handleCloseEditModal}
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </div>
