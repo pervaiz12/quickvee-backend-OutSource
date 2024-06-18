@@ -626,7 +626,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
                     <StyledTableCell>Cost Per Item</StyledTableCell>
                     <StyledTableCell>Total</StyledTableCell>
                     <StyledTableCell>UPC</StyledTableCell>
-                    <StyledTableCell>Note</StyledTableCell>
+                    {/* <StyledTableCell>Note</StyledTableCell> */}
                     <StyledTableCell></StyledTableCell>
                   </TableHead>
                   <TableBody>
