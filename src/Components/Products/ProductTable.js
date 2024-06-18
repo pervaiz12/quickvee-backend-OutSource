@@ -132,7 +132,7 @@ const ProductTable = ({
     const data = {
       product_id: id,
       status: updateValue,
-      merchant_id: "MAL0100CA",
+      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
       ...userTypeData,
     };
     dispatch(changeOnlineOrderMethod(data)).then((res) => {
@@ -157,7 +157,7 @@ const ProductTable = ({
     }
     //let page = productList.length / 10 + 1 ;
     let data1 = {
-      merchant_id: "MAL0100CA",
+      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
       format: "json",
       category_id: categoryId === "All" ? "all" : categoryId,
       show_status: selectedStatusValue === "All" ? "all" : selectedStatusValue,
@@ -359,7 +359,7 @@ const ProductTable = ({
                                             className="inline-block h-12 w-12 rounded-full ring-2 ring-white"
                                             src={
                                               BASE_URL +
-                                              "upload/products/MAL0100CA/" +
+                                              `upload/products/${LoginGetDashBoardRecordJson?.data?.merchant_id}/` +
                                               item
                                             }
                                             onError={(e) => {
@@ -395,7 +395,7 @@ const ProductTable = ({
                                       <img
                                         src={DeleteIcon}
                                         alt=" "
-                                        className="w-16 h-16"
+                                        className="w-10 h-10"
                                         onClick={() =>
                                           handleDeleteProduct(product?.id)
                                         }
@@ -406,26 +406,7 @@ const ProductTable = ({
                               </StyledTableRow>
                             );
                           })}
-                        {/* {productList?.length >= 1 &&
-                          productList.map((product, index) => {
-                            return (
-                              <StyledTableRow key={product?.id}>
-                                <StyledTableCell>
-                                  <ProductRow
-                                    key={index}
-                                    setShowType={setShowType}
-                                    showType={showType}
-                                    {...{
-                                      Avail_Online,
-                                      index,
-                                      product,
-                                      checkStatus,
-                                    }}
-                                  />
-                                 </StyledTableCell>
-                               </StyledTableRow>
-                            );
-                          })} */}
+                        
                       </TableBody>
                     </StyledTable>
                   </InfiniteScroll>

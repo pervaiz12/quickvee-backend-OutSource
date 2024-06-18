@@ -133,6 +133,7 @@ const AddProducts = () => {
     setClearInput(value);
   };
 
+
   // formValue Schema
 
   const formValueInnerSchema = yup.object().shape({
@@ -368,7 +369,7 @@ const AddProducts = () => {
       const formData = new FormData();
       formData.append("title", value);
       formData.append("id", productData?.id);
-      formData.append("merchant_id", "MAL0100CA");
+      formData.append("merchant_id", LoginGetDashBoardRecordJson?.data?.merchant_id);
 
       // Clear previous timeout if exists
       clearTimeout(titleTimeoutId);
@@ -514,38 +515,31 @@ const AddProducts = () => {
 
   // copy Bulk varient value from modal
   const handleCopyAllVarientValue = (values) => {
-    setFormValue((prev) => {
-      // Create a copy of the previous state
-      let newFormValue = { ...prev };
 
-      // Loop through the keys of the input values object
-      for (let key in values) {
-        if (values.hasOwnProperty(key)) {
-          // Only update if the value is not empty
-          if (values[key] !== "") {
-            // Loop through nested objects to update the keys
-            for (let nestedKey in newFormValue) {
-              if (newFormValue.hasOwnProperty(nestedKey) && !isNaN(nestedKey)) {
-                if (newFormValue[nestedKey].hasOwnProperty(key)) {
-                  newFormValue[nestedKey][key] = values[key];
-                }
-              }
-            }
+    setFormValue((prev) => {
+      // Create a deep copy of the previous state
+      let newFormValue = JSON.parse(JSON.stringify(prev));
+  
+      // Loop through each item in the newFormValue array
+      newFormValue.forEach((item) => {
+        // Get the nested object (e.g., "small/red", "large/green")
+        let nestedKey = Object.keys(item)[0];
+        let nestedObject = item[nestedKey];
+  
+        // Update the properties based on the input values
+        for (let key in values) {
+          if (values.hasOwnProperty(key) && values[key] !== "") {
+            nestedObject[key] = values[key];
           }
         }
-      }
-
-      // Convert the updated form values state into an array of objects
-      let resultArray = Object.keys(newFormValue)
-        .filter((key) => !isNaN(key)) // Filter to include only numeric keys
-        .map((key) => newFormValue[key]);
-
-      // Log the resulting array
-
-      // Return the updated array of objects
-      return resultArray;
+      });
+  
+      // Return the updated state
+      return newFormValue;
     });
   };
+  
+  
 
   useEffect(() => {
     // called API
@@ -1212,40 +1206,6 @@ const AddProducts = () => {
           return newFormValue;
         });
       } else {
-        // setFormValue((prevFormValue) => {
-        //   const newFormValue = [...new Set(varientTitle)].map((_, index) => {
-        //     const previousData = prevFormValue[index] || {};
-        //     return {
-        //       costPerItem: previousData.costPerItem || "",
-        //       compareAtPrice: previousData.compareAtPrice || "",
-        //       price: previousData.price || "",
-        //       margin: previousData.margin || "",
-        //       profit: previousData.profit || "",
-        //       qty: previousData.qty || "",
-        //       upcCode: previousData.upcCode || "",
-        //       customCode: previousData.customCode || "",
-        //       reorderQty: previousData.reorderQty || "",
-        //       reorderLevel: previousData.reorderLevel || "",
-        //       // here when fetching prodcut data and track and sellout was false but still showing true and check that's why using this condition
-        //       trackQuantity:
-        //         previousData.trackQuantity || pageUrl !== "inventory/products/edit"
-        //           ? true
-        //           : false,
-        //       sellOutOfStock:
-        //         previousData.sellOutOfStock || pageUrl !== "inventory/products/edit"
-        //           ? true
-        //           : false,
-        //       checkId: previousData.checkId || false,
-        //       disable: previousData.disable || false,
-        //       // itemForAllLinkedLocation:
-        //       //   previousData.itemForAllLinkedLocation || false,
-        //       isFoodStamble: previousData?.isFoodStamble || false,
-        //     };
-        //     // }
-        //   });
-        //   return newFormValue;
-        // });
-
         setFormValue((prevFormValue) => {
           const newFormValue = [...new Set(varientTitle)].map(
             (title, index) => {
@@ -1322,7 +1282,7 @@ const AddProducts = () => {
   const fetchProductDataById = () => {
     setFetchDataLoading(true);
     const formData = new FormData();
-    formData.append("merchant_id", "MAL0100CA");
+    formData.append("merchant_id", LoginGetDashBoardRecordJson?.data?.merchant_id);
     formData.append("id", productId?.id);
     if (!!productId?.id) {
       dispatch(fetchProductsDataById(formData))
@@ -1611,7 +1571,7 @@ const AddProducts = () => {
     e.preventDefault();
     const data = {
       /// single varient payload
-      merchant_id: "MAL0100CA",
+      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
       title: productInfo?.title,
       description: productInfo?.description,
       price: !isMultipleVarient ? formValue[0]?.price : "",
@@ -1903,7 +1863,6 @@ const AddProducts = () => {
             openEditModal={openEditModal}
             handleCloseEditModal={handleCloseEditModal}
             productData={productData}
-            handleVarientTitleBasedItemList={handleVarientTitleBasedItemList}
             modalType={modalType}
             varientData={varientData}
             varientIndex={varientIndex}
@@ -2137,7 +2096,7 @@ const AddProducts = () => {
                                     <img
                                       src={
                                         BASE_URL +
-                                        `/upload/products/MAL0100CA/` +
+                                        `/upload/products/${LoginGetDashBoardRecordJson?.data?.merchant_id}/` +
                                         img
                                       }
                                       alt="Preview"

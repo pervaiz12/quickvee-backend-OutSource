@@ -278,7 +278,7 @@ const GeneratePUC = ({
                             backgroundColor: "#0A64F9",
                           }}
                           onClick={() =>
-                            handleCloseEditModal("single_vendor", formValue?.[index]?.[title]?.productEditId)
+                            handleCloseEditModal("single_vendor", index)
                           }
                         >
                           Vendors
@@ -302,7 +302,7 @@ const GeneratePUC = ({
                             backgroundColor: "#0A64F9",
                           }}
                           onClick={() =>
-                            handleCloseEditModal("single_instant", formValue?.[index]?.[title]?.productEditId)
+                            handleCloseEditModal("single_instant", index)
                           }
                         >
                           Instant PO
@@ -459,7 +459,7 @@ const GeneratePUC = ({
                     style={{
                       backgroundColor: "#0A64F9",
                     }}
-                    onClick={() => handleCloseEditModal("single_vendor", formValue?.[0]?.productEditId)}
+                    onClick={() => handleCloseEditModal("single_vendor", 0)}
                   >
                     Vendors
                   </button>
@@ -481,7 +481,7 @@ const GeneratePUC = ({
                     style={{
                       backgroundColor: "#0A64F9",
                     }}
-                    onClick={() => handleCloseEditModal("single_instant", formValue[0]?.productEditId)}
+                    onClick={() => handleCloseEditModal("single_instant", 0)}
                   >
                     Instant PO
                   </button>

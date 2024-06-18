@@ -7,16 +7,18 @@ import {
   saveSingleVarientPO,
 } from "../../Redux/features/Product/ProductSlice";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import { useAuthDetails } from "../../Common/cookiesHelper";
 
 const BulkInstantPo = ({
   productData,
-  handleVarientTitleBasedItemList,
   modalType,
   varientIndex,
   varientData,
+  handleCloseEditModal
 }) => {
   const dispatch = useDispatch();
   const productId = useParams();
+  const { LoginGetDashBoardRecordJson } = useAuthDetails();
   const [instantPoSingle, setInstantPoSingle] = useState({
     qty: "",
     cost: "",
@@ -28,11 +30,9 @@ const BulkInstantPo = ({
     description: "",
   });
 
-  const varientTitle = handleVarientTitleBasedItemList();
-
   const instantPoForm = useMemo(() => {
     if (modalType === "bulk-edit") {
-      return [...new Set(varientTitle)]?.map(() => ({
+      return [...new Set(varientData)]?.map(() => ({
         qty: "",
         cost: "",
       }));
@@ -132,7 +132,7 @@ const BulkInstantPo = ({
             ? ""
             : varientData[varientIndex]?.id
       );
-      formData.append("merchant_id", "MAL0100CA");
+      formData.append("merchant_id", LoginGetDashBoardRecordJson?.data?.merchant_id);
       formData.append("description", instantPoSingle?.description);
       formData.append("qty", instantPoSingle?.qty);
       formData.append("price", instantPoSingle?.cost);
@@ -146,6 +146,7 @@ const BulkInstantPo = ({
               description: "",
             });
             ToastifyAlert("Instance PO Updated!", "success");
+            handleCloseEditModal();
           }
         })
         .catch((err) => {
@@ -161,7 +162,7 @@ const BulkInstantPo = ({
             ? varientData?.map((i) => i?.id)?.toString()
             : varientData[varientIndex]?.id
       );
-      formData.append("merchant_id", "MAL0100CA");
+      formData.append("merchant_id",  LoginGetDashBoardRecordJson?.data?.merchant_id);
       formData.append("description", instancePoMultiple?.description);
       formData.append(
         "qty",
@@ -180,6 +181,7 @@ const BulkInstantPo = ({
               description: "",
             });
             ToastifyAlert("Instance PO Updated!", "success");
+            handleCloseEditModal();
           }
         })
         .catch((err) => {
@@ -196,11 +198,11 @@ const BulkInstantPo = ({
             {/* for bulk instant PO */}
             {modalType !== "single_instant" ? (
               <>
-                {varientTitle?.map((varient, index) => {
+                {varientData?.map((varient, index) => {
                   return (
                     <div class="varient-container">
                       <div class="varientform ">
-                        <p className="varientName">{varient}</p>
+                        <p className="varientName">{varient?.variant}</p>
                         <div class="form">
                           {bulkInstantPo?.length
                             ? bulkInstantPo?.map((inp, formindex) => {
@@ -265,7 +267,7 @@ const BulkInstantPo = ({
                     <div class="varient-container">
                       <div class="varientform ">
                         <p className="varientName">
-                          {varientTitle?.[varientIndex]}
+                          {varientData?.[varientIndex]?.variant}
                         </p>
                         <div class="form">
                           {bulkInstantPo?.length
@@ -345,7 +347,7 @@ const BulkInstantPo = ({
                     >
                       Update
                     </button>
-                    <button className="quic-btn quic-btn-cancle">Cancel</button>
+                    <button className="quic-btn quic-btn-cancle" onClick={handleCloseEditModal}>Cancel</button>
                   </div>
                 </div>
               </div>

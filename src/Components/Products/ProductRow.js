@@ -7,14 +7,13 @@ import SortIcon from "../../Assests/Category/Sorting.svg";
 
 import { BASE_URL } from "../../Constants/Config";
 
-const   ProductRow = ({
+const  ProductRow = ({
   product,
   index,
   Avail_Online,
   checkStatus,
   // handleError,
 }) => {
-
  
   return (
     <>

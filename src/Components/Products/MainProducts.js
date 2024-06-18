@@ -33,7 +33,7 @@ const MainProducts = () => {
 
   const [searchId, setSearchId] = useState(""); // State to track search ID
 
-  const { userTypeData } = useAuthDetails();
+  const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
 
   // Function to update the category ID, which will be passed to the child
   const handleCategoryChange = (catId) => {
@@ -42,7 +42,7 @@ const MainProducts = () => {
 
   const handleSearch = () => {
     let name_data = {
-      merchant_id: "MAL0100CA",
+      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
       category_id: "all",
       show_status: "all",
       listing_type: 0,
@@ -92,7 +92,7 @@ const MainProducts = () => {
         if (window.confirm("Are you sure you want to update?")) {
           dispatch(emptyProduct([]));
           let type_date = {
-            merchant_id: "MAL0100CA",
+            merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
             id: option.id,
           };
           if (type_date) {
@@ -102,7 +102,7 @@ const MainProducts = () => {
                 
                 if (responseData) {
                   let del_pic_data = {
-                    merchant_id: "MAL0100CA",
+                    merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
                     category_id: categoryId === "All" ? "all" : categoryId, 
                     show_status: selectedStatus,
                     listing_type: selectedListingTypeValue,
@@ -133,7 +133,7 @@ const MainProducts = () => {
         setTransactionDropdownVisible(false);
         dispatch(emptyProduct([]));
         let status_data = {
-          merchant_id: "MAL0100CA",
+          merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
           category_id: categoryId === "All" ? "all" : categoryId,
           show_status: option.id,
           listing_type: selectedListingTypeValue,
@@ -159,7 +159,7 @@ const MainProducts = () => {
         }
         setSelectedListingTypeValue(option);
         let listing_data = {
-          merchant_id: "MAL0100CA",
+          merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
           category_id: categoryId === "All" ? "all" : categoryId,
           show_status: selectedStatus,
           listing_type: option.id,
