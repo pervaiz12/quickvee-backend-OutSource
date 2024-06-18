@@ -2772,7 +2772,12 @@ padding: 15px 0px;
   outline: unset;
 }
 .delete-Box-modal {
-  transform: "translate(50%, 50p%) !important";
+  /* transform: translate(50%, 50%) !important; */
+  /* transform: translateY(-45%)  !important;
+  -webkit-transform: translateY(-45%)  !important;
+  -ms-transform: translateY(-45%)  !important;
+  -moz-transform: translateY(-45%)  !important;
+  transition: transform 225ms cubic-bezier(0, 0, 0.2, 1) 0ms; */
 }
 
 .delete-modal {
