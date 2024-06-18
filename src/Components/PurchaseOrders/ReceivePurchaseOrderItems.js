@@ -14,6 +14,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import CircularProgress from "@mui/material/CircularProgress";
 import {
   BASE_URL,
   EMAIL_PO,
@@ -55,6 +56,12 @@ const ReceivePurchaseOrderItems = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
+
+  const [loaders, setLoaders] = useState({
+    email: false,
+    void: false,
+    receive: false,
+  });
 
   // console.log("LoginGetDashBoardRecordJson: ", LoginGetDashBoardRecordJson);
 
@@ -107,16 +114,24 @@ const ReceivePurchaseOrderItems = () => {
 
   // fetching Purchase Order details
   useEffect(() => {
-    const data = { merchant_id: "MAL0100CA", po_id: id, ...userTypeData };
+    const data = {
+      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+      po_id: id,
+      ...userTypeData,
+    };
     dispatch(fetchPurchaseOrderById(data));
   }, [isUpdated]);
 
   // voiding a purchase order
   const voidPurchaseOrder = async () => {
     try {
+      setLoaders((prev) => ({ ...prev, void: true }));
       const { token } = userTypeData;
       const formData = new FormData();
-      formData.append("merchant_id", "MAL0100CA");
+      formData.append(
+        "merchant_id",
+        LoginGetDashBoardRecordJson?.data?.merchant_id
+      );
       formData.append("po_id", id);
       formData.append("token_id", userTypeData.token_id);
       formData.append("login_type", userTypeData.login_type);
@@ -138,6 +153,8 @@ const ReceivePurchaseOrderItems = () => {
       // console.log("response void po: ", response);
     } catch (e) {
       console.log("Error: ", e);
+    } finally {
+      setLoaders((prev) => ({ ...prev, void: false }));
     }
   };
 
@@ -175,6 +192,7 @@ const ReceivePurchaseOrderItems = () => {
   // receiving purchase order items api
   const receivePOItems = async () => {
     try {
+      setLoaders((prev) => ({ ...prev, receive: true }));
       const bool = purchaseOrder?.order_items?.some(
         (item) => item.isChecked && Number(item.pending_qty) > 0
       );
@@ -204,7 +222,10 @@ const ReceivePurchaseOrderItems = () => {
           }));
 
         const formData = new FormData();
-        formData.append("merchant_id", "MAL0100CA");
+        formData.append(
+          "merchant_id",
+          LoginGetDashBoardRecordJson?.data?.merchant_id
+        );
         formData.append("po_id", id);
         formData.append("token_id", userTypeData.token_id);
         formData.append("login_type", userTypeData.login_type);
@@ -233,12 +254,15 @@ const ReceivePurchaseOrderItems = () => {
       }
     } catch (e) {
       console.log("Error: ", e);
+    } finally {
+      setLoaders((prev) => ({ ...prev, receive: false }));
     }
   };
 
   // emailing purchase order to vendor api
   const handleEmail = async () => {
     try {
+      setLoaders((prev) => ({ ...prev, email: true }));
       if (!purchaseOrder.email) {
         ToastifyAlert("Vendor Email not found!", "error");
         return;
@@ -247,7 +271,10 @@ const ReceivePurchaseOrderItems = () => {
       const { token } = userTypeData;
 
       const formData = new FormData();
-      formData.append("merchant_id", "MAL0100CA");
+      formData.append(
+        "merchant_id",
+        LoginGetDashBoardRecordJson?.data?.merchant_id
+      );
       formData.append("po_id", id);
       formData.append("token_id", userTypeData.token_id);
       formData.append("login_type", userTypeData.login_type);
@@ -255,25 +282,21 @@ const ReceivePurchaseOrderItems = () => {
       const response = await axios.post(BASE_URL + EMAIL_PO, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`, // Use data?.token directly
+          Authorization: `Bearer ${token}`,
         },
       });
-
-      // console.log("response: ", response);
 
       if (response.data.status) {
         ToastifyAlert(response.data.message, "success");
       }
     } catch (e) {
       console.log("Error: ", e);
+    } finally {
+      setLoaders((prev) => ({ ...prev, email: false }));
     }
   };
 
   const purchaseOrderDetails = useMemo(() => {
-    // const merchantAddress = `${LoginGetDashBoardRecordJson?.data?.a_address_line_1},
-    // ${LoginGetDashBoardRecordJson?.data?.a_address_line_2}, ${LoginGetDashBoardRecordJson?.data?.a_city},
-    //  ${LoginGetDashBoardRecordJson?.data?.a_state}, ${LoginGetDashBoardRecordJson?.data?.a_zip}`;
-
     const data = {
       // merchantName: LoginGetDashBoardRecordJson?.name,
       // merchantAddress,
@@ -463,9 +486,6 @@ const ReceivePurchaseOrderItems = () => {
                                               newReceivedQty: Number(
                                                 e.target.value
                                               ),
-                                              // newReceivedQty:
-                                              //   Number(item.recieved_qty) +
-                                              //   Number(e.target.value),
                                             }
                                           : item
                                     ),
@@ -510,7 +530,11 @@ const ReceivePurchaseOrderItems = () => {
             <div className="flex justify-between py-7 px-6">
               <div className="button-container start gap-4">
                 <button onClick={handleEmail} className="quic-btn quic-btn-add">
-                  Email
+                  {loaders.email ? (
+                    <CircularProgress color={"inherit"} size={18} />
+                  ) : (
+                    "Email"
+                  )}
                 </button>
                 <button
                   onClick={() =>
@@ -534,7 +558,11 @@ const ReceivePurchaseOrderItems = () => {
                   onClick={voidPurchaseOrder}
                   className="quic-btn quic-btn-draft"
                 >
-                  Void
+                  {loaders.void ? (
+                    <CircularProgress color={"inherit"} size={18} />
+                  ) : (
+                    "Void"
+                  )}
                 </button>
               </div>
               <div className="button-container end gap-4">
@@ -548,7 +576,11 @@ const ReceivePurchaseOrderItems = () => {
                   className="quic-btn quic-btn-save"
                   onClick={receivePOItems}
                 >
-                  Receive
+                  {loaders.receive ? (
+                    <CircularProgress color={"inherit"} size={18} />
+                  ) : (
+                    "Receive"
+                  )}
                 </button>
               </div>
             </div>

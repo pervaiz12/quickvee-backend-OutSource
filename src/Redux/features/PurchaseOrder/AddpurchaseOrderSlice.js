@@ -12,8 +12,9 @@ let initial = {
 export const fetchaddpopurchaseData = createAsyncThunk(
   "Addpolist/fetchaddpopurchaseData",
   async (data) => {
-    // console.log(data)
-    let dataresult = { merchant_id: "MAL0100CA", admin_id: "MAL0100CA" };
+    // console.log("data hoho:", data);
+    let dataresult = { merchant_id: data.merchant_id, admin_id: data.admin_id };
+    // console.log("data res: ", dataresult);
     try {
       const response = await axios.post(
         "https://sandbox.quickvee.net/Purchase_orders_api/po_list",
@@ -22,7 +23,7 @@ export const fetchaddpopurchaseData = createAsyncThunk(
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-      // console.log(response); // Log the response data
+      console.log("response: ", response); // Log the response data
       return response?.data; // Return the response data
     } catch (error) {
       console.error("Error validating email:", error.message);

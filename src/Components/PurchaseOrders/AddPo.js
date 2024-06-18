@@ -10,7 +10,7 @@ import AutoPo from "./AutoPo";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import backIcon from "../../Assests/Dashboard/Left.svg";
-import { fetchaddpopurchaseData } from "../../Redux/features/PurchaseOrder/AddpurchaseOrderSlice";
+// import { fetchaddpopurchaseData } from "../../Redux/features/PurchaseOrder/AddpurchaseOrderSlice";
 import { fetchVendorsListData } from "../../Redux/features/VendorList/vListSlice";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -21,7 +21,7 @@ import { useNavigate } from "react-router-dom";
 const AddPo = ({ seVisible }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { userTypeData } = useAuthDetails();
+  const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
 
   const [purchaseInfo, setPurchaseInfo] = useState({
     issuedDate: null,
@@ -43,8 +43,16 @@ const AddPo = ({ seVisible }) => {
   const allVendors = useSelector((state) => state.vendors);
 
   useEffect(() => {
-    const data = { merchant_id: "MAL0100CA", ...userTypeData };
-    dispatch(fetchaddpopurchaseData({ ...data, admin_id: "MAL0100CA" }));
+    const data = {
+      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+      ...userTypeData,
+    };
+    // dispatch(
+    //   fetchaddpopurchaseData({
+    //     ...data,
+    //     admin_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+    //   })
+    // );
     dispatch(fetchVendorsListData(data));
   }, [dispatch]);
 

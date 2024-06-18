@@ -24,6 +24,14 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MenuItem from "@mui/material/MenuItem";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import { createdAt } from "../../Constants/utils";
+import CircularProgress from "@mui/material/CircularProgress";
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
 
 const theme = createTheme({
   components: {
@@ -42,11 +50,38 @@ const theme = createTheme({
   },
 });
 
+const StyledTable = styled(Table)(({ theme }) => ({
+  padding: 2, // Adjust padding as needed
+}));
+
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#253338",
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+  [`&.${tableCellClasses.table}`]: {
+    fontSize: 14,
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+}));
+
 const ModifyPurchaseOrder = () => {
   const navigate = useNavigate();
   const { id } = useParams();
   const dispatch = useDispatch();
-  const { userTypeData } = useAuthDetails();
+  const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
 
   const [purchaseInfo, setPurchaseInfo] = useState({
     issuedDate: null,
@@ -56,6 +91,7 @@ const ModifyPurchaseOrder = () => {
     selectedVendor: "",
     vendorId: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const [purchaseInfoErrors, setPurchaseInfoErrors] = useState({
     issuedDate: "",
@@ -72,7 +108,7 @@ const ModifyPurchaseOrder = () => {
   );
 
   useEffect(() => {
-    console.log("puchaseOrderDetail: ", puchaseOrderDetail);
+    // console.log("puchaseOrderDetail: ", puchaseOrderDetail);
 
     setPurchaseInfo((prev) => ({
       ...prev,
@@ -106,13 +142,17 @@ const ModifyPurchaseOrder = () => {
     }
   }, [puchaseOrderDetail]);
 
-  useEffect(() => {
-    console.log("selectedProducts: ", selectedProducts);
-  }, [selectedProducts]);
+  // useEffect(() => {
+  //   console.log("selectedProducts: ", selectedProducts);
+  // }, [selectedProducts]);
 
   // fetching Purchase Order details
   useEffect(() => {
-    const data = { merchant_id: "MAL0100CA", po_id: id, ...userTypeData };
+    const data = {
+      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+      po_id: id,
+      ...userTypeData,
+    };
     dispatch(fetchPurchaseOrderById(data));
   }, []);
 
@@ -129,7 +169,10 @@ const ModifyPurchaseOrder = () => {
     try {
       const { token } = userTypeData;
       const formData = new FormData();
-      formData.append("merchant_id", "MAL0100CA");
+      formData.append(
+        "merchant_id",
+        LoginGetDashBoardRecordJson?.data?.merchant_id
+      );
       formData.append("po_item_id", productId);
       formData.append("token_id", userTypeData.token_id);
       formData.append("login_type", userTypeData.login_type);
@@ -212,7 +255,7 @@ const ModifyPurchaseOrder = () => {
   const productOptions = async (inputValue) => {
     if (inputValue && inputValue.length > 2) {
       let name_data = {
-        merchant_id: "MAL0100CA",
+        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
         category_id: "all",
         show_status: "all",
         listing_type: 1,
@@ -265,14 +308,17 @@ const ModifyPurchaseOrder = () => {
   const getProductData = async (productId, variantId) => {
     try {
       const formData = new FormData();
-      formData.append("merchant_id", "MAL0100CA");
+      formData.append(
+        "merchant_id",
+        LoginGetDashBoardRecordJson?.data?.merchant_id
+      );
       formData.append("id", productId);
       const response = await axios.post(
         BASE_URL + "Product_api_react/get_productdata_ById",
         formData
       );
 
-      console.log("product info: ", response.data.data);
+      // console.log("product info: ", response.data.data);
 
       let obj = {
         note: "",
@@ -412,6 +458,7 @@ const ModifyPurchaseOrder = () => {
 
     if (purchaseInfoDetails && stockDate && issuedDate && validateProducts) {
       try {
+        setLoading(() => true);
         const orderItems = selectedProducts?.map((prod) => ({
           product_id:
             prod.variant || prod.variant_id ? prod.product_id : prod.id,
@@ -430,8 +477,8 @@ const ModifyPurchaseOrder = () => {
           order_item_id: prod.order_item_id ? prod.order_item_id : "",
         }));
 
-        console.log("selectedProducts: ", selectedProducts);
-        console.log("orderItems: ", orderItems);
+        // console.log("selectedProducts: ", selectedProducts);
+        // console.log("orderItems: ", orderItems);
 
         const orderItemsObject = orderItems?.reduce((acc, curr, index) => {
           acc[index] = curr;
@@ -440,8 +487,14 @@ const ModifyPurchaseOrder = () => {
 
         const { token } = userTypeData;
         const formData = new FormData();
-        formData.append("merchant_id", "MAL0100CA");
-        formData.append("admin_id", "MAL0100CA");
+        formData.append(
+          "merchant_id",
+          LoginGetDashBoardRecordJson?.data?.merchant_id
+        );
+        formData.append(
+          "admin_id",
+          LoginGetDashBoardRecordJson?.data?.merchant_id
+        );
         formData.append("po_id", id);
         formData.append("vendor_id", Number(purchaseInfo?.vendorId));
         formData.append(
@@ -466,7 +519,7 @@ const ModifyPurchaseOrder = () => {
             Authorization: `Bearer ${token}`, // Use data?.token directly
           },
         });
-        console.log("response modifyPurchaseOrder: ", response);
+        // console.log("response modifyPurchaseOrder: ", response);
 
         if (response.data.status) {
           ToastifyAlert(response.data.message, "success");
@@ -475,6 +528,8 @@ const ModifyPurchaseOrder = () => {
         }
       } catch (e) {
         console.log("Error: ", e);
+      } finally {
+        setLoading(() => false);
       }
     } else {
       if (!purchaseInfoDetails || !stockDate || !issuedDate) {
@@ -641,7 +696,7 @@ const ModifyPurchaseOrder = () => {
       <div className="auto-po-container">
         <div className="box">
           <div className="box_shadow_div" style={{ overflow: "unset" }}>
-            <div className="mt-4 px-6">
+            <div className="py-7 px-6">
               <div className="q_searchBar sticky z-index-2">
                 <Grid container>
                   <Grid item xs={12}>
@@ -659,7 +714,7 @@ const ModifyPurchaseOrder = () => {
               </div>
             </div>
 
-            <div className="q-category-bottom-detail-section z-index-1">
+            {/* <div className="q-category-bottom-detail-section z-index-1">
               {selectedProducts.length > 0 && (
                 <>
                   <div className="q-add-purchase-section-header">
@@ -775,23 +830,153 @@ const ModifyPurchaseOrder = () => {
                   ))}
                 </>
               )}
-              <div className="flex justify-end py-4 px-4">
-                {/* {selectedProducts.length > 0 && ( */}
-                <div className="button-container end gap-4">
-                  <button
-                    className="quic-btn quic-btn-save"
-                    onClick={modifyPurchaseOrder}
-                  >
-                    Update
-                  </button>
-                  <button
-                    onClick={() => navigate("/purchase-data")}
-                    className="quic-btn quic-btn-cancle"
-                  >
-                    Cancel
-                  </button>
-                </div>
-                {/* )} */}
+              
+            </div> */}
+
+            <Grid container className="z-index-1">
+              <TableContainer>
+                <StyledTable
+                  sx={{ minWidth: 500 }}
+                  aria-label="customized table"
+                >
+                  <TableHead>
+                    <StyledTableCell>Item Name</StyledTableCell>
+                    <StyledTableCell>Qty</StyledTableCell>
+                    <StyledTableCell>After</StyledTableCell>
+                    <StyledTableCell>Cost Per Item</StyledTableCell>
+                    <StyledTableCell>Total</StyledTableCell>
+                    <StyledTableCell>UPC</StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                  </TableHead>
+                  <TableBody>
+                    {selectedProducts.map((product) => (
+                      <StyledTableRow key={product?.id}>
+                        <StyledTableCell>
+                          <>
+                            {/* <p className="purchase-data-item text-[16px]">
+                              <br />
+                              {product.variant_title || product.variant ? (
+                                <>
+                                  <span className="text-[14px]">
+                                    {product.variant_title || product.variant}
+                                  </span>
+                                  <br />
+                                </>
+                              ) : null}
+                            </p> */}
+
+                            <p className="font-normal text-[16px] mb-0">
+                              {product?.product_title
+                                ? product?.product_title
+                                : product?.title
+                                  ? product?.title
+                                  : ""}
+                            </p>
+                            <p className="font-light text-[15px] mb-3">
+                              {/* {product.variant ? product.variant : null} */}
+
+                              {product.variant_title
+                                ? product.variant_title
+                                : product.variant
+                                  ? product.variant
+                                  : null}
+                            </p>
+                            <TextField
+                              id="outlined-basic"
+                              inputProps={{ type: "text" }}
+                              value={product.note}
+                              onChange={(e) =>
+                                handleProduct(e, product.id, "note")
+                              }
+                              placeholder="Add Note"
+                              variant="outlined"
+                              size="small"
+                              disabled={product.recieved_status === "2"}
+                            />
+                          </>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <TextField
+                            id="outlined-basic"
+                            value={product.newQty}
+                            inputProps={{
+                              type: "number",
+                            }}
+                            onChange={(e) => {
+                              if (e.target.value >= 0) {
+                                handleProduct(e, product.id, "newQty");
+                              }
+                            }}
+                            variant="outlined"
+                            size="small"
+                            disabled={product.recieved_status === "2"}
+                          />
+                          {product.qtyError && (
+                            <p className="error-message">Qty is required</p>
+                          )}
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p className="text-[16px]">{product?.finalQty}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <TextField
+                            id="outlined-basic"
+                            value={product.newPrice}
+                            inputProps={{ type: "number" }}
+                            onChange={(e) => {
+                              handleProduct(e, product.id, "newPrice");
+                            }}
+                            variant="outlined"
+                            size="small"
+                            disabled={product.recieved_status === "2"}
+                          />
+                          {product.priceError && (
+                            <p className="error-message">
+                              Cost Per Item is required
+                            </p>
+                          )}
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p className="text-[16px]">${product?.finalPrice}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p className="text-[16px]">{product?.upc}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          {product?.recieved_status === "0" ||
+                          !product.po_id ? (
+                            <img
+                              src={DeleteIcon}
+                              alt=""
+                              className="w-8 h-8 cursor-pointer"
+                              onClick={() => handleDelete(product)}
+                            />
+                          ) : null}
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                  </TableBody>
+                </StyledTable>
+              </TableContainer>
+            </Grid>
+            <div className="flex justify-end py-7 px-6">
+              <div className="button-container end gap-4">
+                <button
+                  className="quic-btn quic-btn-save"
+                  onClick={modifyPurchaseOrder}
+                >
+                  {loading ? (
+                    <CircularProgress color={"inherit"} size={18} />
+                  ) : (
+                    "Update"
+                  )}
+                </button>
+                <button
+                  onClick={() => navigate("/purchase-data")}
+                  className="quic-btn quic-btn-cancle"
+                >
+                  Cancel
+                </button>
               </div>
             </div>
           </div>

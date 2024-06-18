@@ -235,18 +235,18 @@ const MerchantFunction = () => {
   };
 
   const handleChange = (e) => {
-    console.log("handleChange, ",e)
+    // console.log("handleChange, ",e)
     let updatedErrors = { ...store.errors };
     // const { name, value } = e.target;
     const { name, value } = e.target || {};
-    if(e?.target?.name){
+    if (e?.target?.name) {
       let emailRegex =
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       let reg = /^[0-9\b]+$/;
-      console.log(value)
-  
+      console.log(value);
+
       if (name === "storename") {
-        console.log(name)
+        console.log(name);
         // updatedErrors[name] = value === "" ? `Please fill the ${name} field` : "";
         updatedErrors[name] =
           value.trim() === ""
@@ -256,7 +256,8 @@ const MerchantFunction = () => {
               : "";
       }
       if (name == "ownerName") {
-        updatedErrors[name] = value === "" ? `Please fill the ${name} field` : "";
+        updatedErrors[name] =
+          value === "" ? `Please fill the ${name} field` : "";
         // updatedErrors[name] =
         //   value.trim() === ""
         //     ? `Please fill in the ${name} field`
@@ -273,10 +274,12 @@ const MerchantFunction = () => {
               : "";
       }
       if (name == "password") {
-        updatedErrors[name] = value === "" ? `Please fill the ${name} field` : "";
+        updatedErrors[name] =
+          value === "" ? `Please fill the ${name} field` : "";
       }
       if (name == "state") {
-        updatedErrors[name] = value === "" ? `Please fill the ${name} field` : "";
+        updatedErrors[name] =
+          value === "" ? `Please fill the ${name} field` : "";
       }
       if (name === "phone") {
         const numericValue = value.replace(/[^0-9]/g, "");
@@ -292,23 +295,22 @@ const MerchantFunction = () => {
       setStore({
         ...store,
         errors: updatedErrors,
-       
-        [name]:  value.replace(/^\s+/, "")
+
+        [name]: value.replace(/^\s+/, ""),
       });
-    }else{
-      if(e.name=="state")
-        {
-          updatedErrors[e.name] = e.title === "" ? `Please fill the ${e.name} field` : "";
-        }
-      setStore(prevState =>({
+    } else {
+      if (e.name == "state") {
+        updatedErrors[e.name] =
+          e.title === "" ? `Please fill the ${e.name} field` : "";
+      }
+      setStore((prevState) => ({
         ...prevState,
         errors: updatedErrors,
-        [e.name]: e.title
-      }))
+        [e.name]: e.title,
+      }));
     }
-  
   };
-  console.log("store updated ",store)
+  console.log("store updated ", store);
   const handleKeyPress = (e) => {
     if ((e.charCode < 48 || e.charCode > 57) && e.charCode !== 8) {
       e.preventDefault();
@@ -411,10 +413,10 @@ const MerchantFunction = () => {
         error = true;
       }
 
-      if (store.phone === "") {
-        errors.phone = "Please fill the Phone";
-        error = true;
-      }
+      // if (store.phone === "") {
+      //   errors.phone = "Please fill the Phone";
+      //   error = true;
+      // }
     }
 
     setRadioError(errorMessage);
@@ -557,7 +559,7 @@ const MerchantFunction = () => {
                   },
                 });
                 navigate(`/users/unapprove/editMerchant/${result.data.id}`);
-              } 
+              }
               // else {
               //   ToastifyAlert("Merchant not Added!", "warn");
               // }
