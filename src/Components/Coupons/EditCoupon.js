@@ -237,6 +237,7 @@ const EditCoupon = ({couponId,seVisible}) => {
   const [dateStartError, setDateStartError] = useState("");
   const [dateEndError, setDateEndError] = useState("");
   const [dateMaxDisAMTError, setDateMaxDisAMTError] = useState("");
+  const [countLimitError, setCountLimitError] = useState("");
 
   const handleSave = async (e) => {
     e.preventDefault();
@@ -246,6 +247,16 @@ const EditCoupon = ({couponId,seVisible}) => {
         showModal("Minimum order amount must be greater than the discount amount.");
         setCoupon({ ...coupon, discount: "0.00" });
         setDiscountError("Discount Amount is required");
+        return; // Stop further execution
+      }
+    }
+    if (couponStates.enablelimit > 0) {
+      if (!coupon.count_limit === "0") {
+        setCountLimitError("Please enter a value greater than or equal to 1.");
+        return; // Stop further execution
+      }
+      if (!coupon.count_limit ||coupon.count_limit === null || coupon.count_limit === "0") {
+        setCountLimitError("Please enter a value greater than or equal to 1.");
         return; // Stop further execution
       }
     }
@@ -1457,8 +1468,8 @@ const EditCoupon = ({couponId,seVisible}) => {
                       type="number"
                       id="count_limit"
                       name="count_limit"
-                      min={1}
-                      max={999}
+                      min="1"
+                      max="999"
                       value={
                         coupon.count_limit === null ||
                         coupon.count_limit === "0"
@@ -1472,6 +1483,9 @@ const EditCoupon = ({couponId,seVisible}) => {
                         })
                       }
                     />
+                     {countLimitError && (
+                      <p className="error-message">{countLimitError}</p>
+                    )}
                   </div>
                 )}
 

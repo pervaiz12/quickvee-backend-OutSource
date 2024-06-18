@@ -138,7 +138,7 @@ const AddCoupon = ({ seVisible }) => {
     maximum_discount: "",
     date_valid: "",
     date_expire: "",
-    count_limit:"1",
+    count_limit:"",
     time_valid: dayjs().format("HH:mm:ss"),
     time_expire: dayjs().format("HH:mm:ss"),
 
@@ -841,8 +841,8 @@ const AddCoupon = ({ seVisible }) => {
                       type="number"
                       id="count_limit"
                       name="count_limit"
-                      min="1"
-                      max="999"
+                      // min="1"
+                      // max="999"
                       value={coupon.count_limit}
                       onChange={(e) =>
                         setCoupon({
@@ -853,7 +853,7 @@ const AddCoupon = ({ seVisible }) => {
                     />
 
                     {countLimitError && (
-                      <p className="error-message">errew{countLimitError}</p>
+                      <p className="error-message">{countLimitError}</p>
                     )}
                   </div>
                 )}
