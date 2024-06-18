@@ -54,7 +54,7 @@ import SettingSetupSlice from "../features/SettingSetup/SettingSetupSlice";
 import ShiftSummarySlice from "../features/Reports/ShiftSummary/ShiftSummarySlice";
 import DetailCategorySaleSliceReducer from "../features/DetailCategorySale/detailCategorySaleSlice";
 import EmployeeWorkinghrsSlice from "../features/Reports/EmployeeWorkinghrs/EmployeeWorkinghrsSlice";
-import AddpurchaseOrderSliceReducer from "../features/PurchaseOrder/AddpurchaseOrderSlice";
+// import AddpurchaseOrderSliceReducer from "../features/PurchaseOrder/AddpurchaseOrderSlice";
 import MenuSlice from "../features/NavBar/MenuSlice";
 import LoginSliceReducer from "../features/Authentication/loginSlice";
 import orderSummeryReducer from "../features/orderSummeryHistory/orderSummerySlice";
@@ -71,7 +71,7 @@ const store = configureStore({
     categories: categoriesReducer,
     attributes: attributesReducer,
     purchase: PurchaseOrderReducer,
-    stocktakeList : StocktakeListSlice,
+    stocktakeList: StocktakeListSlice,
     purchaseOrderById: PurchaseOrderByIdReducer,
     inStoreOrder: inStoreOrderReducer,
     onlineStoreOrder: onlineStoreOrderReducer,
@@ -137,7 +137,7 @@ const store = configureStore({
     ShiftSummarylist: ShiftSummarySlice,
     StoreSetupList: SettingSetupSlice,
     EmpWorkinghrsList: EmployeeWorkinghrsSlice,
-    Addpolist: AddpurchaseOrderSliceReducer,
+    // Addpolist: AddpurchaseOrderSliceReducer,
     loginAuthentication: LoginSliceReducer,
     orderSummeryList: orderSummeryReducer,
 
@@ -146,7 +146,7 @@ const store = configureStore({
     SalesReportList: SalesReportSlice,
     TipReportList: TipReportSlice,
     CouponReportList: CouponReportSlice,
-    RefundDataList:RefundReportSlice
+    RefundDataList: RefundReportSlice,
   },
 
   //setting setup

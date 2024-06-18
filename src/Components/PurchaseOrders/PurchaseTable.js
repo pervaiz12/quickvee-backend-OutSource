@@ -57,14 +57,14 @@ const PurchaseTable = ({ seVisible }) => {
   const AllpurchaseDataState = useSelector((state) => state.purchase);
   const dispatch = useDispatch();
 
-  const { userTypeData } = useAuthDetails();
+  const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
 
   // getting Purchase Order data
   useEffect(() => {
     const data = {
       ...userTypeData,
       perpage: rowsPerPage,
-      merchant_id: "MAL0100CA",
+      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
       page: currentPage,
       search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
     };
@@ -76,7 +76,7 @@ const PurchaseTable = ({ seVisible }) => {
     dispatch(
       getPurchaseOrderCount({
         ...userTypeData,
-        merchant_id: "MAL0100CA",
+        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
         search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
       })
     );

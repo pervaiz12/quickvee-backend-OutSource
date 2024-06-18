@@ -27,14 +27,17 @@ import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import Loader from "../../CommonComponents/Loader";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import { useAuthDetails } from "../../Common/cookiesHelper";
 
 const BulkVendorEdit = ({
   productData,
   varientData,
   varientIndex,
   modalType,
+  handleCloseEditModal
 }) => {
   const dispatch = useDispatch();
+  const { LoginGetDashBoardRecordJson } = useAuthDetails();
   const [selectedVendor, setSelectedVendor] = useState([]);
   const [fetchDataLoadingVendor, setFetchDataLoadingVendor] = useState(false);
   const [vendor, setVendor] = useState([]);
@@ -51,6 +54,7 @@ const BulkVendorEdit = ({
   };
 
   const [vendorItems, setVendorItems] = useState([]);
+
 
   // onchange of costperItem and
   const handleVendorCostPerItem = (e, index, vendorId) => {
@@ -138,7 +142,7 @@ const BulkVendorEdit = ({
           ? productData?.id
           : varientData[varientIndex]?.id
     );
-    formData.append("merchant_id", "MAL0100CA");
+    formData.append("merchant_id",  LoginGetDashBoardRecordJson?.data?.merchant_id);
     formData.append("single_product", isVarient ? 0 : 1);
 
     dispatch(getAlreadyAssignVendor(formData))
@@ -169,7 +173,7 @@ const BulkVendorEdit = ({
           ? productData?.id
           : varientData[varientIndex]?.id
     );
-    formData.append("merchant_id", "MAL0100CA");
+    formData.append("merchant_id",    LoginGetDashBoardRecordJson?.data?.merchant_id);
     formData.append("single_product", isVarient ? 0 : 1);
 
     // called vendor api for dropdown vendor data
@@ -218,7 +222,7 @@ const BulkVendorEdit = ({
               })),
             ]);
             const formData = new FormData();
-            formData.append("merchant_id", "MAL0100CA");
+            formData.append("merchant_id",    LoginGetDashBoardRecordJson?.data?.merchant_id);
             formData.append("id", productId?.id);
 
             ToastifyAlert("Vendor Added Successfully!", "success");
@@ -323,7 +327,7 @@ const BulkVendorEdit = ({
       "costperItem",
       vendorItems?.map((i) => i?.costPerItem)?.toString()
     );
-    bulkFormData.append("merchant_id", "MAL0100CA");
+    bulkFormData.append("merchant_id",    LoginGetDashBoardRecordJson?.data?.merchant_id);
     bulkFormData.append(
       "prefferd_vendor",
       vendorItems?.filter((i) => Boolean(+i?.isPreferred))[0]?.id ?? ""
@@ -335,6 +339,7 @@ const BulkVendorEdit = ({
         .then((res) => {
           if (res?.payload?.status) {
             ToastifyAlert("Updated successfully!", "success");
+            handleCloseEditModal();
           }
         })
         .catch(() => {
@@ -345,6 +350,7 @@ const BulkVendorEdit = ({
         .then((res) => {
           if (res?.payload?.status) {
             ToastifyAlert("Updated successfully!", "success");
+            handleCloseEditModal();
           }
         })
         .catch(() => {
@@ -369,6 +375,7 @@ const BulkVendorEdit = ({
               hideSelectedValue={true}
               hideSelectedList={vendorItems}
               name="name"
+              placeholder="Enter category Name"
             />
             <button
               className="quic-btn quic-bulk-vendor-edit"
@@ -490,10 +497,11 @@ const BulkVendorEdit = ({
                         backgroundColor: "#0A64F9",
                       }}
                       onClick={handleSaveVendorList}
+                      disabled={!vendorItems?.length}
                     >
                       Update
                     </button>
-                    <button className="quic-btn quic-btn-cancle">Cancel</button>
+                    <button className="quic-btn quic-btn-cancle" onClick={handleCloseEditModal}>Cancel</button>
                   </div>
                 </div>
               </div>

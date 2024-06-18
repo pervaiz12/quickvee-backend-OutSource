@@ -22,6 +22,7 @@ import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import Pagination from "../../AllUserComponents/Users/UnverifeDetails/Pagination";
 import InputTextSearch from "../../reuseableComponents/InputTextSearch";
 import useDebounce from "../../hooks/useDebouncs";
+import { useAuthDetails } from "../../Common/cookiesHelper";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -56,6 +57,7 @@ const ProductSalesReport = () => {
   const productId = location?.pathname?.split("/")[3];
   const varientId = location?.pathname?.split("/")[4];
   const dispatch = useDispatch();
+  const { LoginGetDashBoardRecordJson } = useAuthDetails();
 
   const [salesData, setSalesData] = useState([]);
   const [filterData, setFilterData] = useState([]);
@@ -75,7 +77,7 @@ const ProductSalesReport = () => {
 
   useEffect(() => {
     const formData = new FormData();
-    formData.append("merchant_id", "MAL0100CA");
+    formData.append("merchant_id", LoginGetDashBoardRecordJson?.data?.merchant_id);
     formData.append("product_id", productId);
     formData.append("variant_id", !!varientId ? varientId : "");
     setLoading(true);

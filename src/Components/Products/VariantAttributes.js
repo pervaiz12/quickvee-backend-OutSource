@@ -20,12 +20,15 @@ const VariantAttributes = ({
   handleClearFormData,
 }) => {
 
-
   const styles = {
 
     multiValueRemove: (base, state) => {
       return state.data.isFixed ? { ...base, display: "none" } : base;
     },
+    clearIndicator: (provided) => ({
+      ...provided,
+      display: 'none',
+    }),
   };
   const pageUrl =
     window.location.pathname.split("/")[1] +

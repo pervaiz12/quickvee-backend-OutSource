@@ -237,7 +237,6 @@ export default function SettingStoreOption() {
       setLoading(true);
       const newItem = {
         login_type: userTypeData?.login_type,
-        // merchant_id: "MAL0100CA",
         merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
         user_id: LoginGetDashBoardRecordJson?.data?.id,
         enable_order_number: orderState?.orderNumebrEnabled ? "1" : "0",
