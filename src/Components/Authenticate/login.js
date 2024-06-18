@@ -27,6 +27,7 @@ import IconButton from "@mui/material/IconButton";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 import { getAuthInvalidMessage } from "../../Redux/features/Authentication/loginSlice";
+// import { Route, useNavigate, Navigate, Outlet } from "react-router-dom";
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -61,39 +62,75 @@ export default function Login() {
 
     setErrorMessage("");
   };
+// ======================================
+// console.log(userTypeData)
+// console.log(merchant_id)
+console.log(LoginGetDashBoardRecordJson)
+// useEffect(() => {
+//     if (
+//       ((LoginGetDashBoardRecordJson?.data?.login_type === "admin" ||
+//       LoginGetDashBoardRecordJson?.data?.login_type === "merchant" ||
+//       LoginGetDashBoardRecordJson?.data?.login_type === "manager")&&(LoginGetDashBoardRecordJson?.login_type &&
+//       LoginGetDashBoardRecordJson?.login_type == "superadmin"))
+//       && (merchant_id=="" || merchant_id == undefined )
+//     ) {
+//       navigate("/users/unapprove");
+//     } else if (
+//       ((LoginGetDashBoardRecordJson?.data?.login_type === "admin" ||
+//       LoginGetDashBoardRecordJson?.data?.login_type === "merchant" ||
+//       LoginGetDashBoardRecordJson?.data?.login_type === "manager")&&(LoginGetDashBoardRecordJson?.login_type === "admin" || 
+//         LoginGetDashBoardRecordJson?.login_type === "merchant" ||
+//         LoginGetDashBoardRecordJson?.login_type === "manager" ||
+//         LoginGetDashBoardRecordJson?.login_type == "superadmin")) &&
+//       !!merchant_id
+//     ) {
 
-  // useEffect(() => {
-  //   if (
-  //     !!userTypeData?.login_type &&
-  //     userTypeData?.login_type == "superadmin"
-  //   ) {
-  //     console.log("1");
-  //     navigate("/users/view/unapprove");
-  //   } else if (
-  //     (userTypeData?.login_type === "admin" ||
-  //       userTypeData?.login_type === "merchant" ||
-  //       userTypeData?.login_type === "manager" ||
-  //       userTypeData?.login_type == "superadmin") &&
-  //     !!merchant_id
-  //   ) {
-  //     console.log("2");
+//       navigate("/");
+//     } else if (
+//       ((LoginGetDashBoardRecordJson?.data?.login_type === "admin" ||
+//       LoginGetDashBoardRecordJson?.data?.login_type === "merchant" ||
+//       LoginGetDashBoardRecordJson?.data?.login_type === "manager")&&(LoginGetDashBoardRecordJson?.login_type === "admin" ||
+//         LoginGetDashBoardRecordJson?.data?.login_type === "merchant" ||
+//         LoginGetDashBoardRecordJson?.data?.login_type === "manager")&& LoginGetDashBoardRecordJson?.data?.stores.length>=0)
+//     ) {
+//       console.log('3')
+//       navigate("/store");
+//     } else {
+//       console.log('4')
+//       navigate("/login");
+//     }
+//   }, []);
+// ====================================
+const getLoginRedirectUrl=()=>{
+  if((LoginGetDashBoardRecordJson?.login_type == "superadmin"||
+  LoginGetDashBoardRecordJson?.login_type === "admin"|| 
+  LoginGetDashBoardRecordJson?.login_type === "merchant" ||
+  LoginGetDashBoardRecordJson?.login_type === "manager")
+  &&(LoginGetDashBoardRecordJson?.data?.merchant_id !=="")
+)
+  {
+    console.log('1')
+    navigate('/')
+  }
+  else if((LoginGetDashBoardRecordJson?.login_type == "superadmin")
+  &&(LoginGetDashBoardRecordJson?.data?.merchant_id =="" || LoginGetDashBoardRecordJson?.data?.merchant_id==undefined))
+  {
+    console.log('2')
+    navigate("/users/unapprove")
+  }
+  else if((LoginGetDashBoardRecordJson?.login_type == "superadmin")
+  &&(LoginGetDashBoardRecordJson?.data?.merchant_id !=="" || LoginGetDashBoardRecordJson?.data?.merchant_id!==undefined))
+  {
+    console.log("3")
+    navigate("/")
+  }
 
-  //     navigate("/");
-  //   } else if (
-  //     (userTypeData?.login_type === "admin" ||
-  //       userTypeData?.login_type === "merchant" ||
-  //       userTypeData?.login_type === "manager") &&
-  //     (merchant_id == undefined || merchant_id == "")
-  //   ) {
-  //     console.log("3");
+}
+ useEffect(()=>{
+  // getLoginRedirectUrl()
 
-  //     navigate("/store");
-  //   } else {
-  //     console.log("4");
-
-  //     navigate("/login");
-  //   }
-  // }, []);
+ })
+  // ================================================
 
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
