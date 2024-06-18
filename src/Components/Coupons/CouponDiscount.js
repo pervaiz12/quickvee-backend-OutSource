@@ -205,7 +205,7 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
                               // to={`/coupons/edit-coupons/${coupons.id}`}
                               onClick={()=> {handleEditCoupon(coupons.id)}}
                               >
-                                <img src={Edit} alt="" className="h-8 w-8" />
+                                <img src={Edit} alt="" className="h-8 w-8  cursor-pointer" />
                               </span>
                             </Grid>
                             <Grid item>
