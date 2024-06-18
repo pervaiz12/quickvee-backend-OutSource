@@ -95,7 +95,7 @@ const InstoreTableViewData = (props, searchId) => {
     props.OrderSourceData,
 
     AllInStoreDataState.OrderListCount,
-    AllInStoreDataState.inStoreOrderData,
+    // AllInStoreDataState.inStoreOrderData,
   ]);
 
   useEffect(() => {

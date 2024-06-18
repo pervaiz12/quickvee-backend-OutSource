@@ -130,7 +130,7 @@ const OnlineTableViewData = (props) => {
     // props.OrderTypeData,
     props.OrderSourceData,
     AllInStoreDataState.OrderListCount,
-    AllInStoreDataState.onlineStoreOrderData,
+    // AllInStoreDataState.onlineStoreOrderData,
   ]);
 
   useEffect(() => {
