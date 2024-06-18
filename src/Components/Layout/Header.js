@@ -167,6 +167,8 @@ export default function Header() {
       return value;
     }
 
+
+
     return (
       <>
         <Menu
@@ -338,10 +340,10 @@ export default function Header() {
                 </div> */}
 
                 {/* Online Store and Sync Data section */}
-                <div className="cursor-pointer ml-5 flex items-center">
+                <Link to={`https://quickvee.com/merchant/${LoginGetDashBoardRecordJson?.data?.merchant_id}?orderMethod=pickup`}><div className="cursor-pointer ml-5 flex items-center">
                   <img src={OnlineData} alt="icon" className="ml-2" />
                   <p className="ml-2 admin_medium">Online Store</p>
-                </div>
+                </div></Link>
                 <div className="cursor-pointer mx-5 flex items-center">
                   <img src={SynkData} alt="icon" className="ml-2" />
                   <p className="ml-2 admin_medium">Sync Data</p>

@@ -26,11 +26,13 @@ export default function ProtectedRoute(props) {
     Cookies.remove("token_data");
     localStorage.removeItem("AllStore");
   };
+  console.log(AdminRocord)
 
   if (
     AdminRocord?.status == true &&
     AdminRocord?.login_type == "superadmin" &&
     props.visible == "superadmin"
+    && AdminRocord?.data?.merchant_id==""
   ) {
     return <Outlet />;
   } else if (
@@ -49,10 +51,14 @@ export default function ProtectedRoute(props) {
   ) {
     dispatch(setIsStoreActive(true))
     return <Outlet />;
-  } else {
+  } else if(AdminRocord?.login_type=="" || AdminRocord?.login_type==undefined) {
     handleClearCoockie();
     return <Navigate to="/login" />;
   }
+  // else {
+  //   handleClearCoockie();
+  //   return <Navigate to="/login" />;
+  // }
 
   // return AdminRocord?.status == true ? <Outlet /> : <Navigate to="/login" />;
 

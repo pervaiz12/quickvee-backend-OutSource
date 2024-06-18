@@ -83,6 +83,12 @@ const Employeedetails = (props) => {
     AllEmpWorkingHrsDataState.ItemSalesData,
   ]);
   // console.log("hahaha", allEmpWorkingHrsData);
+  const convertSecondsToHours = (seconds) => {
+    // Calculate hours
+    const hours = seconds / 3600;
+    return hours;
+  };
+
 
   const calTotalWork = (totalworkdata) => {
     if (!Array.isArray(totalworkdata)) {
@@ -91,7 +97,9 @@ const Employeedetails = (props) => {
     return totalworkdata.reduce((total, workData) => {
       const parsedSeconds = parseFloat(workData.total_seconds_worked);
       const validSeconds = isNaN(parsedSeconds) ? 0 : parsedSeconds;
-      return total + validSeconds;
+      const totalNew= total + convertSecondsToHours(validSeconds);
+      
+      return totalNew;
     }, 0); 
   };
   
@@ -101,7 +109,7 @@ const Employeedetails = (props) => {
       return 0;
     }
     return totalbreakdata.reduce(
-      (total, workData) => total + parseFloat(workData.total_seconds_break),
+      (total, workData) => total + convertSecondsToHours(parseFloat(workData.total_seconds_break)),
       0
     );
   };
@@ -113,7 +121,7 @@ const Employeedetails = (props) => {
     return totalactualworkdata.reduce((total, workData) => {
       const parsedSeconds = parseFloat(workData.effective_seconds_worked);
       const validSeconds = isNaN(parsedSeconds) ? 0 : parsedSeconds;
-      return total + validSeconds;
+      return total + convertSecondsToHours(validSeconds);
     }, 0); // Initial value of the accumulator is 0
   };
 
@@ -179,21 +187,21 @@ const Employeedetails = (props) => {
                                   <StyledTableCell>
                                     <p>
                                       {priceFormate((parseFloat(
-                                        workData.total_seconds_worked
+                                        convertSecondsToHours(workData.total_seconds_worked)
                                       ) || 0).toFixed(2))}
                                     </p>
                                   </StyledTableCell>
                                   <StyledTableCell>
                                     <p>
                                       {priceFormate((parseFloat(
-                                        workData.total_seconds_break
+                                        convertSecondsToHours(workData.total_seconds_break)
                                       ) || 0).toFixed(2))}
                                     </p>
                                   </StyledTableCell>
                                   <StyledTableCell>
                                     <p>
                                       {priceFormate((parseFloat(
-                                        workData.effective_seconds_worked
+                                        convertSecondsToHours(workData.effective_seconds_worked)
                                       ) || 0).toFixed(2))}
                                     </p>
                                   </StyledTableCell>
