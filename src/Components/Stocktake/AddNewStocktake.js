@@ -376,6 +376,8 @@ const AddNewStocktake = ({
               current_qty: product?.quantity || "", //
               stocktake_item_id: "0" || "",
               price: product?.price || "",
+              new_qty:"" ,
+              discrepancy:"0",
               // variant_id: "",
             };
             return updatedList;
@@ -398,6 +400,9 @@ const AddNewStocktake = ({
               current_qty: product.quantity || "", //
               stocktake_item_id: "0" || "",
               price: product?.price || "",
+              new_qty:"",
+              discrepancy:"0"
+
             };
             return updatedList;
           });
