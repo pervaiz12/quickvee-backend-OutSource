@@ -34,6 +34,7 @@ import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import { useNavigate } from "react-router-dom";
 import EditCashModel from "./EditCashModel";
 import { CurrencyInputHelperFun } from "../../../Constants/utils";
+import useDebounce from "../../../hooks/useDebouncs";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -66,16 +67,18 @@ const OnlineTableViewData = (props) => {
   const navigate = useNavigate();
   // console.log(props)
   const [allOnlineStoreOrder, setAllOnlineStoreOrders] = useState([]);
+  console.log("allOnlineStoreOrder",allOnlineStoreOrder)
   const AllInStoreDataState = useSelector((state) => state.onlineStoreOrder);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-
+  const debouncedValue = useDebounce(props?.OnlSearchIdData);
+  console.log("debouncedValue",debouncedValue)  
   const dispatch = useDispatch();
   // const debouncedValue = useDebounce(searchId);
   useEffect(() => {
     const fetchData = async () => {
-      if (props?.OrderTypeData) {
+      if (props?.selectedDateRange?.start_date) {
         let data = {
           merchant_id: props.merchant_id,
           order_type: props.OrderTypeData,
@@ -83,27 +86,37 @@ const OnlineTableViewData = (props) => {
           start_date: props.selectedDateRange?.start_date,
           end_date: props.selectedDateRange?.end_date,
           customer_id: "0",
-          search_by: props?.OnlSearchIdData,
+          search_by: props?.OnlSearchIdData !=="" ? props?.OnlSearchIdData : null,
           perpage: rowsPerPage,
-          page: currentPage,
+          page: debouncedValue === "" ? currentPage : "1",
           // search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
           ...props.userTypeData,
         };
 
         if (data) {
+          console.log("sdadasdadada", data);
           dispatch(fetchOnlieStoreOrderData(data));
         }
       }
     };
     fetchData();
-  }, [dispatch, props,currentPage, rowsPerPage]);
+  }, [
+    dispatch,
+    //  props,
+    props.selectedDateRange, //
+    debouncedValue, // 
+    currentPage, //
+    rowsPerPage, // 
+    // AllInStoreDataState.OrderListCount,
+  ]);
 
   useEffect(() => {
+    setCurrentPage(1);
     dispatch(
       getOrderListCount({
         merchant_id: props.merchant_id, //
         order_type: props.OrderTypeData,
-        search_by: props?.OnlSearchIdData,
+        search_by:props?.OnlSearchIdData !=="" ? props?.OnlSearchIdData : null,
         trans_type: props.OrderSourceData, //
         start_date: props.selectedDateRange?.start_date, //
         end_date: props.selectedDateRange?.end_date, //
@@ -113,8 +126,11 @@ const OnlineTableViewData = (props) => {
   }, [
     props.selectedDateRange?.start_date,
     props.selectedDateRange?.end_date,
-    props.OrderTypeData,
+    debouncedValue,
+    // props.OrderTypeData,
     props.OrderSourceData,
+    AllInStoreDataState.OrderListCount,
+    AllInStoreDataState.onlineStoreOrderData,
   ]);
 
   useEffect(() => {
@@ -238,7 +254,7 @@ const OnlineTableViewData = (props) => {
   function capitalizeFirstLetter(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
-  console.log(allOnlineStoreOrder);
+  // console.log(allOnlineStoreOrder);
   useEffect(() => {
     const modifiedData = Object.entries(allOnlineStoreOrder).map(
       ([key, data], i) => {
@@ -449,46 +465,46 @@ const OnlineTableViewData = (props) => {
       };
 
       // Dispatching an action to change the order status
-      if (FormData) {
-        try {
-          const res = await dispatch(fetchOrderChangeStatusData(FormData));
-          console.log("setAllOnlineStoreOrders", res);
-          // Checking if the API call was successful
-          if (res.meta.requestStatus === "fulfilled") {
-            // Update the local state with the updated order data
-            setAllOnlineStoreOrders((prevState) => {
-              // Find the index of the order to update
-              const index = prevState.findIndex(
-                (order) => order.order_id === option.orderId
-              );
-              // console.log("setAllOnlineStoreOrders",index)
-              if (index !== -1) {
-                // Create a copy of the order object
-                const updatedOrder = { ...prevState[index] };
+      // if (FormData) {
+      //   try {
+      //     const res = await dispatch(fetchOrderChangeStatusData(FormData));
+      //     console.log("setAllOnlineStoreOrders", res);
+      //     // Checking if the API call was successful
+      //     if (res.meta.requestStatus === "fulfilled") {
+      //       // Update the local state with the updated order data
+      //       setAllOnlineStoreOrders((prevState) => {
+      //         // Find the index of the order to update
+      //         const index = prevState.findIndex(
+      //           (order) => order.order_id === option.orderId
+      //         );
+      //         // console.log("setAllOnlineStoreOrders",index)
+      //         if (index !== -1) {
+      //           // Create a copy of the order object
+      //           const updatedOrder = { ...prevState[index] };
 
-                // Update the m_status field with the new value
-                updatedOrder.m_status = option.value;
+      //           // Update the m_status field with the new value
+      //           updatedOrder.m_status = option.value;
 
-                // Create a new array with updated order object
-                const updatedOrders = [...prevState];
-                updatedOrders[index] = updatedOrder;
+      //           // Create a new array with updated order object
+      //           const updatedOrders = [...prevState];
+      //           updatedOrders[index] = updatedOrder;
 
-                return updatedOrders;
-              } else {
-                // Order not found, return previous state unchanged
-                return prevState;
-              }
-            });
-          } else {
-            // Handle other status codes or errors if needed
-            console.error("Failed to update order status:", res.statusText);
-            // Optionally show an error message or handle the error state
-          }
-        } catch (error) {
-          console.error("Error while updating order status:", error.message);
-          // Handle any network or other errors that may occur during the API call
-        }
-      }
+      //           return updatedOrders;
+      //         } else {
+      //           // Order not found, return previous state unchanged
+      //           return prevState;
+      //         }
+      //       });
+      //     } else {
+      //       // Handle other status codes or errors if needed
+      //       console.error("Failed to update order status:", res.statusText);
+      //       // Optionally show an error message or handle the error state
+      //     }
+      //   } catch (error) {
+      //     console.error("Error while updating order status:", error.message);
+      //     // Handle any network or other errors that may occur during the API call
+      //   }
+      // }
     }
   };
   const orderStatus = (data) => {
@@ -557,11 +573,11 @@ const OnlineTableViewData = (props) => {
       }
     }
     if (props?.OrderTypeData === "Failed") {
-      console.log("props?.OrderTypeData ")
+      console.log("props?.OrderTypeData ");
       if (data.is_tried === "0") {
-        return  "Incomplete order";
+        return "Incomplete order";
       } else {
-        return  "Failed payment";
+        return "Failed payment";
       }
     }
   };
@@ -683,8 +699,8 @@ const OnlineTableViewData = (props) => {
                           )
                         ) : (
                           <>
-                          <p className="px-5 py-4">No Data Found</p>
-                        </>
+                            <p className="px-5 py-4">No Data Found</p>
+                          </>
                         )}
                       </TableBody>
                     </StyledTable>

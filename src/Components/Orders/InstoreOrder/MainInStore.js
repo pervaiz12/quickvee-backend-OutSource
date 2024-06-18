@@ -13,11 +13,12 @@ const MainInStore = () => {
 
   const [OrderSourceData, setOrderSourceData] = useState(null);
   const [OrderTypeData, setOrderTypeData] = useState(null);
-  const [OnlSearchIdData, setOnlSearchIdData] = useState(null);
-  const [OffSearchIdData, setOffSearchIdData] = useState(null);
+  const [OnlSearchIdData, setOnlSearchIdData] = useState("");
+  const [OffSearchIdData, setOffSearchIdData] = useState("");
   const [EmployeeIDData, setEmployeeIDData] = useState(null);
   const [searchId, setSearchId] = useState("");
   const [selectedDateRange, setSelectedDateRange] = useState(null);
+  const [isloading, setIsLoading] = useState(false);
   const{LoginGetDashBoardRecordJson,LoginAllStore,userTypeData,GetSessionLogin}=useAuthDetails()
   const merchant_id=LoginGetDashBoardRecordJson?.data?.merchant_id
   const handleDateRangeChange = (dateRange) => {
@@ -100,7 +101,7 @@ const MainInStore = () => {
           {!searchId && (
             <>
               <div className="q_dateRange_header">
-                <DateRangeComponent onDateRangeChange={handleDateRangeChange} />
+                <DateRangeComponent isloading={isloading} onDateRangeChange={handleDateRangeChange} />
               </div>
               <div className="q_dateRange_header">
                 <ContentList />
@@ -117,6 +118,7 @@ const MainInStore = () => {
                 selectedDateRange={selectedDateRange}
                 merchant_id={merchant_id}
                 userTypeData={userTypeData}
+                setIsLoading={setIsLoading}
               />
             ) : (
               <OnlineTableViewData

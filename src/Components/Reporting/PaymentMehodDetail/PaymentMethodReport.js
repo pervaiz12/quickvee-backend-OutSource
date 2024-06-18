@@ -40,6 +40,7 @@ const PaymentMethodReport = () => {
         order_env: orderEnvValue,
         ...userTypeData,
       };
+      console.log("updatedData",updatedData);
       setFilteredData(updatedData);
     } else {
       // Handle other cases or log an error

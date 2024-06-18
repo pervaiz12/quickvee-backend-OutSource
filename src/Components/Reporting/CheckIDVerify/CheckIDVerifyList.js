@@ -78,24 +78,30 @@ const CheckIDVerifyList = (props) => {
       </div>
 
       {allCheckIDVerifyData &&
-        allCheckIDVerifyData.length >= 1 &&
-        allCheckIDVerifyData.map((CheckData, index) => (
-          <div className="box">
-            <div
-              key={index}
-              className="q-category-bottom-categories-listing"
-              style={{ borderRadius: "unset" }}
-            >
-              <div className="q-category-bottom-categories-single-category">
-                <p className="report-title">{formatDate(CheckData.merchant_date)}</p>
-                <p className="report-title">{formatTime(CheckData.merchant_time)}</p>
-                <p className="report-title">{CheckData.full_name}</p>
-                <p className="report-title">{CheckData.order_id}</p>
-                <p className="report-title">{CheckData.name}</p>
+        allCheckIDVerifyData.length >= 1 ? (
+          allCheckIDVerifyData.map((CheckData, index) => (
+            <div className="box">
+              <div
+                key={index}
+                className="q-category-bottom-categories-listing"
+                style={{ borderRadius: "unset" }}
+              >
+                <div className="q-category-bottom-categories-single-category">
+                  <p className="report-title">{formatDate(CheckData.merchant_date)}</p>
+                  <p className="report-title">{formatTime(CheckData.merchant_time)}</p>
+                  <p className="report-title">{CheckData.full_name}</p>
+                  <p className="report-title">{CheckData.order_id}</p>
+                  <p className="report-title">{CheckData.name}</p>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))
+        ) :(<>
+        <div style={{margin:0}} className="box_shadow_div">
+        <p className="px-5 py-4">No Data Found</p>
+        </div>
+       </>)
+        }
     </>
   );
 };

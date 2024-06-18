@@ -229,22 +229,22 @@ const LoyaltyProgramList = () => {
                                 </div>
                               </StyledTableCell>
                               <StyledTableCell>
-                                <div className="text-[#000000] capitalize">
+                                <div className="text-[#000000] ">
                                   {Loyaltydata.email}
                                 </div>
                               </StyledTableCell>
                               <StyledTableCell>
-                                <div className="text-[#000000] order_method capitalize">
+                                <div className="text-[#000000] order_method ">
                                   {Loyaltydata.phone}
                                 </div>
                               </StyledTableCell>
                               <StyledTableCell>
-                                <div className="text-[#000000] order_method capitalize">
+                                <div className="text-[#000000] order_method ">
                                   {priceFormate(Loyaltydata.total_loyalty_pts)}
                                 </div>
                               </StyledTableCell>
                               <StyledTableCell>
-                                <div className="text-[#000000] order_method capitalize">
+                                <div className="text-[#000000] order_method ">
                                   {priceFormate(Loyaltydata.total_store_credit)}
                                 </div>
                               </StyledTableCell>

@@ -43,6 +43,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const PaymentMethodList = ({ data }) => {
+  console.log("PaymentMethodList",data)
   const dispatch = useDispatch();
   const { handleCoockieExpire } = PasswordShow();
 
@@ -56,7 +57,7 @@ const PaymentMethodList = ({ data }) => {
     // Dispatch the action to fetch data when the component mounts
     // fetchPaymentReportData();
     dispatch(fetchPaymentMethodReportData(data));
-  }, []);
+  }, [data]);
 
   const fetchPaymentReportData = async () => {
     try {

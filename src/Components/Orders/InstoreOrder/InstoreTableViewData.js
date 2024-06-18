@@ -20,7 +20,7 @@ import "datatables.net-dt/css/jquery.dataTables.min.css";
 import { saveBulkInstantPo } from "./../../../Redux/features/Product/ProductSlice";
 import Pagination from "../../../AllUserComponents/Users/UnverifeDetails/Pagination";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
-import { getOrderListCount } from "../../../Redux/features/Orders/onlineStoreOrderSlice";
+import { getOrderListCount } from "../../../Redux/features/Orders/inStoreOrderSlice";
 import useDebounce from "../../../hooks/useDebouncs";
 
 const StyledTable = styled(Table)(({ theme }) => ({
@@ -58,12 +58,12 @@ const InstoreTableViewData = (props, searchId) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [inStoreOrder, setAllInStoreOrders] = useState([]);
-  console.log("inStoreOrder totalCount", totalCount);
+  // console.log("inStoreOrder totalCount", totalCount);
   const AllInStoreDataState = useSelector((state) => state.inStoreOrder);
   const [selectedValue, setSelectedValue] = useState(1);
   const dispatch = useDispatch();
-  const debouncedValue = useDebounce(props?.OnlSearchIdData);
-
+  const debouncedValue = useDebounce(props?.OffSearchIdData);
+  console.log("debouncedValue", debouncedValue)
   const handleChange = (event) => {
     setSelectedValue(parseInt(event.target.value));
   };
@@ -75,17 +75,17 @@ const InstoreTableViewData = (props, searchId) => {
       </option>
     );
   }
-
   useEffect(() => {
-   const res  =   dispatch(
+    setCurrentPage(1);
+    dispatch(
       getOrderListCount({
         merchant_id: props.merchant_id, //
         order_type: "Offline",
-        search_by: Boolean(debouncedValue?.trim()) ? debouncedValue : null,
+        search_by: props?.OffSearchIdData !=="" ? props?.OffSearchIdData : null,
         trans_type: props.OrderSourceData, //
         start_date: props.selectedDateRange?.start_date, //
         end_date: props.selectedDateRange?.end_date, //
-     
+
         ...props.userTypeData, //
       })
     );
@@ -93,7 +93,9 @@ const InstoreTableViewData = (props, searchId) => {
     props.selectedDateRange?.start_date,
     props.selectedDateRange?.end_date,
     props.OrderSourceData,
-  
+
+    AllInStoreDataState.OrderListCount,
+    AllInStoreDataState.inStoreOrderData,
   ]);
 
   useEffect(() => {
@@ -106,11 +108,11 @@ const InstoreTableViewData = (props, searchId) => {
           start_date: props.selectedDateRange?.start_date,
           end_date: props.selectedDateRange?.end_date,
           emp_id: props?.EmployeeIDData,
-          search_by: props?.OffSearchIdData,
+          search_by: props?.OffSearchIdData !=="" ? props?.OffSearchIdData : null,
           perpage: rowsPerPage,
-          page: currentPage,
+          page:debouncedValue === "" ? currentPage : "1",
         };
-        console.log("date data", data);
+        // console.log("date data", data);
         if (data) {
           dispatch(fetchInStoreOrderData(data));
         }
@@ -119,20 +121,21 @@ const InstoreTableViewData = (props, searchId) => {
     fetchData();
   }, [
     dispatch,
-    props,
-    searchId,
+    // props,
+    debouncedValue,
     props.selectedDateRange,
     currentPage,
     rowsPerPage,
+    AllInStoreDataState.OrderListCount,
   ]);
 
   useEffect(() => {
-    
     setTotalCount(AllInStoreDataState.OrderListCount);
-    console.log("AllInStoreDataState.OrderListCount", AllInStoreDataState)
+    // console.log("AllInStoreDataState.OrderListCount", AllInStoreDataState)
   }, [AllInStoreDataState.OrderListCount]);
 
   useEffect(() => {
+    props.setIsLoading(AllInStoreDataState.loading)
     if (!AllInStoreDataState.loading && AllInStoreDataState.inStoreOrderData) {
       setAllInStoreOrders(AllInStoreDataState.inStoreOrderData);
     }
@@ -140,7 +143,7 @@ const InstoreTableViewData = (props, searchId) => {
 
   // console.log("AllInStoreDataState",AllInStoreDataState)
   const handlePageChange = (newPage) => {
-    setCurrentPage(newPage);
+    // setCurrentPage(newPage);
   };
 
   // for table start
@@ -257,19 +260,19 @@ const InstoreTableViewData = (props, searchId) => {
                                 </p>
                               </StyledTableCell>
                               <StyledTableCell>
-                                <p class="text-[#000000] order_method">
+                                <p className="text-[#000000] order_method">
                                   {data.order_id || ""}
                                 </p>
-                                <p class="text-[#818181]">
+                                <p className="text-[#818181]">
                                   {data.merchant_time || ""}
                                 </p>
-                                <p class="text-[#818181]">
+                                <p className="text-[#818181]">
                                   {data.order_method || ""}
                                 </p>
                               </StyledTableCell>
                               <StyledTableCell>
                                 <p> Amount: {"$" + data.amt || ""}</p>
-                                <p class="text-[#1EC26B]">
+                                <p className="text-[#1EC26B]">
                                   {capitalizeFirstLetter(
                                     data.order_status || ""
                                   )}

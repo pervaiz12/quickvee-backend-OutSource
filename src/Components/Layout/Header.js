@@ -34,7 +34,8 @@ import {
 import { display } from "@mui/system";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { Button, InputBase } from "@mui/material";
-
+import logoutLogo from "../../Assests/Dashboard/logout.svg";
+import userLogo from "../../Assests/Dashboard/userLogoDropDown.svg"
 export default function Header() {
   const { LoginGetDashBoardRecordJson, LoginAllStore, GetSessionLogin } =
     useAuthDetails();
@@ -384,8 +385,19 @@ export default function Header() {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleNavigate}>{storename}</MenuItem>
-              <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              <MenuItem onClick={handleNavigate}>
+              <div className="flex justify-items-start items-center">
+                  <img src={userLogo} alt="" className="w-6 h-6 mr-2" />
+                  {storename}
+                </div>{" "}
+                </MenuItem>
+              <MenuItem onClick={handleLogout}>
+                {" "}
+                <div className="flex justify-items-start items-center">
+                  <img src={logoutLogo} alt="" className="w-6 h-6 mr-2" />
+                  Logout
+                </div>{" "}
+              </MenuItem>
             </Menu>
 
             {/* </div> */}

@@ -550,7 +550,7 @@ const AddNewStocktake = ({
                     return (
                       <>
                         <StyledTableRow key={index}>
-                          <StyledTableCell>
+                          <StyledTableCell sx={{width:"40%"}}>
                             <div style={{ position: "relative", zIndex: 100 }}>
                               {/* <Button>
                                 {product.product_name || product.title}

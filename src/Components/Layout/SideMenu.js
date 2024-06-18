@@ -1118,7 +1118,7 @@ const SuperAdminMenuItems = [
     icon: (
       <img
         src={StoreIcon}
-        alt="Store Order "
+        alt="Store Order"
         className="h-6 w-10 mt-4 mb-4 hoverable-image"
       />
     ),
