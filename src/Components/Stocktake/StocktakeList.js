@@ -16,9 +16,10 @@ import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchStocktakeList, getStocktakeListCount } from "../../Redux/features/Stocktake/StocktakeListSlice";
+import { fetchSingleStocktakeData, fetchStocktakeList, getStocktakeListCount } from "../../Redux/features/Stocktake/StocktakeListSlice";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import useDebounce from "../../hooks/useDebouncs";
+import { useNavigate } from "react-router-dom";
 
 
 const StyledTable = styled(Table)(({ theme }) => ({
@@ -49,25 +50,30 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 const StocktakeList = ({
   setVisible,
-  singleStocktakeState,
-  getSingleStocktakeData,
-  setSingleStocktakeState,
+  // singleStocktakeState,
+  // getSingleStocktakeData,
+  // setSingleStocktakeState,
+  // setStocktakeId
+
 }) => {
+  const navigate = useNavigate()
    const [searchId, setSearchId] = useState(""); // State to track search ID
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const StocktakeListReducerState = useSelector((state) => state.stocktakeList);
- 
-  console.log("StocktakeList", StocktakeListReducerState);
+  const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
+  let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
+  const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
+  // console.log("StocktakeList", StocktakeListReducerState);
   const dispatch = useDispatch();
-  const { userTypeData } = useAuthDetails();
+
   const debouncedValue = useDebounce(searchId);
   useEffect(() => {
     const data = {
       ...userTypeData,
       perpage: rowsPerPage,
-      merchant_id: "MAL0100CA",
+      merchant_id: merchant_id,
       page: currentPage,
       search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
     };
@@ -79,7 +85,7 @@ const StocktakeList = ({
     dispatch(
       getStocktakeListCount({
         ...userTypeData,
-        merchant_id: "MAL0100CA",
+        merchant_id: merchant_id,
         search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
       })
     );
@@ -116,17 +122,21 @@ const StocktakeList = ({
   ];
 
   const handleStocktakeIdClick = async (id) => {
-    const result = await getSingleStocktakeData(id);
-
+    // const result = await getSingleStocktakeData(id);
+    const result = await dispatch(fetchSingleStocktakeData({merchant_id,id,userTypeData}))
+      console.log(result);
     if (result) {
-      if (result?.status === "0") {
-        setVisible("StocktakeReoport");
+      if (result?.payload?.result?.status === "0") {
+        // setVisible("StocktakeReoport");
+        navigate(`/stocktake/completed/${id}`);
       }
-      if (result?.status === "1") {
-        setVisible("AddNewStocktake");
+      if (result?.payload?.result?.status === "1") {
+        // setVisible("AddNewStocktake");
+        navigate(`/stocktake/UpdateStocktake/${id}`);
       }
-      if (result?.status === "2") {
-        setVisible("StocktakeReoport");
+      if (result?.payload?.result?.status === "2") {
+        // setVisible("StocktakeReoport");
+        navigate(`/stocktake/void/${id}`);
       }
     }
   };
@@ -169,8 +179,9 @@ const StocktakeList = ({
               <div className="q-category-bottom-header">
                 <p
                   onClick={() => {
-                    setVisible("AddNewStocktake");
-                    setSingleStocktakeState();
+                    // setVisible("AddNewStocktake");
+                    navigate("/stocktake/AddStocktake")
+                    // setSingleStocktakeState();
                   }}
                 >
                   Add New Stocktake <img src={AddIcon} alt="add-icon" />{" "}

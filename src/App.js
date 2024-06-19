@@ -230,7 +230,26 @@ function App() {
             path="/stocktake"
             element={<Main visible={"stocktake"} />}
           />
-
+           <Route
+            exact
+            path="/stocktake/UpdateStocktake/:id"
+            element={<Main visible={"stocktake-updateStocktake"} />}
+          />
+           <Route
+            exact
+            path="/stocktake/AddStocktake"
+            element={<Main visible={"stocktake-AddStocktake"} />}
+          />
+          <Route
+            exact
+            path="/stocktake/void/:id"
+            element={<Main visible={"stocktake-void"} />}
+          />
+          <Route
+            exact
+            path="/stocktake/completed/:id"
+            element={<Main visible={"stocktake-completed"} />}
+          />
           <Route
             exact
             path="/attributes"

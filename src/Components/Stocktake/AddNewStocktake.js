@@ -13,7 +13,7 @@ import { useEffect, useState } from "react";
 
 // end table imports ----------------------------------------------------
 import AsyncSelect from "react-select/async";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { fetchProductsData } from "../../Redux/features/Product/ProductSlice";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import axios from "axios";
@@ -22,7 +22,9 @@ import BasicTextFields from "../../reuseableComponents/TextInputField";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 import AlertModal from "../../reuseableComponents/AlertModal";
-
+import { useNavigate, useParams } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { fetchSingleStocktakeData } from "../../Redux/features/Stocktake/StocktakeListSlice";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -51,18 +53,31 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 const AddNewStocktake = ({
   setVisible,
-  singleStocktakeState,
-  setSingleStocktakeState,
-  gotDatafromPo,
+  // singleStocktakeState,
+  // setSingleStocktakeState,
+  // gotDatafromPo,
+  getSingleStocktakeData,
+  // merchant_id,
+  // setDataFromPo,
 }) => {
-  const dispatch = useDispatch();
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
-  const [selectedProducts, setSelectedProducts] = useState([]);
-
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
-
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
+  const singleStocktakeStateFromRedux = useSelector(
+    (state) => state.stocktakeList
+  );
+  // console.log("singleStocktakeStateFromRedux", singleStocktakeStateFromRedux);
 
+  const [singleStocktakeState, setSingleStocktakeState] = useState();
+
+  const [gotDatafromPo, setDataFromPo] = useState();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  // console.log("singleStocktakeStateFromRedux", singleStocktakeState);
+  // console.log("gotDatafromPo", gotDatafromPo);
+  const [selectedProducts, setSelectedProducts] = useState([]);
+  const [initialDropdownProducts, setInitialDropdownProducts] = useState([]);
+  console.log("initialDropdownProducts", initialDropdownProducts);
   const [stocktake_items, setProductList] = useState([
     {
       upc: "",
@@ -80,9 +95,47 @@ const AddNewStocktake = ({
     },
   ]);
 
+  const location = useLocation();
+  // console.log("location", location.pathname);
+  const { id } = useParams();
+
+  // console.log("stock id",id)
+  useEffect(() => {
+    if (id && location.pathname !== "/stocktake/AddStocktake") {
+      dispatch(fetchSingleStocktakeData({ merchant_id, id, userTypeData }));
+    }
+  }, [id]);
+
+  useEffect(() => {
+    if (
+      !singleStocktakeStateFromRedux.loading &&
+      singleStocktakeStateFromRedux.singleStocktakeState &&
+      location.pathname !== "/stocktake/AddStocktake"
+    ) {
+      setSingleStocktakeState(
+        singleStocktakeStateFromRedux.singleStocktakeState
+      );
+    }
+  }, [
+    singleStocktakeStateFromRedux.loading,
+    singleStocktakeStateFromRedux.singleStocktakeState,
+  ]);
+
+  useEffect(() => {
+    if (
+      !singleStocktakeStateFromRedux.loading &&
+      singleStocktakeStateFromRedux.gotDatafromPo
+    ) {
+      setDataFromPo(singleStocktakeStateFromRedux.gotDatafromPo);
+    }
+  }, [
+    singleStocktakeStateFromRedux.loading,
+    singleStocktakeStateFromRedux.gotDatafromPo,
+  ]);
+
   useEffect(() => {
     if (singleStocktakeState) {
-      const newStocktakeItems = singleStocktakeState.stocktake_item.map(
+      const newStocktakeItems = singleStocktakeState?.stocktake_item.map(
         (item, index) => ({
           upc: item.upc || "", //
           category_id: item.category_id || "", //
@@ -95,38 +148,41 @@ const AddNewStocktake = ({
           discrepancy: item.discrepancy || "", //
           discrepancy_cost: item.discrepancy_cost || "0", //
           stocktake_item_id: item.id || "",
-          price: gotDatafromPo[index].price || "",
+          price: gotDatafromPo[index]?.price || "",
         })
       );
       setProductList(newStocktakeItems);
     }
-  }, []);
+  }, [singleStocktakeState]);
+  
+  // useEffect(() => {
+   
+  //   loadOptions(" ");
+  // }, []);
 
   const loadOptions = async (inputValue) => {
-    if (inputValue && inputValue.length > 2) {
-      let name_data = {
-        merchant_id: merchant_id,
-        category_id: "all",
-        show_status: "all",
-        listing_type: 1,
-        offset: 0,
-        limit: 100000,
-        name: inputValue,
-        page: 0,
-        ...userTypeData,
-      };
+    let name_data = {
+      merchant_id: merchant_id,
+      category_id: "all",
+      show_status: "all",
+      listing_type: 1,
+      offset: 0,
+      limit: 100000,
+      name: inputValue,
+      page: 0,
+      ...userTypeData,
+    };
 
-      const res = await dispatch(fetchProductsData(name_data));
-      setSelectedProducts(res.payload);
-      const data = res.payload?.map((prod) => ({
-        label: prod.title,
-        value: prod.var_id || prod.id,
-        variantId: prod.isvarient === "1" ? prod.var_id : null,
-        prodId: prod.id,
-      }));
-      // console.log("loadOptions", data);
-      return data;
-    }
+    const res = await dispatch(fetchProductsData(name_data));
+    setSelectedProducts(res.payload);
+    const data = res.payload?.map((prod) => ({
+      label: prod.title,
+      value: prod.var_id || prod.id,
+      variantId: prod.isvarient === "1" ? prod.var_id : null,
+      prodId: prod.id,
+    }));
+    console.log("loadOptions", data);
+    return data;
   };
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -157,7 +213,7 @@ const AddNewStocktake = ({
     setAlertModalHeaderText(headerText);
     setAlertModalOpen(true);
   };
-  console.log("setSelectedProductsList", stocktake_items);
+  // console.log("setSelectedProductsList", stocktake_items);
   // console.log("setSelectedProducts", selectedProducts);
   const handleAddProduct = () => {
     if (validate()) {
@@ -213,14 +269,14 @@ const AddNewStocktake = ({
       const filteredStocktakeItems = singleStocktakeState.stocktake_item.filter(
         (_, i) => i !== deleteCategoryId
       );
-  
+
       const total_qty = filteredStocktakeItems.reduce(
         (sum, item) => sum + Number(item.new_qty || 0),
         0
       );
       const total_discrepancy_cost = filteredStocktakeItems.reduce(
         (sum, item) => sum + Number(item.discrepancy_cost || 0),
-        0     
+        0
       );
       const total_discrepancy = filteredStocktakeItems.reduce(
         (sum, item) => sum + Number(item.discrepancy || 0),
@@ -259,12 +315,12 @@ const AddNewStocktake = ({
           const newList = stocktake_items.filter(
             (_, i) => i !== deleteCategoryId
           );
-          setProductList(newList)
+          setProductList(newList);
           setSingleStocktakeState({
             ...singleStocktakeState,
             stocktake_item: filteredStocktakeItems,
             total_qty: total_qty,
-            total_discrepancy:total_discrepancy,
+            total_discrepancy: total_discrepancy,
             total_discrepancy_cost: total_discrepancy_cost,
           });
           // setProductList(newList);
@@ -279,7 +335,6 @@ const AddNewStocktake = ({
           (_, i) => i !== deleteCategoryId
         );
         setProductList(newList);
-        
       }
     } catch (e) {
       console.log("e: ", e);
@@ -321,10 +376,13 @@ const AddNewStocktake = ({
     });
   };
   const handleOnChangeSelectDropDown = async (productId, variantId, index) => {
-    console.log("onChangeSelectDropDown", productId, variantId)
-    const productExists = stocktake_items.some(
-      (item) => item.product_id === productId 
+    console.log("onChangeSelectDropDown", productId, variantId);
+    const productExists = stocktake_items.some((item) =>
+      item.variant !== ""
+        ? item.variant_id === variantId
+        : item.product_id === productId
     );
+    // console.log("Product exists", productExists);
     if (productExists) {
       // Show an error message or handle it as needed
       showModal("Product is already added.");
@@ -353,7 +411,12 @@ const AddNewStocktake = ({
           const product = response.data.data.product_variants.find(
             (prod) => prod.id === variantId
           );
-          // console.log("Product variant", product);
+          console.log(
+            "Product variant",
+            response.data.data.product_variants,
+            "variantId",
+            variantId
+          );
 
           obj.newPrice =
             parseFloat(product.price) > 0 ? parseFloat(product.price) : 0;
@@ -376,15 +439,15 @@ const AddNewStocktake = ({
               current_qty: product?.quantity || "", //
               stocktake_item_id: "0" || "",
               price: product?.price || "",
-              new_qty:"" ,
-              discrepancy:"0",
+              new_qty: "",
+              discrepancy: "0",
               // variant_id: "",
             };
             return updatedList;
           });
         } else {
           const product = response.data.data.productdata;
-          // console.log("product price", product);
+          console.log("product price", product);
           obj.newPrice =
             parseFloat(product.price) > 0 ? parseFloat(product.price) : 0;
           obj.finalQty = Number(product.quantity) ?? 0;
@@ -400,9 +463,8 @@ const AddNewStocktake = ({
               current_qty: product.quantity || "", //
               stocktake_item_id: "0" || "",
               price: product?.price || "",
-              new_qty:"",
-              discrepancy:"0"
-
+              new_qty: "",
+              discrepancy: "0",
             };
             return updatedList;
           });
@@ -491,7 +553,8 @@ const AddNewStocktake = ({
       } catch (error) {
         console.error("Error creating stocktake:", error);
       }
-      setVisible("StocktakeList");
+      // setVisible("StocktakeList");
+      navigate(-1);
     }
   };
 
@@ -512,7 +575,7 @@ const AddNewStocktake = ({
       e.preventDefault();
     }
   };
-  // console.log("singleStocktakeState",singleStocktakeState)
+  // console.log("singleStocktakeState", singleStocktakeState);
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -522,7 +585,8 @@ const AddNewStocktake = ({
               <div className="q-add-categories-section-header">
                 <span
                   onClick={() => {
-                    setVisible("StocktakeList");
+                    // setVisible("StocktakeList");
+                    navigate(-1);
                     setSingleStocktakeState();
                   }}
                   className="text-center items-center"
@@ -532,7 +596,12 @@ const AddNewStocktake = ({
                     alt="Add-New-Category"
                     className="h-9 w-9"
                   />
-                  <span>{singleStocktakeState  ? "Update" : "New" } Stocktake</span>
+                  <span>
+                    {singleStocktakeState ? "Update" : "New"} Stocktake
+                  </span>
+                  <p className="px-2">
+                    {singleStocktakeState && singleStocktakeState?.st_id}
+                  </p>
                 </span>
               </div>
             </Grid>
@@ -555,7 +624,7 @@ const AddNewStocktake = ({
                     return (
                       <>
                         <StyledTableRow key={index}>
-                          <StyledTableCell sx={{width:"40%"}}>
+                          <StyledTableCell sx={{ width: "40%" }}>
                             <div style={{ position: "relative", zIndex: 100 }}>
                               {/* <Button>
                                 {product.product_name || product.title}
@@ -632,7 +701,8 @@ const AddNewStocktake = ({
               <Grid item>
                 <button
                   onClick={() => {
-                    setVisible("StocktakeList");
+                    // setVisible("StocktakeList");
+                    navigate(-1);
                   }}
                   className="quic-btn quic-btn-cancle"
                 >
