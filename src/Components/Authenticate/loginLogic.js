@@ -57,7 +57,7 @@ export default function LoginLogic(setLoading) {
           if (!result) {
             setErrors({
               ...errors,
-              usernameError: "Invalid emailId",
+              usernameError: "Invalid Username",
             });
             error = true;
           } else {
