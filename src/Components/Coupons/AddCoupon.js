@@ -103,12 +103,16 @@ const AddCoupon = ({ seVisible }) => {
     const regex = /^[A-Za-z0-9 ]*$/;
 
     if (regex.test(value) || value === "") {
-      value = value.toUpperCase();
-      setInputValue(value);
-      setIsUnique(true);
-      setErrorMessage("");
-      if (value) {
-        debouncedCheck(value);
+      if (value.includes(" ")) {
+        setErrorMessage("Spaces between letters are not allowed");
+      } else {
+        value = value.toUpperCase();
+        setInputValue(value);
+        setIsUnique(true);
+        setErrorMessage("");
+        if (value) {
+          debouncedCheck(value);
+        }
       }
     } else {
       setErrorMessage("Special characters are not allowed");
@@ -163,12 +167,12 @@ const AddCoupon = ({ seVisible }) => {
   const handleStartDateChange = (newDate) => {
     const formattedStartDate = newDate.format("YYYY-MM-DD");
     if (formattedStartDate === coupon.date_expire) {
-      showModal("Start date cannot be the same as the end date");
+      // showModal("Start date cannot be the same as the end date");
       setCoupon({
         ...coupon,
-        date_valid: null,
+        date_valid: formattedStartDate,
       });
-      setDateStartError("Start Date is required");
+      // setDateStartError("Start Date is required");
     } else if (dayjs(formattedStartDate).isAfter(dayjs(coupon.date_expire))) {
       showModal("Start date cannot be greater than the end date");
       setCoupon({
@@ -189,12 +193,12 @@ const AddCoupon = ({ seVisible }) => {
     const formattedEndDate = newDate.format("YYYY-MM-DD");
 
     if (formattedEndDate === coupon.date_valid) {
-      showModal("End date cannot be the same as the start date");
+      // showModal("End date cannot be the same as the start date");
       setCoupon({
         ...coupon,
-        date_expire: null,
+        date_expire: formattedEndDate,
       });
-      setDateEndError("End Date is required");
+      // setDateEndError("End Date is required");
       // return; // Do not update the state
     } else if (dayjs(formattedEndDate).isBefore(dayjs(coupon.date_valid))) {
       showModal("End date cannot be less than the start date");
@@ -310,9 +314,9 @@ const AddCoupon = ({ seVisible }) => {
       couponStates.enable_limit ? "1" : "0"
     );
     if (couponStates.enable_limit > 0) {
-      if (!coupon.count_limit === "0") {
+      if (!coupon.count_limit === "0" || !coupon.count_limit === "00" || !coupon.count_limit === "000") {
         setCountLimitError("Please enter a value greater than or equal to 1.");
-        // return; // Stop further execution
+        return; // Stop further execution
       }
       formData.append(
         "enable_redemption_limit",
@@ -321,14 +325,14 @@ const AddCoupon = ({ seVisible }) => {
 
       if (!coupon.count_limit) {
         setCountLimitError("Redemption Limit is required");
-        // return; // Stop further execution
+        return; // Stop further execution
       } else {
         setCountLimitError("");
       }
 
-      if (coupon.count_limit === null || coupon.count_limit === "0") {
+      if (coupon.count_limit === null || coupon.count_limit === "0" || coupon.count_limit === "00" || coupon.count_limit === "000") {
         setCountLimitError("Please enter a value greater than or equal to 1.");
-        // return; // Stop further execution
+        return; // Stop further execution
       }
 
       formData.append("redemption_limit", coupon.count_limit);
@@ -642,13 +646,13 @@ const AddCoupon = ({ seVisible }) => {
                       <label htmlFor="maximum_discount">
                         Maximum Discount Amount
                       </label>
-                      <input
-                        type="number"
-                        id="maximum_discount"
-                        name="maximum_discount"
-                        placeholder="Enter Maximum Discount Amount"
+                      <BasicTextFields
+                        type={"text"}
+                        maxLength={7}
                         value={coupon.maximum_discount}
-                        onChange={(e) => handleMaxDiscountChange(e)}
+                        placeholder="Enter Maximum Discount Amount"
+                        onChangeFun={handleMaxDiscountChange}
+                        sx={{ mt: 0.5 }}
                       />
                       {dateMaxDisAMTError && (
                         <p className="error-message">{dateMaxDisAMTError}</p>
@@ -838,18 +842,29 @@ const AddCoupon = ({ seVisible }) => {
                   <div className="q-add-coupon-single-input">
                     <label htmlFor="count_limit">Redemption Limit</label>
                     <input
-                      type="number"
+                      type="text"
                       id="count_limit"
                       name="count_limit"
                       // min="1"
-                      // max="999"
+                      max="999"
+                      maxLength={3}
                       value={coupon.count_limit}
-                      onChange={(e) =>
-                        setCoupon({
-                          ...coupon,
-                          count_limit: e.target.value,
-                        })
-                      }
+                      // onChange={(e) =>
+                      //   setCoupon({
+                      //     ...coupon,
+                      //     count_limit: e.target.value,
+                      //   })
+                      // }
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        // Only allow numbers
+                        if (/^\d*$/.test(value)) {
+                          setCoupon({
+                            ...coupon,
+                            count_limit: value,
+                          });
+                        }
+                      }}
                     />
 
                     {countLimitError && (
