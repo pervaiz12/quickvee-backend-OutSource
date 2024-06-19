@@ -1,11 +1,18 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { BASE_URL, GET_STOCKTAKE_LIST,STOCKTAKE_LIST_COUNT } from "../../../Constants/Config";
+import {
+  BASE_URL,
+  GET_STOCKTAKE_LIST,
+  STOCKTAKE_LIST_COUNT,
+} from "../../../Constants/Config";
 
 const initialState = {
   loading: false,
   StocktakeList: [],
-  stocktakeListCount:0,
+  stocktakeListCount: 0,
+  singleStocktakeState: null,
+  gotDatafromPo: null,
+  status: "idle",
   successMessage: "",
   error: "",
 };
@@ -13,10 +20,9 @@ const initialState = {
 export const fetchStocktakeList = createAsyncThunk(
   "stocktake/fetchStocktakeList",
   async (data) => {
-    
     try {
       const { token, ...dataNew } = data;
-      console.log("dataNew",dataNew)
+      // console.log("dataNew", dataNew);
       const response = await axios.post(
         BASE_URL + GET_STOCKTAKE_LIST,
         dataNew,
@@ -57,6 +63,73 @@ export const getStocktakeListCount = createAsyncThunk(
     }
   }
 );
+export const fetchSingleStocktakeData = createAsyncThunk(
+  "stocktake/fetchSingleStocktakeData",
+  async ({ merchant_id, id, userTypeData }, { rejectWithValue }) => {
+    let singleStocktakeData = {
+      merchant_id: merchant_id,
+      stocktake_id: id,
+    };
+
+    try {
+      const { token, ...otherUserData } = userTypeData;
+      const response = await axios.post(
+        `${BASE_URL}Stocktake_react_api/get_stocktake_details_by_id`,
+        { ...singleStocktakeData, ...otherUserData },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.status) {
+        const fetchProductDataPromises =
+          response.data.result.stocktake_item.map(async (item) => {
+            try {
+              const formData = new FormData();
+              formData.append("merchant_id", merchant_id);
+              formData.append("id", item.product_id);
+              const productResponse = await axios.post(
+                `${BASE_URL}Product_api_react/get_productdata_ById`,
+                formData
+              );
+
+              if (productResponse.data.status) {
+                if (
+                  item.variant_id !== "0" &&
+                  productResponse.data.data.product_variants.length > 0
+                ) {
+                  const product =
+                    productResponse.data.data.product_variants.find(
+                      (prod) => prod.id === item.variant_id
+                    );
+                  return product;
+                } else {
+                  const product = productResponse.data.data.productdata;
+                  return product;
+                }
+              } else {
+                console.log("Product Not available!");
+              }
+            } catch (e) {
+              console.log("e: ", e);
+            }
+          });
+
+        const dataFromPo = await Promise.all(fetchProductDataPromises);
+        return { result: response.data.result, dataFromPo };
+      } else {
+        // ToastifyAlert(response.error, 'error');
+        return rejectWithValue(response.error);
+      }
+    } catch (error) {
+      console.error("Error creating stocktake:", error);
+      return rejectWithValue(error.message);
+    }
+  }
+);
 const StocktakeListSlice = createSlice({
   name: "stocktake",
   initialState,
@@ -79,6 +152,18 @@ const StocktakeListSlice = createSlice({
     });
     builder.addCase(getStocktakeListCount.rejected, (state, action) => {
       state.stocktakeListCount = 0;
+    });
+    builder.addCase(fetchSingleStocktakeData.pending, (state) => {
+      state.status = "loading";
+    });
+    builder.addCase(fetchSingleStocktakeData.fulfilled, (state, action) => {
+      state.status = "succeeded";
+      state.singleStocktakeState = action.payload.result;
+      state.gotDatafromPo = action.payload.dataFromPo;
+    });
+    builder.addCase(fetchSingleStocktakeData.rejected, (state, action) => {
+      state.status = "failed";
+      state.error = action.payload;
     });
   },
 });

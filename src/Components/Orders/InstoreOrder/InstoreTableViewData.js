@@ -67,14 +67,14 @@ const InstoreTableViewData = (props, searchId) => {
   const handleChange = (event) => {
     setSelectedValue(parseInt(event.target.value));
   };
-  const numberOptions = [];
-  for (let i = 1; i <= 50; i++) {
-    numberOptions.push(
-      <option key={i} value={i}>
-        {i}
-      </option>
-    );
-  }
+  // const numberOptions = [];
+  // for (let i = 1; i <= 50; i++) {
+  //   numberOptions.push(
+  //     <option key={i} value={i}>
+  //       {i}
+  //     </option>
+  //   );
+  // }
   useEffect(() => {
     setCurrentPage(1);
     dispatch(
@@ -92,9 +92,10 @@ const InstoreTableViewData = (props, searchId) => {
   }, [
     props.selectedDateRange?.start_date,
     props.selectedDateRange?.end_date,
-    props.OrderSourceData,
+    debouncedValue
+    // props.OrderSourceData,
 
-    AllInStoreDataState.OrderListCount,
+    // AllInStoreDataState.OrderListCount,
     // AllInStoreDataState.inStoreOrderData,
   ]);
 
@@ -120,13 +121,13 @@ const InstoreTableViewData = (props, searchId) => {
     };
     fetchData();
   }, [
-    dispatch,
+    // dispatch,
     // props,
     debouncedValue,
     props.selectedDateRange,
     currentPage,
     rowsPerPage,
-    AllInStoreDataState.OrderListCount,
+    // AllInStoreDataState.OrderListCount,
   ]);
 
   useEffect(() => {
@@ -214,6 +215,7 @@ const InstoreTableViewData = (props, searchId) => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <>
+    <p>{AllInStoreDataState.OrderListCount}</p>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
           <Grid container sx={{ padding: 2.5 }}>
