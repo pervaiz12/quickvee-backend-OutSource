@@ -186,6 +186,36 @@ const OrderRefundReportList = (props) => {
                       </StyledTableCell>
                     </StyledTableRow>
                   ))}
+                  {allOrderData && (
+                    <StyledTableRow>
+                      <StyledTableCell></StyledTableCell>
+                      <StyledTableCell></StyledTableCell>
+                      <StyledTableCell></StyledTableCell>
+                      <StyledTableCell></StyledTableCell>
+                      <StyledTableCell></StyledTableCell>
+                      <StyledTableCell></StyledTableCell>
+                      <StyledTableCell></StyledTableCell>
+                      <StyledTableCell></StyledTableCell>
+                      <StyledTableCell></StyledTableCell>
+                      <StyledTableCell>
+                        <p
+                          style={{
+                            color: "#0A64F9",
+                          }}
+                        >
+                         Grand Total
+                        </p>
+                      </StyledTableCell>
+                      <StyledTableCell style={{ color: "#0A64F9" }}>
+                        ${parseFloat(
+                          calculateGrandTotal(allOrderData, "amount")
+                        ).toLocaleString(undefined, {
+                          minimumFractionDigits: 2,
+                          maximumFractionDigits: 2,
+                        })}
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        )}
               </TableBody>
             </StyledTable>
           </TableContainer>

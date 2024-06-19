@@ -337,7 +337,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
           setPurchaseInfoErrors((prev) => ({
             ...prev,
             issuedDate: issuedDate ? "" : "Issued Date is required",
-            stockDate: stockDate ? "" : "Stock Due Date is required",
+            // stockDate: stockDate ? "" : "Stock Due Date is required",
             // email: email ? "" : "Email is required",
             selectedVendor: selectedVendor ? "" : "Vendor is required",
           }));

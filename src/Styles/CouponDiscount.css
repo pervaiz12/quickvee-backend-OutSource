@@ -863,3 +863,19 @@ img.clock_design{
   transform: translate(0px, 3rem);
 
 }
+
+.cursor-not-allowed {
+  cursor: not-allowed !important;
+}
+
+/* .syncIcon{
+  height: 2rem;
+} */
+.syncConatiner{
+  position: relative;
+}
+
+.rotaicions{
+  position: absolute;
+  left: 1px;
+}

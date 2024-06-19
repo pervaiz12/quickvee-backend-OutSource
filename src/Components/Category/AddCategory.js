@@ -218,7 +218,7 @@ const AddCategory = ({ seVisible }) => {
     <>
       <div className="box">
         <div className="q-add-categories-section mb-5">
-          <form onSubmit={handleSubmit} enctype="multipart/form-data">
+          {/* <form enctype="multipart/form-data"> */}
             <div className="q-add-categories-section-header">
               <span onClick={() => seVisible("CategoryDetail")}>
                 <img
@@ -243,6 +243,15 @@ const AddCategory = ({ seVisible }) => {
                 options={defaultList}
                 freeSolo
                 getOptionLabel={(option) => option.name}
+                // getOptionLabel={(option) => {
+                //   console.log(option);  // Log the option to debug
+                //   // Check if the option is an object with a name property
+                //   if (typeof option === 'object' && option.name) {
+                //     return option.name;
+                //   }
+                //   // Handle other types of options, e.g., strings
+                //   return typeof option === 'string' ? option : '';
+                // }}
                 value={value}
                 onChange={(newValue) => {
                   console.log(newValue);
@@ -378,7 +387,7 @@ const AddCategory = ({ seVisible }) => {
             </div>
 
             <div className="q-add-categories-section-middle-footer">
-              <button className="quic-btn quic-btn-save">Add</button>
+              <button className="quic-btn quic-btn-save" onClick={handleSubmit}>Add</button>
               <button
                 onClick={() => seVisible("CategoryDetail")}
                 className="quic-btn quic-btn-cancle"
@@ -386,7 +395,7 @@ const AddCategory = ({ seVisible }) => {
                 Cancel
               </button>
             </div>
-          </form>
+          {/* </form> */}
         </div>
       </div>
       <AlertModal
