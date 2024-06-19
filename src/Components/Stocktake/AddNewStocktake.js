@@ -76,8 +76,7 @@ const AddNewStocktake = ({
   // console.log("singleStocktakeStateFromRedux", singleStocktakeState);
   // console.log("gotDatafromPo", gotDatafromPo);
   const [selectedProducts, setSelectedProducts] = useState([]);
-  const [initialDropdownProducts, setInitialDropdownProducts] = useState([]);
-  console.log("initialDropdownProducts", initialDropdownProducts);
+ 
   const [stocktake_items, setProductList] = useState([
     {
       upc: "",
@@ -153,12 +152,12 @@ const AddNewStocktake = ({
       );
       setProductList(newStocktakeItems);
     }
-  }, [singleStocktakeState]);
+  }, [singleStocktakeStateFromRedux]);
   
-  // useEffect(() => {
+  useEffect(() => {
    
-  //   loadOptions(" ");
-  // }, []);
+    loadOptions(" ");
+  }, []);
 
   const loadOptions = async (inputValue) => {
     let name_data = {
@@ -181,7 +180,7 @@ const AddNewStocktake = ({
       variantId: prod.isvarient === "1" ? prod.var_id : null,
       prodId: prod.id,
     }));
-    console.log("loadOptions", data);
+    // console.log("loadOptions", data);
     return data;
   };
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
@@ -213,7 +212,7 @@ const AddNewStocktake = ({
     setAlertModalHeaderText(headerText);
     setAlertModalOpen(true);
   };
-  // console.log("setSelectedProductsList", stocktake_items);
+  console.log("setSelectedProductsList", stocktake_items);
   // console.log("setSelectedProducts", selectedProducts);
   const handleAddProduct = () => {
     if (validate()) {
@@ -376,7 +375,7 @@ const AddNewStocktake = ({
     });
   };
   const handleOnChangeSelectDropDown = async (productId, variantId, index) => {
-    console.log("onChangeSelectDropDown", productId, variantId);
+    // console.log("onChangeSelectDropDown", productId, variantId);
     const productExists = stocktake_items.some((item) =>
       item.variant !== ""
         ? item.variant_id === variantId
@@ -411,12 +410,7 @@ const AddNewStocktake = ({
           const product = response.data.data.product_variants.find(
             (prod) => prod.id === variantId
           );
-          console.log(
-            "Product variant",
-            response.data.data.product_variants,
-            "variantId",
-            variantId
-          );
+          
 
           obj.newPrice =
             parseFloat(product.price) > 0 ? parseFloat(product.price) : 0;
@@ -425,7 +419,7 @@ const AddNewStocktake = ({
             (prod) => prod.var_id === product.id
           );
 
-          // console.log("Sorted products", sortedProduct);
+          console.log("Sorted products", product);
           setProductList((prevList) => {
             const updatedList = [...prevList];
             updatedList[index] = {
@@ -443,7 +437,10 @@ const AddNewStocktake = ({
               discrepancy: "0",
               // variant_id: "",
             };
+            
+              
             return updatedList;
+          
           });
         } else {
           const product = response.data.data.productdata;
@@ -466,6 +463,10 @@ const AddNewStocktake = ({
               new_qty: "",
               discrepancy: "0",
             };
+            
+              
+             
+          
             return updatedList;
           });
         }
@@ -631,6 +632,7 @@ const AddNewStocktake = ({
                               </Button> */}
                               <AsyncSelect
                                 loadOptions={loadOptions}
+                                defaultOptions
                                 styles={customStyles}
                                 menuPortalTarget={document.body}
                                 onChange={(option) => {
