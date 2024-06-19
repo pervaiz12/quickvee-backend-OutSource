@@ -179,7 +179,7 @@ const getLoginRedirectUrl=()=>{
             />
           </Link>
           <form className="login-customer-form">
-            <h1>Merchant Login</h1>
+            <h1></h1>
 
             <div
               style={{
@@ -253,7 +253,7 @@ const getLoginRedirectUrl=()=>{
             <FormControl fullWidth>
               {
                 <QSubmitButton
-                  name="submit"
+                  name="Login"
                   handleSubmitForm={handleSubmitForm}
                   loading={loading}
                 />

@@ -250,14 +250,14 @@ const MerchantFunction = () => {
         // updatedErrors[name] = value === "" ? `Please fill the ${name} field` : "";
         updatedErrors[name] =
           value.trim() === ""
-            ? `Please fill in the ${name} field`
+            ? `Store Name is required`
             : value[0] === " "
-              ? `The ${name} field cannot start with a space`
+              ? `The ${name} can not start with a space`
               : "";
       }
       if (name == "ownerName") {
         updatedErrors[name] =
-          value === "" ? `Please fill the ${name} field` : "";
+          value === "" ? `Owner Name is required` : "";
         // updatedErrors[name] =
         //   value.trim() === ""
         //     ? `Please fill in the ${name} field`
@@ -268,18 +268,18 @@ const MerchantFunction = () => {
       if (name == "email") {
         updatedErrors[name] =
           value === ""
-            ? `Please fill the ${name} field`
+            ? `Email is required`
             : !emailRegex.test(value)
-              ? "Please fill valid email"
+              ? "Please enter a valid email"
               : "";
       }
       if (name == "password") {
         updatedErrors[name] =
-          value === "" ? `Please fill the ${name} field` : "";
+          value === "" ? `Password is required` : "";
       }
       if (name == "state") {
         updatedErrors[name] =
-          value === "" ? `Please fill the ${name} field` : "";
+          value === "" ? `State is required` : "";
       }
       if (name === "phone") {
         const numericValue = value.replace(/[^0-9]/g, "");
@@ -301,7 +301,7 @@ const MerchantFunction = () => {
     } else {
       if (e.name == "state") {
         updatedErrors[e.name] =
-          e.title === "" ? `Please fill the ${e.name} field` : "";
+          e.title === "" ? `State is required` : "";
       }
       setStore((prevState) => ({
         ...prevState,
@@ -356,7 +356,7 @@ const MerchantFunction = () => {
     let errorMessage = "";
     let errors = { ...store.errors };
     if (userRadioData === "") {
-      errorMessage = "Please fill the field";
+      errorMessage = "Please enter the input";
       error = true;
     } else {
       errorMessage = "";
@@ -369,22 +369,22 @@ const MerchantFunction = () => {
       userRadioData === "merchant"
     ) {
       if (store.storename === "") {
-        errors.storename = "Please fill the Store Name";
+        errors.storename = "Store Name is required";
         error = true;
       }
 
       if (store.ownerName === "") {
-        errors.ownerName = "Please fill the Owner Name";
+        errors.ownerName = "Owner Name is required";
         error = true;
       }
 
       if (store.email === "") {
-        errors.email = "Please fill the Email";
+        errors.email = "Email is required";
         error = true;
       }
 
       if (store.password === "") {
-        errors.password = "Please fill the Password";
+        errors.password = "Password is required";
         error = true;
       } else {
         try {
@@ -480,17 +480,17 @@ const MerchantFunction = () => {
     let error = false;
     // console.log(adminId)
     if (adminId == undefined) {
-      setErrorAdminId("Please select admin field");
+      setErrorAdminId("Please select admin");
       error = true;
     } else if (adminId == "") {
-      setErrorAdminId("Please select admin field");
+      setErrorAdminId("Please select admin");
       error = true;
     } else {
       setErrorAdminId("");
       error = false;
     }
     if (merchantStore.pin == "") {
-      setErrorPin("Please select pin field");
+      setErrorPin("Please enter pin");
       error = true;
     } else if (merchantStore.pin !== "" && errorPin == "") {
       setErrorPin("");

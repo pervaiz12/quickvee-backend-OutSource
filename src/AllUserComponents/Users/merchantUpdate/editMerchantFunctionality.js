@@ -333,7 +333,7 @@ export default function EditMerchantFunctionality() {
         );
         if (response.data.status == 200) {
           setLoader(false);
-          ToastifyAlert("Update Merchant  Successfully!", "success");
+          ToastifyAlert("Updated Successfully!", "success");
           // setMessage(response?.data?.message);
           setSuccessMessageHandle(true);
           handleSuccessMessage();
@@ -341,7 +341,7 @@ export default function EditMerchantFunctionality() {
           // navigate(`/users/editMerchant/${getEditMerchant.id}`)
         } else {
           setLoader(false);
-          ToastifyAlert("Merchant not  Updated!", "warn");
+          ToastifyAlert("Merchant not Updated!", "warn");
         }
       } catch (e) {
         console.log("Exception", e);
