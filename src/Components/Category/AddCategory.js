@@ -214,6 +214,14 @@ const AddCategory = ({ seVisible }) => {
 
   // for Default Category list End
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      console.log('Enter key pressed');
+      event.preventDefault(); // Prevent default Enter key behavior if necessary
+      // Additional logic to handle the Enter key press
+    }
+  };
+
   return (
     <>
       <div className="box">
@@ -242,22 +250,21 @@ const AddCategory = ({ seVisible }) => {
                 size="small"
                 options={defaultList}
                 freeSolo
-                getOptionLabel={(option) => option.name}
-                // getOptionLabel={(option) => {
-                //   console.log(option);  // Log the option to debug
-                //   // Check if the option is an object with a name property
-                //   if (typeof option === 'object' && option.name) {
-                //     return option.name;
-                //   }
-                //   // Handle other types of options, e.g., strings
-                //   return typeof option === 'string' ? option : '';
-                // }}
+                // getOptionLabel={(option) => option.name}
+                getOptionLabel={(option) => {
+                  console.log(option);  // Log the option to debug
+                  // Check if the option is an object with a name property
+                  if (typeof option === 'object' && option.name) {
+                    return option.name;
+                  }
+                  // Handle other types of options, e.g., strings
+                  return typeof option === 'string' ? option : '';
+                }}
                 value={value}
-                onChange={(newValue) => {
-                  console.log(newValue);
-                  setCategory((priviousValue) => ({
-                    ...priviousValue,
-                    title: newValue.target.textContent,
+                onChange={(event, newValue) => {
+                  setCategory((previousValue) => ({
+                    ...previousValue,
+                    title: newValue?.name || newValue || '',
                   }));
                 }}
                 renderInput={(params) => (
@@ -268,6 +275,7 @@ const AddCategory = ({ seVisible }) => {
                     name="title"
                     value={category.title}
                     onChange={inputChange}
+                    onKeyDown={handleKeyDown}
                     style={{}}
                   />
                 )}
