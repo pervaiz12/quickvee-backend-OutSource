@@ -1232,3 +1232,11 @@ div.q_label_details::after {
     background: white;
   }
 }
+.norecordFound{
+  padding-left: 20px !important;
+  width: 10% !important;
+  margin-left: 20px !important;
+  /* height: 10vh !important; */
+  vertical-align: cen;
+  padding-top: 5px !important;
+}
