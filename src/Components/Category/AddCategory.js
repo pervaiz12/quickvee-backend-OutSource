@@ -16,7 +16,7 @@ import CheckBoxField from "../../reuseableComponents/CheckBoxField";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const AddCategory = ({ seVisible }) => {
   const {
@@ -86,6 +86,7 @@ const AddCategory = ({ seVisible }) => {
       }
     }
   };
+  const navigate = useNavigate()
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -125,7 +126,8 @@ const AddCategory = ({ seVisible }) => {
       console.log(update_message);
       if (data == "Success") {
         ToastifyAlert(update_message, "success");
-        seVisible("CategoryDetail");
+        // seVisible("CategoryDetail");
+        navigate("/category");
       } else if (
         data == "Failed" &&
         update_message == "The name is Already exist"

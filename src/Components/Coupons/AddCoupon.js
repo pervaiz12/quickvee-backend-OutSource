@@ -28,7 +28,7 @@ import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
 import PasswordShow from "../../Common/passwordShow";
 import CircularProgress from "@mui/material/CircularProgress";
-import { Link } from "react-router-dom";
+import { Link,useNavigate } from "react-router-dom";
 
 const AddCoupon = ({ seVisible }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -224,6 +224,7 @@ const AddCoupon = ({ seVisible }) => {
   const [dateMaxDisAMTError, setDateMaxDisAMTError] = useState("");
   const [countLimitError, setCountLimitError] = useState("");
 
+  const navigate = useNavigate()
   const handleAddButtonClick = async (e) => {
     e.preventDefault();
 
@@ -399,7 +400,8 @@ const AddCoupon = ({ seVisible }) => {
         let data = {
           merchant_id,
         };
-        seVisible("CouponDiscount");
+        // seVisible("CouponDiscount");
+        navigate("/coupons");
       } else if (
         data == false &&
         update_message === "Coupon not added, please try again."
