@@ -10,13 +10,19 @@ import Paper from "@mui/material/Paper";
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { priceFormate } from "../../hooks/priceFormate";
+import sortIcon from "../../Assests/Category/SortingW.svg";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: theme.palette.common.black,
     color: theme.palette.common.white,
+    fontFamily: "CircularSTDBook !important",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
+    paddingTop:"12px",
+    paddingLeft:"1px",
+    paddingRight:"1px",
+    fontFamily: "CircularSTDMedium",
   },
 }));
 
@@ -26,7 +32,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
   // hide last border
   "&:last-child td, &:last-child th": {
-    border: 0,
+    // border: 0,
   },
 }));
 
@@ -44,10 +50,10 @@ const rows = [
 
 const formatDateTime = (dateTimeString) => {
   const date = new Date(dateTimeString);
-  const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
-  const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
-  const formattedDate = date.toLocaleDateString('en-US', dateOptions);
-  const formattedTime = date.toLocaleTimeString('en-US', timeOptions);
+  const dateOptions = { year: "numeric", month: "short", day: "numeric" };
+  const timeOptions = { hour: "numeric", minute: "numeric", hour12: true };
+  const formattedDate = date.toLocaleDateString("en-US", dateOptions);
+  const formattedTime = date.toLocaleTimeString("en-US", timeOptions);
   return `${formattedDate} ${formattedTime}`;
 };
 
@@ -60,15 +66,15 @@ export default function DashboardTables(props) {
   // };
 
   const getCustomerName = (deliverName, billingName) => {
-    if (deliverName && deliverName !== '') {
+    if (deliverName && deliverName !== "") {
       return deliverName;
-    } else if (billingName && billingName !== '') {
+    } else if (billingName && billingName !== "") {
       return billingName;
     } else {
-      return 'N/A';
+      return "N/A";
     }
   };
-  
+
   const getStatus = (orderMethod, mStatus) => {
     if (orderMethod === "pickup") {
       switch (mStatus) {
@@ -109,18 +115,69 @@ export default function DashboardTables(props) {
     }
   };
 
+ 
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell align="center">Customer Name</StyledTableCell>
-            <StyledTableCell align="center">Customer No.</StyledTableCell>
-            <StyledTableCell align="center">Order Date & Time</StyledTableCell>
-            <StyledTableCell align="center">Order Id</StyledTableCell>
-            <StyledTableCell align="center">Order Type</StyledTableCell>
-            <StyledTableCell align="center">Status</StyledTableCell>
-            <StyledTableCell align="center">Amount</StyledTableCell>
+            <StyledTableCell align="center">
+              <button
+                className="flex items-center"
+                onClick={() => props.sortByItemName("str", "billing_name")}
+              >
+                <p className="whitespace-nowrap">Customer Name</p>
+                <img src={sortIcon} alt="" className="pl-1" />
+              </button>
+            </StyledTableCell>
+            <StyledTableCell className="whitespace-nowrap" align="center">
+              Customer No.
+            </StyledTableCell>
+            <StyledTableCell align="center">
+              <button
+                className="flex items-center"
+                onClick={() => props.sortByItemName("date", "date_time")}
+              >
+                <p>Order Date & Time</p>
+                <img src={sortIcon} alt="" className="pl-1" />
+              </button>
+            </StyledTableCell>
+            <StyledTableCell align="center">
+              <button
+                className="flex items-center"
+                onClick={() => props.sortByItemName("id", "order_id")}
+              >
+                <p> Order Id</p>
+                <img src={sortIcon} alt="" className="pl-1" />
+              </button>
+            </StyledTableCell>
+            <StyledTableCell align="center">
+              <button
+                className="flex items-center"
+                onClick={() => props.sortByItemName("str", "order_method")}
+              >
+                <p className="whitespace-nowrap"> Order Type</p>
+                <img src={sortIcon} alt="" className="pl-1" />
+              </button>
+            </StyledTableCell>
+            <StyledTableCell align="center">
+              <button
+                className="flex items-center"
+                onClick={() => props.sortByItemName("str", "m_status")}
+              >
+                <p>Status</p>
+                <img src={sortIcon} alt="" className="pl-1" />
+              </button>
+            </StyledTableCell>
+            <StyledTableCell align="center">
+              <button
+                className="flex items-center"
+                onClick={() => props.sortByItemName("num", "amt")}
+              >
+                <p> Amount</p>
+                <img src={sortIcon} alt="" className="pl-1" />
+              </button>
+            </StyledTableCell>
             <StyledTableCell align="center">Order Details</StyledTableCell>
           </TableRow>
         </TableHead>
@@ -128,12 +185,14 @@ export default function DashboardTables(props) {
           {props.dashboardRecord && Array.isArray(props.dashboardRecord)
             ? props.dashboardRecord.map((row) => (
                 <StyledTableRow key={row.id}>
-                  <StyledTableCell align="center">{getCustomerName(row.deliver_name, row.billing_name)}</StyledTableCell>
+                  <StyledTableCell align="center">
+                    {getCustomerName(row.deliver_name, row.billing_name)}
+                  </StyledTableCell>
                   <StyledTableCell align="center">
                     {row.delivery_phn}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                    {formatDateTime(row.date_time)}
+                   <p className="whitespace-nowrap">{formatDateTime(row.date_time)}</p> 
                   </StyledTableCell>
                   <StyledTableCell align="center">
                     {row.order_id}
@@ -142,11 +201,14 @@ export default function DashboardTables(props) {
                     {row.order_method}
                   </StyledTableCell>
                   <StyledTableCell align="center">
-                  {getStatus(row.order_method, row.m_status)}
+                    {getStatus(row.order_method, row.m_status)}
                   </StyledTableCell>
-                  <StyledTableCell align="center">{`$${priceFormate(row.amt)}`}</StyledTableCell>
+                  <StyledTableCell align="center">{`$${priceFormate(
+                    row.amt
+                  )}`}</StyledTableCell>
                   <StyledTableCell align="center">
                     <Link
+                    className="whitespace-nowrap text-[#0A64F9]"
                       to={`/order/store-reporting/order-summary/${props.merchant_id}/${row.order_id}`}
                       // onClick={() => handleSummeryPage(row.order_id)}
                       target="_blank"

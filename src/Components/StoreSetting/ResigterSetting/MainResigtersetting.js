@@ -35,7 +35,7 @@ const MainResigtersetting = () => {
           <div className="q-resigtersetting-top-detail-section">
             <div className="">
               <div className="q-resigtersetting-bottom-section">
-                <div className="q_setting_main_Section">Register Settings</div>
+                <div className="heading">Register Settings</div>
 
                 <div className="q_resigter_checkboxfiled flex-wrap mt-8">
                   <ul className="custom-checkbox-list flex space-x-5">
@@ -112,7 +112,7 @@ const MainResigtersetting = () => {
           <div className="q-resigtersetting-top-detail-section">
             <div>
               <div className="q-resigtersetting-bottom-section">
-                <div className="q_setting_main_Section">Payment Method</div>
+                <div className="heading">Payment Method</div>
 
                 <div className="q_resigter_checkboxfiled mt-8">
                   <ul className="custom-checkbox-list flex space-x-5">
@@ -295,7 +295,7 @@ const MainResigtersetting = () => {
           <div className="q-resigtersetting-top-detail-section">
             <div className="">
               <div className="q-resigtersetting-bottom-section">
-                <div className="q_setting_main_Section">Quick Add</div>
+                <div className="heading">Quick Add</div>
 
                 <div className="text-sm text-[#545454] CircularSTDBook">
                   Quick Add If bar code scanned is not found

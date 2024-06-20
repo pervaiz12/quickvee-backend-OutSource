@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { fetchReorderInventoryData } from "../../../Redux/features/Reports/ReorderInventory/ReorderInventorySlice";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 
-import { Grid } from "@mui/material";
+import { Button, Grid } from "@mui/material";
 
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -13,7 +13,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { priceFormate } from "../../../hooks/priceFormate";
-
+import sortIcon from "../../../Assests/Category/SortingW.svg";
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -47,7 +48,7 @@ const ReorderInventoryList = (props) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const dispatch = useDispatch();
-  const [allReorderInventoryData, setallReorderInventoryData] = useState("");
+  const [allReorderInventoryData, setallReorderInventoryData] = useState([]);
   const AllReorderInventoryDataState = useSelector(
     (state) => state.ReorderInventoryList
   );
@@ -71,7 +72,7 @@ const ReorderInventoryList = (props) => {
       console.log(AllReorderInventoryDataState.ReorderData);
       setallReorderInventoryData(AllReorderInventoryDataState.ReorderData);
     } else {
-      setallReorderInventoryData("");
+      setallReorderInventoryData([]);
     }
   }, [
     AllReorderInventoryDataState,
@@ -79,6 +80,31 @@ const ReorderInventoryList = (props) => {
     AllReorderInventoryDataState.ReorderData,
   ]);
 
+  const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
+
+  const sortByItemName = (type, name) => {
+    
+
+    const {sortedItems,newOrder} = SortTableItemsHelperFun(
+      allReorderInventoryData,
+      type,
+      name,
+      sortOrder
+    );
+    setallReorderInventoryData(sortedItems);
+    setSortOrder(newOrder);
+  };
+
+  const columns = [
+    { type: "str", name: "item_name", label: "Item Name" },
+    { type: "num", name: "variant", label: "Variant" },
+    { type: "str", name: "category", label: "Category" },
+    { type: "num", name: "cost_vendor", label: "Cost Of Vendor" },
+    { type: "num", name: "instock", label: "Instock" },
+    { type: "num", name: "item_price", label: "Item Price" },
+    { type: "num", name: "reorder_level", label: "Reorder Level" },
+    { type: "num", name: "reorder_qty", label: "Reorder Quantity" },
+  ];
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -86,18 +112,21 @@ const ReorderInventoryList = (props) => {
           <TableContainer>
             <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
               <TableHead>
-                <StyledTableCell>Item Name</StyledTableCell>
-                <StyledTableCell>Varient</StyledTableCell>
-                <StyledTableCell>Category</StyledTableCell>
-                <StyledTableCell>Cost Of Vendor</StyledTableCell>
-                <StyledTableCell>Instock</StyledTableCell>
-                <StyledTableCell>Item Price</StyledTableCell>
-                <StyledTableCell>Reorder Level</StyledTableCell>
-                <StyledTableCell>Reorder Quantity</StyledTableCell>
+                {columns.map((column) => (
+                  <StyledTableCell key={column.name}>
+                    <button
+                      className="flex items-center"
+                      onClick={() => sortByItemName(column.type, column.name)}
+                    >
+                      <p>{column.label}</p>
+                      <img src={sortIcon} alt="" className="pl-1" />
+                    </button>
+                  </StyledTableCell>
+                ))}
               </TableHead>
               <TableBody>
                 {allReorderInventoryData &&
-                allReorderInventoryData.length >= 1 ? (
+                allReorderInventoryData?.length > 0 ? (
                   allReorderInventoryData.map((InvData, index) => (
                     <StyledTableRow>
                       <StyledTableCell>

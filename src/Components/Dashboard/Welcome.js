@@ -135,7 +135,7 @@ const Welcome = ({ isOpen, onClose, children }) => {
   return (
     <>
       <div className="box" ref={dropdownRef}>
-        <div className="flex justify-between mb-10 mt-12 ">
+        <div className="flex justify-between mb-2 mt-5">
           <div className="q_dashboard_welcom_msg">
             <h1>Welcome {!!owner_name ? owner_name : "to Dashboard"}</h1>
           </div>

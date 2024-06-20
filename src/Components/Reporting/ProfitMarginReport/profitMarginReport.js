@@ -34,6 +34,11 @@ export default function ProfitMarginReport() {
               <div className="q_details_header ">Filter by</div>
             </Grid>
           </Grid> */}
+           <Grid container sx={{p:2.5}}>
+            <Grid item xs={12}>
+            <h1 style={{marginBottom:0}} className="heading ">Profit Margin Report</h1>
+            </Grid>
+          </Grid>
           <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
             <Grid item xs={12} sm={6} md={4}>
               <label

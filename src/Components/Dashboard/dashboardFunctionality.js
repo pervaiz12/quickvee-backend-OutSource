@@ -6,6 +6,7 @@ import {
 } from "../../Constants/Config";
 import axios from "axios";
 import { useAuthDetails } from "./../../Common/cookiesHelper";
+import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
 import PasswordShow from "../../Common/passwordShow";
 
 export default function DashboardFunctionality() {
@@ -63,9 +64,23 @@ export default function DashboardFunctionality() {
       handleCoockieExpire();
     }
   };
+
+  const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
+
+  const sortByItemName = (type, name) => {
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      dashboardRecord,
+      type,
+      name,
+      sortOrder
+    );
+    setDashboardRecord(sortedItems);
+    setSortOrder(newOrder);
+  };
+
   useEffect(() => {
     getDashboardCountRecord();
     getDashboardTableRecord();
   }, [LoginGetDashBoardRecordJson?.data?.merchant_id]);
-  return { dashboardCount, dashboardRecord };
+  return { dashboardCount, dashboardRecord, sortByItemName };
 }

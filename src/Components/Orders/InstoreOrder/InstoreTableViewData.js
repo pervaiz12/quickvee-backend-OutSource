@@ -22,7 +22,8 @@ import Pagination from "../../../AllUserComponents/Users/UnverifeDetails/Paginat
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import { getOrderListCount } from "../../../Redux/features/Orders/inStoreOrderSlice";
 import useDebounce from "../../../hooks/useDebouncs";
-
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import sortIcon from "../../../Assests/Category/SortingW.svg";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -63,7 +64,7 @@ const InstoreTableViewData = (props, searchId) => {
   const [selectedValue, setSelectedValue] = useState(1);
   const dispatch = useDispatch();
   const debouncedValue = useDebounce(props?.OffSearchIdData);
-  console.log("debouncedValue", debouncedValue)
+  console.log("debouncedValue", debouncedValue);
   const handleChange = (event) => {
     setSelectedValue(parseInt(event.target.value));
   };
@@ -81,7 +82,8 @@ const InstoreTableViewData = (props, searchId) => {
       getOrderListCount({
         merchant_id: props.merchant_id, //
         order_type: "Offline",
-        search_by: props?.OffSearchIdData !=="" ? props?.OffSearchIdData : null,
+        search_by:
+          props?.OffSearchIdData !== "" ? props?.OffSearchIdData : null,
         trans_type: props.OrderSourceData, //
         start_date: props.selectedDateRange?.start_date, //
         end_date: props.selectedDateRange?.end_date, //
@@ -92,7 +94,7 @@ const InstoreTableViewData = (props, searchId) => {
   }, [
     props.selectedDateRange?.start_date,
     props.selectedDateRange?.end_date,
-    debouncedValue
+    debouncedValue,
     // props.OrderSourceData,
 
     // AllInStoreDataState.OrderListCount,
@@ -109,9 +111,10 @@ const InstoreTableViewData = (props, searchId) => {
           start_date: props.selectedDateRange?.start_date,
           end_date: props.selectedDateRange?.end_date,
           emp_id: props?.EmployeeIDData,
-          search_by: props?.OffSearchIdData !=="" ? props?.OffSearchIdData : null,
+          search_by:
+            props?.OffSearchIdData !== "" ? props?.OffSearchIdData : null,
           perpage: rowsPerPage,
-          page:debouncedValue === "" ? currentPage : "1",
+          page: debouncedValue === "" ? currentPage : "1",
         };
         // console.log("date data", data);
         if (data) {
@@ -136,7 +139,7 @@ const InstoreTableViewData = (props, searchId) => {
   }, [AllInStoreDataState.OrderListCount]);
 
   useEffect(() => {
-    props.setIsLoading(AllInStoreDataState.loading)
+    props.setIsLoading(AllInStoreDataState.loading);
     if (!AllInStoreDataState.loading && AllInStoreDataState.inStoreOrderData) {
       setAllInStoreOrders(AllInStoreDataState.inStoreOrderData);
     }
@@ -213,6 +216,21 @@ const InstoreTableViewData = (props, searchId) => {
   }
   const tableRow = ["Customer", "Order", "Amount", ""];
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  
+  const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
+
+  const sortByItemName = (type, name) => {
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      inStoreOrder,
+      type,
+      name,
+      sortOrder
+    );
+    setAllInStoreOrders(sortedItems);
+    setSortOrder(newOrder);
+  };
+
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -242,9 +260,44 @@ const InstoreTableViewData = (props, searchId) => {
                       aria-label="customized table"
                     >
                       <TableHead>
-                        {tableRow.map((item, index) => (
+                        {/* {tableRow.map((item, index) => (
                           <StyledTableCell key={item}>{item}</StyledTableCell>
                         ))}
+                         */}
+                        <StyledTableCell>
+                          <button
+                            className="flex items-center"
+                            onClick={() =>
+                              sortByItemName("str", "billing_name")
+                            }
+                          >
+                            <p className="whitespace-nowrap">Customer</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <button
+                            className="flex items-center"
+                            onClick={() =>
+                              sortByItemName("id", "order_id")
+                            }
+                          >
+                            <p>Order</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <button
+                            className="flex items-center"
+                            onClick={() =>
+                              sortByItemName("num", "amt")
+                            }
+                          >
+                            <p>Amount</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                        </StyledTableCell>
+                        <StyledTableCell></StyledTableCell>
                       </TableHead>
                       <TableBody>
                         {inStoreOrder &&

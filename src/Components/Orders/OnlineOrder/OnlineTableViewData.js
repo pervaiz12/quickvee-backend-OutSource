@@ -12,7 +12,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
-
+import sortIcon from "../../../Assests/Category/SortingW.svg";
 import {
   fetchOnlieStoreOrderData,
   fetchOrderChangeStatusData,
@@ -37,7 +37,7 @@ import { CurrencyInputHelperFun } from "../../../Constants/utils";
 import useDebounce from "../../../hooks/useDebouncs";
 import AskConform from "../../../reuseableComponents/AskConform";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
-
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -70,13 +70,13 @@ const OnlineTableViewData = (props) => {
   const navigate = useNavigate();
   // console.log(props)
   const [allOnlineStoreOrder, setAllOnlineStoreOrders] = useState([]);
-  console.log("allOnlineStoreOrder",allOnlineStoreOrder)
+  console.log("allOnlineStoreOrder", allOnlineStoreOrder);
   const AllInStoreDataState = useSelector((state) => state.onlineStoreOrder);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const debouncedValue = useDebounce(props?.OnlSearchIdData);
-  console.log("debouncedValue",debouncedValue)  
+  console.log("debouncedValue", debouncedValue);
   const dispatch = useDispatch();
   // const debouncedValue = useDebounce(searchId);
   useEffect(() => {
@@ -89,7 +89,8 @@ const OnlineTableViewData = (props) => {
           start_date: props.selectedDateRange?.start_date,
           end_date: props.selectedDateRange?.end_date,
           customer_id: "0",
-          search_by: props?.OnlSearchIdData !=="" ? props?.OnlSearchIdData : null,
+          search_by:
+            props?.OnlSearchIdData !== "" ? props?.OnlSearchIdData : null,
           perpage: rowsPerPage,
           page: debouncedValue === "" ? currentPage : "1",
           // search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
@@ -97,7 +98,6 @@ const OnlineTableViewData = (props) => {
         };
 
         if (data) {
-
           dispatch(fetchOnlieStoreOrderData(data));
         }
       }
@@ -107,9 +107,9 @@ const OnlineTableViewData = (props) => {
     dispatch,
     //  props,
     props.selectedDateRange, //
-    debouncedValue, // 
+    debouncedValue, //
     currentPage, //
-    rowsPerPage, // 
+    rowsPerPage, //
     // AllInStoreDataState.OrderListCount,
   ]);
 
@@ -119,7 +119,8 @@ const OnlineTableViewData = (props) => {
       getOrderListCount({
         merchant_id: props.merchant_id, //
         order_type: props.OrderTypeData,
-        search_by:props?.OnlSearchIdData !=="" ? props?.OnlSearchIdData : null,
+        search_by:
+          props?.OnlSearchIdData !== "" ? props?.OnlSearchIdData : null,
         trans_type: props.OrderSourceData, //
         start_date: props.selectedDateRange?.start_date, //
         end_date: props.selectedDateRange?.end_date, //
@@ -413,7 +414,6 @@ const OnlineTableViewData = (props) => {
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
-
   const tableRow = ["Customer", "Order", "Amount", "Order Status", ""];
   const pickupStatusList = [
     {
@@ -466,13 +466,11 @@ const OnlineTableViewData = (props) => {
     // // Proceed if the user confirms
     // if (success === true) {
     //   // Constructing form data to send to the server
-     
+
     // }
   };
 
-
   const confirmChangeStatus = async () => {
-
     const FormData = {
       merchant_id: props.merchant_id,
       order_id: deleteCategoryId.orderId,
@@ -480,8 +478,7 @@ const OnlineTableViewData = (props) => {
       ...props.userTypeData,
     };
 
-    console.log("confirmDeleteCategory", FormData)
-  
+    console.log("confirmDeleteCategory", FormData);
 
     // Dispatching an action to change the order status
     if (FormData) {
@@ -508,7 +505,7 @@ const OnlineTableViewData = (props) => {
               const updatedOrders = [...prevState];
               updatedOrders[index] = updatedOrder;
               ToastifyAlert(res.payload, "success");
-              
+
               return updatedOrders;
             } else {
               ToastifyAlert(res.payload, "error");
@@ -526,8 +523,8 @@ const OnlineTableViewData = (props) => {
         // Handle any network or other errors that may occur during the API call
       }
     }
-    
-    setDeleteCategoryId(null)
+
+    setDeleteCategoryId(null);
     setDeleteModalOpen(false);
   };
 
@@ -606,6 +603,20 @@ const OnlineTableViewData = (props) => {
     }
   };
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
+
+  const sortByItemName = (type, name) => {
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      allOnlineStoreOrder,
+      type,
+      name,
+      sortOrder
+    );
+    setAllOnlineStoreOrders(sortedItems);
+    setSortOrder(newOrder);
+  };
+
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -637,9 +648,56 @@ const OnlineTableViewData = (props) => {
                       aria-label="customized table"
                     >
                       <TableHead>
-                        {tableRow.map((item, index) => (
+                        {/* {tableRow.map((item, index) => (
                           <StyledTableCell key={item}>{item}</StyledTableCell>
-                        ))}
+                        ))} */}
+                      </TableHead>
+                      <TableHead>
+                        <StyledTableCell>
+                          <button
+                            className="flex items-center"
+                            onClick={() =>
+                              sortByItemName("str", "deliver_name")
+                            }
+                          >
+                            <p className="whitespace-nowrap">Customer</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("id", "order_id")}
+                          >
+                            <p>Order</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <button
+                            className="flex items-center"
+                            onClick={() =>
+                              sortByItemName("num", "amt")
+                            }
+                          >
+                            <p>Amount</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          {/* <button
+                            className="flex items-center"
+                            onClick={() =>
+                              sortByItemName("srt", "m_status")
+                            }
+                          > */}
+                            <p>Order Status</p>
+                            {/* <img src={sortIcon} alt="" className="pl-1" /> */}
+                          {/* </button> */}
+                        </StyledTableCell>
+                        <StyledTableCell>
+
+                        </StyledTableCell>
                       </TableHead>
                       <TableBody>
                         {allOnlineStoreOrder &&
@@ -785,12 +843,14 @@ const OnlineTableViewData = (props) => {
           </div>
         </div>
       )}
-        <AskConform
-            headerText="change status"
-            open={deleteModalOpen}
-            onClose={() => {setDeleteModalOpen(false)}}
-            onConfirm={confirmChangeStatus}
-          />
+      <AskConform
+        headerText="change status"
+        open={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+        }}
+        onConfirm={confirmChangeStatus}
+      />
     </>
   );
 };
