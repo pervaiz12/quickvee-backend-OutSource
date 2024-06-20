@@ -171,6 +171,11 @@ const AddCategory = ({ seVisible }) => {
 
   const handleDeleteImage = (e) => {
     e.stopPropagation();
+    const fileInput = document.getElementById("filesBanner");
+    if (fileInput) {
+        fileInput.value = "";
+    }
+
     setCategory((prevValue) => ({
       ...prevValue,
       image: {
@@ -349,7 +354,7 @@ const AddCategory = ({ seVisible }) => {
                 <div className="q-add-categories-single-input">
                   <input
                     type="file"
-                    id="image"
+                    id="filesBanner"
                     name="image"
                     accept="image/*"
                     ref={inputRef}

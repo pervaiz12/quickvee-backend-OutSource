@@ -336,6 +336,10 @@ const EditCategory = ({ productId,seVisible }) => {
   };
 
   const handleDeleteImage = (e) => {
+    const fileInput = document.getElementById("filesBanner");
+    if (fileInput) {
+        fileInput.value = "";
+    }
     e.stopPropagation();
     setCategory((prevValue) => ({
       ...prevValue,
@@ -490,7 +494,7 @@ const EditCategory = ({ productId,seVisible }) => {
                 <div className="q-add-categories-single-input">
                   <input
                     type="file"
-                    id="image"
+                    id="filesBanner"
                     name="image"
                     accept="image/*"
                     ref={inputRef}

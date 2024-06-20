@@ -229,6 +229,10 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
 
   const handleDeleteImage = (e) => {
     e.stopPropagation();
+    const fileInput = document.getElementById("filesBanner");
+    if (fileInput) {
+        fileInput.value = "";
+    }
     setDefaults((prevValue) => ({
       ...prevValue,
       image: {
@@ -438,7 +442,7 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
                   <div className="q-add-categories-single-input">
                     <input
                       type="file"
-                      id="image"
+                      id="filesBanner"
                       name="image"
                       accept="image/*"
                       ref={inputRef}
