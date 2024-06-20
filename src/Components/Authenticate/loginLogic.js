@@ -108,25 +108,25 @@ export default function LoginLogic(setLoading) {
     });
   };
   // ==============
-  const handleEnterKeyPress = (event) => {
-    if (event.key === 'Enter') {
+  const keyEnter = (event) => {
+    if (event.key === "Enter") {
       event.preventDefault();
-      setFormData((prevFormData) => ({
-       
-        ...prevFormData,
+      setFormData((prev) => ({
+        ...prev,
         [event.target.name]: event.target.value,
       }));
+
       handleSubmitForm(event);
     }
   };
-  
+
   useEffect(() => {
-    document.addEventListener('keydown', handleEnterKeyPress);
+    document.addEventListener("keydown", keyEnter);
     return () => {
-      document.removeEventListener('keydown', handleEnterKeyPress);
+      document.removeEventListener("keydown", keyEnter);
     };
-  }, []);
-  
+  }, [formData]);
+
   // ==============
 
   const handleSubmitForm = async (e) => {
@@ -171,5 +171,6 @@ export default function LoginLogic(setLoading) {
     handleBlur,
     setErrorMessage,
     errorMessage,
+    keyEnter,
   };
 }

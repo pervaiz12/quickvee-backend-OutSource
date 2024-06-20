@@ -20,7 +20,7 @@ import "../../Styles/loginAuth.css";
 // import Quickvee from "../../../Assets/LoginScreen/quickveeLogo.svg";handleSubmitFormPlace
 import Quickvee from "../../Assests/LoginScreen/quickveeLogo.svg";
 import CryptoJS from "crypto-js";
-import { useNavigate, Navigate,useLocation } from "react-router-dom";
+import { useNavigate, Navigate, useLocation } from "react-router-dom";
 // import { useLocation } from 'react-router-dom';
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import IconButton from "@mui/material/IconButton";
@@ -33,11 +33,10 @@ export default function Login() {
   const dispatch = useDispatch();
   const location = useLocation();
   const currentUrl = location.pathname;
-  
 
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-    const validLoginTypes = ["superadmin", "manager", "admin", "merchant"];
+  const validLoginTypes = ["superadmin", "manager", "admin", "merchant"];
   const inputRefs = useRef({});
   const merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
@@ -55,12 +54,13 @@ export default function Login() {
     setErrorMessage,
     errorMessage,
     handleWrongPasswordError,
+    keyEnter,
     // handleKeyDown
   } = LoginLogic(setLoading);
-  
+
   // const handleEnterKeyPress = (event) => {
   //   if (event.key === 'Enter') {
-    
+
   //     handleSubmitForm(event)
   //   }
   // };
@@ -70,31 +70,33 @@ export default function Login() {
   //     document.removeEventListener('keydown', handleEnterKeyPress);
   //   };
   // }, []);
- 
-  
+
   useEffect(() => {
     if (currentUrl === "/login") {
-      if (LoginGetDashBoardRecordJson?.login_type === "superadmin" && LoginGetDashBoardRecordJson?.data?.merchant_id === "") {
-        console.log('1');
-        navigate('/users/unapprove');
+      if (
+        LoginGetDashBoardRecordJson?.login_type === "superadmin" &&
+        LoginGetDashBoardRecordJson?.data?.merchant_id === ""
+      ) {
+        console.log("1");
+        navigate("/users/unapprove");
       } else if (
-        (LoginGetDashBoardRecordJson?.data?.login_type=="superadmin" ||
-           LoginGetDashBoardRecordJson?.data?.login_type=="merchant" ||
-           LoginGetDashBoardRecordJson?.data?.login_type=="admin" ||
-           LoginGetDashBoardRecordJson?.data?.login_type=="manager") &&
-           LoginGetDashBoardRecordJson?.data?.merchant_id === undefined &&
+        (LoginGetDashBoardRecordJson?.data?.login_type == "superadmin" ||
+          LoginGetDashBoardRecordJson?.data?.login_type == "merchant" ||
+          LoginGetDashBoardRecordJson?.data?.login_type == "admin" ||
+          LoginGetDashBoardRecordJson?.data?.login_type == "manager") &&
+        LoginGetDashBoardRecordJson?.data?.merchant_id === undefined &&
         LoginGetDashBoardRecordJson?.data?.stores.length >= 0
       ) {
-        navigate('/store');
-      }else if( (LoginGetDashBoardRecordJson?.login_type=="superadmin" ||
-        LoginGetDashBoardRecordJson?.login_type=="merchant" ||
-        LoginGetDashBoardRecordJson?.login_type=="admin" ||
-        LoginGetDashBoardRecordJson?.login_type=="manager") &&
-        LoginGetDashBoardRecordJson?.data?.merchant_id !=="")
-        {
-           navigate('/')
-        }
-      else{
+        navigate("/store");
+      } else if (
+        (LoginGetDashBoardRecordJson?.login_type == "superadmin" ||
+          LoginGetDashBoardRecordJson?.login_type == "merchant" ||
+          LoginGetDashBoardRecordJson?.login_type == "admin" ||
+          LoginGetDashBoardRecordJson?.login_type == "manager") &&
+        LoginGetDashBoardRecordJson?.data?.merchant_id !== ""
+      ) {
+        navigate("/");
+      } else {
         // console.log('333333333')
       }
     }
@@ -106,9 +108,8 @@ export default function Login() {
 
     setErrorMessage("");
   };
- 
 
-console.log(LoginGetDashBoardRecordJson)
+  console.log(LoginGetDashBoardRecordJson);
   // ================================================
 
   const [showPassword, setShowPassword] = useState(false);
@@ -178,7 +179,8 @@ console.log(LoginGetDashBoardRecordJson)
                       value={formData.username}
                       onChange={handleChangeLogin}
                       handleBlur={handleBlur}
-                      // onKeyDown={handleKeyDown} 
+                      onKeyDown={keyEnter}
+                      // onKeyDown={handleKeyDown}
                     />
                   </FormControl>
                   <span className="input-error">{errors.usernameError}</span>
@@ -204,7 +206,8 @@ console.log(LoginGetDashBoardRecordJson)
                         ref: (input) => (inputRefs.current["password"] = input), // Store the ref in a ref object
                         selectionstart: formData.password,
                       }}
-                      // onKeyDown={handleKeyDown} 
+                      onKeyDown={keyEnter}
+                      // onKeyDown={handleKeyDown}
                     />
                   </FormControl>
                   <span
