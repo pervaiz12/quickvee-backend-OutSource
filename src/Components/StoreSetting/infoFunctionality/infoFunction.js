@@ -10,6 +10,7 @@ import {
 } from "../../../Constants/Config";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
+import PasswordShow from "../../../Common/passwordShow";
 export default function InfoFunction() {
   const {
     LoginGetDashBoardRecordJson,
@@ -17,6 +18,7 @@ export default function InfoFunction() {
     userTypeData,
     GetSessionLogin,
   } = useAuthDetails();
+  const { getUnAutherisedTokenMessage, handleCoockieExpire } = PasswordShow();
   const [successsMessage, setSuccessMessage] = useState("");
   const [hideSucess, setHideSuccess] = useState(false);
   const [image, setImage] = useState("");
@@ -38,7 +40,7 @@ export default function InfoFunction() {
     phone: "",
     facebookUrl: "",
     instagramUrl: "",
-    promotionalUrl:"",
+    promotionalUrl: "",
     user_id: "",
     is_banner_change: "0",
     is_logo_change: "0",
@@ -274,7 +276,7 @@ export default function InfoFunction() {
         response.data.message.insta_url !== null
           ? response.data.message.insta_url
           : "";
-          const promotional_url =
+      const promotional_url =
         response.data.message.promo_url !== null
           ? response.data.message.promo_url
           : "";
@@ -304,7 +306,7 @@ export default function InfoFunction() {
         phone: phone,
         facebookUrl: fb_url,
         instagramUrl: insta_url,
-        promotionalUrl:promotional_url,
+        promotionalUrl: promotional_url,
         user_id: user_id,
         qrCode: qr_img,
       }));
@@ -428,51 +430,60 @@ export default function InfoFunction() {
     e.preventDefault();
     let validateData = validate();
     let currentValidate = CurrentValidate(errors);
-    if (validateData == true) {
-      if (currentValidate == true) {
-        const packect = {
-          login_type: userTypeData?.login_type, //
-          merchant_id: infoRecord.merchant_id, //
-          user_id: infoRecord.user_id, //
-          menu_link: infoRecord.menuLink, //
-          domain_url: infoRecord.domain, //
-          banner_img: infoRecord.banners, //
-          is_banner_change: infoRecord.is_banner_change, //
-          logo_img: infoRecord.image, //
-          is_logo_change: infoRecord.is_logo_change, //
-          qr_code: infoRecord.qrCode, //
-          is_qr_code_change: infoRecord.is_qr_code_change, //
-          address_line_1: infoRecord.address_1, //
-          address_line_2: infoRecord.address_2, //
-          phone: infoRecord.phone, //
-          zip: infoRecord.zip, //
-          city: infoRecord.city, //
-          state: infoRecord.state, //
-          fb_url: infoRecord.facebookUrl,
-          insta_url: infoRecord.instagramUrl,
-          promo_url: infoRecord.promotionalUrl,
-          // imageBanner: imageBanner,
-          // original_name: image,
-          // approve: approve,
+    try {
+      if (validateData == true) {
+        if (currentValidate == true) {
+          const packect = {
+            login_type: userTypeData?.login_type, //
+            merchant_id: infoRecord.merchant_id, //
+            user_id: infoRecord.user_id, //
+            menu_link: infoRecord.menuLink, //
+            domain_url: infoRecord.domain, //
+            banner_img: infoRecord.banners, //
+            is_banner_change: infoRecord.is_banner_change, //
+            logo_img: infoRecord.image, //
+            is_logo_change: infoRecord.is_logo_change, //
+            qr_code: infoRecord.qrCode, //
+            is_qr_code_change: infoRecord.is_qr_code_change, //
+            address_line_1: infoRecord.address_1, //
+            address_line_2: infoRecord.address_2, //
+            phone: infoRecord.phone, //
+            zip: infoRecord.zip, //
+            city: infoRecord.city, //
+            state: infoRecord.state, //
+            fb_url: infoRecord.facebookUrl,
+            insta_url: infoRecord.instagramUrl,
+            promo_url: infoRecord.promotionalUrl,
+            // imageBanner: imageBanner,
+            // original_name: image,
+            // approve: approve,
 
-          token_id: userTypeData?.token_id,
-        };
-        let response = await axios.post(BASE_URL + UPDATE_STORE_INFO, packect, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${userTypeData?.token}`,
-          },
-        });
-        console.log(response.data);
-        if (response.data.status === true) {
-          ToastifyAlert(response.data.msg, "success");
-          setSuccessMessage(response.data.message);
-          setHideSuccess(true);
-          handleSuccessMessage();
-        } else {
-          ToastifyAlert(response.data.msg, "error");
+            token_id: userTypeData?.token_id,
+          };
+          let response = await axios.post(
+            BASE_URL + UPDATE_STORE_INFO,
+            packect,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${userTypeData?.token}`,
+              },
+            }
+          );
+          console.log(response.data);
+          if (response.data.status === true) {
+            ToastifyAlert(response.data.msg, "success");
+            setSuccessMessage(response.data.message);
+            setHideSuccess(true);
+            handleSuccessMessage();
+          } else {
+            ToastifyAlert(response.data.msg, "error");
+          }
         }
       }
+    } catch (e) {
+      getUnAutherisedTokenMessage();
+      handleCoockieExpire();
     }
   };
   const currentPassordValidate = (passwordError) => {
