@@ -25,15 +25,26 @@ export default function Discount_Per_Sales() {
       <Grid container>
         <Grid item xs={12}>
           <Grid container sx={{ padding: 2.5 }} className="box_shadow_div">
-            <Grid item xs={6}>
-              <label htmlFor="orderSourceFilter">Select Employee</label>
-              <SelectDropDown
-                heading="All"
-                listItem={allEmployee}
-                title={"f_name"}
-                onClickHandler={handleOptionClick}
-                selectedOption={selectedoption}
-              />
+            <Grid item xs={12}>
+              <Grid container sx={{}}>
+                <Grid item xs={12}>
+                  <h1 style={{  }} className="heading ">
+                    Discount Per Sales Person Report
+                  </h1>
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item xs={6}>
+                  <label htmlFor="orderSourceFilter">Select Employee</label>
+                  <SelectDropDown
+                    heading="All"
+                    listItem={allEmployee}
+                    title={"f_name"}
+                    onClickHandler={handleOptionClick}
+                    selectedOption={selectedoption}
+                  />
+                </Grid>
+              </Grid>
             </Grid>
           </Grid>
           <Grid container>

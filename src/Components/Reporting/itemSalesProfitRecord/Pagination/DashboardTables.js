@@ -201,9 +201,11 @@ export default function DashboardTables(props) {
                 </StyledTableRow>
               ))
             ) : (
-              <StyledTableCell colSpan={7} align="center">
-                {props.getMessageRecord || "No data available"}
-              </StyledTableCell>
+              <Grid sx={{ padding: 2.5, margin: 0 }} className="">
+                <Grid item xs={12}>
+                  {props.getMessageRecord || "No data available"}
+                </Grid>
+              </Grid>
             )}
             {Array.isArray(props.getItemRecord) &&
             props.getItemRecord.length > 0 ? (

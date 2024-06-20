@@ -159,11 +159,18 @@ const FilterProduct = ({
       document.removeEventListener("mousedown", handleOutsideClick);
     };
   }, []);
-  
+
   return (
     <>
       <div className="box">
         <div className="box_shadow_input">
+          <Grid container sx={{px: 3.5,pt:2.5}}>
+            <Grid item xs={12}>
+              <h1 style={{marginBottom: 0}} className="heading ">
+                Products
+              </h1>
+            </Grid>
+          </Grid>
           <div className="q_main_data_range">
             <Grid container>
               <Grid item xs={12} className="px-5">
