@@ -215,7 +215,6 @@ const InstoreTableViewData = (props, searchId) => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <>
-    <p>{AllInStoreDataState.OrderListCount}</p>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
           <Grid container sx={{ padding: 2.5 }}>
