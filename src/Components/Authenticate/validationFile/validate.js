@@ -11,7 +11,7 @@ export default function Validate({ formData, setErrors, errors }) {
     let error = "";
 
     if (value.trim() === "") {
-      error = `Please fill the ${name} field`;
+      error = `Username is required`;
     }
     // else if(!emailValidate.test(value))
     // {
@@ -22,7 +22,7 @@ export default function Validate({ formData, setErrors, errors }) {
   function validatePassword(value, name) {
     let error = "";
     if (value.trim() === "") {
-      error = `Please fill the ${name} field`;
+      error = `Password is required`;
     }
     // else if(!Passwordregex.test(value))
     // {
@@ -33,7 +33,7 @@ export default function Validate({ formData, setErrors, errors }) {
   function validateOTP(value, name) {
     let error = "";
     if (value.trim() === "") {
-      error = `Please fill the ${name} field`;
+      error = `OTP is required`;
     }
     return error;
   }
@@ -41,11 +41,11 @@ export default function Validate({ formData, setErrors, errors }) {
     let error = false;
     let errorMessage = { errors };
     if (formData.username == "") {
-      errorMessage.usernameError = "Please fill the user field";
+      errorMessage.usernameError = "Username is required";
       error = true;
     }
     if (formData.password == "") {
-      errorMessage.passwordError = "Please fill the password field";
+      errorMessage.passwordError = "Password is required";
       error = true;
     }
     // (authEmailValidate?.checkemailValidate || authEmailValidate?.localEmailValidate=="true" ) && (!authEmailValidate?.checkemailValidate || authEmailValidate?.localEmailValidate=="true")

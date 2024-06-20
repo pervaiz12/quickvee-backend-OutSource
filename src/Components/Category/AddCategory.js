@@ -171,6 +171,11 @@ const AddCategory = ({ seVisible }) => {
 
   const handleDeleteImage = (e) => {
     e.stopPropagation();
+    const fileInput = document.getElementById("filesBanner");
+    if (fileInput) {
+        fileInput.value = "";
+    }
+
     setCategory((prevValue) => ({
       ...prevValue,
       image: {
@@ -214,11 +219,19 @@ const AddCategory = ({ seVisible }) => {
 
   // for Default Category list End
 
+  const handleKeyDown = (event) => {
+    if (event.key === 'Enter') {
+      console.log('Enter key pressed');
+      event.preventDefault(); // Prevent default Enter key behavior if necessary
+      // Additional logic to handle the Enter key press
+    }
+  };
+
   return (
     <>
       <div className="box">
         <div className="q-add-categories-section mb-5">
-          <form onSubmit={handleSubmit} enctype="multipart/form-data">
+          {/* <form enctype="multipart/form-data"> */}
             <div className="q-add-categories-section-header">
               <span onClick={() => seVisible("CategoryDetail")}>
                 <img
@@ -242,13 +255,21 @@ const AddCategory = ({ seVisible }) => {
                 size="small"
                 options={defaultList}
                 freeSolo
-                getOptionLabel={(option) => option.name}
+                // getOptionLabel={(option) => option.name}
+                getOptionLabel={(option) => {
+                  console.log(option);  // Log the option to debug
+                  // Check if the option is an object with a name property
+                  if (typeof option === 'object' && option.name) {
+                    return option.name;
+                  }
+                  // Handle other types of options, e.g., strings
+                  return typeof option === 'string' ? option : '';
+                }}
                 value={value}
-                onChange={(newValue) => {
-                  console.log(newValue);
-                  setCategory((priviousValue) => ({
-                    ...priviousValue,
-                    title: newValue.target.textContent,
+                onChange={(event, newValue) => {
+                  setCategory((previousValue) => ({
+                    ...previousValue,
+                    title: newValue?.name || newValue || '',
                   }));
                 }}
                 renderInput={(params) => (
@@ -259,6 +280,7 @@ const AddCategory = ({ seVisible }) => {
                     name="title"
                     value={category.title}
                     onChange={inputChange}
+                    onKeyDown={handleKeyDown}
                     style={{}}
                   />
                 )}
@@ -332,7 +354,7 @@ const AddCategory = ({ seVisible }) => {
                 <div className="q-add-categories-single-input">
                   <input
                     type="file"
-                    id="image"
+                    id="filesBanner"
                     name="image"
                     accept="image/*"
                     ref={inputRef}
@@ -378,7 +400,7 @@ const AddCategory = ({ seVisible }) => {
             </div>
 
             <div className="q-add-categories-section-middle-footer">
-              <button className="quic-btn quic-btn-save">Add</button>
+              <button className="quic-btn quic-btn-save" onClick={handleSubmit}>Add</button>
               <button
                 onClick={() => seVisible("CategoryDetail")}
                 className="quic-btn quic-btn-cancle"
@@ -386,7 +408,7 @@ const AddCategory = ({ seVisible }) => {
                 Cancel
               </button>
             </div>
-          </form>
+          {/* </form> */}
         </div>
       </div>
       <AlertModal

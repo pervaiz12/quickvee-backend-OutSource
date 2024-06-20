@@ -36,8 +36,13 @@ import { useAuthDetails } from "../../Common/cookiesHelper";
 import { Button, InputBase } from "@mui/material";
 import logoutLogo from "../../Assests/Dashboard/logout.svg";
 import userLogo from "../../Assests/Dashboard/userLogoDropDown.svg"
+import { BASE_URL, SYNC_DATA } from "../../Constants/Config";
+import axios from "axios";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import PasswordShow from "../../Common/passwordShow";
+import CircularProgress from "@mui/material/CircularProgress";
 export default function Header() {
-  const { LoginGetDashBoardRecordJson, LoginAllStore, GetSessionLogin } =
+  const { LoginGetDashBoardRecordJson, LoginAllStore, GetSessionLogin,userTypeData } =
     useAuthDetails();
   const dispatch = useDispatch();
   const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
@@ -217,6 +222,42 @@ export default function Header() {
     );
   }
 
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const [loader, setLoader] = useState(false);
+
+  let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
+  const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
+  const SyncData = async (e) => {
+    const Syncdata = {
+      merchant_id: merchant_id,
+      token_id: userTypeData?.token_id,
+      login_type: userTypeData?.login_type,
+    };
+    setLoader(true);
+
+    try {
+      const res = await axios.post(BASE_URL + SYNC_DATA, Syncdata, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userTypeData?.token}`,
+        },
+      });
+
+      const data = await res.data.status;
+      const update_message = await res.data.msg;
+      if (data === true) {
+        ToastifyAlert(update_message, "success");
+      }else{
+        ToastifyAlert(update_message, "warn");
+      }
+    } catch (error) {
+      console.error("API Error:", error);
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
+    }
+    setLoader(false);
+  }
+
   return (
     <>
       <div
@@ -344,8 +385,9 @@ export default function Header() {
                   <img src={OnlineData} alt="icon" className="ml-2" />
                   <p className="ml-2 admin_medium">Online Store</p>
                 </div></Link>
-                <div className="cursor-pointer mx-5 flex items-center">
-                  <img src={SynkData} alt="icon" className="ml-2" />
+                <div className="cursor-pointer mx-5 flex items-center syncConatiner"  onClick={SyncData}>
+                  <CircularProgress color={"inherit"}className={` rotaicions ${loader ? 'opacity-1' : 'opacity-0'}`} width={18} size={18} />
+                  <img src={SynkData} alt="icon" className={` syncIcon ${loader ? 'opacity-0' : 'opacity-1'}`}/>
                   <p className="ml-2 admin_medium">Sync Data</p>
                 </div>
               </>

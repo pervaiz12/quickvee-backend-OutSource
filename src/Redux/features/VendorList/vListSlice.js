@@ -26,7 +26,7 @@ export const fetchVendorsListData = createAsyncThunk(
         } }
       );
 
-      if (response.data.status === "true") {
+      if (response.data.status === true) {
         const listdata = [
           response.data.vendor_name_list,
           response.data.vendor_payout_list,

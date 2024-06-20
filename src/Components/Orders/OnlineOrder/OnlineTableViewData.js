@@ -35,6 +35,9 @@ import { useNavigate } from "react-router-dom";
 import EditCashModel from "./EditCashModel";
 import { CurrencyInputHelperFun } from "../../../Constants/utils";
 import useDebounce from "../../../hooks/useDebouncs";
+import AskConform from "../../../reuseableComponents/AskConform";
+import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
+
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -94,7 +97,7 @@ const OnlineTableViewData = (props) => {
         };
 
         if (data) {
-          console.log("sdadasdadada", data);
+
           dispatch(fetchOnlieStoreOrderData(data));
         }
       }
@@ -128,8 +131,8 @@ const OnlineTableViewData = (props) => {
     props.selectedDateRange?.end_date,
     debouncedValue,
     // props.OrderTypeData,
-    props.OrderSourceData,
-    AllInStoreDataState.OrderListCount,
+    // props.OrderSourceData,
+    // AllInStoreDataState.OrderListCount,
     // AllInStoreDataState.onlineStoreOrderData,
   ]);
 
@@ -255,157 +258,161 @@ const OnlineTableViewData = (props) => {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
   // console.log(allOnlineStoreOrder);
-  useEffect(() => {
-    const modifiedData = Object.entries(allOnlineStoreOrder).map(
-      ([key, data], i) => {
-        let status = "";
-        if (props?.OrderTypeData == "Failed") {
-          if (data.is_tried == "0") {
-            status = "Incomplete order";
-          } else {
-            status = "Failed payment";
-          }
-        } else {
-          if (data.payment_id === "Cash") {
-            if (data.m_status === "4") {
-              status = "Cash-Paid";
-            } else {
-              status = "Cash-Pending";
-            }
-          } else {
-            status = "Online-Paid";
-          }
-        }
+  // useEffect(() => {
+  //   const modifiedData = Object.entries(allOnlineStoreOrder).map(
+  //     ([key, data], i) => {
+  //       let status = "";
+  //       if (props?.OrderTypeData == "Failed") {
+  //         if (data.is_tried == "0") {
+  //           status = "Incomplete order";
+  //         } else {
+  //           status = "Failed payment";
+  //         }
+  //       } else {
+  //         if (data.payment_id === "Cash") {
+  //           if (data.m_status === "4") {
+  //             status = "Cash-Paid";
+  //           } else {
+  //             status = "Cash-Pending";
+  //           }
+  //         } else {
+  //           status = "Online-Paid";
+  //         }
+  //       }
 
-        let PayStatus = "";
-        let OrderStatus = "";
+  //       let PayStatus = "";
+  //       let OrderStatus = "";
 
-        if (data.m_status == 5) {
-          OrderStatus = "Cancelled";
-        } else if (data.payment_id == "Cash") {
-          OrderStatus = "Cash";
-        } else {
-          OrderStatus = "Online-Paid";
-        }
+  //       if (data.m_status == 5) {
+  //         OrderStatus = "Cancelled";
+  //       } else if (data.payment_id == "Cash") {
+  //         OrderStatus = "Cash";
+  //       } else {
+  //         OrderStatus = "Online-Paid";
+  //       }
 
-        if (props?.OrderTypeData == "Closed") {
-          if (
-            OrderStatus == "Cash" &&
-            parseFloat(data?.cash_collected)?.toFixed(2) !=
-              parseFloat(data?.amt)?.toFixed(2)
-          ) {
-            PayStatus = `<a href="#">
-            <img class="edit_center" order-id="${data.order_id}" order-amt="${data.amt}" src="/static/media/editIcon.4dccb72a9324ddcac62b9a41d0a042db.svg" alt="Edit">
-            </a>`;
-          } else if (OrderStatus == "Cancelled") {
-            PayStatus = "Cancelled";
-          } else {
-            PayStatus = "Paid";
-          }
-        } else if (props?.OrderTypeData == "New") {
-          let cancelOption = "";
-          if (data.payment_id === "Cash") {
-            cancelOption = `<option value="5" ${
-              data.m_status == "5" ? `selected` : ""
-            }>Cancel</option>`;
-          }
-          if (data.order_method == "pickup") {
-            PayStatus = `<select class="custom-selecttable w-52 cursor-pointer" data-order-id="${
-              data.order_id
-            }">
-              <option value="1" ${
-                data.m_status == "1" ? `selected` : ""
-              }>Accepted</option>
-              <option value="2" ${
-                data.m_status == "2" ? `selected` : ""
-              }>Packing</option>
-              <option value="3" ${
-                data.m_status == "3" ? `selected` : ""
-              }>Ready</option>
-              <option value="4" ${
-                data.m_status == "4" ? `selected` : ""
-              }>Completed</option>
-              ${cancelOption}
-            </select>`;
-          } else {
-            PayStatus = `<select class="custom-selecttable w-52 cursor-pointer" data-order-id="${
-              data.order_id
-            }">
-              <option value="1" ${
-                data.m_status == "1" ? `selected` : ""
-              }>Accepted</option>
-              <option value="2" ${
-                data.m_status == "2" ? `selected` : ""
-              }>Packing</option>
-              <option value="6" ${
-                data.m_status == "6" ? `selected` : ""
-              }>Ready</option>
-              <option value="3" ${
-                data.m_status == "3" ? `selected` : ""
-              }>Out for Delivery</option>
-              <option value="4" ${
-                data.m_status == "4" ? `selected` : ""
-              }>Delivered</option>
-              ${cancelOption}
-            </select>`;
-          }
-        }
+  //       if (props?.OrderTypeData == "Closed") {
+  //         if (
+  //           OrderStatus == "Cash" &&
+  //           parseFloat(data?.cash_collected)?.toFixed(2) !=
+  //             parseFloat(data?.amt)?.toFixed(2)
+  //         ) {
+  //           PayStatus = `<a href="#">
+  //           <img class="edit_center" order-id="${data.order_id}" order-amt="${data.amt}" src="/static/media/editIcon.4dccb72a9324ddcac62b9a41d0a042db.svg" alt="Edit">
+  //           </a>`;
+  //         } else if (OrderStatus == "Cancelled") {
+  //           PayStatus = "Cancelled";
+  //         } else {
+  //           PayStatus = "Paid";
+  //         }
+  //       } else if (props?.OrderTypeData == "New") {
+  //         let cancelOption = "";
+  //         if (data.payment_id === "Cash") {
+  //           cancelOption = `<option value="5" ${
+  //             data.m_status == "5" ? `selected` : ""
+  //           }>Cancel</option>`;
+  //         }
+  //         if (data.order_method == "pickup") {
+  //           PayStatus = `<select class="custom-selecttable w-52 cursor-pointer" data-order-id="${
+  //             data.order_id
+  //           }">
+  //             <option value="1" ${
+  //               data.m_status == "1" ? `selected` : ""
+  //             }>Accepted</option>
+  //             <option value="2" ${
+  //               data.m_status == "2" ? `selected` : ""
+  //             }>Packing</option>
+  //             <option value="3" ${
+  //               data.m_status == "3" ? `selected` : ""
+  //             }>Ready</option>
+  //             <option value="4" ${
+  //               data.m_status == "4" ? `selected` : ""
+  //             }>Completed</option>
+  //             ${cancelOption}
+  //           </select>`;
+  //         } else {
+  //           PayStatus = `<select class="custom-selecttable w-52 cursor-pointer" data-order-id="${
+  //             data.order_id
+  //           }">
+  //             <option value="1" ${
+  //               data.m_status == "1" ? `selected` : ""
+  //             }>Accepted</option>
+  //             <option value="2" ${
+  //               data.m_status == "2" ? `selected` : ""
+  //             }>Packing</option>
+  //             <option value="6" ${
+  //               data.m_status == "6" ? `selected` : ""
+  //             }>Ready</option>
+  //             <option value="3" ${
+  //               data.m_status == "3" ? `selected` : ""
+  //             }>Out for Delivery</option>
+  //             <option value="4" ${
+  //               data.m_status == "4" ? `selected` : ""
+  //             }>Delivered</option>
+  //             ${cancelOption}
+  //           </select>`;
+  //         }
+  //       }
 
-        return {
-          Customer: `<span class="text-[#000000] order_method">${
-            data.deliver_name || ""
-          }</span><br>${data.delivery_phn || ""}`,
-          Order: `<span class="text-[#000000] order_method">${
-            data.order_id || ""
-          }</span><br><span class="text-[#818181]">${
-            data.merchant_time || ""
-          }</span><br><span class="text-[#818181] order_method">${
-            data.order_method || ""
-          }</span>`,
-          Amount: `${
-            "$" + data.amt || ""
-          }<br><span class="text-[#1EC26B]">${capitalizeFirstLetter(
-            data.order_status || ""
-          )}</span>`,
-          Status: status,
-          OrderStatus: PayStatus,
-          View: `<ahref="/store-reporting/order-summary/${data.order_id}" class="view_details_order">View Details</ahref=>`,
-        };
-      }
-    );
+  //       return {
+  //         Customer: `<span class="text-[#000000] order_method">${
+  //           data.deliver_name || ""
+  //         }</span><br>${data.delivery_phn || ""}`,
+  //         Order: `<span class="text-[#000000] order_method">${
+  //           data.order_id || ""
+  //         }</span><br><span class="text-[#818181]">${
+  //           data.merchant_time || ""
+  //         }</span><br><span class="text-[#818181] order_method">${
+  //           data.order_method || ""
+  //         }</span>`,
+  //         Amount: `${
+  //           "$" + data.amt || ""
+  //         }<br><span class="text-[#1EC26B]">${capitalizeFirstLetter(
+  //           data.order_status || ""
+  //         )}</span>`,
+  //         Status: status,
+  //         OrderStatus: PayStatus,
+  //         View: `<ahref="/store-reporting/order-summary/${data.order_id}" class="view_details_order">View Details</ahref=>`,
+  //       };
+  //     }
+  //   );
 
-    const table = $("#OnlineStoreTable").DataTable({
-      data: modifiedData,
-      columns: [
-        { title: "Customer", data: "Customer", orderable: false },
-        { title: "Order", data: "Order", orderable: false },
-        { title: "Amount", data: "Amount", orderable: false },
-        { title: "Status", data: "Status", orderable: false },
-        { title: "Order Status", data: "OrderStatus", orderable: false },
-        { title: " ", data: "View", orderable: false },
-      ],
-      destroy: true,
-      searching: true,
-      dom: "<'row 'l<'col-sm-12'b>><'row'<'col-sm-7 mt-2'p><'col-sm-5'>>",
-      lengthMenu: [10, 20, 50],
-      lengthChange: true,
-      ordering: false,
-      language: {
-        paginate: {
-          previous: "<",
-          next: ">",
-        },
-      },
-    });
+  //   const table = $("#OnlineStoreTable").DataTable({
+  //     data: modifiedData,
+  //     columns: [
+  //       { title: "Customer", data: "Customer", orderable: false },
+  //       { title: "Order", data: "Order", orderable: false },
+  //       { title: "Amount", data: "Amount", orderable: false },
+  //       { title: "Status", data: "Status", orderable: false },
+  //       { title: "Order Status", data: "OrderStatus", orderable: false },
+  //       { title: " ", data: "View", orderable: false },
+  //     ],
+  //     destroy: true,
+  //     searching: true,
+  //     dom: "<'row 'l<'col-sm-12'b>><'row'<'col-sm-7 mt-2'p><'col-sm-5'>>",
+  //     lengthMenu: [10, 20, 50],
+  //     lengthChange: true,
+  //     ordering: false,
+  //     language: {
+  //       paginate: {
+  //         previous: "<",
+  //         next: ">",
+  //       },
+  //     },
+  //   });
 
-    $("#searchInput").on("input", function () {
-      table.search(this.value).draw();
-    });
+  //   $("#searchInput").on("input", function () {
+  //     table.search(this.value).draw();
+  //   });
 
-    return () => {
-      table.destroy();
-    };
-  }, [allOnlineStoreOrder, props]);
+  //   return () => {
+  //     table.destroy();
+  //   };
+  // }, [allOnlineStoreOrder, props]);
+
+  const [deleteCategoryId, setDeleteCategoryId] = useState(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+
 
   const tableRow = ["Customer", "Order", "Amount", "Order Status", ""];
   const pickupStatusList = [
@@ -449,64 +456,81 @@ const OnlineTableViewData = (props) => {
     },
   ];
   const handleDropDownChange = async (option) => {
+    setDeleteCategoryId(option);
+    setDeleteModalOpen(true);
     console.log("handleDropDownChange", option);
 
     // Confirming with the user before proceeding
-    var success = window.confirm("Are you sure you want to change status");
+    // var success = window.confirm("Are you sure you want to change status");
 
-    // Proceed if the user confirms
-    if (success === true) {
-      // Constructing form data to send to the server
-      const FormData = {
-        merchant_id: props.merchant_id,
-        order_id: option.orderId,
-        m_status: option.value,
-        ...props.userTypeData,
-      };
-
-      // Dispatching an action to change the order status
-      // if (FormData) {
-      //   try {
-      //     const res = await dispatch(fetchOrderChangeStatusData(FormData));
-      //     console.log("setAllOnlineStoreOrders", res);
-      //     // Checking if the API call was successful
-      //     if (res.meta.requestStatus === "fulfilled") {
-      //       // Update the local state with the updated order data
-      //       setAllOnlineStoreOrders((prevState) => {
-      //         // Find the index of the order to update
-      //         const index = prevState.findIndex(
-      //           (order) => order.order_id === option.orderId
-      //         );
-      //         // console.log("setAllOnlineStoreOrders",index)
-      //         if (index !== -1) {
-      //           // Create a copy of the order object
-      //           const updatedOrder = { ...prevState[index] };
-
-      //           // Update the m_status field with the new value
-      //           updatedOrder.m_status = option.value;
-
-      //           // Create a new array with updated order object
-      //           const updatedOrders = [...prevState];
-      //           updatedOrders[index] = updatedOrder;
-
-      //           return updatedOrders;
-      //         } else {
-      //           // Order not found, return previous state unchanged
-      //           return prevState;
-      //         }
-      //       });
-      //     } else {
-      //       // Handle other status codes or errors if needed
-      //       console.error("Failed to update order status:", res.statusText);
-      //       // Optionally show an error message or handle the error state
-      //     }
-      //   } catch (error) {
-      //     console.error("Error while updating order status:", error.message);
-      //     // Handle any network or other errors that may occur during the API call
-      //   }
-      // }
-    }
+    // // Proceed if the user confirms
+    // if (success === true) {
+    //   // Constructing form data to send to the server
+     
+    // }
   };
+
+
+  const confirmChangeStatus = async () => {
+
+    const FormData = {
+      merchant_id: props.merchant_id,
+      order_id: deleteCategoryId.orderId,
+      m_status: deleteCategoryId.value,
+      ...props.userTypeData,
+    };
+
+    console.log("confirmDeleteCategory", FormData)
+  
+
+    // Dispatching an action to change the order status
+    if (FormData) {
+      try {
+        const res = await dispatch(fetchOrderChangeStatusData(FormData));
+        console.log("setAllOnlineStoreOrders", res);
+        // Checking if the API call was successful
+        if (res.meta.requestStatus === "fulfilled") {
+          // Update the local state with the updated order data
+          setAllOnlineStoreOrders((prevState) => {
+            // Find the index of the order to update
+            const index = prevState.findIndex(
+              (order) => order.order_id === deleteCategoryId.orderId
+            );
+            // console.log("setAllOnlineStoreOrders",index)
+            if (index !== -1) {
+              // Create a copy of the order object
+              const updatedOrder = { ...prevState[index] };
+
+              // Update the m_status field with the new value
+              updatedOrder.m_status = deleteCategoryId.value;
+
+              // Create a new array with updated order object
+              const updatedOrders = [...prevState];
+              updatedOrders[index] = updatedOrder;
+              ToastifyAlert(res.payload, "success");
+              
+              return updatedOrders;
+            } else {
+              ToastifyAlert(res.payload, "error");
+              // Order not found, return previous state unchanged
+              return prevState;
+            }
+          });
+        } else {
+          // Handle other status codes or errors if needed
+          console.error("Failed to update order status:", res.statusText);
+          // Optionally show an error message or handle the error state
+        }
+      } catch (error) {
+        console.error("Error while updating order status:", error.message);
+        // Handle any network or other errors that may occur during the API call
+      }
+    }
+    
+    setDeleteCategoryId(null)
+    setDeleteModalOpen(false);
+  };
+
   const orderStatus = (data) => {
     if (props?.OrderTypeData === "New") {
       const currentList =
@@ -761,6 +785,12 @@ const OnlineTableViewData = (props) => {
           </div>
         </div>
       )}
+        <AskConform
+            headerText="change status"
+            open={deleteModalOpen}
+            onClose={() => {setDeleteModalOpen(false)}}
+            onConfirm={confirmChangeStatus}
+          />
     </>
   );
 };

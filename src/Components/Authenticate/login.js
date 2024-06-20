@@ -20,7 +20,7 @@ import "../../Styles/loginAuth.css";
 // import Quickvee from "../../../Assets/LoginScreen/quickveeLogo.svg";handleSubmitFormPlace
 import Quickvee from "../../Assests/LoginScreen/quickveeLogo.svg";
 import CryptoJS from "crypto-js";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate, useLocation } from "react-router-dom";
 // import { useLocation } from 'react-router-dom';
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import IconButton from "@mui/material/IconButton";
@@ -31,9 +31,12 @@ import { getAuthInvalidMessage } from "../../Redux/features/Authentication/login
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
+  const currentUrl = location.pathname;
 
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+  const validLoginTypes = ["superadmin", "manager", "admin", "merchant"];
   const inputRefs = useRef({});
   const merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
@@ -51,9 +54,52 @@ export default function Login() {
     setErrorMessage,
     errorMessage,
     handleWrongPasswordError,
+    keyEnter,
+    // handleKeyDown
   } = LoginLogic(setLoading);
+
+  // const handleEnterKeyPress = (event) => {
+  //   if (event.key === 'Enter') {
+
+  //     handleSubmitForm(event)
+  //   }
+  // };
+  // useEffect(() => {
+  //   document.addEventListener('keydown', handleEnterKeyPress);
+  //   return () => {
+  //     document.removeEventListener('keydown', handleEnterKeyPress);
+  //   };
+  // }, []);
+
   useEffect(() => {
-    setErrorMessage(errorMessageRecord);
+    if (currentUrl === "/login") {
+      if (
+        LoginGetDashBoardRecordJson?.login_type === "superadmin" &&
+        LoginGetDashBoardRecordJson?.data?.merchant_id === ""
+      ) {
+        console.log("1");
+        navigate("/users/unapprove");
+      } else if (
+        (LoginGetDashBoardRecordJson?.data?.login_type == "superadmin" ||
+          LoginGetDashBoardRecordJson?.data?.login_type == "merchant" ||
+          LoginGetDashBoardRecordJson?.data?.login_type == "admin" ||
+          LoginGetDashBoardRecordJson?.data?.login_type == "manager") &&
+        LoginGetDashBoardRecordJson?.data?.merchant_id === undefined &&
+        LoginGetDashBoardRecordJson?.data?.stores.length >= 0
+      ) {
+        navigate("/store");
+      } else if (
+        (LoginGetDashBoardRecordJson?.login_type == "superadmin" ||
+          LoginGetDashBoardRecordJson?.login_type == "merchant" ||
+          LoginGetDashBoardRecordJson?.login_type == "admin" ||
+          LoginGetDashBoardRecordJson?.login_type == "manager") &&
+        LoginGetDashBoardRecordJson?.data?.merchant_id !== ""
+      ) {
+        navigate("/");
+      } else {
+        // console.log('333333333')
+      }
+    }
   }, []);
 
   const handleHideErrorMessage = () => {
@@ -62,74 +108,8 @@ export default function Login() {
 
     setErrorMessage("");
   };
-// ======================================
-// console.log(userTypeData)
-// console.log(merchant_id)
-console.log(LoginGetDashBoardRecordJson)
-// useEffect(() => {
-//     if (
-//       ((LoginGetDashBoardRecordJson?.data?.login_type === "admin" ||
-//       LoginGetDashBoardRecordJson?.data?.login_type === "merchant" ||
-//       LoginGetDashBoardRecordJson?.data?.login_type === "manager")&&(LoginGetDashBoardRecordJson?.login_type &&
-//       LoginGetDashBoardRecordJson?.login_type == "superadmin"))
-//       && (merchant_id=="" || merchant_id == undefined )
-//     ) {
-//       navigate("/users/unapprove");
-//     } else if (
-//       ((LoginGetDashBoardRecordJson?.data?.login_type === "admin" ||
-//       LoginGetDashBoardRecordJson?.data?.login_type === "merchant" ||
-//       LoginGetDashBoardRecordJson?.data?.login_type === "manager")&&(LoginGetDashBoardRecordJson?.login_type === "admin" || 
-//         LoginGetDashBoardRecordJson?.login_type === "merchant" ||
-//         LoginGetDashBoardRecordJson?.login_type === "manager" ||
-//         LoginGetDashBoardRecordJson?.login_type == "superadmin")) &&
-//       !!merchant_id
-//     ) {
 
-//       navigate("/");
-//     } else if (
-//       ((LoginGetDashBoardRecordJson?.data?.login_type === "admin" ||
-//       LoginGetDashBoardRecordJson?.data?.login_type === "merchant" ||
-//       LoginGetDashBoardRecordJson?.data?.login_type === "manager")&&(LoginGetDashBoardRecordJson?.login_type === "admin" ||
-//         LoginGetDashBoardRecordJson?.data?.login_type === "merchant" ||
-//         LoginGetDashBoardRecordJson?.data?.login_type === "manager")&& LoginGetDashBoardRecordJson?.data?.stores.length>=0)
-//     ) {
-//       console.log('3')
-//       navigate("/store");
-//     } else {
-//       console.log('4')
-//       navigate("/login");
-//     }
-//   }, []);
-// ====================================
-const getLoginRedirectUrl=()=>{
-  if((LoginGetDashBoardRecordJson?.login_type == "superadmin"||
-  LoginGetDashBoardRecordJson?.login_type === "admin"|| 
-  LoginGetDashBoardRecordJson?.login_type === "merchant" ||
-  LoginGetDashBoardRecordJson?.login_type === "manager")
-  &&(LoginGetDashBoardRecordJson?.data?.merchant_id !=="")
-)
-  {
-    console.log('1')
-    navigate('/')
-  }
-  else if((LoginGetDashBoardRecordJson?.login_type == "superadmin")
-  &&(LoginGetDashBoardRecordJson?.data?.merchant_id =="" || LoginGetDashBoardRecordJson?.data?.merchant_id==undefined))
-  {
-    console.log('2')
-    navigate("/users/unapprove")
-  }
-  else if((LoginGetDashBoardRecordJson?.login_type == "superadmin")
-  &&(LoginGetDashBoardRecordJson?.data?.merchant_id !=="" || LoginGetDashBoardRecordJson?.data?.merchant_id!==undefined))
-  {
-    console.log("3")
-    navigate("/")
-  }
-
-}
- useEffect(()=>{
-  // getLoginRedirectUrl()
-
- })
+  console.log(LoginGetDashBoardRecordJson);
   // ================================================
 
   const [showPassword, setShowPassword] = useState(false);
@@ -179,7 +159,7 @@ const getLoginRedirectUrl=()=>{
             />
           </Link>
           <form className="login-customer-form">
-            <h1>Merchant Login</h1>
+            <h1></h1>
 
             <div
               style={{
@@ -199,6 +179,8 @@ const getLoginRedirectUrl=()=>{
                       value={formData.username}
                       onChange={handleChangeLogin}
                       handleBlur={handleBlur}
+                      onKeyDown={keyEnter}
+                      // onKeyDown={handleKeyDown}
                     />
                   </FormControl>
                   <span className="input-error">{errors.usernameError}</span>
@@ -224,6 +206,8 @@ const getLoginRedirectUrl=()=>{
                         ref: (input) => (inputRefs.current["password"] = input), // Store the ref in a ref object
                         selectionstart: formData.password,
                       }}
+                      onKeyDown={keyEnter}
+                      // onKeyDown={handleKeyDown}
                     />
                   </FormControl>
                   <span
@@ -253,7 +237,7 @@ const getLoginRedirectUrl=()=>{
             <FormControl fullWidth>
               {
                 <QSubmitButton
-                  name="submit"
+                  name="Login"
                   handleSubmitForm={handleSubmitForm}
                   loading={loading}
                 />
