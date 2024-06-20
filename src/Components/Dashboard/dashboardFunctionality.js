@@ -6,10 +6,12 @@ import {
 } from "../../Constants/Config";
 import axios from "axios";
 import { useAuthDetails } from "./../../Common/cookiesHelper";
+import PasswordShow from "../../Common/passwordShow";
 
 export default function DashboardFunctionality() {
   const [dashboardCount, setDashboardCount] = React.useState("");
   const [dashboardRecord, setDashboardRecord] = React.useState([]);
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
 
   const {
     LoginGetDashBoardRecordJson,
@@ -23,40 +25,43 @@ export default function DashboardFunctionality() {
     merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
   };
   const getDashboardCountRecord = async () => {
-    try{
-      const response = await axios.post(BASE_URL + DASHBOARD_COUNT_STORE, data, {
+    try {
+      const response = await axios.post(
+        BASE_URL + DASHBOARD_COUNT_STORE,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response?.data?.status == true) {
+        setDashboardCount(response?.data);
+      }
+    } catch (error) {
+      getUnAutherisedTokenMessage();
+      handleCoockieExpire();
+    }
+  };
+
+  const getDashboardTableRecord = async () => {
+    try {
+      const response = await axios.post(BASE_URL + DASHBOARD_TABLE_LIST, data, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
       });
       if (response?.data?.status == true) {
-        setDashboardCount(response?.data);
+        console.log(response?.data?.data);
+        setDashboardRecord(response?.data?.data);
+        // setDashboardCount(response?.data);
       }
-
-    }catch(error){
-      console.log("token expire")
-
+    } catch (error) {
+      getUnAutherisedTokenMessage();
+      handleCoockieExpire();
     }
-   
-  };
-
-  const getDashboardTableRecord = async () => {
-    try{
-    const response = await axios.post(BASE_URL + DASHBOARD_TABLE_LIST, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (response?.data?.status == true) {
-      console.log(response?.data?.data);
-      setDashboardRecord(response?.data?.data);
-      // setDashboardCount(response?.data);
-    }
-  }catch(error){
-    console.log("error")
-  }
   };
   useEffect(() => {
     getDashboardCountRecord();

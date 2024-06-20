@@ -85,22 +85,23 @@ export default function ProtectedRoute(props) {
     Cookies.remove("token_data");
     localStorage.removeItem("AllStore");
   };
-  console.log(AdminRocord)
+  console.log(AdminRocord);
 
   if (
     AdminRocord?.status == true &&
     AdminRocord?.login_type == "superadmin" &&
-    props.visible == "superadmin"
-    && AdminRocord?.data?.merchant_id==""
+    props.visible == "superadmin" &&
+    AdminRocord?.data?.merchant_id == ""
   ) {
     return <Outlet />;
-  } else if( AdminRocord?.status == true &&
+  } else if (
+    AdminRocord?.status == true &&
     AdminRocord?.login_type == "superadmin" &&
-    props.visible == "superadmin"
-    && AdminRocord?.data?.merchant_id !==""){
-      navigate('/')
-
-  }else if (
+    props.visible == "superadmin" &&
+    AdminRocord?.data?.merchant_id !== ""
+  ) {
+    navigate("/");
+  } else if (
     AdminRocord?.status == true &&
     (AdminRocord?.login_type == "superadmin" ||
       AdminRocord?.data?.login_type == "manager" ||
@@ -114,13 +115,10 @@ export default function ProtectedRoute(props) {
       AdminRocord?.data?.merchant_id == "no_id") &&
     AdminRocord?.data?.merchant_id !== undefined
   ) {
-    dispatch(setIsStoreActive(true))
+    dispatch(setIsStoreActive(true));
     return <Outlet />;
-  } 
-  else if(AdminRocord?.status==false) {
+  } else if (AdminRocord?.status == false) {
     handleClearCoockie();
     return <Navigate to="/login" />;
   }
-
 }
-

@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Grid } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux"; //,localAuthCheck
@@ -95,6 +95,7 @@ const StorePage = () => {
     userTypeData,
     GetSessionLogin,
   } = useAuthDetails();
+
   // let AuthSessionRecord=Cookies.get('loginDetails') !==undefined ? Cookies.get('loginDetails') :[]
   // let UserLoginDataStringFy=Cookies.get('user_auth_record') !==undefined ? Cookies.get('user_auth_record') :[]
   // const getUserLoginAuth = atob(UserLoginDataStringFy);
@@ -151,8 +152,9 @@ const StorePage = () => {
     <>
       {LoginAllStore?.data?.login_type == "admin" ? (
         <>
-          <Grid container className="store-items-list" spacing={2}>
+          <Grid container spacing={2} className="store-items-list ">
             {Array.isArray(LoginAllStore?.data?.stores) &&
+            LoginAllStore?.data?.stores.length > 0 ? (
               LoginAllStore?.data?.stores.map((store, Index) => {
                 return (
                   <Grid
@@ -174,10 +176,9 @@ const StorePage = () => {
                           src={store.img || storeDefaultImage}
                           alt="store_image"
                           onError={(e) => {
-                            e.target.onerror = null; 
+                            e.target.onerror = null;
                             e.target.src = storeDefaultImage;
                           }}
-                        
                         />
                       </div>
                       <div className="grid content-center store-items-address">
@@ -198,12 +199,17 @@ const StorePage = () => {
                     {/* </Link> */}
                   </Grid>
                 );
-              })}
+              })
+            ) : (
+              <div className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 norecordFound box_shadow_div css-3988i3-MuiGrid-root">
+                <p>No Store Found</p>
+              </div>
+            )}
           </Grid>
         </>
       ) : LoginAllStore?.data?.login_type == "merchant" ? (
         <Grid container className="store-items-list" spacing={2}>
-          {Array.isArray(LoginAllStore?.data?.stores) &&
+          {Array.isArray(LoginAllStore?.data?.stores) ? (
             LoginAllStore?.data?.stores.map((store, Index) => {
               return (
                 <Grid item className="store-items " xs={12} sm={6} key={Index}>
@@ -236,11 +242,16 @@ const StorePage = () => {
                   {/* </Link> */}
                 </Grid>
               );
-            })}
+            })
+          ) : (
+            <div className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 norecordFound box_shadow_div css-3988i3-MuiGrid-root">
+              <p>No Store Found</p>
+            </div>
+          )}
         </Grid>
       ) : LoginAllStore?.data?.login_type == "manager" ? (
         <Grid container className="store-items-list" spacing={2}>
-          {Array.isArray(LoginAllStore?.data?.stores) &&
+          {Array.isArray(LoginAllStore?.data?.stores) ? (
             LoginAllStore?.data?.stores.map((store, Index) => {
               return (
                 <Grid item className="store-items " xs={12} sm={6} key={Index}>
@@ -273,7 +284,12 @@ const StorePage = () => {
                   {/* </Link> */}
                 </Grid>
               );
-            })}
+            })
+          ) : (
+            <div className="MuiGrid-root MuiGrid-container MuiGrid-spacing-xs-2 norecordFound box_shadow_div css-3988i3-MuiGrid-root">
+              <p>No Store Found</p>
+            </div>
+          )}
         </Grid>
       ) : (
         ""

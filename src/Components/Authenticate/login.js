@@ -70,6 +70,14 @@ export default function Login() {
   //     document.removeEventListener('keydown', handleEnterKeyPress);
   //   };
   // }, []);
+  const listArray = ["superadmin", "merchant", "admin", "manager"];
+
+  const greaterElement = listArray.find(
+    (ele) =>
+      ele ==
+      (LoginGetDashBoardRecordJson?.data?.login_type ||
+        LoginGetDashBoardRecordJson?.login_type)
+  );
 
   useEffect(() => {
     if (currentUrl === "/login") {
@@ -80,19 +88,13 @@ export default function Login() {
         console.log("1");
         navigate("/users/unapprove");
       } else if (
-        (LoginGetDashBoardRecordJson?.data?.login_type == "superadmin" ||
-          LoginGetDashBoardRecordJson?.data?.login_type == "merchant" ||
-          LoginGetDashBoardRecordJson?.data?.login_type == "admin" ||
-          LoginGetDashBoardRecordJson?.data?.login_type == "manager") &&
+        !!greaterElement &&
         LoginGetDashBoardRecordJson?.data?.merchant_id === undefined &&
         LoginGetDashBoardRecordJson?.data?.stores.length >= 0
       ) {
         navigate("/store");
       } else if (
-        (LoginGetDashBoardRecordJson?.login_type == "superadmin" ||
-          LoginGetDashBoardRecordJson?.login_type == "merchant" ||
-          LoginGetDashBoardRecordJson?.login_type == "admin" ||
-          LoginGetDashBoardRecordJson?.login_type == "manager") &&
+        !!greaterElement &&
         LoginGetDashBoardRecordJson?.data?.merchant_id !== ""
       ) {
         navigate("/");
