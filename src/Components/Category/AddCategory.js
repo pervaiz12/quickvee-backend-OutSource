@@ -16,6 +16,7 @@ import CheckBoxField from "../../reuseableComponents/CheckBoxField";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
+import { Link } from "react-router-dom";
 
 const AddCategory = ({ seVisible }) => {
   const {
@@ -230,17 +231,29 @@ const AddCategory = ({ seVisible }) => {
   return (
     <>
       <div className="box">
+        <div className="q-category-top-detail-section">
+          <li>In order to use the Quickvee app one Category is required.</li>
+          <li>
+            If you make changes to the Category, the Category status will be
+            pending until the admin approves it.
+          </li>
+          <li>
+            After you've made changes to your menu, select the option "Click
+            Here To Send For Approval To Admin" to get admin approval to update
+            your website.
+          </li>
+        </div>
         <div className="q-add-categories-section mb-5">
           {/* <form enctype="multipart/form-data"> */}
             <div className="q-add-categories-section-header">
-              <span onClick={() => seVisible("CategoryDetail")}>
+            <Link to={`/category`}>
                 <img
                   src={AddNewCategory}
                   alt="Add-New-Category"
                   className="w-6 h-6"
                 />
                 <span>Add New Category</span>
-              </span>
+              </Link>
             </div>
             <div className="q-add-categories-section-middle-form">
               <div
@@ -401,12 +414,14 @@ const AddCategory = ({ seVisible }) => {
 
             <div className="q-add-categories-section-middle-footer">
               <button className="quic-btn quic-btn-save" onClick={handleSubmit}>Add</button>
+              <Link to={`/category`}>
               <button
-                onClick={() => seVisible("CategoryDetail")}
+                // onClick={() => seVisible("CategoryDetail")}
                 className="quic-btn quic-btn-cancle"
               >
                 Cancel
               </button>
+              </Link>
             </div>
           {/* </form> */}
         </div>

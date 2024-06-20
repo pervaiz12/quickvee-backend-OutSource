@@ -6,7 +6,7 @@ import { useAuthDetails } from "../../../Common/cookiesHelper";
 import PasswordShow from "../../../Common/passwordShow";
 
 import { Grid } from "@mui/material";
-
+import { Link } from "react-router-dom";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -152,7 +152,11 @@ const OrderRefundReportList = (props) => {
                   allOrderData?.map((CheckData, index) => (
                     <StyledTableRow key={index}>
                       <StyledTableCell>
-                        <p>{CheckData.order_id}</p>
+                        
+                        <p><Link to={`/order/store-reporting/order-summary/${merchant_id}/${CheckData.order_id}`}
+                                target="_blank"
+                              >{CheckData.order_id} </Link></p>
+                        
                       </StyledTableCell>
                       <StyledTableCell>
                         <p>{dateFormattedFunction(CheckData?.created_at)}</p>

@@ -54,7 +54,7 @@ const EditCoupon = ({couponId,seVisible}) => {
   async function fetchData() {
     const getcouponData = {
       merchant_id,
-      coupon_id:couponId,
+      coupon_id:params?.couponsCode,
       ...userTypeData,
     };
 
@@ -385,12 +385,12 @@ const EditCoupon = ({couponId,seVisible}) => {
       const update_message = await res.data.message;
       if (data === true) {
         ToastifyAlert(update_message, "success");
-        seVisible("CouponDiscount")
+        // seVisible("CouponDiscount")
         // alert(update_message);
         let data = {
           merchant_id,
         };
-        // navigate("/coupons");
+        navigate("/coupons");
       } else if (
         data == false &&
         update_message == "Coupon not updated, please try again."
@@ -940,18 +940,18 @@ const EditCoupon = ({couponId,seVisible}) => {
           <div className="box_shadow_div">
             <div className="q-add-categories-section">
               <div className="q-add-categories-section-header" >
-                {/* <Link to={`/coupons`} > */}
-                <div onClick={()=>{seVisible("CouponDiscount")}} className="cursor-pointer">
+                <Link to={`/coupons`} >
+                <div  className="cursor-pointer">
                   <span style={myStyles}>
                   <img
                   src={AddNewCategory}
                   alt="Add-New-Category"
                   className="h-9 w-9"
                 />
-                    <span className="pt-1">Edit Coupon</span>
+                    <span className="textIMG">Edit Coupon</span>
                   </span>
                 </div>
-                {/* </Link> */}
+                </Link>
               </div>
               <div className="q-add-categories-section-middle-form">
                 <div className="q_coupon_Add_status_btn">
@@ -1523,9 +1523,11 @@ const EditCoupon = ({couponId,seVisible}) => {
                     </button>
                   </Grid>
                   <Grid item>
-                    <spam onClick={()=>{seVisible("CouponDiscount")}}>
+                  <Link to={`/coupons`} >
+                    {/* <spam onClick={()=>{seVisible("CouponDiscount")}}> */}
                       <button className="quic-btn quic-btn-cancle">Cancel</button>
-                    </spam>
+                    {/* </spam> */}
+                  </Link>
                   </Grid>
                 </Grid>
               </div>

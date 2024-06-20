@@ -66,18 +66,24 @@ const AtrDataList = ({ seVisible }) => {
   ]);
 
   const changeTittleHandler = (event) => {
-    setNewAttribute(event.target.value);
-    const nameExists = allattributes.some(
-      (item) => item.title === event.target.value
-    );
-    if (nameExists) {
-      setErrorMessage("Attribute name already exists");
-      setNameExists(true);
-    } else {
-      setErrorMessage("");
-      setNameExists(false);
+    let value = event.target.value;
+    const regex = /^[A-Za-z0-9 ]*$/ ;
+    const space = /^(?!\s).*/;
+    if(space.test(value)){
+      if (regex.test(value) || value === "" ) {
+          setNewAttribute(value);
+          const nameExists = allattributes.some((item) => item.title === value);
+          if (nameExists) {
+            setErrorMessage("Attribute name already exists");
+            setNameExists(true);
+          } else {
+            setErrorMessage("");
+            setNameExists(false);
+        }
+      } else {
+        setErrorMessage("Special characters are not allowed");
+      }
     }
-    setNewAttribute(event.target.value);
   };
 
   const handleAddAttribute = async () => {
@@ -241,6 +247,7 @@ const AtrDataList = ({ seVisible }) => {
                     value={newAttribute}
                     onChangeFun={changeTittleHandler}
                     placeholder="Enter attribute title"
+                    maxLength={35}
                   />
                   <span className="input-error">
                     {errorMessage !== "" ? errorMessage : ""}

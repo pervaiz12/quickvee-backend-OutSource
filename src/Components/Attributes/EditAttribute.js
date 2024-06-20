@@ -10,6 +10,7 @@ import BasicTextFields from "../../reuseableComponents/TextInputField";
 import { Box, Modal } from "@mui/material";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const EditDeliveryAddress = ({ attribute, allattributes }) => {
   const [nameExists, setNameExists] = useState("");
@@ -32,27 +33,30 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
   const closeModal = () => {
     setShowModal(false);
   };
+  const [loader, setLoader] = useState(false);
 
   const dispatch = useDispatch();
   const changeTittleHandler = (event) => {
     const inputValue = event.target.value;
-    setNewAttribute(inputValue);
-    const nameExists = allattributes.some(
-      (item) => item.title === inputValue && item.id !== attribute.id
-    );
-    if (inputValue.trim() === "") {
-      setErrorMessage("Attribute name cannot be blank");
-      setNameExists(true);
-    } else if (nameExists) {
-      setErrorMessage("Attribute name already exists");
-      setNameExists(true);
-    } else {
-      setErrorMessage("");
-      setNameExists(false);
+    const regex = /^[A-Za-z0-9 ]*$/;
+    const space = /^(?!\s).*/;
+    if(space.test(inputValue)){
+      if (regex.test(inputValue) || inputValue === "" ) {
+        setNewAttribute(inputValue);
+        const nameExists = allattributes.some((item) => item.title === inputValue && item.id !== attribute.id);
+        if (nameExists) {
+          setErrorMessage("Attribute name already exists");
+          setNameExists(true);
+        } else {
+          setErrorMessage("");
+          setNameExists(false);
+        }
+      }else{
+        setErrorMessage("Special characters are not allowed");
+      }
     }
   };
   const handleEditAttribute = async () => {
-    console.log(attribute);
     if (nameExists) {
       return false;
     }
@@ -66,6 +70,7 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
     };
     const data = editItem;
     console.log(data);
+    setLoader(true);
     const response = await axios.post(BASE_URL + ADD_ATTRIBUTE, editItem, {
       headers: {
         "Content-Type": "multipart/form-data",
@@ -79,6 +84,7 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
     } else {
       setsubmitmessage(response.data.message);
     }
+    setLoader(false);
   };
 
   setTimeout(() => {
@@ -101,7 +107,7 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
     <>
       <div>
         <Button
-          className="modal-main-button edit-delivery-address-button"
+          className="modal-main-button edit-delivery-address-button attributeEdit_BTN"
           onClick={openModal}
         >
           {/* <img src={Edit}  alt="edit" /> */}
@@ -185,6 +191,7 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
                   value={newAttribute}
                   onChangeFun={changeTittleHandler}
                   placeholder="Enter attribute title"
+                  maxLength={35}
                 />
                 <span className="input-error">
                   {errorMessage !== "" ? errorMessage : ""}
@@ -195,9 +202,11 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
             <div className="q-add-categories-section-middle-footer">
               <button
                 onClick={handleEditAttribute}
-                className="quic-btn quic-btn-save"
+                className="quic-btn quic-btn-save attributeUpdateBTN"
+                disabled={loader}
               >
-                Update
+                { loader ? <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15}/> Update</> : "Update"}
+                {/* Update */}
               </button>
               <button onClick={closeModal} className="quic-btn quic-btn-cancle">
                 Cancel

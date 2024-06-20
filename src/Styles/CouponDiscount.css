@@ -879,3 +879,8 @@ img.clock_design{
   position: absolute;
   left: 1px;
 }
+
+.textIMG{
+  display: flex;
+  align-items: center;
+}

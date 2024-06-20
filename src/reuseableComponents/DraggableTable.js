@@ -347,6 +347,7 @@ const DraggableTable = ({
                               )}
                               {editButtonEnable && (
                                 <StyledTableCell>
+                                  <Link to={`/category/edit-category/${item.id}`}>
                                   <span
                                     // to={`${editButtonurl}${item.id}`}
                                     onClick={() => {
@@ -361,6 +362,7 @@ const DraggableTable = ({
                                       alt="Edit"
                                     />
                                   </span>
+                                  </Link>
                                 </StyledTableCell>
                               )}
                               {item.title === "DefaultTax" ? (

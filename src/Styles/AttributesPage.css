@@ -372,3 +372,20 @@
   .container > div {
     flex: 1;
   }
+
+  .attributeEdit_BTN:hover{
+    background-color: inherit !important;
+  } 
+  .attributeEdit_BTN{
+    min-width: max-content !important;
+    margin-right: 0.5rem !important;
+  }
+
+  .attributeUpdateBTN{
+    position: relative !important;
+  }
+  .loaderIcon{
+    position: absolute !important;
+    left: 1rem;
+    top: 0.75rem;
+  }

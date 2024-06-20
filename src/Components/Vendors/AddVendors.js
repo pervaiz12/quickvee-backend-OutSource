@@ -14,6 +14,7 @@ import CreatableSelect from "react-select/creatable";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import PasswordShow from "../../Common/passwordShow";
+import { Link } from "react-router-dom";
 const AddVendors = ({ setVisible }) => {
   const [allvendors, setallvendors] = useState([]);
   const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
@@ -191,15 +192,18 @@ const AddVendors = ({ setVisible }) => {
 
   return (
     <>
+    <div className="mt-6">
       <Grid container className="box">
         <Grid item xs={12} className="q-add-categories-section">
           <Grid container>
             <Grid item xs={12}>
               <div className="q-add-categories-section-header">
-                <span onClick={() => setVisible("VendorsDetail")}>
+              <Link to={`/vendors`}>
+                {/* <span onClick={() => setVisible("VendorsDetail")}> */}
                   <img src={AddNewVendors} alt="Add-New-Vendors" />
                   <span>Add New Vendors</span>
-                </span>
+                {/* </span> */}
+                </Link>
               </div>
             </Grid>
           </Grid>
@@ -315,18 +319,21 @@ const AddVendors = ({ setVisible }) => {
                   <button type="submit" className="quic-btn quic-btn-save me-3">
                     Save
                   </button>
+                  <Link to={`/vendors`}>
                   <button
-                    onClick={() => setVisible("VendorsDetail")}
+                    // onClick={() => setVisible("VendorsDetail")}
                     className="quic-btn quic-btn-cancle"
                   >
                     Cancel
                   </button>
+                  </Link>
                 </Grid>
               </form>
             </Grid>
           </Grid>
         </Grid>
       </Grid>
+      </div>
       {/* <div className="box">
         <form onSubmit={handleSubmit}>
           <div className="q-add-categories-section">

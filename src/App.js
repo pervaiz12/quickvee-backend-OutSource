@@ -183,6 +183,11 @@ function App() {
           />
           <Route
             exact
+            path="/category-add"
+            element={<Main visible={"add-category"} />}
+          />
+          <Route
+            exact
             path="inventory/products"
             element={<Main visible={"products"} />}
           />
@@ -267,12 +272,14 @@ function App() {
             element={<Main visible={"loyalty-program"} />}
           />
           <Route exact path="/coupons" element={<Main visible={"coupons"} />} />
+          <Route exact path="/coupons-add" element={<Main visible={"add-coupons"} />} />
           <Route
             exact
             path="/coupons/edit-coupons/:couponsCode"
             element={<Main visible={"coupons-edit-cop"} />}
           />
           <Route exact path="/vendors" element={<Main visible={"vendors"} />} />
+          <Route exact path="/vendors-add" element={<Main visible={"add-vendors"} />} />
           <Route
             exact
             path="/vendors/edit-vendor/:code"

@@ -215,9 +215,11 @@ const CategoryDetail = ({ seVisible,setProductId }) => {
           <div className="categoryTable">
             <div className="q-category-bottom-header">
               <span>Category</span>
-              <p onClick={() => seVisible("CategoryAlert")}>
+              <Link to={`/category-add`}>
+              <p>
                 Add Category <img src={AddIcon} alt="add-icon" />{" "}
               </p>
+              </Link>
             </div>
             <DraggableTable
               tableHead={["Sort", "Title", "Items", "Enable/Disable", "", ""]}

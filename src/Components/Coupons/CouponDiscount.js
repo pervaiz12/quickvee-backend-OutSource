@@ -168,9 +168,13 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
               </div>
             </Grid>
             <Grid item>
-              <p onClick={() => seVisible("AddCoupon")}>
+              <Link to={`/coupons-add`}>
+              <p 
+              // onClick={() => seVisible("AddCoupon")}
+              >
                 Add New Coupon <img src={AddIcon} alt="add-icon" />
               </p>
+              </Link>
             </Grid>
           </Grid>
           <Grid container spacing={3} sx={{ p: 2.5 }}>
@@ -201,12 +205,14 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
                         <Grid item>
                           <Grid container spacing={1}>
                             <Grid item>
+                              <Link to={`/coupons/edit-coupons/${coupons.id}`}>
                               <span 
                               // to={`/coupons/edit-coupons/${coupons.id}`}
-                              onClick={()=> {handleEditCoupon(coupons.id)}}
+                              // onClick={()=> {handleEditCoupon(coupons.id)}}
                               >
                                 <img src={Edit} alt="" className="h-8 w-8  cursor-pointer" />
                               </span>
+                              </Link>
                             </Grid>
                             <Grid item>
                               <img

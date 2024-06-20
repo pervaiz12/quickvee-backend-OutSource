@@ -83,13 +83,21 @@ const NewItemCreatedBetweenList = (props) => {
     AllNewItemDataState.NewItemData,
   ]);
 
+  // const formatDate = (dateString) => {
+  //   const options = { day: "2-digit", month: "short", year: "numeric" };
+  //   const formattedDate = new Date(dateString).toLocaleDateString(
+  //     "en-US",
+  //     options
+  //   );
+  //   return formattedDate;
+  // };
   const formatDate = (dateString) => {
-    const options = { day: "2-digit", month: "short", year: "numeric" };
-    const formattedDate = new Date(dateString).toLocaleDateString(
-      "en-US",
-      options
-    );
-    return formattedDate;
+    const [day, month, year] = dateString.split('-');
+    const monthNames = [
+      "January", "February", "March", "April", "May", "June",
+      "July", "August", "September", "October", "November", "December"
+    ];
+    return `${monthNames[parseInt(month, 10) - 1]} ${parseInt(day, 10)}, ${year}`;
   };
 
   return (

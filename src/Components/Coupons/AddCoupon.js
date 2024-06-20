@@ -28,6 +28,7 @@ import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
 import PasswordShow from "../../Common/passwordShow";
 import CircularProgress from "@mui/material/CircularProgress";
+import { Link } from "react-router-dom";
 
 const AddCoupon = ({ seVisible }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -486,17 +487,19 @@ const AddCoupon = ({ seVisible }) => {
         <div className="box_shadow_div">
           <div className="q-add-categories-section">
             <div className="q-add-categories-section-header">
-              <span
+            <Link to={`/coupons`}>
+              {/* <span
                 onClick={() => seVisible("CouponDiscount")}
                 className="add_coupon_span"
-              >
+              > */}
                 <img
                   src={AddNewCategory}
                   alt="Add-New-Category"
                   className="h-9 w-9"
                 />
-                <span>Add Coupon</span>
-              </span>
+                <span className="textIMG">Add Coupon</span>
+              {/* </span> */}
+              </Link>
             </div>
             <form onSubmit={handleAddButtonClick}>
               <div className="q-add-categories-section-middle-form">
@@ -876,12 +879,14 @@ const AddCoupon = ({ seVisible }) => {
 
               <div className="q-add-categories-section-middle-footer">
                 <button className="quic-btn quic-btn-save" disabled={loader}> {loader ? <><CircularProgress color={"inherit"} size={18}/>Add</> : "Add"}</button>
+                <Link to={`/coupons`}>
                 <button
-                  onClick={() => seVisible("CouponDiscount")}
+                  // onClick={() => seVisible("CouponDiscount")}
                   className="quic-btn quic-btn-cancle"
                 >
                   Cancel
                 </button>
+                </Link>
               </div>
             </form>
           </div>

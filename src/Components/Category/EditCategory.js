@@ -45,7 +45,7 @@ const EditCategory = ({ productId,seVisible }) => {
   async function fetchData() {
     const getcategoryData = {
       merchant_id: merchant_id,
-      id: productId,
+      id: params?.categoryCode,
       ...userTypeData,
     };
 
@@ -353,7 +353,7 @@ const EditCategory = ({ productId,seVisible }) => {
   return (
     <div className="q-category-main-page">
       <div className="box">
-        {/* <div className="q-category-top-detail-section">
+        <div className="q-category-top-detail-section">
           <li>In order to use the Quickvee app one Category is required.</li>
           <li>
             If you make changes to the Category, the Category status will be
@@ -364,17 +364,15 @@ const EditCategory = ({ productId,seVisible }) => {
             Here To Send For Approval To Admin" to get admin approval to update
             your website.
           </li>
-        </div> */}
+        </div>
 
         <div className="q-add-categories-section">
           <form>
             <div className="q-add-categories-section-header">
-              <Link 
-                onClick={()=>{seVisible("CategoryDetail")}}
-              to={`/category`}>
+              <Link  to={`/category`}>
                 <span style={myStyles}>
                   <img src={AddNewCategory} alt="Add-New-Category" />
-                  <span className="pl-4">Edit Category</span>
+                  <span >Edit Category</span>
                 </span>
               </Link>
             </div>

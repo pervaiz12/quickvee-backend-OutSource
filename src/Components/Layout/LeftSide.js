@@ -83,6 +83,9 @@ import StocktakeReportPrint from "../Stocktake/StocktakeReportPrint";
 import AddNewStocktake from "../Stocktake/AddNewStocktake";
 import StocktakeList from "../Stocktake/StocktakeList";
 import StocktakeReport from "../Stocktake/StocktakeReport";
+import AddCategory from "../Category/AddCategory";
+import AddCoupon from "../Coupons/AddCoupon";
+import AddVendors from "../Vendors/AddVendors";
 
 const LeftSide = ({ visible }) => {
   useEffect(() => {
@@ -96,6 +99,7 @@ const LeftSide = ({ visible }) => {
           {visible === "dashboard" && <DashboardMain />}
           {visible === "order" && <MainOrder />}
           {visible === "category" && <MainCategory />}
+          {visible === "add-category" && <AddCategory />}
           {visible === "purchase-data" && <MainPurchase />}
           {visible === "stocktake" && <StocktakeList />}
           {visible === "stocktake-updateStocktake" && <AddNewStocktake />}
@@ -111,8 +115,10 @@ const LeftSide = ({ visible }) => {
           {visible === "store" && <StorePage />}
           {visible === "manager" && <ManagerStore />}
           {visible === "coupons" && <MainCoupon />}
+          {visible === "add-coupons" && <AddCoupon />}
           {visible === "coupons-edit-cop" && <EditCoupon />}
           {visible === "vendors" && <MainVendors />}
+          {visible === "add-vendors" && <AddVendors />}
           {visible === "timesheet" && <MainTimesheet />}
           {visible === "import-data" && <MainImportData />}
           {visible === "store-setting" && <MainStoreOption />}

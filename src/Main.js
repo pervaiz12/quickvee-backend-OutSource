@@ -20,6 +20,7 @@ const Main = ({ visible }) => {
       {visible === "dashboard" && <Layout visible={visible} />}
       {visible === "order" && <Layout visible={visible} />}
       {visible === "category" && <Layout visible={visible} />}
+      {visible === "add-category" && <Layout visible={visible} />}
       {visible === "products" && <Layout visible={visible} />}
       {visible === "purchase-data" && <Layout visible={visible} />}
       {visible === "stocktake" && <Layout visible={visible} />}
@@ -36,8 +37,10 @@ const Main = ({ visible }) => {
       {visible === "import-data" && <Layout visible={visible} />}
       {visible === "loyalty-program" && <Layout visible={visible} />}
       {visible === "coupons" && <Layout visible={visible} />}
+      {visible === "add-coupons" && <Layout visible={visible} />}
       {visible === "coupons-edit-cop" && <Layout visible={visible} />}
       {visible === "vendors" && <Layout visible={visible} />}
+      {visible === "add-vendors" && <Layout visible={visible} />}
       {visible === "timesheet" && <Layout visible={visible} />}
       {visible === "category-edit-cat" && <Layout visible={visible} />}
       {/* {visible === "product-edit-cat" && <Layout visible={visible} />} */}
