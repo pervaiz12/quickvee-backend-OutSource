@@ -20,20 +20,20 @@ export const fetchVendorsListData = createAsyncThunk(
       const response = await axios.post(
         BASE_URL + LIST_ALL_VENDORS,
         { ...data, ...otherUserData },
-        { headers: { 
+        {
+          headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
-        } }
+          },
+        }
       );
 
-      if (response.data.status === "true") {
+      if (response.data.status) {
         const listdata = [
           response.data.vendor_name_list,
           response.data.vendor_payout_list,
           response.data.states,
         ];
-        // const statdata = [response.data.states , response.data.states ]
-        // console.log(listdata[1])
         return listdata;
       }
     } catch (error) {

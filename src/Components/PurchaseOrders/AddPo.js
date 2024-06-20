@@ -10,7 +10,6 @@ import AutoPo from "./AutoPo";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import backIcon from "../../Assests/Dashboard/Left.svg";
-// import { fetchaddpopurchaseData } from "../../Redux/features/PurchaseOrder/AddpurchaseOrderSlice";
 import { fetchVendorsListData } from "../../Redux/features/VendorList/vListSlice";
 
 import "react-datepicker/dist/react-datepicker.css";
@@ -23,8 +22,10 @@ const AddPo = ({ seVisible }) => {
   const navigate = useNavigate();
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
 
+  // const currentDate = dayjs(new Date()).format("MM/DD/YYYY");
+  // console.log(currentDate);
   const [purchaseInfo, setPurchaseInfo] = useState({
-    issuedDate: null,
+    issuedDate: dayjs(new Date()),
     stockDate: null,
     email: "",
     reference: "",
@@ -47,12 +48,6 @@ const AddPo = ({ seVisible }) => {
       merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
       ...userTypeData,
     };
-    // dispatch(
-    //   fetchaddpopurchaseData({
-    //     ...data,
-    //     admin_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-    //   })
-    // );
     dispatch(fetchVendorsListData(data));
   }, [dispatch]);
 
@@ -98,18 +93,44 @@ const AddPo = ({ seVisible }) => {
 
   const handleDate = (date, type) => {
     const dayjsDate = dayjs(date); // Convert to dayjs object
-    const formattedStartDate = dayjsDate.format("YYYY-MM-DD");
+
     setPurchaseInfo((prev) => ({
       ...prev,
-      [type]: formattedStartDate,
+      [type]: dayjsDate,
     }));
 
-    if (type === "issuedDate" && purchaseInfoErrors.issuedDate) {
-      setPurchaseInfoErrors((prev) => ({ ...prev, issuedDate: "" }));
+    const currentDate = dayjs().startOf("day");
+
+    if (type === "issuedDate") {
+      const selectedIssuedDate = dayjs(dayjsDate).startOf("day");
+      const issuedDateLessThanPresentDate =
+        selectedIssuedDate.isBefore(currentDate);
+
+      setPurchaseInfoErrors((prev) => ({
+        ...prev,
+        issuedDate: issuedDateLessThanPresentDate
+          ? "Issued Date cannot be older than present date"
+          : "",
+        stockDate: "",
+      }));
     }
 
-    if (type === "stockDate" && purchaseInfoErrors.stockDate) {
-      setPurchaseInfoErrors((prev) => ({ ...prev, stockDate: "" }));
+    if (type === "stockDate") {
+      const selectedStockDate = dayjs(dayjsDate).startOf("day");
+      const stockDateLessThanIssuedDate = selectedStockDate.isBefore(
+        purchaseInfo.issuedDate
+      );
+      const stockDateLessThanPresentDate =
+        selectedStockDate.isBefore(currentDate);
+
+      setPurchaseInfoErrors((prev) => ({
+        ...prev,
+        stockDate: stockDateLessThanIssuedDate
+          ? "Stock Due Date cannot be older than issued date"
+          : stockDateLessThanPresentDate
+            ? "Stock Due Date cannot be older than present date"
+            : "",
+      }));
     }
   };
 
@@ -130,7 +151,9 @@ const AddPo = ({ seVisible }) => {
                 <label>Vendor</label>
                 <SelectDropDown
                   selectedOption={purchaseInfo.selectedVendor}
-                  listItem={allVendors.vendorListData[0]}
+                  listItem={
+                    allVendors?.vendorListData && allVendors?.vendorListData[0]
+                  }
                   onClickHandler={handleVendorClick}
                   title={"name"}
                 />
@@ -149,7 +172,7 @@ const AddPo = ({ seVisible }) => {
                   >
                     <DatePicker
                       sx={{ width: "100%" }}
-                      className="issued-date"
+                      className="issued-date default-border-color"
                       size="small"
                       slotProps={{
                         textField: {
@@ -184,7 +207,7 @@ const AddPo = ({ seVisible }) => {
                   >
                     <DatePicker
                       sx={{ width: "100%" }}
-                      className="stock-due-date"
+                      className="stock-due-date default-border-color"
                       size="small"
                       slotProps={{
                         textField: {
@@ -194,7 +217,7 @@ const AddPo = ({ seVisible }) => {
                       disablePast
                       format={"MM/DD/YYYY"}
                       shouldDisableDate={(date) => {
-                        return date < dayjs(purchaseInfo.issuedDate);
+                        return dayjs(date) < dayjs(purchaseInfo.issuedDate);
                       }}
                       onChange={(newDate) => handleDate(newDate, "stockDate")}
                       value={purchaseInfo.stockDate}

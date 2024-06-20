@@ -217,18 +217,45 @@ const ModifyPurchaseOrder = () => {
 
   const handleDate = (date, type) => {
     const dayjsDate = dayjs(date); // Convert to dayjs object
-    const formattedStartDate = dayjsDate.format("YYYY-MM-DD");
+    // const formattedStartDate = dayjsDate.format("YYYY-MM-DD");
+
     setPurchaseInfo((prev) => ({
       ...prev,
-      [type]: formattedStartDate,
+      [type]: dayjsDate,
     }));
 
-    if (type === "issuedDate" && purchaseInfoErrors.issuedDate) {
-      setPurchaseInfoErrors((prev) => ({ ...prev, issuedDate: "" }));
+    const currentDate = dayjs().startOf("day");
+
+    if (type === "issuedDate") {
+      const selectedIssuedDate = dayjs(dayjsDate).startOf("day");
+      const issuedDateLessThanPresentDate =
+        selectedIssuedDate.isBefore(currentDate);
+
+      setPurchaseInfoErrors((prev) => ({
+        ...prev,
+        issuedDate: issuedDateLessThanPresentDate
+          ? "Issued Date cannot be older than present date"
+          : "",
+        stockDate: "",
+      }));
     }
 
-    if (type === "stockDate" && purchaseInfoErrors.stockDate) {
-      setPurchaseInfoErrors((prev) => ({ ...prev, stockDate: "" }));
+    if (type === "stockDate") {
+      const selectedStockDate = dayjs(dayjsDate).startOf("day");
+      const stockDateLessThanIssuedDate = selectedStockDate.isBefore(
+        purchaseInfo.issuedDate
+      );
+      const stockDateLessThanPresentDate =
+        selectedStockDate.isBefore(currentDate);
+
+      setPurchaseInfoErrors((prev) => ({
+        ...prev,
+        stockDate: stockDateLessThanIssuedDate
+          ? "Stock Due Date cannot be older than issued date"
+          : stockDateLessThanPresentDate
+            ? "Stock Due Date cannot be older than present date"
+            : "",
+      }));
     }
   };
 
@@ -268,15 +295,15 @@ const ModifyPurchaseOrder = () => {
 
       const res = await dispatch(fetchProductsData(name_data));
 
-      const data = res.payload
-        ?.filter((prod) =>
-          prod.title.toLowerCase().includes(inputValue.toLowerCase())
-        )
-        .map((prod) => ({
-          label: prod.title,
-          value: prod.id,
-          variantId: prod.isvarient === "1" ? prod.var_id : null,
-        }));
+      // ?.filter((prod) =>
+      //   prod.title.toLowerCase().includes(inputValue.toLowerCase())
+      // )
+
+      const data = res.payload?.map((prod) => ({
+        label: prod.title,
+        value: prod.id,
+        variantId: prod.isvarient === "1" ? prod.var_id : null,
+      }));
 
       const filterProducts =
         data &&
@@ -445,6 +472,11 @@ const ModifyPurchaseOrder = () => {
   // modifying purchase order api
   const modifyPurchaseOrder = async () => {
     const { issuedDate, stockDate, selectedVendor } = purchaseInfo;
+
+    if (selectedProducts.length <= 0) {
+      ToastifyAlert("No Products to update!", "error");
+      return;
+    }
 
     // validating purchase order info dataset
     const purchaseInfoDetails = [selectedVendor].every((a) =>
@@ -649,7 +681,7 @@ const ModifyPurchaseOrder = () => {
                       disablePast
                       format={"MM/DD/YYYY"}
                       shouldDisableDate={(date) => {
-                        return date < dayjs(purchaseInfo.issuedDate);
+                        return dayjs(date) < dayjs(purchaseInfo.issuedDate);
                       }}
                       onChange={(newDate) => handleDate(newDate, "stockDate")}
                       value={purchaseInfo.stockDate}
@@ -707,131 +739,12 @@ const ModifyPurchaseOrder = () => {
                       onChange={(option) => {
                         getProductData(option.value, option.variantId);
                       }}
-                      placeholder="Search Product by Title"
+                      placeholder="Search Product by Title or UPC"
                     />
                   </Grid>
                 </Grid>
               </div>
             </div>
-
-            {/* <div className="q-category-bottom-detail-section z-index-1">
-              {selectedProducts.length > 0 && (
-                <>
-                  <div className="q-add-purchase-section-header">
-                    <p className="purchase-data-item">Item Name</p>
-                    <p className="purchase-data-qty">Qty</p>
-                    <p className="purchase-data-after">After</p>
-                    <p className="purchase-data-unit">Cost Per Unit</p>
-                    <p className="purchase-data-total">Total</p>
-                    <p className="purchase-data-upc">UPC</p>
-                    <p className="purchase-data-delete"></p>
-                  </div>
-                  {selectedProducts.map((product, index) => (
-                    <div
-                      key={product?.id}
-                      className={`q-category-bottom-categories-single-category purchase-addpo d-flex gap-2 ${
-                        index % 2 === 0 ? "even" : "odd"
-                      }`}
-                    >
-                      <p className="purchase-data-item text-[16px]">
-                        {product.product_title
-                          ? product.product_title
-                          : product.title
-                            ? product.title
-                            : ""}
-                        <br />
-                        {product.variant_title || product.variant ? (
-                          <>
-                            <span className="text-[14px]">
-                              {product.variant_title || product.variant}
-                            </span>
-                            <br />
-                          </>
-                        ) : null}
-                        <TextField
-                          id="outlined-basic"
-                          inputProps={{ type: "text" }}
-                          value={product.note}
-                          onChange={(e) => handleProduct(e, product.id, "note")}
-                          placeholder="Add Note"
-                          variant="outlined"
-                          size="small"
-                          disabled={product.recieved_status === "2"}
-                        />
-                      </p>
-                      <p className="purchase-data-qty">
-                        <Grid container>
-                          <Grid item xs={10}>
-                            <FormControl fullWidth>
-                              <TextField
-                                id="outlined-basic"
-                                value={product.newQty}
-                                inputProps={{
-                                  type: "number",
-                                }}
-                                onChange={(e) => {
-                                  if (e.target.value >= 0) {
-                                    handleProduct(e, product.id, "newQty");
-                                  }
-                                }}
-                                variant="outlined"
-                                size="small"
-                                disabled={product.recieved_status === "2"}
-                              />
-                              {product.qtyError && (
-                                <p className="error-message">Qty is required</p>
-                              )}
-                            </FormControl>
-                          </Grid>
-                        </Grid>
-                      </p>
-                      <p className="purchase-data-after mt-3">
-                        {product?.finalQty}
-                      </p>
-                      <p className="purchase-data-unit">
-                        <Grid container>
-                          <Grid item xs={10}>
-                            <FormControl fullWidth>
-                              <TextField
-                                id="outlined-basic"
-                                value={product.newPrice}
-                                inputProps={{ type: "number" }}
-                                onChange={(e) => {
-                                  handleProduct(e, product.id, "newPrice");
-                                }}
-                                variant="outlined"
-                                size="small"
-                                disabled={product.recieved_status === "2"}
-                              />
-                              {product.priceError && (
-                                <p className="error-message">
-                                  Cost Per Item is required
-                                </p>
-                              )}
-                            </FormControl>
-                          </Grid>
-                        </Grid>
-                      </p>
-                      <p className="purchase-data-total mt-3">
-                        ${product?.finalPrice}
-                      </p>
-                      <p className="purchase-data-upc mt-3">{product?.upc}</p>
-                      <p className="purchase-data-delete">
-                        {product?.recieved_status === "0" || !product.po_id ? (
-                          <img
-                            src={DeleteIcon}
-                            alt=""
-                            className="w-8 h-8 cursor-pointer"
-                            onClick={() => handleDelete(product)}
-                          />
-                        ) : null}
-                      </p>
-                    </div>
-                  ))}
-                </>
-              )}
-              
-            </div> */}
 
             <Grid container className="z-index-1">
               <TableContainer>
@@ -853,18 +766,6 @@ const ModifyPurchaseOrder = () => {
                       <StyledTableRow key={product?.id}>
                         <StyledTableCell>
                           <>
-                            {/* <p className="purchase-data-item text-[16px]">
-                              <br />
-                              {product.variant_title || product.variant ? (
-                                <>
-                                  <span className="text-[14px]">
-                                    {product.variant_title || product.variant}
-                                  </span>
-                                  <br />
-                                </>
-                              ) : null}
-                            </p> */}
-
                             <p className="font-normal text-[16px] mb-0">
                               {product?.product_title
                                 ? product?.product_title

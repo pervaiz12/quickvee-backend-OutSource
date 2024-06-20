@@ -96,6 +96,7 @@ const ReceivePurchaseOrderItems = () => {
                     // newReceivedQty: item.recieved_qty,
                     newReceivedQty: item.pending_qty,
                     toReceiveQty: item.pending_qty,
+                    isChecked: true,
                   }
             )
           : [],
@@ -345,7 +346,8 @@ const ReceivePurchaseOrderItems = () => {
             <Grid item xs={12} sm={6} md={4}>
               <label>Stock Due</label>
               <p>
-                {purchaseOrder.stock_date
+                {purchaseOrder.stock_date &&
+                purchaseOrder.stock_date !== "0000-00-00"
                   ? formatDate(purchaseOrder.stock_date)
                   : "-"}
               </p>
