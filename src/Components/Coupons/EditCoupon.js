@@ -267,7 +267,8 @@ const EditCoupon = ({couponId,seVisible}) => {
     if (!coupon.min_amount) {
       setMinOrderAmountError("Minimum Order Amount is required");
       return; // Stop further execution
-    } else if (coupon.min_amount === "") {
+    } else if (coupon.min_amount === "" || coupon.min_amount === "0.00") {
+      setMinOrderAmountError("Minimum Order Amount is required");
       return;
     } else {
       setMinOrderAmountError("");
@@ -304,6 +305,23 @@ const EditCoupon = ({couponId,seVisible}) => {
       return;
     } else {
       setDateEndError("");
+    }
+
+    if (activeTab === "percentage") {
+      if (!coupon.maximum_discount) {
+        setDateMaxDisAMTError("Maximum Discount Amount is required");
+        return; // Stop further execution
+      } else if (coupon.maximum_discount === "") {
+        setDateMaxDisAMTError("Maximum Discount Amount is required");
+        // return;
+      } else {
+        setDateMaxDisAMTError("");
+      }
+      if (!coupon.discount == null || coupon.discount === "") {
+        setDiscountError("Discount Amount Percentage is required");
+      } else {
+        setDiscountError("");
+      }
     }
 
     const formData = new FormData();
@@ -352,6 +370,7 @@ const EditCoupon = ({couponId,seVisible}) => {
     for (const [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
     }
+    // return
     setLoader(true);
 
     try {
