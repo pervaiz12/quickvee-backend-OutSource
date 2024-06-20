@@ -18,6 +18,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import dayjs from "dayjs";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -120,11 +121,12 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
 
       const res = await dispatch(fetchProductsData(name_data));
 
+      // ?.filter((prod) =>
+      //   prod.title.toLowerCase().includes(inputValue.toLowerCase())
+      // )
+
       const data = res.payload
-        ?.filter((prod) =>
-          prod.title.toLowerCase().includes(inputValue.toLowerCase())
-        )
-        .map((prod) => ({
+        ?.map((prod) => ({
           label: prod.title,
           value: prod.id,
           variantId: prod.isvarient === "1" ? prod.var_id : null,
@@ -174,7 +176,9 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
           );
 
           obj.newPrice =
-            parseFloat(product.price) > 0 ? parseFloat(product.price) : 0;
+            parseFloat(product.costperItem) > 0
+              ? parseFloat(product.costperItem)
+              : 0;
           obj.finalQty = Number(product.quantity) ?? 0;
 
           setSelectedProducts((prev) => [
@@ -185,7 +189,9 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
           const product = response.data.data.productdata;
 
           obj.newPrice =
-            parseFloat(product.price) > 0 ? parseFloat(product.price) : 0;
+            parseFloat(product.costperItem) > 0
+              ? parseFloat(product.costperItem)
+              : 0;
           obj.finalQty = Number(product.quantity) ?? 0;
 
           setSelectedProducts((prev) => [{ ...product, ...obj }, ...prev]);
@@ -263,19 +269,27 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
         createPo: isDraft === "0",
         saveAsDraft: isDraft === "1",
       }));
+
       const { issuedDate, stockDate, selectedVendor } = purchaseInfo;
 
+      const currentDate = dayjs().startOf("day");
+      const selectedIssuedDate = dayjs(issuedDate).startOf("day");
+
+      const issuedDateIsFine = !selectedIssuedDate.isBefore(currentDate);
+
       // validating purchase order info dataset
-      const purchaseInfoDetails = [issuedDate, stockDate, selectedVendor].every(
-        (a) => Boolean(a && a.trim())
+      const purchaseInfoDetails = [selectedVendor].every((a) =>
+        Boolean(a && a.trim())
       );
+
+      // issuedDate, stockDate,  need to handle this dates..
 
       // validating purchase order products dataset
       const validateProducts = selectedProducts.every(
         (prod) => prod.newQty && prod.newPrice
       );
 
-      if (purchaseInfoDetails && validateProducts) {
+      if (purchaseInfoDetails && validateProducts && issuedDateIsFine) {
         try {
           const orderItems = selectedProducts.map((prod) => ({
             product_id: prod.variant ? prod.product_id : prod.id,
@@ -305,8 +319,11 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
             LoginGetDashBoardRecordJson?.data?.merchant_id
           );
           formData.append("vendor_id", Number(purchaseInfo?.vendorId));
-          formData.append("issue_date", purchaseInfo?.issuedDate);
-          formData.append("stock_date", purchaseInfo?.stockDate);
+          formData.append("issue_date", issuedDate?.format("YYYY-MM-DD"));
+          formData.append(
+            "stock_date",
+            stockDate ? stockDate?.format("YYYY-MM-DD") : "0000-00-00"
+          );
           formData.append("reference", purchaseInfo?.reference);
           formData.append("is_draft", isDraft);
           formData.append("created_at", createdAt(new Date()));
@@ -333,10 +350,16 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
           console.log("Error: ", e);
         }
       } else {
-        if (!purchaseInfoDetails) {
+        // console.log("issuedDate: ", issuedDate);
+        if (!purchaseInfoDetails || !issuedDateIsFine) {
           setPurchaseInfoErrors((prev) => ({
             ...prev,
-            issuedDate: issuedDate ? "" : "Issued Date is required",
+            issuedDate:
+              issuedDate && issuedDateIsFine
+                ? ""
+                : issuedDate && !issuedDateIsFine
+                  ? "Issued Date cannot be older than present date"
+                  : "Issued Date is required",
             // stockDate: stockDate ? "" : "Stock Due Date is required",
             // email: email ? "" : "Email is required",
             selectedVendor: selectedVendor ? "" : "Vendor is required",
@@ -443,7 +466,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
                     onChange={(option) => {
                       getProductData(option.value, option.variantId);
                     }}
-                    placeholder="Search Product by Title"
+                    placeholder="Search Product by Title or UPC"
                   />
                 </Grid>
               </Grid>
