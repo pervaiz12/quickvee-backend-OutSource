@@ -18,10 +18,10 @@ export const colourOptions = [
 
 export const formData = [
   {
-    name: "price",
+    name: "costPerItem",
     placeholder: "",
     type: "text",
-    label: "Price",
+    label: "Cost per item",
   },
   {
     name: "compareAtPrice",
@@ -30,12 +30,11 @@ export const formData = [
     label: "Compare At Price",
   },
   {
-    name: "costPerItem",
+    name: "price",
     placeholder: "",
     type: "text",
-    label: "Cost per item",
+    label: "Price",
   },
-
   {
     name: "margin",
     placeholder: "",

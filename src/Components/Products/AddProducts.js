@@ -348,6 +348,8 @@ const AddProducts = () => {
     }));
   };
 
+  console.log('formValue', formValue);
+
   const handleDeleteSelectedOption = (id, name) => {
     const filterOptionItems = productInfo[name].filter(
       (item) => item?.id !== id
@@ -689,22 +691,7 @@ const AddProducts = () => {
       let profitValue;
       let price_total_value;
 
-      // price field total value calculation based on costPer value which is fetch from API.
-      if (name === "costPerItem") {
-        if (costPer > 0) {
-          totalPriceValue = (costPer / 100) * fieldValue;
-          price_total_value =
-            parseFloat(fieldValue) + parseFloat(totalPriceValue);
 
-          // margin and profit total value calculation
-          let marginvl = (fieldValue * 100) / price_total_value.toFixed(2);
-          let showmargin = 100 - marginvl;
-          marginValue = parseFloat(showmargin).toFixed(2);
-          profitValue = parseFloat(price_total_value - fieldValue).toFixed(2);
-        } else {
-          price_total_value = "";
-        }
-      }
 
       // if price value is change manually the recalculate margin and profit value
       const costPerValue = isMultipleVarient
@@ -730,6 +717,42 @@ const AddProducts = () => {
           : data.every((item) => isValue(item));
       };
 
+
+      const calculateProfit=(name, item, value)=>{
+        let profitAmount = 0;
+        if(name === "costPerItem" && parseFloat(item?.price) > 0){;
+              profitAmount = parseFloat(item?.price - value).toFixed(2);
+              console.log('profit iffff', profitAmount, value, item.price);
+        }else if(name === "price" && parseFloat(item?.costPerItem) > 0){
+              profitAmount = parseFloat(value - item?.costPerItem).toFixed(2);
+              console.log('profit else', profitAmount, value, item.costPerItem);
+        } else{
+          profitAmount=""
+        }
+        return profitAmount;
+      }
+  
+  
+      const calculatemargin=(name, item, value)=>{
+        let marginAmount = 0;
+        if(name === "costPerItem" && parseFloat(item?.price) > 0){
+              let marginvl = (value * 100) / parseFloat(item?.price);
+              let showmargin = 100 - marginvl;
+              marginAmount = parseFloat(showmargin).toFixed(2);
+              console.log('margin iffff', marginvl, showmargin, marginAmount, value, item.price);
+        } else if(name === "price" && parseFloat(item?.costPerItem) > 0){
+              let marginvl = (parseFloat(item?.costPerItem) * 100) / parseFloat(value);
+              let showmargin = 100 - marginvl;
+              marginAmount = parseFloat(showmargin).toFixed(2);
+              console.log('margin else', marginvl, showmargin, marginAmount, value, item.costPerItem);
+        } else{
+          marginAmount=""
+        }
+        return marginAmount;
+      }
+
+
+
       const updatedValues = formValue.map((item, index) => {
         const currentTitle = Object.keys(item)[0];
         const showError =
@@ -746,6 +769,11 @@ const AddProducts = () => {
               : item[currentTitle]?.compareAtPrice
           );
 
+          const costPerItemAndPriceAmountExists = () => {
+            const bool = (((name === "costPerItem" && fieldValue) && (parseFloat(item[currentTitle]?.price) > 0)) || ((name === "price" && fieldValue) && (parseFloat(item[currentTitle]?.costPerItem) > 0))) 
+            return bool;
+          }
+
         if (i > 0) {
           return !["upcCode", "customCode"].includes(name) && item[title]
             ? {
@@ -753,17 +781,13 @@ const AddProducts = () => {
                 [currentTitle]: {
                   ...item[currentTitle],
                   [name]: fieldValue,
-                  price: !isNaN(parseFloat(price_total_value))
-                    ? parseFloat(price_total_value).toFixed(2)
-                    : name === "price"
+                  price: name === "price"
                       ? fieldValue
-                      : item[currentTitle]?.price &&
-                          name === "costPerItem" &&
-                          !fieldValue
-                        ? ""
-                        : item[currentTitle]?.price,
-                  margin: !isNaN(parseFloat(marginValue))
-                    ? marginValue
+                      : item[currentTitle]?.price
+                        ? item[currentTitle]?.price
+                        : "",
+                  margin: costPerItemAndPriceAmountExists() 
+                  ? calculatemargin(name, item[currentTitle], fieldValue) 
                     : oldMargin([
                           item[currentTitle]?.costPerItem,
                           item[currentTitle]?.margin,
@@ -771,8 +795,8 @@ const AddProducts = () => {
                         ])
                       ? item[currentTitle]?.margin
                       : "",
-                  profit: !isNaN(parseFloat(profitValue))
-                    ? profitValue
+                  profit:costPerItemAndPriceAmountExists() 
+                  ? calculateProfit(name, item[currentTitle], fieldValue) 
                     : oldMargin([
                           item[currentTitle]?.costPerItem,
                           item[currentTitle]?.margin,
@@ -796,6 +820,7 @@ const AddProducts = () => {
                             "isFoodStamble",
                             "sellOutOfStock",
                             "trackQuantity",
+                            "costPerItem"
                           ]?.includes(name) &&
                           item[currentTitle]?.comparePriceError
                         ? item[currentTitle]?.comparePriceError
@@ -804,23 +829,19 @@ const AddProducts = () => {
               }
             : item;
         } else if (i === 0) {
-          return !["upcCode", "customCode"].includes(name)
+          return (!["upcCode", "customCode"].includes(name) && !item[currentTitle][name]) && pageUrl === "inventory/products/add"
             ? {
                 ...item,
                 [currentTitle]: {
                   ...item[currentTitle],
                   [name]: fieldValue,
-                  price: !isNaN(parseFloat(price_total_value))
-                    ? parseFloat(price_total_value).toFixed(2)
-                    : name === "price"
+                  price: name === "price"
                       ? fieldValue
-                      : item[currentTitle]?.price &&
-                          name === "costPerItem" &&
-                          !fieldValue
-                        ? ""
-                        : item[currentTitle]?.price,
-                  margin: !isNaN(parseFloat(marginValue))
-                    ? marginValue
+                      : item[currentTitle]?.price
+                        ? item[currentTitle]?.price
+                        : "",
+                  margin:costPerItemAndPriceAmountExists() 
+                  ? calculatemargin(name, item[currentTitle], fieldValue) 
                     : oldMargin([
                           item[currentTitle]?.costPerItem,
                           item[currentTitle]?.margin,
@@ -828,8 +849,8 @@ const AddProducts = () => {
                         ])
                       ? item[currentTitle]?.margin
                       : "",
-                  profit: !isNaN(parseFloat(profitValue))
-                    ? profitValue
+                  profit:costPerItemAndPriceAmountExists() 
+                  ? calculateProfit(name, item[currentTitle], fieldValue) 
                     : oldMargin([
                           item[currentTitle]?.costPerItem,
                           item[currentTitle]?.margin,
@@ -837,6 +858,9 @@ const AddProducts = () => {
                         ])
                       ? item[currentTitle]?.profit
                       : "",
+
+
+                      
                   comparePriceError:
                     ["price", "compareAtPrice", "costPerItem"]?.includes(
                       name
@@ -853,6 +877,7 @@ const AddProducts = () => {
                             "isFoodStamble",
                             "sellOutOfStock",
                             "trackQuantity",
+                             "costPerItem"
                           ]?.includes(name) &&
                           item[currentTitle]?.comparePriceError
                         ? item[currentTitle]?.comparePriceError
@@ -955,23 +980,6 @@ const AddProducts = () => {
     let profitValue;
     let price_total_value;
 
-    // price field total value calculation based on costPer value which is fetch from API.
-    if (name === "costPerItem") {
-      if (costPer > 0) {
-        totalPriceValue = (costPer / 100) * fieldValue;
-        price_total_value =
-          parseFloat(fieldValue) + parseFloat(totalPriceValue);
-
-        // margin and profit total value calculation
-        let marginvl = (fieldValue * 100) / price_total_value.toFixed(2);
-        let showmargin = 100 - marginvl;
-        marginValue = parseFloat(showmargin).toFixed(2);
-        profitValue = parseFloat(price_total_value - fieldValue).toFixed(2);
-      } else {
-        price_total_value = "";
-      }
-    }
-
     // if price value is change manually the recalculate margin and profit value
     const costPerValue = isMultipleVarient
       ? formValue?.[i]?.[title]?.["costPerItem"]
@@ -996,6 +1004,40 @@ const AddProducts = () => {
         : data.every((item) => isValue(item));
     };
 
+    const calculateProfit=(name, item, value)=>{
+      let profitAmount = 0;
+      if(name === "costPerItem" && parseFloat(item?.price) > 0){;
+            profitAmount = parseFloat(item?.price - value).toFixed(2);
+            console.log('profit iffff', profitAmount, value, item.price);
+      }else if(name === "price" && parseFloat(item?.costPerItem) > 0){
+            profitAmount = parseFloat(value - item?.costPerItem).toFixed(2);
+            console.log('profit else', profitAmount, value, item.costPerItem);
+      } else{
+        profitAmount=""
+      }
+      return profitAmount;
+    }
+
+
+    const calculatemargin=(name, item, value)=>{
+      let marginAmount = 0;
+      if(name === "costPerItem" && parseFloat(item?.price) > 0){
+            let marginvl = (value * 100) / parseFloat(item?.price);
+            let showmargin = 100 - marginvl;
+            marginAmount = parseFloat(showmargin).toFixed(2);
+            console.log('margin iffff', marginvl, showmargin, marginAmount, value, item.price);
+      } else if(name === "price" && parseFloat(item?.costPerItem) > 0){
+            let marginvl = (parseFloat(item?.costPerItem) * 100) / parseFloat(value);
+            let showmargin = 100 - marginvl;
+            marginAmount = parseFloat(showmargin).toFixed(2);
+            console.log('margin else', marginvl, showmargin, marginAmount, value, item.costPerItem);
+      } else{
+        marginAmount=""
+      }
+      return marginAmount;
+    }
+
+
     let showError;
     let updatedValues;
     // manually onchange
@@ -1013,30 +1055,35 @@ const AddProducts = () => {
             name === "compareAtPrice" ? fieldValue : item[title]?.compareAtPrice
           );
 
+          const costPerItemAndPriceAmountExists = () => {
+            const bool = (((name === "costPerItem" && fieldValue) && (parseFloat(item[title]?.price) > 0)) || ((name === "price" && fieldValue) && (parseFloat(item[title]?.costPerItem) > 0))) 
+            return bool;
+          }
+
         return Object.keys(item).includes(title)
           ? {
               ...item,
               [title]: {
                 ...item[title],
                 [name]: type === "checkbox" ? checked : fieldValue,
-                price: !isNaN(parseFloat(price_total_value))
-                  ? parseFloat(price_total_value).toFixed(2)
-                  : name === "price"
+                price:  name === "price"
                     ? fieldValue
-                    : item[title].price && name === "costPerItem" && !fieldValue
-                      ? ""
-                      : item[title].price,
-                margin: !isNaN(parseFloat(marginValue))
-                  ? marginValue
-                  : oldMargin([
-                        item[title].costPerItem,
-                        item[title].margin,
-                        item[title].price,
-                      ])
-                    ? item[title].margin
-                    : "",
-                profit: !isNaN(parseFloat(profitValue))
-                  ? profitValue
+                    : item[title].price
+                      ? item[title].price
+                      : "",
+
+                margin: costPerItemAndPriceAmountExists() 
+                      ? calculatemargin(name, item[title], fieldValue) 
+                      : oldMargin([
+                          item[title].costPerItem,
+                          item[title].margin,
+                          item[title].price,
+                        ])
+                      ? item[title].margin
+                      : "",
+
+                profit: costPerItemAndPriceAmountExists()
+                  ? calculateProfit(name, item[title], fieldValue)
                   : oldMargin([
                         item[title].costPerItem,
                         item[title].margin,
@@ -1063,6 +1110,7 @@ const AddProducts = () => {
                           "isFoodStamble",
                           "sellOutOfStock",
                           "trackQuantity",
+                          "costPerItem"
                         ]?.includes(name) && item[title]?.comparePriceError
                       ? item[title]?.comparePriceError
                       : "",
@@ -1084,24 +1132,29 @@ const AddProducts = () => {
             name === "compareAtPrice" ? fieldValue : item?.compareAtPrice
           );
 
+
+          const costPerItemAndPriceAmountExistsInSingleVarient = () => {
+            const bool = (((name === "costPerItem" && fieldValue) && (parseFloat(item?.price) > 0)) || ((name === "price" && fieldValue) && (parseFloat(item?.costPerItem) > 0))) 
+            return bool;
+          }
+
+
         return {
           ...item,
           [name]: type === "checkbox" ? checked : fieldValue,
-          price: !isNaN(parseFloat(price_total_value))
-            ? parseFloat(price_total_value).toFixed(2)
-            : name === "price"
+          price: name === "price"
               ? fieldValue
-              : item.price && name === "costPerItem" && !fieldValue
-                ? ""
-                : item.price,
-          margin: !isNaN(parseFloat(marginValue))
-            ? marginValue
-            : oldMargin([item.costPerItem, item.margin, item.price])
+              : item.price 
+                ? item.price
+                : "",
+          margin: costPerItemAndPriceAmountExistsInSingleVarient() 
+          ? calculatemargin(name, item, fieldValue) 
+          : oldMargin([item.costPerItem, item.margin, item.price])
               ? item.margin
               : "",
-          profit: !isNaN(parseFloat(profitValue))
-            ? profitValue
-            : oldMargin([item.costPerItem, item.margin, item.price])
+          profit: costPerItemAndPriceAmountExistsInSingleVarient()
+          ? calculateProfit(name, item, fieldValue)
+          :  oldMargin([item.costPerItem, item.margin, item.price])
               ? item.profit
               : "",
           comparePriceError:
@@ -1119,6 +1172,7 @@ const AddProducts = () => {
                     "isFoodStamble",
                     "sellOutOfStock",
                     "trackQuantity",
+                    "costPerItem"
                   ]?.includes(name) && item?.comparePriceError
                 ? item?.comparePriceError
                 : "",
@@ -1217,6 +1271,7 @@ const AddProducts = () => {
                 [title]: {
                   notEditable: result?.notEditable || "",
                   productEditId: result?.productEditId || "",
+                  comparePriceError: result?.comparePriceError || "",
                   costPerItem: result?.costPerItem || "",
                   compareAtPrice: result?.compareAtPrice || "",
                   price: result?.price || "",
@@ -1869,6 +1924,7 @@ const AddProducts = () => {
             formData={formValue}
             handleCopyAllVarientValue={handleCopyAllVarientValue}
             inventoryData={inventoryData}
+            fetchProductDataById={fetchProductDataById}
           />
           {/* alert modal */}
           <AlertModal
@@ -1904,7 +1960,7 @@ const AddProducts = () => {
                     onChange={handleProductInfo}
                   />
                   {error?.title ? (
-                    <span className="error-alert">{error?.title}</span>
+                    <span className="error-alert mb-2">{error?.title}</span>
                   ) : (
                     ""
                   )}
@@ -1968,6 +2024,7 @@ const AddProducts = () => {
                     error={error}
                     // handleUpdateError={handleUpdateError}
                     placeholder="Search Taxes"
+                    pageUrl={pageUrl}
                   />
                 </div>
 
@@ -2143,6 +2200,10 @@ const AddProducts = () => {
                                 </>
                               </div>
                             );
+
+
+
+                            
                           })
                         : ""}
                     </div>

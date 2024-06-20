@@ -8,13 +8,15 @@ import {
 } from "../../Redux/features/Product/ProductSlice";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import { Box, CircularProgress } from "@mui/material";
 
 const BulkInstantPo = ({
   productData,
   modalType,
   varientIndex,
   varientData,
-  handleCloseEditModal
+  handleCloseEditModal,
+  fetchProductDataById,
 }) => {
   const dispatch = useDispatch();
   const productId = useParams();
@@ -24,6 +26,7 @@ const BulkInstantPo = ({
     cost: "",
     description: "",
   });
+  const [loading, setLoading] = useState(false);
 
   const [instancePoMultiple, setInstancePoMultiple] = useState({
     instantPoState: [],
@@ -122,6 +125,7 @@ const BulkInstantPo = ({
 
   const handlSumbitInstantPo = () => {
     const formData = new FormData();
+    setLoading(true);
     if (modalType !== "bulk-edit") {
       formData.append("product_id", productId?.id);
       formData.append(
@@ -132,7 +136,10 @@ const BulkInstantPo = ({
             ? ""
             : varientData[varientIndex]?.id
       );
-      formData.append("merchant_id", LoginGetDashBoardRecordJson?.data?.merchant_id);
+      formData.append(
+        "merchant_id",
+        LoginGetDashBoardRecordJson?.data?.merchant_id
+      );
       formData.append("description", instantPoSingle?.description);
       formData.append("qty", instantPoSingle?.qty);
       formData.append("price", instantPoSingle?.cost);
@@ -146,11 +153,15 @@ const BulkInstantPo = ({
               description: "",
             });
             ToastifyAlert("Instance PO Updated!", "success");
+            fetchProductDataById();
             handleCloseEditModal();
           }
         })
         .catch((err) => {
           ToastifyAlert("Error!", "error");
+        })
+        .finally(() => {
+          setLoading(false);
         });
     } else {
       formData.append("product_id", productId?.id);
@@ -162,7 +173,10 @@ const BulkInstantPo = ({
             ? varientData?.map((i) => i?.id)?.toString()
             : varientData[varientIndex]?.id
       );
-      formData.append("merchant_id",  LoginGetDashBoardRecordJson?.data?.merchant_id);
+      formData.append(
+        "merchant_id",
+        LoginGetDashBoardRecordJson?.data?.merchant_id
+      );
       formData.append("description", instancePoMultiple?.description);
       formData.append(
         "qty",
@@ -181,11 +195,15 @@ const BulkInstantPo = ({
               description: "",
             });
             ToastifyAlert("Instance PO Updated!", "success");
+            fetchProductDataById();
             handleCloseEditModal();
           }
         })
         .catch((err) => {
           ToastifyAlert("Error!", "error");
+        })
+        .finally(() => {
+          setLoading(false);
         });
     }
   };
@@ -344,10 +362,22 @@ const BulkInstantPo = ({
                         backgroundColor: "#0A64F9",
                       }}
                       onClick={handlSumbitInstantPo}
+                      disabled={loading}
                     >
-                      Update
+                      {loading ? (
+                        <Box className="loader-box">
+                          <CircularProgress />
+                        </Box>
+                      ) : (
+                        "Update"
+                      )}
                     </button>
-                    <button className="quic-btn quic-btn-cancle" onClick={handleCloseEditModal}>Cancel</button>
+                    <button
+                      className="quic-btn quic-btn-cancle"
+                      onClick={handleCloseEditModal}
+                    >
+                      Cancel
+                    </button>
                   </div>
                 </div>
               </div>

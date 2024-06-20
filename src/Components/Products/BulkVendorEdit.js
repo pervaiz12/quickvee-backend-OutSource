@@ -34,7 +34,7 @@ const BulkVendorEdit = ({
   varientData,
   varientIndex,
   modalType,
-  handleCloseEditModal
+  handleCloseEditModal,
 }) => {
   const dispatch = useDispatch();
   const { LoginGetDashBoardRecordJson } = useAuthDetails();
@@ -42,6 +42,8 @@ const BulkVendorEdit = ({
   const [fetchDataLoadingVendor, setFetchDataLoadingVendor] = useState(false);
   const [vendor, setVendor] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [submitLoading, setSubmitLoading] = useState(false);
+
   const productId = useParams();
 
   const handleSelectProductOptions = (value, name) => {
@@ -54,7 +56,6 @@ const BulkVendorEdit = ({
   };
 
   const [vendorItems, setVendorItems] = useState([]);
-
 
   // onchange of costperItem and
   const handleVendorCostPerItem = (e, index, vendorId) => {
@@ -142,7 +143,10 @@ const BulkVendorEdit = ({
           ? productData?.id
           : varientData[varientIndex]?.id
     );
-    formData.append("merchant_id",  LoginGetDashBoardRecordJson?.data?.merchant_id);
+    formData.append(
+      "merchant_id",
+      LoginGetDashBoardRecordJson?.data?.merchant_id
+    );
     formData.append("single_product", isVarient ? 0 : 1);
 
     dispatch(getAlreadyAssignVendor(formData))
@@ -173,7 +177,10 @@ const BulkVendorEdit = ({
           ? productData?.id
           : varientData[varientIndex]?.id
     );
-    formData.append("merchant_id",    LoginGetDashBoardRecordJson?.data?.merchant_id);
+    formData.append(
+      "merchant_id",
+      LoginGetDashBoardRecordJson?.data?.merchant_id
+    );
     formData.append("single_product", isVarient ? 0 : 1);
 
     // called vendor api for dropdown vendor data
@@ -222,7 +229,10 @@ const BulkVendorEdit = ({
               })),
             ]);
             const formData = new FormData();
-            formData.append("merchant_id",    LoginGetDashBoardRecordJson?.data?.merchant_id);
+            formData.append(
+              "merchant_id",
+              LoginGetDashBoardRecordJson?.data?.merchant_id
+            );
             formData.append("id", productId?.id);
 
             ToastifyAlert("Vendor Added Successfully!", "success");
@@ -297,6 +307,7 @@ const BulkVendorEdit = ({
   const handleSaveVendorList = () => {
     const formData = new FormData();
     const bulkFormData = new FormData();
+    setSubmitLoading(true);
 
     /// send formData payload when single varient
     formData.append(
@@ -327,7 +338,10 @@ const BulkVendorEdit = ({
       "costperItem",
       vendorItems?.map((i) => i?.costPerItem)?.toString()
     );
-    bulkFormData.append("merchant_id",    LoginGetDashBoardRecordJson?.data?.merchant_id);
+    bulkFormData.append(
+      "merchant_id",
+      LoginGetDashBoardRecordJson?.data?.merchant_id
+    );
     bulkFormData.append(
       "prefferd_vendor",
       vendorItems?.filter((i) => Boolean(+i?.isPreferred))[0]?.id ?? ""
@@ -344,6 +358,9 @@ const BulkVendorEdit = ({
         })
         .catch(() => {
           ToastifyAlert("Error!", "error");
+        })
+        .finally(() => {
+          setSubmitLoading(false);
         });
     } else {
       dispatch(saveVendorList(formData))
@@ -355,6 +372,9 @@ const BulkVendorEdit = ({
         })
         .catch(() => {
           ToastifyAlert("Error!", "error");
+        })
+        .finally(() => {
+          setSubmitLoading(false);
         });
     }
   };
@@ -416,64 +436,64 @@ const BulkVendorEdit = ({
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {vendorItems?.length
-                    ? vendorItems.map((row, index) => (
-                        <TableRow
-                          key={row.id}
-                          sx={{
-                            "&:last-child td, &:last-child th": { border: 0 },
-                          }}
-                        >
-                          <TableCell component="th" scope="row">
-                            {row.name}
-                          </TableCell>
-                          <TableCell align="center">
-                            <input
-                              type="text"
-                              className="vendor-cost-input"
-                              placeholder="$10.00"
-                              name="costPerItem"
-                              onChange={(e) =>
-                                handleVendorCostPerItem(e, index, row?.id)
-                              }
-                              value={vendorItems[index]["costPerItem"]}
-                              maxLength={9}
-                            />
-                          </TableCell>
-                          <TableCell align="center">
-                            <Switch
-                              name="online"
-                              id="online"
-                              checked={
-                                vendorItems[index]["isPreferred"] || false
-                              }
-                              onChange={(e) =>
-                                handleVendorCostPerItem(e, index, row?.id)
-                              }
-                              sx={{
-                                "& .MuiSwitch-switchBase.Mui-checked": {
-                                  color: "#0A64F9",
-                                },
-                                "& .MuiSwitch-track": {
-                                  backgroundColor: "#0A64F9",
-                                },
-                              }}
-                            />
-                          </TableCell>
-                          <TableCell align="center">
-                            {" "}
-                            <img
-                              src={DeleteIcon}
-                              alt=""
-                              className=" m-auto d-grid place-content-center"
-                              width="30px"
-                              style={{ cursor: "pointer" }}
-                              onClick={() => handleDeleteVendor(row?.id)}
-                            />
-                          </TableCell>
-                        </TableRow>
-                      ))
-                    : <p className="no-vendor-text">No Vendor Selected</p>}
+                  {vendorItems?.length ? (
+                    vendorItems.map((row, index) => (
+                      <TableRow
+                        key={row.id}
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
+                      >
+                        <TableCell component="th" scope="row">
+                          {row.name}
+                        </TableCell>
+                        <TableCell align="center">
+                          <input
+                            type="text"
+                            className="vendor-cost-input"
+                            placeholder="$10.00"
+                            name="costPerItem"
+                            onChange={(e) =>
+                              handleVendorCostPerItem(e, index, row?.id)
+                            }
+                            value={vendorItems[index]["costPerItem"]}
+                            maxLength={9}
+                          />
+                        </TableCell>
+                        <TableCell align="center">
+                          <Switch
+                            name="online"
+                            id="online"
+                            checked={vendorItems[index]["isPreferred"] || false}
+                            onChange={(e) =>
+                              handleVendorCostPerItem(e, index, row?.id)
+                            }
+                            sx={{
+                              "& .MuiSwitch-switchBase.Mui-checked": {
+                                color: "#0A64F9",
+                              },
+                              "& .MuiSwitch-track": {
+                                backgroundColor: "#0A64F9",
+                              },
+                            }}
+                          />
+                        </TableCell>
+                        <TableCell align="center">
+                          {" "}
+                          <img
+                            src={DeleteIcon}
+                            alt=""
+                            className=" m-auto d-grid place-content-center"
+                            width="30px"
+                            style={{ cursor: "pointer" }}
+                            onClick={() => handleDeleteVendor(row?.id)}
+                          />
+                        </TableCell>
+                      </TableRow>
+                    ))
+                  ) : (
+                    <p className="no-vendor-text">No Vendor Selected</p>
+                  )}
                 </TableBody>
               </Table>
             </TableContainer>
@@ -497,11 +517,22 @@ const BulkVendorEdit = ({
                         backgroundColor: "#0A64F9",
                       }}
                       onClick={handleSaveVendorList}
-                      disabled={!vendorItems?.length}
+                      disabled={!vendorItems?.length || submitLoading}
                     >
-                      Update
+                      {submitLoading ? (
+                        <Box className="loader-box">
+                          <CircularProgress />
+                        </Box>
+                      ) : (
+                        "Update"
+                      )}
                     </button>
-                    <button className="quic-btn quic-btn-cancle" onClick={handleCloseEditModal}>Cancel</button>
+                    <button
+                      className="quic-btn quic-btn-cancle"
+                      onClick={handleCloseEditModal}
+                    >
+                      Cancel
+                    </button>
                   </div>
                 </div>
               </div>

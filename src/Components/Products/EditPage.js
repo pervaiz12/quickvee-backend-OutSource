@@ -22,6 +22,7 @@ const EditPage = ({
   formData,
   handleCopyAllVarientValue,
   inventoryData,
+  fetchProductDataById,
 }) => {
   const [value, setValue] = React.useState("1");
 
@@ -115,6 +116,7 @@ const EditPage = ({
                     varientIndex={varientIndex}
                     varientData={varientData}
                     handleCloseEditModal={handleCloseEditModal}
+                    fetchProductDataById={fetchProductDataById}
                   />
                 </TabPanel>
               </TabContext>
