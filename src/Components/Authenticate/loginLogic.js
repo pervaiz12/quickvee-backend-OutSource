@@ -107,6 +107,27 @@ export default function LoginLogic(setLoading) {
       [name]: value,
     });
   };
+  // ==============
+  const keyEnter = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      setFormData((prev) => ({
+        ...prev,
+        [event.target.name]: event.target.value,
+      }));
+
+      handleSubmitForm(event);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", keyEnter);
+    return () => {
+      document.removeEventListener("keydown", keyEnter);
+    };
+  }, [formData]);
+
+  // ==============
 
   const handleSubmitForm = async (e) => {
     try {
@@ -150,5 +171,6 @@ export default function LoginLogic(setLoading) {
     handleBlur,
     setErrorMessage,
     errorMessage,
+    keyEnter,
   };
 }

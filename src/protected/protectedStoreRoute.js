@@ -21,11 +21,20 @@ export default function ProtectedStoreRoute() {
     Cookies.remove("token_data");
     localStorage.removeItem("AllStore");
   };
+  console.log(AdminRocord)
+
   if (AdminRocord?.status == true && AdminRocord?.data?.stores !== undefined) {
     return <Outlet />;
-  } else {
-    handleClearCoockie();
-    return <Navigate to="/login" />;
+  } else if(AdminRocord?.status == true && AdminRocord?.login_type !=="" && AdminRocord?.data?.merchant_id !=="")
+    {
+      return <Navigate to="/" />
+
+    }else if(AdminRocord?.status == true && AdminRocord?.data?.login_type !=="" && AdminRocord?.data?.merchant_id == undefined && AdminRocord?.data?.stores.length >=0 )
+      {
+        return <Navigate to="/store" />
+
+      } else if(AdminRocord?.status==false){
+       handleClearCoockie();
+      return <Navigate to="/login" />;
   }
-  //   return AdminRocord?.status == true ? <Outlet /> : <Navigate to="/login" />;
 }
