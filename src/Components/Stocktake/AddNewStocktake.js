@@ -66,18 +66,16 @@ const AddNewStocktake = ({
   const singleStocktakeStateFromRedux = useSelector(
     (state) => state.stocktakeList
   );
-  // console.log("singleStocktakeStateFromRedux", singleStocktakeStateFromRedux);
+
 
   const [singleStocktakeState, setSingleStocktakeState] = useState();
 
   const [gotDatafromPo, setDataFromPo] = useState();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  // console.log("singleStocktakeStateFromRedux", singleStocktakeState);
-  // console.log("gotDatafromPo", gotDatafromPo);
+ 
   const [selectedProducts, setSelectedProducts] = useState([]);
-  const [initialDropdownProducts, setInitialDropdownProducts] = useState([]);
-  console.log("initialDropdownProducts", initialDropdownProducts);
+  const [gotSelectedProducts, setGotSelectedProducts] = useState(false);
   const [stocktake_items, setProductList] = useState([
     {
       upc: "",
@@ -96,10 +94,10 @@ const AddNewStocktake = ({
   ]);
 
   const location = useLocation();
-  // console.log("location", location.pathname);
+
   const { id } = useParams();
 
-  // console.log("stock id",id)
+
   useEffect(() => {
     if (id && location.pathname !== "/stocktake/AddStocktake") {
       dispatch(fetchSingleStocktakeData({ merchant_id, id, userTypeData }));
@@ -134,7 +132,8 @@ const AddNewStocktake = ({
   ]);
 
   useEffect(() => {
-    if (singleStocktakeState) {
+    if (singleStocktakeState && !gotSelectedProducts) {
+
       const newStocktakeItems = singleStocktakeState?.stocktake_item.map(
         (item, index) => ({
           upc: item.upc || "", //
@@ -152,13 +151,14 @@ const AddNewStocktake = ({
         })
       );
       setProductList(newStocktakeItems);
+      setGotSelectedProducts(true);
     }
   }, [singleStocktakeState]);
   
-  // useEffect(() => {
+  useEffect(() => {
    
-  //   loadOptions(" ");
-  // }, []);
+    loadOptions(" ");
+  }, []);
 
   const loadOptions = async (inputValue) => {
     let name_data = {
@@ -181,7 +181,7 @@ const AddNewStocktake = ({
       variantId: prod.isvarient === "1" ? prod.var_id : null,
       prodId: prod.id,
     }));
-    console.log("loadOptions", data);
+
     return data;
   };
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
@@ -189,7 +189,7 @@ const AddNewStocktake = ({
 
   const [alertModalOpen, setAlertModalOpen] = useState(false);
   const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
-
+  
   const [errorMessages, setErrorMessages] = useState([]);
   const validate = () => {
     const errors = [];
@@ -213,8 +213,8 @@ const AddNewStocktake = ({
     setAlertModalHeaderText(headerText);
     setAlertModalOpen(true);
   };
-  // console.log("setSelectedProductsList", stocktake_items);
-  // console.log("setSelectedProducts", selectedProducts);
+
+
   const handleAddProduct = () => {
     if (validate()) {
       setProductList([
@@ -244,10 +244,7 @@ const AddNewStocktake = ({
     setDeleteCategoryId(index);
     setDeleteModalOpen(true);
   };
-  // console.log(
-  //   "confirmDeleteCategorysingleStocktakeState",
-  //   singleStocktakeState.stocktake_item
-  // );
+ 
   const confirmDeleteCategory = async () => {
     // Check if the singleStocktakeState object and stocktake_item array are present
     if (
@@ -285,11 +282,11 @@ const AddNewStocktake = ({
 
       // Check if the item to be deleted is in the original stocktake_item list
       const itemToDelete = stocktake_items[deleteCategoryId];
-      // console.log("itemToDelete ",itemToDelete)
+  
       const isOriginalItem = singleStocktakeState.stocktake_item.some(
         (item) => item.id === itemToDelete.stocktake_item_id
       );
-      // console.log("isOriginalItem isOriginalItem ",isOriginalItem)
+
       if (isOriginalItem) {
         const formData = {
           merchant_id: merchant_id,
@@ -376,15 +373,15 @@ const AddNewStocktake = ({
     });
   };
   const handleOnChangeSelectDropDown = async (productId, variantId, index) => {
-    console.log("onChangeSelectDropDown", productId, variantId);
+    
     const productExists = stocktake_items.some((item) =>
       item.variant !== ""
         ? item.variant_id === variantId
         : item.product_id === productId
     );
-    // console.log("Product exists", productExists);
+
     if (productExists) {
-      // Show an error message or handle it as needed
+
       showModal("Product is already added.");
 
       return;
@@ -411,12 +408,7 @@ const AddNewStocktake = ({
           const product = response.data.data.product_variants.find(
             (prod) => prod.id === variantId
           );
-          console.log(
-            "Product variant",
-            response.data.data.product_variants,
-            "variantId",
-            variantId
-          );
+          
 
           obj.newPrice =
             parseFloat(product.price) > 0 ? parseFloat(product.price) : 0;
@@ -425,7 +417,7 @@ const AddNewStocktake = ({
             (prod) => prod.var_id === product.id
           );
 
-          // console.log("Sorted products", sortedProduct);
+     
           setProductList((prevList) => {
             const updatedList = [...prevList];
             updatedList[index] = {
@@ -443,11 +435,14 @@ const AddNewStocktake = ({
               discrepancy: "0",
               // variant_id: "",
             };
+            
+              
             return updatedList;
+          
           });
         } else {
           const product = response.data.data.productdata;
-          console.log("product price", product);
+   
           obj.newPrice =
             parseFloat(product.price) > 0 ? parseFloat(product.price) : 0;
           obj.finalQty = Number(product.quantity) ?? 0;
@@ -466,6 +461,10 @@ const AddNewStocktake = ({
               new_qty: "",
               discrepancy: "0",
             };
+            
+              
+             
+          
             return updatedList;
           });
         }
@@ -532,7 +531,7 @@ const AddNewStocktake = ({
         stocktake_id: singleStocktakeState ? singleStocktakeState.id : "0", //
       };
 
-      // console.log("stocktakeData", stocktakeData);
+  
       try {
         const { token, ...otherUserData } = userTypeData;
         const response = await axios.post(
@@ -575,7 +574,7 @@ const AddNewStocktake = ({
       e.preventDefault();
     }
   };
-  // console.log("singleStocktakeState", singleStocktakeState);
+
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -631,6 +630,7 @@ const AddNewStocktake = ({
                               </Button> */}
                               <AsyncSelect
                                 loadOptions={loadOptions}
+                                defaultOptions
                                 styles={customStyles}
                                 menuPortalTarget={document.body}
                                 onChange={(option) => {
