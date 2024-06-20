@@ -75,9 +75,9 @@ const BulkVarientEdit = ({
 
       // Check if the dynamic priceKey is greater than the dynamic compareAtPriceKey
       if (type === "isCompareAtGreaterThanAllPrice") {
-        return +nestedObject[firstKey] > +bulkVarient[lastKey];
+        return +nestedObject[firstKey] >= +bulkVarient[lastKey];
       } else if (type === "isPriceLessThanAllCompareAtPrice") {
-        return +nestedObject[firstKey] < +bulkVarient[lastKey];
+        return +nestedObject[firstKey] <= +bulkVarient[lastKey];
       } 
     });
   };

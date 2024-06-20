@@ -617,9 +617,7 @@ const Validation = () => {
       updateError.title = "This Field is Required";
     } else if (emoji.test(value)) {
       updateError.title = "Emoji not allowed";
-    } else if (!NameSpace.test(value)) {
-      updateError.title = "title only contains alphabet";
-    } else {
+    }  else {
       updateError.title = "";
     }
     return updateError;
@@ -631,8 +629,6 @@ const Validation = () => {
       updateError.description = "This Field is Required";
     } else if (emoji.test(value)) {
       updateError.description = "Emoji not allowed";
-    } else if (!NameSpace.test(value)) {
-      updateError.description = "description only contains alphabet";
     }
     //  else if (+value?.length <= 20) {
     //   updateError.description =
@@ -647,7 +643,7 @@ const Validation = () => {
   const checkLength = (fieldname, value, updateError) => {
     if (!value?.length) {
       updateError[fieldname] = "select option";
-    } else {
+    } else if(value?.length > 0) {
       updateError[fieldname] = "";
     }
     return updateError;

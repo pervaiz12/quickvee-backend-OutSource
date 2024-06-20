@@ -2,6 +2,7 @@ import React from "react";
 import { formData } from "./data";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { Grid } from "@mui/material";
 
 const GeneratePUC = ({
   handleVarientTitleBasedItemList,
@@ -118,10 +119,12 @@ const GeneratePUC = ({
                     ) : (
                       ""
                     )}
+                      <Grid container spacing={2}>
                     {formData?.length
                       ? formData?.map((inp, i) => {
                           return (
-                            <div className="col-qv-3" key={i}>
+                            // <div className="col-qv-2" key={i}>
+                            <Grid item xs={6} sm={4} md={3} lg={2.4} >    
                               <div className="q-add-categories-single-input">
                                 <label>{inp?.label}</label>
                                 <div className="input_area">
@@ -159,10 +162,12 @@ const GeneratePUC = ({
                                 
                                 </div>
                               </div>
-                            </div>
+                            {/* // </div> */}
+                            </Grid>
                           );
                         })
                       : ""}
+                      </Grid>
                     <div className="flex flex-wrap gap-3 ">
                       <label
                         class="q_resigter_setting_section"
@@ -319,10 +324,12 @@ const GeneratePUC = ({
           {!isMultipleVarient ? (
             <div className="qvrow">
               <div className="mx-4 my-4">{varientTitle?.[0]}</div>
+              <Grid container spacing={2}>
               {formData?.length
                 ? formData?.map((inp, i) => {
                     return (
-                      <div className="col-qv-3" key={i}>
+                      // <div className="col-qv-2" key={i}>
+                      <Grid item xs={6} sm={4} md={3} lg={2.4} >    
                         <div className="q-add-categories-single-input">
                           <label>{inp?.label}</label>
                           <div className="input_area">
@@ -355,10 +362,12 @@ const GeneratePUC = ({
                             )}
                           </div>
                         </div>
-                      </div>
-                    );
-                  })
-                : ""}
+                      {/* // </div> */}
+                      </Grid>
+                      );
+                    })
+                    : ""}
+              </Grid>
               <div className="flex flex-wrap gap-3 ">
                 <label
                   class="q_resigter_setting_section"

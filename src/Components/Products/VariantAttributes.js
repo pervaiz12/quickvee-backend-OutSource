@@ -5,6 +5,8 @@ import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
 import makeAnimated from "react-select/animated";
 import Validation from "../../Constants/Validation";
+import { components } from 'react-select';
+import SearchIcon from '@mui/icons-material/Search'; // Import MUI icon
 
 const VariantAttributes = ({
   filterOptionList,
@@ -28,6 +30,31 @@ const VariantAttributes = ({
     clearIndicator: (provided) => ({
       ...provided,
       display: 'none',
+    }),
+    indicatorSeparator: (provided, state) => ({
+      ...provided,
+      display: 'none',
+    }),
+    dropdownIndicator: (provided, state) => ({
+      ...provided,
+      padding: 4,
+      position:'absolute',
+      top:0,
+      right:0,
+    }),
+    multiValue: (provided, state) => ({
+      ...provided,
+      backgroundColor: '#F2F2F2', // Background color for selected items
+      borderRadius: '2px', // Border radius for selected items
+      // padding:'6px 0px',
+    }),
+    multiValueLabel: (provided, state) => ({
+      ...provided,
+      color: '#000', // Text color for selected items
+      padding: '0 10px', // Padding for label within the selected item
+      fontSize:"13px",
+      textAlign:'center',
+      padding:'3px 6px 3px 10px !important',
     }),
   };
   const pageUrl =
@@ -173,10 +200,6 @@ const VariantAttributes = ({
     }
   }, [varientDropdownList]);
 
-
-
-  
-
   const filterDefaultvalue = () => {
     if (filterOptionList?.length > 0) {
       return filterOptionList?.map((option) => ({
@@ -184,6 +207,14 @@ const VariantAttributes = ({
         label: option?.title,
       }));
     }
+  };
+
+  const SearchIndicator = (props) => {
+    return (
+      <components.DropdownIndicator {...props}>
+        <SearchIcon />
+      </components.DropdownIndicator>
+    );
   };
 
   return (
@@ -261,13 +292,18 @@ const VariantAttributes = ({
                         <div class="input_area">
                           <CreatableSelect
                             closeMenuOnSelect={true}
-                            components={{ ...animatedComponents }}
+                            components={{ 
+                              ...animatedComponents,
+                              DropdownIndicator: SearchIndicator // Replace DropdownIndicator with SearchIndicator
+                            }}
                             styles={styles}
                             value={varient?.varientAttributeList}
                             options={varient?.varientAttributeList}
                             onChange={(e, actionMeta) => {
                               handlechange(e, index, "varientAttributeList", actionMeta);
                             }}
+                            
+                          
                             onKeyDown={handleOnBlurAttributes}
                             isMulti
                             isClearable={varient?.varientAttributeList?.some((v) => !v.isFixed)}
@@ -275,7 +311,7 @@ const VariantAttributes = ({
                         </div>
                         {!!varientError?.error &&
                         +varientError?.errorIndex === index ? (
-                          <span className="error-alert">
+                          <span className="error-alert error-alert-varient">
                             {varientError?.error}
                           </span>
                         ) : (
@@ -295,7 +331,7 @@ const VariantAttributes = ({
                               src={DeleteIcon}
                               alt=""
                               className=" m-auto d-grid place-content-center"
-                              width="50px"
+                              width="32px"
                             />
                           </button>
                         ) : (

@@ -17,9 +17,9 @@ const SearchableDropdown = ({
   name,
   hideSelectedValue,
   hideSelectedList,
-  placeholder
+  placeholder,
+  pageUrl
 }) => {
-  // console.log("optionList", keyName, optionList);
   const { checkLength } = Validation();
   const [filterOptions, setFilterOptions] = useState(optionList);
   const [filterValue, setFilterValue] = useState("");
@@ -35,6 +35,7 @@ const SearchableDropdown = ({
   };
   const [showOptions, setShowOptions] = useState(false);
   const ref = useRef();
+  const dropdownRef = useRef(null);
 
   useEffect(() => {
     // check is frequentlyBought selected item length is 2 or not
@@ -53,6 +54,35 @@ const SearchableDropdown = ({
       setFilterOptions(hideItemList);
     }
   }, [selectedOption, hideSelectedValue, hideSelectedList, optionList]);
+
+  useEffect(()=>{
+    // remove category error if exist.
+    if(selectedOption?.length > 0 && !!handleUpdateError) {
+      checkLength(keyName, selectedOption, error);
+      handleUpdateError(error);
+    }
+  }, [selectedOption])
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setShowOptions(false);
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [showOptions]);
+
+  useEffect(()=>{
+    // set defaultTax in taxes dropdown
+    if(optionList?.length && keyName === "taxes" && pageUrl === "inventory/products/add"){
+      const findOption = optionList?.filter((item)=> item?.title === "DefaultTax");
+      handleSelectProductOptions(findOption[0], keyName)
+    }
+  }, [optionList, keyName])
 
   const changeFilterableList = () => {
     // filter incoming optionList items when onchange run
@@ -85,12 +115,7 @@ const SearchableDropdown = ({
       handleUpdateError(error);
     }
 
-    // work in progress
-    // if (showOptions) {
-    //   setShowOptions(false);
-    // }
   };
-
   return (
     <>
       {title ? (
@@ -105,6 +130,7 @@ const SearchableDropdown = ({
         style={{ padding: showOptions ? "10px" : "7px 8px 0px 8px" }}
         onBlur={handleBlurOption}
         name={keyName}
+        ref={dropdownRef}
       >
         <div
           className="search-area"
@@ -163,7 +189,7 @@ const SearchableDropdown = ({
           </div>
         </div>
         {showOptions ? (
-          <div className="options-box">
+          <div className={`options-box`}>
             {showOptions
               ? changeFilterableList()?.map((opt) => {
                   if (typeof opt === "string") {
