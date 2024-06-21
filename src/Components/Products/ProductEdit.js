@@ -44,7 +44,7 @@ const ProductEdit = () => {
   ];
 
   const navigateToCategoryPage = () => {
-    window.location.href = "/category"; // Replace "/category" with the actual path of your category page
+    window.location.href = "/inventory/category"; // Replace "/category" with the actual path of your category page
   };
 
   const handleCancel = () => {

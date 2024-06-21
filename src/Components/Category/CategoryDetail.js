@@ -99,7 +99,7 @@ const CategoryDetail = ({ seVisible,setProductId }) => {
       };
       if (data) {
         dispatch(deleteCategory(data));
-        ToastifyAlert("Category Deleted", "success");
+        ToastifyAlert("Deleted Successfully", "success");
       }
     }
     setDeleteCategoryId(null)
@@ -119,7 +119,7 @@ const CategoryDetail = ({ seVisible,setProductId }) => {
     const rep = await dispatch(updateCategoryStatus(data));
     if (rep.payload === "Success") {
       // alert("Status Success Updated");
-      ToastifyAlert("Status Success Updated", "success");
+      ToastifyAlert("Updated Successfully", "success");
       let datas = {
         merchant_id,
       };
@@ -215,7 +215,7 @@ const CategoryDetail = ({ seVisible,setProductId }) => {
           <div className="categoryTable">
             <div className="q-category-bottom-header">
               <span>Category</span>
-              <Link to={`/category-add`}>
+              <Link to={`/inventory/category/add`}>
               <p>
                 Add Category <img src={AddIcon} alt="add-icon" />{" "}
               </p>
@@ -234,7 +234,7 @@ const CategoryDetail = ({ seVisible,setProductId }) => {
               radioButtonComponent={true}
               editBtnCategory={{
                 editButtonEnable: true,
-                editButtonurl: "/category/edit-category/",
+                editButtonurl: "/inventory/category/edit-category/",
               }}
               deleteButton={{
                 deleteButtonEnable: true,

@@ -19,6 +19,7 @@ import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 // import Stack from '@mui/material/Stack';
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import PasswordShow from "../../Common/passwordShow";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 const vendorFormValues = {
   merchant_id: "",
   id: "",
@@ -81,6 +82,7 @@ const EditVendors = ({ setVisible }) => {
 
       // setVendorData(response.data);
 
+      ToastifyAlert("Updated Successfully", "success");
       setVendorData((prevState) => {
         const newData = { ...prevState };
         for (const key in response.data.vendor_data[0]) {

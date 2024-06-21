@@ -736,7 +736,7 @@ const menuItems = [
           <img src={CatIcon} alt="Category" className="h-6 w-10 mt-4 mb-4 " />
         ),
         text: "Category",
-        link: "/category",
+        link: "/inventory/category",
       },
       {
         id: 2,

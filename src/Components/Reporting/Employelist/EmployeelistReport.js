@@ -127,7 +127,9 @@ const EmployeelistReport = () => {
                             <p>{employee?.email}</p>
                           </StyledTableCell>
                           <StyledTableCell>
-                            <p>{employee?.address}</p>
+                            <p> {employee ? [employee.address, employee.city, employee.state, employee.zipcode]
+                                .filter(Boolean)
+                                .join(', ')  : ""}</p>
                           </StyledTableCell>
                         </StyledTableRow>
                       ))

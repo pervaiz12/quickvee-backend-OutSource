@@ -244,7 +244,8 @@ const CateDuplicateStore = () => {
             setsubmitmessage(response.data.msg);
             setSelectedStorefrom("-- Select Store --");
             setSelectedStoreto("-- Select Store --");
-            ToastifyAlert("Duplicate Inventory Success!", "success");
+            // ToastifyAlert("Duplicate Inventory Success!", "success");
+            ToastifyAlert("Added Successfully", "success");
             setUserInput("")
             setStorefrom(null);
             setStoreto(null);

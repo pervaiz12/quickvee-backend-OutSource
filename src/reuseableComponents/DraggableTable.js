@@ -27,6 +27,7 @@ import EditEmployeeModal from "../Components/StoreSetting/AddEmployee/EditEmploy
 import Permission from "../Assests/Employee/Permission.svg";
 import AlertModal from "./AlertModal";
 import SortModal from "./SortModal";
+import { useNavigate } from "react-router-dom";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
@@ -191,6 +192,7 @@ const DraggableTable = ({
     setVisible("EmployeePermission");
     setEmployeeId(id);
   };
+  const navigate = useNavigate();
   const handleEditCategory = (id) => {
     seVisible("EditCategory");
     setProductId(id);
@@ -347,10 +349,11 @@ const DraggableTable = ({
                               )}
                               {editButtonEnable && (
                                 <StyledTableCell>
-                                  <Link to={`/category/edit-category/${item.id}`}>
+                                  {/* <Link to={`inventory/category/edit-category/${item.id}`}> */}
                                   <span
                                     // to={`${editButtonurl}${item.id}`}
                                     onClick={() => {
+                                      navigate(`${editButtonurl}${item.id}`)
                                       handleEditCategory(item.id);
                                     }}
                                     className="cursor-pointer"
@@ -362,7 +365,7 @@ const DraggableTable = ({
                                       alt="Edit"
                                     />
                                   </span>
-                                  </Link>
+                                  {/* </Link> */}
                                 </StyledTableCell>
                               )}
                               {item.title === "DefaultTax" ? (

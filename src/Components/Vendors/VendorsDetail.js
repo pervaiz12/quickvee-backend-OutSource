@@ -115,7 +115,7 @@ const VendorsDetail = ({ setVisible }) => {
           <div className="q-category-bottom-header-sticky">
             <div className="q-category-bottom-header">
               <span>Vendors</span>
-              <Link to={`/vendors-add`}>
+              <Link to={`/vendors/add`}>
               {/* <p onClick={() => setVisible("AddVendors")}> */}
               <p >
                 Add Vendors <img src={AddIcon} alt="add-icon" />{" "}

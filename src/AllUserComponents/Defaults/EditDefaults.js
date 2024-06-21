@@ -13,6 +13,7 @@ import { Grid } from "@mui/material";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
+import CircularProgress from "@mui/material/CircularProgress";
 const EditDefaults = ({ setVisible, defaultEditId }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -37,7 +38,7 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
     setAlertModalHeaderText(headerText);
     setAlertModalOpen(true);
   };
-
+  const [loader, setLoader] = useState(false);
   const params = useParams();
   async function fetchData() {
     const getdefaultsData = {
@@ -145,6 +146,7 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
     }
     formData.append("token_id", userTypeData.token_id);
     formData.append("login_type", userTypeData.login_type);
+    setLoader(true);
     try {
       const res = await axios.post(BASE_URL + EDIT_DEFAULTS, formData, {
         headers: {
@@ -156,7 +158,7 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
       const data = await res.data.status;
       const update_message = await res.data.msg;
       if (data == "Success") {
-        ToastifyAlert("Default Menu Updated", "success");
+        ToastifyAlert("Updated Successfully", "success");
         // navigate("/users/view/unapprove/menu/defaults");
         navigate(-1)
       } else if (
@@ -168,6 +170,7 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
     } catch (error) {
       console.error("API Error:", error);
     }
+    setLoader(false);
   };
 
   // Function to prevent default behavior for drag over
@@ -457,7 +460,9 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
               </div>
 
               <div className="q-add-categories-section-middle-footer">
-                <button onClick={handleSubmit} className="quic-btn quic-btn-save">Update</button>
+                <button onClick={handleSubmit} className="quic-btn quic-btn-save attributeUpdateBTN">
+                { loader ? <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15}/> Update</> : "Update"}
+                </button>
                 <div
                 
                 >

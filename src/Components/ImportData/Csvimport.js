@@ -111,7 +111,7 @@ const FileUpload = () => {
     });
     if (response) {
       // console.log(response);
-      ToastifyAlert(response.data.message, "success");
+      ToastifyAlert("Added Successfully", "success");
       // setalertmsg(response.data.message);
       // alert(response.data.message);
       // setOpenAlert(true);
