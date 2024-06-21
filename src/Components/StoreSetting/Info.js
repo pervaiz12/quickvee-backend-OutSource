@@ -61,7 +61,12 @@ const Info = () => {
         receieptLogoBool={receieptLogoBool}
       />
       <form>
-        <AddressForm handleKeyPress={handleKeyPress}  errors={errors} infoRecord={infoRecord} onChangeHandle={onChangeHandle} />
+        <AddressForm
+          handleKeyPress={handleKeyPress}
+          errors={errors}
+          infoRecord={infoRecord}
+          onChangeHandle={onChangeHandle}
+        />
 
         <SocialMediaForm
           infoRecord={infoRecord}

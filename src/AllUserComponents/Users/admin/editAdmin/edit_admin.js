@@ -114,7 +114,8 @@ export default function EditAdmin({ EditAdminId, setVisible }) {
                 <div className="col-qv-6">
                   <div className="input_area">
                     <label>
-                      Phone<span className="Asterisk_error">*</span>
+                      Phone
+                      {/* <span className="Asterisk_error">*</span> */}
                     </label>
                     <input
                       className=""
