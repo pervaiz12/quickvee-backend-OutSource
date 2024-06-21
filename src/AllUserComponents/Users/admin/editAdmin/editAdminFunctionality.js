@@ -59,7 +59,7 @@ const EditAdminFunctionality = (handleClick) => {
       // updatedErrors[name] = value === "" ? `please fill the ${name} field` : "";
       updatedErrors[name] =
         value.trim() === ""
-          ? `Please fill in the ${name} field`
+          ? `Owner Name is required`
           : value[0] === " "
             ? `The ${name} field cannot start with a space`
             : "";
@@ -68,7 +68,7 @@ const EditAdminFunctionality = (handleClick) => {
       console.log(value);
       updatedErrors[name] =
         value === ""
-          ? `Please fill the ${name} field`
+          ? `Email is required`
           : !emailRegex.test(value)
             ? "Please fill valid email"
             : "";
@@ -76,7 +76,7 @@ const EditAdminFunctionality = (handleClick) => {
     if (name === "phone") {
       const numericValue = value.replace(/[^0-9]/g, "");
       if (numericValue == "") {
-        updatedErrors[name] = `Please fill the ${name} field`;
+        updatedErrors[name] = "";
       } else if (numericValue.length !== 10) {
         updatedErrors[name] = "Phone number must be 10 digits";
       } else {
@@ -105,17 +105,17 @@ const EditAdminFunctionality = (handleClick) => {
     let error = false;
     let updatedErrors = { ...errors };
     if (editData.owner_name == "") {
-      updatedErrors.owner_name = "Please fill the owner_name field";
+      updatedErrors.owner_name = "Owner Name is required";
       error = true;
     }
     if (editData.email == "") {
-      updatedErrors.email = "Please fill the email field";
+      updatedErrors.email = "Email is required";
       error = true;
     }
-    if (editData.phone == "") {
-      updatedErrors.phone = "Please fill the phone field";
-      error = true;
-    }
+    // if (editData.phone == "") {
+    //   updatedErrors.phone = "Please fill the phone field";
+    //   error = true;
+    // }
 
     // setErrors({ ...errors, updatedErrors });
     setErrors(updatedErrors);

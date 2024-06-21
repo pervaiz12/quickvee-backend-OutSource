@@ -30,7 +30,6 @@ const Info = () => {
     passwordError,
     handleSubmitChangePassword,
     qrCodeBoolean,
-
   } = InfoFunction();
   let data = {
     id: 100, //dynamic id give
@@ -57,10 +56,14 @@ const Info = () => {
         imageBoolean={imageBoolean}
         errors={errors}
         qrCodeBoolean={qrCodeBoolean}
-
       />
       <form>
-        <AddressForm handleKeyPress={handleKeyPress}  errors={errors} infoRecord={infoRecord} onChangeHandle={onChangeHandle} />
+        <AddressForm
+          handleKeyPress={handleKeyPress}
+          errors={errors}
+          infoRecord={infoRecord}
+          onChangeHandle={onChangeHandle}
+        />
 
         <SocialMediaForm
           infoRecord={infoRecord}

@@ -19,9 +19,9 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    paddingTop:"12px",
-    paddingLeft:"1px",
-    paddingRight:"1px",
+    paddingTop: "12px",
+    paddingLeft: "1px",
+    paddingRight: "1px",
     fontFamily: "CircularSTDMedium",
   },
 }));
@@ -115,7 +115,6 @@ export default function DashboardTables(props) {
     }
   };
 
- 
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
@@ -182,43 +181,47 @@ export default function DashboardTables(props) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.dashboardRecord && Array.isArray(props.dashboardRecord)
-            ? props.dashboardRecord.map((row) => (
-                <StyledTableRow key={row.id}>
-                  <StyledTableCell align="center">
-                    {getCustomerName(row.deliver_name, row.billing_name)}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {row.delivery_phn}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                   <p className="whitespace-nowrap">{formatDateTime(row.date_time)}</p> 
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {row.order_id}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {row.order_method}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {getStatus(row.order_method, row.m_status)}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">{`$${priceFormate(
-                    row.amt
-                  )}`}</StyledTableCell>
-                  <StyledTableCell align="center">
-                    <Link
+          {props.dashboardRecord &&
+          Array.isArray(props.dashboardRecord) &&
+          props.dashboardRecord.length > 0 ? (
+            props.dashboardRecord.map((row) => (
+              <StyledTableRow key={row.id}>
+                <StyledTableCell align="center">
+                  {getCustomerName(row.deliver_name, row.billing_name)}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {row.delivery_phn}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  <p className="whitespace-nowrap">
+                    {formatDateTime(row.date_time)}
+                  </p>
+                </StyledTableCell>
+                <StyledTableCell align="center">{row.order_id}</StyledTableCell>
+                <StyledTableCell align="center">
+                  {row.order_method}
+                </StyledTableCell>
+                <StyledTableCell align="center">
+                  {getStatus(row.order_method, row.m_status)}
+                </StyledTableCell>
+                <StyledTableCell align="center">{`$${priceFormate(
+                  row.amt
+                )}`}</StyledTableCell>
+                <StyledTableCell align="center">
+                  <Link
                     className="whitespace-nowrap text-[#0A64F9]"
-                      to={`/order/store-reporting/order-summary/${props.merchant_id}/${row.order_id}`}
-                      // onClick={() => handleSummeryPage(row.order_id)}
-                      target="_blank"
-                    >
-                      Order Summery
-                    </Link>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))
-            : ""}
+                    to={`/order/store-reporting/order-summary/${props.merchant_id}/${row.order_id}`}
+                    // onClick={() => handleSummeryPage(row.order_id)}
+                    target="_blank"
+                  >
+                    Order Summery
+                  </Link>
+                </StyledTableCell>
+              </StyledTableRow>
+            ))
+          ) : (
+            <p className="p-2">No record found</p>
+          )}
         </TableBody>
       </Table>
     </TableContainer>

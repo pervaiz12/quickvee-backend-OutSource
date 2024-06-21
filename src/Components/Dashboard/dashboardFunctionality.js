@@ -58,6 +58,8 @@ export default function DashboardFunctionality() {
         console.log(response?.data?.data);
         setDashboardRecord(response?.data?.data);
         // setDashboardCount(response?.data);
+      } else {
+        setDashboardRecord([]);
       }
     } catch (error) {
       getUnAutherisedTokenMessage();
