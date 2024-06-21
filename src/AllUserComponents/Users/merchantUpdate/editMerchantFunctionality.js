@@ -128,8 +128,8 @@ export default function EditMerchantFunctionality() {
               ? response.data.message.row.merchant_token
               : "";
           const Phone =
-            response.data.message.row.phone !== null
-              ? response.data.message.row.phone
+            response.data.message.row.a_phone !== null
+              ? response.data.message.row.a_phone
               : "";
           const usa_pin =
             response.data.message.row.usa_pin !== null
