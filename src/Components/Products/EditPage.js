@@ -103,7 +103,6 @@ const EditPage = ({
                 <TabPanel value="2">
                   <BulkVendorEdit
                     productData={productData}
-                    varientData={varientData}
                     varientIndex={varientIndex}
                     modalType={modalType}
                     handleCloseEditModal={handleCloseEditModal}
@@ -117,6 +116,8 @@ const EditPage = ({
                     varientData={varientData}
                     handleCloseEditModal={handleCloseEditModal}
                     fetchProductDataById={fetchProductDataById}
+                    inventoryData={inventoryData}
+
                   />
                 </TabPanel>
               </TabContext>

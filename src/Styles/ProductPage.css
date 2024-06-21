@@ -8,9 +8,10 @@
   src: url("../Assests/Fonts/FontsFree-Net-Circular-Std-Medium.ttf");
 }
 
-.title-area span {
-  color: #818181;
-  font-size: 14px;
+@font-face {
+  font-family: CircularBold;
+  src: url("../Assests/Fonts/circular-bold.TTF");
+
 }
 
 .dropdownBox {
@@ -62,7 +63,13 @@
   margin: 0px;
 }
 .search-selected-item input.search-item::placeholder {
-  font-size: 14px;
+  font-size: 14px !important;
+letter-spacing: normal;
+text-align: left;
+letter-spacing: 0px;
+color: #888888 !important;
+opacity: 1;
+font-family: CircularSTDBook !important;
 }
 .search-selected-item .search-item:focus {
   border-left: 2px solid #2e5eff !important;
@@ -76,11 +83,21 @@ padding-right: 30px !important;
 }
 .selected-item .item {
   background-color: #f2f2f2;
-  padding: 4px 8px;
-  border-radius: 3px;
+  padding: 7px 11px;
+  border-radius: 0px;;
+  opacity: 1;
+  display: flex;
+  align-items: center;
+}
+
+.selected-item .item span{
+  text-align: left;
+  letter-spacing: 0px;
+  color: #000000;
+  opacity: 1;
   font-size: 13px;
-  font-weight: 500;
-  font-family: CircularSTDMedium !important;
+  font-family: CircularSTDMedium;
+  margin-right: 6px;
 }
 .selected-item .item:last-child {
   margin-right: 8px;
@@ -97,14 +114,14 @@ padding-right: 30px !important;
   background-color: #afafaf;
   padding: 2px;
 }
-
+/* 
 .selected-item span {
   background-color: #e1e1e1;
   padding: 7px;
   margin-right: 5px;
   border-radius: 3px;
   position: relative;
-}
+} */
 
 .options-box {
   padding: 2px 0px;
@@ -119,7 +136,7 @@ padding-right: 30px !important;
 .options-box .item {
   background: #fff;
   border-radius: 3px;
-  border: 1.5px solid #bebebe;
+  border: 1.5px solid #BEBEBE;
   padding: 4px 10px;
   box-sizing: border-box;
   margin-right: 12px;
@@ -532,4 +549,112 @@ padding-right: 30px !important;
   min-height: 150px; /* Set your desired height */
   margin-bottom: 8px;
   padding-left: 18px !important;
+}
+
+
+
+/* all css start from here... */
+
+.product-input-title{
+letter-spacing: normal;
+text-align: left;
+letter-spacing: 0px;
+color: #6A6A6A !important;
+font-size: 14px;
+opacity: 1;
+font-family: CircularSTDBook;
+margin-bottom: 7px !important;
+}
+
+
+.image-list h1{
+letter-spacing: normal;
+font-size: 16px;
+text-align: left;
+letter-spacing: 0px;
+color: #000000;
+opacity: 1;
+font-family: CircularBold;
+margin-bottom: 7px;
+line-height: normal;
+margin-top: 12px;
+}
+
+.image-list .image-title-show{
+text-align: left;
+letter-spacing: 0px;
+color: #6A6A6A;
+opacity: 1;
+font-size: 12px !important;
+font-family: CircularSTDBook;
+}
+
+.varient-block .multiple-items{
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+  margin-top: 5px;
+}
+
+.varient-block .multiple-items span{
+text-align: left;
+letter-spacing: 0px;
+color: #000000;
+opacity: 1;
+font-size: 16px;
+font-family: CircularBold;
+margin-right: 18px;
+}
+
+
+.checkbox-input{
+color: #0A64F9;
+border-radius: 4px;
+opacity: 1;
+width: 20px;
+height: 20px;
+position: relative;
+cursor: pointer;
+}
+
+
+.varient-block .checkbox-area .check-text{
+  text-align: left;
+  letter-spacing: 0px;
+  color: #000000;
+  opacity: 1;
+  font-size: 14px;
+  font-family: CircularSTDBook;
+}
+
+.varient-select-section{
+
+}
+
+.varient-select-section h2{
+text-align: left;
+letter-spacing: 0px;
+color: #000000;
+opacity: 1;
+font-size: 16px;
+font-weight: 600;
+font-family: CircularBold;
+}
+
+.varientAddSection .input_area  .css-13cymwt-control, .varientAddSection .input_area  .css-t3ipsp-control, .varientAddSection .input_area  .css-16xfy0z-control{
+  background: #FFFFFF;
+border: 1px solid #E1E1E1;
+border-radius: 4px;
+opacity: 1;
+padding: 7px 0px;
+box-sizing: border-box;
+}
+
+.input_area .css-t3ipsp-control{
+  padding-right: 0px !important;
+}
+
+
+.varientAddSection .input_area  .css-1xc3v61-indicatorContainer{
+  /* padding: 0px !important; */
 }

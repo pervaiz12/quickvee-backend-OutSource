@@ -39,14 +39,15 @@ const VariantAttributes = ({
       ...provided,
       padding: 4,
       position:'absolute',
-      top:0,
+      top:"50%",
       right:0,
+      transform:"translate(0px, -50%)",
     }),
     multiValue: (provided, state) => ({
       ...provided,
       backgroundColor: '#F2F2F2', // Background color for selected items
       borderRadius: '2px', // Border radius for selected items
-      // padding:'6px 0px',
+      padding:'2px 0px',
     }),
     multiValueLabel: (provided, state) => ({
       ...provided,
@@ -57,6 +58,17 @@ const VariantAttributes = ({
       padding:'3px 6px 3px 10px !important',
     }),
   };
+
+  const dropDownStyle={
+    clearIndicator: (provided) => ({
+      ...provided,
+      display: 'none',
+    }),
+    indicatorSeparator: (provided, state) => ({
+      ...provided,
+      display: 'none',
+    }),
+  }
   const pageUrl =
     window.location.pathname.split("/")[1] +
     "/" +
@@ -231,6 +243,8 @@ const VariantAttributes = ({
       </div>
 
 
+<div class="varient-block">
+
       {pageUrl !== "inventory/products/edit" ? (
         <div class="multiple-items">
           <span>Multiple Items?*</span>
@@ -240,15 +254,16 @@ const VariantAttributes = ({
               name="isMultiple"
               checked={isMultipleVarient}
               onChange={toggleVarientSection}
+              className="checkbox-input"
             />
-            <label for="isMultiple">Create Attributes and Options</label>
+            <label for="isMultiple" className="check-text">Create Attributes and Options</label>
           </div>
         </div>
       ) : (
         ""
       )}
       {isMultipleVarient ? (
-        <div className="">
+        <div className="varient-select-section">
           <div className="">
             <div className="flex">
               <h2 className="text-[18px] text-black opacity-100 Admin_std mb-4">
@@ -280,6 +295,7 @@ const VariantAttributes = ({
                             options={filterDefaultvalue()}
                             isSearchable
                             isClearable
+                            styles={dropDownStyle}
                             // defaultValue={{
                             //   value: varientDropdownList[0]?.title,
                             //   label: varientDropdownList[0]?.title,
@@ -302,6 +318,7 @@ const VariantAttributes = ({
                             onChange={(e, actionMeta) => {
                               handlechange(e, index, "varientAttributeList", actionMeta);
                             }}
+                            placeholder="Select Varient..."
                             
                           
                             onKeyDown={handleOnBlurAttributes}
@@ -362,7 +379,7 @@ const VariantAttributes = ({
       ) : (
         ""
       )}
-      {/* )} */}
+</div>
     </>
   );
 };
