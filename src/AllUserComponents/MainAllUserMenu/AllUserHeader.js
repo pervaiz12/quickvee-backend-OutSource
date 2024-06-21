@@ -119,7 +119,8 @@ const AllUserHeader = () => {
   };
 
   const handleNavigateToNeedHelp = () => [
-    navigate("/users/view/unapprove/need-help"),
+    // navigate("/users/view/unapprove/need-help"),
+    navigate("/need-help"),
   ];
 
   return (

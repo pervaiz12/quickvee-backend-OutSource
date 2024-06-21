@@ -86,6 +86,7 @@ import StocktakeReport from "../Stocktake/StocktakeReport";
 import AddCategory from "../Category/AddCategory";
 import AddCoupon from "../Coupons/AddCoupon";
 import AddVendors from "../Vendors/AddVendors";
+import NeedHelp from "../NeedHelp/NeedHelp";
 
 const LeftSide = ({ visible }) => {
   useEffect(() => {
@@ -106,7 +107,6 @@ const LeftSide = ({ visible }) => {
           {visible === "stocktake-AddStocktake" && <AddNewStocktake />}
           {visible === "stocktake-void" && <StocktakeReport />}
           {visible === "stocktake-completed" && <StocktakeReport />}
-         
           {visible === "add-purchase-data" && <AddPo />}
           {visible === "edit-purchase-data" && <ReceivePurchaseOrderItems />}
           {visible === "modify-purchase-order" && <ModifyPurchaseOrder />}
@@ -133,6 +133,7 @@ const LeftSide = ({ visible }) => {
           {visible === "product-sales" && <ProductSalesReport />}
 
           {visible === "info" && <Info />}
+          {visible === "need_help" && <NeedHelp />}
           {visible === "setup" && <Setup />}
           {visible === "Alters" && <MainStoreAlters />}
           {visible === "options" && <MainStoreOption />}
