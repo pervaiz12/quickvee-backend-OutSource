@@ -38,27 +38,27 @@ export default function Add_adminFunctionality({setVisible}) {
       // errors[name] = value === " " ? `Please fill in the ${name} field` : "";
       errors[name] =
         value.trim() === ""
-          ? `Please fill in the ${name} field`
+          ? `Owner Name is required`
           : value[0] === " "
-            ? `The ${name} field cannot start with a space`
+            ? `Owner Name cannot start with a space`
             : "";
     }
     if (name === "email") {
       errors[name] =
         value === ""
-          ? `Please fill in the ${name} field`
+          ? `Email is required`
           : !emailRegex.test(value)
-            ? `Please give valid ${name} field`
+            ? `Please enter a valid ${name}`
             : "";
       //  await emailValidate(value)
     }
     if (name === "password") {
-      errors[name] = value === "" ? `Please fill in the ${name} field` : "";
+      errors[name] = value === "" ? `Password is required` : "";
     }
     if (name === "phone") {
       const numericValue = value.replace(/[^0-9]/g, "");
       if (numericValue == "") {
-        errors[name] = `Please fill in the ${name} field`;
+        errors[name] = `Phone is required`;
       } else if (numericValue.length !== 10) {
         errors[name] = "Phone number must be 10 digits";
       } else {
@@ -144,12 +144,12 @@ export default function Add_adminFunctionality({setVisible}) {
     let formIsValid = true;
 
     if (addAdminData.owner_name === "") {
-      errors.owner_name = "Please fill in the owner_name field";
+      errors.owner_name = "Owner Name is required";
       formIsValid = false;
     }
 
     if (addAdminData.email === "") {
-      errors.email = "Please fill in the email field";
+      errors.email = "Email is required";
       formIsValid = false;
     } else {
       try {
@@ -173,11 +173,11 @@ export default function Add_adminFunctionality({setVisible}) {
     }
 
     if (addAdminData.password === "") {
-      errors.password = "Please fill in the password field";
+      errors.password = "Password is required";
       formIsValid = false;
     }
     if (addAdminData.phone === "") {
-      errors.phone = "Please fill in the phone field";
+      errors.phone = "Phone is required";
       formIsValid = false;
     }
 
@@ -222,7 +222,7 @@ export default function Add_adminFunctionality({setVisible}) {
           .then((res) => {
             setLoader(false);
             if (res.data.status == 200) {
-              ToastifyAlert("Admin Added  Successfully!", "success");
+              ToastifyAlert("Added  Successfully!", "success");
               // setVisible("AdminView")
 
               setAddAdminData({
@@ -240,7 +240,7 @@ export default function Add_adminFunctionality({setVisible}) {
               
               navigate("/users/admin");
             } else {
-              ToastifyAlert("Admin not Added!", "warn");
+              ToastifyAlert("Something went wrong!", "warn");
             }
           });
       }
