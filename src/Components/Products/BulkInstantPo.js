@@ -17,7 +17,9 @@ const BulkInstantPo = ({
   varientData,
   handleCloseEditModal,
   fetchProductDataById,
+  inventoryData,
 }) => {
+ 
   const dispatch = useDispatch();
   const productId = useParams();
   const { LoginGetDashBoardRecordJson } = useAuthDetails();
@@ -32,6 +34,8 @@ const BulkInstantPo = ({
     instantPoState: [],
     description: "",
   });
+  const [error, setError] = useState(false);
+  console.log("erirr", error);
 
   const instantPoForm = useMemo(() => {
     if (modalType === "bulk-edit") {
@@ -127,84 +131,103 @@ const BulkInstantPo = ({
     const formData = new FormData();
     setLoading(true);
     if (modalType !== "bulk-edit") {
-      formData.append("product_id", productId?.id);
-      formData.append(
-        "variant_id",
-        !Boolean(+productData?.isvarient)
-          ? ""
-          : modalType === "bulk-edit"
+      if (
+        inventoryData?.inv_setting?.split(",")?.includes("2") &&
+        !instantPoSingle?.description
+      ) {
+
+        setError(true);
+        setLoading(false);
+      } else {
+        setError(false);
+        formData.append("product_id", productId?.id);
+        formData.append(
+          "variant_id",
+          !Boolean(+productData?.isvarient)
             ? ""
-            : varientData[varientIndex]?.id
-      );
-      formData.append(
-        "merchant_id",
-        LoginGetDashBoardRecordJson?.data?.merchant_id
-      );
-      formData.append("description", instantPoSingle?.description);
-      formData.append("qty", instantPoSingle?.qty);
-      formData.append("price", instantPoSingle?.cost);
+            : modalType === "bulk-edit"
+              ? ""
+              : varientIndex
+        );
+        formData.append(
+          "merchant_id",
+          LoginGetDashBoardRecordJson?.data?.merchant_id
+        );
+        formData.append("description", instantPoSingle?.description);
+        formData.append("qty", instantPoSingle?.qty);
+        formData.append("price", instantPoSingle?.cost);
 
-      dispatch(saveSingleVarientPO(formData))
-        .then((res) => {
-          if (res?.payload?.status) {
-            setInstantPoSingle({
-              qty: "",
-              cost: "",
-              description: "",
-            });
-            ToastifyAlert("Instance PO Updated!", "success");
-            fetchProductDataById();
-            handleCloseEditModal();
-          }
-        })
-        .catch((err) => {
-          ToastifyAlert("Error!", "error");
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+        dispatch(saveSingleVarientPO(formData))
+          .then((res) => {
+            if (res?.payload?.status) {
+              setInstantPoSingle({
+                qty: "",
+                cost: "",
+                description: "",
+              });
+              ToastifyAlert("Instance PO Updated!", "success");
+              fetchProductDataById();
+              handleCloseEditModal();
+            }
+          })
+          .catch((err) => {
+            ToastifyAlert("Error!", "error");
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      }
     } else {
-      formData.append("product_id", productId?.id);
-      formData.append(
-        "variant_id",
-        !Boolean(+productData?.isvarient)
-          ? ""
-          : modalType === "bulk-edit"
-            ? varientData?.map((i) => i?.id)?.toString()
-            : varientData[varientIndex]?.id
-      );
-      formData.append(
-        "merchant_id",
-        LoginGetDashBoardRecordJson?.data?.merchant_id
-      );
-      formData.append("description", instancePoMultiple?.description);
-      formData.append(
-        "qty",
-        instancePoMultiple?.instantPoState?.map((i) => i?.qty)?.toString()
-      );
-      formData.append(
-        "price",
-        instancePoMultiple?.instantPoState?.map((i) => i?.cost)?.toString()
-      );
+      if (
+        inventoryData?.inv_setting?.split(",")?.includes("2") &&
+        !instancePoMultiple?.description
+      ) {
+        setError(true);
+        setLoading(false);
+      } else {
+        setError(false);
+        formData.append("product_id", productId?.id);
+        formData.append(
+          "variant_id",
+          !Boolean(+productData?.isvarient)
+            ? ""
+            : modalType === "bulk-edit"
+              ? varientData?.map((i) => i?.id)?.toString()
+              : varientIndex
+        );
+        formData.append(
+          "merchant_id",
+          LoginGetDashBoardRecordJson?.data?.merchant_id
+        );
+        formData.append("description", instancePoMultiple?.description);
+        formData.append(
+          "qty",
+          instancePoMultiple?.instantPoState?.map((i) => i?.qty)?.toString()
+        );
+        formData.append(
+          "price",
+          instancePoMultiple?.instantPoState?.map((i) => i?.cost)?.toString()
+        );
 
-      dispatch(saveBulkInstantPo(formData))
-        .then((res) => {
-          if (res?.payload?.status) {
-            setInstancePoMultiple({
-              instantPoState: [],
-              description: "",
-            });
-            ToastifyAlert("Instance PO Updated!", "success");
-            fetchProductDataById();
-            handleCloseEditModal();
-          }
-        })
-        .catch((err) => {
-          ToastifyAlert("Error!", "error");
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+        dispatch(saveBulkInstantPo(formData))
+          .then((res) => {
+            if (res?.payload?.status) {
+              setInstancePoMultiple({
+                instantPoState: [],
+                description: "",
+              });
+              ToastifyAlert("Instance PO Updated!", "success");
+              fetchProductDataById();
+              handleCloseEditModal();
+            }
+          })
+          .catch((err) => {
+            ToastifyAlert("Error!", "error");
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      }
     }
   };
 
@@ -273,6 +296,13 @@ const BulkInstantPo = ({
                           value={instancePoMultiple?.description}
                           placeholder="Type here..."
                         />
+                        {error ? (
+                          <span className="error-alert mb-2">
+                            description is Required
+                          </span>
+                        ) : (
+                          ""
+                        )}
                       </div>
                     </div>
                   </div>
@@ -333,6 +363,13 @@ const BulkInstantPo = ({
                           value={instantPoSingle?.["description"]}
                           onChange={handleChangeSinglePo}
                         />
+                        {error ? (
+                          <span className="error-alert mb-2">
+                            description is Required
+                          </span>
+                        ) : (
+                          ""
+                        )}
                       </div>
                     </div>
                   </div>

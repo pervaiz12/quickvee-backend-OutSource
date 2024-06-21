@@ -120,7 +120,7 @@ const SearchableDropdown = ({
     <>
       {title ? (
         <div className="title-area">
-          <span>{title}</span>
+          <span  className="product-input-title">{title}</span>
         </div>
       ) : (
         ""
@@ -144,7 +144,7 @@ const SearchableDropdown = ({
                 ? selectedOption?.map((option) => {
                     return (
                       <div className="item" key={option?.id}>
-                        {option?.[name]}
+                        <span>{option?.[name]}</span>
                         <img
                           src={CloseIcon}
                           className="cancel-image"

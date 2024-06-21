@@ -78,13 +78,14 @@ const GeneratePUC = ({
       navigate(`/inventory/products/saleshistory/${productData?.id}`, {state: productInfo});
     } else {
       navigate(
-        `/inventory/products/saleshistory/${productData?.id}/${varientData[varientIndex]?.id}`,
+        `/inventory/products/saleshistory/${productData?.id}/${varientIndex}`,
         {state: productInfo}
       );
     }
   };
 
 
+  console.log('formValue', formValue);
   return (
     <>
       <div className="mx-0">
@@ -283,7 +284,7 @@ const GeneratePUC = ({
                             backgroundColor: "#0A64F9",
                           }}
                           onClick={() =>
-                            handleCloseEditModal("single_vendor", index)
+                            handleCloseEditModal("single_vendor", formValue?.[index]?.[title]?.productEditId)
                           }
                         >
                           Vendors
@@ -295,7 +296,7 @@ const GeneratePUC = ({
                           style={{
                             backgroundColor: "#0A64F9",
                           }}
-                          onClick={() => handleRedirectHistory(index)}
+                          onClick={() => handleRedirectHistory(formValue?.[index]?.[title]?.productEditId)}
                         >
                           Sales History
                         </button>
@@ -307,7 +308,7 @@ const GeneratePUC = ({
                             backgroundColor: "#0A64F9",
                           }}
                           onClick={() =>
-                            handleCloseEditModal("single_instant", index)
+                            handleCloseEditModal("single_instant", formValue?.[index]?.[title]?.productEditId)
                           }
                         >
                           Instant PO
@@ -342,7 +343,7 @@ const GeneratePUC = ({
                               onChange={(e) => handleOnChange(e, 0)}
                               onBlur={(e) => handleBlur(e, 0)}
                               maxLength={setInputMaxLength(inp?.name)}
-                              disabled={disabledInput(inp)}
+                              disabled={disabledInput(inp, formValue?.[0])}
                             />
                               {!!formValue?.[0]?.['comparePriceError'] && inp?.name === "compareAtPrice" ? (
                                     <span className="error-alert">
@@ -468,7 +469,7 @@ const GeneratePUC = ({
                     style={{
                       backgroundColor: "#0A64F9",
                     }}
-                    onClick={() => handleCloseEditModal("single_vendor", 0)}
+                    onClick={() => handleCloseEditModal("single_vendor", formValue?.[0]?.productEditId)}
                   >
                     Vendors
                   </button>
@@ -490,7 +491,7 @@ const GeneratePUC = ({
                     style={{
                       backgroundColor: "#0A64F9",
                     }}
-                    onClick={() => handleCloseEditModal("single_instant", 0)}
+                    onClick={() => handleCloseEditModal("single_instant", formValue?.[0]?.productEditId)}
                   >
                     Instant PO
                   </button>

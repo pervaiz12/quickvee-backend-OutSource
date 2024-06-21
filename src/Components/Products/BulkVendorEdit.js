@@ -31,7 +31,6 @@ import { useAuthDetails } from "../../Common/cookiesHelper";
 
 const BulkVendorEdit = ({
   productData,
-  varientData,
   varientIndex,
   modalType,
   handleCloseEditModal,
@@ -79,7 +78,7 @@ const BulkVendorEdit = ({
           ? productData?.id
           : modalType === "bulk-edit"
             ? productData?.id
-            : varientData[varientIndex]?.id
+            : varientIndex
       );
       formData.append("vendor_id", vendorId);
 
@@ -141,7 +140,7 @@ const BulkVendorEdit = ({
         ? productData?.id
         : modalType === "bulk-edit" && Boolean(+productData?.isvarient)
           ? productData?.id
-          : varientData[varientIndex]?.id
+          : varientIndex
     );
     formData.append(
       "merchant_id",
@@ -175,7 +174,7 @@ const BulkVendorEdit = ({
         ? productData?.id
         : modalType === "bulk-edit" && Boolean(+productData?.isvarient)
           ? productData?.id
-          : varientData[varientIndex]?.id
+          : varientIndex
     );
     formData.append(
       "merchant_id",
@@ -210,7 +209,7 @@ const BulkVendorEdit = ({
           ? productData?.id
           : modalType === "bulk-edit"
             ? productData?.id
-            : varientData[varientIndex]?.id
+            : varientIndex
       );
       formData.append(
         "vendor_id",
@@ -277,7 +276,7 @@ const BulkVendorEdit = ({
           ? productData?.id
           : modalType === "bulk-edit"
             ? productData?.id
-            : varientData[varientIndex]?.id
+            : varientIndex
       );
       formData.append("vendor_id", vendorId);
       dispatch(deleteProductVendor(formData))
@@ -320,7 +319,7 @@ const BulkVendorEdit = ({
         ? productData?.id
         : modalType === "bulk-edit"
           ? productData?.id
-          : varientData[varientIndex]?.id
+          : varientIndex
     );
     formData.append(
       "costperItem",
