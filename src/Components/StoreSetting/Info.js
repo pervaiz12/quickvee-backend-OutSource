@@ -30,6 +30,7 @@ const Info = () => {
     passwordError,
     handleSubmitChangePassword,
     qrCodeBoolean,
+    receieptLogoBool,
 
   } = InfoFunction();
   let data = {
@@ -57,7 +58,7 @@ const Info = () => {
         imageBoolean={imageBoolean}
         errors={errors}
         qrCodeBoolean={qrCodeBoolean}
-
+        receieptLogoBool={receieptLogoBool}
       />
       <form>
         <AddressForm handleKeyPress={handleKeyPress}  errors={errors} infoRecord={infoRecord} onChangeHandle={onChangeHandle} />
@@ -66,6 +67,7 @@ const Info = () => {
           infoRecord={infoRecord}
           onChangeHandle={onChangeHandle}
           handleSubmitInfo={handleSubmitInfo}
+          errors={errors}
         />
       </form>
 

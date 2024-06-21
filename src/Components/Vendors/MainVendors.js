@@ -16,7 +16,7 @@ const MainCategory = () => {
                     <li>If you make changes to the Category, the Category status will be pending until the admin approves it.</li>
                     <li>After you've made changes to your menu, select the option "Click Here To Send For Approval To Admin" to get admin approval to update your website.</li>
                 </div> */}
-                <br></br>
+               
                 {visible === "VendorsDetail" && <VendorsDetail setVisible={setVisible} />}
                 {visible === "AddVendors" && <AddVendors setVisible={setVisible} />}
                 {visible === "EditVendors" && <EditVendors setVisible={setVisible} />}

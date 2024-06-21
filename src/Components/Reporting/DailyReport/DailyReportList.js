@@ -15,7 +15,8 @@ import { Grid } from "@mui/material";
 import PasswordShow from "../../../Common/passwordShow";
 import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
 import { priceFormate } from "../../../hooks/priceFormate";
-
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import sortIcon from "../../../Assests/Category/SortingW.svg";
 // ==================== TABLE STYLE ADDED ===================================================
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -45,6 +46,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 // ==================== END TABLE STYLE ADDED ===================================================
 
 const DailyReportList = ({ data }) => {
+  const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
   const dispatch = useDispatch();
   const { handleCoockieExpire } = PasswordShow();
   const {
@@ -111,6 +113,16 @@ const DailyReportList = ({ data }) => {
   };
 
   const renderDataTable = () => {
+    const sortByItemName = (type, name) => {
+      const { sortedItems, newOrder, sortIcon } = SortTableItemsHelperFun(
+        dailyreport,
+        type,
+        name,
+        sortOrder
+      );
+      setdailyreport(sortedItems);
+      setSortOrder(newOrder);
+    };
     // console.log(dailyreport)
     if (
       dailyreport.status === "Failed" &&
@@ -128,6 +140,7 @@ const DailyReportList = ({ data }) => {
         (total, report) => total + parseFloat(report.amt),
         0
       );
+
       return (
         <>
           <Grid container className="box_shadow_div">
@@ -140,24 +153,43 @@ const DailyReportList = ({ data }) => {
                       aria-label="customized table"
                     >
                       <TableHead>
-                        <StyledTableCell>Date</StyledTableCell>
-                        <StyledTableCell>Total</StyledTableCell>
+                        <StyledTableCell>
+                          <button
+                            className="flex items-center"
+                            onClick={() =>
+                              sortByItemName("date", "merchant_time")
+                            }
+                          >
+                            <p className="whitespace-nowrap">Date</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("num", "amt")}
+                          >
+                            <p className="whitespace-nowrap">Total</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                        </StyledTableCell>
                       </TableHead>
                       <TableBody>
-                        {dailyreport.map((dailyreport, index) => (
-                          <StyledTableRow>
-                            <StyledTableCell>
-                              <p className="report-sort">
-                                {formatDate(dailyreport.merchant_time)}
-                              </p>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <p className="report-title">
-                                ${priceFormate(dailyreport.amt)}
-                              </p>
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        ))}
+                        {dailyreport.length > 0 &&
+                          dailyreport.map((dailyreport, index) => (
+                            <StyledTableRow key={index}>
+                              <StyledTableCell>
+                                <p className="report-sort">
+                                  {formatDate(dailyreport.merchant_time)}
+                                </p>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <p className="report-title">
+                                  ${priceFormate(dailyreport.amt)}
+                                </p>
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          ))}
                         <StyledTableCell>
                           <div className="q-category-bottom-report-listing">
                             <div>
