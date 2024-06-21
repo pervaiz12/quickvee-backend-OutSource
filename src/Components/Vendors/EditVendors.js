@@ -34,7 +34,7 @@ const vendorFormValues = {
 const EditVendors = ({ setVisible }) => {
   const Navigate = useNavigate();
   const location = useLocation();
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const searchParams = new URLSearchParams(location.search);
   const [allvendors, setallvendors] = useState([]);
   const AllVendorsDataState = useSelector((state) => state.vendors);
@@ -57,6 +57,51 @@ const EditVendors = ({ setVisible }) => {
 
   const handleOnChange = (event) => {
     const { name, value } = event.target;
+    let errorMsg = "";
+    console.log("vendorFormValues.name.length,",vendorData.name)
+    switch (name) {
+      case "name":
+        if (value.length <= 0) {
+          errorMsg = "Please enter a vendor name";
+        }
+        break;
+      case "email":
+        if (!/\S+@\S+\.\S+/.test(value)) {
+          errorMsg = "Invalid email address";
+        }
+        break;
+      case "phone":
+        if (!/^\d{10}$/.test(value)) {
+          errorMsg = "Phone number must be 10 digits";
+        }
+        break;
+      case "zip_code":
+        if (!/^\d{5}$/.test(value)) {
+          errorMsg = "ZIP code must be 5 digits";
+        }
+        break;
+      case "full_address":
+        if (value.length <= 0) {
+          errorMsg = "Please enter a vendor address";
+        }
+        break;
+      case "city":
+        if (value.length <= 0) {
+          errorMsg = "Please enter a vendor address";
+        }
+        break;
+      case "state":
+        if (vendorFormValues.state === "") {
+          errorMsg = "Please enter a vendor address";
+        }
+        break;
+      default:
+        break;
+    }
+    setErrorMessage((prevState) => ({
+      ...prevState,
+      [name]: errorMsg,
+    }));
     setVendorData((prevState) => ({
       ...prevState,
       [name]: value,
@@ -95,8 +140,8 @@ const EditVendors = ({ setVisible }) => {
       console.log(response.data);
     } catch (error) {
       console.error("Error:", error);
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
     }
   }
 
@@ -161,8 +206,8 @@ const EditVendors = ({ setVisible }) => {
       }
     } catch (error) {
       console.error("Error updating data:", error);
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
     }
   };
 
@@ -176,9 +221,14 @@ const EditVendors = ({ setVisible }) => {
     Navigate("/vendors");
     // setVisible("VendorsDetail");
   };
+  const handleKeyPress = (e) => {
+    if ((e.charCode < 48 || e.charCode > 57) && e.charCode !== 8) {
+      e.preventDefault();
+    }
+  };
   return (
     <>
-      <Grid container style={{marginTop: "1.5rem"}}>
+      <Grid container style={{ marginTop: "1.5rem" }}>
         <Grid item xs={12} className="q-add-categories-section ">
           <Grid container sx={{ marginTop: 0, marginLeft: 0 }}>
             <Grid item xs={12}>
@@ -212,7 +262,7 @@ const EditVendors = ({ setVisible }) => {
                       onChangeFun={handleOnChange}
                       required={"required"}
                     />
-                    {errorMessage}
+                     {errorMessage.name && <span className="error">{errorMessage.name}</span>}
                   </Grid>
                   <Grid item xs={12} sm={6} md={4}>
                     <div className=" qvrowmain my-1">
@@ -225,6 +275,7 @@ const EditVendors = ({ setVisible }) => {
                       onChangeFun={handleOnChange}
                       required={"required"}
                     />
+                     {errorMessage.email && <span className="error">{errorMessage.email}</span>}
                   </Grid>
                   <Grid item xs={12} sm={6} md={4}>
                     <div className=" qvrowmain my-1">
@@ -236,7 +287,10 @@ const EditVendors = ({ setVisible }) => {
                       value={vendorData.phone}
                       onChangeFun={handleOnChange}
                       required={"required"}
+                      onKeyPressFun={handleKeyPress}
+                      maxLength={10}
                     />
+                     {errorMessage.phone && <span className="error">{errorMessage.phone}</span>}
                   </Grid>
                 </Grid>
                 <Grid container sx={{ marginTop: 2.5 }}>
@@ -251,6 +305,7 @@ const EditVendors = ({ setVisible }) => {
                       onChangeFun={handleOnChange}
                       value={vendorData.full_address}
                     />
+                     {errorMessage.full_address && <span className="error">{errorMessage.full_address}</span>}
                   </Grid>
                 </Grid>
                 <Grid container sx={{ marginTop: 2.5 }} spacing={2}>
@@ -265,6 +320,7 @@ const EditVendors = ({ setVisible }) => {
                       onChangeFun={handleOnChange}
                       required={"required"}
                     />
+                     {errorMessage.city && <span className="error">{errorMessage.city}</span>}
                   </Grid>
                   <Grid item xs={12} sm={6} md={4}>
                     <div className="qvrowmain my-1">
@@ -277,6 +333,7 @@ const EditVendors = ({ setVisible }) => {
                       onChangeFun={handleOnChange}
                       required={"required"}
                     />
+                     {errorMessage.zip_code && <span className="error"> {errorMessage.zip_code}</span>}
                   </Grid>
                   <Grid item xs={12} sm={6} md={4}>
                     <div className="qvrowmain my-1">
@@ -289,6 +346,7 @@ const EditVendors = ({ setVisible }) => {
                       onClickHandler={handleSetVendorStateChange}
                       name={"state"}
                     />
+                     {errorMessage.state && <span className="error">{errorMessage.state}</span>}
                   </Grid>
                 </Grid>
                 <Grid
