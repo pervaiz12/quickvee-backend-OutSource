@@ -173,6 +173,7 @@ const StorePage = () => {
                     >
                       <div className="me-5">
                         <img
+                          className="w-store"
                           src={
                             !!store.img
                               ? ` https://sandbox.quickvee.net/upload/${store.img}`
@@ -224,6 +225,7 @@ const StorePage = () => {
                   >
                     <div className="me-5">
                       <img
+                        className="w-store"
                         src={
                           !!store.img
                             ? ` https://sandbox.quickvee.net/upload/${store.img}`
