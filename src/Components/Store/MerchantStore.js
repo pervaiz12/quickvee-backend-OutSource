@@ -173,7 +173,12 @@ const StorePage = () => {
                     >
                       <div className="me-5">
                         <img
-                          src={store.img || storeDefaultImage}
+                          className="w-store"
+                          src={
+                            !!store.img
+                              ? ` https://sandbox.quickvee.net/upload/${store.img}`
+                              : storeDefaultImage
+                          }
                           alt="store_image"
                           onError={(e) => {
                             e.target.onerror = null;
@@ -220,7 +225,12 @@ const StorePage = () => {
                   >
                     <div className="me-5">
                       <img
-                        src={store.img || storeDefaultImage}
+                        className="w-store"
+                        src={
+                          !!store.img
+                            ? ` https://sandbox.quickvee.net/upload/${store.img}`
+                            : storeDefaultImage
+                        }
                         alt="store_image"
                       />
                     </div>
@@ -262,7 +272,12 @@ const StorePage = () => {
                   >
                     <div className="me-5">
                       <img
-                        src={store.img || storeDefaultImage}
+                        className="w-store"
+                        src={
+                          !!store.img
+                            ? ` https://sandbox.quickvee.net/upload/${store.img}`
+                            : storeDefaultImage
+                        }
                         alt="store_image"
                       />
                     </div>

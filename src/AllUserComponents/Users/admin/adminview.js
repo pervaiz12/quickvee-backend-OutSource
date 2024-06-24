@@ -24,7 +24,7 @@ import Edit from "../../../Assests/VerifiedMerchant/Edit.svg";
 import useDebounce from "../../../hooks/useDebouncs";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 
-export default function AdminView({setVisible,setEditAdminId}) {
+export default function AdminView({ setVisible, setEditAdminId }) {
   const { userTypeData } = useAuthDetails();
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -110,15 +110,15 @@ export default function AdminView({setVisible,setEditAdminId}) {
   }));
 
   const columns = ["Owner Name", "Name", "Email", "Phone", "View", ""];
-  const handleClick =()=>{
+  const handleClick = () => {
     // setVisible("AddAmin")
-    navigate("/users/admin/addAdmin")
-  }
+    navigate("/users/admin/addAdmin");
+  };
 
-  const handleEditAdminClick = (id)=>{
+  const handleEditAdminClick = (id) => {
     setEditAdminId(id);
-    setVisible("EditAdmin")
-  }
+    setVisible("EditAdmin");
+  };
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -141,7 +141,7 @@ export default function AdminView({setVisible,setEditAdminId}) {
               <Grid container direction="row" alignItems="center">
                 <Grid item>
                   <span
-                  onClick={handleClick}
+                    onClick={handleClick}
                     // to="/users/addAdmin"
                     className="flex q-category-bottom-header "
                   >
@@ -241,7 +241,9 @@ export default function AdminView({setVisible,setEditAdminId}) {
                                   onClick={() =>
                                     // handleEditAdminClick(data.id)
                                     // setEditAdminId(data.id)
-                                    navigate(`/users/admin/editAdmin/${data.id}`)
+                                    navigate(
+                                      `/users/admin/editAdmin/${data.id}`
+                                    )
                                   }
                                   src={Edit}
                                   alt="Edit"

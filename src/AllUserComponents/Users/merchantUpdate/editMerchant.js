@@ -51,6 +51,7 @@ export default function EditMerchant({
     inventoryApprove,
     errors,
     loader,
+    handleBlur,
   } = EditMerchantFunctionality();
   const { id } = useParams();
   const ids = !!merchantId ? merchantId : id;
@@ -147,10 +148,16 @@ export default function EditMerchant({
                   value={getEditMerchant.newPassword}
                   onChangeFun={handleChangeMerchant}
                   sx={{ pt: 0.5 }}
+                  onBlurFunction={() => handleBlur("password")}
                   autoCompleteOff="off"
+                  readOnly
+                  onFocusData={(e) => e.target.removeAttribute("readonly")}
                 />
                 {jsxData(getEditMerchant.newPassword)}
               </div>
+              {errors.password && (
+                <label className="input-error">{errors.password}</label>
+              )}
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
               <label>Owner Name</label>
