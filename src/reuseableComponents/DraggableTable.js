@@ -350,6 +350,7 @@ const DraggableTable = ({
                               {editButtonEnable && (
                                 <StyledTableCell>
                                   {/* <Link to={`inventory/category/edit-category/${item.id}`}> */}
+                                  <div className="permissionEditBTN">
                                   <span
                                     // to={`${editButtonurl}${item.id}`}
                                     onClick={() => {
@@ -365,6 +366,7 @@ const DraggableTable = ({
                                       alt="Edit"
                                     />
                                   </span>
+                                  </div>
                                   {/* </Link> */}
                                 </StyledTableCell>
                               )}
