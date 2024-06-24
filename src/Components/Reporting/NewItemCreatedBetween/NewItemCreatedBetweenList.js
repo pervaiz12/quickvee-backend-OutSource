@@ -118,10 +118,10 @@ const NewItemCreatedBetweenList = (props) => {
   const sortByItemName = (type, name) => {
     const itemsWithParsedDates = allNewItemData.map((item) => {
       const dateString = item.created_on;
-      // const [day, month, year] = dateString.split("-").map(Number);
-      // const date =`${year}, ${month}, ${day}`;
-      // console.log("date in map ", new Date(date))
-      return { ...item, created_on:formatDate(dateString) };
+      const [day, month, year] = dateString.split("-").map(Number);
+      const date =`${year},${month},${day}`;
+      console.log("date in map ", date)
+      return { ...item, created_on:date };
     });
     console.log("itemsWithParsedDates",itemsWithParsedDates)
     const { sortedItems, newOrder } = SortTableItemsHelperFun(
@@ -130,8 +130,16 @@ const NewItemCreatedBetweenList = (props) => {
       name,
       sortOrder
     );
-    console.log("sortOrder", sortOrder);
-    setallNewItemData(sortedItems);
+    console.log("sortOrder", sortedItems);
+    setallNewItemData(sortedItems.map((item) => {
+      
+      const dateString = item.created_on;
+      console.log("item", dateString)
+      const [year,month,day ] = dateString.split(",").map(Number);
+      const customdate =`${day}-${month}-${year}`;
+      console.log("date in map ", customdate) 
+      return { ...item, created_on:customdate };
+    }));
     setSortOrder(newOrder);
   };
 
@@ -143,14 +151,14 @@ const NewItemCreatedBetweenList = (props) => {
             <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
               <TableHead>
                 <StyledTableCell>
-                  {/* <button
+                  <button
                     className="flex items-center"
                     onClick={() => sortByItemName("date", "created_on")}
                   >
                     <p className="whitespace-nowrap">Date</p>
                     <img src={sortIcon} alt="" className="pl-1" />
-                  </button> */}
-                  Date
+                  </button>
+                  {/* Date */}
                 </StyledTableCell>
                 <StyledTableCell>Category</StyledTableCell>
                 <StyledTableCell>Item Name</StyledTableCell>

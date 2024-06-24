@@ -315,6 +315,8 @@ module.exports = Object.freeze({
   STOCKTAKE_LIST_COUNT: "Stocktake_react_api/stocktake_count",
 
   SYNC_DATA: "InventoryReact/syncOI",
+
+  VENDOR_UPDATE_DETAILS: "vendor_api/update_details",
 });
 
 // All api calls are initialized in this component for this application

@@ -46,7 +46,7 @@ const EditVendors = ({ setVisible }) => {
     userTypeData,
     GetSessionLogin,
   } = useAuthDetails();
-
+  const dispatch = useDispatch();
   const [value, setValue] = useState();
   const [inputValue, setInputValue] = useState("");
 
@@ -54,7 +54,7 @@ const EditVendors = ({ setVisible }) => {
 
   const [vendorData, setVendorData] = useState(vendorFormValues);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-
+  console.log("vendorFormValues.name.length,",vendorData)
   const handleOnChange = (event) => {
     const { name, value } = event.target;
     let errorMsg = "";
@@ -126,8 +126,8 @@ const EditVendors = ({ setVisible }) => {
       });
 
       // setVendorData(response.data);
-
-      ToastifyAlert("Updated Successfully", "success");
+      // console.log("response.data",response.data);
+      // ToastifyAlert("Updated Successfully", "success");
       setVendorData((prevState) => {
         const newData = { ...prevState };
         for (const key in response.data.vendor_data[0]) {
@@ -135,9 +135,9 @@ const EditVendors = ({ setVisible }) => {
             newData[key] = response.data.vendor_data[0][key];
           }
         }
+        console.log("return newData",newData)
         return newData;
       });
-      console.log(response.data);
     } catch (error) {
       console.error("Error:", error);
       handleCoockieExpire();
@@ -149,6 +149,16 @@ const EditVendors = ({ setVisible }) => {
     // Fetch data when the component mounts
     fetchData();
   }, []);
+
+ 
+  useEffect(() => {
+    let data = {
+      merchant_id,
+      // ...userTypeData,
+    };
+    dispatch(fetchVendorsListData(data));
+  }, []);
+
 
   useEffect(() => {
     if (
@@ -169,6 +179,7 @@ const EditVendors = ({ setVisible }) => {
     AllVendorsDataState,
     AllVendorsDataState.loading,
     AllVendorsDataState.vendorListData,
+   
   ]);
 
   const handleFormSubmit = async (e) => {
@@ -198,12 +209,14 @@ const EditVendors = ({ setVisible }) => {
         response.data.status === "false" &&
         response.data.msg === "Name already exist."
       ) {
+        ToastifyAlert("Name already exists. Please choose a different name.", "error");
         setErrorMessage("Name already exists. Please choose a different name.");
       } else {
         setErrorMessage("");
 
         Navigate(-1);
       }
+      ToastifyAlert("Vendors Data Updated Successfully.", "success");
     } catch (error) {
       console.error("Error updating data:", error);
       handleCoockieExpire();
@@ -340,7 +353,7 @@ const EditVendors = ({ setVisible }) => {
                       <label htmlFor="city">State</label>
                     </div>
                     <SelectDropDown
-                      listItem={states.map((item) => ({ title: item }))}
+                      listItem={states && states.map((item) => ({ title: item }))}
                       title={"title"}
                       selectedOption={vendorData.state}
                       onClickHandler={handleSetVendorStateChange}
@@ -376,5 +389,5 @@ const EditVendors = ({ setVisible }) => {
     </>
   );
 };
-
+ 
 export default EditVendors;
