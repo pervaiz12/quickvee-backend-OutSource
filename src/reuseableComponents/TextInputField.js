@@ -13,13 +13,13 @@ export default function BasicTextFields({
   disable,
   onBlurFunction,
   sx,
-  onKeyPressFun
+  onKeyPressFun,
 }) {
   return (
     <FormControl fullWidth>
       <TextField
         id="outlined-basic"
-        sx={{fontFamily: "inherit",...sx}}
+        sx={{ fontFamily: "inherit", ...sx }}
         name={name}
         value={value}
         inputProps={{ maxLength: maxLength, type: type, readOnly: readOnly }}

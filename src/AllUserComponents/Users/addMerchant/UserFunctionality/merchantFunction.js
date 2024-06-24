@@ -256,8 +256,7 @@ const MerchantFunction = () => {
               : "";
       }
       if (name == "ownerName") {
-        updatedErrors[name] =
-          value === "" ? `Owner Name is required` : "";
+        updatedErrors[name] = value === "" ? `Owner Name is required` : "";
         // updatedErrors[name] =
         //   value.trim() === ""
         //     ? `Please fill in the ${name} field`
@@ -274,12 +273,10 @@ const MerchantFunction = () => {
               : "";
       }
       if (name == "password") {
-        updatedErrors[name] =
-          value === "" ? `Password is required` : "";
+        updatedErrors[name] = value === "" ? `Password is required` : "";
       }
       if (name == "state") {
-        updatedErrors[name] =
-          value === "" ? `State is required` : "";
+        updatedErrors[name] = value === "" ? `State is required` : "";
       }
       if (name === "phone") {
         const numericValue = value.replace(/[^0-9]/g, "");
@@ -300,8 +297,7 @@ const MerchantFunction = () => {
       });
     } else {
       if (e.name == "state") {
-        updatedErrors[e.name] =
-          e.title === "" ? `State is required` : "";
+        updatedErrors[e.name] = e.title === "" ? `State is required` : "";
       }
       setStore((prevState) => ({
         ...prevState,
@@ -508,6 +504,7 @@ const MerchantFunction = () => {
     // let validateMerchant = validateData();
     const currentValidate = validateFormNew(store.errors);
     const isValidate = await validate();
+
     // && validateMerchant
     try {
       if (isValidate) {

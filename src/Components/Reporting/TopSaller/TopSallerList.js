@@ -13,7 +13,8 @@ import TableRow from "@mui/material/TableRow";
 import { priceFormate } from "../../../hooks/priceFormate";
 import PasswordShow from "../../../Common/passwordShow";
 import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
-
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import SortIcon from "../../../Assests/Category/SortingW.svg";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -74,7 +75,18 @@ const TopSallerList = ({ data }) => {
     topsallerDataState.loading,
     topsallerDataState.topsallerData,
   ]);
+  const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
 
+  const sortByItemName = (type, name) => {
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      topsaller,
+      type,
+      name,
+      sortOrder
+    );
+    settopsaller(sortedItems);
+    setSortOrder(newOrder);
+  };
   const renderDataTable = () => {
     if (topsaller.status === "Failed" && topsaller.msg === "No. Data found.") {
       return (
@@ -94,10 +106,43 @@ const TopSallerList = ({ data }) => {
               <TableContainer>
                 <StyledTable>
                   <TableHead>
-                    <StyledTableCell>Item Name</StyledTableCell>
-                    <StyledTableCell>Category</StyledTableCell>
-                    <StyledTableCell>Varient Name</StyledTableCell>
-                    <StyledTableCell>Quantity Sold</StyledTableCell>
+                    <StyledTableCell>
+                      <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName("str", "real_name")}
+                      >
+                        <p>Item Name</p>
+                        <img src={SortIcon} alt="" className="pl-1" />
+                      </button>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName("str", "categoryss")}
+                      >
+                        <p>Category</p>
+                        <img src={SortIcon} alt="" className="pl-1" />
+                      </button>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName("str", "variant")}
+                      >
+                        <p>Varient Name</p>
+                        <img src={SortIcon} alt="" className="pl-1" />
+                      </button>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                    <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName("num", "total_sold")}
+                      >
+                        <p>Quantity Sold</p>
+                        <img src={SortIcon} alt="" className="pl-1" />
+                      </button>
+                      
+                      </StyledTableCell>
                   </TableHead>
 
                   <TableBody>

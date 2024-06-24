@@ -54,8 +54,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const ProductSalesReport = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const productId = location?.pathname?.split("/")[3];
-  const varientId = location?.pathname?.split("/")[4];
+  const productId = location?.pathname?.split("/")[4];
+  const varientId = location?.pathname?.split("/")[5];
   const dispatch = useDispatch();
   const { LoginGetDashBoardRecordJson } = useAuthDetails();
 

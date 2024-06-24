@@ -15,6 +15,7 @@ import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import PasswordShow from "../../Common/passwordShow";
 import { Link } from "react-router-dom";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 const AddVendors = ({ setVisible }) => {
   const [allvendors, setallvendors] = useState([]);
   const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
@@ -178,7 +179,7 @@ const AddVendors = ({ setVisible }) => {
 
     if (response) {
       setVisible("VendorsDetail");
-
+      ToastifyAlert("Added Successfully", "success");
       // alert(response.data.message);
     } else {
       console.error(response);

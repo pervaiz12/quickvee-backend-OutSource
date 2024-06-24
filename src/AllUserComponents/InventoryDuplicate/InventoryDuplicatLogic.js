@@ -159,7 +159,8 @@ const InventoryExportLogic = () => {
 
           if (response.data) {
             setsubmitmessage(response.data);
-            ToastifyAlert("Duplicate Settings Success!", "success");
+            // ToastifyAlert("Duplicate Settings Success!", "success");
+            ToastifyAlert("Added Successfully", "success");
           } else {
             setsubmitmessage(response.data);
           }

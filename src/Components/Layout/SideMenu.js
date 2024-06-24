@@ -736,7 +736,7 @@ const menuItems = [
           <img src={CatIcon} alt="Category" className="h-6 w-10 mt-4 mb-4 " />
         ),
         text: "Category",
-        link: "/category",
+        link: "/inventory/category",
       },
       {
         id: 2,
@@ -1378,6 +1378,20 @@ const MerchantLink = [
     // id: 82,
     text: "Store",
     link: "/store",
+    icon: (
+      <img
+        src={storeIcon}
+        alt="labal"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={storeIconActive}
+        alt="menu-defaults"
+        className="h-6 w-10 mt-4 mb-4"
+      />
+    ),
   },
 ];
 // }MerchantLink

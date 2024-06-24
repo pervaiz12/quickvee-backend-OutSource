@@ -396,7 +396,7 @@ const AddCoupon = ({ seVisible }) => {
       const data = await res.data.status;
       const update_message = await res.data.message;
       if (data === true) {
-        ToastifyAlert(update_message, "success");
+        ToastifyAlert("Added Successfully", "success");
         let data = {
           merchant_id,
         };

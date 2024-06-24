@@ -116,6 +116,7 @@ const AddProducts = () => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [modalType, setModalType] = useState("");
   const [varientIndex, setVarientIndex] = useState(null);
+  const [varientId, setVarientId] = useState("");
 
   // close alert
   const handleCloseAlertModal = () => {
@@ -128,6 +129,11 @@ const AddProducts = () => {
     setVarientIndex(varientId);
   };
 
+
+  // useEffect(()=>{
+  //   const findVarientIndex = varientData?.find((item)=> item?.id === varientIndex);
+  //   setVarientId(findVarientIndex?.productEditId);
+  // }, [handleCloseEditModal, varientData, varientIndex])
   // clear all form input value
   const handleClearFormData = (value) => {
     setClearInput(value);
@@ -347,8 +353,6 @@ const AddProducts = () => {
       [name]: [...prev[name], value],
     }));
   };
-
-  console.log('formValue', formValue);
 
   const handleDeleteSelectedOption = (id, name) => {
     const filterOptionItems = productInfo[name].filter(
@@ -722,10 +726,8 @@ const AddProducts = () => {
         let profitAmount = 0;
         if(name === "costPerItem" && parseFloat(item?.price) > 0){;
               profitAmount = parseFloat(item?.price - value).toFixed(2);
-              console.log('profit iffff', profitAmount, value, item.price);
         }else if(name === "price" && parseFloat(item?.costPerItem) > 0){
               profitAmount = parseFloat(value - item?.costPerItem).toFixed(2);
-              console.log('profit else', profitAmount, value, item.costPerItem);
         } else{
           profitAmount=""
         }
@@ -739,12 +741,10 @@ const AddProducts = () => {
               let marginvl = (value * 100) / parseFloat(item?.price);
               let showmargin = 100 - marginvl;
               marginAmount = parseFloat(showmargin).toFixed(2);
-              console.log('margin iffff', marginvl, showmargin, marginAmount, value, item.price);
         } else if(name === "price" && parseFloat(item?.costPerItem) > 0){
               let marginvl = (parseFloat(item?.costPerItem) * 100) / parseFloat(value);
               let showmargin = 100 - marginvl;
               marginAmount = parseFloat(showmargin).toFixed(2);
-              console.log('margin else', marginvl, showmargin, marginAmount, value, item.costPerItem);
         } else{
           marginAmount=""
         }
@@ -1008,10 +1008,8 @@ const AddProducts = () => {
       let profitAmount = 0;
       if(name === "costPerItem" && parseFloat(item?.price) > 0){;
             profitAmount = parseFloat(item?.price - value).toFixed(2);
-            console.log('profit iffff', profitAmount, value, item.price);
       }else if(name === "price" && parseFloat(item?.costPerItem) > 0){
             profitAmount = parseFloat(value - item?.costPerItem).toFixed(2);
-            console.log('profit else', profitAmount, value, item.costPerItem);
       } else{
         profitAmount=""
       }
@@ -1025,12 +1023,10 @@ const AddProducts = () => {
             let marginvl = (value * 100) / parseFloat(item?.price);
             let showmargin = 100 - marginvl;
             marginAmount = parseFloat(showmargin).toFixed(2);
-            console.log('margin iffff', marginvl, showmargin, marginAmount, value, item.price);
       } else if(name === "price" && parseFloat(item?.costPerItem) > 0){
             let marginvl = (parseFloat(item?.costPerItem) * 100) / parseFloat(value);
             let showmargin = 100 - marginvl;
             marginAmount = parseFloat(showmargin).toFixed(2);
-            console.log('margin else', marginvl, showmargin, marginAmount, value, item.costPerItem);
       } else{
         marginAmount=""
       }
@@ -1517,6 +1513,7 @@ const AddProducts = () => {
         setFormValue(() => {
           const formValue = [
             {
+              notEditable: true,
               productEditId: productData?.id || "",
               costPerItem: productData?.costperItem || "",
               compareAtPrice: productData?.compare_price || "",
@@ -1951,7 +1948,7 @@ const AddProducts = () => {
               </div>
               <div className="q-add-categories-section-middle-form">
                 <div className="q-add-categories-single-input">
-                  <label htmlFor="title">Title</label>
+                  <label htmlFor="title" className="product-input-title">Title</label>
                   <input
                     type="text"
                     id="title"
@@ -1974,16 +1971,16 @@ const AddProducts = () => {
                 </div>
 
                 <div className="q-add-categories-single-input">
+                  <label htmlFor="description"  className="product-input-title">Description</label>
                   <CkEditorInput
                     value={productInfo?.description}
                     onChange={handleProductInfo}
                   />
                 </div>
                 {/* <div className="q-add-categories-single-input">
-                  <label htmlFor="description">Description</label>
                   <textarea
-                    id="description"
-                    name="description"
+                  id="description"
+                  name="description"
                     rows="4"
                     cols="50"
                     value={productInfo?.description}
@@ -2058,12 +2055,12 @@ const AddProducts = () => {
                   />
                 </div>
 
-                <div className="q-add-categories-single-input">
-                  <div className="q_dashbaord_netsales">
-                    <h1>Product Image</h1>
+                <div className="q-add-categories-single-input image-list">
+                  <div className="q_dashbaord_netsales ">
+                    <h1>Product Images</h1>
                   </div>
 
-                  <label>
+                  <label className="image-title-show">
                     Select Default Image if in case some color image is not
                     available.
                   </label>

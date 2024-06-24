@@ -345,7 +345,7 @@ const TimesheetListing = ({ data }) => {
         response.data.status === true &&
         response.data.msg === "Inserted successfully."
       ) {
-        ToastifyAlert("Timesheet Created Successfully", "success");
+        ToastifyAlert("Added Successfully", "success");
         dispatch(fetchtimeSheetData(data));
         setShowModal(false);
       } else if (
@@ -518,7 +518,7 @@ const TimesheetListing = ({ data }) => {
         response.data.msg === "Break Added."
       ) {
         setShowModalBreak(false);
-        ToastifyAlert("Break Added", "success");
+        ToastifyAlert("Added Successfully", "success");
       } else if (
         response.data.status === false &&
         response.data.msg === "Invalid time entered."
@@ -675,7 +675,7 @@ const TimesheetListing = ({ data }) => {
             dispatch(fetchtimeSheetData(data));
           });
       }
-      ToastifyAlert("Timesheet Deleted", "success");
+      ToastifyAlert("Deleted Successfully", "success");
       closeModalViewBreak();
     }else if(deleteBreakTime){
       const datasBreakDelete = {
@@ -687,7 +687,7 @@ const TimesheetListing = ({ data }) => {
             dispatch(fetchtimeSheetData(data));
           });
       }
-      ToastifyAlert("Break Deleted", "success");
+      ToastifyAlert("Deleted Successfully", "success");
       closeModalViewBreak();
 
     }

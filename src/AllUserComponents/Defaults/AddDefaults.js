@@ -11,6 +11,7 @@ import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
 import { useNavigate } from "react-router-dom";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const AddDefaults = ({ setVisible }) => {
   const navigate = useNavigate()
@@ -34,6 +35,7 @@ const AddDefaults = ({ setVisible }) => {
     setAlertModalHeaderText(headerText);
     setAlertModalOpen(true);
   };
+  const [loader, setLoader] = useState(false);
 
   const inputChange = (e) => {
     const { name, value } = e.target;
@@ -103,7 +105,7 @@ const AddDefaults = ({ setVisible }) => {
     }
     formData.append("token_id", userTypeData.token_id);
     formData.append("login_type", userTypeData.login_type);
-
+    setLoader(true);
     try {
       const res = await axios.post(BASE_URL + ADD_DEFAULTS, formData, {
         headers: {
@@ -114,7 +116,7 @@ const AddDefaults = ({ setVisible }) => {
       const data = await res.data.status;
       const update_message = await res.data.msg;
       if (data === "Success") {
-        ToastifyAlert("Default Menu Created", "success");
+        ToastifyAlert("Added Successfully", "success");
         navigate(-1)
       } else if (
         data === "Failed" &&
@@ -125,6 +127,7 @@ const AddDefaults = ({ setVisible }) => {
     } catch (error) {
       console.error("API Error:", error);
     }
+    setLoader(false);
   };
 
   // Function to prevent default behavior for drag over
@@ -399,7 +402,13 @@ const AddDefaults = ({ setVisible }) => {
               </div>
 
               <div className="q-add-categories-section-middle-footer">
-                <button className="quic-btn quic-btn-save">Add</button>
+                <button className="quic-btn quic-btn-save attributeUpdateBTN">{loader ? 
+                ( <> <CircularProgress color={"inherit"} className="loaderIcon"  width={15}size={15}/>{" "}
+                  Add
+                </>
+              ) : (
+                "Add"
+              )}</button>
                 <button
                   onClick={() => navigate(-1)}
                   className="quic-btn quic-btn-cancle"

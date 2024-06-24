@@ -384,7 +384,7 @@ const EditCoupon = ({couponId,seVisible}) => {
       const data = await res.data.status;
       const update_message = await res.data.message;
       if (data === true) {
-        ToastifyAlert(update_message, "success");
+        ToastifyAlert("Updated Successfully", "success");
         // seVisible("CouponDiscount")
         // alert(update_message);
         let data = {

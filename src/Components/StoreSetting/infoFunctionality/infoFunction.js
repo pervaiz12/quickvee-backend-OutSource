@@ -32,6 +32,7 @@ export default function InfoFunction() {
     image: "",
     banners: "",
     qrCode: "",
+    receieptLogo: "",
     address_1: "",
     address_2: "",
     city: "",
@@ -45,7 +46,10 @@ export default function InfoFunction() {
     is_banner_change: "0",
     is_logo_change: "0",
     is_qr_code_change: "0",
+    is_receipt_logo_change: "0",
   });
+  const urlPattern =
+    /^(https:\/\/www\.instagram\.com\/|https:\/\/www\.facebook\.com\/|https:\/\/[a-z0-9]+(\.[a-z0-9]+)+\/).*$/;
   console.log("infoRecord.image === selectedFile.name", infoRecord);
   // ============================password ======================
   const [passwordInput, setPassowordInput] = useState({
@@ -118,11 +122,16 @@ export default function InfoFunction() {
     zipCodeError: "",
     stateNameError: "",
     phoneError: "",
+    receieptLogoError: "",
+    facebookUrlError: "",
+    instagramUrlError: "",
+    promotionalUrlError: "",
   });
 
   const [imageBoolean, setImageBoolean] = useState(false);
   const [BannersBoolean, setBannersBoolean] = useState(false);
   const [qrCodeBoolean, setQrCodeBoolean] = useState(false);
+  const [receieptLogoBool, setReceieptLogoBool] = useState(false);
   const [approve, setApprove] = useState("");
   const handleDelete = (data) => {
     if (data === "banners") {
@@ -140,6 +149,12 @@ export default function InfoFunction() {
     } else if (data === "qrCode") {
       setInfoRecord({ ...infoRecord, qrCode: "" });
       const fileInput = document.getElementById("file-input5");
+      if (fileInput) {
+        fileInput.value = "";
+      }
+    } else if (data === "receieptLogo") {
+      setInfoRecord({ ...infoRecord, receieptLogo: "" });
+      const fileInput = document.getElementById("file-input4");
       if (fileInput) {
         fileInput.value = "";
       }
@@ -168,6 +183,13 @@ export default function InfoFunction() {
       isValidate = false;
     } else {
       errorMessage.qrCodeError = "";
+    }
+
+    if (infoRecord.receieptLogo === "") {
+      errorMessage.receieptLogoError = "QR Reciept logo is required.";
+      isValidate = false;
+    } else {
+      errorMessage.receieptLogoError = "";
     }
 
     if (infoRecord.address_1 === "") {
@@ -203,6 +225,24 @@ export default function InfoFunction() {
       isValidate = false;
     } else {
       errorMessage.phoneError = "";
+    }
+    if (infoRecord.facebookUrl === "") {
+      errorMessage.facebookUrlError = "this field is required.";
+      isValidate = false;
+    } else {
+      errorMessage.facebookUrlError = "";
+    }
+    if (infoRecord.instagramUrl === "") {
+      errorMessage.instagramUrlError = "this field is required.";
+      isValidate = false;
+    } else {
+      errorMessage.instagramUrlError = "";
+    }
+    if (infoRecord.promotionalUrl === "") {
+      errorMessage.promotionalUrlError = "this field is required.";
+      isValidate = false;
+    } else {
+      errorMessage.promotionalUrlError = "";
     }
     setErrors(errorMessage);
 
@@ -269,8 +309,8 @@ export default function InfoFunction() {
           ? response.data.message.a_phone
           : "";
       const fb_url =
-        response.data.message.insta_url !== null
-          ? response.data.message.insta_url
+        response.data.message.fb_url !== null
+          ? response.data.message.fb_url
           : "";
       const insta_url =
         response.data.message.insta_url !== null
@@ -285,6 +325,10 @@ export default function InfoFunction() {
       const qr_img =
         response.data.message.qr_img !== null
           ? response.data.message.qr_img
+          : "";
+      const receipt_img =
+        response.data.message.receipt_logo !== null
+          ? response.data.message.receipt_logo
           : "";
       setApprove("approve");
       setImageBanner(banner_img);
@@ -309,6 +353,7 @@ export default function InfoFunction() {
         promotionalUrl: promotional_url,
         user_id: user_id,
         qrCode: qr_img,
+        receieptLogo: receipt_img,
       }));
     }
   };
@@ -385,6 +430,30 @@ export default function InfoFunction() {
         errorMessage.qrCodeError = "";
       }
     }
+    if (name === "receieptLogo") {
+      console.log("receieptLogo", name);
+      if (e.target.value == "") {
+        errorMessage.receieptLogoError = "Please select Receipt Logo field";
+      } else {
+        const selectedFile = e.target.files[0];
+
+        if (selectedFile) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setInfoRecord((prevState) => ({
+              ...prevState,
+              receieptLogo: reader.result,
+              is_receipt_logo_change:
+                prevState.receieptLogo === selectedFile.name ? "0" : "1",
+            }));
+          };
+
+          reader.readAsDataURL(selectedFile);
+          setReceieptLogoBool(true);
+        }
+        errorMessage.receieptLogoError = "";
+      }
+    }
     if (name == "phone") {
       if (value !== "") {
         // console.log(value.length)
@@ -397,6 +466,21 @@ export default function InfoFunction() {
         errorMessage.phoneError = "";
       }
     }
+    switch (name) {
+      case "facebookUrl":
+      case "instagramUrl":
+      case "promotionalUrl":
+        if (value !== "" && !urlPattern.test(value)) {
+          errorMessage[`${name}Error`] = `Please enter a valid ${name} URL`;
+        } else {
+          errorMessage[`${name}Error`] = "";
+        }
+        break;
+
+      default:
+        break;
+    }
+
     setErrors(errorMessage);
     setInfoRecord((prevInfoRecord) => ({
       ...prevInfoRecord,
@@ -444,7 +528,9 @@ export default function InfoFunction() {
             logo_img: infoRecord.image, //
             is_logo_change: infoRecord.is_logo_change, //
             qr_code: infoRecord.qrCode, //
+            receipt_logo: infoRecord.receieptLogo || "",
             is_qr_code_change: infoRecord.is_qr_code_change, //
+            is_receipt_logo_change: infoRecord.is_receipt_logo_change,
             address_line_1: infoRecord.address_1, //
             address_line_2: infoRecord.address_2, //
             phone: infoRecord.phone, //
@@ -550,5 +636,6 @@ export default function InfoFunction() {
     passwordError,
     handleSubmitChangePassword,
     qrCodeBoolean,
+    receieptLogoBool,
   };
 }
