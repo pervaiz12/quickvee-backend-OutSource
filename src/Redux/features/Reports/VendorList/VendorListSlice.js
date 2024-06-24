@@ -1,10 +1,11 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
-import { BASE_URL, VENDORS_REPORT_LIST } from "../../../../Constants/Config";
+import { BASE_URL, VENDORS_REPORT_LIST, GET_VENDORS_DATA_COUNT } from "../../../../Constants/Config";
 
 const initialState = {
   loading: false,
   VendorListData: [],
+  VendorListCount: 0,
   successMessage: "",
   error: "",
 };
@@ -36,6 +37,27 @@ export const fetchVendorListData = createAsyncThunk(
   }
 );
 
+export const getVendorListCount = createAsyncThunk(
+  "VendorReportList/getVendorListCount",
+  async (data) => {
+    const { token, ...dataNew } = data;
+    const response = await axios.post(
+      BASE_URL + GET_VENDORS_DATA_COUNT,
+      dataNew,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`, // Use data?.token directly
+        },
+      }
+    );
+   
+    if (response.data.status === true) {
+      return response.data.tot_count;
+    }
+  }
+);
+
 const VendorListSlice = createSlice({
   name: "VendorReportList",
   initialState,
@@ -52,6 +74,12 @@ const VendorListSlice = createSlice({
       state.loading = false;
       state.VendorListData = {};
       state.error = action.error.message;
+    });
+    builder.addCase(getVendorListCount.fulfilled, (state, action) => {
+      state.VendorListCount = action.payload;
+    });
+    builder.addCase(getVendorListCount.rejected, (state, action) => {
+      state.VendorListCount = 0;
     });
   },
 });

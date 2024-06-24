@@ -227,7 +227,8 @@ const PermissionList = () => {
                   ))} */}
                     <StyledTableCell>Sub Permission</StyledTableCell>
                     <StyledTableCell>Permission</StyledTableCell>
-                    <StyledTableCell>Action</StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
                   </TableHead>
                   <TableBody>
                     {allpermission?.length
@@ -249,7 +250,7 @@ const PermissionList = () => {
                               </div>
                             </StyledTableCell> */}
                               <StyledTableCell>
-                                <div class="text-[#000000] order_method capitalize">
+                                <div class="text-[#000000] order_method ">
                                   {data?.sub_permission}
                                 </div>
                               </StyledTableCell>
@@ -262,18 +263,12 @@ const PermissionList = () => {
                                 </div>
                               </StyledTableCell>
                               <StyledTableCell>
-                                <div className="flex">
                                   <EditPermissionModal selected={data} />
-                                  <img
-                                    class="mx-6 delete cursor-pointer"
-                                    data-id="${[data.id,data.merchant_id,]}"
-                                    onClick={() =>
-                                      handleDeletePermission(data?.id)
-                                    }
-                                    src={Delete}
-                                    alt="Delete"
-                                  />
-                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <img class="delete cursor-pointer" data-id="${[data.id,data.merchant_id,]}"
+                                  onClick={() => handleDeletePermission(data?.id)} 
+                                  src={Delete} alt="Delete" />
                               </StyledTableCell>
                             </StyledTableRow>
                           );
