@@ -286,7 +286,12 @@ export default function EditMerchantFunctionality() {
       updatedErrors.a_city = trimmedValue === "" ? "City is required" : "";
     }
     if (name == "a_zip") {
-      updatedErrors.a_zip = trimmedValue === "" ? "Zip Code is required" : "";
+      updatedErrors.a_zip =
+        trimmedValue === ""
+          ? "Zip Code is required"
+          : trimmedValue.length !== 4 && trimmedValue.length !== 5
+            ? "Invalid Zip Code"
+            : "";
     }
     if (name == "a_state") {
       updatedErrors.a_state = trimmedValue === "" ? "State is required" : "";

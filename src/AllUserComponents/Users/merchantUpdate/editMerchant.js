@@ -148,6 +148,8 @@ export default function EditMerchant({
                   onChangeFun={handleChangeMerchant}
                   sx={{ pt: 0.5 }}
                   autoCompleteOff="off"
+                  readOnly
+                  onFocusData={(e) => e.target.removeAttribute("readonly")}
                 />
                 {jsxData(getEditMerchant.newPassword)}
               </div>

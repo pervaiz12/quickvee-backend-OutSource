@@ -382,27 +382,28 @@ const MerchantFunction = () => {
       if (store.password === "") {
         errors.password = "Password is required";
         error = true;
-      } else {
-        try {
-          // console.log('heloo password')
-          if (errors.password === "" && errors.email == "") {
-            const emailValid = await passwordValidate(
-              store.email,
-              store.password
-            );
-            if (emailValid == true) {
-              errors.password = "Password already exists";
-              error = true;
-            } else {
-              errors.password = "";
-              error = false;
-            }
-          }
-        } catch (error) {
-          console.error("Error validating email:", error);
-          error = true; // You should handle this error case accordingly
-        }
       }
+      //  else {
+      //   try {
+      //     // console.log('heloo password')
+      //     if (errors.password === "" && errors.email == "") {
+      //       const emailValid = await passwordValidate(
+      //         store.email,
+      //         store.password
+      //       );
+      //       if (emailValid == true) {
+      //         errors.password = "Password already exists";
+      //         error = true;
+      //       } else {
+      //         errors.password = "";
+      //         error = false;
+      //       }
+      //     }
+      //   } catch (error) {
+      //     console.error("Error validating email:", error);
+      //     error = true; // You should handle this error case accordingly
+      //   }
+      // }
 
       if (store.state === "") {
         errors.state = "Please select the State";
