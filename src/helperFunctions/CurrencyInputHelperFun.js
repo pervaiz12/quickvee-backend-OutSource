@@ -2,7 +2,7 @@ const CurrencyInputHelperFun = (value) => {
     let val = value.replace(/[^\d]/g, "");
     
     if (val === "") {
-      return "0.00";
+      return "";
     }
     
     val = val.replace(/^0+/, "");
