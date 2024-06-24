@@ -457,7 +457,7 @@ const MerchantFunction = () => {
             ...prev,
             errors: {
               ...prev.errors,
-              password: "Email already exists",
+              password: "Password already exists",
             },
           }));
         } else {

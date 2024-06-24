@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import {
   BASE_URL,
   GET_EDIT_ADMIN,
+  CHECK_ADMIN_EMAIL,
   UPDATE_ADMIN_RECORD,
 } from "../../../../Constants/Config";
 import { useNavigate } from "react-router-dom";
@@ -28,6 +29,7 @@ const EditAdminFunctionality = (handleClick) => {
   });
   const [loader, setLoader] = useState(false);
   const [loaderEdit, setLoaderEdit] = useState(false);
+  const [ExitEmail, setExitEmail] = useState("");
 
   const handleEditAdmin = async (data) => {
     const { token, ...newData } = data;
@@ -46,9 +48,60 @@ const EditAdminFunctionality = (handleClick) => {
         if (response.data.status == 200) {
           console.log(response.data.message[0]);
           setEditData({ password1: "", ...response.data.message[0] });
+          setExitEmail(response.data.message[0].email);
         }
       });
   };
+  // ============================================
+  const emailValidate = async (data) => {
+    const { token, ...newData } = userTypeData;
+
+    const dataNew = { email: data, ...newData };
+
+    try {
+      const response = await axios.post(BASE_URL + CHECK_ADMIN_EMAIL, dataNew, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data; // Assuming this data indicates whether email is valid or not
+    } catch (error) {
+      console.error("Error validating email:", error);
+      throw error;
+    }
+  };
+  const handleBlur = async (name) => {
+    if (name === "email") {
+      console.log(errors.email);
+      if (errors.email == "") {
+        let result = await emailValidate(editData.email);
+        if (result == true) {
+          // console.log(editData.email);
+          // console.log(ExitEmail);
+          if (ExitEmail !== editData.email) {
+            setErrors((prev) => ({
+              ...prev,
+              email: "Email already exists",
+            }));
+          } else {
+            setErrors((prev) => ({
+              ...prev,
+              email: "",
+            }));
+          }
+        } else {
+          console.log("nooo");
+          setErrors((prev) => ({
+            ...prev,
+            email: "", // Clear the error if email does not exist
+          }));
+        }
+      }
+    }
+  };
+  // ============================================
   const handleChangeAdmin = (e) => {
     const { name, value } = e.target;
     let updatedErrors = { ...errors };
@@ -177,6 +230,7 @@ const EditAdminFunctionality = (handleClick) => {
     handleKeyPress,
     loader,
     loaderEdit,
+    handleBlur,
   };
 };
 export default EditAdminFunctionality;

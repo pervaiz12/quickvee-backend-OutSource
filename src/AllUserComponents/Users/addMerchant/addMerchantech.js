@@ -314,7 +314,7 @@ export default function AddMerchan() {
                       value={store.password}
                       onChangeFun={handleChange}
                       onBlurFunction={() => handleBlur("password")}
-                      sx={{ pt: 0.5 }}
+                      sx={{ pt: 0.5, pt: 0 }}
                     />
                     {jsxData(store.password)}
                   </div>

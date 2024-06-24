@@ -3,16 +3,19 @@ import {
   BASE_URL,
   GET_EDIT_CUSTOMER,
   GET_UPDATE_MERCHANT,
+  ADMIN_CHECK_USER,
 } from "../../../Constants/Config";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
+import PasswordShow from "../../../Common/passwordShow";
 
 export default function EditMerchantFunctionality() {
   const navigate = useNavigate();
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+  const { handleCoockieExpire } = PasswordShow();
 
   const [getEditMerchant, setEditMerchant] = useState({
     id: "",
@@ -46,6 +49,7 @@ export default function EditMerchantFunctionality() {
     a_city: "",
     a_state: "",
     a_zip: "",
+    password: "",
   });
   // console.log("getEditMerchant:", getEditMerchant)
   const [paymentModeOnline, setPaymentModeOnline] = useState(false);
@@ -66,6 +70,68 @@ export default function EditMerchantFunctionality() {
     // console.log(e.target)
     setInventory(!inventory);
   };
+  // ================================
+  const passwordValidate = async (email, password) => {
+    const { token, ...newData } = userTypeData;
+    const dataNew = { email: email, password: password, ...newData };
+
+    try {
+      const response = await axios.post(BASE_URL + ADMIN_CHECK_USER, dataNew, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Error validating email:", error);
+      // console.log("hellooo", error?.message);
+      // dispatch(getAuthInvalidMessage(error?.message));
+      handleCoockieExpire();
+      throw error;
+    }
+  };
+
+  const handleBlur = async (name) => {
+    console.log("ddddd");
+    if (name === "password" || name === "email") {
+      if (getEditMerchant.newPassword !== "") {
+        if (
+          getEditMerchant.username !== "" &&
+          getEditMerchant.newPassword !== ""
+        ) {
+          let result = await passwordValidate(
+            getEditMerchant.username,
+            getEditMerchant.newPassword
+          );
+          if (result == true) {
+            setErrors((prev) => ({
+              ...prev,
+              password: "Password already exists",
+            }));
+          } else {
+            setErrors((prev) => ({
+              ...prev,
+              password: "",
+            }));
+          }
+        } else {
+          setErrors((prev) => ({
+            ...prev,
+            password: "",
+          }));
+        }
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          password: "",
+        }));
+      }
+    }
+  };
+
+  // ==================================
   const getEditMerchantData = async (data) => {
     const { token, ...dataNew } = data;
     console.log(data);
@@ -475,5 +541,6 @@ export default function EditMerchantFunctionality() {
     inventoryApprove,
     errors,
     loader,
+    handleBlur,
   };
 }

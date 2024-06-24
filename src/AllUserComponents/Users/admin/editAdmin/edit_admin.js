@@ -28,6 +28,7 @@ export default function EditAdmin({ EditAdminId, setVisible }) {
     handleKeyPress,
     loader,
     loaderEdit,
+    handleBlur,
   } = EditAdminFunctionality(handleClick);
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -87,6 +88,7 @@ export default function EditAdmin({ EditAdminId, setVisible }) {
                       // value={customerData && customerData.email}
                       // value={store.ownerName}
                       onChange={handleChangeAdmin}
+                      onBlur={() => handleBlur("email")}
                       autoComplete="off"
                       readOnly // Set as readonly initially
                       onFocus={(e) => e.target.removeAttribute("readonly")}
