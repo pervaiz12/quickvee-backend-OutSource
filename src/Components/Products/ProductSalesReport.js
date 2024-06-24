@@ -57,7 +57,7 @@ const ProductSalesReport = () => {
   const productId = location?.pathname?.split("/")[4];
   const varientId = location?.pathname?.split("/")[5];
   const dispatch = useDispatch();
-  const { LoginGetDashBoardRecordJson } = useAuthDetails();
+  const {userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
 
   const [salesData, setSalesData] = useState([]);
   const [filterData, setFilterData] = useState([]);
@@ -80,6 +80,11 @@ const ProductSalesReport = () => {
     formData.append("merchant_id", LoginGetDashBoardRecordJson?.data?.merchant_id);
     formData.append("product_id", productId);
     formData.append("variant_id", !!varientId ? varientId : "");
+    formData.append("login_type", userTypeData?.login_type);
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("token", userTypeData?.token);
+    
+    
     setLoading(true);
     dispatch(fetchSalesHistory(formData))
       .then((res) => {

@@ -22,7 +22,7 @@ const BulkInstantPo = ({
  
   const dispatch = useDispatch();
   const productId = useParams();
-  const { LoginGetDashBoardRecordJson } = useAuthDetails();
+  const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const [instantPoSingle, setInstantPoSingle] = useState({
     qty: "",
     cost: "",
@@ -34,8 +34,12 @@ const BulkInstantPo = ({
     instantPoState: [],
     description: "",
   });
+
+  const [required, setRequired] = useState({
+    qty:'',
+    cost:'',
+  })
   const [error, setError] = useState(false);
-  console.log("erirr", error);
 
   const instantPoForm = useMemo(() => {
     if (modalType === "bulk-edit") {
@@ -47,12 +51,18 @@ const BulkInstantPo = ({
     return [];
   }, [modalType]);
 
+  
+
   useEffect(() => {
     if (modalType === "bulk-edit") {
       setInstancePoMultiple({
         instantPoState: instantPoForm,
         description: "",
       });
+      setRequired([...new Set(instantPoForm)]?.map(()=>({
+        qty:"",
+        cost:""
+      })))
     }
   }, [modalType, instantPoForm]);
 
@@ -127,109 +137,190 @@ const BulkInstantPo = ({
     }
   };
 
+
+  const handleBlur=(e, index)=>{
+    const {value, name} = e.target;
+    if(modalType === "single_instant"){
+      if(name === "qty" && value){
+        setRequired((prev)=>({
+          ...prev,
+          qty: ''
+        }))
+      }
+      else if(name === 'cost' && value){
+        setRequired((prev)=>({
+          ...prev,
+          cost: ''
+        }))
+      }
+      else if(name === 'qty' && !value || name === 'cost' && !value){
+        setRequired((prev)=>({
+          ...prev,
+          [name]: `${name === 'qty' ? 'Quantity' : name.charAt(0).toUpperCase() + name.slice(1)} is required`
+        }))
+      }
+    }else{
+      const newRequired = [...required];
+      if (name === "qty" && value) {
+        newRequired[index][name] = "";
+      } else if (name === "cost" && value) {
+        newRequired[index][name] = "";
+      } else if ((name === 'qty' && !value) || (name === 'cost' && !value)) {
+        newRequired[index][name] = name === 'qty' ? 'Quantity is required' : `${name.charAt(0).toUpperCase() + name.slice(1)} is required`;
+      }
+      setRequired(newRequired);
+    }
+  }
+
+  const validateFields = () => {
+    let hasError = false;
+    const newErrors = instancePoMultiple?.instantPoState?.map((item, index) => {
+      const itemErrors = { qty: "", cost: "" };
+      if (!item.qty) {
+        itemErrors.qty = "Quantity is required";
+        hasError = true;
+      }
+      if (!item.cost) {
+        itemErrors.cost = "Cost is required";
+        hasError = true;
+      }
+      return itemErrors;
+    });
+    setRequired(newErrors);
+    return !hasError; // return true if no errors
+  };
+
+
   const handlSumbitInstantPo = () => {
     const formData = new FormData();
-    setLoading(true);
-    if (modalType !== "bulk-edit") {
-      if (
-        inventoryData?.inv_setting?.split(",")?.includes("2") &&
-        !instantPoSingle?.description
-      ) {
+      if (modalType !== "bulk-edit") {
+        if(!instantPoSingle?.qty){
+          setRequired((prev)=>({
+            ...prev,
+            qty: 'Quantity is required',
+          }))
+        } 
+        if(!instantPoSingle?.cost){
+          setRequired((prev)=>({
+            ...prev,
+            cost: 'Cost is required',
+          }))
+        }
+        if (
+          inventoryData?.inv_setting?.split(",")?.includes("2") &&
+          !instantPoSingle?.description
+        ) {
 
-        setError(true);
-        setLoading(false);
-      } else {
-        setError(false);
-        formData.append("product_id", productId?.id);
-        formData.append(
-          "variant_id",
-          !Boolean(+productData?.isvarient)
-            ? ""
-            : modalType === "bulk-edit"
+          setError(true);
+          setLoading(false);
+        }
+        else {
+          setLoading(true);
+          setError(false);
+          setRequired({qty:'', cost:''})
+
+          formData.append("product_id", productId?.id);
+          formData.append(
+            "variant_id",
+            !Boolean(+productData?.isvarient)
               ? ""
-              : varientIndex
-        );
-        formData.append(
-          "merchant_id",
-          LoginGetDashBoardRecordJson?.data?.merchant_id
-        );
-        formData.append("description", instantPoSingle?.description);
-        formData.append("qty", instantPoSingle?.qty);
-        formData.append("price", instantPoSingle?.cost);
-
-        dispatch(saveSingleVarientPO(formData))
-          .then((res) => {
-            if (res?.payload?.status) {
-              setInstantPoSingle({
-                qty: "",
-                cost: "",
-                description: "",
-              });
-              ToastifyAlert("Instance PO Updated!", "success");
-              fetchProductDataById();
-              handleCloseEditModal();
-            }
-          })
-          .catch((err) => {
-            ToastifyAlert("Error!", "error");
-          })
-          .finally(() => {
-            setLoading(false);
-          });
-      }
-    } else {
-      if (
-        inventoryData?.inv_setting?.split(",")?.includes("2") &&
-        !instancePoMultiple?.description
-      ) {
-        setError(true);
-        setLoading(false);
+              : modalType === "bulk-edit"
+                ? ""
+                : varientIndex
+          );
+          formData.append(
+            "merchant_id",
+            LoginGetDashBoardRecordJson?.data?.merchant_id
+          );
+          formData.append("description", instantPoSingle?.description);
+          formData.append("qty", instantPoSingle?.qty);
+          formData.append("price", instantPoSingle?.cost);
+          formData.append("login_type", userTypeData?.login_type);
+          formData.append("token_id", userTypeData?.token_id);
+          formData.append("token", userTypeData?.token);
+  
+          dispatch(saveSingleVarientPO(formData))
+            .then((res) => {
+              if (res?.payload?.status) {
+                setInstantPoSingle({
+                  qty: "",
+                  cost: "",
+                  description: "",
+                });
+                ToastifyAlert("Instance PO Updated!", "success");
+                fetchProductDataById();
+                handleCloseEditModal();
+              }
+            })
+            .catch((err) => {
+              ToastifyAlert("Error!", "error");
+            })
+            .finally(() => {
+              setLoading(false);
+            });
+        }
       } else {
-        setError(false);
-        formData.append("product_id", productId?.id);
-        formData.append(
-          "variant_id",
-          !Boolean(+productData?.isvarient)
-            ? ""
-            : modalType === "bulk-edit"
-              ? varientData?.map((i) => i?.id)?.toString()
-              : varientIndex
-        );
-        formData.append(
-          "merchant_id",
-          LoginGetDashBoardRecordJson?.data?.merchant_id
-        );
-        formData.append("description", instancePoMultiple?.description);
-        formData.append(
-          "qty",
-          instancePoMultiple?.instantPoState?.map((i) => i?.qty)?.toString()
-        );
-        formData.append(
-          "price",
-          instancePoMultiple?.instantPoState?.map((i) => i?.cost)?.toString()
-        );
 
-        dispatch(saveBulkInstantPo(formData))
-          .then((res) => {
-            if (res?.payload?.status) {
-              setInstancePoMultiple({
-                instantPoState: [],
-                description: "",
-              });
-              ToastifyAlert("Instance PO Updated!", "success");
-              fetchProductDataById();
-              handleCloseEditModal();
-            }
-          })
-          .catch((err) => {
-            ToastifyAlert("Error!", "error");
-          })
-          .finally(() => {
-            setLoading(false);
-          });
+        validateFields()
+        if (
+          inventoryData?.inv_setting?.split(",")?.includes("2") &&
+          !instancePoMultiple?.description
+        ) {
+          setError(true);
+          setLoading(false);
+        }
+        else {
+          setError(false);
+          formData.append("product_id", productId?.id);
+          formData.append(
+            "variant_id",
+            !Boolean(+productData?.isvarient)
+              ? ""
+              : modalType === "bulk-edit"
+                ? varientData?.map((i) => i?.id)?.toString()
+                : varientIndex
+          );  
+          formData.append(
+            "merchant_id",
+            LoginGetDashBoardRecordJson?.data?.merchant_id
+          );
+          formData.append("description", instancePoMultiple?.description);
+          formData.append(
+            "qty",
+            instancePoMultiple?.instantPoState?.map((i) => i?.qty)?.toString()
+          );
+          formData.append(
+            "price",
+            instancePoMultiple?.instantPoState?.map((i) => i?.cost)?.toString()
+          );
+          formData.append("login_type", userTypeData?.login_type);
+          formData.append("token_id", userTypeData?.token_id);
+          formData.append("token", userTypeData?.token);
+          
+  
+          dispatch(saveBulkInstantPo(formData))
+            .then((res) => {
+              if (res?.payload?.status) {
+                setInstancePoMultiple({
+                  instantPoState: [],
+                  description: "",
+                });
+                ToastifyAlert("Instance PO Updated!", "success");
+                fetchProductDataById();
+                handleCloseEditModal();
+              }
+            })
+            .catch((err) => {
+              ToastifyAlert("Error!", "error");
+            })
+            .finally(() => {
+              setLoading(false);
+            });
+        }
       }
-    }
+    
   };
+  
 
   return (
     <>
@@ -269,9 +360,20 @@ const BulkInstantPo = ({
                                           onChange={(e) =>
                                             handleChangeMultiplePo(e, index)
                                           }
+                                          onBlur={(e)=> handleBlur(e, index)}
                                           maxLength={9}
                                         />
                                       </div>
+                                         {
+                                          inp?.name === "qty" && !!required?.[index]?.qty ?  <span className="error-alert">
+                                          {required?.[index]?.qty}
+                                           </span> :""
+                                        }
+                                           {
+                                          inp?.name === "cost" && !!required?.[index]?.cost ?  <span className="error-alert">
+                                          {required?.[index]?.cost}
+                                           </span> :""
+                                        }
                                     </div>
                                   </div>
                                 );
@@ -298,7 +400,7 @@ const BulkInstantPo = ({
                         />
                         {error ? (
                           <span className="error-alert mb-2">
-                            description is Required
+                            description is required
                           </span>
                         ) : (
                           ""
@@ -337,8 +439,19 @@ const BulkInstantPo = ({
                                           onChange={(e) =>
                                             handleChangeSinglePo(e, index)
                                           }
+                                          onBlur={(e)=> handleBlur(e)}
                                           maxLength={9}
                                         />
+                                        {
+                                          inp?.name === "qty" && !!required?.qty ?  <span className="error-alert">
+                                          {required?.qty}
+                                           </span> :""
+                                        }
+                                          {
+                                          inp?.name === "cost" && !!required?.cost ?  <span className="error-alert">
+                                          {required?.cost}
+                                           </span> :""
+                                        }
                                       </div>
                                     </div>
                                   </div>
@@ -365,7 +478,7 @@ const BulkInstantPo = ({
                         />
                         {error ? (
                           <span className="error-alert mb-2">
-                            description is Required
+                            description is required
                           </span>
                         ) : (
                           ""

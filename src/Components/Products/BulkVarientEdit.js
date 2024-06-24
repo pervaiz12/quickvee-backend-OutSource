@@ -160,31 +160,7 @@ const BulkVarientEdit = ({
         handleCopyAllVarientValue(copyValue);
       }
       // compare inside form
-      else if (
-        // formData?.some((i) => +i?.["price"] > +bulkVarient["compareAtPrice"])
-        hasDynamicPriceComparison(
-          formData,
-          "price",
-          "compareAtPrice",
-          "isCompareAtGreaterThanAllPrice"
-        )
-        
-      ) {
-        handleCopyAllVarientValue(copyValue);
-
-        alert("compareAtPrice must be greater than price.");
-      } else if (
-        // formData?.some((i) => +i?.["compareAtPrice"] < +bulkVarient["price"])
-        hasDynamicPriceComparison(
-          formData,
-          "compareAtPrice",
-          "price",
-          "isPriceLessThanAllCompareAtPrice"
-        )
-      ) {
-        alert("compareAtPrice must be greater than price.");
-        handleCopyAllVarientValue(copyValue);
-      } else {
+      else {
         handleCopyAllVarientValue(copyAllValue);
         ToastifyAlert(
           "Copied values! Plase Click on Update for Save!",

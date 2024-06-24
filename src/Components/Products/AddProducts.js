@@ -376,6 +376,10 @@ const AddProducts = () => {
       formData.append("title", value);
       formData.append("id", productData?.id);
       formData.append("merchant_id", LoginGetDashBoardRecordJson?.data?.merchant_id);
+      formData.append("login_type", userTypeData?.login_type);
+      formData.append("token_id", userTypeData?.token_id);
+      formData.append("token", userTypeData?.token);
+
 
       // Clear previous timeout if exists
       clearTimeout(titleTimeoutId);
@@ -554,6 +558,10 @@ const AddProducts = () => {
       "merchant_id",
       LoginGetDashBoardRecordJson?.data?.merchant_id
     );
+    formData.append("login_type", userTypeData?.login_type);
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("token", userTypeData?.token);
+    
 
     dispatch(getInventorySetting(formData)).then((res) => {
       if (!!+res?.payload) {
@@ -1335,6 +1343,9 @@ const AddProducts = () => {
     const formData = new FormData();
     formData.append("merchant_id", LoginGetDashBoardRecordJson?.data?.merchant_id);
     formData.append("id", productId?.id);
+    formData.append("login_type", userTypeData?.login_type);
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("token", userTypeData?.token);
     if (!!productId?.id) {
       dispatch(fetchProductsDataById(formData))
         .then((res) => {
@@ -1624,6 +1635,9 @@ const AddProducts = () => {
     const data = {
       /// single varient payload
       merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+      token_id: userTypeData?.token_id,
+      login_type: userTypeData?.login_type,
+      token: userTypeData?.token,
       title: productInfo?.title,
       description: productInfo?.description,
       price: !isMultipleVarient ? formValue[0]?.price : "",

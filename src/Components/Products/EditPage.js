@@ -84,7 +84,7 @@ const EditPage = ({
                       ""
                     )}
                     {modalType !== "single_vendor" ? (
-                      <Tab label="Bulk Instant PO" value="3" />
+                      <Tab label={`${modalType !== "single_instant" ? "Bulk Instant PO": "Instant PO"}`} value="3" />
                     ) : (
                       ""
                     )}

@@ -5,8 +5,8 @@ import Select from "react-select";
 import CreatableSelect from "react-select/creatable";
 import makeAnimated from "react-select/animated";
 import Validation from "../../Constants/Validation";
-import { components } from 'react-select';
-import SearchIcon from '@mui/icons-material/Search'; // Import MUI icon
+import { components } from "react-select";
+import SearchIcon from "@mui/icons-material/Search"; // Import MUI icon
 
 const VariantAttributes = ({
   filterOptionList,
@@ -21,61 +21,59 @@ const VariantAttributes = ({
   addMoreVarientItems,
   handleClearFormData,
 }) => {
-
   const styles = {
-
     multiValueRemove: (base, state) => {
       return state.data.isFixed ? { ...base, display: "none" } : base;
     },
     clearIndicator: (provided) => ({
       ...provided,
-      display: 'none',
+      display: "none",
     }),
     indicatorSeparator: (provided, state) => ({
       ...provided,
-      display: 'none',
+      display: "none",
     }),
     dropdownIndicator: (provided, state) => ({
       ...provided,
       padding: 4,
-      position:'absolute',
-      top:"50%",
-      right:0,
-      transform:"translate(0px, -50%)",
+      position: "absolute",
+      top: "50%",
+      right: 0,
+      transform: "translate(0px, -50%)",
     }),
     multiValue: (provided, state) => ({
       ...provided,
-      backgroundColor: '#F2F2F2', // Background color for selected items
-      borderRadius: '2px', // Border radius for selected items
-      padding:'2px 0px',
+      backgroundColor: "#F2F2F2", // Background color for selected items
+      borderRadius: "2px", // Border radius for selected items
+      padding: "2px 0px",
     }),
     multiValueLabel: (provided, state) => ({
       ...provided,
-      color: '#000', // Text color for selected items
-      padding: '0 10px', // Padding for label within the selected item
-      fontSize:"13px",
-      textAlign:'center',
-      padding:'3px 6px 3px 10px !important',
+      color: "#000", // Text color for selected items
+      padding: "0 10px", // Padding for label within the selected item
+      fontSize: "13px",
+      textAlign: "center",
+      padding: "3px 6px 3px 10px !important",
     }),
   };
 
-  const dropDownStyle={
+  const dropDownStyle = {
     clearIndicator: (provided) => ({
       ...provided,
-      display: 'none',
+      display: "none",
     }),
     indicatorSeparator: (provided, state) => ({
       ...provided,
-      display: 'none',
+      display: "none",
     }),
-  }
+  };
   const pageUrl =
     window.location.pathname.split("/")[1] +
     "/" +
     window.location.pathname.split("/")[2] +
-    "/" + window.location.pathname.split("/")[3];
+    "/" +
+    window.location.pathname.split("/")[3];
   const [showAttributes, setShowAttributes] = useState(false);
-
 
   const animatedComponents = makeAnimated();
 
@@ -117,28 +115,38 @@ const VariantAttributes = ({
   };
 
   const handlechange = (value, index, name, actionMeta) => {
+    console.log('values=>>', value);
     // validation for add varient item => only ' is allowed and " is not allowed in varient item text
     let filterValue;
     // if value comes from createble varient
     if (Array.isArray(value)) {
       filterValue = value?.filter((item) => {
-        let checkValidation =
-          !(item?.label?.split("").filter((p) => p === "'")?.length > 1) &&
-          !item?.label?.includes(`"`);  
+        let checkApostrophe = !(
+          item?.label?.split("").filter((p) => p === "'")?.length > 1
+        );
 
-        if (!checkValidation) {
-          alert("special character is not allowed.");
-        }
+        let checkDoubleQuotes = !item?.label?.includes(`"`);
+        if (!checkApostrophe) {
+          alert("Only one apostrophe is allowed in selected values.");
+        } else if (!checkDoubleQuotes) {
+          alert("No Double quotes allowed in selected values.");
+        } 
+        
         return (
           !(item?.label?.split("").filter((p) => p === "'")?.length > 1) &&
-          !item?.label?.includes(`"`)
+          !item?.label?.includes(`"`) &&
+          !item?.label?.includes(`,`) &&
+          !item?.label?.includes(`~`) &&
+          !item?.label?.includes(`-`) &&
+          !item?.label?.includes(`<`) &&
+          !item?.label?.includes(`>`) &&
+          !item?.label?.includes(`/`) && 
+          !item?.label?.includes(`\\`) 
         );
       });
-    }else{
-      filterValue = value
+    } else {
+      filterValue = value;
     }
-
-
 
     // clear the all input fields value when add new varient first item
     // here using varientLength length and value is less that current varientLength
@@ -242,42 +250,42 @@ const VariantAttributes = ({
         </div>
       </div>
 
-
-<div class="varient-block">
-
-      {pageUrl !== "inventory/products/edit" ? (
-        <div class="multiple-items">
-          <span>Multiple Items?*</span>
-          <div class="checkbox-area">
-            <input
-              type="checkbox"
-              name="isMultiple"
-              checked={isMultipleVarient}
-              onChange={toggleVarientSection}
-              className="checkbox-input"
-            />
-            <label for="isMultiple" className="check-text">Create Attributes and Options</label>
-          </div>
-        </div>
-      ) : (
-        ""
-      )}
-      {isMultipleVarient ? (
-        <div className="varient-select-section">
-          <div className="">
-            <div className="flex">
-              <h2 className="text-[18px] text-black opacity-100 Admin_std mb-4">
-                Variant Attributes
-              </h2>
+      <div class="varient-block">
+        {pageUrl !== "inventory/products/edit" ? (
+          <div class="multiple-items">
+            <span>Multiple Items?*</span>
+            <div class="checkbox-area">
+              <input
+                type="checkbox"
+                name="isMultiple"
+                checked={isMultipleVarient}
+                onChange={toggleVarientSection}
+                className="checkbox-input"
+              />
+              <label for="isMultiple" className="check-text">
+                Create Attributes and Options
+              </label>
             </div>
+          </div>
+        ) : (
+          ""
+        )}
+        {isMultipleVarient ? (
+          <div className="varient-select-section">
+            <div className="">
+              <div className="flex">
+                <h2 className="text-[18px] text-black opacity-100 Admin_std mb-4">
+                  Variant Attributes
+                </h2>
+              </div>
 
-            {varientLength.length > 0
-              ? varientLength?.map((varient, index) => {
-                  return (
-                    <div class="qvrow varientAddSection" key={index + 1}>
-                      <div class="col-qv-5">
-                        <div class="input_area">
-                          {/* <input
+              {varientLength.length > 0
+                ? varientLength?.map((varient, index) => {
+                    return (
+                      <div class="qvrow varientAddSection" key={index + 1}>
+                        <div class="col-qv-5">
+                          <div class="input_area">
+                            {/* <input
                     className=""
                     type="text"
                     name="owner_name"
@@ -285,101 +293,115 @@ const VariantAttributes = ({
                     onChange={(e) => setNewAttribute(e.target.value)}
                   /> */}
 
-                          <Select
-                            closeMenuOnSelect={true}
-                            components={{ ...animatedComponents }}
-                            value={varient?.varientName}
-                            onChange={(e) =>
-                              handlechange(e, index, "varientName")
-                            }
-                            options={filterDefaultvalue()}
-                            isSearchable
-                            isClearable
-                            styles={dropDownStyle}
-                            // defaultValue={{
-                            //   value: varientDropdownList[0]?.title,
-                            //   label: varientDropdownList[0]?.title,
-                            // }}
-                            isDisabled={index + 1 < varientLength?.length || pageUrl === "inventory/products/edit"}
-                          />
-                        </div>
-                      </div>
-                      <div class="col-qv-5">
-                        <div class="input_area">
-                          <CreatableSelect
-                            closeMenuOnSelect={true}
-                            components={{ 
-                              ...animatedComponents,
-                              DropdownIndicator: SearchIndicator // Replace DropdownIndicator with SearchIndicator
-                            }}
-                            styles={styles}
-                            value={varient?.varientAttributeList}
-                            options={varient?.varientAttributeList}
-                            onChange={(e, actionMeta) => {
-                              handlechange(e, index, "varientAttributeList", actionMeta);
-                            }}
-                            placeholder="Select Varient..."
-                            
-                          
-                            onKeyDown={handleOnBlurAttributes}
-                            isMulti
-                            isClearable={varient?.varientAttributeList?.some((v) => !v.isFixed)}
-                          />
-                        </div>
-                        {!!varientError?.error &&
-                        +varientError?.errorIndex === index ? (
-                          <span className="error-alert error-alert-varient">
-                            {varientError?.error}
-                          </span>
-                        ) : (
-                          ""
-                        )}
-                      </div>
-                      {
-                        pageUrl !== 'inventory/products/edit' ? 
-                      <div className="col-qv-2">
-                        {varientLength[varientLength?.length - 1]?.id ===
-                          varient?.id && varient?.id !== 1 ? (
-                          <button
-                            onClick={() => handleDeleteClick(null, varient?.id)}
-                            className="ml-auto"
-                          >
-                            <img
-                              src={DeleteIcon}
-                              alt=""
-                              className=" m-auto d-grid place-content-center"
-                              width="32px"
+                            <Select
+                              closeMenuOnSelect={true}
+                              components={{ ...animatedComponents }}
+                              value={varient?.varientName}
+                              onChange={(e) =>
+                                handlechange(e, index, "varientName")
+                              }
+                              options={filterDefaultvalue()}
+                              isSearchable
+                              isClearable
+                              styles={dropDownStyle}
+                              // defaultValue={{
+                              //   value: varientDropdownList[0]?.title,
+                              //   label: varientDropdownList[0]?.title,
+                              // }}
+                              isDisabled={
+                                index + 1 < varientLength?.length ||
+                                pageUrl === "inventory/products/edit"
+                              }
                             />
-                          </button>
+                          </div>
+                        </div>
+                        <div class="col-qv-5">
+                          <div class="input_area">
+                            <CreatableSelect
+                              closeMenuOnSelect={true}
+                              // isValidNewOption={isValidNewOption}
+                              components={{
+                                ...animatedComponents,
+                                DropdownIndicator: SearchIndicator, // Replace DropdownIndicator with SearchIndicator
+                              }}
+                              styles={styles}
+                              value={varient?.varientAttributeList}
+                              options={varient?.varientAttributeList}
+                              onChange={(e, actionMeta) => {
+                                handlechange(
+                                  e,
+                                  index,
+                                  "varientAttributeList",
+                                  actionMeta
+                                );
+                              }}
+                              placeholder="Select Varient..."
+                              onKeyDown={handleOnBlurAttributes}
+                              isMulti
+                              isClearable={varient?.varientAttributeList?.some(
+                                (v) => !v.isFixed
+                              )}
+                            />
+                          </div>
+                          {!!varientError?.error &&
+                          +varientError?.errorIndex === index ? (
+                            <span className="error-alert error-alert-varient">
+                              {varientError?.error}
+                            </span>
+                          ) : (
+                            ""
+                          )}
+                        </div>
+                        {pageUrl !== "inventory/products/edit" ? (
+                          <div className="col-qv-2">
+                            {varientLength[varientLength?.length - 1]?.id ===
+                              varient?.id && varient?.id !== 1 ? (
+                              <button
+                                onClick={() =>
+                                  handleDeleteClick(null, varient?.id)
+                                }
+                                className="ml-auto"
+                              >
+                                <img
+                                  src={DeleteIcon}
+                                  alt=""
+                                  className=" m-auto d-grid place-content-center"
+                                  width="32px"
+                                />
+                              </button>
+                            ) : (
+                              ""
+                            )}
+                          </div>
                         ) : (
                           ""
                         )}
-                      </div>:""
-                      }
-                    </div>
-                  );
-                })
-              : ""}
+                      </div>
+                    );
+                  })
+                : ""}
 
-            {(+varientLength?.length < 3 &&  pageUrl === "inventory/products/add") && pageUrl !== "inventory/products/edit" ? (
-              <div className="flex">
-                <button
-                  className="px-4 py-2 bg-[#0A64F9] text-white rounded-md"
-                  // onClick={handleAddAttribute}
-                  onClick={addMoreVarientItems}
-                >
-                  Add Variant Attributes +
-                </button>
-              </div>
-            ) : (
-              ""
-            )}
+              {+varientLength?.length < 3 &&
+              pageUrl === "inventory/products/add" &&
+              pageUrl !== "inventory/products/edit" ? (
+                <div className="flex">
+                  <button
+                    className="px-4 py-2 bg-[#0A64F9] text-white rounded-md"
+                    // onClick={handleAddAttribute}
+                    onClick={addMoreVarientItems}
+                  >
+                    Add Variant Attributes +
+                  </button>
+                </div>
+              ) : (
+                ""
+              )}
+            </div>
           </div>
-        </div>
-      ) : (
-        ""
-      )}
-</div>
+        ) : (
+          ""
+        )}
+      </div>
     </>
   );
 };
