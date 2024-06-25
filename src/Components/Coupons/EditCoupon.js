@@ -224,6 +224,10 @@ const EditCoupon = ({couponId,seVisible}) => {
       ...couponStates,
       enablelimit: status,
     });
+    setCoupon({
+      ...coupon,
+      count_limit:"1"
+    })
   };
   const handleListOnlineChange = (e) => {
       const status = e.target.checked;
@@ -274,12 +278,13 @@ const EditCoupon = ({couponId,seVisible}) => {
         return;
       }
     }
+    console.log("coupon.count_limit",coupon.count_limit)
     if (couponStates.enablelimit > 0) {
       if (!coupon.count_limit === "0") {
         setCountLimitError("Please enter a value greater than or equal to 1.");
         return; // Stop further execution
       }
-      if (!coupon.count_limit ||coupon.count_limit === null || coupon.count_limit === "0" || coupon.count_limit === "00" || coupon.count_limit === "000") {
+      if (!coupon.count_limit  || coupon.count_limit === "0" || coupon.count_limit === "00" || coupon.count_limit === "000") {
         setCountLimitError("Please enter a value greater than or equal to 1.");
         return; // Stop further execution
       }
@@ -375,6 +380,13 @@ const EditCoupon = ({couponId,seVisible}) => {
     // );
 
     // Do something with formData, like sending it to an API endpoint
+
+    if (
+      dateStartError === "Start Date cannot be before the current date" ||
+      dateEndError === "End Date cannot be before the current date" 
+    ) {
+      return;
+    }
     for (const [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
     }
@@ -428,12 +440,14 @@ const EditCoupon = ({couponId,seVisible}) => {
 
   const handleStartDateChange = (newDate) => {
     const formattedStartDate = newDate.format("YYYY-MM-DD");
+    const today = new Date().toISOString().split("T")[0];
     if (formattedStartDate === coupon.date_expire) {
       // showModal("Start date cannot be the same as the end date");
       setCoupon({
         ...coupon,
         date_valid: formattedStartDate,
       });
+      setDateStartError("");
       // setDateStartError("Start Date is required");
     } else if (dayjs(formattedStartDate).isAfter(dayjs(coupon.date_expire))) {
       showModal("Start date cannot be greater than the end date");
@@ -449,11 +463,18 @@ const EditCoupon = ({couponId,seVisible}) => {
       });
       setDateStartError("");
     }
+    if(formattedStartDate < today){
+      setCoupon({
+        ...coupon,
+        date_valid: null,
+      });
+      setDateStartError("Start Date cannot be before the current date");
+    }
   };
 
   const handleEndDateChange = (newDate) => {
     const formattedEndDate = newDate.format("YYYY-MM-DD");
-
+    const today = new Date().toISOString().split("T")[0];
     if (formattedEndDate === coupon.date_valid) {
       // showModal("End date cannot be the same as the start date");
       setCoupon({
@@ -461,6 +482,7 @@ const EditCoupon = ({couponId,seVisible}) => {
         date_expire: formattedEndDate,
       });
       // setDateEndError("End Date is required");
+      setDateEndError("");
       return; // Do not update the state
     } else if (dayjs(formattedEndDate).isBefore(dayjs(coupon.date_valid))) {
       showModal("End date cannot be less than the start date");
@@ -475,6 +497,13 @@ const EditCoupon = ({couponId,seVisible}) => {
         date_expire: formattedEndDate,
       });
       setDateEndError("");
+    }
+    if(formattedEndDate < today){
+      setCoupon({
+        ...coupon,
+        date_expire: null,
+      });
+      setDateEndError("End Date cannot be before the current date");
     }
   };
 

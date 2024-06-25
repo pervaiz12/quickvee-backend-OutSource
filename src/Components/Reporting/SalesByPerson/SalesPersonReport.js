@@ -270,7 +270,7 @@ const SalesPersonReport = (props) => {
           <StyledTableCell align="center">
             <div className="q-category-bottom-report-listing">
               <div>
-                <p className="">${priceFormate(grandTotal)}</p>
+                <p className="">${priceFormate(grandTotal.toFixed(2))}</p>
               </div>
             </div>
           </StyledTableCell>
