@@ -1217,22 +1217,7 @@ div.q_label_details::after {
   font-family: CircularBold !important;
 }
 
-@media print {
-  body * {
-    visibility: hidden;
-  }
-  .print-container, .print-container * {
-    visibility: visible;
-  }
-  .print-container {
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    background: white;
-  }
-}
-.norecordFound{
+.norecordFound {
   padding-left: 20px !important;
   width: 10% !important;
   margin-left: 20px !important;

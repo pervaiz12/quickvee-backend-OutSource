@@ -235,12 +235,12 @@ function App() {
             path="/stocktake"
             element={<Main visible={"stocktake"} />}
           />
-           <Route
+          <Route
             exact
             path="/stocktake/UpdateStocktake/:id"
             element={<Main visible={"stocktake-updateStocktake"} />}
           />
-           <Route
+          <Route
             exact
             path="/stocktake/AddStocktake"
             element={<Main visible={"stocktake-AddStocktake"} />}
@@ -275,11 +275,21 @@ function App() {
           <Route exact path="/coupons/add" element={<Main visible={"add-coupons"} />} />
           <Route
             exact
+            path="/coupons-add"
+            element={<Main visible={"add-coupons"} />}
+          />
+          <Route
+            exact
             path="/coupons/edit-coupons/:couponsCode"
             element={<Main visible={"coupons-edit-cop"} />}
           />
           <Route exact path="/vendors" element={<Main visible={"vendors"} />} />
           <Route exact path="/vendors/add" element={<Main visible={"add-vendors"} />} />
+          <Route
+            exact
+            path="/vendors-add"
+            element={<Main visible={"add-vendors"} />}
+          />
           <Route
             exact
             path="/vendors/edit-vendor/:code"
@@ -578,6 +588,11 @@ function App() {
             exact
             path="/users/manager_view"
             element={<Main visible={"manager_view"} />}
+          />
+          <Route
+            exact
+            path="/need-help"
+            element={<Main visible={"need_help"} />}
           />
           <Route
             exact

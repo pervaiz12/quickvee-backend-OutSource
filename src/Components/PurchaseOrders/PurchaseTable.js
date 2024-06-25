@@ -125,7 +125,6 @@ const PurchaseTable = ({ seVisible }) => {
           </div>
         </div>
       </div>
-
       <div className="box_shadow_div">
         <div className="q-category-bottom-header-sticky">
           <div className="q-category-bottom-header">

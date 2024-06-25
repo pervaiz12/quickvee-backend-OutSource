@@ -28,7 +28,6 @@ const Main = ({ visible }) => {
       {visible === "stocktake-AddStocktake" && <Layout visible={visible} />}
       {visible === "stocktake-void" && <Layout visible={visible} />}
       {visible === "stocktake-completed" && <Layout visible={visible} />}
-      
       {visible === "add-purchase-data" && <Layout visible={visible} />}
       {visible === "edit-purchase-data" && <Layout visible={visible} />}
       {visible === "modify-purchase-order" && <Layout visible={visible} />}
@@ -104,6 +103,7 @@ const Main = ({ visible }) => {
       {visible === "newsletter" && <IndexAllUsers visible={visible} />}
       {visible === "store-order" && <IndexAllUsers visible={visible} />}
       {visible === "order-count" && <IndexAllUsers visible={visible} />}
+      {visible === "need_help" && <IndexAllUsers visible={visible} />}
       {visible === "defaults" && <IndexAllUsers visible={visible} />}
       {visible === "release_apk" && <IndexAllUsers visible={visible} />}
       {visible === "inverntory-duplicate" && (
