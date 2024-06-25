@@ -54,11 +54,11 @@ const EditVendors = ({ setVisible }) => {
 
   const [vendorData, setVendorData] = useState(vendorFormValues);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-  console.log("vendorFormValues.name.length,",vendorData)
+  console.log("vendorFormValues.name.length,", vendorData);
   const handleOnChange = (event) => {
     const { name, value } = event.target;
     let errorMsg = "";
-    console.log("vendorFormValues.name.length,",vendorData.name)
+    console.log("vendorFormValues.name.length,", vendorData.name);
     switch (name) {
       case "name":
         if (value.length <= 0) {
@@ -135,7 +135,7 @@ const EditVendors = ({ setVisible }) => {
             newData[key] = response.data.vendor_data[0][key];
           }
         }
-        console.log("return newData",newData)
+        console.log("return newData", newData);
         return newData;
       });
     } catch (error) {
@@ -150,7 +150,6 @@ const EditVendors = ({ setVisible }) => {
     fetchData();
   }, []);
 
- 
   useEffect(() => {
     let data = {
       merchant_id,
@@ -158,7 +157,6 @@ const EditVendors = ({ setVisible }) => {
     };
     dispatch(fetchVendorsListData(data));
   }, []);
-
 
   useEffect(() => {
     if (
@@ -179,7 +177,6 @@ const EditVendors = ({ setVisible }) => {
     AllVendorsDataState,
     AllVendorsDataState.loading,
     AllVendorsDataState.vendorListData,
-   
   ]);
 
   const handleFormSubmit = async (e) => {
@@ -209,14 +206,17 @@ const EditVendors = ({ setVisible }) => {
         response.data.status === "false" &&
         response.data.msg === "Name already exist."
       ) {
-        ToastifyAlert("Name already exists. Please choose a different name.", "error");
+        ToastifyAlert(
+          "Name already exists. Please choose a different name.",
+          "error"
+        );
         setErrorMessage("Name already exists. Please choose a different name.");
       } else {
         setErrorMessage("");
 
         Navigate(-1);
       }
-      ToastifyAlert("Vendors Data Updated Successfully.", "success");
+      ToastifyAlert("Updated Successfully.", "success");
     } catch (error) {
       console.error("Error updating data:", error);
       handleCoockieExpire();
@@ -275,7 +275,9 @@ const EditVendors = ({ setVisible }) => {
                       onChangeFun={handleOnChange}
                       required={"required"}
                     />
-                     {errorMessage.name && <span className="error">{errorMessage.name}</span>}
+                    {errorMessage.name && (
+                      <span className="error">{errorMessage.name}</span>
+                    )}
                   </Grid>
                   <Grid item xs={12} sm={6} md={4}>
                     <div className=" qvrowmain my-1">
@@ -288,7 +290,9 @@ const EditVendors = ({ setVisible }) => {
                       onChangeFun={handleOnChange}
                       required={"required"}
                     />
-                     {errorMessage.email && <span className="error">{errorMessage.email}</span>}
+                    {errorMessage.email && (
+                      <span className="error">{errorMessage.email}</span>
+                    )}
                   </Grid>
                   <Grid item xs={12} sm={6} md={4}>
                     <div className=" qvrowmain my-1">
@@ -303,7 +307,9 @@ const EditVendors = ({ setVisible }) => {
                       onKeyPressFun={handleKeyPress}
                       maxLength={10}
                     />
-                     {errorMessage.phone && <span className="error">{errorMessage.phone}</span>}
+                    {errorMessage.phone && (
+                      <span className="error">{errorMessage.phone}</span>
+                    )}
                   </Grid>
                 </Grid>
                 <Grid container sx={{ marginTop: 2.5 }}>
@@ -318,7 +324,9 @@ const EditVendors = ({ setVisible }) => {
                       onChangeFun={handleOnChange}
                       value={vendorData.full_address}
                     />
-                     {errorMessage.full_address && <span className="error">{errorMessage.full_address}</span>}
+                    {errorMessage.full_address && (
+                      <span className="error">{errorMessage.full_address}</span>
+                    )}
                   </Grid>
                 </Grid>
                 <Grid container sx={{ marginTop: 2.5 }} spacing={2}>
@@ -333,7 +341,9 @@ const EditVendors = ({ setVisible }) => {
                       onChangeFun={handleOnChange}
                       required={"required"}
                     />
-                     {errorMessage.city && <span className="error">{errorMessage.city}</span>}
+                    {errorMessage.city && (
+                      <span className="error">{errorMessage.city}</span>
+                    )}
                   </Grid>
                   <Grid item xs={12} sm={6} md={4}>
                     <div className="qvrowmain my-1">
@@ -346,20 +356,26 @@ const EditVendors = ({ setVisible }) => {
                       onChangeFun={handleOnChange}
                       required={"required"}
                     />
-                     {errorMessage.zip_code && <span className="error"> {errorMessage.zip_code}</span>}
+                    {errorMessage.zip_code && (
+                      <span className="error"> {errorMessage.zip_code}</span>
+                    )}
                   </Grid>
                   <Grid item xs={12} sm={6} md={4}>
                     <div className="qvrowmain my-1">
                       <label htmlFor="city">State</label>
                     </div>
                     <SelectDropDown
-                      listItem={states && states.map((item) => ({ title: item }))}
+                      listItem={
+                        states && states.map((item) => ({ title: item }))
+                      }
                       title={"title"}
                       selectedOption={vendorData.state}
                       onClickHandler={handleSetVendorStateChange}
                       name={"state"}
                     />
-                     {errorMessage.state && <span className="error">{errorMessage.state}</span>}
+                    {errorMessage.state && (
+                      <span className="error">{errorMessage.state}</span>
+                    )}
                   </Grid>
                 </Grid>
                 <Grid
@@ -389,5 +405,5 @@ const EditVendors = ({ setVisible }) => {
     </>
   );
 };
- 
+
 export default EditVendors;

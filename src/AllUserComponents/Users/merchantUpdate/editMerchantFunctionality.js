@@ -194,11 +194,11 @@ export default function EditMerchantFunctionality() {
               : "";
           const Phone =
             response.data.message.row.a_phone !== null
-              ? response.data.message.row.a_phone
-              : "";
+              ? response.data?.message?.row?.a_phone
+              : response.data?.message?.row?.phone;
           const usa_pin =
-            response.data.message.row.usa_pin !== null
-              ? response.data.message.row.usa_pin
+            response.data.message?.row?.usa_pin !== null
+              ? response.data.message?.row?.usa_pin
               : "";
           const merchant_id =
             response.data.message.row.merchant_id !== null
@@ -391,7 +391,7 @@ export default function EditMerchantFunctionality() {
     }
   };
   // -------------------------------validation-----------------
-  const validateForm = () => {
+  const validateForm = async () => {
     let error = false;
     let updatedErrors = { ...errors };
 
@@ -416,6 +416,25 @@ export default function EditMerchantFunctionality() {
     if (getEditMerchant.owner_name == "") {
       updatedErrors.owner_name = "Owner Name is required";
       error = true;
+    }
+    if (getEditMerchant.newPassword == "") {
+      updatedErrors.password = "";
+      error = false;
+    } else {
+      setLoader(true);
+      let response = await passwordValidate(
+        getEditMerchant.username,
+        getEditMerchant.newPassword
+      );
+      if (response) {
+        setLoader(false);
+        updatedErrors.password = "Password already exists";
+        error = true;
+      } else {
+        setLoader(false);
+        updatedErrors.password = "";
+        error = false;
+      }
     }
     if (getEditMerchant.a_address_line_1 == "") {
       updatedErrors.a_address_line_1 = "Address Line 1 is required";
@@ -458,11 +477,8 @@ export default function EditMerchantFunctionality() {
       inventoryNew = 1;
     }
     const { token, ...dataNew } = userTypeData;
-    // console.log(dataNew)
-    // console.log(token)
-    const validateBlank = validateForm();
+    const validateBlank = await validateForm();
     const isValidateField = Currentvalidate(errors);
-    console.log(isValidateField);
     if (validateBlank) {
       if (isValidateField == true) {
         const packet = {

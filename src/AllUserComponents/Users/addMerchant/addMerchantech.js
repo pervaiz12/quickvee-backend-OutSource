@@ -325,7 +325,9 @@ export default function AddMerchan() {
               </Grid>
               <Grid container spacing={3} sx={{ px: 2.5, pb: 2.5 }}>
                 <Grid item xs={12} sm={6}>
-                  <label>Phone</label>
+                  <label>
+                    Phone<span className="Asterisk_error">*</span>
+                  </label>
                   <BasicTextFields
                     className=""
                     type="text"
