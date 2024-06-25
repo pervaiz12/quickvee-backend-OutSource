@@ -77,10 +77,22 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
+const customStyles = {
+  menu: (provided) => ({
+    ...provided,
+    zIndex: 9999,
+    position: "absolute",
+  }),
+  menuPortal: (base) => ({
+    ...base,
+    zIndex: 9999,
+  }),
+};
+
 const ModifyPurchaseOrder = () => {
   const navigate = useNavigate();
-  const { id } = useParams();
   const dispatch = useDispatch();
+  const { id } = useParams();
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
 
   const [purchaseInfo, setPurchaseInfo] = useState({
@@ -91,8 +103,8 @@ const ModifyPurchaseOrder = () => {
     selectedVendor: "",
     vendorId: "",
   });
-  const [loading, setLoading] = useState(false);
 
+  const [loading, setLoading] = useState(false);
   const [purchaseInfoErrors, setPurchaseInfoErrors] = useState({
     issuedDate: "",
     stockDate: "",
@@ -107,9 +119,8 @@ const ModifyPurchaseOrder = () => {
     (state) => state.purchaseOrderById.purchaseOrderDetail
   );
 
+  // setting default product items
   useEffect(() => {
-    // console.log("puchaseOrderDetail: ", puchaseOrderDetail);
-
     setPurchaseInfo((prev) => ({
       ...prev,
       issuedDate: puchaseOrderDetail?.issued_date
@@ -144,10 +155,6 @@ const ModifyPurchaseOrder = () => {
     }
   }, [puchaseOrderDetail]);
 
-  // useEffect(() => {
-  //   console.log("selectedProducts: ", selectedProducts);
-  // }, [selectedProducts]);
-
   // fetching Purchase Order details
   useEffect(() => {
     const data = {
@@ -157,6 +164,55 @@ const ModifyPurchaseOrder = () => {
     };
     dispatch(fetchPurchaseOrderById(data));
   }, []);
+
+  // check each product has required data
+  const validateProducts = () => {
+    // console.log("check products..: ", selectedProducts);
+    const bool = selectedProducts.every(
+      (product) =>
+        product.id &&
+        (product.title || product.product_title) &&
+        product.newQty &&
+        product.newPrice
+    );
+
+    // console.log("bool: ", bool);
+    return bool;
+  };
+
+  const displayErrors = () => {
+    const updatedData = selectedProducts.map((product) => ({
+      ...product,
+      titleError: !Boolean(product.title) && !Boolean(product.product_title),
+      qtyError: !Boolean(product.newQty),
+      priceError: !Boolean(product.newPrice),
+    }));
+
+    setSelectedProducts(updatedData);
+  };
+
+  // helper fn for adding a new product
+  const handleAddProduct = () => {
+    if (validateProducts()) {
+      const newObj = {
+        id: "",
+        variantId: "",
+        title: "",
+        variant: "",
+        notes: "",
+        newQty: "",
+        qtyError: false,
+        finalQty: "0",
+        newPrice: "",
+        priceError: false,
+        finalPrice: "0.00",
+        upc: "",
+      };
+      setSelectedProducts((prev) => [...prev, newObj]);
+    } else {
+      displayErrors();
+    }
+  };
 
   // removing from local state
   const removeItem = (productId) => {
@@ -280,71 +336,85 @@ const ModifyPurchaseOrder = () => {
     }
   };
 
+  useEffect(() => {
+    productOptions(" ");
+  }, [selectedProducts]);
+
   // generating product options once user searches any product name
   const productOptions = async (inputValue) => {
-    if (inputValue && inputValue.length > 2) {
-      let name_data = {
-        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-        category_id: "all",
-        show_status: "all",
-        listing_type: 1,
-        offset: 0,
-        limit: 100000,
-        name: inputValue,
-        page: 0,
-        ...userTypeData,
-      };
+    // if (inputValue && inputValue.length > 2) {
+    let name_data = {
+      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+      category_id: "all",
+      show_status: "all",
+      listing_type: 1,
+      offset: 0,
+      limit: 100000,
+      name: inputValue,
+      page: 0,
+      ...userTypeData,
+    };
 
-      const res = await dispatch(fetchProductsData(name_data));
+    const res = await dispatch(fetchProductsData(name_data));
 
-      // ?.filter((prod) =>
-      //   prod.title.toLowerCase().includes(inputValue.toLowerCase())
-      // )
+    // ?.filter((prod) =>
+    //   prod.title.toLowerCase().includes(inputValue.toLowerCase())
+    // )
 
-      const data = res.payload?.map((prod) => ({
-        label: prod.title,
-        value: prod.id,
-        variantId: prod.isvarient === "1" ? prod.var_id : null,
-      }));
+    const data = res.payload?.map((prod) => ({
+      label: prod.title,
+      value: prod.id,
+      variantId: prod.isvarient === "1" ? prod.var_id : null,
+    }));
 
-      const filterProducts =
-        data &&
-        data.length > 0 &&
-        data.filter((product) => {
-          const productExists =
-            selectedProducts &&
-            selectedProducts.length > 0 &&
-            selectedProducts.find((item) => {
-              const productIdMatching = item.product_id === product.value;
+    const filterProducts =
+      data &&
+      data.length > 0 &&
+      data.filter((product) => {
+        const productExists =
+          selectedProducts &&
+          selectedProducts.length > 0 &&
+          selectedProducts.find((item) => {
+            const productIdMatching = item.product_id === product.value;
 
-              // item is variant
-              if (Number(item.variant_id) > 0) {
-                const variantIdMatching = item.variant_id === product.variantId;
-                return variantIdMatching && productIdMatching;
-              } else {
-                return productIdMatching;
-              }
-            });
+            // item is variant
+            if (Number(item.variant_id) > 0) {
+              const variantIdMatching = item.variant_id === product.variantId;
+              return variantIdMatching && productIdMatching;
+            } else {
+              return productIdMatching;
+            }
+          });
 
-          return !Boolean(productExists);
-        });
+        return !Boolean(productExists);
+      });
 
-      return filterProducts;
-    }
+    return filterProducts;
+    // }
   };
 
   // on selecting a new product from dropdown fetching its details...
-  const getProductData = async (productId, variantId) => {
+  const getProductData = async (productId, variantId, index) => {
     try {
+      const { token } = userTypeData;
       const formData = new FormData();
       formData.append(
         "merchant_id",
         LoginGetDashBoardRecordJson?.data?.merchant_id
       );
+      formData.append("token_id", userTypeData.token_id);
       formData.append("id", productId);
+      formData.append("login_type", userTypeData.login_type);
+
       const response = await axios.post(
         BASE_URL + "Product_api_react/get_productdata_ById",
-        formData
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       // console.log("product info: ", response.data.data);
@@ -367,12 +437,26 @@ const ModifyPurchaseOrder = () => {
             parseFloat(product.costperItem) > 0
               ? parseFloat(product.costperItem)
               : 0;
+
           obj.finalQty = Number(product.quantity) ?? 0;
 
-          setSelectedProducts((prev) => [
-            { ...product, ...obj, title: response.data.data.productdata.title },
-            ...prev,
-          ]);
+          // setSelectedProducts((prev) => [
+          //   { ...product, ...obj, title: response.data.data.productdata.title },
+          //   ...prev,
+          // ]);
+
+          const updatedData = selectedProducts.map((item, idx) =>
+            idx === index
+              ? {
+                  ...product,
+                  ...obj,
+                  title: response.data.data.productdata.title,
+                }
+              : item
+          );
+
+          // console.log("after: ", updatedData);
+          setSelectedProducts(updatedData);
         } else {
           const product = response.data.data.productdata;
 
@@ -382,7 +466,17 @@ const ModifyPurchaseOrder = () => {
               : 0;
           obj.finalQty = Number(product.quantity) ?? 0;
 
-          setSelectedProducts((prev) => [{ ...product, ...obj }, ...prev]);
+          const updatedData = selectedProducts.map((item, idx) =>
+            idx === index
+              ? {
+                  ...product,
+                  ...obj,
+                }
+              : item
+          );
+
+          setSelectedProducts(updatedData);
+          // setSelectedProducts((prev) => [{ ...product, ...obj }, ...prev]);
         }
       } else {
         console.log("Product Not available!");
@@ -491,14 +585,14 @@ const ModifyPurchaseOrder = () => {
     );
 
     // validating purchase order products dataset
-    const validateProducts = selectedProducts.every(
-      (prod) => prod.newQty && prod.newPrice
-    );
+    // const validateProducts = selectedProducts.every(
+    //   (prod) => prod.newQty && prod.newPrice
+    // );
 
     // console.log("selectedProducts: ", selectedProducts);
     // return;
 
-    if (purchaseInfoDetails && issuedDate && validateProducts) {
+    if (purchaseInfoDetails && issuedDate && validateProducts()) {
       try {
         setLoading(() => true);
         const orderItems = selectedProducts?.map((prod) => ({
@@ -592,18 +686,20 @@ const ModifyPurchaseOrder = () => {
         }));
       }
 
-      if (!validateProducts) {
-        const temp = selectedProducts.map((prod) =>
-          !prod.newQty || !prod.newPrice
-            ? {
-                ...prod,
-                priceError: !prod.newPrice ? "Cost Per Item is required" : "",
-                qtyError: !prod.newQty ? "Quantity is required" : "",
-              }
-            : prod
-        );
+      if (!validateProducts()) {
+        displayErrors();
 
-        setSelectedProducts(() => temp);
+        // const temp = selectedProducts.map((prod) =>
+        //   !prod.newQty || !prod.newPrice
+        //     ? {
+        //         ...prod,
+        //         priceError: !prod.newPrice ? "Cost Per Item is required" : "",
+        //         qtyError: !prod.newQty ? "Quantity is required" : "",
+        //       }
+        //     : prod
+        // );
+
+        // setSelectedProducts(() => temp);
       }
     }
   };
@@ -746,7 +842,7 @@ const ModifyPurchaseOrder = () => {
       <div className="auto-po-container">
         <div className="box">
           <div className="box_shadow_div" style={{ overflow: "unset" }}>
-            <div className="py-7 px-6">
+            {/* <div className="py-7 px-6">
               <div className="q_searchBar sticky z-index-2">
                 <Grid container>
                   <Grid item xs={12}>
@@ -762,7 +858,7 @@ const ModifyPurchaseOrder = () => {
                   </Grid>
                 </Grid>
               </div>
-            </div>
+            </div> */}
 
             <Grid container className="z-index-1">
               <TableContainer>
@@ -780,26 +876,60 @@ const ModifyPurchaseOrder = () => {
                     <StyledTableCell></StyledTableCell>
                   </TableHead>
                   <TableBody>
-                    {selectedProducts.map((product) => (
+                    {selectedProducts.map((product, index) => (
                       <StyledTableRow key={product?.id}>
-                        <StyledTableCell>
+                        <StyledTableCell sx={{ width: "30%" }}>
                           <>
-                            <p className="font-normal text-[16px] mb-0">
-                              {product?.product_title
-                                ? product?.product_title
-                                : product?.title
-                                  ? product?.title
-                                  : ""}
-                            </p>
-                            <p className="font-light text-[15px] mb-3">
-                              {/* {product.variant ? product.variant : null} */}
+                            {product.order_item_id ? (
+                              <>
+                                <p className="font-normal text-[16px] mb-0">
+                                  {product?.product_title
+                                    ? product?.product_title
+                                    : product?.title
+                                      ? product?.title
+                                      : ""}
+                                </p>
 
-                              {product.variant_title
-                                ? product.variant_title
-                                : product.variant
-                                  ? product.variant
-                                  : null}
-                            </p>
+                                <p className="font-light text-[15px] mb-2">
+                                  {product.variant_title
+                                    ? product.variant_title
+                                    : product.variant
+                                      ? product.variant
+                                      : null}
+                                </p>
+                              </>
+                            ) : (
+                              <>
+                                <AsyncSelect
+                                  className={"mb-2"}
+                                  closeMenuOnSelect={true}
+                                  defaultOptions
+                                  styles={customStyles}
+                                  menuPortalTarget={document.body}
+                                  value={{
+                                    label: `${product.title} ${
+                                      product.variant ? "~" : ""
+                                    } ${product.variant}`,
+                                    value: product.id,
+                                  }}
+                                  loadOptions={productOptions}
+                                  onChange={(option) => {
+                                    getProductData(
+                                      option.value,
+                                      option.variantId,
+                                      index
+                                    );
+                                  }}
+                                  placeholder="Search Product by Title or UPC"
+                                />
+                                {product.titleError && (
+                                  <p className="error-message">
+                                    Please select a Product
+                                  </p>
+                                )}
+                              </>
+                            )}
+
                             <TextField
                               id="outlined-basic"
                               inputProps={{ type: "text" }}
@@ -878,7 +1008,13 @@ const ModifyPurchaseOrder = () => {
                 </StyledTable>
               </TableContainer>
             </Grid>
-            <div className="flex justify-end py-7 px-6">
+            <div className="flex justify-between py-7 px-6">
+              <button
+                onClick={handleAddProduct}
+                className="quic-btn quic-btn-add"
+              >
+                Add Product
+              </button>
               <div className="button-container end gap-4">
                 <button
                   className="quic-btn quic-btn-save"

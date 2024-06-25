@@ -71,7 +71,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
       title: "",
       variant: "",
       notes: "",
-      newQty: "0",
+      newQty: "",
       qtyError: "",
       finalQty: "0",
       newPrice: "",
@@ -136,14 +136,30 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
     productOptions(" ");
   }, []);
 
+  // check each product has required data
   const validateProducts = () => {
+    // console.log("check products..: ", selectedProducts);
     const bool = selectedProducts.every(
       (product) =>
         product.id && product.title && product.newQty && product.newPrice
     );
+
+    // console.log("bool: ", bool);
     return bool;
   };
 
+  const displayErrors = () => {
+    const updatedData = selectedProducts.map((product) => ({
+      ...product,
+      titleError: !Boolean(product.title),
+      qtyError: !Boolean(product.newQty),
+      priceError: !Boolean(product.newPrice),
+    }));
+
+    setSelectedProducts(updatedData);
+  };
+
+  // helper fn for adding a new product
   const handleAddProduct = () => {
     if (validateProducts()) {
       const newObj = {
@@ -152,15 +168,17 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
         title: "",
         variant: "",
         notes: "",
-        newQty: "0",
-        qtyError: "",
+        newQty: "",
+        qtyError: false,
         finalQty: "0",
         newPrice: "",
-        priceError: "",
+        priceError: false,
         finalPrice: "0.00",
         upc: "",
       };
       setSelectedProducts((prev) => [...prev, newObj]);
+    } else {
+      displayErrors();
     }
   };
 
@@ -215,15 +233,25 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
   // on selecting a new product from dropdown fetching its details...
   const getProductData = async (productId, variantId, index) => {
     try {
+      const { token } = userTypeData;
       const formData = new FormData();
       formData.append(
         "merchant_id",
         LoginGetDashBoardRecordJson?.data?.merchant_id
       );
+      formData.append("token_id", userTypeData.token_id);
+      formData.append("login_type", userTypeData.login_type);
       formData.append("id", productId);
+
       const response = await axios.post(
         BASE_URL + "Product_api_react/get_productdata_ById",
-        formData
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       let obj = {
@@ -247,7 +275,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
 
           obj.finalQty = Number(product.quantity) ?? 0;
 
-          console.log("before: ", selectedProducts);
+          // console.log("before: ", selectedProducts);
           const updatedData = selectedProducts.map((item, idx) =>
             idx === index
               ? {
@@ -258,7 +286,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
               : item
           );
 
-          console.log("after: ", updatedData);
+          // console.log("after: ", updatedData);
           setSelectedProducts(updatedData);
         } else {
           const product = response.data.data.productdata;
@@ -369,11 +397,11 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
       // issuedDate, stockDate,  need to handle this dates..
 
       // validating purchase order products dataset
-      const validateProducts = selectedProducts.every(
-        (prod) => prod.newQty && prod.newPrice
-      );
+      // const validateProducts = selectedProducts.every(
+      //   (prod) => prod.newQty && prod.newPrice
+      // );
 
-      if (purchaseInfoDetails && validateProducts && issuedDateIsFine) {
+      if (purchaseInfoDetails && validateProducts() && issuedDateIsFine) {
         try {
           const orderItems = selectedProducts.map((prod) => ({
             product_id: prod.variant ? prod.product_id : prod.id,
@@ -450,18 +478,19 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
           }));
         }
 
-        if (!validateProducts) {
-          const temp = selectedProducts.map((prod) =>
-            !prod.newQty || !prod.newPrice
-              ? {
-                  ...prod,
-                  priceError: !prod.newPrice ? "Cost Per Item is required" : "",
-                  qtyError: !prod.newQty ? "Quantity is required" : "",
-                }
-              : prod
-          );
+        if (!validateProducts()) {
+          displayErrors();
+          // const temp = selectedProducts.map((prod) =>
+          //   !prod.newQty || !prod.newPrice
+          //     ? {
+          //         ...prod,
+          //         priceError: !prod.newPrice ? "Cost Per Item is required" : "",
+          //         qtyError: !prod.newQty ? "Quantity is required" : "",
+          //       }
+          //     : prod
+          // );
 
-          setSelectedProducts(() => temp);
+          // setSelectedProducts(() => temp);
         }
       }
     } catch (e) {
@@ -575,12 +604,6 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
                     <StyledTableRow key={product?.id}>
                       <StyledTableCell sx={{ width: "30%" }}>
                         <>
-                          {/* <p className="font-normal text-[16px] mb-0">
-                              {product?.title}
-                            </p>
-                            <p className="font-light text-[15px] mb-3">
-                              {product.variant ? product.variant : null}
-                            </p> */}
                           <AsyncSelect
                             className={product.title ? "mb-2" : ""}
                             closeMenuOnSelect={true}
@@ -603,6 +626,11 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
                             }}
                             placeholder="Search Product by Title or UPC"
                           />
+                          {product.titleError && (
+                            <p className="error-message">
+                              Please select a Product
+                            </p>
+                          )}
                           {product.title && (
                             <TextField
                               id="outlined-basic"
