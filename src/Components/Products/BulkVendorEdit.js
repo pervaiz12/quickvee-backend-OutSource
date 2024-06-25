@@ -85,7 +85,7 @@ const BulkVendorEdit = ({
       dispatch(assignPrefferedVendor(formData))
         .then((res) => {
           if (res?.payload?.status) {
-            ToastifyAlert("Updated Preferred Vendor!", "success");
+            ToastifyAlert("Updated Successfully", "success");
           }
         })
         .catch((err) => {
@@ -246,7 +246,7 @@ const BulkVendorEdit = ({
             );
             formData.append("id", productId?.id);
 
-            ToastifyAlert("Vendor Added Successfully!", "success");
+            ToastifyAlert("Added Successfully", "success");
 
             setSelectedVendor([]);
           }
@@ -299,7 +299,7 @@ const BulkVendorEdit = ({
             );
             setVendorItems(filtervendorList);
 
-            ToastifyAlert("Vendor deleted successfully!", "success");
+            ToastifyAlert("Deleted Successfully", "success");
           }
         })
         .catch((err) => {

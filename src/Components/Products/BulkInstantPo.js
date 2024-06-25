@@ -193,28 +193,33 @@ const BulkInstantPo = ({
 
   const handlSumbitInstantPo = () => {
     const formData = new FormData();
+      let error = false;
       if (modalType !== "bulk-edit") {
+        if (
+          inventoryData?.inv_setting?.split(",")?.includes("2") &&
+          !instantPoSingle?.description
+        ) {
+          setError(true);
+          error=true
+        }else{
+          setError(false);
+        }
         if(!instantPoSingle?.qty){
           setRequired((prev)=>({
             ...prev,
             qty: 'Quantity is required',
           }))
+          error=true
         } 
         if(!instantPoSingle?.cost){
           setRequired((prev)=>({
             ...prev,
             cost: 'Cost is required',
           }))
+          error= true
         }
-        if (
-          inventoryData?.inv_setting?.split(",")?.includes("2") &&
-          !instantPoSingle?.description
-        ) {
-
-          setError(true);
-          setLoading(false);
-        }
-        else {
+       
+        if(!error) {
           setLoading(true);
           setError(false);
           setRequired({qty:'', cost:''})
@@ -247,7 +252,7 @@ const BulkInstantPo = ({
                   cost: "",
                   description: "",
                 });
-                ToastifyAlert("Instance PO Updated!", "success");
+                ToastifyAlert("Updated Successfully", "success");
                 fetchProductDataById();
                 handleCloseEditModal();
               }
@@ -260,16 +265,20 @@ const BulkInstantPo = ({
             });
         }
       } else {
-
-        validateFields()
+        if(!validateFields()){
+          error = true;
+        }
         if (
           inventoryData?.inv_setting?.split(",")?.includes("2") &&
           !instancePoMultiple?.description
         ) {
           setError(true);
           setLoading(false);
+          error=true;
+        }else{
+          setError(false);
         }
-        else {
+        if(!error) {
           setError(false);
           formData.append("product_id", productId?.id);
           formData.append(
@@ -305,7 +314,7 @@ const BulkInstantPo = ({
                   instantPoState: [],
                   description: "",
                 });
-                ToastifyAlert("Instance PO Updated!", "success");
+                ToastifyAlert("Updated Successfully", "success");
                 fetchProductDataById();
                 handleCloseEditModal();
               }
@@ -321,6 +330,7 @@ const BulkInstantPo = ({
     
   };
   
+  console.log('error', error);
 
   return (
     <>

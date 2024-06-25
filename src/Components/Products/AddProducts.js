@@ -143,30 +143,16 @@ const AddProducts = () => {
   // formValue Schema
 
   const formValueInnerSchema = yup.object().shape({
-    // costPerItem: yup.string().required("This Field is Required"),
-    // compareAtPrice: yup.string().required("This Field is Required"),
-    price: yup.string().required("This Field is Required"),
-    // margin: yup.string().required("This Field is Required"),
-    // profit: yup.string().required("This Field is Required"),
-    qty: yup.string().required("This Field is Required"),
-    upcCode: yup.string().required("This Field is Required"),
-    // customCode: yup.string().required("This Field is Required"),
-    // reorderQty: yup.string().required("This Field is Required"),
-    // reorderLevel: yup.string().required("This Field is Required"),
+    price: yup.string().required("price is required"),
+    qty: yup.string().required("quantity is required"),
+    upcCode: yup.string().required("upcCode is required"),
   });
 
   const formInnerSchemaOnSingle = yup.array().of(
     yup.object({
-      // costPerItem: yup.string().required("This Field is Required"),
-      // compareAtPrice: yup.string().required("This Field is Required"),
-      price: yup.string().required("This Field is Required"),
-      // margin: yup.string().required("This Field is Required"),
-      // Profit: yup.string().required("This Field is Required"),
-      qty: yup.string().required("This Field is Required"),
-      upcCode: yup.string().required("This Field is Required"),
-      // customCode: yup.string().required("This Field is Required"),
-      // reorderQty: yup.string().required("This Field is Required"),
-      // reorderLevel: yup.string().required("This Field is Required"),
+      price: yup.string().required("price is required"),
+      qty: yup.string().required("quantity is required"),
+      upcCode: yup.string().required("upcCode is required"),
     })
   );
 
@@ -184,23 +170,8 @@ const AddProducts = () => {
   const formSchema = yup.object().shape({
     title: yup
       .string()
-      .required("This Field is Required")
-      .matches(/^[^\d]*$/, "title only contains alphabet"),
-    // description: yup.string().required("This Field is Required"),
-    category: yup.array().min(1, "select option").required("select option"),
-    // taxes: yup.array().min(1, "select option").required("select option"),
-    // relatedProduct: yup
-    //   .array()
-    //   .min(1, "select option")
-    //   .required("select option"),
-    // frequentlyBought: yup
-    //   .array()
-    //   .min(1, "select option")
-    //   .required("select option"),
-    // files: yup
-    //   .array()
-    //   .min(1, "please upload image..")
-    //   .required("please upload image.."),
+      .required("title is required"),
+    category: yup.array().min(1, "select category").required("select category"),
     formValue: !isMultipleVarient ? formInnerSchemaOnSingle : formValueSchema,
   });
 
@@ -432,7 +403,7 @@ const AddProducts = () => {
     const checkEmpty = varientLength?.map((item, i) => {
       if (!item?.varientAttributeList?.length || !item?.varientName) {
         setVarientError({
-          error: "Please enter the option values.",
+          error: "Please enter the varients",
           errorIndex: i,
         });
         return false;
@@ -1825,7 +1796,7 @@ const AddProducts = () => {
       checkEmpty = varientLength?.map((item, i) => {
         if (!item?.varientAttributeList?.length || !item?.varientName) {
           setVarientError({
-            error: "Please enter the option values.",
+            error: "Please enter the varients",
             errorIndex: i,
           });
           return false;
@@ -1868,7 +1839,7 @@ const AddProducts = () => {
           ? dispatch(editProductData(formdata))
               .then((res) => {
                 if (res?.payload?.data?.status) {
-                  ToastifyAlert("Product Edit Successfully!", "success");
+                  ToastifyAlert("Updated Successfully", "success");
                 }
               })
               .catch((err) => {
@@ -1879,7 +1850,7 @@ const AddProducts = () => {
           : dispatch(addProduct(formdata))
               .then((res) => {
                 if (res?.payload?.data?.status) {
-                  ToastifyAlert("Product Added Successfully!", "success");
+                  ToastifyAlert("Added Successfully", "success");
                   navigate("/inventory/products");
                 }
               })

@@ -69,6 +69,7 @@ const ProductTable = ({
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   const [productList, setproductsList] = useState([]);
+  console.log('productList', productList);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -189,10 +190,14 @@ const ProductTable = ({
     let timer = null;
     const formData = new FormData();
     formData.append("id", id);
+    formData.append("login_type", userTypeData?.login_type);
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("token", userTypeData?.token);
+
     dispatch(deleteProductAPI(formData))
       .then(async (res) => {
         if (res?.payload?.status) {
-          ToastifyAlert("Product deleted successfully!", "success");
+          ToastifyAlert("Deleted Successfully", "success");
           clearTimeout(timer);
           timer = setTimeout(() => {
             window.location.reload();
@@ -261,8 +266,8 @@ const ProductTable = ({
                       </TableHead>
 
                       <TableBody>
-                        {productList?.length >= 1 &&
-                          productList.map((product, index) => {
+                        {[productList]?.length >= 1 &&
+                          [...new Set(productList)].map((product, index) => {
                             return (
                               <StyledTableRow key={product?.id}>
                                 <StyledTableCell>

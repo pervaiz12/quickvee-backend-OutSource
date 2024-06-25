@@ -540,6 +540,8 @@ export const changeOnlineOrderMethod = createAsyncThunk(
 export const deleteProductAPI = createAsyncThunk(
   "products/deleteProductAPI",
   async (payload) => {
+    const token = payload.get('token'); // Extract the token from FormData
+    payload.delete('token');
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/delete_product",
@@ -547,6 +549,7 @@ export const deleteProductAPI = createAsyncThunk(
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
