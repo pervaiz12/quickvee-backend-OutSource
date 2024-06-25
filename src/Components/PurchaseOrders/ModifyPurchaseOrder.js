@@ -115,9 +115,11 @@ const ModifyPurchaseOrder = () => {
       issuedDate: puchaseOrderDetail?.issued_date
         ? dayjs(puchaseOrderDetail?.issued_date)
         : null,
-      stockDate: puchaseOrderDetail?.stock_date
-        ? dayjs(puchaseOrderDetail?.stock_date)
-        : null,
+      stockDate:
+        puchaseOrderDetail?.stock_date &&
+        puchaseOrderDetail?.stock_date !== "0000-00-00"
+          ? dayjs(puchaseOrderDetail?.stock_date)
+          : null,
       email: puchaseOrderDetail?.email,
       reference: puchaseOrderDetail?.reference,
       selectedVendor: puchaseOrderDetail?.vendor_name,
@@ -362,7 +364,9 @@ const ModifyPurchaseOrder = () => {
           );
 
           obj.newPrice =
-            parseFloat(product.price) > 0 ? parseFloat(product.price) : 0;
+            parseFloat(product.costperItem) > 0
+              ? parseFloat(product.costperItem)
+              : 0;
           obj.finalQty = Number(product.quantity) ?? 0;
 
           setSelectedProducts((prev) => [
@@ -373,7 +377,9 @@ const ModifyPurchaseOrder = () => {
           const product = response.data.data.productdata;
 
           obj.newPrice =
-            parseFloat(product.price) > 0 ? parseFloat(product.price) : 0;
+            parseFloat(product.costperItem) > 0
+              ? parseFloat(product.costperItem)
+              : 0;
           obj.finalQty = Number(product.quantity) ?? 0;
 
           setSelectedProducts((prev) => [{ ...product, ...obj }, ...prev]);
@@ -472,7 +478,8 @@ const ModifyPurchaseOrder = () => {
   // modifying purchase order api
   const modifyPurchaseOrder = async () => {
     const { issuedDate, stockDate, selectedVendor } = purchaseInfo;
-
+    // console.log("puchaseOrderDetail: ", puchaseOrderDetail?.created_at);
+    // return;
     if (selectedProducts.length <= 0) {
       ToastifyAlert("No Products to update!", "error");
       return;
@@ -488,7 +495,10 @@ const ModifyPurchaseOrder = () => {
       (prod) => prod.newQty && prod.newPrice
     );
 
-    if (purchaseInfoDetails && stockDate && issuedDate && validateProducts) {
+    // console.log("selectedProducts: ", selectedProducts);
+    // return;
+
+    if (purchaseInfoDetails && issuedDate && validateProducts) {
       try {
         setLoading(() => true);
         const orderItems = selectedProducts?.map((prod) => ({
@@ -507,10 +517,12 @@ const ModifyPurchaseOrder = () => {
           upc: prod.upc,
           note: prod.note,
           order_item_id: prod.order_item_id ? prod.order_item_id : "",
+          recieved_status: prod?.recieved_status ? prod?.recieved_status : "0",
         }));
 
         // console.log("selectedProducts: ", selectedProducts);
         // console.log("orderItems: ", orderItems);
+        // return;
 
         const orderItemsObject = orderItems?.reduce((acc, curr, index) => {
           acc[index] = curr;
@@ -535,11 +547,17 @@ const ModifyPurchaseOrder = () => {
         );
         formData.append(
           "stock_date",
-          dayjs(purchaseInfo?.stockDate).format("YYYY-MM-DD")
+          stockDate ? stockDate?.format("YYYY-MM-DD") : "0000-00-00"
         );
         formData.append("reference", purchaseInfo?.reference);
         formData.append("is_draft", 0);
-        formData.append("created_at", createdAt(new Date()));
+        formData.append(
+          "created_at",
+          puchaseOrderDetail?.created_at
+            ? puchaseOrderDetail?.created_at
+            : "0000-00-00 00:00:00"
+        );
+        formData.append("updated_at", createdAt(new Date()));
         formData.append("vendor_email", purchaseInfo?.email);
         formData.append("order_items", JSON.stringify(orderItemsObject));
         formData.append("token_id", userTypeData.token_id);
@@ -564,11 +582,11 @@ const ModifyPurchaseOrder = () => {
         setLoading(() => false);
       }
     } else {
-      if (!purchaseInfoDetails || !stockDate || !issuedDate) {
+      if (!purchaseInfoDetails || !issuedDate) {
         setPurchaseInfoErrors((prev) => ({
           ...prev,
           issuedDate: issuedDate ? "" : "Issued Date is required",
-          stockDate: stockDate ? "" : "Stock Due Date is required",
+          // stockDate: stockDate ? "" : "Stock Due Date is required",
           // email: email ? "" : "Email is required",
           selectedVendor: selectedVendor ? "" : "Vendor is required",
         }));
@@ -688,11 +706,11 @@ const ModifyPurchaseOrder = () => {
                     />
                   </DemoContainer>
                 </LocalizationProvider>
-                {purchaseInfoErrors.stockDate && (
+                {/* {purchaseInfoErrors.stockDate && (
                   <p className="error-message">
                     {purchaseInfoErrors.stockDate}
                   </p>
-                )}
+                )} */}
               </Grid>
               <Grid item xs={12} sm={6} md={4}>
                 <label>Reference</label>
