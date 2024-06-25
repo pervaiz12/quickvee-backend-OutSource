@@ -34,7 +34,7 @@ const Permission = ({ EmployeeId, setVisible }) => {
     setShowModal,
     scrollRef,
     setsubmitmessage,
-  } = EditPermissionLogic({ employeedata });
+  } = EditPermissionLogic({ employeedata, setVisible });
 
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();

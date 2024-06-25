@@ -86,14 +86,12 @@ export default function ProtectedRoute(props) {
     localStorage.removeItem("AllStore");
   };
   console.log(AdminRocord);
-
   if (
     AdminRocord?.status == true &&
     AdminRocord?.login_type == "superadmin" &&
     props.visible == "superadmin" &&
     AdminRocord?.data?.merchant_id == ""
   ) {
-    console.log("1");
     return <Outlet />;
   } else if (
     AdminRocord?.status == true &&
@@ -101,8 +99,6 @@ export default function ProtectedRoute(props) {
     props.visible == "superadmin" &&
     AdminRocord?.data?.merchant_id !== ""
   ) {
-    console.log("2");
-    // navigate("/");
     return <Navigate to="/" />;
   } else if (
     AdminRocord?.status == true &&
@@ -118,11 +114,9 @@ export default function ProtectedRoute(props) {
       AdminRocord?.data?.merchant_id == "no_id") &&
     AdminRocord?.data?.merchant_id !== undefined
   ) {
-    console.log("3");
     dispatch(setIsStoreActive(true));
     return <Outlet />;
   } else {
-    console.log("4");
     handleClearCoockie();
     return <Navigate to="/login" />;
   }

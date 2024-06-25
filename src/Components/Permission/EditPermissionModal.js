@@ -30,23 +30,23 @@ const EditPermissionModal = ({ selected }) => {
   });
 
   const handleOpen = () => {
-    if(permission.sub_permission === ""){
+    if (permission.sub_permission === "") {
       setErrors({
         sub_permission: "Sub Permission is required",
-      })
-    }else{
+      });
+    } else {
       setErrors({
         sub_permission: "",
-      })
+      });
     }
-    if(permission.permission === "Select"){
+    if (permission.permission === "Select") {
       setErrors({
         permission: "Permission is required",
-      })
-    }else{
+      });
+    } else {
       setErrors({
         permission: "",
-      })
+      });
     }
 
     if (selected) {
@@ -142,7 +142,7 @@ const EditPermissionModal = ({ selected }) => {
       ...prevState,
       [name]: value,
     }));
-    if(value !== ""){
+    if (value !== "") {
       setPermission((prevState) => ({
         ...prevState,
         [name]: value,
@@ -151,7 +151,7 @@ const EditPermissionModal = ({ selected }) => {
         ...prevState,
         sub_permission: "",
       }));
-    }else{
+    } else {
       setErrors((prevState) => ({
         ...prevState,
         sub_permission: "Sub Permission is required",
@@ -176,7 +176,7 @@ const EditPermissionModal = ({ selected }) => {
         permission: "Permission is required",
       }));
       hasError = true;
-    }else if(permission.permission === "Select"){
+    } else if (permission.permission === "Select") {
       setErrors((prevState) => ({
         ...prevState,
         permission: "Please Select Permission is required",
@@ -191,7 +191,7 @@ const EditPermissionModal = ({ selected }) => {
       hasError = true;
     }
 
-   if (hasError) return;
+    if (hasError) return;
 
     const data = {
       id: permission?.id,
@@ -245,12 +245,15 @@ const EditPermissionModal = ({ selected }) => {
   };
 
   return (
-      <div>
-        <div className="flex justify-evenly categories-items categories-items-btn permissionEditBTN" onClick={handleOpen}>
-          <span className="categories-items ">
-            <img src={EditIcon} alt="edit-icon" />{" "}
-          </span>
-        </div>
+    <div>
+      <div
+        className="flex justify-evenly categories-items categories-items-btn permissionEditBTN"
+        onClick={handleOpen}
+      >
+        <span className="categories-items ">
+          <img src={EditIcon} alt="edit-icon" />{" "}
+        </span>
+      </div>
 
       <Modal
         open={open}
@@ -304,11 +307,11 @@ const EditPermissionModal = ({ selected }) => {
                       onChangeFun={handleSubPermissionChange}
                       value={permission?.sub_permission}
                     />
-                  {errors.sub_permission && (
-                    <span className="error-message" >
-                      {errors.sub_permission}
-                    </span>
-                  )}
+                    {errors.sub_permission && (
+                      <span className="error-message">
+                        {errors.sub_permission}
+                      </span>
+                    )}
                   </Grid>
 
                   <Grid item xs={12} sm={6} md={6}>
@@ -322,11 +325,9 @@ const EditPermissionModal = ({ selected }) => {
                       name="permission"
                       selectedOption={permission?.permission}
                     />
-                  {errors.permission && (
-                    <span className="error-message" >
-                      {errors.permission}
-                    </span>
-                  )}
+                    {errors.permission && (
+                      <span className="error-message">{errors.permission}</span>
+                    )}
                   </Grid>
                   {/* <div className="col-qv-6">
                     <div className="input_area">
@@ -404,8 +405,23 @@ const EditPermissionModal = ({ selected }) => {
               </div>
 
               <div className="q-add-categories-section-middle-footer">
-                <button className="quic-btn quic-btn-save attributeUpdateBTN" disabled={loader}>
-                { loader ? <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15}/> Update</> : "Update"}
+                <button
+                  className="quic-btn quic-btn-save attributeUpdateBTN"
+                  disabled={loader}
+                >
+                  {loader ? (
+                    <>
+                      <CircularProgress
+                        color={"inherit"}
+                        className="loaderIcon"
+                        width={15}
+                        size={15}
+                      />{" "}
+                      Update
+                    </>
+                  ) : (
+                    "Update"
+                  )}
                 </button>
 
                 <button
