@@ -124,7 +124,7 @@ const EditPermissionModal = ({ selected }) => {
       if (update_message == "success") {
         // alert(msg)
 
-        ToastifyAlert("Permission Edited!", "success");
+        ToastifyAlert("Updated Successfully", "success");
 
         dispatch(fetchPermissionData(userTypeData));
         handleClose();
@@ -132,7 +132,7 @@ const EditPermissionModal = ({ selected }) => {
         update_message == "failed" &&
         msg == "Permission and Sub-Permission cannot be empty."
       ) {
-        ToastifyAlert("Please enter Permission and Sub Permission", "warn");
+        // ToastifyAlert("Please enter Permission and Sub Permission", "warn");
 
         setErrorMessage(msg);
       }

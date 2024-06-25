@@ -452,12 +452,15 @@ export default function Header() {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleNavigate}>
-                <div className="flex justify-items-start items-center">
-                  <img src={userLogo} alt="" className="w-6 h-6 mr-2" />
-                  {storename}
-                </div>{" "}
-              </MenuItem>
+              {storename && (
+                <MenuItem onClick={handleNavigate}>
+                  <div className="flex justify-items-start items-center">
+                    <img src={userLogo} alt="" className="w-6 h-6 mr-2" />
+                    {storename}
+                  </div>{" "}
+                </MenuItem>
+              )}
+
               <MenuItem onClick={handleLogout}>
                 {" "}
                 <div className="flex justify-items-start items-center">

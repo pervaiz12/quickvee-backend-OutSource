@@ -58,7 +58,8 @@ export const deletePermission = createAsyncThunk(
       );
       if (response) {
         console.log(response);
-        ToastifyAlert("Permission Deleted Successfully!", "success");
+        // ToastifyAlert("Permission Deleted Successfully!", "success");
+        ToastifyAlert("Deleted Successfully", "success");
         return {
           id: data.id,
         };

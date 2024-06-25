@@ -6,9 +6,7 @@ import {
 } from "../../../Constants/Config";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import {
-  useAuthDetails,
-} from "../../../Common/cookiesHelper";
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 
 export default function EditMerchantFunctionality() {
@@ -41,6 +39,13 @@ export default function EditMerchantFunctionality() {
   const [errors, setErrors] = useState({
     usa_pin: "",
     merchant_token: "",
+    name_error: "",
+    owner_name: "",
+    a_address_line_1: "",
+    a_phone: "",
+    a_city: "",
+    a_state: "",
+    a_zip: "",
   });
   // console.log("getEditMerchant:", getEditMerchant)
   const [paymentModeOnline, setPaymentModeOnline] = useState(false);
@@ -63,11 +68,11 @@ export default function EditMerchantFunctionality() {
   };
   const getEditMerchantData = async (data) => {
     const { token, ...dataNew } = data;
-    console.log(data)
-    console.log(dataNew)
+    console.log(data);
+    console.log(dataNew);
     // const dataNew={id:data}
     // const packet={}
-    console.log()
+    console.log();
     await axios
       .post(BASE_URL + GET_EDIT_CUSTOMER, dataNew, {
         headers: {
@@ -88,7 +93,7 @@ export default function EditMerchantFunctionality() {
           } else {
             setInventory(true);
           }
-          console.log(response)
+          console.log(response);
           const a_zipCode =
             response.data.message?.row?.a_zip !== null
               ? response.data.message.row?.a_zip
@@ -123,8 +128,8 @@ export default function EditMerchantFunctionality() {
               ? response.data.message.row.merchant_token
               : "";
           const Phone =
-            response.data.message.row.phone !== null
-              ? response.data.message.row.phone
+            response.data.message.row.a_phone !== null
+              ? response.data.message.row.a_phone
               : "";
           const usa_pin =
             response.data.message.row.usa_pin !== null
@@ -209,29 +214,90 @@ export default function EditMerchantFunctionality() {
       e.preventDefault();
     }
   };
+  // const handleChangeMerchant = (e) => {
+  //   if (e?.target?.name) {
+  //     const { name, value } = e.target;
+  //     // const trimmedValue = value.replace(/^\s+|\s+$/g, "");
+  //     const trimmedValue = value.replace(/^\s+/, "");
+
+  //     // setEditMerchant((prev) => ({
+  //     //   ...prev,
+  //     //   [name]: trimmedValue,
+  //     // }));
+
+  //     setEditMerchant((prev) => ({
+  //       ...prev,
+  //       [name]: trimmedValue,
+  //     }));
+  //   } else {
+  //     console.log("value of object:", e);
+  //     setEditMerchant((prev) => ({
+  //       ...prev,
+  //       [e.name]: e.value,
+  //     }));
+  //   }
+  // };
   const handleChangeMerchant = (e) => {
-    if(e?.target?.name){
-      const { name, value } = e.target;
-    // const trimmedValue = value.replace(/^\s+|\s+$/g, "");
-    const trimmedValue = value.replace(/^\s+/, "");
+    let name, value;
 
-    // setEditMerchant((prev) => ({
-    //   ...prev,
-    //   [name]: trimmedValue,
-    // }));
+    if (e?.target?.name) {
+      // Extract name and value from event target
+      ({ name, value } = e.target);
+    } else {
+      // Handle non-event objects
+      ({ name, value } = e);
+    }
 
+    // Clone errors to avoid mutation
+    let updatedErrors = { ...errors };
+    let trimmedValue = value.replace(/^\s+/, "");
+    // const containsNumbers = /\d/.test(trimmedValue);
+
+    // Update errors based on the field name
+    if (name === "name") {
+      updatedErrors.name_error =
+        trimmedValue === "" ? "Store Name is required" : "";
+    }
+    if (name === "owner_name") {
+      updatedErrors.owner_name =
+        trimmedValue === "" ? "Owner Name is required" : "";
+    }
+    if (name == "usa_pin") {
+      updatedErrors.usa_pin = trimmedValue === "" ? "USA Pin is required" : "";
+    }
+
+    if (name == "merchant_token") {
+      updatedErrors.merchant_token =
+        trimmedValue === "" ? "Merchant Token is required" : "";
+    }
+    if (name == "a_address_line_1") {
+      updatedErrors.a_address_line_1 =
+        trimmedValue === "" ? "Address Line 1 is required" : "";
+    }
+    if (name == "a_phone") {
+      updatedErrors.a_phone =
+        trimmedValue === ""
+          ? "Phone is required"
+          : trimmedValue.length !== 10
+            ? "Invalid Phone"
+            : "";
+    }
+    if (name == "a_city") {
+      updatedErrors.a_city = trimmedValue === "" ? "City is required" : "";
+    }
+    if (name == "a_zip") {
+      updatedErrors.a_zip = trimmedValue === "" ? "Zip Code is required" : "";
+    }
+    if (name == "a_state") {
+      updatedErrors.a_state = trimmedValue === "" ? "State is required" : "";
+    }
+
+    // Update state
+    setErrors(updatedErrors);
     setEditMerchant((prev) => ({
       ...prev,
-      [name]: trimmedValue,
+      [name]: trimmedValue.replace(/^\s+/, ""),
     }));
-    }else{
-      console.log("value of object:",e)
-      setEditMerchant((prev) => ({
-        ...prev,
-        [e.name]: e.value,
-      }));
-    } 
-    
   };
 
   const handleChangePaymentMode = (e) => {
@@ -257,20 +323,48 @@ export default function EditMerchantFunctionality() {
   // -------------------------------validation-----------------
   const validateForm = () => {
     let error = false;
-    let updatedErrors = { errors };
+    let updatedErrors = { ...errors };
 
     if (
       (paymentCredits || paymentModeOnline) &&
       getEditMerchant.usa_pin == ""
     ) {
-      updatedErrors.usa_pin = "please fill the usa_pin";
+      updatedErrors.usa_pin = "USA Pin is required";
       error = true;
     }
     if (
       (paymentCredits || paymentModeOnline) &&
       getEditMerchant.merchant_token == ""
     ) {
-      updatedErrors.merchant_token = "please fill the merchant_token";
+      updatedErrors.merchant_token = "Merchant Token is required";
+      error = true;
+    }
+    if (getEditMerchant.name == "") {
+      updatedErrors.name_error = "Store Name is required";
+      error = true;
+    }
+    if (getEditMerchant.owner_name == "") {
+      updatedErrors.owner_name = "Owner Name is required";
+      error = true;
+    }
+    if (getEditMerchant.a_address_line_1 == "") {
+      updatedErrors.a_address_line_1 = "Address Line 1 is required";
+      error = true;
+    }
+    if (getEditMerchant.a_phone == "") {
+      updatedErrors.a_phone = "Phone is required";
+      error = true;
+    }
+    if (getEditMerchant.a_city == "") {
+      updatedErrors.a_city = "City is required";
+      error = true;
+    }
+    if (getEditMerchant.a_zip == "") {
+      updatedErrors.a_zip = "Zip Code is required";
+      error = true;
+    }
+    if (getEditMerchant.a_state == "") {
+      updatedErrors.a_state = "State is required";
       error = true;
     }
     setErrors(updatedErrors);
@@ -280,8 +374,13 @@ export default function EditMerchantFunctionality() {
       return true;
     }
   };
-  // -----------------------validation-------------------
+  // // -----------------------validation-------------------
+  function Currentvalidate(errors) {
+    console.log(errors);
+    return Object.values(errors).every((error) => error === "");
+  }
 
+  // // ===================================
   const handleUpdateMerchant = async (e) => {
     e.preventDefault();
     let inventoryNew = 0;
@@ -292,60 +391,63 @@ export default function EditMerchantFunctionality() {
     // console.log(dataNew)
     // console.log(token)
     const validateBlank = validateForm();
-    // console.log(validateBlank);
+    const isValidateField = Currentvalidate(errors);
+    console.log(isValidateField);
     if (validateBlank) {
-      const packet = {
-        id: getEditMerchant?.id.id,
-        username: getEditMerchant?.username.trim(),
-        ...dataNew,
-        inventory: inventoryNew,
-        mer_id: getEditMerchant?.id.id,
-        name: getEditMerchant.name,
-        merchant_id: getEditMerchant.merchant_id,
-        ownername: getEditMerchant.owner_name.trim(),
-        password: getEditMerchant.newPassword.trim(),
-        address: {
-          address1: getEditMerchant.a_address_line_1.trim(),
-          address2: getEditMerchant.a_address_line_2.trim(),
-          phoneNumber: getEditMerchant.a_phone,
-          city: getEditMerchant.a_city.trim(),
-          a_zip: getEditMerchant.a_zip,
-          state: getEditMerchant.a_state,
-        },
-        cc_payment: paymentModeRecord,
-        account_type: getEditMerchant.live_account,
-        merchant_token: getEditMerchant.merchant_token,
-        usa_pin: getEditMerchant.usa_pin,
-      };
-      setLoader(true);
-      console.log(packet);
-      console.log(userTypeData?.token);
-      try {
-        let response = await axios.post(
-          BASE_URL + GET_UPDATE_MERCHANT,
-          packet,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`, // Use data?.token directly
-            },
+      if (isValidateField == true) {
+        const packet = {
+          id: getEditMerchant?.id.id,
+          username: getEditMerchant?.username.trim(),
+          ...dataNew,
+          inventory: inventoryNew,
+          mer_id: getEditMerchant?.id.id,
+          name: getEditMerchant.name,
+          merchant_id: getEditMerchant.merchant_id,
+          ownername: getEditMerchant.owner_name.trim(),
+          password: getEditMerchant.newPassword.trim(),
+          address: {
+            address1: getEditMerchant.a_address_line_1.trim(),
+            address2: getEditMerchant.a_address_line_2.trim(),
+            phoneNumber: getEditMerchant.a_phone,
+            city: getEditMerchant.a_city.trim(),
+            a_zip: getEditMerchant.a_zip,
+            state: getEditMerchant.a_state,
+          },
+          cc_payment: paymentModeRecord,
+          account_type: getEditMerchant.live_account,
+          merchant_token: getEditMerchant.merchant_token,
+          usa_pin: getEditMerchant.usa_pin,
+        };
+        setLoader(true);
+        console.log(packet);
+        console.log(userTypeData?.token);
+        try {
+          let response = await axios.post(
+            BASE_URL + GET_UPDATE_MERCHANT,
+            packet,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`, // Use data?.token directly
+              },
+            }
+          );
+          if (response.data.status == 200) {
+            setLoader(false);
+            ToastifyAlert("Updated Successfully!", "success");
+            // setMessage(response?.data?.message);
+            setSuccessMessageHandle(true);
+            handleSuccessMessage();
+            // navigate(`/users/editMerchant/${response?.data?.id}`);
+            // navigate(`/users/editMerchant/${getEditMerchant.id}`)
+          } else {
+            setLoader(false);
+            ToastifyAlert("Merchant not Updated!", "warn");
           }
-        );
-        if (response.data.status == 200) {
-          setLoader(false);
-          ToastifyAlert("Updated Successfully!", "success");
-          // setMessage(response?.data?.message);
-          setSuccessMessageHandle(true);
-          handleSuccessMessage();
-          // navigate(`/users/editMerchant/${response?.data?.id}`);
-          // navigate(`/users/editMerchant/${getEditMerchant.id}`)
-        } else {
-          setLoader(false);
-          ToastifyAlert("Merchant not Updated!", "warn");
+        } catch (e) {
+          console.log("Exception", e);
+          navigate("/");
         }
-      } catch (e) {
-        console.log("Exception", e);
-        navigate("/");
       }
     }
   };

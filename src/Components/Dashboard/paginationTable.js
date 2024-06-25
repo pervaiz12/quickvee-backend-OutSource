@@ -20,7 +20,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
     paddingTop:"12px",
-    paddingLeft:"1px",
+    paddingLeft:"12px",
     paddingRight:"1px",
     fontFamily: "CircularSTDMedium",
   },
@@ -115,13 +115,12 @@ export default function DashboardTables(props) {
     }
   };
 
- 
   return (
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell align="center">
+            <StyledTableCell >
               <button
                 className="flex items-center"
                 onClick={() => props.sortByItemName("str", "billing_name")}
@@ -130,10 +129,10 @@ export default function DashboardTables(props) {
                 <img src={sortIcon} alt="" className="pl-1" />
               </button>
             </StyledTableCell>
-            <StyledTableCell className="whitespace-nowrap" align="center">
+            <StyledTableCell className="whitespace-nowrap" >
               Customer No.
             </StyledTableCell>
-            <StyledTableCell align="center">
+            <StyledTableCell >
               <button
                 className="flex items-center"
                 onClick={() => props.sortByItemName("date", "date_time")}
@@ -142,7 +141,7 @@ export default function DashboardTables(props) {
                 <img src={sortIcon} alt="" className="pl-1" />
               </button>
             </StyledTableCell>
-            <StyledTableCell align="center">
+            <StyledTableCell >
               <button
                 className="flex items-center"
                 onClick={() => props.sortByItemName("id", "order_id")}
@@ -151,7 +150,7 @@ export default function DashboardTables(props) {
                 <img src={sortIcon} alt="" className="pl-1" />
               </button>
             </StyledTableCell>
-            <StyledTableCell align="center">
+            <StyledTableCell >
               <button
                 className="flex items-center"
                 onClick={() => props.sortByItemName("str", "order_method")}
@@ -160,7 +159,7 @@ export default function DashboardTables(props) {
                 <img src={sortIcon} alt="" className="pl-1" />
               </button>
             </StyledTableCell>
-            <StyledTableCell align="center">
+            <StyledTableCell >
               <button
                 className="flex items-center"
                 onClick={() => props.sortByItemName("str", "m_status")}
@@ -169,7 +168,7 @@ export default function DashboardTables(props) {
                 <img src={sortIcon} alt="" className="pl-1" />
               </button>
             </StyledTableCell>
-            <StyledTableCell align="center">
+            <StyledTableCell >
               <button
                 className="flex items-center"
                 onClick={() => props.sortByItemName("num", "amt")}
@@ -178,47 +177,51 @@ export default function DashboardTables(props) {
                 <img src={sortIcon} alt="" className="pl-1" />
               </button>
             </StyledTableCell>
-            <StyledTableCell align="center">Order Details</StyledTableCell>
+            <StyledTableCell >Order Details</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
-          {props.dashboardRecord && Array.isArray(props.dashboardRecord)
-            ? props.dashboardRecord.map((row) => (
-                <StyledTableRow key={row.id}>
-                  <StyledTableCell align="center">
-                    {getCustomerName(row.deliver_name, row.billing_name)}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {row.delivery_phn}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                   <p className="whitespace-nowrap">{formatDateTime(row.date_time)}</p> 
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {row.order_id}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {row.order_method}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {getStatus(row.order_method, row.m_status)}
-                  </StyledTableCell>
-                  <StyledTableCell align="center">{`$${priceFormate(
-                    row.amt
-                  )}`}</StyledTableCell>
-                  <StyledTableCell align="center">
-                    <Link
+          {props.dashboardRecord &&
+          Array.isArray(props.dashboardRecord) &&
+          props.dashboardRecord.length > 0 ? (
+            props.dashboardRecord.map((row) => (
+              <StyledTableRow key={row.id}>
+                <StyledTableCell >
+                  {getCustomerName(row.deliver_name, row.billing_name)}
+                </StyledTableCell>
+                <StyledTableCell >
+                  {row.delivery_phn}
+                </StyledTableCell>
+                <StyledTableCell >
+                  <p className="whitespace-nowrap">
+                    {formatDateTime(row.date_time)}
+                  </p>
+                </StyledTableCell>
+                <StyledTableCell>{row.order_id}</StyledTableCell>
+                <StyledTableCell >
+                  {row.order_method}
+                </StyledTableCell>
+                <StyledTableCell>
+                  {getStatus(row.order_method, row.m_status)}
+                </StyledTableCell>
+                <StyledTableCell >{`$${priceFormate(
+                  row.amt
+                )}`}</StyledTableCell>
+                <StyledTableCell >
+                  <Link
                     className="whitespace-nowrap text-[#0A64F9]"
-                      to={`/order/store-reporting/order-summary/${props.merchant_id}/${row.order_id}`}
-                      // onClick={() => handleSummeryPage(row.order_id)}
-                      target="_blank"
-                    >
-                      Order Summery
-                    </Link>
-                  </StyledTableCell>
-                </StyledTableRow>
-              ))
-            : ""}
+                    to={`/order/store-reporting/order-summary/${props.merchant_id}/${row.order_id}`}
+                    // onClick={() => handleSummeryPage(row.order_id)}
+                    target="_blank"
+                  >
+                    Order Summery
+                  </Link>
+                </StyledTableCell>
+              </StyledTableRow>
+            ))
+          ) : (
+            <p className="p-2">No record found</p>
+          )}
         </TableBody>
       </Table>
     </TableContainer>

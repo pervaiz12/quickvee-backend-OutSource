@@ -19,6 +19,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 import AlertModal from "../../reuseableComponents/AlertModal";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const EditCategory = ({ productId,seVisible }) => {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ const EditCategory = ({ productId,seVisible }) => {
     userTypeData,
     GetSessionLogin,
   } = useAuthDetails();
+  const [loader, setLoader] = useState(false);
 
   const [category, setCategory] = useState({
     collID: "",
@@ -94,12 +96,19 @@ const EditCategory = ({ productId,seVisible }) => {
 
   const inputChange = (e) => {
     const { name, value } = e.target;
-    setCategory((preValue) => {
-      return {
-        ...preValue,
-        [name]: value,
-      };
-    });
+    const regex = /^[A-Za-z0-9 ]*$/ ;
+    if (name === "title"){
+      if (regex.test(value)) {
+        setCategory({ ...category, title: value });
+      }
+    }else{
+      setCategory((preValue) => {
+        return {
+          ...preValue,
+          [name]: value,
+        };
+      });
+    }
   };
 
   const [selectedImage, setSelectedImage] = useState(null);
@@ -162,7 +171,7 @@ const EditCategory = ({ productId,seVisible }) => {
       formData.append("image", "");
       formData.append("filename", "");
     }
-
+    setLoader(true);
     try {
       const res = await axios.post(BASE_URL + UPDATE_CATOGRY, formData, {
         headers: {
@@ -175,13 +184,13 @@ const EditCategory = ({ productId,seVisible }) => {
       const update_message = await res.data.update_message;
       if (data == "Success") {
         // alert(update_message);
-        ToastifyAlert(update_message, "success");
+        ToastifyAlert("Updated Successfully", "success");
         setErrorMessage(" ");
         let data = {
           merchant_id: merchant_id,
         };
         setSelectedImage(null);
-        navigate("/category");
+        navigate("/inventory/category");
       } else if (data == "Failed" && update_message == "*Please enter title") {
         setErrorMessage(update_message);
       } else if (
@@ -200,6 +209,7 @@ const EditCategory = ({ productId,seVisible }) => {
     } catch (error) {
       console.error("API Error:", error);
     }
+    setLoader(false);
   };
 
   const [errorMessage, setErrorMessage] = useState("");
@@ -349,6 +359,9 @@ const EditCategory = ({ productId,seVisible }) => {
       },
     }));
   };
+  const back = () => {
+    navigate("/inventory/category");
+  }
 
   return (
     <div className="q-category-main-page">
@@ -369,12 +382,12 @@ const EditCategory = ({ productId,seVisible }) => {
         <div className="q-add-categories-section">
           <form>
             <div className="q-add-categories-section-header">
-              <Link  to={`/category`}>
+              <span   onClick={back}>
                 <span style={myStyles}>
                   <img src={AddNewCategory} alt="Add-New-Category" />
                   <span >Edit Category</span>
                 </span>
-              </Link>
+              </span>
             </div>
             <div className="q-add-categories-section-middle-form">
               <div className="q-add-categories-single-input">
@@ -541,13 +554,11 @@ const EditCategory = ({ productId,seVisible }) => {
             </div>
 
             <div className="q-add-categories-section-middle-footer">
-              <button className="quic-btn quic-btn-save" onClick={handleSubmit}>
-                Save
+              <button className="quic-btn quic-btn-save attributeUpdateBTN" onClick={handleSubmit}>
+                 { loader ? <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15}/> Save</> : "Save"}
               </button>
 
-              <Link to={`/category`}>
-                <button className="quic-btn quic-btn-cancle">Cancel</button>
-              </Link>
+                <button className="quic-btn quic-btn-cancle"  onClick={back}>Cancel</button>
             </div>
           </form>
         </div>

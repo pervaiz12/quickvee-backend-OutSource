@@ -79,7 +79,7 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
     });
     if (response) {
       dispatch(editAttribute({ id: attribute.id, title: newAttribute }));
-      ToastifyAlert(response.data.response_message, "success");
+      ToastifyAlert("Updated Successfully", "success");
       setShowModal(false);
     } else {
       setsubmitmessage(response.data.message);

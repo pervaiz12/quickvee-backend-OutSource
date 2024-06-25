@@ -83,9 +83,7 @@ const ReorderInventoryList = (props) => {
   const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
 
   const sortByItemName = (type, name) => {
-    
-
-    const {sortedItems,newOrder} = SortTableItemsHelperFun(
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
       allReorderInventoryData,
       type,
       name,

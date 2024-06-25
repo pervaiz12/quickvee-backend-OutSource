@@ -189,7 +189,7 @@ const DefaultsDetail = ({ setVisible,setDefaultEditId }) => {
         dispatch(deleteDefaultsData(data)).then(() => {
           dispatch(fetchdefaultsData({ merchant_id, ...userTypeData }));
         });
-        ToastifyAlert("Default Menu Deleted", "success");
+        ToastifyAlert("Deleted Successfully", "success");
       }
     }else if(deleteSelectDefaultId){
         const data = {
@@ -197,7 +197,7 @@ const DefaultsDetail = ({ setVisible,setDefaultEditId }) => {
           ...userTypeData,
         };
         if (data) {
-          ToastifyAlert("Default Menu Deleted", "success");
+          ToastifyAlert("Deleted Successfully", "success");
           dispatch(deleteDefaultsMultiData(data)).then(() => {
             dispatch(fetchdefaultsData({ merchant_id, ...userTypeData }));
           });

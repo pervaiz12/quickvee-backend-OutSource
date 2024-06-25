@@ -94,6 +94,7 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
                 show_offline: 0,
               })
             );
+            ToastifyAlert("Updated Successfully", "success");
           }
         } catch (error) {
           console.error("API call failed:", error);
@@ -143,7 +144,7 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
       };
       if (data) {
         dispatch(deleteCoupon(data));
-        ToastifyAlert("Coupon Deleted", "success");
+        ToastifyAlert("Deleted Successfully", "success");
       }
     }
     setDeleteCouponId(null)
@@ -168,7 +169,7 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
               </div>
             </Grid>
             <Grid item>
-              <Link to={`/coupons-add`}>
+              <Link to={`/coupons/add`}>
               <p 
               // onClick={() => seVisible("AddCoupon")}
               >

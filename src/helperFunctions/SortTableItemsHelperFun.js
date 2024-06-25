@@ -1,15 +1,14 @@
-// src/utils/sortUtils.js
 export const SortTableItemsHelperFun = (items, type, name, sortOrder) => {
   const newOrder = sortOrder === "asc" ? "desc" : "asc";
   const sortedItems = [...items].sort((a, b) => {
-    const aValue = a[name];
-    const bValue = b[name];
+    const aValue = a[name] || "";
+    const bValue = b[name] || "";
 
     if (type === "str") {
       if (newOrder === "asc") {
-        return aValue.localeCompare(bValue);
+        return aValue.localeCompare(bValue) || "";
       } else {
-        return bValue.localeCompare(aValue);
+        return bValue.localeCompare(aValue) || "";
       }
     }
 
@@ -29,11 +28,12 @@ export const SortTableItemsHelperFun = (items, type, name, sortOrder) => {
       }
     }
     if (type === "date") {
+      console.log("parseDate", aValue);
       const parseDate = (dateString) => new Date(dateString);
-
+     
       let aDate = parseDate(aValue);
       let bDate = parseDate(bValue);
-
+     
       if (newOrder === "asc") {
         return aDate - bDate;
       } else {
