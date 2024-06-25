@@ -184,7 +184,7 @@ const VendorsDetail = ({ setVisible }) => {
                 </TableHead>
                 <TableBody>
                   {allvendors &&
-                    allvendors.length > 0 &&
+                    allvendors.length > 0 ? 
                     allvendors.map((singleVendor, index) => (
                       <StyledTableRow>
                         <StyledTableCell>
@@ -241,7 +241,11 @@ const VendorsDetail = ({ setVisible }) => {
                           </Link>
                         </StyledTableCell>
                       </StyledTableRow>
-                    ))}
+                    )):<>
+                    <div className="p-3">
+                      <p>No record found.</p>
+                    </div>
+                    </>} 
                 </TableBody>
               </StyledTable>
             </TableContainer>

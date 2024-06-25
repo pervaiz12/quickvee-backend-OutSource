@@ -14,6 +14,10 @@ export default function BasicTextFields({
   onBlurFunction,
   sx,
   onKeyPressFun,
+  multiline,
+  rows,
+  maxRows,
+  onFocusData,
 }) {
   return (
     <FormControl fullWidth>
@@ -31,6 +35,10 @@ export default function BasicTextFields({
         disabled={disable}
         onBlur={onBlurFunction}
         onKeyPress={onKeyPressFun}
+        multiline={multiline}
+        rows={rows}
+        maxRows={maxRows}
+        onFocus={onFocusData}
       />
     </FormControl>
   );

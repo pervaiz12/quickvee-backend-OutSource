@@ -14,7 +14,7 @@ import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { toast } from "react-toastify";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
-
+import CircularProgress from "@mui/material/CircularProgress";
 const AddPermissionModal = () => {
   const [open, setOpen] = useState(false);
   // const handleOpen = () => setOpen(true);
@@ -27,7 +27,7 @@ const AddPermissionModal = () => {
 
   const handleOpen = () => {
     setPermission({
-      permission: "",
+      permission: "Select",
       sub_permission: "",
     });
     setErrors({
@@ -36,7 +36,7 @@ const AddPermissionModal = () => {
     });
     setOpen(true);
   };
-
+  const [loader, setLoader] = useState(false);
   const { userTypeData } = useAuthDetails();
 
   const { token, ...userTypeDataAlter } = userTypeData;
@@ -121,6 +121,7 @@ const AddPermissionModal = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("permission.permission",permission.permission)
 
     let hasError = false;
 
@@ -149,9 +150,9 @@ const AddPermissionModal = () => {
 
    if (hasError) return;
 
-  //  console.log("permission.permission",permission.permission)
+   
   //  return
-      
+  setLoader(true);
       try {
         const res = await axios.post(
           BASE_URL + ADD_UPDATE_PERMISSION,
@@ -186,7 +187,7 @@ const AddPermissionModal = () => {
       } catch (error) {
         ToastifyAlert("Error!", "error");
       }
-
+      setLoader(false);
   };
 
   return (
@@ -247,6 +248,7 @@ const AddPermissionModal = () => {
                       name="sub_permission"
                       placeholder="Sub Permission"
                       onChangeFun={handleSubPermissionChange}
+                      value={permission?.sub_permission}
                     />
                      
                     {errors.sub_permission && (
@@ -263,7 +265,7 @@ const AddPermissionModal = () => {
                     <SelectDropDown
                       listItem={states.map((item) => ({ title: item }))}
                       title={"title"}
-                      // defaultValue={"Select"}
+                      // heading={"Select"}
                       selectedOption={permission?.permission}
                       onClickHandler={handlePermissionChange}
                       name="permission"
@@ -277,7 +279,9 @@ const AddPermissionModal = () => {
               </div>
 
               <div className="q-add-categories-section-middle-footer">
-                <button className="quic-btn quic-btn-save">Add</button>
+                <button className="quic-btn quic-btn-save attributeUpdateBTN"  disabled={loader}>
+                { loader ? <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15}/> Add</> : "Add"}
+                </button>
 
                 <button
                   onClick={() => handleClose()}

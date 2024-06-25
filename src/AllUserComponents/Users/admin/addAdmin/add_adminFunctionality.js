@@ -145,7 +145,7 @@ export default function Add_adminFunctionality({ setVisible }) {
     let formIsValid = true;
 
     if (addAdminData.owner_name === "") {
-      errors.owner_name = "`Owner Name is required";
+      errors.owner_name = "Owner Name is required";
       formIsValid = false;
     }
 

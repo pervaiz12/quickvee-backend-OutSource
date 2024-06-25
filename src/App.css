@@ -1225,3 +1225,6 @@ div.q_label_details::after {
   vertical-align: cen;
   padding-top: 5px !important;
 }
+.w-store{
+  width: 100px;
+}

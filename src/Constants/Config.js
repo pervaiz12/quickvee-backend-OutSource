@@ -230,6 +230,7 @@ module.exports = Object.freeze({
   ADD_VENDOR_DATA: "Vendor_api/add_vendor",
   GET_VENDOR_DETAILS: "Vendor_api/vendor_details",
   DELETE_SINGLE_VENDOR_DATA: "Vendor_api/delete_vendor",
+  GET_VENDORS_DATA_COUNT: "vendor_report_api/vendor_list_count",
   // Vendors Sales List API
   VENDORS_SALES_REPORT: "vendor_report_api/vendors_sales_report",
 
@@ -314,6 +315,8 @@ module.exports = Object.freeze({
   STOCKTAKE_LIST_COUNT: "Stocktake_react_api/stocktake_count",
 
   SYNC_DATA: "InventoryReact/syncOI",
+
+  VENDOR_UPDATE_DETAILS: "vendor_api/update_details",
 });
 
 // All api calls are initialized in this component for this application

@@ -284,7 +284,21 @@ export default function AddMerchan() {
                     value={store.email}
                     onChangeFun={handleChange}
                     onBlurFunction={() => handleBlur("email")}
+                    autoComplete="off"
+                    readOnly
+                    onFocusData={(e) => e.target.removeAttribute("readonly")}
                   />
+                  {/* <input
+                    className=""
+                    type="text"
+                    name="email"
+                    value={store.email}
+                    onChange={handleChange}
+                    onBlur={() => handleBlur("email")}
+                    autoComplete="off"
+                    readOnly
+                    onFocus={(e) => e.target.removeAttribute("readonly")}
+                  /> */}
                   {store.errors.email && (
                     <span className="error">{store.errors.email}</span>
                   )}
@@ -300,7 +314,7 @@ export default function AddMerchan() {
                       value={store.password}
                       onChangeFun={handleChange}
                       onBlurFunction={() => handleBlur("password")}
-                      sx={{ pt: 0.5 }}
+                      sx={{ pt: 0.5, pt: 0 }}
                     />
                     {jsxData(store.password)}
                   </div>

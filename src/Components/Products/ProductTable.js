@@ -87,6 +87,7 @@ const ProductTable = ({
     offset: 0,
     limit: 10,
     page: 0,
+    ...userTypeData,
   };
   useEffect(() => {
     if (payloadData) {

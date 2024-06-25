@@ -84,7 +84,6 @@ const MainProducts = () => {
   };
 
   const handleOptionClick = (option, dropdown, value) => {
-    console.log(option, dropdown)
     switch (dropdown) {
       case "del_pic":
         setSelectedEmployee(option.title);
@@ -166,6 +165,7 @@ const MainProducts = () => {
           offset: 0,
           limit: 10,
           page: 0,
+          ...userTypeData,
         };
         if (listing_data) {
           dispatch(fetchProductsData(listing_data));

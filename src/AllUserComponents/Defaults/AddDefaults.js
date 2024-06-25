@@ -402,7 +402,7 @@ const AddDefaults = ({ setVisible }) => {
               </div>
 
               <div className="q-add-categories-section-middle-footer">
-                <button className="quic-btn quic-btn-save attributeUpdateBTN">{loader ? 
+                <button className="quic-btn quic-btn-save attributeUpdateBTN" disabled={loader}>{loader ? 
                 ( <> <CircularProgress color={"inherit"} className="loaderIcon"  width={15}size={15}/>{" "}
                   Add
                 </>

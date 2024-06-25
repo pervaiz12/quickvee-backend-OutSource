@@ -82,7 +82,7 @@ const Itemdatadetails = ({ data }) => {
       orderReport.success === false &&
       orderReport.message === "No data found for the specified criteria"
     ) {
-      return <div className="empty-div">No data available</div>;
+      return <Grid container sx={{p:2.5}} className="box_shadow_div">No data available</Grid>;
     } else if (orderReport && orderReport.length >= 1) {
       return (
         <>

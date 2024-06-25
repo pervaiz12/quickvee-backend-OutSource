@@ -4,8 +4,8 @@ import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import EditIcon from "../../Assests/Category/editIcon.svg";
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
-import LeftArrow from "../../Assests/Vendors/LeftArrow.svg"
-import { useLocation,useNavigate } from "react-router-dom";
+import LeftArrow from "../../Assests/Vendors/LeftArrow.svg";
+import { useLocation, useNavigate } from "react-router-dom";
 import "../../Styles/Common.css";
 import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
@@ -37,9 +37,10 @@ const options = [
 ];
 
 const SingleVendorsDetail = ({ setVisible }) => {
-  const Navigate = useNavigate()
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
-  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } = useAuthDetails();
+  const Navigate = useNavigate();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
   const [showModal, setShowModal] = useState(false);
@@ -47,7 +48,8 @@ const SingleVendorsDetail = ({ setVisible }) => {
   const searchParams = new URLSearchParams(location.search);
   const vendorId = searchParams.get("vendorId");
   const vendor_name = decodeURIComponent(location.pathname.split("/").pop());
-
+  const [dateRangeState, setDateRangeState] = useState();
+  console.log("dateRangeState", dateRangeState);
   // date range
 
   const [modalData, setModalData] = useState(null);
@@ -58,8 +60,8 @@ const SingleVendorsDetail = ({ setVisible }) => {
   const [selectedRemark, setSelectedRemark] = useState();
   const AllVendorsDataState = useSelector((state) => state.vendors);
   const [selectedVendor, setSelectedVendor] = useState(false);
+  const [total, setTotal] = useState(0);
   console.log("selectedVendor", selectedVendor);
- 
 
   const openModal = (payAmount, id, remark) => {
     setShowModal(true);
@@ -75,6 +77,7 @@ const SingleVendorsDetail = ({ setVisible }) => {
   const [vendorDetails, setVendorDetails] = useState([]);
 
   const handleGetReport = async (dateRangeData) => {
+    setDateRangeState(dateRangeData);
     const { start_date, end_date } = dateRangeData;
 
     try {
@@ -95,9 +98,15 @@ const SingleVendorsDetail = ({ setVisible }) => {
       });
 
       setVendorDetails(response.data.vendor_details);
+      const total = response.data.vendor_details.reduce((acc, curr) => {
+        console.log(curr.pay_amount);
+        return acc + (curr.pay_amount ? parseFloat(curr.pay_amount) : 0);
+      }, 0);
+      setTotal(total);
+      console.log(response.data.vendor_details);
     } catch (error) {
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
     }
   };
 
@@ -131,7 +140,10 @@ const SingleVendorsDetail = ({ setVisible }) => {
           BASE_URL + UPDATE_SINGLE_VENDOR_DATA,
           updSingleVendor,
           {
-            headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}` },
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${userTypeData?.token}`,
+            },
           }
         );
 
@@ -168,13 +180,13 @@ const SingleVendorsDetail = ({ setVisible }) => {
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const handleDeleteClick = (id, vendorId) => {
-    setDeleteId(id)
-    setDeleteVendorId(vendorId)
+    setDeleteId(id);
+    setDeleteVendorId(vendorId);
     setDeleteModalOpen(true);
   };
 
   const confirmDeleteCategory = async () => {
-    if(deleteId){
+    if (deleteId) {
       const currentDateTime = dayjs().format("YYYY-MM-DD HH:mm:ss");
       const delSingleVendor = {
         merchant_id: merchant_id,
@@ -185,22 +197,25 @@ const SingleVendorsDetail = ({ setVisible }) => {
         token_id: userTypeData?.token_id,
         login_type: userTypeData?.login_type,
       };
-  
+
       try {
         const response = await axios.post(
           BASE_URL + DELETE_SINGLE_VENDOR_DATA,
           delSingleVendor,
           {
-            headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}` },
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${userTypeData?.token}`,
+            },
           }
         );
-  
+
         if (response) {
           const updatedVendorDetails = vendorDetails.filter(
             (vendor) => vendor.id !== deleteId
           );
           setVendorDetails(updatedVendorDetails);
-  
+
           // alert(response.data.message);
         } else {
           console.error(response);
@@ -209,12 +224,10 @@ const SingleVendorsDetail = ({ setVisible }) => {
         console.error(error);
       }
     }
-    setDeleteId(null)
-    setDeleteVendorId(null)
+    setDeleteId(null);
+    setDeleteVendorId(null);
     setDeleteModalOpen(false);
   };
-
-
 
   function calculateTotal() {
     let total = 0;
@@ -226,19 +239,23 @@ const SingleVendorsDetail = ({ setVisible }) => {
 
   return (
     <>
-      <Grid container sx={{ paddingTop: 2 }}>
-          <DateRangeComponent onDateRangeChange={handleGetReport} />
+      <Grid container sx={{ paddingY: 2 }}>
+        <DateRangeComponent onDateRangeChange={handleGetReport} />
       </Grid>
       <Grid
         container
-        sx={{ marginTop: 2 }}
+        sx={{ marginY: 2 }}
         className="q-add-categories-section"
       >
-        <Grid xs={12} item>
+        <Grid xs={12} item> 
           <Grid item xs={12}>
             <div className="q-add-categories-section-header">
-              <span onClick={()=>{Navigate(-1)}}>
-                <img src={LeftArrow}  />
+              <span
+                onClick={() => {
+                  Navigate(-1);
+                }}
+              >
+                <img src={LeftArrow} />
                 <span>{vendor_name}</span>
               </span>
             </div>
@@ -252,246 +269,27 @@ const SingleVendorsDetail = ({ setVisible }) => {
                   "Transaction Date",
                   "Remark",
                   "",
+                  "",
                 ]}
                 vendorDetails={vendorDetails}
                 handleDeleteClick={handleDeleteClick}
+                dateRangeState={dateRangeState}
+                handleGetReport={handleGetReport}
+                total={total}
               />
             </Grid>
           </Grid>
         </Grid>
       </Grid>
-      {/* <div className="q-category-main-page">
-        <div className="box">
-          <br></br>
-          <form>
-            <div className="q-add-categories-section">
-              <div className="q-add-categories-section-header">
-                <span>
-                  <span>Vendor Payout Details</span>
-                </span>
-              </div>
-              <div className="q-add-categories-section-middle-form">
-                <div className="qvrowmain">
-                  <div className="qvrow">
-                    <div className="col-qv-4">
-                      <div className="q-add-categories-single-input qv_input">
-                      
-                        <div className="q-add-categories-single-input qv_input">
-                          <label htmlFor="State">Date Range</label>
-                          <Autocomplete
-                            value={value}
-                            inputValue={inputValue}
-                            onInputChange={(event, newInputValue) => {
-                              setInputValue(newInputValue);
-                            }}
-                            id="controllable-states-demo"
-                            options={options}
-                            sx={{ width: 300 }}
-                            renderInput={(params) => <TextField {...params} />}
-                            onChange={handleOptionChange}
-                          />
-                        </div>
-                        {showDateRangePicker && (
-                          <div className="qvrow">
-                            <div className="col-qv-12">
-                              <div className="input_area">
-                                <label>Start & End Date</label>
-                                <LocalizationProvider
-                                  dateAdapter={AdapterDayjs}
-                                >
-                                  <DateRangePicker
-                                    startText="Start Date"
-                                    endText="End Date"
-                                    value={[dayjs(startDate), dayjs(endDate)]}
-                                    onChange={(newValue) => {
-                                      // Check if newValue is not null
-                                      if (newValue[0]) {
-                                        setStartDate(newValue[0].toDate());
-                                      }
-                                      // Check if newValue is not null
-                                      if (newValue[1]) {
-                                        setEndDate(newValue[1].toDate());
-                                      }
-                                    }}
-                                  />
-                                </LocalizationProvider>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
 
-                  <div className="qvrow">
-                    <div className="col-qv-12">
-                      <div className="q-add-categories-section-middle-footer">
-                        <button
-                          className="quic-btn quic-btn-save"
-                          type="button"
-                          onClick={handleGetReport}
-                        >
-                          Get Report
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div className="vendor_payout_header">
-                <p className="vendor_payout_sr">Sr No.</p>
-                <p className="vendor_payout_amount">Amount</p>
-                <p className="vendor_payout_transaction">Transaction Date</p>
-                <p className="vendor_payout_remark">Remark</p>
-                <p className="vendor_payout_edit">Edit</p>
-                <p className="vendor_payout_delete">Delete</p>
-              </div>
-              <div className="vendor_payout_listing">
-                {vendorDetails.length === 0 ? (
-                  <p className="vendor_payout_listing_single">No data found</p>
-                ) : (
-                  <>
-                    {vendorDetails.map((vendor, index) => (
-                      <div
-                        key={vendor.id}
-                        className="vendor_payout_listing_single"
-                      >
-                        <p className="vendor_payout_sr">{index + 1}</p>
-                        <p className="vendor_payout_amount">
-                          ${vendor.pay_amount}
-                        </p>
-                        <p className="vendor_payout_transaction">
-                          {new Date(vendor.updated_datetime).toLocaleString(
-                            "en-US",
-                            {
-                              day: "numeric",
-                              month: "short",
-                              year: "numeric",
-                              hour: "numeric",
-                              minute: "numeric",
-                              hour12: true,
-                            }
-                          )}
-                        </p>
-                        <p className="vendor_payout_remark">
-                          {vendor.remark || "N/A"}
-                        </p>
-                        <p
-                          className="vendor_payout_edit"
-                          onClick={() =>
-                            openModal(
-                              vendor.pay_amount,
-                              vendor.id,
-                              vendor.remark
-                            )
-                          }
-                        >
-                          <img src={EditIcon} alt="edit-icon" />
-                        </p>
-                        <p className="vendor_payout_delete">
-                          <img
-                            src={DeleteIcon}
-                            alt="delete-icon"
-                            onClick={() =>
-                              handleDeleteClick(vendor.id, vendor.vendor_id)
-                            }
-                          />
-                        </p>
-                      </div>
-                    ))}
-                    <div className="vendor_payout_listing_single total_payout">
-                      <p className="vendor_payout_sr">Total: </p>
-                      <p className="vendor_payout_amount">
-                        ${calculateTotal()}
-                      </p>
-                    </div>
-                  </>
-                )}
-              </div>
-
-              {showModal && (
-                <div className="q-custom-modal-container" id="addemployee">
-              
-                  <div className="q-custom-modal-content modal_custom">
-              
-                    <div className="">
-                      <p className="q-custom-modal-header ">
-                        Update Vendor Details
-                        <img
-                          src={CrossIcon}
-                          alt="icon"
-                          className="ml-auto mb-4"
-                          onClick={closeModal}
-                        />
-                      </p>
-                    </div>
-       
-                    <div className="qvrow">
-                      <div className="col-qv-12">
-                        <div className="input_area">
-                          <label>Amount</label>
-                          <input
-                            type="text"
-                            name="amount"
-                            placeholder="Amount"
-                            value={selectedPayAmount}
-                            onChange={handleAmountChange}
-                            className="q-custom-input-field"
-                            maxLength={8}
-                          />
-                          <span className="input-error">
-                         
-                          </span>
-                        </div>
-                      </div>
-                      <div className="col-qv-12">
-                        <div className="input_area">
-                          <label>More Information </label>
-
-                          <textarea
-                            type="text"
-                            name="remark"
-                            value={selectedRemark}
-                            onChange={handleRemarkChange}
-                            rows={5}
-                            placeholder="More Information"
-                            className="q-custom-input-field"
-                          ></textarea>
-                          <span className="input-error">
-                        
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="q-add-categories-section-middle-footer plr0">
-                      <button
-                        className="quic-btn quic-btn-save"
-                        type="button"
-                        onClick={handleUpdate}
-                      >
-                        Update
-                      </button>
-                      <button
-                        onClick={closeModal}
-                        className="quic-btn quic-btn-cancle"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
-          </form>
-        </div>
-      </div> */}
-
-        <DeleteModal
-            headerText="Vendor Details"
-            open={deleteModalOpen}
-            onClose={() => {setDeleteModalOpen(false)}}
-            onConfirm={confirmDeleteCategory}
-          />
+      <DeleteModal
+        headerText="Vendor Details"
+        open={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+        }}
+        onConfirm={confirmDeleteCategory}
+      />
     </>
   );
 };

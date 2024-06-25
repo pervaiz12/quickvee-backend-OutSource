@@ -125,7 +125,6 @@ const AddCategory = ({ seVisible }) => {
       formData.append("image", "");
       formData.append("filename", "");
     }
-    // console.log(category);
     setLoader(true);
     try {
       const res = await axios.post(BASE_URL + ADD_CATOGRY, formData, {
@@ -136,9 +135,7 @@ const AddCategory = ({ seVisible }) => {
       });
 
       const data = await res.data.status;
-      //console.log(data);
       const update_message = await res.data.msg;
-      console.log(update_message);
       if (data == "Success") {
         ToastifyAlert("Added Successfully", "success");
         // seVisible("CategoryDetail");
@@ -241,7 +238,6 @@ const AddCategory = ({ seVisible }) => {
 
   const handleKeyDown = (event) => {
     if (event.key === "Enter") {
-      console.log("Enter key pressed");
       event.preventDefault(); // Prevent default Enter key behavior if necessary
       // Additional logic to handle the Enter key press
     }
@@ -302,7 +298,6 @@ const AddCategory = ({ seVisible }) => {
               }}
               value={value}
               onChange={(event, newValue) => {
-                console.log("newvalue", newValue);
                 // let val = newValue.replace(/[^a-zA-Z0-9\s]/g, "");
                 // if (regex.test(event.target.value)) {
                 setCategory((previousValue) => ({

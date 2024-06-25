@@ -36,7 +36,7 @@ const BulkVendorEdit = ({
   handleCloseEditModal,
 }) => {
   const dispatch = useDispatch();
-  const { LoginGetDashBoardRecordJson } = useAuthDetails();
+  const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const [selectedVendor, setSelectedVendor] = useState([]);
   const [fetchDataLoadingVendor, setFetchDataLoadingVendor] = useState(false);
   const [vendor, setVendor] = useState([]);
@@ -147,6 +147,9 @@ const BulkVendorEdit = ({
       LoginGetDashBoardRecordJson?.data?.merchant_id
     );
     formData.append("single_product", isVarient ? 0 : 1);
+    formData.append("login_type", userTypeData?.login_type);
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("token", userTypeData?.token);
 
     dispatch(getAlreadyAssignVendor(formData))
       .then((res) => {
@@ -181,6 +184,9 @@ const BulkVendorEdit = ({
       LoginGetDashBoardRecordJson?.data?.merchant_id
     );
     formData.append("single_product", isVarient ? 0 : 1);
+    formData.append("login_type", userTypeData?.login_type);
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("token", userTypeData?.token);
 
     // called vendor api for dropdown vendor data
     dispatch(fetchVendorList(formData)).then((res) => {
@@ -215,6 +221,12 @@ const BulkVendorEdit = ({
         "vendor_id",
         selectedVendor?.map((item) => item?.id)?.toString()
       );
+            
+            formData.append("login_type", userTypeData?.login_type);
+      formData.append("token_id", userTypeData?.token_id);
+      formData.append("token", userTypeData?.token);
+      
+      
 
       dispatch(assignProductVendor(formData))
         .then((res) => {
@@ -326,6 +338,10 @@ const BulkVendorEdit = ({
       vendorItems?.map((i) => i?.costPerItem).toString()
     );
     formData.append("vendor_id", vendorItems?.map((i) => i?.id).toString());
+    formData.append("login_type", userTypeData?.login_type);
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("token", userTypeData?.token);
+    
 
     /// send bulkFormData when multiple varient and bulkModal is open
     bulkFormData.append("product_id", productId?.id);
@@ -345,9 +361,13 @@ const BulkVendorEdit = ({
       "prefferd_vendor",
       vendorItems?.filter((i) => Boolean(+i?.isPreferred))[0]?.id ?? ""
     );
+    bulkFormData.append("login_type", userTypeData?.login_type);
+    bulkFormData.append("token_id", userTypeData?.token_id);
+    bulkFormData.append("token", userTypeData?.token);
 
     if (modalType === "bulk-edit") {
       formData.append("vendor_id", vendorItems?.map((i) => i?.id).toString());
+
       dispatch(bulkVendorAssign(bulkFormData))
         .then((res) => {
           if (res?.payload?.status) {
