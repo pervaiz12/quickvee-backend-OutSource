@@ -279,7 +279,7 @@ const InstoreTableViewData = (props, searchId) => {
                           <button
                             className="flex items-center"
                             onClick={() =>
-                              sortByItemName("id", "order_id")
+                              sortByItemName("str", "order_id")
                             }
                           >
                             <p>Order</p>

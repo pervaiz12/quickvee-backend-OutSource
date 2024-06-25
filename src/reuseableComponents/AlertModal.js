@@ -43,6 +43,7 @@ const AlertModal = ({ headerText, otherMSG, open, onClose }) => {
         return Oneproduct;
       case "No categories found is not a Category":
       case "Something went wrong !":
+      case "List cannot be empty !":
         return Categorie;
       case "You can select up to 5 options.":
         return Range;
