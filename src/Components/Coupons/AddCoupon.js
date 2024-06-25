@@ -880,7 +880,7 @@ const AddCoupon = ({ seVisible }) => {
               </div>
 
               <div className="q-add-categories-section-middle-footer">
-                <button className="quic-btn quic-btn-save" disabled={loader}> {loader ? <><CircularProgress color={"inherit"} size={18}/>Add</> : "Add"}</button>
+                <button className="quic-btn quic-btn-save" disabled={loader}> {loader ? <><CircularProgress color={"inherit"} width={15} size={15}/>Add</> : "Add"}</button>
                 <Link to={`/coupons`}>
                 <button
                   // onClick={() => seVisible("CouponDiscount")}

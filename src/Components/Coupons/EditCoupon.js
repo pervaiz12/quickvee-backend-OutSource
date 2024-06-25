@@ -111,6 +111,9 @@ const EditCoupon = ({couponId,seVisible}) => {
 
         if (res[0]?.flag === "1") {
           setActiveTab("amount");
+          if(res[0]?.discount === "0.00"){
+            setDiscountError("Discount Amount is required");
+          }
         } else {
           setActiveTab("percentage");
         }
@@ -242,12 +245,33 @@ const EditCoupon = ({couponId,seVisible}) => {
   const handleSave = async (e) => {
     e.preventDefault();
     // Create a new FormData object
+    if (activeTab === "percentage") {
+      if (!coupon.maximum_discount) {
+        setDateMaxDisAMTError("Maximum Discount Amount is required");
+        return; // Stop further execution
+      } else if (coupon.maximum_discount === "") {
+        setDateMaxDisAMTError("Maximum Discount Amount is required");
+        // return;
+      } else {
+        setDateMaxDisAMTError("");
+      }
+      if (!coupon.discount == null || coupon.discount === "") {
+        setDiscountError("Discount Amount Percentage is required");
+        return
+      } else {
+        setDiscountError("");
+      }
+    }
     if (activeTab === "amount") {
       if (parseFloat(coupon.min_amount) <= parseFloat(coupon.discount)) {
         showModal("Minimum order amount must be greater than the discount amount.");
         setCoupon({ ...coupon, discount: "0.00" });
         setDiscountError("Discount Amount is required");
         return; // Stop further execution
+      }
+      if(coupon.discount === "0.00"){
+        setDiscountError("Discount Amount is required");
+        return;
       }
     }
     if (couponStates.enablelimit > 0) {
@@ -307,22 +331,6 @@ const EditCoupon = ({couponId,seVisible}) => {
       setDateEndError("");
     }
 
-    if (activeTab === "percentage") {
-      if (!coupon.maximum_discount) {
-        setDateMaxDisAMTError("Maximum Discount Amount is required");
-        return; // Stop further execution
-      } else if (coupon.maximum_discount === "") {
-        setDateMaxDisAMTError("Maximum Discount Amount is required");
-        // return;
-      } else {
-        setDateMaxDisAMTError("");
-      }
-      if (!coupon.discount == null || coupon.discount === "") {
-        setDiscountError("Discount Amount Percentage is required");
-      } else {
-        setDiscountError("");
-      }
-    }
 
     const formData = new FormData();
 
@@ -512,6 +520,17 @@ const EditCoupon = ({couponId,seVisible}) => {
       setDateMaxDisAMTError("");
     }
     setCoupon({ ...coupon, maximum_discount: formattedValue });
+  };
+
+  const handleTabChange = (tab) => {
+    if(coupon.discount === "0.00" || coupon.discount === ""){
+      setActiveTab(tab);
+      setCoupon({ ...coupon, discount: "" })
+      setDateMaxDisAMTError("");
+      setDiscountError("");
+    }else{
+      return
+    }
   };
 
   return (
@@ -1076,8 +1095,9 @@ const EditCoupon = ({couponId,seVisible}) => {
                                   className={`cursor-pointer amt_btn text-center   ${
                                     activeTab === "amount"
                                       ? "bg-[#0A64F9] text-white radius-4"
-                                      : "cursor-not-allowed"
+                                      : ""
                                   }`}
+                                  onClick={() => handleTabChange("amount")}
                                 >
                                   Amount ($)
                                 </div>
@@ -1087,8 +1107,10 @@ const EditCoupon = ({couponId,seVisible}) => {
                                   className={`cursor-pointer amt_btn text-center  ${
                                     activeTab === "percentage"
                                       ? "bg-[#0A64F9] text-white radius-4"
-                                      : "cursor-not-allowed"
+                                      : ""
                                   }`}
+                                  style={{ whiteSpace: "nowrap" }}
+                                  onClick={() => handleTabChange("percentage")}
                                 >
                                   Percentage (%)
                                 </div>
@@ -1518,8 +1540,8 @@ const EditCoupon = ({couponId,seVisible}) => {
                   sx={{  pb: 2.5 }}
                 >
                   <Grid item sx={{px:2}}>
-                    <button className="quic-btn quic-btn-save" onClick={handleSave} disabled={loader}>
-                      {loader ? <><CircularProgress color={"inherit"} size={18}/> Save</> : "Save"}
+                    <button className="quic-btn quic-btn-save attributeUpdateBTN" onClick={handleSave} disabled={loader}>
+                      {loader ? <><CircularProgress color={"inherit"} width={15} size={15} /> Save</> : "Save"}
                     </button>
                   </Grid>
                   <Grid item>
