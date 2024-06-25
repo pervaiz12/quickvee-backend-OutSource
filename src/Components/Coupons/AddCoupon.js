@@ -178,10 +178,11 @@ const AddCoupon = ({ seVisible }) => {
       setDateStartError("");
       // setDateStartError("Start Date is required");
     } else if (dayjs(dayjsDate).isAfter(dayjs(coupon.date_expire))) {
-      showModal("Start date cannot be greater than the end date");
+      // showModal("Start date cannot be greater than the end date");
       setCoupon({
         ...coupon,
-        date_valid: "",
+        date_valid: formattedStartDate,
+        date_expire: "",
       });
       setDateStartError("Start Date is required");
     } else {
@@ -269,10 +270,10 @@ const AddCoupon = ({ seVisible }) => {
     if (activeTab === "amount") {
       if (!coupon.discount) {
         setDiscountError("Discount Amount is required");
-        // return; // Stop further execution
+        return; // Stop further execution
       } else if (coupon.discount === "0.00") {
-        // return;
         setDiscountError("Discount Amount is required");
+        return;
       } else {
         setDiscountError("");
       }
@@ -406,7 +407,7 @@ const AddCoupon = ({ seVisible }) => {
     for (const [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
     }
-    // return
+    return
     setLoader(true);
 
     try {
