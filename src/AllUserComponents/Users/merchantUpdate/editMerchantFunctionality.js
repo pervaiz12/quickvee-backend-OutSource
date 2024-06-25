@@ -94,7 +94,6 @@ export default function EditMerchantFunctionality() {
   };
 
   const handleBlur = async (name) => {
-    console.log("ddddd");
     if (name === "password" || name === "email") {
       if (getEditMerchant.newPassword !== "") {
         if (

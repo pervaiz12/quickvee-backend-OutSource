@@ -6,6 +6,7 @@ import { BASE_URL, UPDATE_PERMISSION } from "../../../Constants/Config";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 
 const defaultPermissions = {
   cashier: [
@@ -28,7 +29,7 @@ const defaultPermissions = {
   time_clock_only: ["13"],
 };
 
-const EditPermissionLogic = ({ employeedata }) => {
+const EditPermissionLogic = ({ employeedata, setVisible }) => {
   // console.log(employeedata)
   const { isNumber, validateRadioBtn } = Validation();
   const [submitmessage, setsubmitmessage] = useState("");
@@ -200,7 +201,9 @@ const EditPermissionLogic = ({ employeedata }) => {
 
         if (response.data.status === true) {
           // alert(response.data.message)
-          ToastifyAlert(response?.data?.message, "success");
+          ToastifyAlert("Updated Successfully", "success");
+          setVisible("EmployeeList");
+          Navigate("/store-settings/addemployee");
         } else {
           // alert(response.data.message)
           ToastifyAlert(response?.data?.message, "warn");

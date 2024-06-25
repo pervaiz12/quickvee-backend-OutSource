@@ -182,7 +182,7 @@ const AddEmployeeFormLogic = ({ employeeList }) => {
         });
         console.log(response.data);
         if (response.data.status === true) {
-          ToastifyAlert(response?.data?.message, "success");
+          ToastifyAlert("Added Successfully", "success");
           const latest_employee = response.data.inserted_data;
           dispatch(addToEmployeeList(latest_employee));
           setShowModal(false);

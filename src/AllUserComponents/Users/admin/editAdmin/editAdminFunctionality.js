@@ -214,6 +214,7 @@ const EditAdminFunctionality = (handleClick) => {
               phone: "",
               password: "",
             });
+            setExitEmail("");
             ToastifyAlert(result?.data?.message, "success");
             handleClick();
             // navigate("/users/admin");
