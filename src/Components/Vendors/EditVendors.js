@@ -13,7 +13,7 @@ import {
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { Link } from "react-router-dom";
-import { Grid } from "@mui/material";
+import { CircularProgress, Grid } from "@mui/material";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 // import Stack from '@mui/material/Stack';
@@ -40,6 +40,7 @@ const EditVendors = ({ setVisible }) => {
   const AllVendorsDataState = useSelector((state) => state.vendors);
   const vendorId = searchParams.get("vendorId");
   const [states, setStates] = useState([]);
+  const [loader, setLoader] = useState(false);
   const {
     LoginGetDashBoardRecordJson,
     LoginAllStore,
@@ -54,11 +55,48 @@ const EditVendors = ({ setVisible }) => {
 
   const [vendorData, setVendorData] = useState(vendorFormValues);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-  console.log("vendorFormValues.name.length,", vendorData);
+
+  const validate = () => {
+    const errors = [];
+    let isValid = true;
+
+    const itemErrors = {};
+    if (!vendorData.name) {
+      itemErrors.name = "Please enter a vendor name";
+      isValid = false;
+    }
+    if (!/\S+@\S+\.\S+/.test(vendorData.email)) {
+      itemErrors.email = "Invalid email address";
+      isValid = false;
+    }
+    if (!/^\d{10}$/.test(vendorData.phone)) {
+      itemErrors.phone = "Phone number must be 10 digits";
+      isValid = false;
+    }
+    if (!vendorData.full_address) {
+      itemErrors.full_address = "Please enter a vendor address";
+      isValid = false;
+    }
+    if (!vendorData.city) {
+      itemErrors.city = "Please enter a vendor city";
+      isValid = false;
+    }
+    if (!/^\d{5}$/.test(vendorData.zip_code)) {
+      itemErrors.zip_code = "ZIP code must be 5 digits";
+      isValid = false;
+    }
+    if (!vendorData.state) {
+      itemErrors.state = "Please select state";
+      isValid = false;
+    }
+    setErrorMessage(itemErrors);
+    return isValid;
+  };
+
   const handleOnChange = (event) => {
     const { name, value } = event.target;
     let errorMsg = "";
-    console.log("vendorFormValues.name.length,", vendorData.name);
+
     switch (name) {
       case "name":
         if (value.length <= 0) {
@@ -87,12 +125,12 @@ const EditVendors = ({ setVisible }) => {
         break;
       case "city":
         if (value.length <= 0) {
-          errorMsg = "Please enter a vendor address";
+          errorMsg = "Please enter a vendor city";
         }
         break;
       case "state":
-        if (vendorFormValues.state === "") {
-          errorMsg = "Please enter a vendor address";
+        if (vendorData.state === "") {
+          errorMsg = "Please select state";
         }
         break;
       default:
@@ -181,47 +219,55 @@ const EditVendors = ({ setVisible }) => {
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
-
-    let packet = {
-      ...vendorData,
-      ...userTypeData,
-      // token_id: userTypeData?.token_id,
-      // login_type: userTypeData?.login_type,
-    };
-    const { token, ...newData } = packet;
-    try {
-      const response = await axios.post(
-        BASE_URL + UPDATE_VENDOR_DATA,
-        // updatedData,
-        newData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      if (
-        response.data.status === "false" &&
-        response.data.msg === "Name already exist."
-      ) {
-        ToastifyAlert(
-          "Name already exists. Please choose a different name.",
-          "error"
+    if (validate()) {
+      let packet = {
+        ...vendorData,
+        ...userTypeData,
+        // token_id: userTypeData?.token_id,
+        // login_type: userTypeData?.login_type,
+      };
+      const { token, ...newData } = packet;
+      try {
+        setLoader(true);
+        const response = await axios.post(
+          BASE_URL + UPDATE_VENDOR_DATA,
+          // updatedData,
+          newData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
-        setErrorMessage("Name already exists. Please choose a different name.");
-      } else {
-        setErrorMessage("");
-
-        Navigate(-1);
+  
+        if (
+          response.data.status === "false" &&
+          response.data.msg === "Name already exist."
+         
+        ) {
+          ToastifyAlert(
+            "Name already exists. Please choose a different name.",
+            "error"
+          );
+          setErrorMessage("Name already exists. Please choose a different name.");
+          setLoader(false)
+        } else {
+          setErrorMessage("");
+  
+          Navigate(-1);
+          
+        }
+        ToastifyAlert("Updated Successfully.", "success");
+        setLoader(false)
+      } catch (error) {
+        console.error("Error updating data:", error);
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+        setLoader(false)
       }
-      ToastifyAlert("Updated Successfully.", "success");
-    } catch (error) {
-      console.error("Error updating data:", error);
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
     }
+    
   };
 
   const handleSetVendorStateChange = (newState) => {
@@ -273,7 +319,7 @@ const EditVendors = ({ setVisible }) => {
                       name={"name"}
                       value={vendorData.name}
                       onChangeFun={handleOnChange}
-                      required={"required"}
+                      // required={"required"}
                     />
                     {errorMessage.name && (
                       <span className="error">{errorMessage.name}</span>
@@ -288,7 +334,7 @@ const EditVendors = ({ setVisible }) => {
                       name={"email"}
                       value={vendorData.email}
                       onChangeFun={handleOnChange}
-                      required={"required"}
+                      // required={"required"}
                     />
                     {errorMessage.email && (
                       <span className="error">{errorMessage.email}</span>
@@ -339,7 +385,7 @@ const EditVendors = ({ setVisible }) => {
                       name={"city"}
                       value={vendorData.city}
                       onChangeFun={handleOnChange}
-                      required={"required"}
+                      // required={"required"}
                     />
                     {errorMessage.city && (
                       <span className="error">{errorMessage.city}</span>
@@ -386,8 +432,13 @@ const EditVendors = ({ setVisible }) => {
                   xs={12}
                   sx={{ marginTop: 3 }}
                 >
-                  <button type="submit" className="quic-btn quic-btn-save me-3">
-                    Save
+                  <button type="submit" className="quic-btn quic-btn-save me-3 w-44" disabled={loader}>
+                    {loader ?  <CircularProgress
+                      color={"inherit"}
+                      className=""
+                      width={15}
+                      size={15}
+                    /> : "Update"}  
                   </button>
                   <button
                     // onClick={() => setVisible("VendorsDetail")}

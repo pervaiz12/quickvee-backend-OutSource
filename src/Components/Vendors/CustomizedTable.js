@@ -12,6 +12,9 @@ import { priceFormate } from "../../hooks/priceFormate";
 
 import EditTransactionAmountRemark from "./EditTransactionAmountRemark";
 import { useState } from "react";
+import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
+import sortIcon from "../../Assests/Category/SortingW.svg";
+import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -57,83 +60,136 @@ export default function CustomizedTable({
   handleGetReport,
   total,
   setTotal,
+  loading,
+  setVendorDetails,
 }) {
   const totalFormatted = total && total.toFixed(2);
-  console.log(totalFormatted);
-  console.log("Customized", dateRangeState);
+  const [sortOrder, setSortOrder] = useState("asc");
+  const sortByItemName = (type, name) => {
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      vendorDetails,
+      type,
+      name,
+      sortOrder
+    );
+    setVendorDetails(sortedItems);
+    setSortOrder(newOrder);
+  };
 
   return (
-    <TableContainer component={Paper}>
-      <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            {tableRowData.map((row) => (
-              <StyledTableCell>{row}</StyledTableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {vendorDetails && vendorDetails.length > 0 ? (
-            vendorDetails.map((vendor, index) => {
-              return (
-                <>
-                  <StyledTableRow key={index}>
-                    <StyledTableCell>{index + 1}</StyledTableCell>
+    <>
+      {loading ? (
+        <>
+          <SkeletonTable columns={tableRowData} />
+        </>
+      ) : (
+        <>
+          <TableContainer component={Paper}>
+            <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  {/* {tableRowData.map((row) => (
+                    <StyledTableCell>{row}</StyledTableCell>
+                  ))} */}
+                  <StyledTableCell>Sr No.</StyledTableCell>
+                  <StyledTableCell>
+                    <button
+                      className="flex items-center"
+                      onClick={() => sortByItemName("num", "pay_amount")}
+                    >
+                      <p className="whitespace-nowrap">Amount</p>
+                      <img src={sortIcon} alt="" className="pl-1" />
+                    </button>
+                  </StyledTableCell>
+                  <StyledTableCell>
+                  <button
+                      className="flex items-center"
+                      onClick={() => sortByItemName("date", "updated_datetime")}
+                    >
+                      <p className="whitespace-nowrap">Transaction Date</p>
+                      <img src={sortIcon} alt="" className="pl-1" />
+                    </button>
+                  </StyledTableCell>
+                  <StyledTableCell>
+                  <button
+                      className="flex items-center"
+                      onClick={() => sortByItemName("str", "remark")}
+                    >
+                      <p className="whitespace-nowrap">Remark</p>
+                      <img src={sortIcon} alt="" className="pl-1" />
+                    </button>
+                  </StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {vendorDetails && vendorDetails.length > 0 ? (
+                  vendorDetails.map((vendor, index) => {
+                    return (
+                      <>
+                        <StyledTableRow key={index}>
+                          <StyledTableCell>{index + 1}</StyledTableCell>
+                          <StyledTableCell>
+                            {vendor.pay_amount
+                              ? `$${priceFormate(vendor.pay_amount)}`
+                              : "-"}
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            {formatDateTime(vendor.updated_datetime)}
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            {vendor.remark || "-"}
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <EditTransactionAmountRemark
+                              vendor={vendor}
+                              dateRangeState={dateRangeState}
+                              handleGetReport={handleGetReport}
+                              setTotal={setTotal}
+                            />
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <img
+                              src={DeleteIcon}
+                              onClick={() => {
+                                handleDeleteClick(vendor.id, vendor.vendor_id);
+                              }}
+                              className="cursor-pointer"
+                            />
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      </>
+                    );
+                  })
+                ) : (
+                  <div className="p-3">
+                    <p>No record found.</p>
+                  </div>
+                )}
+                {vendorDetails.length > 0 ? (
+                  <StyledTableRow>
                     <StyledTableCell>
-                      {vendor.pay_amount
-                        ? `$${priceFormate(vendor.pay_amount)}`
-                        : "-"}
+                      <p className="text-[#0A64F9]">total</p>
                     </StyledTableCell>
                     <StyledTableCell>
-                      {formatDateTime(vendor.updated_datetime)}
+                      <p className="text-[#0A64F9]">
+                        ${priceFormate(totalFormatted)}
+                      </p>
                     </StyledTableCell>
-                    <StyledTableCell>{vendor.remark || "-"}</StyledTableCell>
-                    <StyledTableCell>
-                      <EditTransactionAmountRemark
-                        vendor={vendor}
-                        dateRangeState={dateRangeState}
-                        handleGetReport={handleGetReport}
-                        setTotal={setTotal}
-                      />
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      <img
-                        src={DeleteIcon}
-                        onClick={() => {
-                          handleDeleteClick(vendor.id, vendor.vendor_id);
-                        }}
-                        className="cursor-pointer"
-                      />
-                    </StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
                   </StyledTableRow>
-                </>
-              );
-            })
-          ) : (
-            <div className="p-3">
-              <p>No record found.</p>
-            </div>
-          )}
-          {vendorDetails.length > 0 ? (
-            <StyledTableRow>
-              <StyledTableCell>
-                <p className="text-[#0A64F9]">total</p>
-              </StyledTableCell>
-              <StyledTableCell>
-                <p className="text-[#0A64F9]">
-                  ${priceFormate(totalFormatted)}
-                </p>
-              </StyledTableCell>
-              <StyledTableCell></StyledTableCell>
-              <StyledTableCell></StyledTableCell>
-              <StyledTableCell></StyledTableCell>
-              <StyledTableCell></StyledTableCell>
-            </StyledTableRow>
-          ) : (
-            ""
-          )}
-        </TableBody>
-      </StyledTable>
-    </TableContainer>
+                ) : (
+                  ""
+                )}
+              </TableBody>
+            </StyledTable>
+          </TableContainer>
+        </>
+      )}
+    </>
   );
 }
