@@ -12,6 +12,7 @@ export default function Add_Admin({ setVisible }) {
     handleSubmit,
     handleBlur,
     handleKeyPress,
+    keyEnter,
     loader,
   } = Add_adminFunctionality({ setVisible });
   const handleClick = () => {
@@ -44,6 +45,7 @@ export default function Add_Admin({ setVisible }) {
                       name="owner_name"
                       value={addAdminData.owner_name}
                       onChange={handleChange}
+                      onKeyDown={keyEnter}
                     />
                     {addAdminData.errors.owner_name && (
                       <span className="error">
@@ -68,6 +70,7 @@ export default function Add_Admin({ setVisible }) {
                       autoComplete="off"
                       readOnly
                       onFocus={(e) => e.target.removeAttribute("readonly")}
+                      onKeyDown={keyEnter}
                     />
                     {addAdminData.errors.email && (
                       <span className="error">{addAdminData.errors.email}</span>
@@ -88,6 +91,7 @@ export default function Add_Admin({ setVisible }) {
                       name="password"
                       value={addAdminData.password}
                       onChange={handleChange}
+                      onKeyDown={keyEnter}
                     />
                     {jsxData(addAdminData.password)}
                     {addAdminData.errors.password && (
@@ -111,6 +115,7 @@ export default function Add_Admin({ setVisible }) {
                       value={addAdminData.phone}
                       maxLength={10}
                       onKeyPress={handleKeyPress}
+                      onKeyDown={keyEnter}
                     />
                     <label className="error">{addAdminData.errors.phone}</label>
                   </div>

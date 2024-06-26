@@ -501,6 +501,29 @@ const MerchantFunction = () => {
     }
   }
 
+  // ==============
+  const keyEnter = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      setStore((prev) => ({
+        ...prev,
+        [event.target.name]: event.target.value,
+      }));
+      if (loader == false) {
+        handleSubmitMerchant(event);
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", keyEnter);
+    return () => {
+      document.removeEventListener("keydown", keyEnter);
+    };
+  }, [store]);
+
+  // ==============
+
   const handleSubmitMerchant = async (e) => {
     e.preventDefault();
     console.log("hello rinkesh");
@@ -653,6 +676,7 @@ const MerchantFunction = () => {
     handleBlur,
     userRadioData,
     loader,
+    keyEnter,
   };
 };
 export default MerchantFunction;
