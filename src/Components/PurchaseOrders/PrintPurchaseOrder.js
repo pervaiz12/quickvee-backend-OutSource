@@ -53,7 +53,6 @@ const PrintPurchaseOrder = () => {
   }, [location]);
 
   const purchaseOrderDetails = useMemo(() => {
-    // console.log("po data: ", location?.state?.data);
     return location?.state?.data;
   }, [location]);
 
@@ -67,7 +66,7 @@ const PrintPurchaseOrder = () => {
             0
           )
         : 0;
-    return sum;
+    return type === "required_qty" ? sum : sum.toFixed(2);
   };
 
   return (

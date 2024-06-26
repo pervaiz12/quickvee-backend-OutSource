@@ -166,12 +166,20 @@ const PurchaseTable = ({ seVisible }) => {
                         </TableRow>
                       </TableHead>
                       <TableBody>
+                        {/* {console.log(
+                          "purchaseData: ",
+                          AllpurchaseDataState.purchaseData
+                        )} */}
                         {AllpurchaseDataState.purchaseData.map(
                           (purchaseData, index) => (
                             <StyledTableRow key={index}>
                               <StyledTableCell align="center">
                                 <Link
-                                  to={`/purchase-data/${purchaseData.id}`}
+                                  to={
+                                    purchaseData.is_draft === "1"
+                                      ? `/purchase-data/edit/${purchaseData.id}`
+                                      : `/purchase-data/${purchaseData.id}`
+                                  }
                                   className={"text-[#0A64F9]"}
                                 >
                                   {purchaseData.po_number}
