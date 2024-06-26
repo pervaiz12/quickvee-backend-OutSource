@@ -281,7 +281,7 @@ const MerchantFunction = () => {
       if (name === "phone") {
         const numericValue = value.replace(/[^0-9]/g, "");
         if (numericValue == "") {
-          updatedErrors[name] = "";
+          updatedErrors[name] = "Phone is required";
         } else if (numericValue.length !== 10) {
           updatedErrors[name] = "Phone number must be 10 digits";
         } else {
@@ -382,38 +382,40 @@ const MerchantFunction = () => {
       if (store.password === "") {
         errors.password = "Password is required";
         error = true;
+      } else {
+        try {
+          // console.log('heloo password')
+          if (errors.password === "" && errors.email == "") {
+            setLoader(true);
+            const emailValid = await passwordValidate(
+              store.email,
+              store.password
+            );
+            if (emailValid == true) {
+              setLoader(false);
+              errors.password = "Password already exists";
+              error = true;
+            } else {
+              setLoader(false);
+              errors.password = "";
+              error = false;
+            }
+          }
+        } catch (error) {
+          console.error("Error validating email:", error);
+          // error = true; // You should handle this error case accordingly
+        }
       }
-      //  else {
-      //   try {
-      //     // console.log('heloo password')
-      //     if (errors.password === "" && errors.email == "") {
-      //       const emailValid = await passwordValidate(
-      //         store.email,
-      //         store.password
-      //       );
-      //       if (emailValid == true) {
-      //         errors.password = "Password already exists";
-      //         error = true;
-      //       } else {
-      //         errors.password = "";
-      //         error = false;
-      //       }
-      //     }
-      //   } catch (error) {
-      //     console.error("Error validating email:", error);
-      //     error = true; // You should handle this error case accordingly
-      //   }
-      // }
 
       if (store.state === "") {
         errors.state = "Please select the State";
         error = true;
       }
 
-      // if (store.phone === "") {
-      //   errors.phone = "Please fill the Phone";
-      //   error = true;
-      // }
+      if (store.phone === "") {
+        errors.phone = "Phone is required";
+        error = true;
+      }
     }
 
     setRadioError(errorMessage);
@@ -448,7 +450,6 @@ const MerchantFunction = () => {
   };
   // ------------------------
   const handleBlur = async (name) => {
-    console.log("HandleBlur", name);
     if (name === "password" || name === "email") {
       if (store.errors.password == "" && store.errors.email == "") {
         let result = await passwordValidate(store.email, store.password);
@@ -502,16 +503,14 @@ const MerchantFunction = () => {
 
   const handleSubmitMerchant = async (e) => {
     e.preventDefault();
+    console.log("hello rinkesh");
     // let validateMerchant = validateData();
     const currentValidate = validateFormNew(store.errors);
     const isValidate = await validate();
-
-    // && validateMerchant
     try {
       if (isValidate) {
         if (currentValidate) {
           const { token, ...newData } = userTypeData;
-
           const data = {
             login_pin: merchantStore.pin,
             admin: adminId,
@@ -526,7 +525,6 @@ const MerchantFunction = () => {
             ...newData,
           };
           setLoader(true);
-          // ${token}
           await axios
             .post(BASE_URL + ADD_MERCHAN_EMPLOYEE, data, {
               headers: {

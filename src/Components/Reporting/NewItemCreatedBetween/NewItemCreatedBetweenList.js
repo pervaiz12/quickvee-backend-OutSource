@@ -119,11 +119,11 @@ const NewItemCreatedBetweenList = (props) => {
     const itemsWithParsedDates = allNewItemData.map((item) => {
       const dateString = item.created_on;
       const [day, month, year] = dateString.split("-").map(Number);
-      const date =`${year},${month},${day}`;
-      console.log("date in map ", date)
-      return { ...item, created_on:date };
+      const date = `${year},${month},${day}`;
+      console.log("date in map ", date);
+      return { ...item, created_on: date };
     });
-    console.log("itemsWithParsedDates",itemsWithParsedDates)
+    console.log("itemsWithParsedDates", itemsWithParsedDates);
     const { sortedItems, newOrder } = SortTableItemsHelperFun(
       itemsWithParsedDates,
       type,
@@ -131,15 +131,16 @@ const NewItemCreatedBetweenList = (props) => {
       sortOrder
     );
     console.log("sortOrder", sortedItems);
-    setallNewItemData(sortedItems.map((item) => {
-      
-      const dateString = item.created_on;
-      console.log("item", dateString)
-      const [year,month,day ] = dateString.split(",").map(Number);
-      const customdate =`${day}-${month}-${year}`;
-      console.log("date in map ", customdate) 
-      return { ...item, created_on:customdate };
-    }));
+    setallNewItemData(
+      sortedItems.map((item) => {
+        const dateString = item.created_on;
+        console.log("item", dateString);
+        const [year, month, day] = dateString.split(",").map(Number);
+        const customdate = `${day}-${month}-${year}`;
+        console.log("date in map ", customdate);
+        return { ...item, created_on: customdate };
+      })
+    );
     setSortOrder(newOrder);
   };
 
@@ -158,11 +159,36 @@ const NewItemCreatedBetweenList = (props) => {
                     <p className="whitespace-nowrap">Date</p>
                     <img src={sortIcon} alt="" className="pl-1" />
                   </button>
-                  {/* Date */}
                 </StyledTableCell>
-                <StyledTableCell>Category</StyledTableCell>
-                <StyledTableCell>Item Name</StyledTableCell>
-                <StyledTableCell>Price</StyledTableCell>
+                <StyledTableCell>
+                  <button
+                    className="flex items-center"
+                    onClick={() => sortByItemName("str", "category")}
+                  >
+                    <p className="whitespace-nowrap">Category</p>
+                    <img src={sortIcon} alt="" className="pl-1" />
+                  </button>
+                </StyledTableCell>
+                <StyledTableCell>
+                <button
+                    className="flex items-center"
+                    onClick={() => sortByItemName("str", "item_name")}
+                  >
+                    <p className="whitespace-nowrap">Item Name</p>
+                    <img src={sortIcon} alt="" className="pl-1" />
+                  </button>
+                  
+                  </StyledTableCell>
+                <StyledTableCell>
+                <button
+                    className="flex items-center"
+                    onClick={() => sortByItemName("num", "price")}
+                  >
+                    <p className="whitespace-nowrap">Price</p>
+                    <img src={sortIcon} alt="" className="pl-1" />
+                  </button>
+                  
+                  </StyledTableCell>
               </TableHead>
               <TableBody>
                 {allNewItemData && allNewItemData.length >= 1 ? (
