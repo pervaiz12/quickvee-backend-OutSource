@@ -23,6 +23,7 @@ import Pagination from "../../AllUserComponents/Users/UnverifeDetails/Pagination
 import InputTextSearch from "../../reuseableComponents/InputTextSearch";
 import useDebounce from "../../hooks/useDebouncs";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import PasswordShow from "../../Common/passwordShow";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -71,6 +72,7 @@ const ProductSalesReport = () => {
   const [searchRecord, setSearchRecord] = useState("");
   const [storename, setStorename] = useState();
   const [submitmessage, setsubmitmessage] = useState("");
+  const {getUnAutherisedTokenMessage} = PasswordShow();
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const debouncedValue = useDebounce(searchRecord);
@@ -95,6 +97,7 @@ const ProductSalesReport = () => {
       })
       .catch((err) => {
         throw new Error(err?.payload?.message);
+        getUnAutherisedTokenMessage();
       })
       .finally(() => {
         setLoading(false);

@@ -23,6 +23,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import { memo } from "react";
+import PasswordShow from "../../Common/passwordShow";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -66,15 +68,16 @@ const ProductTable = ({
     (state) => state.productsListData
   );
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
+            
+  const {getUnAutherisedTokenMessage} = PasswordShow();
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   const [productList, setproductsList] = useState([]);
-  console.log('productList', productList);
 
   const dispatch = useDispatch();
   useEffect(() => {
     if (ProductsListDataState?.productsData?.length) {
-      setproductsList(ProductsListDataState?.productsData);
+      setproductsList([...new Set(ProductsListDataState?.productsData)]);
     } else {
       setproductsList([]);
     }
@@ -206,6 +209,7 @@ const ProductTable = ({
       })
       .catch(() => {
         ToastifyAlert("Error!", "error");
+    getUnAutherisedTokenMessage();
       });
   };
   return (
@@ -428,4 +432,4 @@ const ProductTable = ({
   );
 };
 
-export default ProductTable;
+export default memo(ProductTable);
