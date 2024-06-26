@@ -609,11 +609,11 @@ const AddNewStocktake = ({
       e.preventDefault();
     }
   };
-  console.log("stocktake_items", stocktake_items);
-  console.log(
-    "singleStocktakeState?.stocktake_item",
-    singleStocktakeState?.stocktake_item
-  );
+  // console.log("stocktake_items", stocktake_items);
+  // console.log(
+  //   "singleStocktakeState?.stocktake_item",
+  //   singleStocktakeState?.stocktake_item
+  // );
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -702,6 +702,7 @@ const AddNewStocktake = ({
                                 handleNewQtyChange(e, index);
                               }}
                               onKeyPressFun={handleKeyPress}
+                              autoComplete={false}
                             />
                             {errorMessages[index]?.new_qty && (
                               <div className="error">

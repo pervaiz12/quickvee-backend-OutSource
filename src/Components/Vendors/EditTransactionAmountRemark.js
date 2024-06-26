@@ -3,7 +3,7 @@ import { useState } from "react";
 import Modal from "@mui/material/Modal";
 import CrossIcon from "../../Assests/Dashboard/cross.svg";
 import EditIcon from "../../Assests/Category/editIcon.svg";
-import { Grid } from "@mui/material";
+import { CircularProgress, Grid } from "@mui/material";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import CurrencyInputHelperFun from "../../helperFunctions/CurrencyInputHelperFun";
 import { BASE_URL, VENDOR_UPDATE_DETAILS } from "../../Constants/Config";
@@ -23,14 +23,12 @@ export default function EditTransactionAmountRemark({
   vendor,
   dateRangeState,
   handleGetReport,
-
 }) {
- 
   const [open, setOpen] = useState(false);
   const [vendorData, setVendorData] = useState(vendor);
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
-
+  const [loading, setLoading] = useState(false);
   const handleClick = () => {
     console.log("sfdsadffds");
     handleOpen(true);
@@ -51,27 +49,28 @@ export default function EditTransactionAmountRemark({
     console.log("update");
     e.preventDefault();
     function formatDate(date) {
-        const options = { 
-          month: 'short', 
-          day: 'numeric', 
-          year: 'numeric', 
-          hour: 'numeric', 
-          minute: 'numeric', 
-          hour12: true 
-        };
-        return date.toLocaleString('en-US', options);
-      }
+      const options = {
+        month: "short",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+        hour12: true,
+      };
+      return date.toLocaleString("en-US", options);
+    }
     const data = {
       merchant_id: merchant_id,
       det_id: vendorData.id,
       amount: vendorData.pay_amount,
       remark: vendorData.remark,
       vendor_id: vendorData.vendor_id,
-    //   start: formatDate(new Date()),
-    //   end: formatDate(new Date()),
+      //   start: formatDate(new Date()),
+      //   end: formatDate(new Date()),
     };
-    
+
     try {
+      setLoading(true);
       const { token, ...otherUserData } = userTypeData;
       const response = await axios.post(
         BASE_URL + VENDOR_UPDATE_DETAILS,
@@ -84,16 +83,19 @@ export default function EditTransactionAmountRemark({
         }
       );
       if (response.data.status === "true") {
+        setLoading(false);
         console.log(response.data);
- 
-        handleGetReport(dateRangeState)
+
+        handleGetReport(dateRangeState);
         handleClose();
         ToastifyAlert("Upadated successfully", "success");
       } else {
         ToastifyAlert("Something wrong", "error");
+        setLoading(false);
       }
     } catch (error) {
       console.error("Error updating vendor:", error);
+      setLoading(false);
     }
   };
 
@@ -176,9 +178,19 @@ export default function EditTransactionAmountRemark({
                   onClick={(e) => {
                     handleUpdate(e);
                   }}
-                  className="quic-btn quic-btn-ok"
+                  className="quic-btn quic-btn-save w-44"
+                  disabled={loading}
                 >
-                  Update
+                  {loading ? (
+                    <CircularProgress
+                      color={"inherit"}
+                      className=""
+                      width={15}
+                      size={15}
+                    />
+                  ) : (
+                    "Update"
+                  )}
                 </button>
                 <button onClick={handleClose} class="quic-btn quic-btn-cancle">
                   Cancel
