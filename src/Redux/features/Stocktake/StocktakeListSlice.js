@@ -70,9 +70,9 @@ export const fetchSingleStocktakeData = createAsyncThunk(
       merchant_id: merchant_id,
       stocktake_id: id,
     };
-
+    const { token, ...otherUserData } = userTypeData;
     try {
-      const { token, ...otherUserData } = userTypeData;
+      
       const response = await axios.post(
         `${BASE_URL}Stocktake_react_api/get_stocktake_details_by_id`,
         { ...singleStocktakeData, ...otherUserData },
@@ -88,12 +88,20 @@ export const fetchSingleStocktakeData = createAsyncThunk(
         const fetchProductDataPromises =
           response.data.result.stocktake_item.map(async (item) => {
             try {
-              const formData = new FormData();
-              formData.append("merchant_id", merchant_id);
-              formData.append("id", item.product_id);
+              const formData = {
+                merchant_id: merchant_id,
+                id:item.product_id,
+                ...otherUserData,
+              }
+              
               const productResponse = await axios.post(
                 `${BASE_URL}Product_api_react/get_productdata_ById`,
-                formData
+                formData, {
+                  headers: {
+                    "Content-Type": "multipart/form-data",
+                    Authorization: `Bearer ${token}`,
+                  },
+                }
               );
 
               if (productResponse.data.status) {

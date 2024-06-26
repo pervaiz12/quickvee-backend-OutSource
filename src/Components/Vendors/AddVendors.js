@@ -14,11 +14,12 @@ import CreatableSelect from "react-select/creatable";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import PasswordShow from "../../Common/passwordShow";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 const AddVendors = ({ setVisible }) => {
+  const navigate = useNavigate();
   const [allvendors, setallvendors] = useState([]);
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
 
   const [states, setStates] = useState([]);
   const {
@@ -46,7 +47,6 @@ const AddVendors = ({ setVisible }) => {
     };
     dispatch(fetchVendorsListData(data));
   }, []);
-
 
   const [vendor, setVendor] = useState({
     vendor_name: "",
@@ -164,176 +164,180 @@ const AddVendors = ({ setVisible }) => {
   };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try{
-    const state = value;
-    // Assuming `vendor` is an object that you want to send in the request
-    let updatedVendor = { ...vendor, ...userTypeData };
-    const { token, ...newData } = updatedVendor;
+    try {
+      const state = value;
+      // Assuming `vendor` is an object that you want to send in the request
+      let updatedVendor = { ...vendor, ...userTypeData };
+      const { token, ...newData } = updatedVendor;
 
-    const response = await axios.post(BASE_URL + ADD_VENDOR_DATA, newData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
-    });
+      const response = await axios.post(BASE_URL + ADD_VENDOR_DATA, newData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
-    if (response) {
-      setVisible("VendorsDetail");
-      ToastifyAlert("Added Successfully", "success");
-      // alert(response.data.message);
-    } else {
-      console.error(response);
-      // alert(response.data.message);
+      if (response) {
+        // setVisible("VendorsDetail");
+        navigate("/vendors");
+        ToastifyAlert("Added Successfully", "success");
+        // alert(response.data.message);
+      } else {
+        console.error(response);
+        // alert(response.data.message);
+      }
+    } catch (error) {
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
     }
-  }catch(error){
-    handleCoockieExpire()
-    getUnAutherisedTokenMessage()      
-  }
   };
 
   return (
     <>
-    <div className="mt-6">
-      <Grid container className="box">
-        <Grid item xs={12} className="q-add-categories-section">
-          <Grid container>
-            <Grid item xs={12}>
-              <div className="q-add-categories-section-header">
-              <Link to={`/vendors`}>
-                {/* <span onClick={() => setVisible("VendorsDetail")}> */}
-                  <img src={AddNewVendors} alt="Add-New-Vendors" />
-                  <span>Add New Vendors</span>
-                {/* </span> */}
-                </Link>
-              </div>
-            </Grid>
-          </Grid>
-          <Grid container sx={{ padding: 3 }}>
-            <Grid item xs={12}>
-              <form onSubmit={handleSubmit}>
-                <Grid container spacing={2}>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <div className=" qvrowmain my-1">
-                      <label htmlFor="vendorName">Vendor Name</label>
-                    </div>
-                    <CreatableSelect
-                      isClearable
-                      onChange={handleAutocompleteChange}
-                      options={allvendors.map((option, index) => {
-                        return {
-                          value: option.name,
-                          label: option?.name,
-                        };
-                      })}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <div className=" qvrowmain my-1">
-                      <label htmlFor="email">Email Address</label>
-                    </div>
-                    <BasicTextFields
-                      type={"email"}
-                      name="email"
-                      value={vendor.email}
-                      placeholder="Email Address"
-                      onChangeFun={inputChange}
-                      required={"required"}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <div className="qvrowmain my-1">
-                      <label htmlFor="phone">Phone Number</label>
-                    </div>
-                    <BasicTextFields
-                      type={"text"}
-                      placeholder="Phone Number"
-                      required={"required"}
-                      name={"phone"}
-                      onChangeFun={inputChange}
-                      value={vendor.phone}
-                      maxLength={10}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid container sx={{ marginTop: 0 }} spacing={2}>
-                  <Grid item xs={12}>
-                    <div className=" qvrowmain my-1">
-                      <label htmlFor="address">Address</label>
-                    </div>
-                    <BasicTextFields
-                      type={"text"}
-                      name={"full_address"}
-                      placeholder="Address Line 1"
-                      onChangeFun={inputChange}
-                      value={vendor.full_address}
-                    />
-                  </Grid>
-                </Grid>
-                <Grid container sx={{ marginTop: 0 }} spacing={2}>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <div className="qvrowmain my-1">
-                      <label htmlFor="city">City</label>
-                    </div>
-                    <BasicTextFields
-                      type={"text"}
-                      name={"city"}
-                      value={vendor.city}
-                      placeholder="City"
-                      onChangeFun={inputChange}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <div className="my-1 qvrowmain">
-                      <label htmlFor="zip">Zip</label>
-                    </div>
-                    <BasicTextFields
-                      type={"text"}
-                      name="zip_code"
-                      value={vendor.zip_code}
-                      placeholder="Zip"
-                      onChangeFun={inputChange}
-                      maxLength={5}
-                    />
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <div className="my-1 qvrowmain">
-                      <label htmlFor="State">State</label>
-                    </div>
-                    <SelectDropDown
-                      listItem={states.map((item) => ({ title: item }))}
-                      title={"title"}
-                      selectedOption={vendor.state}
-                      onClickHandler={handleSetVendorStateChange}
-                      name={"state"}
-                    />
-                  </Grid>
-                </Grid>
-
-                <Grid
-                  container
-                  direction="row"
-                  justifyContent="flex-end"
-                  alignItems="center"
-                  xs={12}
-                  sx={{ marginTop: 3 }}
-                >
-                  <button type="submit" className="quic-btn quic-btn-save me-3">
-                    Save
-                  </button>
+      <div className="mt-6">
+        <Grid container className="box">
+          <Grid item xs={12} className="q-add-categories-section">
+            <Grid container>
+              <Grid item xs={12}>
+                <div className="q-add-categories-section-header">
                   <Link to={`/vendors`}>
-                  <button
-                    // onClick={() => setVisible("VendorsDetail")}
-                    className="quic-btn quic-btn-cancle"
-                  >
-                    Cancel
-                  </button>
+                    {/* <span onClick={() => setVisible("VendorsDetail")}> */}
+                    <img src={AddNewVendors} alt="Add-New-Vendors" />
+                    <span>Add New Vendors</span>
+                    {/* </span> */}
                   </Link>
-                </Grid>
-              </form>
+                </div>
+              </Grid>
+            </Grid>
+            <Grid container sx={{ padding: 3 }}>
+              <Grid item xs={12}>
+                <form onSubmit={handleSubmit}>
+                  <Grid container spacing={2}>
+                    <Grid item xs={12} sm={6} md={4}>
+                      <div className=" qvrowmain my-1">
+                        <label htmlFor="vendorName">Vendor Name</label>
+                      </div>
+                      <CreatableSelect
+                        isClearable
+                        onChange={handleAutocompleteChange}
+                        options={allvendors.map((option, index) => {
+                          return {
+                            value: option.name,
+                            label: option?.name,
+                          };
+                        })}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                      <div className=" qvrowmain my-1">
+                        <label htmlFor="email">Email Address</label>
+                      </div>
+                      <BasicTextFields
+                        type={"email"}
+                        name="email"
+                        value={vendor.email}
+                        placeholder="Email Address"
+                        onChangeFun={inputChange}
+                        required={"required"}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                      <div className="qvrowmain my-1">
+                        <label htmlFor="phone">Phone Number</label>
+                      </div>
+                      <BasicTextFields
+                        type={"text"}
+                        placeholder="Phone Number"
+                        required={"required"}
+                        name={"phone"}
+                        onChangeFun={inputChange}
+                        value={vendor.phone}
+                        maxLength={10}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid container sx={{ marginTop: 0 }} spacing={2}>
+                    <Grid item xs={12}>
+                      <div className=" qvrowmain my-1">
+                        <label htmlFor="address">Address</label>
+                      </div>
+                      <BasicTextFields
+                        type={"text"}
+                        name={"full_address"}
+                        placeholder="Address Line 1"
+                        onChangeFun={inputChange}
+                        value={vendor.full_address}
+                      />
+                    </Grid>
+                  </Grid>
+                  <Grid container sx={{ marginTop: 0 }} spacing={2}>
+                    <Grid item xs={12} sm={6} md={4}>
+                      <div className="qvrowmain my-1">
+                        <label htmlFor="city">City</label>
+                      </div>
+                      <BasicTextFields
+                        type={"text"}
+                        name={"city"}
+                        value={vendor.city}
+                        placeholder="City"
+                        onChangeFun={inputChange}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                      <div className="my-1 qvrowmain">
+                        <label htmlFor="zip">Zip</label>
+                      </div>
+                      <BasicTextFields
+                        type={"text"}
+                        name="zip_code"
+                        value={vendor.zip_code}
+                        placeholder="Zip"
+                        onChangeFun={inputChange}
+                        maxLength={5}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                      <div className="my-1 qvrowmain">
+                        <label htmlFor="State">State</label>
+                      </div>
+                      <SelectDropDown
+                        listItem={states.map((item) => ({ title: item }))}
+                        title={"title"}
+                        selectedOption={vendor.state}
+                        onClickHandler={handleSetVendorStateChange}
+                        name={"state"}
+                      />
+                    </Grid>
+                  </Grid>
+
+                  <Grid
+                    container
+                    direction="row"
+                    justifyContent="flex-end"
+                    alignItems="center"
+                    xs={12}
+                    sx={{ marginTop: 3 }}
+                  >
+                    <button
+                      type="submit"
+                      className="quic-btn quic-btn-save me-3"
+                    >
+                      Save
+                    </button>
+                    <Link to={`/vendors`}>
+                      <button
+                        // onClick={() => setVisible("VendorsDetail")}
+                        className="quic-btn quic-btn-cancle"
+                      >
+                        Cancel
+                      </button>
+                    </Link>
+                  </Grid>
+                </form>
+              </Grid>
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
       </div>
       {/* <div className="box">
         <form onSubmit={handleSubmit}>

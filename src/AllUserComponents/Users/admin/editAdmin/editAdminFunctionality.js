@@ -154,7 +154,7 @@ const EditAdminFunctionality = (handleClick) => {
       e.preventDefault();
     }
   };
-  const validateForm = () => {
+  const validateForm = async () => {
     let error = false;
     let updatedErrors = { ...errors };
     if (editData.owner_name == "") {
@@ -164,7 +164,33 @@ const EditAdminFunctionality = (handleClick) => {
     if (editData.email == "") {
       updatedErrors.email = "Email is required";
       error = true;
+    } else {
+      try {
+        if (errors.email == "") {
+          setLoader(true);
+          const emailValid = await emailValidate(editData.email);
+          if (emailValid == true) {
+            setLoader(false);
+            if (ExitEmail !== editData.email) {
+              updatedErrors.email = "Email already exists";
+              error = false;
+            } else {
+              updatedErrors.email = "";
+              error = true;
+            }
+          } else {
+            updatedErrors.email = "";
+            error = true;
+          }
+        } else {
+          error = false;
+        }
+      } catch (error) {
+        console.error("Error validating email:", error);
+        error = false;
+      }
     }
+
     // if (editData.phone == "") {
     //   updatedErrors.phone = "Please fill the phone field";
     //   error = true;
@@ -194,8 +220,8 @@ const EditAdminFunctionality = (handleClick) => {
       ...newData,
     };
     let validate = Object.values(errors).filter((error) => error !== "").length;
-    const validateBlank = validateForm();
-    if (validateBlank) {
+    const validateBlank = await validateForm();
+    if (!validateBlank) {
       if (validate == 0) {
         setLoader(true);
         await axios
@@ -216,8 +242,8 @@ const EditAdminFunctionality = (handleClick) => {
             });
             setExitEmail("");
             ToastifyAlert(result?.data?.message, "success");
-            handleClick();
-            // navigate("/users/admin");
+            // handleClick();
+            navigate("/users/admin");
           });
       }
     }

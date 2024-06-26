@@ -84,8 +84,10 @@ export default function Add_adminFunctionality({ setVisible }) {
   const handleBlur = async (name) => {
     if (name === "email") {
       if (addAdminData.errors.email == "") {
+        setLoader(true);
         let result = await emailValidate(addAdminData.email);
         if (result == true) {
+          setLoader(false);
           setAddAdminData((prev) => ({
             ...prev,
             errors: {
@@ -94,6 +96,7 @@ export default function Add_adminFunctionality({ setVisible }) {
             },
           }));
         } else {
+          setLoader(false);
           setAddAdminData((prev) => ({
             ...prev,
             errors: {
@@ -152,28 +155,29 @@ export default function Add_adminFunctionality({ setVisible }) {
     if (addAdminData.email === "") {
       errors.email = "Email is required";
       formIsValid = false;
-    }
-    // else {
-    //   try {
-    //     if (errors.email == "") {
-    //       setLoader(true)
-    //       const emailValid = await emailValidate(addAdminData.email);
+    } else {
+      try {
+        if (errors.email == "") {
+          setLoader(true);
+          const emailValid = await emailValidate(addAdminData.email);
 
-    //       if (emailValid == true) {
-    //         errors.email = "Email already exists";
-    //         formIsValid = false;
-    //       } else {
-    //         errors.email = "";
-    //         formIsValid = true;
-    //       }
-    //     } else {
-    //       formIsValid = false;
-    //     }
-    //   } catch (error) {
-    //     console.error("Error validating email:", error);
-    //     formIsValid = false;
-    //   }
-    // }
+          if (emailValid == true) {
+            setLoader(false);
+            errors.email = "Email already exists";
+            formIsValid = false;
+          } else {
+            setLoader(false);
+            errors.email = "";
+            formIsValid = true;
+          }
+        } else {
+          formIsValid = false;
+        }
+      } catch (error) {
+        console.error("Error validating email:", error);
+        formIsValid = false;
+      }
+    }
 
     if (addAdminData.password === "") {
       errors.password = "Password is required";
@@ -219,9 +223,7 @@ export default function Add_adminFunctionality({ setVisible }) {
           phone: addAdminData.phone,
           ...newData,
         };
-
         setLoader(true);
-
         try {
           await axios
             .post(BASE_URL + GET_ADD_ADMIN, packet, {
@@ -234,7 +236,6 @@ export default function Add_adminFunctionality({ setVisible }) {
               if (res.data.status == 200) {
                 ToastifyAlert("Added Successfully", "success");
                 // setVisible("AdminView")
-
                 setAddAdminData({
                   owner_name: "",
                   email: "",
@@ -247,7 +248,6 @@ export default function Add_adminFunctionality({ setVisible }) {
                     phone: "",
                   },
                 });
-
                 navigate("/users/admin");
                 // getTimerAdmin();
               } else {
