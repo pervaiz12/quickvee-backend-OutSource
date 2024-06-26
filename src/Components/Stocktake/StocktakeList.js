@@ -1,4 +1,4 @@
-import { CircularProgress, Grid, Paper } from "@mui/material";
+import { capitalize, CircularProgress, Grid, Paper } from "@mui/material";
 import InputTextSearch from "../../reuseableComponents/InputTextSearch";
 import AddIcon from "../../Assests/Category/addIcon.svg";
 import Pagination from "../../AllUserComponents/Users/UnverifeDetails/Pagination";
@@ -177,7 +177,7 @@ const StocktakeList = ({
         <Grid item xs={12}>
           <InputTextSearch
             type="text"
-            placeholder="Search Purchase Order"
+            placeholder="Search Stocktake Order"
             value={searchId}
             handleChange={handleSearchInputChange}
             autoComplete="off"
@@ -237,7 +237,7 @@ const StocktakeList = ({
                       <StyledTable aria-label="customized table">
                         <TableHead>
                           {tableRow.map((item, index) => (
-                            <StyledTableCell align="center" key={item}>
+                            <StyledTableCell  key={item}>
                               {item}
                             </StyledTableCell>
                           ))}
@@ -251,7 +251,7 @@ const StocktakeList = ({
                               );
                               return (
                                 <StyledTableRow key={index}>
-                                  <StyledTableCell align="center">
+                                  <StyledTableCell >
                                     <button
                                       className="attributeUpdateBTN"
                                       onClick={() => {
@@ -272,16 +272,16 @@ const StocktakeList = ({
                                       )}
                                     </button>
                                   </StyledTableCell>
-                                  <StyledTableCell align="center">
-                                    <p>{statusObj ? statusObj.title : ""}</p>
+                                  <StyledTableCell >
+                                    <p>{statusObj ? capitalize(statusObj.title) : ""}</p>
                                   </StyledTableCell>
-                                  <StyledTableCell align="center">
+                                  <StyledTableCell >
                                     <p>{item.total_qty}</p>
                                   </StyledTableCell>
-                                  <StyledTableCell align="center">
-                                    <p>{item.total_discrepancy_cost}</p>
+                                  <StyledTableCell >
+                                    <p>${item.total_discrepancy_cost}</p>
                                   </StyledTableCell>
-                                  <StyledTableCell align="center">
+                                  <StyledTableCell >
                                     <p>{formatDate(item.created_at)}</p>
                                   </StyledTableCell>
                                 </StyledTableRow>

@@ -75,14 +75,14 @@ const Pagination = ({
   return (
     <nav className="flex items-center justify-between">
       <div className="flex items-center">
-        <p className="me-3">show</p>
+        <p className="me-3">Show</p>
         <SelectDropDown
           listItem={pageLength}
           title={"title"}
           selectedOption={rowsPerPage}
           onClickHandler={handlePageRowLength}
         />
-        <p className="ms-3">entries</p>
+        <p className="ms-3">Entries</p>
       </div>
       <ul className="flex justify-end	">
         <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
