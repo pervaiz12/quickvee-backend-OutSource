@@ -23,10 +23,11 @@ import Edit from "../../../Assests/VerifiedMerchant/Edit.svg";
 import Delete from "../../../Assests/VerifiedMerchant/Delete.svg";
 import useDebounce from "../../../hooks/useDebouncs";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
-
+import PasswordShow from "../../../Common/passwordShow";
 const Customer = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
 
   // states
   const [searchRecord, setSearchRecord] = useState("");
@@ -90,6 +91,14 @@ const Customer = () => {
   const { userTypeData } = useAuthDetails();
 
   // only when user changes Page number, Page size & searches something
+  const getCustomerData = async (data) => {
+    try {
+      await dispatch(CustomerFunction(data)).unwrap();
+    } catch (error) {
+      getUnAutherisedTokenMessage();
+      handleCoockieExpire();
+    }
+  };
   useEffect(() => {
     const data = {
       type: 2,
@@ -98,8 +107,7 @@ const Customer = () => {
       page: currentPage,
       search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
     };
-
-    dispatch(CustomerFunction(data));
+    getCustomerData(data);
   }, [currentPage, debouncedValue, rowsPerPage]);
 
   // only when user searches

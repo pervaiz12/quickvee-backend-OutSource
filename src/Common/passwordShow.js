@@ -36,9 +36,9 @@ export default function PasswordShow() {
     localStorage.removeItem("AllStore");
     navigate("/login");
   };
-  const getUnAutherisedTokenMessage=()=>{
-    dispatch(getAuthInvalidMessage("your session has been expired"))
-  }
+  const getUnAutherisedTokenMessage = () => {
+    dispatch(getAuthInvalidMessage("your session has been expired"));
+  };
 
   return {
     showpPassword,
@@ -46,6 +46,6 @@ export default function PasswordShow() {
     handleMouseUp,
     jsxData,
     handleCoockieExpire,
-    getUnAutherisedTokenMessage
+    getUnAutherisedTokenMessage,
   };
 }

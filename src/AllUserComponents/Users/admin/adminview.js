@@ -23,11 +23,13 @@ import Pagination from "../UnverifeDetails/Pagination";
 import Edit from "../../../Assests/VerifiedMerchant/Edit.svg";
 import useDebounce from "../../../hooks/useDebouncs";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import PasswordShow from "../../../Common/passwordShow";
 
 export default function AdminView({ setVisible, setEditAdminId }) {
   const { userTypeData } = useAuthDetails();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
 
   // states
   const [searchRecord, setSearchRecord] = useState("");
@@ -42,6 +44,14 @@ export default function AdminView({ setVisible, setEditAdminId }) {
   );
 
   // only when user changes Page number, Page size & searches something
+  const getAdminRecordData = async (data) => {
+    try {
+      await dispatch(AdminFunction(data)).unwrap();
+    } catch (error) {
+      getUnAutherisedTokenMessage();
+      handleCoockieExpire();
+    }
+  };
   useEffect(() => {
     const data = {
       ...userTypeData,
@@ -49,8 +59,7 @@ export default function AdminView({ setVisible, setEditAdminId }) {
       page: currentPage,
       search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
     };
-
-    dispatch(AdminFunction(data));
+    getAdminRecordData(data);
   }, [currentPage, debouncedValue, rowsPerPage]);
 
   // only when user searches to update the total count

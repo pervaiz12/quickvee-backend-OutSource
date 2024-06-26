@@ -103,12 +103,15 @@ export default function Login() {
       }
     }
   }, []);
+  useEffect(() => {
+    handleHideErrorMessage();
+  }, []);
 
   const handleHideErrorMessage = () => {
     setErrorMessage(errorMessageRecord);
     dispatch(getAuthInvalidMessage(""));
 
-    setErrorMessage("");
+    // setErrorMessage("");
   };
 
   console.log(LoginGetDashBoardRecordJson);
