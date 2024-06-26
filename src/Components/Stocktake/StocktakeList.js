@@ -1,4 +1,4 @@
-import { Grid, Paper } from "@mui/material";
+import { capitalize, CircularProgress, Grid, Paper } from "@mui/material";
 import InputTextSearch from "../../reuseableComponents/InputTextSearch";
 import AddIcon from "../../Assests/Category/addIcon.svg";
 import Pagination from "../../AllUserComponents/Users/UnverifeDetails/Pagination";
@@ -16,11 +16,14 @@ import TableRow from "@mui/material/TableRow";
 import { useEffect, useState } from "react";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchSingleStocktakeData, fetchStocktakeList, getStocktakeListCount } from "../../Redux/features/Stocktake/StocktakeListSlice";
+import {
+  fetchSingleStocktakeData,
+  fetchStocktakeList,
+  getStocktakeListCount,
+} from "../../Redux/features/Stocktake/StocktakeListSlice";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import useDebounce from "../../hooks/useDebouncs";
 import { useNavigate } from "react-router-dom";
-
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -54,14 +57,15 @@ const StocktakeList = ({
   // getSingleStocktakeData,
   // setSingleStocktakeState,
   // setStocktakeId
-
 }) => {
-  const navigate = useNavigate()
-   const [searchId, setSearchId] = useState(""); // State to track search ID
+  const navigate = useNavigate();
+  const [searchId, setSearchId] = useState(""); // State to track search ID
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const StocktakeListReducerState = useSelector((state) => state.stocktakeList);
+  const [loader, setLoader] = useState(false);
+  const [stocltakeId, setStocltakeId] = useState();
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
@@ -77,7 +81,7 @@ const StocktakeList = ({
       page: currentPage,
       search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
     };
-   
+
     dispatch(fetchStocktakeList(data));
   }, [currentPage, debouncedValue, rowsPerPage]);
 
@@ -105,6 +109,14 @@ const StocktakeList = ({
     "Total Qty",
     "Total Discrepancy Cost",
     "Date",
+    // { type: "str", name: "item_name", label: "Stocktake" },
+    // { type: "num", name: "variant", label: "Variant" },
+    // { type: "str", name: "category", label: "Category" },
+    // { type: "num", name: "cost_vendor", label: "Cost Of Vendor" },
+    // { type: "num", name: "instock", label: "Instock" },
+    // { type: "num", name: "item_price", label: "Item Price" },
+    // { type: "num", name: "reorder_level", label: "Reorder Level" },
+    // { type: "num", name: "reorder_qty", label: "Reorder Quantity" },
   ];
   const stocktalkStatus = [
     {
@@ -122,21 +134,30 @@ const StocktakeList = ({
   ];
 
   const handleStocktakeIdClick = async (id) => {
+    setStocltakeId(id);
+    setLoader(true);
     // const result = await getSingleStocktakeData(id);
-    const result = await dispatch(fetchSingleStocktakeData({merchant_id,id,userTypeData}))
-      console.log(result);
+    const result = await dispatch(
+      fetchSingleStocktakeData({ merchant_id, id, userTypeData })
+    );
+    console.log(result);
+
+    console.log(loader);
     if (result) {
       if (result?.payload?.result?.status === "0") {
         // setVisible("StocktakeReoport");
         navigate(`/stocktake/completed/${id}`);
+        setLoader(false);
       }
       if (result?.payload?.result?.status === "1") {
         // setVisible("AddNewStocktake");
         navigate(`/stocktake/UpdateStocktake/${id}`);
+        setLoader(false);
       }
       if (result?.payload?.result?.status === "2") {
         // setVisible("StocktakeReoport");
         navigate(`/stocktake/void/${id}`);
+        setLoader(false);
       }
     }
   };
@@ -148,6 +169,7 @@ const StocktakeList = ({
     );
     return formattedDate;
   };
+
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <>
@@ -155,9 +177,9 @@ const StocktakeList = ({
         <Grid item xs={12}>
           <InputTextSearch
             type="text"
-            placeholder="Search Purchase Order"
-              value={searchId}
-              handleChange={handleSearchInputChange}
+            placeholder="Search Stocktake Order"
+            value={searchId}
+            handleChange={handleSearchInputChange}
             autoComplete="off"
           />
         </Grid>
@@ -180,7 +202,7 @@ const StocktakeList = ({
                 <p
                   onClick={() => {
                     // setVisible("AddNewStocktake");
-                    navigate("/stocktake/AddStocktake")
+                    navigate("/stocktake/AddStocktake");
                     // setSingleStocktakeState();
                   }}
                 >
@@ -215,7 +237,7 @@ const StocktakeList = ({
                       <StyledTable aria-label="customized table">
                         <TableHead>
                           {tableRow.map((item, index) => (
-                            <StyledTableCell align="center" key={item}>
+                            <StyledTableCell  key={item}>
                               {item}
                             </StyledTableCell>
                           ))}
@@ -229,26 +251,37 @@ const StocktakeList = ({
                               );
                               return (
                                 <StyledTableRow key={index}>
-                                  <StyledTableCell
-                                    onClick={() => {
-                                      handleStocktakeIdClick(item.id);
-                                    }}
-                                    align="center"
-                                  >
-                                    <p className="text-[#0A64F9] cursor-pointer">
-                                      {item.st_id}
-                                    </p>
+                                  <StyledTableCell >
+                                    <button
+                                      className="attributeUpdateBTN"
+                                      onClick={() => {
+                                        handleStocktakeIdClick(item.id);
+                                      }}
+                                    >
+                                      {loader && stocltakeId === item.id ? (
+                                        <CircularProgress
+                                          color={"inherit"}
+                                          className=""
+                                          width={15}
+                                          size={15}
+                                        />
+                                      ) : (
+                                        <p className="text-[#0A64F9] cursor-pointer">
+                                          {item.st_id}
+                                        </p>
+                                      )}
+                                    </button>
                                   </StyledTableCell>
-                                  <StyledTableCell align="center">
-                                    <p>{statusObj ? statusObj.title : ""}</p>
+                                  <StyledTableCell >
+                                    <p>{statusObj ? capitalize(statusObj.title) : ""}</p>
                                   </StyledTableCell>
-                                  <StyledTableCell align="center">
+                                  <StyledTableCell >
                                     <p>{item.total_qty}</p>
                                   </StyledTableCell>
-                                  <StyledTableCell align="center">
-                                    <p>{item.total_discrepancy_cost}</p>
+                                  <StyledTableCell >
+                                    <p>${item.total_discrepancy_cost}</p>
                                   </StyledTableCell>
-                                  <StyledTableCell align="center">
+                                  <StyledTableCell >
                                     <p>{formatDate(item.created_at)}</p>
                                   </StyledTableCell>
                                 </StyledTableRow>
@@ -260,7 +293,7 @@ const StocktakeList = ({
                     </TableContainer>
                   </>
                 ) : (
-                  <></>
+                  <><div className="p-4"><p>No results found</p></div></>
                 )}
               </>
             )}

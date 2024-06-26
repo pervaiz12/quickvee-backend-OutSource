@@ -3,7 +3,7 @@ import { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "@mui/material/Modal";
 import CrossIcon from "../../Assests/Dashboard/cross.svg";
-import { Grid } from "@mui/material";
+import { CircularProgress, Grid } from "@mui/material";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import axios from "axios";
@@ -26,6 +26,7 @@ const EmailModel = ({singleStocktakeState}) => {
   const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [email, setEmail] = useState("");
+  const [loader, setLoader] = useState(false);
   const [emailError, setEmailError] = useState("");
   const handleClick = () => {
     handleOpen(true);
@@ -56,6 +57,7 @@ const EmailModel = ({singleStocktakeState}) => {
       merchant_id,
     };
     try {
+      setLoader(true)
       const { token, ...otherUserData } = userTypeData;
       const response = await axios.post(
         BASE_URL + "Stocktake_react_api/email_stocktake",
@@ -69,11 +71,14 @@ const EmailModel = ({singleStocktakeState}) => {
       );
       if (response.data.status) {
         ToastifyAlert(response.data.message, "success");
+        setLoader(false)
       } else {
         ToastifyAlert(response.data.message, "error");
+        setLoader(false)
       }
     } catch (error) {
       console.error("Error creating stocktake:", error);
+      setLoader(false)
     }
     // Handle send email action here
     console.log("Email sent to:", email);
@@ -157,9 +162,20 @@ const EmailModel = ({singleStocktakeState}) => {
                   <Grid item>
                     <button
                       onClick={handleSendEmail}
-                      className="quic-btn quic-btn-save"
+                      className="quic-btn quic-btn-save w-44"
+                      disabled={loader}
                     >
-                      Send Email
+                      {loader  ? (
+                    <CircularProgress
+                      color={"inherit"}
+                      className=""
+                      width={15}
+                      size={15}
+                    />
+                  ) : (
+                    "Send Email"
+                  )}
+                      
                     </button>
                   </Grid>
                 </Grid>

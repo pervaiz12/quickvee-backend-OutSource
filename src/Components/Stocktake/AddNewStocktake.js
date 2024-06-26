@@ -67,13 +67,12 @@ const AddNewStocktake = ({
     (state) => state.stocktakeList
   );
 
-
   const [singleStocktakeState, setSingleStocktakeState] = useState();
 
   const [gotDatafromPo, setDataFromPo] = useState();
   const navigate = useNavigate();
   const dispatch = useDispatch();
- 
+
   const [selectedProducts, setSelectedProducts] = useState([]);
   const [gotSelectedProducts, setGotSelectedProducts] = useState(false);
   const [stocktake_items, setProductList] = useState([
@@ -96,7 +95,6 @@ const AddNewStocktake = ({
   const location = useLocation();
 
   const { id } = useParams();
-
 
   useEffect(() => {
     if (id && location.pathname !== "/stocktake/AddStocktake") {
@@ -133,7 +131,6 @@ const AddNewStocktake = ({
 
   useEffect(() => {
     if (singleStocktakeState && !gotSelectedProducts) {
-
       const newStocktakeItems = singleStocktakeState?.stocktake_item.map(
         (item, index) => ({
           upc: item.upc || "", //
@@ -154,9 +151,8 @@ const AddNewStocktake = ({
       setGotSelectedProducts(true);
     }
   }, [singleStocktakeState]);
-  
+
   useEffect(() => {
-   
     loadOptions(" ");
   }, []);
 
@@ -186,10 +182,10 @@ const AddNewStocktake = ({
   };
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-
+  const [StocktakeStaus, setStocktakeStaus] = useState();
   const [alertModalOpen, setAlertModalOpen] = useState(false);
   const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
-  
+  const [loader, setLoader] = useState(false);
   const [errorMessages, setErrorMessages] = useState([]);
   const validate = () => {
     const errors = [];
@@ -213,7 +209,6 @@ const AddNewStocktake = ({
     setAlertModalHeaderText(headerText);
     setAlertModalOpen(true);
   };
-
 
   const handleAddProduct = () => {
     if (validate()) {
@@ -244,7 +239,7 @@ const AddNewStocktake = ({
     setDeleteCategoryId(index);
     setDeleteModalOpen(true);
   };
- 
+
   const confirmDeleteCategory = async () => {
     // Check if the singleStocktakeState object and stocktake_item array are present
     if (
@@ -282,7 +277,7 @@ const AddNewStocktake = ({
 
       // Check if the item to be deleted is in the original stocktake_item list
       const itemToDelete = stocktake_items[deleteCategoryId];
-  
+
       const isOriginalItem = singleStocktakeState.stocktake_item.some(
         (item) => item.id === itemToDelete.stocktake_item_id
       );
@@ -312,6 +307,7 @@ const AddNewStocktake = ({
           const newList = stocktake_items.filter(
             (_, i) => i !== deleteCategoryId
           );
+          console.log(stocktake_items.length);
           setProductList(newList);
           setSingleStocktakeState({
             ...singleStocktakeState,
@@ -321,13 +317,14 @@ const AddNewStocktake = ({
             total_discrepancy_cost: total_discrepancy_cost,
           });
           // setProductList(newList);
-          ToastifyAlert(response.data.message, "success");
+          ToastifyAlert("Deleted Successfully", "success");
         } else {
           console.log("Product Not available!");
           ToastifyAlert(response.data.message, "error");
         }
       } else {
         // If the item is newly added, just remove it from the list
+
         const newList = stocktake_items.filter(
           (_, i) => i !== deleteCategoryId
         );
@@ -373,7 +370,6 @@ const AddNewStocktake = ({
     });
   };
   const handleOnChangeSelectDropDown = async (productId, variantId, index) => {
-    
     const productExists = stocktake_items.some((item) =>
       item.variant !== ""
         ? item.variant_id === variantId
@@ -381,18 +377,29 @@ const AddNewStocktake = ({
     );
 
     if (productExists) {
-
       showModal("Product is already added.");
 
       return;
     }
     try {
-      const formData = new FormData();
-      formData.append("merchant_id", merchant_id);
-      formData.append("id", productId);
+      // const formData = new FormData();
+      // formData.append("merchant_id", merchant_id);
+      // formData.append("id", productId);
+      const { token, ...otherData } = userTypeData;
+      const formData = {
+        merchant_id: merchant_id,
+        id: productId,
+        ...otherData,
+      };
       const response = await axios.post(
         BASE_URL + "Product_api_react/get_productdata_ById",
-        formData
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       let obj = {
@@ -408,7 +415,6 @@ const AddNewStocktake = ({
           const product = response.data.data.product_variants.find(
             (prod) => prod.id === variantId
           );
-          
 
           obj.newPrice =
             parseFloat(product.price) > 0 ? parseFloat(product.price) : 0;
@@ -416,8 +422,7 @@ const AddNewStocktake = ({
           const sortedProduct = selectedProducts.find(
             (prod) => prod.var_id === product.id
           );
-
-     
+          console.log("Updated product", product);
           setProductList((prevList) => {
             const updatedList = [...prevList];
             updatedList[index] = {
@@ -435,18 +440,16 @@ const AddNewStocktake = ({
               discrepancy: "0",
               // variant_id: "",
             };
-            
-              
+
             return updatedList;
-          
           });
         } else {
           const product = response.data.data.productdata;
-   
+
           obj.newPrice =
             parseFloat(product.price) > 0 ? parseFloat(product.price) : 0;
           obj.finalQty = Number(product.quantity) ?? 0;
-
+          console.log("Updated product", product);
           setProductList((prevList) => {
             const updatedList = [...prevList];
             updatedList[index] = {
@@ -461,10 +464,7 @@ const AddNewStocktake = ({
               new_qty: "",
               discrepancy: "0",
             };
-            
-              
-             
-          
+
             return updatedList;
           });
         }
@@ -489,6 +489,11 @@ const AddNewStocktake = ({
   };
 
   const handleCreateStocktake = async (stocktakeStatus) => {
+    setStocktakeStaus(stocktakeStatus);
+    if (stocktake_items.length === 0) {
+      showModal("List cannot be empty !");
+      return;
+    }
     if (validate()) {
       const total_qty = stocktake_items.reduce(
         (sum, item) => sum + Number(item.new_qty || 0),
@@ -531,8 +536,8 @@ const AddNewStocktake = ({
         stocktake_id: singleStocktakeState ? singleStocktakeState.id : "0", //
       };
 
-  
       try {
+        setLoader(true);
         const { token, ...otherUserData } = userTypeData;
         const response = await axios.post(
           BASE_URL + CREATE_UPDATE_STOCKTAKE,
@@ -545,16 +550,46 @@ const AddNewStocktake = ({
           }
         );
         if (response.data.status) {
-          ToastifyAlert(response.data.message, "success");
+          ToastifyAlert("Updated Successfully", "success");
+          setLoader(false);
         } else {
           ToastifyAlert(response.data.message, "error");
+          setLoader(false);
         }
       } catch (error) {
         console.error("Error creating stocktake:", error);
+        setLoader(false);
       }
       // setVisible("StocktakeList");
       navigate(-1);
     }
+  };
+  const handleCancelBtn = () => {
+    const isItemInvalid = (item) => {
+      if (!item.product_name) {
+        showModal("Product name cannot be empty!");
+        return true;
+      }
+      if (!item.new_qty) {
+        showModal("New quantity cannot be empty!");
+        return true;
+      }
+      return false;
+    };
+
+    if (singleStocktakeState?.stocktake_item?.length === 0) {
+      showModal("List cannot be empty!");
+      return;
+    }
+
+    if (
+      singleStocktakeState?.stocktake_item?.length === 1 &&
+      isItemInvalid(singleStocktakeState?.stocktake_item[0])
+    ) {
+      return;
+    }
+
+    navigate(-1);
   };
 
   const customStyles = {
@@ -574,7 +609,11 @@ const AddNewStocktake = ({
       e.preventDefault();
     }
   };
-
+  console.log("stocktake_items", stocktake_items);
+  console.log(
+    "singleStocktakeState?.stocktake_item",
+    singleStocktakeState?.stocktake_item
+  );
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -583,11 +622,7 @@ const AddNewStocktake = ({
             <Grid item xs={12}>
               <div className="q-add-categories-section-header">
                 <span
-                  onClick={() => {
-                    // setVisible("StocktakeList");
-                    navigate(-1);
-                    setSingleStocktakeState();
-                  }}
+                  onClick={handleCancelBtn}
                   className="text-center items-center"
                 >
                   <img
@@ -625,27 +660,30 @@ const AddNewStocktake = ({
                         <StyledTableRow key={index}>
                           <StyledTableCell sx={{ width: "40%" }}>
                             <div style={{ position: "relative", zIndex: 100 }}>
-                              {/* <Button>
-                                {product.product_name || product.title}
-                              </Button> */}
-                              <AsyncSelect
-                                loadOptions={loadOptions}
-                                defaultOptions
-                                styles={customStyles}
-                                menuPortalTarget={document.body}
-                                onChange={(option) => {
-                                  handleOnChangeSelectDropDown(
-                                    option.prodId,
-                                    option.variantId,
-                                    index
-                                  );
-                                }}
-                                value={{
-                                  label: product && product?.product_name,
-                                  value:
-                                    (product && product?.var_id) || product?.id,
-                                }}
-                              />
+                              {singleStocktakeState?.stocktake_item[index]
+                                ?.category_id === product.category_id ? (
+                                product?.product_name
+                              ) : (
+                                <AsyncSelect
+                                  loadOptions={loadOptions}
+                                  defaultOptions
+                                  styles={customStyles}
+                                  menuPortalTarget={document.body}
+                                  onChange={(option) => {
+                                    handleOnChangeSelectDropDown(
+                                      option.prodId,
+                                      option.variantId,
+                                      index
+                                    );
+                                  }}
+                                  value={{
+                                    label: product && product?.product_name,
+                                    value:
+                                      (product && product?.var_id) ||
+                                      product?.id,
+                                  }}
+                                />
+                              )}
                               {errorMessages[index]?.product_name && (
                                 <div className="error">
                                   {errorMessages[index].product_name}
@@ -674,11 +712,18 @@ const AddNewStocktake = ({
                             {product.discrepancy}
                           </StyledTableCell>
                           <StyledTableCell>{product.upc}</StyledTableCell>
+
                           <StyledTableCell>
-                            <img
-                              src={DeleteIcon}
-                              onClick={() => handleDeleteProduct(index)}
-                            />
+                            {singleStocktakeState?.stocktake_item.length ===
+                              1 &&
+                            singleStocktakeState?.stocktake_item[0]
+                              ?.product_id === product?.product_id ? (
+                              null
+                            ) : <img
+                            src={DeleteIcon}
+                            onClick={() => handleDeleteProduct(index)}
+                            alt="Delete Icon"
+                          />}
                           </StyledTableCell>
                         </StyledTableRow>
                       </>
@@ -700,10 +745,7 @@ const AddNewStocktake = ({
             <Grid container spacing={3}>
               <Grid item>
                 <button
-                  onClick={() => {
-                    // setVisible("StocktakeList");
-                    navigate(-1);
-                  }}
+                  onClick={handleCancelBtn}
                   className="quic-btn quic-btn-cancle"
                 >
                   Cancel
@@ -728,20 +770,40 @@ const AddNewStocktake = ({
                   onClick={() => {
                     handleCreateStocktake("1");
                   }}
-                  className="quic-btn quic-btn-save"
+                  className="quic-btn quic-btn-save w-48"
+                  disabled={loader}
                 >
-                  Save as Draft
+                  {loader && StocktakeStaus === "1" ? (
+                    <CircularProgress
+                      color={"inherit"}
+                      className=""
+                      width={15}
+                      size={15}
+                    />
+                  ) : (
+                    "Save as Draft"
+                  )}
                 </button>
               </Grid>
               <Grid item>
                 <button
-                  className="quic-btn quic-btn-save"
+                  className="quic-btn quic-btn-save w-36"
                   onClick={() => {
                     handleCreateStocktake("0");
                   }}
-                  //   disabled={loader}
+                  disabled={loader}
                 >
-                  Create
+                  {loader && StocktakeStaus === "0" ? (
+                    <CircularProgress
+                      color={"inherit"}
+                      className=""
+                      width={15}
+                      size={15}
+                    />
+                  ) : (
+                    "Create"
+                  )}
+
                   {/* {loader ? <CircularProgress /> : "Update"} */}
                 </button>
               </Grid>
