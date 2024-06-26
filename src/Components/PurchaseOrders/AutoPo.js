@@ -184,7 +184,6 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
 
   // generating product options once user searches any product name
   const productOptions = async (inputValue) => {
-    // if (inputValue && inputValue.length > 2) {
     let name_data = {
       merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
       category_id: "all",
@@ -199,10 +198,6 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
 
     const res = await dispatch(fetchProductsData(name_data));
 
-    // ?.filter((prod) =>
-    //   prod.title.toLowerCase().includes(inputValue.toLowerCase())
-    // )
-
     const data = res.payload
       ?.map((prod) => ({
         label: prod.title,
@@ -210,7 +205,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
         variantId: prod.isvarient === "1" ? prod.var_id : null,
       }))
       .filter((prod) => {
-        const productFound = selectedProducts.find(
+        const productFound = selectedProducts?.find(
           (product) =>
             (product.variant &&
               product.id === prod.variantId &&
@@ -221,9 +216,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
         return !productFound;
       });
 
-    console.log("data: ", data);
     return data;
-    // }
   };
 
   useEffect(() => {
@@ -597,6 +590,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
                   <StyledTableCell>Cost Per Item</StyledTableCell>
                   <StyledTableCell>Total</StyledTableCell>
                   <StyledTableCell>UPC</StyledTableCell>
+                  <StyledTableCell>Note</StyledTableCell>
                   <StyledTableCell></StyledTableCell>
                 </TableHead>
                 <TableBody>
@@ -605,15 +599,14 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
                       <StyledTableCell sx={{ width: "30%" }}>
                         <>
                           <AsyncSelect
-                            className={product.title ? "mb-2" : ""}
                             closeMenuOnSelect={true}
                             defaultOptions
                             styles={customStyles}
                             menuPortalTarget={document.body}
                             value={{
-                              label: `${product.title} ${
-                                product.variant ? "~" : ""
-                              } ${product.variant}`,
+                              label: product.variant
+                                ? `${product.title} ~ ${product.variant}`
+                                : `${product.title}`,
                               value: product.id,
                             }}
                             loadOptions={productOptions}
@@ -631,19 +624,6 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
                               Please select a Product
                             </p>
                           )}
-                          {product.title && (
-                            <TextField
-                              id="outlined-basic"
-                              inputProps={{ type: "text" }}
-                              value={product.notes}
-                              onChange={(e) =>
-                                handleProduct(e, product.id, "notes")
-                              }
-                              placeholder="Add Note"
-                              variant="outlined"
-                              size="small"
-                            />
-                          )}
                         </>
                       </StyledTableCell>
                       <StyledTableCell>
@@ -651,10 +631,14 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
                           id="outlined-basic"
                           value={product.newQty}
                           inputProps={{
-                            type: "number",
+                            type: "text",
                           }}
                           onChange={(e) => {
-                            if (e.target.value >= 0) {
+                            if (
+                              e.target.value >= 0 &&
+                              e.target.value.length <= 6 &&
+                              !isNaN(e.target.value)
+                            ) {
                               handleProduct(e, product.id, "newQty");
                             }
                           }}
@@ -674,7 +658,9 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
                           value={product.newPrice}
                           inputProps={{ type: "number" }}
                           onChange={(e) => {
-                            handleProduct(e, product.id, "newPrice");
+                            if (e.target.value.length <= 9) {
+                              handleProduct(e, product.id, "newPrice");
+                            }
                           }}
                           variant="outlined"
                           size="small"
@@ -690,6 +676,19 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
                       </StyledTableCell>
                       <StyledTableCell>
                         <p className="text-[16px]">{product?.upc}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <TextField
+                          id="outlined-basic"
+                          inputProps={{ type: "text" }}
+                          value={product.notes}
+                          onChange={(e) =>
+                            handleProduct(e, product.id, "notes")
+                          }
+                          placeholder="Add Note"
+                          variant="outlined"
+                          size="small"
+                        />
                       </StyledTableCell>
                       <StyledTableCell>
                         {selectedProducts.length > 1 && (

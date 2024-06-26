@@ -113,6 +113,7 @@ const ModifyPurchaseOrder = () => {
   });
 
   const [selectedProducts, setSelectedProducts] = useState([]);
+  const [deletedProducts, setDeletedProducts] = useState([]);
 
   const puchaseOrderDetail = useSelector(
     (state) => state.purchaseOrderById.purchaseOrderDetail
@@ -240,35 +241,35 @@ const ModifyPurchaseOrder = () => {
         },
       });
 
-      console.log("response: ", response);
+      // console.log("response: ", response);
 
-      if (response.data.status) {
-        removeItem(productId);
-        ToastifyAlert(response.data.message, "success");
-      } else {
-        ToastifyAlert(response.data.message, "error");
-      }
+      // if (response.data.status) {
+      //   removeItem(productId);
+      //   ToastifyAlert(response.data.message, "success");
+      // } else {
+      //   ToastifyAlert(response.data.message, "error");
+      // }
     } catch (e) {
       console.log("Error: ", e);
     }
   };
 
   const handleDelete = (product) => {
-    // console.log("prod: ", product);
-
     // if product has po_id then removing from Local state as well as from backend
-    if (product.po_id) {
-      const confirmDelete = window.confirm(
-        "Are you sure you want to delete this product?"
-      );
+    // if (product.po_id) {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this product?"
+    );
 
-      if (confirmDelete) {
-        // delete po item from backend api call
-        deletePOItem(product.id);
-      }
-    } else {
+    if (confirmDelete) {
+      // delete po item from backend api call
+      // deletePOItem(product.id);
       removeItem(product.id);
+      setDeletedProducts((prev) => [...prev, product.id]);
     }
+    // } else {
+    //   removeItem(product.id);
+    // }
   };
 
   const handleDate = (date, type) => {
@@ -637,7 +638,11 @@ const ModifyPurchaseOrder = () => {
             Authorization: `Bearer ${token}`, // Use data?.token directly
           },
         });
-        // console.log("response modifyPurchaseOrder: ", response);
+
+        // deleting product items if any from PO
+        if (deletedProducts.length > 0) {
+          deletedProducts.forEach((item) => deletePOItem(item));
+        }
 
         if (response.data.status) {
           ToastifyAlert(response.data.message, "success");
@@ -815,6 +820,7 @@ const ModifyPurchaseOrder = () => {
                     <StyledTableCell>Cost Per Item</StyledTableCell>
                     <StyledTableCell>Total</StyledTableCell>
                     <StyledTableCell>UPC</StyledTableCell>
+                    <StyledTableCell>Note</StyledTableCell>
                     <StyledTableCell></StyledTableCell>
                   </TableHead>
                   <TableBody>
@@ -843,15 +849,14 @@ const ModifyPurchaseOrder = () => {
                             ) : (
                               <>
                                 <AsyncSelect
-                                  className={"mb-2"}
                                   closeMenuOnSelect={true}
                                   defaultOptions
                                   styles={customStyles}
                                   menuPortalTarget={document.body}
                                   value={{
-                                    label: `${product.title} ${
-                                      product.variant ? "~" : ""
-                                    } ${product.variant}`,
+                                    label: product.variant
+                                      ? `${product.title} ~ ${product.variant}`
+                                      : `${product.title}`,
                                     value: product.id,
                                   }}
                                   loadOptions={productOptions}
@@ -871,19 +876,6 @@ const ModifyPurchaseOrder = () => {
                                 )}
                               </>
                             )}
-
-                            <TextField
-                              id="outlined-basic"
-                              inputProps={{ type: "text" }}
-                              value={product.note}
-                              onChange={(e) =>
-                                handleProduct(e, product.id, "note")
-                              }
-                              placeholder="Add Note"
-                              variant="outlined"
-                              size="small"
-                              disabled={product.recieved_status === "2"}
-                            />
                           </>
                         </StyledTableCell>
                         <StyledTableCell>
@@ -891,10 +883,14 @@ const ModifyPurchaseOrder = () => {
                             id="outlined-basic"
                             value={product.newQty}
                             inputProps={{
-                              type: "number",
+                              type: "text",
                             }}
                             onChange={(e) => {
-                              if (e.target.value >= 0) {
+                              if (
+                                e.target.value >= 0 &&
+                                e.target.value.length <= 6 &&
+                                !isNaN(e.target.value)
+                              ) {
                                 handleProduct(e, product.id, "newQty");
                               }
                             }}
@@ -915,7 +911,9 @@ const ModifyPurchaseOrder = () => {
                             value={product.newPrice}
                             inputProps={{ type: "number" }}
                             onChange={(e) => {
-                              handleProduct(e, product.id, "newPrice");
+                              if (e.target.value.length <= 9) {
+                                handleProduct(e, product.id, "newPrice");
+                              }
                             }}
                             variant="outlined"
                             size="small"
@@ -934,8 +932,23 @@ const ModifyPurchaseOrder = () => {
                           <p className="text-[16px]">{product?.upc}</p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          {product?.recieved_status === "0" ||
-                          !product.po_id ? (
+                          <TextField
+                            id="outlined-basic"
+                            inputProps={{ type: "text" }}
+                            value={product.note}
+                            onChange={(e) =>
+                              handleProduct(e, product.id, "note")
+                            }
+                            placeholder="Add Note"
+                            variant="outlined"
+                            size="small"
+                            disabled={product.recieved_status === "2"}
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          {(product?.recieved_status === "0" ||
+                            !product.po_id) &&
+                          selectedProducts.length > 1 ? (
                             <img
                               src={DeleteIcon}
                               alt=""
