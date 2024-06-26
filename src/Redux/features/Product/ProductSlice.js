@@ -559,6 +559,51 @@ export const deleteProductAPI = createAsyncThunk(
     }
   }
 );
+
+export const checkUpcCodeMultiple = createAsyncThunk(
+  "products/checkUpcCodeMultiple",
+  async (payload) => {
+    // const token = payload.get('token'); // Extract the token from FormData
+    // payload.delete('token');
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/check_upc",
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          },
+        }
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const checkUpcCodeSingle = createAsyncThunk(
+  "products/checkUpcCodeSingle",
+  async (payload) => {
+    // const token = payload.get('token'); // Extract the token from FormData
+    // payload.delete('token');
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/check_upc_form",
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          },
+        }
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
 const productsSlice = createSlice({
   name: "products",
   initialState,
@@ -623,7 +668,15 @@ const productsSlice = createSlice({
       }
       // Append new items to the productsData array
       // console.log(state);
-      state.productsData.push(...action.payload);
+      const productIds = new Set(state.productsData.map(product => product.id));
+  
+      // Append new items to the productsData array if they are not already present
+      action.payload.forEach(product => {
+        if (!productIds.has(product.id)) {
+          state.productsData.push(product);
+          productIds.add(product.id);
+        }
+      });
       state.offset += 10;
       state.hasMore = action.payload.length > 0;
       state.error = "";

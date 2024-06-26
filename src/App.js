@@ -102,9 +102,12 @@ import PageNotFound from "./Components/PageNotFound/PageNotFound";
 import PrintPurchaseOrder from "./Components/PurchaseOrders/PrintPurchaseOrder";
 import StocktakeReportPrint from "./Components/Stocktake/StocktakeReportPrint";
 import MainNeedHelp from "./AllUserComponents/NeedHelp/MainNeedHelp";
+import { emptyProduct } from "./Redux/features/Product/ProductSlice";
+import { useDispatch } from "react-redux";
 
 function App() {
   const location = useLocation();
+  const dispatch = useDispatch();
   const isTabletNav = useMediaQuery("(max-width:1024px)");
   const [isMenuOpen, setIsMenuOpen] = useState(!isTabletNav);
   const currentUrl = location.pathname;
@@ -121,6 +124,12 @@ function App() {
       setIsSideBar(false);
     }
   }, [currentUrl]);
+
+  useEffect(()=>{
+    if(!location.pathname.includes('products')){
+      dispatch(emptyProduct([]))
+    }
+  }, [location])
 
   return (
     <>

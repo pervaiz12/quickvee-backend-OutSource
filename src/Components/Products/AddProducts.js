@@ -7,6 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import {
   addProduct,
   checkProductTitle,
+  checkUpcCode,
+  checkUpcCodeMultiple,
+  checkUpcCodeSingle,
   editProductData,
   fetchCategoryList,
   fetchProductList,
@@ -35,6 +38,7 @@ import { toast } from "react-toastify";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import CkEditorInput from "../../CommonComponents/CkEditorInput";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import PasswordShow from "../../Common/passwordShow";
 
 const AddProducts = () => {
   const fileUploadRef = useRef();
@@ -43,6 +47,7 @@ const AddProducts = () => {
     (state) => state?.productsListData
   );
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
+  const { getUnAutherisedTokenMessage } = PasswordShow();
   const navigate = useNavigate();
 
   const [fetchDataLoading, setFetchDataLoading] = useState(false);
@@ -57,7 +62,6 @@ const AddProducts = () => {
 
   // find productId from Url
   const productId = useParams();
-
   const { validatTitle, validatDescription, addVarientFormValidation } =
     Validation();
   const [formValue, setFormValue] = useState({});
@@ -78,6 +82,8 @@ const AddProducts = () => {
       Cost: "",
     },
   ]);
+
+  const [isUpcvalid, setIsUpcvalid] = useState("");
 
   //fetch data states
   const [productData, setProductData] = useState({});
@@ -129,7 +135,6 @@ const AddProducts = () => {
     setVarientIndex(varientId);
   };
 
-
   // useEffect(()=>{
   //   const findVarientIndex = varientData?.find((item)=> item?.id === varientIndex);
   //   setVarientId(findVarientIndex?.productEditId);
@@ -138,7 +143,6 @@ const AddProducts = () => {
   const handleClearFormData = (value) => {
     setClearInput(value);
   };
-
 
   // formValue Schema
 
@@ -168,9 +172,7 @@ const AddProducts = () => {
 
   // formschema for validation
   const formSchema = yup.object().shape({
-    title: yup
-      .string()
-      .required("title is required"),
+    title: yup.string().required("title is required"),
     category: yup.array().min(1, "select category").required("select category"),
     formValue: !isMultipleVarient ? formInnerSchemaOnSingle : formValueSchema,
   });
@@ -346,11 +348,13 @@ const AddProducts = () => {
       const formData = new FormData();
       formData.append("title", value);
       formData.append("id", productData?.id);
-      formData.append("merchant_id", LoginGetDashBoardRecordJson?.data?.merchant_id);
+      formData.append(
+        "merchant_id",
+        LoginGetDashBoardRecordJson?.data?.merchant_id
+      );
       formData.append("login_type", userTypeData?.login_type);
       formData.append("token_id", userTypeData?.token_id);
       formData.append("token", userTypeData?.token);
-
 
       // Clear previous timeout if exists
       clearTimeout(titleTimeoutId);
@@ -496,17 +500,16 @@ const AddProducts = () => {
 
   // copy Bulk varient value from modal
   const handleCopyAllVarientValue = (values) => {
-
     setFormValue((prev) => {
       // Create a deep copy of the previous state
       let newFormValue = JSON.parse(JSON.stringify(prev));
-  
+
       // Loop through each item in the newFormValue array
       newFormValue.forEach((item) => {
         // Get the nested object (e.g., "small/red", "large/green")
         let nestedKey = Object.keys(item)[0];
         let nestedObject = item[nestedKey];
-  
+
         // Update the properties based on the input values
         for (let key in values) {
           if (values.hasOwnProperty(key) && values[key] !== "") {
@@ -514,13 +517,11 @@ const AddProducts = () => {
           }
         }
       });
-  
+
       // Return the updated state
       return newFormValue;
     });
   };
-  
-  
 
   useEffect(() => {
     // called API
@@ -532,7 +533,6 @@ const AddProducts = () => {
     formData.append("login_type", userTypeData?.login_type);
     formData.append("token_id", userTypeData?.token_id);
     formData.append("token", userTypeData?.token);
-    
 
     dispatch(getInventorySetting(formData)).then((res) => {
       if (!!+res?.payload) {
@@ -609,7 +609,39 @@ const AddProducts = () => {
     }
   };
 
-  const handleBlur = (e, i, title) => {
+  const handleBlur = async (e, i, title) => {
+    const checkUpcValue = async (value, name) => {
+        if (value && name === "upcCode") {
+          let isAllowed = false;
+          const data = {
+            merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+            upc: value,
+            productId:
+              pageUrl === "inventory/products/edit" ? productId?.id : "",
+          };
+
+          const response = isMultipleVarient
+            ? await dispatch(checkUpcCodeMultiple(data))
+            : await dispatch(checkUpcCodeSingle(data));
+
+          if (response?.payload?.status === "true") {
+            isAllowed = true;
+          }
+
+          return isAllowed;
+        }
+    };
+
+    const checkLocalDuplicate = (upcCode, currentIndex) => {
+      return formValue.some((item, index) => {
+        if (index !== currentIndex) {
+          const currentTitle = Object.keys(item)[0];
+          return item[currentTitle]?.upcCode === upcCode;
+        }
+        return false;
+      });
+    };
+  
     if (isMultipleVarient) {
       const { name, value, type, checked } = e.target;
 
@@ -650,6 +682,28 @@ const AddProducts = () => {
         } else {
           fieldValue = inputStr.toUpperCase();
         }
+
+        // here check UPCCode Value
+        const isUpcValid = await checkUpcValue(fieldValue, name);
+        const isLocalDuplicate = checkLocalDuplicate(fieldValue, i);
+
+        const updatedValues = formValue.map((item, index) => {
+          if (index === i) {
+            const currentTitle = Object.keys(item)[0];
+            return {
+              ...item,
+              [currentTitle]: {
+                ...item[currentTitle],
+                [name]: fieldValue,
+                upcCode: isUpcValid && !isLocalDuplicate ? fieldValue : "",
+                upcError: !isUpcValid ? "UPC code must be unique (API check)." : isLocalDuplicate ? "UPC code must be unique (local check)." : ""
+              }
+            };
+          }
+          return item;
+        });
+        setFormValue(updatedValues);
+        return;
       }
       // normal input value format
       else {
@@ -673,8 +727,6 @@ const AddProducts = () => {
       let marginValue;
       let profitValue;
       let price_total_value;
-
-
 
       // if price value is change manually the recalculate margin and profit value
       const costPerValue = isMultipleVarient
@@ -700,37 +752,34 @@ const AddProducts = () => {
           : data.every((item) => isValue(item));
       };
 
-
-      const calculateProfit=(name, item, value)=>{
+      const calculateProfit = (name, item, value) => {
         let profitAmount = 0;
-        if(name === "costPerItem" && parseFloat(item?.price) > 0){;
-              profitAmount = parseFloat(item?.price - value).toFixed(2);
-        }else if(name === "price" && parseFloat(item?.costPerItem) > 0){
-              profitAmount = parseFloat(value - item?.costPerItem).toFixed(2);
-        } else{
-          profitAmount=""
+        if (name === "costPerItem" && parseFloat(item?.price) > 0) {
+          profitAmount = parseFloat(item?.price - value).toFixed(2);
+        } else if (name === "price" && parseFloat(item?.costPerItem) > 0) {
+          profitAmount = parseFloat(value - item?.costPerItem).toFixed(2);
+        } else {
+          profitAmount = "";
         }
         return profitAmount;
-      }
-  
-  
-      const calculatemargin=(name, item, value)=>{
+      };
+
+      const calculatemargin = (name, item, value) => {
         let marginAmount = 0;
-        if(name === "costPerItem" && parseFloat(item?.price) > 0){
-              let marginvl = (value * 100) / parseFloat(item?.price);
-              let showmargin = 100 - marginvl;
-              marginAmount = parseFloat(showmargin).toFixed(2);
-        } else if(name === "price" && parseFloat(item?.costPerItem) > 0){
-              let marginvl = (parseFloat(item?.costPerItem) * 100) / parseFloat(value);
-              let showmargin = 100 - marginvl;
-              marginAmount = parseFloat(showmargin).toFixed(2);
-        } else{
-          marginAmount=""
+        if (name === "costPerItem" && parseFloat(item?.price) > 0) {
+          let marginvl = (value * 100) / parseFloat(item?.price);
+          let showmargin = 100 - marginvl;
+          marginAmount = parseFloat(showmargin).toFixed(2);
+        } else if (name === "price" && parseFloat(item?.costPerItem) > 0) {
+          let marginvl =
+            (parseFloat(item?.costPerItem) * 100) / parseFloat(value);
+          let showmargin = 100 - marginvl;
+          marginAmount = parseFloat(showmargin).toFixed(2);
+        } else {
+          marginAmount = "";
         }
         return marginAmount;
-      }
-
-
+      };
 
       const updatedValues = formValue.map((item, index) => {
         const currentTitle = Object.keys(item)[0];
@@ -748,10 +797,16 @@ const AddProducts = () => {
               : item[currentTitle]?.compareAtPrice
           );
 
-          const costPerItemAndPriceAmountExists = () => {
-            const bool = (((name === "costPerItem" && fieldValue) && (parseFloat(item[currentTitle]?.price) > 0)) || ((name === "price" && fieldValue) && (parseFloat(item[currentTitle]?.costPerItem) > 0))) 
-            return bool;
-          }
+        const costPerItemAndPriceAmountExists = () => {
+          const bool =
+            (name === "costPerItem" &&
+              fieldValue &&
+              parseFloat(item[currentTitle]?.price) > 0) ||
+            (name === "price" &&
+              fieldValue &&
+              parseFloat(item[currentTitle]?.costPerItem) > 0);
+          return bool;
+        };
 
         if (i > 0) {
           return !["upcCode", "customCode"].includes(name) && item[title]
@@ -760,13 +815,14 @@ const AddProducts = () => {
                 [currentTitle]: {
                   ...item[currentTitle],
                   [name]: fieldValue,
-                  price: name === "price"
+                  price:
+                    name === "price"
                       ? fieldValue
                       : item[currentTitle]?.price
                         ? item[currentTitle]?.price
                         : "",
-                  margin: costPerItemAndPriceAmountExists() 
-                  ? calculatemargin(name, item[currentTitle], fieldValue) 
+                  margin: costPerItemAndPriceAmountExists()
+                    ? calculatemargin(name, item[currentTitle], fieldValue)
                     : oldMargin([
                           item[currentTitle]?.costPerItem,
                           item[currentTitle]?.margin,
@@ -774,8 +830,8 @@ const AddProducts = () => {
                         ])
                       ? item[currentTitle]?.margin
                       : "",
-                  profit:costPerItemAndPriceAmountExists() 
-                  ? calculateProfit(name, item[currentTitle], fieldValue) 
+                  profit: costPerItemAndPriceAmountExists()
+                    ? calculateProfit(name, item[currentTitle], fieldValue)
                     : oldMargin([
                           item[currentTitle]?.costPerItem,
                           item[currentTitle]?.margin,
@@ -799,7 +855,7 @@ const AddProducts = () => {
                             "isFoodStamble",
                             "sellOutOfStock",
                             "trackQuantity",
-                            "costPerItem"
+                            "costPerItem",
                           ]?.includes(name) &&
                           item[currentTitle]?.comparePriceError
                         ? item[currentTitle]?.comparePriceError
@@ -808,19 +864,22 @@ const AddProducts = () => {
               }
             : item;
         } else if (i === 0) {
-          return (!["upcCode", "customCode"].includes(name) && !item[currentTitle][name]) && pageUrl === "inventory/products/add"
+          return !["upcCode", "customCode"].includes(name) &&
+            !item[currentTitle][name] &&
+            pageUrl === "inventory/products/add"
             ? {
                 ...item,
                 [currentTitle]: {
                   ...item[currentTitle],
                   [name]: fieldValue,
-                  price: name === "price"
+                  price:
+                    name === "price"
                       ? fieldValue
                       : item[currentTitle]?.price
                         ? item[currentTitle]?.price
                         : "",
-                  margin:costPerItemAndPriceAmountExists() 
-                  ? calculatemargin(name, item[currentTitle], fieldValue) 
+                  margin: costPerItemAndPriceAmountExists()
+                    ? calculatemargin(name, item[currentTitle], fieldValue)
                     : oldMargin([
                           item[currentTitle]?.costPerItem,
                           item[currentTitle]?.margin,
@@ -828,8 +887,8 @@ const AddProducts = () => {
                         ])
                       ? item[currentTitle]?.margin
                       : "",
-                  profit:costPerItemAndPriceAmountExists() 
-                  ? calculateProfit(name, item[currentTitle], fieldValue) 
+                  profit: costPerItemAndPriceAmountExists()
+                    ? calculateProfit(name, item[currentTitle], fieldValue)
                     : oldMargin([
                           item[currentTitle]?.costPerItem,
                           item[currentTitle]?.margin,
@@ -838,8 +897,6 @@ const AddProducts = () => {
                       ? item[currentTitle]?.profit
                       : "",
 
-
-                      
                   comparePriceError:
                     ["price", "compareAtPrice", "costPerItem"]?.includes(
                       name
@@ -856,7 +913,7 @@ const AddProducts = () => {
                             "isFoodStamble",
                             "sellOutOfStock",
                             "trackQuantity",
-                             "costPerItem"
+                            "costPerItem",
                           ]?.includes(name) &&
                           item[currentTitle]?.comparePriceError
                         ? item[currentTitle]?.comparePriceError
@@ -983,35 +1040,34 @@ const AddProducts = () => {
         : data.every((item) => isValue(item));
     };
 
-    const calculateProfit=(name, item, value)=>{
+    const calculateProfit = (name, item, value) => {
       let profitAmount = 0;
-      if(name === "costPerItem" && parseFloat(item?.price) > 0){;
-            profitAmount = parseFloat(item?.price - value).toFixed(2);
-      }else if(name === "price" && parseFloat(item?.costPerItem) > 0){
-            profitAmount = parseFloat(value - item?.costPerItem).toFixed(2);
-      } else{
-        profitAmount=""
+      if (name === "costPerItem" && parseFloat(item?.price) > 0) {
+        profitAmount = parseFloat(item?.price - value).toFixed(2);
+      } else if (name === "price" && parseFloat(item?.costPerItem) > 0) {
+        profitAmount = parseFloat(value - item?.costPerItem).toFixed(2);
+      } else {
+        profitAmount = "";
       }
       return profitAmount;
-    }
+    };
 
-
-    const calculatemargin=(name, item, value)=>{
+    const calculatemargin = (name, item, value) => {
       let marginAmount = 0;
-      if(name === "costPerItem" && parseFloat(item?.price) > 0){
-            let marginvl = (value * 100) / parseFloat(item?.price);
-            let showmargin = 100 - marginvl;
-            marginAmount = parseFloat(showmargin).toFixed(2);
-      } else if(name === "price" && parseFloat(item?.costPerItem) > 0){
-            let marginvl = (parseFloat(item?.costPerItem) * 100) / parseFloat(value);
-            let showmargin = 100 - marginvl;
-            marginAmount = parseFloat(showmargin).toFixed(2);
-      } else{
-        marginAmount=""
+      if (name === "costPerItem" && parseFloat(item?.price) > 0) {
+        let marginvl = (value * 100) / parseFloat(item?.price);
+        let showmargin = 100 - marginvl;
+        marginAmount = parseFloat(showmargin).toFixed(2);
+      } else if (name === "price" && parseFloat(item?.costPerItem) > 0) {
+        let marginvl =
+          (parseFloat(item?.costPerItem) * 100) / parseFloat(value);
+        let showmargin = 100 - marginvl;
+        marginAmount = parseFloat(showmargin).toFixed(2);
+      } else {
+        marginAmount = "";
       }
       return marginAmount;
-    }
-
+    };
 
     let showError;
     let updatedValues;
@@ -1030,10 +1086,16 @@ const AddProducts = () => {
             name === "compareAtPrice" ? fieldValue : item[title]?.compareAtPrice
           );
 
-          const costPerItemAndPriceAmountExists = () => {
-            const bool = (((name === "costPerItem" && fieldValue) && (parseFloat(item[title]?.price) > 0)) || ((name === "price" && fieldValue) && (parseFloat(item[title]?.costPerItem) > 0))) 
-            return bool;
-          }
+        const costPerItemAndPriceAmountExists = () => {
+          const bool =
+            (name === "costPerItem" &&
+              fieldValue &&
+              parseFloat(item[title]?.price) > 0) ||
+            (name === "price" &&
+              fieldValue &&
+              parseFloat(item[title]?.costPerItem) > 0);
+          return bool;
+        };
 
         return Object.keys(item).includes(title)
           ? {
@@ -1041,21 +1103,22 @@ const AddProducts = () => {
               [title]: {
                 ...item[title],
                 [name]: type === "checkbox" ? checked : fieldValue,
-                price:  name === "price"
+                price:
+                  name === "price"
                     ? fieldValue
                     : item[title].price
                       ? item[title].price
                       : "",
 
-                margin: costPerItemAndPriceAmountExists() 
-                      ? calculatemargin(name, item[title], fieldValue) 
-                      : oldMargin([
-                          item[title].costPerItem,
-                          item[title].margin,
-                          item[title].price,
-                        ])
-                      ? item[title].margin
-                      : "",
+                margin: costPerItemAndPriceAmountExists()
+                  ? calculatemargin(name, item[title], fieldValue)
+                  : oldMargin([
+                        item[title].costPerItem,
+                        item[title].margin,
+                        item[title].price,
+                      ])
+                    ? item[title].margin
+                    : "",
 
                 profit: costPerItemAndPriceAmountExists()
                   ? calculateProfit(name, item[title], fieldValue)
@@ -1085,7 +1148,7 @@ const AddProducts = () => {
                           "isFoodStamble",
                           "sellOutOfStock",
                           "trackQuantity",
-                          "costPerItem"
+                          "costPerItem",
                         ]?.includes(name) && item[title]?.comparePriceError
                       ? item[title]?.comparePriceError
                       : "",
@@ -1107,29 +1170,29 @@ const AddProducts = () => {
             name === "compareAtPrice" ? fieldValue : item?.compareAtPrice
           );
 
-
-          const costPerItemAndPriceAmountExistsInSingleVarient = () => {
-            const bool = (((name === "costPerItem" && fieldValue) && (parseFloat(item?.price) > 0)) || ((name === "price" && fieldValue) && (parseFloat(item?.costPerItem) > 0))) 
-            return bool;
-          }
-
+        const costPerItemAndPriceAmountExistsInSingleVarient = () => {
+          const bool =
+            (name === "costPerItem" &&
+              fieldValue &&
+              parseFloat(item?.price) > 0) ||
+            (name === "price" &&
+              fieldValue &&
+              parseFloat(item?.costPerItem) > 0);
+          return bool;
+        };
 
         return {
           ...item,
           [name]: type === "checkbox" ? checked : fieldValue,
-          price: name === "price"
-              ? fieldValue
-              : item.price 
-                ? item.price
-                : "",
-          margin: costPerItemAndPriceAmountExistsInSingleVarient() 
-          ? calculatemargin(name, item, fieldValue) 
-          : oldMargin([item.costPerItem, item.margin, item.price])
+          price: name === "price" ? fieldValue : item.price ? item.price : "",
+          margin: costPerItemAndPriceAmountExistsInSingleVarient()
+            ? calculatemargin(name, item, fieldValue)
+            : oldMargin([item.costPerItem, item.margin, item.price])
               ? item.margin
               : "",
           profit: costPerItemAndPriceAmountExistsInSingleVarient()
-          ? calculateProfit(name, item, fieldValue)
-          :  oldMargin([item.costPerItem, item.margin, item.price])
+            ? calculateProfit(name, item, fieldValue)
+            : oldMargin([item.costPerItem, item.margin, item.price])
               ? item.profit
               : "",
           comparePriceError:
@@ -1147,7 +1210,7 @@ const AddProducts = () => {
                     "isFoodStamble",
                     "sellOutOfStock",
                     "trackQuantity",
-                    "costPerItem"
+                    "costPerItem",
                   ]?.includes(name) && item?.comparePriceError
                 ? item?.comparePriceError
                 : "",
@@ -1157,6 +1220,7 @@ const AddProducts = () => {
 
     setFormValue(updatedValues);
   };
+  console.log("formvalue", formValue);
 
   const handleVarientTitleBasedItemList = () => {
     if (varientLength.length) {
@@ -1247,6 +1311,7 @@ const AddProducts = () => {
                   notEditable: result?.notEditable || "",
                   productEditId: result?.productEditId || "",
                   comparePriceError: result?.comparePriceError || "",
+                  upcError: result?.upcError || "",
                   costPerItem: result?.costPerItem || "",
                   compareAtPrice: result?.compareAtPrice || "",
                   price: result?.price || "",
@@ -1312,7 +1377,10 @@ const AddProducts = () => {
   const fetchProductDataById = () => {
     setFetchDataLoading(true);
     const formData = new FormData();
-    formData.append("merchant_id", LoginGetDashBoardRecordJson?.data?.merchant_id);
+    formData.append(
+      "merchant_id",
+      LoginGetDashBoardRecordJson?.data?.merchant_id
+    );
     formData.append("id", productId?.id);
     formData.append("login_type", userTypeData?.login_type);
     formData.append("token_id", userTypeData?.token_id);
@@ -1332,6 +1400,7 @@ const AddProducts = () => {
         })
         .catch((err) => {
           ToastifyAlert("Error while fetch product data!", "error");
+          getUnAutherisedTokenMessage();
         })
         .finally(() => {
           setFetchDataLoading(false);
@@ -1547,7 +1616,9 @@ const AddProducts = () => {
           ...item,
           [title]: {
             ...item[title],
-            upcCode: item[title]?.upcCode ? item[title]?.upcCode :  generateString(20),
+            upcCode: item[title]?.upcCode
+              ? item[title]?.upcCode
+              : generateString(20),
           },
         };
       });
@@ -1846,6 +1917,7 @@ const AddProducts = () => {
                 if (err) {
                   ToastifyAlert("Error!", "error");
                 }
+                getUnAutherisedTokenMessage();
               })
           : dispatch(addProduct(formdata))
               .then((res) => {
@@ -1858,6 +1930,7 @@ const AddProducts = () => {
                 if (err) {
                   ToastifyAlert("Error!", "error");
                 }
+                getUnAutherisedTokenMessage();
               });
       }
     } catch (err) {
@@ -1915,7 +1988,10 @@ const AddProducts = () => {
             text="Compare Price must be greater than price."
           />
 
-          <div className="q-attributes-main-page box_shadow_div">
+          <div
+            className="q-attributes-main-page box_shadow_div"
+            style={{ overflow: "unset" }}
+          >
             <div className="q-add-categories-section">
               <div className="q-add-categories-section-header">
                 <span
@@ -1933,7 +2009,9 @@ const AddProducts = () => {
               </div>
               <div className="q-add-categories-section-middle-form">
                 <div className="q-add-categories-single-input">
-                  <label htmlFor="title" className="product-input-title">Title</label>
+                  <label htmlFor="title" className="product-input-title">
+                    Title
+                  </label>
                   <input
                     type="text"
                     id="title"
@@ -1956,7 +2034,9 @@ const AddProducts = () => {
                 </div>
 
                 <div className="q-add-categories-single-input">
-                  <label htmlFor="description"  className="product-input-title">Description</label>
+                  <label htmlFor="description" className="product-input-title">
+                    Description
+                  </label>
                   <CkEditorInput
                     value={productInfo?.description}
                     onChange={handleProductInfo}
@@ -2022,6 +2102,8 @@ const AddProducts = () => {
                     error={error}
                     // handleUpdateError={handleUpdateError}
                     placeholder="Search Related Products"
+                    productTitle={productInfo?.title}
+                    pageUrl={pageUrl}
                   />
                 </div>
 
@@ -2037,6 +2119,8 @@ const AddProducts = () => {
                     error={error}
                     // handleUpdateError={handleUpdateError}
                     placeholder="Search Products"
+                    productTitle={productInfo?.title}
+                    pageUrl={pageUrl}
                   />
                 </div>
 
@@ -2182,10 +2266,6 @@ const AddProducts = () => {
                                 </>
                               </div>
                             );
-
-
-
-                            
                           })
                         : ""}
                     </div>

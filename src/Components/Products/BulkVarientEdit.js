@@ -107,7 +107,7 @@ const BulkVarientEdit = ({
       handleCopyAllVarientValue(copyValue);
     }
 
-    // compareAtPrice check inside form with all price // compareAtPrice must be greater than price value
+    // compareAtPrice check inside form with all price // Compare At Price must be greater than price in all variants.value
     if (bulkVarient["compareAtPrice"] && !bulkVarient["price"]) {
       if (
         // formData?.some((i) => +i?.["price"] > +bulkVarient["compareAtPrice"])
@@ -118,7 +118,7 @@ const BulkVarientEdit = ({
           "isCompareAtGreaterThanAllPrice"
         )
       ) {
-        alert("compareAtPrice must be greater than price.");
+        alert("Compare At Price must be greater than price in all variants.");
         handleCopyAllVarientValue(copyValue);
       } else {
         handleCopyAllVarientValue(copyAllValue);
@@ -140,7 +140,7 @@ const BulkVarientEdit = ({
           "isPriceLessThanAllCompareAtPrice"
         )
       ) {
-        alert("compareAtPrice must be greater than price.");
+        alert("Compare At Price must be greater than price in all variants.");
         handleCopyAllVarientValue(copyValue);
       } else {
         handleCopyAllVarientValue(copyAllValue);
@@ -152,11 +152,11 @@ const BulkVarientEdit = ({
       }
     }
 
-    // if both value exist then check compareAtPrice must be greater than price and check inside form that compare value is greater than all price
+    // if both value exist then check Compare At Price must be greater than price in all variants.and check inside form that compare value is greater than all price
     else if (bulkVarient["compareAtPrice"] && bulkVarient["price"]) {
       // compare inside modal
       if (+bulkVarient["compareAtPrice"] < +bulkVarient["price"]) {
-        alert("compareAtPrice must be greater than price.");
+        alert("Compare At Price must be greater than price in all variants.");
         handleCopyAllVarientValue(copyValue);
       }
       // compare inside form
