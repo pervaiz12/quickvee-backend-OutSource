@@ -29,12 +29,14 @@ import AlertModal from "../../reuseableComponents/AlertModal";
 import PasswordShow from "../../Common/passwordShow";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Link,useNavigate } from "react-router-dom";
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 
 const AddCoupon = ({ seVisible }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
     const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
   const [activeTab, setActiveTab] = useState("amount");
+  const [switchdisable, setSwitchdisable] = useState(false);
 
   const [couponStates, setCouponStates] = useState({
     online: false,
@@ -43,10 +45,19 @@ const AddCoupon = ({ seVisible }) => {
   });
 
   const handleCheckboxChange = (couponName) => (e) => {
-    setCouponStates({
-      ...couponStates,
-      [couponName]: e.target.checked ? 1 : 0,
-    });
+    if(switchdisable && (couponName === "online" || couponName === "list_online" )){
+      setCouponStates({
+        ...couponStates,
+        online: false,
+        list_online:false, 
+      })
+    }else{
+      setCouponStates({
+        ...couponStates,
+        [couponName]: e.target.checked ? 1 : 0,
+      });
+
+    }
   };
 
   const [inputValue, setInputValue] = useState("");
@@ -125,6 +136,7 @@ const AddCoupon = ({ seVisible }) => {
     setCoupon({ ...coupon, discount: "" })
     setDateMaxDisAMTError("");
     setDiscountError("");
+    setSwitchdisable(false)
   };
 
   const minutes = Math.round(dayjs().minute() / 15) * 15;
@@ -165,76 +177,146 @@ const AddCoupon = ({ seVisible }) => {
     });
   };
 
+  // const handleStartDateChange = (newDate) => {
+  //   const formattedStartDate = newDate.format("YYYY-MM-DD");
+  //   const dayjsDate = dayjs(newDate);
+  //   const today = new Date().toISOString().split("T")[0];
+  //   if (dayjsDate === coupon.date_expire) {
+  //     // showModal("Start date cannot be the same as the end date");
+  //     setCoupon({
+  //       ...coupon,
+  //       date_valid: formattedStartDate,
+  //     });
+  //     setDateStartError("");
+  //     // setDateStartError("Start Date is required");
+  //   } else if (dayjs(dayjsDate).isAfter(dayjs(coupon.date_expire))) {
+  //     // showModal("Start date cannot be greater than the end date");
+  //     setCoupon({
+  //       ...coupon,
+  //       date_valid: formattedStartDate,
+  //       date_expire: "",
+  //     });
+  //     setDateStartError("Start Date is required");
+  //   } else {
+  //     setCoupon({
+  //       ...coupon,
+  //       date_valid: formattedStartDate,
+  //     });
+  //     setDateStartError("");
+  //   }
+  //   if(dayjsDate < today){
+  //     setCoupon({
+  //       ...coupon,
+  //       date_valid: "",
+  //     });
+  //     setDateStartError("Start Date cannot be before the current date");
+  //   }
+  // };
+
+  // const handleEndDateChange = (newDate) => {
+  //   const formattedEndDate = newDate.format("YYYY-MM-DD");
+  //   const dayjsDate = dayjs(newDate);
+  //   const today = new Date().toISOString().split("T")[0];
+  //   if (dayjsDate === coupon.date_valid) {
+  //     // showModal("End date cannot be the same as the start date");
+  //     setCoupon({
+  //       ...coupon,
+  //       date_expire: formattedEndDate,
+  //     });
+  //     // setDateEndError("End Date is required");
+  //     setDateEndError("")
+  //     // return; // Do not update the state
+  //   } else if (dayjs(dayjsDate).isBefore(dayjs(coupon.date_valid))) {
+  //     showModal("End date cannot be less than the start date");
+  //     setCoupon({
+  //       ...coupon,
+  //       date_expire: "",
+  //     });
+  //     setDateEndError("End Date is required");
+  //   } else {
+  //     setCoupon({
+  //       ...coupon,
+  //       date_expire: formattedEndDate,
+  //     });
+  //     setDateEndError("");
+  //   }
+  //   if(dayjsDate < today){
+  //     setCoupon({
+  //       ...coupon,
+  //       date_expire: "",
+  //     });
+  //     setDateEndError("End Date cannot be before the current date");
+  //   }
+  // };
+
+
   const handleStartDateChange = (newDate) => {
     const formattedStartDate = newDate.format("YYYY-MM-DD");
-    const dayjsDate = dayjs(newDate);
-    const today = new Date().toISOString().split("T")[0];
-    if (dayjsDate === coupon.date_expire) {
-      // showModal("Start date cannot be the same as the end date");
+    const dayjsDate = dayjs(formattedStartDate);
+    const today = dayjs().format("YYYY-MM-DD");
+    const endDate = coupon.date_expire;
+  
+    // Check if the start date is before today's date
+    if (formattedStartDate < today) {
       setCoupon({
         ...coupon,
-        date_valid: formattedStartDate,
+        date_valid: "",
       });
-      setDateStartError("");
-      // setDateStartError("Start Date is required");
-    } else if (dayjs(dayjsDate).isAfter(dayjs(coupon.date_expire))) {
+      setDateStartError("Start Date cannot be before the current date");
+    }else if (endDate && dayjsDate.isAfter(dayjs(endDate))) {
       // showModal("Start date cannot be greater than the end date");
       setCoupon({
         ...coupon,
         date_valid: formattedStartDate,
         date_expire: "",
       });
-      setDateStartError("Start Date is required");
-    } else {
+      setDateStartError("");
+      setDateEndError("End Date is required");
+    }else {
       setCoupon({
         ...coupon,
         date_valid: formattedStartDate,
       });
       setDateStartError("");
+      setDateEndError("");
     }
-    if(dayjsDate < today){
-      setCoupon({
-        ...coupon,
-        date_valid: "",
-      });
-      setDateStartError("Start Date cannot be before the current date");
-    }
+    // console.log("coupon StartDate", coupon.date_valid);
   };
+  
 
   const handleEndDateChange = (newDate) => {
     const formattedEndDate = newDate.format("YYYY-MM-DD");
-    const dayjsDate = dayjs(newDate);
-    const today = new Date().toISOString().split("T")[0];
-    if (dayjsDate === coupon.date_valid) {
-      // showModal("End date cannot be the same as the start date");
-      setCoupon({
-        ...coupon,
-        date_expire: formattedEndDate,
-      });
-      // setDateEndError("End Date is required");
-      setDateEndError("")
-      // return; // Do not update the state
-    } else if (dayjs(dayjsDate).isBefore(dayjs(coupon.date_valid))) {
-      showModal("End date cannot be less than the start date");
+    const dayjsEndDate = dayjs(formattedEndDate);
+    const today = dayjs().format("YYYY-MM-DD");
+    const startDate = coupon.date_valid;
+  
+    // Check if the end date is before today's date
+    if (formattedEndDate < today) {
       setCoupon({
         ...coupon,
         date_expire: "",
       });
-      setDateEndError("End Date is required");
-    } else {
+      setDateEndError("End Date cannot be before the current date");
+    } 
+    // Check if the end date is less than the start date
+    else if (startDate && dayjsEndDate.isBefore(dayjs(startDate))) {
+      // showModal("End date cannot be less than the start date");
+      setCoupon({
+        ...coupon,
+        date_expire: "",
+      });
+      // setDateEndError("End Date is required");
+      setDateEndError("End Date cannot be less than the start date");
+    } 
+    // If the end date is valid
+    else {
       setCoupon({
         ...coupon,
         date_expire: formattedEndDate,
       });
       setDateEndError("");
     }
-    if(dayjsDate < today){
-      setCoupon({
-        ...coupon,
-        date_expire: "",
-      });
-      setDateEndError("End Date cannot be before the current date");
-    }
+    // console.log("coupon EndDate", coupon.date_expire);
   };
 
   const [minOrderAmountError, setMinOrderAmountError] = useState("");
@@ -309,10 +391,15 @@ const AddCoupon = ({ seVisible }) => {
       // return; // Stop further execution
     }
     if (activeTab === "percentage") {
+      if(coupon.discount > "100.00"){
+        console.log("coupon.discount",coupon.discount)
+        setDiscountError("Discount Percentage is cannot exceed 100.00%");
+        return
+      }
       if (!coupon.discount == null || coupon.discount === "" || coupon.discount === "0.00") {
         setDiscountError("Discount Amount Percentage is required");
         return
-      } else {
+      }else {
         setDiscountError("");
       }
     }
@@ -385,7 +472,9 @@ const AddCoupon = ({ seVisible }) => {
       dateEndError === "End Date is required" ||
       dateMaxDisAMTError === "Maximum Discount Amount is required" ||
       dateStartError === "Start Date cannot be before the current date" ||
-      dateEndError === "End Date cannot be before the current date" 
+      dateEndError === "End Date cannot be before the Start date" || 
+      dateEndError === "End Date cannot be less than the start date"  ||
+      discountError === "Discount Percentage is cannot exceed 100.00%"  
     ) {
       return;
     }
@@ -407,7 +496,7 @@ const AddCoupon = ({ seVisible }) => {
     for (const [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
     }
-    return
+    // return
     setLoader(true);
 
     try {
@@ -444,18 +533,20 @@ const AddCoupon = ({ seVisible }) => {
   };
 
   const handleMinAmountChange = (e) => {
-    const { value } = e.target;
-    const formattedValue = CurrencyInputHelperFun(value);
-
-    if (formattedValue === "0.00") {
-      setMinOrderAmountError("Minimum Order Amount is required");
-    } else {
-      setMinOrderAmountError("");
+    if (!isNaN(e.target.value)) {
+      const { value } = e.target;
+      const formattedValue = CurrencyInputHelperFun(value);
+      if (formattedValue === "0.00") {
+        setMinOrderAmountError("Minimum Order Amount is required");
+      } else {
+        setMinOrderAmountError("");
+      }
+      setCoupon({ ...coupon, min_amount: formattedValue });
     }
-    setCoupon({ ...coupon, min_amount: formattedValue });
   };
 
   const handleDiscountAmountChange = (e) => {
+    if (!isNaN(e.target.value)) {
     const { value } = e.target;
     const formattedValue = CurrencyInputHelperFun(value);
     if (formattedValue === "0.00") {
@@ -464,9 +555,12 @@ const AddCoupon = ({ seVisible }) => {
       setDiscountError("");
     }
     setCoupon({ ...coupon, discount: formattedValue });
+    }
+    setSwitchdisable(false)
   };
 
   const handleDiscountPercentChange = (e) => {
+    if (!isNaN(e.target.value)) {
     const { value } = e.target;
     const formattedValue = CurrencyInputHelperFun(value);
     if (formattedValue === "0.00") {
@@ -474,38 +568,58 @@ const AddCoupon = ({ seVisible }) => {
     } else {
       setDiscountError("");
     }
+    if(formattedValue > "100.00"){
+      setDiscountError("Discount Percentage is cannot exceed 100.00%");
+    }
+    if(formattedValue === "100.00" || formattedValue > "100.00"){  
+      setCouponStates({
+        ...couponStates,
+        online: false,
+        list_online:false,
+      })
+      setSwitchdisable(true)
+    }else{
+      setSwitchdisable(false)
+    }
     setCoupon({ ...coupon, discount: formattedValue });
+    }
   };
 
   const handleMaxDiscountChange = (e) => {
     // const inputValue = e.target.value;
-    const { name, value } = e.target;
-    let fieldValue;
-    fieldValue = value
-      // Remove extra dots and ensure only one dot exists at most
-      .replace(/[^\d.]/g, "") // Allow digits and dots only
-      .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
-      .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
-    let inputStr = fieldValue.replace(/\D/g, "");
-    inputStr = inputStr.replace(/^0+/, "");
+    if (!isNaN(e.target.value)) {
+      const { name, value } = e.target;
+      let fieldValue;
+      fieldValue = value
+        // Remove extra dots and ensure only one dot exists at most
+        .replace(/[^\d.]/g, "") // Allow digits and dots only
+        .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
+        .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+      let inputStr = fieldValue.replace(/\D/g, "");
+      inputStr = inputStr.replace(/^0+/, "");
 
-    if (inputStr.length == "") {
-      fieldValue = "0.00";
-    } else if (inputStr.length === 1) {
-      fieldValue = "0.0" + inputStr;
-    } else if (inputStr.length === 2) {
-      fieldValue = "0." + inputStr;
-    } else {
-      fieldValue =
-        inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
+      if (inputStr.length == "") {
+        fieldValue = "0.00";
+      } else if (inputStr.length === 1) {
+        fieldValue = "0.0" + inputStr;
+      } else if (inputStr.length === 2) {
+        fieldValue = "0." + inputStr;
+      } else {
+        fieldValue =
+          inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
+      }
+      if (fieldValue.trim() === "") {
+          setDateMaxDisAMTError("Maximum Discount Amount is required");
+          setCoupon({ ...coupon, maximum_discount: "" });
+      } else {
+        setCoupon({ ...coupon, maximum_discount: fieldValue });
+        setDateMaxDisAMTError("");
+      }
     }
-    if (fieldValue.trim() === "") {
-      setDateMaxDisAMTError("Maximum Discount Amount is required");
-      setCoupon({ ...coupon, maximum_discount: "" });
-    } else {
-      setCoupon({ ...coupon, maximum_discount: fieldValue });
-      setDateMaxDisAMTError("");
-    }
+  };
+
+  const preventKeyPress = (event) => {
+    event.preventDefault();
   };
 
   return (
@@ -620,7 +734,7 @@ const AddCoupon = ({ seVisible }) => {
                               <BasicTextFields
                                 type={"text"}
                                 value={coupon.discount}
-                                maxLength={5}
+                                // maxLength={5}
                                 placeholder="Enter Discount Percentage"
                                 onChangeFun={handleDiscountPercentChange}
                               />
@@ -714,16 +828,16 @@ const AddCoupon = ({ seVisible }) => {
                               }
                               style={{ border: "none" }} // Remove border
                               size="small"
-                              // format={"MMMM DD, YYYY"}
+                              format={"MMMM DD, YYYY"}
                               disablePast
                               views={["year", "month", "day"]}
                               slotProps={{
                                 textField: {
                                   placeholder: "Start Date",
                                   size: "small",
+                                  onKeyPress: preventKeyPress, 
                                 },
                               }}
-                              value={coupon.date_valid}
                               components={{
                                 OpenPickerIcon: () => (
                                   <img src={caleIcon} alt="calendar-icon" />
@@ -793,14 +907,15 @@ const AddCoupon = ({ seVisible }) => {
                                 const start = coupon.date_valid;
                                 return date.format("YYYY-MM-DD") < start ;
                               }}
-                              value={coupon.date_expire}
-                              // format={"MMMM DD, YYYY"}
+                              // value={coupon.date_expire}
+                              format={"MMMM DD, YYYY"}
                               disablePast
-                              views={["year", "month", "day"]}
+                              // views={["year", "month", "day"]}
                               slotProps={{
                                 textField: {
                                   placeholder: "End Date",
                                   size: "small",
+                                  onKeyPress: preventKeyPress, 
                                 },
                               }}
                               components={{

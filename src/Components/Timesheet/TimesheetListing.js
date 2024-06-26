@@ -899,6 +899,9 @@ const TimesheetListing = ({ data }) => {
     }
   };
 
+  const preventKeyPress = (event) => {
+    event.preventDefault();
+  };
   return (
     <>
       {renderDataTable()}
@@ -953,7 +956,7 @@ const TimesheetListing = ({ data }) => {
                       format={"MMMM DD, YYYY"}
                       views={["year", "month", "day"]}
                       slotProps={{
-                        textField: { placeholder: "Select Date" },
+                        textField: { placeholder: "Select Date",onKeyPress: preventKeyPress, },
                       }}
                       disableFuture
                       components={{
@@ -1036,7 +1039,7 @@ const TimesheetListing = ({ data }) => {
                       format={"MMMM DD, YYYY"}
                       views={["year", "month", "day"]}
                       slotProps={{
-                        textField: { placeholder: "Select Date" },
+                        textField: { placeholder: "Select Date",onKeyPress: preventKeyPress, },
                       }}
                       components={{
                         OpenPickerIcon: () => (
