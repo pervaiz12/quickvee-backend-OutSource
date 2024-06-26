@@ -660,8 +660,9 @@ const AddNewStocktake = ({
                         <StyledTableRow key={index}>
                           <StyledTableCell sx={{ width: "40%" }}>
                             <div style={{ position: "relative", zIndex: 100 }}>
-                              {singleStocktakeState?.stocktake_item[index]
-                                ?.category_id === product.category_id ? (
+                              { singleStocktakeState?.stocktake_item[index]
+                                ?.product_id &&  singleStocktakeState?.stocktake_item[index]
+                                ?.product_id === product.product_id ? (
                                 product?.product_name
                               ) : (
                                 <AsyncSelect
@@ -714,15 +715,25 @@ const AddNewStocktake = ({
                           <StyledTableCell>{product.upc}</StyledTableCell>
 
                           <StyledTableCell>
+                            
                             {singleStocktakeState?.stocktake_item.length ===
-                              1 &&
+                              1 && 
+
+                              (singleStocktakeState?.stocktake_item[0]
+                              ?.variant.length > 0 ? 
+
+                              singleStocktakeState?.stocktake_item[0]
+                              ?.variant_id === product?.variant_id 
+                              :
                             singleStocktakeState?.stocktake_item[0]
-                              ?.product_id === product?.product_id ? (
+                              ?.product_id === product?.product_id ) ? 
+                              (
                               null
                             ) : <img
                             src={DeleteIcon}
                             onClick={() => handleDeleteProduct(index)}
                             alt="Delete Icon"
+                            className="cursor-pointer"
                           />}
                           </StyledTableCell>
                         </StyledTableRow>

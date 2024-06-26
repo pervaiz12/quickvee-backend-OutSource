@@ -225,6 +225,7 @@ const StocktakeList = ({
             </Grid>
           </Grid>
           <Grid container>
+            
             {StocktakeListReducerState.loading ? (
               <SkeletonTable columns={tableRow} />
             ) : (
