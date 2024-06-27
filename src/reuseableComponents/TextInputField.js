@@ -18,6 +18,7 @@ export default function BasicTextFields({
   rows,
   maxRows,
   onFocusData,
+  autoComplete
 }) {
   return (
     <FormControl fullWidth>
@@ -39,6 +40,7 @@ export default function BasicTextFields({
         rows={rows}
         maxRows={maxRows}
         onFocus={onFocusData}
+        autoComplete={false}
       />
     </FormControl>
   );

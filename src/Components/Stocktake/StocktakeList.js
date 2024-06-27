@@ -24,7 +24,8 @@ import {
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import useDebounce from "../../hooks/useDebouncs";
 import { useNavigate } from "react-router-dom";
-
+import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
+import sortIcon from "../../Assests/Category/SortingW.svg";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -70,6 +71,7 @@ const StocktakeList = ({
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
   // console.log("StocktakeList", StocktakeListReducerState);
+  const [StocktakeList, setStocktakeList] = useState([]);
   const dispatch = useDispatch();
 
   const debouncedValue = useDebounce(searchId);
@@ -99,24 +101,24 @@ const StocktakeList = ({
     setTotalCount(StocktakeListReducerState.stocktakeListCount);
   }, [StocktakeListReducerState.stocktakeListCount]);
 
+  useEffect(() => {
+    setStocktakeList(StocktakeListReducerState?.StocktakeList);
+  }, [StocktakeListReducerState?.StocktakeList]);
+
   const handleSearchInputChange = (value) => {
     setSearchId(value);
     setCurrentPage(1);
   };
   const tableRow = [
-    "Stocktake",
-    "Status",
-    "Total Qty",
-    "Total Discrepancy Cost",
-    "Date",
-    // { type: "str", name: "item_name", label: "Stocktake" },
-    // { type: "num", name: "variant", label: "Variant" },
-    // { type: "str", name: "category", label: "Category" },
-    // { type: "num", name: "cost_vendor", label: "Cost Of Vendor" },
-    // { type: "num", name: "instock", label: "Instock" },
-    // { type: "num", name: "item_price", label: "Item Price" },
-    // { type: "num", name: "reorder_level", label: "Reorder Level" },
-    // { type: "num", name: "reorder_qty", label: "Reorder Quantity" },
+    { type: "num", name: "id", label: "Stocktake" },
+    { type: "str", name: "status", label: "Status" },
+    { type: "num", name: "total_qty", label: "Total Qty" },
+    {
+      type: "num",
+      name: "total_discrepancy_cost",
+      label: "Total Discrepancy Cost",
+    },
+    { type: "date", name: "created_at", label: "Date" },
   ];
   const stocktalkStatus = [
     {
@@ -169,7 +171,32 @@ const StocktakeList = ({
     );
     return formattedDate;
   };
-
+  console.log("StocktakeListReducerState", StocktakeListReducerState);
+  const [sortOrder, setSortOrder] = useState("asc");
+  const sortByItemName = (type, name) => {
+    const updatedList = StocktakeList?.map((item) => {
+      const matchingStatus = stocktalkStatus?.find((itemStatus) => itemStatus?.status === item?.status);
+      return {
+        ...item,
+        status: matchingStatus ? matchingStatus.title : ""
+      };
+    });
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      updatedList,
+      type,
+      name,
+      sortOrder
+    );
+    const updatedListWithDigit = sortedItems?.map((item) => {
+      const matchingStatus = stocktalkStatus?.find((itemStatus) => itemStatus?.title === item?.status);
+      return {
+        ...item,
+        status: matchingStatus ? matchingStatus.status : ""
+      };
+    });
+    setStocktakeList(updatedListWithDigit);
+    setSortOrder(newOrder);
+  };
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   return (
     <>
@@ -225,9 +252,8 @@ const StocktakeList = ({
             </Grid>
           </Grid>
           <Grid container>
-            
             {StocktakeListReducerState.loading ? (
-              <SkeletonTable columns={tableRow} />
+              <SkeletonTable columns={tableRow.map((item) => item.label)} />
             ) : (
               <>
                 {StocktakeListReducerState?.StocktakeList &&
@@ -238,63 +264,77 @@ const StocktakeList = ({
                       <StyledTable aria-label="customized table">
                         <TableHead>
                           {tableRow.map((item, index) => (
-                            <StyledTableCell  key={item}>
-                              {item}
+                            <StyledTableCell key={item}>
+                              <button
+                                className="flex items-center"
+                                onClick={() =>
+                                  sortByItemName(item.type, item.name)
+                                }
+                              >
+                                <p>{item.label}</p>
+                                <img src={sortIcon} alt="" className="pl-1" />
+                              </button>
+                              {}
                             </StyledTableCell>
                           ))}
                         </TableHead>
                         <TableBody>
-                          {StocktakeListReducerState.StocktakeList.map(
-                            (item, index) => {
-                              const statusObj = stocktalkStatus.find(
-                                (itemStatus) =>
-                                  itemStatus.status === item.status
-                              );
-                              return (
-                                <StyledTableRow key={index}>
-                                  <StyledTableCell >
-                                    <button
-                                      className="attributeUpdateBTN"
-                                      onClick={() => {
-                                        handleStocktakeIdClick(item.id);
-                                      }}
-                                    >
-                                      {loader && stocltakeId === item.id ? (
-                                        <CircularProgress
-                                          color={"inherit"}
-                                          className=""
-                                          width={15}
-                                          size={15}
-                                        />
-                                      ) : (
-                                        <p className="text-[#0A64F9] cursor-pointer">
-                                          {item.st_id}
-                                        </p>
-                                      )}
-                                    </button>
-                                  </StyledTableCell>
-                                  <StyledTableCell >
-                                    <p>{statusObj ? capitalize(statusObj.title) : ""}</p>
-                                  </StyledTableCell>
-                                  <StyledTableCell >
-                                    <p>{item.total_qty}</p>
-                                  </StyledTableCell>
-                                  <StyledTableCell >
-                                    <p>${item.total_discrepancy_cost}</p>
-                                  </StyledTableCell>
-                                  <StyledTableCell >
-                                    <p>{formatDate(item.created_at)}</p>
-                                  </StyledTableCell>
-                                </StyledTableRow>
-                              );
-                            }
-                          )}
+                          {StocktakeList.map((item, index) => {
+                            const statusObj = stocktalkStatus.find(
+                              (itemStatus) => itemStatus.status === item.status
+                            );
+                            return (
+                              <StyledTableRow key={index}>
+                                <StyledTableCell>
+                                  <button
+                                    className="attributeUpdateBTN"
+                                    onClick={() => {
+                                      handleStocktakeIdClick(item.id);
+                                    }}
+                                  >
+                                    {loader && stocltakeId === item.id ? (
+                                      <CircularProgress
+                                        color={"inherit"}
+                                        className=""
+                                        width={15}
+                                        size={15}
+                                      />
+                                    ) : (
+                                      <p className="text-[#0A64F9] cursor-pointer">
+                                        {item.st_id}
+                                      </p>
+                                    )}
+                                  </button>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <p>
+                                    {statusObj
+                                      ? capitalize(statusObj.title)
+                                      : ""}
+                                  </p>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <p>{item.total_qty}</p>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <p>${item.total_discrepancy_cost}</p>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <p>{formatDate(item.created_at)}</p>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            );
+                          })}
                         </TableBody>
                       </StyledTable>
                     </TableContainer>
                   </>
                 ) : (
-                  <><div className="p-4"><p>No results found</p></div></>
+                  <>
+                    <div className="p-4">
+                      <p>No results found</p>
+                    </div>
+                  </>
                 )}
               </>
             )}

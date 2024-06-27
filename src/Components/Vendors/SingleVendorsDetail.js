@@ -61,6 +61,7 @@ const SingleVendorsDetail = ({ setVisible }) => {
   const AllVendorsDataState = useSelector((state) => state.vendors);
   const [selectedVendor, setSelectedVendor] = useState(false);
   const [total, setTotal] = useState(0);
+  const [loading, setLoading] = useState(false);
   console.log("selectedVendor", selectedVendor);
 
   const openModal = (payAmount, id, remark) => {
@@ -81,6 +82,7 @@ const SingleVendorsDetail = ({ setVisible }) => {
     const { start_date, end_date } = dateRangeData;
 
     try {
+      setLoading(true);
       const { token, ...otherUserData } = userTypeData;
       const data = {
         // merchant_id: 'MAL0100CA',
@@ -96,17 +98,25 @@ const SingleVendorsDetail = ({ setVisible }) => {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      setVendorDetails(response.data.vendor_details);
-      const total = response.data.vendor_details.reduce((acc, curr) => {
-        console.log(curr.pay_amount);
-        return acc + (curr.pay_amount ? parseFloat(curr.pay_amount) : 0);
-      }, 0);
-      setTotal(total);
-      console.log(response.data.vendor_details);
+      console.log(response);
+      if (response.status === 200) {
+        setVendorDetails(response.data.vendor_details);
+        const total = response.data.vendor_details.reduce((acc, curr) => {
+          console.log(curr.pay_amount);
+          return acc + (curr.pay_amount ? parseFloat(curr.pay_amount) : 0);
+        }, 0);
+        setTotal(total);
+        setLoading(false);
+        console.log(response.data.vendor_details);
+      } else {
+        ToastifyAlert("Something went wrong", "error");
+        setLoading(false);
+      }
     } catch (error) {
       handleCoockieExpire();
       getUnAutherisedTokenMessage();
+      setLoading(false);
+      ToastifyAlert("Something went wrong", "error");
     }
   };
 
@@ -242,12 +252,8 @@ const SingleVendorsDetail = ({ setVisible }) => {
       <Grid container sx={{ paddingY: 2 }}>
         <DateRangeComponent onDateRangeChange={handleGetReport} />
       </Grid>
-      <Grid
-        container
-        sx={{ marginY: 2 }}
-        className="q-add-categories-section"
-      >
-        <Grid xs={12} item> 
+      <Grid container sx={{ marginY: 2 }} className="q-add-categories-section">
+        <Grid xs={12} item>
           <Grid item xs={12}>
             <div className="q-add-categories-section-header">
               <span
@@ -260,7 +266,7 @@ const SingleVendorsDetail = ({ setVisible }) => {
               </span>
             </div>
           </Grid>
-          <Grid container >
+          <Grid container>
             <Grid item xs={12}>
               <CustomizedTable
                 tableRowData={[
@@ -275,7 +281,9 @@ const SingleVendorsDetail = ({ setVisible }) => {
                 handleDeleteClick={handleDeleteClick}
                 dateRangeState={dateRangeState}
                 handleGetReport={handleGetReport}
+                loading={loading}
                 total={total}
+                setVendorDetails={setVendorDetails}
               />
             </Grid>
           </Grid>

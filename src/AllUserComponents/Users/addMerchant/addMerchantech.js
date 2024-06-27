@@ -31,6 +31,7 @@ export default function AddMerchan() {
     errorPin,
     handleKeyPress,
     loader,
+    keyEnter,
   } = MerchantFunction();
 
   const navigate = useNavigate();
@@ -252,6 +253,7 @@ export default function AddMerchan() {
                     value={store.storename}
                     onChangeFun={handleChange}
                     sx={{ pt: 0.5 }}
+                    onKeyDown={keyEnter}
                   />
                   {store.errors.storename && (
                     <span className="error">{store.errors.storename}</span>
@@ -267,6 +269,7 @@ export default function AddMerchan() {
                     value={store.ownerName}
                     onChangeFun={handleChange}
                     sx={{ pt: 0.5 }}
+                    onKeyDown={keyEnter}
                   />
                   {store.errors.ownerName && (
                     <span className="error">{store.errors.ownerName}</span>
@@ -287,6 +290,7 @@ export default function AddMerchan() {
                     autoComplete="off"
                     readOnly
                     onFocusData={(e) => e.target.removeAttribute("readonly")}
+                    onKeyDown={keyEnter}
                   />
                   {/* <input
                     className=""
@@ -315,6 +319,7 @@ export default function AddMerchan() {
                       onChangeFun={handleChange}
                       onBlurFunction={() => handleBlur("password")}
                       sx={{ pt: 0.5, pt: 0 }}
+                      onKeyDown={keyEnter}
                     />
                     {jsxData(store.password)}
                   </div>
@@ -337,6 +342,7 @@ export default function AddMerchan() {
                     maxLength={10}
                     onKeyPressFun={handleKeyPress}
                     sx={{ pt: 0.5 }}
+                    onKeyDown={keyEnter}
                   />
                   {store.errors.phone && (
                     <span className="error">{store.errors.phone}</span>

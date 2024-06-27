@@ -716,6 +716,13 @@ const TimesheetListing = ({ data }) => {
     );
     return formattedDate;
   };
+  const formDateOUtDate = (dateString) =>{
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const [day, month, year] = dateString.split('-');
+    const date = new Date(year, month - 1, day);
+    const formattedDate = `${months[date.getMonth()]} ${String(date.getDate()).padStart(2, '0')}, ${date.getFullYear()}`;
+    return formattedDate;
+  };
 
   const [currentDate, setCurrentDate] = useState(getDate());
   function getDate() {
@@ -899,6 +906,9 @@ const TimesheetListing = ({ data }) => {
     }
   };
 
+  const preventKeyPress = (event) => {
+    event.preventDefault();
+  };
   return (
     <>
       {renderDataTable()}
@@ -953,7 +963,7 @@ const TimesheetListing = ({ data }) => {
                       format={"MMMM DD, YYYY"}
                       views={["year", "month", "day"]}
                       slotProps={{
-                        textField: { placeholder: "Select Date" },
+                        textField: { placeholder: "Select Date",onKeyPress: preventKeyPress, },
                       }}
                       disableFuture
                       components={{
@@ -1036,7 +1046,7 @@ const TimesheetListing = ({ data }) => {
                       format={"MMMM DD, YYYY"}
                       views={["year", "month", "day"]}
                       slotProps={{
-                        textField: { placeholder: "Select Date" },
+                        textField: { placeholder: "Select Date",onKeyPress: preventKeyPress, },
                       }}
                       components={{
                         OpenPickerIcon: () => (
@@ -1273,7 +1283,7 @@ const TimesheetListing = ({ data }) => {
                 <span className="viewTextBark">
                   {formatDate(EmployeeWorkDate)} -{" "}
                   {EmployeeWorkDateOUT
-                    ? formatDate(EmployeeWorkDateOUT)
+                    ? formDateOUtDate(EmployeeWorkDateOUT)
                     : "-"}
                 </span>{" "}
               </span>

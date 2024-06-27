@@ -8,7 +8,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { useNavigate, useParams } from "react-router-dom";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
-import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import AsyncSelect from "react-select/async";
 import DeleteIcon from "../../Assests/Dashboard/deleteIcon.svg";
 import { fetchPurchaseOrderById } from "../../Redux/features/PurchaseOrder/purchaseOrderByIdSlice";
@@ -114,6 +113,7 @@ const ModifyPurchaseOrder = () => {
   });
 
   const [selectedProducts, setSelectedProducts] = useState([]);
+  const [deletedProducts, setDeletedProducts] = useState([]);
 
   const puchaseOrderDetail = useSelector(
     (state) => state.purchaseOrderById.purchaseOrderDetail
@@ -145,7 +145,8 @@ const ModifyPurchaseOrder = () => {
         ...item,
         order_item_id: item.id,
         newPrice: item.cost_per_item,
-        newQty: item.pending_qty,
+        newQty:
+          item.recieved_status === "2" ? item.required_qty : item.pending_qty,
         finalQty:
           (Number(item.item_qty) || 0) + (Number(item.pending_qty) || 0),
         finalPrice: item.total_pricing,
@@ -167,7 +168,6 @@ const ModifyPurchaseOrder = () => {
 
   // check each product has required data
   const validateProducts = () => {
-    // console.log("check products..: ", selectedProducts);
     const bool = selectedProducts.every(
       (product) =>
         product.id &&
@@ -176,7 +176,6 @@ const ModifyPurchaseOrder = () => {
         product.newPrice
     );
 
-    // console.log("bool: ", bool);
     return bool;
   };
 
@@ -242,35 +241,35 @@ const ModifyPurchaseOrder = () => {
         },
       });
 
-      console.log("response: ", response);
+      // console.log("response: ", response);
 
-      if (response.data.status) {
-        removeItem(productId);
-        ToastifyAlert(response.data.message, "success");
-      } else {
-        ToastifyAlert(response.data.message, "error");
-      }
+      // if (response.data.status) {
+      //   removeItem(productId);
+      //   ToastifyAlert(response.data.message, "success");
+      // } else {
+      //   ToastifyAlert(response.data.message, "error");
+      // }
     } catch (e) {
       console.log("Error: ", e);
     }
   };
 
   const handleDelete = (product) => {
-    // console.log("prod: ", product);
-
     // if product has po_id then removing from Local state as well as from backend
-    if (product.po_id) {
-      const confirmDelete = window.confirm(
-        "Are you sure you want to delete this product?"
-      );
+    // if (product.po_id) {
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this product?"
+    );
 
-      if (confirmDelete) {
-        // delete po item from backend api call
-        deletePOItem(product.id);
-      }
-    } else {
+    if (confirmDelete) {
+      // delete po item from backend api call
+      // deletePOItem(product.id);
       removeItem(product.id);
+      setDeletedProducts((prev) => [...prev, product.id]);
     }
+    // } else {
+    //   removeItem(product.id);
+    // }
   };
 
   const handleDate = (date, type) => {
@@ -342,7 +341,6 @@ const ModifyPurchaseOrder = () => {
 
   // generating product options once user searches any product name
   const productOptions = async (inputValue) => {
-    // if (inputValue && inputValue.length > 2) {
     let name_data = {
       merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
       category_id: "all",
@@ -356,10 +354,6 @@ const ModifyPurchaseOrder = () => {
     };
 
     const res = await dispatch(fetchProductsData(name_data));
-
-    // ?.filter((prod) =>
-    //   prod.title.toLowerCase().includes(inputValue.toLowerCase())
-    // )
 
     const data = res.payload?.map((prod) => ({
       label: prod.title,
@@ -417,8 +411,6 @@ const ModifyPurchaseOrder = () => {
         }
       );
 
-      // console.log("product info: ", response.data.data);
-
       let obj = {
         note: "",
         newQty: "",
@@ -440,11 +432,6 @@ const ModifyPurchaseOrder = () => {
 
           obj.finalQty = Number(product.quantity) ?? 0;
 
-          // setSelectedProducts((prev) => [
-          //   { ...product, ...obj, title: response.data.data.productdata.title },
-          //   ...prev,
-          // ]);
-
           const updatedData = selectedProducts.map((item, idx) =>
             idx === index
               ? {
@@ -455,7 +442,6 @@ const ModifyPurchaseOrder = () => {
               : item
           );
 
-          // console.log("after: ", updatedData);
           setSelectedProducts(updatedData);
         } else {
           const product = response.data.data.productdata;
@@ -476,7 +462,6 @@ const ModifyPurchaseOrder = () => {
           );
 
           setSelectedProducts(updatedData);
-          // setSelectedProducts((prev) => [{ ...product, ...obj }, ...prev]);
         }
       } else {
         console.log("Product Not available!");
@@ -572,8 +557,6 @@ const ModifyPurchaseOrder = () => {
   // modifying purchase order api
   const modifyPurchaseOrder = async () => {
     const { issuedDate, stockDate, selectedVendor } = purchaseInfo;
-    // console.log("puchaseOrderDetail: ", puchaseOrderDetail?.created_at);
-    // return;
     if (selectedProducts.length <= 0) {
       ToastifyAlert("No Products to update!", "error");
       return;
@@ -583,14 +566,6 @@ const ModifyPurchaseOrder = () => {
     const purchaseInfoDetails = [selectedVendor].every((a) =>
       Boolean(a && a.trim())
     );
-
-    // validating purchase order products dataset
-    // const validateProducts = selectedProducts.every(
-    //   (prod) => prod.newQty && prod.newPrice
-    // );
-
-    // console.log("selectedProducts: ", selectedProducts);
-    // return;
 
     if (purchaseInfoDetails && issuedDate && validateProducts()) {
       try {
@@ -663,7 +638,11 @@ const ModifyPurchaseOrder = () => {
             Authorization: `Bearer ${token}`, // Use data?.token directly
           },
         });
-        // console.log("response modifyPurchaseOrder: ", response);
+
+        // deleting product items if any from PO
+        if (deletedProducts.length > 0) {
+          deletedProducts.forEach((item) => deletePOItem(item));
+        }
 
         if (response.data.status) {
           ToastifyAlert(response.data.message, "success");
@@ -680,26 +659,12 @@ const ModifyPurchaseOrder = () => {
         setPurchaseInfoErrors((prev) => ({
           ...prev,
           issuedDate: issuedDate ? "" : "Issued Date is required",
-          // stockDate: stockDate ? "" : "Stock Due Date is required",
-          // email: email ? "" : "Email is required",
           selectedVendor: selectedVendor ? "" : "Vendor is required",
         }));
       }
 
       if (!validateProducts()) {
         displayErrors();
-
-        // const temp = selectedProducts.map((prod) =>
-        //   !prod.newQty || !prod.newPrice
-        //     ? {
-        //         ...prod,
-        //         priceError: !prod.newPrice ? "Cost Per Item is required" : "",
-        //         qtyError: !prod.newQty ? "Quantity is required" : "",
-        //       }
-        //     : prod
-        // );
-
-        // setSelectedProducts(() => temp);
       }
     }
   };
@@ -842,24 +807,6 @@ const ModifyPurchaseOrder = () => {
       <div className="auto-po-container">
         <div className="box">
           <div className="box_shadow_div" style={{ overflow: "unset" }}>
-            {/* <div className="py-7 px-6">
-              <div className="q_searchBar sticky z-index-2">
-                <Grid container>
-                  <Grid item xs={12}>
-                    <AsyncSelect
-                      closeMenuOnSelect={true}
-                      value={null}
-                      loadOptions={productOptions}
-                      onChange={(option) => {
-                        getProductData(option.value, option.variantId);
-                      }}
-                      placeholder="Search Product by Title or UPC"
-                    />
-                  </Grid>
-                </Grid>
-              </div>
-            </div> */}
-
             <Grid container className="z-index-1">
               <TableContainer>
                 <StyledTable
@@ -873,6 +820,7 @@ const ModifyPurchaseOrder = () => {
                     <StyledTableCell>Cost Per Item</StyledTableCell>
                     <StyledTableCell>Total</StyledTableCell>
                     <StyledTableCell>UPC</StyledTableCell>
+                    <StyledTableCell>Note</StyledTableCell>
                     <StyledTableCell></StyledTableCell>
                   </TableHead>
                   <TableBody>
@@ -901,15 +849,14 @@ const ModifyPurchaseOrder = () => {
                             ) : (
                               <>
                                 <AsyncSelect
-                                  className={"mb-2"}
                                   closeMenuOnSelect={true}
                                   defaultOptions
                                   styles={customStyles}
                                   menuPortalTarget={document.body}
                                   value={{
-                                    label: `${product.title} ${
-                                      product.variant ? "~" : ""
-                                    } ${product.variant}`,
+                                    label: product.variant
+                                      ? `${product.title} ~ ${product.variant}`
+                                      : `${product.title}`,
                                     value: product.id,
                                   }}
                                   loadOptions={productOptions}
@@ -929,19 +876,6 @@ const ModifyPurchaseOrder = () => {
                                 )}
                               </>
                             )}
-
-                            <TextField
-                              id="outlined-basic"
-                              inputProps={{ type: "text" }}
-                              value={product.note}
-                              onChange={(e) =>
-                                handleProduct(e, product.id, "note")
-                              }
-                              placeholder="Add Note"
-                              variant="outlined"
-                              size="small"
-                              disabled={product.recieved_status === "2"}
-                            />
                           </>
                         </StyledTableCell>
                         <StyledTableCell>
@@ -949,10 +883,14 @@ const ModifyPurchaseOrder = () => {
                             id="outlined-basic"
                             value={product.newQty}
                             inputProps={{
-                              type: "number",
+                              type: "text",
                             }}
                             onChange={(e) => {
-                              if (e.target.value >= 0) {
+                              if (
+                                e.target.value >= 0 &&
+                                e.target.value.length <= 6 &&
+                                !isNaN(e.target.value)
+                              ) {
                                 handleProduct(e, product.id, "newQty");
                               }
                             }}
@@ -973,7 +911,9 @@ const ModifyPurchaseOrder = () => {
                             value={product.newPrice}
                             inputProps={{ type: "number" }}
                             onChange={(e) => {
-                              handleProduct(e, product.id, "newPrice");
+                              if (e.target.value.length <= 9) {
+                                handleProduct(e, product.id, "newPrice");
+                              }
                             }}
                             variant="outlined"
                             size="small"
@@ -992,8 +932,23 @@ const ModifyPurchaseOrder = () => {
                           <p className="text-[16px]">{product?.upc}</p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          {product?.recieved_status === "0" ||
-                          !product.po_id ? (
+                          <TextField
+                            id="outlined-basic"
+                            inputProps={{ type: "text" }}
+                            value={product.note}
+                            onChange={(e) =>
+                              handleProduct(e, product.id, "note")
+                            }
+                            placeholder="Add Note"
+                            variant="outlined"
+                            size="small"
+                            disabled={product.recieved_status === "2"}
+                          />
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          {(product?.recieved_status === "0" ||
+                            !product.po_id) &&
+                          selectedProducts.length > 1 ? (
                             <img
                               src={DeleteIcon}
                               alt=""

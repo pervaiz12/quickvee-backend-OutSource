@@ -81,7 +81,7 @@ const MainInstantDetails = ({ data }) => {
           <TableContainer>
             <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
               <TableHead>
-                <StyledTableCell>Date</StyledTableCell>
+                <StyledTableCell>Instant PO Info</StyledTableCell>
                 {/* <StyledTableCell>Time</StyledTableCell> */}
                 <StyledTableCell>Source</StyledTableCell>
                 {/* <StyledTableCell>Product Name</StyledTableCell> */}

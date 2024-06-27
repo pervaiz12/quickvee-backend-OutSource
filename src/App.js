@@ -270,11 +270,7 @@ function App() {
             element={<Main visible={"attributes"} />}
           />
 
-          <Route
-            exact
-            path="/import-data"
-            element={<Main visible={"import-data"} />}
-          />
+         
           <Route
             exact
             path="/loyalty-program"
@@ -597,6 +593,11 @@ function App() {
             exact
             path="/users/manager_view"
             element={<Main visible={"manager_view"} />}
+          />
+           <Route
+            exact
+            path="/import-data"
+            element={<Main visible={"import-data"} />}
           />
           <Route
             exact

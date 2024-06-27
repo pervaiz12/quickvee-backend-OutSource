@@ -11,7 +11,7 @@ import { BASE_URL, STATUS_UPD_VENDORS } from "../../Constants/Config";
 import ViewItemsModal from "./ViewItemsModal";
 // import EditVendorsModal from './EditVendorsModal';
 import Switch from "@mui/material/Switch";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import AlertModal from "../../reuseableComponents/AlertModal";
 import { priceFormate } from "../../hooks/priceFormate";
@@ -27,7 +27,9 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-
+import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
+import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
+import sortIcon from "../../Assests/Category/SortingW.svg";
 // end table imports ----------------------------------------------------
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -60,7 +62,7 @@ const VendorsDetail = ({ setVisible }) => {
   const label = { inputProps: { "aria-label": "Switch demo" } };
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
-
+  const navigate = useNavigate();
   const [allvendors, setallvendors] = useState([]);
   const AllVendorsDataState = useSelector((state) => state.vendors);
   const authUserData = useSelector((state) => state.authUser);
@@ -122,9 +124,9 @@ const VendorsDetail = ({ setVisible }) => {
         }
       );
       console.log(response);
-      if (response.data.status === "true") {
+      if (response.status === 200) {
         // alert("Vendor Status Updated Successfully.");
-        ToastifyAlert("Vendor Status Updated Successfully.", "success");
+        ToastifyAlert("Updated Successfully.", "success");
       } else {
         // alert("something went wrong.");
         showModal("Something went wrong !");
@@ -143,7 +145,32 @@ const VendorsDetail = ({ setVisible }) => {
     const formattedTime = date.toLocaleTimeString("en-US", timeOptions);
     return `${formattedDate} ${formattedTime}`;
   };
+  const handleEditClick = (name, id) => {
+    navigate(
+      `/vendors/vendor-details/${encodeURIComponent(name)}?vendorId=${id}`
+    );
+  };
+  const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
+  const sortByItemName = (type, name) => {
+    const itemWthoutDoller = allvendors.map((item)=>{
+      const dateString = item.recent_trans;
+      const [date, doller] = dateString.split('-')
+      return{ ...item,recent_trans:date }
+    })
 
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      itemWthoutDoller,
+      type,
+      name,
+      sortOrder
+    );
+    const itemWithSortedWitchDoller = sortedItems.map((item)=>{
+      const originalItem = allvendors.find(vendor => vendor.vendor_id === item.vendor_id);
+      return {...item, recent_trans: originalItem.recent_trans} 
+    })
+    setallvendors(itemWithSortedWitchDoller);
+    setSortOrder(newOrder);
+  };
   return (
     <>
       <Grid container sx={{}} className="box_shadow_div">
@@ -170,85 +197,139 @@ const VendorsDetail = ({ setVisible }) => {
             </Grid>
           </Grid>
           <Grid container>
-            <TableContainer>
-              <StyledTable>
-                <TableHead>
-                  <StyledTableCell>
-                    <p>Vendor Name</p>
-                  </StyledTableCell>
-                  <StyledTableCell>Payment Count</StyledTableCell>
-                  <StyledTableCell>Amount</StyledTableCell>
-                  <StyledTableCell>Recent Transaction</StyledTableCell>
-                  <StyledTableCell>Status</StyledTableCell>
-                  <StyledTableCell></StyledTableCell>
-                </TableHead>
-                <TableBody>
-                  {allvendors &&
-                    allvendors.length > 0 ? 
-                    allvendors.map((singleVendor, index) => (
-                      <StyledTableRow>
-                        <StyledTableCell>
-                          <p>{singleVendor.vendor_name}</p>
+            {AllVendorsDataState.loading ? (
+              <>
+                <SkeletonTable
+                  columns={[
+                    "Vendor Name",
+                    "Payment Count",
+                    "Amount",
+                    "Recent Transaction",
+                    "Status",
+                    "",
+                  ]}
+                />
+              </>
+            ) : (
+              <>
+                <TableContainer>
+                  <StyledTable>
+                    <TableHead>
+                      <StyledTableCell>
+                      <button
+                          className="flex items-center"
+                          onClick={() => sortByItemName("str", "vendor_name")}
+                        >
+                          <p className="whitespace-nowrap">Vendor Name</p>
+                          <img src={sortIcon} alt="" className="pl-1" />
+                        </button>
+                       
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <button
+                          className="flex items-center"
+                          onClick={() => sortByItemName("num", "pay_count")}
+                        >
+                          <p className="whitespace-nowrap">Payment Count</p>
+                          <img src={sortIcon} alt="" className="pl-1" />
+                        </button>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                      <button
+                          className="flex items-center"
+                          onClick={() => sortByItemName("num", "amount")}
+                        >
+                          <p className="whitespace-nowrap">Amount</p>
+                          <img src={sortIcon} alt="" className="pl-1" />
+                        </button>
+                        
                         </StyledTableCell>
-                        <StyledTableCell>
-                          <p>{priceFormate(singleVendor.pay_count)}</p>
+                      <StyledTableCell>
+                      <button
+                          className="flex items-center"
+                          onClick={() => sortByItemName("date", "recent_trans")}
+                        >
+                          <p className="whitespace-nowrap">Recent Transaction</p>
+                          <img src={sortIcon} alt="" className="pl-1" />
+                        </button>
                         </StyledTableCell>
-                        <StyledTableCell>
-                          <p>
-                            $
-                            {typeof singleVendor.amount === "number"
-                              ? priceFormate(singleVendor.amount.toFixed(2))
-                              : priceFormate(
-                                  parseFloat(singleVendor.amount).toFixed(2)
-                                )}
-                          </p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p className="text-[#0A64F9]">
-                            <Link
-                              to={`/vendors/vendor-details/${encodeURIComponent(
-                                singleVendor.vendor_name
-                              )}?vendorId=${singleVendor.vendor_id}`}
-                            >
-                              {singleVendor.recent_trans}
-                            </Link>
-                          </p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <Switch
-                            onChange={(event) =>
-                              handleUpdateStatus(
-                                event,
-                                label,
-                                singleVendor.vendor_id
-                              )
-                            }
-                            {...label}
-                            defaultChecked={singleVendor.enabled === "1"}
-                          />
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <Link
-                            to={`/vendors/edit-vendor/${singleVendor.vendor_name}?vendorId=${singleVendor.vendor_id}`}
-                          >
-                            <img
-                              className="edit_center"
-                              singleVender={singleVendor}
-                              // onClick={() => setVisible("EditVendors")}
-                              src={EditIcon}
-                              alt="Edit"
-                            />
-                          </Link>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    )):<>
-                    <div className="p-3">
-                      <p>No record found.</p>
-                    </div>
-                    </>} 
-                </TableBody>
-              </StyledTable>
-            </TableContainer>
+                      <StyledTableCell>Status</StyledTableCell>
+                      <StyledTableCell></StyledTableCell>
+                    </TableHead>
+                    <TableBody>
+                      {allvendors && allvendors.length > 0 ? (
+                        allvendors.map((singleVendor, index) => (
+                          <StyledTableRow key={index}>
+                            <StyledTableCell>
+                              <p>{singleVendor.vendor_name}</p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <p>{priceFormate(singleVendor.pay_count)}</p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <p>
+                                $
+                                {typeof singleVendor.amount === "number"
+                                  ? priceFormate(singleVendor.amount.toFixed(2))
+                                  : priceFormate(
+                                      parseFloat(singleVendor.amount).toFixed(2)
+                                    )}
+                              </p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <p className="text-[#0A64F9] cursor-pointer">
+                                <div
+                                  onClick={() => {
+                                    handleEditClick(
+                                      singleVendor.vendor_name,
+                                      singleVendor.vendor_id
+                                    );
+                                  }}
+                                >
+                                  {singleVendor.recent_trans}
+                                </div>
+                              </p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <Switch
+                                onChange={(event) =>
+                                  handleUpdateStatus(
+                                    event,
+                                    label,
+                                    singleVendor.vendor_id
+                                  )
+                                }
+                                {...label}
+                                defaultChecked={singleVendor.enabled === "1"}
+                              />
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <Link
+                                to={`/vendors/edit-vendor/${singleVendor.vendor_name}?vendorId=${singleVendor.vendor_id}`}
+                              >
+                                <img
+                                  className="edit_center"
+                                  singleVender={singleVendor}
+                                  // onClick={() => setVisible("EditVendors")}
+                                  src={EditIcon}
+                                  alt="Edit"
+                                />
+                              </Link>
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        ))
+                      ) : (
+                        <>
+                          <div className="p-3">
+                            <p>No record found.</p>
+                          </div>
+                        </>
+                      )}
+                    </TableBody>
+                  </StyledTable>
+                </TableContainer>
+              </>
+            )}
           </Grid>
         </Grid>
       </Grid>

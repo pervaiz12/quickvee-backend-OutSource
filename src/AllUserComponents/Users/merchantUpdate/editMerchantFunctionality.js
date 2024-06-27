@@ -15,7 +15,7 @@ export default function EditMerchantFunctionality() {
   const navigate = useNavigate();
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-  const { handleCoockieExpire } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
 
   const [getEditMerchant, setEditMerchant] = useState({
     id: "",
@@ -138,139 +138,151 @@ export default function EditMerchantFunctionality() {
     // const dataNew={id:data}
     // const packet={}
     console.log();
-    await axios
-      .post(BASE_URL + GET_EDIT_CUSTOMER, dataNew, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`, // Use data?.token directly
-        },
-      })
-      .then((response) => {
-        // console.log(response);
-        if (response.data.status == 200) {
-          const inventory =
-            response.data.message.inventory !== null &&
-            response.data.message.inventory !== ""
-              ? response.data.message.inventory
-              : "0";
-          if (inventory == 0) {
-            setInventory(false);
-          } else {
-            setInventory(true);
-          }
-          console.log(response);
-          const a_zipCode =
-            response.data.message?.row?.a_zip !== null
-              ? response.data.message.row?.a_zip
-              : "";
-          const account_Type =
-            response.data.message?.row?.flag !== null &&
-            response.data.message?.row?.flag !== ""
-              ? response.data.message?.row?.flag
-              : "0";
-          const Ownername =
-            response.data.message?.row?.owner_name !== null
-              ? response.data.message?.row?.owner_name
-              : "";
-          const City =
-            response.data.message?.row?.a_city !== null
-              ? response.data.message?.row?.a_city
-              : "";
-          const username =
-            response?.data?.message?.row?.email !== null
-              ? response?.data?.message?.row?.email
-              : "";
-          const name =
-            response?.data?.message?.row?.name !== null
-              ? response?.data?.message?.row?.name
-              : "";
-          const State =
-            response.data.message.row.a_state !== null
-              ? response.data.message.row.a_state
-              : "";
-          const Merchant_token =
-            response.data?.message?.row?.merchant_token !== null
-              ? response.data.message.row.merchant_token
-              : "";
-          const Phone =
-            response.data.message.row.a_phone !== null
-              ? response.data?.message?.row?.a_phone
-              : response.data?.message?.row?.phone;
-          const usa_pin =
-            response.data.message?.row?.usa_pin !== null
-              ? response.data.message?.row?.usa_pin
-              : "";
-          const merchant_id =
-            response.data.message.row.merchant_id !== null
-              ? response.data.message.row.merchant_id
-              : "no_id";
-          const otp =
-            response.data.message.row.ver_code !== null
-              ? response.data.message.row.ver_code
-              : "";
-          const a_address_line_1 =
-            response.data.message.row.a_address_line_1 !== null
-              ? response.data.message.row.a_address_line_1
-              : "";
-          const a_address_line_2 =
-            response.data.message.row.a_address_line_2 !== null
-              ? response.data.message.row.a_address_line_2
-              : "";
+    try {
+      await axios
+        .post(BASE_URL + GET_EDIT_CUSTOMER, dataNew, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // Use data?.token directly
+          },
+        })
+        .then((response) => {
+          // console.log(response);
+          if (response.data.status == 200) {
+            const inventory =
+              response.data.message.inventory !== null &&
+              response.data.message.inventory !== ""
+                ? response.data.message.inventory
+                : "0";
+            if (inventory == 0) {
+              setInventory(false);
+            } else {
+              setInventory(true);
+            }
+            console.log(response);
+            const a_zipCode =
+              response.data.message?.row?.a_zip !== null
+                ? response.data.message.row?.a_zip
+                : "";
+            const account_Type =
+              response.data.message?.row?.flag !== null &&
+              response.data.message?.row?.flag !== ""
+                ? response.data.message?.row?.flag
+                : "0";
+            const Ownername =
+              response.data.message?.row?.owner_name !== null
+                ? response.data.message?.row?.owner_name
+                : "";
+            const City =
+              response.data.message?.row?.a_city !== null
+                ? response.data.message?.row?.a_city
+                : "";
+            const username =
+              response?.data?.message?.row?.email !== null
+                ? response?.data?.message?.row?.email
+                : "";
+            const name =
+              response?.data?.message?.row?.name !== null
+                ? response?.data?.message?.row?.name
+                : "";
+            const State =
+              response.data.message.row.a_state !== null
+                ? response.data.message.row.a_state
+                : "";
+            const Merchant_token =
+              response.data?.message?.row?.merchant_token !== null
+                ? response.data.message.row.merchant_token
+                : "";
+            const Phone =
+              response.data.message.row.a_phone !== null
+                ? response.data?.message?.row?.a_phone
+                : response.data?.message?.row?.phone;
+            const usa_pin =
+              response.data.message?.row?.usa_pin !== null
+                ? response.data.message?.row?.usa_pin
+                : "";
+            const merchant_id =
+              response.data.message.row.merchant_id !== null
+                ? response.data.message.row.merchant_id
+                : "no_id";
+            const otp =
+              response.data.message.row.ver_code !== null
+                ? response.data.message.row.ver_code
+                : "";
+            const a_address_line_1 =
+              response.data.message.row.a_address_line_1 !== null
+                ? response.data.message.row.a_address_line_1
+                : "";
+            const a_address_line_2 =
+              response.data.message.row.a_address_line_2 !== null
+                ? response.data.message.row.a_address_line_2
+                : "";
 
-          setEditMerchant({
-            id: data,
-            live_account: account_Type,
-            newPassword: "",
-            username: username,
-            name: name,
-            merchant_id: merchant_id,
-            owner_name: Ownername,
-            otp: otp,
-            a_address_line_1: a_address_line_1,
-            a_address_line_2: a_address_line_2,
-            a_phone: Phone,
-            a_city: City,
-            a_zip: a_zipCode,
-            a_state: State,
-            merchant_token: Merchant_token,
-            usa_pin: usa_pin,
-            user_type: response.data.message.row.user_type,
-            states: response.data.message.states,
-          });
-          // console.log(response.data.message.Paymentmode.cc_payment)
-          if (response.data.message.Paymentmode == null) {
-            setPaymentModeRecord("0");
-            setPaymentModeOffline(true);
-            setPaymentModeOnline(false);
-            setPaymentCredits(false);
-          } else if (
-            response.data.message.Paymentmode.cc_payment !== null &&
-            parseInt(response.data.message.Paymentmode.cc_payment) === 0
-          ) {
-            setPaymentModeRecord(response.data.message.Paymentmode.cc_payment);
-            setPaymentModeOffline(true);
-            setPaymentModeOnline(false);
-            setPaymentCredits(false);
-          } else if (
-            response.data.message.Paymentmode.cc_payment !== null &&
-            parseInt(response.data.message.Paymentmode.cc_payment) === 2
-          ) {
-            // console.log(response.data.message.Paymentmode.cc_payment);
-            setPaymentModeRecord(response.data.message.Paymentmode.cc_payment);
-            setPaymentModeOnline(true);
-            setPaymentModeOffline(false);
-            setPaymentCredits(false);
-          } else if (
-            response.data.message.Paymentmode.cc_payment !== null &&
-            parseInt(response.data.message.Paymentmode.cc_payment) === 1
-          ) {
-            setPaymentModeRecord(response.data.message.Paymentmode.cc_payment);
-            setPaymentCredits(true);
-            setPaymentModeOnline(false);
-            setPaymentModeOffline(false);
+            setEditMerchant({
+              id: data,
+              live_account: account_Type,
+              newPassword: "",
+              username: username,
+              name: name,
+              merchant_id: merchant_id,
+              owner_name: Ownername,
+              otp: otp,
+              a_address_line_1: a_address_line_1,
+              a_address_line_2: a_address_line_2,
+              a_phone: Phone,
+              a_city: City,
+              a_zip: a_zipCode,
+              a_state: State,
+              merchant_token: Merchant_token,
+              usa_pin: usa_pin,
+              user_type: response.data.message.row.user_type,
+              states: response.data.message.states,
+            });
+            // console.log(response.data.message.Paymentmode.cc_payment)
+            if (response.data.message.Paymentmode == null) {
+              setPaymentModeRecord("0");
+              setPaymentModeOffline(true);
+              setPaymentModeOnline(false);
+              setPaymentCredits(false);
+            } else if (
+              response.data.message.Paymentmode.cc_payment !== null &&
+              parseInt(response.data.message.Paymentmode.cc_payment) === 0
+            ) {
+              setPaymentModeRecord(
+                response.data.message.Paymentmode.cc_payment
+              );
+              setPaymentModeOffline(true);
+              setPaymentModeOnline(false);
+              setPaymentCredits(false);
+            } else if (
+              response.data.message.Paymentmode.cc_payment !== null &&
+              parseInt(response.data.message.Paymentmode.cc_payment) === 2
+            ) {
+              // console.log(response.data.message.Paymentmode.cc_payment);
+              setPaymentModeRecord(
+                response.data.message.Paymentmode.cc_payment
+              );
+              setPaymentModeOnline(true);
+              setPaymentModeOffline(false);
+              setPaymentCredits(false);
+            } else if (
+              response.data.message.Paymentmode.cc_payment !== null &&
+              parseInt(response.data.message.Paymentmode.cc_payment) === 1
+            ) {
+              setPaymentModeRecord(
+                response.data.message.Paymentmode.cc_payment
+              );
+              setPaymentCredits(true);
+              setPaymentModeOnline(false);
+              setPaymentModeOffline(false);
+            }
           }
-        }
-      });
+        });
+    } catch (error) {
+      // console.log("hehehehheh");
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
+    }
   };
 
   const handleKeyPress = (e) => {

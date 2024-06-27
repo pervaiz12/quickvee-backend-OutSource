@@ -126,21 +126,59 @@ const SideMenu = () => {
       setMenuItemSwitcher(SuperAdminMenuItems);
       dispatch(setMenuOpen(true));
     } else {
-      setMenuItemSwitcher(menuItems);
+      const updatedMenuItems = [...menuItems];
+      if (LoginGetDashBoardRecordJson?.login_type === "superadmin") {
+        const newMenuItem = {
+          id: 91,
+          icon: (
+            <img
+              src={dataIcon}
+              alt="Export Sold Items"
+              className="h-6 w-10 mt-4 mb-4 hoverable-image"
+            />
+          ),
+          activeIcon: (
+            <img
+              src={DataIconActive}
+              alt="Import"
+              className="h-6 w-10 mt-4 mb-4"
+            />
+          ),
+          text: "Import Data",
+          link: "/import-data",
+        };
+        updatedMenuItems.splice(updatedMenuItems.length - 1, 0, newMenuItem);
+      }
+      setMenuItemSwitcher(updatedMenuItems);
     }
-  }, [currentUrl,isStoreActive]);
+  }, [currentUrl, isStoreActive]);
+  console.log(
+    "LoginGetDashBoardRecordJson?.login_type",
+    LoginGetDashBoardRecordJson?.login_type
+  );
+  useEffect(() => {
+    if (LoginGetDashBoardRecordJson?.login_type === "superadmin") {
+      setMenuItemSwitcher((menuItems) => [...menuItems]);
+    }
+  }, [LoginGetDashBoardRecordJson?.login_type]);
+
   function getFirstTwoSegmentsPath(pathname) {
     // console.log("getFirstTwoSegmentsPath",pathname)
-    const segments = pathname.split('/').filter(Boolean);
-    return "/"+segments.slice(0, 2).join('/');
-}
-function getFirstTwoSegmentsPathIsStoreAvtive(pathname){
-  // console.log("getFirstTwoSegmentsPath",pathname)
-  const segments = pathname.split('/').filter(Boolean);
-  return isStoreActive ?  "/"+segments.slice(0, 1).join('/') : "/"+segments.slice(0, 2).join('/');
-}
+    const segments = pathname.split("/").filter(Boolean);
+    return "/" + segments.slice(0, 2).join("/");
+  }
+  function getFirstTwoSegmentsPathIsStoreAvtive(pathname) {
+    // console.log("getFirstTwoSegmentsPath",pathname)
+    const segments = pathname.split("/").filter(Boolean);
+    return isStoreActive
+      ? "/" + segments.slice(0, 1).join("/")
+      : "/" + segments.slice(0, 2).join("/");
+  }
 
-console.log("getFirstTwoSegmentsPath",getFirstTwoSegmentsPathIsStoreAvtive(activeItem))
+  console.log(
+    "getFirstTwoSegmentsPath",
+    getFirstTwoSegmentsPathIsStoreAvtive(activeItem)
+  );
   return (
     <>
       <div
@@ -188,7 +226,8 @@ console.log("getFirstTwoSegmentsPath",getFirstTwoSegmentsPathIsStoreAvtive(activ
                         onClick={() => handleItemClick(item)}
                         style={{ cursor: "pointer" }}
                         className={`flex items-center ${
-                          getFirstTwoSegmentsPathIsStoreAvtive(activeItem) === item.link.trim()
+                          getFirstTwoSegmentsPathIsStoreAvtive(activeItem) ===
+                          item.link.trim()
                             ? "bg-[#414F54] text-[#FFC400]"
                             : ""
                               ? "text-[#FFC400] active:bg-[#414F54] hover:bg-[#414F54] px-0"
@@ -203,8 +242,8 @@ console.log("getFirstTwoSegmentsPath",getFirstTwoSegmentsPathIsStoreAvtive(activ
                           "activeItem === item.link.trim()",
                           activeItem === item.link.trim()
                         )} */}
-                        {getFirstTwoSegmentsPathIsStoreAvtive(activeItem) === item.link.trim() ||
-                        hoveredItem === item.id
+                        {getFirstTwoSegmentsPathIsStoreAvtive(activeItem) ===
+                          item.link.trim() || hoveredItem === item.id
                           ? item.activeIcon
                           : item.icon}
                         <Link
@@ -272,8 +311,8 @@ console.log("getFirstTwoSegmentsPath",getFirstTwoSegmentsPathIsStoreAvtive(activ
                         hoveredItem
                       )} */}
                       {/* {activeItem === item.id ? item.activeIcon : item.icon} */}
-                      {getFirstTwoSegmentsPath(activeItem) === item.link.trim() ||
-                      hoveredItem === item.id
+                      {getFirstTwoSegmentsPath(activeItem) ===
+                        item.link.trim() || hoveredItem === item.id
                         ? item.activeIcon
                         : item.icon}
                     </div>
@@ -299,7 +338,7 @@ const DropdownMenuItem = ({
   currentDropDownItem,
   activeNestedItem,
   setActiveNestedItem,
-  getFirstTwoSegmentsPath
+  getFirstTwoSegmentsPath,
 }) => {
   const dispatch = useDispatch();
 
@@ -333,7 +372,7 @@ const DropdownMenuItem = ({
     }
     // item.id === currentDropDownItem && dispatch(setIsDropdownOpen(true));
     dispatch(setIsDropdownOpen(!isTabletNav));
-  }, [isTabletNav, dropDownItem, isTabletNav,activeItem]);
+  }, [isTabletNav, dropDownItem, isTabletNav, activeItem]);
 
   const handleToggleDropdownItems = (link, e) => {
     if (isTabletNav) {
@@ -377,16 +416,21 @@ const DropdownMenuItem = ({
           {isMenuOpenRedux ? (
             <div
               className={`w-full flex items-center cursor-pointer ${
-                getFirstTwoSegmentsPath(activeItem) === dropDownItem ? "bg-[#414F54]" : ""
+                getFirstTwoSegmentsPath(activeItem) === dropDownItem
+                  ? "bg-[#414F54]"
+                  : ""
               }`}
             >
               {/* {console.log("activeItem",getFirstTwoSegmentsPath(activeItem)," ===","dropDownItem", dropDownItem,  activeItem === dropDownItem  )} */}
-              {getFirstTwoSegmentsPath(activeItem) === dropDownItem || hoveredItem === item.id
+              {getFirstTwoSegmentsPath(activeItem) === dropDownItem ||
+              hoveredItem === item.id
                 ? item.activeIcon
                 : item.icon}
               <p
                 className={`ml-2 menu-item DropDown-memu text-[14px] flex-auto Admin_std ${
-                  getFirstTwoSegmentsPath(activeItem) === dropDownItem ? "activeTab" : ""
+                  getFirstTwoSegmentsPath(activeItem) === dropDownItem
+                    ? "activeTab"
+                    : ""
                 }`}
               >
                 {item.text}
@@ -394,14 +438,16 @@ const DropdownMenuItem = ({
               {currentDropDownItem === item.id ? (
                 <FaChevronUp
                   className={`quickarrow_icon ml-4 me-5 text-${
-                    (getFirstTwoSegmentsPath(activeItem) === dropDownItem || hoveredItem === item.id) &&
+                    (getFirstTwoSegmentsPath(activeItem) === dropDownItem ||
+                      hoveredItem === item.id) &&
                     "[#FFC400]"
                   }`}
                 />
               ) : (
                 <FaChevronDown
                   className={`quickarrow_icon ml-4 me-5 text-${
-                    (getFirstTwoSegmentsPath(activeItem) === dropDownItem || hoveredItem === item.id) &&
+                    (getFirstTwoSegmentsPath(activeItem) === dropDownItem ||
+                      hoveredItem === item.id) &&
                     "[#FFC400]"
                   }`}
                 />
@@ -416,7 +462,8 @@ const DropdownMenuItem = ({
                   HandleDropdownIconClick(item.id);
                 }}
               >
-                {getFirstTwoSegmentsPath(activeItem) === dropDownItem || hoveredItem === item.id
+                {getFirstTwoSegmentsPath(activeItem) === dropDownItem ||
+                hoveredItem === item.id
                   ? item.activeIcon
                   : item.icon}
               </div>
@@ -461,14 +508,17 @@ const DropdownMenuItem = ({
                   // key={nestedDropdownItem.id}
                   to={nestedDropdownItem.link}
                   className={`flex text-center submenu-item text-gray-400 p-4 text-[14px] ${
-                    getFirstTwoSegmentsPath(activeItem) === getFirstTwoSegmentsPath(nestedDropdownItem.link) ? "active" : ""
+                    getFirstTwoSegmentsPath(activeItem) ===
+                    getFirstTwoSegmentsPath(nestedDropdownItem.link)
+                      ? "active"
+                      : ""
                   }`}
                   onClick={(e) => {
                     handleToggleDropdownItems(nestedDropdownItem.link);
                     e.stopPropagation();
                   }}
                 >
-                  {nestedDropdownItem.text}  
+                  {nestedDropdownItem.text}
                 </Link>
               )}
             </React.Fragment>
@@ -1011,21 +1061,22 @@ const menuItems = [
   //   text: "Import Data",
   //   link: "/import-data",
   // },
-  {
-    id: 91,
-    icon: (
-      <img
-        src={dataIcon}
-        alt="Export Sold Items"
-        className="h-6 w-10 mt-4 mb-4 hoverable-image"
-      />
-    ),
-    activeIcon: (
-      <img src={DataIconActive} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
-    ),
-    text: "Import Data",
-    link: "/import-data",
-  },
+
+  // {
+  //   id: 91,
+  //   icon: (
+  //     <img
+  //       src={dataIcon}
+  //       alt="Export Sold Items"
+  //       className="h-6 w-10 mt-4 mb-4 hoverable-image"
+  //     />
+  //   ),
+  //   activeIcon: (
+  //     <img src={DataIconActive} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
+  //   ),
+  //   text: "Import Data",
+  //   link: "/import-data",
+  // },
   {
     id: 11,
     icon: (
@@ -1147,7 +1198,6 @@ const SuperAdminMenuItems = [
     text: "Order Count",
     // link: "/users/view/unapprove/order-count",
     link: "/unapprove/order-count",
-    
   },
 
   {
