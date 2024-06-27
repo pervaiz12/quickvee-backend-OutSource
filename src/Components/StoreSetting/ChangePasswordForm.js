@@ -53,7 +53,6 @@ const ChangePasswordForm = ({
                         edge="end"
                       >
                         {showPassword ? (
-                        
                           <p className="text-sm">Hide</p>
                         ) : (
                           <p className="text-sm">Show</p>

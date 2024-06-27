@@ -256,105 +256,114 @@ export default function InfoFunction() {
       login_type: userTypeData?.login_type,
       token_id: userTypeData?.token_id,
     };
-    let response = await axios.post(BASE_URL + GET_Edit_STORE_INFO, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${userTypeData?.token}`,
-      },
-    });
-    console.log(response);
-    if (response.data.status == 200) {
-      const merchant_id =
-        response.data.message.merchant_id !== null
-          ? response.data.message.merchant_id
-          : "";
-      const name =
-        response.data.message.name !== null ? response.data.message.name : "";
-      const email =
-        response.data.message.email !== null ? response.data.message.email : "";
-      const menu_link =
-        response.data.message.menu_link !== null
-          ? response.data.message.menu_link
-          : "";
-      const domain_url =
-        response.data.message.domain_url !== null
-          ? response.data.message.domain_url
-          : "";
-      const img =
-        response.data.message.img !== null ? response.data.message.img : "";
-      const banner_img =
-        response.data.message.banner_img !== null
-          ? response.data.message.banner_img
-          : "";
-      const a_address_line_1 =
-        response.data.message.a_address_line_1 !== null
-          ? response.data.message.a_address_line_1
-          : "";
-      const a_address_line_2 =
-        response.data.message.a_address_line_2 !== null
-          ? response.data.message.a_address_line_2
-          : "";
-      const a_city =
-        response.data.message.a_city !== null
-          ? response.data.message.a_city
-          : "";
-      const a_zip =
-        response.data.message.a_zip !== null ? response.data.message.a_zip : "";
-      const state =
-        response.data.message.a_state !== null
-          ? response.data.message.a_state
-          : "";
-      const phone =
-        response.data.message.a_phone !== null
-          ? response.data.message.a_phone
-          : "";
-      const fb_url =
-        response.data.message.fb_url !== null
-          ? response.data.message.fb_url
-          : "";
-      const insta_url =
-        response.data.message.insta_url !== null
-          ? response.data.message.insta_url
-          : "";
-      const promotional_url =
-        response.data.message.promo_url !== null
-          ? response.data.message.promo_url
-          : "";
-      const user_id =
-        response.data.message.id !== null ? response.data.message.id : "";
-      const qr_img =
-        response.data.message.qr_img !== null
-          ? response.data.message.qr_img
-          : "";
-      const receipt_img =
-        response.data.message.receipt_logo !== null
-          ? response.data.message.receipt_logo
-          : "";
-      setApprove("approve");
-      setImageBanner(banner_img);
-      setImage(img);
-      setInfoRecord((prevState) => ({
-        ...prevState,
-        merchant_id: merchant_id,
-        store: name,
-        email: email,
-        menuLink: menu_link,
-        domain: domain_url,
-        image: img,
-        banners: banner_img,
-        address_1: a_address_line_1,
-        address_2: a_address_line_2,
-        city: a_city,
-        zip: a_zip,
-        state: state,
-        phone: phone,
-        facebookUrl: fb_url,
-        instagramUrl: insta_url,
-        promotionalUrl: promotional_url,
-        user_id: user_id,
-        qrCode: qr_img,
-        receieptLogo: receipt_img,
-      }));
+    try {
+      let response = await axios.post(BASE_URL + GET_Edit_STORE_INFO, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userTypeData?.token}`,
+        },
+      });
+      console.log(response);
+      if (response.data.status == 200) {
+        const merchant_id =
+          response.data.message.merchant_id !== null
+            ? response.data.message.merchant_id
+            : "";
+        const name =
+          response.data.message.name !== null ? response.data.message.name : "";
+        const email =
+          response.data.message.email !== null
+            ? response.data.message.email
+            : "";
+        const menu_link =
+          response.data.message.menu_link !== null
+            ? response.data.message.menu_link
+            : "";
+        const domain_url =
+          response.data.message.domain_url !== null
+            ? response.data.message.domain_url
+            : "";
+        const img =
+          response.data.message.img !== null ? response.data.message.img : "";
+        const banner_img =
+          response.data.message.banner_img !== null
+            ? response.data.message.banner_img
+            : "";
+        const a_address_line_1 =
+          response.data.message.a_address_line_1 !== null
+            ? response.data.message.a_address_line_1
+            : "";
+        const a_address_line_2 =
+          response.data.message.a_address_line_2 !== null
+            ? response.data.message.a_address_line_2
+            : "";
+        const a_city =
+          response.data.message.a_city !== null
+            ? response.data.message.a_city
+            : "";
+        const a_zip =
+          response.data.message.a_zip !== null
+            ? response.data.message.a_zip
+            : "";
+        const state =
+          response.data.message.a_state !== null
+            ? response.data.message.a_state
+            : "";
+        const phone =
+          response.data.message.a_phone !== null
+            ? response.data.message.a_phone
+            : "";
+        const fb_url =
+          response.data.message.fb_url !== null
+            ? response.data.message.fb_url
+            : "";
+        const insta_url =
+          response.data.message.insta_url !== null
+            ? response.data.message.insta_url
+            : "";
+        const promotional_url =
+          response.data.message.promo_url !== null
+            ? response.data.message.promo_url
+            : "";
+        const user_id =
+          response.data.message.id !== null ? response.data.message.id : "";
+        const qr_img =
+          response.data.message.qr_img !== null
+            ? response.data.message.qr_img
+            : "";
+        const receipt_img =
+          response.data.message.receipt_logo !== null
+            ? response.data.message.receipt_logo
+            : "";
+        setApprove("approve");
+        setImageBanner(banner_img);
+        setImage(img);
+        setInfoRecord((prevState) => ({
+          ...prevState,
+          merchant_id: merchant_id,
+          store: name,
+          email: email,
+          menuLink: menu_link,
+          domain: domain_url,
+          image: img,
+          banners: banner_img,
+          address_1: a_address_line_1,
+          address_2: a_address_line_2,
+          city: a_city,
+          zip: a_zip,
+          state: state,
+          phone: phone,
+          facebookUrl: fb_url,
+          instagramUrl: insta_url,
+          promotionalUrl: promotional_url,
+          user_id: user_id,
+          qrCode: qr_img,
+          receieptLogo: receipt_img,
+        }));
+      }
+    } catch (error) {
+      getUnAutherisedTokenMessage();
+      handleCoockieExpire();
     }
   };
 
@@ -604,16 +613,25 @@ export default function InfoFunction() {
         user_id: 100,
         login_type: userTypeData?.login_type,
       };
-      let response = await axios.post(BASE_URL + CHANGE_PASSWORD_STORE, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${userTypeData?.token}`,
-        },
-      });
-      if (response.status == 200) {
-        ToastifyAlert(response.data.msg, "success");
+      try {
+        let response = await axios.post(
+          BASE_URL + CHANGE_PASSWORD_STORE,
+          data,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${userTypeData?.token}`,
+            },
+          }
+        );
+        if (response.status == 200) {
+          ToastifyAlert(response.data.msg, "success");
 
-        console.log("password changes");
+          console.log("password changes");
+        }
+      } catch (error) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
       }
     }
   };

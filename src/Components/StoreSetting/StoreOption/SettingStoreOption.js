@@ -277,6 +277,7 @@ export default function SettingStoreOption() {
           }
         })
         .catch((err) => {
+          console.log("hhhhhhhhhhhhhhhhhhhhh");
           ToastifyAlert("Error!", "error");
         })
         .finally(() => {

@@ -317,6 +317,7 @@ module.exports = Object.freeze({
   SYNC_DATA: "InventoryReact/syncOI",
 
   VENDOR_UPDATE_DETAILS: "vendor_api/update_details",
+  CHECK_EXIST_STORENAME: "UserController/check_merchant",
 });
 
 // All api calls are initialized in this component for this application
