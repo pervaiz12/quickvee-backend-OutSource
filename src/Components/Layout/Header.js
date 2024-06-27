@@ -393,9 +393,10 @@ export default function Header() {
                     <p className="ml-2 admin_medium">Online Store</p>
                   </div>
                 </Link>
-                <div
+                <button
                   className="cursor-pointer mx-5 flex items-center syncConatiner"
                   onClick={SyncData}
+                  disabled={loader}
                 >
                   <CircularProgress
                     color={"inherit"}
@@ -413,7 +414,7 @@ export default function Header() {
                     }`}
                   />
                   <p className="ml-2 admin_medium">Sync Data</p>
-                </div>
+                </button>
               </>
             ) : (
               ""

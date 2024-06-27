@@ -42,3 +42,6 @@
     display: flex;
     flex-direction: column;
 }
+  .EditEmployeeModal:focus-visible{
+    outline: unset !important;
+  }

@@ -14,6 +14,7 @@ import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
 import CircularProgress from "@mui/material/CircularProgress";
+import PasswordShow from "./../../Common/passwordShow";
 const EditDefaults = ({ setVisible, defaultEditId }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -31,7 +32,7 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
     type: "",
     image: "",
   });
-
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
   const [alertModalOpen, setAlertModalOpen] = useState(false);
   const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
   const showModal = (headerText) => {
@@ -64,6 +65,8 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
       }
     } catch (error) {
       console.error("Error:", error);
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
     }
   }
 
@@ -89,13 +92,19 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
 
   const inputChange = (e) => {
     const { name, value } = e.target;
-    setDefaults((preValue) => {
-      return {
-        ...preValue,
-        [name]: value,
-      };
-    });
-
+    const regex = /^[A-Za-z0-9 ]*$/ ;
+    if (name === "name"){
+      if (regex.test(value)) {
+        setDefaults({ ...defaults, name: value });
+      }
+    }else{
+      setDefaults((preValue) => {
+        return {
+          ...preValue,
+          [name]: value,
+        };
+      });
+    }
     setFieldErrors((prevErrors) => ({
       ...prevErrors,
       [name]: "",
@@ -169,6 +178,8 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
       }
     } catch (error) {
       console.error("API Error:", error);
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
     }
     setLoader(false);
   };
