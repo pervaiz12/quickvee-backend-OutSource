@@ -78,7 +78,10 @@ const TimesheetListing = ({ data }) => {
 
         const mappedOptions = EmpList.map((empdata) => ({
           id: empdata.id,
-          title: empdata.f_name + " " + empdata.l_name,
+          // title: empdata.f_name + " " + empdata.l_name,
+          // title: (empdata.f_name ? empdata.f_name : "") + " " + (empdata.l_name ? empdata.l_name : ""),
+          title: empdata.l_name ? `${empdata.f_name} ${empdata.l_name}` : empdata.f_name
+          // title: empdata.l_name && empdata.l_name !== "" ? `${empdata.f_name} ${empdata.l_name}` : empdata.f_name
         }));
         setemployeeList(mappedOptions);
       } catch (error) {

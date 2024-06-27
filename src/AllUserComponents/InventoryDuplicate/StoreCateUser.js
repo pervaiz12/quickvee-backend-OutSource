@@ -13,7 +13,7 @@ import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import AlertModal from "../../reuseableComponents/AlertModal";
 import { LuRefreshCw } from "react-icons/lu";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
-
+import PasswordShow from "./../../Common/passwordShow";
 const StoreCateUser = () => {
   const [openAlert, setOpenAlert] = useState(true);
   const [alertModalOpen, setAlertModalOpen] = useState(false);
@@ -35,12 +35,13 @@ const StoreCateUser = () => {
     setUserInput,
     captchaText,
     setCaptchaText,
+    loader
   } = InventoryExportLogic();
   console.log("alertOpen",alertOpen)
   console.log("modalHeaderText",modalHeaderText)
 
   const { userTypeData } = useAuthDetails();
-
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
   const [MerchantList, setMerchantList] = useState();
   const MerchantListData = useSelector((state) => state.ExportInventoryData);
   const dispatch = useDispatch();
@@ -52,8 +53,23 @@ const StoreCateUser = () => {
   }, [MerchantListData, MerchantListData.loading]);
 
   useEffect(() => {
-    dispatch(fetchMerchantsList(userTypeData));
+    // dispatch(fetchMerchantsList(userTypeData));
+    getFetchMerchantsList()
   }, []);
+
+  const getFetchMerchantsList=async()=>{
+    try{
+      const data = {
+        ...userTypeData
+      };
+      if (data) {
+        await dispatch(fetchMerchantsList(data)).unwrap();
+      }
+    }catch(error){
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
+    }
+  }
 
   // for change dropdown start
   const myStyles = {
@@ -375,6 +391,7 @@ const StoreCateUser = () => {
               className="quic-btn quic-btn-save"
               // onClick={dupplicateInventory}
               onClick={(e) => dupplicateInventoryHandler(e)}
+              disabled={loader}
             >
               Duplicate Inventory
             </button>
@@ -382,6 +399,7 @@ const StoreCateUser = () => {
               className="quic-btn quic-btn-cancle"
               // onClick={dupplicateSettings}
               onClick={(e) => dupplicateSettingsHandler(e)}
+              disabled={loader}
             >
               Duplicate setting
             </button>

@@ -367,18 +367,18 @@ const AddCoupon = ({ seVisible }) => {
       }
     }
 
-    if (activeTab === "percentage") {
-      if (!coupon.maximum_discount) {
-        setDateMaxDisAMTError("Maximum Discount Amount is required");
+    // if (activeTab === "percentage") {
+    //   if (!coupon.maximum_discount) {
+    //     setDateMaxDisAMTError("Maximum Discount Amount is required");
 
-        // return; // Stop further execution
-      } else if (coupon.maximum_discount === "") {
-        setDateMaxDisAMTError("Maximum Discount Amount is required");
-        // return;
-      } else {
-        setDateMaxDisAMTError("");
-      }
-    }
+    //     // return; // Stop further execution
+    //   } else if (coupon.maximum_discount === "") {
+    //     setDateMaxDisAMTError("Maximum Discount Amount is required");
+    //     // return;
+    //   } else {
+    //     setDateMaxDisAMTError("");
+    //   }
+    // }
 
     if (!coupon.date_valid) {
       //  alert("Start Date are required.");
@@ -470,7 +470,7 @@ const AddCoupon = ({ seVisible }) => {
       discountError === "Discount Amount Percentage is required" ||
       dateStartError === "Start Date is required" ||
       dateEndError === "End Date is required" ||
-      dateMaxDisAMTError === "Maximum Discount Amount is required" ||
+      // dateMaxDisAMTError === "Maximum Discount Amount is required" ||
       dateStartError === "Start Date cannot be before the current date" ||
       dateEndError === "End Date cannot be before the Start date" || 
       dateEndError === "End Date cannot be less than the start date"  ||
@@ -609,7 +609,7 @@ const AddCoupon = ({ seVisible }) => {
           inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
       }
       if (fieldValue.trim() === "") {
-          setDateMaxDisAMTError("Maximum Discount Amount is required");
+          // setDateMaxDisAMTError("Maximum Discount Amount is required");
           setCoupon({ ...coupon, maximum_discount: "" });
       } else {
         setCoupon({ ...coupon, maximum_discount: fieldValue });
@@ -620,6 +620,15 @@ const AddCoupon = ({ seVisible }) => {
 
   const preventKeyPress = (event) => {
     event.preventDefault();
+    const forbiddenKeys = [
+      "ArrowUp",
+      "ArrowDown",
+      "ArrowLeft",
+      "ArrowRight",
+    ];
+    if (forbiddenKeys.includes(event.key)) {
+      event.preventDefault();
+    }
   };
 
   return (

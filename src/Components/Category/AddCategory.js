@@ -471,6 +471,7 @@ const AddCategory = ({ seVisible }) => {
             <button
               className="quic-btn quic-btn-save attributeUpdateBTN"
               onClick={handleSubmit}
+              disabled={loader}
             >
               {loader ? (
                 <>

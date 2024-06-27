@@ -67,7 +67,7 @@ const EditEmployeeModal = ({ employee, states, employeeList }) => {
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
           >
-            <Box className="view-category-item-modal" style={myStyles}>
+            <Box className="q-custom-modal-content modal_custom EditEmployeeModal" style={myStyles}>
               <div
                 className="q-add-categories-section-header"
                 style={{ justifyContent: "space-between" }}
