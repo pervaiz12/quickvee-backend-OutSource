@@ -258,6 +258,15 @@ padding-right: 30px !important;
   position: absolute;
 }
 
+.product-note-section{
+  margin: 11px 0px;
+}
+.product-note-section .product-note{
+  margin: 2px 0px;
+  font-size: 15px;
+  color: #000;
+  font-family: CircularSTDBook !important;
+}
 
 
 /* product page edit modal css */

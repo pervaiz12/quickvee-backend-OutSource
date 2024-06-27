@@ -55,6 +55,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const ProductSalesReport = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const searchParams = new URLSearchParams(location?.search);
+
   const productId = location?.pathname?.split("/")[4];
   const varientId = location?.pathname?.split("/")[5];
   const dispatch = useDispatch();
@@ -146,7 +148,7 @@ const ProductSalesReport = () => {
                     navigate(`/inventory/products/edit/${location.pathname.split('/')[4]}`);
                   }}>
                     <img src={AddNewCategory} alt="Add-New-Category" />
-                    Sales History - {location?.state?.title}
+                    Sales History - {searchParams.get('title')} {searchParams.get('varientName')? '- '+ searchParams.get('varientName'): ""}
                   </span>
                 </span>
               </div>

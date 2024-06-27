@@ -78,16 +78,13 @@ const GeneratePUC = ({
     return false;
   };
 
-  const handleRedirectHistory = (varientIndex) => {
+  const handleRedirectHistory = (varientIndex, varientTitle) => {
+    const varientName = varientTitle ? Object.keys(varientTitle)?.[0]:"";
+    let url;
     if (varientIndex === null) {
-      navigate(`/inventory/products/saleshistory/${productData?.id}`, {
-        state: productInfo,
-      });
+      window.open(`/inventory/products/saleshistory/${productData?.id}?title=${productInfo?.title}`);
     } else {
-      navigate(
-        `/inventory/products/saleshistory/${productData?.id}/${varientIndex}`,
-        { state: productInfo }
-      );
+      window.open(`/inventory/products/saleshistory/${productData?.id}/${varientIndex}?title=${productInfo?.title}&varientName=${varientName}`);
     }
   };
 
@@ -170,7 +167,10 @@ const GeneratePUC = ({
                                     {!!formValue?.[index]?.[title]?.[
                                       "upcError"
                                     ] && inp?.name === "upcCode" ? (
-                                      <span className="error-alert">
+                                      <span
+                                        className="error-alert"
+                                        style={{ display: "block" }}
+                                      >
                                         {
                                           formValue?.[index]?.[title]?.[
                                             "upcError"
@@ -342,7 +342,8 @@ const GeneratePUC = ({
                           }}
                           onClick={() =>
                             handleRedirectHistory(
-                              formValue?.[index]?.[title]?.productEditId
+                              formValue?.[index]?.[title]?.productEditId,
+                              formValue?.[index]
                             )
                           }
                         >
@@ -404,7 +405,17 @@ const GeneratePUC = ({
                               ) : (
                                 ""
                               )}
-
+                              {!!formValue?.[0]?.["upcError"] &&
+                              inp?.name === "upcCode" ? (
+                                <span
+                                  className="error-alert"
+                                  style={{ display: "block" }}
+                                >
+                                  {formValue?.[0]?.["upcError"]}
+                                </span>
+                              ) : (
+                                ""
+                              )}
                               {error[`formValue[0].${inp?.name}`] ? (
                                 <span className="error-alert">
                                   {error[`formValue[0].${inp?.name}`]}

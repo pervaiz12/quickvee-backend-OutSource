@@ -8,6 +8,7 @@ import Validation from "../../Constants/Validation";
 import { components } from "react-select";
 import SearchIcon from "@mui/icons-material/Search"; // Import MUI icon
 
+
 const VariantAttributes = ({
   filterOptionList,
   handleFilterDropdownOption,
@@ -270,6 +271,14 @@ const VariantAttributes = ({
         ) : (
           ""
         )}
+        {
+          pageUrl === "inventory/products/edit" && isMultipleVarient ? 
+          <div className="product-note-section">
+          <p class="product-note">Note : After making any change, please update the page.</p>
+          <p class="product-note">Note : You cannot remove existing variants.</p>
+          </div>
+          :""
+        }
         {isMultipleVarient ? (
           <div className="varient-select-section">
             <div className="">
