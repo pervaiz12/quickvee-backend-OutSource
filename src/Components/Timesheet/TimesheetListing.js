@@ -716,6 +716,13 @@ const TimesheetListing = ({ data }) => {
     );
     return formattedDate;
   };
+  const formDateOUtDate = (dateString) =>{
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const [day, month, year] = dateString.split('-');
+    const date = new Date(year, month - 1, day);
+    const formattedDate = `${months[date.getMonth()]} ${String(date.getDate()).padStart(2, '0')}, ${date.getFullYear()}`;
+    return formattedDate;
+  };
 
   const [currentDate, setCurrentDate] = useState(getDate());
   function getDate() {
@@ -1276,7 +1283,7 @@ const TimesheetListing = ({ data }) => {
                 <span className="viewTextBark">
                   {formatDate(EmployeeWorkDate)} -{" "}
                   {EmployeeWorkDateOUT
-                    ? formatDate(EmployeeWorkDateOUT)
+                    ? formDateOUtDate(EmployeeWorkDateOUT)
                     : "-"}
                 </span>{" "}
               </span>
