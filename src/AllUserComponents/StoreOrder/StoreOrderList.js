@@ -91,11 +91,20 @@ const StoreOrderList = (props) => {
   ]);
 
   const getfetchStoreOrderData=async()=>{
+    const orderType =(type)=>{
+      if(type === "Online Order"){
+        return "Online";
+      }if(type === "Store Order"){
+        return "Offline"
+      }else{
+        return type
+      }
+    }
     try{
       if(props && props.OrderStatusData && props.OrderTypeData){
         let data = {
           pay_status: props.OrderStatusData,
-          order_env: props.OrderTypeData,
+          order_env:  orderType(props.OrderTypeData),
           page: currentPage,
           perpage: rowsPerPage,
           search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,

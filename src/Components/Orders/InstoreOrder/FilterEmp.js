@@ -11,10 +11,10 @@ const transactionsList = [
     title: "Both",
   },
   {
-    title: "Cash",
+    title: "Cash Payment",
   },
   {
-    title: "Online",
+    title: "Card Payment",
   },
 ];
 

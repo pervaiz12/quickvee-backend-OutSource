@@ -10,7 +10,7 @@ import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
 import Loader from "../../../CommonComponents/Loader";
 import { priceFormate } from "../../../hooks/priceFormate";
-
+import sortIcon from "../../../Assests/Category/SortingW.svg";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -47,10 +47,42 @@ export default function Pagination(props) {
         <TableContainer>
           <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
             <TableHead>
-              <StyledTableCell>Title </StyledTableCell>
-              <StyledTableCell>Category</StyledTableCell>
-              <StyledTableCell>Quantity</StyledTableCell>
-              <StyledTableCell>Price </StyledTableCell>
+              <StyledTableCell>
+                <button
+                  className="flex items-center"
+                  onClick={() => props.sortByItemName("str", "title")}
+                >
+                  <p>Title</p>
+                  <img src={sortIcon} alt="" className="pl-1" />
+                </button>
+              </StyledTableCell>
+              <StyledTableCell>
+                <button
+                  className="flex items-center"
+                  onClick={() => props.sortByItemName("str", "category_name")}
+                >
+                  <p>Category</p>
+                  <img src={sortIcon} alt="" className="pl-1" />
+                </button>
+              </StyledTableCell>
+              <StyledTableCell>
+                <button
+                  className="flex items-center"
+                  onClick={() => props.sortByItemName("num", "quantity")}
+                >
+                  <p>Quantity</p>
+                  <img src={sortIcon} alt="" className="pl-1" />
+                </button>
+              </StyledTableCell>
+              <StyledTableCell>
+                <button
+                  className="flex items-center"
+                  onClick={() => props.sortByItemName("num", "price")}
+                >
+                  <p>Price</p>
+                  <img src={sortIcon} alt="" className="pl-1" />
+                </button>
+              </StyledTableCell>
             </TableHead>
             <TableBody>
               {props.searchProduct.length > 0 ? (

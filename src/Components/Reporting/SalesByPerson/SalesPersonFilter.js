@@ -119,7 +119,7 @@ const SalesPersonFilter = ({ onFilterDataChange }) => {
     );
   }, [selectedOrderSource, selectedOrderType, selectedEmployeeID]);
 
-  const orderSourceList = ["All", "Online Order", "Offline Order"];
+  const orderSourceList = ["All", "Online Order", "Store Order"];
   const orderTypeList = ["All", "Pickup", "Delivery"];
 
   return (
