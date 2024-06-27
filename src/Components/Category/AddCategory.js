@@ -51,11 +51,18 @@ const AddCategory = ({ seVisible }) => {
     setAlertModalHeaderText(headerText);
     setAlertModalOpen(true);
   };
-  console.log(category);
+  // console.log(category);
+  const handleKeyPress = (event) => {
+    const allowedChars = /^[a-zA-Z0-9\s]$/;
+    if (!allowedChars.test(event.key)) {
+      event.preventDefault();
+    }
+  };
   const inputChange = (e) => {
     const { name, value } = e.target;
     // let val = value.replace(/[^\w\d]/g, "");
-    let val = value.replace(/[^a-zA-Z0-9\s]/g, "");
+    let val = value;
+    // let val = value.replace(/[^a-zA-Z0-9\s]/g, "");
     if (name === "title") {
       if (val) {
         setCategory({ ...category, title: val });
@@ -103,60 +110,86 @@ const AddCategory = ({ seVisible }) => {
   };
   const navigate = useNavigate();
 
+  const validate = () => {
+    console.log(category.title);
+    let error = false;
+    const allowedCharacters = /^[a-zA-Z0-9\s]*$/;
+    if (category.title == "") {
+      setErrorMessage("Title is required");
+      error = true;
+    } else if (!allowedCharacters.test(category.title)) {
+      setErrorMessage("Special Character not allowed");
+      error = true;
+    } else {
+      setErrorMessage("");
+      error = false;
+    }
+    if (error) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let isValidate = validate();
+    if (isValidate) {
+      const formData = new FormData();
 
-    const formData = new FormData();
+      // Append your tax data
+      formData.append("title", category.title);
+      formData.append("description", category.description);
+      formData.append("merchant_id", category.merchant_id);
+      formData.append("use_point", category.use_point);
+      formData.append("earn_point", category.earn_point);
+      formData.append("token_id", userTypeData?.token_id);
+      formData.append("login_type", userTypeData?.login_type);
 
-    // Append your tax data
-    formData.append("title", category.title);
-    formData.append("description", category.description);
-    formData.append("merchant_id", category.merchant_id);
-    formData.append("use_point", category.use_point);
-    formData.append("earn_point", category.earn_point);
-    formData.append("token_id", userTypeData?.token_id);
-    formData.append("login_type", userTypeData?.login_type);
-
-    if (category.image && category.image.base64) {
-      formData.append("online", category.online);
-      formData.append("image", category.image.base64);
-      formData.append("filename", category.image.file.name);
-    } else {
-      formData.append("image", "");
-      formData.append("filename", "");
-    }
-    setLoader(true);
-    try {
-      const res = await axios.post(BASE_URL + ADD_CATOGRY, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${userTypeData?.token}`,
-        },
-      });
-
-      const data = await res.data.status;
-      const update_message = await res.data.msg;
-      if (data == "Success") {
-        ToastifyAlert("Added Successfully", "success");
-        // seVisible("CategoryDetail");
-        navigate("/inventory/category");
-      } else if (
-        data == "Failed" &&
-        update_message == "The name is Already exist"
-      ) {
-        setErrorMessage(update_message);
-      } else if (data == "Failed" && update_message == "*Please enter title") {
-        setErrorMessage(update_message);
+      if (category.image && category.image.base64) {
+        formData.append("online", category.online);
+        formData.append("image", category.image.base64);
+        formData.append("filename", category.image.file.name);
       } else {
-        // alert(update_message);
-        showModal(update_message);
-        // seVisible("CategoryDetail");
-        navigate("/inventory/category");
+        formData.append("image", "");
+        formData.append("filename", "");
       }
-    } catch (error) {
-      console.error("API Error:", error);
+      setLoader(true);
+      try {
+        const res = await axios.post(BASE_URL + ADD_CATOGRY, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${userTypeData?.token}`,
+          },
+        });
+
+        const data = await res.data.status;
+        const update_message = await res.data.msg;
+        if (data == "Success") {
+          ToastifyAlert("Added Successfully", "success");
+          // seVisible("CategoryDetail");
+          navigate("/inventory/category");
+        } else if (
+          data == "Failed" &&
+          update_message == "The name is Already exist"
+        ) {
+          setErrorMessage(update_message);
+        } else if (
+          data == "Failed" &&
+          update_message == "*Please enter title"
+        ) {
+          setErrorMessage(update_message);
+        } else {
+          // alert(update_message);
+          showModal(update_message);
+          // seVisible("CategoryDetail");
+          navigate("/inventory/category");
+        }
+      } catch (error) {
+        console.error("API Error:", error);
+      }
+      setLoader(false);
     }
-    setLoader(false);
   };
 
   // Function to prevent default behavior for drag over
@@ -316,6 +349,7 @@ const AddCategory = ({ seVisible }) => {
                   onChange={inputChange}
                   onKeyDown={handleKeyDown}
                   style={{}}
+                  onKeyPress={handleKeyPress}
                 />
               )}
             />

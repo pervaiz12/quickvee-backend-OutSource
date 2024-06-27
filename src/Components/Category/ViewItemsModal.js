@@ -5,8 +5,10 @@ import Table from "react-bootstrap/Table";
 import axios from "axios";
 import CrossIcon from "../../Assests/Dashboard/cross.svg";
 import { useAuthDetails } from "./../../Common/cookiesHelper";
+import { useNavigate } from "react-router-dom";
 
 const ViewItemsModal = ({ selectedView, onViewClick }) => {
+  const navigate = useNavigate();
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const [open, setOpen] = useState(false);
@@ -59,6 +61,11 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
     onViewClick(selectedView);
   };
 
+  const hadleRedirect=(id)=>{
+    navigate(`/inventory/products/edit/${id}`)
+    
+  }
+
   return (
     <>
       <div>
@@ -83,7 +90,7 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
               }}
             >
               <span>
-                <span>{selectedView.title}</span>
+                <span >{selectedView.title}</span>
               </span>
               <div>
                 <div className="flex justify-between gap-4">
@@ -111,7 +118,8 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
                         <p
                           className="q_view_modal_details"
                           key={index}
-                          style={{ fontFamily: "CircularSTDMedium !important" }}
+                          style={{ fontFamily: "CircularSTDMedium !important", cursor: 'pointer' }}
+                          onClick={() => hadleRedirect(item?.id)}
                         >
                           {item.title}
                         </p>

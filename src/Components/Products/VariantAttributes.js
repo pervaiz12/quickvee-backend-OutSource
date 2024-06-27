@@ -115,7 +115,6 @@ const VariantAttributes = ({
   };
 
   const handlechange = (value, index, name, actionMeta) => {
-    console.log('values=>>', value);
     // validation for add varient item => only ' is allowed and " is not allowed in varient item text
     let filterValue;
     // if value comes from createble varient
@@ -141,7 +140,8 @@ const VariantAttributes = ({
           !item?.label?.includes(`<`) &&
           !item?.label?.includes(`>`) &&
           !item?.label?.includes(`/`) && 
-          !item?.label?.includes(`\\`) 
+          !item?.label?.includes(`\\`) &&
+          !item?.label?.includes(`;`)
         );
       });
     } else {
@@ -312,6 +312,7 @@ const VariantAttributes = ({
                                 index + 1 < varientLength?.length ||
                                 pageUrl === "inventory/products/edit"
                               }
+                              
                             />
                           </div>
                         </div>

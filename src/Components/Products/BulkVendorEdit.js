@@ -28,6 +28,7 @@ import { useParams } from "react-router-dom";
 import Loader from "../../CommonComponents/Loader";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import PasswordShow from "../../Common/passwordShow";
 
 const BulkVendorEdit = ({
   productData,
@@ -37,6 +38,7 @@ const BulkVendorEdit = ({
 }) => {
   const dispatch = useDispatch();
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
+  const {getUnAutherisedTokenMessage} = PasswordShow();
   const [selectedVendor, setSelectedVendor] = useState([]);
   const [fetchDataLoadingVendor, setFetchDataLoadingVendor] = useState(false);
   const [vendor, setVendor] = useState([]);
@@ -90,6 +92,7 @@ const BulkVendorEdit = ({
         })
         .catch((err) => {
           ToastifyAlert("Error!", "error");
+          getUnAutherisedTokenMessage();
         });
     } else if (type === "checkbox" && modalType === "bulk-edit") {
       updateVandorItems = vendorItems.map((item, i) => ({
@@ -253,6 +256,7 @@ const BulkVendorEdit = ({
         })
         .catch((err) => {
           console.log("error for assign vendor", err);
+          getUnAutherisedTokenMessage();
         })
         .finally(() => {
           setLoading(false);
@@ -304,6 +308,7 @@ const BulkVendorEdit = ({
         })
         .catch((err) => {
           ToastifyAlert("Error!", "error");
+          getUnAutherisedTokenMessage();
         });
     } else {
       const filtervendorList = vendorItems?.filter(
@@ -377,6 +382,7 @@ const BulkVendorEdit = ({
         })
         .catch(() => {
           ToastifyAlert("Error!", "error");
+          getUnAutherisedTokenMessage();
         })
         .finally(() => {
           setSubmitLoading(false);
@@ -391,6 +397,7 @@ const BulkVendorEdit = ({
         })
         .catch(() => {
           ToastifyAlert("Error!", "error");
+          getUnAutherisedTokenMessage();
         })
         .finally(() => {
           setSubmitLoading(false);

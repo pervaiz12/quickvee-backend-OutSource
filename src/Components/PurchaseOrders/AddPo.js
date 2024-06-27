@@ -260,12 +260,10 @@ const AddPo = ({ seVisible }) => {
         </div>
       </div>
 
-      <div className="second-component">
-        <AutoPo
-          purchaseInfo={purchaseInfo}
-          setPurchaseInfoErrors={setPurchaseInfoErrors}
-        />
-      </div>
+      <AutoPo
+        purchaseInfo={purchaseInfo}
+        setPurchaseInfoErrors={setPurchaseInfoErrors}
+      />
     </>
   );
 };

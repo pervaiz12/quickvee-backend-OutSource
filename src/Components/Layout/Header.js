@@ -110,6 +110,7 @@ export default function Header() {
     localStorage.removeItem("AllStore");
     navigate("/login");
     dispatch(setIsStoreActive(false));
+    dispatch(getAuthInvalidMessage(""));
   };
 
   const handleNavigate = () => {

@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BASE_URL,
   GET_ADD_ADMIN,
@@ -207,6 +207,28 @@ export default function Add_adminFunctionality({ setVisible }) {
       setLoader(false);
     }, 4000);
   };
+  // ==============
+  const keyEnter = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      setAddAdminData((prev) => ({
+        ...prev,
+        [event.target.name]: event.target.value,
+      }));
+      if (loader == false) {
+        handleSubmit(event);
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", keyEnter);
+    return () => {
+      document.removeEventListener("keydown", keyEnter);
+    };
+  }, [addAdminData]);
+
+  // ==============
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -268,6 +290,7 @@ export default function Add_adminFunctionality({ setVisible }) {
     handleSubmit,
     handleBlur,
     handleKeyPress,
+    keyEnter,
     loader,
   };
 }

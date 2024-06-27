@@ -19,6 +19,7 @@ import TableRow from "@mui/material/TableRow";
 import useDebounce from "../../../hooks/useDebouncs";
 import Pagination from "../UnverifeDetails/Pagination";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import PasswordShow from "../../../Common/passwordShow";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -49,6 +50,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export default function Manager() {
   const dispatch = useDispatch();
   const managerList = useSelector((state) => state.managerRecord);
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
 
   // ========================= DEFIENED STATES ========================================
   const [managerTable, setManagerTable] = useState([]);
@@ -60,6 +62,14 @@ export default function Manager() {
 
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+  const getManagerData = async (data) => {
+    try {
+      await dispatch(ManagerRecord(data)).unwrap();
+    } catch (error) {
+      getUnAutherisedTokenMessage();
+      handleCoockieExpire();
+    }
+  };
 
   useEffect(() => {
     const data = {
@@ -68,7 +78,7 @@ export default function Manager() {
       page: currentPage,
       search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
     };
-    dispatch(ManagerRecord(data));
+    getManagerData(data);
   }, [currentPage, debouncedValue, rowsPerPage]);
 
   // only when user searches to update the total count

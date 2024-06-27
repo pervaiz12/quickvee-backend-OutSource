@@ -56,35 +56,25 @@ export const getManagerRecordCount = createAsyncThunk(
 export const deleteManagerById = createAsyncThunk(
   "Manager/deleteManagerById",
   async (data) => {
-    const response = await axios.post(
-      BASE_URL + DELETE_MANAGER,
-      data,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        
-        },
-      }
-    );
-    return response?.data
+    const response = await axios.post(BASE_URL + DELETE_MANAGER, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response?.data;
   }
 );
-
 
 export const addManager = createAsyncThunk(
   "Manager/addManager",
   async (data) => {
     const { token, ...dataNew } = data;
-    const response = await axios.post(
-      BASE_URL + ADD_MANAGER,
-      dataNew,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`, // Use data?.token directly
-        },
-      }
-    );
+    const response = await axios.post(BASE_URL + ADD_MANAGER, dataNew, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+        Authorization: `Bearer ${token}`, // Use data?.token directly
+      },
+    });
     return response?.data;
   }
 );
@@ -92,20 +82,14 @@ export const addManager = createAsyncThunk(
 export const getManagerListing = createAsyncThunk(
   "Manager/getManagerListing",
   async (data) => {
-    const response = await axios.post(
-      BASE_URL + GET_MANAGER_LISTING,
-      data,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data"
-        },
-      }
-    );
+    const response = await axios.post(BASE_URL + GET_MANAGER_LISTING, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
     return response?.data;
   }
 );
-
-
 
 const ManagerSlice = createSlice({
   name: "Manager",

@@ -9,6 +9,7 @@ import {
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { Box, CircularProgress } from "@mui/material";
+import PasswordShow from "../../Common/passwordShow";
 
 const BulkInstantPo = ({
   productData,
@@ -23,6 +24,7 @@ const BulkInstantPo = ({
   const dispatch = useDispatch();
   const productId = useParams();
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
+  const {getUnAutherisedTokenMessage} = PasswordShow();
   const [instantPoSingle, setInstantPoSingle] = useState({
     qty: "",
     cost: "",
@@ -259,6 +261,7 @@ const BulkInstantPo = ({
             })
             .catch((err) => {
               ToastifyAlert("Error!", "error");
+              getUnAutherisedTokenMessage();
             })
             .finally(() => {
               setLoading(false);
@@ -321,6 +324,7 @@ const BulkInstantPo = ({
             })
             .catch((err) => {
               ToastifyAlert("Error!", "error");
+              getUnAutherisedTokenMessage();
             })
             .finally(() => {
               setLoading(false);

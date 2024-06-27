@@ -19,7 +19,7 @@ let initialState = {
 
 export const getUnVerifiedMerchant = createAsyncThunk(
   "UnVerified/getUnVerifiedMerchant",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     // console.log(data)
     try {
       const { token, ...dataNew } = data;
@@ -40,6 +40,7 @@ export const getUnVerifiedMerchant = createAsyncThunk(
       }
     } catch (error) {
       console.log(error);
+      return rejectWithValue(error.response?.data || error.message);
     }
   }
 );
