@@ -314,6 +314,7 @@ const AddProducts = () => {
     }
   };
 
+
   const handleOnBlurAttributes = (e) => {
     if (e.key === "Enter" || e.key === "Tab") {
       handleVarientTitleBasedItemList();
@@ -610,39 +611,71 @@ const AddProducts = () => {
   };
 
   const handleBlur = async (e, i, title) => {
-    const checkUpcValue = async (value, name) => {
-        if (value && name === "upcCode") {
-          let isAllowed = false;
-          const data = {
-            merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-            upc: value,
-            productId:
-              pageUrl === "inventory/products/edit" ? productId?.id : "",
-          };
 
-          const response = isMultipleVarient
-            ? await dispatch(checkUpcCodeMultiple(data))
-            : await dispatch(checkUpcCodeSingle(data));
+    const checkUpcValueforSingle = async (value, name) => {
+      if (value && name === 'upcCode') {
+        let isAllowed = false;
+        const data = {
+          merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+          upc: value,
+          id: pageUrl === "inventory/products/edit" ? productId?.id : '',
+        };
+  
+        const response = isMultipleVarient
+          ? await dispatch(checkUpcCodeMultiple(data))
+          : await dispatch(checkUpcCodeSingle(data));
 
-          if (response?.payload?.status === "true") {
-            isAllowed = true;
-          }
-
-          return isAllowed;
+        if (response?.payload === true) {
+          isAllowed = true;
         }
+  
+        return isAllowed;
+      }
+      return true; // Allow empty value
+    };
+
+    const checkLocalDuplicateForSingle = (upcCode, currentIndex) => {
+      return formValue.some((item, index) => {
+        return index !== currentIndex && item?.upcCode === upcCode;
+      });
+    };
+
+
+    const checkUpcValue = async (value, name) => {
+      if (value && name === "upcCode") {
+        let isAllowed = true;
+        const data = {
+          merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+          upc: value,
+          product_id: pageUrl === "inventory/products/edit" ? productId?.id : "",
+        };
+
+        const response = isMultipleVarient
+          ? await dispatch(checkUpcCodeMultiple(data))
+          : await dispatch(checkUpcCodeSingle(data));
+
+        if (response?.payload?.status === "true") {
+          isAllowed = true;
+        }else if(response?.payload?.status === "false"){
+          isAllowed = false
+        }
+        return isAllowed;
+      }
     };
 
     const checkLocalDuplicate = (upcCode, currentIndex) => {
-      return formValue.some((item, index) => {
-        if (index !== currentIndex) {
-          const currentTitle = Object.keys(item)[0];
-          return item[currentTitle]?.upcCode === upcCode;
-        }
-        return false;
-      });
+      if (!!upcCode) {
+        return formValue.some((item, index) => {
+          if (index !== currentIndex) {
+            const currentTitle = Object.keys(item)[0];
+            return item[currentTitle]?.upcCode === upcCode;
+          }
+          return false;
+        });
+      }
     };
-  
-    if (isMultipleVarient) {
+
+
       const { name, value, type, checked } = e.target;
 
       /// convert input value format 0.00
@@ -684,26 +717,91 @@ const AddProducts = () => {
         }
 
         // here check UPCCode Value
-        const isUpcValid = await checkUpcValue(fieldValue, name);
-        const isLocalDuplicate = checkLocalDuplicate(fieldValue, i);
 
-        const updatedValues = formValue.map((item, index) => {
-          if (index === i) {
-            const currentTitle = Object.keys(item)[0];
-            return {
-              ...item,
-              [currentTitle]: {
-                ...item[currentTitle],
-                [name]: fieldValue,
-                upcCode: isUpcValid && !isLocalDuplicate ? fieldValue : "",
-                upcError: !isUpcValid ? "UPC code must be unique (API check)." : isLocalDuplicate ? "UPC code must be unique (local check)." : ""
+        // Skip API validation if the field is empty
+        if(isMultipleVarient){
+          // multiple varient
+          if (!fieldValue) {
+            const updatedValues = formValue.map((item, index) => {
+              if (index === i) {
+                const currentTitle = Object.keys(item)[0];
+                return {
+                  ...item,
+                  [currentTitle]: {
+                    ...item[currentTitle],
+                    [name]: fieldValue,
+                    upcCode: "",
+                    upcError: "",
+                  },
+                };
               }
-            };
+              return item;
+            });
+  
+            setFormValue(updatedValues);
+            return;
+          } else {
+            const isUpcValid = await checkUpcValue(fieldValue, name);
+            const isLocalDuplicate = checkLocalDuplicate(fieldValue, i);
+            const updatedValues = formValue.map((item, index) => {
+              if (index === i) {
+                const currentTitle = Object.keys(item)[0];
+                return {
+                  ...item,
+                  [currentTitle]: {
+                    ...item[currentTitle],
+                    [name]: fieldValue,
+                    upcCode: (isUpcValid) && !isLocalDuplicate ? fieldValue : "",
+                    upcError: !isUpcValid
+                      ? "UPC code must be unique (API check). test"
+                      : isLocalDuplicate
+                        ? "UPC code must be unique (local check)."
+                        : "",
+                  },
+                };
+              }
+              return item;
+            });
+  
+            setFormValue(updatedValues);
+            return;
           }
-          return item;
-        });
-        setFormValue(updatedValues);
-        return;
+        }else{
+          if (!fieldValue) {
+            const updatedValues = formValue.map((item, index) => {
+              if (index === i) {
+                return {
+                  ...item,
+                  [name]: fieldValue,
+                  upcCode: "",
+                  upcError: ""
+                };
+              }
+              return item;
+            });
+      
+            setFormValue(updatedValues);
+            return;
+          }else{
+            const isUpcValid = await checkUpcValueforSingle(fieldValue, name);
+            const isLocalDuplicate = checkLocalDuplicateForSingle(fieldValue, i);
+        
+            const updatedValues = formValue.map((item, index) => {
+              if (index === i) {
+                return {
+                  ...item,
+                  [name]: fieldValue,
+                  upcCode: isUpcValid && !isLocalDuplicate ? fieldValue : "",
+                  upcError: !isUpcValid ? "UPC code must be unique (API check)." : isLocalDuplicate ? "UPC code must be unique (local check)." : ""
+                };
+              }
+              return item;
+            });
+        
+            setFormValue(updatedValues);
+            return;
+          }
+        }
       }
       // normal input value format
       else {
@@ -781,173 +879,175 @@ const AddProducts = () => {
         return marginAmount;
       };
 
-      const updatedValues = formValue.map((item, index) => {
-        const currentTitle = Object.keys(item)[0];
-        const showError =
-          parseFloat(
-            name === "price"
-              ? fieldValue
-              : name === "costPerItem"
-                ? price_total_value
-                : item[currentTitle]?.price
-          ) >=
-          parseFloat(
-            name === "compareAtPrice"
-              ? fieldValue
-              : item[currentTitle]?.compareAtPrice
-          );
-
-        const costPerItemAndPriceAmountExists = () => {
-          const bool =
-            (name === "costPerItem" &&
-              fieldValue &&
-              parseFloat(item[currentTitle]?.price) > 0) ||
-            (name === "price" &&
-              fieldValue &&
-              parseFloat(item[currentTitle]?.costPerItem) > 0);
-          return bool;
-        };
-
-        if (i > 0) {
-          return !["upcCode", "customCode"].includes(name) && item[title]
-            ? {
-                ...item,
-                [currentTitle]: {
-                  ...item[currentTitle],
-                  [name]: fieldValue,
-                  price:
-                    name === "price"
-                      ? fieldValue
-                      : item[currentTitle]?.price
-                        ? item[currentTitle]?.price
+      if(isMultipleVarient){
+        const updatedValues = formValue.map((item, index) => {
+          const currentTitle = Object.keys(item)[0];
+          const showError =
+            parseFloat(
+              name === "price"
+                ? fieldValue
+                : name === "costPerItem"
+                  ? price_total_value
+                  : item[currentTitle]?.price
+            ) >=
+            parseFloat(
+              name === "compareAtPrice"
+                ? fieldValue
+                : item[currentTitle]?.compareAtPrice
+            );
+  
+          const costPerItemAndPriceAmountExists = () => {
+            const bool =
+              (name === "costPerItem" &&
+                fieldValue &&
+                parseFloat(item[currentTitle]?.price) > 0) ||
+              (name === "price" &&
+                fieldValue &&
+                parseFloat(item[currentTitle]?.costPerItem) > 0);
+            return bool;
+          };
+  
+          if (i > 0) {
+            return !["upcCode", "customCode"].includes(name) && item[title]
+              ? {
+                  ...item,
+                  [currentTitle]: {
+                    ...item[currentTitle],
+                    [name]: fieldValue,
+                    price:
+                      name === "price"
+                        ? fieldValue
+                        : item[currentTitle]?.price
+                          ? item[currentTitle]?.price
+                          : "",
+                    margin: costPerItemAndPriceAmountExists()
+                      ? calculatemargin(name, item[currentTitle], fieldValue)
+                      : oldMargin([
+                            item[currentTitle]?.costPerItem,
+                            item[currentTitle]?.margin,
+                            item[currentTitle]?.price,
+                          ])
+                        ? item[currentTitle]?.margin
                         : "",
-                  margin: costPerItemAndPriceAmountExists()
-                    ? calculatemargin(name, item[currentTitle], fieldValue)
-                    : oldMargin([
-                          item[currentTitle]?.costPerItem,
-                          item[currentTitle]?.margin,
-                          item[currentTitle]?.price,
-                        ])
-                      ? item[currentTitle]?.margin
-                      : "",
-                  profit: costPerItemAndPriceAmountExists()
-                    ? calculateProfit(name, item[currentTitle], fieldValue)
-                    : oldMargin([
-                          item[currentTitle]?.costPerItem,
-                          item[currentTitle]?.margin,
-                          item[currentTitle]?.price,
-                        ])
-                      ? item[currentTitle]?.profit
-                      : "",
-                  comparePriceError:
-                    ["price", "compareAtPrice", "costPerItem"]?.includes(
-                      name
-                    ) && showError
-                      ? "Compare Price must be greater than price."
-                      : [
-                            "qty",
-                            "upcCode",
-                            "customCode",
-                            "reorderLevel",
-                            "reorderQty",
-                            "checkId",
-                            "disable",
-                            "isFoodStamble",
-                            "sellOutOfStock",
-                            "trackQuantity",
-                            "costPerItem",
-                          ]?.includes(name) &&
-                          item[currentTitle]?.comparePriceError
-                        ? item[currentTitle]?.comparePriceError
+                    profit: costPerItemAndPriceAmountExists()
+                      ? calculateProfit(name, item[currentTitle], fieldValue)
+                      : oldMargin([
+                            item[currentTitle]?.costPerItem,
+                            item[currentTitle]?.margin,
+                            item[currentTitle]?.price,
+                          ])
+                        ? item[currentTitle]?.profit
                         : "",
-                },
-              }
-            : item;
-        } else if (i === 0) {
-          return !["upcCode", "customCode"].includes(name) &&
-            !item[currentTitle][name] &&
-            pageUrl === "inventory/products/add"
-            ? {
-                ...item,
-                [currentTitle]: {
-                  ...item[currentTitle],
-                  [name]: fieldValue,
-                  price:
-                    name === "price"
-                      ? fieldValue
-                      : item[currentTitle]?.price
-                        ? item[currentTitle]?.price
+                    comparePriceError:
+                      ["price", "compareAtPrice", "costPerItem"]?.includes(
+                        name
+                      ) && showError
+                        ? "Compare Price must be greater than price."
+                        : [
+                              "qty",
+                              "upcCode",
+                              "customCode",
+                              "reorderLevel",
+                              "reorderQty",
+                              "checkId",
+                              "disable",
+                              "isFoodStamble",
+                              "sellOutOfStock",
+                              "trackQuantity",
+                              "costPerItem",
+                            ]?.includes(name) &&
+                            item[currentTitle]?.comparePriceError
+                          ? item[currentTitle]?.comparePriceError
+                          : "",
+                  },
+                }
+              : item;
+          } else if (i === 0) {
+            return !["upcCode", "customCode"].includes(name) &&
+              !item[currentTitle][name] &&
+              pageUrl === "inventory/products/add"
+              ? {
+                  ...item,
+                  [currentTitle]: {
+                    ...item[currentTitle],
+                    [name]: fieldValue,
+                    price:
+                      name === "price"
+                        ? fieldValue
+                        : item[currentTitle]?.price
+                          ? item[currentTitle]?.price
+                          : "",
+                    margin: costPerItemAndPriceAmountExists()
+                      ? calculatemargin(name, item[currentTitle], fieldValue)
+                      : oldMargin([
+                            item[currentTitle]?.costPerItem,
+                            item[currentTitle]?.margin,
+                            item[currentTitle]?.price,
+                          ])
+                        ? item[currentTitle]?.margin
                         : "",
-                  margin: costPerItemAndPriceAmountExists()
-                    ? calculatemargin(name, item[currentTitle], fieldValue)
-                    : oldMargin([
-                          item[currentTitle]?.costPerItem,
-                          item[currentTitle]?.margin,
-                          item[currentTitle]?.price,
-                        ])
-                      ? item[currentTitle]?.margin
-                      : "",
-                  profit: costPerItemAndPriceAmountExists()
-                    ? calculateProfit(name, item[currentTitle], fieldValue)
-                    : oldMargin([
-                          item[currentTitle]?.costPerItem,
-                          item[currentTitle]?.margin,
-                          item[currentTitle]?.price,
-                        ])
-                      ? item[currentTitle]?.profit
-                      : "",
-
-                  comparePriceError:
-                    ["price", "compareAtPrice", "costPerItem"]?.includes(
-                      name
-                    ) && showError
-                      ? "Compare Price must be greater than price."
-                      : [
-                            "qty",
-                            "upcCode",
-                            "customCode",
-                            "reorderLevel",
-                            "reorderQty",
-                            "checkId",
-                            "disable",
-                            "isFoodStamble",
-                            "sellOutOfStock",
-                            "trackQuantity",
-                            "costPerItem",
-                          ]?.includes(name) &&
-                          item[currentTitle]?.comparePriceError
-                        ? item[currentTitle]?.comparePriceError
+                    profit: costPerItemAndPriceAmountExists()
+                      ? calculateProfit(name, item[currentTitle], fieldValue)
+                      : oldMargin([
+                            item[currentTitle]?.costPerItem,
+                            item[currentTitle]?.margin,
+                            item[currentTitle]?.price,
+                          ])
+                        ? item[currentTitle]?.profit
                         : "",
-                },
-              }
-            : item;
-        }
-        //   else {
-        //   return !["upcCode", "customCode"].includes(name) ? {
-        //     ...item,
-        //     [title]: {
-        //       ...title[title],
-        //       [name]: fieldValue,
-        //       price: !isNaN(parseFloat(price_total_value))
-        //         ? parseFloat(price_total_value).toFixed(2)
-        //         : name === "price"
-        //           ? fieldValue
-        //           : item[currentTitle]?.price && (name === "costPerItem" && !fieldValue)
-        //             ? ""
-        //             : item[currentTitle]?.price,
-        //         margin: !isNaN(parseFloat(marginValue)) ? marginValue : oldMargin([item[currentTitle]?.costPerItem, item[currentTitle]?.margin, item[currentTitle]?.price]) ? item[currentTitle]?.margin : "",
-        //         profit: !isNaN(parseFloat(profitValue)) ? profitValue : oldMargin([item[currentTitle]?.costPerItem, item[currentTitle]?.margin, item[currentTitle]?.price]) ? item[currentTitle]?.profit : "",
-        //         comparePriceError:
-        //         ((["price", "compareAtPrice", "costPerItem"]?.includes(name)) && showError)
-        //             ? "Compare Price must be greater than price."
-        //             : (["qty", "upcCode", "customCode", "reorderLevel", "reorderQty"]?.includes(name)) && item[currentTitle]?.comparePriceError ? item[currentTitle]?.comparePriceError : ""
-        //     }
-        //   }: item
-        // }
-      });
-
-      setFormValue(updatedValues);
-    }
+  
+                    comparePriceError:
+                      ["price", "compareAtPrice", "costPerItem"]?.includes(
+                        name
+                      ) && showError
+                        ? "Compare Price must be greater than price."
+                        : [
+                              "qty",
+                              "upcCode",
+                              "customCode",
+                              "reorderLevel",
+                              "reorderQty",
+                              "checkId",
+                              "disable",
+                              "isFoodStamble",
+                              "sellOutOfStock",
+                              "trackQuantity",
+                              "costPerItem",
+                            ]?.includes(name) &&
+                            item[currentTitle]?.comparePriceError
+                          ? item[currentTitle]?.comparePriceError
+                          : "",
+                  },
+                }
+              : item;
+          }
+          //   else {
+          //   return !["upcCode", "customCode"].includes(name) ? {
+          //     ...item,
+          //     [title]: {
+          //       ...title[title],
+          //       [name]: fieldValue,
+          //       price: !isNaN(parseFloat(price_total_value))
+          //         ? parseFloat(price_total_value).toFixed(2)
+          //         : name === "price"
+          //           ? fieldValue
+          //           : item[currentTitle]?.price && (name === "costPerItem" && !fieldValue)
+          //             ? ""
+          //             : item[currentTitle]?.price,
+          //         margin: !isNaN(parseFloat(marginValue)) ? marginValue : oldMargin([item[currentTitle]?.costPerItem, item[currentTitle]?.margin, item[currentTitle]?.price]) ? item[currentTitle]?.margin : "",
+          //         profit: !isNaN(parseFloat(profitValue)) ? profitValue : oldMargin([item[currentTitle]?.costPerItem, item[currentTitle]?.margin, item[currentTitle]?.price]) ? item[currentTitle]?.profit : "",
+          //         comparePriceError:
+          //         ((["price", "compareAtPrice", "costPerItem"]?.includes(name)) && showError)
+          //             ? "Compare Price must be greater than price."
+          //             : (["qty", "upcCode", "customCode", "reorderLevel", "reorderQty"]?.includes(name)) && item[currentTitle]?.comparePriceError ? item[currentTitle]?.comparePriceError : ""
+          //     }
+          //   }: item
+          // }
+        });
+  
+        setFormValue(updatedValues);
+      }
+    
   };
 
   const handleOnChange = (e, i, title) => {
@@ -1220,7 +1320,6 @@ const AddProducts = () => {
 
     setFormValue(updatedValues);
   };
-  console.log("formvalue", formValue);
 
   const handleVarientTitleBasedItemList = () => {
     if (varientLength.length) {
