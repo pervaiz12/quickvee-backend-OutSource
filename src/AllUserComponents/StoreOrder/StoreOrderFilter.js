@@ -19,10 +19,10 @@ const StoreOrderFilter = ({ onFilterDataChange }) => {
 
   const orderType = [
     {
-      title: "Online",
+      title: "Online Order",
     },
     {
-      title: "Offline",
+      title: "Store Order",
     },
     {
       title: "Both",
@@ -30,7 +30,7 @@ const StoreOrderFilter = ({ onFilterDataChange }) => {
   ];
 
   const [selectedOrderStatus, setSelectedOrderStatus] = useState("Paid");
-  const [selectedOrderType, setSelectedOrderType] = useState("Online");
+  const [selectedOrderType, setSelectedOrderType] = useState("Online Order");
 
   const [orderStatusDropdownVisible, setOrderStatusDropdownVisible] =
     useState(false);

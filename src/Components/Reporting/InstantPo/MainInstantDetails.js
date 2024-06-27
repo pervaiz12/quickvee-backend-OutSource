@@ -13,7 +13,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { priceFormate } from "../../../hooks/priceFormate";
-
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import sortIcon from "../../../Assests/Category/SortingW.svg";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -56,9 +58,23 @@ const MainInstantDetails = ({ data }) => {
   useEffect(() => {
     if (
       !instantactivityDataState.loading &&
-      instantactivityDataState.instantactivityData
+      Array.isArray(instantactivityDataState.instantactivityData)
     ) {
-      setinstantactivity(instantactivityDataState.instantactivityData);
+      const AfterAdjustQtyAddedList =
+        instantactivityDataState.instantactivityData.map((item) => {
+          const AfterAdjustQty =
+            parseInt(item.current_qty, 10) + parseInt(item.qty, 10);
+          console.log("AfterAdjustQtyAddedList", AfterAdjustQty);
+          const calculatedTotal =
+            parseInt(item.qty, 10) * parseFloat(item.price);
+          console.log("calculatedTotal", calculatedTotal.toFixed(2));
+          return {
+            ...item,
+            afterAdjustQty: AfterAdjustQty,
+            calculatedTotal: calculatedTotal.toFixed(2),
+          };
+        });
+      setinstantactivity(AfterAdjustQtyAddedList);
     }
   }, [
     instantactivityDataState,
@@ -68,143 +84,252 @@ const MainInstantDetails = ({ data }) => {
 
   const formatDateTime = (dateTimeString) => {
     const date = new Date(dateTimeString);
-    const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
-    const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
-    const formattedDate = date.toLocaleDateString('en-US', dateOptions);
+    const dateOptions = { year: "numeric", month: "short", day: "numeric" };
+    const timeOptions = { hour: "numeric", minute: "numeric", hour12: true };
+    const formattedDate = date.toLocaleDateString("en-US", dateOptions);
     return `${formattedDate}`;
   };
-
+  const [sortOrder, setSortOrder] = useState("asc");
+  const sortByItemName = (type, name) => {
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      instantactivity,
+      type,
+      name,
+      sortOrder
+    );
+    console.log(sortedItems);
+    setinstantactivity(sortedItems);
+    setSortOrder(newOrder);
+  };
   return (
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <TableContainer>
-            <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-              <TableHead>
-                <StyledTableCell>Instant PO Info</StyledTableCell>
-                {/* <StyledTableCell>Time</StyledTableCell> */}
-                <StyledTableCell>Source</StyledTableCell>
-                {/* <StyledTableCell>Product Name</StyledTableCell> */}
-                {/* <StyledTableCell>Variants Name</StyledTableCell> */}
-                <StyledTableCell>Before Adjust Qty</StyledTableCell>
-                <StyledTableCell>Adjust Qty</StyledTableCell>
-                <StyledTableCell>After Adjust Qty</StyledTableCell>
-                <StyledTableCell>Per Item Cost</StyledTableCell>
-                <StyledTableCell>Total Cost</StyledTableCell>
-              </TableHead>
-              <TableBody>
-                {instantactivity && instantactivity.length >= 1 ? (
-                  instantactivity.map((instantactivity, index) => {
-                    const AfterAdjustQty =
-                      parseInt(instantactivity.current_qty, 10) +
-                      parseInt(instantactivity.qty, 10);
-                    const calculatedTotal =
-                      parseInt(instantactivity.qty, 10) *
-                      parseFloat(instantactivity.price);
-                    return (
-                      <StyledTableRow>
-                        <StyledTableCell>
-                          <div>
-                            <p>{instantactivity.title}</p>
-                            <p
-                              style={{
-                                color:"#0A64F9"
-                              }}
-                            >{instantactivity.variant}</p>
-                            <div className="flex ">
-                              <p
-                                style={{
-                                  color: "#818181",
-                                }}
-                                className="me-3"
-                              >
-                                {/* {new Date(instantactivity.created_at)
-                                  .toLocaleDateString("en-US", {
-                                    month: "2-digit",
-                                    day: "2-digit",
-                                    year: "numeric",
-                                  })
-                                  .split("/")
-                                  .join("-")} */}
-                                  {formatDateTime(instantactivity.created_at)}
+          {instantactivityDataState.loading ? (
+            <>
+              <SkeletonTable
+                columns={[
+                  "Instant PO Info",
+                  "	Source",
+                  "Before Adjust Qty",
+                  "Adjust Qty",
+                  "After Adjust Qty",
+                  "Per Item Cost",
+                  "Total Cost",
+                ]}
+              />
+            </>
+          ) : (
+            <>
+              <TableContainer>
+                <StyledTable
+                  sx={{ minWidth: 500 }}
+                  aria-label="customized table"
+                >
+                  <TableHead>
+                    <StyledTableCell>
+                      <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName("date", "created_at")}
+                      >
+                        <p>Instant PO Info</p>
+                        <img src={sortIcon} alt="" className="pl-1" />
+                      </button>
+                    </StyledTableCell>
+                    {/* <StyledTableCell>Time</StyledTableCell> */}
+                    <StyledTableCell>
+                      <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName("str", "emp_name")}
+                      >
+                        <p>Source</p>
+                        <img src={sortIcon} alt="" className="pl-1" />
+                      </button>
+                    </StyledTableCell>
+                    {/* <StyledTableCell>Product Name</StyledTableCell> */}
+                    {/* <StyledTableCell>Variants Name</StyledTableCell> */}
+                    <StyledTableCell>
+                      <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName("num", "current_qty")}
+                      >
+                        <p>Before Adjust Qty</p>
+                        <img src={sortIcon} alt="" className="pl-1" />
+                      </button>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName("num", "qty")}
+                      >
+                        <p>Adjust Qty</p>
+                        <img src={sortIcon} alt="" className="pl-1" />
+                      </button>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName("num", "qty")}
+                      >
+                        <p>After Adjust Qty</p>
+                        <img src={sortIcon} alt="" className="pl-1" />
+                      </button>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName("num", "price")}
+                      >
+                        <p>Per Item Cost</p>
+                        <img src={sortIcon} alt="" className="pl-1" />
+                      </button>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName("num", "calculatedTotal")}
+                      >
+                        <p>Total Cost</p>
+                        <img src={sortIcon} alt="" className="pl-1" />
+                      </button>
+                    </StyledTableCell>
+                  </TableHead>
+                  <TableBody>
+                    {instantactivity && instantactivity.length >= 1 ? (
+                      instantactivity.map((instantactivity, index) => {
+                        const AfterAdjustQty =
+                          parseInt(instantactivity.current_qty, 10) +
+                          parseInt(instantactivity.qty, 10);
+                        const calculatedTotal =
+                          parseInt(instantactivity.qty, 10) *
+                          parseFloat(instantactivity.price);
+                        return (
+                          <StyledTableRow>
+                            <StyledTableCell>
+                              <div>
+                                <p>{instantactivity.title}</p>
+                                <p
+                                  style={{
+                                    color: "#0A64F9",
+                                  }}
+                                >
+                                  {instantactivity.variant}
+                                </p>
+                                <div className="flex ">
+                                  <p
+                                    style={{
+                                      color: "#818181",
+                                    }}
+                                    className="me-3"
+                                  >
+                                    {/* {new Date(instantactivity.created_at)
+                      .toLocaleDateString("en-US", {
+                        month: "2-digit",
+                        day: "2-digit",
+                        year: "numeric",
+                      })
+                      .split("/")
+                      .join("-")} */}
+                                    {formatDateTime(instantactivity.created_at)}
+                                  </p>
+                                  <p
+                                    style={{
+                                      color: "#818181",
+                                    }}
+                                  >
+                                    {new Date(
+                                      instantactivity.created_at
+                                    ).toLocaleTimeString("en-US", {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                      second: "2-digit",
+                                      hour12: true,
+                                    })}
+                                  </p>
+                                </div>
+                              </div>
+                            </StyledTableCell>
+                            {/* <StyledTableCell>
+              <p>
+                {new Date(
+                  instantactivity.created_at
+                ).toLocaleTimeString("en-US", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  second: "2-digit",
+                  hour12: true,
+                })}
+              </p>
+            </StyledTableCell> */}
+                            <StyledTableCell>
+                              <p>
+                                {instantactivity.emp_name === null ||
+                                instantactivity.emp_name === ""
+                                  ? "Online"
+                                  : instantactivity.emp_name}
                               </p>
-                              <p
-                                style={{
-                                  color: "#818181",
-                                }}
-                              >
-                                {new Date(
-                                  instantactivity.created_at
-                                ).toLocaleTimeString("en-US", {
-                                  hour: "2-digit",
-                                  minute: "2-digit",
-                                  second: "2-digit",
-                                  hour12: true,
-                                })}
+                            </StyledTableCell>
+                            {/* <StyledTableCell>
+             <p>{instantactivity.title}</p>
+            </StyledTableCell> */}
+                            {/* <StyledTableCell>
+              <p>{instantactivity.variant}</p>
+            </StyledTableCell> */}
+                            <StyledTableCell>
+                              <p>{priceFormate(instantactivity.current_qty)}</p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <p>{priceFormate(instantactivity.qty)}</p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              {/* a <p>{priceFormate(AfterAdjustQty)}</p> */}
+                              <p>
+                                {priceFormate(
+                                  isNaN(instantactivity.afterAdjustQty)
+                                    ? 0
+                                    : instantactivity.afterAdjustQty
+                                )}
                               </p>
-                            </div>
-                          </div>
-                        </StyledTableCell>
-                        {/* <StyledTableCell>
-                          <p>
-                            {new Date(
-                              instantactivity.created_at
-                            ).toLocaleTimeString("en-US", {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                              second: "2-digit",
-                              hour12: true,
-                            })}
-                          </p>
-                        </StyledTableCell> */}
-                        <StyledTableCell>
-                          <p>
-                            {instantactivity.emp_name === null ||
-                            instantactivity.emp_name === ""
-                              ? "Online"
-                              : instantactivity.emp_name}
-                          </p>
-                        </StyledTableCell>
-                        {/* <StyledTableCell>
-                         <p>{instantactivity.title}</p>
-                        </StyledTableCell> */}
-                        {/* <StyledTableCell>
-                          <p>{instantactivity.variant}</p>
-                        </StyledTableCell> */}
-                        <StyledTableCell>
-                          <p>{priceFormate(instantactivity.current_qty)}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>{priceFormate(instantactivity.qty)}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>{priceFormate(AfterAdjustQty)}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>${priceFormate(instantactivity.price)}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>
-                            ${calculatedTotal % 1 !== 0
-                              ? priceFormate(calculatedTotal.toFixed(2))
-                              : priceFormate(calculatedTotal)}
-                          </p>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    );
-                  })
-                ) : (
-                  <>
-                    <Grid container sx={{ padding: 2.5 }}>
-                      <Grid item xs={12}>
-                        <p style={{ whiteSpace: "nowrap" }}>No. Data found.</p>
-                      </Grid>
-                    </Grid>
-                  </>
-                )}
-              </TableBody>
-            </StyledTable>
-          </TableContainer>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <p>${priceFormate(instantactivity.price)}</p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <p>
+                                $
+                                {priceFormate(
+                                  isNaN(instantactivity.calculatedTotal)
+                                    ? 0
+                                    : instantactivity.calculatedTotal
+                                )}
+                                {/* $
+                {instantactivity.calculatedTotal % 1 !== 0
+                  ? priceFormate(
+                      instantactivity.calculatedTotal
+                    ) || "0"
+                  : priceFormate(instantactivity.calculatedTotal) ||
+                    "0"} */}
+                              </p>
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        );
+                      })
+                    ) : (
+                      <>
+                        <Grid container sx={{ padding: 2.5 }}>
+                          <Grid item xs={12}>
+                            <p style={{ whiteSpace: "nowrap" }}>
+                              No. Data found.
+                            </p>
+                          </Grid>
+                        </Grid>
+                      </>
+                    )}
+                  </TableBody>
+                </StyledTable>
+              </TableContainer>
+            </>
+          )}
         </Grid>
       </Grid>
     </>
