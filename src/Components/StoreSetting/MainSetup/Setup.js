@@ -17,8 +17,10 @@ import { fetchSettingReceiptData } from "../../../Redux/features/StoreSettings/S
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../../reuseableComponents/AlertModal";
+import PasswordShow from "../../../Common/passwordShow";
 const Setup = () => {
   // const [updateDetails, setUpdateDetails] = useState(true);
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const [OnlineOrderStatus, setOnlineOrderStatus] = useState("");
   const [EnableOrderNumber, setEnableOrderNumber] = useState("");
   const [MinPickData, setMinPickData] = useState("");
@@ -159,30 +161,34 @@ const Setup = () => {
       default_tip_delivery: delDefTip, //
       day_data: JSON.stringify(days),
     };
+    try {
+      const { token, ...otherUserData } = userTypeData;
+      const response = await axios.post(
+        BASE_URL + UPDATE_STORE_SETUP,
+        { ...FormData, ...otherUserData },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response);
+      if (response.data.status === true) {
+        ToastifyAlert(response.data.msg, "success");
 
-    const { token, ...otherUserData } = userTypeData;
-    const response = await axios.post(
-      BASE_URL + UPDATE_STORE_SETUP,
-      { ...FormData, ...otherUserData },
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
+        let merchantdata = {
+          merchant_id: merchant_id,
+        };
+        if (merchantdata) {
+          dispatch(fetchSettingReceiptData(merchantdata));
+        }
+      } else {
+        ToastifyAlert(response.data.msg, "unsuccess");
       }
-    );
-    console.log(response);
-    if (response.data.status === true) {
-      ToastifyAlert(response.data.msg, "success");
-
-      let merchantdata = {
-        merchant_id: merchant_id,
-      };
-      if (merchantdata) {
-        dispatch(fetchSettingReceiptData(merchantdata));
-      }
-    } else {
-      ToastifyAlert(response.data.msg, "unsuccess");
+    } catch (error) {
+      getUnAutherisedTokenMessage();
+      handleCoockieExpire();
     }
   };
 
