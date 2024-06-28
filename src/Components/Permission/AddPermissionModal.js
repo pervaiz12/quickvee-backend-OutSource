@@ -15,6 +15,7 @@ import { useAuthDetails } from "../../Common/cookiesHelper";
 import { toast } from "react-toastify";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import CircularProgress from "@mui/material/CircularProgress";
+import PasswordShow from "./../../Common/passwordShow";
 const AddPermissionModal = () => {
   const [open, setOpen] = useState(false);
   // const handleOpen = () => setOpen(true);
@@ -74,6 +75,7 @@ const AddPermissionModal = () => {
     permission: "",
     sub_permission: "",
   });
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
 
   //Handle Select Permission's
   const handlePermissionChange = (e) => {
@@ -185,7 +187,10 @@ const AddPermissionModal = () => {
           ToastifyAlert(msg, "warn");
         }
       } catch (error) {
-        ToastifyAlert("Error!", "error");
+        // ToastifyAlert("Error!", "error");
+        console.error("Error submitting data:", error);
+        handleCoockieExpire()
+        getUnAutherisedTokenMessage()
       }
       setLoader(false);
   };
