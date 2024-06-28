@@ -334,16 +334,12 @@ const ModifyPurchaseOrder = () => {
       const stockDateLessThanIssuedDate = selectedStockDate.isBefore(
         purchaseInfo.issuedDate
       );
-      const stockDateLessThanPresentDate =
-        selectedStockDate.isBefore(currentDate);
 
       setPurchaseInfoErrors((prev) => ({
         ...prev,
         stockDate: stockDateLessThanIssuedDate
           ? "Stock Due date cannot be older than issued date"
-          : stockDateLessThanPresentDate && puchaseOrderDetail.is_draft === "0"
-            ? "Stock Due Date cannot be older than present date"
-            : "",
+          : "",
       }));
     }
   };
@@ -369,7 +365,7 @@ const ModifyPurchaseOrder = () => {
 
   useEffect(() => {
     productOptions(" ");
-  }, [selectedProducts]);
+  }, [selectedProducts.length]);
 
   // generating product options once user searches any product name
   const productOptions = async (inputValue) => {
@@ -393,6 +389,9 @@ const ModifyPurchaseOrder = () => {
       variantId: prod.isvarient === "1" ? prod.var_id : null,
     }));
 
+    console.log("all products: ", data);
+    console.log("selectedProducts: ", selectedProducts);
+
     const filterProducts =
       data &&
       data.length > 0 &&
@@ -414,6 +413,8 @@ const ModifyPurchaseOrder = () => {
 
         return !Boolean(productExists);
       });
+
+    console.log("filtered Products: ", filterProducts);
 
     return filterProducts;
     // }
@@ -631,10 +632,6 @@ const ModifyPurchaseOrder = () => {
           order_item_id: prod.order_item_id ? prod.order_item_id : "",
           recieved_status: prod?.recieved_status ? prod?.recieved_status : "0",
         }));
-
-        // console.log("selectedProducts: ", selectedProducts);
-        // console.log("orderItems: ", orderItems);
-        // return;
 
         const orderItemsObject = orderItems?.reduce((acc, curr, index) => {
           acc[index] = curr;
@@ -940,11 +937,11 @@ const ModifyPurchaseOrder = () => {
                     />
                   </DemoContainer>
                 </LocalizationProvider>
-                {/* {purchaseInfoErrors.stockDate && (
+                {purchaseInfoErrors.stockDate && (
                   <p className="error-message">
                     {purchaseInfoErrors.stockDate}
                   </p>
-                )} */}
+                )}
               </Grid>
               <Grid item xs={12} sm={6} md={4}>
                 <label>Reference</label>
