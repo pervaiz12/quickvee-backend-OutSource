@@ -21,6 +21,7 @@ import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 import DeleteModal from "../../../reuseableComponents/DeleteModal";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const EmployeeList = ({ setVisible, setEmployeeId }) => {
   const employeeListDataState = useSelector((state) => state.employeelistData);
@@ -49,6 +50,7 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
     scrollRef,
     setsubmitmessage,
     handleKeyPress,
+    loader,
     // handleBlur,
   } = AddEmployeeFormLogic({ employeeList });
 
@@ -597,9 +599,21 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
                   <button
                     onClick={handleAddEmployee}
                     className="quic-btn quic-btn-save"
+                    disabled={loader}
                   >
-                    {" "}
-                    Add{" "}
+                    {loader ? (
+                      <>
+                        <CircularProgress
+                          color={"inherit"}
+                          className="loaderIcon"
+                          width={15}
+                          size={15}
+                        />{" "}
+                        Add
+                      </>
+                    ) : (
+                      "Add"
+                    )}
                   </button>
                   <button
                     onClick={closeModal}
