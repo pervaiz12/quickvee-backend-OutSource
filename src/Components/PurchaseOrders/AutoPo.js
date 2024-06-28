@@ -111,13 +111,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
   };
 
   const handleCancel = () => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete all products?"
-    );
-    if (confirmDelete) {
-      setSelectedProducts([]);
-      navigate("/purchase-data");
-    }
+    navigate("/purchase-data");
   };
 
   const handleDelete = (index) => {
@@ -138,13 +132,14 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
 
   // check each product has required data
   const validateProducts = () => {
-    // console.log("check products..: ", selectedProducts);
     const bool = selectedProducts.every(
       (product) =>
-        product.id && product.title && product.newQty && product.newPrice
+        product.id &&
+        product.title &&
+        Number(product.newQty) > 0 &&
+        parseFloat(product.newPrice) > 0
     );
 
-    // console.log("bool: ", bool);
     return bool;
   };
 
@@ -152,8 +147,9 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
     const updatedData = selectedProducts.map((product) => ({
       ...product,
       titleError: !Boolean(product.title),
-      qtyError: !Boolean(product.newQty),
-      priceError: !Boolean(product.newPrice),
+      qtyError: !Boolean(product.newQty) || Number(product.newQty) <= 0,
+      priceError:
+        !Boolean(product.newPrice) || parseFloat(product.newPrice) <= 0,
     }));
 
     setSelectedProducts(updatedData);
@@ -375,7 +371,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
         saveAsDraft: isDraft === "1",
       }));
 
-      const { issuedDate, stockDate, selectedVendor } = purchaseInfo;
+      const { issuedDate, stockDate, selectedVendor, email } = purchaseInfo;
 
       const currentDate = dayjs().startOf("day");
       const selectedIssuedDate = dayjs(issuedDate).startOf("day");
@@ -387,12 +383,16 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
         Boolean(a && a.trim())
       );
 
-      // issuedDate, stockDate,  need to handle this dates..
+      let emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+      const emailIsValid = email ? emailRegex.test(email) : true;
 
-      // validating purchase order products dataset
-      // const validateProducts = selectedProducts.every(
-      //   (prod) => prod.newQty && prod.newPrice
-      // );
+      if (email && !emailIsValid) {
+        setPurchaseInfoErrors((prev) => ({
+          ...prev,
+          email: "Please fill valid email",
+        }));
+        return;
+      }
 
       if (purchaseInfoDetails && validateProducts() && issuedDateIsFine) {
         try {
@@ -455,7 +455,6 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
           console.log("Error: ", e);
         }
       } else {
-        // console.log("issuedDate: ", issuedDate);
         if (!purchaseInfoDetails || !issuedDateIsFine) {
           setPurchaseInfoErrors((prev) => ({
             ...prev,
@@ -473,17 +472,6 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
 
         if (!validateProducts()) {
           displayErrors();
-          // const temp = selectedProducts.map((prod) =>
-          //   !prod.newQty || !prod.newPrice
-          //     ? {
-          //         ...prod,
-          //         priceError: !prod.newPrice ? "Cost Per Item is required" : "",
-          //         qtyError: !prod.newQty ? "Quantity is required" : "",
-          //       }
-          //     : prod
-          // );
-
-          // setSelectedProducts(() => temp);
         }
       }
     } catch (e) {

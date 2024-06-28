@@ -63,15 +63,9 @@ const ReceivePurchaseOrderItems = () => {
     receive: false,
   });
 
-  // console.log("LoginGetDashBoardRecordJson: ", LoginGetDashBoardRecordJson);
-
   const puchaseOrderDetail = useSelector(
     (state) => state.purchaseOrderById.purchaseOrderDetail
   );
-
-  // useEffect(() => {
-  //   console.log("puchaseOrderDetail: ", puchaseOrderDetail);
-  // }, [puchaseOrderDetail]);
 
   const [purchaseOrder, setPurchaseOrder] = useState({});
   const [headerCheckboxChecked, setHeaderCheckboxChecked] = useState(false);
@@ -105,7 +99,6 @@ const ReceivePurchaseOrderItems = () => {
 
   // setting main checkbox to true if all items have isChecked: true
   useEffect(() => {
-    // console.log("items: ", purchaseOrder.order_items);
     const bool =
       purchaseOrder.order_items &&
       purchaseOrder.order_items.length > 0 &&
@@ -264,7 +257,7 @@ const ReceivePurchaseOrderItems = () => {
   const handleEmail = async () => {
     try {
       setLoaders((prev) => ({ ...prev, email: true }));
-      if (!purchaseOrder.email) {
+      if (!purchaseOrder.email || purchaseOrder.email === "null") {
         ToastifyAlert("Vendor Email not found!", "error");
         return;
       }
@@ -354,7 +347,11 @@ const ReceivePurchaseOrderItems = () => {
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
               <label>Vendor Email</label>
-              <p>{purchaseOrder.email ? purchaseOrder.email : "-"}</p>
+              <p>
+                {purchaseOrder.email && purchaseOrder.email !== "null"
+                  ? purchaseOrder.email
+                  : "-"}
+              </p>
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
               <label>Reference</label>
@@ -479,6 +476,7 @@ const ReceivePurchaseOrderItems = () => {
                                         item.id === data.id
                                           ? {
                                               ...item,
+                                              toReceiveQtyError: "",
                                               toReceiveQty: e.target.value,
                                               newPendingQty: e.target.value
                                                 ? (Number(item.pending_qty) ||
@@ -493,10 +491,22 @@ const ReceivePurchaseOrderItems = () => {
                                     ),
                                   }));
                                 } else {
-                                  ToastifyAlert(
-                                    "Receive Quantity can not be more than required quantity",
-                                    "error"
-                                  );
+                                  const requiredQty =
+                                    (Number(data?.required_qty) || 0) -
+                                    (Number(data?.recieved_qty) || 0);
+
+                                  setPurchaseOrder((prev) => ({
+                                    ...prev,
+                                    order_items: purchaseOrder.order_items.map(
+                                      (item) =>
+                                        item.id === data.id
+                                          ? {
+                                              ...item,
+                                              toReceiveQtyError: `Receive Quantity cannot be more than ${requiredQty}`,
+                                            }
+                                          : item
+                                    ),
+                                  }));
                                 }
                               }}
                               placeholder="Received Qty"
@@ -504,6 +514,11 @@ const ReceivePurchaseOrderItems = () => {
                               size="small"
                               disabled={Number(data.pending_qty) <= 0}
                             />
+                            {data?.toReceiveQtyError && (
+                              <p className="error-message">
+                                {data?.toReceiveQtyError}
+                              </p>
+                            )}
                           </StyledTableCell>
                         )}
                       {purchaseOrder?.is_void === "0" && (
@@ -512,8 +527,12 @@ const ReceivePurchaseOrderItems = () => {
                             (Number(data?.item_qty) || 0)}
                         </StyledTableCell>
                       )}
-                      <StyledTableCell>${data.cost_per_item}</StyledTableCell>
-                      <StyledTableCell>${data.total_pricing}</StyledTableCell>
+                      <StyledTableCell>
+                        ${parseFloat(data.cost_per_item).toFixed(2)}
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        ${parseFloat(data.total_pricing).toFixed(2)}
+                      </StyledTableCell>
                       <StyledTableCell>
                         {data.upc ? data.upc : "-"}
                       </StyledTableCell>

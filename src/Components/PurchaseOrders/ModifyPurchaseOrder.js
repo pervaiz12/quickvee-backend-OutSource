@@ -14,7 +14,12 @@ import { fetchPurchaseOrderById } from "../../Redux/features/PurchaseOrder/purch
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import dayjs from "dayjs";
 import { fetchProductsData } from "../../Redux/features/Product/ProductSlice";
-import { BASE_URL, DELETE_PO_ITEM, UPDATE_PO } from "../../Constants/Config";
+import {
+  BASE_URL,
+  DELETE_PO_ITEM,
+  SAVE_PO,
+  UPDATE_PO,
+} from "../../Constants/Config";
 import axios from "axios";
 import { ThemeProvider } from "@mui/material/styles";
 import Select from "@mui/material/Select";
@@ -103,6 +108,12 @@ const ModifyPurchaseOrder = () => {
     vendorId: "",
   });
 
+  const [loaders, setLoaders] = useState({
+    autoPo: false,
+    saveAsDraft: false,
+    createPo: false,
+  });
+
   const [loading, setLoading] = useState(false);
   const [purchaseInfoErrors, setPurchaseInfoErrors] = useState({
     issuedDate: "",
@@ -131,7 +142,10 @@ const ModifyPurchaseOrder = () => {
         puchaseOrderDetail?.stock_date !== "0000-00-00"
           ? dayjs(puchaseOrderDetail?.stock_date)
           : null,
-      email: puchaseOrderDetail?.email,
+      email:
+        puchaseOrderDetail?.email && puchaseOrderDetail?.email !== "null"
+          ? puchaseOrderDetail?.email
+          : "",
       reference: puchaseOrderDetail?.reference,
       selectedVendor: puchaseOrderDetail?.vendor_name,
       vendorId: puchaseOrderDetail?.vendor_id,
@@ -172,8 +186,8 @@ const ModifyPurchaseOrder = () => {
       (product) =>
         product.id &&
         (product.title || product.product_title) &&
-        product.newQty &&
-        product.newPrice
+        Number(product.newQty) > 0 &&
+        parseFloat(product.newPrice) > 0
     );
 
     return bool;
@@ -183,8 +197,9 @@ const ModifyPurchaseOrder = () => {
     const updatedData = selectedProducts.map((product) => ({
       ...product,
       titleError: !Boolean(product.title) && !Boolean(product.product_title),
-      qtyError: !Boolean(product.newQty),
-      priceError: !Boolean(product.newPrice),
+      qtyError: !Boolean(product.newQty) || Number(product.newQty) <= 0,
+      priceError:
+        !Boolean(product.newPrice) || parseFloat(product.newPrice) <= 0,
     }));
 
     setSelectedProducts(updatedData);
@@ -240,15 +255,6 @@ const ModifyPurchaseOrder = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      // console.log("response: ", response);
-
-      // if (response.data.status) {
-      //   removeItem(productId);
-      //   ToastifyAlert(response.data.message, "success");
-      // } else {
-      //   ToastifyAlert(response.data.message, "error");
-      // }
     } catch (e) {
       console.log("Error: ", e);
     }
@@ -256,20 +262,34 @@ const ModifyPurchaseOrder = () => {
 
   const handleDelete = (product) => {
     // if product has po_id then removing from Local state as well as from backend
-    // if (product.po_id) {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this product?"
-    );
+    if (product.po_id) {
+      const confirmDelete = window.confirm(
+        "Are you sure you want to delete this product?"
+      );
 
-    if (confirmDelete) {
-      // delete po item from backend api call
-      // deletePOItem(product.id);
+      if (confirmDelete) {
+        // delete po item from backend api call
+        // deletePOItem(product.id);
+        removeItem(product.id);
+        setDeletedProducts((prev) => [...prev, product.id]);
+      }
+    } else {
       removeItem(product.id);
-      setDeletedProducts((prev) => [...prev, product.id]);
     }
-    // } else {
-    //   removeItem(product.id);
-    // }
+  };
+
+  // date format MM/DD/YYYY if issued date is wrong
+  const getDate = () => {
+    const defaultDate = puchaseOrderDetail?.issued_date;
+    const d = new Date(defaultDate);
+
+    const date = d.getDate();
+    const month = d.getMonth() + 1;
+    const year = d.getFullYear();
+
+    const mm = month >= 10 ? month : `0${month}`;
+
+    return `${mm}/${date}/${year}`;
   };
 
   const handleDate = (date, type) => {
@@ -284,17 +304,29 @@ const ModifyPurchaseOrder = () => {
     const currentDate = dayjs().startOf("day");
 
     if (type === "issuedDate") {
+      const defaultIssuedDate = dayjs(puchaseOrderDetail?.issued_date);
       const selectedIssuedDate = dayjs(dayjsDate).startOf("day");
-      const issuedDateLessThanPresentDate =
-        selectedIssuedDate.isBefore(currentDate);
+
+      // const issuedDateLessThanPresentDate =
+      //   selectedIssuedDate.isBefore(currentDate);
+
+      const issuedDateLessThanDefaultIssuedDate =
+        selectedIssuedDate.isBefore(defaultIssuedDate);
 
       setPurchaseInfoErrors((prev) => ({
         ...prev,
-        issuedDate: issuedDateLessThanPresentDate
-          ? "Issued Date cannot be older than present date"
-          : "",
+        issuedDate:
+          puchaseOrderDetail.is_draft === "1" &&
+          issuedDateLessThanDefaultIssuedDate
+            ? `Issued Date cannot be older than ${getDate()}`
+            : "",
         stockDate: "",
       }));
+
+      // issuedDateLessThanPresentDate &&
+      //           puchaseOrderDetail.is_draft === "0"
+      //         ? "Issued Date cannot be older than present date"
+      //         :
     }
 
     if (type === "stockDate") {
@@ -308,8 +340,8 @@ const ModifyPurchaseOrder = () => {
       setPurchaseInfoErrors((prev) => ({
         ...prev,
         stockDate: stockDateLessThanIssuedDate
-          ? "Stock Due Date cannot be older than issued date"
-          : stockDateLessThanPresentDate
+          ? "Stock Due date cannot be older than issued date"
+          : stockDateLessThanPresentDate && puchaseOrderDetail.is_draft === "0"
             ? "Stock Due Date cannot be older than present date"
             : "",
       }));
@@ -327,7 +359,7 @@ const ModifyPurchaseOrder = () => {
         setPurchaseInfo((prev) => ({ ...prev, email: value }));
         setPurchaseInfoErrors((prev) => ({
           ...prev,
-          email: Boolean(value.trim()) ? "" : prev.email,
+          email: Boolean(value.trim()) || value === "" ? "" : prev.email,
         }));
         break;
       default:
@@ -556,7 +588,7 @@ const ModifyPurchaseOrder = () => {
 
   // modifying purchase order api
   const modifyPurchaseOrder = async () => {
-    const { issuedDate, stockDate, selectedVendor } = purchaseInfo;
+    const { issuedDate, stockDate, selectedVendor, email } = purchaseInfo;
     if (selectedProducts.length <= 0) {
       ToastifyAlert("No Products to update!", "error");
       return;
@@ -566,6 +598,17 @@ const ModifyPurchaseOrder = () => {
     const purchaseInfoDetails = [selectedVendor].every((a) =>
       Boolean(a && a.trim())
     );
+
+    let emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    const emailIsValid = email ? emailRegex.test(email) : true;
+
+    if (email && !emailIsValid) {
+      setPurchaseInfoErrors((prev) => ({
+        ...prev,
+        email: "Please fill valid email",
+      }));
+      return;
+    }
 
     if (purchaseInfoDetails && issuedDate && validateProducts()) {
       try {
@@ -669,6 +712,129 @@ const ModifyPurchaseOrder = () => {
     }
   };
 
+  // api for creating a new purchase order
+  const savePurchaseOrder = async (isDraft) => {
+    try {
+      setLoaders((prev) => ({
+        ...prev,
+        createPo: isDraft === "0",
+        saveAsDraft: isDraft === "1",
+      }));
+
+      const { issuedDate, stockDate, selectedVendor, email } = purchaseInfo;
+
+      // if PO is draft, then checking its old issued date.. user should not select earlier than that..
+      const defaultIssuedDate = dayjs(puchaseOrderDetail?.issued_date);
+      const selectedIssuedDate = dayjs(issuedDate).startOf("day");
+
+      const issuedDateIsFine = !selectedIssuedDate.isBefore(defaultIssuedDate);
+
+      // validating purchase order info dataset
+      const purchaseInfoDetails = [selectedVendor].every((a) =>
+        Boolean(a && a.trim())
+      );
+
+      let emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
+      const emailIsValid = email ? emailRegex.test(email) : true;
+
+      if (email && !emailIsValid) {
+        setPurchaseInfoErrors((prev) => ({
+          ...prev,
+          email: "Please fill valid email",
+        }));
+        return;
+      }
+
+      if (purchaseInfoDetails && validateProducts() && issuedDateIsFine) {
+        try {
+          const orderItems = selectedProducts.map((prod) => ({
+            product_id: prod.variant ? prod.product_id : prod.id,
+            variant_id: prod.variant ? prod.id : "",
+            required_qty: prod.newQty.toString(),
+            after_qty: (Number(prod.quantity) + Number(prod.newQty)).toString(),
+            cost_per_item: prod.newPrice.toString(),
+            total_pricing: prod.finalPrice.toString(), // Number(prod.newQty) * parseFloat(prod.newPrice),
+            upc: prod.upc,
+            note: prod.notes,
+          }));
+
+          const orderItemsObject = orderItems?.reduce((acc, curr, index) => {
+            acc[index] = curr;
+            return acc;
+          }, {});
+
+          const { token } = userTypeData;
+
+          const formData = new FormData();
+          formData.append(
+            "merchant_id",
+            LoginGetDashBoardRecordJson?.data?.merchant_id
+          );
+          formData.append(
+            "admin_id",
+            LoginGetDashBoardRecordJson?.data?.merchant_id
+          );
+          formData.append("vendor_id", Number(purchaseInfo?.vendorId));
+          formData.append("issue_date", issuedDate?.format("YYYY-MM-DD"));
+          formData.append(
+            "stock_date",
+            stockDate ? stockDate?.format("YYYY-MM-DD") : "0000-00-00"
+          );
+          formData.append("reference", purchaseInfo?.reference);
+          formData.append("is_draft", isDraft);
+          formData.append("created_at", createdAt(new Date()));
+          formData.append("vendor_email", purchaseInfo?.email);
+          formData.append("order_items", JSON.stringify(orderItemsObject));
+          formData.append("token_id", userTypeData.token_id);
+          formData.append("login_type", userTypeData.login_type);
+          formData.append("po_id", puchaseOrderDetail?.id);
+
+          const response = await axios.post(BASE_URL + SAVE_PO, formData, {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`, // Use data?.token directly
+            },
+          });
+
+          // console.log("response: ", response);
+          if (response.data.status) {
+            ToastifyAlert(response.data.message, "success");
+            navigate("/purchase-data");
+          } else {
+            ToastifyAlert(response.data.message, "error");
+          }
+        } catch (e) {
+          console.log("Error: ", e);
+        }
+      } else {
+        if (!purchaseInfoDetails || !issuedDateIsFine) {
+          setPurchaseInfoErrors((prev) => ({
+            ...prev,
+            issuedDate:
+              issuedDate && issuedDateIsFine
+                ? ""
+                : issuedDate && !issuedDateIsFine
+                  ? `Issued Date cannot be older than ${getDate()}`
+                  : "Issued Date is required",
+            selectedVendor: selectedVendor ? "" : "Vendor is required",
+          }));
+        }
+
+        if (!validateProducts()) {
+          displayErrors();
+        }
+      }
+    } catch (e) {
+      console.log("Error: ", e);
+    } finally {
+      setLoaders((prev) => ({
+        ...prev,
+        createPo: false,
+        saveAsDraft: false,
+      }));
+    }
+  };
+
   return (
     <>
       {/* purchase order basic info */}
@@ -720,10 +886,16 @@ const ModifyPurchaseOrder = () => {
                       slotProps={{
                         textField: {
                           size: "small",
+                          onKeyPress: (e) => e.preventDefault(),
                         },
                       }}
                       format={"MM/DD/YYYY"}
-                      disablePast
+                      // disablePast={puchaseOrderDetail.is_draft === "0"}
+                      shouldDisableDate={(date) => {
+                        return (
+                          dayjs(date) < dayjs(puchaseOrderDetail?.issued_date)
+                        );
+                      }}
                       onChange={(newDate) => {
                         handleDate(newDate, "issuedDate");
                         setPurchaseInfo((prev) => ({
@@ -755,9 +927,10 @@ const ModifyPurchaseOrder = () => {
                       slotProps={{
                         textField: {
                           size: "small",
+                          onKeyPress: (e) => e.preventDefault(),
                         },
                       }}
-                      disablePast
+                      // disablePast={puchaseOrderDetail.is_draft === "0"}
                       format={"MM/DD/YYYY"}
                       shouldDisableDate={(date) => {
                         return dayjs(date) < dayjs(purchaseInfo.issuedDate);
@@ -926,7 +1099,9 @@ const ModifyPurchaseOrder = () => {
                           )}
                         </StyledTableCell>
                         <StyledTableCell>
-                          <p className="text-[16px]">${product?.finalPrice}</p>
+                          <p className="text-[16px]">
+                            ${parseFloat(product?.finalPrice).toFixed(2)}
+                          </p>
                         </StyledTableCell>
                         <StyledTableCell>
                           <p className="text-[16px]">{product?.upc}</p>
@@ -946,14 +1121,16 @@ const ModifyPurchaseOrder = () => {
                           />
                         </StyledTableCell>
                         <StyledTableCell>
-                          {(product?.recieved_status === "0" ||
+                          {((product?.recieved_status === "0" ||
                             !product.po_id) &&
-                          selectedProducts.length > 1 ? (
+                            selectedProducts.length > 1) ||
+                          puchaseOrderDetail.is_draft === "1" ? (
                             <img
                               src={DeleteIcon}
                               alt=""
                               className="w-8 h-8 cursor-pointer"
                               onClick={() => handleDelete(product)}
+                              title="Delete"
                             />
                           ) : null}
                         </StyledTableCell>
@@ -964,23 +1141,51 @@ const ModifyPurchaseOrder = () => {
               </TableContainer>
             </Grid>
             <div className="flex justify-between py-7 px-6">
-              <button
-                onClick={handleAddProduct}
-                className="quic-btn quic-btn-add"
-              >
-                Add Product
-              </button>
-              <div className="button-container end gap-4">
+              <div className="button-container start gap-4">
+                {puchaseOrderDetail.is_draft === "1" ? (
+                  <button
+                    onClick={() => savePurchaseOrder("1")}
+                    className="quic-btn quic-btn-draft"
+                  >
+                    {loaders.saveAsDraft ? (
+                      <CircularProgress color={"inherit"} size={18} />
+                    ) : (
+                      "Save as Draft"
+                    )}
+                  </button>
+                ) : null}
                 <button
-                  className="quic-btn quic-btn-save"
-                  onClick={modifyPurchaseOrder}
+                  onClick={handleAddProduct}
+                  className="quic-btn quic-btn-add"
                 >
-                  {loading ? (
-                    <CircularProgress color={"inherit"} size={18} />
-                  ) : (
-                    "Update"
-                  )}
+                  Add Product
                 </button>
+              </div>
+              <div className="button-container end gap-4">
+                {puchaseOrderDetail.is_draft === "1" ? (
+                  <button
+                    className="quic-btn quic-btn-save"
+                    onClick={() => savePurchaseOrder("0")}
+                  >
+                    {loaders.createPo ? (
+                      <CircularProgress color={"inherit"} size={18} />
+                    ) : (
+                      "Create"
+                    )}
+                  </button>
+                ) : (
+                  <button
+                    className="quic-btn quic-btn-save"
+                    onClick={modifyPurchaseOrder}
+                  >
+                    {loading ? (
+                      <CircularProgress color={"inherit"} size={18} />
+                    ) : (
+                      "Update"
+                    )}
+                  </button>
+                )}
+
                 <button
                   onClick={() => navigate("/purchase-data")}
                   className="quic-btn quic-btn-cancle"
