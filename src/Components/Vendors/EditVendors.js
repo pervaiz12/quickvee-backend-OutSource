@@ -73,22 +73,22 @@ const EditVendors = ({ setVisible }) => {
       itemErrors.phone = "Phone number must be 10 digits";
       isValid = false;
     }
-    if (!vendorData.full_address) {
-      itemErrors.full_address = "Please enter a vendor address";
-      isValid = false;
-    }
-    if (!vendorData.city) {
-      itemErrors.city = "Please enter a vendor city";
-      isValid = false;
-    }
-    if (!/^\d{5}$/.test(vendorData.zip_code)) {
-      itemErrors.zip_code = "ZIP code must be 5 digits";
-      isValid = false;
-    }
-    if (!vendorData.state) {
-      itemErrors.state = "Please select state";
-      isValid = false;
-    }
+    // if (!vendorData.full_address) {
+    //   itemErrors.full_address = "Please enter a vendor address";
+    //   isValid = false;
+    // }
+    // if (!vendorData.city) {
+    //   itemErrors.city = "Please enter a vendor city";
+    //   isValid = false;
+    // }
+    // if (!/^\d{5}$/.test(vendorData.zip_code)) {
+    //   itemErrors.zip_code = "ZIP code must be 5 digits";
+    //   isValid = false;
+    // }
+    // if (!vendorData.state) {
+    //   itemErrors.state = "Please select state";
+    //   isValid = false;
+    // }
     setErrorMessage(itemErrors);
     return isValid;
   };
@@ -113,26 +113,26 @@ const EditVendors = ({ setVisible }) => {
           errorMsg = "Phone number must be 10 digits";
         }
         break;
-      case "zip_code":
-        if (!/^\d{5}$/.test(value)) {
-          errorMsg = "ZIP code must be 5 digits";
-        }
-        break;
-      case "full_address":
-        if (value.length <= 0) {
-          errorMsg = "Please enter a vendor address";
-        }
-        break;
-      case "city":
-        if (value.length <= 0) {
-          errorMsg = "Please enter a vendor city";
-        }
-        break;
-      case "state":
-        if (vendorData.state === "") {
-          errorMsg = "Please select state";
-        }
-        break;
+      // case "zip_code":
+      //   if (!/^\d{5}$/.test(value)) {
+      //     errorMsg = "ZIP code must be 5 digits";
+      //   }
+      //   break;
+      // case "full_address":
+      //   if (value.length <= 0) {
+      //     errorMsg = "Please enter a vendor address";
+      //   }
+      //   break;
+      // case "city":
+      //   if (value.length <= 0) {
+      //     errorMsg = "Please enter a vendor city";
+      //   }
+      //   break;
+      // case "state":
+      //   if (vendorData.state === "") {
+      //     errorMsg = "Please select state";
+      //   }
+      //   break;
       default:
         break;
     }
@@ -319,7 +319,7 @@ const EditVendors = ({ setVisible }) => {
                       name={"name"}
                       value={vendorData.name}
                       onChangeFun={handleOnChange}
-                      // required={"required"}
+                  
                     />
                     {errorMessage.name && (
                       <span className="error">{errorMessage.name}</span>
@@ -334,7 +334,7 @@ const EditVendors = ({ setVisible }) => {
                       name={"email"}
                       value={vendorData.email}
                       onChangeFun={handleOnChange}
-                      // required={"required"}
+                      
                     />
                     {errorMessage.email && (
                       <span className="error">{errorMessage.email}</span>
@@ -349,7 +349,7 @@ const EditVendors = ({ setVisible }) => {
                       name={"phone"}
                       value={vendorData.phone}
                       onChangeFun={handleOnChange}
-                      required={"required"}
+                   
                       onKeyPressFun={handleKeyPress}
                       maxLength={10}
                     />
@@ -400,7 +400,7 @@ const EditVendors = ({ setVisible }) => {
                       name={"zip_code"}
                       value={vendorData.zip_code}
                       onChangeFun={handleOnChange}
-                      required={"required"}
+                      // required={"required"}
                     />
                     {errorMessage.zip_code && (
                       <span className="error"> {errorMessage.zip_code}</span>

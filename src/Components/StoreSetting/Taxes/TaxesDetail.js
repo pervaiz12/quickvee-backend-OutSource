@@ -75,7 +75,7 @@ const TaxesDetail = () => {
       };
       if (data) {
         dispatch(deleteTax(data));
-        ToastifyAlert("Taxes Deleted", "success");
+        ToastifyAlert("Deleted Successfully", "success");
       }
     }
     setDeleteTaxeId(null)

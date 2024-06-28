@@ -54,7 +54,6 @@ export default function SettingStoreOption() {
     "enabledGuestCheckout",
   ];
   const inputValueList = ["dayCount"];
-
   const [alertModalOpen, setAlertModalOpen] = useState(false);
   const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
   const showModal = (headerText) => {
@@ -261,6 +260,7 @@ export default function SettingStoreOption() {
         enable_dispatch: orderState?.enabledDispatchCenter ? "1" : "0",
         email_notification: orderState?.enabledEmailNotification ? "1" : "0",
         sms_notification: orderState?.enabledSmsNotification ? "1" : "0",
+        ...userTypeData
       };
       const data = newItem;
       dispatch(updateStoreOption(data))
@@ -273,10 +273,11 @@ export default function SettingStoreOption() {
             dispatch(fetchStoreSettingOptionData(merchantdata)).catch((err) =>
               console.log("err", err)
             );
-            ToastifyAlert("Store Setting Options is Updated.", "success");
+            ToastifyAlert("Updated Successfully", "success");
           }
         })
         .catch((err) => {
+          console.log("hhhhhhhhhhhhhhhhhhhhh");
           ToastifyAlert("Error!", "error");
         })
         .finally(() => {
@@ -715,17 +716,11 @@ export default function SettingStoreOption() {
             >
               <Grid item>
                 <button
-                  className="store-setting-btn"
+                  className="store-setting-btn attributeUpdateBTN"
                   onClick={handleUpdateSettingOption}
                   disabled={loading}
                 >
-                  {loading ? (
-                    <Box className="loader-box">
-                      <CircularProgress />
-                    </Box>
-                  ) : (
-                    "Update"
-                  )}
+                   {loading ? <><CircularProgress color={"inherit"} width={15} size={15} /> Update</> : "Update"}
                 </button>
               </Grid>
             </Grid>

@@ -9,9 +9,11 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../../CommonComponents/ToastifyAlert";
+import PasswordShow from "../../../../Common/passwordShow";
 
 const EditAdminFunctionality = (handleClick) => {
   const navigate = useNavigate();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const [editData, setEditData] = useState({
     owner_name: "",
     email: "",
@@ -35,22 +37,27 @@ const EditAdminFunctionality = (handleClick) => {
     const { token, ...newData } = data;
     // console.log(newData)
     // const dataNew={admin_id:data,newData}
-    setLoaderEdit(true);
-    await axios
-      .post(BASE_URL + GET_EDIT_ADMIN, newData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`,
-        },
-      })
-      .then((response) => {
-        setLoaderEdit(false);
-        if (response.data.status == 200) {
-          console.log(response.data.message[0]);
-          setEditData({ password1: "", ...response.data.message[0] });
-          setExitEmail(response.data.message[0].email);
-        }
-      });
+    try {
+      setLoaderEdit(true);
+      await axios
+        .post(BASE_URL + GET_EDIT_ADMIN, newData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          setLoaderEdit(false);
+          if (response.data.status == 200) {
+            console.log(response.data.message[0]);
+            setEditData({ password1: "", ...response.data.message[0] });
+            setExitEmail(response.data.message[0].email);
+          }
+        });
+    } catch (error) {
+      getUnAutherisedTokenMessage();
+      handleCoockieExpire();
+    }
   };
   // ============================================
   const emailValidate = async (data) => {
@@ -68,35 +75,42 @@ const EditAdminFunctionality = (handleClick) => {
 
       return response.data; // Assuming this data indicates whether email is valid or not
     } catch (error) {
-      console.error("Error validating email:", error);
-      throw error;
+      getUnAutherisedTokenMessage();
+      handleCoockieExpire();
+      // console.error("Error validating email:", error);
+      // throw error;
     }
   };
   const handleBlur = async (name) => {
     if (name === "email") {
       console.log(errors.email);
       if (errors.email == "") {
-        let result = await emailValidate(editData.email);
-        if (result == true) {
-          // console.log(editData.email);
-          // console.log(ExitEmail);
-          if (ExitEmail !== editData.email) {
-            setErrors((prev) => ({
-              ...prev,
-              email: "Email already exists",
-            }));
+        try {
+          let result = await emailValidate(editData.email);
+          if (result == true) {
+            // console.log(editData.email);
+            // console.log(ExitEmail);
+            if (ExitEmail !== editData.email) {
+              setErrors((prev) => ({
+                ...prev,
+                email: "Email already exists",
+              }));
+            } else {
+              setErrors((prev) => ({
+                ...prev,
+                email: "",
+              }));
+            }
           } else {
+            console.log("nooo");
             setErrors((prev) => ({
               ...prev,
-              email: "",
+              email: "", // Clear the error if email does not exist
             }));
           }
-        } else {
-          console.log("nooo");
-          setErrors((prev) => ({
-            ...prev,
-            email: "", // Clear the error if email does not exist
-          }));
+        } catch (error) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
         }
       }
     }
@@ -205,6 +219,30 @@ const EditAdminFunctionality = (handleClick) => {
       return true;
     }
   };
+  // --------------------------------------
+  // ==============
+  const keyEnter = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      setEditData((prev) => ({
+        ...prev,
+        [event.target.name]: event.target.value,
+      }));
+      if (loader == false) {
+        handleSubmitAdmin(event);
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", keyEnter);
+    return () => {
+      document.removeEventListener("keydown", keyEnter);
+    };
+  }, [editData]);
+
+  // ==============
+  // --------------------------------------
 
   const handleSubmitAdmin = async (e) => {
     e.preventDefault();
@@ -224,27 +262,32 @@ const EditAdminFunctionality = (handleClick) => {
     if (!validateBlank) {
       if (validate == 0) {
         setLoader(true);
-        await axios
-          .post(BASE_URL + UPDATE_ADMIN_RECORD, data, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          .then((result) => {
-            setLoader(false);
-            setEditData({
-              owner_name: "",
-              email: "",
-              password: "",
-              phone: "",
-              password: "",
+        try {
+          await axios
+            .post(BASE_URL + UPDATE_ADMIN_RECORD, data, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
+              },
+            })
+            .then((result) => {
+              setLoader(false);
+              setEditData({
+                owner_name: "",
+                email: "",
+                password: "",
+                phone: "",
+                password: "",
+              });
+              setExitEmail("");
+              ToastifyAlert(result?.data?.message, "success");
+              // handleClick();
+              navigate("/users/admin");
             });
-            setExitEmail("");
-            ToastifyAlert(result?.data?.message, "success");
-            // handleClick();
-            navigate("/users/admin");
-          });
+        } catch (error) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        }
       }
     }
   };
@@ -258,6 +301,7 @@ const EditAdminFunctionality = (handleClick) => {
     loader,
     loaderEdit,
     handleBlur,
+    keyEnter,
   };
 };
 export default EditAdminFunctionality;

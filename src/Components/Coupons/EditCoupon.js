@@ -118,7 +118,7 @@ const EditCoupon = ({couponId,seVisible}) => {
           setSwitchdisable(false)
         } else {
           setActiveTab("percentage");
-          if(res[0]?.discount === "100.00" || res[0]?.discount < "100.00"){
+          if(res[0]?.discount === "100.00"){
             setCouponStates({
               ...couponStates,
               online: false,
@@ -274,15 +274,15 @@ const EditCoupon = ({couponId,seVisible}) => {
     e.preventDefault();
     // Create a new FormData object
     if (activeTab === "percentage") {
-      if (!coupon.maximum_discount) {
-        setDateMaxDisAMTError("Maximum Discount Amount is required");
-        return; // Stop further execution
-      } else if (coupon.maximum_discount === "") {
-        setDateMaxDisAMTError("Maximum Discount Amount is required");
-        // return;
-      } else {
-        setDateMaxDisAMTError("");
-      }
+      // if (!coupon.maximum_discount) {
+      //   setDateMaxDisAMTError("Maximum Discount Amount is required");
+      //   return; // Stop further execution
+      // } else if (coupon.maximum_discount === "") {
+      //   setDateMaxDisAMTError("Maximum Discount Amount is required");
+      //   // return;
+      // } else {
+      //   setDateMaxDisAMTError("");
+      // }
       if(coupon.discount > "100.00"){
         console.log("coupon.discount",coupon.discount)
         setDiscountError("Discount Percentage is cannot exceed 100.00%");
@@ -341,15 +341,15 @@ const EditCoupon = ({couponId,seVisible}) => {
       setDiscountError("");
     }
 
-    if (!coupon.maximum_discount) {
-      setDateMaxDisAMTError("Maximum Discount Amount is required");
-      return; // Stop further execution
-    } else if (coupon.maximum_discount === "") {
-      setDateMaxDisAMTError("Maximum Discount Amount is required");
-      return;
-    } else {
-      setDateMaxDisAMTError("");
-    }
+    // if (!coupon.maximum_discount) {
+    //   setDateMaxDisAMTError("Maximum Discount Amount is required");
+    //   return; // Stop further execution
+    // } else if (coupon.maximum_discount === "") {
+    //   setDateMaxDisAMTError("Maximum Discount Amount is required");
+    //   return;
+    // } else {
+    //   setDateMaxDisAMTError("");
+    // }
 
     if (!coupon.date_valid) {
       setDateStartError("Start Date is required");
@@ -411,6 +411,8 @@ const EditCoupon = ({couponId,seVisible}) => {
     // Do something with formData, like sending it to an API endpoint
 
     if (
+      dateStartError === "Invalid date. Please select a valid date." ||
+      dateEndError === "Invalid date. Please select a valid date." ||
       discountError === "Discount Percentage is required" ||
       dateStartError === "Start Date cannot be before the current date" ||
       dateEndError === "End Date cannot be before the current date" ||
@@ -540,6 +542,15 @@ const EditCoupon = ({couponId,seVisible}) => {
 
 
   const handleStartDateChange = (newDate) => {
+    if (!newDate || !newDate.isValid()) {
+      // showModal("Buss");
+      setDateStartError("Invalid date. Please select a valid date.");
+      setCoupon({
+        ...coupon,
+        date_valid: null,
+      });
+      return;
+    }
     const formattedStartDate = newDate.format("YYYY-MM-DD");
     const dayjsDate = dayjs(formattedStartDate);
     const today = dayjs().format("YYYY-MM-DD");
@@ -574,6 +585,15 @@ const EditCoupon = ({couponId,seVisible}) => {
   
 
   const handleEndDateChange = (newDate) => {
+    if (!newDate || !newDate.isValid()) {
+      // showModal("Buss");
+      setDateEndError("Invalid date. Please select a valid date.");
+      setCoupon({
+        ...coupon,
+        date_expire: null,
+      });
+      return;
+    }
     const formattedEndDate = newDate.format("YYYY-MM-DD");
     const dayjsEndDate = dayjs(formattedEndDate);
     const today = dayjs().format("YYYY-MM-DD");
@@ -665,7 +685,7 @@ const EditCoupon = ({couponId,seVisible}) => {
       const formattedValue = CurrencyInputHelperFun(value);
       const inputValue = e.target.value;
       if (formattedValue === "0.00") {
-        setDateMaxDisAMTError("Maximum Discount Amount is required");
+        // setDateMaxDisAMTError("Maximum Discount Amount is required");
       } else {
         setDateMaxDisAMTError("");
       }

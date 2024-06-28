@@ -424,7 +424,7 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
                         name="pin"
                         placeholder="Pin"
                         value={values.pin}
-                        inputProps={{ maxLength: 4 }}
+                        inputProps={{ maxLength: 5 }}
                         onChange={handlePinInput}
                         className="q-custom-input-field"
                         variant="outlined"

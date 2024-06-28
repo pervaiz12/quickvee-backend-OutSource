@@ -3,7 +3,7 @@ import DownIcon from "../../Assests/Dashboard/Down.svg";
 import { BASE_URL, EXPORT_ORDER_COUNT_DATA } from "../../Constants/Config";
 import axios from "axios";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
-import { Grid } from "@mui/material";
+import { CircularProgress, Grid } from "@mui/material";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
@@ -13,6 +13,7 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 
 import { useAuthDetails } from "./../../Common/cookiesHelper";
 import PasswordShow from "../../Common/passwordShow";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const OrderCountList = () => {
   const OrderStatus = [
@@ -29,20 +30,20 @@ const OrderCountList = () => {
 
   const orderType = [
     {
-      title: "Online",
+      title: "Online Order",
     },
     {
-      title: "Offline",
+      title: "Store Order",
     },
   ];
   const [selectedOrderStatus, setSelectedOrderStatus] = useState("Paid");
-  const [selectedOrderType, setSelectedOrderType] = useState("Online");
+  const [selectedOrderType, setSelectedOrderType] = useState("Online Order");
 
   const currentDate = dayjs().format("YYYY-MM-DD");
   const [selectedStartDate, setSelectedStartDate] = useState(currentDate);
   const [selectedEndDate, setSelectedEndDate] = useState(currentDate);
   const [error, setError] = useState("");
-
+  const [loader, setLoader] = useState(false);
   const [orderStatusDropdownVisible, setOrderStatusDropdownVisible] =
     useState(false);
   const [orderTypeDropdownVisible, setOrderTypeDropdownVisible] =
@@ -73,7 +74,7 @@ const OrderCountList = () => {
     }
   };
   const { userTypeData } = useAuthDetails();
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
 
   const handleSubmitData = async () => {
     if (
@@ -84,16 +85,25 @@ const OrderCountList = () => {
       setError("Please Enter Vaild Start Date and End Date");
     } else {
       setError("");
+      const orderType = (type) => {
+        if (type === "Online Order") {
+          return "Online";
+        }
+        if (type === "Store Order") {
+          return "Offline";
+        }
+      };
       const data = {
         start_date: selectedStartDate,
         end_date: selectedEndDate,
-        order_source: selectedOrderType,
+        order_source: orderType(selectedOrderType),
         order_status: selectedOrderStatus,
         token_id: userTypeData.token_id,
         login_type: userTypeData.login_type,
       };
       console.log(data);
       try {
+        setLoader(true);
         const response = await axios.post(
           BASE_URL + EXPORT_ORDER_COUNT_DATA,
           data,
@@ -124,10 +134,14 @@ const OrderCountList = () => {
           // Cleanup: remove the anchor element and revoke the Blob URL
           document.body.removeChild(a);
           URL.revokeObjectURL(fileUrl);
+          setLoader(false);
+          ToastifyAlert("Download Successfully", "success")
         }
       } catch (error) {
-        handleCoockieExpire()
-        getUnAutherisedTokenMessage()
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+        setLoader(false);
+        ToastifyAlert("Something wents wrong", "error")
       }
     }
   };
@@ -332,8 +346,8 @@ const OrderCountList = () => {
                             )}
                         </div> */}
               <label>Start Date</label>
-              <LocalizationProvider dateAdapter={AdapterDayjs} >
-                <DemoContainer components={["DatePicker"]} >
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={["DatePicker"]}>
                   <DatePicker
                     value={dayjs(selectedStartDate)}
                     onChange={handleDateChange(setSelectedStartDate)}
@@ -400,10 +414,10 @@ const OrderCountList = () => {
                         size: "small",
                       },
                     }}
-                     shouldDisableDate={(date) => {
-                        const start = selectedStartDate;
-                        return date.format("YYYY-MM-DD") < start ;
-                      }}
+                    shouldDisableDate={(date) => {
+                      const start = selectedStartDate;
+                      return date.format("YYYY-MM-DD") < start;
+                    }}
                     components={{
                       OpenPickerIcon: () => (
                         <img
@@ -439,8 +453,26 @@ const OrderCountList = () => {
             marginTop: "2rem",
           }}
         >
-          <button className="save_btn" onClick={handleSubmitData}>
-            Export
+          <button
+            className="save_btn attributeUpdateBTN"
+            onClick={handleSubmitData}
+            disabled={setTimeout(()=>{
+              
+            })}
+          >
+            {loader ? (
+              <>
+                <CircularProgress
+                  color={"inherit"}
+                  className="loaderIcon"
+                  width={15}
+                  size={15}
+                />
+                Export
+              </>
+            ) : (
+              "Export"
+            )}
           </button>
         </div>
       </div>

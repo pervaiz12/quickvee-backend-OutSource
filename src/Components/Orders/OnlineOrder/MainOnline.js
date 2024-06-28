@@ -8,10 +8,10 @@ const MainOnline = ({ onFilterDataChange, searchId, setSearchId }) => {
       title: "Both",
     },
     {
-      title: "Cash",
+      title: "Cash Payment",
     },
     {
-      title: "Online",
+      title: "Card Payment",
     },
   ];
 
@@ -27,7 +27,7 @@ const MainOnline = ({ onFilterDataChange, searchId, setSearchId }) => {
     },
   ];
 
-  console.log("setSearchId", searchId);
+  // console.log("setSearchId", searchId);
   const handleSearch = () => {
     // console.log("Search ID:", searchId);
   };

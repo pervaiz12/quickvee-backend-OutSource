@@ -14,7 +14,7 @@ const DelveryPickupDetails = ({ DeliveryPickupData }) => {
     useState("None");
 
   const handleCheckedenbale = (e) => {
-    setDelverypickup( e.target.checked ? "1" : "0");
+    setDelverypickup(e.target.checked ? "1" : "0");
   };
   const TipList = [
     {
@@ -43,10 +43,9 @@ const DelveryPickupDetails = ({ DeliveryPickupData }) => {
     (state) => state?.StoreSetupList?.storesetupData
   );
 
-  
   useEffect(() => {
     if (setupDataState?.enable_tip) {
-      setDelverypickup(setupDataState?.enable_tip)
+      setDelverypickup(setupDataState?.enable_tip);
     }
     if (setupDataState?.default_tip_d) {
       setDeliveryDefaultTip(setupDataState.default_tip_d);
@@ -55,7 +54,6 @@ const DelveryPickupDetails = ({ DeliveryPickupData }) => {
       )?.title;
       if (selectedTip) setDeliveryTipDropDownTitle(selectedTip);
     }
-
 
     if (setupDataState?.default_tip_p) {
       setPickupDefaultTip(setupDataState.default_tip_p);

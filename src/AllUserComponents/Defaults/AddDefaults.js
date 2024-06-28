@@ -12,6 +12,7 @@ import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
+import PasswordShow from "./../../Common/passwordShow";
 
 const AddDefaults = ({ setVisible }) => {
   const navigate = useNavigate()
@@ -37,14 +38,22 @@ const AddDefaults = ({ setVisible }) => {
   };
   const [loader, setLoader] = useState(false);
 
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
   const inputChange = (e) => {
     const { name, value } = e.target;
-    setDefaults((preValue) => {
-      return {
-        ...preValue,
-        [name]: value,
-      };
-    });
+    const regex = /^[A-Za-z0-9 ]*$/ ;
+    if (name === "name"){
+      if (regex.test(value)) {
+        setDefaults({ ...defaults, name: value });
+      }
+    }else{
+      setDefaults((preValue) => {
+        return {
+          ...preValue,
+          [name]: value,
+        };
+      });
+    }
 
     setFieldErrors((prevErrors) => ({
       ...prevErrors,
@@ -126,6 +135,8 @@ const AddDefaults = ({ setVisible }) => {
       }
     } catch (error) {
       console.error("API Error:", error);
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
     }
     setLoader(false);
   };

@@ -41,22 +41,22 @@ module.exports = Object.freeze({
 
   //Storesettings API Calls
 
-  EMPLOYEE_LIST: "Store_setting_api/employee_list",
-  ADDEDIT_EMPLOYEE: "Store_setting_api/addEdit_employee",
-  DELETE_EMPLOYEE: "Store_setting_api/delete_employee",
+  EMPLOYEE_LIST: "Store_setting_react_api/employee_list",
+  ADDEDIT_EMPLOYEE: "Store_setting_react_api/addEdit_employee",
+  DELETE_EMPLOYEE: "Store_setting_react_api/delete_employee",
 
   // EMPLOYEE_LIST:"App/employee_list",
 
-  EMPLOYEE_DATA: "Store_setting_api/getEmployeeByEmpid",
-  PERMISSIONS_LIST: "Store_setting_api/permission_list",
-  UPDATE_PERMISSION: "Store_setting_api/update_Employee_permission",
+  EMPLOYEE_DATA: "Store_setting_react_api/getEmployeeByEmpid",
+  PERMISSIONS_LIST: "Store_setting_react_api/permission_list",
+  UPDATE_PERMISSION: "Store_setting_react_api/update_Employee_permission",
 
   // Store Setting - RegisterSettings api
   GET_REGISTER_SETTINGS_DATA: "ProfileReact_setup/inventory_register_setting",
   UPDATE_REGISTER_SETTINGS: "ProfileReact_setup/register_setting",
 
   // Store Setting options api
-  GET_STORE_OPTIONS_DATA: "Store_setting_api/get_store_options_data",
+  GET_STORE_OPTIONS_DATA: "Store_setting_react_api/get_store_options_data",
 
   // Update Store Setting options api
   // UPDATE_STORE_OPTIONS_DATA: "Store_setting_api/update_store_options_data",
@@ -88,7 +88,7 @@ module.exports = Object.freeze({
   UPDATE_STORE_SETUP: "Store_setting_react_api/update_store_setup",
 
   // get Store Setting alerts list api
-  GET_STORE_ALERTS_DATA: "Store_setting_api/store_alerts_list",
+  GET_STORE_ALERTS_DATA: "Store_setting_react_api/store_alerts_list",
 
   // get Store Setting alerts list api
   UPDATE_STORE_ALERTS_DATA: "StoreReact_setting_api1/update_store_alerts",
@@ -317,6 +317,7 @@ module.exports = Object.freeze({
   SYNC_DATA: "InventoryReact/syncOI",
 
   VENDOR_UPDATE_DETAILS: "vendor_api/update_details",
+  CHECK_EXIST_STORENAME: "UserController/check_merchant",
 });
 
 // All api calls are initialized in this component for this application

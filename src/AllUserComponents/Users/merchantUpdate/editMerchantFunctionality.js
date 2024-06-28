@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BASE_URL,
   GET_EDIT_CUSTOMER,
   GET_UPDATE_MERCHANT,
   ADMIN_CHECK_USER,
+  CHECK_EXIST_STORENAME,
 } from "../../../Constants/Config";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
@@ -51,6 +52,7 @@ export default function EditMerchantFunctionality() {
     a_zip: "",
     password: "",
   });
+  const [checkExistStore, setCheckExistStore] = useState("");
   // console.log("getEditMerchant:", getEditMerchant)
   const [paymentModeOnline, setPaymentModeOnline] = useState(false);
   const [paymentModeOffline, setPaymentModeOffline] = useState(false);
@@ -60,6 +62,7 @@ export default function EditMerchantFunctionality() {
   const [successMessagehandle, setSuccessMessageHandle] = useState(false);
   const [inventory, setInventory] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [loadDataId, setLoadDataId] = useState("");
 
   const handleSuccessMessage = () => {
     setTimeout(() => {
@@ -92,6 +95,57 @@ export default function EditMerchantFunctionality() {
       throw error;
     }
   };
+  // ------------------------------------------------------
+  const StorenameValidate = async (email, store) => {
+    const { token, ...newData } = userTypeData;
+    const dataNew = { email: email, name: store, ...newData };
+    try {
+      const response = await axios.post(
+        BASE_URL + CHECK_EXIST_STORENAME,
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Error validating email:");
+    }
+  };
+
+  const handleBlurStoreFound = async () => {
+    if (
+      errors.name_error == "" &&
+      getEditMerchant.name !== "" &&
+      getEditMerchant.username !== ""
+    ) {
+      let result = await StorenameValidate(
+        getEditMerchant.username,
+        getEditMerchant.name
+      );
+      if (result.status == true) {
+        if (checkExistStore !== getEditMerchant.name) {
+          setErrors((prev) => ({
+            ...prev,
+            name_error: "Store already exists",
+          }));
+        }
+      } else {
+        setErrors((prev) => ({
+          ...prev,
+          name_error: "",
+        }));
+      }
+    } else {
+      console.log("nooo");
+    }
+  };
+
+  // ------------------------------------------------------
 
   const handleBlur = async (name) => {
     if (name === "password" || name === "email") {
@@ -130,14 +184,8 @@ export default function EditMerchantFunctionality() {
     }
   };
 
-  // ==================================
   const getEditMerchantData = async (data) => {
     const { token, ...dataNew } = data;
-    console.log(data);
-    console.log(dataNew);
-    // const dataNew={id:data}
-    // const packet={}
-    console.log();
     try {
       await axios
         .post(BASE_URL + GET_EDIT_CUSTOMER, dataNew, {
@@ -185,6 +233,7 @@ export default function EditMerchantFunctionality() {
               response?.data?.message?.row?.name !== null
                 ? response?.data?.message?.row?.name
                 : "";
+            setCheckExistStore(name);
             const State =
               response.data.message.row.a_state !== null
                 ? response.data.message.row.a_state
@@ -280,8 +329,8 @@ export default function EditMerchantFunctionality() {
         });
     } catch (error) {
       // console.log("hehehehheh");
-      handleCoockieExpire();
       getUnAutherisedTokenMessage();
+      handleCoockieExpire();
     }
   };
 
@@ -389,17 +438,19 @@ export default function EditMerchantFunctionality() {
       setPaymentCredits(true);
       setPaymentModeOnline(false);
       setPaymentModeOffline(false);
-      setErrors({ usa_pin: "", merchant_token: "" });
+      setErrors({ ...errors, usa_pin: "", merchant_token: "" });
     } else if (e.target.value == 0) {
       setPaymentModeOffline(true);
       setPaymentModeOnline(false);
       setPaymentCredits(false);
-      setErrors({ usa_pin: "", merchant_token: "" });
+      setEditMerchant({ ...getEditMerchant, usa_pin: "", merchant_token: "" });
+      setErrors({ ...errors, usa_pin: "", merchant_token: "" });
     } else if (e.target.value == 2) {
       setPaymentModeOnline(true);
       setPaymentModeOffline(false);
       setPaymentCredits(false);
-      setErrors({ usa_pin: "", merchant_token: "" });
+      setErrors({ ...errors, usa_pin: "", merchant_token: "" });
+      // setErrors({...errors});
     }
   };
   // -------------------------------validation-----------------
@@ -407,81 +458,222 @@ export default function EditMerchantFunctionality() {
     let error = false;
     let updatedErrors = { ...errors };
 
-    if (
-      (paymentCredits || paymentModeOnline) &&
-      getEditMerchant.usa_pin == ""
-    ) {
+    // Synchronous validations
+    if ((paymentCredits || paymentModeOnline) && !getEditMerchant.usa_pin) {
       updatedErrors.usa_pin = "USA Pin is required";
       error = true;
     }
+
     if (
       (paymentCredits || paymentModeOnline) &&
-      getEditMerchant.merchant_token == ""
+      !getEditMerchant.merchant_token
     ) {
       updatedErrors.merchant_token = "Merchant Token is required";
       error = true;
     }
-    if (getEditMerchant.name == "") {
+
+    if (!getEditMerchant.name) {
       updatedErrors.name_error = "Store Name is required";
       error = true;
+    } else {
+      try {
+        setLoader(true);
+        const response = await StorenameValidate(
+          getEditMerchant.username,
+          getEditMerchant.name
+        );
+        setLoader(false);
+        if (response.status) {
+          if (checkExistStore == getEditMerchant.name) {
+            updatedErrors.name_error = "";
+          } else {
+            updatedErrors.name_error = "Store already exists";
+            error = true;
+          }
+        } else {
+          updatedErrors.name_error = "";
+        }
+      } catch (validationError) {
+        setLoader(false);
+        console.error("Error validating store name:", validationError);
+        updatedErrors.name_error = "Error validating store name";
+        error = true;
+      }
     }
-    if (getEditMerchant.owner_name == "") {
+
+    if (!getEditMerchant.owner_name) {
       updatedErrors.owner_name = "Owner Name is required";
       error = true;
     }
-    if (getEditMerchant.newPassword == "") {
-      updatedErrors.password = "";
-      error = false;
-    } else {
-      setLoader(true);
-      let response = await passwordValidate(
-        getEditMerchant.username,
-        getEditMerchant.newPassword
-      );
-      if (response) {
+
+    if (getEditMerchant.newPassword) {
+      try {
+        setLoader(true);
+        const response = await passwordValidate(
+          getEditMerchant.username,
+          getEditMerchant.newPassword
+        );
         setLoader(false);
-        updatedErrors.password = "Password already exists";
+        if (response) {
+          updatedErrors.password = "Password already exists";
+          error = true;
+        } else {
+          updatedErrors.password = "";
+        }
+      } catch (validationError) {
+        setLoader(false);
+        console.error("Error validating password:", validationError);
+        updatedErrors.password = "Error validating password";
         error = true;
-      } else {
-        setLoader(false);
-        updatedErrors.password = "";
-        error = false;
       }
+    } else {
+      updatedErrors.password = ""; // No error if password is not required
     }
-    if (getEditMerchant.a_address_line_1 == "") {
+
+    if (!getEditMerchant.a_address_line_1) {
       updatedErrors.a_address_line_1 = "Address Line 1 is required";
       error = true;
     }
-    if (getEditMerchant.a_phone == "") {
+
+    if (!getEditMerchant.a_phone) {
       updatedErrors.a_phone = "Phone is required";
       error = true;
     }
-    if (getEditMerchant.a_city == "") {
+
+    if (!getEditMerchant.a_city) {
       updatedErrors.a_city = "City is required";
       error = true;
     }
-    if (getEditMerchant.a_zip == "") {
+
+    if (!getEditMerchant.a_zip) {
       updatedErrors.a_zip = "Zip Code is required";
       error = true;
     }
-    if (getEditMerchant.a_state == "") {
+
+    if (!getEditMerchant.a_state) {
       updatedErrors.a_state = "State is required";
       error = true;
     }
+
     setErrors(updatedErrors);
-    if (error == true) {
-      return false;
-    } else {
-      return true;
-    }
+    return !error;
   };
+
+  // const validateForm = async () => {
+  //   let error = false;
+  //   let updatedErrors = { ...errors };
+
+  //   if (
+  //     (paymentCredits || paymentModeOnline) &&
+  //     getEditMerchant.usa_pin == ""
+  //   ) {
+  //     updatedErrors.usa_pin = "USA Pin is required";
+  //     error = true;
+  //   }
+  //   if (
+  //     (paymentCredits || paymentModeOnline) &&
+  //     getEditMerchant.merchant_token == ""
+  //   ) {
+  //     updatedErrors.merchant_token = "Merchant Token is required";
+  //     error = true;
+  //   }
+  //   if (getEditMerchant.name == "") {
+  //     updatedErrors.name_error = "Store Name is required";
+  //     error = true;
+  //   } else {
+  //     setLoader(true);
+  //     let response = await StorenameValidate(
+  //       getEditMerchant.username,
+  //       getEditMerchant.name
+  //     );
+  //     if (response.status == true) {
+  //       setLoader(false);
+  //       updatedErrors.name_error = "Store already exists";
+  //       error = true;
+  //     } else {
+  //       setLoader(false);
+  //       updatedErrors.name_error = "";
+  //       error = false;
+  //     }
+  //   }
+  //   if (getEditMerchant.owner_name == "") {
+  //     updatedErrors.owner_name = "Owner Name is required";
+  //     error = true;
+  //   }
+  //   if (getEditMerchant.newPassword == "") {
+  //     updatedErrors.password = "";
+  //     error = false;
+  //   } else {
+  //     setLoader(true);
+  //     let response = await passwordValidate(
+  //       getEditMerchant.username,
+  //       getEditMerchant.newPassword
+  //     );
+  //     if (response) {
+  //       setLoader(false);
+  //       updatedErrors.password = "Password already exists";
+  //       error = true;
+  //     } else {
+  //       setLoader(false);
+  //       updatedErrors.password = "";
+  //       error = false;
+  //     }
+  //   }
+  //   if (getEditMerchant.a_address_line_1 == "") {
+  //     updatedErrors.a_address_line_1 = "Address Line 1 is required";
+  //     error = true;
+  //   }
+  //   if (getEditMerchant.a_phone == "") {
+  //     updatedErrors.a_phone = "Phone is required";
+  //     error = true;
+  //   }
+  //   if (getEditMerchant.a_city == "") {
+  //     updatedErrors.a_city = "City is required";
+  //     error = true;
+  //   }
+  //   if (getEditMerchant.a_zip == "") {
+  //     updatedErrors.a_zip = "Zip Code is required";
+  //     error = true;
+  //   }
+  //   if (getEditMerchant.a_state == "") {
+  //     updatedErrors.a_state = "State is required";
+  //     error = true;
+  //   }
+  //   setErrors(updatedErrors);
+  //   if (error == true) {
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // };
   // // -----------------------validation-------------------
   function Currentvalidate(errors) {
     console.log(errors);
     return Object.values(errors).every((error) => error === "");
   }
+  // ==================================
 
-  // // ===================================
+  const keyEnter = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      setEditMerchant((prev) => ({
+        ...prev,
+        [event.target.name]: event.target.value,
+      }));
+      if (loader == false) {
+        handleUpdateMerchant(event);
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", keyEnter);
+    return () => {
+      document.removeEventListener("keydown", keyEnter);
+    };
+  }, [getEditMerchant]);
+
+  // ==============
   const handleUpdateMerchant = async (e) => {
     e.preventDefault();
     let inventoryNew = 0;
@@ -517,6 +709,7 @@ export default function EditMerchantFunctionality() {
           usa_pin: getEditMerchant.usa_pin,
         };
         setLoader(true);
+        setLoadDataId("");
         console.log(packet);
         console.log(userTypeData?.token);
         try {
@@ -535,6 +728,7 @@ export default function EditMerchantFunctionality() {
             ToastifyAlert("Updated Successfully!", "success");
             // setMessage(response?.data?.message);
             setSuccessMessageHandle(true);
+            setLoadDataId(response?.data);
             handleSuccessMessage();
             // navigate(`/users/editMerchant/${response?.data?.id}`);
             // navigate(`/users/editMerchant/${getEditMerchant.id}`)
@@ -569,5 +763,8 @@ export default function EditMerchantFunctionality() {
     errors,
     loader,
     handleBlur,
+    keyEnter,
+    handleBlurStoreFound,
+    loadDataId,
   };
 }

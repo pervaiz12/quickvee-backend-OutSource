@@ -66,12 +66,19 @@ const EditTaxesModal = ({ selectedTaxe }) => {
 
   const inputChange = (e) => {
     const { name, value } = e.target;
-    setTaxes((preValue) => {
-      return {
-        ...preValue,
-        [name]: name === "percent" ? formatPercent(value) : value,
-      };
-    });
+    const regex = /^[A-Za-z0-9 ]*$/ ;
+    if (name === "title"){
+      if (regex.test(value)) {
+        setTaxes({ ...taxes, title: value });
+      }
+    }else{
+      setTaxes((preValue) => {
+        return {
+          ...preValue,
+          [name]: name === "percent" ? formatPercent(value) : value,
+        };
+      });
+    }
   };
 
   const formatPercent = (value) => {
@@ -134,7 +141,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
         console.log(update_message);
         if (update_message == "Success") {
           // alert(msg)
-          ToastifyAlert(msg, "success");
+          ToastifyAlert("Updated Successfully", "success");
           let data = {
             merchant_id: merchant_id,
             ...userTypeData

@@ -279,7 +279,7 @@ const StocktakeList = ({
                           ))}
                         </TableHead>
                         <TableBody>
-                          {StocktakeList.map((item, index) => {
+                          {StocktakeList && StocktakeList?.map((item, index) => {
                             const statusObj = stocktalkStatus.find(
                               (itemStatus) => itemStatus.status === item.status
                             );

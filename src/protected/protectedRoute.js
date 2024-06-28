@@ -99,7 +99,8 @@ export default function ProtectedRoute(props) {
     props.visible == "superadmin" &&
     AdminRocord?.data?.merchant_id !== ""
   ) {
-    return <Navigate to="/" />;
+    return <Outlet />;
+    // return <Navigate to="/" />;
   } else if (
     AdminRocord?.status == true &&
     (AdminRocord?.login_type == "superadmin" ||

@@ -152,7 +152,6 @@ const SideMenu = () => {
       setMenuItemSwitcher(updatedMenuItems);
     }
   }, [currentUrl, isStoreActive]);
-
   useEffect(() => {
     if (LoginGetDashBoardRecordJson?.login_type === "superadmin") {
       setMenuItemSwitcher((menuItems) => [...menuItems]);
@@ -171,7 +170,6 @@ const SideMenu = () => {
       ? "/" + segments.slice(0, 1).join("/")
       : "/" + segments.slice(0, 2).join("/");
   }
-
 
   return (
     <>

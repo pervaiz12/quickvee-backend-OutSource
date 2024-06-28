@@ -32,6 +32,7 @@ export default function AddMerchan() {
     handleKeyPress,
     loader,
     keyEnter,
+    handleBlurStoreFound,
   } = MerchantFunction();
 
   const navigate = useNavigate();
@@ -144,6 +145,7 @@ export default function AddMerchan() {
                     value={store.ownerName}
                     onChangeFun={handleChange}
                     sx={{ pt: 0.5 }}
+                    onBlurFunction={() => handleBlur("ownerName")}
                   />
                   {store.errors.ownerName && (
                     <span className="error">{store.errors.ownerName}</span>
@@ -254,6 +256,7 @@ export default function AddMerchan() {
                     onChangeFun={handleChange}
                     sx={{ pt: 0.5 }}
                     onKeyDown={keyEnter}
+                    onBlurFunction={() => handleBlurStoreFound("storename")}
                   />
                   {store.errors.storename && (
                     <span className="error">{store.errors.storename}</span>

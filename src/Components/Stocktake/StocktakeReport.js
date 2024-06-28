@@ -16,6 +16,7 @@ import EmailModel from "./EmailModel";
 import { useNavigate, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchSingleStocktakeData } from "../../Redux/features/Stocktake/StocktakeListSlice";
+import { priceFormate } from "../../hooks/priceFormate";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2,
@@ -164,7 +165,7 @@ const StocktakeReport = ({ setVisible }) => {
 
                       <StyledTableCell>{item.discrepancy}</StyledTableCell>
 
-                      <StyledTableCell>{item.discrepancy_cost}</StyledTableCell>
+                      <StyledTableCell>${priceFormate((parseFloat(item.discrepancy_cost)).toFixed(2))}</StyledTableCell>
 
                       <StyledTableCell>{item.upc}</StyledTableCell>
                     </StyledTableRow>
@@ -187,7 +188,7 @@ const StocktakeReport = ({ setVisible }) => {
 
                     <StyledTableCell>
                       <p className="text-[#0A64F9]">
-                        {singleStocktakeState?.total_discrepancy_cost}
+                        ${singleStocktakeState?.total_discrepancy_cost}
                       </p>
                     </StyledTableCell>
 

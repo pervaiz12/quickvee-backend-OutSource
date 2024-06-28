@@ -52,13 +52,16 @@ export default function EditMerchant({
     errors,
     loader,
     handleBlur,
+    keyEnter,
+    handleBlurStoreFound,
+    loadDataId,
   } = EditMerchantFunctionality();
   const { id } = useParams();
   const ids = !!merchantId ? merchantId : id;
   useEffect(() => {
     let data = { id: ids, ...userTypeData };
     getEditMerchantData(data);
-  }, [ids]);
+  }, [ids, loadDataId]);
   const { showpPassword, handleMouseDown, handleMouseUp, jsxData } =
     PasswordShow();
   const accountTtype = [
@@ -113,6 +116,7 @@ export default function EditMerchant({
                 value={getEditMerchant.username}
                 disable={true}
                 sx={{ pt: 0.5 }}
+                onKeyDown={keyEnter}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -123,6 +127,8 @@ export default function EditMerchant({
                 onChangeFun={handleChangeMerchant}
                 sx={{ pt: 0.5 }}
                 required={true}
+                onKeyDown={keyEnter}
+                onBlurFunction={() => handleBlurStoreFound("name")}
               />
               {errors.name_error && (
                 <label className="input-error">{errors.name_error}</label>
@@ -137,6 +143,7 @@ export default function EditMerchant({
                 value={getEditMerchant.merchant_id}
                 disable={true}
                 sx={{ pt: 0.5 }}
+                onKeyDown={keyEnter}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
@@ -152,6 +159,7 @@ export default function EditMerchant({
                   autoCompleteOff="off"
                   readOnly
                   onFocusData={(e) => e.target.removeAttribute("readonly")}
+                  onKeyDown={keyEnter}
                 />
                 {jsxData(getEditMerchant.newPassword)}
               </div>
@@ -172,6 +180,7 @@ export default function EditMerchant({
                 }
                 onChangeFun={handleChangeMerchant}
                 sx={{ pt: 0.5 }}
+                onKeyDown={keyEnter}
               />
               {errors.owner_name && (
                 <label className="input-error">{errors.owner_name}</label>
@@ -187,6 +196,7 @@ export default function EditMerchant({
                 listItem={accountTtype}
                 title={"title"}
                 onClickHandler={handleChangeMerchant}
+                onKeyDown={keyEnter}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
@@ -208,6 +218,7 @@ export default function EditMerchant({
                 value={getEditMerchant.a_address_line_1}
                 onChangeFun={handleChangeMerchant}
                 sx={{ pt: 0.5 }}
+                onKeyDown={keyEnter}
               />
               {errors.a_address_line_1 && (
                 <label className="input-error">{errors.a_address_line_1}</label>
@@ -221,6 +232,7 @@ export default function EditMerchant({
                 value={getEditMerchant.a_address_line_2}
                 onChangeFun={handleChangeMerchant}
                 sx={{ pt: 0.5 }}
+                onKeyDown={keyEnter}
               />
             </Grid>
           </Grid>
@@ -235,6 +247,7 @@ export default function EditMerchant({
                 onKeyPressFun={handleKeyPress}
                 maxLength={10}
                 sx={{ pt: 0.5 }}
+                onKeyDown={keyEnter}
               />
               {errors.a_phone && (
                 <label className="input-error">{errors.a_phone}</label>
@@ -249,6 +262,7 @@ export default function EditMerchant({
                 value={getEditMerchant.a_city}
                 onChangeFun={handleChangeMerchant}
                 sx={{ pt: 0.5 }}
+                onKeyDown={keyEnter}
               />
               {errors.a_city && (
                 <label className="input-error">{errors.a_city}</label>
@@ -263,9 +277,10 @@ export default function EditMerchant({
                 name="a_zip"
                 value={getEditMerchant.a_zip}
                 onChangeFun={handleChangeMerchant}
-                maxLength={6}
+                maxLength={5}
                 onKeyPressFun={handleKeyPress}
                 sx={{ pt: 0.5 }}
+                onKeyDown={keyEnter}
               />
               {errors.a_zip && (
                 <label className="input-error">{errors.a_zip}</label>
@@ -300,6 +315,7 @@ export default function EditMerchant({
                   value="1"
                   onChange={handleChangePaymentMode}
                   checked={paymentCredits}
+                  onKeyDown={keyEnter}
                 />
                 <label htmlFor="radio1">CREDITS CARDS ONLY</label>
               </div>
@@ -314,6 +330,7 @@ export default function EditMerchant({
                   value="0"
                   onChange={handleChangePaymentMode}
                   checked={paymentModeOffline}
+                  onKeyDown={keyEnter}
                 />
                 <label htmlFor="radio2">CASH ONLY</label>
               </div>
@@ -328,6 +345,7 @@ export default function EditMerchant({
                   value="2"
                   onChange={handleChangePaymentMode}
                   checked={paymentModeOnline}
+                  onKeyDown={keyEnter}
                 />
                 <label htmlFor="radio3">CASH AND CREDITS CARDS ONLY</label>
               </div>
@@ -344,6 +362,7 @@ export default function EditMerchant({
                     value={getEditMerchant.merchant_token}
                     onChangeFun={handleChangeMerchant}
                     sx={{ pt: 0.5 }}
+                    onKeyDown={keyEnter}
                   />
                   {errors.merchant_token && (
                     <span className="input-error">{errors.merchant_token}</span>
@@ -357,6 +376,7 @@ export default function EditMerchant({
                     value={getEditMerchant.usa_pin}
                     onChangeFun={handleChangeMerchant}
                     sx={{ pt: 0.5 }}
+                    onKeyDown={keyEnter}
                   />
                   {errors.usa_pin && (
                     <label className="input-error">{errors.usa_pin}</label>

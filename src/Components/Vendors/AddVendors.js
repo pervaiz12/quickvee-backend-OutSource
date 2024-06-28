@@ -36,12 +36,11 @@ const AddVendors = ({ setVisible }) => {
   const [value, setValue] = useState();
   const [loader, setLoader] = useState(false);
   const handleAutocompleteChange = (event) => {
-    
-
-    setErrorMessage((prevState) => ({
-      ...prevState,
-      ["name"]: "",
-    }));
+    // setErrorMessage((prevState) => ({
+    //   ...prevState,
+    //   ["name"]: "",
+    // }));
+   
 
     handleSelectedVendor(event?.value);
   };
@@ -82,22 +81,22 @@ const AddVendors = ({ setVisible }) => {
       itemErrors.phone = "Phone number must be 10 digits";
       isValid = false;
     }
-    if (!vendor.full_address) {
-      itemErrors.full_address = "Please enter a vendor address";
-      isValid = false;
-    }
-    if (!vendor.city) {
-      itemErrors.city = "Please enter a vendor city";
-      isValid = false;
-    }
-    if (!/^\d{5}$/.test(vendor.zip_code)) {
-      itemErrors.zip_code = "ZIP code must be 5 digits";
-      isValid = false;
-    }
-    if (!vendor.state) {
-      itemErrors.state = "Please select state";
-      isValid = false;
-    }
+    // if (!vendor.full_address) {
+    //   itemErrors.full_address = "Please enter a vendor address";
+    //   isValid = false;
+    // }
+    // if (!vendor.city) {
+    //   itemErrors.city = "Please enter a vendor city";
+    //   isValid = false;
+    // }
+    // if (!/^\d{5}$/.test(vendor.zip_code)) {
+    //   itemErrors.zip_code = "ZIP code must be 5 digits";
+    //   isValid = false;
+    // }
+    // if (!vendor.state) {
+    //   itemErrors.state = "Please select state";
+    //   isValid = false;
+    // }
     setErrorMessage(itemErrors);
     return isValid;
   };
@@ -122,26 +121,26 @@ const AddVendors = ({ setVisible }) => {
           errorMsg = "Phone number must be 10 digits";
         }
         break;
-      case "zip_code":
-        if (!/^\d{5}$/.test(value)) {
-          errorMsg = "ZIP code must be 5 digits";
-        }
-        break;
-      case "full_address":
-        if (value.length <= 0) {
-          errorMsg = "Please enter a vendor address";
-        }
-        break;
-      case "city":
-        if (value.length <= 0) {
-          errorMsg = "Please enter a vendor city";
-        }
-        break;
-      case "state":
-        if (vendor.state.length <= 0) {
-          errorMsg = "Please select state";
-        }
-        break;
+      // case "zip_code":
+      //   if (!/^\d{5}$/.test(value)) {
+      //     errorMsg = "ZIP code must be 5 digits";
+      //   }
+      //   break;
+      // case "full_address":
+      //   if (value.length <= 0) {
+      //     errorMsg = "Please enter a vendor address";
+      //   }
+      //   break;
+      // case "city":
+      //   if (value.length <= 0) {
+      //     errorMsg = "Please enter a vendor city";
+      //   }
+      //   break;
+      // case "state":
+      //   if (vendor.state.length <= 0) {
+      //     errorMsg = "Please select state";
+      //   }
+      //   break;
       default:
         break;
     }
@@ -178,13 +177,13 @@ const AddVendors = ({ setVisible }) => {
   ]);
 
   const handleSelectedVendor = (selectedOption) => {
-    console.log('handleSelectedVendor', selectedOption)
+    console.log("handleSelectedVendor", selectedOption);
     const matchedObject = allvendors.find(
       (vendor) => vendor.name === selectedOption
     );
 
     if (matchedObject) {
-      setVendor({
+      let data = {
         phone: matchedObject.phone,
         email: matchedObject.email,
         name: matchedObject.name,
@@ -194,6 +193,16 @@ const AddVendors = ({ setVisible }) => {
         zip_code: matchedObject.zip_code,
         full_address: matchedObject.full_address,
         state: matchedObject.state,
+      }
+      setVendor(data);
+      setErrorMessage((prevState) => {
+        const newErrorMessages = { ...prevState };
+        Object.keys(data).forEach((key) => {
+          if (data[key]) {
+            newErrorMessages[key] = "";
+          }
+        });
+        return newErrorMessages;
       });
     } else {
       // If no match is found, set name to the entered value
@@ -210,6 +219,17 @@ const AddVendors = ({ setVisible }) => {
       });
     }
   };
+  // useEffect(() => {
+  //   setErrorMessage((prevState) => {
+  //     const newErrorMessages = { ...prevState };
+  //     Object.keys(vendor).forEach((key) => {
+  //       if (vendor[key]) {
+  //         newErrorMessages[key] = "";
+  //       }
+  //     });
+  //     return newErrorMessages;
+  //   });
+  // }, [vendor]);
   const handleSetVendorStateChange = (newState) => {
     console.log("setVendorStateChange", newState);
     setErrorMessage((prevState) => ({
@@ -230,7 +250,7 @@ const AddVendors = ({ setVisible }) => {
         // Assuming `vendor` is an object that you want to send in the request
         let updatedVendor = { ...vendor, ...userTypeData };
         const { token, ...newData } = updatedVendor;
-        console.log("setVendorState", updatedVendor)
+        console.log("setVendorState", updatedVendor);
         const response = await axios.post(BASE_URL + ADD_VENDOR_DATA, newData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -243,16 +263,16 @@ const AddVendors = ({ setVisible }) => {
           navigate("/vendors");
           ToastifyAlert("Added Successfully", "success");
           // alert(response.data.message);
-          setLoader(false)
+          setLoader(false);
         } else {
           console.error(response);
-          setLoader(false)
+          setLoader(false);
           // alert(response.data.message);
         }
       } catch (error) {
         handleCoockieExpire();
         getUnAutherisedTokenMessage();
-        setLoader(false)
+        setLoader(false);
       }
     }
   };
@@ -312,7 +332,7 @@ const AddVendors = ({ setVisible }) => {
                         value={vendor.email}
                         placeholder="Email Address"
                         onChangeFun={inputChange}
-                        // required={"required"}
+                      
                       />
                       {errorMessage.email && (
                         <span className="error">{errorMessage.email}</span>
@@ -420,14 +440,18 @@ const AddVendors = ({ setVisible }) => {
                     <button
                       type="submit"
                       className="quic-btn quic-btn-save me-3 w-40"
+                      disabled={loader}
                     >
-                      {loader ? <CircularProgress
-                      color={"inherit"}
-                      className=""
-                      width={15}
-                      size={15}
-                    /> : "Add"}
-                      
+                      {loader ? (
+                        <CircularProgress
+                          color={"inherit"}
+                          className=""
+                          width={15}
+                          size={15}
+                        />
+                      ) : (
+                        "Add"
+                      )}
                     </button>
                     <Link to={`/vendors`}>
                       <button

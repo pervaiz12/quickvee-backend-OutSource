@@ -554,7 +554,7 @@ const EditCategory = ({ productId,seVisible }) => {
             </div>
 
             <div className="q-add-categories-section-middle-footer">
-              <button className="quic-btn quic-btn-save attributeUpdateBTN" onClick={handleSubmit}>
+              <button className="quic-btn quic-btn-save attributeUpdateBTN" onClick={handleSubmit} disabled={loader}>
                  { loader ? <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15}/> Save</> : "Save"}
               </button>
 
