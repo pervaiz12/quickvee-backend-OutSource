@@ -255,7 +255,6 @@ const BulkVendorEdit = ({
           }
         })
         .catch((err) => {
-          console.log("error for assign vendor", err);
           getUnAutherisedTokenMessage();
         })
         .finally(() => {

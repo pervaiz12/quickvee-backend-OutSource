@@ -334,7 +334,6 @@ const BulkInstantPo = ({
     
   };
   
-  console.log('error', error);
 
   return (
     <>

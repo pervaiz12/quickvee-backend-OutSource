@@ -1,6 +1,6 @@
 import React from "react";
 import { formData } from "./data";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Grid } from "@mui/material";
 
@@ -17,14 +17,19 @@ const GeneratePUC = ({
   handleCloseEditModal,
   productData,
   varientData,
+  isVarientEdit,
 }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const pageUrl =
     window.location.pathname.split("/")[1] +
     "/" +
     window.location.pathname.split("/")[2] +
     "/" +
     window.location.pathname.split("/")[3];
+
+  const findVarientName = productData?.title?.split("~");
+  console.log("findVarientName", findVarientName?.[1], productData);
 
   const varientTitle = handleVarientTitleBasedItemList();
   const { varientProduct } = useSelector((state) => state?.productsListData);
@@ -79,12 +84,25 @@ const GeneratePUC = ({
   };
 
   const handleRedirectHistory = (varientIndex, varientTitle) => {
-    const varientName = varientTitle ? Object.keys(varientTitle)?.[0]:"";
+    console.log("redirected", varientIndex, varientTitle);
+    const varientName = varientTitle ? Object.keys(varientTitle)?.[0] : "";
     let url;
     if (varientIndex === null) {
-      window.open(`/inventory/products/saleshistory/${productData?.id}?title=${productInfo?.title}`);
+      window.open(
+        `/inventory/products/saleshistory/${productData?.id}?title=${productInfo?.title}`
+      );
+    } else if (isVarientEdit) {
+      window.open(
+        `/inventory/products/saleshistory/${productData?.id}/${
+          productData?.var_id
+        }?title=${
+          productData?.title?.split("~")?.[0]
+        }&varientName=${varientTitle}`
+      );
     } else {
-      window.open(`/inventory/products/saleshistory/${productData?.id}/${varientIndex}?title=${productInfo?.title}&varientName=${varientName}`);
+      window.open(
+        `/inventory/products/saleshistory/${productData?.id}/${varientIndex}?title=${productInfo?.title}&varientName=${varientName}`
+      );
     }
   };
 
@@ -92,6 +110,9 @@ const GeneratePUC = ({
     <>
       <div className="mx-0">
         <div className="q-add-categories-single-input">
+          <div className="q-category-bottom-header" style={{padding:"1px 20px"}}>
+            <span className="varient-edit-text"> {isVarientEdit ? "Variants":''}</span>
+          </div>
           {formValue?.length ? (
             <div className="q-category-bottom-header">
               <span>
@@ -99,12 +120,21 @@ const GeneratePUC = ({
                   ? "Variants"
                   : productInfo?.title
                     ? productInfo?.title
-                    : "ProductName"}
+                    : isVarientEdit
+                      ? productData?.title
+                      : "ProductName"}
               </span>
-              <p onClick={() => handleGenerateUPC(20)}>
-                Generate UPC
-                {/* <img src={AddIcon} alt="add-icon" />{" "} */}
-              </p>
+              <span>
+              
+              </span>
+              {!isVarientEdit ? (
+                <p onClick={() => handleGenerateUPC(20)}>
+                  Generate UPC
+                  {/* <img src={AddIcon} alt="add-icon" />{" "} */}
+                </p>
+              ) : (
+                ""
+              )}
             </div>
           ) : (
             ""
@@ -377,6 +407,7 @@ const GeneratePUC = ({
           {!isMultipleVarient ? (
             <div className="qvrow">
               <div className="mx-4 my-4">{varientTitle?.[0]}</div>
+              
               <Grid container spacing={2}>
                 {formData?.length
                   ? formData?.map((inp, i) => {
@@ -478,7 +509,7 @@ const GeneratePUC = ({
                   class="q_resigter_setting_section"
                   style={{ color: "#000", fontSize: "18px" }}
                 >
-                  Disable
+                  Disable 
                   <input
                     type="checkbox"
                     name="disable"
@@ -522,7 +553,7 @@ const GeneratePUC = ({
                 </label> */}
               </div>
 
-              {pageUrl === "inventory/products/edit" ? (
+              {pageUrl === "inventory/products/edit" || isVarientEdit ? (
                 <div class="edit-profile-btns">
                   <button
                     className="quic-btn quic-btn-save vendor-btn"
@@ -547,7 +578,12 @@ const GeneratePUC = ({
                     style={{
                       backgroundColor: "#0A64F9",
                     }}
-                    onClick={() => handleRedirectHistory(null)}
+                    onClick={() =>
+                      handleRedirectHistory(
+                        !isVarientEdit ? null : formValue?.[0]?.productEditId,
+                        findVarientName[1]
+                      )
+                    }
                   >
                     Sales History
                   </button>

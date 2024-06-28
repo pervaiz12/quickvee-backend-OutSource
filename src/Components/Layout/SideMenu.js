@@ -152,10 +152,7 @@ const SideMenu = () => {
       setMenuItemSwitcher(updatedMenuItems);
     }
   }, [currentUrl, isStoreActive]);
-  console.log(
-    "LoginGetDashBoardRecordJson?.login_type",
-    LoginGetDashBoardRecordJson?.login_type
-  );
+
   useEffect(() => {
     if (LoginGetDashBoardRecordJson?.login_type === "superadmin") {
       setMenuItemSwitcher((menuItems) => [...menuItems]);
@@ -175,10 +172,7 @@ const SideMenu = () => {
       : "/" + segments.slice(0, 2).join("/");
   }
 
-  console.log(
-    "getFirstTwoSegmentsPath",
-    getFirstTwoSegmentsPathIsStoreAvtive(activeItem)
-  );
+
   return (
     <>
       <div

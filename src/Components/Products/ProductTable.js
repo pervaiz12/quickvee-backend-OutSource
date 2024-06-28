@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import AddIcon from "../../Assests/Category/addIcon.svg";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 // import EditIcon from "../../Assests/Category/editIcon.svg";
 import SortIcon from "../../Assests/Category/Sorting.svg";
@@ -68,16 +68,18 @@ const ProductTable = ({
     (state) => state.productsListData
   );
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
-            
-  const {getUnAutherisedTokenMessage} = PasswordShow();
+
+  const { getUnAutherisedTokenMessage } = PasswordShow();
+  const navigate = useNavigate();
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   const [productList, setproductsList] = useState([]);
 
+
   const dispatch = useDispatch();
   useEffect(() => {
     if (ProductsListDataState?.productsData?.length) {
-      setproductsList([...new Set(ProductsListDataState?.productsData)]);
+      setproductsList(ProductsListDataState?.productsData);
     } else {
       setproductsList([]);
     }
@@ -209,9 +211,18 @@ const ProductTable = ({
       })
       .catch(() => {
         ToastifyAlert("Error!", "error");
-    getUnAutherisedTokenMessage();
+        getUnAutherisedTokenMessage();
       });
   };
+
+  const handleNavigate = (id, varientName, productData) => {
+    if (selectedListingType === "Variant listing" && productData?.isvarient === "1") {
+      navigate(`/inventory/products/varient-edit/${id}/${varientName ? varientName: null}`, {state: productData});
+    } else {
+      navigate(`/inventory/products/edit/${id}`);
+    }
+  };
+
   return (
     <>
       <div className="box">
@@ -270,18 +281,27 @@ const ProductTable = ({
                       </TableHead>
 
                       <TableBody>
-                        {[productList]?.length >= 1 &&
-                          [...new Set(productList)].map((product, index) => {
+                        {productList?.length >= 1 &&
+                          productList.map((product, index) => {
+                            const getVarientName = product?.title?.split("~");
                             return (
                               <StyledTableRow key={product?.id}>
                                 <StyledTableCell>
                                   <img src={SortIcon} alt="" className="" />
                                 </StyledTableCell>
                                 <StyledTableCell>
-                                  <p className="categories-title">
-                                    <Link to={`/inventory/products/edit/${product?.id}`}>
-                                      {product.title}
-                                    </Link>
+                                  <p
+                                    className="categories-title"
+                                    style={{cursor: "pointer"}}
+                                    onClick={() =>
+                                      handleNavigate(
+                                        product?.id,
+                                        getVarientName[1],
+                                        product,
+                                      )
+                                    }
+                                  >
+                                    {product.title}
                                   </p>
                                 </StyledTableCell>
                                 <StyledTableCell>
@@ -416,7 +436,6 @@ const ProductTable = ({
                               </StyledTableRow>
                             );
                           })}
-                        
                       </TableBody>
                     </StyledTable>
                   </InfiniteScroll>

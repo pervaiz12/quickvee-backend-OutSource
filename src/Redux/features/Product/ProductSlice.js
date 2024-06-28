@@ -604,6 +604,55 @@ export const checkUpcCodeSingle = createAsyncThunk(
   }
 );
 
+
+export const checkUpcOnVarientEdit = createAsyncThunk(
+  "products/checkUpcOnVarientEdit",
+  async (payload) => {
+    // const token = payload.get('token'); // Extract the token from FormData
+    // payload.delete('token');
+    const {token, ...newData} = payload;
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/check_upc_new",
+        newData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+
+export const updateEditVarient = createAsyncThunk(
+  "products/updateEditVarient",
+  async (payload) => {
+    // const token = payload.get('token'); // Extract the token from FormData
+    // payload.delete('token');
+    const {token, ...newData} = payload;
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/update_variant",
+        newData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
 const productsSlice = createSlice({
   name: "products",
   initialState,
