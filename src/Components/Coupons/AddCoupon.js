@@ -251,6 +251,16 @@ const AddCoupon = ({ seVisible }) => {
 
 
   const handleStartDateChange = (newDate) => {
+
+    if (!newDate || !newDate.isValid()) {
+      // showModal("Buss");
+      setDateStartError("Invalid date. Please select a valid date.");
+      setCoupon({
+        ...coupon,
+        date_valid: null,
+      });
+      return;
+    }
     const formattedStartDate = newDate.format("YYYY-MM-DD");
     const dayjsDate = dayjs(formattedStartDate);
     const today = dayjs().format("YYYY-MM-DD");
@@ -285,6 +295,15 @@ const AddCoupon = ({ seVisible }) => {
   
 
   const handleEndDateChange = (newDate) => {
+    if (!newDate || !newDate.isValid()) {
+      // showModal("Buss");
+      setDateEndError("Invalid date. Please select a valid date.");
+      setCoupon({
+        ...coupon,
+        date_expire: null,
+      });
+      return;
+    }
     const formattedEndDate = newDate.format("YYYY-MM-DD");
     const dayjsEndDate = dayjs(formattedEndDate);
     const today = dayjs().format("YYYY-MM-DD");
@@ -463,6 +482,8 @@ const AddCoupon = ({ seVisible }) => {
     formData.append("login_type", userTypeData?.login_type);
 
     if (
+      dateStartError === "Invalid date. Please select a valid date." ||
+      dateEndError === "Invalid date. Please select a valid date." ||
       errorMessage === "Coupon name already exists" ||
       inputValue === "" ||
       minOrderAmountError === "Minimum Order Amount is required" ||

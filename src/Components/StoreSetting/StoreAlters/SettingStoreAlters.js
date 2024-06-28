@@ -10,6 +10,7 @@ import { el } from "date-fns/locale";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 import PasswordShow from "../../../Common/passwordShow";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function SettingStoreAlters() {
   const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
@@ -109,6 +110,7 @@ export default function SettingStoreAlters() {
   const [isTaxesReport, setTaxesReport] = useState(false);
   const [isPaypointReport, setPaypointReport] = useState(false);
   const [isReportEmailTime, setReportEmailTime] = useState(false);
+  const [loader, setLoader] = useState(false);
 
   useEffect(() => {
     if (
@@ -479,6 +481,7 @@ export default function SettingStoreAlters() {
     };
     console.log(FormData);
     // return
+    setLoader(true);
     try {
       const response = await axios.post(
         BASE_URL + UPDATE_STORE_ALERTS_DATA,
@@ -492,7 +495,7 @@ export default function SettingStoreAlters() {
       );
 
       if (response?.data?.status) {
-        ToastifyAlert(response?.data?.message, "success");
+        ToastifyAlert("Updated Successfully", "success");
         let merchantdata = {
           merchant_id: merchant_id,
           ...userTypeData,
@@ -514,6 +517,7 @@ export default function SettingStoreAlters() {
       getUnAutherisedTokenMessage();
       handleCoockieExpire();
     }
+    setLoader(false);
   };
 
   return (
@@ -1077,10 +1081,11 @@ export default function SettingStoreAlters() {
       </div>
 
       <button
-        className="store-setting-btn mt-8 mb-8"
+        className="store-setting-btn mt-8 mb-8 attributeUpdateBTN"
         onClick={handleUpdateSettingAlerts}
+        disabled={loader}
       >
-        Update
+        {loader ? <><CircularProgress color={"inherit"} width={15} size={15} /> Update</> : "Update"}
       </button>
     </>
   );

@@ -56,7 +56,7 @@ module.exports = Object.freeze({
   UPDATE_REGISTER_SETTINGS: "ProfileReact_setup/register_setting",
 
   // Store Setting options api
-  GET_STORE_OPTIONS_DATA: "Store_setting_api/get_store_options_data",
+  GET_STORE_OPTIONS_DATA: "Store_setting_react_api/get_store_options_data",
 
   // Update Store Setting options api
   // UPDATE_STORE_OPTIONS_DATA: "Store_setting_api/update_store_options_data",
@@ -88,7 +88,7 @@ module.exports = Object.freeze({
   UPDATE_STORE_SETUP: "Store_setting_react_api/update_store_setup",
 
   // get Store Setting alerts list api
-  GET_STORE_ALERTS_DATA: "Store_setting_api/store_alerts_list",
+  GET_STORE_ALERTS_DATA: "Store_setting_react_api/store_alerts_list",
 
   // get Store Setting alerts list api
   UPDATE_STORE_ALERTS_DATA: "StoreReact_setting_api1/update_store_alerts",

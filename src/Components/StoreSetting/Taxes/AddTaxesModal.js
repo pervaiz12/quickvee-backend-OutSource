@@ -24,6 +24,8 @@ const AddTaxesModal = () => {
     setOpen(false);
   }
   const [errorMessage, setErrorMessage] = useState("");
+  const [errorTitleMessage, setErrorTitleMessage] = useState("");
+
   const dispatch = useDispatch();
 
   const myStyles = {
@@ -49,14 +51,22 @@ const AddTaxesModal = () => {
 
   const inputChange = (e) => {
     const { name, value } = e.target;
+    const regex = /^[A-Za-z0-9 ]*$/ ;
+    if (name === "title"){
+      if (regex.test(value)) {
+        setTaxes({ ...taxes, title: value });
+      }
+    }else{
+      setTaxes((preValue) => {
+        return {
+          ...preValue,
+          // [name]: value,
+          [name]: name === "percent" ? formatPercent(value) : value,
+        };
+      });
 
-    setTaxes((preValue) => {
-      return {
-        ...preValue,
-        // [name]: value,
-        [name]: name === "percent" ? formatPercent(value) : value,
-      };
-    });
+    }
+
   };
   const formatPercent = (value) => {
     if (value.match(/^\d{0,2}$/)) {
@@ -97,7 +107,7 @@ const AddTaxesModal = () => {
       // alert(update_message);
       if (data == "Success") {
         // alert(update_message);
-        ToastifyAlert(update_message, "success");
+        ToastifyAlert("Added Successfully", "success");
         let data = {
           merchant_id: merchant_id,
           ...userTypeData

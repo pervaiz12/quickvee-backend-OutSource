@@ -41,11 +41,12 @@ export const fetchStoreSettingOptionData = createAsyncThunk(
 export const updateStoreOption = createAsyncThunk(
   "StoreSettingOptionSlice/updateStoreOption",
   async (data) => {
+    const { token, ...dataNew } = data;
     try {
       const response = await axios.post(
         BASE_URL + UPDATE_STORE_OPTIONS_DATA,
-        data,
-        { headers: { "Content-Type": "multipart/form-data" } }
+        dataNew,
+        { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`, } }
       );
       return response?.data;
     } catch (error) {
