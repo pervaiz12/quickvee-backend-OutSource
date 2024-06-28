@@ -64,7 +64,7 @@ const InstoreTableViewData = (props, searchId) => {
   const [selectedValue, setSelectedValue] = useState(1);
   const dispatch = useDispatch();
   const debouncedValue = useDebounce(props?.OffSearchIdData);
-  console.log("debouncedValue", debouncedValue);
+  // console.log("debouncedValue", debouncedValue);
   const handleChange = (event) => {
     setSelectedValue(parseInt(event.target.value));
   };
