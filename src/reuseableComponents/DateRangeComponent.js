@@ -10,7 +10,7 @@ import { Grid } from "@mui/material";
 import { useMediaQuery } from "@mui/material";
 const DateRangeComponent = ({ onDateRangeChange }) => {
   const isDesktopWtdth = useMediaQuery("(max-width:710px)");
-  console.log("isDesktopWtdth : ", isDesktopWtdth);
+  // console.log("isDesktopWtdth : ", isDesktopWtdth);
   const today = dayjs();
   const [isTablet, setIsTablet] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
