@@ -319,7 +319,7 @@ const EditVendors = ({ setVisible }) => {
                       name={"name"}
                       value={vendorData.name}
                       onChangeFun={handleOnChange}
-                      // required={"required"}
+                  
                     />
                     {errorMessage.name && (
                       <span className="error">{errorMessage.name}</span>
@@ -334,7 +334,7 @@ const EditVendors = ({ setVisible }) => {
                       name={"email"}
                       value={vendorData.email}
                       onChangeFun={handleOnChange}
-                      // required={"required"}
+                      
                     />
                     {errorMessage.email && (
                       <span className="error">{errorMessage.email}</span>
@@ -349,7 +349,7 @@ const EditVendors = ({ setVisible }) => {
                       name={"phone"}
                       value={vendorData.phone}
                       onChangeFun={handleOnChange}
-                      required={"required"}
+                   
                       onKeyPressFun={handleKeyPress}
                       maxLength={10}
                     />
