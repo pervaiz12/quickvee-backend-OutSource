@@ -54,13 +54,14 @@ export default function EditMerchant({
     handleBlur,
     keyEnter,
     handleBlurStoreFound,
+    loadDataId,
   } = EditMerchantFunctionality();
   const { id } = useParams();
   const ids = !!merchantId ? merchantId : id;
   useEffect(() => {
     let data = { id: ids, ...userTypeData };
     getEditMerchantData(data);
-  }, [ids]);
+  }, [ids, loadDataId]);
   const { showpPassword, handleMouseDown, handleMouseUp, jsxData } =
     PasswordShow();
   const accountTtype = [
