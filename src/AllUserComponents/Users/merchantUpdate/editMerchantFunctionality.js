@@ -62,6 +62,7 @@ export default function EditMerchantFunctionality() {
   const [successMessagehandle, setSuccessMessageHandle] = useState(false);
   const [inventory, setInventory] = useState(false);
   const [loader, setLoader] = useState(false);
+  const [loadDataId, setLoadDataId] = useState("");
 
   const handleSuccessMessage = () => {
     setTimeout(() => {
@@ -708,6 +709,7 @@ export default function EditMerchantFunctionality() {
           usa_pin: getEditMerchant.usa_pin,
         };
         setLoader(true);
+        setLoadDataId("");
         console.log(packet);
         console.log(userTypeData?.token);
         try {
@@ -726,6 +728,7 @@ export default function EditMerchantFunctionality() {
             ToastifyAlert("Updated Successfully!", "success");
             // setMessage(response?.data?.message);
             setSuccessMessageHandle(true);
+            setLoadDataId(response?.data);
             handleSuccessMessage();
             // navigate(`/users/editMerchant/${response?.data?.id}`);
             // navigate(`/users/editMerchant/${getEditMerchant.id}`)
@@ -762,5 +765,6 @@ export default function EditMerchantFunctionality() {
     handleBlur,
     keyEnter,
     handleBlurStoreFound,
+    loadDataId,
   };
 }
