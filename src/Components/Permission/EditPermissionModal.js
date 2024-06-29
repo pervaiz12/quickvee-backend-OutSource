@@ -16,7 +16,7 @@ import BasicTextFields from "../../reuseableComponents/TextInputField";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { toast } from "react-toastify";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
-
+import PasswordShow from "./../../Common/passwordShow";
 const EditPermissionModal = ({ selected }) => {
   const [open, setOpen] = useState(false);
   // const handleOpen = () => setOpen(true);
@@ -62,7 +62,7 @@ const EditPermissionModal = ({ selected }) => {
   const { userTypeData } = useAuthDetails();
 
   const { token, ...userTypeDataAlter } = userTypeData;
-
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
   const [states, setStates] = useState([
     "Select",
     "Register",
@@ -236,8 +236,9 @@ const EditPermissionModal = ({ selected }) => {
       handleClose();
     } catch (error) {
       console.error("Error submitting data:", error);
-
-      ToastifyAlert("Error!", "error");
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
+      // ToastifyAlert("Error!", "error");
       // Handle errors as needed
     }
     // }
