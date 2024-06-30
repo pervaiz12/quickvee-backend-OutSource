@@ -35,6 +35,7 @@ const BulkVendorEdit = ({
   varientIndex,
   modalType,
   handleCloseEditModal,
+  isVarientEdit
 }) => {
   const dispatch = useDispatch();
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
@@ -176,7 +177,7 @@ const BulkVendorEdit = ({
     const formData = new FormData();
     formData.append(
       "varient_id",
-      !isVarient
+      !isVarient 
         ? productData?.id
         : modalType === "bulk-edit" && Boolean(+productData?.isvarient)
           ? productData?.id
@@ -420,7 +421,7 @@ const BulkVendorEdit = ({
               hideSelectedValue={true}
               hideSelectedList={vendorItems}
               name="name"
-              placeholder="Enter category Name"
+              placeholder="Enter vendor Name"
             />
             <button
               className="quic-btn quic-bulk-vendor-edit"

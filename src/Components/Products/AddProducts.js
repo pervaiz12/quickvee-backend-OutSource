@@ -12,6 +12,7 @@ import {
   checkUpcCodeSingle,
   checkUpcOnVarientEdit,
   editProductData,
+  emptyProduct,
   fetchCategoryList,
   fetchProductList,
   fetchProductsData,
@@ -20,6 +21,7 @@ import {
   fetchVarientList,
   getInventorySetting,
   setVarientList,
+  updateEditVarient,
   updateFormValue,
 } from "../../Redux/features/Product/ProductSlice";
 import Validation from "../../Constants/Validation";
@@ -133,13 +135,11 @@ const AddProducts = () => {
   };
 
   const handleCloseEditModal = (modalType, varientId) => {
-    console.log("hello", modalType, varientId);
     setOpenEditModal((prev) => !prev);
     setModalType(modalType);
     setVarientIndex(varientId);
   };
 
-  console.log("editmodla", modalType, openEditModal);
 
   // useEffect(()=>{
   //   const findVarientIndex = varientData?.find((item)=> item?.id === varientIndex);
@@ -175,6 +175,11 @@ const AddProducts = () => {
       });
     })
   );
+
+  const formSingleVarientChange = yup.object().shape({
+    formValue: !isMultipleVarient ? formInnerSchemaOnSingle : formValueSchema,
+  });
+
 
   // formschema for validation
   const formSchema = yup.object().shape({
@@ -253,9 +258,9 @@ const AddProducts = () => {
             id: 1,
             varientName: dropdownData?.varientList?.length
               ? {
-                  value: dropdownData?.varientList[0]?.title,
-                  label: dropdownData?.varientList[0]?.title,
-                }
+                value: dropdownData?.varientList[0]?.title,
+                label: dropdownData?.varientList[0]?.title,
+              }
               : "",
             varientAttributeList: [],
           },
@@ -432,9 +437,9 @@ const AddProducts = () => {
           id: prev?.length + 1,
           varientName: filterOptionList?.length
             ? {
-                value: filterOptionList[0]?.title,
-                label: filterOptionList[0]?.title,
-              }
+              value: filterOptionList[0]?.title,
+              label: filterOptionList[0]?.title,
+            }
             : "",
           varientAttributeList: [],
         },
@@ -582,6 +587,9 @@ const AddProducts = () => {
         ["frequentlyBroughtList"]: res?.payload?.result,
       }));
     });
+
+
+    return () => dispatch(emptyProduct([]));
   }, []);
 
   const handleFilterDropdownOption = (updatedDropdownList) => {
@@ -630,7 +638,6 @@ const AddProducts = () => {
           const response = isMultipleVarient
             ? await dispatch(checkUpcCodeMultiple(data))
             : await dispatch(checkUpcCodeSingle(data));
-          console.log("res single", response);
           if (response?.payload === true) {
             isAllowed = true;
           }
@@ -643,7 +650,6 @@ const AddProducts = () => {
           };
 
           const response = await dispatch(checkUpcOnVarientEdit(data));
-          console.log("response", response);
 
           if (response?.payload?.status === "true") {
             isAllowed = true;
@@ -662,7 +668,6 @@ const AddProducts = () => {
 
     const checkUpcValue = async (value, name) => {
       if (value && name === "upcCode") {
-        console.log("called smultiple");
         let isAllowed = true;
         const data = {
           merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
@@ -866,7 +871,10 @@ const AddProducts = () => {
       }
     }
 
-    const isValue = (input) => Boolean(parseFloat(input));
+    const isValue = (input) => {
+      const number = parseFloat(input);
+      return !isNaN(number);
+    };
 
     const oldMargin = (data) => {
       return (name === "price" || name === "costPerItem") && !fieldValue
@@ -934,115 +942,115 @@ const AddProducts = () => {
         if (i > 0) {
           return !["upcCode", "customCode"].includes(name) && item[title]
             ? {
-                ...item,
-                [currentTitle]: {
-                  ...item[currentTitle],
-                  [name]: fieldValue,
-                  price:
-                    name === "price"
-                      ? fieldValue
-                      : item[currentTitle]?.price
-                        ? item[currentTitle]?.price
-                        : "",
-                  margin: costPerItemAndPriceAmountExists()
-                    ? calculatemargin(name, item[currentTitle], fieldValue)
-                    : oldMargin([
-                          item[currentTitle]?.costPerItem,
-                          item[currentTitle]?.margin,
-                          item[currentTitle]?.price,
-                        ])
-                      ? item[currentTitle]?.margin
+              ...item,
+              [currentTitle]: {
+                ...item[currentTitle],
+                [name]: fieldValue,
+                price:
+                  name === "price"
+                    ? fieldValue
+                    : item[currentTitle]?.price
+                      ? item[currentTitle]?.price
                       : "",
-                  profit: costPerItemAndPriceAmountExists()
-                    ? calculateProfit(name, item[currentTitle], fieldValue)
-                    : oldMargin([
-                          item[currentTitle]?.costPerItem,
-                          item[currentTitle]?.margin,
-                          item[currentTitle]?.price,
-                        ])
-                      ? item[currentTitle]?.profit
+                margin: costPerItemAndPriceAmountExists()
+                  ? calculatemargin(name, item[currentTitle], fieldValue)
+                  : oldMargin([
+                    item[currentTitle]?.costPerItem,
+                    item[currentTitle]?.margin,
+                    item[currentTitle]?.price,
+                  ])
+                    ? item[currentTitle]?.margin
+                    : "",
+                profit: costPerItemAndPriceAmountExists()
+                  ? calculateProfit(name, item[currentTitle], fieldValue)
+                  : oldMargin([
+                    item[currentTitle]?.costPerItem,
+                    item[currentTitle]?.margin,
+                    item[currentTitle]?.price,
+                  ])
+                    ? item[currentTitle]?.profit
+                    : "",
+                comparePriceError:
+                  ["price", "compareAtPrice", "costPerItem"]?.includes(
+                    name
+                  ) && showError
+                    ? "Compare Price must be greater than price."
+                    : [
+                      "qty",
+                      "upcCode",
+                      "customCode",
+                      "reorderLevel",
+                      "reorderQty",
+                      "checkId",
+                      "disable",
+                      "isFoodStamble",
+                      "sellOutOfStock",
+                      "trackQuantity",
+                      "costPerItem",
+                    ]?.includes(name) &&
+                      item[currentTitle]?.comparePriceError
+                      ? item[currentTitle]?.comparePriceError
                       : "",
-                  comparePriceError:
-                    ["price", "compareAtPrice", "costPerItem"]?.includes(
-                      name
-                    ) && showError
-                      ? "Compare Price must be greater than price."
-                      : [
-                            "qty",
-                            "upcCode",
-                            "customCode",
-                            "reorderLevel",
-                            "reorderQty",
-                            "checkId",
-                            "disable",
-                            "isFoodStamble",
-                            "sellOutOfStock",
-                            "trackQuantity",
-                            "costPerItem",
-                          ]?.includes(name) &&
-                          item[currentTitle]?.comparePriceError
-                        ? item[currentTitle]?.comparePriceError
-                        : "",
-                },
-              }
+              },
+            }
             : item;
         } else if (i === 0) {
           return !["upcCode", "customCode"].includes(name) &&
             !item[currentTitle][name] &&
             pageUrl === "inventory/products/add"
             ? {
-                ...item,
-                [currentTitle]: {
-                  ...item[currentTitle],
-                  [name]: fieldValue,
-                  price:
-                    name === "price"
-                      ? fieldValue
-                      : item[currentTitle]?.price
-                        ? item[currentTitle]?.price
-                        : "",
-                  margin: costPerItemAndPriceAmountExists()
-                    ? calculatemargin(name, item[currentTitle], fieldValue)
-                    : oldMargin([
-                          item[currentTitle]?.costPerItem,
-                          item[currentTitle]?.margin,
-                          item[currentTitle]?.price,
-                        ])
-                      ? item[currentTitle]?.margin
+              ...item,
+              [currentTitle]: {
+                ...item[currentTitle],
+                [name]: fieldValue,
+                price:
+                  name === "price"
+                    ? fieldValue
+                    : item[currentTitle]?.price
+                      ? item[currentTitle]?.price
                       : "",
-                  profit: costPerItemAndPriceAmountExists()
-                    ? calculateProfit(name, item[currentTitle], fieldValue)
-                    : oldMargin([
-                          item[currentTitle]?.costPerItem,
-                          item[currentTitle]?.margin,
-                          item[currentTitle]?.price,
-                        ])
-                      ? item[currentTitle]?.profit
-                      : "",
+                margin: costPerItemAndPriceAmountExists()
+                  ? calculatemargin(name, item[currentTitle], fieldValue)
+                  : oldMargin([
+                    item[currentTitle]?.costPerItem,
+                    item[currentTitle]?.margin,
+                    item[currentTitle]?.price,
+                  ])
+                    ? item[currentTitle]?.margin
+                    : "",
+                profit: costPerItemAndPriceAmountExists()
+                  ? calculateProfit(name, item[currentTitle], fieldValue)
+                  : oldMargin([
+                    item[currentTitle]?.costPerItem,
+                    item[currentTitle]?.margin,
+                    item[currentTitle]?.price,
+                  ])
+                    ? item[currentTitle]?.profit
+                    : "",
 
-                  comparePriceError:
-                    ["price", "compareAtPrice", "costPerItem"]?.includes(
-                      name
-                    ) && showError
-                      ? "Compare Price must be greater than price."
-                      : [
-                            "qty",
-                            "upcCode",
-                            "customCode",
-                            "reorderLevel",
-                            "reorderQty",
-                            "checkId",
-                            "disable",
-                            "isFoodStamble",
-                            "sellOutOfStock",
-                            "trackQuantity",
-                            "costPerItem",
-                          ]?.includes(name) &&
-                          item[currentTitle]?.comparePriceError
-                        ? item[currentTitle]?.comparePriceError
-                        : "",
-                },
-              }
+                comparePriceError:
+                  ["price", "compareAtPrice", "costPerItem"]?.includes(
+                    name
+                  ) && showError
+                    ? "Compare Price must be greater than price."
+                    : [
+                      "qty",
+                      "upcCode",
+                      "customCode",
+                      "reorderLevel",
+                      "reorderQty",
+                      "checkId",
+                      "disable",
+                      "isFoodStamble",
+                      "sellOutOfStock",
+                      "trackQuantity",
+                      "costPerItem",
+                    ]?.includes(name) &&
+                      item[currentTitle]?.comparePriceError
+                      ? item[currentTitle]?.comparePriceError
+                      : "",
+              },
+            }
             : item;
         }
         //   else {
@@ -1075,7 +1083,6 @@ const AddProducts = () => {
 
   const handleOnChange = (e, i, title) => {
     const { name, value, type, checked } = e.target;
-    console.log("iam run", name, value, type, isMultipleVarient);
 
     const updatedFormValue = [...formValue];
 
@@ -1156,7 +1163,10 @@ const AddProducts = () => {
       }
     }
 
-    const isValue = (input) => Boolean(parseFloat(input));
+    const isValue = (input) => {
+      const number = parseFloat(input);
+      return !isNaN(number);
+    };
 
     const oldMargin = (data) => {
       return (name === "price" || name === "costPerItem") && !fieldValue
@@ -1223,65 +1233,64 @@ const AddProducts = () => {
 
         return Object.keys(item).includes(title)
           ? {
-              ...item,
-              [title]: {
-                ...item[title],
-                [name]: type === "checkbox" ? checked : fieldValue,
-                price:
-                  name === "price"
-                    ? fieldValue
-                    : item[title].price
-                      ? item[title].price
-                      : "",
-
-                margin: costPerItemAndPriceAmountExists()
-                  ? calculatemargin(name, item[title], fieldValue)
-                  : oldMargin([
-                        item[title].costPerItem,
-                        item[title].margin,
-                        item[title].price,
-                      ])
-                    ? item[title].margin
+            ...item,
+            [title]: {
+              ...item[title],
+              [name]: type === "checkbox" ? checked : fieldValue,
+              price:
+                name === "price"
+                  ? fieldValue
+                  : item[title].price
+                    ? item[title].price
                     : "",
 
-                profit: costPerItemAndPriceAmountExists()
-                  ? calculateProfit(name, item[title], fieldValue)
-                  : oldMargin([
-                        item[title].costPerItem,
-                        item[title].margin,
-                        item[title].price,
-                      ])
-                    ? item[title].profit
-                    : "",
-                // comparePriceError:
-                //     ((["price", "compareAtPrice", "costPerItem"].includes(name)) && showError)
-                //         ? "Compare Price must be greater than price."
-                //         : ""
-                comparePriceError:
-                  ["price", "compareAtPrice", "costPerItem"]?.includes(name) &&
+              margin: costPerItemAndPriceAmountExists()
+                ? calculatemargin(name, item[title], fieldValue)
+                : oldMargin([
+                  item[title].costPerItem,
+                  item[title].margin,
+                  item[title].price,
+                ])
+                  ? item[title].margin
+                  : "",
+
+              profit: costPerItemAndPriceAmountExists()
+                ? calculateProfit(name, item[title], fieldValue)
+                : oldMargin([
+                  item[title].costPerItem,
+                  item[title].margin,
+                  item[title].price,
+                ])
+                  ? item[title].profit
+                  : "",
+              // comparePriceError:
+              //     ((["price", "compareAtPrice", "costPerItem"].includes(name)) && showError)
+              //         ? "Compare Price must be greater than price."
+              //         : ""
+              comparePriceError:
+                ["price", "compareAtPrice", "costPerItem"]?.includes(name) &&
                   showError
-                    ? "Compare Price must be greater than price."
-                    : [
-                          "qty",
-                          "upcCode",
-                          "customCode",
-                          "reorderLevel",
-                          "reorderQty",
-                          "checkId",
-                          "disable",
-                          "isFoodStamble",
-                          "sellOutOfStock",
-                          "trackQuantity",
-                          "costPerItem",
-                        ]?.includes(name) && item[title]?.comparePriceError
-                      ? item[title]?.comparePriceError
-                      : "",
-              },
-            }
+                  ? "Compare Price must be greater than price."
+                  : [
+                    "qty",
+                    "upcCode",
+                    "customCode",
+                    "reorderLevel",
+                    "reorderQty",
+                    "checkId",
+                    "disable",
+                    "isFoodStamble",
+                    "sellOutOfStock",
+                    "trackQuantity",
+                    "costPerItem",
+                  ]?.includes(name) && item[title]?.comparePriceError
+                    ? item[title]?.comparePriceError
+                    : "",
+            },
+          }
           : item;
       });
     } else {
-      console.log("else run", value, name, fieldValue);
       updatedValues = formValue.map((item, index) => {
         showError =
           parseFloat(
@@ -1322,21 +1331,21 @@ const AddProducts = () => {
               : "",
           comparePriceError:
             ["price", "compareAtPrice", "costPerItem"]?.includes(name) &&
-            showError
+              showError
               ? "Compare Price must be greater than price."
               : [
-                    "qty",
-                    "upcCode",
-                    "customCode",
-                    "reorderLevel",
-                    "reorderQty",
-                    "checkId",
-                    "disable",
-                    "isFoodStamble",
-                    "sellOutOfStock",
-                    "trackQuantity",
-                    "costPerItem",
-                  ]?.includes(name) && item?.comparePriceError
+                "qty",
+                "upcCode",
+                "customCode",
+                "reorderLevel",
+                "reorderQty",
+                "checkId",
+                "disable",
+                "isFoodStamble",
+                "sellOutOfStock",
+                "trackQuantity",
+                "costPerItem",
+              ]?.includes(name) && item?.comparePriceError
                 ? item?.comparePriceError
                 : "",
         };
@@ -1451,14 +1460,14 @@ const AddProducts = () => {
                   // here when fetching prodcut data and track and sellout was false but still showing true and check that's why using this condition
                   trackQuantity:
                     result?.trackQuantity ||
-                    pageUrl !== "inventory/products/edit"
+                      pageUrl !== "inventory/products/edit"
                       ? true
                       : false || !result?.notEditable
                         ? true
                         : false,
                   sellOutOfStock:
                     result?.sellOutOfStock ||
-                    pageUrl !== "inventory/products/edit"
+                      pageUrl !== "inventory/products/edit"
                       ? true
                       : false || !result?.notEditable
                         ? true
@@ -1540,6 +1549,7 @@ const AddProducts = () => {
     const data = location?.state;
     setProductData(data);
     setIsMultipleVaient(false);
+    setIsVarientEdit(true);
     setFormValue([
       {
         costPerItem: data?.costperItem || "",
@@ -1573,7 +1583,6 @@ const AddProducts = () => {
       fetchProductDataById();
     } else if (pageUrl === "inventory/products/varient-edit") {
       fetchSingleVarientData();
-      setIsVarientEdit(true);
     }
   }, [pageUrl, location]);
 
@@ -1928,21 +1937,21 @@ const AddProducts = () => {
         : "",
       optionvalue: isMultipleVarient
         ? varientLength[0]?.varientAttributeList
-            ?.map((item) => item)
-            ?.map((i) => i?.value)
-            ?.toString() ?? ""
+          ?.map((item) => item)
+          ?.map((i) => i?.value)
+          ?.toString() ?? ""
         : "",
       optionvalue1: isMultipleVarient
         ? varientLength[1]?.varientAttributeList
-            ?.map((item) => item)
-            ?.map((i) => i?.value)
-            ?.toString() ?? ""
+          ?.map((item) => item)
+          ?.map((i) => i?.value)
+          ?.toString() ?? ""
         : "",
       optionvalue2: isMultipleVarient
         ? varientLength[2]?.varientAttributeList
-            ?.map((item) => item)
-            ?.map((i) => i?.value)
-            ?.toString() ?? ""
+          ?.map((item) => item)
+          ?.map((i) => i?.value)
+          ?.toString() ?? ""
         : "",
       varvarient: isMultipleVarient
         ? varientTitle.filter(Boolean)?.toString()
@@ -2071,30 +2080,30 @@ const AddProducts = () => {
         }
         pageUrl === "inventory/products/edit"
           ? dispatch(editProductData(formdata))
-              .then((res) => {
-                if (res?.payload?.data?.status) {
-                  ToastifyAlert("Updated Successfully", "success");
-                }
-              })
-              .catch((err) => {
-                if (err) {
-                  ToastifyAlert("Error!", "error");
-                }
-                getUnAutherisedTokenMessage();
-              })
+            .then((res) => {
+              if (res?.payload?.data?.status) {
+                ToastifyAlert("Updated Successfully", "success");
+              }
+            })
+            .catch((err) => {
+              if (err) {
+                ToastifyAlert("Error!", "error");
+              }
+              getUnAutherisedTokenMessage();
+            })
           : dispatch(addProduct(formdata))
-              .then((res) => {
-                if (res?.payload?.data?.status) {
-                  ToastifyAlert("Added Successfully", "success");
-                  navigate("/inventory/products");
-                }
-              })
-              .catch((err) => {
-                if (err) {
-                  ToastifyAlert("Error!", "error");
-                }
-                getUnAutherisedTokenMessage();
-              });
+            .then((res) => {
+              if (res?.payload?.data?.status) {
+                ToastifyAlert("Added Successfully", "success");
+                navigate("/inventory/products");
+              }
+            })
+            .catch((err) => {
+              if (err) {
+                ToastifyAlert("Error!", "error");
+              }
+              getUnAutherisedTokenMessage();
+            });
       }
     } catch (err) {
       let errorsList = {};
@@ -2110,19 +2119,18 @@ const AddProducts = () => {
     }
   };
 
-  const handleUpdateVarient = () => {
+  const handleUpdateVarient = async () => {
     const data = {
       merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
       // token_id: userTypeData?.token_id,
       // login_type: userTypeData?.login_type,
       // token: userTypeData?.token,
-      variant_id: formValue?.productEditVarientId,
+      variant_id: formValue[0]?.productEditVarientId,
       price: formValue[0]?.price,
       compare_price: formValue[0]?.compareAtPrice,
       costperItem: formValue[0]?.costPerItem,
-      margin: formValue[0]?.margin,
-      profit: formValue[0]?.profit,
-      ischargeTax: 0,
+      ogvarmargin: formValue[0]?.margin,
+      ogvarprofit: formValue[0]?.profit,
       //sku:
       //barcode:
       trackqnty: +formValue[0]?.trackQuantity,
@@ -2135,9 +2143,55 @@ const AddProducts = () => {
       upc: formValue[0]?.upcCode,
       custom_code: formValue[0]?.customCode,
       reorder_qty: formValue[0]?.reorderQty,
+      // reorder_cost: formValue[0]?.reordr,
+      Track_Quantity: formValue[0]?.trackQuantity,
+      Continue_selling: formValue[0]?.sellOutOfStock,
+      Checkid: formValue[0]?.checkId,
+      Disable: formValue[0]?.disable,
+      Food_stampable: formValue[0]?.isFoodStamble,
+      ...userTypeData,
     };
 
-  
+
+    try {
+      const response = await formSingleVarientChange.validate(
+        { formValue },
+        {
+          abortEarly: false,
+        }
+      );
+      setError({});
+      // check any error exist in error state and if response success and any productTitleError is exist
+      if (
+        !!response &&
+        checkFormErrorExist()
+      ) {
+        dispatch(updateEditVarient(data))
+          .then((res) => {
+            if (res?.payload?.status) {
+              ToastifyAlert("update Successfully", "success");
+            }
+          })
+          .catch((err) => {
+            if (err) {
+              ToastifyAlert("Error!", "error");
+            }
+            getUnAutherisedTokenMessage();
+          });
+      }
+    } catch (err) {
+      let errorsList = {};
+      setError({});
+      if (err && err.inner) {
+        err?.inner?.forEach((error) => {
+          if (error?.path) {
+            errorsList[error.path] = error.message;
+          }
+        });
+      }
+      setError(errorsList);
+    }
+
   };
 
   const handleUpdateError = (updatedErrorValue) => {
@@ -2376,53 +2430,8 @@ const AddProducts = () => {
                     <div class="image-list">
                       {productInfo?.files?.length
                         ? productInfo?.files?.map((img, index) => {
-                            // if img type is string
-                            if (typeof img === "string") {
-                              return (
-                                <div
-                                  className="py-10 image-display"
-                                  style={{
-                                    border: "2px solid #0A64F9",
-                                    // width: "20%",
-                                    cursor: "pointer",
-                                  }}
-                                  key={index}
-                                >
-                                  <>
-                                    <span
-                                      className="delete-image-icon img-DeleteIcon"
-                                      // onClick={handleDeleteImage}
-                                      style={{
-                                        position: "absolute",
-                                        top: "7px",
-                                        right: "7px",
-                                      }}
-                                    >
-                                      <img
-                                        src={CloseIcon}
-                                        className="delete-image"
-                                        onClick={() =>
-                                          handleDeleteSelectedImage(
-                                            "string",
-                                            img
-                                          )
-                                        }
-                                      />
-                                    </span>
-                                    <img
-                                      src={
-                                        BASE_URL +
-                                        `/upload/products/${LoginGetDashBoardRecordJson?.data?.merchant_id}/` +
-                                        img
-                                      }
-                                      alt="Preview"
-                                      className="default-img"
-                                    />
-                                  </>
-                                </div>
-                              );
-                            }
-                            // if img type is object
+                          // if img type is string
+                          if (typeof img === "string") {
                             return (
                               <div
                                 className="py-10 image-display"
@@ -2447,19 +2456,64 @@ const AddProducts = () => {
                                       src={CloseIcon}
                                       className="delete-image"
                                       onClick={() =>
-                                        handleDeleteSelectedImage("object", img)
+                                        handleDeleteSelectedImage(
+                                          "string",
+                                          img
+                                        )
                                       }
                                     />
                                   </span>
                                   <img
-                                    src={img?.base64}
+                                    src={
+                                      BASE_URL +
+                                      `/upload/products/${LoginGetDashBoardRecordJson?.data?.merchant_id}/` +
+                                      img
+                                    }
                                     alt="Preview"
                                     className="default-img"
                                   />
                                 </>
                               </div>
                             );
-                          })
+                          }
+                          // if img type is object
+                          return (
+                            <div
+                              className="py-10 image-display"
+                              style={{
+                                border: "2px solid #0A64F9",
+                                // width: "20%",
+                                cursor: "pointer",
+                              }}
+                              key={index}
+                            >
+                              <>
+                                <span
+                                  className="delete-image-icon img-DeleteIcon"
+                                  // onClick={handleDeleteImage}
+                                  style={{
+                                    position: "absolute",
+                                    top: "7px",
+                                    right: "7px",
+                                  }}
+                                >
+                                  <img
+                                    src={CloseIcon}
+                                    className="delete-image"
+                                    onClick={() =>
+                                      handleDeleteSelectedImage("object", img)
+                                    }
+                                  />
+                                </span>
+                                <img
+                                  src={img?.base64}
+                                  alt="Preview"
+                                  className="default-img"
+                                />
+                              </>
+                            </div>
+                          );
+                        })
                         : ""}
                     </div>
                   </div>
@@ -2468,7 +2522,7 @@ const AddProducts = () => {
                   ) : (
                     ""
                   )}
-                  {}
+                  { }
                 </div>
 
                 <div className="mt_card_header">
@@ -2513,7 +2567,7 @@ const AddProducts = () => {
 
                     <div className="q-add-categories-section-middle-footer  ">
                       {pageUrl === "inventory/products/edit" &&
-                      productData?.isvarient === "1" ? (
+                        productData?.isvarient === "1" ? (
                         <div
                           className="q-category-bottom-header"
                           style={{ marginRight: "67px" }}
@@ -2603,6 +2657,8 @@ const AddProducts = () => {
                   handleCopyAllVarientValue={handleCopyAllVarientValue}
                   inventoryData={inventoryData}
                   fetchProductDataById={fetchProductDataById}
+                  isVarientEdit={isVarientEdit}
+                  fetchSingleVarientData={fetchSingleVarientData}
                 />
                 <GeneratePUC
                   handleVarientTitleBasedItemList={

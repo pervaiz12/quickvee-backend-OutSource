@@ -19,6 +19,8 @@ const BulkInstantPo = ({
   handleCloseEditModal,
   fetchProductDataById,
   inventoryData,
+  isVarientEdit,
+  fetchSingleVarientData,
 }) => {
  
   const dispatch = useDispatch();
@@ -255,7 +257,7 @@ const BulkInstantPo = ({
                   description: "",
                 });
                 ToastifyAlert("Updated Successfully", "success");
-                fetchProductDataById();
+                isVarientEdit ? fetchSingleVarientData() : fetchProductDataById();
                 handleCloseEditModal();
               }
             })
@@ -318,7 +320,7 @@ const BulkInstantPo = ({
                   description: "",
                 });
                 ToastifyAlert("Updated Successfully", "success");
-                fetchProductDataById();
+                isVarientEdit ? fetchSingleVarientData() :  fetchProductDataById();
                 handleCloseEditModal();
               }
             })

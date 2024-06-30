@@ -269,11 +269,16 @@ padding-right: 30px !important;
 }
 
 .varient-edit-text{
-  font-size: 22px !important;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.varient-edit-text .title{
+  font-size: 18px !important;
   color: #000;
   font-family: CircularSTDBook !important;
 }
-
 
 /* product page edit modal css */
 .product-edit-modal {

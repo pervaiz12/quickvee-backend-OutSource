@@ -635,6 +635,7 @@ export const updateEditVarient = createAsyncThunk(
   async (payload) => {
     // const token = payload.get('token'); // Extract the token from FormData
     // payload.delete('token');
+    console.log('update var', payload);
     const {token, ...newData} = payload;
     try {
       const response = await axios.post(
@@ -717,13 +718,13 @@ const productsSlice = createSlice({
       }
       // Append new items to the productsData array
       // console.log(state);
-      const productIds = new Set(state.productsData.map(product => product.id));
+      const productIds = new Set(state.productsData.map(product => product.title));
   
       // Append new items to the productsData array if they are not already present
       action.payload.forEach(product => {
-        if (!productIds.has(product.id)) {
+        if (!productIds.has(product.title)) {
           state.productsData.push(product);
-          productIds.add(product.id);
+          productIds.add(product.title);
         }
       });
       state.offset += 10;
