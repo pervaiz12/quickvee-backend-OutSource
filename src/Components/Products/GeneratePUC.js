@@ -21,6 +21,7 @@ const GeneratePUC = ({
   varientData,
   isVarientEdit,
 }) => {
+  console.log('productData', productData);
   const navigate = useNavigate();
   const location = useLocation();
   const pageUrl =
@@ -30,7 +31,10 @@ const GeneratePUC = ({
     "/" +
     window.location.pathname.split("/")[3];
 
-  const findVarientName = productData?.title?.split("~");
+    console.log('pageUrl', pageUrl, inventoryData);
+
+  const findVarientName = productData?.product_name?.split("~");
+  console.log('findVarientName', findVarientName);
 
   const varientTitle = handleVarientTitleBasedItemList();
   const { varientProduct } = useSelector((state) => state?.productsListData);
@@ -63,18 +67,23 @@ const GeneratePUC = ({
     ) {
       return true;
     } else if (
-      pageUrl === "inventory/products/edit" &&
+      pageUrl === "inventory/products/edit"  &&
       inp?.name === "qty" &&
       !formDisabledKey?.notEditable
     ) {
       return false;
     } else if (
-      pageUrl === "inventory/products/edit" &&
+      pageUrl === "inventory/products/edit"  &&
+      disabledFieldsOnEdit.includes(inp?.name) ||  pageUrl === "inventory/products/varient-edit"  &&
       disabledFieldsOnEdit.includes(inp?.name)
     ) {
       return true;
     } else if (
-      pageUrl === "inventory/products/edit" &&
+      pageUrl === "inventory/products/edit"   &&
+      +inventoryData?.cost_method === 1 &&
+      inp?.name === "costPerItem" &&
+      !!formDisabledKey?.notEditable ||
+      pageUrl === "inventory/products/varient-edit" &&
       +inventoryData?.cost_method === 1 &&
       inp?.name === "costPerItem" &&
       !!formDisabledKey?.notEditable
@@ -85,6 +94,7 @@ const GeneratePUC = ({
   };
 
   const handleRedirectHistory = (varientIndex, varientTitle) => {
+    console.log('varientTitle', varientTitle);
     const varientName = varientTitle ? Object.keys(varientTitle)?.[0] : "";
     let url;  
     if (varientIndex === null) {
@@ -93,8 +103,8 @@ const GeneratePUC = ({
       );
     } else if (isVarientEdit) {
       window.open(
-        `/inventory/products/saleshistory/${productData?.id}/${productData?.var_id
-        }?title=${productData?.title?.split("~")?.[0]
+        `/inventory/products/saleshistory/${productData?.product_id}/${productData?.id
+        }?title=${productData?.product_name?.split("~")?.[0]
         }&varientName=${varientTitle}`
       );
     } else {
@@ -130,7 +140,7 @@ const GeneratePUC = ({
                   : productInfo?.title
                     ? productInfo?.title
                     : isVarientEdit
-                      ? productData?.title
+                      ? productData?.product_name
                       : "ProductName"}
               </span>
               <span>
@@ -574,7 +584,7 @@ const GeneratePUC = ({
                     onClick={() =>
                       handleCloseEditModal(
                         "single_vendor",
-                        isVarientEdit ? formValue?.[0]?.productEditVarientId : formValue?.[0]?.productEditId
+                     formValue?.[0]?.productEditId
                       )
                     }
                   >
@@ -590,7 +600,7 @@ const GeneratePUC = ({
                     onClick={() =>
                       handleRedirectHistory(
                         !isVarientEdit ? null : formValue?.[0]?.productEditId,
-                        findVarientName?.length === 3 ?  findVarientName[2]: findVarientName[1]
+                        findVarientName?.length === 3 ?  findVarientName?.[2]: findVarientName?.[1]
                       )
                     }
                   >
@@ -606,7 +616,7 @@ const GeneratePUC = ({
                     onClick={() =>
                       handleCloseEditModal(
                         "single_instant",
-                        isVarientEdit ? formValue?.[0]?.productEditVarientId : formValue?.[0]?.productEditId
+                     formValue?.[0]?.productEditId
                       )
                     }
                   >

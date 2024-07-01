@@ -218,6 +218,7 @@ const ProductTable = ({
   };
 
   const handleNavigate = (id, varientName, productData) => {
+    console.log('productData', productData)
     let varientTitle = '';
     if (varientName?.includes('/')) {
       const splitVarient = varientName?.split('/');
@@ -365,6 +366,7 @@ const ProductTable = ({
                               {productList?.length >= 1 &&
                                 productList.map((product, index) => {
                                   const getVarientName = product?.title?.split(/~~?/) || [];
+                                  console.log('single product', product);
                                   return (
                                     <Draggable
                                       key={product?.id}

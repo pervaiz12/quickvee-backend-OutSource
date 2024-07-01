@@ -19,7 +19,9 @@ import {
   fetchProductsDataById,
   fetchTaxList,
   fetchVarientList,
+  fetchVarietDataById,
   getInventorySetting,
+  getInventorySettingOnVarient,
   setVarientList,
   updateEditVarient,
   updateFormValue,
@@ -94,6 +96,7 @@ const AddProducts = () => {
   const [inventoryData, setInventoryData] = useState({});
   const [options, setOptions] = useState({});
   const [varientData, setVarientData] = useState([]);
+  const [varientLoading, setVarientLoading] = useState(false);
 
   const orderOptions = (values) => {
     return values
@@ -135,11 +138,11 @@ const AddProducts = () => {
   };
 
   const handleCloseEditModal = (modalType, varientId) => {
+    console.log('varientId', varientId);
     setOpenEditModal((prev) => !prev);
     setModalType(modalType);
     setVarientIndex(varientId);
   };
-
 
   // useEffect(()=>{
   //   const findVarientIndex = varientData?.find((item)=> item?.id === varientIndex);
@@ -153,16 +156,16 @@ const AddProducts = () => {
   // formValue Schema
 
   const formValueInnerSchema = yup.object().shape({
-    price: yup.string().required("price is required"),
-    qty: yup.string().required("quantity is required"),
-    upcCode: yup.string().required("upcCode is required"),
+    price: yup.string().required("Price is required"),
+    qty: yup.string().required("Quantity is required"),
+    upcCode: yup.string().required("UPC Code is required"),
   });
 
   const formInnerSchemaOnSingle = yup.array().of(
     yup.object({
-      price: yup.string().required("price is required"),
-      qty: yup.string().required("quantity is required"),
-      upcCode: yup.string().required("upcCode is required"),
+      price: yup.string().required("Price is required"),
+      qty: yup.string().required("Quantity is required"),
+      upcCode: yup.string().required("UPC Code is required"),
     })
   );
 
@@ -180,11 +183,10 @@ const AddProducts = () => {
     formValue: !isMultipleVarient ? formInnerSchemaOnSingle : formValueSchema,
   });
 
-
   // formschema for validation
   const formSchema = yup.object().shape({
-    title: yup.string().required("title is required"),
-    category: yup.array().min(1, "select category").required("select category"),
+    title: yup.string().required("Title is required"),
+    category: yup.array().min(1, "Select Category").required("Select Category"),
     formValue: !isMultipleVarient ? formInnerSchemaOnSingle : formValueSchema,
   });
 
@@ -258,9 +260,9 @@ const AddProducts = () => {
             id: 1,
             varientName: dropdownData?.varientList?.length
               ? {
-                value: dropdownData?.varientList[0]?.title,
-                label: dropdownData?.varientList[0]?.title,
-              }
+                  value: dropdownData?.varientList[0]?.title,
+                  label: dropdownData?.varientList[0]?.title,
+                }
               : "",
             varientAttributeList: [],
           },
@@ -418,7 +420,7 @@ const AddProducts = () => {
     const checkEmpty = varientLength?.map((item, i) => {
       if (!item?.varientAttributeList?.length || !item?.varientName) {
         setVarientError({
-          error: "Please enter the varients",
+          error: "Please enter the Varients",
           errorIndex: i,
         });
         return false;
@@ -437,9 +439,9 @@ const AddProducts = () => {
           id: prev?.length + 1,
           varientName: filterOptionList?.length
             ? {
-              value: filterOptionList[0]?.title,
-              label: filterOptionList[0]?.title,
-            }
+                value: filterOptionList[0]?.title,
+                label: filterOptionList[0]?.title,
+              }
             : "",
           varientAttributeList: [],
         },
@@ -588,7 +590,6 @@ const AddProducts = () => {
       }));
     });
 
-
     return () => dispatch(emptyProduct([]));
   }, []);
 
@@ -645,7 +646,7 @@ const AddProducts = () => {
           const data = {
             merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
             upc: value,
-            variant_id: formValue[0]?.productEditVarientId,
+            variant_id: formValue[0]?.productEditId,
             ...userTypeData,
           };
 
@@ -778,9 +779,9 @@ const AddProducts = () => {
                   [name]: fieldValue,
                   upcCode: isUpcValid && !isLocalDuplicate ? fieldValue : "",
                   upcError: !isUpcValid
-                    ? "UPC code must be unique (API check). test"
+                    ? "UPC Code must be unique"
                     : isLocalDuplicate
-                      ? "UPC code must be unique (local check)."
+                      ? "UPC Code must be unique"
                       : "",
                 },
               };
@@ -914,19 +915,43 @@ const AddProducts = () => {
     if (isMultipleVarient) {
       const updatedValues = formValue.map((item, index) => {
         const currentTitle = Object.keys(item)[0];
-        const showError =
-          parseFloat(
-            name === "price"
-              ? fieldValue
-              : name === "costPerItem"
-                ? price_total_value
-                : item[currentTitle]?.price
-          ) >=
-          parseFloat(
-            name === "compareAtPrice"
-              ? fieldValue
-              : item[currentTitle]?.compareAtPrice
-          );
+
+
+
+     
+        let compareAtPriceValue = parseFloat(
+          name === "compareAtPrice" ? fieldValue : item[currentTitle]?.compareAtPrice
+        );
+        
+        let priceValue = parseFloat(
+          name === "price"
+            ? fieldValue
+            : name === "costPerItem"
+            ? price_total_value
+            :  item[currentTitle]?.price
+        );
+        
+        let showError = false;
+        
+        if (name === "price") {
+          if (compareAtPriceValue === 0) {
+            showError = false;
+          } else if (compareAtPriceValue > 0) {
+            showError = priceValue >= compareAtPriceValue;
+          }
+        } else if (name === "compareAtPrice") {
+          showError = priceValue >= compareAtPriceValue;
+        }
+
+
+
+
+
+
+
+
+
+
 
         const costPerItemAndPriceAmountExists = () => {
           const bool =
@@ -942,115 +967,115 @@ const AddProducts = () => {
         if (i > 0) {
           return !["upcCode", "customCode"].includes(name) && item[title]
             ? {
-              ...item,
-              [currentTitle]: {
-                ...item[currentTitle],
-                [name]: fieldValue,
-                price:
-                  name === "price"
-                    ? fieldValue
-                    : item[currentTitle]?.price
-                      ? item[currentTitle]?.price
+                ...item,
+                [currentTitle]: {
+                  ...item[currentTitle],
+                  [name]: fieldValue,
+                  price:
+                    name === "price"
+                      ? fieldValue
+                      : item[currentTitle]?.price
+                        ? item[currentTitle]?.price
+                        : "",
+                  margin: costPerItemAndPriceAmountExists()
+                    ? calculatemargin(name, item[currentTitle], fieldValue)
+                    : oldMargin([
+                          item[currentTitle]?.costPerItem,
+                          item[currentTitle]?.margin,
+                          item[currentTitle]?.price,
+                        ])
+                      ? item[currentTitle]?.margin
                       : "",
-                margin: costPerItemAndPriceAmountExists()
-                  ? calculatemargin(name, item[currentTitle], fieldValue)
-                  : oldMargin([
-                    item[currentTitle]?.costPerItem,
-                    item[currentTitle]?.margin,
-                    item[currentTitle]?.price,
-                  ])
-                    ? item[currentTitle]?.margin
-                    : "",
-                profit: costPerItemAndPriceAmountExists()
-                  ? calculateProfit(name, item[currentTitle], fieldValue)
-                  : oldMargin([
-                    item[currentTitle]?.costPerItem,
-                    item[currentTitle]?.margin,
-                    item[currentTitle]?.price,
-                  ])
-                    ? item[currentTitle]?.profit
-                    : "",
-                comparePriceError:
-                  ["price", "compareAtPrice", "costPerItem"]?.includes(
-                    name
-                  ) && showError
-                    ? "Compare Price must be greater than price."
-                    : [
-                      "qty",
-                      "upcCode",
-                      "customCode",
-                      "reorderLevel",
-                      "reorderQty",
-                      "checkId",
-                      "disable",
-                      "isFoodStamble",
-                      "sellOutOfStock",
-                      "trackQuantity",
-                      "costPerItem",
-                    ]?.includes(name) &&
-                      item[currentTitle]?.comparePriceError
-                      ? item[currentTitle]?.comparePriceError
+                  profit: costPerItemAndPriceAmountExists()
+                    ? calculateProfit(name, item[currentTitle], fieldValue)
+                    : oldMargin([
+                          item[currentTitle]?.costPerItem,
+                          item[currentTitle]?.margin,
+                          item[currentTitle]?.price,
+                        ])
+                      ? item[currentTitle]?.profit
                       : "",
-              },
-            }
+                  comparePriceError:
+                    ["price", "compareAtPrice", "costPerItem"]?.includes(
+                      name
+                    ) && showError
+                      ? "Compare Price must be greater than price."
+                      : [
+                            "qty",
+                            "upcCode",
+                            "customCode",
+                            "reorderLevel",
+                            "reorderQty",
+                            "checkId",
+                            "disable",
+                            "isFoodStamble",
+                            "sellOutOfStock",
+                            "trackQuantity",
+                            "costPerItem",
+                          ]?.includes(name) &&
+                          item[currentTitle]?.comparePriceError
+                        ? item[currentTitle]?.comparePriceError
+                        : "",
+                },
+              }
             : item;
         } else if (i === 0) {
           return !["upcCode", "customCode"].includes(name) &&
             !item[currentTitle][name] &&
             pageUrl === "inventory/products/add"
             ? {
-              ...item,
-              [currentTitle]: {
-                ...item[currentTitle],
-                [name]: fieldValue,
-                price:
-                  name === "price"
-                    ? fieldValue
-                    : item[currentTitle]?.price
-                      ? item[currentTitle]?.price
+                ...item,
+                [currentTitle]: {
+                  ...item[currentTitle],
+                  [name]: fieldValue,
+                  price:
+                    name === "price"
+                      ? fieldValue
+                      : item[currentTitle]?.price
+                        ? item[currentTitle]?.price
+                        : "",
+                  margin: costPerItemAndPriceAmountExists()
+                    ? calculatemargin(name, item[currentTitle], fieldValue)
+                    : oldMargin([
+                          item[currentTitle]?.costPerItem,
+                          item[currentTitle]?.margin,
+                          item[currentTitle]?.price,
+                        ])
+                      ? item[currentTitle]?.margin
                       : "",
-                margin: costPerItemAndPriceAmountExists()
-                  ? calculatemargin(name, item[currentTitle], fieldValue)
-                  : oldMargin([
-                    item[currentTitle]?.costPerItem,
-                    item[currentTitle]?.margin,
-                    item[currentTitle]?.price,
-                  ])
-                    ? item[currentTitle]?.margin
-                    : "",
-                profit: costPerItemAndPriceAmountExists()
-                  ? calculateProfit(name, item[currentTitle], fieldValue)
-                  : oldMargin([
-                    item[currentTitle]?.costPerItem,
-                    item[currentTitle]?.margin,
-                    item[currentTitle]?.price,
-                  ])
-                    ? item[currentTitle]?.profit
-                    : "",
+                  profit: costPerItemAndPriceAmountExists()
+                    ? calculateProfit(name, item[currentTitle], fieldValue)
+                    : oldMargin([
+                          item[currentTitle]?.costPerItem,
+                          item[currentTitle]?.margin,
+                          item[currentTitle]?.price,
+                        ])
+                      ? item[currentTitle]?.profit
+                      : "",
 
-                comparePriceError:
-                  ["price", "compareAtPrice", "costPerItem"]?.includes(
-                    name
-                  ) && showError
-                    ? "Compare Price must be greater than price."
-                    : [
-                      "qty",
-                      "upcCode",
-                      "customCode",
-                      "reorderLevel",
-                      "reorderQty",
-                      "checkId",
-                      "disable",
-                      "isFoodStamble",
-                      "sellOutOfStock",
-                      "trackQuantity",
-                      "costPerItem",
-                    ]?.includes(name) &&
-                      item[currentTitle]?.comparePriceError
-                      ? item[currentTitle]?.comparePriceError
-                      : "",
-              },
-            }
+                  comparePriceError:
+                    ["price", "compareAtPrice", "costPerItem"]?.includes(
+                      name
+                    ) && showError
+                      ? "Compare Price must be greater than price."
+                      : [
+                            "qty",
+                            "upcCode",
+                            "customCode",
+                            "reorderLevel",
+                            "reorderQty",
+                            "checkId",
+                            "disable",
+                            "isFoodStamble",
+                            "sellOutOfStock",
+                            "trackQuantity",
+                            "costPerItem",
+                          ]?.includes(name) &&
+                          item[currentTitle]?.comparePriceError
+                        ? item[currentTitle]?.comparePriceError
+                        : "",
+                },
+              }
             : item;
         }
         //   else {
@@ -1208,17 +1233,38 @@ const AddProducts = () => {
     // manually onchange
     if (isMultipleVarient) {
       updatedValues = formValue.map((item, index) => {
-        showError =
-          parseFloat(
+
+          let compareAtPriceValue = parseFloat(
+            name === "compareAtPrice" ? fieldValue : item[title]?.compareAtPrice
+          );
+          
+          let priceValue = parseFloat(
             name === "price"
               ? fieldValue
               : name === "costPerItem"
-                ? price_total_value
-                : item[title]?.price
-          ) >=
-          parseFloat(
-            name === "compareAtPrice" ? fieldValue : item[title]?.compareAtPrice
+              ? price_total_value
+              : item[title]?.price
           );
+          
+          let showError = false;
+          
+          if (name === "price") {
+            if (compareAtPriceValue === 0) {
+              showError = false;
+            } else if (compareAtPriceValue > 0) {
+              showError = priceValue >= compareAtPriceValue;
+            }
+          } else if (name === "compareAtPrice") {
+            showError = priceValue >= compareAtPriceValue;
+          }
+                    
+                   
+        
+
+
+
+
+
 
         const costPerItemAndPriceAmountExists = () => {
           const bool =
@@ -1233,76 +1279,94 @@ const AddProducts = () => {
 
         return Object.keys(item).includes(title)
           ? {
-            ...item,
-            [title]: {
-              ...item[title],
-              [name]: type === "checkbox" ? checked : fieldValue,
-              price:
-                name === "price"
-                  ? fieldValue
-                  : item[title].price
-                    ? item[title].price
+              ...item,
+              [title]: {
+                ...item[title],
+                [name]: type === "checkbox" ? checked : fieldValue,
+                price:
+                  name === "price"
+                    ? fieldValue
+                    : item[title].price
+                      ? item[title].price
+                      : "",
+
+                margin: costPerItemAndPriceAmountExists()
+                  ? calculatemargin(name, item[title], fieldValue)
+                  : oldMargin([
+                        item[title].costPerItem,
+                        item[title].margin,
+                        item[title].price,
+                      ])
+                    ? item[title].margin
                     : "",
 
-              margin: costPerItemAndPriceAmountExists()
-                ? calculatemargin(name, item[title], fieldValue)
-                : oldMargin([
-                  item[title].costPerItem,
-                  item[title].margin,
-                  item[title].price,
-                ])
-                  ? item[title].margin
-                  : "",
-
-              profit: costPerItemAndPriceAmountExists()
-                ? calculateProfit(name, item[title], fieldValue)
-                : oldMargin([
-                  item[title].costPerItem,
-                  item[title].margin,
-                  item[title].price,
-                ])
-                  ? item[title].profit
-                  : "",
-              // comparePriceError:
-              //     ((["price", "compareAtPrice", "costPerItem"].includes(name)) && showError)
-              //         ? "Compare Price must be greater than price."
-              //         : ""
-              comparePriceError:
-                ["price", "compareAtPrice", "costPerItem"]?.includes(name) &&
+                profit: costPerItemAndPriceAmountExists()
+                  ? calculateProfit(name, item[title], fieldValue)
+                  : oldMargin([
+                        item[title].costPerItem,
+                        item[title].margin,
+                        item[title].price,
+                      ])
+                    ? item[title].profit
+                    : "",
+                // comparePriceError:
+                //     ((["price", "compareAtPrice", "costPerItem"].includes(name)) && showError)
+                //         ? "Compare Price must be greater than price."
+                //         : ""
+                comparePriceError:
+                  ["price", "compareAtPrice", "costPerItem"]?.includes(name) &&
                   showError
-                  ? "Compare Price must be greater than price."
-                  : [
-                    "qty",
-                    "upcCode",
-                    "customCode",
-                    "reorderLevel",
-                    "reorderQty",
-                    "checkId",
-                    "disable",
-                    "isFoodStamble",
-                    "sellOutOfStock",
-                    "trackQuantity",
-                    "costPerItem",
-                  ]?.includes(name) && item[title]?.comparePriceError
-                    ? item[title]?.comparePriceError
-                    : "",
-            },
-          }
+                    ? "Compare Price must be greater than price."
+                    : [
+                          "qty",
+                          "upcCode",
+                          "customCode",
+                          "reorderLevel",
+                          "reorderQty",
+                          "checkId",
+                          "disable",
+                          "isFoodStamble",
+                          "sellOutOfStock",
+                          "trackQuantity",
+                          "costPerItem",
+                        ]?.includes(name) && item[title]?.comparePriceError
+                      ? item[title]?.comparePriceError
+                      : "",
+              },
+            }
           : item;
       });
     } else {
       updatedValues = formValue.map((item, index) => {
-        showError =
-          parseFloat(
-            name === "price"
-              ? fieldValue
-              : name === "costPerItem"
-                ? price_total_value
-                : item?.price
-          ) >=
-          parseFloat(
-            name === "compareAtPrice" ? fieldValue : item?.compareAtPrice
-          );
+        console.log(fieldValue, item?.price)
+
+
+
+        let compareAtPriceValue = parseFloat(
+          name === "compareAtPrice" ? fieldValue : item?.compareAtPrice
+        );
+        
+        let priceValue = parseFloat(
+          name === "price"
+            ? fieldValue
+            : name === "costPerItem"
+            ? price_total_value
+            : item?.price
+        );
+        
+        let showError = false;
+        
+        if (name === "price") {
+          if (compareAtPriceValue === 0) {
+            showError = false;
+          } else if (compareAtPriceValue > 0) {
+            showError = priceValue >= compareAtPriceValue;
+          }
+        } else if (name === "compareAtPrice") {
+          showError = priceValue >= compareAtPriceValue;
+        }
+
+
 
         const costPerItemAndPriceAmountExistsInSingleVarient = () => {
           const bool =
@@ -1331,21 +1395,21 @@ const AddProducts = () => {
               : "",
           comparePriceError:
             ["price", "compareAtPrice", "costPerItem"]?.includes(name) &&
-              showError
+            showError
               ? "Compare Price must be greater than price."
               : [
-                "qty",
-                "upcCode",
-                "customCode",
-                "reorderLevel",
-                "reorderQty",
-                "checkId",
-                "disable",
-                "isFoodStamble",
-                "sellOutOfStock",
-                "trackQuantity",
-                "costPerItem",
-              ]?.includes(name) && item?.comparePriceError
+                    "qty",
+                    "upcCode",
+                    "customCode",
+                    "reorderLevel",
+                    "reorderQty",
+                    "checkId",
+                    "disable",
+                    "isFoodStamble",
+                    "sellOutOfStock",
+                    "trackQuantity",
+                    "costPerItem",
+                  ]?.includes(name) && item?.comparePriceError
                 ? item?.comparePriceError
                 : "",
         };
@@ -1460,14 +1524,14 @@ const AddProducts = () => {
                   // here when fetching prodcut data and track and sellout was false but still showing true and check that's why using this condition
                   trackQuantity:
                     result?.trackQuantity ||
-                      pageUrl !== "inventory/products/edit"
+                    pageUrl !== "inventory/products/edit"
                       ? true
                       : false || !result?.notEditable
                         ? true
                         : false,
                   sellOutOfStock:
                     result?.sellOutOfStock ||
-                      pageUrl !== "inventory/products/edit"
+                    pageUrl !== "inventory/products/edit"
                       ? true
                       : false || !result?.notEditable
                         ? true
@@ -1547,34 +1611,74 @@ const AddProducts = () => {
 
   const fetchSingleVarientData = () => {
     const data = location?.state;
-    setProductData(data);
-    setIsMultipleVaient(false);
-    setIsVarientEdit(true);
-    setFormValue([
-      {
-        costPerItem: data?.costperItem || "",
-        compareAtPrice: data?.compare_price || "",
-        price: data?.price || "",
-        margin: data?.margin || "",
-        notEditable: data?.notEditable || "",
-        productEditId: data?.id || "",
-        productEditVarientId: data?.var_id || "",
-        comparePriceError: data?.comparePriceError || "",
-        upcError: data?.upcError || "",
-        profit: data?.profit || "",
-        qty: data?.quantity || "",
-        upcCode: data?.upc || "",
-        customCode: data?.custom_code || "",
-        reorderQty: data?.reorder_qty || "",
-        reorderLevel: data?.reorder_level || "",
-        trackQuantity: Boolean(+data?.trackqnty) || false,
-        sellOutOfStock: Boolean(+data?.isstockcontinue) || false,
-        checkId: Boolean(+data?.is_tobacco) || false,
-        disable: Boolean(+data?.disable) || false,
-        // itemForAllLinkedLocation: data?.,
-        isFoodStamble: Boolean(+data?.food_stampable) || false,
-      },
-    ]);
+    const formData = new FormData();
+
+    formData.append("id", data?.var_id);
+    formData.append("single_product", 0);
+    formData.append("product_name", data?.title);
+    formData.append("login_type", userTypeData?.login_type);
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("token", userTypeData?.token);
+
+
+    const formDataNew = new FormData();
+    formDataNew.append(
+      "merchant_id",
+      LoginGetDashBoardRecordJson?.data?.merchant_id
+    );
+    formDataNew.append("login_type", userTypeData?.login_type);
+    formDataNew.append("token_id", userTypeData?.token_id);
+    formDataNew.append("token", userTypeData?.token);
+
+    dispatch(getInventorySettingOnVarient(formDataNew)).then((res) => {
+      if (res?.payload?.status) {
+        setInventoryData(res?.payload?.result);
+      }
+    });
+
+    dispatch(fetchVarietDataById(formData))
+      .then((res) => {
+        console.log("res", res);
+        if (res?.payload?.status) {
+          const payloadData = res?.payload?.var_data;
+          setProductData(payloadData);
+          setIsMultipleVaient(false);
+          setIsVarientEdit(true);
+          setFormValue([
+            {
+              notEditable: true,
+              costPerItem: payloadData?.costperItem || "",
+              compareAtPrice: payloadData?.compare_price || "",
+              price: payloadData?.price || "",
+              margin: payloadData?.margin || "",
+              // notEditable: payloadData?.notEditable || "",
+              productEditId: payloadData?.id || "",
+              // productEditVarientId: payloadData?.id || "",
+              comparePriceError: payloadData?.comparePriceError || "",
+              upcError: payloadData?.upcError || "",
+              profit: payloadData?.profit || "",
+              qty: payloadData?.quantity || "",
+              upcCode: payloadData?.upc || "",
+              customCode: payloadData?.custom_code || "",
+              reorderQty: payloadData?.reorder_qty || "",
+              reorderLevel: payloadData?.reorder_level || "",
+              trackQuantity: Boolean(+payloadData?.trackqnty) || false,
+              sellOutOfStock: Boolean(+payloadData?.isstockcontinue) || false,
+              checkId: Boolean(+payloadData?.is_tobacco) || false,
+              disable: Boolean(+payloadData?.disable) || false,
+              // itemForAllLinkedLocation: payloadData?.,
+              isFoodStamble: Boolean(+payloadData?.food_stampable) || false,
+            },
+          ]);
+        }
+      })
+      .catch((err) => {
+        ToastifyAlert("Error while fetch product data!", "error");
+        getUnAutherisedTokenMessage();
+      })
+      .finally(() => {
+        setFetchDataLoading(false);
+      });
   };
 
   useEffect(() => {
@@ -1937,21 +2041,21 @@ const AddProducts = () => {
         : "",
       optionvalue: isMultipleVarient
         ? varientLength[0]?.varientAttributeList
-          ?.map((item) => item)
-          ?.map((i) => i?.value)
-          ?.toString() ?? ""
+            ?.map((item) => item)
+            ?.map((i) => i?.value)
+            ?.toString() ?? ""
         : "",
       optionvalue1: isMultipleVarient
         ? varientLength[1]?.varientAttributeList
-          ?.map((item) => item)
-          ?.map((i) => i?.value)
-          ?.toString() ?? ""
+            ?.map((item) => item)
+            ?.map((i) => i?.value)
+            ?.toString() ?? ""
         : "",
       optionvalue2: isMultipleVarient
         ? varientLength[2]?.varientAttributeList
-          ?.map((item) => item)
-          ?.map((i) => i?.value)
-          ?.toString() ?? ""
+            ?.map((item) => item)
+            ?.map((i) => i?.value)
+            ?.toString() ?? ""
         : "",
       varvarient: isMultipleVarient
         ? varientTitle.filter(Boolean)?.toString()
@@ -2039,7 +2143,7 @@ const AddProducts = () => {
       checkEmpty = varientLength?.map((item, i) => {
         if (!item?.varientAttributeList?.length || !item?.varientName) {
           setVarientError({
-            error: "Please enter the varients",
+            error: "Please enter the Varients",
             errorIndex: i,
           });
           return false;
@@ -2080,30 +2184,35 @@ const AddProducts = () => {
         }
         pageUrl === "inventory/products/edit"
           ? dispatch(editProductData(formdata))
-            .then((res) => {
-              if (res?.payload?.data?.status) {
-                ToastifyAlert("Updated Successfully", "success");
-              }
-            })
-            .catch((err) => {
-              if (err) {
-                ToastifyAlert("Error!", "error");
-              }
-              getUnAutherisedTokenMessage();
-            })
+              .then((res) => {
+                if (res?.payload?.data?.status) {
+                  ToastifyAlert("Updated Successfully", "success");
+                  let timerId;
+                  clearTimeout(timerId);
+                  timerId = setTimeout(() => {
+                    window.location.reload();
+                  }, 400);
+                }
+              })
+              .catch((err) => {
+                if (err) {
+                  ToastifyAlert("Error!", "error");
+                }
+                getUnAutherisedTokenMessage();
+              })
           : dispatch(addProduct(formdata))
-            .then((res) => {
-              if (res?.payload?.data?.status) {
-                ToastifyAlert("Added Successfully", "success");
-                navigate("/inventory/products");
-              }
-            })
-            .catch((err) => {
-              if (err) {
-                ToastifyAlert("Error!", "error");
-              }
-              getUnAutherisedTokenMessage();
-            });
+              .then((res) => {
+                if (res?.payload?.data?.status) {
+                  ToastifyAlert("Added Successfully", "success");
+                  navigate("/inventory/products");
+                }
+              })
+              .catch((err) => {
+                if (err) {
+                  ToastifyAlert("Error!", "error");
+                }
+                getUnAutherisedTokenMessage();
+              });
       }
     } catch (err) {
       let errorsList = {};
@@ -2125,7 +2234,7 @@ const AddProducts = () => {
       // token_id: userTypeData?.token_id,
       // login_type: userTypeData?.login_type,
       // token: userTypeData?.token,
-      variant_id: formValue[0]?.productEditVarientId,
+      variant_id: formValue[0]?.productEditId,
       price: formValue[0]?.price,
       compare_price: formValue[0]?.compareAtPrice,
       costperItem: formValue[0]?.costPerItem,
@@ -2133,25 +2242,24 @@ const AddProducts = () => {
       ogvarprofit: formValue[0]?.profit,
       //sku:
       //barcode:
-      trackqnty: +formValue[0]?.trackQuantity,
-      isstockcontinue: +formValue[0]?.sellOutOfStock,
-      disable: +formValue[0]?.disable,
-      is_tobacco: +formValue[0]?.checkId,
-      food_stampable: +formValue[0]?.isFoodStamble,
+      // trackqnty: +formValue[0]?.trackQuantity,
+      // isstockcontinue: +formValue[0]?.sellOutOfStock,
+      // disable: +formValue[0]?.disable,
+      // is_tobacco: +formValue[0]?.checkId,
+      // food_stampable: +formValue[0]?.isFoodStamble,
       quantity: formValue[0]?.qty,
       reorder_level: formValue[0]?.reorderLevel,
       upc: formValue[0]?.upcCode,
       custom_code: formValue[0]?.customCode,
       reorder_qty: formValue[0]?.reorderQty,
       // reorder_cost: formValue[0]?.reordr,
-      Track_Quantity: formValue[0]?.trackQuantity,
-      Continue_selling: formValue[0]?.sellOutOfStock,
-      Checkid: formValue[0]?.checkId,
-      Disable: formValue[0]?.disable,
-      Food_stampable: formValue[0]?.isFoodStamble,
+      Track_Quantity: +formValue[0]?.trackQuantity,
+      Continue_selling: +formValue[0]?.sellOutOfStock,
+      Checkid: +formValue[0]?.checkId,
+      Disable: +formValue[0]?.disable,
+      Food_stampable: +formValue[0]?.isFoodStamble,
       ...userTypeData,
     };
-
 
     try {
       const response = await formSingleVarientChange.validate(
@@ -2162,14 +2270,13 @@ const AddProducts = () => {
       );
       setError({});
       // check any error exist in error state and if response success and any productTitleError is exist
-      if (
-        !!response &&
-        checkFormErrorExist()
-      ) {
+      if (!!response && checkFormErrorExist()) {
+        setVarientLoading(true);
         dispatch(updateEditVarient(data))
           .then((res) => {
             if (res?.payload?.status) {
               ToastifyAlert("update Successfully", "success");
+              fetchSingleVarientData();
             }
           })
           .catch((err) => {
@@ -2177,6 +2284,9 @@ const AddProducts = () => {
               ToastifyAlert("Error!", "error");
             }
             getUnAutherisedTokenMessage();
+          })
+          .finally(() => {
+            setVarientLoading(false);
           });
       }
     } catch (err) {
@@ -2191,7 +2301,6 @@ const AddProducts = () => {
       }
       setError(errorsList);
     }
-
   };
 
   const handleUpdateError = (updatedErrorValue) => {
@@ -2430,8 +2539,53 @@ const AddProducts = () => {
                     <div class="image-list">
                       {productInfo?.files?.length
                         ? productInfo?.files?.map((img, index) => {
-                          // if img type is string
-                          if (typeof img === "string") {
+                            // if img type is string
+                            if (typeof img === "string") {
+                              return (
+                                <div
+                                  className="py-10 image-display"
+                                  style={{
+                                    border: "2px solid #0A64F9",
+                                    // width: "20%",
+                                    cursor: "pointer",
+                                  }}
+                                  key={index}
+                                >
+                                  <>
+                                    <span
+                                      className="delete-image-icon img-DeleteIcon"
+                                      // onClick={handleDeleteImage}
+                                      style={{
+                                        position: "absolute",
+                                        top: "7px",
+                                        right: "7px",
+                                      }}
+                                    >
+                                      <img
+                                        src={CloseIcon}
+                                        className="delete-image"
+                                        onClick={() =>
+                                          handleDeleteSelectedImage(
+                                            "string",
+                                            img
+                                          )
+                                        }
+                                      />
+                                    </span>
+                                    <img
+                                      src={
+                                        BASE_URL +
+                                        `/upload/products/${LoginGetDashBoardRecordJson?.data?.merchant_id}/` +
+                                        img
+                                      }
+                                      alt="Preview"
+                                      className="default-img"
+                                    />
+                                  </>
+                                </div>
+                              );
+                            }
+                            // if img type is object
                             return (
                               <div
                                 className="py-10 image-display"
@@ -2456,64 +2610,19 @@ const AddProducts = () => {
                                       src={CloseIcon}
                                       className="delete-image"
                                       onClick={() =>
-                                        handleDeleteSelectedImage(
-                                          "string",
-                                          img
-                                        )
+                                        handleDeleteSelectedImage("object", img)
                                       }
                                     />
                                   </span>
                                   <img
-                                    src={
-                                      BASE_URL +
-                                      `/upload/products/${LoginGetDashBoardRecordJson?.data?.merchant_id}/` +
-                                      img
-                                    }
+                                    src={img?.base64}
                                     alt="Preview"
                                     className="default-img"
                                   />
                                 </>
                               </div>
                             );
-                          }
-                          // if img type is object
-                          return (
-                            <div
-                              className="py-10 image-display"
-                              style={{
-                                border: "2px solid #0A64F9",
-                                // width: "20%",
-                                cursor: "pointer",
-                              }}
-                              key={index}
-                            >
-                              <>
-                                <span
-                                  className="delete-image-icon img-DeleteIcon"
-                                  // onClick={handleDeleteImage}
-                                  style={{
-                                    position: "absolute",
-                                    top: "7px",
-                                    right: "7px",
-                                  }}
-                                >
-                                  <img
-                                    src={CloseIcon}
-                                    className="delete-image"
-                                    onClick={() =>
-                                      handleDeleteSelectedImage("object", img)
-                                    }
-                                  />
-                                </span>
-                                <img
-                                  src={img?.base64}
-                                  alt="Preview"
-                                  className="default-img"
-                                />
-                              </>
-                            </div>
-                          );
-                        })
+                          })
                         : ""}
                     </div>
                   </div>
@@ -2522,7 +2631,7 @@ const AddProducts = () => {
                   ) : (
                     ""
                   )}
-                  { }
+                  {}
                 </div>
 
                 <div className="mt_card_header">
@@ -2567,7 +2676,7 @@ const AddProducts = () => {
 
                     <div className="q-add-categories-section-middle-footer  ">
                       {pageUrl === "inventory/products/edit" &&
-                        productData?.isvarient === "1" ? (
+                      productData?.isvarient === "1" ? (
                         <div
                           className="q-category-bottom-header"
                           style={{ marginRight: "67px" }}
@@ -2671,23 +2780,23 @@ const AddProducts = () => {
                   handleBlur={handleBlur}
                   isMultipleVarient={isMultipleVarient}
                   productInfo={productInfo}
-                  // inventoryData={inventoryData}
+                  inventoryData={inventoryData}
                   handleCloseEditModal={handleCloseEditModal}
                   productData={productData}
                   // varientData={varientData}
                   isVarientEdit={isVarientEdit}
                 />
               </div>
-              <div className="" style={{ marginRight: "0px" }}>
+              <div  className="q-category-bottom-header varient-box" style={{ marginRight: "0px" }}>
                 <button
                   className="quic-btn quic-btn-save"
                   onClick={handleUpdateVarient}
-                  disabled={isLoading}
+                  disabled={varientLoading}
                   style={{
-                    backgroundColor: isLoading ? "#878787" : "#0A64F9",
+                    backgroundColor: varientLoading ? "#878787" : "#0A64F9",
                   }}
                 >
-                  {isLoading ? (
+                  {varientLoading ? (
                     <Box className="loader-box">
                       <CircularProgress />
                     </Box>

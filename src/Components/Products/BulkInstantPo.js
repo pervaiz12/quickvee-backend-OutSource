@@ -22,7 +22,7 @@ const BulkInstantPo = ({
   isVarientEdit,
   fetchSingleVarientData,
 }) => {
- 
+ console.log('varientIndex', varientIndex);
   const dispatch = useDispatch();
   const productId = useParams();
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
@@ -185,7 +185,7 @@ const BulkInstantPo = ({
         hasError = true;
       }
       if (!item.cost) {
-        itemErrors.cost = "Cost is required";
+        itemErrors.cost = "CostPerItem is required";
         hasError = true;
       }
       return itemErrors;
@@ -218,7 +218,7 @@ const BulkInstantPo = ({
         if(!instantPoSingle?.cost){
           setRequired((prev)=>({
             ...prev,
-            cost: 'Cost is required',
+            cost: 'CostPerItem is required',
           }))
           error= true
         }
@@ -231,7 +231,8 @@ const BulkInstantPo = ({
           formData.append("product_id", productId?.id);
           formData.append(
             "variant_id",
-            !Boolean(+productData?.isvarient)
+            isVarientEdit  ? varientIndex :
+            !Boolean(+productData?.isvarient) && !isVarientEdit
               ? ""
               : modalType === "bulk-edit"
                 ? ""

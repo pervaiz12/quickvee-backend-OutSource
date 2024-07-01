@@ -119,6 +119,30 @@ export const getInventorySetting = createAsyncThunk(
   }
 );
 
+export const getInventorySettingOnVarient = createAsyncThunk(
+  "products/getInventorySettingOnVarient",
+  async (payload) => {
+    const token = payload.get('token'); // Extract the token from FormData
+    payload.delete('token');
+    try {
+      const response = await axios.post(
+        BASE_URL + "Profile_setup/inventory_register_setting",
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
 export const editProductData = createAsyncThunk(
   "products/editProduct",
   async (payload) => {
@@ -641,6 +665,32 @@ export const updateEditVarient = createAsyncThunk(
       const response = await axios.post(
         BASE_URL + "Product_api_react/update_variant",
         newData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+
+
+export const fetchVarietDataById = createAsyncThunk(
+  "products/fetchVarietDataById",
+  async (payload) => {
+    const token = payload.get('token'); // Extract the token from FormData
+    payload.delete('token');
+    
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/get_variantdata_ById",
+        payload,
         {
           headers: {
             "Content-Type": "multipart/form-data",

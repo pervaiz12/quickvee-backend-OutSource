@@ -678,3 +678,8 @@ box-sizing: border-box;
 .varientAddSection .input_area  .css-1xc3v61-indicatorContainer{
   /* padding: 0px !important; */
 }
+
+
+.varient-box{
+  justify-content: start !important;
+}
