@@ -456,6 +456,9 @@ const OrderCountList = () => {
           <button
             className="save_btn attributeUpdateBTN"
             onClick={handleSubmitData}
+            disabled={setTimeout(()=>{
+              
+            })}
           >
             {loader ? (
               <>

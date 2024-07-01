@@ -40,6 +40,7 @@ const AddVendors = ({ setVisible }) => {
     //   ...prevState,
     //   ["name"]: "",
     // }));
+   
 
     handleSelectedVendor(event?.value);
   };
@@ -182,7 +183,7 @@ const AddVendors = ({ setVisible }) => {
     );
 
     if (matchedObject) {
-      setVendor({
+      let data = {
         phone: matchedObject.phone,
         email: matchedObject.email,
         name: matchedObject.name,
@@ -192,6 +193,16 @@ const AddVendors = ({ setVisible }) => {
         zip_code: matchedObject.zip_code,
         full_address: matchedObject.full_address,
         state: matchedObject.state,
+      }
+      setVendor(data);
+      setErrorMessage((prevState) => {
+        const newErrorMessages = { ...prevState };
+        Object.keys(data).forEach((key) => {
+          if (data[key]) {
+            newErrorMessages[key] = "";
+          }
+        });
+        return newErrorMessages;
       });
     } else {
       // If no match is found, set name to the entered value
@@ -208,17 +219,17 @@ const AddVendors = ({ setVisible }) => {
       });
     }
   };
-  useEffect(() => {
-    setErrorMessage((prevState) => {
-      const newErrorMessages = { ...prevState };
-      Object.keys(vendor).forEach((key) => {
-        if (vendor[key]) {
-          newErrorMessages[key] = "";
-        }
-      });
-      return newErrorMessages;
-    });
-  }, [vendor]);
+  // useEffect(() => {
+  //   setErrorMessage((prevState) => {
+  //     const newErrorMessages = { ...prevState };
+  //     Object.keys(vendor).forEach((key) => {
+  //       if (vendor[key]) {
+  //         newErrorMessages[key] = "";
+  //       }
+  //     });
+  //     return newErrorMessages;
+  //   });
+  // }, [vendor]);
   const handleSetVendorStateChange = (newState) => {
     console.log("setVendorStateChange", newState);
     setErrorMessage((prevState) => ({
@@ -321,7 +332,7 @@ const AddVendors = ({ setVisible }) => {
                         value={vendor.email}
                         placeholder="Email Address"
                         onChangeFun={inputChange}
-                        // required={"required"}
+                      
                       />
                       {errorMessage.email && (
                         <span className="error">{errorMessage.email}</span>
