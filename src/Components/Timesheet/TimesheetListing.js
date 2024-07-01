@@ -579,10 +579,15 @@ const TimesheetListing = ({ data }) => {
   const openModalViewBreak = (title, data) => {
     setEmployeeName(title);
     fetchBreakDetails(data);
-    setEmployeeWorkDate(data.attendance_date);
-    setEmployeeWorkDateOUT(data.out_date);
-    setEmployeeTimeIn(formatTime(data.check_in_time));
-    setEmployeeTimeOut(formatTime(data.check_out_time));
+    setEmployeeWorkDate(data?.attendance_date);
+    setEmployeeWorkDateOUT(data?.out_date);
+    // setEmployeeTimeIn(formatTime(data.check_in_time));
+    if (data?.check_in_time) {
+      setEmployeeTimeIn(formatTime(data?.check_in_time));
+    } else if (data.time_entered) {
+      setEmployeeTimeIn(formatTime(data?.time_entered));
+    }
+    setEmployeeTimeOut(formatTime(data?.check_out_time));
     setAllbreakDelete(data);
     setShowModalViewBreak(true);
   };
