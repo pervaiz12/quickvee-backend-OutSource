@@ -170,7 +170,7 @@ const ManagerStore = () => {
       if (id) {
         dispatch(deleteManagerById(data)).then((res)=>{
          if(res?.payload?.status){
-        ToastifyAlert("Manager Deleted Successfully!", "success")
+        ToastifyAlert("Deleted Successfully", "success")
         fetchManagerListing();
          }
         }).catch((_)=>{

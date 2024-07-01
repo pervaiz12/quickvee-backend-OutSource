@@ -157,8 +157,8 @@ created_by_id:  LoginGetDashBoardRecordJson?.data?.user_id,
           const res = await dispatch(addManager(formData));
           if (res?.payload?.status) {
             modalType === 'add' ? 
-            ToastifyAlert("Manager Added Successfully!", "success") : 
-            ToastifyAlert("Manager Edited Successfully!", "success")
+            ToastifyAlert("Added Successfully", "success") : 
+            ToastifyAlert("Updated Successfully", "success")
             // call here fetch api of all manager 
             fetchManagerListing()
             handleClose();

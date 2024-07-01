@@ -1,56 +1,78 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import axios from 'axios';
-import { BASE_URL, GET_STORE_OPTIONS_DATA, UPDATE_STORE_OPTIONS_DATA } from "../../../Constants/Config";
+import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
+import axios from "axios";
+import {
+  BASE_URL,
+  GET_STORE_OPTIONS_DATA,
+  UPDATE_STORE_OPTIONS_DATA,
+} from "../../../Constants/Config";
 
 const initialState = {
-    loading: false,
-    storeoptionData: [],
-    successMessage: "",
-    error: '',
-}
+  loading: false,
+  storeoptionData: [],
+  successMessage: "",
+  error: "",
+};
 
 // Generate pening , fulfilled and rejected action type
-export const fetchStoreSettingOptionData = createAsyncThunk('StoreSettingOptionSlice/fetchStoreSettingOptionData.', async (data) => {
-    const {token, ...dataNew} = data;
+export const fetchStoreSettingOptionData = createAsyncThunk(
+  "StoreSettingOptionSlice/fetchStoreSettingOptionData.",
+  async (data) => {
+    const { token, ...dataNew } = data;
     try {
-        const response = await axios.post(BASE_URL + GET_STORE_OPTIONS_DATA, dataNew, { headers: { "Content-Type": "multipart/form-data",  Authorization: `Bearer ${token}` } })
-        if (response.status === 200) {
-           return response.data
+      const response = await axios.post(
+        BASE_URL + GET_STORE_OPTIONS_DATA,
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
         }
+      );
+      if (response.status === 200) {
+        return response.data;
+      }
     } catch (error) {
-        throw new Error(error.response.data.message);
+      throw new Error(error.response.data.message);
     }
-})
+  }
+);
 
-export const updateStoreOption = createAsyncThunk('StoreSettingOptionSlice/updateStoreOption', async(data)=>{
+export const updateStoreOption = createAsyncThunk(
+  "StoreSettingOptionSlice/updateStoreOption",
+  async (data) => {
+    const { token, ...dataNew } = data;
     try {
-        const response = await axios.post(BASE_URL + UPDATE_STORE_OPTIONS_DATA, data, { headers: { "Content-Type": "multipart/form-data" } })
-        return response?.data
+      const response = await axios.post(
+        BASE_URL + UPDATE_STORE_OPTIONS_DATA,
+        dataNew,
+        { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`, } }
+      );
+      return response?.data;
     } catch (error) {
-        throw new Error(error.response.data.message);
+      throw new Error(error.response.data.message);
     }
-})
+  }
+);
 
 const StoreSettingOptionSlice = createSlice({
-    name: 'StoreSettingOptionList',
-    initialState,
-    extraReducers: (builder) => {
-        builder.addCase(fetchStoreSettingOptionData.pending, (state) => {
-            state.loading = true;
-        })
-        builder.addCase(fetchStoreSettingOptionData.fulfilled, (state, action) => {
-            state.loading = false;
-            state.storeoptionData = action.payload;
-            state.error = '';
-        })
-        builder.addCase(fetchStoreSettingOptionData.rejected, (state, action) => {
-            state.loading = false;
-            state.storeoptionData = {};
-            state.error = action.error.message;
-        })
+  name: "StoreSettingOptionList",
+  initialState,
+  extraReducers: (builder) => {
+    builder.addCase(fetchStoreSettingOptionData.pending, (state) => {
+      state.loading = true;
+    });
+    builder.addCase(fetchStoreSettingOptionData.fulfilled, (state, action) => {
+      state.loading = false;
+      state.storeoptionData = action.payload;
+      state.error = "";
+    });
+    builder.addCase(fetchStoreSettingOptionData.rejected, (state, action) => {
+      state.loading = false;
+      state.storeoptionData = {};
+      state.error = action.error.message;
+    });
+  },
+});
 
-    }
-})
-
-
-export default StoreSettingOptionSlice.reducer
+export default StoreSettingOptionSlice.reducer;

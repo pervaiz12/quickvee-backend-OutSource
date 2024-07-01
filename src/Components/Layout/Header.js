@@ -110,6 +110,7 @@ export default function Header() {
     localStorage.removeItem("AllStore");
     navigate("/login");
     dispatch(setIsStoreActive(false));
+    dispatch(getAuthInvalidMessage(""));
   };
 
   const handleNavigate = () => {
@@ -392,9 +393,10 @@ export default function Header() {
                     <p className="ml-2 admin_medium">Online Store</p>
                   </div>
                 </Link>
-                <div
+                <button
                   className="cursor-pointer mx-5 flex items-center syncConatiner"
                   onClick={SyncData}
+                  disabled={loader}
                 >
                   <CircularProgress
                     color={"inherit"}
@@ -412,7 +414,7 @@ export default function Header() {
                     }`}
                   />
                   <p className="ml-2 admin_medium">Sync Data</p>
-                </div>
+                </button>
               </>
             ) : (
               ""
@@ -452,12 +454,15 @@ export default function Header() {
               open={open}
               onClose={handleClose}
             >
-              <MenuItem onClick={handleNavigate}>
-                <div className="flex justify-items-start items-center">
-                  <img src={userLogo} alt="" className="w-6 h-6 mr-2" />
-                  {storename}
-                </div>{" "}
-              </MenuItem>
+              {storename && (
+                <MenuItem onClick={handleNavigate}>
+                  <div className="flex justify-items-start items-center">
+                    <img src={userLogo} alt="" className="w-6 h-6 mr-2" />
+                    {storename}
+                  </div>{" "}
+                </MenuItem>
+              )}
+
               <MenuItem onClick={handleLogout}>
                 {" "}
                 <div className="flex justify-items-start items-center">

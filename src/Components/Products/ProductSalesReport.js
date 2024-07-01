@@ -23,6 +23,7 @@ import Pagination from "../../AllUserComponents/Users/UnverifeDetails/Pagination
 import InputTextSearch from "../../reuseableComponents/InputTextSearch";
 import useDebounce from "../../hooks/useDebouncs";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import PasswordShow from "../../Common/passwordShow";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -54,10 +55,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const ProductSalesReport = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const productId = location?.pathname?.split("/")[3];
-  const varientId = location?.pathname?.split("/")[4];
+  const searchParams = new URLSearchParams(location?.search);
+
+  const productId = location?.pathname?.split("/")[4];
+  const varientId = location?.pathname?.split("/")[5];
   const dispatch = useDispatch();
-  const { LoginGetDashBoardRecordJson } = useAuthDetails();
+  const {userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
 
   const [salesData, setSalesData] = useState([]);
   const [filterData, setFilterData] = useState([]);
@@ -71,6 +74,7 @@ const ProductSalesReport = () => {
   const [searchRecord, setSearchRecord] = useState("");
   const [storename, setStorename] = useState();
   const [submitmessage, setsubmitmessage] = useState("");
+  const {getUnAutherisedTokenMessage} = PasswordShow();
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const debouncedValue = useDebounce(searchRecord);
@@ -80,6 +84,11 @@ const ProductSalesReport = () => {
     formData.append("merchant_id", LoginGetDashBoardRecordJson?.data?.merchant_id);
     formData.append("product_id", productId);
     formData.append("variant_id", !!varientId ? varientId : "");
+    formData.append("login_type", userTypeData?.login_type);
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("token", userTypeData?.token);
+    
+    
     setLoading(true);
     dispatch(fetchSalesHistory(formData))
       .then((res) => {
@@ -90,6 +99,7 @@ const ProductSalesReport = () => {
       })
       .catch((err) => {
         throw new Error(err?.payload?.message);
+        getUnAutherisedTokenMessage();
       })
       .finally(() => {
         setLoading(false);
@@ -138,7 +148,7 @@ const ProductSalesReport = () => {
                     navigate(`/inventory/products/edit/${location.pathname.split('/')[4]}`);
                   }}>
                     <img src={AddNewCategory} alt="Add-New-Category" />
-                    Sales History - {location?.state?.title}
+                    Sales History - {searchParams.get('title')} {searchParams.get('varientName')? '- '+ searchParams.get('varientName'): ""}
                   </span>
                 </span>
               </div>

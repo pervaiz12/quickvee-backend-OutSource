@@ -12,7 +12,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
 import { priceFormate } from "../../../hooks/priceFormate";
-
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import sortIcon from "../../../Assests/Category/SortingW.svg";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -50,7 +51,7 @@ const NewItemCreatedBetweenList = (props) => {
     userTypeData,
     GetSessionLogin,
   } = useAuthDetails();
-  const [allNewItemData, setallNewItemData] = useState("");
+  const [allNewItemData, setallNewItemData] = useState([]);
   const AllNewItemDataState = useSelector(
     (state) => state.NewItemCreatedBtnList
   );
@@ -92,12 +93,55 @@ const NewItemCreatedBetweenList = (props) => {
   //   return formattedDate;
   // };
   const formatDate = (dateString) => {
-    const [day, month, year] = dateString.split('-');
+    const [day, month, year] = dateString.split("-");
     const monthNames = [
-      "January", "February", "March", "April", "May", "June",
-      "July", "August", "September", "October", "November", "December"
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
     ];
-    return `${monthNames[parseInt(month, 10) - 1]} ${parseInt(day, 10)}, ${year}`;
+    return `${monthNames[parseInt(month, 10) - 1]} ${parseInt(
+      day,
+      10
+    )}, ${year}`;
+  };
+  const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
+
+  const sortByItemName = (type, name) => {
+    const itemsWithParsedDates = allNewItemData.map((item) => {
+      const dateString = item.created_on;
+      const [day, month, year] = dateString.split("-").map(Number);
+      const date = `${year},${month},${day}`;
+      console.log("date in map ", date);
+      return { ...item, created_on: date };
+    });
+    console.log("itemsWithParsedDates", itemsWithParsedDates);
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      itemsWithParsedDates,
+      type,
+      name,
+      sortOrder
+    );
+    console.log("sortOrder", sortedItems);
+    setallNewItemData(
+      sortedItems.map((item) => {
+        const dateString = item.created_on;
+        console.log("item", dateString);
+        const [year, month, day] = dateString.split(",").map(Number);
+        const customdate = `${day}-${month}-${year}`;
+        console.log("date in map ", customdate);
+        return { ...item, created_on: customdate };
+      })
+    );
+    setSortOrder(newOrder);
   };
 
   return (
@@ -107,17 +151,53 @@ const NewItemCreatedBetweenList = (props) => {
           <TableContainer>
             <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
               <TableHead>
-                <StyledTableCell>Date</StyledTableCell>
-                <StyledTableCell>Category</StyledTableCell>
-                <StyledTableCell>Item Name</StyledTableCell>
-                <StyledTableCell>Price</StyledTableCell>
+                <StyledTableCell>
+                  <button
+                    className="flex items-center"
+                    onClick={() => sortByItemName("date", "created_on")}
+                  >
+                    <p className="whitespace-nowrap">Date</p>
+                    <img src={sortIcon} alt="" className="pl-1" />
+                  </button>
+                </StyledTableCell>
+                <StyledTableCell>
+                  <button
+                    className="flex items-center"
+                    onClick={() => sortByItemName("str", "category")}
+                  >
+                    <p className="whitespace-nowrap">Category</p>
+                    <img src={sortIcon} alt="" className="pl-1" />
+                  </button>
+                </StyledTableCell>
+                <StyledTableCell>
+                <button
+                    className="flex items-center"
+                    onClick={() => sortByItemName("str", "item_name")}
+                  >
+                    <p className="whitespace-nowrap">Item Name</p>
+                    <img src={sortIcon} alt="" className="pl-1" />
+                  </button>
+                  
+                  </StyledTableCell>
+                <StyledTableCell>
+                <button
+                    className="flex items-center"
+                    onClick={() => sortByItemName("num", "price")}
+                  >
+                    <p className="whitespace-nowrap">Price</p>
+                    <img src={sortIcon} alt="" className="pl-1" />
+                  </button>
+                  
+                  </StyledTableCell>
               </TableHead>
               <TableBody>
                 {allNewItemData && allNewItemData.length >= 1 ? (
                   allNewItemData.map((ItemData, index) => (
                     <StyledTableRow key={index}>
                       <StyledTableCell>
-                        <p>{formatDate(ItemData.created_on)}</p>
+                        <p className="whitespace-nowrap">
+                          {formatDate(ItemData.created_on)}
+                        </p>
                       </StyledTableCell>
                       <StyledTableCell>
                         <p>{ItemData.category}</p>

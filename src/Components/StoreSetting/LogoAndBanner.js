@@ -9,6 +9,7 @@ const LogoAndBanner = ({
   imageBoolean,
   qrCodeBoolean,
   errors,
+  receieptLogoBool,
 }) => {
   return (
     <Grid container sx={{ p: 2.5 }} className="box_shadow_div">
@@ -32,7 +33,7 @@ const LogoAndBanner = ({
               }}
             >
               {infoRecord.banners ? (
-                <div className="info-delete-banner">
+                <div className="info-delete-banner cursor-pointer">
                   <div
                     className="verifiedTableIcon"
                     onClick={() => handleDelete("banners")}
@@ -46,7 +47,7 @@ const LogoAndBanner = ({
               )}
               <div className="info-banner-image-div">
                 {infoRecord.image ? (
-                  <div className="info-delete">
+                  <div className="info-delete cursor-pointer">
                     <div
                       className="verifiedTableIcon"
                       onClick={() => handleDelete("image")}
@@ -103,8 +104,11 @@ const LogoAndBanner = ({
                   )}
                 </div>
               </div>
-              <div className="info-upload-image-button">
-                <label htmlFor="fileInput3" className="inforecord-email">
+              <div className="info-upload-image-button ">
+                <label
+                  htmlFor="fileInput3"
+                  className="inforecord-email cursor-pointer"
+                >
                   Add Banner
                 </label>
                 <input
@@ -125,78 +129,160 @@ const LogoAndBanner = ({
             )}
           </Grid>
         </Grid>
-        <Grid container sx={{ mt: 2.5, mb: 1 }}>
-          <Grid item xs={12}>
-            <h1 className="info-menu">QR Code</h1>
-          </Grid>
-        </Grid>
         <Grid container>
-          <Grid item xs={12}>
-            <div className="info-qrCodeDiv-image-div">
-              {infoRecord.qrCode ? (
-                <div className="info-delete-qr">
-                  <div
-                    className="verifiedTableIcon"
-                    onClick={() => handleDelete("qrCode")}
-                  >
-                    {" "}
-                    <img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img>
+          <Grid item xs={4}>
+            <Grid container sx={{ mt: 2.5, mb: 1 }}>
+              <Grid item xs={12}>
+                <h1 className="info-menu">QR Code</h1>
+              </Grid>
+            </Grid>
+            <Grid container>
+              <Grid item xs={12}>
+                <div className="info-qrCodeDiv-image-div">
+                  {infoRecord.qrCode ? (
+                    <div className="info-delete-qr cursor-pointer">
+                      <div
+                        className="verifiedTableIcon"
+                        onClick={() => handleDelete("qrCode")}
+                      >
+                        {" "}
+                        <img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img>
+                      </div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                  <div className="info-file-upload">
+                    {infoRecord.qrCode === "" ? (
+                      <>
+                        <label htmlFor="file-input1" className="file-input1">
+                          <img
+                            src={infoImage}
+                            alt="Upload Image"
+                            className="info-image-icon"
+                          />
+                          <div className="info-image-logo-position">
+                            <p className="inforecord-email whitespace-nowrap">
+                              Add QR code
+                            </p>
+                          </div>
+                        </label>
+                        <input
+                          id="file-input1"
+                          name="qrCode"
+                          style={{ display: "none" }}
+                          type="file"
+                          onChange={onChangeHandle}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <label
+                          htmlFor="file-input5"
+                          className="file-input1 info-background"
+                          style={{
+                            backgroundImage: `url(${
+                              !qrCodeBoolean
+                                ? BASE_URL +
+                                  "upload/qr_code/" +
+                                  infoRecord.qrCode
+                                : infoRecord.qrCode
+                            })`,
+                          }}
+                        ></label>
+                        <input
+                          id="file-input5"
+                          name="qrCode"
+                          style={{ display: "none" }}
+                          type="file"
+                          onChange={onChangeHandle}
+                        />
+                      </>
+                    )}
                   </div>
                 </div>
-              ) : (
-                ""
-              )}
-              <div className="info-file-upload">
-                {infoRecord.qrCode === "" ? (
-                  <>
-                    <label htmlFor="file-input1" className="file-input1">
-                      <img
-                        src={infoImage}
-                        alt="Upload Image"
-                        className="info-image-icon"
-                      />
-                      <div className="info-image-logo-position">
-                        <p className="inforecord-email whitespace-nowrap">
-                          Add QR code
-                        </p>
-                      </div>
-                    </label>
-                    <input
-                      id="file-input1"
-                      name="qrCode"
-                      style={{ display: "none" }}
-                      type="file"
-                      onChange={onChangeHandle}
-                    />
-                  </>
-                ) : (
-                  <>
-                    <label
-                      htmlFor="file-input5"
-                      className="file-input1 info-background"
-                      style={{
-                        backgroundImage: `url(${
-                          !qrCodeBoolean
-                            ? BASE_URL + "upload/qr_code/" + infoRecord.qrCode
-                            : infoRecord.qrCode
-                        })`,
-                      }}
-                    ></label>
-                    <input
-                      id="file-input5"
-                      name="qrCode"
-                      style={{ display: "none" }}
-                      type="file"
-                      onChange={onChangeHandle}
-                    />
-                  </>
-                )}
-              </div>
-            </div>
 
-            {errors.imageErrors && (
-              <div className="error">{errors.qrCodeError}</div>
-            )}
+                {errors.imageErrors && (
+                  <div className="error">{errors.qrCodeError}</div>
+                )}
+              </Grid>
+            </Grid>
+          </Grid>
+          <Grid item xs={4}>
+            <Grid container sx={{ mt: 2.5, mb: 1 }}>
+              <Grid item xs={12}>
+                <h1 className="info-menu">Receipt Logo</h1>
+              </Grid>
+            </Grid>
+            <Grid container>
+              <Grid item xs={12}>
+                <div className="info-qrCodeDiv-image-div">
+                  {infoRecord.receieptLogo ? (
+                    <div className="info-delete-qr cursor-pointer">
+                      <div
+                        className="verifiedTableIcon"
+                        onClick={() => handleDelete("receieptLogo")}
+                      >
+                        {" "}
+                        <img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img>
+                      </div>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                  <div className="info-file-upload">
+                    {infoRecord.receieptLogo === "" ? (
+                      <>
+                        <label htmlFor="file-input4" className="file-input1">
+                          <img
+                            src={infoImage}
+                            alt="Upload Image"
+                            className="info-image-icon"
+                          />
+                          <div className="info-image-logo-position">
+                            <p className="inforecord-email whitespace-nowrap">
+                              Add Receipt Logo
+                            </p>
+                          </div>
+                        </label>
+                        <input
+                          id="file-input4"
+                          name="receieptLogo"
+                          style={{ display: "none" }}
+                          type="file"
+                          onChange={onChangeHandle}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <label
+                          htmlFor="file-input4"
+                          className="file-input1 info-background"
+                          style={{
+                            backgroundImage: `url(${
+                              !receieptLogoBool
+                                ? BASE_URL + "upload/" + infoRecord.receieptLogo
+                                : infoRecord.receieptLogo
+                            })`,
+                          }}
+                        ></label>
+                        <input
+                          id="file-input4"
+                          name="receieptLogo"
+                          style={{ display: "none" }}
+                          type="file"
+                          onChange={onChangeHandle}
+                        />
+                      </>
+                    )}
+                  </div>
+                </div>
+
+                {errors.imageErrors && (
+                  <div className="error">{errors.qrCodeError}</div>
+                )}
+              </Grid>
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

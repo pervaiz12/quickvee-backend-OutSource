@@ -23,12 +23,11 @@ const GeneratePUC = ({
     window.location.pathname.split("/")[1] +
     "/" +
     window.location.pathname.split("/")[2] +
-    "/" + window.location.pathname.split("/")[3];
+    "/" +
+    window.location.pathname.split("/")[3];
 
   const varientTitle = handleVarientTitleBasedItemList();
-  const { varientProduct } = useSelector(
-    (state) => state?.productsListData
-  );
+  const { varientProduct } = useSelector((state) => state?.productsListData);
   const setInputMaxLength = (fieldname) => {
     switch (fieldname) {
       case "costPerItem":
@@ -52,38 +51,42 @@ const GeneratePUC = ({
   const disabledFieldsOnEdit = ["margin", "profit", "qty"];
 
   const disabledInput = (inp, formDisabledKey) => {
-    if (pageUrl !== "inventory/products/edit" && disabledFields.includes(inp?.name) ) {
-      return true;
-    }else if(pageUrl === "inventory/products/edit" &&  inp?.name === 'qty' && !formDisabledKey?.notEditable){
-      return false
-    }
-    else if (
-     ( pageUrl === "inventory/products/edit" &&
-      disabledFieldsOnEdit.includes(inp?.name)) 
+    if (
+      pageUrl !== "inventory/products/edit" &&
+      disabledFields.includes(inp?.name)
     ) {
       return true;
     } else if (
-     ( pageUrl === "inventory/products/edit" &&
-      +inventoryData?.cost_method === 1) &&
-    (  inp?.name === "costPerItem" &&
-      !!formDisabledKey?.notEditable)
+      pageUrl === "inventory/products/edit" &&
+      inp?.name === "qty" &&
+      !formDisabledKey?.notEditable
+    ) {
+      return false;
+    } else if (
+      pageUrl === "inventory/products/edit" &&
+      disabledFieldsOnEdit.includes(inp?.name)
+    ) {
+      return true;
+    } else if (
+      pageUrl === "inventory/products/edit" &&
+      +inventoryData?.cost_method === 1 &&
+      inp?.name === "costPerItem" &&
+      !!formDisabledKey?.notEditable
     ) {
       return true;
     }
     return false;
   };
 
-  const handleRedirectHistory = (varientIndex) => {
+  const handleRedirectHistory = (varientIndex, varientTitle) => {
+    const varientName = varientTitle ? Object.keys(varientTitle)?.[0]:"";
+    let url;
     if (varientIndex === null) {
-      navigate(`/inventory/products/saleshistory/${productData?.id}`, {state: productInfo});
+      window.open(`/inventory/products/saleshistory/${productData?.id}?title=${productInfo?.title}`);
     } else {
-      navigate(
-        `/inventory/products/saleshistory/${productData?.id}/${varientData[varientIndex]?.id}`,
-        {state: productInfo}
-      );
+      window.open(`/inventory/products/saleshistory/${productData?.id}/${varientIndex}?title=${productInfo?.title}&varientName=${varientName}`);
     }
   };
-
 
   return (
     <>
@@ -119,55 +122,85 @@ const GeneratePUC = ({
                     ) : (
                       ""
                     )}
-                      <Grid container spacing={2}>
-                    {formData?.length
-                      ? formData?.map((inp, i) => {
-                          return (
-                            // <div className="col-qv-2" key={i}>
-                            <Grid item xs={6} sm={4} md={3} lg={2.4} >    
-                              <div className="q-add-categories-single-input">
-                                <label>{inp?.label}</label>
-                                <div className="input_area">
-                                  <input
-                                    class="varient-input-field"
-                                    type={inp?.type}
-                                    name={inp?.name}
-                                    value={formValue?.[index]?.[title]?.[inp?.name]}
-                                    placeholder={inp?.placeholder}
-                                    onChange={(e) => handleOnChange(e, index, title)}
-                                    onBlur={(e) => handleBlur(e, index, title)}
-                                    maxLength={setInputMaxLength(inp?.name)}
-                                    disabled={disabledInput(inp, formValue?.[index]?.[title])}
-                                  />
-                                  {!!formValue?.[index]?.[title]?.['comparePriceError'] && inp?.name === "compareAtPrice" ? (
-                                    <span className="error-alert">
-                                      {
-                                        formValue?.[index]?.[title]?.['comparePriceError']
+                    <Grid container spacing={2}>
+                      {formData?.length
+                        ? formData?.map((inp, i) => {
+                            return (
+                              // <div className="col-qv-2" key={i}>
+                              <Grid item xs={6} sm={4} md={3} lg={2.4}>
+                                <div className="q-add-categories-single-input">
+                                  <label>{inp?.label}</label>
+                                  <div className="input_area">
+                                    <input
+                                      class="varient-input-field"
+                                      type={inp?.type}
+                                      name={inp?.name}
+                                      value={
+                                        formValue?.[index]?.[title]?.[inp?.name]
                                       }
-                                    </span>
-                                  ) : (
-                                    ""
-                                  )}
-                                  {error[`formValue[${index}].${title}.${inp?.name}`] ? (
-                                    <span className="error-alert">
-                                      {
-                                        error[
-                                          `formValue[${index}].${title}.${inp?.name}`
-                                        ]
+                                      placeholder={inp?.placeholder}
+                                      onChange={(e) =>
+                                        handleOnChange(e, index, title)
                                       }
-                                    </span>
-                                  ) : (
-                                    ""
-                                  )}
-                                
+                                      onBlur={(e) =>
+                                        handleBlur(e, index, title)
+                                      }
+                                      maxLength={setInputMaxLength(inp?.name)}
+                                      disabled={disabledInput(
+                                        inp,
+                                        formValue?.[index]?.[title]
+                                      )}
+                                    />
+                                    {!!formValue?.[index]?.[title]?.[
+                                      "comparePriceError"
+                                    ] && inp?.name === "compareAtPrice" ? (
+                                      <span className="error-alert">
+                                        {
+                                          formValue?.[index]?.[title]?.[
+                                            "comparePriceError"
+                                          ]
+                                        }
+                                      </span>
+                                    ) : (
+                                      ""
+                                    )}
+                                    {!!formValue?.[index]?.[title]?.[
+                                      "upcError"
+                                    ] && inp?.name === "upcCode" ? (
+                                      <span
+                                        className="error-alert"
+                                        style={{ display: "block" }}
+                                      >
+                                        {
+                                          formValue?.[index]?.[title]?.[
+                                            "upcError"
+                                          ]
+                                        }
+                                      </span>
+                                    ) : (
+                                      ""
+                                    )}
+                                    {error[
+                                      `formValue[${index}].${title}.${inp?.name}`
+                                    ] ? (
+                                      <span className="error-alert">
+                                        {
+                                          error[
+                                            `formValue[${index}].${title}.${inp?.name}`
+                                          ]
+                                        }
+                                      </span>
+                                    ) : (
+                                      ""
+                                    )}
+                                  </div>
                                 </div>
-                              </div>
-                            {/* // </div> */}
-                            </Grid>
-                          );
-                        })
-                      : ""}
-                      </Grid>
+                                {/* // </div> */}
+                              </Grid>
+                            );
+                          })
+                        : ""}
+                    </Grid>
                     <div className="flex flex-wrap gap-3 ">
                       <label
                         class="q_resigter_setting_section"
@@ -180,7 +213,7 @@ const GeneratePUC = ({
                           value={formValue?.[index]?.[title]?.["trackQuantity"]}
                           onChange={(e) => handleOnChange(e, index, title)}
                           checked={
-                            formValue?.[index]?.[title]?.["trackQuantity"] 
+                            formValue?.[index]?.[title]?.["trackQuantity"]
                           }
                         />
                         <span class="checkmark"></span>
@@ -193,7 +226,9 @@ const GeneratePUC = ({
                         <input
                           type="checkbox"
                           name="sellOutOfStock"
-                          value={formValue?.[index]?.[title]?.["sellOutOfStock"]}
+                          value={
+                            formValue?.[index]?.[title]?.["sellOutOfStock"]
+                          }
                           onChange={(e) => handleOnChange(e, index, title)}
                           checked={
                             formValue?.[index]?.[title]?.["sellOutOfStock"]
@@ -214,7 +249,9 @@ const GeneratePUC = ({
                           value={formValue?.[index]?.[title]?.["checkId"]}
                           onChange={(e) => handleOnChange(e, index, title)}
                           checked={
-                            formValue?.[index]?.[title]?.["checkId"] ? true : false
+                            formValue?.[index]?.[title]?.["checkId"]
+                              ? true
+                              : false
                           }
                         />
                         <span class="checkmark"></span>
@@ -230,7 +267,9 @@ const GeneratePUC = ({
                           value={formValue?.[index]?.[title]?.["disable"]}
                           onChange={(e) => handleOnChange(e, index, title)}
                           checked={
-                            formValue?.[index]?.[title]?.["disable"] ? true : false
+                            formValue?.[index]?.[title]?.["disable"]
+                              ? true
+                              : false
                           }
                         />
                         <span class="checkmark"></span>
@@ -246,7 +285,9 @@ const GeneratePUC = ({
                           value={formValue?.[index]?.[title]?.["isFoodStamble"]}
                           onChange={(e) => handleOnChange(e, index, title)}
                           checked={
-                            formValue?.[index]?.[title]?.["isFoodStamble"] ? true : false
+                            formValue?.[index]?.[title]?.["isFoodStamble"]
+                              ? true
+                              : false
                           }
                         />
                         <span class="checkmark"></span>
@@ -273,7 +314,8 @@ const GeneratePUC = ({
                       </label> */}
                     </div>
 
-                    {pageUrl === "inventory/products/edit" && formValue?.[index]?.[title]?.notEditable ? (
+                    {pageUrl === "inventory/products/edit" &&
+                    formValue?.[index]?.[title]?.notEditable ? (
                       <div class="edit-profile-btns">
                         <button
                           className="quic-btn quic-btn-save vendor-btn"
@@ -283,7 +325,10 @@ const GeneratePUC = ({
                             backgroundColor: "#0A64F9",
                           }}
                           onClick={() =>
-                            handleCloseEditModal("single_vendor", index)
+                            handleCloseEditModal(
+                              "single_vendor",
+                              formValue?.[index]?.[title]?.productEditId
+                            )
                           }
                         >
                           Vendors
@@ -295,7 +340,12 @@ const GeneratePUC = ({
                           style={{
                             backgroundColor: "#0A64F9",
                           }}
-                          onClick={() => handleRedirectHistory(index)}
+                          onClick={() =>
+                            handleRedirectHistory(
+                              formValue?.[index]?.[title]?.productEditId,
+                              formValue?.[index]
+                            )
+                          }
                         >
                           Sales History
                         </button>
@@ -307,7 +357,10 @@ const GeneratePUC = ({
                             backgroundColor: "#0A64F9",
                           }}
                           onClick={() =>
-                            handleCloseEditModal("single_instant", index)
+                            handleCloseEditModal(
+                              "single_instant",
+                              formValue?.[index]?.[title]?.productEditId
+                            )
                           }
                         >
                           Instant PO
@@ -320,53 +373,63 @@ const GeneratePUC = ({
                 );
               })
             : ""}
-            
+
           {!isMultipleVarient ? (
             <div className="qvrow">
               <div className="mx-4 my-4">{varientTitle?.[0]}</div>
               <Grid container spacing={2}>
-              {formData?.length
-                ? formData?.map((inp, i) => {
-                    return (
-                      // <div className="col-qv-2" key={i}>
-                      <Grid item xs={6} sm={4} md={3} lg={2.4} >    
-                        <div className="q-add-categories-single-input">
-                          <label>{inp?.label}</label>
-                          <div className="input_area">
-                            <input
-                              class="varient-input-field"
-                              type={inp?.type}
-                              name={inp?.name}
-                              value={formValue?.[0]?.[inp?.name]}
-                              placeholder={inp?.placeholder}
-                              onChange={(e) => handleOnChange(e, 0)}
-                              onBlur={(e) => handleBlur(e, 0)}
-                              maxLength={setInputMaxLength(inp?.name)}
-                              disabled={disabledInput(inp)}
-                            />
-                              {!!formValue?.[0]?.['comparePriceError'] && inp?.name === "compareAtPrice" ? (
-                                    <span className="error-alert">
-                                      {
-                                        formValue?.[0]?.['comparePriceError']
-                                      }
-                                    </span>
-                                  ) : (
-                                    ""
-                                  )}
-                            {error[`formValue[0].${inp?.name}`] ? (
-                              <span className="error-alert">
-                                {error[`formValue[0].${inp?.name}`]}
-                              </span>
-                            ) : (
-                              ""
-                            )}
+                {formData?.length
+                  ? formData?.map((inp, i) => {
+                      return (
+                        // <div className="col-qv-2" key={i}>
+                        <Grid item xs={6} sm={4} md={3} lg={2.4}>
+                          <div className="q-add-categories-single-input">
+                            <label>{inp?.label}</label>
+                            <div className="input_area">
+                              <input
+                                class="varient-input-field"
+                                type={inp?.type}
+                                name={inp?.name}
+                                value={formValue?.[0]?.[inp?.name]}
+                                placeholder={inp?.placeholder}
+                                onChange={(e) => handleOnChange(e, 0)}
+                                onBlur={(e) => handleBlur(e, 0)}
+                                maxLength={setInputMaxLength(inp?.name)}
+                                disabled={disabledInput(inp, formValue?.[0])}
+                              />
+                              {!!formValue?.[0]?.["comparePriceError"] &&
+                              inp?.name === "compareAtPrice" ? (
+                                <span className="error-alert">
+                                  {formValue?.[0]?.["comparePriceError"]}
+                                </span>
+                              ) : (
+                                ""
+                              )}
+                              {!!formValue?.[0]?.["upcError"] &&
+                              inp?.name === "upcCode" ? (
+                                <span
+                                  className="error-alert"
+                                  style={{ display: "block" }}
+                                >
+                                  {formValue?.[0]?.["upcError"]}
+                                </span>
+                              ) : (
+                                ""
+                              )}
+                              {error[`formValue[0].${inp?.name}`] ? (
+                                <span className="error-alert">
+                                  {error[`formValue[0].${inp?.name}`]}
+                                </span>
+                              ) : (
+                                ""
+                              )}
+                            </div>
                           </div>
-                        </div>
-                      {/* // </div> */}
-                      </Grid>
+                          {/* // </div> */}
+                        </Grid>
                       );
                     })
-                    : ""}
+                  : ""}
               </Grid>
               <div className="flex flex-wrap gap-3 ">
                 <label
@@ -468,7 +531,12 @@ const GeneratePUC = ({
                     style={{
                       backgroundColor: "#0A64F9",
                     }}
-                    onClick={() => handleCloseEditModal("single_vendor", 0)}
+                    onClick={() =>
+                      handleCloseEditModal(
+                        "single_vendor",
+                        formValue?.[0]?.productEditId
+                      )
+                    }
                   >
                     Vendors
                   </button>
@@ -490,7 +558,12 @@ const GeneratePUC = ({
                     style={{
                       backgroundColor: "#0A64F9",
                     }}
-                    onClick={() => handleCloseEditModal("single_instant", 0)}
+                    onClick={() =>
+                      handleCloseEditModal(
+                        "single_instant",
+                        formValue?.[0]?.productEditId
+                      )
+                    }
                   >
                     Instant PO
                   </button>

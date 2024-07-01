@@ -14,27 +14,46 @@ import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { toast } from "react-toastify";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
-
+import CircularProgress from "@mui/material/CircularProgress";
+import PasswordShow from "./../../Common/passwordShow";
 const AddPermissionModal = () => {
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  // const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const dispatch = useDispatch();
+  const [errors, setErrors] = useState({
+    permission: "",
+    sub_permission: "",
+  });
 
+  const handleOpen = () => {
+    setPermission({
+      permission: "Select",
+      sub_permission: "",
+    });
+    setErrors({
+      permission: "",
+      sub_permission: "",
+    });
+    setOpen(true);
+  };
+  const [loader, setLoader] = useState(false);
   const { userTypeData } = useAuthDetails();
 
   const { token, ...userTypeDataAlter } = userTypeData;
   const [states, setStates] = useState([
     "Select",
     "Register",
-    " Store Stats",
+    "Store Stats",
     "Users",
     "Inventory",
     "Customers",
     "Coupons",
     "Setup",
-    " Dispatch Center",
+    "Dispatch Center",
     "Attendance",
+    "Home Screen",
+    "Gift Card",
   ]);
 
   const myStyles = {
@@ -56,61 +75,124 @@ const AddPermissionModal = () => {
     permission: "",
     sub_permission: "",
   });
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
 
   //Handle Select Permission's
   const handlePermissionChange = (e) => {
-    setPermission((prevState) => ({
-      ...prevState,
-      ["permission"]: e?.title,
-    }));
+    const selectedPermission = e.title;
+    if (selectedPermission === "Select") {
+      setPermission((prevState) => ({
+        ...prevState,
+        permission: selectedPermission,
+      }));
+      setErrors((prevState) => ({
+        ...prevState,
+        permission: "Permission is required",
+      }));
+    } else {
+      setPermission((prevState) => ({
+        ...prevState,
+        permission: selectedPermission,
+      }));
+      setErrors((prevState) => ({
+        ...prevState,
+        permission: "",
+      }));
+    }
   };
 
   //Handle Sub Permission's
   const handleSubPermissionChange = (e) => {
     const { name, value } = e?.target;
-    setPermission((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
+    if(value){
+      setPermission((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+      setErrors((prevState) => ({
+        ...prevState,
+        sub_permission: "",
+      }));
+    }else{
+      setErrors((prevState) => ({
+        ...prevState,
+        sub_permission: "Sub Permission is required",
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    console.log("permission.permission",permission.permission)
 
-    try {
-      const res = await axios.post(
-        BASE_URL + ADD_UPDATE_PERMISSION,
-        { ...permission, ...userTypeDataAlter },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-      const data = await res.data.status;
-      const msg = await res.data.message;
+    let hasError = false;
 
-      if (data == "success") {
-        ToastifyAlert("Permission Added Successfully!", "success");
-
-        dispatch(fetchPermissionData(userTypeData));
-
-        setPermission({
-          permission: "",
-          sub_permission: "",
-        });
-
-        handleClose();
-      } else if (
-        data == "failed" &&
-        msg == "Permission and Sub-Permission cannot be empty."
-      ) {
-        ToastifyAlert(msg, "warn");
-      }
-    } catch (error) {
-      ToastifyAlert("Error!", "error");
+    if (permission.permission === "") {
+      setErrors((prevState) => ({
+        ...prevState,
+        permission: "Permission is required",
+      }));
+      hasError = true;
+    }else if(permission.permission === "Select"){
+      setErrors((prevState) => ({
+        ...prevState,
+        permission: "Please Select Permission is required",
+      }));
+      hasError = true;
     }
+   
+
+    if (permission.sub_permission === "") {
+      setErrors((prevState) => ({
+        ...prevState,
+        sub_permission: "Sub Permission is required",
+      }));
+      hasError = true;
+    }
+
+   if (hasError) return;
+
+   
+  //  return
+  setLoader(true);
+      try {
+        const res = await axios.post(
+          BASE_URL + ADD_UPDATE_PERMISSION,
+          { ...permission, ...userTypeDataAlter },
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        const data = await res.data.status;
+        const msg = await res.data.message;
+
+        if (data == "success") {
+          ToastifyAlert("Added Successfully", "success");
+
+          dispatch(fetchPermissionData(userTypeData));
+
+          setPermission({
+            permission: "",
+            sub_permission: "",
+          });
+
+          handleClose();
+        } else if (
+          data == "failed" &&
+          msg == "Permission and Sub-Permission cannot be empty."
+        ) {
+          ToastifyAlert(msg, "warn");
+        }
+      } catch (error) {
+        // ToastifyAlert("Error!", "error");
+        console.error("Error submitting data:", error);
+        handleCoockieExpire()
+        getUnAutherisedTokenMessage()
+      }
+      setLoader(false);
   };
 
   return (
@@ -171,7 +253,12 @@ const AddPermissionModal = () => {
                       name="sub_permission"
                       placeholder="Sub Permission"
                       onChangeFun={handleSubPermissionChange}
+                      value={permission?.sub_permission}
                     />
+                     
+                    {errors.sub_permission && (
+                      <p className="error-message">{errors.sub_permission}</p>
+                    )}
                   </Grid>
                   {/* </div> */}
 
@@ -183,18 +270,23 @@ const AddPermissionModal = () => {
                     <SelectDropDown
                       listItem={states.map((item) => ({ title: item }))}
                       title={"title"}
-                      selectedOption={permission?.permission}
                       // heading={"Select"}
+                      selectedOption={permission?.permission}
                       onClickHandler={handlePermissionChange}
                       name="permission"
                     />
+                     {errors.permission && (
+                      <p className="error-message">{errors.permission}</p>
+                    )}
                   </Grid>
                   {/* </div> */}
                 </div>
               </div>
 
               <div className="q-add-categories-section-middle-footer">
-                <button className="quic-btn quic-btn-save">Add</button>
+                <button className="quic-btn quic-btn-save attributeUpdateBTN"  disabled={loader}>
+                { loader ? <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15}/> Add</> : "Add"}
+                </button>
 
                 <button
                   onClick={() => handleClose()}

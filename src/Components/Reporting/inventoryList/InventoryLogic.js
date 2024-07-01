@@ -9,6 +9,7 @@ import { useAuthDetails } from "../../../Common/cookiesHelper";
 import axios from "axios";
 import PasswordShow from "../../../Common/passwordShow";
 import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 export default function InventoryLogic() {
   const dispatch = useDispatch();
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -185,6 +186,18 @@ export default function InventoryLogic() {
       handleCoockieExpire();
     }
   };
+  const [sortOrder, setSortOrder] = useState("asc");
+  const sortByItemName = (type, name) => {
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      searchProduct,
+      type,
+      name,
+      sortOrder
+    );
+    console.log(sortedItems);
+    setsearchProduct(sortedItems);
+    setSortOrder(newOrder);
+  };
   // button click when loadmore display
   return {
     handleChangeInventory,
@@ -198,5 +211,6 @@ export default function InventoryLogic() {
     handleLoadMore,
     laodMoreData,
     loader,
+    sortByItemName
   };
 }

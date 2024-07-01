@@ -9,25 +9,60 @@ import { Form } from "react-bootstrap";
 import EditIcon from "../../Assests/Category/editIcon.svg";
 import LeftIcon from "../../Assests/Taxes/Left.svg";
 import { CodeSharp } from "@mui/icons-material";
-
+import CircularProgress from "@mui/material/CircularProgress";
 import { BASE_URL, ADD_UPDATE_PERMISSION } from "../../Constants/Config";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { toast } from "react-toastify";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
-
+import PasswordShow from "./../../Common/passwordShow";
 const EditPermissionModal = ({ selected }) => {
   const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
+  // const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
   const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useDispatch();
 
+  const [errors, setErrors] = useState({
+    permission: "",
+    sub_permission: "",
+  });
+
+  const handleOpen = () => {
+    if (permission.sub_permission === "") {
+      setErrors({
+        sub_permission: "Sub Permission is required",
+      });
+    } else {
+      setErrors({
+        sub_permission: "",
+      });
+    }
+    if (permission.permission === "Select") {
+      setErrors({
+        permission: "Permission is required",
+      });
+    } else {
+      setErrors({
+        permission: "",
+      });
+    }
+
+    if (selected) {
+      setPermission({
+        id: selected.id,
+        permission: selected.permission,
+        sub_permission: selected.sub_permission,
+      });
+    }
+    setOpen(true);
+  };
+  const [loader, setLoader] = useState(false);
   const { userTypeData } = useAuthDetails();
 
   const { token, ...userTypeDataAlter } = userTypeData;
-
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
   const [states, setStates] = useState([
     "Select",
     "Register",
@@ -74,10 +109,30 @@ const EditPermissionModal = ({ selected }) => {
 
   //Handle Select Permission's
   const handlePermissionChange = (e) => {
-    setPermission((prevState) => ({
-      ...prevState,
-      ["permission"]: e?.title,
-    }));
+    // setPermission((prevState) => ({
+    //   ...prevState,
+    //   ["permission"]: e?.title,
+    // }));
+    const selectedPermission = e.title;
+    if (selectedPermission === "Select") {
+      setPermission((prevState) => ({
+        ...prevState,
+        permission: selectedPermission,
+      }));
+      setErrors((prevState) => ({
+        ...prevState,
+        permission: "Permission is required",
+      }));
+    } else {
+      setPermission((prevState) => ({
+        ...prevState,
+        permission: selectedPermission,
+      }));
+      setErrors((prevState) => ({
+        ...prevState,
+        permission: "",
+      }));
+    }
   };
 
   //Handle Sub Permission's
@@ -87,6 +142,21 @@ const EditPermissionModal = ({ selected }) => {
       ...prevState,
       [name]: value,
     }));
+    if (value !== "") {
+      setPermission((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+      setErrors((prevState) => ({
+        ...prevState,
+        sub_permission: "",
+      }));
+    } else {
+      setErrors((prevState) => ({
+        ...prevState,
+        sub_permission: "Sub Permission is required",
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -99,12 +169,37 @@ const EditPermissionModal = ({ selected }) => {
     // formData.append("permission", permission.permission);
     // formData.append("sub_permission", permission.sub_permission);
 
+    let hasError = false;
+    if (permission.permission === "") {
+      setErrors((prevState) => ({
+        ...prevState,
+        permission: "Permission is required",
+      }));
+      hasError = true;
+    } else if (permission.permission === "Select") {
+      setErrors((prevState) => ({
+        ...prevState,
+        permission: "Please Select Permission is required",
+      }));
+      hasError = true;
+    }
+    if (permission.sub_permission === "") {
+      setErrors((prevState) => ({
+        ...prevState,
+        sub_permission: "Sub Permission is required",
+      }));
+      hasError = true;
+    }
+
+    if (hasError) return;
+
     const data = {
       id: permission?.id,
       permission: permission?.permission,
       sub_permission: permission?.sub_permission,
       ...userTypeDataAlter,
     };
+    setLoader(true);
     try {
       // Make your API request with axios
       const response = await axios.post(
@@ -124,7 +219,7 @@ const EditPermissionModal = ({ selected }) => {
       if (update_message == "success") {
         // alert(msg)
 
-        ToastifyAlert("Permission Edited!", "success");
+        ToastifyAlert("Updated Successfully", "success");
 
         dispatch(fetchPermissionData(userTypeData));
         handleClose();
@@ -132,7 +227,7 @@ const EditPermissionModal = ({ selected }) => {
         update_message == "failed" &&
         msg == "Permission and Sub-Permission cannot be empty."
       ) {
-        ToastifyAlert("Please enter Permission and Sub Permission", "warn");
+        // ToastifyAlert("Please enter Permission and Sub Permission", "warn");
 
         setErrorMessage(msg);
       }
@@ -141,20 +236,22 @@ const EditPermissionModal = ({ selected }) => {
       handleClose();
     } catch (error) {
       console.error("Error submitting data:", error);
-
-      ToastifyAlert("Error!", "error");
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
+      // ToastifyAlert("Error!", "error");
       // Handle errors as needed
     }
     // }
+    setLoader(false);
   };
 
   return (
     <div>
       <div
-        className="flex justify-evenly categories-items categories-items-btn"
+        className="flex justify-evenly categories-items categories-items-btn permissionEditBTN"
         onClick={handleOpen}
       >
-        <span className="categories-items categories-items-btn">
+        <span className="categories-items ">
           <img src={EditIcon} alt="edit-icon" />{" "}
         </span>
       </div>
@@ -211,12 +308,12 @@ const EditPermissionModal = ({ selected }) => {
                       onChangeFun={handleSubPermissionChange}
                       value={permission?.sub_permission}
                     />
+                    {errors.sub_permission && (
+                      <span className="error-message">
+                        {errors.sub_permission}
+                      </span>
+                    )}
                   </Grid>
-                  {errorMessage && (
-                    <span className="error-message" style={{ color: "red" }}>
-                      {errorMessage}
-                    </span>
-                  )}
 
                   <Grid item xs={12} sm={6} md={6}>
                     <div className="my-1 qvrowmain">
@@ -229,12 +326,10 @@ const EditPermissionModal = ({ selected }) => {
                       name="permission"
                       selectedOption={permission?.permission}
                     />
+                    {errors.permission && (
+                      <span className="error-message">{errors.permission}</span>
+                    )}
                   </Grid>
-                  {errorMessage && (
-                    <span className="error-message" style={{ color: "red" }}>
-                      {errorMessage}
-                    </span>
-                  )}
                   {/* <div className="col-qv-6">
                     <div className="input_area">
                       <select
@@ -311,7 +406,24 @@ const EditPermissionModal = ({ selected }) => {
               </div>
 
               <div className="q-add-categories-section-middle-footer">
-                <button className="quic-btn quic-btn-save">Update</button>
+                <button
+                  className="quic-btn quic-btn-save attributeUpdateBTN"
+                  disabled={loader}
+                >
+                  {loader ? (
+                    <>
+                      <CircularProgress
+                        color={"inherit"}
+                        className="loaderIcon"
+                        width={15}
+                        size={15}
+                      />{" "}
+                      Update
+                    </>
+                  ) : (
+                    "Update"
+                  )}
+                </button>
 
                 <button
                   onClick={() => handleClose()}

@@ -8,7 +8,7 @@ import {
 } from "../../Constants/Config";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
-
+import PasswordShow from "./../../Common/passwordShow";
 const InventoryExportLogic = () => {
   const [submitmessage, setsubmitmessage] = useState();
   const { validateDropdown } = Validation();
@@ -23,11 +23,12 @@ const InventoryExportLogic = () => {
     },
   });
   const { userTypeData } = useAuthDetails();
-
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
   const [alertOpen, setAlertOpen] = useState(false);
   const [modalHeaderText, setModalHeaderText] = useState("");
   const [userInput, setUserInput] = useState(''); 
   const [captchaText, setCaptchaText] = useState(''); 
+  const [loader, setLoader] = useState(false);
 
   const handleStoreInput = async (event) => {
     let { errors } = values;
@@ -89,6 +90,7 @@ const InventoryExportLogic = () => {
             upc_check: values.upc_check,
             ...userTypeDataNew,
           };
+          setLoader(true);
           try {
             const response = await axios.post(
               BASE_URL + INVENTORY_DUPLICATE,
@@ -109,6 +111,8 @@ const InventoryExportLogic = () => {
           } catch (error) {
             // console.log('33 catch err');
             ToastifyAlert("Error!", "error");
+            handleCoockieExpire()
+            getUnAutherisedTokenMessage()
             return new Error(error);
           }
         }else{
@@ -116,6 +120,7 @@ const InventoryExportLogic = () => {
           setAlertOpen(true)
           return false;
         }
+        setLoader(false);
       }
     }
 
@@ -144,7 +149,7 @@ const InventoryExportLogic = () => {
           //   upc_check: values.upc_check,
           ...userTypeDataNew,
         };
-
+        setLoader(true);
         try {
           const response = await axios.post(
             BASE_URL + SETTINGS_DUPLICATE,
@@ -159,11 +164,14 @@ const InventoryExportLogic = () => {
 
           if (response.data) {
             setsubmitmessage(response.data);
-            ToastifyAlert("Duplicate Settings Success!", "success");
+            // ToastifyAlert("Duplicate Settings Success!", "success");
+            ToastifyAlert("Added Successfully", "success");
           } else {
             setsubmitmessage(response.data);
           }
         } catch (error) {
+          handleCoockieExpire()
+          getUnAutherisedTokenMessage()
           ToastifyAlert("Error!", "error");
           // console.log('33 catch err');
           return new Error(error);
@@ -173,6 +181,7 @@ const InventoryExportLogic = () => {
           setAlertOpen(true)
           return false;
         }
+        setLoader(false);
       }
     }
 
@@ -194,6 +203,7 @@ const InventoryExportLogic = () => {
     setUserInput,
     captchaText,
     setCaptchaText,
+    loader
   };
 };
 

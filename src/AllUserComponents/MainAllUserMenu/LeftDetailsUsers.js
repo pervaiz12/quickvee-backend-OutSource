@@ -31,6 +31,7 @@ import MainAdmin from "../Users/admin/MainAdmin";
 import MainVerifiedMerchantPage from "../Users/VerifiedMerchant/MainVerifiedMerchantPage";
 import MainUnverifiedMerchant from "../Users/UnverifeDetails/MainUnverifiedMerchant";
 import AddDefaults from "../Defaults/AddDefaults";
+import NeedHelp from "../../Components/NeedHelp/NeedHelp";
 // verified
 
 const LeftDetailsUsers = ({ visible }) => {
@@ -40,6 +41,7 @@ const LeftDetailsUsers = ({ visible }) => {
       {visible === "newsletter" && <NewsLetterMain />}
       {visible === "store-order" && <MainStoreOrder />}
       {visible === "order-count" && <OrderCountMain />}
+      {visible === "need_help" && <NeedHelp />}
       {visible === "defaults" && <MainDefaults />}
       {visible === "edit-defaults" && <EditDefaults />}
       {visible === "add-defaults" && <AddDefaults />}
@@ -51,7 +53,6 @@ const LeftDetailsUsers = ({ visible }) => {
       {visible === "create_permission" && <MainPermission />}
       {visible === "invertory-export" && <MainInventoryExport />}
       {visible === "merchant-details" && <MainMerchantDetails />}
-    
       {/* manager view */}
       {visible === "manager_view" && <Manager />}
       {visible === "unverified" && <MainUnverifiedMerchant />}

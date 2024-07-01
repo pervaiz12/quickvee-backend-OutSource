@@ -49,6 +49,7 @@ import DislikeModal from "../../../reuseableComponents/DislikeModal";
 import emailLogo from "../../../Assests/Dashboard/email.svg";
 import phoneLogo from "../../../Assests/Dashboard/phone.svg";
 import { setIsStoreActive } from "../../../Redux/features/NavBar/MenuSlice";
+import PasswordShow from "../../../Common/passwordShow";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -74,7 +75,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function Unverified({ setMerchantId, setVisible }) {
   //  ============== DEFINED REDUX STATES ============================
-
+  const { getUnAutherisedTokenMessage, handleCoockieExpire } = PasswordShow();
   const UnVerifiedMerchantList = useSelector(
     (state) => state.unverifiedMerchantRecord
   );
@@ -182,8 +183,17 @@ export default function Unverified({ setMerchantId, setVisible }) {
     page: currentPage,
     search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
   };
+  const getUnVerifiedRecord = async () => {
+    try {
+      await dispatch(getUnVerifiedMerchant(unverify_data)).unwrap();
+    } catch (error) {
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
+    }
+  };
   useEffect(() => {
-    dispatch(getUnVerifiedMerchant(unverify_data));
+    // dispatch(getUnVerifiedMerchant(unverify_data));
+    getUnVerifiedRecord();
   }, [currentPage, debouncedValue, rowsPerPage, VerifiedMerchantListState]);
 
   // only when user searches

@@ -55,6 +55,7 @@ const CategoryListDropDown = ({ type, onCategoryChange }) => {
   };
 
   const handleOptionClick = (option, dropdown, value) => {
+    console.log('outer option', option);
     switch (dropdown) {
       case "category":
         setSelectedCategory(option === "All" ? "All" : option.title);
@@ -64,12 +65,13 @@ const CategoryListDropDown = ({ type, onCategoryChange }) => {
         let data1 = {
           merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
           format: "json",
-          category_id: option === 'All' ? 'all' : option,
+          category_id: option === 'All' ? 'all' : option?.id,
           show_status: "all",
           listing_type: listing_type,
           offset: offset,
           limit: 10,
         };
+        console.log('data1', data1, option);
         if (data1) {
           dispatch(fetchProductsData(data1));
         }

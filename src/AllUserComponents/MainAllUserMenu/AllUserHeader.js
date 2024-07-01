@@ -47,7 +47,6 @@ const AllUserHeader = () => {
   };
 
   // ================ handle dropdown menu end =============================
-
   const dispatch = useDispatch();
   const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
   const isDropdownOpen = useSelector(
@@ -113,13 +112,16 @@ const AllUserHeader = () => {
     Cookies.remove("user_auth_record");
     localStorage.removeItem("AllStore");
     Cookies.remove("token_data");
+    dispatch(getAuthInvalidMessage(""));
     navigate("/login");
     dispatch(setIsStoreActive(false));
+
     // handleClose()
   };
 
   const handleNavigateToNeedHelp = () => [
-    navigate("/users/view/unapprove/need-help"),
+    // navigate("/users/view/unapprove/need-help"),
+    navigate("/need-help"),
   ];
 
   return (

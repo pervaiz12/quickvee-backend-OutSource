@@ -76,16 +76,27 @@ const OnlineTableViewData = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const debouncedValue = useDebounce(props?.OnlSearchIdData);
-  console.log("debouncedValue", debouncedValue);
+  // console.log("debouncedValue", debouncedValue);
   const dispatch = useDispatch();
   // const debouncedValue = useDebounce(searchId);
   useEffect(() => {
+    const transactionType = (type)=>{
+      if(type === "Cash Payment"){
+        return "Cash"
+      }
+      if(type === "Card Payment"){
+        return "Online"
+      }
+      else{
+        return type
+      }
+    }
     const fetchData = async () => {
       if (props?.selectedDateRange?.start_date) {
         let data = {
           merchant_id: props.merchant_id,
           order_type: props.OrderTypeData,
-          trans_type: props.OrderSourceData,
+          trans_type: transactionType(props.OrderSourceData),
           start_date: props.selectedDateRange?.start_date,
           end_date: props.selectedDateRange?.end_date,
           customer_id: "0",
@@ -115,13 +126,24 @@ const OnlineTableViewData = (props) => {
 
   useEffect(() => {
     setCurrentPage(1);
+    const transactionType = (type)=>{
+      if(type === "Cash Payment"){
+        return "Cash"
+      }
+      if(type === "Card Payment"){
+        return "Online"
+      }
+      else{
+        return type
+      }
+    }
     dispatch(
       getOrderListCount({
         merchant_id: props.merchant_id, //
         order_type: props.OrderTypeData,
         search_by:
           props?.OnlSearchIdData !== "" ? props?.OnlSearchIdData : null,
-        trans_type: props.OrderSourceData, //
+        trans_type: transactionType(props.OrderSourceData), //
         start_date: props.selectedDateRange?.start_date, //
         end_date: props.selectedDateRange?.end_date, //
         ...props.userTypeData, //
@@ -490,10 +512,16 @@ const OnlineTableViewData = (props) => {
           // Update the local state with the updated order data
           setAllOnlineStoreOrders((prevState) => {
             // Find the index of the order to update
+            const updatedStatusListItem  = prevState.find((order)=>
+              order.order_id === deleteCategoryId.orderId
+            )
+            console.log("updateOrder", updatedStatusListItem)
+            
             const index = prevState.findIndex(
               (order) => order.order_id === deleteCategoryId.orderId
             );
             // console.log("setAllOnlineStoreOrders",index)
+            
             if (index !== -1) {
               // Create a copy of the order object
               const updatedOrder = { ...prevState[index] };

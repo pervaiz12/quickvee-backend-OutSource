@@ -28,6 +28,7 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
     setShowModal(true);
     setNewAttribute(attribute.title);
     setold_title(attribute.title);
+    setErrorMessage("");
   };
 
   const closeModal = () => {
@@ -60,6 +61,10 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
     if (nameExists) {
       return false;
     }
+    if (!newAttribute.trim()) {
+      setErrorMessage("Title is required");
+      return;
+    }
     const editItem = {
       merchant_id: merchant_id,
       varient_id: attribute.id,
@@ -79,7 +84,7 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
     });
     if (response) {
       dispatch(editAttribute({ id: attribute.id, title: newAttribute }));
-      ToastifyAlert(response.data.response_message, "success");
+      ToastifyAlert("Updated Successfully", "success");
       setShowModal(false);
     } else {
       setsubmitmessage(response.data.message);

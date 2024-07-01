@@ -17,6 +17,7 @@ import TableRow from "@mui/material/TableRow";
 import { priceFormate } from "../../../hooks/priceFormate";
 import PasswordShow from "../../../Common/passwordShow";
 import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -59,7 +60,7 @@ const DetailsSaleReport = ({ data }) => {
   const [detailCategorySale, setdetailCategorySale] = useState([]);
   const [order, setOrder] = useState("DESC");
   const [sorting_type, setSorting_type] = useState("categoryTotal");
-
+  const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
   const detailCategorySaleDataState = useSelector(
     (state) => state.detailCategorySale
   );
@@ -139,6 +140,25 @@ const DetailsSaleReport = ({ data }) => {
     setOrder(newOrder);
   };
 
+  const sortByItemName = (type, name) => {
+    const newOrder = sortOrder === "asc" ? "desc" : "asc";
+
+    const updatedCategorySale = Object.fromEntries(
+      Object.entries(detailCategorySale).map(([category, items]) => {
+        const { sortedItems } = SortTableItemsHelperFun(
+          items,
+          type,
+          name,
+          sortOrder
+        );
+        return [category, sortedItems];
+      })
+    );
+
+    setdetailCategorySale(updatedCategorySale);
+    setSortOrder(newOrder);
+  };
+
   return (
     <>
       {Object.entries(detailCategorySale).map(([category, items]) => (
@@ -158,20 +178,44 @@ const DetailsSaleReport = ({ data }) => {
                   aria-label="customized table"
                 >
                   <TableHead>
-                    <StyledTableCell sx={{ width: "55%" }}>Item Name</StyledTableCell>
-                    <StyledTableCell align="center">
-                      <p
-                    className="q-catereport-quantity "
-                    onClick={handleQuantityClick}
-                  >
-                    Quantity {" "}
-                    <img src={SortIconW} alt="" className="pl-1" />
-                  </p>
+                    <StyledTableCell sx={{ width: "55%" }}>
+                      <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName("str", "name")}
+                      >
+                        <p>Item Name</p>
+                        <img src={SortIconW} alt="" className="pl-1" />
+                      </button>
                     </StyledTableCell>
                     <StyledTableCell align="center">
-                    <p className="attriButes-title" onClick={handleQuantityClick}>
-                      Amount <img src={SortIconW} alt=""  className="pl-1" />
-                    </p>
+                      {/* <p
+                        className="q-catereport-quantity "
+                        onClick={handleQuantityClick}
+                      >
+                        Quantity <img src={SortIconW} alt="" className="pl-1" />
+                      </p> */}
+                      <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName("num", "pro_qty")}
+                      >
+                        <p>Quantity</p>
+                        <img src={SortIconW} alt="" className="pl-1" />
+                      </button>
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {/* <p
+                        className="attriButes-title"
+                        onClick={handleQuantityClick}
+                      >
+                        Amount <img src={SortIconW} alt="" className="pl-1" />
+                      </p> */}
+                      <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName("num", "product_total")}
+                      >
+                        <p>Amount</p>
+                        <img src={SortIconW} alt="" className="pl-1" />
+                      </button>
                     </StyledTableCell>
                   </TableHead>
                   <TableBody>
@@ -298,21 +342,19 @@ const DetailsSaleReport = ({ data }) => {
             <StyledTable>
               <TableBody>
                 <StyledTableRow>
-                  <StyledTableCell  sx={{ width: "50%" }} >
+                  <StyledTableCell sx={{ width: "50%" }}>
                     <div className="q-category-bottom-report-listing">
-                                      <div>
-                                        <p className="">Grand Total</p>
-                                      </div>
-                                    </div>
+                      <div>
+                        <p className="">Grand Total</p>
+                      </div>
+                    </div>
                   </StyledTableCell>
                   <StyledTableCell></StyledTableCell>
 
                   <StyledTableCell align="center">
-                      <div className="q-category-bottom-report-listing">
-                        <div>
-                        ${priceFormate(grandTotal.toFixed(2))}
-                        </div>
-                      </div>
+                    <div className="q-category-bottom-report-listing">
+                      <div>${priceFormate(grandTotal.toFixed(2))}</div>
+                    </div>
                   </StyledTableCell>
                 </StyledTableRow>
               </TableBody>

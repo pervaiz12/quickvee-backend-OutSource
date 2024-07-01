@@ -28,16 +28,17 @@ import { useParams } from "react-router-dom";
 import Loader from "../../CommonComponents/Loader";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import PasswordShow from "../../Common/passwordShow";
 
 const BulkVendorEdit = ({
   productData,
-  varientData,
   varientIndex,
   modalType,
   handleCloseEditModal,
 }) => {
   const dispatch = useDispatch();
-  const { LoginGetDashBoardRecordJson } = useAuthDetails();
+  const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
+  const {getUnAutherisedTokenMessage} = PasswordShow();
   const [selectedVendor, setSelectedVendor] = useState([]);
   const [fetchDataLoadingVendor, setFetchDataLoadingVendor] = useState(false);
   const [vendor, setVendor] = useState([]);
@@ -79,18 +80,19 @@ const BulkVendorEdit = ({
           ? productData?.id
           : modalType === "bulk-edit"
             ? productData?.id
-            : varientData[varientIndex]?.id
+            : varientIndex
       );
       formData.append("vendor_id", vendorId);
 
       dispatch(assignPrefferedVendor(formData))
         .then((res) => {
           if (res?.payload?.status) {
-            ToastifyAlert("Updated Preferred Vendor!", "success");
+            ToastifyAlert("Updated Successfully", "success");
           }
         })
         .catch((err) => {
           ToastifyAlert("Error!", "error");
+          getUnAutherisedTokenMessage();
         });
     } else if (type === "checkbox" && modalType === "bulk-edit") {
       updateVandorItems = vendorItems.map((item, i) => ({
@@ -141,13 +143,16 @@ const BulkVendorEdit = ({
         ? productData?.id
         : modalType === "bulk-edit" && Boolean(+productData?.isvarient)
           ? productData?.id
-          : varientData[varientIndex]?.id
+          : varientIndex
     );
     formData.append(
       "merchant_id",
       LoginGetDashBoardRecordJson?.data?.merchant_id
     );
     formData.append("single_product", isVarient ? 0 : 1);
+    formData.append("login_type", userTypeData?.login_type);
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("token", userTypeData?.token);
 
     dispatch(getAlreadyAssignVendor(formData))
       .then((res) => {
@@ -175,13 +180,16 @@ const BulkVendorEdit = ({
         ? productData?.id
         : modalType === "bulk-edit" && Boolean(+productData?.isvarient)
           ? productData?.id
-          : varientData[varientIndex]?.id
+          : varientIndex
     );
     formData.append(
       "merchant_id",
       LoginGetDashBoardRecordJson?.data?.merchant_id
     );
     formData.append("single_product", isVarient ? 0 : 1);
+    formData.append("login_type", userTypeData?.login_type);
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("token", userTypeData?.token);
 
     // called vendor api for dropdown vendor data
     dispatch(fetchVendorList(formData)).then((res) => {
@@ -210,12 +218,18 @@ const BulkVendorEdit = ({
           ? productData?.id
           : modalType === "bulk-edit"
             ? productData?.id
-            : varientData[varientIndex]?.id
+            : varientIndex
       );
       formData.append(
         "vendor_id",
         selectedVendor?.map((item) => item?.id)?.toString()
       );
+            
+            formData.append("login_type", userTypeData?.login_type);
+      formData.append("token_id", userTypeData?.token_id);
+      formData.append("token", userTypeData?.token);
+      
+      
 
       dispatch(assignProductVendor(formData))
         .then((res) => {
@@ -235,13 +249,14 @@ const BulkVendorEdit = ({
             );
             formData.append("id", productId?.id);
 
-            ToastifyAlert("Vendor Added Successfully!", "success");
+            ToastifyAlert("Added Successfully", "success");
 
             setSelectedVendor([]);
           }
         })
         .catch((err) => {
           console.log("error for assign vendor", err);
+          getUnAutherisedTokenMessage();
         })
         .finally(() => {
           setLoading(false);
@@ -277,7 +292,7 @@ const BulkVendorEdit = ({
           ? productData?.id
           : modalType === "bulk-edit"
             ? productData?.id
-            : varientData[varientIndex]?.id
+            : varientIndex
       );
       formData.append("vendor_id", vendorId);
       dispatch(deleteProductVendor(formData))
@@ -288,11 +303,12 @@ const BulkVendorEdit = ({
             );
             setVendorItems(filtervendorList);
 
-            ToastifyAlert("Vendor deleted successfully!", "success");
+            ToastifyAlert("Deleted Successfully", "success");
           }
         })
         .catch((err) => {
           ToastifyAlert("Error!", "error");
+          getUnAutherisedTokenMessage();
         });
     } else {
       const filtervendorList = vendorItems?.filter(
@@ -320,13 +336,17 @@ const BulkVendorEdit = ({
         ? productData?.id
         : modalType === "bulk-edit"
           ? productData?.id
-          : varientData[varientIndex]?.id
+          : varientIndex
     );
     formData.append(
       "costperItem",
       vendorItems?.map((i) => i?.costPerItem).toString()
     );
     formData.append("vendor_id", vendorItems?.map((i) => i?.id).toString());
+    formData.append("login_type", userTypeData?.login_type);
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("token", userTypeData?.token);
+    
 
     /// send bulkFormData when multiple varient and bulkModal is open
     bulkFormData.append("product_id", productId?.id);
@@ -346,9 +366,13 @@ const BulkVendorEdit = ({
       "prefferd_vendor",
       vendorItems?.filter((i) => Boolean(+i?.isPreferred))[0]?.id ?? ""
     );
+    bulkFormData.append("login_type", userTypeData?.login_type);
+    bulkFormData.append("token_id", userTypeData?.token_id);
+    bulkFormData.append("token", userTypeData?.token);
 
     if (modalType === "bulk-edit") {
       formData.append("vendor_id", vendorItems?.map((i) => i?.id).toString());
+
       dispatch(bulkVendorAssign(bulkFormData))
         .then((res) => {
           if (res?.payload?.status) {
@@ -358,6 +382,7 @@ const BulkVendorEdit = ({
         })
         .catch(() => {
           ToastifyAlert("Error!", "error");
+          getUnAutherisedTokenMessage();
         })
         .finally(() => {
           setSubmitLoading(false);
@@ -372,6 +397,7 @@ const BulkVendorEdit = ({
         })
         .catch(() => {
           ToastifyAlert("Error!", "error");
+          getUnAutherisedTokenMessage();
         })
         .finally(() => {
           setSubmitLoading(false);

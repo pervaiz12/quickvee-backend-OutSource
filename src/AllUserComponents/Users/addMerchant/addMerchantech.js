@@ -31,6 +31,8 @@ export default function AddMerchan() {
     errorPin,
     handleKeyPress,
     loader,
+    keyEnter,
+    handleBlurStoreFound,
   } = MerchantFunction();
 
   const navigate = useNavigate();
@@ -143,6 +145,7 @@ export default function AddMerchan() {
                     value={store.ownerName}
                     onChangeFun={handleChange}
                     sx={{ pt: 0.5 }}
+                    onBlurFunction={() => handleBlur("ownerName")}
                   />
                   {store.errors.ownerName && (
                     <span className="error">{store.errors.ownerName}</span>
@@ -252,6 +255,8 @@ export default function AddMerchan() {
                     value={store.storename}
                     onChangeFun={handleChange}
                     sx={{ pt: 0.5 }}
+                    onKeyDown={keyEnter}
+                    onBlurFunction={() => handleBlurStoreFound("storename")}
                   />
                   {store.errors.storename && (
                     <span className="error">{store.errors.storename}</span>
@@ -267,6 +272,7 @@ export default function AddMerchan() {
                     value={store.ownerName}
                     onChangeFun={handleChange}
                     sx={{ pt: 0.5 }}
+                    onKeyDown={keyEnter}
                   />
                   {store.errors.ownerName && (
                     <span className="error">{store.errors.ownerName}</span>
@@ -284,7 +290,22 @@ export default function AddMerchan() {
                     value={store.email}
                     onChangeFun={handleChange}
                     onBlurFunction={() => handleBlur("email")}
+                    autoComplete="off"
+                    readOnly
+                    onFocusData={(e) => e.target.removeAttribute("readonly")}
+                    onKeyDown={keyEnter}
                   />
+                  {/* <input
+                    className=""
+                    type="text"
+                    name="email"
+                    value={store.email}
+                    onChange={handleChange}
+                    onBlur={() => handleBlur("email")}
+                    autoComplete="off"
+                    readOnly
+                    onFocus={(e) => e.target.removeAttribute("readonly")}
+                  /> */}
                   {store.errors.email && (
                     <span className="error">{store.errors.email}</span>
                   )}
@@ -300,7 +321,8 @@ export default function AddMerchan() {
                       value={store.password}
                       onChangeFun={handleChange}
                       onBlurFunction={() => handleBlur("password")}
-                      sx={{ pt: 0.5 }}
+                      sx={{ pt: 0.5, pt: 0 }}
+                      onKeyDown={keyEnter}
                     />
                     {jsxData(store.password)}
                   </div>
@@ -311,7 +333,9 @@ export default function AddMerchan() {
               </Grid>
               <Grid container spacing={3} sx={{ px: 2.5, pb: 2.5 }}>
                 <Grid item xs={12} sm={6}>
-                  <label>Phone</label>
+                  <label>
+                    Phone<span className="Asterisk_error">*</span>
+                  </label>
                   <BasicTextFields
                     className=""
                     type="text"
@@ -321,6 +345,7 @@ export default function AddMerchan() {
                     maxLength={10}
                     onKeyPressFun={handleKeyPress}
                     sx={{ pt: 0.5 }}
+                    onKeyDown={keyEnter}
                   />
                   {store.errors.phone && (
                     <span className="error">{store.errors.phone}</span>

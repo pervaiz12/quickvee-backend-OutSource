@@ -32,6 +32,7 @@ export default function InfoFunction() {
     image: "",
     banners: "",
     qrCode: "",
+    receieptLogo: "",
     address_1: "",
     address_2: "",
     city: "",
@@ -45,7 +46,10 @@ export default function InfoFunction() {
     is_banner_change: "0",
     is_logo_change: "0",
     is_qr_code_change: "0",
+    is_receipt_logo_change: "0",
   });
+  const urlPattern =
+    /^(https:\/\/www\.instagram\.com\/|https:\/\/www\.facebook\.com\/|https:\/\/[a-z0-9]+(\.[a-z0-9]+)+\/).*$/;
   console.log("infoRecord.image === selectedFile.name", infoRecord);
   // ============================password ======================
   const [passwordInput, setPassowordInput] = useState({
@@ -118,11 +122,16 @@ export default function InfoFunction() {
     zipCodeError: "",
     stateNameError: "",
     phoneError: "",
+    receieptLogoError: "",
+    facebookUrlError: "",
+    instagramUrlError: "",
+    promotionalUrlError: "",
   });
 
   const [imageBoolean, setImageBoolean] = useState(false);
   const [BannersBoolean, setBannersBoolean] = useState(false);
   const [qrCodeBoolean, setQrCodeBoolean] = useState(false);
+  const [receieptLogoBool, setReceieptLogoBool] = useState(false);
   const [approve, setApprove] = useState("");
   const handleDelete = (data) => {
     if (data === "banners") {
@@ -140,6 +149,12 @@ export default function InfoFunction() {
     } else if (data === "qrCode") {
       setInfoRecord({ ...infoRecord, qrCode: "" });
       const fileInput = document.getElementById("file-input5");
+      if (fileInput) {
+        fileInput.value = "";
+      }
+    } else if (data === "receieptLogo") {
+      setInfoRecord({ ...infoRecord, receieptLogo: "" });
+      const fileInput = document.getElementById("file-input4");
       if (fileInput) {
         fileInput.value = "";
       }
@@ -168,6 +183,13 @@ export default function InfoFunction() {
       isValidate = false;
     } else {
       errorMessage.qrCodeError = "";
+    }
+
+    if (infoRecord.receieptLogo === "") {
+      errorMessage.receieptLogoError = "QR Reciept logo is required.";
+      isValidate = false;
+    } else {
+      errorMessage.receieptLogoError = "";
     }
 
     if (infoRecord.address_1 === "") {
@@ -204,6 +226,24 @@ export default function InfoFunction() {
     } else {
       errorMessage.phoneError = "";
     }
+    if (infoRecord.facebookUrl === "") {
+      errorMessage.facebookUrlError = "this field is required.";
+      isValidate = false;
+    } else {
+      errorMessage.facebookUrlError = "";
+    }
+    if (infoRecord.instagramUrl === "") {
+      errorMessage.instagramUrlError = "this field is required.";
+      isValidate = false;
+    } else {
+      errorMessage.instagramUrlError = "";
+    }
+    if (infoRecord.promotionalUrl === "") {
+      errorMessage.promotionalUrlError = "this field is required.";
+      isValidate = false;
+    } else {
+      errorMessage.promotionalUrlError = "";
+    }
     setErrors(errorMessage);
 
     return isValidate;
@@ -216,100 +256,114 @@ export default function InfoFunction() {
       login_type: userTypeData?.login_type,
       token_id: userTypeData?.token_id,
     };
-    let response = await axios.post(BASE_URL + GET_Edit_STORE_INFO, data, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${userTypeData?.token}`,
-      },
-    });
-    console.log(response);
-    if (response.data.status == 200) {
-      const merchant_id =
-        response.data.message.merchant_id !== null
-          ? response.data.message.merchant_id
-          : "";
-      const name =
-        response.data.message.name !== null ? response.data.message.name : "";
-      const email =
-        response.data.message.email !== null ? response.data.message.email : "";
-      const menu_link =
-        response.data.message.menu_link !== null
-          ? response.data.message.menu_link
-          : "";
-      const domain_url =
-        response.data.message.domain_url !== null
-          ? response.data.message.domain_url
-          : "";
-      const img =
-        response.data.message.img !== null ? response.data.message.img : "";
-      const banner_img =
-        response.data.message.banner_img !== null
-          ? response.data.message.banner_img
-          : "";
-      const a_address_line_1 =
-        response.data.message.a_address_line_1 !== null
-          ? response.data.message.a_address_line_1
-          : "";
-      const a_address_line_2 =
-        response.data.message.a_address_line_2 !== null
-          ? response.data.message.a_address_line_2
-          : "";
-      const a_city =
-        response.data.message.a_city !== null
-          ? response.data.message.a_city
-          : "";
-      const a_zip =
-        response.data.message.a_zip !== null ? response.data.message.a_zip : "";
-      const state =
-        response.data.message.a_state !== null
-          ? response.data.message.a_state
-          : "";
-      const phone =
-        response.data.message.a_phone !== null
-          ? response.data.message.a_phone
-          : "";
-      const fb_url =
-        response.data.message.insta_url !== null
-          ? response.data.message.insta_url
-          : "";
-      const insta_url =
-        response.data.message.insta_url !== null
-          ? response.data.message.insta_url
-          : "";
-      const promotional_url =
-        response.data.message.promo_url !== null
-          ? response.data.message.promo_url
-          : "";
-      const user_id =
-        response.data.message.id !== null ? response.data.message.id : "";
-      const qr_img =
-        response.data.message.qr_img !== null
-          ? response.data.message.qr_img
-          : "";
-      setApprove("approve");
-      setImageBanner(banner_img);
-      setImage(img);
-      setInfoRecord((prevState) => ({
-        ...prevState,
-        merchant_id: merchant_id,
-        store: name,
-        email: email,
-        menuLink: menu_link,
-        domain: domain_url,
-        image: img,
-        banners: banner_img,
-        address_1: a_address_line_1,
-        address_2: a_address_line_2,
-        city: a_city,
-        zip: a_zip,
-        state: state,
-        phone: phone,
-        facebookUrl: fb_url,
-        instagramUrl: insta_url,
-        promotionalUrl: promotional_url,
-        user_id: user_id,
-        qrCode: qr_img,
-      }));
+    try {
+      let response = await axios.post(BASE_URL + GET_Edit_STORE_INFO, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userTypeData?.token}`,
+        },
+      });
+      console.log(response);
+      if (response.data.status == 200) {
+        const merchant_id =
+          response.data.message.merchant_id !== null
+            ? response.data.message.merchant_id
+            : "";
+        const name =
+          response.data.message.name !== null ? response.data.message.name : "";
+        const email =
+          response.data.message.email !== null
+            ? response.data.message.email
+            : "";
+        const menu_link =
+          response.data.message.menu_link !== null
+            ? response.data.message.menu_link
+            : "";
+        const domain_url =
+          response.data.message.domain_url !== null
+            ? response.data.message.domain_url
+            : "";
+        const img =
+          response.data.message.img !== null ? response.data.message.img : "";
+        const banner_img =
+          response.data.message.banner_img !== null
+            ? response.data.message.banner_img
+            : "";
+        const a_address_line_1 =
+          response.data.message.a_address_line_1 !== null
+            ? response.data.message.a_address_line_1
+            : "";
+        const a_address_line_2 =
+          response.data.message.a_address_line_2 !== null
+            ? response.data.message.a_address_line_2
+            : "";
+        const a_city =
+          response.data.message.a_city !== null
+            ? response.data.message.a_city
+            : "";
+        const a_zip =
+          response.data.message.a_zip !== null
+            ? response.data.message.a_zip
+            : "";
+        const state =
+          response.data.message.a_state !== null
+            ? response.data.message.a_state
+            : "";
+        const phone =
+          response.data.message.a_phone !== null
+            ? response.data.message.a_phone
+            : "";
+        const fb_url =
+          response.data.message.fb_url !== null
+            ? response.data.message.fb_url
+            : "";
+        const insta_url =
+          response.data.message.insta_url !== null
+            ? response.data.message.insta_url
+            : "";
+        const promotional_url =
+          response.data.message.promo_url !== null
+            ? response.data.message.promo_url
+            : "";
+        const user_id =
+          response.data.message.id !== null ? response.data.message.id : "";
+        const qr_img =
+          response.data.message.qr_img !== null
+            ? response.data.message.qr_img
+            : "";
+        const receipt_img =
+          response.data.message.receipt_logo !== null
+            ? response.data.message.receipt_logo
+            : "";
+        setApprove("approve");
+        setImageBanner(banner_img);
+        setImage(img);
+        setInfoRecord((prevState) => ({
+          ...prevState,
+          merchant_id: merchant_id,
+          store: name,
+          email: email,
+          menuLink: menu_link,
+          domain: domain_url,
+          image: img,
+          banners: banner_img,
+          address_1: a_address_line_1,
+          address_2: a_address_line_2,
+          city: a_city,
+          zip: a_zip,
+          state: state,
+          phone: phone,
+          facebookUrl: fb_url,
+          instagramUrl: insta_url,
+          promotionalUrl: promotional_url,
+          user_id: user_id,
+          qrCode: qr_img,
+          receieptLogo: receipt_img,
+        }));
+      }
+    } catch (error) {
+      getUnAutherisedTokenMessage();
+      handleCoockieExpire();
     }
   };
 
@@ -385,6 +439,30 @@ export default function InfoFunction() {
         errorMessage.qrCodeError = "";
       }
     }
+    if (name === "receieptLogo") {
+      console.log("receieptLogo", name);
+      if (e.target.value == "") {
+        errorMessage.receieptLogoError = "Please select Receipt Logo field";
+      } else {
+        const selectedFile = e.target.files[0];
+
+        if (selectedFile) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setInfoRecord((prevState) => ({
+              ...prevState,
+              receieptLogo: reader.result,
+              is_receipt_logo_change:
+                prevState.receieptLogo === selectedFile.name ? "0" : "1",
+            }));
+          };
+
+          reader.readAsDataURL(selectedFile);
+          setReceieptLogoBool(true);
+        }
+        errorMessage.receieptLogoError = "";
+      }
+    }
     if (name == "phone") {
       if (value !== "") {
         // console.log(value.length)
@@ -397,6 +475,21 @@ export default function InfoFunction() {
         errorMessage.phoneError = "";
       }
     }
+    switch (name) {
+      case "facebookUrl":
+      case "instagramUrl":
+      case "promotionalUrl":
+        if (value !== "" && !urlPattern.test(value)) {
+          errorMessage[`${name}Error`] = `Please enter a valid ${name} URL`;
+        } else {
+          errorMessage[`${name}Error`] = "";
+        }
+        break;
+
+      default:
+        break;
+    }
+
     setErrors(errorMessage);
     setInfoRecord((prevInfoRecord) => ({
       ...prevInfoRecord,
@@ -444,7 +537,9 @@ export default function InfoFunction() {
             logo_img: infoRecord.image, //
             is_logo_change: infoRecord.is_logo_change, //
             qr_code: infoRecord.qrCode, //
+            receipt_logo: infoRecord.receieptLogo || "",
             is_qr_code_change: infoRecord.is_qr_code_change, //
+            is_receipt_logo_change: infoRecord.is_receipt_logo_change,
             address_line_1: infoRecord.address_1, //
             address_line_2: infoRecord.address_2, //
             phone: infoRecord.phone, //
@@ -518,16 +613,25 @@ export default function InfoFunction() {
         user_id: 100,
         login_type: userTypeData?.login_type,
       };
-      let response = await axios.post(BASE_URL + CHANGE_PASSWORD_STORE, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${userTypeData?.token}`,
-        },
-      });
-      if (response.status == 200) {
-        ToastifyAlert(response.data.msg, "success");
+      try {
+        let response = await axios.post(
+          BASE_URL + CHANGE_PASSWORD_STORE,
+          data,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${userTypeData?.token}`,
+            },
+          }
+        );
+        if (response.status == 200) {
+          ToastifyAlert(response.data.msg, "success");
 
-        console.log("password changes");
+          console.log("password changes");
+        }
+      } catch (error) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
       }
     }
   };
@@ -550,5 +654,6 @@ export default function InfoFunction() {
     passwordError,
     handleSubmitChangePassword,
     qrCodeBoolean,
+    receieptLogoBool,
   };
 }

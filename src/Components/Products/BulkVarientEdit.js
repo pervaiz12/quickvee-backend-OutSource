@@ -107,7 +107,7 @@ const BulkVarientEdit = ({
       handleCopyAllVarientValue(copyValue);
     }
 
-    // compareAtPrice check inside form with all price // compareAtPrice must be greater than price value
+    // compareAtPrice check inside form with all price // Compare At Price must be greater than price in all variants.value
     if (bulkVarient["compareAtPrice"] && !bulkVarient["price"]) {
       if (
         // formData?.some((i) => +i?.["price"] > +bulkVarient["compareAtPrice"])
@@ -118,12 +118,12 @@ const BulkVarientEdit = ({
           "isCompareAtGreaterThanAllPrice"
         )
       ) {
-        alert("compareAtPrice must be greater than price.");
+        alert("Compare At Price must be greater than price in all variants.");
         handleCopyAllVarientValue(copyValue);
       } else {
         handleCopyAllVarientValue(copyAllValue);
         ToastifyAlert(
-          "Copied values! Plase Click on Update for Save!",
+          "Updated Successfully. Plase Click on Update for Save!",
           "success"
         );
         handleCloseEditModal();
@@ -140,54 +140,30 @@ const BulkVarientEdit = ({
           "isPriceLessThanAllCompareAtPrice"
         )
       ) {
-        alert("compareAtPrice must be greater than price.");
+        alert("Compare At Price must be greater than price in all variants.");
         handleCopyAllVarientValue(copyValue);
       } else {
         handleCopyAllVarientValue(copyAllValue);
         ToastifyAlert(
-          "Copied values! Plase Click on Update for Save!",
+          "Updated Successfully. Plase Click on Update for Save!",
           "success"
         );
         handleCloseEditModal();
       }
     }
 
-    // if both value exist then check compareAtPrice must be greater than price and check inside form that compare value is greater than all price
+    // if both value exist then check Compare At Price must be greater than price in all variants.and check inside form that compare value is greater than all price
     else if (bulkVarient["compareAtPrice"] && bulkVarient["price"]) {
       // compare inside modal
       if (+bulkVarient["compareAtPrice"] < +bulkVarient["price"]) {
-        alert("compareAtPrice must be greater than price.");
+        alert("Compare At Price must be greater than price in all variants.");
         handleCopyAllVarientValue(copyValue);
       }
       // compare inside form
-      else if (
-        // formData?.some((i) => +i?.["price"] > +bulkVarient["compareAtPrice"])
-        hasDynamicPriceComparison(
-          formData,
-          "price",
-          "compareAtPrice",
-          "isCompareAtGreaterThanAllPrice"
-        )
-        
-      ) {
-        handleCopyAllVarientValue(copyValue);
-
-        alert("compareAtPrice must be greater than price.");
-      } else if (
-        // formData?.some((i) => +i?.["compareAtPrice"] < +bulkVarient["price"])
-        hasDynamicPriceComparison(
-          formData,
-          "compareAtPrice",
-          "price",
-          "isPriceLessThanAllCompareAtPrice"
-        )
-      ) {
-        alert("compareAtPrice must be greater than price.");
-        handleCopyAllVarientValue(copyValue);
-      } else {
+      else {
         handleCopyAllVarientValue(copyAllValue);
         ToastifyAlert(
-          "Copied values! Plase Click on Update for Save!",
+          "Updated Successfully. Plase Click on Update for Save!",
           "success"
         );
         handleCloseEditModal();
@@ -201,7 +177,7 @@ const BulkVarientEdit = ({
     ) {
       handleCopyAllVarientValue(copyValue);
       ToastifyAlert(
-        "Copied values! Plase Click on Update for Save!",
+        "Updated Successfully. Plase Click on Update for Save!",
         "success"
       );
       handleCloseEditModal();

@@ -1,69 +1,51 @@
-// src/utils/sortUtils.js
 export const SortTableItemsHelperFun = (items, type, name, sortOrder) => {
   const newOrder = sortOrder === "asc" ? "desc" : "asc";
+
   const sortedItems = [...items].sort((a, b) => {
-    const aValue = a[name];
-    const bValue = b[name];
+    const aValue = a[name] || "";
+    const bValue = b[name] || "";
 
-    if (type === "str") {
-      if (newOrder === "asc") {
-        return aValue.localeCompare(bValue);
-      } else {
-        return bValue.localeCompare(aValue);
-      }
-    }
+    const compareStrings = (a, b, order) => order === "asc" ? a.localeCompare(b) : b.localeCompare(a);
 
-    if (type === "num") {
-      const getNumericValue = (variant) => {
-        const numericPart = variant ? variant.match(/\d+/) : 0; // Match one or more digits
-        return numericPart ? parseInt(numericPart[0]) : 0; // Parse to integer if numeric part found
-      };
+    const getNumericValue = (value) => {
+      const match = value.match(/-?\d+(\.\d+)?/);
+      return match ? parseFloat(match[0]) : 0;
+    };
 
-      let aNumValue = getNumericValue(a[name]);
-      let bNumValue = getNumericValue(b[name]);
+    const parseDate = (dateString) => new Date(dateString);
 
-      if (newOrder === "asc") {
-        return aNumValue - bNumValue;
-      } else {
-        return bNumValue - aNumValue;
-      }
-    }
-    if (type === "date") {
-      const parseDate = (dateString) => new Date(dateString);
+    const splitId = (id) => {
+      const numericPart = getNumericValue(id);
+      const alphaPart = id.match(/[A-Z]+$/) ? id.match(/[A-Z]+$/)[0] : "";
+      return { numericPart, alphaPart };
+    };
 
-      let aDate = parseDate(aValue);
-      let bDate = parseDate(bValue);
+    switch (type) {
+      case "str":
+        return compareStrings(aValue, bValue, newOrder);
 
-      if (newOrder === "asc") {
-        return aDate - bDate;
-      } else {
-        return bDate - aDate;
-      }
-    }
-    if (type === "id") {
-      const splitId = (id) => {
-        const numericPart = id.match(/\d+/) ? parseInt(id.match(/\d+/)[0]) : 0;
-        const alphaPart = id.match(/[A-Z]+$/) ? id.match(/[A-Z]+$/)[0] : "";
-        return { numericPart, alphaPart };
-      };
-      const aId = splitId(aValue);
-      const bId = splitId(bValue);
-      if (newOrder === "asc") {
+      case "num":
+        const aNum = getNumericValue(aValue);
+        const bNum = getNumericValue(bValue);
+        return newOrder === "asc" ? aNum - bNum : bNum - aNum;
+
+      case "date":
+        const aDate = parseDate(aValue);
+        const bDate = parseDate(bValue);
+        return newOrder === "asc" ? aDate - bDate : bDate - aDate;
+
+      case "id":
+        const aId = splitId(aValue);
+        const bId = splitId(bValue);
         if (aId.numericPart === bId.numericPart) {
-          return aId.alphaPart.localeCompare(bId.alphaPart);
+          return compareStrings(aId.alphaPart, bId.alphaPart, newOrder);
         } else {
-          return aId.numericPart - bId.numericPart;
+          return newOrder === "asc" ? aId.numericPart - bId.numericPart : bId.numericPart - aId.numericPart;
         }
-      } else {
-        if (aId.numericPart === bId.numericPart) {
-          return bId.alphaPart.localeCompare(aId.alphaPart);
-        } else {
-          return bId.numericPart - aId.numericPart;
-        }
-      }
-    }
 
-    return 0; // Default return value if type is not matched
+      default:
+        return 0;
+    }
   });
 
   return { sortedItems, newOrder };

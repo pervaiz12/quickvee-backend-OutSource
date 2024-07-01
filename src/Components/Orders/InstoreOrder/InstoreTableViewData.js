@@ -64,7 +64,7 @@ const InstoreTableViewData = (props, searchId) => {
   const [selectedValue, setSelectedValue] = useState(1);
   const dispatch = useDispatch();
   const debouncedValue = useDebounce(props?.OffSearchIdData);
-  console.log("debouncedValue", debouncedValue);
+  // console.log("debouncedValue", debouncedValue);
   const handleChange = (event) => {
     setSelectedValue(parseInt(event.target.value));
   };
@@ -78,13 +78,24 @@ const InstoreTableViewData = (props, searchId) => {
   // }
   useEffect(() => {
     setCurrentPage(1);
+    const transactionType = (type)=>{
+      if(type === "Cash Payment"){
+        return "Cash"
+      }
+      if(type === "Card Payment"){
+        return "Online"
+      }
+      else{
+        return type
+      }
+    }
     dispatch(
       getOrderListCount({
         merchant_id: props.merchant_id, //
         order_type: "Offline",
         search_by:
           props?.OffSearchIdData !== "" ? props?.OffSearchIdData : null,
-        trans_type: props.OrderSourceData, //
+        trans_type:transactionType(props.OrderSourceData), //
         start_date: props.selectedDateRange?.start_date, //
         end_date: props.selectedDateRange?.end_date, //
 
@@ -102,12 +113,23 @@ const InstoreTableViewData = (props, searchId) => {
   ]);
 
   useEffect(() => {
+    const transactionType = (type)=>{
+      if(type === "Cash Payment"){
+        return "Cash"
+      }
+      if(type === "Card Payment"){
+        return "Online"
+      }
+      else{
+        return type
+      }
+    }
     const fetchData = async () => {
       if (props?.selectedDateRange?.start_date) {
         let data = {
           merchant_id: props.merchant_id,
           order_type: "Offline",
-          trans_type: props.OrderSourceData,
+          trans_type: transactionType(props.OrderSourceData),
           start_date: props.selectedDateRange?.start_date,
           end_date: props.selectedDateRange?.end_date,
           emp_id: props?.EmployeeIDData,
@@ -279,7 +301,7 @@ const InstoreTableViewData = (props, searchId) => {
                           <button
                             className="flex items-center"
                             onClick={() =>
-                              sortByItemName("id", "order_id")
+                              sortByItemName("str", "order_id")
                             }
                           >
                             <p>Order</p>

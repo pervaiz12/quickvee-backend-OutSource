@@ -98,10 +98,18 @@ export const updateProductsType = createAsyncThunk(
 export const getInventorySetting = createAsyncThunk(
   "products/getInventorySetting",
   async (payload) => {
+    const token = payload.get('token'); // Extract the token from FormData
+    payload.delete('token');
     try {
       const response = await axios.post(
         BASE_URL + "Profile_setup/inventory_register_setting",
-        payload
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       return response?.data?.result?.cost_per;
@@ -114,10 +122,18 @@ export const getInventorySetting = createAsyncThunk(
 export const editProductData = createAsyncThunk(
   "products/editProduct",
   async (payload) => {
+    const token = payload.get('token'); // Extract the token from FormData
+    payload.delete('token');
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/edit_produt",
-        payload
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
 
       return response;
@@ -130,10 +146,18 @@ export const editProductData = createAsyncThunk(
 export const addProduct = createAsyncThunk(
   "products/addProduct",
   async (payload) => {
+    const token = payload.get('token'); // Extract the token from FormData
+    payload.delete('token');
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/add_product",
-        payload
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response;
     } catch (error) {
@@ -213,10 +237,19 @@ export const fetchProductList = createAsyncThunk(
 export const fetchProductsDataById = createAsyncThunk(
   "products/fetchProductData",
   async (payload) => {
+    const token = payload.get('token'); // Extract the token from FormData
+    payload.delete('token');
+    
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/get_productdata_ById",
-        payload
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response?.data;
     } catch (error) {
@@ -228,10 +261,17 @@ export const fetchProductsDataById = createAsyncThunk(
 export const checkProductTitle = createAsyncThunk(
   "products/checkProductTitle",
   async (payload) => {
+    const token = payload.get('token'); // Extract the token from FormData
+    payload.delete('token');
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/check_productTitle",
-        payload
+        payload,{
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response?.data;
     } catch (error) {
@@ -243,10 +283,18 @@ export const checkProductTitle = createAsyncThunk(
 export const fetchVendorList = createAsyncThunk(
   "products/fetchVendorList",
   async (payload) => {
+    const token = payload.get('token'); // Extract the token from FormData
+    payload.delete('token');
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/product_vendors_list",
-        payload
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response?.data;
     } catch (error) {
@@ -273,10 +321,19 @@ export const filterVendorAPI = createAsyncThunk(
 export const assignProductVendor = createAsyncThunk(
   "products/assignProductVendor",
   async (payload) => {
+    const token = payload.get('token'); // Extract the token from FormData
+    payload.delete('token');
+    
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/assign_product_vendors",
-        payload
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response?.data;
     } catch (error) {
@@ -288,10 +345,18 @@ export const assignProductVendor = createAsyncThunk(
 export const fetchSalesHistory = createAsyncThunk(
   "products/fetchSalesHistory",
   async (payload) => {
+    const token = payload.get('token'); // Extract the token from FormData
+    payload.delete('token');
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/saleshistory",
-        payload
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response?.data;
     } catch (error) {
@@ -333,10 +398,20 @@ export const deleteProductVendor = createAsyncThunk(
 export const saveVendorList = createAsyncThunk(
   "products/saveVendorList",
   async (payload) => {
+
+ const token = payload.get('token'); // Extract the token from FormData
+ payload.delete('token');
+ 
     try {
       const response = await axios.post(
         BASE_URL + "Productapi/save_vendor_list",
-        payload
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response?.data;
     } catch (error) {
@@ -348,10 +423,19 @@ export const saveVendorList = createAsyncThunk(
 export const getAlreadyAssignVendor = createAsyncThunk(
   "products/getAlreadyAssignVendor",
   async (payload) => {
+    const token = payload.get('token'); // Extract the token from FormData
+    payload.delete('token');
+    
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/assign_product_vendors_list",
-        payload
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response?.data;
     } catch (error) {
@@ -363,10 +447,18 @@ export const getAlreadyAssignVendor = createAsyncThunk(
 export const bulkVendorAssign = createAsyncThunk(
   "products/bulkVendorAssign",
   async (payload) => {
+    const token = payload.get('token'); // Extract the token from FormData
+    payload.delete('token');
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/bulk_assign_vendors",
-        payload
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response?.data;
     } catch (error) {
@@ -378,10 +470,19 @@ export const bulkVendorAssign = createAsyncThunk(
 export const saveSingleVarientPO = createAsyncThunk(
   "products/saveSingleVarientPO",
   async (payload) => {
+    const token = payload.get('token'); // Extract the token from FormData
+    payload.delete('token');
+    
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/save_instant_po",
-        payload
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response?.data;
     } catch (error) {
@@ -393,10 +494,19 @@ export const saveSingleVarientPO = createAsyncThunk(
 export const saveBulkInstantPo = createAsyncThunk(
   "products/saveBulkInstantPo",
   async (payload) => {
+    const token = payload.get('token'); // Extract the token from FormData
+    payload.delete('token');
+    
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/bulk_instant_po",
-        payload
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response?.data;
     } catch (error) {
@@ -430,6 +540,8 @@ export const changeOnlineOrderMethod = createAsyncThunk(
 export const deleteProductAPI = createAsyncThunk(
   "products/deleteProductAPI",
   async (payload) => {
+    const token = payload.get('token'); // Extract the token from FormData
+    payload.delete('token');
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/delete_product",
@@ -437,6 +549,7 @@ export const deleteProductAPI = createAsyncThunk(
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -446,6 +559,51 @@ export const deleteProductAPI = createAsyncThunk(
     }
   }
 );
+
+export const checkUpcCodeMultiple = createAsyncThunk(
+  "products/checkUpcCodeMultiple",
+  async (payload) => {
+    // const token = payload.get('token'); // Extract the token from FormData
+    // payload.delete('token');
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/check_upc",
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          },
+        }
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
+export const checkUpcCodeSingle = createAsyncThunk(
+  "products/checkUpcCodeSingle",
+  async (payload) => {
+    // const token = payload.get('token'); // Extract the token from FormData
+    // payload.delete('token');
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/check_upc_form",
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          },
+        }
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
 const productsSlice = createSlice({
   name: "products",
   initialState,
@@ -510,7 +668,15 @@ const productsSlice = createSlice({
       }
       // Append new items to the productsData array
       // console.log(state);
-      state.productsData.push(...action.payload);
+      const productIds = new Set(state.productsData.map(product => product.id));
+  
+      // Append new items to the productsData array if they are not already present
+      action.payload.forEach(product => {
+        if (!productIds.has(product.id)) {
+          state.productsData.push(product);
+          productIds.add(product.id);
+        }
+      });
       state.offset += 10;
       state.hasMore = action.payload.length > 0;
       state.error = "";

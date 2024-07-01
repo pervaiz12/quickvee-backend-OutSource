@@ -31,6 +31,7 @@ import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
+import PasswordShow from "./../../Common/passwordShow";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -75,12 +76,26 @@ const PermissionList = () => {
 
   const AllPermissionDataState = useSelector((state) => state.permissionRed);
   const { userTypeData } = useAuthDetails();
-
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
   const dispatch = useDispatch();
 
-  useEffect(() => {
-    dispatch(fetchPermissionData(userTypeData));
+  useEffect(  () => {
+   
+    getpermissionData()
   }, []);
+  const getpermissionData = async() =>{
+    try {
+      let data = {
+        ...userTypeData,
+      };
+      if(data){
+        await dispatch(fetchPermissionData(userTypeData)).unwrap();
+      }
+    } catch (error) {
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
+    }
+  }
 
   useEffect(() => {
     if (
@@ -115,18 +130,24 @@ const PermissionList = () => {
     setDeletePermissionId(id);
     setDeleteModalOpen(true);
   };
-  const confirmDeleteCategory = () => {
-    if (deletePermissionId) {
-      const data = {
-        id: deletePermissionId,
-        ...userTypeData,
-      };
-      if (data) {
-        dispatch(deletePermission(data));
+  const confirmDeleteCategory = async () => {
+   
+    try {
+      if (deletePermissionId) {
+        const data = {
+          id: deletePermissionId,
+          ...userTypeData,
+        };
+        if (data) {
+         await dispatch(deletePermission(data)).unwrap();
+        }
       }
+      setDeletePermissionId(null);
+      setDeleteModalOpen(false);
+    } catch (error) {
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
     }
-    setDeletePermissionId(null);
-    setDeleteModalOpen(false);
   };
 
   // const handleSearchInputChange = (value) => {
@@ -227,7 +248,8 @@ const PermissionList = () => {
                   ))} */}
                     <StyledTableCell>Sub Permission</StyledTableCell>
                     <StyledTableCell>Permission</StyledTableCell>
-                    <StyledTableCell>Action</StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
                   </TableHead>
                   <TableBody>
                     {allpermission?.length
@@ -249,7 +271,7 @@ const PermissionList = () => {
                               </div>
                             </StyledTableCell> */}
                               <StyledTableCell>
-                                <div class="text-[#000000] order_method capitalize">
+                                <div class="text-[#000000] order_method ">
                                   {data?.sub_permission}
                                 </div>
                               </StyledTableCell>
@@ -262,18 +284,12 @@ const PermissionList = () => {
                                 </div>
                               </StyledTableCell>
                               <StyledTableCell>
-                                <div className="flex">
                                   <EditPermissionModal selected={data} />
-                                  <img
-                                    class="mx-6 delete cursor-pointer"
-                                    data-id="${[data.id,data.merchant_id,]}"
-                                    onClick={() =>
-                                      handleDeletePermission(data?.id)
-                                    }
-                                    src={Delete}
-                                    alt="Delete"
-                                  />
-                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <img class="delete cursor-pointer" data-id="${[data.id,data.merchant_id,]}"
+                                  onClick={() => handleDeletePermission(data?.id)} 
+                                  src={Delete} alt="Delete" />
                               </StyledTableCell>
                             </StyledTableRow>
                           );

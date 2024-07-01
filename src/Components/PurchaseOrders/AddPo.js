@@ -83,7 +83,7 @@ const AddPo = ({ seVisible }) => {
         setPurchaseInfo((prev) => ({ ...prev, email: value }));
         setPurchaseInfoErrors((prev) => ({
           ...prev,
-          email: Boolean(value.trim()) ? "" : prev.email,
+          email: Boolean(value.trim()) || value === "" ? "" : prev.email,
         }));
         break;
       default:
@@ -177,6 +177,7 @@ const AddPo = ({ seVisible }) => {
                       slotProps={{
                         textField: {
                           size: "small",
+                          onKeyPress: (e) => e.preventDefault(),
                         },
                       }}
                       format={"MM/DD/YYYY"}
@@ -212,6 +213,7 @@ const AddPo = ({ seVisible }) => {
                       slotProps={{
                         textField: {
                           size: "small",
+                          onKeyPress: (e) => e.preventDefault(),
                         },
                       }}
                       disablePast
@@ -260,12 +262,10 @@ const AddPo = ({ seVisible }) => {
         </div>
       </div>
 
-      <div className="second-component">
-        <AutoPo
-          purchaseInfo={purchaseInfo}
-          setPurchaseInfoErrors={setPurchaseInfoErrors}
-        />
-      </div>
+      <AutoPo
+        purchaseInfo={purchaseInfo}
+        setPurchaseInfoErrors={setPurchaseInfoErrors}
+      />
     </>
   );
 };

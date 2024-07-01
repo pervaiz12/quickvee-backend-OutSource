@@ -12,20 +12,36 @@ import {
   BASE_URL,
   UPDATE_TAXES,
   TAXE_CATEGORY_LIST,
+  FETCH_DATA_TAXE,
 } from "../../../Constants/Config";
 import BasicTextFields from "../../../reuseableComponents/TextInputField";
 import TextField from "@mui/material/TextField";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
-
+import CircularProgress from "@mui/material/CircularProgress";
+import PasswordShow from "../../../Common/passwordShow";
 const EditTaxesModal = ({ selectedTaxe }) => {
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+  // const handleClose = () => setOpen(false);
+  const handleClose = () => {
+    setTaxes({
+      title: "",
+      percent: "",
+    });
+    setErrorMessage("")
+    setErrorTitleMessage("")
+    setErrorPerMessage("")
+    setOpen(false);
+  }
 
   const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useDispatch();
 
+  const [errorTitleMessage, setErrorTitleMessage] = useState("");
+  const [errorPerMessage, setErrorPerMessage] = useState("");
+  const [loader, setLoader] = useState(false);
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
   const myStyles = {
     width: "58rem",
     position: "absolute",
@@ -46,16 +62,52 @@ const EditTaxesModal = ({ selectedTaxe }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } = useAuthDetails();
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
-  useEffect(() => {
-    if (selectedTaxe) {
-      setTaxes({
-        collID: selectedTaxe.id,
-        title: selectedTaxe.title,
-        percent: selectedTaxe.percent,
-        merchant_id: selectedTaxe.merchant_id,
-      });
+  async function fetchData() {
+    const getdefaultsData = {
+      tax_id: selectedTaxe.id,
+      merchant_id:merchant_id,
+      token_id: userTypeData.token_id,
+      login_type: userTypeData.login_type,
+    };
+    try {
+      const response = await axios.post(
+        BASE_URL + FETCH_DATA_TAXE,
+        getdefaultsData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${userTypeData.token}`,
+          },
+        }
+      );
+      if (response.data.status === true) {
+        return response.data.tax_data;
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
     }
-  }, [selectedTaxe]);
+  }
+
+  useEffect(() => {
+    if (open) {
+      const fetchDataAndUpdateState = async () => {
+        const res = await fetchData();
+        if (res) {
+          setTaxes({
+            collID: res?.id,
+            title: res?.title,
+            percent: res?.percent,
+            merchant_id: res?.merchant_id,
+          });
+        }
+      };
+      setApplyToCategory(false)
+
+      fetchDataAndUpdateState();
+    }
+  }, [open, selectedTaxe]);
 
   const [taxes, setTaxes] = useState({
     collID: "",
@@ -66,12 +118,46 @@ const EditTaxesModal = ({ selectedTaxe }) => {
 
   const inputChange = (e) => {
     const { name, value } = e.target;
-    setTaxes((preValue) => {
-      return {
-        ...preValue,
-        [name]: name === "percent" ? formatPercent(value) : value,
-      };
-    });
+    const regex = /^[A-Za-z0-9 ]*$/ ;
+    if (name === "title"){
+      if (regex.test(value)) {
+        setTaxes({ ...taxes, title: value });
+        setErrorTitleMessage(value ? "" : "Title is required");
+        setErrorMessage("")
+      }
+    }else{
+      let fieldValue;
+      fieldValue = value
+        // Remove extra dots and ensure only one dot exists at most
+        .replace(/[^\d.]/g, "") // Allow digits and dots only
+        .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
+        .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+      let inputStr = fieldValue.replace(/\D/g, "");
+      inputStr = inputStr.replace(/^0+/, "");
+
+      if (inputStr.length == "") {
+        fieldValue = "0.00";
+      } else if (inputStr.length === 1) {
+        fieldValue = "0.0" + inputStr;
+      } else if (inputStr.length === 2) {
+        fieldValue = "0." + inputStr;
+      } else {
+        fieldValue =
+          inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
+      }
+      if (fieldValue.trim() === "") {
+        setTaxes({ ...taxes, title: "" });
+      } else {
+        setTaxes((preValue) => {
+          return {
+            ...preValue,
+            [name]: name === "percent" ? formatPercent(fieldValue) : fieldValue,
+          };
+        });
+        setErrorPerMessage("");
+      }
+      setErrorPerMessage(value ? "" : "Percent is required");
+    }
   };
 
   const formatPercent = (value) => {
@@ -122,6 +208,13 @@ const EditTaxesModal = ({ selectedTaxe }) => {
       formData.append("cate_id", categoryId);
       formData.append("token_id", userTypeData?.token_id);
       formData.append("login_type", userTypeData?.login_type);
+
+      if(taxes.title === "" || taxes.percent === ""){
+        setErrorTitleMessage(taxes.title ? "" : "Title is required");
+        setErrorPerMessage(taxes.percent ? "" : "Percent is required");
+        return;
+      }
+      setLoader(true);
       try {
         // Make your API request with axios
         const response = await axios.post(BASE_URL + UPDATE_TAXES, formData, {
@@ -134,7 +227,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
         console.log(update_message);
         if (update_message == "Success") {
           // alert(msg)
-          ToastifyAlert(msg, "success");
+          ToastifyAlert("Updated Successfully", "success");
           let data = {
             merchant_id: merchant_id,
             ...userTypeData
@@ -144,7 +237,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
           }
           setCategory("--Select Category--");
           handleClose();
-        } else if (update_message == "Failed" && msg == "*Please enter Title") {
+        } else if (update_message == "Failed" && msg == "Title is required") {
           setErrorMessage(msg);
         } else if (update_message == "Failed" && msg == "Taxes Already Exist") {
           setErrorMessage(msg);
@@ -155,7 +248,10 @@ const EditTaxesModal = ({ selectedTaxe }) => {
       } catch (error) {
         console.error("Error submitting data:", error);
         // Handle errors as needed
+        handleCoockieExpire()
+        getUnAutherisedTokenMessage()
       }
+      setLoader(false);
     } else {
       // Handle case when applyToCategory is false or categoryId is not selected
       // setErrorMessage("Please select a category and choose a tax option.");
@@ -169,6 +265,13 @@ const EditTaxesModal = ({ selectedTaxe }) => {
       formData.append("merchant_id", taxes.merchant_id);
       formData.append("token_id", userTypeData?.token_id);
       formData.append("login_type", userTypeData?.login_type);
+
+      if(taxes.title === "" || taxes.percent === ""){
+        setErrorTitleMessage(taxes.title ? "" : "Title is required");
+        setErrorPerMessage(taxes.percent ? "" : "Percent is required");
+        return;
+      }
+      setLoader(true);
       try {
         // Make your API request with axios
         const response = await axios.post(BASE_URL + UPDATE_TAXES, formData, {
@@ -190,7 +293,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
           }
           setCategory("--Select Category--");
           handleClose();
-        } else if (update_message == "Failed" && msg == "*Please enter Title") {
+        } else if (update_message == "Failed" && msg == "Title is required") {
           setErrorMessage(msg);
         } else if (update_message == "Failed" && msg == "Taxes Already Exist") {
           setErrorMessage(msg);
@@ -199,8 +302,11 @@ const EditTaxesModal = ({ selectedTaxe }) => {
         // Close the modal or perform any other actions
       } catch (error) {
         console.error("Error submitting data:", error);
+        handleCoockieExpire()
+        getUnAutherisedTokenMessage()
         // Handle errors as needed
       }
+      setLoader(false);
     }
   };
 
@@ -238,6 +344,8 @@ const EditTaxesModal = ({ selectedTaxe }) => {
       } catch (error) {
         console.error("Error fetching categories:", error);
         setLoadingCategories(false);
+        handleCoockieExpire()
+        getUnAutherisedTokenMessage()
       }
     };
 
@@ -339,13 +447,16 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                         placeholder="Enter Title"
                         name="title"
                         type="text"
-                        required={true}
+                        // required={true}
                         disable={true}
                       />
                     {errorMessage && (
                       <span className="error-message" >
                         {errorMessage}
                       </span>
+                    )}
+                    {errorTitleMessage && (
+                      <p className="error-message">{errorTitleMessage}</p>
                     )}
                   </>
                 ) : (
@@ -367,12 +478,15 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                         placeholder="Enter Title"
                         name="title"
                         type="text"
-                        required={true}
+                        // required={true}
                       />
                     {errorMessage && (
                       <span className="error-message" style={{ color: "red" }}>
                         {errorMessage}
                       </span>
+                    )}
+                    {errorTitleMessage && (
+                      <p className="error-message">{errorTitleMessage}</p>
                     )}
                   </>
                 )}
@@ -405,6 +519,9 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                     required={true}
                     onKeyPress={handleKeyPress}
                   />
+                   {errorPerMessage && (
+                    <p className="error-message ">{errorPerMessage}</p>
+                  )}
 
                 <div className="category-checkmark-div m-2 mt-4 mb-4">
                   <label className="category-checkmark-label">
@@ -525,7 +642,9 @@ const EditTaxesModal = ({ selectedTaxe }) => {
               </div>
 
               <div className="q-add-categories-section-middle-footer">
-                <button className="quic-btn quic-btn-save">Update</button>
+                <button className="quic-btn quic-btn-save attributeUpdateBTN"  disabled={loader}>
+                { loader ? <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15}/> Update</> : "Update"}
+                </button>
 
                 <button
                   onClick={() => handleClose()}

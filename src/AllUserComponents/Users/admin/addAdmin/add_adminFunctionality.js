@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BASE_URL,
   GET_ADD_ADMIN,
@@ -9,7 +9,7 @@ import { useNavigate } from "react-router-dom";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../../CommonComponents/ToastifyAlert";
 
-export default function Add_adminFunctionality({setVisible}) {
+export default function Add_adminFunctionality({ setVisible }) {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
 
@@ -38,6 +38,7 @@ export default function Add_adminFunctionality({setVisible}) {
       // errors[name] = value === " " ? `Please fill in the ${name} field` : "";
       errors[name] =
         value.trim() === ""
+          ? `Owner Name is required`
           ? `Owner Name is required`
           : value[0] === " "
             ? `Owner Name cannot start with a space`
@@ -83,8 +84,10 @@ export default function Add_adminFunctionality({setVisible}) {
   const handleBlur = async (name) => {
     if (name === "email") {
       if (addAdminData.errors.email == "") {
+        setLoader(true);
         let result = await emailValidate(addAdminData.email);
         if (result == true) {
+          setLoader(false);
           setAddAdminData((prev) => ({
             ...prev,
             errors: {
@@ -93,6 +96,7 @@ export default function Add_adminFunctionality({setVisible}) {
             },
           }));
         } else {
+          setLoader(false);
           setAddAdminData((prev) => ({
             ...prev,
             errors: {
@@ -154,12 +158,15 @@ export default function Add_adminFunctionality({setVisible}) {
     } else {
       try {
         if (errors.email == "") {
+          setLoader(true);
           const emailValid = await emailValidate(addAdminData.email);
 
           if (emailValid == true) {
+            setLoader(false);
             errors.email = "Email already exists";
             formIsValid = false;
           } else {
+            setLoader(false);
             errors.email = "";
             formIsValid = true;
           }
@@ -193,6 +200,35 @@ export default function Add_adminFunctionality({setVisible}) {
       return true;
     }
   };
+  const getTimerAdmin = () => {
+    setLoader(true);
+    setTimeout(() => {
+      navigate("/users/admin");
+      setLoader(false);
+    }, 4000);
+  };
+  // ==============
+  const keyEnter = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      setAddAdminData((prev) => ({
+        ...prev,
+        [event.target.name]: event.target.value,
+      }));
+      if (loader == false) {
+        handleSubmit(event);
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", keyEnter);
+    return () => {
+      document.removeEventListener("keydown", keyEnter);
+    };
+  }, [addAdminData]);
+
+  // ==============
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -209,40 +245,42 @@ export default function Add_adminFunctionality({setVisible}) {
           phone: addAdminData.phone,
           ...newData,
         };
-        // console.log(packet)
         setLoader(true);
-
-        await axios
-          .post(BASE_URL + GET_ADD_ADMIN, packet, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          .then((res) => {
-            setLoader(false);
-            if (res.data.status == 200) {
-              ToastifyAlert("Added  Successfully!", "success");
-              // setVisible("AdminView")
-
-              setAddAdminData({
-                owner_name: "",
-                email: "",
-                password: "",
-                phone: "",
-                errors: { 
+        try {
+          await axios
+            .post(BASE_URL + GET_ADD_ADMIN, packet, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
+              },
+            })
+            .then((res) => {
+              if (res.data.status == 200) {
+                ToastifyAlert("Added Successfully", "success");
+                // setVisible("AdminView")
+                setAddAdminData({
                   owner_name: "",
                   email: "",
                   password: "",
                   phone: "",
-                },
-              });
-              
-              navigate("/users/admin");
-            } else {
-              ToastifyAlert("Something went wrong!", "warn");
-            }
-          });
+                  errors: {
+                    owner_name: "",
+                    email: "",
+                    password: "",
+                    phone: "",
+                  },
+                });
+                navigate("/users/admin");
+                // getTimerAdmin();
+              } else {
+                // getTimerAdmin();
+                ToastifyAlert("Admin not Added!", "warn");
+              }
+              setLoader(false);
+            });
+        } catch (error) {
+          console.log(error);
+        }
       }
     }
   };
@@ -252,6 +290,7 @@ export default function Add_adminFunctionality({setVisible}) {
     handleSubmit,
     handleBlur,
     handleKeyPress,
+    keyEnter,
     loader,
   };
 }

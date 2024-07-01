@@ -102,9 +102,12 @@ import PageNotFound from "./Components/PageNotFound/PageNotFound";
 import PrintPurchaseOrder from "./Components/PurchaseOrders/PrintPurchaseOrder";
 import StocktakeReportPrint from "./Components/Stocktake/StocktakeReportPrint";
 import MainNeedHelp from "./AllUserComponents/NeedHelp/MainNeedHelp";
+import { emptyProduct } from "./Redux/features/Product/ProductSlice";
+import { useDispatch } from "react-redux";
 
 function App() {
   const location = useLocation();
+  const dispatch = useDispatch();
   const isTabletNav = useMediaQuery("(max-width:1024px)");
   const [isMenuOpen, setIsMenuOpen] = useState(!isTabletNav);
   const currentUrl = location.pathname;
@@ -121,6 +124,12 @@ function App() {
       setIsSideBar(false);
     }
   }, [currentUrl]);
+
+  useEffect(()=>{
+    if(!location.pathname.includes('products')){
+      dispatch(emptyProduct([]))
+    }
+  }, [location])
 
   return (
     <>
@@ -178,12 +187,12 @@ function App() {
           <Route exact path="/order" element={<Main visible={"order"} />} />
           <Route
             exact
-            path="/category"
+            path="/inventory/category"
             element={<Main visible={"category"} />}
           />
           <Route
             exact
-            path="/category-add"
+            path="/inventory/category/add"
             element={<Main visible={"add-category"} />}
           />
           <Route
@@ -235,12 +244,12 @@ function App() {
             path="/stocktake"
             element={<Main visible={"stocktake"} />}
           />
-           <Route
+          <Route
             exact
             path="/stocktake/UpdateStocktake/:id"
             element={<Main visible={"stocktake-updateStocktake"} />}
           />
-           <Route
+          <Route
             exact
             path="/stocktake/AddStocktake"
             element={<Main visible={"stocktake-AddStocktake"} />}
@@ -261,25 +270,31 @@ function App() {
             element={<Main visible={"attributes"} />}
           />
 
-          <Route
-            exact
-            path="/import-data"
-            element={<Main visible={"import-data"} />}
-          />
+         
           <Route
             exact
             path="/loyalty-program"
             element={<Main visible={"loyalty-program"} />}
           />
           <Route exact path="/coupons" element={<Main visible={"coupons"} />} />
-          <Route exact path="/coupons-add" element={<Main visible={"add-coupons"} />} />
+          <Route exact path="/coupons/add" element={<Main visible={"add-coupons"} />} />
+          <Route
+            exact
+            path="/coupons-add"
+            element={<Main visible={"add-coupons"} />}
+          />
           <Route
             exact
             path="/coupons/edit-coupons/:couponsCode"
             element={<Main visible={"coupons-edit-cop"} />}
           />
           <Route exact path="/vendors" element={<Main visible={"vendors"} />} />
-          <Route exact path="/vendors-add" element={<Main visible={"add-vendors"} />} />
+          <Route exact path="/vendors/add" element={<Main visible={"add-vendors"} />} />
+          <Route
+            exact
+            path="/vendors-add"
+            element={<Main visible={"add-vendors"} />}
+          />
           <Route
             exact
             path="/vendors/edit-vendor/:code"
@@ -292,7 +307,7 @@ function App() {
           />
           <Route
             exact
-            path="/category/edit-category/:categoryCode"
+            path="/inventory/category/edit-category/:categoryCode"
             element={<Main visible={"category-edit-cat"} />}
           />
 
@@ -578,6 +593,16 @@ function App() {
             exact
             path="/users/manager_view"
             element={<Main visible={"manager_view"} />}
+          />
+           <Route
+            exact
+            path="/import-data"
+            element={<Main visible={"import-data"} />}
+          />
+          <Route
+            exact
+            path="/need-help"
+            element={<Main visible={"need_help"} />}
           />
           <Route
             exact

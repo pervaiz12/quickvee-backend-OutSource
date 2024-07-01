@@ -28,6 +28,7 @@ import View from "../../../Assests/VerifiedMerchant/View.svg";
 import Edit from "../../../Assests/VerifiedMerchant/Edit.svg";
 import Delete from "../../../Assests/VerifiedMerchant/Delete.svg";
 import DisLike from "../../../Assests/VerifiedMerchant/DisLike.svg";
+import PasswordShow from "../../../Common/passwordShow";
 import {
   BASE_URL,
   DELETE_SINGLE_STORE,
@@ -71,6 +72,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export default function Verified({ setVisible, setMerchantId }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
 
   // states
   const [currentPage, setCurrentPage] = useState(1);
@@ -110,8 +112,16 @@ export default function Verified({ setVisible, setMerchantId }) {
     page: currentPage,
     search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
   };
+  const getVerifiedRecord = async () => {
+    try {
+      await dispatch(getVerifiedMerchant(data_verified)).unwrap();
+    } catch (error) {
+      getUnAutherisedTokenMessage();
+      handleCoockieExpire();
+    }
+  };
   useEffect(() => {
-    dispatch(getVerifiedMerchant(data_verified));
+    getVerifiedRecord();
   }, [currentPage, debouncedValue, rowsPerPage]);
 
   // only when user searches VerifiedMerchantListState

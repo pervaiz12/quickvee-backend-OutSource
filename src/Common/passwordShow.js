@@ -46,6 +46,6 @@ export default function PasswordShow() {
     handleMouseUp,
     jsxData,
     handleCoockieExpire,
-    getUnAutherisedTokenMessage
+    getUnAutherisedTokenMessage,
   };
 }

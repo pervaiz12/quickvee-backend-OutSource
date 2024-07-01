@@ -92,7 +92,7 @@ const AtrDataList = ({ seVisible }) => {
     }
     if (!newAttribute.trim()) {
       // Check if newAttribute is empty or only contains whitespace
-      setErrorMessage("Please enter attributes title");
+      setErrorMessage("Title is required");
       return;
     }
     const newItem = {
@@ -107,7 +107,7 @@ const AtrDataList = ({ seVisible }) => {
     });
     if (response) {
       setShowModal(false);
-      ToastifyAlert(response.data.response_message, "success");
+      ToastifyAlert("Added Successfully", "success");
       setNewAttribute("");
       let merchantdata = {
         merchant_id: merchant_id,

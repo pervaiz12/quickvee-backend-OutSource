@@ -23,11 +23,13 @@ import Pagination from "../UnverifeDetails/Pagination";
 import Edit from "../../../Assests/VerifiedMerchant/Edit.svg";
 import useDebounce from "../../../hooks/useDebouncs";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import PasswordShow from "../../../Common/passwordShow";
 
-export default function AdminView({setVisible,setEditAdminId}) {
+export default function AdminView({ setVisible, setEditAdminId }) {
   const { userTypeData } = useAuthDetails();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
 
   // states
   const [searchRecord, setSearchRecord] = useState("");
@@ -42,6 +44,14 @@ export default function AdminView({setVisible,setEditAdminId}) {
   );
 
   // only when user changes Page number, Page size & searches something
+  const getAdminRecordData = async (data) => {
+    try {
+      await dispatch(AdminFunction(data)).unwrap();
+    } catch (error) {
+      getUnAutherisedTokenMessage();
+      handleCoockieExpire();
+    }
+  };
   useEffect(() => {
     const data = {
       ...userTypeData,
@@ -49,8 +59,7 @@ export default function AdminView({setVisible,setEditAdminId}) {
       page: currentPage,
       search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
     };
-
-    dispatch(AdminFunction(data));
+    getAdminRecordData(data);
   }, [currentPage, debouncedValue, rowsPerPage]);
 
   // only when user searches to update the total count
@@ -110,15 +119,15 @@ export default function AdminView({setVisible,setEditAdminId}) {
   }));
 
   const columns = ["Owner Name", "Name", "Email", "Phone", "View", ""];
-  const handleClick =()=>{
+  const handleClick = () => {
     // setVisible("AddAmin")
-    navigate("/users/admin/addAdmin")
-  }
+    navigate("/users/admin/addAdmin");
+  };
 
-  const handleEditAdminClick = (id)=>{
+  const handleEditAdminClick = (id) => {
     setEditAdminId(id);
-    setVisible("EditAdmin")
-  }
+    setVisible("EditAdmin");
+  };
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -141,7 +150,7 @@ export default function AdminView({setVisible,setEditAdminId}) {
               <Grid container direction="row" alignItems="center">
                 <Grid item>
                   <span
-                  onClick={handleClick}
+                    onClick={handleClick}
                     // to="/users/addAdmin"
                     className="flex q-category-bottom-header "
                   >
@@ -241,7 +250,9 @@ export default function AdminView({setVisible,setEditAdminId}) {
                                   onClick={() =>
                                     // handleEditAdminClick(data.id)
                                     // setEditAdminId(data.id)
-                                    navigate(`/users/admin/editAdmin/${data.id}`)
+                                    navigate(
+                                      `/users/admin/editAdmin/${data.id}`
+                                    )
                                   }
                                   src={Edit}
                                   alt="Edit"

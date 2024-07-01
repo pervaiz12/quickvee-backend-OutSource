@@ -7,6 +7,7 @@ import {
   GET_MERCHAN_STATE,
   GET_ADMIN_DATA,
   ADMIN_CHECK_USER,
+  CHECK_EXIST_STORENAME,
 } from "../../../../Constants/Config";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -22,7 +23,7 @@ const MerchantFunction = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
 
-  const { handleCoockieExpire } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const [store, setStore] = useState({
     storename: "",
     ownerName: "",
@@ -243,10 +244,10 @@ const MerchantFunction = () => {
       let emailRegex =
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
       let reg = /^[0-9\b]+$/;
-      console.log(value);
+      // console.log(value);
 
       if (name === "storename") {
-        console.log(name);
+        // console.log(name);
         // updatedErrors[name] = value === "" ? `Please fill the ${name} field` : "";
         updatedErrors[name] =
           value.trim() === ""
@@ -256,8 +257,7 @@ const MerchantFunction = () => {
               : "";
       }
       if (name == "ownerName") {
-        updatedErrors[name] =
-          value === "" ? `Owner Name is required` : "";
+        updatedErrors[name] = value === "" ? `Owner Name is required` : "";
         // updatedErrors[name] =
         //   value.trim() === ""
         //     ? `Please fill in the ${name} field`
@@ -274,17 +274,15 @@ const MerchantFunction = () => {
               : "";
       }
       if (name == "password") {
-        updatedErrors[name] =
-          value === "" ? `Password is required` : "";
+        updatedErrors[name] = value === "" ? `Password is required` : "";
       }
       if (name == "state") {
-        updatedErrors[name] =
-          value === "" ? `State is required` : "";
+        updatedErrors[name] = value === "" ? `State is required` : "";
       }
       if (name === "phone") {
         const numericValue = value.replace(/[^0-9]/g, "");
         if (numericValue == "") {
-          updatedErrors[name] = "";
+          updatedErrors[name] = "Phone is required";
         } else if (numericValue.length !== 10) {
           updatedErrors[name] = "Phone number must be 10 digits";
         } else {
@@ -300,8 +298,7 @@ const MerchantFunction = () => {
       });
     } else {
       if (e.name == "state") {
-        updatedErrors[e.name] =
-          e.title === "" ? `State is required` : "";
+        updatedErrors[e.name] = e.title === "" ? `State is required` : "";
       }
       setStore((prevState) => ({
         ...prevState,
@@ -310,7 +307,7 @@ const MerchantFunction = () => {
       }));
     }
   };
-  console.log("store updated ", store);
+  // console.log("store updated ", store);
   const handleKeyPress = (e) => {
     if ((e.charCode < 48 || e.charCode > 57) && e.charCode !== 8) {
       e.preventDefault();
@@ -341,9 +338,8 @@ const MerchantFunction = () => {
       errors.state == "" &&
       errors.email == "" &&
       errors.ownerName == "" &&
-      errors.password == ""
-      // &&
-      // errorPin == ""
+      errors.password == "" &&
+      errors.storename === ""
     ) {
       return true;
     } else {
@@ -355,14 +351,14 @@ const MerchantFunction = () => {
     let error = false;
     let errorMessage = "";
     let errors = { ...store.errors };
+
+    // Check if userRadioData is empty
     if (userRadioData === "") {
       errorMessage = "Please enter the input";
       error = true;
-    } else {
-      errorMessage = "";
-      error = false;
     }
 
+    // Check for specific userRadioData values
     if (
       userRadioData === "" ||
       userRadioData === "admin" ||
@@ -371,6 +367,29 @@ const MerchantFunction = () => {
       if (store.storename === "") {
         errors.storename = "Store Name is required";
         error = true;
+      } else {
+        // Validate store name uniqueness
+        try {
+          if (!errors.storename && !errors.email) {
+            setLoader(true);
+            const emailValid = await StorenameValidate(
+              store.email,
+              store.storename
+            );
+            setLoader(false);
+            if (emailValid.status === true) {
+              errors.storename = "Store already exists";
+              error = true;
+            } else {
+              errors.storename = "";
+            }
+          }
+        } catch (validationError) {
+          setLoader(false);
+          console.error("Error validating store name:", validationError);
+          errors.storename = "Error validating store name";
+          error = true; // Consider this as an error
+        }
       }
 
       if (store.ownerName === "") {
@@ -387,24 +406,27 @@ const MerchantFunction = () => {
         errors.password = "Password is required";
         error = true;
       } else {
+        // Validate password uniqueness
         try {
-          // console.log('heloo password')
-          if (errors.password === "" && errors.email == "") {
-            const emailValid = await passwordValidate(
+          if (!errors.password && !errors.email) {
+            setLoader(true);
+            const passwordValid = await passwordValidate(
               store.email,
               store.password
             );
-            if (emailValid == true) {
+            setLoader(false);
+            if (passwordValid === true) {
               errors.password = "Password already exists";
               error = true;
             } else {
               errors.password = "";
-              error = false;
             }
           }
-        } catch (error) {
-          console.error("Error validating email:", error);
-          error = true; // You should handle this error case accordingly
+        } catch (validationError) {
+          setLoader(false);
+          console.error("Error validating password:", validationError);
+          errors.password = "Error validating password";
+          error = true; // Consider this as an error
         }
       }
 
@@ -413,21 +435,144 @@ const MerchantFunction = () => {
         error = true;
       }
 
-      // if (store.phone === "") {
-      //   errors.phone = "Please fill the Phone";
-      //   error = true;
-      // }
+      if (store.phone === "") {
+        errors.phone = "Phone is required";
+        error = true;
+      }
     }
 
     setRadioError(errorMessage);
     setStore({ ...store, errors });
 
-    if (error == true) {
-      return false;
-    } else {
-      return true;
+    return !error; // If error is true, return false; otherwise, return true
+  };
+
+  // =====================================================
+  // const validate = async () => {
+  //   let error = false;
+  //   let errorMessage = "";
+  //   let errors = { ...store.errors };
+  //   if (userRadioData === "") {
+  //     errorMessage = "Please enter the input";
+  //     error = true;
+  //   } else {
+  //     errorMessage = "";
+  //     error = false;
+  //   }
+
+  //   if (
+  //     userRadioData === "" ||
+  //     userRadioData === "admin" ||
+  //     userRadioData === "merchant"
+  //   ) {
+  //     if (store.storename === "") {
+  //       errors.storename = "Store Name is required";
+  //       error = true;
+  //     } else {
+  //       try {
+  //         // console.log('heloo password')
+  //         if (errors.storename === "" && errors.email == "") {
+  //           setLoader(true);
+  //           const emailValid = await StorenameValidate(
+  //             store.email,
+  //             store.storename
+  //           );
+  //           if (emailValid.status == true) {
+  //             setLoader(false);
+  //             errors.storename = "Store already exists";
+  //             error = true;
+  //           } else {
+  //             setLoader(false);
+  //             errors.storename = "";
+  //             error = false;
+  //           }
+  //         }
+  //       } catch (error) {
+  //         console.error("Error validating email:", error);
+  //         // error = true; // You should handle this error case accordingly
+  //       }
+  //     }
+
+  //     if (store.ownerName === "") {
+  //       errors.ownerName = "Owner Name is required";
+  //       error = true;
+  //     }
+
+  //     if (store.email === "") {
+  //       errors.email = "Email is required";
+  //       error = true;
+  //     }
+
+  //     if (store.password === "") {
+  //       errors.password = "Password is required";
+  //       error = true;
+  //     } else {
+  //       try {
+  //         // console.log('heloo password')
+  //         if (errors.password === "" && errors.email == "") {
+  //           setLoader(true);
+  //           const emailValid = await passwordValidate(
+  //             store.email,
+  //             store.password
+  //           );
+  //           if (emailValid == true) {
+  //             setLoader(false);
+  //             errors.password = "Password already exists";
+  //             error = true;
+  //           } else {
+  //             setLoader(false);
+  //             errors.password = "";
+  //             error = false;
+  //           }
+  //         }
+  //       } catch (error) {
+  //         console.error("Error validating email:", error);
+  //         // error = true; // You should handle this error case accordingly
+  //       }
+  //     }
+
+  //     if (store.state === "") {
+  //       errors.state = "Please select the State";
+  //       error = true;
+  //     }
+
+  //     if (store.phone === "") {
+  //       errors.phone = "Phone is required";
+  //       error = true;
+  //     }
+  //   }
+
+  //   setRadioError(errorMessage);
+  //   setStore({ ...store, errors });
+
+  //   if (error == true) {
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // };
+  //  store check function start -------
+  const StorenameValidate = async (email, store) => {
+    const { token, ...newData } = userTypeData;
+    const dataNew = { email: email, name: store, ...newData };
+    try {
+      const response = await axios.post(
+        BASE_URL + CHECK_EXIST_STORENAME,
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.error("Error validating email:");
     }
   };
+
   const passwordValidate = async (email, password) => {
     const { token, ...newData } = userTypeData;
     const dataNew = { email: email, password: password, ...newData };
@@ -450,8 +595,37 @@ const MerchantFunction = () => {
     }
   };
   // ------------------------
+  const handleBlurStoreFound = async () => {
+    if (
+      store.errors.storename == "" &&
+      store.storename !== "" &&
+      store.email !== ""
+    ) {
+      let result = await StorenameValidate(store.email, store.storename);
+      console.log(result);
+      if (result.status == true) {
+        setStore((prev) => ({
+          ...prev,
+          errors: {
+            ...prev.errors,
+            storename: "Store already exists",
+          },
+        }));
+      } else {
+        setStore((prev) => ({
+          ...prev,
+          errors: {
+            ...prev.errors,
+            storename: "",
+          },
+        }));
+      }
+    } else {
+      console.log("nooo");
+    }
+  };
+
   const handleBlur = async (name) => {
-    console.log("HandleBlur", name);
     if (name === "password" || name === "email") {
       if (store.errors.password == "" && store.errors.email == "") {
         let result = await passwordValidate(store.email, store.password);
@@ -460,7 +634,7 @@ const MerchantFunction = () => {
             ...prev,
             errors: {
               ...prev.errors,
-              password: "Email already exists",
+              password: "Password already exists",
             },
           }));
         } else {
@@ -503,17 +677,39 @@ const MerchantFunction = () => {
     }
   }
 
+  // ==============
+  const keyEnter = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      setStore((prev) => ({
+        ...prev,
+        [event.target.name]: event.target.value,
+      }));
+      if (loader == false) {
+        handleSubmitMerchant(event);
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", keyEnter);
+    return () => {
+      document.removeEventListener("keydown", keyEnter);
+    };
+  }, [store]);
+
+  // ==============
+
   const handleSubmitMerchant = async (e) => {
     e.preventDefault();
     // let validateMerchant = validateData();
     const currentValidate = validateFormNew(store.errors);
     const isValidate = await validate();
-    // && validateMerchant
+    console.log(isValidate);
     try {
       if (isValidate) {
         if (currentValidate) {
           const { token, ...newData } = userTypeData;
-
           const data = {
             login_pin: merchantStore.pin,
             admin: adminId,
@@ -528,7 +724,6 @@ const MerchantFunction = () => {
             ...newData,
           };
           setLoader(true);
-          // ${token}
           await axios
             .post(BASE_URL + ADD_MERCHAN_EMPLOYEE, data, {
               headers: {
@@ -569,6 +764,7 @@ const MerchantFunction = () => {
     } catch (error) {
       // console.log("hellooo", error?.message);
       // dispatch(getAuthInvalidMessage(error?.message));
+      getUnAutherisedTokenMessage();
       handleCoockieExpire();
     }
   };
@@ -657,6 +853,8 @@ const MerchantFunction = () => {
     handleBlur,
     userRadioData,
     loader,
+    keyEnter,
+    handleBlurStoreFound,
   };
 };
 export default MerchantFunction;

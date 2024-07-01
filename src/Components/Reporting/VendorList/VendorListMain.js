@@ -18,7 +18,7 @@ const VendorListMain = () => {
 
   return (
     <>
-    <Grid container sx={{ padding: 2.5,mt:3.6 }} className="box_shadow_div ">
+    {/* <Grid container sx={{ padding: 2.5,mt:3.6 }} className="box_shadow_div ">
         <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
@@ -26,7 +26,7 @@ const VendorListMain = () => {
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </Grid> */}
       <VendorReportList
       // selectedDateRange={selectedDateRange}
       // VendorIdData={VendorIdData}

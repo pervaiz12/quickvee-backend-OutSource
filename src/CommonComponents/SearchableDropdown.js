@@ -18,7 +18,8 @@ const SearchableDropdown = ({
   hideSelectedValue,
   hideSelectedList,
   placeholder,
-  pageUrl
+  pageUrl,
+  productTitle
 }) => {
   const { checkLength } = Validation();
   const [filterOptions, setFilterOptions] = useState(optionList);
@@ -27,7 +28,7 @@ const SearchableDropdown = ({
     const { value } = e.target;
     setFilterValue(value);
     const filterList = optionList?.filter((item) => {
-      return item?.[name]?.toLowerCase().includes(value.toLowerCase());
+      return item?.[name]?.toLowerCase().includes(value?.toLowerCase());
     });
     setFilterOptions(
       filterList?.length ? filterList : ["No Search Result Found"]
@@ -82,14 +83,15 @@ const SearchableDropdown = ({
       const findOption = optionList?.filter((item)=> item?.title === "DefaultTax");
       handleSelectProductOptions(findOption[0], keyName)
     }
-  }, [optionList, keyName])
+  }, [optionList, keyName, productTitle])
 
   const changeFilterableList = () => {
+    const filterOptionList = optionList?.filter((product)=> !product?.title?.toLowerCase().includes(productTitle?.toLowerCase()));
     // filter incoming optionList items when onchange run
     if (filterOptions?.length) {
-      return filterOptions;
+      return  pageUrl === "inventory/products/edit" ? filterOptions?.filter((product)=> !product?.title?.toLowerCase().includes(productTitle?.toLowerCase())): filterOptions;
     }
-    return optionList;
+    return pageUrl === "inventory/products/edit" ? filterOptionList: optionList;
   };
 
   const toggleOption = () => {
@@ -120,7 +122,7 @@ const SearchableDropdown = ({
     <>
       {title ? (
         <div className="title-area">
-          <span>{title}</span>
+          <span  className="product-input-title">{title}</span>
         </div>
       ) : (
         ""
@@ -144,7 +146,7 @@ const SearchableDropdown = ({
                 ? selectedOption?.map((option) => {
                     return (
                       <div className="item" key={option?.id}>
-                        {option?.[name]}
+                        <span>{option?.[name]}</span>
                         <img
                           src={CloseIcon}
                           className="cancel-image"

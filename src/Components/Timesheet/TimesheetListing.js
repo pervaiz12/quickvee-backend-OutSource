@@ -78,7 +78,10 @@ const TimesheetListing = ({ data }) => {
 
         const mappedOptions = EmpList.map((empdata) => ({
           id: empdata.id,
-          title: empdata.f_name + " " + empdata.l_name,
+          // title: empdata.f_name + " " + empdata.l_name,
+          // title: (empdata.f_name ? empdata.f_name : "") + " " + (empdata.l_name ? empdata.l_name : ""),
+          title: empdata.l_name ? `${empdata.f_name} ${empdata.l_name}` : empdata.f_name
+          // title: empdata.l_name && empdata.l_name !== "" ? `${empdata.f_name} ${empdata.l_name}` : empdata.f_name
         }));
         setemployeeList(mappedOptions);
       } catch (error) {
@@ -212,6 +215,14 @@ const TimesheetListing = ({ data }) => {
 
   const handleStartDateChange = (newDate) => {
     // const formattedStartDate = newDate.format("YYYY-MM-DD");
+    if (!newDate || !newDate.isValid()) {
+      setDateStartError("Invalid date. Please select a valid date.");
+      setTimeBreak({
+        ...addtimebreak,
+        add_in_date: null,
+      });
+      return;
+    }
     const dayjsDate = dayjs(newDate); // Convert to dayjs object
     const formattedStartDate = dayjsDate.format("YYYY-MM-DD");
     // const formattedStartDate = dayjs(newDate).format("YYYY-MM-DD");
@@ -248,6 +259,15 @@ const TimesheetListing = ({ data }) => {
   };
 
   const handleEndDateChange = (newDate) => {
+    if (!newDate || !newDate.isValid()) {
+      // showModal("Buss");
+      setDateEndTimeError("Invalid date. Please select a valid date.");
+      setTimeBreak({
+        ...addtimebreak,
+        add_out_date: null,
+      });
+      return;
+    }
     const formattedEndDate = newDate.format("YYYY-MM-DD");
     setTimeBreak({
       ...addtimebreak,
@@ -314,6 +334,10 @@ const TimesheetListing = ({ data }) => {
       setDateEndTimeError("");
     }
 
+    if (dateStartError === "Invalid date. Please select a valid date." || dateEndError === "Invalid date. Please select a valid date." ){
+      return;
+    }
+
     if (!valid) return;
     const formData = new FormData();
     formData.append("merchant_id", merchant_id);
@@ -345,7 +369,7 @@ const TimesheetListing = ({ data }) => {
         response.data.status === true &&
         response.data.msg === "Inserted successfully."
       ) {
-        ToastifyAlert("Timesheet Created Successfully", "success");
+        ToastifyAlert("Added Successfully", "success");
         dispatch(fetchtimeSheetData(data));
         setShowModal(false);
       } else if (
@@ -518,7 +542,7 @@ const TimesheetListing = ({ data }) => {
         response.data.msg === "Break Added."
       ) {
         setShowModalBreak(false);
-        ToastifyAlert("Break Added", "success");
+        ToastifyAlert("Added Successfully", "success");
       } else if (
         response.data.status === false &&
         response.data.msg === "Invalid time entered."
@@ -555,10 +579,15 @@ const TimesheetListing = ({ data }) => {
   const openModalViewBreak = (title, data) => {
     setEmployeeName(title);
     fetchBreakDetails(data);
-    setEmployeeWorkDate(data.attendance_date);
-    setEmployeeWorkDateOUT(data.out_date);
-    setEmployeeTimeIn(formatTime(data.check_in_time));
-    setEmployeeTimeOut(formatTime(data.check_out_time));
+    setEmployeeWorkDate(data?.attendance_date);
+    setEmployeeWorkDateOUT(data?.out_date);
+    // setEmployeeTimeIn(formatTime(data.check_in_time));
+    if (data?.check_in_time) {
+      setEmployeeTimeIn(formatTime(data?.check_in_time));
+    } else if (data.time_entered) {
+      setEmployeeTimeIn(formatTime(data?.time_entered));
+    }
+    setEmployeeTimeOut(formatTime(data?.check_out_time));
     setAllbreakDelete(data);
     setShowModalViewBreak(true);
   };
@@ -675,7 +704,7 @@ const TimesheetListing = ({ data }) => {
             dispatch(fetchtimeSheetData(data));
           });
       }
-      ToastifyAlert("Timesheet Deleted", "success");
+      ToastifyAlert("Deleted Successfully", "success");
       closeModalViewBreak();
     }else if(deleteBreakTime){
       const datasBreakDelete = {
@@ -687,7 +716,7 @@ const TimesheetListing = ({ data }) => {
             dispatch(fetchtimeSheetData(data));
           });
       }
-      ToastifyAlert("Break Deleted", "success");
+      ToastifyAlert("Deleted Successfully", "success");
       closeModalViewBreak();
 
     }
@@ -714,6 +743,13 @@ const TimesheetListing = ({ data }) => {
       "en-US",
       options
     );
+    return formattedDate;
+  };
+  const formDateOUtDate = (dateString) =>{
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    const [day, month, year] = dateString.split('-');
+    const date = new Date(year, month - 1, day);
+    const formattedDate = `${months[date.getMonth()]} ${String(date.getDate()).padStart(2, '0')}, ${date.getFullYear()}`;
     return formattedDate;
   };
 
@@ -899,6 +935,9 @@ const TimesheetListing = ({ data }) => {
     }
   };
 
+  const preventKeyPress = (event) => {
+    event.preventDefault();
+  };
   return (
     <>
       {renderDataTable()}
@@ -953,7 +992,7 @@ const TimesheetListing = ({ data }) => {
                       format={"MMMM DD, YYYY"}
                       views={["year", "month", "day"]}
                       slotProps={{
-                        textField: { placeholder: "Select Date" },
+                        textField: { placeholder: "Select Date",onKeyPress: preventKeyPress, },
                       }}
                       disableFuture
                       components={{
@@ -1036,7 +1075,7 @@ const TimesheetListing = ({ data }) => {
                       format={"MMMM DD, YYYY"}
                       views={["year", "month", "day"]}
                       slotProps={{
-                        textField: { placeholder: "Select Date" },
+                        textField: { placeholder: "Select Date",onKeyPress: preventKeyPress, },
                       }}
                       components={{
                         OpenPickerIcon: () => (
@@ -1273,7 +1312,7 @@ const TimesheetListing = ({ data }) => {
                 <span className="viewTextBark">
                   {formatDate(EmployeeWorkDate)} -{" "}
                   {EmployeeWorkDateOUT
-                    ? formatDate(EmployeeWorkDateOUT)
+                    ? formDateOUtDate(EmployeeWorkDateOUT)
                     : "-"}
                 </span>{" "}
               </span>

@@ -28,6 +28,8 @@ export default function EditAdmin({ EditAdminId, setVisible }) {
     handleKeyPress,
     loader,
     loaderEdit,
+    handleBlur,
+    keyEnter,
   } = EditAdminFunctionality(handleClick);
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -69,6 +71,7 @@ export default function EditAdmin({ EditAdminId, setVisible }) {
                       name="owner_name"
                       value={editData.owner_name}
                       onChange={handleChangeAdmin}
+                      onKeyDown={keyEnter}
                     />
                     <label className="error">{errors.owner_name}</label>
                   </div>
@@ -87,6 +90,8 @@ export default function EditAdmin({ EditAdminId, setVisible }) {
                       // value={customerData && customerData.email}
                       // value={store.ownerName}
                       onChange={handleChangeAdmin}
+                      onBlur={() => handleBlur("email")}
+                      onKeyDown={keyEnter}
                       autoComplete="off"
                       readOnly // Set as readonly initially
                       onFocus={(e) => e.target.removeAttribute("readonly")}
@@ -103,6 +108,7 @@ export default function EditAdmin({ EditAdminId, setVisible }) {
                       className=""
                       type={showpPassword ? "text" : "password"}
                       name="password1"
+                      onKeyDown={keyEnter}
                       value={editData.password1}
                       onChange={handleChangeAdmin}
                       autoComplete="off"
@@ -114,7 +120,8 @@ export default function EditAdmin({ EditAdminId, setVisible }) {
                 <div className="col-qv-6">
                   <div className="input_area">
                     <label>
-                      Phone<span className="Asterisk_error">*</span>
+                      Phone
+                      {/* <span className="Asterisk_error">*</span> */}
                     </label>
                     <input
                       className=""
@@ -122,6 +129,7 @@ export default function EditAdmin({ EditAdminId, setVisible }) {
                       name="phone"
                       value={editData.phone}
                       onKeyPress={handleKeyPress}
+                      onKeyDown={keyEnter}
                       maxLength={10}
                       onChange={handleChangeAdmin}
                     />

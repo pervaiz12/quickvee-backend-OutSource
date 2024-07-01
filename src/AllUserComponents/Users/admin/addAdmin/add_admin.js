@@ -5,19 +5,20 @@ import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import PasswordShow from "../../../../Common/passwordShow";
 
-export default function Add_Admin({setVisible}) {
+export default function Add_Admin({ setVisible }) {
   const {
     handleChange,
     addAdminData,
     handleSubmit,
     handleBlur,
     handleKeyPress,
+    keyEnter,
     loader,
-  } = Add_adminFunctionality({setVisible});
+  } = Add_adminFunctionality({ setVisible });
   const handleClick = () => {
     navigate(-1);
     // setVisible("AdminView")
-  }
+  };
   const navigate = useNavigate();
   const { showpPassword, jsxData } = PasswordShow();
   return (
@@ -44,6 +45,7 @@ export default function Add_Admin({setVisible}) {
                       name="owner_name"
                       value={addAdminData.owner_name}
                       onChange={handleChange}
+                      onKeyDown={keyEnter}
                     />
                     {addAdminData.errors.owner_name && (
                       <span className="error">
@@ -65,6 +67,10 @@ export default function Add_Admin({setVisible}) {
                       value={addAdminData.email}
                       onChange={handleChange}
                       onBlur={() => handleBlur("email")}
+                      autoComplete="off"
+                      readOnly
+                      onFocus={(e) => e.target.removeAttribute("readonly")}
+                      onKeyDown={keyEnter}
                     />
                     {addAdminData.errors.email && (
                       <span className="error">{addAdminData.errors.email}</span>
@@ -76,7 +82,8 @@ export default function Add_Admin({setVisible}) {
                 <div className="col-qv-6">
                   <div className="input_area password-show-input">
                     <label>
-                      Password<span className="Asterisk_error">*</span>
+                      Password
+                      <span className="Asterisk_error">*</span>
                     </label>
                     <input
                       className=""
@@ -84,6 +91,7 @@ export default function Add_Admin({setVisible}) {
                       name="password"
                       value={addAdminData.password}
                       onChange={handleChange}
+                      onKeyDown={keyEnter}
                     />
                     {jsxData(addAdminData.password)}
                     {addAdminData.errors.password && (
@@ -96,7 +104,8 @@ export default function Add_Admin({setVisible}) {
                 <div className="col-qv-6">
                   <div className="input_area">
                     <label>
-                      Phone<span className="Asterisk_error">*</span>
+                      Phone
+                      {/* <span className="Asterisk_error">*</span> */}
                     </label>
                     <input
                       className=""
@@ -106,6 +115,7 @@ export default function Add_Admin({setVisible}) {
                       value={addAdminData.phone}
                       maxLength={10}
                       onKeyPress={handleKeyPress}
+                      onKeyDown={keyEnter}
                     />
                     <label className="error">{addAdminData.errors.phone}</label>
                   </div>
@@ -114,11 +124,23 @@ export default function Add_Admin({setVisible}) {
             </div>
             <div className="q-add-categories-section-middle-footer">
               <button
-                className="quic-btn quic-btn-save"
+                className="quic-btn quic-btn-save attributeUpdateBTN"
                 onClick={handleSubmit}
                 disabled={loader}
               >
-                {loader ? <CircularProgress /> : "Add"}
+                {loader ? (
+                  <>
+                    <CircularProgress
+                      color={"inherit"}
+                      className="loaderIcon"
+                      width={15}
+                      size={15}
+                    />{" "}
+                    Add
+                  </>
+                ) : (
+                  "Add"
+                )}
               </button>
               <button
                 onClick={() => navigate("/users/admin")}

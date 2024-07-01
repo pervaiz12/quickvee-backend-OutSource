@@ -23,6 +23,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableBody from "@mui/material/TableBody";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import { memo } from "react";
+import PasswordShow from "../../Common/passwordShow";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -66,6 +68,8 @@ const ProductTable = ({
     (state) => state.productsListData
   );
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
+            
+  const {getUnAutherisedTokenMessage} = PasswordShow();
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   const [productList, setproductsList] = useState([]);
@@ -73,7 +77,7 @@ const ProductTable = ({
   const dispatch = useDispatch();
   useEffect(() => {
     if (ProductsListDataState?.productsData?.length) {
-      setproductsList(ProductsListDataState?.productsData);
+      setproductsList([...new Set(ProductsListDataState?.productsData)]);
     } else {
       setproductsList([]);
     }
@@ -87,6 +91,7 @@ const ProductTable = ({
     offset: 0,
     limit: 10,
     page: 0,
+    ...userTypeData,
   };
   useEffect(() => {
     if (payloadData) {
@@ -188,10 +193,14 @@ const ProductTable = ({
     let timer = null;
     const formData = new FormData();
     formData.append("id", id);
+    formData.append("login_type", userTypeData?.login_type);
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("token", userTypeData?.token);
+
     dispatch(deleteProductAPI(formData))
       .then(async (res) => {
         if (res?.payload?.status) {
-          ToastifyAlert("Product deleted successfully!", "success");
+          ToastifyAlert("Deleted Successfully", "success");
           clearTimeout(timer);
           timer = setTimeout(() => {
             window.location.reload();
@@ -200,6 +209,7 @@ const ProductTable = ({
       })
       .catch(() => {
         ToastifyAlert("Error!", "error");
+    getUnAutherisedTokenMessage();
       });
   };
   return (
@@ -260,8 +270,8 @@ const ProductTable = ({
                       </TableHead>
 
                       <TableBody>
-                        {productList?.length >= 1 &&
-                          productList.map((product, index) => {
+                        {[productList]?.length >= 1 &&
+                          [...new Set(productList)].map((product, index) => {
                             return (
                               <StyledTableRow key={product?.id}>
                                 <StyledTableCell>
@@ -422,4 +432,4 @@ const ProductTable = ({
   );
 };
 
-export default ProductTable;
+export default memo(ProductTable);

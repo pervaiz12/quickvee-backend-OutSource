@@ -511,3 +511,7 @@
 .categoryTable .category-checkmark-div{
   width: 200px;
 }
+
+.permissionEditBTN{
+  width: max-content !important;
+}

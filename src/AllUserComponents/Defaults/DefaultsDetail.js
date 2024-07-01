@@ -25,6 +25,7 @@ import TableRow from "@mui/material/TableRow";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
+import PasswordShow from "./../../Common/passwordShow";
 
 const DefaultsDetail = ({ setVisible,setDefaultEditId }) => {
   const myStyles = {
@@ -42,15 +43,32 @@ const DefaultsDetail = ({ setVisible,setDefaultEditId }) => {
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
 
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
   useEffect(() => {
-    let data = {
-      merchant_id: merchant_id,
-      ...userTypeData,
-    };
-    if (data) {
-      dispatch(fetchdefaultsData(data));
-    }
+      // let data = {
+      //   // merchant_id: merchant_id,
+      //   ...userTypeData,
+      // };
+      // if (data) {
+      //   dispatch(fetchdefaultsData(data));
+      // }
+
+    getfetchdefaultsDataData()
   }, []);
+
+  const getfetchdefaultsDataData=async()=>{
+    try{
+      let data = {
+        ...userTypeData,
+      };
+      if (data) {
+        await dispatch(fetchdefaultsData(data)).unwrap();
+      }
+  }catch(error){
+    handleCoockieExpire()
+    getUnAutherisedTokenMessage()
+  }
+}
 
   useEffect(() => {
 
@@ -179,33 +197,38 @@ const DefaultsDetail = ({ setVisible,setDefaultEditId }) => {
     }
   };
 
-  const confirmDeleteCategory = () => {
-    if(deleteDefaultId){
-      const data = {
-        id: deleteDefaultId,
-        ...userTypeData,
-      };
-      if (data) {
-        dispatch(deleteDefaultsData(data)).then(() => {
-          dispatch(fetchdefaultsData({ merchant_id, ...userTypeData }));
-        });
-        ToastifyAlert("Default Menu Deleted", "success");
-      }
-    }else if(deleteSelectDefaultId){
+  const confirmDeleteCategory = async () => {
+    try{
+      if(deleteDefaultId){
         const data = {
-          selectedIds: deleteSelectDefaultId,
+          id: deleteDefaultId,
           ...userTypeData,
         };
         if (data) {
-          ToastifyAlert("Default Menu Deleted", "success");
-          dispatch(deleteDefaultsMultiData(data)).then(() => {
+          await dispatch(deleteDefaultsData(data)).unwrap().then(() => {
             dispatch(fetchdefaultsData({ merchant_id, ...userTypeData }));
           });
+          ToastifyAlert("Deleted Successfully", "success");
         }
+      }else if(deleteSelectDefaultId){
+          const data = {
+            selectedIds: deleteSelectDefaultId,
+            ...userTypeData,
+          };
+          if (data) {
+            ToastifyAlert("Deleted Successfully", "success");
+            await dispatch(deleteDefaultsMultiData(data)).unwrap().then(() => {
+              dispatch(fetchdefaultsData({ merchant_id, ...userTypeData }));
+            });
+          }
+      }
+      setDeleteSelectDefaultId([]);
+      setDeleteDefaultId(null)
+      setDeleteModalOpen(false);
+    } catch(error){
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
     }
-    setDeleteSelectDefaultId([]);
-    setDeleteDefaultId(null)
-    setDeleteModalOpen(false);
   };
 
   // for selected check box item Delete End
@@ -341,7 +364,7 @@ const DefaultsDetail = ({ setVisible,setDefaultEditId }) => {
                       </StyledTableCell>
 
                       <StyledTableCell>
-                        <div class="text-[#000000] order_method capitalize">
+                        <div class="text-[#000000] order_method ">
                           {data.name || ""}
                         </div>
                       </StyledTableCell>

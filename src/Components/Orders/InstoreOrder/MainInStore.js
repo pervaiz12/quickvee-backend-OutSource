@@ -12,7 +12,7 @@ const MainInStore = () => {
   const [activeTab, setActiveTab] = useState("offline");
 
   const [OrderSourceData, setOrderSourceData] = useState(null);
-  const [OrderTypeData, setOrderTypeData] = useState(null);
+  const [OrderTypeData, setOrderTypeData] = useState("New");
   const [OnlSearchIdData, setOnlSearchIdData] = useState("");
   const [OffSearchIdData, setOffSearchIdData] = useState("");
   const [EmployeeIDData, setEmployeeIDData] = useState(null);

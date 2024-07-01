@@ -3,14 +3,17 @@ import React, { useState, useEffect } from "react";
 import {
   BASE_URL,
   GET_EDIT_ADMIN,
+  CHECK_ADMIN_EMAIL,
   UPDATE_ADMIN_RECORD,
 } from "../../../../Constants/Config";
 import { useNavigate } from "react-router-dom";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../../CommonComponents/ToastifyAlert";
+import PasswordShow from "../../../../Common/passwordShow";
 
 const EditAdminFunctionality = (handleClick) => {
   const navigate = useNavigate();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const [editData, setEditData] = useState({
     owner_name: "",
     email: "",
@@ -28,27 +31,91 @@ const EditAdminFunctionality = (handleClick) => {
   });
   const [loader, setLoader] = useState(false);
   const [loaderEdit, setLoaderEdit] = useState(false);
+  const [ExitEmail, setExitEmail] = useState("");
 
   const handleEditAdmin = async (data) => {
     const { token, ...newData } = data;
     // console.log(newData)
     // const dataNew={admin_id:data,newData}
-    setLoaderEdit(true);
-    await axios
-      .post(BASE_URL + GET_EDIT_ADMIN, newData, {
+    try {
+      setLoaderEdit(true);
+      await axios
+        .post(BASE_URL + GET_EDIT_ADMIN, newData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {
+          setLoaderEdit(false);
+          if (response.data.status == 200) {
+            console.log(response.data.message[0]);
+            setEditData({ password1: "", ...response.data.message[0] });
+            setExitEmail(response.data.message[0].email);
+          }
+        });
+    } catch (error) {
+      getUnAutherisedTokenMessage();
+      handleCoockieExpire();
+    }
+  };
+  // ============================================
+  const emailValidate = async (data) => {
+    const { token, ...newData } = userTypeData;
+
+    const dataNew = { email: data, ...newData };
+
+    try {
+      const response = await axios.post(BASE_URL + CHECK_ADMIN_EMAIL, dataNew, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${token}`,
         },
-      })
-      .then((response) => {
-        setLoaderEdit(false);
-        if (response.data.status == 200) {
-          console.log(response.data.message[0]);
-          setEditData({ password1: "", ...response.data.message[0] });
-        }
       });
+
+      return response.data; // Assuming this data indicates whether email is valid or not
+    } catch (error) {
+      getUnAutherisedTokenMessage();
+      handleCoockieExpire();
+      // console.error("Error validating email:", error);
+      // throw error;
+    }
   };
+  const handleBlur = async (name) => {
+    if (name === "email") {
+      console.log(errors.email);
+      if (errors.email == "") {
+        try {
+          let result = await emailValidate(editData.email);
+          if (result == true) {
+            // console.log(editData.email);
+            // console.log(ExitEmail);
+            if (ExitEmail !== editData.email) {
+              setErrors((prev) => ({
+                ...prev,
+                email: "Email already exists",
+              }));
+            } else {
+              setErrors((prev) => ({
+                ...prev,
+                email: "",
+              }));
+            }
+          } else {
+            console.log("nooo");
+            setErrors((prev) => ({
+              ...prev,
+              email: "", // Clear the error if email does not exist
+            }));
+          }
+        } catch (error) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        }
+      }
+    }
+  };
+  // ============================================
   const handleChangeAdmin = (e) => {
     const { name, value } = e.target;
     let updatedErrors = { ...errors };
@@ -101,7 +168,7 @@ const EditAdminFunctionality = (handleClick) => {
       e.preventDefault();
     }
   };
-  const validateForm = () => {
+  const validateForm = async () => {
     let error = false;
     let updatedErrors = { ...errors };
     if (editData.owner_name == "") {
@@ -111,11 +178,37 @@ const EditAdminFunctionality = (handleClick) => {
     if (editData.email == "") {
       updatedErrors.email = "Email is required";
       error = true;
+    } else {
+      try {
+        if (errors.email == "") {
+          setLoader(true);
+          const emailValid = await emailValidate(editData.email);
+          if (emailValid == true) {
+            setLoader(false);
+            if (ExitEmail !== editData.email) {
+              updatedErrors.email = "Email already exists";
+              error = false;
+            } else {
+              updatedErrors.email = "";
+              error = true;
+            }
+          } else {
+            updatedErrors.email = "";
+            error = true;
+          }
+        } else {
+          error = false;
+        }
+      } catch (error) {
+        console.error("Error validating email:", error);
+        error = false;
+      }
     }
-    if (editData.phone == "") {
-      updatedErrors.phone = "Phone is required";
-      error = true;
-    }
+
+    // if (editData.phone == "") {
+    //   updatedErrors.phone = "Please fill the phone field";
+    //   error = true;
+    // }
 
     // setErrors({ ...errors, updatedErrors });
     setErrors(updatedErrors);
@@ -126,6 +219,30 @@ const EditAdminFunctionality = (handleClick) => {
       return true;
     }
   };
+  // --------------------------------------
+  // ==============
+  const keyEnter = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      setEditData((prev) => ({
+        ...prev,
+        [event.target.name]: event.target.value,
+      }));
+      if (loader == false) {
+        handleSubmitAdmin(event);
+      }
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener("keydown", keyEnter);
+    return () => {
+      document.removeEventListener("keydown", keyEnter);
+    };
+  }, [editData]);
+
+  // ==============
+  // --------------------------------------
 
   const handleSubmitAdmin = async (e) => {
     e.preventDefault();
@@ -141,30 +258,36 @@ const EditAdminFunctionality = (handleClick) => {
       ...newData,
     };
     let validate = Object.values(errors).filter((error) => error !== "").length;
-    const validateBlank = validateForm();
-    if (validateBlank) {
+    const validateBlank = await validateForm();
+    if (!validateBlank) {
       if (validate == 0) {
         setLoader(true);
-        await axios
-          .post(BASE_URL + UPDATE_ADMIN_RECORD, data, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          })
-          .then((result) => {
-            setLoader(false);
-            setEditData({
-              owner_name: "",
-              email: "",
-              password: "",
-              phone: "",
-              password: "",
+        try {
+          await axios
+            .post(BASE_URL + UPDATE_ADMIN_RECORD, data, {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${token}`,
+              },
+            })
+            .then((result) => {
+              setLoader(false);
+              setEditData({
+                owner_name: "",
+                email: "",
+                password: "",
+                phone: "",
+                password: "",
+              });
+              setExitEmail("");
+              ToastifyAlert(result?.data?.message, "success");
+              // handleClick();
+              navigate("/users/admin");
             });
-            ToastifyAlert(result?.data?.message, "success");
-            handleClick();
-            // navigate("/users/admin");
-          });
+        } catch (error) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        }
       }
     }
   };
@@ -177,6 +300,8 @@ const EditAdminFunctionality = (handleClick) => {
     handleKeyPress,
     loader,
     loaderEdit,
+    handleBlur,
+    keyEnter,
   };
 };
 export default EditAdminFunctionality;

@@ -23,6 +23,7 @@ import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 import { priceFormate } from "../../hooks/priceFormate";
 import PasswordShow from "../../Common/passwordShow";
+import AlertModal from "../../reuseableComponents/AlertModal";
 
 const CouponDiscount = ({ seVisible,setCouponId }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -64,10 +65,20 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
     AllCouponDataState.loading,
     AllCouponDataState.couponData,
   ]);
+  const [alertModalOpen, setAlertModalOpen] = useState(false);
+  const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
+
+  const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
+  };
 
   const handleCheckboxChange = useCallback(
-    async (couponId, isChecked) => {
-      if (isChecked) {
+    async (couponId, isChecked, coupons) => {
+      if(+coupons?.flag === 0 && +coupons?.discount === 100){
+        showModal("Discount Percentage must always be less than 100%.");
+        return
+      } else if(isChecked) {
         try {
           const data = {
             merchant_id,
@@ -94,6 +105,7 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
                 show_offline: 0,
               })
             );
+            ToastifyAlert("Updated Successfully", "success");
           }
         } catch (error) {
           console.error("API call failed:", error);
@@ -143,7 +155,7 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
       };
       if (data) {
         dispatch(deleteCoupon(data));
-        ToastifyAlert("Coupon Deleted", "success");
+        ToastifyAlert("Deleted Successfully", "success");
       }
     }
     setDeleteCouponId(null)
@@ -168,7 +180,7 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
               </div>
             </Grid>
             <Grid item>
-              <Link to={`/coupons-add`}>
+              <Link to={`/coupons/add`}>
               <p 
               // onClick={() => seVisible("AddCoupon")}
               >
@@ -306,9 +318,11 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
                               onChange={(e) =>
                                 handleCheckboxChange(
                                   coupons.id,
-                                  e.target.checked
+                                  e.target.checked,
+                                  coupons
                                 )
                               }
+                              // disabled={+coupons?.flag === 0 && +coupons?.discount === 100}
                               sx={{
                                 "& .MuiSwitch-switchBase.Mui-checked": {
                                   color: "#0A64F9", // Change color when switch is checked
@@ -396,6 +410,11 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
         open={deleteModalOpen}
         onClose={() => {setDeleteModalOpen(false)}}
         onConfirm={confirmDeleteCategory}
+        />
+         <AlertModal
+        headerText={alertModalHeaderText}
+        open={alertModalOpen}
+        onClose={() => {setAlertModalOpen(false)}}
         />
       </div>
     </>
