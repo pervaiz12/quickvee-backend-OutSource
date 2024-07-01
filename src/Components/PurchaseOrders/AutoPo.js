@@ -194,25 +194,37 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
 
     const res = await dispatch(fetchProductsData(name_data));
 
-    const data = res.payload
-      ?.map((prod) => ({
-        label: prod.title,
-        value: prod.id,
-        variantId: prod.isvarient === "1" ? prod.var_id : null,
-      }))
-      .filter((prod) => {
-        const productFound = selectedProducts?.find(
-          (product) =>
-            (product.variant &&
-              product.id === prod.variantId &&
-              product.product_id === prod.value) ||
-            (!product.variant && product.id === prod.value)
-        );
+    // console.log("api data: ", res.payload);
+
+    const data = res.payload?.map((prod) => ({
+      label: prod.title,
+      value: prod.id,
+      variantId: prod.isvarient === "1" ? prod.var_id : null,
+    }));
+
+    const filteredProducts =
+      data &&
+      data.length > 0 &&
+      data.filter((prod) => {
+        const productFound =
+          selectedProducts &&
+          selectedProducts.length > 0 &&
+          selectedProducts.find(
+            (product) =>
+              (product.variant &&
+                product.id === prod.variantId &&
+                product.product_id === prod.value) ||
+              (!product.variant && product.id === prod.value)
+          );
+
+        // console.log("curr prod: ", prod)
 
         return !productFound;
       });
 
-    return data;
+    // console.log("filteredProducts data: ", filteredProducts);
+
+    return filteredProducts || [];
   };
 
   useEffect(() => {
@@ -511,7 +523,6 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
           },
         });
 
-        // console.log("response: ", response);
         if (response.data.status && response.data.result.length > 0) {
           const temp = response.data.result.map((prod) => ({
             upc: prod.upc,
@@ -528,8 +539,6 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
             title: prod.product_title,
             variant: prod.variant ? prod.variant : "",
           }));
-
-          // console.log("temp: ", temp);
 
           setSelectedProducts(temp);
         } else if (!response.data.status) {
@@ -549,25 +558,6 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
     <div className="auto-po-container">
       <div className="box">
         <div className="box_shadow_div" style={{ overflow: "unset" }}>
-          {/* <div className="py-7 px-6">
-            <div className="q_searchBar sticky z-index-2">
-              <Grid container>
-                <Grid item xs={12}>
-                  <AsyncSelect
-                    closeMenuOnSelect={true}
-                    value={null}
-                    loadOptions={productOptions}
-                    onChange={(option) => {
-                      getProductData(option.value, option.variantId);
-                    }}
-                    placeholder="Search Product by Title or UPC"
-                  />
-                </Grid>
-              </Grid>
-            </div>
-          </div> */}
-
-          {/* {selectedProducts.length > 0 ? ( */}
           <Grid container className="z-index-1">
             <TableContainer>
               <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
@@ -694,7 +684,6 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
               </StyledTable>
             </TableContainer>
           </Grid>
-          {/* ) : null} */}
 
           {purchaseInfo.selectedVendor || selectedProducts.length > 0 ? (
             <div className="flex justify-between w-full py-4 px-6">
