@@ -76,7 +76,7 @@ const OnlineTableViewData = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const debouncedValue = useDebounce(props?.OnlSearchIdData);
-  console.log("debouncedValue", debouncedValue);
+  // console.log("debouncedValue", debouncedValue);
   const dispatch = useDispatch();
   // const debouncedValue = useDebounce(searchId);
   useEffect(() => {
@@ -512,6 +512,11 @@ const OnlineTableViewData = (props) => {
           // Update the local state with the updated order data
           setAllOnlineStoreOrders((prevState) => {
             // Find the index of the order to update
+            const updatedStatusListItem  = prevState.find((order)=>
+              order.order_id === deleteCategoryId.orderId
+            )
+            console.log("updateOrder", updatedStatusListItem)
+            
             const index = prevState.findIndex(
               (order) => order.order_id === deleteCategoryId.orderId
             );

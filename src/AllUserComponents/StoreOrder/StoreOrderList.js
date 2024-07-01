@@ -49,7 +49,15 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-
+const orderType =(type)=>{
+  if(type === "Online Order"){
+    return "Online";
+  }if(type === "Store Order"){
+    return "Offline"
+  }else{
+    return type
+  }
+}
 const StoreOrderList = (props) => {
   const dispatch = useDispatch();
 
@@ -91,15 +99,7 @@ const StoreOrderList = (props) => {
   ]);
 
   const getfetchStoreOrderData=async()=>{
-    const orderType =(type)=>{
-      if(type === "Online Order"){
-        return "Online";
-      }if(type === "Store Order"){
-        return "Offline"
-      }else{
-        return type
-      }
-    }
+   
     try{
       if(props && props.OrderStatusData && props.OrderTypeData){
         let data = {
@@ -131,14 +131,14 @@ const StoreOrderList = (props) => {
 
     // dispatch(getStoreOrderCount(data));
     getStoreOrderCountFun();
-  }, [debouncedValue]);
+  }, [debouncedValue,props.OrderTypeData]);
 
   const getStoreOrderCountFun=async()=>{
     try{
       if(props && props.OrderStatusData && props.OrderTypeData){
         const data = {
           pay_status: props.OrderStatusData,
-          order_env: props.OrderTypeData,
+          order_env: orderType(props.OrderTypeData),
           search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
           ...userTypeData,
         };

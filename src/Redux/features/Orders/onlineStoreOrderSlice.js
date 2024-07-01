@@ -68,7 +68,7 @@ export const getOrderListCount = createAsyncThunk(
         },
       }
     );
-    console.log("AllInStoreDataState OrderListCount: ", response.data.order_data);
+    // console.log("AllInStoreDataState OrderListCount: ", response.data.order_data);
     if (response.status == 200) {
       return response.data.order_data;
     }

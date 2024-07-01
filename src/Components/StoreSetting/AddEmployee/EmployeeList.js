@@ -48,6 +48,8 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
     setShowModal,
     scrollRef,
     setsubmitmessage,
+    handleKeyPress,
+    // handleBlur,
   } = AddEmployeeFormLogic({ employeeList });
 
   useEffect(() => {
@@ -403,10 +405,12 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
                         placeholder="Phone"
                         value={values.phone}
                         inputProps={{ maxLength: 10 }}
-                        onChange={handlePhoneInput}
+                        // onChange={handlePhoneInput}
+                        onChange={handleAddEmployeeInput}
                         className="q-custom-input-field"
                         variant="outlined"
                         size="small"
+                        onKeyPress={handleKeyPress}
                       />
                       <span className="input-error">
                         {values.errors.phone !== "" ? values.errors.phone : ""}
@@ -425,10 +429,13 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
                         placeholder="Pin"
                         value={values.pin}
                         inputProps={{ maxLength: 4 }}
-                        onChange={handlePinInput}
+                        onChange={handleAddEmployeeInput}
+                        // onChange={handlePinInput}
                         className="q-custom-input-field"
                         variant="outlined"
                         size="small"
+                        onKeyPress={handleKeyPress}
+                        // onBlur={() => handleBlur("pin")}
                       />
                       <span className="input-error">
                         {values.errors.pin !== "" ? values.errors.pin : ""}

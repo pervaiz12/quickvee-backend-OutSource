@@ -215,6 +215,14 @@ const TimesheetListing = ({ data }) => {
 
   const handleStartDateChange = (newDate) => {
     // const formattedStartDate = newDate.format("YYYY-MM-DD");
+    if (!newDate || !newDate.isValid()) {
+      setDateStartError("Invalid date. Please select a valid date.");
+      setTimeBreak({
+        ...addtimebreak,
+        add_in_date: null,
+      });
+      return;
+    }
     const dayjsDate = dayjs(newDate); // Convert to dayjs object
     const formattedStartDate = dayjsDate.format("YYYY-MM-DD");
     // const formattedStartDate = dayjs(newDate).format("YYYY-MM-DD");
@@ -251,6 +259,15 @@ const TimesheetListing = ({ data }) => {
   };
 
   const handleEndDateChange = (newDate) => {
+    if (!newDate || !newDate.isValid()) {
+      // showModal("Buss");
+      setDateEndTimeError("Invalid date. Please select a valid date.");
+      setTimeBreak({
+        ...addtimebreak,
+        add_out_date: null,
+      });
+      return;
+    }
     const formattedEndDate = newDate.format("YYYY-MM-DD");
     setTimeBreak({
       ...addtimebreak,
@@ -315,6 +332,10 @@ const TimesheetListing = ({ data }) => {
       valid = false;
     } else {
       setDateEndTimeError("");
+    }
+
+    if (dateStartError === "Invalid date. Please select a valid date." || dateEndError === "Invalid date. Please select a valid date." ){
+      return;
     }
 
     if (!valid) return;

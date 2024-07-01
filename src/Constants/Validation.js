@@ -9,7 +9,7 @@ const Validation = () => {
 
   const PassLeng = /^.{6,}$/i;
   const Space = /^[^\s]+$/i;
-  const PhoneNo = /^(\+?91|0)?[6789]\d{9}$/i;
+  // const PhoneNo = /^(\+?91|0)?[6789]\d{9}$/i;
   const Nameval = /^[a-zA-Z]+$/;
   const NameSpace = /^[a-zA-Z\s]+$/;
   const Numberval = /^\d*$/;
@@ -17,11 +17,11 @@ const Validation = () => {
 
   const validateEmail = (email, updatedErrors) => {
     if (email === "") {
-      updatedErrors.email = "Please enter email field";
+      updatedErrors.email = "Email Address is required";
     } else if (emoji.test(email)) {
       updatedErrors.email = "Emoji not allowed";
     } else if (!EmailReg.test(email)) {
-      updatedErrors.email = "Please enter valid email";
+      updatedErrors.email = "Enter valid email address";
     } else {
       updatedErrors.email = "";
     }
@@ -59,11 +59,11 @@ const Validation = () => {
   };
   const validatePhoneNumber = (phone, updatedErrors) => {
     if (phone === "") {
-      updatedErrors.phone = "Please enter phone field";
+      updatedErrors.phone = "Phone Number is required";
     } else if (emoji.test(phone)) {
       updatedErrors.phone = "Emoji not allowed";
-    } else if (!PhoneNo.test(phone)) {
-      updatedErrors.phone = "Phone no not valid";
+    } else if (phone.length !== 10) {
+      updatedErrors.phone = "Phone Number not valid";
     } else {
       updatedErrors.phone = "";
     }
@@ -86,7 +86,7 @@ const Validation = () => {
   };
   const validateFirstName = (fname, updatedErrors) => {
     if (fname === "") {
-      updatedErrors.firstname = "Please enter firstname field ";
+      updatedErrors.firstname = "First Name is required";
     } else if (emoji.test(fname)) {
       updatedErrors.firstname = "Emoji not allowed";
     } else if (!Space.test(fname)) {
@@ -192,13 +192,11 @@ const Validation = () => {
 
   const validatePinNumber = (pin, updatedErrors, employeeList) => {
     if (pin === "") {
-      updatedErrors.pin = "Please enter pin  ";
+      updatedErrors.pin = "Pin is required";
     } else if (emoji.test(pin)) {
       updatedErrors.pin = "Emoji not allowed";
-    } else if (pin.length !== 4) {
-      updatedErrors.pin = "Max 4 number should be enter";
-    } else if (!Numberval.test(pin)) {
-      updatedErrors.pin = "pin only contain number ";
+    } else if (pin.length !== 4 && pin.length !== 5) {
+      updatedErrors.pin = "Invalid Pin";
     } else if (checkPin(pin, employeeList)) {
       updatedErrors.pin = "Pin is already registered ";
     } else {
@@ -240,14 +238,14 @@ const Validation = () => {
   };
   const validateExpiredate = (expiredate, updatedErrors) => {
     if (expiredate === "") {
-      updatedErrors.expiredate = "Please enter Expiration Date  field ";
+      updatedErrors.expiredate = "Expiration Date is required";
     } else {
       updatedErrors.expiredate = "";
     }
   };
   const validateImageProof = (myfile, updatedErrors) => {
     if (myfile === "") {
-      updatedErrors.myfile = "Please select image  ";
+      updatedErrors.myfile = "Image is required";
     } else {
       updatedErrors.myfile = "";
     }
@@ -617,7 +615,7 @@ const Validation = () => {
       updateError.title = "This Field is Required";
     } else if (emoji.test(value)) {
       updateError.title = "Emoji not allowed";
-    }  else {
+    } else {
       updateError.title = "";
     }
     return updateError;
@@ -643,7 +641,7 @@ const Validation = () => {
   const checkLength = (fieldname, value, updateError) => {
     if (!value?.length) {
       updateError[fieldname] = "select option";
-    } else if(value?.length > 0) {
+    } else if (value?.length > 0) {
       updateError[fieldname] = "";
     }
     return updateError;
