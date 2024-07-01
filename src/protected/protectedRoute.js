@@ -119,6 +119,7 @@ export default function ProtectedRoute(props) {
     return <Outlet />;
   } else {
     handleClearCoockie();
+    dispatch(setIsStoreActive(false));
     return <Navigate to="/login" />;
   }
 }

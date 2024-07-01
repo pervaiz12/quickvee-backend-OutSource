@@ -122,41 +122,87 @@ const AddEmployeeFormLogic = ({ employeeList }) => {
   //   }
   // };
 
-  const handleAddEmployeeInput = async (event) => {
+  // const handleAddEmployeeInput = async (event) => {
+  //   let { errors } = values;
+  //   const fieldName = event.target.name;
+  //   const fieldValue = event.target.value;
+
+  //   switch (fieldName) {
+  //     case "firstname":
+  //       await validateFirstName(fieldValue, errors);
+  //       break;
+  //     case "lastname":
+  //       await validateLastName(fieldValue, errors);
+  //       break;
+  //     case "email":
+  //       await validateEmail(fieldValue, errors);
+  //       break;
+  //     case "phone":
+  //       await validatePhoneNumber(fieldValue, errors);
+  //       break;
+  //     case "pin":
+  //       await validatePinNumber(fieldValue, errors, employeeList);
+  //       break;
+  //     case "wages":
+  //       await validateWages(fieldValue, errors);
+  //       break;
+  //     case "address_line_1":
+  //       await Address_line_1(fieldValue, errors);
+  //       break;
+  //     case "city":
+  //       await validateCity(fieldValue, errors);
+  //       break;
+  //     case "zipcode":
+  //       await validateZipCode(fieldValue, errors);
+  //       break;
+  //     case "state":
+  //       await validateState(fieldValue, errors);
+  //       break;
+  //     default:
+  //       break;
+  //   }
+
+  //   setValues((prevValues) => ({
+  //     errors,
+  //     ...prevValues,
+  //     [fieldName]: fieldValue,
+  //   }));
+  // };
+  const handleAddEmployeeInput = (event) => {
     let { errors } = values;
     const fieldName = event.target.name;
     const fieldValue = event.target.value;
 
     switch (fieldName) {
       case "firstname":
-        await validateFirstName(fieldValue, errors);
+        validateFirstName(fieldValue, errors);
         break;
       case "lastname":
-        await validateLastName(fieldValue, errors);
+        validateLastName(fieldValue, errors);
         break;
       case "email":
-        await validateEmail(fieldValue, errors);
+        validateEmail(fieldValue, errors);
         break;
       case "phone":
-        await validatePhoneNumber(fieldValue, errors);
+        validatePhoneNumber(fieldValue, errors);
         break;
       case "pin":
-        await validatePinNumber(fieldValue, errors, employeeList);
+        validatePinNumber(fieldValue, errors, employeeList);
         break;
       case "wages":
-        await validateWages(fieldValue, errors);
+        validateWages(fieldValue, errors);
         break;
       case "address_line_1":
-        await Address_line_1(fieldValue, errors);
+        Address_line_1(fieldValue, errors);
         break;
       case "city":
-        await validateCity(fieldValue, errors);
+        validateCity(fieldValue, errors);
         break;
       case "zipcode":
-        await validateZipCode(fieldValue, errors);
+        validateZipCode(fieldValue, errors);
         break;
       case "state":
-        await validateState(fieldValue, errors);
+        validateState(fieldValue, errors);
         break;
       default:
         break;

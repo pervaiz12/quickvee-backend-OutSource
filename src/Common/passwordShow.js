@@ -37,7 +37,9 @@ export default function PasswordShow() {
     navigate("/login");
   };
   const getUnAutherisedTokenMessage = () => {
-    dispatch(getAuthInvalidMessage("your session has been expired"));
+    dispatch(
+      getAuthInvalidMessage("Your session has expired. Please log in again.")
+    );
   };
 
   return {
