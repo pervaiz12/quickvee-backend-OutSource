@@ -39,7 +39,6 @@ export default function Add_adminFunctionality({ setVisible }) {
       errors[name] =
         value.trim() === ""
           ? `Owner Name is required`
-          ? `Owner Name is required`
           : value[0] === " "
             ? `Owner Name cannot start with a space`
             : "";
