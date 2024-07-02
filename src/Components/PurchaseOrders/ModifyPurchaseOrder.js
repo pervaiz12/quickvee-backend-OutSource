@@ -587,6 +587,7 @@ const ModifyPurchaseOrder = () => {
   // modifying purchase order api
   const modifyPurchaseOrder = async () => {
     const { issuedDate, stockDate, selectedVendor, email } = purchaseInfo;
+
     if (selectedProducts.length <= 0) {
       ToastifyAlert("No Products to update!", "error");
       return;
@@ -619,7 +620,10 @@ const ModifyPurchaseOrder = () => {
             : Number(prod.variant_id) > 0
               ? prod.variant_id
               : "",
-          required_qty: prod.newQty.toString(),
+          required_qty:
+            prod?.recieved_status && prod?.recieved_status === "2"
+              ? 0
+              : prod?.newQty.toString(),
           // after_qty: (Number(prod.quantity) + Number(prod.newQty)).toString(),
           after_qty: Number(prod.finalQty).toString(),
           cost_per_item: prod.newPrice.toString(),
@@ -651,11 +655,13 @@ const ModifyPurchaseOrder = () => {
           "issue_date",
           dayjs(purchaseInfo?.issuedDate).format("YYYY-MM-DD")
         );
+
         formData.append(
           "stock_date",
           stockDate ? stockDate?.format("YYYY-MM-DD") : "0000-00-00"
         );
         formData.append("reference", purchaseInfo?.reference);
+        formData.append("received_status", puchaseOrderDetail?.received_status);
         formData.append("is_draft", 0);
         formData.append(
           "created_at",
@@ -1084,7 +1090,10 @@ const ModifyPurchaseOrder = () => {
                             }}
                             variant="outlined"
                             size="small"
-                            disabled={product.recieved_status === "2"}
+                            disabled={
+                              product.recieved_status === "2" ||
+                              product.recieved_status === "1"
+                            }
                           />
                           {product.priceError && (
                             <p className="error-message">

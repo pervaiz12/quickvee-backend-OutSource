@@ -45,28 +45,28 @@ const TimesheetListing = ({ data }) => {
     useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   useEffect(() => {
     // if (!data.merchant_id) {
     //   console.log("empty");
     // } else {
     //   dispatch(fetchtimeSheetData(data));
     // }
-    getfetchtimeSheetData()
+    getfetchtimeSheetData();
   }, [dispatch, data]);
   const [loader, setLoader] = useState(false);
-  const getfetchtimeSheetData=async()=>{
-    try{
+  const getfetchtimeSheetData = async () => {
+    try {
       if (!data.merchant_id) {
         console.log("empty");
-      }else{
+      } else {
         await dispatch(fetchtimeSheetData(data)).unwrap();
       }
-    }catch(error){
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+    } catch (error) {
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
     }
-  }
+  };
 
   // console.log("timesheet",timesheet)
 
@@ -85,8 +85,17 @@ const TimesheetListing = ({ data }) => {
       try {
         const response = await axios.post(
           BASE_URL + EMPLOYEE_LIST,
-          { merchant_id: merchant_id,token_id:userTypeData?.token_id,login_type:userTypeData?.login_type },
-          { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}` } }
+          {
+            merchant_id: merchant_id,
+            token_id: userTypeData?.token_id,
+            login_type: userTypeData?.login_type,
+          },
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${userTypeData?.token}`,
+            },
+          }
         );
 
         const EmpList = response.data.result;
@@ -95,13 +104,15 @@ const TimesheetListing = ({ data }) => {
           id: empdata.id,
           // title: empdata.f_name + " " + empdata.l_name,
           // title: (empdata.f_name ? empdata.f_name : "") + " " + (empdata.l_name ? empdata.l_name : ""),
-          title: empdata.l_name ? `${empdata.f_name} ${empdata.l_name}` : empdata.f_name
+          title: empdata.l_name
+            ? `${empdata.f_name} ${empdata.l_name}`
+            : empdata.f_name,
           // title: empdata.l_name && empdata.l_name !== "" ? `${empdata.f_name} ${empdata.l_name}` : empdata.f_name
         }));
         setemployeeList(mappedOptions);
       } catch (error) {
-        handleCoockieExpire()
-        getUnAutherisedTokenMessage()
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
         console.error("Error fetching Employee List:", error);
       }
     };
@@ -351,7 +362,10 @@ const TimesheetListing = ({ data }) => {
       setDateEndTimeError("");
     }
 
-    if (dateStartError === "Invalid date. Please select a valid date." || dateEndError === "Invalid date. Please select a valid date." ){
+    if (
+      dateStartError === "Invalid date. Please select a valid date." ||
+      dateEndError === "Invalid date. Please select a valid date."
+    ) {
       return;
     }
 
@@ -406,8 +420,8 @@ const TimesheetListing = ({ data }) => {
         setShowModal(true);
       }
     } catch (error) {
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
       console.error("API Error:", error);
     }
     setLoader(false);
@@ -581,8 +595,8 @@ const TimesheetListing = ({ data }) => {
         setShowModalBreak(true);
       }
     } catch (error) {
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
       console.error("API Error:", error);
     }
     setLoader(false)
@@ -647,15 +661,15 @@ const TimesheetListing = ({ data }) => {
         setBreakDetails([]);
       }
     } catch (error) {
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
       console.error("API Error:", error);
     }
   };
 
   const [deleteBreakId, setDeleteBreakId] = useState(null);
   const [modalheadText, setModalheadText] = useState(null);
-  const [deleteBreakTime, setDeleteBreakTime]= useState(null);
+  const [deleteBreakTime, setDeleteBreakTime] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const deleteBreakTimesheet = (dataBreak) => {
@@ -676,8 +690,8 @@ const TimesheetListing = ({ data }) => {
     // } else {
     //   console.log("Deletion canceled by Break ");
     // }
-    setDeleteBreakTime(dataBreak)
-    setModalheadText("Break Timeing")
+    setDeleteBreakTime(dataBreak);
+    setModalheadText("Break Timeing");
     setDeleteModalOpen(true);
     setDeleteBreakId("");
   };
@@ -709,7 +723,7 @@ const TimesheetListing = ({ data }) => {
     //   console.log("Deletion canceled by timeclock");
     // }
     setDeleteBreakId(dataTimesheet);
-    setModalheadText("Timeclock")
+    setModalheadText("Timeclock");
     setDeleteModalOpen(true);
     setDeleteBreakTime("")
   };
@@ -718,7 +732,7 @@ const TimesheetListing = ({ data }) => {
     // console.log("deleteBreakId",deleteBreakId)
     // console.log("deleteBreakTime",deleteBreakTime)
     // return
-    if(deleteBreakId){
+    if (deleteBreakId) {
       const datas = {
         inid: deleteBreakId.check_in_id,
         outid: deleteBreakId.check_out_id,
@@ -731,52 +745,51 @@ const TimesheetListing = ({ data }) => {
         ...userTypeData,
       };
       if (deleteBreakId) {
-          // dispatch(deleteTimesheet(datas)).then(() => {
-          //   dispatch(fetchtimeSheetData(data));
-          // });
-          try {
-            await dispatch(deleteTimesheet(datas))
-              .unwrap()
-              .then(() => {
-                dispatch(fetchtimeSheetData(data));
-              });
-          } catch (error) {
-            console.log(error);
-            getUnAutherisedTokenMessage();
-            handleCoockieExpire();
-          }
+        // dispatch(deleteTimesheet(datas)).then(() => {
+        //   dispatch(fetchtimeSheetData(data));
+        // });
+        try {
+          await dispatch(deleteTimesheet(datas))
+            .unwrap()
+            .then(() => {
+              dispatch(fetchtimeSheetData(data));
+            });
+        } catch (error) {
+          console.log(error);
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        }
       }
       ToastifyAlert("Deleted Successfully", "success");
       closeModalViewBreak();
-    }else if(deleteBreakTime){
+    } else if (deleteBreakTime) {
       const datasBreakDelete = {
         break_id: deleteBreakTime,
         ...userTypeData,
       };
       if (deleteBreakTime) {
-          // dispatch(deleteBreak(datasBreakDelete)).then(() => {
-          //   dispatch(fetchtimeSheetData(data));
-          // });
-          try {
-            await dispatch(deleteBreak(datasBreakDelete))
-              .unwrap()
-              .then(() => {
-                dispatch(fetchtimeSheetData(data));
-              });
-          } catch (error) {
-            console.log(error);
-            getUnAutherisedTokenMessage();
-            handleCoockieExpire();
-          }
+        // dispatch(deleteBreak(datasBreakDelete)).then(() => {
+        //   dispatch(fetchtimeSheetData(data));
+        // });
+        try {
+          await dispatch(deleteBreak(datasBreakDelete))
+            .unwrap()
+            .then(() => {
+              dispatch(fetchtimeSheetData(data));
+            });
+        } catch (error) {
+          console.log(error);
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        }
       }
       ToastifyAlert("Deleted Successfully", "success");
       closeModalViewBreak();
-
     }
 
     setModalheadText("");
-    setDeleteBreakId(null)
-    setDeleteBreakTime(null)
+    setDeleteBreakId(null);
+    setDeleteBreakTime(null);
     setDeleteModalOpen(false);
   };
 
@@ -798,11 +811,26 @@ const TimesheetListing = ({ data }) => {
     );
     return formattedDate;
   };
-  const formDateOUtDate = (dateString) =>{
-    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
-    const [day, month, year] = dateString.split('-');
+  const formDateOUtDate = (dateString) => {
+    const months = [
+      "Jan",
+      "Feb",
+      "Mar",
+      "Apr",
+      "May",
+      "Jun",
+      "Jul",
+      "Aug",
+      "Sep",
+      "Oct",
+      "Nov",
+      "Dec",
+    ];
+    const [day, month, year] = dateString.split("-");
     const date = new Date(year, month - 1, day);
-    const formattedDate = `${months[date.getMonth()]} ${String(date.getDate()).padStart(2, '0')}, ${date.getFullYear()}`;
+    const formattedDate = `${months[date.getMonth()]} ${String(
+      date.getDate()
+    ).padStart(2, "0")}, ${date.getFullYear()}`;
     return formattedDate;
   };
 
@@ -1045,7 +1073,10 @@ const TimesheetListing = ({ data }) => {
                       format={"MMMM DD, YYYY"}
                       views={["year", "month", "day"]}
                       slotProps={{
-                        textField: { placeholder: "Select Date",onKeyPress: preventKeyPress, },
+                        textField: {
+                          placeholder: "Select Date",
+                          onKeyPress: preventKeyPress,
+                        },
                       }}
                       disableFuture
                       components={{
@@ -1128,7 +1159,10 @@ const TimesheetListing = ({ data }) => {
                       format={"MMMM DD, YYYY"}
                       views={["year", "month", "day"]}
                       slotProps={{
-                        textField: { placeholder: "Select Date",onKeyPress: preventKeyPress, },
+                        textField: {
+                          placeholder: "Select Date",
+                          onKeyPress: preventKeyPress,
+                        },
                       }}
                       components={{
                         OpenPickerIcon: () => (
@@ -1225,8 +1259,7 @@ const TimesheetListing = ({ data }) => {
             </span>
             <div className="viewTextBark">
               <span className="borderRight ">
-                {modalDate} -{" "}
-                {modalDateOUT ? formatDate(modalDateOUT) : "-"}
+                {modalDate} - {modalDateOUT ? formatDate(modalDateOUT) : "-"}
               </span>{" "}
               <span className="pl-1"> Break-in/Break-out</span>
             </div>
@@ -1435,12 +1468,14 @@ const TimesheetListing = ({ data }) => {
       </Modal>
       {/* Modal for All View Break IN/Out End */}
 
-        <DeleteModal
-            headerText={modalheadText ? modalheadText : ""}
-            open={deleteModalOpen}
-            onClose={() => {setDeleteModalOpen(false)}}
-            onConfirm={confirmDeleteCategory}
-        />
+      <DeleteModal
+        headerText={modalheadText ? modalheadText : ""}
+        open={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+        }}
+        onConfirm={confirmDeleteCategory}
+      />
     </>
   );
 };
