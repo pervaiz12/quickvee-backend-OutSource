@@ -718,6 +718,11 @@ function App() {
             path="/unapprove/invertory-export"
             element={<Main visible={"invertory-export"} />}
           />
+           <Route
+            exact
+            path="/unapprove/support-details"
+            element={<Main visible={"support-details"} />}
+          />
           <Route
             exact
             path="/users/view/unapprove/merchant-details"
