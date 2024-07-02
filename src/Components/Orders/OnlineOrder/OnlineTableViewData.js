@@ -515,31 +515,45 @@ const OnlineTableViewData = (props) => {
             const updatedStatusListItem  = prevState.find((order)=>
               order.order_id === deleteCategoryId.orderId
             )
-            console.log("updateOrder", updatedStatusListItem)
-            
-            const index = prevState.findIndex(
-              (order) => order.order_id === deleteCategoryId.orderId
-            );
-            // console.log("setAllOnlineStoreOrders",index)
-            
-            if (index !== -1) {
-              // Create a copy of the order object
-              const updatedOrder = { ...prevState[index] };
-
-              // Update the m_status field with the new value
-              updatedOrder.m_status = deleteCategoryId.value;
-
-              // Create a new array with updated order object
-              const updatedOrders = [...prevState];
-              updatedOrders[index] = updatedOrder;
-              ToastifyAlert(res.payload, "success");
-
+            console.log("updateOrder", deleteCategoryId.value)
+            if(updatedStatusListItem){
+              let updatedOrders;
+              if(deleteCategoryId.value === "4" || deleteCategoryId.value ==="5"){
+                updatedOrders = prevState.filter(order => order.order_id !== deleteCategoryId.orderId)
+              }else{
+              const updatedOrder = {...updatedStatusListItem, m_status: deleteCategoryId.value}
+              updatedOrders = prevState.map(order => order.order_id === deleteCategoryId.orderId ? updatedOrder : order);
+              }
+                ToastifyAlert(res.payload, "success");
               return updatedOrders;
-            } else {
+            }else {
               ToastifyAlert(res.payload, "error");
               // Order not found, return previous state unchanged
               return prevState;
             }
+            // const index = prevState.findIndex(
+            //   (order) => order.order_id === deleteCategoryId.orderId
+            // );
+            // // console.log("setAllOnlineStoreOrders",index)
+            
+            // if (index !== -1) {
+            //   // Create a copy of the order object
+            //   const updatedOrder = { ...prevState[index] };
+
+            //   // Update the m_status field with the new value
+            //   updatedOrder.m_status = deleteCategoryId.value;
+
+            //   // Create a new array with updated order object
+            //   const updatedOrders = [...prevState];
+            //   updatedOrders[index] = updatedOrder;
+            //   ToastifyAlert(res.payload, "success");
+
+            //   return updatedOrders;
+            // } else {
+            //   ToastifyAlert(res.payload, "error");
+            //   // Order not found, return previous state unchanged
+            //   return prevState;
+            // }
           });
         } else {
           // Handle other status codes or errors if needed

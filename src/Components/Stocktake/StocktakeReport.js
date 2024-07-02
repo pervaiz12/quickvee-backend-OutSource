@@ -125,7 +125,17 @@ const StocktakeReport = ({ setVisible }) => {
       state: { data: singleStocktakeState },
     });
   };
-
+  const formatCurrency = (amount) => {
+    const formattedAmount = Math.abs(
+      amount
+    ).toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+    });
+    return amount < 0
+      ? `-${formattedAmount}`
+      : formattedAmount;
+  };
   return (
     <Grid container className="box_shadow_div">
       <Grid item xs={12}>
@@ -169,8 +179,8 @@ const StocktakeReport = ({ setVisible }) => {
                       <StyledTableCell>{item.discrepancy}</StyledTableCell>
 
                       <StyledTableCell>
-                        $
-                        {priceFormate(
+                        
+                        {formatCurrency(
                           parseFloat(item.discrepancy_cost).toFixed(2)
                         )}
                       </StyledTableCell>
@@ -196,7 +206,7 @@ const StocktakeReport = ({ setVisible }) => {
 
                     <StyledTableCell>
                       <p className="text-[#0A64F9]">
-                        ${singleStocktakeState?.total_discrepancy_cost}
+                        {formatCurrency(singleStocktakeState?.total_discrepancy_cost)}
                       </p>
                     </StyledTableCell>
 
