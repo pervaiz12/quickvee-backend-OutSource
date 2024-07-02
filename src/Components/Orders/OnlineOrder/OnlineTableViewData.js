@@ -31,7 +31,7 @@ import "datatables.net-dt/css/jquery.dataTables.min.css";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import Pagination from "../../../AllUserComponents/Users/UnverifeDetails/Pagination";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import EditCashModel from "./EditCashModel";
 import { CurrencyInputHelperFun } from "../../../Constants/utils";
 import useDebounce from "../../../hooks/useDebouncs";
@@ -275,8 +275,14 @@ const OnlineTableViewData = (props) => {
   };
 
   $.DataTable = require("datatables.net");
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+  function capitalizeFirstLetter(string, payemnt, status) {
+    // console.log(payemnt);
+    return payemnt == "Cash" && status == "5"
+      ? "Cancelled"
+      : payemnt == "Cash"
+        ? "Cash-Paid"
+        : "Online-Paid";
+    // return string.charAt(0).toUpperCase() + string.slice(1);
   }
   // console.log(allOnlineStoreOrder);
   // useEffect(() => {
@@ -615,6 +621,12 @@ const OnlineTableViewData = (props) => {
 
     if (data.m_status == 5) {
       OrderStatus = "Cancelled";
+    } else if (data.m_status == "7") {
+      OrderStatus = "Refunded";
+    } else if (data.m_status === "4" && data.order_method === "pickup") {
+      OrderStatus = "Completed";
+    } else if (data.m_status === "4" && data.order_method == "delivery") {
+      OrderStatus = "Delivered";
     } else if (data.payment_id === "Cash") {
       OrderStatus = "Cash";
     } else {
@@ -622,25 +634,32 @@ const OnlineTableViewData = (props) => {
     }
 
     if (props?.OrderTypeData === "Closed") {
-      if (
-        OrderStatus === "Cash" &&
-        parseFloat(data?.cash_collected)?.toFixed(2) !=
-          parseFloat(data?.amt)?.toFixed(2)
-      ) {
-        return (
-          <>
-            <EditCashModel
-              changeReceivingAmount={changeReceivingAmount}
-              newReceivingAmount={newReceivingAmount}
-              handleAddReceivingAmount={handleAddReceivingAmount}
-              data={data}
-              setNewOrderId={setNewOrderId}
-              setNewOrderAmount={setNewOrderAmount}
-            />
-          </>
-        );
-      } else if (OrderStatus == "Cancelled") {
+      // if (
+      //   OrderStatus === "Cash" &&
+      //   parseFloat(data?.cash_collected)?.toFixed(2) !=
+      //     parseFloat(data?.amt)?.toFixed(2)
+      // ) {
+      //   return (
+      //     <>
+      //       <EditCashModel
+      //         changeReceivingAmount={changeReceivingAmount}
+      //         newReceivingAmount={newReceivingAmount}
+      //         handleAddReceivingAmount={handleAddReceivingAmount}
+      //         data={data}
+      //         setNewOrderId={setNewOrderId}
+      //         setNewOrderAmount={setNewOrderAmount}
+      //       />
+      //     </>
+      //   );
+      // } else
+      if (OrderStatus == "Cancelled") {
         return "Cancelled";
+      } else if (OrderStatus == "Refunded") {
+        return "Refunded";
+      } else if (OrderStatus == "Completed") {
+        return "Completed";
+      } else if (OrderStatus == "Delivered") {
+        return "Delivered";
       } else {
         return "Paid";
       }
@@ -747,6 +766,7 @@ const OnlineTableViewData = (props) => {
                         </StyledTableCell>
                         <StyledTableCell></StyledTableCell>
                       </TableHead>
+                      {console.log(allOnlineStoreOrder)}
                       <TableBody>
                         {allOnlineStoreOrder &&
                         Object.entries(allOnlineStoreOrder).length > 0 ? (
@@ -811,9 +831,11 @@ const OnlineTableViewData = (props) => {
                                     </StyledTableCell>
                                     <StyledTableCell>
                                       <p>{"$" + data.amt || ""}</p>
-                                      <p className="text-[#1EC26B]">
+                                      <p className="existignCustomerData1">
                                         {capitalizeFirstLetter(
-                                          data.order_status || ""
+                                          data.order_status || "",
+                                          data.payment_id || "",
+                                          data.m_status
                                         )}
                                       </p>
                                     </StyledTableCell>
@@ -821,16 +843,16 @@ const OnlineTableViewData = (props) => {
                                       {orderStatus(data)}
                                     </StyledTableCell>
                                     <StyledTableCell>
-                                      <span
-                                        className="view_details_order"
-                                        onClick={() =>
-                                          navigate(
-                                            `/order/store-reporting/order-summary/${"MAL0100CA"}/${data.order_id}`
-                                          )
-                                        }
+                                      <Link
+                                        className="whitespace-nowrap text-[#0A64F9]"
+                                        to={`/order/store-reporting/order-summary/${props.merchant_id}/${data?.order_id}`}
+                                        // onClick={() => handleSummeryPage(row.order_id)}
+                                        target="_blank"
                                       >
                                         View Details
-                                      </span>
+                                        {/* Order Summery */}
+                                        {/* <img src={Summery} alt="" className="pl-1" /> */}
+                                      </Link>
                                     </StyledTableCell>
                                   </StyledTableRow>
                                 </>

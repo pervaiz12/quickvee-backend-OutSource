@@ -76,3 +76,11 @@
     padding-left: 10px;
 
 }
+.existignCustomerData1{
+    color: #0A64F9;
+    /* cursor: pointer; */
+    text-decoration-color: #0A64F9;
+    text-underline-offset: 2px;
+    font-family: CircularSTDMedium !important;
+    font-size: 15px;
+}
