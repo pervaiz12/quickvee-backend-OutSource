@@ -33,6 +33,7 @@ import { useAuthDetails } from "./../../Common/cookiesHelper";
 import { priceFormate } from "../../hooks/priceFormate";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import PasswordShow from "../../Common/passwordShow";
 
 const TimesheetListing = ({ data }) => {
   const dispatch = useDispatch();
@@ -44,14 +45,28 @@ const TimesheetListing = ({ data }) => {
     useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
-
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
   useEffect(() => {
-    if (!data.merchant_id) {
-      console.log("empty");
-    } else {
-      dispatch(fetchtimeSheetData(data));
-    }
+    // if (!data.merchant_id) {
+    //   console.log("empty");
+    // } else {
+    //   dispatch(fetchtimeSheetData(data));
+    // }
+    getfetchtimeSheetData()
   }, [dispatch, data]);
+
+  const getfetchtimeSheetData=async()=>{
+    try{
+      if (!data.merchant_id) {
+        console.log("empty");
+      }else{
+        await dispatch(fetchtimeSheetData(data)).unwrap();
+      }
+    }catch(error){
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
+    }
+  }
 
   // console.log("timesheet",timesheet)
 
@@ -85,6 +100,8 @@ const TimesheetListing = ({ data }) => {
         }));
         setemployeeList(mappedOptions);
       } catch (error) {
+        handleCoockieExpire()
+        getUnAutherisedTokenMessage()
         console.error("Error fetching Employee List:", error);
       }
     };
@@ -388,6 +405,8 @@ const TimesheetListing = ({ data }) => {
         setShowModal(true);
       }
     } catch (error) {
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
       console.error("API Error:", error);
     }
   };
@@ -560,6 +579,8 @@ const TimesheetListing = ({ data }) => {
         setShowModalBreak(true);
       }
     } catch (error) {
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
       console.error("API Error:", error);
     }
   };
@@ -579,10 +600,15 @@ const TimesheetListing = ({ data }) => {
   const openModalViewBreak = (title, data) => {
     setEmployeeName(title);
     fetchBreakDetails(data);
-    setEmployeeWorkDate(data.attendance_date);
-    setEmployeeWorkDateOUT(data.out_date);
-    setEmployeeTimeIn(formatTime(data.check_in_time));
-    setEmployeeTimeOut(formatTime(data.check_out_time));
+    setEmployeeWorkDate(data?.attendance_date);
+    setEmployeeWorkDateOUT(data?.out_date);
+    // setEmployeeTimeIn(formatTime(data.check_in_time));
+    if (data?.check_in_time) {
+      setEmployeeTimeIn(formatTime(data?.check_in_time));
+    } else if (data.time_entered) {
+      setEmployeeTimeIn(formatTime(data?.time_entered));
+    }
+    setEmployeeTimeOut(formatTime(data?.check_out_time));
     setAllbreakDelete(data);
     setShowModalViewBreak(true);
   };
@@ -618,6 +644,8 @@ const TimesheetListing = ({ data }) => {
         setBreakDetails([]);
       }
     } catch (error) {
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
       console.error("API Error:", error);
     }
   };
@@ -681,7 +709,7 @@ const TimesheetListing = ({ data }) => {
     setDeleteModalOpen(true);
   };
 
-  const confirmDeleteCategory = () => {
+  const confirmDeleteCategory = async () => {
     if(deleteBreakId){
       const datas = {
         inid: deleteBreakId.check_in_id,
@@ -695,9 +723,20 @@ const TimesheetListing = ({ data }) => {
         ...userTypeData,
       };
       if (deleteBreakId) {
-          dispatch(deleteTimesheet(datas)).then(() => {
-            dispatch(fetchtimeSheetData(data));
-          });
+          // dispatch(deleteTimesheet(datas)).then(() => {
+          //   dispatch(fetchtimeSheetData(data));
+          // });
+          try {
+            await dispatch(deleteTimesheet(datas))
+              .unwrap()
+              .then(() => {
+                dispatch(fetchtimeSheetData(data));
+              });
+          } catch (error) {
+            console.log(error);
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          }
       }
       ToastifyAlert("Deleted Successfully", "success");
       closeModalViewBreak();
@@ -707,9 +746,20 @@ const TimesheetListing = ({ data }) => {
         ...userTypeData,
       };
       if (deleteBreakTime) {
-          dispatch(deleteBreak(datasBreakDelete)).then(() => {
-            dispatch(fetchtimeSheetData(data));
-          });
+          // dispatch(deleteBreak(datasBreakDelete)).then(() => {
+          //   dispatch(fetchtimeSheetData(data));
+          // });
+          try {
+            await dispatch(deleteBreak(datasBreakDelete))
+              .unwrap()
+              .then(() => {
+                dispatch(fetchtimeSheetData(data));
+              });
+          } catch (error) {
+            console.log(error);
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          }
       }
       ToastifyAlert("Deleted Successfully", "success");
       closeModalViewBreak();
