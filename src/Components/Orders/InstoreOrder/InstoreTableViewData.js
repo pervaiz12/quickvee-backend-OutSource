@@ -78,24 +78,23 @@ const InstoreTableViewData = (props, searchId) => {
   // }
   useEffect(() => {
     setCurrentPage(1);
-    const transactionType = (type)=>{
-      if(type === "Cash Payment"){
-        return "Cash"
+    const transactionType = (type) => {
+      if (type === "Cash Payment") {
+        return "Cash";
       }
-      if(type === "Card Payment"){
-        return "Online"
+      if (type === "Card Payment") {
+        return "Online";
+      } else {
+        return type;
       }
-      else{
-        return type
-      }
-    }
+    };
     dispatch(
       getOrderListCount({
         merchant_id: props.merchant_id, //
         order_type: "Offline",
         search_by:
           props?.OffSearchIdData !== "" ? props?.OffSearchIdData : null,
-        trans_type:transactionType(props.OrderSourceData), //
+        trans_type: transactionType(props.OrderSourceData), //
         start_date: props.selectedDateRange?.start_date, //
         end_date: props.selectedDateRange?.end_date, //
 
@@ -113,17 +112,16 @@ const InstoreTableViewData = (props, searchId) => {
   ]);
 
   useEffect(() => {
-    const transactionType = (type)=>{
-      if(type === "Cash Payment"){
-        return "Cash"
+    const transactionType = (type) => {
+      if (type === "Cash Payment") {
+        return "Cash";
       }
-      if(type === "Card Payment"){
-        return "Online"
+      if (type === "Card Payment") {
+        return "Online";
+      } else {
+        return type;
       }
-      else{
-        return type
-      }
-    }
+    };
     const fetchData = async () => {
       if (props?.selectedDateRange?.start_date) {
         let data = {
@@ -233,13 +231,25 @@ const InstoreTableViewData = (props, searchId) => {
 
   // for table End
 
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+  function capitalizeFirstLetter(
+    string,
+    m_status,
+    payment_id,
+    pax_details,
+    is_split_payment
+  ) {
+    // return string.charAt(0).toUpperCase() + string.slice(1);
+    return payment_id !== "Cash" && payment_id !== "" && is_split_payment == "0"
+      ? "Pax-Pad"
+      : payment_id == "Cash"
+        ? "Cash-Paid"
+        : is_split_payment == "1"
+          ? "Split-Paid"
+          : "";
   }
   const tableRow = ["Customer", "Order", "Amount", ""];
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  
   const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
 
   const sortByItemName = (type, name) => {
@@ -300,9 +310,7 @@ const InstoreTableViewData = (props, searchId) => {
                         <StyledTableCell>
                           <button
                             className="flex items-center"
-                            onClick={() =>
-                              sortByItemName("str", "order_id")
-                            }
+                            onClick={() => sortByItemName("str", "order_id")}
                           >
                             <p>Order</p>
                             <img src={sortIcon} alt="" className="pl-1" />
@@ -311,9 +319,7 @@ const InstoreTableViewData = (props, searchId) => {
                         <StyledTableCell>
                           <button
                             className="flex items-center"
-                            onClick={() =>
-                              sortByItemName("num", "amt")
-                            }
+                            onClick={() => sortByItemName("num", "amt")}
                           >
                             <p>Amount</p>
                             <img src={sortIcon} alt="" className="pl-1" />
@@ -347,15 +353,19 @@ const InstoreTableViewData = (props, searchId) => {
                                 </p>
                               </StyledTableCell>
                               <StyledTableCell>
-                                <p> Amount: {"$" + data.amt || ""}</p>
+                                <p> {"$" + data.amt || ""}</p>
                                 <p className="text-[#1EC26B]">
                                   {capitalizeFirstLetter(
-                                    data.order_status || ""
+                                    data.order_status || "",
+                                    data.m_status || "",
+                                    data.payment_id || "",
+                                    data.pax_details || "",
+                                    data.is_split_payment || ""
                                   )}
                                 </p>
                               </StyledTableCell>
                               <StyledTableCell>
-                                <p
+                                {/* <p
                                   onClick={() =>
                                     navigate(
                                       `/order/store-reporting/order-summary/${"MAL0100CA"}/${data.order_id}`
@@ -365,7 +375,17 @@ const InstoreTableViewData = (props, searchId) => {
                                   className="view_details_order"
                                 >
                                   View Details
-                                </p>
+                                </p> */}
+                                <Link
+                                  className="whitespace-nowrap text-[#0A64F9]"
+                                  to={`/order/store-reporting/order-summary/${props.merchant_id}/${data?.order_id}`}
+                                  // onClick={() => handleSummeryPage(row.order_id)}
+                                  target="_blank"
+                                >
+                                  View Details
+                                  {/* Order Summery */}
+                                  {/* <img src={Summery} alt="" className="pl-1" /> */}
+                                </Link>
                               </StyledTableCell>
                             </StyledTableRow>
                           ))
