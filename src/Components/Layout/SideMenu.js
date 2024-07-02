@@ -1306,6 +1306,26 @@ const SuperAdminMenuItems = [
     link: "/unapprove/invertory-export",
   },
 
+  {
+    id: 13,
+    icon: (
+      <img
+        src={InverntoryIcon}
+        alt="labal"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={InvertoryActive}
+        alt="menu-defaults"
+        className="h-6 w-10 mt-4 mb-4"
+      />
+    ),
+    text: "Support Details",
+    link: "/unapprove/support-details",
+  },
+
   // {
   //   id: 13,
   //   icon: (

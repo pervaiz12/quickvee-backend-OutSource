@@ -64,7 +64,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
   const navigate = useNavigate();
 
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
-  const [selectedProducts, setSelectedProducts] = useState([
+  const initialState = [
     {
       id: "",
       variantId: "",
@@ -79,7 +79,8 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
       finalPrice: "0.00",
       upc: "",
     },
-  ]);
+  ];
+  const [selectedProducts, setSelectedProducts] = useState(initialState);
 
   const [loaders, setLoaders] = useState({
     autoPo: false,
@@ -202,6 +203,21 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
       variantId: prod.isvarient === "1" ? prod.var_id : null,
     }));
 
+    // const filteredProducts =
+    //   data &&
+    //   data.length > 0 &&
+    //   data.filter((prod) => {
+    //     const productFound =
+    //       selectedProducts &&
+    //       selectedProducts.length > 0 &&
+    //       selectedProducts.find(
+    //         (product) =>
+    //           (product.variant &&
+    //             product.id === prod.variantId &&
+    //             product.product_id === prod.value) ||
+    //           (!product.variant && product.id === prod.value)
+    //       );
+
     const filteredProducts =
       data &&
       data.length > 0 &&
@@ -211,10 +227,11 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
           selectedProducts.length > 0 &&
           selectedProducts.find(
             (product) =>
-              (product.variant &&
+              (product.id &&
+                product.product_id &&
                 product.id === prod.variantId &&
                 product.product_id === prod.value) ||
-              (!product.variant && product.id === prod.value)
+              (product.id && !product.product_id && product.id === prod.value)
           );
 
         // console.log("curr prod: ", prod)
@@ -227,9 +244,9 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
     return filteredProducts || [];
   };
 
-  useEffect(() => {
-    console.log("selectedProducts: ", selectedProducts);
-  }, [selectedProducts]);
+  // useEffect(() => {
+  //   console.log("selectedProducts: ", selectedProducts);
+  // }, [selectedProducts]);
 
   // on selecting a new product from dropdown fetching its details...
   const getProductData = async (productId, variantId, index) => {
@@ -528,20 +545,31 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
             upc: prod.upc,
             id: prod.variant_id ? prod.variant_id : prod.product_id,
             product_id: prod.variant_id ? prod.product_id : "",
-            quantity: prod.item_qty,
+            quantity: prod.item_qty || 0,
             newQty: prod.reorder_qty || 0,
-            newPrice: prod.costperItem || 0,
+            newPrice:
+              prod.preferd_vendor_cost &&
+              parseFloat(prod.preferd_vendor_cost) > 0
+                ? prod.preferd_vendor_cost
+                : prod.costperItem && parseFloat(prod.costperItem) > 0
+                  ? prod.costperItem
+                  : 0,
             finalQty:
               (Number(prod.item_qty) || 0) + (Number(prod.reorder_qty) || 0),
             finalPrice:
               (Number(prod.reorder_qty) || 0) * (Number(prod.costperItem) || 0),
             notes: "",
             title: prod.product_title,
-            variant: prod.variant ? prod.variant : "",
+            variant: prod.variant
+              ? prod.variant
+              : prod.variant_title
+                ? prod.variant_title
+                : "",
           }));
 
           setSelectedProducts(temp);
         } else if (!response.data.status) {
+          setSelectedProducts(initialState);
           ToastifyAlert(response.data.message, "error");
         }
       } else {
@@ -576,27 +604,35 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
                     <StyledTableRow key={product?.id}>
                       <StyledTableCell sx={{ width: "30%" }}>
                         <>
-                          <AsyncSelect
-                            closeMenuOnSelect={true}
-                            defaultOptions
-                            styles={customStyles}
-                            menuPortalTarget={document.body}
-                            value={{
-                              label: product.variant
+                          <span
+                            title={
+                              product.variant
                                 ? `${product.title} ~ ${product.variant}`
-                                : `${product.title}`,
-                              value: product.id,
-                            }}
-                            loadOptions={productOptions}
-                            onChange={(option) => {
-                              getProductData(
-                                option.value,
-                                option.variantId,
-                                index
-                              );
-                            }}
-                            placeholder="Search Product by Title or UPC"
-                          />
+                                : `${product.title}`
+                            }
+                          >
+                            <AsyncSelect
+                              closeMenuOnSelect={true}
+                              defaultOptions
+                              styles={customStyles}
+                              menuPortalTarget={document.body}
+                              value={{
+                                label: product.variant
+                                  ? `${product.title} ~ ${product.variant}`
+                                  : `${product.title}`,
+                                value: product.id,
+                              }}
+                              loadOptions={productOptions}
+                              onChange={(option) => {
+                                getProductData(
+                                  option.value,
+                                  option.variantId,
+                                  index
+                                );
+                              }}
+                              placeholder="Search Product by Title or UPC"
+                            />
+                          </span>
                           {product.titleError && (
                             <p className="error-message">
                               Please select a Product
