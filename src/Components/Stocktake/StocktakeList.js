@@ -98,11 +98,17 @@ const StocktakeList = ({
   }, [debouncedValue]);
 
   useEffect(() => {
-    setTotalCount(StocktakeListReducerState.stocktakeListCount);
+    if(!StocktakeListReducerState.loading && StocktakeListReducerState?.stocktakeListCount){
+      setTotalCount(StocktakeListReducerState.stocktakeListCount);
+    }
+  
   }, [StocktakeListReducerState.stocktakeListCount]);
 
   useEffect(() => {
-    setStocktakeList(StocktakeListReducerState?.StocktakeList);
+    if(!StocktakeListReducerState.loading && StocktakeListReducerState?.StocktakeList){
+      setStocktakeList(StocktakeListReducerState?.StocktakeList);
+    }
+    
   }, [StocktakeListReducerState?.StocktakeList]);
 
   const handleSearchInputChange = (value) => {
@@ -283,7 +289,7 @@ const StocktakeList = ({
                           ))}
                         </TableHead>
                         <TableBody>
-                          {StocktakeList &&
+                          {StocktakeList && StocktakeList.length >= 1 &&
                             StocktakeList?.map((item, index) => {
                               const statusObj = stocktalkStatus?.find(
                                 (itemStatus) =>

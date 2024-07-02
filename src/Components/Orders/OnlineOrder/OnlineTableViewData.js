@@ -31,7 +31,7 @@ import "datatables.net-dt/css/jquery.dataTables.min.css";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import Pagination from "../../../AllUserComponents/Users/UnverifeDetails/Pagination";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import EditCashModel from "./EditCashModel";
 import { CurrencyInputHelperFun } from "../../../Constants/utils";
 import useDebounce from "../../../hooks/useDebouncs";
@@ -80,17 +80,16 @@ const OnlineTableViewData = (props) => {
   const dispatch = useDispatch();
   // const debouncedValue = useDebounce(searchId);
   useEffect(() => {
-    const transactionType = (type)=>{
-      if(type === "Cash Payment"){
-        return "Cash"
+    const transactionType = (type) => {
+      if (type === "Cash Payment") {
+        return "Cash";
       }
-      if(type === "Card Payment"){
-        return "Online"
+      if (type === "Card Payment") {
+        return "Online";
+      } else {
+        return type;
       }
-      else{
-        return type
-      }
-    }
+    };
     const fetchData = async () => {
       if (props?.selectedDateRange?.start_date) {
         let data = {
@@ -126,17 +125,16 @@ const OnlineTableViewData = (props) => {
 
   useEffect(() => {
     setCurrentPage(1);
-    const transactionType = (type)=>{
-      if(type === "Cash Payment"){
-        return "Cash"
+    const transactionType = (type) => {
+      if (type === "Cash Payment") {
+        return "Cash";
       }
-      if(type === "Card Payment"){
-        return "Online"
+      if (type === "Card Payment") {
+        return "Online";
+      } else {
+        return type;
       }
-      else{
-        return type
-      }
-    }
+    };
     dispatch(
       getOrderListCount({
         merchant_id: props.merchant_id, //
@@ -277,8 +275,14 @@ const OnlineTableViewData = (props) => {
   };
 
   $.DataTable = require("datatables.net");
-  function capitalizeFirstLetter(string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+  function capitalizeFirstLetter(string, payemnt, status) {
+    // console.log(payemnt);
+    return payemnt == "Cash" && status == "5"
+      ? "Cancelled"
+      : payemnt == "Cash"
+        ? "Cash-Paid"
+        : "Online-Paid";
+    // return string.charAt(0).toUpperCase() + string.slice(1);
   }
   // console.log(allOnlineStoreOrder);
   // useEffect(() => {
@@ -512,34 +516,60 @@ const OnlineTableViewData = (props) => {
           // Update the local state with the updated order data
           setAllOnlineStoreOrders((prevState) => {
             // Find the index of the order to update
-            const updatedStatusListItem  = prevState.find((order)=>
-              order.order_id === deleteCategoryId.orderId
-            )
-            console.log("updateOrder", updatedStatusListItem)
-            
-            const index = prevState.findIndex(
+            const updatedStatusListItem = prevState.find(
               (order) => order.order_id === deleteCategoryId.orderId
             );
-            // console.log("setAllOnlineStoreOrders",index)
-            
-            if (index !== -1) {
-              // Create a copy of the order object
-              const updatedOrder = { ...prevState[index] };
-
-              // Update the m_status field with the new value
-              updatedOrder.m_status = deleteCategoryId.value;
-
-              // Create a new array with updated order object
-              const updatedOrders = [...prevState];
-              updatedOrders[index] = updatedOrder;
+            console.log("updateOrder", deleteCategoryId.value);
+            if (updatedStatusListItem) {
+              let updatedOrders;
+              if (
+                deleteCategoryId.value === "4" ||
+                deleteCategoryId.value === "5"
+              ) {
+                updatedOrders = prevState.filter(
+                  (order) => order.order_id !== deleteCategoryId.orderId
+                );
+              } else {
+                const updatedOrder = {
+                  ...updatedStatusListItem,
+                  m_status: deleteCategoryId.value,
+                };
+                updatedOrders = prevState.map((order) =>
+                  order.order_id === deleteCategoryId.orderId
+                    ? updatedOrder
+                    : order
+                );
+              }
               ToastifyAlert(res.payload, "success");
-
               return updatedOrders;
             } else {
               ToastifyAlert(res.payload, "error");
               // Order not found, return previous state unchanged
               return prevState;
             }
+            // const index = prevState.findIndex(
+            //   (order) => order.order_id === deleteCategoryId.orderId
+            // );
+            // // console.log("setAllOnlineStoreOrders",index)
+
+            // if (index !== -1) {
+            //   // Create a copy of the order object
+            //   const updatedOrder = { ...prevState[index] };
+
+            //   // Update the m_status field with the new value
+            //   updatedOrder.m_status = deleteCategoryId.value;
+
+            //   // Create a new array with updated order object
+            //   const updatedOrders = [...prevState];
+            //   updatedOrders[index] = updatedOrder;
+            //   ToastifyAlert(res.payload, "success");
+
+            //   return updatedOrders;
+            // } else {
+            //   ToastifyAlert(res.payload, "error");
+            //   // Order not found, return previous state unchanged
+            //   return prevState;
+            // }
           });
         } else {
           // Handle other status codes or errors if needed
@@ -591,6 +621,12 @@ const OnlineTableViewData = (props) => {
 
     if (data.m_status == 5) {
       OrderStatus = "Cancelled";
+    } else if (data.m_status == "7") {
+      OrderStatus = "Refunded";
+    } else if (data.m_status === "4" && data.order_method === "pickup") {
+      OrderStatus = "Completed";
+    } else if (data.m_status === "4" && data.order_method == "delivery") {
+      OrderStatus = "Delivered";
     } else if (data.payment_id === "Cash") {
       OrderStatus = "Cash";
     } else {
@@ -598,25 +634,32 @@ const OnlineTableViewData = (props) => {
     }
 
     if (props?.OrderTypeData === "Closed") {
-      if (
-        OrderStatus === "Cash" &&
-        parseFloat(data?.cash_collected)?.toFixed(2) !=
-          parseFloat(data?.amt)?.toFixed(2)
-      ) {
-        return (
-          <>
-            <EditCashModel
-              changeReceivingAmount={changeReceivingAmount}
-              newReceivingAmount={newReceivingAmount}
-              handleAddReceivingAmount={handleAddReceivingAmount}
-              data={data}
-              setNewOrderId={setNewOrderId}
-              setNewOrderAmount={setNewOrderAmount}
-            />
-          </>
-        );
-      } else if (OrderStatus == "Cancelled") {
+      // if (
+      //   OrderStatus === "Cash" &&
+      //   parseFloat(data?.cash_collected)?.toFixed(2) !=
+      //     parseFloat(data?.amt)?.toFixed(2)
+      // ) {
+      //   return (
+      //     <>
+      //       <EditCashModel
+      //         changeReceivingAmount={changeReceivingAmount}
+      //         newReceivingAmount={newReceivingAmount}
+      //         handleAddReceivingAmount={handleAddReceivingAmount}
+      //         data={data}
+      //         setNewOrderId={setNewOrderId}
+      //         setNewOrderAmount={setNewOrderAmount}
+      //       />
+      //     </>
+      //   );
+      // } else
+      if (OrderStatus == "Cancelled") {
         return "Cancelled";
+      } else if (OrderStatus == "Refunded") {
+        return "Refunded";
+      } else if (OrderStatus == "Completed") {
+        return "Completed";
+      } else if (OrderStatus == "Delivered") {
+        return "Delivered";
       } else {
         return "Paid";
       }
@@ -704,9 +747,7 @@ const OnlineTableViewData = (props) => {
                         <StyledTableCell>
                           <button
                             className="flex items-center"
-                            onClick={() =>
-                              sortByItemName("num", "amt")
-                            }
+                            onClick={() => sortByItemName("num", "amt")}
                           >
                             <p>Amount</p>
                             <img src={sortIcon} alt="" className="pl-1" />
@@ -719,14 +760,13 @@ const OnlineTableViewData = (props) => {
                               sortByItemName("srt", "m_status")
                             }
                           > */}
-                            <p>Order Status</p>
-                            {/* <img src={sortIcon} alt="" className="pl-1" /> */}
+                          <p>Order Status</p>
+                          {/* <img src={sortIcon} alt="" className="pl-1" /> */}
                           {/* </button> */}
                         </StyledTableCell>
-                        <StyledTableCell>
-
-                        </StyledTableCell>
+                        <StyledTableCell></StyledTableCell>
                       </TableHead>
+                      {console.log(allOnlineStoreOrder)}
                       <TableBody>
                         {allOnlineStoreOrder &&
                         Object.entries(allOnlineStoreOrder).length > 0 ? (
@@ -763,6 +803,16 @@ const OnlineTableViewData = (props) => {
                                     <StyledTableCell>
                                       <p className="text-[#000000] order_method">
                                         {data.deliver_name || ""}
+                                        {data?.customer_type ? (
+                                          <span className="existignCustomerData">
+                                            ({data?.customer_type})
+                                          </span>
+                                        ) : (
+                                          ""
+                                        )}
+                                      </p>
+                                      <p className="text-[#818181]">
+                                        {data.users_email || ""}
                                       </p>
                                       <p className="text-[#818181]">
                                         {data.delivery_phn || ""}
@@ -781,9 +831,11 @@ const OnlineTableViewData = (props) => {
                                     </StyledTableCell>
                                     <StyledTableCell>
                                       <p>{"$" + data.amt || ""}</p>
-                                      <p className="text-[#1EC26B]">
+                                      <p className="existignCustomerData1">
                                         {capitalizeFirstLetter(
-                                          data.order_status || ""
+                                          data.order_status || "",
+                                          data.payment_id || "",
+                                          data.m_status
                                         )}
                                       </p>
                                     </StyledTableCell>
@@ -791,16 +843,16 @@ const OnlineTableViewData = (props) => {
                                       {orderStatus(data)}
                                     </StyledTableCell>
                                     <StyledTableCell>
-                                      <span
-                                        className="view_details_order"
-                                        onClick={() =>
-                                          navigate(
-                                            `/order/store-reporting/order-summary/${"MAL0100CA"}/${data.order_id}`
-                                          )
-                                        }
+                                      <Link
+                                        className="whitespace-nowrap text-[#0A64F9]"
+                                        to={`/order/store-reporting/order-summary/${props.merchant_id}/${data?.order_id}`}
+                                        // onClick={() => handleSummeryPage(row.order_id)}
+                                        target="_blank"
                                       >
                                         View Details
-                                      </span>
+                                        {/* Order Summery */}
+                                        {/* <img src={Summery} alt="" className="pl-1" /> */}
+                                      </Link>
                                     </StyledTableCell>
                                   </StyledTableRow>
                                 </>

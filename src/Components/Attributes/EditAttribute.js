@@ -11,6 +11,7 @@ import { Box, Modal } from "@mui/material";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import CircularProgress from "@mui/material/CircularProgress";
+import PasswordShow from "../../Common/passwordShow";
 
 const EditDeliveryAddress = ({ attribute, allattributes }) => {
   const [nameExists, setNameExists] = useState("");
@@ -30,7 +31,7 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
     setold_title(attribute.title);
     setErrorMessage("");
   };
-
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
   const closeModal = () => {
     setShowModal(false);
   };
@@ -65,29 +66,34 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
       setErrorMessage("Title is required");
       return;
     }
-    const editItem = {
-      merchant_id: merchant_id,
-      varient_id: attribute.id,
-      title: newAttribute,
-      old_title: attribute.title,
-      token_id: userTypeData?.token_id,
-      login_type: userTypeData?.login_type,
-    };
-    const data = editItem;
-    console.log(data);
-    setLoader(true);
-    const response = await axios.post(BASE_URL + ADD_ATTRIBUTE, editItem, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${userTypeData?.token}`,
-      },
-    });
-    if (response) {
-      dispatch(editAttribute({ id: attribute.id, title: newAttribute }));
-      ToastifyAlert("Updated Successfully", "success");
-      setShowModal(false);
-    } else {
-      setsubmitmessage(response.data.message);
+    try {
+      const editItem = {
+        merchant_id: merchant_id,
+        varient_id: attribute.id,
+        title: newAttribute,
+        old_title: attribute.title,
+        token_id: userTypeData?.token_id,
+        login_type: userTypeData?.login_type,
+      };
+      const data = editItem;
+      console.log(data);
+      setLoader(true);
+      const response = await axios.post(BASE_URL + ADD_ATTRIBUTE, editItem, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userTypeData?.token}`,
+        },
+      });
+      if (response) {
+        dispatch(editAttribute({ id: attribute.id, title: newAttribute }));
+        ToastifyAlert("Updated Successfully", "success");
+        setShowModal(false);
+      } else {
+        setsubmitmessage(response.data.message);
+      }
+    } catch (error) {
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
     }
     setLoader(false);
   };

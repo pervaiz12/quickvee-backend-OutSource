@@ -14,6 +14,7 @@ import { Box, Modal } from "@mui/material";
 import ModalCutom from "../../reuseableComponents/ModalCutom";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import PasswordShow from "../../Common/passwordShow";
 
 const AtrDataList = ({ seVisible }) => {
   const [showModal, setShowModal] = useState(false);
@@ -22,14 +23,30 @@ const AtrDataList = ({ seVisible }) => {
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
   const dispatch = useDispatch();
   useEffect(() => {
-    let data = {
-      merchant_id: merchant_id,
-      ...userTypeData,
-    };
-    if (data) {
-      dispatch(fetchAttributesData(data));
-    }
+    // let data = {
+    //   merchant_id: merchant_id,
+    //   ...userTypeData,
+    // };
+    // if (data) {
+    //   dispatch(fetchAttributesData(data));
+    // }
+    getfetchAttributesData();
   }, []);
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const getfetchAttributesData = async () => {
+    try {
+      let data = {
+        merchant_id: merchant_id,
+        ...userTypeData,
+      };
+      if (data) {
+        await dispatch(fetchAttributesData(data)).unwrap();
+      }
+    } catch (error) {
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
+    }
+  }
 
   const openModal = () => {
     setShowModal(true);
@@ -95,30 +112,35 @@ const AtrDataList = ({ seVisible }) => {
       setErrorMessage("Title is required");
       return;
     }
-    const newItem = {
-      merchant_id: merchant_id,
-      title: newAttribute,
-      token_id: userTypeData?.token_id,
-      login_type: userTypeData?.login_type,
-    };
-    const data = newItem;
-    const response = await axios.post(BASE_URL + ADD_ATTRIBUTE, newItem, {
-      headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${userTypeData?.token}` },
-    });
-    if (response) {
-      setShowModal(false);
-      ToastifyAlert("Added Successfully", "success");
-      setNewAttribute("");
-      let merchantdata = {
+    try {
+      const newItem = {
         merchant_id: merchant_id,
-        ...userTypeData,
+        title: newAttribute,
+        token_id: userTypeData?.token_id,
+        login_type: userTypeData?.login_type,
       };
-      if (merchantdata) {
-        dispatch(fetchAttributesData(merchantdata));
+      const data = newItem;
+      const response = await axios.post(BASE_URL + ADD_ATTRIBUTE, newItem, {
+        headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${userTypeData?.token}` },
+      });
+      if (response) {
+        setShowModal(false);
+        ToastifyAlert("Added Successfully", "success");
+        setNewAttribute("");
+        let merchantdata = {
+          merchant_id: merchant_id,
+          ...userTypeData,
+        };
+        if (merchantdata) {
+          dispatch(fetchAttributesData(merchantdata));
+        }
+      } else {
+        setsubmitmessage(response.data.message);
+        setNewAttribute("");
       }
-    } else {
-      setsubmitmessage(response.data.message);
-      setNewAttribute("");
+    } catch (error) {
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
     }
   };
 

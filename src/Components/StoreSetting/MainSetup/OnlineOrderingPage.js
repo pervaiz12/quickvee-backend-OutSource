@@ -2,17 +2,15 @@ import { useState, useEffect } from "react";
 import React from "react";
 import Switch from "@mui/material/Switch";
 import { useDispatch, useSelector } from "react-redux";
-import { Grid } from "@mui/material";
+import { CircularProgress, Grid } from "@mui/material";
 
-const OnlineOrderingPage = ({ onlineorderstatus }) => {
+const OnlineOrderingPage = ({ onlineorderstatus,loader }) => {
   const [isEnableOrderNumber, setisEnableOrderNumber] = useState("");
   const [isChecked, setisChecked] = useState("");
 
   const dispatch = useDispatch();
 
   const handleCheckedSwitch = (e) => {
-
-
     setisChecked(e.target.checked ? "0" : "1");
     setisEnableOrderNumber(e.target.checked ? "1" : "0");
   };
@@ -20,10 +18,11 @@ const OnlineOrderingPage = ({ onlineorderstatus }) => {
   const setupDataState = useSelector(
     (state) => state?.StoreSetupList?.storesetupData
   );
-
+  console.log("isChecked", isChecked);
   useEffect(() => {
     if (setupDataState?.offline) {
       setisChecked(setupDataState?.offline);
+      setisEnableOrderNumber(setupDataState?.offline ==="0" ? "1" : "0");
     }
   }, [setupDataState]);
   useEffect(() => {
@@ -60,12 +59,16 @@ const OnlineOrderingPage = ({ onlineorderstatus }) => {
         </Grid>
         <Grid item>
           <div className="fr">
-            <Switch
-              // {...label}
-              name="cost_method"
-              checked={isChecked === "0"}
-              onChange={handleCheckedSwitch}
-            />
+            {loader ? (
+              <CircularProgress width={20} size={20} />
+            ) : (
+              <Switch
+                // {...label}
+                name="cost_method"
+                checked={isChecked === "0"}
+                onChange={handleCheckedSwitch}
+              />
+            )}
           </div>
         </Grid>
       </Grid>
