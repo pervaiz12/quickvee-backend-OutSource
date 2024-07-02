@@ -131,6 +131,8 @@ const AddProducts = () => {
   const [varientIndex, setVarientIndex] = useState(null);
   const [varientId, setVarientId] = useState("");
   const [isVarientEdit, setIsVarientEdit] = useState(false);
+  const [enbaledSubmit, setDisabledSubmit] = useState(false);
+
 
   // close alert
   const handleCloseAlertModal = () => {
@@ -138,7 +140,6 @@ const AddProducts = () => {
   };
 
   const handleCloseEditModal = (modalType, varientId) => {
-    console.log('varientId', varientId);
     setOpenEditModal((prev) => !prev);
     setModalType(modalType);
     setVarientIndex(varientId);
@@ -625,8 +626,12 @@ const AddProducts = () => {
   };
 
   const handleBlur = async (e, i, title) => {
+    const isSubmitCalled = e?.relatedTarget?.classList?.contains('submit-btn-click');
+    let isUpcValid;
+    let isLocalDuplicate;
     const checkUpcValueforSingle = async (value, name) => {
       if (value && name === "upcCode") {
+        setDisabledSubmit(true);
         let isAllowed = false;
 
         if (!isVarientEdit) {
@@ -640,9 +645,11 @@ const AddProducts = () => {
             ? await dispatch(checkUpcCodeMultiple(data))
             : await dispatch(checkUpcCodeSingle(data));
           if (response?.payload === true) {
+            setDisabledSubmit(false);
             isAllowed = true;
           }
         } else {
+          setDisabledSubmit(true);
           const data = {
             merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
             upc: value,
@@ -653,6 +660,7 @@ const AddProducts = () => {
           const response = await dispatch(checkUpcOnVarientEdit(data));
 
           if (response?.payload?.status === "true") {
+            setDisabledSubmit(false);
             isAllowed = true;
           }
         }
@@ -662,13 +670,16 @@ const AddProducts = () => {
     };
 
     const checkLocalDuplicateForSingle = (upcCode, currentIndex) => {
+      setDisabledSubmit(true);
       return formValue.some((item, index) => {
+        setDisabledSubmit(false);
         return index !== currentIndex && item?.upcCode === upcCode;
       });
     };
 
     const checkUpcValue = async (value, name) => {
       if (value && name === "upcCode") {
+        setDisabledSubmit(true);
         let isAllowed = true;
         const data = {
           merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
@@ -682,8 +693,11 @@ const AddProducts = () => {
           : await dispatch(checkUpcCodeSingle(data));
 
         if (response?.payload?.status === "true") {
+          setDisabledSubmit(false);
           isAllowed = true;
         } else if (response?.payload?.status === "false") {
+          setDisabledSubmit(false);
+          // setIsUpcExists(true);
           isAllowed = false;
         }
         return isAllowed;
@@ -692,11 +706,14 @@ const AddProducts = () => {
 
     const checkLocalDuplicate = (upcCode, currentIndex) => {
       if (!!upcCode) {
+        setDisabledSubmit(true)
         return formValue.some((item, index) => {
           if (index !== currentIndex) {
             const currentTitle = Object.keys(item)[0];
+            setDisabledSubmit(false)
             return item[currentTitle]?.upcCode === upcCode;
           }
+          setDisabledSubmit(false)
           return false;
         });
       }
@@ -725,7 +742,7 @@ const AddProducts = () => {
       } else {
         fieldValue =
           inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
-      }
+      } 
     }
     // allowed alphanumeric value in upcCode field but not allowed decimal value
     else if (name === "upcCode") {
@@ -767,8 +784,8 @@ const AddProducts = () => {
           setFormValue(updatedValues);
           return;
         } else {
-          const isUpcValid = await checkUpcValue(fieldValue, name);
-          const isLocalDuplicate = checkLocalDuplicate(fieldValue, i);
+          isUpcValid = await checkUpcValue(fieldValue, name);
+          isLocalDuplicate = checkLocalDuplicate(fieldValue, i);
           const updatedValues = formValue.map((item, index) => {
             if (index === i) {
               const currentTitle = Object.keys(item)[0];
@@ -790,6 +807,12 @@ const AddProducts = () => {
           });
 
           setFormValue(updatedValues);
+          
+          console.log('isLocalDuplicate', isLocalDuplicate, (isUpcValid && isSubmitCalled) && isLocalDuplicate);
+          // for multiple varient
+          if((isUpcValid && isSubmitCalled) && !isLocalDuplicate){
+            handleSubmitForm();
+          }
           return;
         }
       } else {
@@ -809,8 +832,8 @@ const AddProducts = () => {
           setFormValue(updatedValues);
           return;
         } else {
-          const isUpcValid = await checkUpcValueforSingle(fieldValue, name);
-          const isLocalDuplicate = checkLocalDuplicateForSingle(fieldValue, i);
+          isUpcValid = await checkUpcValueforSingle(fieldValue, name);
+          isLocalDuplicate = checkLocalDuplicateForSingle(fieldValue, i);
 
           const updatedValues = formValue.map((item, index) => {
             if (index === i) {
@@ -829,6 +852,12 @@ const AddProducts = () => {
           });
 
           setFormValue(updatedValues);
+
+
+          // for single form
+          if((isUpcValid && isSubmitCalled) && !isLocalDuplicate){
+            handleSubmitForm();
+          }
           return;
         }
       }
@@ -1259,13 +1288,7 @@ const AddProducts = () => {
           }
                     
                    
-        
-
-
-
-
-
-
+    
         const costPerItemAndPriceAmountExists = () => {
           const bool =
             (name === "costPerItem" &&
@@ -1338,7 +1361,6 @@ const AddProducts = () => {
       });
     } else {
       updatedValues = formValue.map((item, index) => {
-        console.log(fieldValue, item?.price)
 
 
 
@@ -1419,7 +1441,7 @@ const AddProducts = () => {
     setFormValue(updatedValues);
   };
 
-  console.log("formvalue", formValue);
+  // console.log("formvalue", formValue);
 
   const handleVarientTitleBasedItemList = () => {
     if (varientLength.length) {
@@ -1638,7 +1660,6 @@ const AddProducts = () => {
 
     dispatch(fetchVarietDataById(formData))
       .then((res) => {
-        console.log("res", res);
         if (res?.payload?.status) {
           const payloadData = res?.payload?.var_data;
           setProductData(payloadData);
@@ -1880,6 +1901,7 @@ const AddProducts = () => {
         return {
           ...item,
           ["upcCode"]: item?.upcCode ? item?.upcCode : generateString(20),
+          ["upcError"]: item?.upcError && !item?.upcCode ? "" : item?.upcError,
         };
       });
     } else {
@@ -1892,6 +1914,7 @@ const AddProducts = () => {
             upcCode: item[title]?.upcCode
               ? item[title]?.upcCode
               : generateString(20),
+            upcError:  item[title]?.upcError && (!item[title]?.upcCode) ? "" : item[title]?.upcError,
           },
         };
       });
@@ -1946,7 +1969,7 @@ const AddProducts = () => {
   };
 
   const handleSubmitForm = async (e) => {
-    e.preventDefault();
+    e?.preventDefault();
     const data = {
       /// single varient payload
       merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
@@ -2697,16 +2720,16 @@ const AddProducts = () => {
                       >
                         {pageUrl !== "inventory/products/edit" ? (
                           <button
-                            className="quic-btn quic-btn-save"
+                            className="quic-btn quic-btn-save submit-btn-click"
                             onClick={handleSubmitForm}
-                            disabled={isLoading}
+                            disabled={isLoading || enbaledSubmit}
                             style={{
-                              backgroundColor: isLoading
+                              backgroundColor: isLoading || enbaledSubmit
                                 ? "#878787"
                                 : "#0A64F9",
                             }}
                           >
-                            {isLoading ? (
+                            {isLoading || enbaledSubmit ? (
                               <Box className="loader-box">
                                 <CircularProgress />
                               </Box>
@@ -2716,16 +2739,16 @@ const AddProducts = () => {
                           </button>
                         ) : (
                           <button
-                            className="quic-btn quic-btn-update"
+                            className="quic-btn quic-btn-update submit-btn-click"
                             onClick={handleSubmitForm}
-                            disabled={isLoading}
+                            disabled={isLoading || enbaledSubmit }
                             style={{
-                              backgroundColor: isLoading
+                              backgroundColor: isLoading || enbaledSubmit
                                 ? "#878787"
                                 : "#0A64F9",
                             }}
                           >
-                            {isLoading ? (
+                            {isLoading || enbaledSubmit ? (
                               <Box className="loader-box">
                                 <CircularProgress />
                               </Box>
@@ -2789,14 +2812,14 @@ const AddProducts = () => {
               </div>
               <div  className="q-category-bottom-header varient-box" style={{ marginRight: "0px" }}>
                 <button
-                  className="quic-btn quic-btn-save"
+                  className="quic-btn quic-btn-save submit-btn-click"
                   onClick={handleUpdateVarient}
-                  disabled={varientLoading}
+                  disabled={varientLoading || enbaledSubmit}
                   style={{
-                    backgroundColor: varientLoading ? "#878787" : "#0A64F9",
+                    backgroundColor: varientLoading || enbaledSubmit ? "#878787" : "#0A64F9",
                   }}
                 >
-                  {varientLoading ? (
+                  {varientLoading || enbaledSubmit ? (
                     <Box className="loader-box">
                       <CircularProgress />
                     </Box>

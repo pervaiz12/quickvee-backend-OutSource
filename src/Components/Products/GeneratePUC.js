@@ -21,7 +21,6 @@ const GeneratePUC = ({
   varientData,
   isVarientEdit,
 }) => {
-  console.log('productData', productData);
   const navigate = useNavigate();
   const location = useLocation();
   const pageUrl =
@@ -31,10 +30,7 @@ const GeneratePUC = ({
     "/" +
     window.location.pathname.split("/")[3];
 
-    console.log('pageUrl', pageUrl, inventoryData);
-
   const findVarientName = productData?.product_name?.split("~");
-  console.log('findVarientName', findVarientName);
 
   const varientTitle = handleVarientTitleBasedItemList();
   const { varientProduct } = useSelector((state) => state?.productsListData);
@@ -94,7 +90,6 @@ const GeneratePUC = ({
   };
 
   const handleRedirectHistory = (varientIndex, varientTitle) => {
-    console.log('varientTitle', varientTitle);
     const varientName = varientTitle ? Object.keys(varientTitle)?.[0] : "";
     let url;  
     if (varientIndex === null) {

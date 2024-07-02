@@ -7,6 +7,7 @@ import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import SortIcon from "../../Assests/Category/Sorting.svg";
 import {
   changeOnlineOrderMethod,
+  changeShowStatusProduct,
   changeShowType,
   deleteProductAPI,
   fetchProductsData,
@@ -27,6 +28,8 @@ import { memo } from "react";
 import PasswordShow from "../../Common/passwordShow";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import axios from "axios";
+import { fetchStoreSettingSetupData } from "../../Redux/features/SettingSetup/SettingSetupSlice";
+import { changeShowStatus } from "../../Redux/features/Product/ProductSlice";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -69,13 +72,14 @@ const ProductTable = ({
   const { hasMore, offset, limit, loading } = useSelector(
     (state) => state.productsListData
   );
-  const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
+  const { userTypeData, LoginGetDashBoardRecordJson,  LoginAllStore , GetSessionLogin } = useAuthDetails();
 
   const { getUnAutherisedTokenMessage } = PasswordShow();
   const navigate = useNavigate();
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   const [productList, setproductsList] = useState([]);
+  const [inventoryApproval, setInventoryApproval] = useState();
 
 
   const dispatch = useDispatch();
@@ -97,10 +101,15 @@ const ProductTable = ({
     page: 0,
     ...userTypeData,
   };
+
   useEffect(() => {
     if (payloadData) {
       dispatch(fetchProductsData(payloadData));
     }
+    
+    dispatch(fetchStoreSettingSetupData({merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id})).then((res)=>{
+      setInventoryApproval(Boolean(+res?.payload?.inventory_approval))
+    })
   }, []);
 
   const checkStatus = (status) => {
@@ -149,6 +158,25 @@ const ProductTable = ({
         dispatch(changeShowType({ updateValue, id }));
       } else {
         ToastifyAlert("Online Ordering Unabled to change.", "error");
+      }
+    });
+  };
+
+
+  const update_status = (event, showStatus) => {
+    const { name, value, id } = event?.target;
+
+    const data = {
+      product_id: id,
+      check: showStatus,
+      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+      ...userTypeData,
+    };
+    dispatch(changeShowStatusProduct(data)).then((res) => {
+      if (res?.payload?.status) {
+        dispatch(changeShowStatus({ showStatus, id }));
+      } else {
+        ToastifyAlert("show status unable to change", "error");
       }
     });
   };
@@ -218,7 +246,6 @@ const ProductTable = ({
   };
 
   const handleNavigate = (id, varientName, productData) => {
-    console.log('productData', productData)
     let varientTitle = '';
     if (varientName?.includes('/')) {
       const splitVarient = varientName?.split('/');
@@ -293,7 +320,6 @@ const ProductTable = ({
       // For example, update state or trigger additional actions
     } catch (error) {
       // Handle error scenarios
-      console.error("Error:", error);
       ToastifyAlert("Error while reordering", "error");
       // Handle specific error cases if needed
     }
@@ -366,7 +392,6 @@ const ProductTable = ({
                               {productList?.length >= 1 &&
                                 productList.map((product, index) => {
                                   const getVarientName = product?.title?.split(/~~?/) || [];
-                                  console.log('single product', product);
                                   return (
                                     <Draggable
                                       key={product?.id}
@@ -466,7 +491,70 @@ const ProductTable = ({
                                           </StyledTableCell>
                                           <StyledTableCell>
                                             <p className="categories-title">
-                                              {checkStatus(product.show_status)?.text}
+                                              {
+                                                userTypeData?.login_type === "superadmin" && inventoryApproval && product?.show_status === "0"  ? 
+                                                <div className="categories-title">
+                                                <div className="flex flex-wrap gap-3 ">
+                                                  <label
+                                                    className="q_resigter_setting_section"
+                                                    style={{
+                                                      color: "#000",
+                                                      fontSize: "18px",
+                                                    }}
+                                                  >
+                                                    Approve
+                                                    <input
+                                                      type="checkbox"
+                                                      id={product.id}
+                                                      name="approved"
+                                                      // checked={
+                                                      //   product.show_status == 0 ||
+                                                      //     product.show_status == 2
+                                                      //     ? true
+                                                      //     : false
+                                                      // }
+                                                      value={product.show_status}
+                                                      onChange={(event) => {
+                                                        update_status(
+                                                          event,
+                                                          1,
+                                                        );
+                                                      }}
+                                                    />
+                                                    <span className="checkmark"></span>
+                                                  </label>
+                                                  <label
+                                                    className="q_resigter_setting_section"
+                                                    style={{
+                                                      color: "#000",
+                                                      fontSize: "18px",
+                                                    }}
+                                                  >
+                                                    Reject
+                                                    <input
+                                                      type="checkbox"
+                                                      id={product.id}
+                                                      name="reject"
+                                                      // checked={
+                                                      //   product.show_status == 0 ||
+                                                      //     product.show_status == 1
+                                                      //     ? true
+                                                      //     : false
+                                                      // }
+                                                      value={product.show_status}
+                                                      onChange={(event) => {
+                                                        update_status(
+                                                          event,
+                                                          2,
+                                                        );
+                                                      }}
+                                                    />
+                                                    <span className="checkmark"></span>
+                                                  </label>
+                                                </div>
+                                              </div>:
+                                              checkStatus(product.show_status.toString())?.text
+                                              }
                                             </p>
                                           </StyledTableCell>
                                           <StyledTableCell align={"center"}>

@@ -561,6 +561,30 @@ export const changeOnlineOrderMethod = createAsyncThunk(
   }
 );
 
+
+
+export const changeShowStatusProduct = createAsyncThunk(
+  "products/changeShowStatusProduct",
+  async (payload) => {
+    const {token, ...payloadNew} = payload;
+    try {
+      const response = await axios.post(
+        BASE_URL + "Product_api_react/update_show_status",
+        payloadNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      return response?.data;
+    } catch (error) {
+      throw new Error(error.response.data.message);
+    }
+  }
+);
+
 export const deleteProductAPI = createAsyncThunk(
   "products/deleteProductAPI",
   async (payload) => {
@@ -659,7 +683,6 @@ export const updateEditVarient = createAsyncThunk(
   async (payload) => {
     // const token = payload.get('token'); // Extract the token from FormData
     // payload.delete('token');
-    console.log('update var', payload);
     const {token, ...newData} = payload;
     try {
       const response = await axios.post(
@@ -737,6 +760,13 @@ const productsSlice = createSlice({
       const obj = state.productsData?.find(obj => obj.id === id);
       if (obj) {
           obj.show_type = updateValue;
+      }
+    },
+    changeShowStatus: (state, action)=>{
+      const { id, showStatus } = action.payload;
+      const obj = state.productsData?.find(obj => obj.id === id);
+      if (obj) {
+          obj.show_status = showStatus;
       }
     },
     setVarientList: (state, action)=>{
@@ -842,6 +872,6 @@ const productsSlice = createSlice({
   },
 });
 
-export const { editProduct, emptyProduct, updateFormValue, changeShowType, setVarientList } =
+export const { editProduct, emptyProduct, updateFormValue, changeShowType, setVarientList, changeShowStatus } =
   productsSlice.actions;
 export default productsSlice.reducer;
