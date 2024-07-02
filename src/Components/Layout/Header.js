@@ -41,6 +41,7 @@ import axios from "axios";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import PasswordShow from "../../Common/passwordShow";
 import CircularProgress from "@mui/material/CircularProgress";
+import needHelpLogo from "../../Assests/Dashboard/need_help.svg";
 export default function Header() {
   const {
     LoginGetDashBoardRecordJson,
@@ -261,6 +262,11 @@ export default function Header() {
     setLoader(false);
   };
 
+  const handleNavigateToNeedHelp = () => [
+    // navigate("/users/view/unapprove/need-help"),
+    navigate("/need-help"),
+  ];
+
   return (
     <>
       <div
@@ -462,6 +468,15 @@ export default function Header() {
                   </div>{" "}
                 </MenuItem>
               )}
+              <MenuItem onClick={handleClose}>
+                <div
+                  className="flex justify-items-start items-center"
+                  onClick={handleNavigateToNeedHelp}
+                >
+                  <img src={needHelpLogo} alt="" className="w-6 h-6 mr-2" />
+                  <p>Need Help</p>
+                </div>
+              </MenuItem>
 
               <MenuItem onClick={handleLogout}>
                 {" "}

@@ -563,6 +563,11 @@ function App() {
             path="/store-reporting/coupon-report"
             element={<Main visible={"coupon-report"} />}
           />
+          <Route
+            exact
+            path="/need-help"
+            element={<Main visible={"need_help"} />}
+          />
 
           {/* multiple users dashbaord */}
 
@@ -612,11 +617,11 @@ function App() {
             path="/import-data"
             element={<Main visible={"import-data"} />}
           />
-          <Route
+          {/* <Route
             exact
             path="/need-help"
             element={<Main visible={"need_help"} />}
-          />
+          /> */}
           <Route
             exact
             path="/users/unapprove"

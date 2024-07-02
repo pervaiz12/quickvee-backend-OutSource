@@ -104,7 +104,8 @@ const Main = ({ visible }) => {
       {visible === "newsletter" && <IndexAllUsers visible={visible} />}
       {visible === "store-order" && <IndexAllUsers visible={visible} />}
       {visible === "order-count" && <IndexAllUsers visible={visible} />}
-      {visible === "need_help" && <IndexAllUsers visible={visible} />}
+      {/* {visible === "need_help" && <IndexAllUsers visible={visible} />} */}
+      {visible === "need_help" && <Layout visible={visible} />}
       {visible === "defaults" && <IndexAllUsers visible={visible} />}
       {visible === "release_apk" && <IndexAllUsers visible={visible} />}
       {visible === "inverntory-duplicate" && (

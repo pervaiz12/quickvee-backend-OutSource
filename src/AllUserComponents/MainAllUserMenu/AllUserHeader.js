@@ -180,7 +180,7 @@ const AllUserHeader = () => {
                 },
               }}
             >
-              <MenuItem onClick={handleClose}>
+              {/* <MenuItem onClick={handleClose}>
                 <div
                   className="flex justify-items-start items-center"
                   onClick={handleNavigateToNeedHelp}
@@ -188,7 +188,7 @@ const AllUserHeader = () => {
                   <img src={needHelpLogo} alt="" className="w-6 h-6 mr-2" />
                   <p>Need Help</p>
                 </div>
-              </MenuItem>
+              </MenuItem> */}
               <MenuItem onClick={handleLogout}>
                 <div className="flex justify-items-start items-center">
                   <img src={logoutLogo} alt="" className="w-6 h-6 mr-2" />

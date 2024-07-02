@@ -320,6 +320,10 @@ module.exports = Object.freeze({
   VENDOR_UPDATE_DETAILS: "vendor_api/update_details",
   CHECK_EXIST_STORENAME: "UserController/check_merchant",
   CHECK_EXISTING_PIN: "StoreReact_setting_api/check_pin",
+
+  // Support Details 
+  SUPPORT_DETAILS_LIST: "Support_details_react_api/view_support_details",
+  SUPPORT_DETAILS_EDIT: "Support_details_react_api/update_support_details",
 });
 
 // All api calls are initialized in this component for this application

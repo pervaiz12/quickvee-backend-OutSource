@@ -68,6 +68,9 @@ import MerchantIcon from "../../Assests/MultipleUserIcon/merchant.svg";
 import MerchantActive from "../../Assests/MultipleUserIcon/merchantactive.svg";
 import NestedDropdownMenu from "./NestedDropdownMenu";
 import { BASE_URL } from "../../Constants/Config";
+import Support from "../../Assests/Category/Support.svg";
+import Support1 from "../../Assests/Category/Support-1.svg";
+
 const SideMenu = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -1059,7 +1062,7 @@ const menuItems = [
     activeIcon: (
       <img src={LoyaltIcon} alt="Import" className="h-6 w-10 mt-4 mb-4 " />
     ),
-    text: "Loyalty Porogram",
+    text: "Loyalty Program",
     link: "/loyalty-program",
   },
 ];
@@ -1310,14 +1313,14 @@ const SuperAdminMenuItems = [
     id: 13,
     icon: (
       <img
-        src={InverntoryIcon}
+        src={Support1}
         alt="labal"
         className="h-6 w-10 mt-4 mb-4 hoverable-image"
       />
     ),
     activeIcon: (
       <img
-        src={InvertoryActive}
+        src={Support}
         alt="menu-defaults"
         className="h-6 w-10 mt-4 mb-4"
       />

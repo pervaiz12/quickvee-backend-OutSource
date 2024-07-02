@@ -25,6 +25,8 @@ import AlertModal from "../../../reuseableComponents/AlertModal";
 import { Box, Modal } from "@mui/material";
 import { BASE_URL,CHECK_END_DAY } from "../../../Constants/Config";
 import axios from "axios";
+import CircularProgress from "@mui/material/CircularProgress";
+import PasswordShow from "../../../Common/passwordShow";
 
 const SystemAccessData = () => {
   const {
@@ -38,7 +40,7 @@ const SystemAccessData = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [isSwitchEnabled, setIsSwitchEnabled] = useState(false);
-
+  const [loader, setLoader] = useState(false);
   const [actualAmount, setActualAmount] = useState({
     actual_amt: "",
   });
@@ -69,7 +71,7 @@ const SystemAccessData = () => {
 
   const AllInSystemAccessState = useSelector((state) => state.systemAccessList);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-
+  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
   const startDay = (day) => {
     if(day == 1){
       return "Yesterday" 
@@ -346,50 +348,68 @@ const SystemAccessData = () => {
     // console.log("Name and Value of AAAA", name, value);
   };
 
-  const handleActualAmtSave = () => {
-    const data = {
-      merchant_id,
-      actual_amt: actualAmount.actual_amt,
-      ...userTypeData,
-    };
-    console.log("data",data)
-    return
-    dispatch(addActualAmountData(data));
+  const handleActualAmtSave = async () => {
+    setLoader(true)
+    try {
+      const data = {
+        merchant_id,
+        actual_amt: actualAmount.actual_amt,
+        ...userTypeData,
+      };
+      // console.log("data",data)
+      // return
+      await dispatch(addActualAmountData(data)).unwrap();
+      
+    } catch (error) {
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
+    }
+    setLoader(false)
   };
   //   console.log("Actual Amount", actualAmount);
 
   // This is a main Save or Update
-  const handleSave = () => {
-    const data = {
-      merchant_id,
-      default_cash_drawer: systemAccess.default_cash_drawer,
-      clock_in: systemAccess.clock_in ? "1" : "0",
-      hide_inactive: systemAccess.hide_inactive ? "1" : "0",
-      // end_day_Allow: systemAccess.end_day_Allow,
-      end_day_Allow:
-        systemAccess.end_day_Allow == 1
-          ? "1"
-          : systemAccess.end_day_Allow == 2
-            ? "2"
-            : "3",
-      // shift_assign: systemAccess.shift_assign,
-      shift_assign:
-        systemAccess.shift_assign == 1
-          ? "1"
-          : systemAccess.shift_assign == 2
-            ? "2"
-            : "3",
-      start_date: systemAccess.start_date == 1 ? "1" : "2",
-      end_date: systemAccess.end_date == 1 ? "1" : "2",
-      start_time: systemAccess.start_time,
-      end_time: systemAccess.end_time,
-      report_history: isSwitchEnabled ? "1" : "0",
-      emp_permission: systemAccess.emp_permission,
-      ...userTypeData,
-    };
+  const handleSave = async () => {
+    
     // console.log("data",data)
     // return
-    dispatch(updateSystemAccessData(data));
+    // dispatch(updateSystemAccessData(data));
+    setLoader(true)
+    try {
+      const data = {
+        merchant_id,
+        default_cash_drawer: systemAccess.default_cash_drawer,
+        clock_in: systemAccess.clock_in ? "1" : "0",
+        hide_inactive: systemAccess.hide_inactive ? "1" : "0",
+        // end_day_Allow: systemAccess.end_day_Allow,
+        end_day_Allow:
+          systemAccess.end_day_Allow == 1
+            ? "1"
+            : systemAccess.end_day_Allow == 2
+              ? "2"
+              : "3",
+        // shift_assign: systemAccess.shift_assign,
+        shift_assign:
+          systemAccess.shift_assign == 1
+            ? "1"
+            : systemAccess.shift_assign == 2
+              ? "2"
+              : "3",
+        start_date: systemAccess.start_date == 1 ? "1" : "2",
+        end_date: systemAccess.end_date == 1 ? "1" : "2",
+        start_time: systemAccess.start_time,
+        end_time: systemAccess.end_time,
+        report_history: isSwitchEnabled ? "1" : "0",
+        emp_permission: systemAccess.emp_permission,
+        ...userTypeData,
+      };
+      await dispatch(updateSystemAccessData(data)).unwrap();
+
+    } catch (error) {
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
+    }
+    setLoader(false)
   };
 
   //end of day
@@ -803,8 +823,8 @@ const SystemAccessData = () => {
         </div>
       </div>
       <div className="box" style={{display:"flex", justifyContent:"flex-end"}}>
-        <button class="save_btn" onClick={handleSave}>
-                Save
+        <button class="save_btn attributeUpdateBTN" onClick={handleSave}>
+          {loader ? ( <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15} />{" "}  Save </>) : ("Save")}
         </button>
       </div>
 
@@ -861,9 +881,10 @@ const SystemAccessData = () => {
             <div className="q-add-categories-section-middle-footer">
               <button
                 onClick={handleActualAmtSave}
-                className="quic-btn quic-btn-save"
+                className="quic-btn quic-btn-save attributeUpdateBTN"
+                disabled={true}
               >
-                Save
+                {loader ? ( <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15} />{" "}  Save </>) : ("Save")}
               </button>
               <button onClick={closeModal} className="quic-btn quic-btn-cancle">
                 Cancel

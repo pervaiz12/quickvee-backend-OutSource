@@ -64,6 +64,8 @@ import CouponReportSlice from "../features/Reports/CouponReport/CouponReportSlic
 import TimesheetSlice from "../features/Timesheet/timesheetSlice";
 import RefundReportSlice from "../features/Reports/RefundReport/RefundReportSlice";
 import StocktakeListSlice from "../features/Stocktake/StocktakeListSlice";
+import SupportDetailsSlice from "../features/SupportDetails/supportDetailsSlice";
+
 const store = configureStore({
   reducer: {
     VendorList: VendorListReducer,
@@ -147,6 +149,8 @@ const store = configureStore({
     TipReportList: TipReportSlice,
     CouponReportList: CouponReportSlice,
     RefundDataList: RefundReportSlice,
+
+    supportDetail: SupportDetailsSlice,
   },
 
   //setting setup

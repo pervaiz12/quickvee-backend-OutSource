@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_2511" data-name="Rectangle 2511" width="24" height="24" transform="translate(19 339)" fill="none" stroke="#ffc400" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="Support" transform="translate(-19 -339)" clip-path="url(#clip-path)">
+    <g id="g2178" transform="translate(22.374 1025.04)">
+      <g id="g2180" transform="translate(0.625 -682.04)">
+        <g id="Group_7644" data-name="Group 7644" transform="translate(0 0)">
+          <g id="g2188" transform="translate(0 2.82)">
+            <path id="path2190" d="M-159.2-51.975l-.959-.959a1.356,1.356,0,0,0-1.918,0l-.481.481a2.709,2.709,0,0,0-.4,3.329A26.16,26.16,0,0,0-159.2-44.3a26.159,26.159,0,0,0,4.82,3.757,2.708,2.708,0,0,0,3.328-.4l.481-.481a1.356,1.356,0,0,0,0-1.918l-.959-.959a1.258,1.258,0,0,0-1.851-.027,1.392,1.392,0,0,1-1.726.033,24.365,24.365,0,0,1-2.176-1.924A24.365,24.365,0,0,1-159.21-48.4a1.387,1.387,0,0,1,.024-1.714A1.268,1.268,0,0,0-159.2-51.975Z" transform="translate(163.351 53.331)" fill="none" stroke="#ffc400" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+          </g>
+          <g id="g2192" transform="translate(4.857)">
+            <path id="path2194" d="M0-60.96a6.753,6.753,0,0,1,4.363-1.59,6.78,6.78,0,0,1,6.78,6.78,6.752,6.752,0,0,1-1.591,4.364" transform="translate(0 62.551)" fill="none" stroke="#ffc400" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+          </g>
+          <g id="g2196" transform="translate(9.22 4.068)">
+            <path id="path2198" d="M0,0V2.712L1.356,4.068" fill="none" stroke="#ffc400" stroke-linecap="round" stroke-linejoin="round" stroke-miterlimit="10" stroke-width="1.5"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
