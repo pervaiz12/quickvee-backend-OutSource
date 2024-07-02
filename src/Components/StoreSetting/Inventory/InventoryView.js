@@ -29,13 +29,11 @@ const InventoryData = () => {
   const [checkedBirthDayChecked, setirthDayChecked] = useState(false);
   const [ExpirationIdChecked, setExpirationIdChecked] = useState(false);
 
-
   const [isUpdateItem, setUpdateItemVendor] = useState(false);
   // Require Description for Instant POs
   const [isInstantPos, setInstantPos] = useState(false);
 
-
-  const [disableCheckboxesCost, setDisableCheckboxesCost] = useState(false);  
+  const [disableCheckboxesCost, setDisableCheckboxesCost] = useState(false);
 
   const [fetchLoading, setFetchLoading] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -68,7 +66,7 @@ const InventoryData = () => {
     if (data) {
       dispatch(fetchInventoryListData(data))
         .then((res) => {
-          setAllInventory(res?.payload)
+          setAllInventory(res?.payload);
           setCostPer(res?.payload?.cost_per || "");
         })
         .catch((err) => {
@@ -155,34 +153,34 @@ const InventoryData = () => {
     setExpirationIdChecked(!ExpirationIdChecked);
   };
 
-  const setAgeVerificationData=()=>{
-    if(inventory?.by_scanning === '0'){
-      if(inventory?.age_verify === ''){
+  const setAgeVerificationData = () => {
+    if (inventory?.by_scanning === "0") {
+      if (inventory?.age_verify === "") {
         setCheckBirthday(false);
-        setExpiration(false)
-      }else if(inventory?.age_verify === '1'){
+        setExpiration(false);
+      } else if (inventory?.age_verify === "1") {
         setCheckBirthday(true);
-        setExpiration(false)
-      }else if(inventory?.age_verify === '2'){
+        setExpiration(false);
+      } else if (inventory?.age_verify === "2") {
         setCheckBirthday(false);
-        setExpiration(true)
-      }else if(inventory?.age_verify === '1,2'){
+        setExpiration(true);
+      } else if (inventory?.age_verify === "1,2") {
         setCheckBirthday(true);
-        setExpiration(true)
+        setExpiration(true);
       }
-    }else{
+    } else {
       setCheckBirthday(false);
-      setExpiration(false)
+      setExpiration(false);
     }
-  }
+  };
 
-  useEffect(()=>{
-    if(isSwitchEnabled === false){
-      if(inventory?.age_verify){
+  useEffect(() => {
+    if (isSwitchEnabled === false) {
+      if (inventory?.age_verify) {
         setAgeVerificationData();
       }
     }
-  }, [isSwitchEnabled, inventory])
+  }, [isSwitchEnabled, inventory]);
 
   useEffect(() => {
     if (inventory?.by_scanning === "1") {
@@ -191,8 +189,7 @@ const InventoryData = () => {
       setExpiration(false);
       setirthDayChecked(true);
       setExpirationIdChecked(true);
-    }
-    else {
+    } else {
       setIsSwitchEnabled(false);
       setCheckBirthday(true);
       setExpiration(true);
@@ -200,9 +197,7 @@ const InventoryData = () => {
       setExpirationIdChecked(false);
     }
 
-    if (
-      inventory?.cost_method === "1"
-    ) {
+    if (inventory?.cost_method === "1") {
       setDisableCheckboxesCost(true);
       setIsSwitchCost(true);
       setUpdateItemVendor(false);
@@ -212,35 +207,46 @@ const InventoryData = () => {
       setDisableCheckboxesCost(false);
     }
 
-    if(inventory?.inv_setting === "3"){
-      setInstantPos(false)
-      setUpdateItemVendor(false)
-    }else if(inventory?.inv_setting === "1,3"){
-      setUpdateItemVendor(true)
-      setInstantPos(false)
-    }else if(inventory?.inv_setting === "2,3"){
-      setUpdateItemVendor(false)
-      setInstantPos(true)
-    }else if(inventory?.inv_setting === "1,2,3"){
-      setUpdateItemVendor(true)
-      setInstantPos(true)
+    if (inventory?.inv_setting === "3") {
+      setInstantPos(false);
+      setUpdateItemVendor(false);
+    } else if (inventory?.inv_setting === "1,3") {
+      setUpdateItemVendor(true);
+      setInstantPos(false);
+    } else if (inventory?.inv_setting === "2,3") {
+      setUpdateItemVendor(false);
+      setInstantPos(true);
+    } else if (inventory?.inv_setting === "1,2,3") {
+      setUpdateItemVendor(true);
+      setInstantPos(true);
     }
 
     setAgeVerificationData();
-
   }, [inventory]);
-
-
 
   const handleSave = () => {
     setLoading(true);
     const data = {
       merchant_id,
-      cost_method:isSwitchEnabledCost ? "1" : "2",
-      age_verify:!!isCheckBirthday && !!isExpiration ? "1,2" : isCheckBirthday ? "1" : isExpiration ? "2":  "",
-      by_scanning:isSwitchEnabled ? "1" : "0",
-      inv_setting:!!isUpdateItem && !!isInstantPos ? "1,2" : isUpdateItem ? "1": isInstantPos ? "2":  "",
-      cost_per:costPer,
+      cost_method: isSwitchEnabledCost ? "1" : "2",
+      age_verify:
+        !!isCheckBirthday && !!isExpiration
+          ? "1,2"
+          : isCheckBirthday
+            ? "1"
+            : isExpiration
+              ? "2"
+              : "",
+      by_scanning: isSwitchEnabled ? "1" : "0",
+      inv_setting:
+        !!isUpdateItem && !!isInstantPos
+          ? "1,2"
+          : isUpdateItem
+            ? "1"
+            : isInstantPos
+              ? "2"
+              : "",
+      cost_per: costPer,
       ...userTypeData,
     };
 
@@ -264,7 +270,7 @@ const InventoryData = () => {
 
   return (
     <>
-      <div className="box">
+      <div className="box" >
         {fetchLoading ? (
           <div class="loading-box">
             <Loader />
@@ -273,33 +279,34 @@ const InventoryData = () => {
           <>
             <div className="box_shadow_div" style={{ padding: "20px" }}>
               <div className=" qvrow-inventory-row">
-                <h5 className="box_shadow_heading " style={{marginBottom:'0px'}}>
+                <h5
+                  className="box_shadow_heading "
+                  style={{ marginBottom: "0px" }}
+                >
                   Average Cost Method
                 </h5>
-                  <Switch
-                    {...label}
-                    name="cost_method"
-                    checked={isSwitchEnabledCost}
-                    onChange={handleCostMethod}
-                  />
-           
+                <Switch
+                  {...label}
+                  name="cost_method"
+                  checked={isSwitchEnabledCost}
+                  onChange={handleCostMethod}
+                />
               </div>
             </div>
             <div className="box_shadow_div" style={{ padding: "20px" }}>
               <div className="qvrow">
                 <h5 className="box_shadow_heading btm-margin">Future Order</h5>
                 <div className="qvrow-inventory-row">
-                <h6 className="box_shadow_heading section-heading" >
-                Enable Pickup
-                </h6>
-                    <Switch
-                      {...label}
-                      name="by_scanning"
-                      checked={isSwitchEnabled}
-                      onChange={handleEnablePickup}
-                    />
+                  <h6 className="box_shadow_heading section-heading">
+                    Enable Pickup
+                  </h6>
+                  <Switch
+                    {...label}
+                    name="by_scanning"
+                    checked={isSwitchEnabled}
+                    onChange={handleEnablePickup}
+                  />
                 </div>
-
 
                 <div className="qv_checkbox btm-margin">
                   <label className="qv_checkbox_add_checkmark_label age-input">
@@ -336,7 +343,9 @@ const InventoryData = () => {
             </div>
             <div className="box_shadow_div" style={{ padding: "20px" }}>
               <div className="qvrow">
-                <h5 className="box_shadow_heading section-heading">Inventory Setting</h5>
+                <h5 className="box_shadow_heading section-heading">
+                  Inventory Setting
+                </h5>
 
                 <div className="qvrow chkpp">
                   <div className="qv_checkbox">
@@ -389,24 +398,27 @@ const InventoryData = () => {
                 </div>
               </div>
             </div>
-              <div className="qvrow">
-                <div className="col-md-6 ">
-                  <button
-                    className="save_btn float-right"
-                    onClick={handleSave}
-                    disabled={loading}
-                    style={{width:"140px", marginRight:"20px"}}
-                  >
-                    {loading ? (
-                      <Box className="loader-box">
-                        <CircularProgress />
-                      </Box>
-                    ) : (
-                      "Save"
-                    )}
-                  </button>
-                </div>
+            <div className="qvrow fixed-bottom">
+              <div
+                className="col-md-6 box_shadow_div"
+                style={{ marginBottom: 0 }}
+              >
+                <button
+                  className="save_btn float-right mt-5 mb-5 "
+                  onClick={handleSave}
+                  disabled={loading}
+                  style={{ width: "140px", marginRight: "20px" }}
+                >
+                  {loading ? (
+                    <Box className="loader-box">
+                      <CircularProgress />
+                    </Box>
+                  ) : (
+                    "Save"
+                  )}
+                </button>
               </div>
+            </div>
           </>
         )}
       </div>

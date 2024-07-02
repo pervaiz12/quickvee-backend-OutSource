@@ -522,7 +522,7 @@ export default function SettingStoreAlters() {
 
   return (
     <>
-      <div className="box">
+      <div className="box" style={{marginBottom:"110px"}}>
         {/* Online Order Notifications */}
         <div className="store-setting-main-div">
           <h2 className="store-setting-h2">
@@ -1079,14 +1079,24 @@ export default function SettingStoreAlters() {
           </p>
         </div>
       </div>
-
-      <button
-        className="store-setting-btn mt-8 mb-8 attributeUpdateBTN"
-        onClick={handleUpdateSettingAlerts}
-        disabled={loader}
-      >
-        {loader ? <><CircularProgress color={"inherit"} width={15} size={15} /> Update</> : "Update"}
-      </button>
+      <div className="fixed-bottom"> 
+      <div className="box_shadow_div" style={{marginBottom:0,paddingRight:20}}>
+        <button
+          className="store-setting-btn mt-5 mb-5 attributeUpdateBTN"
+          onClick={handleUpdateSettingAlerts}
+          disabled={loader}
+        >
+          {loader ? (
+            <>
+              <CircularProgress color={"inherit"} width={15} size={15} /> Update
+            </>
+          ) : (
+            "Update"
+          )}
+        </button>
+      </div>
+      </div>
+     
     </>
   );
 }
