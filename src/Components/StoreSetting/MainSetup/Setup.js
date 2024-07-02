@@ -228,9 +228,11 @@ const Setup = () => {
         direction="row"
         justifyContent="flex-end"
         alignItems="center"
-        sx={{ pb: 2.5 }}
+        sx={{ mb:0,p:2.5 }}
+
+        className="box_shadow_div p-3"
       >
-        <Grid item>
+        <Grid item >
           <button
             class="quic-btn quic-btn-save attributeUpdateBTN w-36"
             onClick={handleUpdateClick}
