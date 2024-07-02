@@ -64,7 +64,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
   const navigate = useNavigate();
 
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
-  const [selectedProducts, setSelectedProducts] = useState([
+  const initialState = [
     {
       id: "",
       variantId: "",
@@ -79,7 +79,8 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
       finalPrice: "0.00",
       upc: "",
     },
-  ]);
+  ];
+  const [selectedProducts, setSelectedProducts] = useState(initialState);
 
   const [loaders, setLoaders] = useState({
     autoPo: false,
@@ -528,9 +529,15 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
             upc: prod.upc,
             id: prod.variant_id ? prod.variant_id : prod.product_id,
             product_id: prod.variant_id ? prod.product_id : "",
-            quantity: prod.item_qty,
+            quantity: prod.item_qty || 0,
             newQty: prod.reorder_qty || 0,
-            newPrice: prod.costperItem || 0,
+            newPrice:
+              prod.preferd_vendor_cost &&
+              parseFloat(prod.preferd_vendor_cost) > 0
+                ? prod.preferd_vendor_cost
+                : prod.costperItem && parseFloat(prod.costperItem) > 0
+                  ? prod.costperItem
+                  : 0,
             finalQty:
               (Number(prod.item_qty) || 0) + (Number(prod.reorder_qty) || 0),
             finalPrice:
@@ -542,6 +549,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
 
           setSelectedProducts(temp);
         } else if (!response.data.status) {
+          setSelectedProducts(initialState);
           ToastifyAlert(response.data.message, "error");
         }
       } else {
