@@ -14,7 +14,7 @@ import Grid from "@mui/material/Grid";
 
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { TimePicker } from "@mui/x-date-pickers/TimePicker";
-
+import CircularProgress from "@mui/material/CircularProgress";
 import { Box, Modal } from "@mui/material";
 import {
   fetchtimeSheetData,
@@ -54,7 +54,7 @@ const TimesheetListing = ({ data }) => {
     // }
     getfetchtimeSheetData()
   }, [dispatch, data]);
-
+  const [loader, setLoader] = useState(false);
   const getfetchtimeSheetData=async()=>{
     try{
       if (!data.merchant_id) {
@@ -371,6 +371,7 @@ const TimesheetListing = ({ data }) => {
     // }
 
     // return
+    setLoader(true);
     try {
       const response = await axios.post(
         `${BASE_URL}${ADD_TIME_SHEET}`,
@@ -409,6 +410,7 @@ const TimesheetListing = ({ data }) => {
       getUnAutherisedTokenMessage()
       console.error("API Error:", error);
     }
+    setLoader(false);
   };
 
   // const updateTimesheet = (value,type) => {
@@ -544,7 +546,7 @@ const TimesheetListing = ({ data }) => {
     for (const [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
     }
-
+    setLoader(true)
     try {
       const response = await axios.post(
         `${BASE_URL}${ADD_TIME_BREAK}`,
@@ -583,6 +585,7 @@ const TimesheetListing = ({ data }) => {
       getUnAutherisedTokenMessage()
       console.error("API Error:", error);
     }
+    setLoader(false)
   };
   // for Break Modal End
 
@@ -676,6 +679,7 @@ const TimesheetListing = ({ data }) => {
     setDeleteBreakTime(dataBreak)
     setModalheadText("Break Timeing")
     setDeleteModalOpen(true);
+    setDeleteBreakId("");
   };
 
   // fo all Break Delete
@@ -707,9 +711,13 @@ const TimesheetListing = ({ data }) => {
     setDeleteBreakId(dataTimesheet);
     setModalheadText("Timeclock")
     setDeleteModalOpen(true);
+    setDeleteBreakTime("")
   };
 
   const confirmDeleteCategory = async () => {
+    // console.log("deleteBreakId",deleteBreakId)
+    // console.log("deleteBreakTime",deleteBreakTime)
+    // return
     if(deleteBreakId){
       const datas = {
         inid: deleteBreakId.check_in_id,
@@ -1185,8 +1193,8 @@ const TimesheetListing = ({ data }) => {
           </div>
 
           <div className="q-add-categories-section-middle-footer">
-            <button className="quic-btn quic-btn-save" onClick={handleSave}>
-              Add
+            <button className="quic-btn quic-btn-save attributeUpdateBTN" onClick={handleSave} disabled={loader}>
+              { loader ? <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15}/> Add</> : "Add"}
             </button>
             <button onClick={closeModal} className="quic-btn quic-btn-cancle">
               Cancel
@@ -1298,10 +1306,11 @@ const TimesheetListing = ({ data }) => {
 
           <div className="q-add-categories-section-middle-footer">
             <button
-              className="quic-btn quic-btn-save"
+              className="quic-btn quic-btn-save attributeUpdateBTN"
               onClick={handleBreakSave}
+              disabled={loader}
             >
-              Add
+              { loader ? <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15}/> Add</> : "Add"}
             </button>
             <button
               onClick={closeModalBreak}
