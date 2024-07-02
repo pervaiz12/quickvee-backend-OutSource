@@ -13,7 +13,8 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { priceFormate } from "../../../hooks/priceFormate";
-
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import SortIconW from "../../../Assests/Category/SortingW.svg";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -45,7 +46,7 @@ const VendorSalesReportList = (props) => {
   const dispatch = useDispatch();
   const [allVendorData, setallVendorData] = useState("");
   const AllVendorDataState = useSelector((state) => state.VendorSalesList);
-
+  const [sortOrder, setSortOrder] = useState("asc");
   const {
     LoginGetDashBoardRecordJson,
     LoginAllStore,
@@ -104,14 +105,29 @@ const VendorSalesReportList = (props) => {
     const formattedTime = date.toLocaleTimeString("en-US", timeOptions);
     return `${formattedDate} ${formattedTime}`;
   };
-
+  const sortByItemName = (type, name) => {
+    const newOrder = sortOrder === "asc" ? "desc" : "asc";
+    const updatedAllVendorsData = Object.fromEntries(
+      Object.entries(allVendorData).map(([data, items]) => {
+        const { sortedItems } = SortTableItemsHelperFun(
+          items,
+          type,
+          name,
+          sortOrder
+        );
+        return [data, sortedItems];
+      })
+    );
+    setallVendorData(updatedAllVendorsData);
+    setSortOrder(newOrder);
+  };
   return (
     <>
       {allVendorData && Object.keys(allVendorData).length >= 1 ? (
         <>
           {/* <div className="box">
             <div className="q-category-bottom-categories-listing"> */}
-          {Object.keys(allVendorData).map((vendorName, vendorIndex) => (
+          {Object.entries(allVendorData).map(([vendorName, vendorIndex]) => (
             <React.Fragment key={vendorName}>
               <Grid container className="box_shadow_div">
                 <Grid item xs={12}>
@@ -128,17 +144,37 @@ const VendorSalesReportList = (props) => {
                           <p>Sr. No</p>
                         </StyledTableCell> */}
                         <StyledTableCell>
-                          <p>Transaction Date</p>
+                          <button
+                            className="flex items-center"
+                            onClick={() =>
+                              sortByItemName("date", "payment_datetime")
+                            }
+                          >
+                            <p>Transaction Date</p>
+                            <img src={SortIconW} alt="" className="pl-1" />
+                          </button>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <p>Description</p>
+                          <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("str", "remark")}
+                          >
+                            <p>Description</p>
+                            <img src={SortIconW} alt="" className="pl-1" />
+                          </button>
                         </StyledTableCell>
                         <StyledTableCell>
-                          <p>Amount</p>
+                          <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("num", "pay_amount")}
+                          >
+                            <p>Amount</p>
+                            <img src={SortIconW} alt="" className="pl-1" />
+                          </button>
                         </StyledTableCell>
                       </TableHead>
                       <TableBody>
-                        {allVendorData[vendorName]?.map((salesData, index) => (
+                        {vendorIndex?.map((salesData, index) => (
                           <StyledTableRow key={index}>
                             {/* <StyledTableCell>
                               <p>{`${index + 1}`}</p>

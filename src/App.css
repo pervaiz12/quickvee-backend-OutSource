@@ -210,7 +210,7 @@ input[type="number"] {
   overflow-x: hidden;
   height: 100vh;
   /* width: 16rem; */
-  z-index: 9;
+  z-index: 999;
   color: #9e9e9e;
 }
 
@@ -1232,4 +1232,15 @@ div.q_label_details::after {
 .error-message-stocktake{
   color: red;
   font-family: "Roboto","Helvetica","Arial",sans-serif !important;
+}
+
+.fixed-bottom{
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  z-index: 9;
+  padding-left: 16rem;
+  padding-right:0rem;
+  
 }

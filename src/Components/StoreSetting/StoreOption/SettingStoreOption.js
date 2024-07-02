@@ -260,7 +260,7 @@ export default function SettingStoreOption() {
         enable_dispatch: orderState?.enabledDispatchCenter ? "1" : "0",
         email_notification: orderState?.enabledEmailNotification ? "1" : "0",
         sms_notification: orderState?.enabledSmsNotification ? "1" : "0",
-        ...userTypeData
+        ...userTypeData,
       };
       const data = newItem;
       dispatch(updateStoreOption(data))
@@ -678,7 +678,7 @@ export default function SettingStoreOption() {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid container sx={{ p: 2 }} className="box_shadow_div">
+            <Grid container sx={{ p: 2,mb:14 }} className="box_shadow_div">
               <Grid item xs={12}>
                 <Grid
                   container
@@ -708,20 +708,35 @@ export default function SettingStoreOption() {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid
-              container
-              direction="row"
-              justifyContent="flex-end"
-              alignItems="center"
-            >
-              <Grid item>
-                <button
-                  className="store-setting-btn attributeUpdateBTN"
-                  onClick={handleUpdateSettingOption}
-                  disabled={loading}
-                >
-                   {loading ? <><CircularProgress color={"inherit"} width={15} size={15} /> Update</> : "Update"}
-                </button>
+            <Grid className="fixed-bottom">
+              <Grid
+                container
+                direction="row"
+                justifyContent="flex-end"
+                alignItems="center"
+                className="box_shadow_div p-3"
+                sx={{ mb: 0, p: 2.5 }}
+              >
+                <Grid item>
+                  <button
+                    className="store-setting-btn attributeUpdateBTN"
+                    onClick={handleUpdateSettingOption}
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <>
+                        <CircularProgress
+                          color={"inherit"}
+                          width={15}
+                          size={15}
+                        />{" "}
+                        Update
+                      </>
+                    ) : (
+                      "Update"
+                    )}
+                  </button>
+                </Grid>
               </Grid>
             </Grid>
             {/* <div className="store-setting-div bg-white store-setting-px-8 store-setting-py-4 store-setting-my-4  store-setting-shadow store-setting-rounded-lg store-setting-opacity-100">

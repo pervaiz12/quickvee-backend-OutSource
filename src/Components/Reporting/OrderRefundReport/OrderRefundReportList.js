@@ -15,7 +15,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { priceFormate } from "../../../hooks/priceFormate";
-
+import sortIcon from "../../../Assests/Category/SortingW.svg"
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -45,11 +46,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const OrderRefundReportList = (props) => {
   // console.log(props)
+  const [sortOrder, setSortOrder] = useState("asc");
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const dispatch = useDispatch();
   const{handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow() 
-  const [allOrderData, setOrderData] = useState("");
+  const [allOrderData, setOrderData] = useState([]);
   const AllOrderRefundData = useSelector((state) => state.OrderRefundList);
   // console.log(AllOrderRefundData)
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
@@ -126,7 +128,30 @@ const OrderRefundReportList = (props) => {
       year: "numeric",
     });
   };
+  const tableRow = [
+    { type: "id", name: "order_id", label: "Order ID" },
+    { type: "date", name: "created_at", label: "Date" },
+    { type: "str", name: "employee", label: "Employee" },
+    {type: "str",name: "reason",label: "Reason"},
+    { type: "num", name: "debit_amt", label: "Debit/Credit" },
+    { type: "num", name: "cash_amt", label: "Cash" },
+    { type: "num", name: "loyalty_point_amt", label: "LP" },
+    { type: "num", name: "store_credit_amt", label: "SC" },
+    { type: "num", name: "nca_amt", label: "NCA" },
+    { type: "num", name: "tip_amt", label: "TIP" },
+    { type: "num", name: "amount", label: "Total" },
+  ];
 
+  const sortByItemName = (type, name) => {
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      allOrderData,
+      type,
+      name,
+      sortOrder
+    );
+    setOrderData(sortedItems);
+    setSortOrder(newOrder);
+  }
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -134,18 +159,19 @@ const OrderRefundReportList = (props) => {
           <TableContainer>
             <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
               <TableHead>
-                <StyledTableCell>Order ID</StyledTableCell>
-                <StyledTableCell>Date</StyledTableCell>
-                <StyledTableCell>Employee</StyledTableCell>
-                <StyledTableCell>Reason</StyledTableCell>
-                <StyledTableCell>Debit/Credit</StyledTableCell>
-                <StyledTableCell>Cash</StyledTableCell>
-                <StyledTableCell>LP</StyledTableCell>
-                <StyledTableCell>SC</StyledTableCell>
-                <StyledTableCell>NCA</StyledTableCell>
-                <StyledTableCell>TIP</StyledTableCell>
-                <StyledTableCell>Total</StyledTableCell>
+                {tableRow.map((item,index)=>(
+                  <StyledTableCell key={index}>
+                    <button
+                    className="flex items-center"
+                    onClick={()=>sortByItemName(item.type,item.name)}
+                    >
+                      <p>{item.label}</p>
+                      <img src={sortIcon} alt="" className="pl-1"/>
+                      </button>
+                  </StyledTableCell>
+                ))}
               </TableHead>
+              
               <TableBody>
                 {Array.isArray(allOrderData) &&
                   allOrderData.length > 0 &&
@@ -153,7 +179,7 @@ const OrderRefundReportList = (props) => {
                     <StyledTableRow key={index}>
                       <StyledTableCell>
                         
-                        <p><Link to={`/order/store-reporting/order-summary/${merchant_id}/${CheckData.order_id}`}
+                        <p className="text-[#0A64F9]"><Link to={`/order/store-reporting/order-summary/${merchant_id}/${CheckData.order_id}`}
                                 target="_blank"
                               >{CheckData.order_id} </Link></p>
                         

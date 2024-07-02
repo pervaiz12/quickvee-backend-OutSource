@@ -367,7 +367,7 @@ const MainResigtersetting = () => {
       </div>
       {/* device  section */}
 
-      <div className="q-attributes-main-page">
+      <div className="q-attributes-main-page"   style={{marginBottom:50}}>
         <div className="box">
           <div className="q-resigtersetting-top-detail-section">
             <div>
@@ -483,12 +483,14 @@ const MainResigtersetting = () => {
             </div>
           </div>
         </div> */}
-
-        <div className="q-resigtersetting-main-page text-end mt-8">
-          <button className="store-setting-btn mt-8 mb-8" onClick={handleRegisterSettingSubmit}>
+        <div className="fixed-bottom">
+        <div className="q-resigtersetting-main-page text-end  box_shadow_div"  style={{marginBottom:0,paddingRight:20}}>
+          <button className="store-setting-btn mt-5 mb-5" onClick={handleRegisterSettingSubmit}>
             Update
           </button>
         </div>
+        </div>
+        
       </div>
     </>
   );

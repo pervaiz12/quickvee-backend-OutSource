@@ -162,8 +162,8 @@ const Setup = () => {
       default_tip_pickup: pickDefTip, //
       default_tip_delivery: delDefTip, //
       day_data: JSON.stringify(days),
-      cf_pik:parseFloat(convData) > 0 ? "1": "0", 
-      cf_del:parseFloat(conepikData) >0 ? "1" : "0"
+      cf_pik: parseFloat(convData) > 0 ? "1" : "0",
+      cf_del: parseFloat(conepikData) > 0 ? "1" : "0",
     };
     try {
       setLoader(true);
@@ -201,54 +201,62 @@ const Setup = () => {
 
   return (
     <>
-      <OnlineOrderingPage
-        loader={loader}
-        onlineorderstatus={handleonlineorderstatus}
-      />
+      <Grid sx={{pb:11}}>
+        <OnlineOrderingPage
+          loader={loader}
+          onlineorderstatus={handleonlineorderstatus}
+        />
 
-      <StoreWorkingHrs
-        days={days}
-        setDays={setDays}
-        setLastCloseTimeState={setLastCloseTimeState}
-      />
+        <StoreWorkingHrs
+          days={days}
+          setDays={setDays}
+          setLastCloseTimeState={setLastCloseTimeState}
+        />
 
-      <PickupDeliveryDetails
-        pickupdeliverydata={handlepickupdeliverydata}
-        errors={errors}
-        setErrors={setErrors}
-        pickupDeliveryDetailsRef={pickupDeliveryDetailsRef}
-      />
+        <PickupDeliveryDetails
+          pickupdeliverydata={handlepickupdeliverydata}
+          errors={errors}
+          setErrors={setErrors}
+          pickupDeliveryDetailsRef={pickupDeliveryDetailsRef}
+        />
 
-      <FlatDelivery DeliveryFeeData={handleDeliveryFeeData} />
+        <FlatDelivery DeliveryFeeData={handleDeliveryFeeData} />
 
-      <DelveryPickupDetails DeliveryPickupData={handleDeliveryPickupData} />
-
-      <Grid
-        container
-        direction="row"
-        justifyContent="flex-end"
-        alignItems="center"
-        sx={{ mb:0,p:2.5 }}
-
-        className="box_shadow_div p-3"
-      >
-        <Grid item >
-          <button
-            class="quic-btn quic-btn-save attributeUpdateBTN w-36"
-            onClick={handleUpdateClick}
-            disabled={loader}
-          >
-            {loader ? (
-              <>
-                <CircularProgress color={"inherit"} className="loaderIcon"  width={15}size={15} />
-                Update
-              </>
-            ) : (
-              "Update"
-            )}
-          </button>
+        <DelveryPickupDetails DeliveryPickupData={handleDeliveryPickupData} />
+      </Grid>
+      <Grid className="fixed-bottom">
+        <Grid
+          container
+          direction="row"
+          justifyContent="flex-end"
+          alignItems="center"
+          sx={{ mb: 0, p: 2.5 }}
+          className="box_shadow_div p-3"
+        >
+          <Grid item className="">
+            <button
+              class="quic-btn quic-btn-save attributeUpdateBTN w-36"
+              onClick={handleUpdateClick}
+              disabled={loader}
+            >
+              {loader ? (
+                <>
+                  <CircularProgress
+                    color={"inherit"}
+                    className="loaderIcon"
+                    width={15}
+                    size={15}
+                  />
+                  Update
+                </>
+              ) : (
+                "Update"
+              )}
+            </button>
+          </Grid>
         </Grid>
       </Grid>
+
       {/* <div className="">
         <div class="q-add-categories-section-middle-footer">
           <div class="q-category-bottom-header" style={{ marginRight: "67px" }}>
