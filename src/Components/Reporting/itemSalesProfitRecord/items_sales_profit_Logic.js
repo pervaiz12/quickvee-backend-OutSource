@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { ITEM_SALES_PROFIT_REPORT, BASE_URL } from "../../../Constants/Config";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import axios from "axios";
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 
 export default function Items_sales_profit_Logic() {
   const {
@@ -13,6 +14,8 @@ export default function Items_sales_profit_Logic() {
 
   const [getItemRecord, setItemRecord] = useState([]);
   const [getMessageRecord, setgetMessageRecord] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [sortOrder, setSortOrder] = useState("asc");
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   const onDateRangeChange = (data) => {
@@ -20,6 +23,7 @@ export default function Items_sales_profit_Logic() {
     const { token, ...newAdmin } = userTypeData;
     const packet = { merchant_id, start_date, end_date, ...newAdmin };
     try {
+      setLoading(true);
       let response = axios
         .post(BASE_URL + ITEM_SALES_PROFIT_REPORT, packet, {
           headers: {
@@ -30,16 +34,46 @@ export default function Items_sales_profit_Logic() {
         .then((res) => {
           console.log(res?.data);
           if (res?.data?.status == "Success") {
-            console.log("111");
-            setItemRecord(res?.data?.profit_data);
+            const updatedList = res.data?.profit_data.map((item) => {
+              const cost_item = parseFloat(item?.cost_price) * parseFloat(item?.total_qty);
+              const selling_price = parseFloat(item?.price) * parseFloat(item?.total_qty);
+              const profit_per =
+                ((parseFloat(selling_price) - parseFloat(cost_item)) / parseFloat(selling_price)) * 100;
+              return {
+                ...item,
+                costOfItem: (parseFloat(item?.cost_price) * parseFloat(item?.total_qty)).toFixed(2),
+                sellingPrice: (parseFloat(item?.price) * parseFloat(item?.total_qty)).toFixed(2),
+                profitMargin:
+                  selling_price === 0 ? "0.00%" : profit_per.toFixed(2),
+                profitAmmount: (
+                  (parseFloat(item?.price) - parseFloat(item?.cost_price)) *
+                  parseFloat(item?.total_qty) 
+                ).toFixed(2),
+              };
+            });
+            console.log("updatedList", updatedList)
+            setItemRecord(updatedList);
+            setLoading(false);
           } else {
-            console.log("222");
             setgetMessageRecord(res?.data?.msg);
+            setLoading(false);
           }
         });
     } catch (error) {
       console.log("Error", error);
+      setLoading(false);
     }
   };
-  return { onDateRangeChange, getItemRecord, getMessageRecord };
+  const sortByItemName = (type, name) => {
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      getItemRecord,
+      type,
+      name,
+      sortOrder
+    );
+    setItemRecord(sortedItems);
+    setSortOrder(newOrder);
+  }
+
+  return { onDateRangeChange, getItemRecord, getMessageRecord, loading,sortByItemName };
 }

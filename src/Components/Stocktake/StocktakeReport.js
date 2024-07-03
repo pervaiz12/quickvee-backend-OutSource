@@ -254,10 +254,10 @@ const StocktakeReport = ({ setVisible }) => {
                           width={15}
                           size={15}
                         />
-                        void
+                        Void
                       </>
                     ) : (
-                      "void"
+                      "Void"
                     )}
                   </button>
                 </Grid>

@@ -12,7 +12,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { priceFormate } from "../../../hooks/priceFormate";
-
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import sortIcon from "../../../Assests/Category/SortingW.svg";
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -44,6 +46,7 @@ const ItemSalesDetails = (props) => {
   const dispatch = useDispatch();
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+  const [sortOrder, setSortOrder] = useState("asc");
   const [allItemSalesData, setallItemSalesData] = useState("");
   const AllItemSalesDataState = useSelector(
     (state) => state.ItemSalesReportList
@@ -82,7 +85,28 @@ const ItemSalesDetails = (props) => {
     AllItemSalesDataState.loading,
     AllItemSalesDataState.ItemSalesData,
   ]);
-
+  const tableRow = [
+    { type: "str", name: "categoryss", label: "Category" },
+    { type: "str", name: "name", label: "Name" },
+    { type: "num", name: "total_qty", label: "# Sold" },
+    { type: "num", name: "total_price", label: "Gross Sales" },
+    { type: "num", name: "adjust_price", label: "Price Override" },
+    { type: "num", name: "discount_amt", label: "Discounts" },
+    { type: "num", name: "saletx", label: "Default Tax" },
+    { type: "num", name: "othertx", label: "Other Tax" },
+    { type: "num", name: "refund_amount", label: "Refunded" },
+    { type: "num", name: "discount_price", label: "Net Sales" },
+  ];
+  const sortByItemName = (type, name) => {
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      allItemSalesData,
+      type,
+      name,
+      sortOrder
+    );
+    setallItemSalesData(sortedItems);
+    setSortOrder(newOrder);
+  };
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -90,70 +114,73 @@ const ItemSalesDetails = (props) => {
           <div className="q-attributes-bottom-header">
             <span>Item Sales Report</span>
           </div>
-          <TableContainer>
-            <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-              <TableHead>
-                <StyledTableCell>Category</StyledTableCell>
-                <StyledTableCell>Name</StyledTableCell>
-                <StyledTableCell sx={{ whiteSpace: "nowrap" }}>
-                  # Sold
-                </StyledTableCell>
-                <StyledTableCell>Gross Sales</StyledTableCell>
-                <StyledTableCell>Price Override</StyledTableCell>
-                <StyledTableCell>Discounts</StyledTableCell>
-                <StyledTableCell>Default Tax</StyledTableCell>
-                <StyledTableCell>Other Tax</StyledTableCell>
-                <StyledTableCell>Refunded</StyledTableCell>
-                <StyledTableCell>Net Sales</StyledTableCell>
-              </TableHead>
-              <TableBody>
-                {allItemSalesData &&
-                  allItemSalesData.length >= 1 &&
-                  allItemSalesData.map((ItemData, index) => (
-                    <StyledTableRow>
-                      <StyledTableCell>
-                        <p>{ItemData.categoryss}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{ItemData.name}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{priceFormate(ItemData.total_qty)}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>${priceFormate(ItemData.total_price)}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>${priceFormate(ItemData.adjust_price)}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>${priceFormate(ItemData.discount_amt)}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>${priceFormate(ItemData.saletx)}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>${priceFormate(ItemData.othertx)}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>${priceFormate(ItemData.refund_amount)}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>${priceFormate(ItemData.discount_price)}</p>
-                      </StyledTableCell>
-                    </StyledTableRow>
+          {AllItemSalesDataState.loading ? (
+            <SkeletonTable columns={tableRow.map((item) => item.label)} />
+          ) : (
+            <TableContainer>
+              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
+                <TableHead>
+                  {tableRow.map((item) => (
+                    <StyledTableCell>
+                      <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName(item.type, item.name)}
+                      >
+                        <p>{item.label}</p>
+                        <img src={sortIcon} alt="" className="pl-1" />
+                      </button>
+                    </StyledTableCell>
                   ))}
+                </TableHead>
+                <TableBody>
+                  {allItemSalesData &&
+                    allItemSalesData.length >= 1 &&
+                    allItemSalesData.map((ItemData, index) => (
+                      <StyledTableRow>
+                        <StyledTableCell>
+                          <p>{ItemData.categoryss}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>{ItemData.name}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>{priceFormate(ItemData.total_qty)}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>${priceFormate(ItemData.total_price)}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>${priceFormate(ItemData.adjust_price)}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>${priceFormate(ItemData.discount_amt)}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>${priceFormate(ItemData.saletx)}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>${priceFormate(ItemData.othertx)}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>${priceFormate(ItemData.refund_amount)}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>${priceFormate(ItemData.discount_price)}</p>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
 
-                {!allItemSalesData.length >= 1 && (
-                  <div className="box">
-                    <div className="q-category-bottom-categories-single-category">
-                      <p>No data found</p>
+                  {!allItemSalesData.length >= 1 && (
+                    <div className="box">
+                      <div className="q-category-bottom-categories-single-category">
+                        <p>No data found</p>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </TableBody>
-            </StyledTable>
-          </TableContainer>
+                  )}
+                </TableBody>
+              </StyledTable>
+            </TableContainer>
+          )}
         </Grid>
       </Grid>
       {/* <div className="q-attributes-bottom-detail-section">

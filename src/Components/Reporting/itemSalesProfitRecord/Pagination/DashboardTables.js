@@ -12,7 +12,8 @@ import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 import { priceFormate } from "../../../../hooks/priceFormate";
-
+import { SkeletonTable } from "../../../../reuseableComponents/SkeletonTable";
+import sortIcon from "../../../../Assests/Category/SortingW.svg";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -143,108 +144,139 @@ export default function DashboardTables(props) {
   //   }
   // };
 
+  const tableRow = [
+    { type: "str", name: "category", label: "Category" },
+    { type: "str", name: "name", label: "Name" },
+    { type: "num", name: "total_qty", label: "Sold" },
+    { type: "num", name: "costOfItem", label: "Cost of Item" },
+    { type: "num", name: "sellingPrice", label: "Selling Price" },
+    { type: "num", name: "profitMargin", label: "Profit Margin" },
+    { type: "num", name: "profitAmmount", label: "Profit amount" },
+  ];
+  const formatCurrency = (amount) => {
+    const formattedAmount = Math.abs(amount).toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+    });
+    return amount < 0 ? `-${formattedAmount}` : formattedAmount;
+  };
   return (
     <TableContainer component={Paper}>
-      <TableContainer sx={{}} aria-label="customized table">
-        <StyledTable>
-          <TableHead>
-            <StyledTableCell align="center">Category</StyledTableCell>
-            <StyledTableCell align="center">Name</StyledTableCell>
-            <StyledTableCell align="center">Sold</StyledTableCell>
-            <StyledTableCell align="center">Cost of Item</StyledTableCell>
-            <StyledTableCell align="center">Selling Price</StyledTableCell>
-            <StyledTableCell align="center">Profit Margin</StyledTableCell>
-            <StyledTableCell align="center">Profit amount</StyledTableCell>
-          </TableHead>
-          <TableBody>
-            {Array.isArray(props.getItemRecord) &&
-            props.getItemRecord.length > 0 ? (
-              props.getItemRecord.map((item, index) => (
-                <StyledTableRow key={index}>
-                  <StyledTableCell align="center">
-                    {!!item?.category ? item?.category : "Deleted"}
+      {props.loading ? (
+        <SkeletonTable columns={tableRow.map((item) => item.label)} />
+      ) : (
+        <TableContainer sx={{}} aria-label="customized table">
+          <StyledTable>
+           
+            <TableHead>
+              {tableRow.map((item, index) => (
+                <StyledTableCell key={index}>
+                  <button
+                    className="flex items-center"
+                    onClick={() => props.sortByItemName(item.type, item.name)}
+                  >
+                    <p>{item.label}</p>
+                    <img src={sortIcon} alt="" className="pl-1" />
+                  </button>
+                </StyledTableCell>
+              ))}
+            </TableHead>
+            <TableBody>
+              {Array.isArray(props.getItemRecord) &&
+              props.getItemRecord.length > 0 ? (
+                props.getItemRecord.map((item, index) => (
+                  <StyledTableRow key={index}>
+                    <StyledTableCell >
+                      {!!item?.category ? item?.category : "Deleted"}
+                    </StyledTableCell>
+                    <StyledTableCell >
+                      {item?.name}
+                    </StyledTableCell>
+                    <StyledTableCell >
+                      {item?.total_qty}
+                    </StyledTableCell>
+                    <StyledTableCell >
+                      {/* {`$${priceFormate(
+                    parseFloat(item?.cost_price * item?.total_qty).toFixed(2)
+                  )}`} */}
+                      <p>{formatCurrency(item?.costOfItem)}</p>
+                    </StyledTableCell>
+                    <StyledTableCell align="center">
+                      {/* {`$${priceFormate(
+                    parseFloat(item?.price * item?.total_qty).toFixed(2)
+                  )}`} */}
+                      <p>{formatCurrency(item?.sellingPrice)}</p>
+                    </StyledTableCell>
+                    <StyledTableCell >
+                      {/* {(() => {
+                    const cost_item = item?.cost_price * item?.total_qty;
+                    const selling_price = item?.price * item?.total_qty;
+                    if (selling_price === 0) {
+                      return "0.00%";
+                    }
+                    const profit_per =
+                      ((selling_price - cost_item) / selling_price) * 100;
+                    return `${profit_per.toFixed(2)}%`;
+                  })()} */}
+                      <p>{`${item?.profitMargin} %`}</p>
+                    </StyledTableCell>
+                    <StyledTableCell >
+                      {/* {`$${priceFormate(
+                    (
+                      (item?.price - item?.cost_price) *
+                      item?.total_qty
+                    ).toFixed(2)
+                  )}`} */}
+                      <p>{formatCurrency(item?.profitAmmount)}</p>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))
+              ) : (
+                <Grid sx={{ padding: 2.5, margin: 0 }} className="">
+                  <Grid item xs={12}>
+                    {props.getMessageRecord || "No data available"}
+                  </Grid>
+                </Grid>
+              )}
+              {Array.isArray(props.getItemRecord) &&
+              props.getItemRecord.length > 0 ? (
+                <StyledTableRow>
+                  <StyledTableCell colSpan={2}>
+                    <p style={{ color: "#0A64F9" }}>Total</p>
                   </StyledTableCell>
-                  <StyledTableCell align="center">{item?.name}</StyledTableCell>
-                  <StyledTableCell align="center">
-                    {item?.total_qty}
+                  <StyledTableCell >
+                    <p style={{ color: "#0A64F9" }}>
+                      {priceFormate(totalCost?.soldQty)}
+                    </p>
                   </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {`$${priceFormate(
-                      parseFloat(item?.cost_price * item?.total_qty).toFixed(2)
-                    )}`}
+                  <StyledTableCell>
+                    <p style={{ color: "#0A64F9" }}>{`$${priceFormate(
+                      totalCost?.costItem
+                    )}`}</p>
                   </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {`$${priceFormate(
-                      parseFloat(item?.price * item?.total_qty).toFixed(2)
-                    )}`}
+                  <StyledTableCell>
+                    <p style={{ color: "#0A64F9" }}>{`$${priceFormate(
+                      totalCost?.totalSelling
+                    )}`}</p>
                   </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {(() => {
-                      const cost_item = item?.cost_price * item?.total_qty;
-                      const selling_price = item?.price * item?.total_qty;
-                      if (selling_price === 0) {
-                        return "0.00%";
-                      }
-                      const profit_per =
-                        ((selling_price - cost_item) / selling_price) * 100;
-                      return `${profit_per.toFixed(2)}%`;
-                    })()}
+                  <StyledTableCell>
+                    <p
+                      style={{ color: "#0A64F9" }}
+                    >{`${totalCost?.profitPercentage}%`}</p>
                   </StyledTableCell>
-                  <StyledTableCell align="center">
-                    {`$${priceFormate(
-                      (
-                        (item?.price - item?.cost_price) *
-                        item?.total_qty
-                      ).toFixed(2)
-                    )}`}
+                  <StyledTableCell >
+                    <p style={{ color: "#0A64F9" }}>{`$${priceFormate(
+                      totalCost?.profit
+                    )}`}</p>
                   </StyledTableCell>
                 </StyledTableRow>
-              ))
-            ) : (
-              <Grid sx={{ padding: 2.5, margin: 0 }} className="">
-                <Grid item xs={12}>
-                  {props.getMessageRecord || "No data available"}
-                </Grid>
-              </Grid>
-            )}
-            {Array.isArray(props.getItemRecord) &&
-            props.getItemRecord.length > 0 ? (
-              <StyledTableRow>
-                <StyledTableCell colSpan={2} align="center">
-                  <p style={{ color: "#0A64F9" }}>Total</p>
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <p style={{ color: "#0A64F9" }}>
-                    {priceFormate(totalCost?.soldQty)}
-                  </p>
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <p style={{ color: "#0A64F9" }}>{`$${priceFormate(
-                    totalCost?.costItem
-                  )}`}</p>
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <p style={{ color: "#0A64F9" }}>{`$${priceFormate(
-                    totalCost?.totalSelling
-                  )}`}</p>
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <p
-                    style={{ color: "#0A64F9" }}
-                  >{`${totalCost?.profitPercentage}%`}</p>
-                </StyledTableCell>
-                <StyledTableCell align="center">
-                  <p style={{ color: "#0A64F9" }}>{`$${priceFormate(
-                    totalCost?.profit
-                  )}`}</p>
-                </StyledTableCell>
-              </StyledTableRow>
-            ) : (
-              ""
-            )}
-          </TableBody>
-        </StyledTable>
-      </TableContainer>
+              ) : (
+                ""
+              )}
+            </TableBody>
+          </StyledTable>
+        </TableContainer>
+      )}
     </TableContainer>
   );
 }

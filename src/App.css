@@ -210,7 +210,7 @@ input[type="number"] {
   overflow-x: hidden;
   height: 100vh;
   /* width: 16rem; */
-  z-index: 999;
+  z-index: 9;
   color: #9e9e9e;
 }
 
@@ -1239,8 +1239,12 @@ div.q_label_details::after {
   bottom: 0;
   right: 0;
   left: 0;
-  z-index: 9;
+  z-index: 1;
   padding-left: 16rem;
   padding-right:0rem;
+  
+}
+
+@media screen {
   
 }
