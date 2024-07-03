@@ -30,6 +30,7 @@ export default function EditAdmin({ EditAdminId, setVisible }) {
     loaderEdit,
     handleBlur,
     keyEnter,
+    handleBlurPassword,
   } = EditAdminFunctionality(handleClick);
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -111,10 +112,12 @@ export default function EditAdmin({ EditAdminId, setVisible }) {
                       onKeyDown={keyEnter}
                       value={editData.password1}
                       onChange={handleChangeAdmin}
+                      onBlur={() => handleBlurPassword("password1")}
                       autoComplete="off"
                       // value={store.email}
                     />
                     {jsxData(editData.password1)}
+                    <label className="error">{errors.password1}</label>
                   </div>
                 </div>
                 <div className="col-qv-6">

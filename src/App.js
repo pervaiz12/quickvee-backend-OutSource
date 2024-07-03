@@ -603,6 +603,11 @@ function App() {
             path="/users/view/unapprove/permission"
             element={<Main visible={"permission"} />}
           />
+          <Route
+            exact
+            path="/import-data"
+            element={<Main visible={"import-data"} />}
+          />
         </Route>
 
         {/* ------------------------Superadmin---------------- */}
@@ -612,11 +617,11 @@ function App() {
             path="/users/manager_view"
             element={<Main visible={"manager_view"} />}
           />
-          <Route
+          {/* <Route
             exact
             path="/import-data"
             element={<Main visible={"import-data"} />}
-          />
+          /> */}
           {/* <Route
             exact
             path="/need-help"
@@ -723,7 +728,7 @@ function App() {
             path="/unapprove/invertory-export"
             element={<Main visible={"invertory-export"} />}
           />
-           <Route
+          <Route
             exact
             path="/unapprove/support-details"
             element={<Main visible={"support-details"} />}
