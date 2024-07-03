@@ -47,7 +47,6 @@ const PrintPurchaseOrder = () => {
       ToastifyAlert("Sorry, couldn't find Purchase Order details!", "error");
       navigate(-1);
     }
-
     window.print();
     navigate(-1);
   }, [location]);
@@ -125,6 +124,7 @@ const PrintPurchaseOrder = () => {
             <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
               <TableHead>
                 <StyledTableCell>Item Name</StyledTableCell>
+                <StyledTableCell>UPC</StyledTableCell>
                 <StyledTableCell>Qty</StyledTableCell>
                 <StyledTableCell>Price</StyledTableCell>
                 <StyledTableCell>Total (USD)</StyledTableCell>
@@ -135,6 +135,9 @@ const PrintPurchaseOrder = () => {
                   ? purchaseOrderDetails?.orderItems?.map((item) => (
                       <StyledTableRow key={item.id}>
                         <StyledTableCell>{item?.item_fullname}</StyledTableCell>
+                        <StyledTableCell>
+                          {item.upc ? item.upc : "-"}
+                        </StyledTableCell>
                         <StyledTableCell>{item?.required_qty}</StyledTableCell>
                         <StyledTableCell>
                           ${item?.cost_per_item}
@@ -147,15 +150,18 @@ const PrintPurchaseOrder = () => {
                   : null}
                 <StyledTableRow>
                   <StyledTableCell></StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
                   <StyledTableCell colSpan={2}>Total Units</StyledTableCell>
                   <StyledTableCell>{total("required_qty")}</StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow>
                   <StyledTableCell></StyledTableCell>
+                  <StyledTableCell></StyledTableCell>
                   <StyledTableCell colSpan={2}>Subtotal</StyledTableCell>
                   <StyledTableCell>${total("total_pricing")}</StyledTableCell>
                 </StyledTableRow>
                 <StyledTableRow>
+                  <StyledTableCell></StyledTableCell>
                   <StyledTableCell></StyledTableCell>
                   <StyledTableCell colSpan={2}>Total (USD)</StyledTableCell>
                   <StyledTableCell>${total("total_pricing")}</StyledTableCell>

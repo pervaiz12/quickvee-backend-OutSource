@@ -353,7 +353,7 @@ const ReceivePurchaseOrderItems = () => {
                   : "-"}
               </p>
             </Grid>
-            <Grid item xs={12} sm={6} md={4}>
+            <Grid item xs={12} sm={12} md={8}>
               <label>Reference</label>
               <p>{purchaseOrder.reference ? purchaseOrder.reference : "-"}</p>
             </Grid>
@@ -550,12 +550,20 @@ const ReceivePurchaseOrderItems = () => {
           purchaseOrder?.received_status !== "2" && (
             <div className="flex justify-between py-7 px-6">
               <div className="button-container start gap-4">
-                <button onClick={handleEmail} className="quic-btn quic-btn-add">
-                  {loaders.email ? (
-                    <CircularProgress color={"inherit"} size={18} />
-                  ) : (
-                    "Email"
-                  )}
+                <button
+                  onClick={handleEmail}
+                  className="quic-btn quic-btn-add attributeUpdateBTN"
+                  disabled={loaders.email || loaders.void || loaders.receive}
+                >
+                  {loaders.email && (
+                    <CircularProgress
+                      color={"inherit"}
+                      className="loaderIcon"
+                      width={15}
+                      size={15}
+                    />
+                  )}{" "}
+                  Email
                 </button>
                 <button
                   onClick={() =>
@@ -577,13 +585,18 @@ const ReceivePurchaseOrderItems = () => {
                 </button>
                 <button
                   onClick={voidPurchaseOrder}
-                  className="quic-btn quic-btn-draft"
+                  className="quic-btn quic-btn-draft attributeUpdateBTN"
+                  disabled={loaders.email || loaders.void || loaders.receive}
                 >
-                  {loaders.void ? (
-                    <CircularProgress color={"inherit"} size={18} />
-                  ) : (
-                    "Void"
-                  )}
+                  {loaders.void && (
+                    <CircularProgress
+                      color={"inherit"}
+                      className="loaderIcon"
+                      width={15}
+                      size={15}
+                    />
+                  )}{" "}
+                  Void
                 </button>
               </div>
               <div className="button-container end gap-4">
@@ -594,14 +607,19 @@ const ReceivePurchaseOrderItems = () => {
                   Back
                 </button>
                 <button
-                  className="quic-btn quic-btn-save"
+                  className="quic-btn quic-btn-save attributeUpdateBTN"
                   onClick={receivePOItems}
+                  disabled={loaders.email || loaders.void || loaders.receive}
                 >
-                  {loaders.receive ? (
-                    <CircularProgress color={"inherit"} size={18} />
-                  ) : (
-                    "Receive"
-                  )}
+                  {loaders.receive && (
+                    <CircularProgress
+                      color={"inherit"}
+                      className="loaderIcon"
+                      width={15}
+                      size={15}
+                    />
+                  )}{" "}
+                  Receive
                 </button>
               </div>
             </div>
