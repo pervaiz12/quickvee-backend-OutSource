@@ -5,8 +5,13 @@ import Items_sales_profit_Logic from "./items_sales_profit_Logic";
 import DashboardTables from "./Pagination/DashboardTables";
 
 export default function Items_sales_profit_record() {
-  const { onDateRangeChange, getItemRecord, getMessageRecord } =
-    Items_sales_profit_Logic();
+  const {
+    onDateRangeChange,
+    getItemRecord,
+    getMessageRecord,
+    loading,
+    sortByItemName,
+  } = Items_sales_profit_Logic();
   return (
     <>
       <Grid container>
@@ -36,6 +41,8 @@ export default function Items_sales_profit_record() {
               <DashboardTables
                 getItemRecord={getItemRecord}
                 getMessageRecord={getMessageRecord}
+                loading={loading}
+                sortByItemName={sortByItemName}
               />
             </Grid>
           </Grid>

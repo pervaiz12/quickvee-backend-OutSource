@@ -13,7 +13,9 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { priceFormate } from "../../../hooks/priceFormate";
-
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import sortIcon from "../../../Assests/Category/SortingW.svg"
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -50,6 +52,7 @@ const TipReportList = (props) => {
     GetSessionLogin,
   } = useAuthDetails();
   const [tipReportData, setTipReportData] = useState([]);
+  const [sortOrder, setSortOrder] = useState("asc");
   const tipReportDataState = useSelector((state) => state.TipReportList);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
@@ -83,61 +86,101 @@ const TipReportList = (props) => {
   tipReportData?.forEach((tipData) => {
     totalNetTip += parseFloat(tipData.net_tip);
   });
-
+  const tableRow = [
+    { type: "num", name: "employee_id", label: "Employee ID" },
+    { type: "str", name: "f_name", label: "First Name" },
+    { type: "str", name: "l_name", label: "Last Name" },
+    { type: "num", name: "net_tip", label: "Net Tip" },
+  ];
+  const sortByItemName = (type, name) => {
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      tipReportData,
+      type,
+      name,
+      sortOrder
+    );
+    setTipReportData(sortedItems);
+    setSortOrder(newOrder);
+  }
   return (
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <TableContainer>
-            <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-              <TableHead>
-                <StyledTableCell>Employee ID</StyledTableCell>
-                <StyledTableCell>First Name</StyledTableCell>
-                <StyledTableCell>Last Name</StyledTableCell>
-                <StyledTableCell>Net Tip</StyledTableCell>
-              </TableHead>
-              <TableBody>
-                {tipReportData.length > 0 &&
-                  tipReportData.map((tipData, index) => (
-                    <>
-                      <StyledTableRow key={index}>
-                        <StyledTableCell>
-                          <p>{priceFormate(tipData.employee_id)}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>{tipData.f_name}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>{tipData.l_name}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>${priceFormate(parseFloat(tipData.net_tip).toFixed(2))}</p>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    </>
-                  ))}
-                {tipReportData.length > 0 && (
-                  <StyledTableRow>
-                    <StyledTableCell></StyledTableCell>
-                    <StyledTableCell></StyledTableCell>
-                    <StyledTableCell>
-                      <p style={{   color: "#0A64F9"}}>Grand Total</p>
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      <p className="report-title" style={{   color: "#0A64F9"}}>${priceFormate(totalNetTip.toFixed(2))}</p>
-                    </StyledTableCell>
-                  </StyledTableRow>
-                )}
-                {!tipReportData.length > 0 && (
-                  <div className="box">
-                    <div className="q-category-bottom-categories-single-category">
-                      <p>No data found</p>
+          {tipReportDataState.loading ? (
+            <SkeletonTable columns={tableRow.map((item) => item.label)} />
+          ) : (
+            <TableContainer>
+              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
+                <TableHead>
+                  <StyledTableCell>Employee ID</StyledTableCell>
+                  <StyledTableCell>First Name</StyledTableCell>
+                  <StyledTableCell>Last Name</StyledTableCell>
+                  <StyledTableCell>Net Tip</StyledTableCell>
+                </TableHead>
+                <TableHead>
+                  {tableRow.map((item)=><StyledTableCell>
+                    <button
+                    className="flex items-center"
+                    onClick={()=>sortByItemName(item.type,item.name)}
+                    >
+                      <p>{item.label}</p>
+                      <img src={sortIcon} alt="" className="pl-1" />
+                    </button>
+                  </StyledTableCell>)}
+                </TableHead>
+                <TableBody>
+                  {tipReportData.length > 0 &&
+                    tipReportData.map((tipData, index) => (
+                      <>
+                        <StyledTableRow key={index}>
+                          <StyledTableCell>
+                            <p>{priceFormate(tipData.employee_id)}</p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>{tipData.f_name}</p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>{tipData.l_name}</p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>
+                              $
+                              {priceFormate(
+                                parseFloat(tipData.net_tip).toFixed(2)
+                              )}
+                            </p>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      </>
+                    ))}
+                  {tipReportData.length > 0 && (
+                    <StyledTableRow>
+                      <StyledTableCell></StyledTableCell>
+                      <StyledTableCell></StyledTableCell>
+                      <StyledTableCell>
+                        <p style={{ color: "#0A64F9" }}>Grand Total</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p
+                          className="report-title"
+                          style={{ color: "#0A64F9" }}
+                        >
+                          ${priceFormate(totalNetTip.toFixed(2))}
+                        </p>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  )}
+                  {!tipReportData.length > 0 && (
+                    <div className="box">
+                      <div className="q-category-bottom-categories-single-category">
+                        <p>No data found</p>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </TableBody>
-            </StyledTable>
-          </TableContainer>
+                  )}
+                </TableBody>
+              </StyledTable>
+            </TableContainer>
+          )}
         </Grid>
       </Grid>
       {/* <div className="box">

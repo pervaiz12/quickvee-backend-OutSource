@@ -274,7 +274,7 @@ const StocktakeList = ({
                       <StyledTable aria-label="customized table">
                         <TableHead>
                           {tableRow.map((item, index) => (
-                            <StyledTableCell key={item}>
+                            <StyledTableCell key={index}>
                               <button
                                 className="flex items-center"
                                 onClick={() =>

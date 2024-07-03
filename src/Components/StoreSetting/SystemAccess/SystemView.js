@@ -71,7 +71,7 @@ const SystemAccessData = () => {
 
   const AllInSystemAccessState = useSelector((state) => state.systemAccessList);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const startDay = (day) => {
     if (day == 1) {
       return "Yesterday";
@@ -348,7 +348,7 @@ const SystemAccessData = () => {
   };
 
   const handleActualAmtSave = async () => {
-    setLoader(true)
+    setLoader(true);
     try {
       const data = {
         merchant_id,
@@ -358,22 +358,20 @@ const SystemAccessData = () => {
       // console.log("data",data)
       // return
       await dispatch(addActualAmountData(data)).unwrap();
-      
     } catch (error) {
       handleCoockieExpire();
       getUnAutherisedTokenMessage();
     }
-    setLoader(false)
+    setLoader(false);
   };
   //   console.log("Actual Amount", actualAmount);
 
   // This is a main Save or Update
   const handleSave = async () => {
-    
     // console.log("data",data)
     // return
     // dispatch(updateSystemAccessData(data));
-    setLoader(true)
+    setLoader(true);
     try {
       const data = {
         merchant_id,
@@ -403,12 +401,11 @@ const SystemAccessData = () => {
         ...userTypeData,
       };
       await dispatch(updateSystemAccessData(data)).unwrap();
-
     } catch (error) {
       handleCoockieExpire();
       getUnAutherisedTokenMessage();
     }
-    setLoader(false)
+    setLoader(false);
   };
 
   //end of day
@@ -823,10 +820,27 @@ const SystemAccessData = () => {
           )}
         </div>
       </div>
-      <div className="box" style={{display:"flex", justifyContent:"flex-end"}}>
-        <button class="save_btn attributeUpdateBTN" onClick={handleSave}>
-          {loader ? ( <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15} />{" "}  Save </>) : ("Save")}
-        </button>
+      <div className="fixed-bottom">
+        <div
+          className="box_shadow_div"
+          style={{ display: "flex", justifyContent: "flex-end",marginBottom:0,paddingRight:20 }}
+        >
+          <button class="save_btn attributeUpdateBTN mt-5 mb-5" onClick={handleSave}>
+            {loader ? (
+              <>
+                <CircularProgress
+                  color={"inherit"}
+                  className="loaderIcon"
+                  width={15}
+                  size={15}
+                />{" "}
+                Save{" "}
+              </>
+            ) : (
+              "Save"
+            )}
+          </button>
+        </div>
       </div>
 
       {showModal && (
@@ -878,19 +892,34 @@ const SystemAccessData = () => {
                 </div>
               </div>
 
-            <div className="q-add-categories-section-middle-footer">
-              <button
-                onClick={handleActualAmtSave}
-                className="quic-btn quic-btn-save attributeUpdateBTN"
-                disabled={true}
-              >
-                {loader ? ( <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15} />{" "}  Save </>) : ("Save")}
-              </button>
-              <button onClick={closeModal} className="quic-btn quic-btn-cancle">
-                Cancel
-              </button>
-            </div>
-          </Box>
+              <div className="q-add-categories-section-middle-footer">
+                <button
+                  onClick={handleActualAmtSave}
+                  className="quic-btn quic-btn-save attributeUpdateBTN"
+                  disabled={true}
+                >
+                  {loader ? (
+                    <>
+                      <CircularProgress
+                        color={"inherit"}
+                        className="loaderIcon"
+                        width={15}
+                        size={15}
+                      />{" "}
+                      Save{" "}
+                    </>
+                  ) : (
+                    "Save"
+                  )}
+                </button>
+                <button
+                  onClick={closeModal}
+                  className="quic-btn quic-btn-cancle"
+                >
+                  Cancel
+                </button>
+              </div>
+            </Box>
           </Modal>
         </>
       )}
