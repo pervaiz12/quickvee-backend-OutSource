@@ -30,6 +30,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import axios from "axios";
 import { fetchStoreSettingSetupData } from "../../Redux/features/SettingSetup/SettingSetupSlice";
 import { changeShowStatus } from "../../Redux/features/Product/ProductSlice";
+import { color } from "@mui/system";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -77,10 +78,12 @@ const ProductTable = ({
   const { getUnAutherisedTokenMessage } = PasswordShow();
   const navigate = useNavigate();
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
+  const [checkApproved, setCheckApproved] = useState(false);
+  const [checkReject, setCheckReject] = useState(false);
 
   const [productList, setproductsList] = useState([]);
   const [inventoryApproval, setInventoryApproval] = useState();
-
+  const [checkboxState, setCheckboxState] = useState({}); 
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -115,13 +118,13 @@ const ProductTable = ({
   const checkStatus = (status) => {
     switch (status) {
       case "1":
-        return { text: "Approved", color: "#0A64F9" };
+        return { text: "Approved", color: "green" };
       case "2":
-        return { text: "Rejected", color: "#F90A0A" };
+        return { text: "Rejected", color: "red" };
       case "0":
-        return { text: "Pending", color: "#FF8800" };
+        return { text: "Pending", color: "yellow" };
       default:
-        return { text: "Pending", color: "#FF8800" };
+        return { text: "Pending", color: "yellow" };
     }
   };
 
@@ -164,7 +167,15 @@ const ProductTable = ({
 
 
   const update_status = (event, showStatus) => {
-    const { name, value, id } = event?.target;
+    const userConfirmed = window.confirm(
+      "Are you sure you want to delete this vendor?"
+    );
+
+    if (!userConfirmed) {
+      return; // If the user clicks "No", exit the function
+    }
+
+    const { name, id } = event?.target;
 
     const data = {
       product_id: id,
@@ -174,9 +185,23 @@ const ProductTable = ({
     };
     dispatch(changeShowStatusProduct(data)).then((res) => {
       if (res?.payload?.status) {
+        setCheckboxState((prevState) => ({
+          ...prevState,
+          [id]: {
+            approved: showStatus === 1,
+            rejected: showStatus === 2,
+          },
+        }));
         dispatch(changeShowStatus({ showStatus, id }));
       } else {
-        ToastifyAlert("show status unable to change", "error");
+        setCheckboxState((prevState) => ({
+          ...prevState,
+          [id]: {
+            approved: false,
+            rejected: false,
+          },
+        }));
+        ToastifyAlert("Show status unable to change", "error");
       }
     });
   };
@@ -324,8 +349,7 @@ const ProductTable = ({
       // Handle specific error cases if needed
     }
   };
-
-
+  
   return (
     <>
       <div className="box">
@@ -507,12 +531,14 @@ const ProductTable = ({
                                                       type="checkbox"
                                                       id={product.id}
                                                       name="approved"
+                                                      
                                                       // checked={
                                                       //   product.show_status == 0 ||
                                                       //     product.show_status == 2
                                                       //     ? true
                                                       //     : false
                                                       // }
+                                                      checked={checkboxState[product.id]?.approved || false}
                                                       value={product.show_status}
                                                       onChange={(event) => {
                                                         update_status(
@@ -541,6 +567,7 @@ const ProductTable = ({
                                                       //     ? true
                                                       //     : false
                                                       // }
+                                                      checked={checkboxState[product.id]?.rejected || false}
                                                       value={product.show_status}
                                                       onChange={(event) => {
                                                         update_status(
@@ -553,7 +580,7 @@ const ProductTable = ({
                                                   </label>
                                                 </div>
                                               </div>:
-                                              checkStatus(product.show_status.toString())?.text
+                                              <span style={{color: checkStatus(product.show_status.toString())?.color}}>{checkStatus(product.show_status.toString())?.text}</span> 
                                               }
                                             </p>
                                           </StyledTableCell>

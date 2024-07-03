@@ -133,7 +133,6 @@ const AddProducts = () => {
   const [isVarientEdit, setIsVarientEdit] = useState(false);
   const [enbaledSubmit, setDisabledSubmit] = useState(false);
 
-
   // close alert
   const handleCloseAlertModal = () => {
     setOpenAlertModal((prev) => !prev);
@@ -530,6 +529,22 @@ const AddProducts = () => {
             nestedObject[key] = values[key];
           }
         }
+
+        // If the price key is present and not empty, calculate margin and profit
+        if (values.hasOwnProperty("price") && values.price !== "") {
+          let costPerItem = parseFloat(nestedObject.costPerItem);
+          let price = parseFloat(values.price);
+
+          // Check if costPerItem is a valid number and greater than zero
+          if (!isNaN(costPerItem) && costPerItem > 0) {
+            nestedObject.margin = (
+              ((price - costPerItem) / price) *
+              100
+            ).toFixed(2);
+            nestedObject.profit = (price - costPerItem).toFixed(2);
+          }
+          // If costPerItem is 0 or not a valid number, do not update margin and profit
+        }
       });
 
       // Return the updated state
@@ -626,7 +641,8 @@ const AddProducts = () => {
   };
 
   const handleBlur = async (e, i, title) => {
-    const isSubmitCalled = e?.relatedTarget?.classList?.contains('submit-btn-click');
+    const isSubmitCalled =
+      e?.relatedTarget?.classList?.contains("submit-btn-click");
     let isUpcValid;
     let isLocalDuplicate;
     const checkUpcValueforSingle = async (value, name) => {
@@ -637,7 +653,7 @@ const AddProducts = () => {
         if (!isVarientEdit) {
           const data = {
             merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-            upc: value,
+            upc: value.trim(),
             id: pageUrl === "inventory/products/edit" ? productId?.id : "",
           };
 
@@ -652,7 +668,7 @@ const AddProducts = () => {
           setDisabledSubmit(true);
           const data = {
             merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-            upc: value,
+            upc: value.trim(),
             variant_id: formValue[0]?.productEditId,
             ...userTypeData,
           };
@@ -673,7 +689,9 @@ const AddProducts = () => {
       setDisabledSubmit(true);
       return formValue.some((item, index) => {
         setDisabledSubmit(false);
-        return index !== currentIndex && item?.upcCode === upcCode;
+        return (
+          index !== currentIndex && item?.upcCode.trim() === upcCode.trim()
+        );
       });
     };
 
@@ -683,7 +701,7 @@ const AddProducts = () => {
         let isAllowed = true;
         const data = {
           merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-          upc: value,
+          upc: value.trim(),
           product_id:
             pageUrl === "inventory/products/edit" ? productId?.id : "",
         };
@@ -706,14 +724,14 @@ const AddProducts = () => {
 
     const checkLocalDuplicate = (upcCode, currentIndex) => {
       if (!!upcCode) {
-        setDisabledSubmit(true)
+        setDisabledSubmit(true);
         return formValue.some((item, index) => {
           if (index !== currentIndex) {
             const currentTitle = Object.keys(item)[0];
-            setDisabledSubmit(false)
-            return item[currentTitle]?.upcCode === upcCode;
+            setDisabledSubmit(false);
+            return item[currentTitle]?.upcCode.trim() === upcCode.trim();
           }
-          setDisabledSubmit(false)
+          setDisabledSubmit(false);
           return false;
         });
       }
@@ -742,7 +760,7 @@ const AddProducts = () => {
       } else {
         fieldValue =
           inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
-      } 
+      }
     }
     // allowed alphanumeric value in upcCode field but not allowed decimal value
     else if (name === "upcCode") {
@@ -807,10 +825,9 @@ const AddProducts = () => {
           });
 
           setFormValue(updatedValues);
-          
-          console.log('isLocalDuplicate', isLocalDuplicate, (isUpcValid && isSubmitCalled) && isLocalDuplicate);
+
           // for multiple varient
-          if((isUpcValid && isSubmitCalled) && !isLocalDuplicate){
+          if (isUpcValid && isSubmitCalled && !isLocalDuplicate) {
             handleSubmitForm();
           }
           return;
@@ -842,9 +859,9 @@ const AddProducts = () => {
                 [name]: fieldValue,
                 upcCode: isUpcValid && !isLocalDuplicate ? fieldValue : "",
                 upcError: !isUpcValid
-                  ? "UPC code must be unique (API check)."
+                  ? "UPC Code must be unique"
                   : isLocalDuplicate
-                    ? "UPC code must be unique (local check)."
+                    ? "UPC Code must be unique."
                     : "",
               };
             }
@@ -853,10 +870,11 @@ const AddProducts = () => {
 
           setFormValue(updatedValues);
 
-
           // for single form
-          if((isUpcValid && isSubmitCalled) && !isLocalDuplicate){
-            handleSubmitForm();
+          if (isUpcValid && isSubmitCalled && !isLocalDuplicate) {
+            pageUrl === "inventory/products/varient-edit"
+              ? handleUpdateVarient()
+              : handleSubmitForm();
           }
           return;
         }
@@ -945,23 +963,22 @@ const AddProducts = () => {
       const updatedValues = formValue.map((item, index) => {
         const currentTitle = Object.keys(item)[0];
 
-
-
-     
         let compareAtPriceValue = parseFloat(
-          name === "compareAtPrice" ? fieldValue : item[currentTitle]?.compareAtPrice
+          name === "compareAtPrice"
+            ? fieldValue
+            : item[currentTitle]?.compareAtPrice
         );
-        
+
         let priceValue = parseFloat(
           name === "price"
             ? fieldValue
             : name === "costPerItem"
-            ? price_total_value
-            :  item[currentTitle]?.price
+              ? price_total_value
+              : item[currentTitle]?.price
         );
-        
+
         let showError = false;
-        
+
         if (name === "price") {
           if (compareAtPriceValue === 0) {
             showError = false;
@@ -971,16 +988,6 @@ const AddProducts = () => {
         } else if (name === "compareAtPrice") {
           showError = priceValue >= compareAtPriceValue;
         }
-
-
-
-
-
-
-
-
-
-
 
         const costPerItemAndPriceAmountExists = () => {
           const bool =
@@ -1162,6 +1169,8 @@ const AddProducts = () => {
         fieldValue =
           inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
       }
+    } else if (name === "customCode") {
+      fieldValue = value;
     }
     // allowed alphanumeric value in upcCode field but not allowed decimal value
     else if (name === "upcCode") {
@@ -1262,33 +1271,30 @@ const AddProducts = () => {
     // manually onchange
     if (isMultipleVarient) {
       updatedValues = formValue.map((item, index) => {
+        let compareAtPriceValue = parseFloat(
+          name === "compareAtPrice" ? fieldValue : item[title]?.compareAtPrice
+        );
 
-          let compareAtPriceValue = parseFloat(
-            name === "compareAtPrice" ? fieldValue : item[title]?.compareAtPrice
-          );
-          
-          let priceValue = parseFloat(
-            name === "price"
-              ? fieldValue
-              : name === "costPerItem"
+        let priceValue = parseFloat(
+          name === "price"
+            ? fieldValue
+            : name === "costPerItem"
               ? price_total_value
               : item[title]?.price
-          );
-          
-          let showError = false;
-          
-          if (name === "price") {
-            if (compareAtPriceValue === 0) {
-              showError = false;
-            } else if (compareAtPriceValue > 0) {
-              showError = priceValue >= compareAtPriceValue;
-            }
-          } else if (name === "compareAtPrice") {
+        );
+
+        let showError = false;
+
+        if (name === "price") {
+          if (compareAtPriceValue === 0) {
+            showError = false;
+          } else if (compareAtPriceValue > 0) {
             showError = priceValue >= compareAtPriceValue;
           }
-                    
-                   
-    
+        } else if (name === "compareAtPrice") {
+          showError = priceValue >= compareAtPriceValue;
+        }
+
         const costPerItemAndPriceAmountExists = () => {
           const bool =
             (name === "costPerItem" &&
@@ -1361,23 +1367,20 @@ const AddProducts = () => {
       });
     } else {
       updatedValues = formValue.map((item, index) => {
-
-
-
         let compareAtPriceValue = parseFloat(
           name === "compareAtPrice" ? fieldValue : item?.compareAtPrice
         );
-        
+
         let priceValue = parseFloat(
           name === "price"
             ? fieldValue
             : name === "costPerItem"
-            ? price_total_value
-            : item?.price
+              ? price_total_value
+              : item?.price
         );
-        
+
         let showError = false;
-        
+
         if (name === "price") {
           if (compareAtPriceValue === 0) {
             showError = false;
@@ -1387,8 +1390,6 @@ const AddProducts = () => {
         } else if (name === "compareAtPrice") {
           showError = priceValue >= compareAtPriceValue;
         }
-
-
 
         const costPerItemAndPriceAmountExistsInSingleVarient = () => {
           const bool =
@@ -1642,7 +1643,6 @@ const AddProducts = () => {
     formData.append("token_id", userTypeData?.token_id);
     formData.append("token", userTypeData?.token);
 
-
     const formDataNew = new FormData();
     formDataNew.append(
       "merchant_id",
@@ -1886,7 +1886,7 @@ const AddProducts = () => {
 
   const characters = "0123456789";
   function generateString(length) {
-    let result = " ";
+    let result = "";
     const charactersLength = characters.length;
     for (let i = 0; i < length; i++) {
       result += characters.charAt(Math.floor(Math.random() * charactersLength));
@@ -1900,7 +1900,9 @@ const AddProducts = () => {
       updatedUpcData = formValue?.map((item) => {
         return {
           ...item,
-          ["upcCode"]: item?.upcCode ? item?.upcCode : generateString(20),
+          ["upcCode"]: item?.upcCode
+            ? item?.upcCode
+            : generateString(20).trim(),
           ["upcError"]: item?.upcError && !item?.upcCode ? "" : item?.upcError,
         };
       });
@@ -1913,8 +1915,11 @@ const AddProducts = () => {
             ...item[title],
             upcCode: item[title]?.upcCode
               ? item[title]?.upcCode
-              : generateString(20),
-            upcError:  item[title]?.upcError && (!item[title]?.upcCode) ? "" : item[title]?.upcError,
+              : generateString(20).trim(),
+            upcError:
+              item[title]?.upcError && !item[title]?.upcCode
+                ? ""
+                : item[title]?.upcError,
           },
         };
       });
@@ -2563,6 +2568,7 @@ const AddProducts = () => {
                       {productInfo?.files?.length
                         ? productInfo?.files?.map((img, index) => {
                             // if img type is string
+
                             if (typeof img === "string") {
                               return (
                                 <div
@@ -2724,9 +2730,10 @@ const AddProducts = () => {
                             onClick={handleSubmitForm}
                             disabled={isLoading || enbaledSubmit}
                             style={{
-                              backgroundColor: isLoading || enbaledSubmit
-                                ? "#878787"
-                                : "#0A64F9",
+                              backgroundColor:
+                                isLoading || enbaledSubmit
+                                  ? "#878787"
+                                  : "#0A64F9",
                             }}
                           >
                             {isLoading || enbaledSubmit ? (
@@ -2741,11 +2748,12 @@ const AddProducts = () => {
                           <button
                             className="quic-btn quic-btn-update submit-btn-click"
                             onClick={handleSubmitForm}
-                            disabled={isLoading || enbaledSubmit }
+                            disabled={isLoading || enbaledSubmit}
                             style={{
-                              backgroundColor: isLoading || enbaledSubmit
-                                ? "#878787"
-                                : "#0A64F9",
+                              backgroundColor:
+                                isLoading || enbaledSubmit
+                                  ? "#878787"
+                                  : "#0A64F9",
                             }}
                           >
                             {isLoading || enbaledSubmit ? (
@@ -2810,13 +2818,17 @@ const AddProducts = () => {
                   isVarientEdit={isVarientEdit}
                 />
               </div>
-              <div  className="q-category-bottom-header varient-box" style={{ marginRight: "0px" }}>
+              <div
+                className="q-category-bottom-header varient-box"
+                style={{ marginRight: "0px" }}
+              >
                 <button
                   className="quic-btn quic-btn-save submit-btn-click"
                   onClick={handleUpdateVarient}
                   disabled={varientLoading || enbaledSubmit}
                   style={{
-                    backgroundColor: varientLoading || enbaledSubmit ? "#878787" : "#0A64F9",
+                    backgroundColor:
+                      varientLoading || enbaledSubmit ? "#878787" : "#0A64F9",
                   }}
                 >
                   {varientLoading || enbaledSubmit ? (

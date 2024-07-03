@@ -75,10 +75,18 @@ const BulkVarientEdit = ({
 
       // Check if the dynamic priceKey is greater than the dynamic compareAtPriceKey
       if (type === "isCompareAtGreaterThanAllPrice") {
-        return +nestedObject[firstKey] >= +bulkVarient[lastKey];
+        if (+bulkVarient[lastKey] === 0 || +bulkVarient[lastKey] === 0.00) {
+          return false;
+        } else {
+          return +nestedObject[firstKey] >= +bulkVarient[lastKey];
+        }
       } else if (type === "isPriceLessThanAllCompareAtPrice") {
-        return +nestedObject[firstKey] <= +bulkVarient[lastKey];
-      } 
+        if (+nestedObject[firstKey] === 0 || +nestedObject[firstKey] === 0.00) {
+          return false;
+        } else {
+          return +nestedObject[firstKey] <= +bulkVarient[lastKey];
+        }
+      }
     });
   };
 
