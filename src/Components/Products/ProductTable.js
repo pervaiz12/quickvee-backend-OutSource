@@ -69,10 +69,20 @@ const ProductTable = ({
 }) => {
   let listing_type = 0;
   const ProductsListDataState = useSelector((state) => state.productsListData);
+
+  // useEffect(() => {
+  //   console.log("products: ", ProductsListDataState.productsData);
+  // }, [ProductsListDataState.productsData]);
+
   const { hasMore, offset, limit, loading } = useSelector(
     (state) => state.productsListData
   );
-  const { userTypeData, LoginGetDashBoardRecordJson,  LoginAllStore , GetSessionLogin } = useAuthDetails();
+  const {
+    userTypeData,
+    LoginGetDashBoardRecordJson,
+    LoginAllStore,
+    GetSessionLogin,
+  } = useAuthDetails();
 
   const { getUnAutherisedTokenMessage } = PasswordShow();
   const navigate = useNavigate();
@@ -80,7 +90,6 @@ const ProductTable = ({
 
   const [productList, setproductsList] = useState([]);
   const [inventoryApproval, setInventoryApproval] = useState();
-
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -106,10 +115,14 @@ const ProductTable = ({
     if (payloadData) {
       dispatch(fetchProductsData(payloadData));
     }
-    
-    dispatch(fetchStoreSettingSetupData({merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id})).then((res)=>{
-      setInventoryApproval(Boolean(+res?.payload?.inventory_approval))
-    })
+
+    dispatch(
+      fetchStoreSettingSetupData({
+        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+      })
+    ).then((res) => {
+      setInventoryApproval(Boolean(+res?.payload?.inventory_approval));
+    });
   }, []);
 
   const checkStatus = (status) => {
@@ -162,7 +175,6 @@ const ProductTable = ({
     });
   };
 
-
   const update_status = (event, showStatus) => {
     const { name, value, id } = event?.target;
 
@@ -204,9 +216,8 @@ const ProductTable = ({
       page: page,
       ...userTypeData,
     };
-    if (data1) {
-      dispatch(fetchProductsData(data1));
-    }
+
+    dispatch(fetchProductsData(data1));
 
     // setTimeout(() => {
     //   setItems(items.concat(Array.from({ length: 15 })));
@@ -246,21 +257,28 @@ const ProductTable = ({
   };
 
   const handleNavigate = (id, varientName, productData) => {
-    let varientTitle = '';
-    if (varientName?.includes('/')) {
-      const splitVarient = varientName?.split('/');
-      varientTitle = splitVarient?.join('-') || '';
+    let varientTitle = "";
+    if (varientName?.includes("/")) {
+      const splitVarient = varientName?.split("/");
+      varientTitle = splitVarient?.join("-") || "";
     } else {
       varientTitle = varientName;
     }
 
-    if (selectedListingType === "Variant listing" && productData?.isvarient === "1") {
-      navigate(`/inventory/products/varient-edit/${id}/${varientName ? varientTitle : null}`, { state: productData });
+    if (
+      selectedListingType === "Variant listing" &&
+      productData?.isvarient === "1"
+    ) {
+      navigate(
+        `/inventory/products/varient-edit/${id}/${
+          varientName ? varientTitle : null
+        }`,
+        { state: productData }
+      );
     } else {
       navigate(`/inventory/products/edit/${id}`);
     }
   };
-
 
   const onDragEnd = async (result) => {
     const { source, destination } = result;
@@ -278,7 +296,6 @@ const ProductTable = ({
       return; // If user cancels, do nothing
     }
 
-
     // Reorder the items
     const reorderedItems = Array.from(productList);
     const removed = reorderedItems.splice(source.index, 1)[0];
@@ -287,35 +304,38 @@ const ProductTable = ({
     setproductsList(reorderedItems);
     // Optionally, you can dispatch an action to update the order in your store
 
-      // Example of how to prepare payload for API call
+    // Example of how to prepare payload for API call
 
-      const values = {};
-      const payload = {
-        table: "product",
-        merchant_id: "MAL0100CA",
-        token_id: 5022,
-        login_type: "superadmin",
-      };
-  
-      reorderedItems.forEach((item, index) => {
-        values[`values[${item.id}]`] = item.title; // Adjust according to your data structure
-      });
+    const values = {};
+    const payload = {
+      table: "product",
+      merchant_id: "MAL0100CA",
+      token_id: 5022,
+      login_type: "superadmin",
+    };
 
+    reorderedItems.forEach((item, index) => {
+      values[`values[${item.id}]`] = item.title; // Adjust according to your data structure
+    });
 
-      // Example API call after successful reorder
+    // Example API call after successful reorder
     // Replace with your actual API call method (e.g., fetch or axios)
 
     try {
       // Send POST request using axios
-      const response = await axios.post(BASE_URL + SORT_CATOGRY_DATA, {...payload, ...values}, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-  
+      const response = await axios.post(
+        BASE_URL + SORT_CATOGRY_DATA,
+        { ...payload, ...values },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
       // Handle API response
       ToastifyAlert("Reordered Successfully", "success");
-  
+
       // Additional logic after successful reorder and API call
       // For example, update state or trigger additional actions
     } catch (error) {
@@ -324,7 +344,6 @@ const ProductTable = ({
       // Handle specific error cases if needed
     }
   };
-
 
   return (
     <>
@@ -391,7 +410,8 @@ const ProductTable = ({
                             <TableBody>
                               {productList?.length >= 1 &&
                                 productList.map((product, index) => {
-                                  const getVarientName = product?.title?.split(/~~?/) || [];
+                                  const getVarientName =
+                                    product?.title?.split(/~~?/) || [];
                                   return (
                                     <Draggable
                                       key={product?.id}
@@ -405,7 +425,11 @@ const ProductTable = ({
                                           {...provided.dragHandleProps}
                                         >
                                           <StyledTableCell>
-                                            <img src={SortIcon} alt="" className="" />
+                                            <img
+                                              src={SortIcon}
+                                              alt=""
+                                              className=""
+                                            />
                                           </StyledTableCell>
                                           <StyledTableCell>
                                             <p
@@ -415,7 +439,7 @@ const ProductTable = ({
                                                 handleNavigate(
                                                   product?.id,
                                                   getVarientName[1],
-                                                  product,
+                                                  product
                                                 )
                                               }
                                             >
@@ -444,7 +468,7 @@ const ProductTable = ({
                                                     name="delivery_check"
                                                     checked={
                                                       product.show_type == 0 ||
-                                                        product.show_type == 2
+                                                      product.show_type == 2
                                                         ? true
                                                         : false
                                                     }
@@ -472,7 +496,7 @@ const ProductTable = ({
                                                     name="pickup_check"
                                                     checked={
                                                       product.show_type == 0 ||
-                                                        product.show_type == 1
+                                                      product.show_type == 1
                                                         ? true
                                                         : false
                                                     }
@@ -491,70 +515,79 @@ const ProductTable = ({
                                           </StyledTableCell>
                                           <StyledTableCell>
                                             <p className="categories-title">
-                                              {
-                                                userTypeData?.login_type === "superadmin" && inventoryApproval && product?.show_status === "0"  ? 
+                                              {userTypeData?.login_type ===
+                                                "superadmin" &&
+                                              inventoryApproval &&
+                                              product?.show_status === "0" ? (
                                                 <div className="categories-title">
-                                                <div className="flex flex-wrap gap-3 ">
-                                                  <label
-                                                    className="q_resigter_setting_section"
-                                                    style={{
-                                                      color: "#000",
-                                                      fontSize: "18px",
-                                                    }}
-                                                  >
-                                                    Approve
-                                                    <input
-                                                      type="checkbox"
-                                                      id={product.id}
-                                                      name="approved"
-                                                      // checked={
-                                                      //   product.show_status == 0 ||
-                                                      //     product.show_status == 2
-                                                      //     ? true
-                                                      //     : false
-                                                      // }
-                                                      value={product.show_status}
-                                                      onChange={(event) => {
-                                                        update_status(
-                                                          event,
-                                                          1,
-                                                        );
+                                                  <div className="flex flex-wrap gap-3 ">
+                                                    <label
+                                                      className="q_resigter_setting_section"
+                                                      style={{
+                                                        color: "#000",
+                                                        fontSize: "18px",
                                                       }}
-                                                    />
-                                                    <span className="checkmark"></span>
-                                                  </label>
-                                                  <label
-                                                    className="q_resigter_setting_section"
-                                                    style={{
-                                                      color: "#000",
-                                                      fontSize: "18px",
-                                                    }}
-                                                  >
-                                                    Reject
-                                                    <input
-                                                      type="checkbox"
-                                                      id={product.id}
-                                                      name="reject"
-                                                      // checked={
-                                                      //   product.show_status == 0 ||
-                                                      //     product.show_status == 1
-                                                      //     ? true
-                                                      //     : false
-                                                      // }
-                                                      value={product.show_status}
-                                                      onChange={(event) => {
-                                                        update_status(
-                                                          event,
-                                                          2,
-                                                        );
+                                                    >
+                                                      Approve
+                                                      <input
+                                                        type="checkbox"
+                                                        id={product.id}
+                                                        name="approved"
+                                                        // checked={
+                                                        //   product.show_status == 0 ||
+                                                        //     product.show_status == 2
+                                                        //     ? true
+                                                        //     : false
+                                                        // }
+                                                        value={
+                                                          product.show_status
+                                                        }
+                                                        onChange={(event) => {
+                                                          update_status(
+                                                            event,
+                                                            1
+                                                          );
+                                                        }}
+                                                      />
+                                                      <span className="checkmark"></span>
+                                                    </label>
+                                                    <label
+                                                      className="q_resigter_setting_section"
+                                                      style={{
+                                                        color: "#000",
+                                                        fontSize: "18px",
                                                       }}
-                                                    />
-                                                    <span className="checkmark"></span>
-                                                  </label>
+                                                    >
+                                                      Reject
+                                                      <input
+                                                        type="checkbox"
+                                                        id={product.id}
+                                                        name="reject"
+                                                        // checked={
+                                                        //   product.show_status == 0 ||
+                                                        //     product.show_status == 1
+                                                        //     ? true
+                                                        //     : false
+                                                        // }
+                                                        value={
+                                                          product.show_status
+                                                        }
+                                                        onChange={(event) => {
+                                                          update_status(
+                                                            event,
+                                                            2
+                                                          );
+                                                        }}
+                                                      />
+                                                      <span className="checkmark"></span>
+                                                    </label>
+                                                  </div>
                                                 </div>
-                                              </div>:
-                                              checkStatus(product.show_status.toString())?.text
-                                              }
+                                              ) : (
+                                                checkStatus(
+                                                  product.show_status.toString()
+                                                )?.text
+                                              )}
                                             </p>
                                           </StyledTableCell>
                                           <StyledTableCell align={"center"}>
@@ -581,11 +614,16 @@ const ProductTable = ({
                                                     />
                                                   ))}
                                               </div>
-                                              {product?.media?.split(",").length > 4 ? (
+                                              {product?.media?.split(",")
+                                                .length > 4 ? (
                                                 <div className="mt-3 text-sm font-medium">
-                                                  <a href="#" className="text-blue-500">
+                                                  <a
+                                                    href="#"
+                                                    className="text-blue-500"
+                                                  >
                                                     +{" "}
-                                                    {product.media.split(",").length - 4}{" "}
+                                                    {product.media.split(",")
+                                                      .length - 4}{" "}
                                                     others
                                                   </a>
                                                 </div>
@@ -594,7 +632,8 @@ const ProductTable = ({
                                               )}
                                             </div>
                                           </StyledTableCell>
-                                          {selectedListingType === "Variant listing" ? (
+                                          {selectedListingType ===
+                                          "Variant listing" ? (
                                             ""
                                           ) : (
                                             <StyledTableCell>
@@ -608,7 +647,9 @@ const ProductTable = ({
                                                   alt=" "
                                                   className="w-8 h-8"
                                                   onClick={() =>
-                                                    handleDeleteProduct(product?.id)
+                                                    handleDeleteProduct(
+                                                      product?.id
+                                                    )
                                                   }
                                                 />
                                               </p>

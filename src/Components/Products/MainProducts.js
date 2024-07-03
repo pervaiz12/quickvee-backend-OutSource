@@ -9,6 +9,7 @@ import {
   updateProductsType,
 } from "../../Redux/features/Product/ProductSlice";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import useDebounce from "../../hooks/useDebouncs";
 
 const MainProducts = () => {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ const MainProducts = () => {
 
   const [selectedListingType, setSelectedListingType] =
     useState("Select listing");
-    
+
   const [selectedListingTypeValue, setSelectedListingTypeValue] = useState("0");
 
   const [del_picDropdownVisible, setdel_picDropdownVisible] = useState(false);
@@ -32,6 +33,7 @@ const MainProducts = () => {
   const [categoryId, setCategoryId] = useState("all");
 
   const [searchId, setSearchId] = useState(""); // State to track search ID
+  const debouncedValue = useDebounce(searchId, 500);
 
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
 
@@ -41,29 +43,41 @@ const MainProducts = () => {
     setCategoryId(catId);
   };
 
-  const handleSearch = () => {
-    let name_data = {
+  const handleSearch = (val) => {
+    setSearchId(val);
+  };
+
+  useEffect(() => {
+    let data = {
       merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-      category_id: "all",
-      show_status: "all",
-      listing_type: 0,
+      category_id: categoryId === "All" ? "all" : categoryId,
+      show_status: selectedStatus,
+      name: debouncedValue,
+      listing_type: selectedListingTypeValue?.id
+        ? selectedListingTypeValue?.id
+        : 0,
       offset: 0,
       limit: 10,
-      name: searchId,
       page: 0,
       ...userTypeData,
     };
-    if (name_data) {
-      dispatch(emptyProduct([]));
-      dispatch(fetchProductsData(name_data));
-    }
-  };
 
-  const handlefocus=(e)=>{
-    if (e.key === 'Enter' || e.keyCode === 13) {
-      handleSearch()
-    }
-  }
+    dispatch(emptyProduct([]));
+    dispatch(fetchProductsData(data));
+  }, [
+    dispatch,
+    debouncedValue,
+    LoginGetDashBoardRecordJson?.data?.merchant_id,
+    selectedStatus,
+    selectedListingTypeValue,
+    categoryId,
+  ]);
+
+  const handlefocus = (e) => {
+    // if (e.key === "Enter" || e.keyCode === 13) {
+    //   handleSearch();
+    // }
+  };
 
   const toggleDropdown = (dropdown) => {
     switch (dropdown) {
@@ -100,11 +114,11 @@ const MainProducts = () => {
             dispatch(updateProductsType(type_date))
               .then((actionResult) => {
                 const responseData = actionResult.payload;
-                
+
                 if (responseData) {
                   let del_pic_data = {
                     merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-                    category_id: categoryId === "All" ? "all" : categoryId, 
+                    category_id: categoryId === "All" ? "all" : categoryId,
                     show_status: selectedStatus,
                     name: searchId,
                     listing_type: selectedListingTypeValue,
@@ -130,53 +144,52 @@ const MainProducts = () => {
 
         break;
       case "status":
-        setSearchId("")
+        setSearchId("");
         setSelectedStatus(option.id);
         setSelectedStatusValue(option.title);
         setTransactionDropdownVisible(false);
         dispatch(emptyProduct([]));
-        let status_data = {
-          merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-          category_id: categoryId === "All" ? "all" : categoryId,
-          show_status: option.id,
-          name: searchId,
-          listing_type: selectedListingTypeValue,
-          offset: 0,
-          limit: 10,
-          page: 0,
-          ...userTypeData,
-        };
-        if (status_data) {
-          dispatch(fetchProductsData(status_data));
-        }
+        // let status_data = {
+        //   merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        //   category_id: categoryId === "All" ? "all" : categoryId,
+        //   show_status: option.id,
+        //   name: searchId,
+        //   listing_type: selectedListingTypeValue,
+        //   offset: 0,
+        //   limit: 10,
+        //   page: 0,
+        //   ...userTypeData,
+        // };
+        // if (status_data) {
+        //   dispatch(fetchProductsData(status_data));
+        // }
         setlistingTypesDropdownVisible(false);
         break;
       case "listingType":
         dispatch(emptyProduct([]));
         if (option.id === 0) {
           setSelectedListingType("Product listing");
-        } else if(option?.id === 1) {
+        } else if (option?.id === 1) {
           setSelectedListingType("Variant listing");
-        }else{
+        } else {
           setSelectedListingType("Select listing");
-
         }
         setSelectedListingTypeValue(option);
-        setSearchId("")
-        let listing_data = {
-          merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-          category_id: categoryId === "All" ? "all" : categoryId,
-          show_status: selectedStatus,
-          name: searchId, 
-          listing_type: option.id,
-          offset: 0,
-          limit: 10,
-          page: 0,
-          ...userTypeData,
-        };
-        if (listing_data) {
-          dispatch(fetchProductsData(listing_data));
-        }
+        setSearchId("");
+        // let listing_data = {
+        //   merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        //   category_id: categoryId === "All" ? "all" : categoryId,
+        //   show_status: selectedStatus,
+        //   name: searchId,
+        //   listing_type: option.id,
+        //   offset: 0,
+        //   limit: 10,
+        //   page: 0,
+        //   ...userTypeData,
+        // };
+        // if (listing_data) {
+        //   dispatch(fetchProductsData(listing_data));
+        // }
         setlistingTypesDropdownVisible(false);
         break;
       default:
@@ -218,7 +231,7 @@ const MainProducts = () => {
         <ProductTable
           {...{
             selectedListingType,
-          
+
             offset,
             setoffset,
             limit,
