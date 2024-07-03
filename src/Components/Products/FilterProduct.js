@@ -175,7 +175,7 @@ const FilterProduct = ({
             <Grid container>
               <Grid item xs={12} className="px-5">
                 <InputTextSearch
-                  placeholder="Search Products by Title or UPC code"
+                  placeholder="Search products by Name or UPC Code"
                   value={searchId}
                   handleChange={handleSearch}
                   // handleSearchButton={handleSearch}
