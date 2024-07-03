@@ -36,6 +36,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import DeleteModal from "../../reuseableComponents/DeleteModal";
 
 const theme = createTheme({
   components: {
@@ -115,6 +116,8 @@ const ModifyPurchaseOrder = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [productToDelete, setProductToDelete] = useState(null);
   const [purchaseInfoErrors, setPurchaseInfoErrors] = useState({
     issuedDate: "",
     stockDate: "",
@@ -261,19 +264,17 @@ const ModifyPurchaseOrder = () => {
     }
   };
 
+  const confirmDeleteProduct = () => {
+    setDeletedProducts((prev) => [...prev, productToDelete.id]);
+    removeItem(productToDelete.id);
+    setDeleteModalOpen(() => false);
+  };
+
   const handleDelete = (product) => {
     // if product has po_id then removing from Local state as well as from backend
     if (product.po_id) {
-      const confirmDelete = window.confirm(
-        "Are you sure you want to delete this product?"
-      );
-
-      if (confirmDelete) {
-        // delete po item from backend api call
-        // deletePOItem(product.id);
-        removeItem(product.id);
-        setDeletedProducts((prev) => [...prev, product.id]);
-      }
+      setProductToDelete(product);
+      setDeleteModalOpen(() => true);
     } else {
       removeItem(product.id);
     }
@@ -374,14 +375,15 @@ const ModifyPurchaseOrder = () => {
 
     const res = await dispatch(fetchProductsData(name_data));
 
-    const data = res.payload?.map((prod) => ({
-      label: prod.title,
-      value: prod.id,
-      variantId: prod.isvarient === "1" ? prod.var_id : null,
-    }));
+    const data = res.payload
+      ?.filter((prod) => prod.upc && prod.upc !== "")
+      ?.map((prod) => ({
+        label: prod.title,
+        value: prod.id,
+        variantId: prod.isvarient === "1" ? prod.var_id : null,
+      }));
 
     // console.log("api data: ", data);
-    // console.log("selectedProducts: ", selectedProducts);
 
     const filterProducts =
       data &&
@@ -439,7 +441,7 @@ const ModifyPurchaseOrder = () => {
 
       let obj = {
         note: "",
-        newQty: "",
+        newQty: 1,
         newPrice: "",
         finalPrice: "0.00",
         finalQty: 0,
@@ -455,11 +457,11 @@ const ModifyPurchaseOrder = () => {
             parseFloat(product.costperItem) > 0
               ? parseFloat(product.costperItem)
               : 0;
+          obj.finalPrice = obj.newPrice;
 
           obj.variant_id = variantId;
           obj.isvarient = "1";
-
-          obj.finalQty = Number(product.quantity) ?? 0;
+          obj.finalQty = product.quantity ? Number(product.quantity) + 1 : 1;
 
           const updatedData = selectedProducts.map((item, idx) =>
             idx === index
@@ -479,7 +481,8 @@ const ModifyPurchaseOrder = () => {
             parseFloat(product.costperItem) > 0
               ? parseFloat(product.costperItem)
               : 0;
-          obj.finalQty = Number(product.quantity) ?? 0;
+          obj.finalPrice = obj.newPrice;
+          obj.finalQty = product.quantity ? Number(product.quantity) + 1 : 1;
           obj.product_id = product.id;
 
           const updatedData = selectedProducts.map((item, idx) =>
@@ -585,7 +588,9 @@ const ModifyPurchaseOrder = () => {
   };
 
   // modifying purchase order api
-  const modifyPurchaseOrder = async () => {
+  const modifyPurchaseOrder = async (isDraft) => {
+    if (loading) return;
+
     const { issuedDate, stockDate, selectedVendor, email } = purchaseInfo;
 
     if (selectedProducts.length <= 0) {
@@ -655,14 +660,13 @@ const ModifyPurchaseOrder = () => {
           "issue_date",
           dayjs(purchaseInfo?.issuedDate).format("YYYY-MM-DD")
         );
-
         formData.append(
           "stock_date",
           stockDate ? stockDate?.format("YYYY-MM-DD") : "0000-00-00"
         );
         formData.append("reference", purchaseInfo?.reference);
         formData.append("received_status", puchaseOrderDetail?.received_status);
-        formData.append("is_draft", 0);
+        formData.append("is_draft", isDraft);
         formData.append(
           "created_at",
           puchaseOrderDetail?.created_at
@@ -689,6 +693,7 @@ const ModifyPurchaseOrder = () => {
 
         if (response.data.status) {
           ToastifyAlert(response.data.message, "success");
+          navigate("/purchase-data");
         } else {
           ToastifyAlert(response.data.message, "error");
         }
@@ -709,129 +714,6 @@ const ModifyPurchaseOrder = () => {
       if (!validateProducts()) {
         displayErrors();
       }
-    }
-  };
-
-  // api for creating a new purchase order
-  const savePurchaseOrder = async (isDraft) => {
-    try {
-      setLoaders((prev) => ({
-        ...prev,
-        createPo: isDraft === "0",
-        saveAsDraft: isDraft === "1",
-      }));
-
-      const { issuedDate, stockDate, selectedVendor, email } = purchaseInfo;
-
-      // if PO is draft, then checking its old issued date.. user should not select earlier than that..
-      const defaultIssuedDate = dayjs(puchaseOrderDetail?.issued_date);
-      const selectedIssuedDate = dayjs(issuedDate).startOf("day");
-
-      const issuedDateIsFine = !selectedIssuedDate.isBefore(defaultIssuedDate);
-
-      // validating purchase order info dataset
-      const purchaseInfoDetails = [selectedVendor].every((a) =>
-        Boolean(a && a.trim())
-      );
-
-      let emailRegex = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-      const emailIsValid = email ? emailRegex.test(email) : true;
-
-      if (email && !emailIsValid) {
-        setPurchaseInfoErrors((prev) => ({
-          ...prev,
-          email: "Please fill valid email",
-        }));
-        return;
-      }
-
-      if (purchaseInfoDetails && validateProducts() && issuedDateIsFine) {
-        try {
-          const orderItems = selectedProducts.map((prod) => ({
-            product_id: prod.variant ? prod.product_id : prod.id,
-            variant_id: prod.variant ? prod.id : "",
-            required_qty: prod.newQty.toString(),
-            after_qty: (Number(prod.quantity) + Number(prod.newQty)).toString(),
-            cost_per_item: prod.newPrice.toString(),
-            total_pricing: prod.finalPrice.toString(), // Number(prod.newQty) * parseFloat(prod.newPrice),
-            upc: prod.upc,
-            note: prod.notes,
-          }));
-
-          const orderItemsObject = orderItems?.reduce((acc, curr, index) => {
-            acc[index] = curr;
-            return acc;
-          }, {});
-
-          const { token } = userTypeData;
-
-          const formData = new FormData();
-          formData.append(
-            "merchant_id",
-            LoginGetDashBoardRecordJson?.data?.merchant_id
-          );
-          formData.append(
-            "admin_id",
-            LoginGetDashBoardRecordJson?.data?.merchant_id
-          );
-          formData.append("vendor_id", Number(purchaseInfo?.vendorId));
-          formData.append("issue_date", issuedDate?.format("YYYY-MM-DD"));
-          formData.append(
-            "stock_date",
-            stockDate ? stockDate?.format("YYYY-MM-DD") : "0000-00-00"
-          );
-          formData.append("reference", purchaseInfo?.reference);
-          formData.append("is_draft", isDraft);
-          formData.append("created_at", createdAt(new Date()));
-          formData.append("vendor_email", purchaseInfo?.email);
-          formData.append("order_items", JSON.stringify(orderItemsObject));
-          formData.append("token_id", userTypeData.token_id);
-          formData.append("login_type", userTypeData.login_type);
-          formData.append("po_id", puchaseOrderDetail?.id);
-
-          const response = await axios.post(BASE_URL + SAVE_PO, formData, {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`, // Use data?.token directly
-            },
-          });
-
-          // console.log("response: ", response);
-          if (response.data.status) {
-            ToastifyAlert(response.data.message, "success");
-            navigate("/purchase-data");
-          } else {
-            ToastifyAlert(response.data.message, "error");
-          }
-        } catch (e) {
-          console.log("Error: ", e);
-        }
-      } else {
-        if (!purchaseInfoDetails || !issuedDateIsFine) {
-          setPurchaseInfoErrors((prev) => ({
-            ...prev,
-            issuedDate:
-              issuedDate && issuedDateIsFine
-                ? ""
-                : issuedDate && !issuedDateIsFine
-                  ? `Issued Date cannot be older than ${getDate()}`
-                  : "Issued Date is required",
-            selectedVendor: selectedVendor ? "" : "Vendor is required",
-          }));
-        }
-
-        if (!validateProducts()) {
-          displayErrors();
-        }
-      }
-    } catch (e) {
-      console.log("Error: ", e);
-    } finally {
-      setLoaders((prev) => ({
-        ...prev,
-        createPo: false,
-        saveAsDraft: false,
-      }));
     }
   };
 
@@ -1125,7 +1007,7 @@ const ModifyPurchaseOrder = () => {
                             onChange={(e) =>
                               handleProduct(e, product.id, "note")
                             }
-                            placeholder="Add Note"
+                            placeholder="Note"
                             variant="outlined"
                             size="small"
                             disabled={product.recieved_status === "2"}
@@ -1155,14 +1037,21 @@ const ModifyPurchaseOrder = () => {
               <div className="button-container start gap-4">
                 {puchaseOrderDetail.is_draft === "1" ? (
                   <button
-                    onClick={() => savePurchaseOrder("1")}
-                    className="quic-btn quic-btn-draft"
+                    onClick={() => modifyPurchaseOrder("1")}
+                    className="quic-btn quic-btn-draft attributeUpdateBTN"
+                    disabled={
+                      loaders.saveAsDraft || loaders.createPo || loading
+                    }
                   >
-                    {loaders.saveAsDraft ? (
-                      <CircularProgress color={"inherit"} size={18} />
-                    ) : (
-                      "Save as Draft"
-                    )}
+                    {loaders.saveAsDraft && (
+                      <CircularProgress
+                        color={"inherit"}
+                        className="loaderIcon"
+                        width={15}
+                        size={15}
+                      />
+                    )}{" "}
+                    Save as Draft
                   </button>
                 ) : null}
                 <button
@@ -1175,25 +1064,39 @@ const ModifyPurchaseOrder = () => {
               <div className="button-container end gap-4">
                 {puchaseOrderDetail.is_draft === "1" ? (
                   <button
-                    className="quic-btn quic-btn-save"
-                    onClick={() => savePurchaseOrder("0")}
+                    className="quic-btn quic-btn-save attributeUpdateBTN"
+                    onClick={() => modifyPurchaseOrder("0")}
+                    disabled={
+                      loaders.saveAsDraft || loaders.createPo || loading
+                    }
                   >
-                    {loaders.createPo ? (
-                      <CircularProgress color={"inherit"} size={18} />
-                    ) : (
-                      "Create"
-                    )}
+                    {loaders.createPo && (
+                      <CircularProgress
+                        color={"inherit"}
+                        className="loaderIcon"
+                        width={15}
+                        size={15}
+                      />
+                    )}{" "}
+                    Create
                   </button>
                 ) : (
                   <button
-                    className="quic-btn quic-btn-save"
-                    onClick={modifyPurchaseOrder}
+                    className="quic-btn quic-btn-save attributeUpdateBTN"
+                    onClick={() => modifyPurchaseOrder("0")}
+                    disabled={
+                      loaders.saveAsDraft || loaders.createPo || loading
+                    }
                   >
-                    {loading ? (
-                      <CircularProgress color={"inherit"} size={18} />
-                    ) : (
-                      "Update"
-                    )}
+                    {loading && (
+                      <CircularProgress
+                        color={"inherit"}
+                        className="loaderIcon"
+                        width={15}
+                        size={15}
+                      />
+                    )}{" "}
+                    Update
                   </button>
                 )}
 
@@ -1208,6 +1111,14 @@ const ModifyPurchaseOrder = () => {
           </div>
         </div>
       </div>
+      <DeleteModal
+        headerText="Product"
+        open={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+        }}
+        onConfirm={confirmDeleteProduct}
+      />
     </>
   );
 };

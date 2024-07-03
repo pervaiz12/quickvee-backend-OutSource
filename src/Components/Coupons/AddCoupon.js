@@ -364,7 +364,7 @@ const AddCoupon = ({ seVisible }) => {
       // return; // Stop further execution
     } else if (coupon.min_amount === "0.00") {
       setMinOrderAmountError("Minimum Order Amount is required");
-      // return;
+      return;
     } else {
       setMinOrderAmountError("");
     }

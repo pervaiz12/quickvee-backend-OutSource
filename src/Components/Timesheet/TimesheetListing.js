@@ -614,9 +614,9 @@ const TimesheetListing = ({ data }) => {
   const [EmployeeTimeOut, setEmployeeTimeOut] = useState("");
   const [AllbreakDelete, setAllbreakDelete] = useState("");
 
-  const openModalViewBreak = (title, data) => {
+  const openModalViewBreak = async (title, data) => {
     setEmployeeName(title);
-    fetchBreakDetails(data);
+    await fetchBreakDetails(data);
     setEmployeeWorkDate(data?.attendance_date);
     setEmployeeWorkDateOUT(data?.out_date);
     // setEmployeeTimeIn(formatTime(data.check_in_time));
@@ -1414,8 +1414,8 @@ const TimesheetListing = ({ data }) => {
 
             <div className="viewTaleBreak table__header">
               <p>Break</p>
-              <p>Breaked In</p>
-              <p>Breaked Out</p>
+              <p>Break In</p>
+              <p>Break Out</p>
               <p></p>
             </div>
             {breakDetails.length > 0 ? (

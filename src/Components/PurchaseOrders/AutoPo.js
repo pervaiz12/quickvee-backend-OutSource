@@ -116,20 +116,15 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
   };
 
   const handleDelete = (index) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this product?"
+    const updatedProducts = selectedProducts?.filter(
+      (product, idx) => idx !== index
     );
-    if (confirmDelete) {
-      const updatedProducts = selectedProducts?.filter(
-        (product, idx) => idx !== index
-      );
-      setSelectedProducts(updatedProducts);
-    }
+    setSelectedProducts(updatedProducts);
   };
 
   useEffect(() => {
     productOptions(" ");
-  }, []);
+  }, [selectedProducts.length]);
 
   // check each product has required data
   const validateProducts = () => {
@@ -194,29 +189,15 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
     };
 
     const res = await dispatch(fetchProductsData(name_data));
-
     // console.log("api data: ", res.payload);
 
-    const data = res.payload?.map((prod) => ({
-      label: prod.title,
-      value: prod.id,
-      variantId: prod.isvarient === "1" ? prod.var_id : null,
-    }));
-
-    // const filteredProducts =
-    //   data &&
-    //   data.length > 0 &&
-    //   data.filter((prod) => {
-    //     const productFound =
-    //       selectedProducts &&
-    //       selectedProducts.length > 0 &&
-    //       selectedProducts.find(
-    //         (product) =>
-    //           (product.variant &&
-    //             product.id === prod.variantId &&
-    //             product.product_id === prod.value) ||
-    //           (!product.variant && product.id === prod.value)
-    //       );
+    const data = res.payload
+      ?.filter((prod) => prod.upc && prod.upc !== "")
+      ?.map((prod) => ({
+        label: prod.title,
+        value: prod.id,
+        variantId: prod.isvarient === "1" ? prod.var_id : null,
+      }));
 
     const filteredProducts =
       data &&
@@ -234,19 +215,13 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
               (product.id && !product.product_id && product.id === prod.value)
           );
 
-        // console.log("curr prod: ", prod)
-
         return !productFound;
       });
 
-    // console.log("filteredProducts data: ", filteredProducts);
+    // console.log("filteredProducts: ", filteredProducts);
 
     return filteredProducts || [];
   };
-
-  // useEffect(() => {
-  //   console.log("selectedProducts: ", selectedProducts);
-  // }, [selectedProducts]);
 
   // on selecting a new product from dropdown fetching its details...
   const getProductData = async (productId, variantId, index) => {
@@ -274,7 +249,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
 
       let obj = {
         notes: "",
-        newQty: "",
+        newQty: 1,
         newPrice: "",
         finalPrice: "0.00",
         finalQty: 0,
@@ -290,10 +265,9 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
             parseFloat(product.costperItem) > 0
               ? parseFloat(product.costperItem)
               : 0;
+          obj.finalPrice = obj.newPrice;
+          obj.finalQty = product.quantity ? Number(product.quantity) + 1 : 1;
 
-          obj.finalQty = Number(product.quantity) ?? 0;
-
-          // console.log("before: ", selectedProducts);
           const updatedData = selectedProducts.map((item, idx) =>
             idx === index
               ? {
@@ -304,7 +278,6 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
               : item
           );
 
-          // console.log("after: ", updatedData);
           setSelectedProducts(updatedData);
         } else {
           const product = response.data.data.productdata;
@@ -313,7 +286,8 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
             parseFloat(product.costperItem) > 0
               ? parseFloat(product.costperItem)
               : 0;
-          obj.finalQty = Number(product.quantity) ?? 0;
+          obj.finalPrice = obj.newPrice;
+          obj.finalQty = product.quantity ? Number(product.quantity) + 1 : 1;
 
           const updatedData = selectedProducts.map((item, idx) =>
             idx === index
@@ -514,6 +488,8 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
     }
   };
 
+  const numberOrOne = (num) => (num && Number(num) > 0 ? Number(num) : 1);
+
   // Fetching Auto PO list
   const handleAutoPO = async () => {
     try {
@@ -541,33 +517,54 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
         });
 
         if (response.data.status && response.data.result.length > 0) {
-          const temp = response.data.result.map((prod) => ({
-            upc: prod.upc,
-            id: prod.variant_id ? prod.variant_id : prod.product_id,
-            product_id: prod.variant_id ? prod.product_id : "",
-            quantity: prod.item_qty || 0,
-            newQty: prod.reorder_qty || 0,
-            newPrice:
-              prod.preferd_vendor_cost &&
-              parseFloat(prod.preferd_vendor_cost) > 0
-                ? prod.preferd_vendor_cost
-                : prod.costperItem && parseFloat(prod.costperItem) > 0
-                  ? prod.costperItem
-                  : 0,
-            finalQty:
-              (Number(prod.item_qty) || 0) + (Number(prod.reorder_qty) || 0),
-            finalPrice:
-              (Number(prod.reorder_qty) || 0) * (Number(prod.costperItem) || 0),
-            notes: "",
-            title: prod.product_title,
-            variant: prod.variant
-              ? prod.variant
-              : prod.variant_title
-                ? prod.variant_title
-                : "",
-          }));
+          const productsWithUPC = response.data.result.filter(
+            (prod) => prod.upc && prod.upc !== ""
+          );
+          if (productsWithUPC.length > 0) {
+            const temp = response.data.result.map((prod) => {
+              const newPrice =
+                prod.preferd_vendor_cost &&
+                parseFloat(prod.preferd_vendor_cost) > 0
+                  ? parseFloat(prod.preferd_vendor_cost)
+                  : prod.costperItem && parseFloat(prod.costperItem) > 0
+                    ? parseFloat(prod.costperItem)
+                    : 0;
 
-          setSelectedProducts(temp);
+              const finalPrice =
+                numberOrOne(prod.reorder_qty) *
+                (prod.preferd_vendor_cost &&
+                parseFloat(prod.preferd_vendor_cost) > 0
+                  ? parseFloat(prod.preferd_vendor_cost)
+                  : prod.costperItem && parseFloat(prod.costperItem) > 0
+                    ? parseFloat(prod.costperItem)
+                    : 0);
+
+              const productObject = {
+                upc: prod.upc,
+                id: prod.variant_id ? prod.variant_id : prod.product_id,
+                product_id: prod.variant_id ? prod.product_id : "",
+                quantity: prod.item_qty || 0,
+                newQty: numberOrOne(prod.reorder_qty),
+                newPrice,
+                finalQty:
+                  (Number(prod.item_qty) || 0) + numberOrOne(prod.reorder_qty),
+                finalPrice,
+                notes: "",
+                title: prod.product_title,
+                variant: prod.variant
+                  ? prod.variant
+                  : prod.variant_title
+                    ? prod.variant_title
+                    : "",
+              };
+
+              return productObject;
+            });
+
+            setSelectedProducts(temp);
+          } else {
+            ToastifyAlert("No Product List Found", "error");
+          }
         } else if (!response.data.status) {
           setSelectedProducts(initialState);
           ToastifyAlert(response.data.message, "error");
@@ -631,7 +628,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
                                 );
                               }}
                               placeholder="Search Product by Title or UPC"
-                            />
+                            />{" "}
                           </span>
                           {product.titleError && (
                             <p className="error-message">
@@ -699,7 +696,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
                           onChange={(e) =>
                             handleProduct(e, product.id, "notes")
                           }
-                          placeholder="Add Note"
+                          placeholder="Note"
                           variant="outlined"
                           size="small"
                         />
@@ -727,26 +724,39 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
                 {purchaseInfo.selectedVendor && (
                   <button
                     onClick={handleAutoPO}
-                    className="quic-btn quic-btn-add"
-                    disabled={loaders.autoPo}
+                    className="quic-btn quic-btn-add attributeUpdateBTN"
+                    disabled={
+                      loaders.autoPo || loaders.createPo || loaders.saveAsDraft
+                    }
                   >
-                    {loaders.autoPo ? (
-                      <CircularProgress color={"inherit"} size={18} />
-                    ) : (
-                      "Auto PO"
-                    )}
+                    {loaders.autoPo && (
+                      <CircularProgress
+                        color={"inherit"}
+                        className="loaderIcon"
+                        width={15}
+                        size={15}
+                      />
+                    )}{" "}
+                    Auto PO
                   </button>
                 )}
                 {selectedProducts.length > 0 && (
                   <button
                     onClick={() => savePurchaseOrder("1")}
-                    className="quic-btn quic-btn-draft"
+                    className="quic-btn quic-btn-draft attributeUpdateBTN"
+                    disabled={
+                      loaders.autoPo || loaders.createPo || loaders.saveAsDraft
+                    }
                   >
-                    {loaders.saveAsDraft ? (
-                      <CircularProgress color={"inherit"} size={18} />
-                    ) : (
-                      "Save as Draft"
-                    )}
+                    {loaders.saveAsDraft && (
+                      <CircularProgress
+                        color={"inherit"}
+                        className="loaderIcon"
+                        width={15}
+                        size={15}
+                      />
+                    )}{" "}
+                    Save as Draft
                   </button>
                 )}
                 <button
@@ -759,14 +769,21 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
               {selectedProducts.length > 0 && (
                 <div className="button-container end gap-4">
                   <button
-                    className="quic-btn quic-btn-save"
+                    className="quic-btn quic-btn-save attributeUpdateBTN"
                     onClick={() => savePurchaseOrder("0")}
+                    disabled={
+                      loaders.autoPo || loaders.createPo || loaders.saveAsDraft
+                    }
                   >
-                    {loaders.createPo ? (
-                      <CircularProgress color={"inherit"} size={18} />
-                    ) : (
-                      "Create"
-                    )}
+                    {loaders.createPo && (
+                      <CircularProgress
+                        color={"inherit"}
+                        className="loaderIcon"
+                        width={15}
+                        size={15}
+                      />
+                    )}{" "}
+                    Create
                   </button>
                   <button
                     onClick={handleCancel}

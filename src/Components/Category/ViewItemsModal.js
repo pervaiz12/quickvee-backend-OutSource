@@ -24,11 +24,13 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
     transform: "translate(-50%, -50%)",
     fontFamily: "'CircularSTDMedium', sans-serif !important",
   };
-
+  let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
+  const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
   const fetchCategoryProductData = async () => {
-    const {token,...otherUserData} = userTypeData
+    // const {token,...otherUserData} = userTypeData
     const data = {
       cat_id: selectedView.id,
+      merchant_id:merchant_id,
       ...userTypeData,
     };
     try {
@@ -51,19 +53,20 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
     }
   };
 
-  useEffect(() => {
-    // console.log(selectedView)
-    fetchCategoryProductData();
-  }, [selectedView]);
+  // useEffect(() => {
+  //   // console.log(selectedView)
+  //   fetchCategoryProductData();
+  // }, [selectedView]);
 
-  const handleClick = () => {
+  const handleClick = async () => {
+    await fetchCategoryProductData()
     handleOpen(true);
-    onViewClick(selectedView);
+    // onViewClick(selectedView);
   };
 
   const hadleRedirect=(id)=>{
     navigate(`/inventory/products/edit/${id}`)
-    
+
   }
 
   return (
@@ -113,7 +116,7 @@ const ViewItemsModal = ({ selectedView, onViewClick }) => {
               {itemsData && itemsData.length >= 1 ? (
                 <Table striped>
                   <div className="  p-2 my-2">
-                    {itemsData.map((item, index) => (
+                    {itemsData?.map((item, index) => (
                       <>
                         <p
                           className="q_view_modal_details"
