@@ -111,12 +111,7 @@ const TipReportList = (props) => {
           ) : (
             <TableContainer>
               <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-                <TableHead>
-                  <StyledTableCell>Employee ID</StyledTableCell>
-                  <StyledTableCell>First Name</StyledTableCell>
-                  <StyledTableCell>Last Name</StyledTableCell>
-                  <StyledTableCell>Net Tip</StyledTableCell>
-                </TableHead>
+                
                 <TableHead>
                   {tableRow.map((item)=><StyledTableCell>
                     <button
