@@ -295,10 +295,10 @@ const InventoryData = () => {
             </div>
             <div className="box_shadow_div" style={{ padding: "20px" }}>
               <div className="qvrow">
-                <h5 className="box_shadow_heading btm-margin">Future Order</h5>
+                <h5 className="box_shadow_heading btm-margin">Age Verification</h5>
                 <div className="qvrow-inventory-row">
                   <h6 className="box_shadow_heading section-heading">
-                    Enable Pickup
+                  Enable By Scanning
                   </h6>
                   <Switch
                     {...label}
