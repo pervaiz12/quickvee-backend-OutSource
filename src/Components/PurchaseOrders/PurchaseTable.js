@@ -5,7 +5,7 @@ import {
   getPurchaseOrderCount,
 } from "../../Redux/features/PurchaseOrder/purchaseOrderSlice";
 import { useSelector, useDispatch } from "react-redux";
-
+import sortIcon from "../../Assests/Category/SortingW.svg";
 import ResciveIcon from "../../Assests/Dashboard/rescived.svg";
 import VoicIcon from "../../Assests/Dashboard/void.svg";
 import ActiveIcon from "../../Assests/Dashboard/active.svg";
@@ -25,6 +25,7 @@ import { useAuthDetails } from "../../Common/cookiesHelper";
 import Pagination from "../../AllUserComponents/Users/UnverifeDetails/Pagination";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import { priceFormate } from "../../hooks/priceFormate";
+import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -53,7 +54,8 @@ const PurchaseTable = ({ seVisible }) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const debouncedValue = useDebounce(searchId);
-
+  const [allPurchaseData, setAllPurchaseData] = useState([]);
+  const [sortOrder, setSortOrder] = useState("asc");
   const AllpurchaseDataState = useSelector((state) => state.purchase);
   const dispatch = useDispatch();
 
@@ -84,28 +86,51 @@ const PurchaseTable = ({ seVisible }) => {
 
   // on load setting count of Verified Merchant list & on every change...
   useEffect(() => {
-    setTotalCount(AllpurchaseDataState.purchaseDataCount);
-  }, [AllpurchaseDataState.purchaseDataCount]);
+    setTotalCount(AllpurchaseDataState?.purchaseDataCount);
+    setAllPurchaseData(AllpurchaseDataState?.purchaseData);
+  }, [
+    AllpurchaseDataState.purchaseDataCount,
+    AllpurchaseDataState?.purchaseData,
+  ]);
 
   const handleSearchInputChange = (value) => {
     setSearchId(value);
     setCurrentPage(1);
   };
-
   const tableRow = [
-    "Order#",
-    "Status",
-    "Received",
-    "Total Qty",
-    "Vendor Name",
-    "Total Cost",
-    "Due",
-    "Last Update",
-    "Received At",
+    { type: "id", name: "po_number", label: "Order#" },
+    { type: "", name: "", label: "Status" },
+    { type: "", name: "", label: "Received" },
+    { type: "num", name: "total_qty", label: "Total Qty" },
+    { type: "str", name: "vendor_name", label: "Vendor Name" },
+    { type: "num", name: "total_cost", label: "Total Cost" },
+    { type: "date", name: "stock_date", label: "Due" },
+    { type: "", name: "", label: "Last Update" },
+    { type: "", name: "", label: "Received At" },
   ];
+  // const tableRow = [
+  //   "Order#",
+  //   "Status",
+  //   "Received",
+  //   "Total Qty",
+  //   "Vendor Name",
+  //   "Total Cost",
+  //   "Due",
+  //   "Last Update",
+  //   "Received At",
+  // ];
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+  const sortByItemName = (type, name) => {
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      allPurchaseData,
+      type,
+      name,
+      sortOrder
+    );
+    setAllPurchaseData(sortedItems);
+    setSortOrder(newOrder);
+  };
   return (
     <>
       <div className="q-category-main-page">
@@ -148,19 +173,31 @@ const PurchaseTable = ({ seVisible }) => {
           </Grid>
           <Grid container>
             {AllpurchaseDataState.loading ? (
-              <SkeletonTable columns={tableRow} />
+              <SkeletonTable columns={tableRow.map((item) => item.label)} />
             ) : (
               <>
-                {AllpurchaseDataState.purchaseData &&
-                Array.isArray(AllpurchaseDataState.purchaseData) &&
-                AllpurchaseDataState.purchaseData.length >= 1 ? (
+                {allPurchaseData &&
+                Array.isArray(allPurchaseData) &&
+                allPurchaseData.length >= 1 ? (
                   <TableContainer component={Paper}>
                     <Table aria-label="customized table">
                       <TableHead>
                         <TableRow>
                           {tableRow.map((item, index) => (
-                            <StyledTableCell align="center" key={item}>
-                              {item}
+                            <StyledTableCell align="center" key={index}>
+                              <button
+                                className="flex items-center"
+                                onClick={() =>
+                                  sortByItemName(item.type, item.name)
+                                }
+                              >
+                                <p>{item.label}</p>
+                                {item.name ? (
+                                  <img src={sortIcon} alt="" className="pl-1" />
+                                ) : (
+                                  ""
+                                )}
+                              </button>
                             </StyledTableCell>
                           ))}
                         </TableRow>
@@ -170,8 +207,9 @@ const PurchaseTable = ({ seVisible }) => {
                           "purchaseData: ",
                           AllpurchaseDataState.purchaseData
                         )} */}
-                        {AllpurchaseDataState.purchaseData.map(
-                          (purchaseData, index) => (
+                        {allPurchaseData &&
+                          allPurchaseData.length > 0 &&
+                          allPurchaseData.map((purchaseData, index) => (
                             <StyledTableRow key={index}>
                               <StyledTableCell align="center">
                                 <Link
@@ -329,8 +367,7 @@ const PurchaseTable = ({ seVisible }) => {
                                 </div>
                               </StyledTableCell>
                             </StyledTableRow>
-                          )
-                        )}
+                          ))}
                       </TableBody>
                     </Table>
                   </TableContainer>
