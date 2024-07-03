@@ -170,57 +170,66 @@ const EditPermissionLogic = ({ employeedata, setVisible }) => {
     await isNumber(values.break_time, "break_time", errors);
     await isNumber(values.paid_breaks, "paid_breaks", errors);
     await validateRadioBtn(values.role, errors);
+    if (values.break_allowed >= values.paid_breaks) {
+      if (
+        errors.break_allowed === "" &&
+        errors.break_time === "" &&
+        errors.paid_breaks === "" &&
+        errors.role === ""
+      ) {
+        const data = {
+          merchant_id: merchant_id,
+          // "admin_id":"MAL0100CA",
+          admin_id: "",
+          employee_id: employeedata.id,
+          role: values.role,
+          break_allowed: values.break_allowed,
+          break_time: values.break_time,
+          paid_breaks: values.paid_breaks,
+          permissions: values.permissions,
+          token_id: userTypeData?.token_id,
+          login_type: userTypeData?.login_type,
+        };
+        // console.log(data);
+        try {
+          const response = await axios.post(
+            BASE_URL + UPDATE_PERMISSION,
+            data,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${userTypeData?.token}`,
+              },
+            }
+          );
 
-    if (
-      errors.break_allowed === "" &&
-      errors.break_time === "" &&
-      errors.paid_breaks === "" &&
-      errors.role === ""
-    ) {
-      const data = {
-        merchant_id: merchant_id,
-        // "admin_id":"MAL0100CA",
-        admin_id: "",
-        employee_id: employeedata.id,
-        role: values.role,
-        break_allowed: values.break_allowed,
-        break_time: values.break_time,
-        paid_breaks: values.paid_breaks,
-        permissions: values.permissions,
-        token_id: userTypeData?.token_id,
-        login_type: userTypeData?.login_type,
-      };
-      // console.log(data);
-      try {
-        const response = await axios.post(BASE_URL + UPDATE_PERMISSION, data, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${userTypeData?.token}`,
-          },
-        });
-
-        if (response.data.status === true) {
-          // alert(response.data.message)
-          ToastifyAlert("Updated Successfully", "success");
-          setVisible("EmployeeList");
-          Navigate("/store-settings/addemployee");
-        } else {
-          // alert(response.data.message)
-          ToastifyAlert(response?.data?.message, "warn");
-          //   await handleScrollClick()
-          setsubmitmessage(response.data.message);
-          setShowModal(true);
+          if (response.data.status === true) {
+            // alert(response.data.message)
+            ToastifyAlert("Updated Successfully", "success");
+            setVisible("EmployeeList");
+            Navigate("/store-settings/addemployee");
+          } else {
+            // alert(response.data.message)
+            ToastifyAlert(response?.data?.message, "warn");
+            //   await handleScrollClick()
+            setsubmitmessage(response.data.message);
+            setShowModal(true);
+          }
+        } catch (error) {
+          // console.log('33 catch err');
+          return new Error(error);
         }
-      } catch (error) {
-        // console.log('33 catch err');
-        return new Error(error);
       }
-    }
 
-    setValues((prevState) => ({
-      ...prevState,
-      errors,
-    }));
+      setValues((prevState) => ({
+        ...prevState,
+        errors,
+      }));
+    } else {
+      alert(
+        "Paid Breaks should be not more than the number of breaks allowed per day"
+      );
+    }
   };
 
   return {

@@ -217,84 +217,162 @@ const EditAdminFunctionality = (handleClick) => {
       e.preventDefault();
     }
   };
+
+  // ===========
   const validateForm = async () => {
-    console.log(errors);
     let error = false;
     let updatedErrors = { ...errors };
-    if (editData.owner_name == "") {
+
+    // Validate Owner Name
+    if (!editData.owner_name) {
       updatedErrors.owner_name = "Owner Name is required";
       error = true;
+    } else {
+      updatedErrors.owner_name = "";
     }
-    if (editData.email == "") {
+
+    // Validate Email
+    if (!editData.email) {
       updatedErrors.email = "Email is required";
       error = true;
     } else {
       try {
-        if (errors.email == "") {
-          setLoader(true);
-          const emailValid = await emailValidate(editData.email);
-          if (emailValid == true) {
-            setLoader(false);
-            if (ExitEmail !== editData.email) {
-              updatedErrors.email = "Email already exists";
-              error = false;
-            } else {
-              updatedErrors.email = "";
-              error = true;
-            }
+        setLoader(true);
+        const emailValid = await emailValidate(editData.email);
+        setLoader(false);
+        if (emailValid) {
+          if (ExitEmail !== editData.email) {
+            updatedErrors.email = "Email already exists";
+            error = true;
           } else {
             updatedErrors.email = "";
-            error = true;
           }
         } else {
-          error = false;
+          updatedErrors.email = "";
         }
-      } catch (error) {
-        console.error("Error validating email:", error);
-        error = false;
+      } catch (validationError) {
+        console.error("Error validating email:", validationError);
+        updatedErrors.email = "Error validating email";
+        error = true;
       }
     }
-    if (editData.password1 == "") {
+
+    // Validate Password
+    if (!editData.password1) {
       updatedErrors.password1 = "";
-      error = false;
     } else {
       try {
-        if (errors.password1 == "") {
-          setLoader(true);
-          const emailValid = await passwordValidate(
-            editData.email,
-            editData.password1
-          );
-          if (emailValid == true) {
-            setLoader(false);
-            updatedErrors.password1 = "Password already exists";
-            error = false;
-          } else {
-            updatedErrors.password1 = "";
-            error = true;
-          }
+        setLoader(true);
+        const passwordValid = await passwordValidate(
+          editData.email,
+          editData.password1
+        );
+        setLoader(false);
+        if (passwordValid) {
+          updatedErrors.password1 = "Password already exists";
+          error = true;
         } else {
-          error = false;
+          updatedErrors.password1 = "";
         }
-      } catch (error) {
-        error = false;
+      } catch (validationError) {
+        console.error("Error validating password:", validationError);
+        updatedErrors.password1 = "Error validating password";
+        error = true;
       }
     }
 
-    // if (editData.phone == "") {
-    //   updatedErrors.phone = "Please fill the phone field";
-    //   error = true;
-    // }
-
-    // setErrors({ ...errors, updatedErrors });
+    // Set errors and return validation status
     setErrors(updatedErrors);
-    // console.log(errors);
-    if (error == true) {
-      return false;
-    } else {
-      return true;
-    }
+    console.log(error);
+    return !error;
   };
+
+  // ===========
+  // const validateForm = async () => {
+  //   let error = false;
+  //   let updatedErrors = { ...errors };
+  //   if (editData.owner_name == "") {
+  //     updatedErrors.owner_name = "Owner Name is required";
+  //     error = true;
+  //   }
+  //   if (editData.email == "") {
+  //     updatedErrors.email = "Email is required";
+  //     error = true;
+  //   } else {
+  //     try {
+  //       if (errors.email == "") {
+  //         setLoader(true);
+  //         const emailValid = await emailValidate(editData.email);
+  //         if (emailValid == true) {
+  //           setLoader(false);
+  //           if (ExitEmail !== editData.email) {
+  //             updatedErrors.email = "Email already exists";
+  //             error = false;
+  //           } else {
+  //             updatedErrors.email = "";
+  //             error = true;
+  //           }
+  //         } else {
+  //           updatedErrors.email = "";
+  //           error = true;
+  //         }
+  //       } else {
+  //         error = false;
+  //       }
+  //     } catch (error) {
+  //       console.error("Error validating email:", error);
+  //       error = false;
+  //     }
+  //   }
+  //   if (editData.password1 == "") {
+  //     updatedErrors.password1 = "";
+  //     error = false;
+  //   } else {
+  //     try {
+  //       if (
+  //         errors.password1 == "" &&
+  //         editData.email !== "" &&
+  //         editData.password1 !== ""
+  //       ) {
+  //         setLoader(true);
+  //         const emailValid = await passwordValidate(
+  //           editData.email,
+  //           editData.password1
+  //         );
+
+  //         if (emailValid == true) {
+  //           console.log("111111");
+  //           setLoader(false);
+  //           updatedErrors.password1 = "Password already exists";
+  //           error = false;
+  //         } else {
+  //           console.log("222222");
+  //           updatedErrors.password1 = "";
+  //           error = true;
+  //         }
+  //       } else {
+  //         console.log("333333333");
+  //         error = false;
+  //       }
+  //     } catch (error) {
+  //       error = false;
+  //     }
+  //   }
+
+  //   // if (editData.phone == "") {
+  //   //   updatedErrors.phone = "Please fill the phone field";
+  //   //   error = true;
+  //   // }
+
+  //   // setErrors({ ...errors, updatedErrors });
+  //   setErrors(updatedErrors);
+  //   // console.log(errors);
+  //   if (error == true) {
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // };
   // --------------------------------------
   // ==============
   const keyEnter = (event) => {
@@ -335,7 +413,7 @@ const EditAdminFunctionality = (handleClick) => {
     };
     let validate = Object.values(errors).filter((error) => error !== "").length;
     const validateBlank = await validateForm();
-    if (!validateBlank) {
+    if (validateBlank == true) {
       if (validate == 0) {
         setLoader(true);
         try {
