@@ -211,6 +211,7 @@ const Setup = () => {
           days={days}
           setDays={setDays}
           setLastCloseTimeState={setLastCloseTimeState}
+          merchant_id={merchant_id}
         />
 
         <PickupDeliveryDetails

@@ -20,6 +20,18 @@ export const SortTableItemsHelperFun = (items, type, name, sortOrder) => {
       return { numericPart, alphaPart };
     };
 
+    const parseTime = (timeString) => {
+      const [time, modifier] = timeString.split(' ');
+      let [hours, minutes, seconds] = time.split(':');
+      if (hours === '12') {
+        hours = '00';
+      }
+      if (modifier === 'PM') {
+        hours = parseInt(hours, 10) + 12;
+      }
+      return new Date(`1970-01-01T${hours}:${minutes}:${seconds}`);
+    };
+    
     switch (type) {
       case "str":
         return compareStrings(aValue, bValue, newOrder);
@@ -33,6 +45,11 @@ export const SortTableItemsHelperFun = (items, type, name, sortOrder) => {
         const aDate = parseDate(aValue);
         const bDate = parseDate(bValue);
         return newOrder === "asc" ? aDate - bDate : bDate - aDate;
+        case "time":
+        const aTime = parseTime(aValue);
+        const bTime = parseTime(bValue);
+        return newOrder === "asc" ? aTime - bTime : bTime - aTime;
+
 
       case "id":
         const aId = splitId(aValue);

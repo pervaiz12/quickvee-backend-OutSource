@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useAuthDetails } from "./../../../Common/cookiesHelper";
 import PasswordShow from "../../../Common/passwordShow";
 import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 
 export default function Discount_per_sales_logic() {
   const dispatch = useDispatch();
@@ -17,6 +18,7 @@ export default function Discount_per_sales_logic() {
   const [selectedEmployee, setSelectedEmployee] = React.useState("");
   const [EmployeeFilterData, setEmployeeFilterData] = React.useState([]);
   const [selectedoption, setSelectedOption] = React.useState("All");
+  const [sortOrder, setSortOrder] = React.useState("asc");
   const [loader, setLoader] = useState(false);
   const {
     LoginGetDashBoardRecordJson,
@@ -86,7 +88,19 @@ export default function Discount_per_sales_logic() {
         .then((res) => {
           setLoader(false);
           if (res?.data?.status == true) {
-            setEmployeeFilterData(res?.data);
+            const updatedList = Object.fromEntries(
+              Object.entries(res.data?.report_data).map(([key, value]) => {
+                const updatedValue = value.map((item) => {
+                  return {
+                    ...item,
+                    fullName: item?.f_name + " " + item?.l_name,
+                  };
+                });
+                return [key, updatedValue];
+              })
+            );
+            
+            setEmployeeFilterData(updatedList);
           }
         });
     } catch (error) {
@@ -97,6 +111,23 @@ export default function Discount_per_sales_logic() {
 
     // console.log(newData);
   };
+  const sortByItemName = (type, name) => {
+    const newOrder = sortOrder === "asc" ? "desc" : "asc";
+    const updatedList = Object.fromEntries(
+      Object.entries(EmployeeFilterData).map(([key, value]) => {
+        const { sortedItems } = SortTableItemsHelperFun(
+          value,
+          type,
+          name,
+          sortOrder
+        );
+        return [key, sortedItems];
+      })
+    );
+    setEmployeeFilterData(updatedList);
+    setSortOrder(newOrder);
+  };
+
   return {
     onDateRangeChange,
     allEmployee,
@@ -105,5 +136,6 @@ export default function Discount_per_sales_logic() {
     EmployeeFilterData,
     loader,
     merchant_new_id,
+    sortByItemName,
   };
 }

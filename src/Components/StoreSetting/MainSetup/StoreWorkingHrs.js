@@ -44,11 +44,86 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const StoreWorkingHrs = ({
-  days,
-  setDays,
-  setLastCloseTimeState,
-}) => {
+const StoreWorkingHrs = ({ days, setDays, setLastCloseTimeState,merchant_id }) => {
+  const dayList = [
+    {
+      id: "1",
+      merchant_clover_id: merchant_id,
+      day_name: "Sunday",
+      day_code: "0",
+      open_time: "9:00 am",
+      close_time: "5:00 pm",
+      is_holiday: "0",
+      multiple_flag: "0",
+      day_count: 1,
+    },
+    {
+      id: "2",
+      merchant_clover_id: merchant_id,
+      day_name: "Monday",
+      day_code: "1",
+      open_time: "9:00 am",
+      close_time: "5:00 pm",
+      is_holiday: "0",
+      multiple_flag: "0",
+      day_count: 1,
+    },
+    {
+      id: "3",
+      merchant_clover_id: merchant_id,
+      day_name: "Tuesday",
+      day_code: "2",
+      open_time: "9:00 am",
+      close_time: "5:00 pm",
+      is_holiday: "0",
+      multiple_flag: "0",
+      day_count: 1,
+    },
+    {
+      id: "4",
+      merchant_clover_id: merchant_id,
+      day_name: "Wednesday",
+      day_code: "3",
+      open_time: "9:00 am",
+      close_time: "5:00 pm",
+      is_holiday: "0",
+      multiple_flag: "0",
+      day_count: 1,
+    },
+    {
+      id: "5",
+      merchant_clover_id: merchant_id,
+      day_name: "Thursday",
+      day_code: "4",
+      open_time: "9:00 am",
+      close_time: "5:00 pm",
+      is_holiday: "0",
+      multiple_flag: "0",
+      day_count: 1,
+    },
+    {
+      id: "6",
+      merchant_clover_id: merchant_id,
+      day_name: "Friday",
+      day_code: "5",
+      open_time: "9:00 am",
+      close_time: "5:00 pm",
+      is_holiday: "0",
+      multiple_flag: "0",
+      day_count: 1,
+    },
+    {
+      id: "7",
+      merchant_clover_id: merchant_id,
+      day_name: "Saturday",
+      day_code: "6",
+      open_time: "9:00 am",
+      close_time: "5:00 pm",
+      is_holiday: "0",
+      multiple_flag: "0",
+      day_count: 1,
+    },
+  ];
   const dispatch = useDispatch();
   const [newDayAdded, setNewDayAdded] = useState(false);
   const [selectedTime, setSelectedTime] = useState(new Date());
@@ -68,7 +143,7 @@ const StoreWorkingHrs = ({
     if (setupDataState?.time_slot) {
       try {
         const defaultDays = JSON.parse(setupDataState.time_slot);
-        setDays(defaultDays);
+        setDays(defaultDays.length > 0 ? defaultDays : dayList);
         const indicesMap = {};
         defaultDays.forEach((day, index) => {
           indicesMap[day.day_name] = index;
@@ -312,7 +387,9 @@ const StoreWorkingHrs = ({
                                         OpenTime={dayData.open_time}
                                         CloseTime={dayData.close_time}
                                         dayName={dayData.day_name}
-                                        setLastCloseTimeState={setLastCloseTimeState}
+                                        setLastCloseTimeState={
+                                          setLastCloseTimeState
+                                        }
                                       />
                                     </div>
                                     <div style={{ width: "5%" }}>
@@ -362,10 +439,12 @@ const StoreWorkingHrs = ({
         </Grid>
       </Grid>
       <AlertModal
-      headerText={alertModalHeaderText}
-      open={alertModalOpen}
-      onClose={() => {setAlertModalOpen(false)}}
-       />
+        headerText={alertModalHeaderText}
+        open={alertModalOpen}
+        onClose={() => {
+          setAlertModalOpen(false);
+        }}
+      />
     </>
   );
 };
