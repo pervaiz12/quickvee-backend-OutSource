@@ -17,7 +17,10 @@ export default function InfoFunction() {
     LoginAllStore,
     userTypeData,
     GetSessionLogin,
+    user_id,
   } = useAuthDetails();
+  let merchant_idNew = LoginGetDashBoardRecordJson?.data?.merchant_id;
+  console.log(merchant_idNew);
   const { getUnAutherisedTokenMessage, handleCoockieExpire } = PasswordShow();
   const [successsMessage, setSuccessMessage] = useState("");
   const [hideSucess, setHideSuccess] = useState(false);
@@ -253,6 +256,7 @@ export default function InfoFunction() {
     // console.log(data.id) datat
     let data = {
       id: dataRecord.id,
+      merchant_id: dataRecord.merchant_id,
       login_type: userTypeData?.login_type,
       token_id: userTypeData?.token_id,
     };
@@ -610,7 +614,7 @@ export default function InfoFunction() {
         new_password: passwordInput.password,
         confirm_password: passwordInput.confirmPassword,
         merchant_id: infoRecord.merchant_id,
-        user_id: 100,
+        user_id: user_id,
         login_type: userTypeData?.login_type,
       };
       try {
@@ -655,5 +659,7 @@ export default function InfoFunction() {
     handleSubmitChangePassword,
     qrCodeBoolean,
     receieptLogoBool,
+    user_id,
+    merchant_idNew,
   };
 }

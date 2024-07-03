@@ -1066,6 +1066,7 @@ const menuItems = [
     link: "/loyalty-program",
   },
 ];
+
 const SuperAdminMenuItems = [
   // {
   //   id: 1,
@@ -1319,11 +1320,7 @@ const SuperAdminMenuItems = [
       />
     ),
     activeIcon: (
-      <img
-        src={Support}
-        alt="menu-defaults"
-        className="h-6 w-10 mt-4 mb-4"
-      />
+      <img src={Support} alt="menu-defaults" className="h-6 w-10 mt-4 mb-4" />
     ),
     text: "Support Details",
     link: "/unapprove/support-details",

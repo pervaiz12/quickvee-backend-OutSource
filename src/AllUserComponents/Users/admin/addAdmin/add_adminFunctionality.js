@@ -4,14 +4,17 @@ import {
   BASE_URL,
   GET_ADD_ADMIN,
   CHECK_ADMIN_EMAIL,
+  ADMIN_CHECK_USER,
 } from "../../../../Constants/Config";
 import { useNavigate } from "react-router-dom";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../../CommonComponents/ToastifyAlert";
+import PasswordShow from "../../../../Common/passwordShow";
 
 export default function Add_adminFunctionality({ setVisible }) {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
 
   const navigate = useNavigate();
   const [addAdminData, setAddAdminData] = useState({
@@ -58,7 +61,7 @@ export default function Add_adminFunctionality({ setVisible }) {
     if (name === "phone") {
       const numericValue = value.replace(/[^0-9]/g, "");
       if (numericValue == "") {
-        errors[name] = `Phone is required`;
+        errors[name] = ``;
       } else if (numericValue.length !== 10) {
         errors[name] = "Phone number must be 10 digits";
       } else {
@@ -80,6 +83,7 @@ export default function Add_adminFunctionality({ setVisible }) {
       e.preventDefault();
     }
   };
+  // =========================================================
   const handleBlur = async (name) => {
     if (name === "email") {
       if (addAdminData.errors.email == "") {
@@ -108,6 +112,42 @@ export default function Add_adminFunctionality({ setVisible }) {
     }
   };
 
+  const handleBlurPassword = async (name) => {
+    if (name == "password") {
+      if (
+        addAdminData.errors.email == "" &&
+        addAdminData.email !== "" &&
+        addAdminData.password !== ""
+      ) {
+        setLoader(true);
+        let result = await passwordValidate(
+          addAdminData.email,
+          addAdminData.password
+        );
+        if (result == true) {
+          setLoader(false);
+          setAddAdminData((prev) => ({
+            ...prev,
+            errors: {
+              ...prev.errors,
+              password: "Password already exists",
+            },
+          }));
+        } else {
+          setLoader(false);
+          setAddAdminData((prev) => ({
+            ...prev,
+            errors: {
+              ...prev.errors,
+              password: "",
+            },
+          }));
+        }
+      }
+    }
+  };
+  // ================================================================
+
   function Currentvalidate(errors) {
     // console.log(errors.owner_name)
     if (
@@ -121,7 +161,7 @@ export default function Add_adminFunctionality({ setVisible }) {
       return false;
     }
   }
-
+  // =====================================================
   const emailValidate = async (data) => {
     const { token, ...newData } = userTypeData;
 
@@ -141,6 +181,29 @@ export default function Add_adminFunctionality({ setVisible }) {
       throw error;
     }
   };
+
+  const passwordValidate = async (email, password) => {
+    const { token, ...newData } = userTypeData;
+    const dataNew = { email: email, password: password, ...newData };
+
+    try {
+      const response = await axios.post(BASE_URL + ADMIN_CHECK_USER, dataNew, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Error validating email:", error);
+      // console.log("hellooo", error?.message);
+      // dispatch(getAuthInvalidMessage(error?.message));
+      handleCoockieExpire();
+      throw error;
+    }
+  };
+  // ====================================
 
   const validateForm = async () => {
     let errors = { ...addAdminData.errors };
@@ -181,11 +244,34 @@ export default function Add_adminFunctionality({ setVisible }) {
     if (addAdminData.password === "") {
       errors.password = "Password is required";
       formIsValid = false;
+    } else {
+      try {
+        if (errors.password == "") {
+          setLoader(true);
+          const emailValid = await passwordValidate(
+            addAdminData.email,
+            addAdminData.password
+          );
+          if (emailValid == true) {
+            setLoader(false);
+            errors.password = "Password already exists";
+            formIsValid = false;
+          } else {
+            setLoader(false);
+            errors.password = "";
+            formIsValid = true;
+          }
+        } else {
+          formIsValid = false;
+        }
+      } catch (error) {
+        error = false;
+      }
     }
-    if (addAdminData.phone === "") {
-      errors.phone = "Phone is required";
-      formIsValid = false;
-    }
+    // if (addAdminData.phone === "") {
+    //   errors.phone = "Phone is required";
+    //   formIsValid = false;
+    // }
 
     setAddAdminData({
       ...addAdminData,
@@ -291,5 +377,6 @@ export default function Add_adminFunctionality({ setVisible }) {
     handleKeyPress,
     keyEnter,
     loader,
+    handleBlurPassword,
   };
 }

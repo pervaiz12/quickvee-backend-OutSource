@@ -14,6 +14,7 @@ export default function Add_Admin({ setVisible }) {
     handleKeyPress,
     keyEnter,
     loader,
+    handleBlurPassword,
   } = Add_adminFunctionality({ setVisible });
   const handleClick = () => {
     navigate(-1);
@@ -92,6 +93,7 @@ export default function Add_Admin({ setVisible }) {
                       value={addAdminData.password}
                       onChange={handleChange}
                       onKeyDown={keyEnter}
+                      onBlur={() => handleBlurPassword("password")}
                     />
                     {jsxData(addAdminData.password)}
                     {addAdminData.errors.password && (

@@ -5,6 +5,7 @@ import {
   GET_EDIT_ADMIN,
   CHECK_ADMIN_EMAIL,
   UPDATE_ADMIN_RECORD,
+  ADMIN_CHECK_USER,
 } from "../../../../Constants/Config";
 import { useNavigate } from "react-router-dom";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
@@ -28,6 +29,7 @@ const EditAdminFunctionality = (handleClick) => {
     owner_name: "",
     phone: "",
     email: "",
+    password1: "",
   });
   const [loader, setLoader] = useState(false);
   const [loaderEdit, setLoaderEdit] = useState(false);
@@ -60,6 +62,28 @@ const EditAdminFunctionality = (handleClick) => {
     }
   };
   // ============================================
+  const passwordValidate = async (email, password) => {
+    const { token, ...newData } = userTypeData;
+    const dataNew = { email: email, password: password, ...newData };
+
+    try {
+      const response = await axios.post(BASE_URL + ADMIN_CHECK_USER, dataNew, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Error validating email:", error);
+      // console.log("hellooo", error?.message);
+      // dispatch(getAuthInvalidMessage(error?.message));
+      handleCoockieExpire();
+      throw error;
+    }
+  };
+
   const emailValidate = async (data) => {
     const { token, ...newData } = userTypeData;
 
@@ -115,6 +139,28 @@ const EditAdminFunctionality = (handleClick) => {
       }
     }
   };
+  const handleBlurPassword = async (name) => {
+    if (name == "password1") {
+      if (
+        errors.email == "" &&
+        editData.email !== "" &&
+        editData.password1 !== ""
+      ) {
+        let result = await passwordValidate(editData.email, editData.password1);
+        if (result == true) {
+          setErrors((prev) => ({
+            ...prev,
+            password1: "Password already exists",
+          }));
+        } else {
+          setErrors((prev) => ({
+            ...prev,
+            password1: "",
+          }));
+        }
+      }
+    }
+  };
   // ============================================
   const handleChangeAdmin = (e) => {
     const { name, value } = e.target;
@@ -140,10 +186,13 @@ const EditAdminFunctionality = (handleClick) => {
             ? "Please enter a valid email"
             : "";
     }
+    if (name == "password1") {
+      updatedErrors[name] = value === "" ? "" : "";
+    }
     if (name === "phone") {
       const numericValue = value.replace(/[^0-9]/g, "");
       if (numericValue == "") {
-        updatedErrors[name] = `Phone is required`;
+        updatedErrors[name] = ``;
       } else if (numericValue.length !== 10) {
         updatedErrors[name] = "Phone number must be 10 digits";
       } else {
@@ -169,6 +218,7 @@ const EditAdminFunctionality = (handleClick) => {
     }
   };
   const validateForm = async () => {
+    console.log(errors);
     let error = false;
     let updatedErrors = { ...errors };
     if (editData.owner_name == "") {
@@ -201,6 +251,32 @@ const EditAdminFunctionality = (handleClick) => {
         }
       } catch (error) {
         console.error("Error validating email:", error);
+        error = false;
+      }
+    }
+    if (editData.password1 == "") {
+      updatedErrors.password1 = "";
+      error = false;
+    } else {
+      try {
+        if (errors.password1 == "") {
+          setLoader(true);
+          const emailValid = await passwordValidate(
+            editData.email,
+            editData.password1
+          );
+          if (emailValid == true) {
+            setLoader(false);
+            updatedErrors.password1 = "Password already exists";
+            error = false;
+          } else {
+            updatedErrors.password1 = "";
+            error = true;
+          }
+        } else {
+          error = false;
+        }
+      } catch (error) {
         error = false;
       }
     }
@@ -280,7 +356,7 @@ const EditAdminFunctionality = (handleClick) => {
                 password: "",
               });
               setExitEmail("");
-              ToastifyAlert(result?.data?.message, "success");
+              ToastifyAlert("Updated Successfully", "success");
               // handleClick();
               navigate("/users/admin");
             });
@@ -302,6 +378,7 @@ const EditAdminFunctionality = (handleClick) => {
     loaderEdit,
     handleBlur,
     keyEnter,
+    handleBlurPassword,
   };
 };
 export default EditAdminFunctionality;
