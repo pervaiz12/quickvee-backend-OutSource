@@ -14,6 +14,10 @@ import AlertModal from "../../reuseableComponents/AlertModal";
 import { LuRefreshCw } from "react-icons/lu";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import PasswordShow from "./../../Common/passwordShow";
+import CircularProgress from "@mui/material/CircularProgress";
+import ConfirmModal from "../../reuseableComponents/ConfirmModal";
+import FinalConfirm from "../../reuseableComponents/FinalConfirm";
+
 const StoreCateUser = () => {
   const [openAlert, setOpenAlert] = useState(true);
   const [alertModalOpen, setAlertModalOpen] = useState(false);
@@ -35,7 +39,12 @@ const StoreCateUser = () => {
     setUserInput,
     captchaText,
     setCaptchaText,
-    loader
+    loader,
+    setLoader,
+    confirmModalOpen,
+    setConfirmModalOpen,
+    setConfirmFinalModalOpen,
+    confirmfinalModalOpen
   } = InventoryExportLogic();
   console.log("alertOpen",alertOpen)
   console.log("modalHeaderText",modalHeaderText)
@@ -148,7 +157,9 @@ const StoreCateUser = () => {
     }
   };
 
-  const dupplicateInventoryHandler = (e) => {
+  
+
+  const dupplicateInventoryHandler = async (e) => {
     if (selectedStorefrom === "-- Select Store --") {
       // alert("Please select Store From");
       // showModal("Please select Store From");
@@ -157,7 +168,7 @@ const StoreCateUser = () => {
       // alert("Please select Store To");
       showModal("Please select Store To");
     } else {
-      dupplicateInventory(e);
+      await dupplicateInventory(e);
       setSelectedStorefrom("-- Select Store --");
       setSelectedStoreto("-- Select Store --");
     }
@@ -238,6 +249,14 @@ const StoreCateUser = () => {
     }; 
    
   // for captcha End
+
+  const confirmfun = () => {
+    setConfirmModalOpen(false)
+    setConfirmFinalModalOpen(true)
+  }
+  const confirmFinalfun = async () => {
+    console.log("function call kardo")
+  }
 
   return (
     <>
@@ -411,6 +430,18 @@ const StoreCateUser = () => {
       open={alertModalOpen}
       onClose={() => {setAlertModalOpen(false)}}
        />
+       <ConfirmModal
+            headerText="The existing Variants of the selected Store 2 Must be same as selected Store 1 Variants. Do you want to proceed?"
+            open={confirmModalOpen}
+            onClose={() => {setConfirmModalOpen(false)}}
+            onConfirm={confirmfun}
+        />
+        <FinalConfirm
+            headerText="Final Confirmation!!!"
+            open={confirmfinalModalOpen}
+            onClose={() => {setConfirmFinalModalOpen(false)}}
+            onConfirm={confirmFinalfun}
+        />
     </>
   );
 };

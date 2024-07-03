@@ -29,6 +29,8 @@ const InventoryExportLogic = () => {
   const [userInput, setUserInput] = useState(''); 
   const [captchaText, setCaptchaText] = useState(''); 
   const [loader, setLoader] = useState(false);
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [confirmfinalModalOpen, setConfirmFinalModalOpen] = useState(false);
 
   const handleStoreInput = async (event) => {
     let { errors } = values;
@@ -90,6 +92,8 @@ const InventoryExportLogic = () => {
             upc_check: values.upc_check,
             ...userTypeDataNew,
           };
+          setConfirmModalOpen(true);
+
           setLoader(true);
           try {
             const response = await axios.post(
@@ -203,7 +207,12 @@ const InventoryExportLogic = () => {
     setUserInput,
     captchaText,
     setCaptchaText,
-    loader
+    loader,
+    setLoader,
+    confirmModalOpen,
+    setConfirmModalOpen,
+    setConfirmFinalModalOpen,
+    confirmfinalModalOpen
   };
 };
 
