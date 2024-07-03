@@ -745,20 +745,20 @@ const TimesheetListing = ({ data }) => {
         ...userTypeData,
       };
       if (deleteBreakId) {
-        // dispatch(deleteTimesheet(datas)).then(() => {
-        //   dispatch(fetchtimeSheetData(data));
-        // });
-        try {
-          await dispatch(deleteTimesheet(datas))
-            .unwrap()
-            .then(() => {
-              dispatch(fetchtimeSheetData(data));
-            });
-        } catch (error) {
-          console.log(error);
-          getUnAutherisedTokenMessage();
-          handleCoockieExpire();
-        }
+        dispatch(deleteTimesheet(datas)).then(() => {
+          dispatch(fetchtimeSheetData(data));
+        });
+        // try {
+        //   await dispatch(deleteTimesheet(datas))
+        //     .unwrap()
+        //     .then(() => {
+        //       dispatch(fetchtimeSheetData(data));
+        //     });
+        // } catch (error) {
+        //   console.log(error);
+        //   getUnAutherisedTokenMessage();
+        //   handleCoockieExpire();
+        // }
       }
       ToastifyAlert("Deleted Successfully", "success");
       closeModalViewBreak();
@@ -768,20 +768,20 @@ const TimesheetListing = ({ data }) => {
         ...userTypeData,
       };
       if (deleteBreakTime) {
-        // dispatch(deleteBreak(datasBreakDelete)).then(() => {
-        //   dispatch(fetchtimeSheetData(data));
-        // });
-        try {
-          await dispatch(deleteBreak(datasBreakDelete))
-            .unwrap()
-            .then(() => {
-              dispatch(fetchtimeSheetData(data));
-            });
-        } catch (error) {
-          console.log(error);
-          getUnAutherisedTokenMessage();
-          handleCoockieExpire();
-        }
+        dispatch(deleteBreak(datasBreakDelete)).then(() => {
+          dispatch(fetchtimeSheetData(data));
+        });
+        // try {
+        //   await dispatch(deleteBreak(datasBreakDelete))
+        //     .unwrap()
+        //     .then(() => {
+        //       dispatch(fetchtimeSheetData(data));
+        //     });
+        // } catch (error) {
+        //   console.log(error);
+        //   getUnAutherisedTokenMessage();
+        //   handleCoockieExpire();
+        // }
       }
       ToastifyAlert("Deleted Successfully", "success");
       closeModalViewBreak();
