@@ -19,6 +19,11 @@ import AlertModal from "../../reuseableComponents/AlertModal";
 import { LuRefreshCw } from "react-icons/lu";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import PasswordShow from "./../../Common/passwordShow";
+import CircularProgress from "@mui/material/CircularProgress";
+import ConfirmModal from "../../reuseableComponents/ConfirmModal";
+import FinalConfirm from "../../reuseableComponents/FinalConfirm";
+
+
 const CateDuplicateStore = () => {
   const [selectedStorefrom, setSelectedStorefrom] = useState("-- Select Store --");
   const [selectedStoreto, setSelectedStoreto] = useState("-- Select Store --");
@@ -44,7 +49,7 @@ const CateDuplicateStore = () => {
   const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
   const { userTypeData } = useAuthDetails();
   const { token, ...userTypeDataNew } = userTypeData;
-
+  const [loader, setLoader] = useState(false);
   const [storefrom, setStorefrom] = useState();
   const [storeto, setStoreto] = useState();
 
@@ -53,6 +58,8 @@ const CateDuplicateStore = () => {
   const [categoryFocus, setCategoryFocus] = useState(false);
   const [userInput, setUserInput] = useState(''); 
   const [captchaText, setCaptchaText] = useState(''); 
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [confirmfinalModalOpen, setConfirmFinalModalOpen] = useState(false);
 
   const handlFocusCategory = () => {
     setCategoryFocus(true);
@@ -205,6 +212,73 @@ const CateDuplicateStore = () => {
     setsubmitmessage();
   };
 
+  const confirmfun = () => {
+    setConfirmModalOpen(false)
+    setConfirmFinalModalOpen(true)
+  }
+  const confirmFinalfun = async () => {
+    const upcCheckbox = document.getElementById("upc_check");
+    const isUpcChecked = upcCheckbox ? upcCheckbox.checked : false;
+    const categoryValues = selectedCategories.map(
+      (category) => category.value
+    );
+    if (categoryValues.length === 0) {
+      return;
+    } else if (categoryValues.includes("No categories found")) {
+      return;
+    }
+    const data = {
+      store_name_from: storefrom,
+      store_name_to: storeto,
+      category_name: categoryValues,
+      upc_check: isUpcChecked,
+      ...userTypeDataNew,
+    };
+    setConfirmFinalModalOpen(false)
+    setLoader(true);
+    try {
+      const response = await axios.post(
+        BASE_URL + CATEGORY_INVENTORY_DUPLICATE,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data.status === "Success") {
+        setsubmitmessage(response.data.msg);
+        setSelectedStorefrom("-- Select Store --");
+        setSelectedStoreto("-- Select Store --");
+        // ToastifyAlert("Duplicate Inventory Success!", "success");
+        setTimeout(()=>{setLoader(false);
+          ToastifyAlert("Added Successfully", "success");
+        },2000)
+        setUserInput("")
+        setStorefrom(null);
+        setStoreto(null);
+        setCategoryOptions([
+          { value: "Select Category", label: "Select Category" },
+        ]);
+        setSelectedCategories([]);
+        setIsSelectClicked(false);
+      } else if (response.data.status === "Failed") {
+        ToastifyAlert("Duplicate Inventory Failed!", "error");
+        setsubmitmessage(response.data.msg);
+      }
+        const canvas = canvasRef.current; 
+        const ctx = canvas.getContext('2d'); 
+        initializeCaptcha(ctx); 
+    } catch (error) {
+      // console.log('33 catch err');
+      ToastifyAlert("Error!", "error");
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
+      return new Error(error);
+    }
+  }
+
   const dupplicateCategoryInventory = async (e) => {
     e.preventDefault();
 
@@ -242,44 +316,48 @@ const CateDuplicateStore = () => {
           upc_check: isUpcChecked,
           ...userTypeDataNew,
         };
+        setConfirmModalOpen(true);
+        // return
+        // setLoader(true);
+        // try {
+        //   const response = await axios.post(
+        //     BASE_URL + CATEGORY_INVENTORY_DUPLICATE,
+        //     data,
+        //     {
+        //       headers: {
+        //         "Content-Type": "multipart/form-data",
+        //         Authorization: `Bearer ${token}`,
+        //       },
+        //     }
+        //   );
   
-        try {
-          const response = await axios.post(
-            BASE_URL + CATEGORY_INVENTORY_DUPLICATE,
-            data,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
-  
-          if (response.data.status === "Success") {
-            setsubmitmessage(response.data.msg);
-            setSelectedStorefrom("-- Select Store --");
-            setSelectedStoreto("-- Select Store --");
-            // ToastifyAlert("Duplicate Inventory Success!", "success");
-            ToastifyAlert("Added Successfully", "success");
-            setUserInput("")
-            setStorefrom(null);
-            setStoreto(null);
-            setCategoryOptions([
-              { value: "Select Category", label: "Select Category" },
-            ]);
-            setSelectedCategories([]);
-            setIsSelectClicked(false);
-          } else if (response.data.status === "Failed") {
-            ToastifyAlert("Duplicate Inventory Failed!", "error");
-            setsubmitmessage(response.data.msg);
-          }
-        } catch (error) {
-          // console.log('33 catch err');
-          ToastifyAlert("Error!", "error");
-          handleCoockieExpire()
-          getUnAutherisedTokenMessage()
-          return new Error(error);
-        }
+        //   if (response.data.status === "Success") {
+        //     setsubmitmessage(response.data.msg);
+        //     setSelectedStorefrom("-- Select Store --");
+        //     setSelectedStoreto("-- Select Store --");
+        //     // ToastifyAlert("Duplicate Inventory Success!", "success");
+        //     setTimeout(()=>{setLoader(false);
+        //       ToastifyAlert("Added Successfully", "success");
+        //     },2000)
+        //     setUserInput("")
+        //     setStorefrom(null);
+        //     setStoreto(null);
+        //     setCategoryOptions([
+        //       { value: "Select Category", label: "Select Category" },
+        //     ]);
+        //     setSelectedCategories([]);
+        //     setIsSelectClicked(false);
+        //   } else if (response.data.status === "Failed") {
+        //     ToastifyAlert("Duplicate Inventory Failed!", "error");
+        //     setsubmitmessage(response.data.msg);
+        //   }
+        // } catch (error) {
+        //   // console.log('33 catch err');
+        //   ToastifyAlert("Error!", "error");
+        //   handleCoockieExpire()
+        //   getUnAutherisedTokenMessage()
+        //   return new Error(error);
+        // }
       } else { 
           showModal("Please Fill Captcha Correctly!")
           const canvas = canvasRef.current; 
@@ -287,7 +365,7 @@ const CateDuplicateStore = () => {
           initializeCaptcha(ctx); 
       } 
 
-    
+      setTimeout(()=>{setLoader(false);},2000)
     }
   };
   const goToClose = () => {
@@ -583,10 +661,11 @@ const CateDuplicateStore = () => {
             style={{ justifyContent: "start" }}
           >
             <button
-              className="quic-btn quic-btn-save"
+              className="quic-btn quic-btn-save attributeUpdateBTN"
               onClick={dupplicateCategoryInventory}
+              disabled={loader}
             >
-              Duplicate Inventory
+              {loader ? <><CircularProgress color={"inherit"} width={15} size={15}/>Duplicate Inventory</> : "Duplicate Inventory"}
             </button>
           </div>
         </div>
@@ -596,6 +675,19 @@ const CateDuplicateStore = () => {
       open={alertModalOpen}
       onClose={() => {setAlertModalOpen(false)}}
        />
+
+      <ConfirmModal
+            headerText="The existing Variants of the selected Store 2 Must be same as selected Store 1 Variants. Do you want to proceed?"
+            open={confirmModalOpen}
+            onClose={() => {setConfirmModalOpen(false)}}
+            onConfirm={confirmfun}
+        />
+        <FinalConfirm
+            headerText="Final Confirmation!!!"
+            open={confirmfinalModalOpen}
+            onClose={() => {setConfirmFinalModalOpen(false)}}
+            onConfirm={confirmFinalfun}
+        />
     </>
   );
 };
