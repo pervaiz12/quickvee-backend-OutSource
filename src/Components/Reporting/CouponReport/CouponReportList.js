@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchCouponReportData } from "../../../Redux/features/Reports/CouponReport/CouponReportSlice";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
-
+import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { Grid } from "@mui/material";
 
 import { styled } from "@mui/material/styles";
@@ -13,6 +13,8 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { priceFormate } from "../../../hooks/priceFormate";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -51,6 +53,7 @@ const CouponReportList = (props) => {
     GetSessionLogin,
   } = useAuthDetails();
   const [CouponReportData, setCouponReportData] = useState([]);
+  const [sortOrder, setSortOrder] = useState("asc");
   const CouponReportDataState = useSelector((state) => state.CouponReportList);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
@@ -75,7 +78,18 @@ const CouponReportList = (props) => {
       !CouponReportDataState.loading &&
       CouponReportDataState.CouponReportData
     ) {
-      setCouponReportData(CouponReportDataState.CouponReportData);
+      const uodatedList = CouponReportDataState?.CouponReportData.map(
+        (item) => {
+          return {
+            ...item,
+            couponName:
+              item.coupon_type === "Discount"
+                ? "Direct Discount By App"
+                : item.coupon_type,
+          };
+        }
+      );
+      setCouponReportData(uodatedList);
     } else {
       setCouponReportData([]);
     }
@@ -89,51 +103,78 @@ const CouponReportList = (props) => {
     );
     return formattedDate;
   };
-
+  const tableRow = [
+    { type: "date", name: "date", label: "Date" },
+    { type: "str", name: "couponName", label: "Coupon Name" },
+    { type: "num", name: "total_coupons_used", label: "Total Coupon Used" },
+  ];
+  const sortByItemName = (type, name) => {
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      CouponReportData,
+      type,
+      name,
+      sortOrder
+    );
+    setCouponReportData(sortedItems);
+    setSortOrder(newOrder);
+  };
   return (
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <TableContainer>
-            <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-              <TableHead>
-                <StyledTableCell>Date</StyledTableCell>
-                <StyledTableCell>Coupon Name</StyledTableCell>
-                <StyledTableCell>Total Coupon Used</StyledTableCell>
-              </TableHead>
-              <TableBody>
-                {CouponReportData.length > 0 &&
-                  CouponReportData.map((couponData, index) => (
-                    <StyledTableRow>
-                      <StyledTableCell>
-                        <p className="report-title">
-                          {formatDate(couponData.date)}
-                        </p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p className="report-title">
-                          {couponData.coupon_type === "Discount"
-                            ? "Direct Discount By App"
-                            : couponData.coupon_type}
-                        </p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p className="report-title">
-                          {priceFormate(couponData.total_coupons_used)}
-                        </p>
-                      </StyledTableCell>
-                    </StyledTableRow>
+          {CouponReportDataState.loading ? (
+            <SkeletonTable columns={tableRow.map((item) => item.label)} />
+          ) : (
+            <TableContainer>
+              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
+                <TableHead>
+                  {tableRow.map((item, index) => (
+                    <StyledTableCell key={index}>
+                      <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName(item.type, item.name)}
+                      >
+                        <p>{item.label}</p>
+                        <img src={sortIcon} alt="" className="pl-1" />
+                      </button>
+                    </StyledTableCell>
                   ))}
-                {!CouponReportData.length > 0 && (
-                  <div className="box">
-                    <div className="q-category-bottom-categories-single-category">
-                      <p>No data found</p>
+                </TableHead>
+                <TableBody>
+                  {CouponReportData.length > 0 &&
+                    CouponReportData.map((couponData, index) => (
+                      <StyledTableRow>
+                        <StyledTableCell>
+                          <p className="report-title">
+                            {formatDate(couponData.date)}
+                          </p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          {/* <p className="report-title">
+                            {couponData.coupon_type === "Discount"
+                              ? "Direct Discount By App"
+                              : couponData.coupon_type}
+                          </p> */}
+                          <p>{couponData.couponName}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p className="report-title">
+                            {priceFormate(couponData.total_coupons_used)}
+                          </p>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                  {!CouponReportData.length > 0 && (
+                    <div className="box">
+                      <div className="q-category-bottom-categories-single-category">
+                        <p>No data found</p>
+                      </div>
                     </div>
-                  </div>
-                )}
-              </TableBody>
-            </StyledTable>
-          </TableContainer>
+                  )}
+                </TableBody>
+              </StyledTable>
+            </TableContainer>
+          )}
         </Grid>
       </Grid>
       {/* <div className="box">

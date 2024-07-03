@@ -18,6 +18,7 @@ export default function Discount_Per_Sales() {
     selectedoption,
     loader,
     merchant_new_id,
+    sortByItemName,
   } = Discount_per_sales_logic();
 
   return (
@@ -58,6 +59,8 @@ export default function Discount_Per_Sales() {
                 EmployeeFilterData={EmployeeFilterData}
                 loader={loader}
                 merchant_id={merchant_new_id}
+                sortByItemName={sortByItemName}
+                
               />
             </Grid>
           </Grid>

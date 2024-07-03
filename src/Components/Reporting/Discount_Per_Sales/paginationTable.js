@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 import Loader from "../../../CommonComponents/Loader";
 import { priceFormate } from "../../../hooks/priceFormate";
-
+import SortIconW from "../../../Assests/Category/SortingW.svg";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -56,6 +56,7 @@ const isJsonObject = (data) => {
 export default function DashboardTables(props) {
   const navigate = useNavigate();
   const [totalRecord, setTotalRecord] = React.useState("");
+
   // const handleSummeryPage = (order_id) => {
   //   navigate("/store-reporting/order-summary", {
   //     state: { merchantId: props.merchant_id, order_id: order_id },
@@ -112,9 +113,9 @@ export default function DashboardTables(props) {
         <TableContainer component={Paper}>
           {
             // console.log(props.EmployeeFilterData?.report_data?.length)
-            props.EmployeeFilterData?.report_data &&
-            props.EmployeeFilterData.report_data.length !== 0 ? (
-              Object.entries(props.EmployeeFilterData.report_data).map(
+            props.EmployeeFilterData &&
+            props.EmployeeFilterData.length !== 0 ? (
+              Object.entries(props.EmployeeFilterData).map(
                 ([key, result], index) => {
                   if (Array.isArray(result)) {
                     return (
@@ -123,26 +124,119 @@ export default function DashboardTables(props) {
                         <TableContainer sx={{}} aria-label="customized table">
                           <StyledTable>
                             <TableHead>
-                              <StyledTableCell align="center">
-                                Employee
+                              <StyledTableCell>
+                                {/* <button
+                                  className="flex items-center"
+                                  onClick={() =>
+                                    props.sortByItemName("str", "fullName")
+                                  }
+                                > */}
+                                <p>Employee</p>
+                                {/* <img
+                                    src={SortIconW}
+                                    alt=""
+                                    className="pl-1"
+                                  />
+                                </button> */}
                               </StyledTableCell>
-                              <StyledTableCell align="center">
-                                Discount($)
+                              <StyledTableCell>
+                                <button
+                                  className="flex items-center"
+                                  onClick={() =>
+                                    props.sortByItemName("num", "discount")
+                                  }
+                                >
+                                  <p>Discount($)</p>
+                                  <img
+                                    src={SortIconW}
+                                    alt=""
+                                    className="pl-1"
+                                  />
+                                </button>
                               </StyledTableCell>
-                              <StyledTableCell align="center">
-                                Discount Type
+                              <StyledTableCell>
+                                <button
+                                  className="flex items-center"
+                                  onClick={() =>
+                                    props.sortByItemName("num", "coupon_code")
+                                  }
+                                >
+                                  <p> Discount Type</p>
+                                  <img
+                                    src={SortIconW}
+                                    alt=""
+                                    className="pl-1"
+                                  />
+                                </button>
                               </StyledTableCell>
-                              <StyledTableCell align="center">
-                                Item Discount($)
+                              <StyledTableCell>
+                                <button
+                                  className="flex items-center"
+                                  onClick={() =>
+                                    props.sortByItemName(
+                                      "num",
+                                      "line_item_discount"
+                                    )
+                                  }
+                                >
+                                  <p>Item Discount($)</p>
+                                  <img
+                                    src={SortIconW}
+                                    alt=""
+                                    className="pl-1"
+                                  />
+                                </button>
                               </StyledTableCell>
-                              <StyledTableCell align="center">
-                                Adjusted Item Price($)
+                              <StyledTableCell>
+                                <button
+                                  className="flex items-center"
+                                  onClick={() =>
+                                    props.sortByItemName(
+                                      "num",
+                                      "cash_discounting"
+                                    )
+                                  }
+                                >
+                                  <p>Adjusted Item Price($)</p>
+                                  <img
+                                    src={SortIconW}
+                                    alt=""
+                                    className="pl-1"
+                                  />
+                                </button>
                               </StyledTableCell>
-                              <StyledTableCell align="center">
-                                Order ID
+                              <StyledTableCell>
+                                <button
+                                  className="flex items-center"
+                                  onClick={() =>
+                                    props.sortByItemName("id", "order_id")
+                                  }
+                                >
+                                  <p> Order ID</p>
+                                  <img
+                                    src={SortIconW}
+                                    alt=""
+                                    className="pl-1"
+                                  />
+                                </button>
                               </StyledTableCell>
-                              <StyledTableCell align="center">
-                                Date & Time
+                              <StyledTableCell>
+                                <button
+                                  className="flex items-center"
+                                  onClick={() =>
+                                    props.sortByItemName(
+                                      "date",
+                                      "merchant_time"
+                                    )
+                                  }
+                                >
+                                  <p>Date & Time</p>
+                                  <img
+                                    src={SortIconW}
+                                    alt=""
+                                    className="pl-1"
+                                  />
+                                </button>
                               </StyledTableCell>
                               {/* <StyledTableCell align="center">
                                 Order Details
@@ -151,33 +245,38 @@ export default function DashboardTables(props) {
                             <TableBody>
                               {result.map((item, innerIndex) => (
                                 <StyledTableRow key={innerIndex}>
-                                  <StyledTableCell align="center">
-                                    {item?.f_name + " " + item?.l_name}
+                                  <StyledTableCell>
+                                    {/* {item?.f_name + " " + item?.l_name} */}
+                                    <p>{item.fullName}</p>
                                   </StyledTableCell>
-                                  <StyledTableCell align="center">
+                                  <StyledTableCell>
                                     {priceFormate(
                                       parseFloat(item?.discount).toFixed(2)
                                     )}
                                   </StyledTableCell>
-                                  <StyledTableCell align="center">
+                                  <StyledTableCell>
                                     {item?.coupon_code}
                                   </StyledTableCell>
-                                  <StyledTableCell align="center">
-                                    {priceFormate(parseFloat(item?.line_item_discount).toFixed(2))}
+                                  <StyledTableCell>
+                                    {priceFormate(
+                                      parseFloat(
+                                        item?.line_item_discount
+                                      ).toFixed(2)
+                                    )}
                                   </StyledTableCell>
-                                  <StyledTableCell align="center">
+                                  <StyledTableCell>
                                     {priceFormate(item?.cash_discounting)}
                                   </StyledTableCell>
-                                  <StyledTableCell align="center">
+                                  <StyledTableCell>
                                     <Link
                                       to={`/order/store-reporting/order-summary/${props.merchant_id}/${item.order_id}`}
                                       // onClick={() => handleSummeryPage(row.order_id)}
                                       target="_blank"
                                     >
-                                      {item?.order_id}
+                                     <p className="text-[#0A64F9]">{item?.order_id}</p>
                                     </Link>
                                   </StyledTableCell>
-                                  <StyledTableCell align="center">
+                                  <StyledTableCell>
                                     {formatDateTime(item?.merchant_time)}
                                   </StyledTableCell>
                                   {/* <StyledTableCell align="center">
@@ -192,10 +291,10 @@ export default function DashboardTables(props) {
                                 </StyledTableRow>
                               ))}
                               <StyledTableRow>
-                                <StyledTableCell align="center">
-                                Total Discount
+                                <StyledTableCell>
+                                  Total Discount
                                 </StyledTableCell>
-                                <StyledTableCell align="center">
+                                <StyledTableCell>
                                   {`$${priceFormate(
                                     result
                                       .reduce((total, item) => {
@@ -213,20 +312,18 @@ export default function DashboardTables(props) {
                                 <StyledTableCell></StyledTableCell>
                                 <StyledTableCell></StyledTableCell>
                               </StyledTableRow>
-                              {Object.entries(
-                                props.EmployeeFilterData.report_data
-                              ).length -
+                              {Object.entries(props.EmployeeFilterData).length -
                                 1 ===
                                 index && (
                                 <StyledTableRow>
-                                  <StyledTableCell align="center">
+                                  <StyledTableCell>
                                     <div className="q-category-bottom-report-listing">
                                       <div>
                                         <p className="">Final Discount Total</p>
                                       </div>
                                     </div>
                                   </StyledTableCell>
-                                  <StyledTableCell align="center">
+                                  <StyledTableCell>
                                     <div className="q-category-bottom-report-listing">
                                       <div>
                                         <p className="">
@@ -235,6 +332,11 @@ export default function DashboardTables(props) {
                                       </div>
                                     </div>
                                   </StyledTableCell>
+                                  <StyledTableCell></StyledTableCell>
+                                  <StyledTableCell></StyledTableCell>
+                                  <StyledTableCell></StyledTableCell>
+                                  <StyledTableCell></StyledTableCell>
+                                  <StyledTableCell></StyledTableCell>
                                 </StyledTableRow>
                               )}
                             </TableBody>
