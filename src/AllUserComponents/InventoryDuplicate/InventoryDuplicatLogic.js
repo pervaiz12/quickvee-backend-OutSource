@@ -30,10 +30,10 @@ const InventoryExportLogic = () => {
   const [captchaText, setCaptchaText] = useState(''); 
   const [loader, setLoader] = useState(false);
   const [loadersetting, setLoaderSetting] = useState(false);
-  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-  const [confirmfinalModalOpen, setConfirmFinalModalOpen] = useState(false);
   const [confirmModalOpensetting, setConfirmModalOpensetting] = useState(false);
   const [confirmfinalModalOpensetting, setConfirmFinalModalOpensetting] = useState(false);
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [confirmfinalModalOpen, setConfirmFinalModalOpen] = useState(false);
 
   const handleStoreInput = async (event) => {
     let { errors } = values;
@@ -82,6 +82,8 @@ const InventoryExportLogic = () => {
       upc_check: values.upc_check,
       ...userTypeDataNew,
     };
+          setConfirmModalOpen(true);
+
     setConfirmFinalModalOpen(false)
     setLoader(true);
     try {

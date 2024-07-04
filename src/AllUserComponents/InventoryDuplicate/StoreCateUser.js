@@ -166,7 +166,9 @@ const StoreCateUser = () => {
     }
   };
 
-  const dupplicateInventoryHandler = (e) => {
+  
+
+  const dupplicateInventoryHandler = async (e) => {
     if (selectedStorefrom === "-- Select Store --") {
       // alert("Please select Store From");
       // showModal("Please select Store From");
@@ -175,7 +177,7 @@ const StoreCateUser = () => {
       // alert("Please select Store To");
       showModal("Please select Store To");
     } else {
-      dupplicateInventory(e);
+      await dupplicateInventory(e);
       setSelectedStorefrom("-- Select Store --");
       setSelectedStoreto("-- Select Store --");
     }
@@ -256,6 +258,7 @@ const StoreCateUser = () => {
     }; 
    
   // for captcha End
+
 
 
   const confirmfun = () => {
@@ -459,6 +462,18 @@ const StoreCateUser = () => {
       open={alertModalOpen}
       onClose={() => {setAlertModalOpen(false)}}
        />
+       <ConfirmModal
+            headerText="The existing Variants of the selected Store 2 Must be same as selected Store 1 Variants. Do you want to proceed?"
+            open={confirmModalOpen}
+            onClose={() => {setConfirmModalOpen(false)}}
+            onConfirm={confirmfun}
+        />
+        <FinalConfirm
+            headerText="Final Confirmation!!!"
+            open={confirmfinalModalOpen}
+            onClose={() => {setConfirmFinalModalOpen(false)}}
+            onConfirm={confirmFinalfun}
+        />
 
       <ConfirmModal
             headerText="The existing Inventory of the selected Store 2 will be erased and your Inventory will be copied from Store 1 to the selected Store 2. Do you want to proceed?"
