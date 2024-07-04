@@ -14,15 +14,15 @@ import sortIcon from "../../Assests/Category/SortingW.svg";
 import Summery from "../../Assests/Category/Summery.svg";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
-    backgroundColor: theme.palette.common.black,
+    backgroundColor: "#253338",
     color: theme.palette.common.white,
     fontFamily: "CircularSTDBook !important",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    paddingTop:"12px",
-    paddingLeft:"12px",
-    paddingRight:"1px",
+    paddingTop: "12px",
+    paddingLeft: "12px",
+    paddingRight: "1px",
     fontFamily: "CircularSTDMedium",
   },
 }));
@@ -121,7 +121,7 @@ export default function DashboardTables(props) {
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
           <TableRow>
-            <StyledTableCell >
+            <StyledTableCell>
               <button
                 className="flex items-center"
                 onClick={() => props.sortByItemName("str", "billing_name")}
@@ -130,10 +130,10 @@ export default function DashboardTables(props) {
                 <img src={sortIcon} alt="" className="pl-1" />
               </button>
             </StyledTableCell>
-            <StyledTableCell className="whitespace-nowrap" >
+            <StyledTableCell className="whitespace-nowrap">
               Customer No.
             </StyledTableCell>
-            <StyledTableCell >
+            <StyledTableCell>
               <button
                 className="flex items-center"
                 onClick={() => props.sortByItemName("date", "date_time")}
@@ -142,7 +142,7 @@ export default function DashboardTables(props) {
                 <img src={sortIcon} alt="" className="pl-1" />
               </button>
             </StyledTableCell>
-            <StyledTableCell >
+            <StyledTableCell>
               <button
                 className="flex items-center"
                 onClick={() => props.sortByItemName("id", "order_id")}
@@ -151,7 +151,7 @@ export default function DashboardTables(props) {
                 <img src={sortIcon} alt="" className="pl-1" />
               </button>
             </StyledTableCell>
-            <StyledTableCell >
+            <StyledTableCell>
               <button
                 className="flex items-center"
                 onClick={() => props.sortByItemName("str", "order_method")}
@@ -160,7 +160,7 @@ export default function DashboardTables(props) {
                 <img src={sortIcon} alt="" className="pl-1" />
               </button>
             </StyledTableCell>
-            <StyledTableCell >
+            <StyledTableCell>
               <button
                 className="flex items-center"
                 onClick={() => props.sortByItemName("str", "m_status")}
@@ -169,7 +169,7 @@ export default function DashboardTables(props) {
                 <img src={sortIcon} alt="" className="pl-1" />
               </button>
             </StyledTableCell>
-            <StyledTableCell >
+            <StyledTableCell>
               <button
                 className="flex items-center"
                 onClick={() => props.sortByItemName("num", "amt")}
@@ -178,7 +178,7 @@ export default function DashboardTables(props) {
                 <img src={sortIcon} alt="" className="pl-1" />
               </button>
             </StyledTableCell>
-            <StyledTableCell >Order Details</StyledTableCell>
+            <StyledTableCell>Order Details</StyledTableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -187,28 +187,22 @@ export default function DashboardTables(props) {
           props.dashboardRecord.length > 0 ? (
             props.dashboardRecord.map((row) => (
               <StyledTableRow key={row.id}>
-                <StyledTableCell >
+                <StyledTableCell>
                   {getCustomerName(row.deliver_name, row.billing_name)}
                 </StyledTableCell>
-                <StyledTableCell >
-                  {row.delivery_phn}
-                </StyledTableCell>
-                <StyledTableCell >
+                <StyledTableCell>{row.delivery_phn}</StyledTableCell>
+                <StyledTableCell>
                   <p className="whitespace-nowrap">
                     {formatDateTime(row.date_time)}
                   </p>
                 </StyledTableCell>
                 <StyledTableCell>{row.order_id}</StyledTableCell>
-                <StyledTableCell >
-                  {row.order_method}
-                </StyledTableCell>
+                <StyledTableCell>{row.order_method}</StyledTableCell>
                 <StyledTableCell>
                   {getStatus(row.order_method, row.m_status)}
                 </StyledTableCell>
-                <StyledTableCell >{`$${priceFormate(
-                  row.amt
-                )}`}</StyledTableCell>
-                <StyledTableCell >
+                <StyledTableCell>{`$${priceFormate(row.amt)}`}</StyledTableCell>
+                <StyledTableCell>
                   <Link
                     className="whitespace-nowrap text-[#0A64F9]"
                     to={`/order/store-reporting/order-summary/${props.merchant_id}/${row.order_id}`}

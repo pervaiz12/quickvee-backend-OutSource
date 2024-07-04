@@ -79,8 +79,12 @@ const VendorsDetail = ({ setVisible }) => {
       };
       await dispatch(fetchVendorsListData(data)).unwrap();
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        alert("Please check your internet connection and try again.");
+      }
     }
   };
 
@@ -152,11 +156,11 @@ const VendorsDetail = ({ setVisible }) => {
   };
   const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
   const sortByItemName = (type, name) => {
-    const itemWthoutDoller = allvendors.map((item)=>{
+    const itemWthoutDoller = allvendors.map((item) => {
       const dateString = item.recent_trans;
-      const [date, doller] = dateString.split('-')
-      return{ ...item,recent_trans:date }
-    })
+      const [date, doller] = dateString.split("-");
+      return { ...item, recent_trans: date };
+    });
 
     const { sortedItems, newOrder } = SortTableItemsHelperFun(
       itemWthoutDoller,
@@ -164,10 +168,12 @@ const VendorsDetail = ({ setVisible }) => {
       name,
       sortOrder
     );
-    const itemWithSortedWitchDoller = sortedItems.map((item)=>{
-      const originalItem = allvendors.find(vendor => vendor.vendor_id === item.vendor_id);
-      return {...item, recent_trans: originalItem.recent_trans} 
-    })
+    const itemWithSortedWitchDoller = sortedItems.map((item) => {
+      const originalItem = allvendors.find(
+        (vendor) => vendor.vendor_id === item.vendor_id
+      );
+      return { ...item, recent_trans: originalItem.recent_trans };
+    });
     setallvendors(itemWithSortedWitchDoller);
     setSortOrder(newOrder);
   };
@@ -216,14 +222,13 @@ const VendorsDetail = ({ setVisible }) => {
                   <StyledTable>
                     <TableHead>
                       <StyledTableCell>
-                      <button
+                        <button
                           className="flex items-center"
                           onClick={() => sortByItemName("str", "vendor_name")}
                         >
                           <p className="whitespace-nowrap">Vendor Name</p>
                           <img src={sortIcon} alt="" className="pl-1" />
                         </button>
-                       
                       </StyledTableCell>
                       <StyledTableCell>
                         <button
@@ -235,24 +240,25 @@ const VendorsDetail = ({ setVisible }) => {
                         </button>
                       </StyledTableCell>
                       <StyledTableCell>
-                      <button
+                        <button
                           className="flex items-center"
                           onClick={() => sortByItemName("num", "amount")}
                         >
                           <p className="whitespace-nowrap">Amount</p>
                           <img src={sortIcon} alt="" className="pl-1" />
                         </button>
-                        
-                        </StyledTableCell>
+                      </StyledTableCell>
                       <StyledTableCell>
-                      <button
+                        <button
                           className="flex items-center"
                           onClick={() => sortByItemName("date", "recent_trans")}
                         >
-                          <p className="whitespace-nowrap">Recent Transaction</p>
+                          <p className="whitespace-nowrap">
+                            Recent Transaction
+                          </p>
                           <img src={sortIcon} alt="" className="pl-1" />
                         </button>
-                        </StyledTableCell>
+                      </StyledTableCell>
                       <StyledTableCell>Status</StyledTableCell>
                       <StyledTableCell></StyledTableCell>
                     </TableHead>

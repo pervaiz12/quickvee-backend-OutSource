@@ -24,6 +24,8 @@ import { getOrderListCount } from "../../../Redux/features/Orders/inStoreOrderSl
 import useDebounce from "../../../hooks/useDebouncs";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
+
+import PasswordShow from "../../../Common/passwordShow";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -55,6 +57,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const InstoreTableViewData = (props, searchId) => {
   // console.log(props)
   const navigate = useNavigate();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
@@ -112,36 +115,6 @@ const InstoreTableViewData = (props, searchId) => {
   ]);
 
   useEffect(() => {
-    const transactionType = (type) => {
-      if (type === "Cash Payment") {
-        return "Cash";
-      }
-      if (type === "Card Payment") {
-        return "Online";
-      } else {
-        return type;
-      }
-    };
-    const fetchData = async () => {
-      if (props?.selectedDateRange?.start_date) {
-        let data = {
-          merchant_id: props.merchant_id,
-          order_type: "Offline",
-          trans_type: transactionType(props.OrderSourceData),
-          start_date: props.selectedDateRange?.start_date,
-          end_date: props.selectedDateRange?.end_date,
-          emp_id: props?.EmployeeIDData,
-          search_by:
-            props?.OffSearchIdData !== "" ? props?.OffSearchIdData : null,
-          perpage: rowsPerPage,
-          page: debouncedValue === "" ? currentPage : "1",
-        };
-        // console.log("date data", data);
-        if (data) {
-          dispatch(fetchInStoreOrderData(data));
-        }
-      }
-    };
     fetchData();
   }, [
     // dispatch,
@@ -152,6 +125,45 @@ const InstoreTableViewData = (props, searchId) => {
     rowsPerPage,
     // AllInStoreDataState.OrderListCount,
   ]);
+  const fetchData = async () => {
+    const transactionType = (type) => {
+      if (type === "Cash Payment") {
+        return "Cash";
+      }
+      if (type === "Card Payment") {
+        return "Online";
+      } else {
+        return type;
+      }
+    };
+    if (props?.selectedDateRange?.start_date) {
+      let data = {
+        merchant_id: props.merchant_id,
+        order_type: "Offline",
+        trans_type: transactionType(props.OrderSourceData),
+        start_date: props.selectedDateRange?.start_date,
+        end_date: props.selectedDateRange?.end_date,
+        emp_id: props?.EmployeeIDData,
+        search_by:
+          props?.OffSearchIdData !== "" ? props?.OffSearchIdData : null,
+        perpage: rowsPerPage,
+        page: debouncedValue === "" ? currentPage : "1",
+      };
+      // console.log("date data", data);
+      if (data) {
+        try {
+          await dispatch(fetchInStoreOrderData(data)).unwrap();
+        } catch (error) {
+          if (error.status == 401) {
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          } else if (error.status == "Network Error") {
+            alert("Please check your internet connection and try again.");
+          }
+        }
+      }
+    }
+  };
 
   useEffect(() => {
     setTotalCount(AllInStoreDataState.OrderListCount);

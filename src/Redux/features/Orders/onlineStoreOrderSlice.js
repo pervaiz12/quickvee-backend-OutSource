@@ -10,7 +10,7 @@ const initialState = {
   loading: false,
   onlineStoreOrderData: [],
   OrderChangeStatusData: [],
-  OrderListCount:0,
+  OrderListCount: 0,
   successMessage: "",
   error: "",
 };
@@ -18,20 +18,30 @@ const initialState = {
 // Generate pening , fulfilled and rejected action type
 export const fetchOnlieStoreOrderData = createAsyncThunk(
   "onlineStoreOrder/fetchOnlieStoreOrderData.",
-  async (data) => {
-    const{token,...newData}=data
+  async (data, { rejectWithValue }) => {
+    const { token, ...newData } = data;
     try {
       const response = await axios.post(
         BASE_URL + LIST_ALL_STORE_ORDER_LIST,
         newData,
-        { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`,} }
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       // console.log(response)
       if (response.data.status === true) {
         return response.data.order_data;
       }
     } catch (error) {
-      throw new Error(error.response.data.message);
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
@@ -39,11 +49,18 @@ export const fetchOnlieStoreOrderData = createAsyncThunk(
 export const fetchOrderChangeStatusData = createAsyncThunk(
   "onlineStoreOrder/fetchOrderChangeStatusData.",
   async (data) => {
-    const{token,...newData}=data
+    const { token, ...newData } = data;
     try {
-      const response = await axios.post(BASE_URL + UPDATE_ORDER_STATUS, newData, {
-        headers: { "Content-Type": "multipart/form-data" ,Authorization: `Bearer ${token}`},
-      });
+      const response = await axios.post(
+        BASE_URL + UPDATE_ORDER_STATUS,
+        newData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       console.log(response);
       if (response.data.status === true) {
         return response.data.message;

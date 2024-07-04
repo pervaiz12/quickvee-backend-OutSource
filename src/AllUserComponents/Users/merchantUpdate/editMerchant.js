@@ -83,6 +83,13 @@ export default function EditMerchant({
     return result && result.title ? result.title : null;
   }, [getEditMerchant]);
 
+  const handleKeyPressNew = (event) => {
+    const allowedChars = /^\S+$/;
+    if (!allowedChars.test(event.key)) {
+      event.preventDefault();
+    }
+  };
+
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -160,6 +167,7 @@ export default function EditMerchant({
                   readOnly
                   onFocusData={(e) => e.target.removeAttribute("readonly")}
                   onKeyDown={keyEnter}
+                  onKeyPressFun={handleKeyPressNew}
                 />
                 {jsxData(getEditMerchant.newPassword)}
               </div>
