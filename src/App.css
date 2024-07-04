@@ -801,13 +801,13 @@ a.days_filter {
 }
 
 /* width */
-#custom-scroll::-webkit-scrollbar {
+.custom-scroll::-webkit-scrollbar {
   width: 2px;
   height: auto;
 }
 
 /* Track */
-#custom-scroll::-webkit-scrollbar-track {
+.custom-scroll::-webkit-scrollbar-track {
   box-shadow: inset 0 0 5px grey;
   border-radius: 10px;
 }

@@ -177,8 +177,8 @@ const SideMenu = () => {
   return (
     <>
       <div
-        className="sidebar-menu"
-        id="custom-scroll"
+        className="sidebar-menu custom-scroll"
+        // id="custom-scroll"
         style={{
           width: isMenuOpenRedux ? "16rem" : "4rem",
           paddingTop: "69px",

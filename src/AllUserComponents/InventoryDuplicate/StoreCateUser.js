@@ -41,11 +41,18 @@ const StoreCateUser = () => {
     setCaptchaText,
     loader,
     setLoader,
+    loadersetting,
+    setLoaderSetting,
     confirmModalOpen,
     setConfirmModalOpen,
     setConfirmFinalModalOpen,
     confirmfinalModalOpen,
-    confirmFinalLogic
+    confirmModalOpensetting,
+    setConfirmModalOpensetting,
+    confirmfinalModalOpensetting,
+    setConfirmFinalModalOpensetting,
+    confirmFinalLogic,
+    confirmFinalSettingLogic
   } = InventoryExportLogic();
   console.log("alertOpen",alertOpen)
   console.log("modalHeaderText",modalHeaderText)
@@ -122,6 +129,12 @@ const StoreCateUser = () => {
       }else if(modalHeaderText === "Please Fill Captcha Correctly!"){
         setAlertModalHeaderText("Please Fill Captcha Correctly!")
         setAlertModalOpen(alertOpen);
+      }else if(modalHeaderText === "Your Inventory has been copied to your other location.  Please verify and make any changes as needed."){
+        setAlertModalHeaderText("Your Inventory has been copied to your other location.  Please verify and make any changes as needed.")
+        setAlertModalOpen(alertOpen);
+      }else if(modalHeaderText === "Your setting has been copied to your other location.  Please verify and make any changes as needed."){
+        setAlertModalHeaderText("Your setting has been copied to your other location.  Please verify and make any changes as needed.")
+        setAlertModalOpen(alertOpen);
       }
     }
   }, [alertOpen,modalHeaderText]);
@@ -175,7 +188,7 @@ const StoreCateUser = () => {
     }
   };
 
-  const dupplicateSettingsHandler = (e) => {
+  const dupplicateSettingsHandler = async (e) => {
     if (selectedStorefrom === "-- Select Store --") {
       // alert("Please select Store From");
       // showModal("Please select Store From");
@@ -184,7 +197,9 @@ const StoreCateUser = () => {
       // alert("Please select Store To");
       showModal("Please select Store To");
     } else {
-      dupplicateSettings(e);
+      await dupplicateSettings(e);
+      setSelectedStorefrom("-- Select Store --");
+      setSelectedStoreto("-- Select Store --");
     }
   };
 
@@ -255,6 +270,19 @@ const StoreCateUser = () => {
   }
   const confirmFinalfun = async () => {
     await confirmFinalLogic();
+    setSelectedStorefrom("-- Select Store --");
+    setSelectedStoreto("-- Select Store --");
+    const canvas = canvasRef.current; 
+    const ctx = canvas.getContext('2d'); 
+    initializeCaptcha(ctx); 
+  }
+
+  const confirmfunsetting = () => {
+    setConfirmModalOpensetting(false)
+    setConfirmFinalModalOpensetting(true)
+  }
+  const confirmFinalfunsetting = async () => {
+    await confirmFinalSettingLogic();
     setSelectedStorefrom("-- Select Store --");
     setSelectedStoreto("-- Select Store --");
     const canvas = canvasRef.current; 
@@ -381,7 +409,7 @@ const StoreCateUser = () => {
 
           {/* for captcha start  */}
 
-              <div className="captcha_wrapper ">
+              <div className="q-add-inventory-section-header ">
                   <div className="captue_Img_Reload"> 
                     <canvas ref={canvasRef} width="200" height="50" onClick={  () => initializeCaptcha(canvasRef.current.getContext('2d'))}> 
                     </canvas> 
@@ -390,7 +418,7 @@ const StoreCateUser = () => {
                     </button> 
                   </div>
               </div>
-              <div className="q-order-page-container mx-6 mb-6 md:flex-col d-flex">
+              <div className="q-add-inventory-section-header">
                 <Grid container spacing={4} >
                   <Grid item xs={6} sm={12} md={6}>
                     <BasicTextFields
@@ -411,7 +439,7 @@ const StoreCateUser = () => {
             style={{ justifyContent: "start" }}
           >
             <button
-              className="quic-btn quic-btn-save"
+              className="quic-btn quic-btn-save attributeUpdateBTN"
               // onClick={dupplicateInventory}
               onClick={(e) => dupplicateInventoryHandler(e)}
               disabled={loader}
@@ -419,12 +447,12 @@ const StoreCateUser = () => {
               {loader ? <><CircularProgress color={"inherit"} width={15} size={15}/>Duplicate Inventory</> : "Duplicate Inventory"}
             </button>
             <button
-              className="quic-btn quic-btn-cancle"
+              className="quic-btn quic-btn-cancle attributeUpdateBTN"
               // onClick={dupplicateSettings}
               onClick={(e) => dupplicateSettingsHandler(e)}
-              disabled={loader}
+              disabled={loadersetting}
             >
-              Duplicate setting
+              {loadersetting ? <><CircularProgress color={"inherit"} width={15} size={15}/>Duplicate setting</> : "Duplicate setting"}
             </button>
           </div>
         </div>
@@ -445,6 +473,18 @@ const StoreCateUser = () => {
             open={confirmfinalModalOpen}
             onClose={() => {setConfirmFinalModalOpen(false)}}
             onConfirm={confirmFinalfun}
+        />
+        <ConfirmModal
+            headerText="The existing setting of the selected Store 2 will be erased and your setting will be copied from Store 1 to the selected Store 2. Do you want to proceed?"
+            open={confirmModalOpensetting}
+            onClose={() => {setConfirmModalOpensetting(false)}}
+            onConfirm={confirmfunsetting}
+        />
+        <FinalConfirm
+            headerText="Final Confirmation!!!"
+            open={confirmfinalModalOpensetting}
+            onClose={() => {setConfirmFinalModalOpensetting(false)}}
+            onConfirm={confirmFinalfunsetting}
         />
     </>
   );

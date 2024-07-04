@@ -610,6 +610,7 @@ const CateDuplicateStore = () => {
                       id: item?.merchant_id,
                     }))
                   }
+
                   heading={"-- Select Store --"}
                   title={"title"}
                   selectedOption={selectedStoreto}
@@ -634,7 +635,7 @@ const CateDuplicateStore = () => {
 
           {/* for captcha start  */}
 
-          <div className="captcha_wrapper ">
+          <div className="q-add-inventory-section-header ">
                   <div className="captue_Img_Reload"> 
                     <canvas ref={canvasRef} width="200" height="50" onClick={  () => initializeCaptcha(canvasRef.current.getContext('2d'))}> 
                     </canvas> 
@@ -643,7 +644,7 @@ const CateDuplicateStore = () => {
                     </button> 
                   </div>
               </div>
-              <div className="q-order-page-container mx-6 mb-6 md:flex-col d-flex">
+              <div className="q-add-inventory-section-header">
                 <Grid container spacing={4} >
                   <Grid item xs={6} sm={12} md={6}>
                     <BasicTextFields
