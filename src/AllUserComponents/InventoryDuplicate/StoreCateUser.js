@@ -18,7 +18,6 @@ import CircularProgress from "@mui/material/CircularProgress";
 import ConfirmModal from "../../reuseableComponents/ConfirmModal";
 import FinalConfirm from "../../reuseableComponents/FinalConfirm";
 
-
 const StoreCateUser = () => {
   const [openAlert, setOpenAlert] = useState(true);
   const [alertModalOpen, setAlertModalOpen] = useState(false);
@@ -42,18 +41,10 @@ const StoreCateUser = () => {
     setCaptchaText,
     loader,
     setLoader,
-    loadersetting,
-    setLoaderSetting,
     confirmModalOpen,
     setConfirmModalOpen,
     setConfirmFinalModalOpen,
-    confirmfinalModalOpen,
-    confirmModalOpensetting,
-    confirmfinalModalOpensetting,
-    setConfirmModalOpensetting,
-    setConfirmFinalModalOpensetting,
-    confirmFinalLogic,
-    confirmFinalSettingLogic
+    confirmfinalModalOpen
   } = InventoryExportLogic();
   console.log("alertOpen",alertOpen)
   console.log("modalHeaderText",modalHeaderText)
@@ -259,35 +250,12 @@ const StoreCateUser = () => {
    
   // for captcha End
 
-
-
   const confirmfun = () => {
     setConfirmModalOpen(false)
     setConfirmFinalModalOpen(true)
   }
   const confirmFinalfun = async () => {
-    await confirmFinalLogic();
-    showModal("Your Inventory has been copied to your other location.  Please verify and make any changes as needed.");
-    setSelectedStorefrom("-- Select Store --");
-    setSelectedStoreto("-- Select Store --");
-    const canvas = canvasRef.current; 
-    const ctx = canvas.getContext('2d'); 
-    initializeCaptcha(ctx); 
-  }
-
-
-  const confirmSettingfun = () => {
-    setConfirmModalOpensetting(false)
-    setConfirmFinalModalOpensetting(true)
-  }
-  const confirmFinalSettingfun = async () => {
-    await confirmFinalSettingLogic();
-    showModal("Your setting has been copied to your other location.  Please verify and make any changes as needed.");
-    setSelectedStorefrom("-- Select Store --");
-    setSelectedStoreto("-- Select Store --");
-    const canvas = canvasRef.current; 
-    const ctx = canvas.getContext('2d'); 
-    initializeCaptcha(ctx); 
+    console.log("function call kardo")
   }
 
   return (
@@ -444,15 +412,15 @@ const StoreCateUser = () => {
               onClick={(e) => dupplicateInventoryHandler(e)}
               disabled={loader}
             >
-              {loader ? <><CircularProgress color={"inherit"} width={15} size={15}/>Duplicate Inventory</> : "Duplicate Inventory"}
+              Duplicate Inventory
             </button>
             <button
               className="quic-btn quic-btn-cancle"
               // onClick={dupplicateSettings}
               onClick={(e) => dupplicateSettingsHandler(e)}
-              disabled={loadersetting}
+              disabled={loader}
             >
-              {loadersetting ? <><CircularProgress color={"inherit"} width={15} size={15}/>Duplicate setting</> : "Duplicate setting"}
+              Duplicate setting
             </button>
           </div>
         </div>
@@ -474,33 +442,6 @@ const StoreCateUser = () => {
             onClose={() => {setConfirmFinalModalOpen(false)}}
             onConfirm={confirmFinalfun}
         />
-
-      <ConfirmModal
-            headerText="The existing Inventory of the selected Store 2 will be erased and your Inventory will be copied from Store 1 to the selected Store 2. Do you want to proceed?"
-            open={confirmModalOpen}
-            onClose={() => {setConfirmModalOpen(false)}}
-            onConfirm={confirmfun}
-        />
-        <FinalConfirm
-            headerText="Final Confirmation!!!"
-            open={confirmfinalModalOpen}
-            onClose={() => {setConfirmFinalModalOpen(false)}}
-            onConfirm={confirmFinalfun}
-        />
-
-        <ConfirmModal
-            headerText="The existing setting of the selected Store 2 will be erased and your setting will be copied from Store 1 to the selected Store 2. Do you want to proceed?"
-            open={confirmModalOpensetting}
-            onClose={() => {setConfirmModalOpensetting(false)}}
-            onConfirm={confirmSettingfun}
-        />
-        <FinalConfirm
-            headerText="Final Confirmation!!!"
-            open={confirmfinalModalOpensetting}
-            onClose={() => {setConfirmFinalModalOpensetting(false)}}
-            onConfirm={confirmFinalSettingfun}
-        />
-
     </>
   );
 };
