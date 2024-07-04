@@ -72,28 +72,14 @@ const InventoryExportLogic = () => {
 
   const { token, ...userTypeDataNew } = userTypeData;
 
-  const dupplicateInventory = async (e) => {
-    e.preventDefault();
-    let { errors } = values;
-    await validateDropdown(values.store_name_from, "store_name_from", errors);
-    await validateDropdown(values.store_name_to, "store_name_to", errors);
-    
-    if (errors.store_name_from === "" && errors.store_name_to === "") {
-      if (values.store_name_from == values.store_name_to) {
-        // alert("Both the stores cannot be same.");
-        setModalHeaderText("Both the stores cannot be same.")
-        setAlertOpen(true)
-        return false;
-      }else {
-        if (userInput === captchaText) { 
+  const confirmFinalLogic = async (e) => {
           const data = {
             store_name_from: values.store_name_from,
             store_name_to: values.store_name_to,
             upc_check: values.upc_check,
             ...userTypeDataNew,
           };
-          setConfirmModalOpen(true);
-
+          setConfirmFinalModalOpen(false)
           setLoader(true);
           try {
             const response = await axios.post(
@@ -119,12 +105,29 @@ const InventoryExportLogic = () => {
             getUnAutherisedTokenMessage()
             return new Error(error);
           }
+    setLoader(false);
+  }
+  const dupplicateInventory = async (e) => {
+    e.preventDefault();
+    let { errors } = values;
+    await validateDropdown(values.store_name_from, "store_name_from", errors);
+    await validateDropdown(values.store_name_to, "store_name_to", errors);
+    
+    if (errors.store_name_from === "" && errors.store_name_to === "") {
+      if (values.store_name_from == values.store_name_to) {
+        // alert("Both the stores cannot be same.");
+        setModalHeaderText("Both the stores cannot be same.")
+        setAlertOpen(true)
+        return false;
+      }else {
+        if (userInput === captchaText) { 
+          setConfirmModalOpen(true);
         }else{
           setModalHeaderText("Please Fill Captcha Correctly!")
           setAlertOpen(true)
           return false;
         }
-        setLoader(false);
+        
       }
     }
 
@@ -212,7 +215,8 @@ const InventoryExportLogic = () => {
     confirmModalOpen,
     setConfirmModalOpen,
     setConfirmFinalModalOpen,
-    confirmfinalModalOpen
+    confirmfinalModalOpen,
+    confirmFinalLogic
   };
 };
 

@@ -44,7 +44,8 @@ const StoreCateUser = () => {
     confirmModalOpen,
     setConfirmModalOpen,
     setConfirmFinalModalOpen,
-    confirmfinalModalOpen
+    confirmfinalModalOpen,
+    confirmFinalLogic
   } = InventoryExportLogic();
   console.log("alertOpen",alertOpen)
   console.log("modalHeaderText",modalHeaderText)
@@ -184,8 +185,6 @@ const StoreCateUser = () => {
       showModal("Please select Store To");
     } else {
       dupplicateSettings(e);
-      setSelectedStorefrom("-- Select Store --");
-      setSelectedStoreto("-- Select Store --");
     }
   };
 
@@ -255,7 +254,12 @@ const StoreCateUser = () => {
     setConfirmFinalModalOpen(true)
   }
   const confirmFinalfun = async () => {
-    console.log("function call kardo")
+    await confirmFinalLogic();
+    setSelectedStorefrom("-- Select Store --");
+    setSelectedStoreto("-- Select Store --");
+    const canvas = canvasRef.current; 
+    const ctx = canvas.getContext('2d'); 
+    initializeCaptcha(ctx); 
   }
 
   return (
@@ -412,7 +416,7 @@ const StoreCateUser = () => {
               onClick={(e) => dupplicateInventoryHandler(e)}
               disabled={loader}
             >
-              Duplicate Inventory
+              {loader ? <><CircularProgress color={"inherit"} width={15} size={15}/>Duplicate Inventory</> : "Duplicate Inventory"}
             </button>
             <button
               className="quic-btn quic-btn-cancle"
