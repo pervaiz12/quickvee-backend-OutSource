@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { FiCalendar } from "react-icons/fi";
 // import CalendIcon from "../../../Assests/Filter/Calender.svg";
-import CalendIcon from "../Assests/Filter/Calender.svg"
+import CalendIcon from "../Assests/Filter/Calender.svg";
 import { padding } from "@mui/system";
 import dayjs from "dayjs";
 import { Grid } from "@mui/material";
@@ -87,7 +87,7 @@ const DateRangeComponent = ({ onDateRangeChange }) => {
   };
 
   useEffect(() => {
-    handleSearch()
+    handleSearch();
     setDatesBasedOnOption(activeOption);
   }, [activeOption]);
   return (
@@ -203,7 +203,7 @@ const DateRangeComponent = ({ onDateRangeChange }) => {
           <Grid item alignSelf={"center"} xs={12} sm={6} md={4}>
             <div className="pt-4">
               <button onClick={handleSearch} className="save_btn">
-              Get Report
+                Get Report
               </button>
             </div>
           </Grid>

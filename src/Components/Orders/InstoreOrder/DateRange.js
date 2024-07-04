@@ -84,7 +84,11 @@ const DateRange = ({ onDateRangeChange }) => {
         if (thirtyDaysAgo.getMonth() === today.getMonth()) {
           setStartDate(thirtyDaysAgo);
         } else {
-          const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+          const firstDayOfMonth = new Date(
+            today.getFullYear(),
+            today.getMonth(),
+            1
+          );
           setStartDate(firstDayOfMonth);
         }
         setEndDate(today);

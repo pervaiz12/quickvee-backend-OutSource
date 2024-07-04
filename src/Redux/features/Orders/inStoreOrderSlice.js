@@ -6,7 +6,7 @@ import { useAuthDetails } from "../../../Common/cookiesHelper";
 const initialState = {
   loading: false,
   inStoreOrderData: [],
-  OrderListCount:0,
+  OrderListCount: 0,
   successMessage: "",
   error: "",
 };
@@ -14,7 +14,7 @@ const initialState = {
 // Generate pening , fulfilled and rejected action type
 export const fetchInStoreOrderData = createAsyncThunk(
   "inStoreOrder/fetchInStoreOrderData.",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     const { userTypeData } = useAuthDetails();
     const { token, ...otherUserData } = userTypeData;
     try {
@@ -33,27 +33,41 @@ export const fetchInStoreOrderData = createAsyncThunk(
         return response.data.order_data;
       }
     } catch (error) {
-      throw new Error(error.response.data.message);
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
 export const getOrderListCount = createAsyncThunk(
   "purchase/getPurchaseOrderCount",
-  async (data) => {
-    const { token, ...dataNew } = data;
-    const response = await axios.post(
-      BASE_URL + "Order_list_api/all_order_list_count",
-      dataNew,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`, // Use data?.token directly
-        },
+  async (data, { rejectWithValue }) => {
+    try {
+      const { token, ...dataNew } = data;
+      const response = await axios.post(
+        BASE_URL + "Order_list_api/all_order_list_count",
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // Use data?.token directly
+          },
+        }
+      );
+      // console.log("AllInStoreDataState OrderListCount: ", response.data.order_data);
+      if (response.status == 200) {
+        return response.data.order_data;
       }
-    );
-    // console.log("AllInStoreDataState OrderListCount: ", response.data.order_data);
-    if (response.status == 200) {
-      return response.data.order_data;
+    } catch (error) {
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );

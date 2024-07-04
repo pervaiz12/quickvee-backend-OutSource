@@ -240,34 +240,35 @@ const EditVendors = ({ setVisible }) => {
             },
           }
         );
-  
+
         if (
           response.data.status === "false" &&
           response.data.msg === "Name already exist."
-         
         ) {
           ToastifyAlert(
             "Name already exists. Please choose a different name.",
             "error"
           );
-          setErrorMessage("Name already exists. Please choose a different name.");
-          setLoader(false)
+          setErrorMessage(
+            "Name already exists. Please choose a different name."
+          );
+          setLoader(false);
         } else {
           setErrorMessage("");
-  
+
           Navigate(-1);
-          
         }
         ToastifyAlert("Updated Successfully.", "success");
-        setLoader(false)
+        setLoader(false);
       } catch (error) {
         console.error("Error updating data:", error);
-        handleCoockieExpire();
-        getUnAutherisedTokenMessage();
-        setLoader(false)
+        if (error.response.status == 401) {
+          handleCoockieExpire();
+          getUnAutherisedTokenMessage();
+          setLoader(false);
+        }
       }
     }
-    
   };
 
   const handleSetVendorStateChange = (newState) => {
@@ -319,7 +320,6 @@ const EditVendors = ({ setVisible }) => {
                       name={"name"}
                       value={vendorData.name}
                       onChangeFun={handleOnChange}
-                  
                     />
                     {errorMessage.name && (
                       <span className="error">{errorMessage.name}</span>
@@ -334,7 +334,6 @@ const EditVendors = ({ setVisible }) => {
                       name={"email"}
                       value={vendorData.email}
                       onChangeFun={handleOnChange}
-                      
                     />
                     {errorMessage.email && (
                       <span className="error">{errorMessage.email}</span>
@@ -349,7 +348,6 @@ const EditVendors = ({ setVisible }) => {
                       name={"phone"}
                       value={vendorData.phone}
                       onChangeFun={handleOnChange}
-                   
                       onKeyPressFun={handleKeyPress}
                       maxLength={10}
                     />
@@ -432,13 +430,21 @@ const EditVendors = ({ setVisible }) => {
                   xs={12}
                   sx={{ marginTop: 3 }}
                 >
-                  <button type="submit" className="quic-btn quic-btn-save me-3 w-44" disabled={loader}>
-                    {loader ?  <CircularProgress
-                      color={"inherit"}
-                      className=""
-                      width={15}
-                      size={15}
-                    /> : "Update"}  
+                  <button
+                    type="submit"
+                    className="quic-btn quic-btn-save me-3 w-44"
+                    disabled={loader}
+                  >
+                    {loader ? (
+                      <CircularProgress
+                        color={"inherit"}
+                        className=""
+                        width={15}
+                        size={15}
+                      />
+                    ) : (
+                      "Update"
+                    )}
                   </button>
                   <button
                     // onClick={() => setVisible("VendorsDetail")}

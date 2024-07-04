@@ -40,19 +40,29 @@ const AddVendors = ({ setVisible }) => {
     //   ...prevState,
     //   ["name"]: "",
     // }));
-   
 
     handleSelectedVendor(event?.value);
   };
   const dispatch = useDispatch();
 
   useEffect(() => {
-    let data = {
-      merchant_id,
-      // ...userTypeData,
-    };
-    dispatch(fetchVendorsListData(data));
+    getVendorListData();
   }, []);
+  const getVendorListData = async () => {
+    try {
+      let data = {
+        merchant_id: merchant_id,
+      };
+      await dispatch(fetchVendorsListData(data)).unwrap();
+    } catch (error) {
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        alert("Please check your internet connection and try again.");
+      }
+    }
+  };
 
   const [vendor, setVendor] = useState({
     name: "",
@@ -193,7 +203,7 @@ const AddVendors = ({ setVisible }) => {
         zip_code: matchedObject.zip_code,
         full_address: matchedObject.full_address,
         state: matchedObject.state,
-      }
+      };
       setVendor(data);
       setErrorMessage((prevState) => {
         const newErrorMessages = { ...prevState };
@@ -270,9 +280,11 @@ const AddVendors = ({ setVisible }) => {
           // alert(response.data.message);
         }
       } catch (error) {
-        handleCoockieExpire();
-        getUnAutherisedTokenMessage();
-        setLoader(false);
+        if (error.response.status == 401) {
+          handleCoockieExpire();
+          getUnAutherisedTokenMessage();
+          setLoader(false);
+        }
       }
     }
   };
@@ -332,7 +344,6 @@ const AddVendors = ({ setVisible }) => {
                         value={vendor.email}
                         placeholder="Email Address"
                         onChangeFun={inputChange}
-                      
                       />
                       {errorMessage.email && (
                         <span className="error">{errorMessage.email}</span>

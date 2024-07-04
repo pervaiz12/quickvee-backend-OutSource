@@ -12,7 +12,7 @@ const initialState = {
 // Generate pening , fulfilled and rejected action type
 export const fetchVendorsListData = createAsyncThunk(
   "vendors/fetchVendorsListData.",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     const { userTypeData } = useAuthDetails();
 
     try {
@@ -37,7 +37,13 @@ export const fetchVendorsListData = createAsyncThunk(
         return listdata;
       }
     } catch (error) {
-      throw new Error("Internal Server Error");
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
