@@ -73,8 +73,8 @@ export default function DashboardTables(props) {
   const getDiscountRecord = () => {
     let grandTotal = 0; // Initialize grand total
 
-    if (props.EmployeeFilterData?.report_data) {
-      Object.entries(props.EmployeeFilterData.report_data).forEach(
+    if (props.EmployeeFilterData) {
+      Object.entries(props.EmployeeFilterData).forEach(
         ([key, result]) => {
           if (Array.isArray(result)) {
             const total = result.reduce((acc, item) => {
