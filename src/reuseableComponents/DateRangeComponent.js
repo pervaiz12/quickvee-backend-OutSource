@@ -161,6 +161,7 @@ const DateRangeComponent = ({ onDateRangeChange }) => {
                 selectsStart
                 startDate={startDate}
                 endDate={endDate}
+                maxDate={endDate}
                 dateFormat="MMMM d, yyyy"
                 className="q_input_details"
                 ref={startDateRef}
