@@ -42,6 +42,8 @@ import DislikeModal from "../../../reuseableComponents/DislikeModal";
 import emailLogo from "../../../Assests/Dashboard/email.svg";
 import phoneLogo from "../../../Assests/Dashboard/phone.svg";
 import { setIsStoreActive } from "../../../Redux/features/NavBar/MenuSlice";
+import sortIcon from "../../../Assests/Category/SortingW.svg";
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -145,8 +147,14 @@ export default function Verified({ setVisible, setMerchantId }) {
 
   // on load setting count of Verified Merchant list & on every change...
   useEffect(() => {
-    setTotalCount(verifiedMerchantList.verifiedMerchantCount);
-  }, [verifiedMerchantList.verifiedMerchantCount]);
+    if (!verifiedMerchantList.loading && verifiedMerchantList) {
+      setTotalCount(verifiedMerchantList?.verifiedMerchantCount);
+      setVerifiedMerchantListState(verifiedMerchantList?.verifiedMerchantData);
+    }
+  }, [
+    verifiedMerchantList.verifiedMerchantCount,
+    verifiedMerchantList.verifiedMerchantData,
+  ]);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
@@ -163,7 +171,7 @@ export default function Verified({ setVisible, setMerchantId }) {
     // setVisible("editVerirmedMerchant")
     navigate(`/users/approve/editMerchant/${data}`);
   };
-
+  const [sortOrder, setSortOrder] = useState("asc");
   const [deleteTableId, setDeleteTableId] = useState(null);
   const [deleteMerchantId, setDeleteMerchantId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -371,7 +379,16 @@ export default function Verified({ setVisible, setMerchantId }) {
   };
 
   const columns = ["Store Info", "Owner Name", "Merchant ID", ""];
-
+  const sortByItemName = (type, name) => {
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      VerifiedMerchantListState,
+      type,
+      name,
+      sortOrder
+    );
+    setVerifiedMerchantListState(sortedItems);
+    setSortOrder(newOrder);
+  };
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -457,119 +474,139 @@ export default function Verified({ setVisible, setMerchantId }) {
               </>
             ) : (
               <>
-                {verifiedMerchantList.verifiedMerchantData &&
-                Array.isArray(verifiedMerchantList.verifiedMerchantData) &&
-                verifiedMerchantList.verifiedMerchantData?.length > 0 ? (
+                {VerifiedMerchantListState &&
+                Array.isArray(VerifiedMerchantListState) &&
+                VerifiedMerchantListState?.length > 0 ? (
                   <TableContainer>
                     <StyledTable
                       sx={{ minWidth: 500 }}
                       aria-label="customized table"
                     >
                       <TableHead>
-                        <StyledTableCell>Store Info</StyledTableCell>
-                        <StyledTableCell>Owner Name</StyledTableCell>
-                        <StyledTableCell>Merchant ID</StyledTableCell>
+                        <StyledTableCell>
+                          <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("str", "name")}
+                          >
+                            <p>Store Info</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("str", "owner_name")}
+                          >
+                            <p>Owner Name</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("str", "merchant_id")}
+                          >
+                            <p>Merchant ID</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                        </StyledTableCell>
                         <StyledTableCell>Action</StyledTableCell>
                       </TableHead>
                       <TableBody>
-                        {verifiedMerchantList.verifiedMerchantData?.map(
-                          (data, index) => (
-                            <StyledTableRow key={data.id}>
-                              <StyledTableCell>
-                                <div className="flex">
-                                  <div className="text-[#000000] order_method capitalize">
-                                    {data.name.length < 18
-                                      ? data.name
-                                      : data.name.slice(0, 18) + `...` || ""}
-                                  </div>
-                                  <div className="mx-2 ">
-                                    (State: {data.a_state})
-                                  </div>
-                                </div>
-                                <div className="text-[#818181] lowercase flex">
-                                  {data.email && (
-                                    <img
-                                      src={emailLogo}
-                                      alt=""
-                                      className="pe-1"
-                                    />
-                                  )}{" "}
-                                  <p>{data.email || ""}</p>
-                                </div>
-                                <div className="text-[#818181] flex">
-                                  {data.a_phone && (
-                                    <img
-                                      src={phoneLogo}
-                                      alt=""
-                                      className="pe-1"
-                                    />
-                                  )}{" "}
-                                  <p> {data.a_phone || ""}</p>
-                                </div>
-                              </StyledTableCell>
-                              <StyledTableCell>
+                        {VerifiedMerchantListState?.map((data, index) => (
+                          <StyledTableRow key={data.id}>
+                            <StyledTableCell>
+                              <div className="flex">
                                 <div className="text-[#000000] order_method capitalize">
-                                  {data.owner_name || ""}
+                                  {data.name.length < 18
+                                    ? data.name
+                                    : data.name.slice(0, 18) + `...` || ""}
                                 </div>
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                <div className="text-[#000000] order_method ">
-                                  {data.merchant_id || ""}
+                                <div className="mx-2 ">
+                                  (State: {data.a_state})
                                 </div>
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                <div className="flex">
-                                  {loaders.view.id === data.merchant_id &&
-                                  loaders.view.isLoading ? (
-                                    <img src={SmallLoader} alt="loading" />
-                                  ) : (
-                                    <img
-                                      className="mx-1 view cursor-pointer"
-                                      onClick={() =>
-                                        handleGetVerifiedMerchant(
-                                          data.merchant_id
-                                        )
-                                      }
-                                      src={View}
-                                      alt="View"
-                                      title="View"
-                                    />
-                                  )}
-
+                              </div>
+                              <div className="text-[#818181] lowercase flex">
+                                {data.email && (
                                   <img
-                                    className="mx-1 edit cursor-pointer"
-                                    onClick={() => handleEditMerchant(data.id)}
-                                    src={Edit}
-                                    alt="Edit"
-                                    title="Edit"
+                                    src={emailLogo}
+                                    alt=""
+                                    className="pe-1"
                                   />
-
-                                  {data.id == deletedId && deleteLoader ? (
-                                    <img src={SmallLoader} alt="loading" />
-                                  ) : (
-                                    <img
-                                      className="mx-1 delete cursor-pointer"
-                                      onClick={() => handleDeleteMerchant(data)}
-                                      src={Delete}
-                                      alt="Delete"
-                                      title="Delete"
-                                    />
-                                  )}
-
+                                )}{" "}
+                                <p>{data.email || ""}</p>
+                              </div>
+                              <div className="text-[#818181] flex">
+                                {data.a_phone && (
                                   <img
-                                    className="mx-1 cursor-pointer"
+                                    src={phoneLogo}
+                                    alt=""
+                                    className="pe-1"
+                                  />
+                                )}{" "}
+                                <p> {data.a_phone || ""}</p>
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <div className="text-[#000000] order_method capitalize">
+                                {data.owner_name || ""}
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <div className="text-[#000000] order_method ">
+                                {data.merchant_id || ""}
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <div className="flex">
+                                {loaders.view.id === data.merchant_id &&
+                                loaders.view.isLoading ? (
+                                  <img src={SmallLoader} alt="loading" />
+                                ) : (
+                                  <img
+                                    className="mx-1 view cursor-pointer"
                                     onClick={() =>
-                                      hadleDislikeMerchant(data.id)
+                                      handleGetVerifiedMerchant(
+                                        data.merchant_id
+                                      )
                                     }
-                                    src={DisLike}
-                                    alt="DisLike"
-                                    title="Disapprove"
+                                    src={View}
+                                    alt="View"
+                                    title="View"
                                   />
-                                </div>
-                              </StyledTableCell>
-                            </StyledTableRow>
-                          )
-                        )}
+                                )}
+
+                                <img
+                                  className="mx-1 edit cursor-pointer"
+                                  onClick={() => handleEditMerchant(data.id)}
+                                  src={Edit}
+                                  alt="Edit"
+                                  title="Edit"
+                                />
+
+                                {data.id == deletedId && deleteLoader ? (
+                                  <img src={SmallLoader} alt="loading" />
+                                ) : (
+                                  <img
+                                    className="mx-1 delete cursor-pointer"
+                                    onClick={() => handleDeleteMerchant(data)}
+                                    src={Delete}
+                                    alt="Delete"
+                                    title="Delete"
+                                  />
+                                )}
+
+                                <img
+                                  className="mx-1 cursor-pointer"
+                                  onClick={() => hadleDislikeMerchant(data.id)}
+                                  src={DisLike}
+                                  alt="DisLike"
+                                  title="Disapprove"
+                                />
+                              </div>
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        ))}
                       </TableBody>
                     </StyledTable>
                   </TableContainer>

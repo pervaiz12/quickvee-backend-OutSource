@@ -201,7 +201,7 @@ export default function DashboardTables(props) {
                   )}`} */}
                       <p>{formatCurrency(item?.costOfItem)}</p>
                     </StyledTableCell>
-                    <StyledTableCell align="center">
+                    <StyledTableCell >
                       {/* {`$${priceFormate(
                     parseFloat(item?.price * item?.total_qty).toFixed(2)
                   )}`} */}

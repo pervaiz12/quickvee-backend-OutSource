@@ -10,7 +10,7 @@ import TableRow from "@mui/material/TableRow";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
-
+import sortIcon from "../../../Assests/Category/SortingW.svg";
 import ViewAdmin from "./viewAdminModal";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
@@ -24,19 +24,20 @@ import Edit from "../../../Assests/VerifiedMerchant/Edit.svg";
 import useDebounce from "../../../hooks/useDebouncs";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import PasswordShow from "../../../Common/passwordShow";
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 
 export default function AdminView({ setVisible, setEditAdminId }) {
   const { userTypeData } = useAuthDetails();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
-
+  const [sortOrder, setSortOrder] = useState("asc");
   // states
   const [searchRecord, setSearchRecord] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
-
+  const [adminsDataState, setAdminsDataState] = useState([]);
   const debouncedValue = useDebounce(searchRecord);
   const AdminRecord = useSelector((state) => state.adminRecord);
   const adminRecordCount = useSelector(
@@ -72,12 +73,12 @@ export default function AdminView({ setVisible, setEditAdminId }) {
     );
   }, [debouncedValue]);
 
-  // useEffect(() => {
-  //   if (AdminRecord.AdminRecord.length >= 1) {
-  //     setAdminsDataState(AdminRecord.AdminRecord);
-  //     setTotalCount(AdminRecord.AdminRecord.length);
-  //   }
-  // }, [AdminRecord.AdminRecord]);
+  useEffect(() => {
+    if (!AdminRecord.loading && AdminRecord.AdminRecord.length >= 1) {
+      setAdminsDataState(AdminRecord.AdminRecord);
+      setTotalCount(AdminRecord.AdminRecord.length);
+    }
+  }, [AdminRecord.AdminRecord]);
 
   // on load setting count of Verified Merchant list & on every change...
   useEffect(() => {
@@ -118,7 +119,7 @@ export default function AdminView({ setVisible, setEditAdminId }) {
     },
   }));
 
-  const columns = ["Owner Name", "Name", "Email", "Phone", "View", ""];
+  const columns = ["Name", "Email", "Phone", "View", "Action"];
   const handleClick = () => {
     // setVisible("AddAmin")
     navigate("/users/admin/addAdmin");
@@ -127,6 +128,17 @@ export default function AdminView({ setVisible, setEditAdminId }) {
   const handleEditAdminClick = (id) => {
     setEditAdminId(id);
     setVisible("EditAdmin");
+  };
+
+  const sortByItemName = (type, name) => {
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      adminsDataState,
+      type,
+      name,
+      sortOrder
+    );
+    setAdminsDataState(sortedItems);
+    setSortOrder(newOrder);
   };
   return (
     <>
@@ -195,8 +207,8 @@ export default function AdminView({ setVisible, setEditAdminId }) {
             ) : (
               <>
                 {AdminRecord &&
-                Array.isArray(AdminRecord.AdminRecord) &&
-                AdminRecord.AdminRecord?.length > 0 ? (
+                Array.isArray(adminsDataState) &&
+                adminsDataState?.length > 0 ? (
                   <TableContainer>
                     <StyledTable
                       sx={{ minWidth: 500 }}
@@ -204,14 +216,38 @@ export default function AdminView({ setVisible, setEditAdminId }) {
                     >
                       <TableHead>
                         {/* <StyledTableCell>Owner Name</StyledTableCell> */}
-                        <StyledTableCell>Name</StyledTableCell>
-                        <StyledTableCell>Email</StyledTableCell>
-                        <StyledTableCell>Phone</StyledTableCell>
+                        <StyledTableCell>
+                          <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("str", "name")}
+                          >
+                            <p>Name</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("str", "email")}
+                          >
+                            <p>Email</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("num", "phone")}
+                          >
+                            <p>Phone</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                        </StyledTableCell>
                         <StyledTableCell>View</StyledTableCell>
                         <StyledTableCell>Action</StyledTableCell>
                       </TableHead>
                       <TableBody>
-                        {AdminRecord.AdminRecord?.map((data, index) => (
+                        {adminsDataState?.map((data, index) => (
                           <StyledTableRow key={data.id}>
                             {/* <StyledTableCell>
                               <div className="text-[#000000] order_method capitalize">

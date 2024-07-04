@@ -23,7 +23,8 @@ import useDebounce from "../../hooks/useDebouncs";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import PasswordShow from "./../../Common/passwordShow";
 import { Link } from "react-router-dom";
-
+import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
+import sortIcon from "../../Assests/Category/SortingW.svg";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -67,10 +68,10 @@ const StoreOrderList = (props) => {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
   const [searchRecord, setSearchRecord] = useState("");
-
+  const [storeOrderTableList, setStoreOrderTableList] = useState([]);
   const debouncedValue = useDebounce(searchRecord);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+  const [sortOrder, setSortOrder] = useState("asc");
   const { userTypeData } = useAuthDetails();
   const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
 
@@ -154,8 +155,12 @@ const StoreOrderList = (props) => {
 
   // on load setting count of Verified Merchant list & on every change...
   useEffect(() => {
-    setTotalCount(AllStoreOrderDataState.storeOrderCount);
-  }, [AllStoreOrderDataState.storeOrderCount]);
+    if(!AllStoreOrderDataState.loading && AllStoreOrderDataState){
+      setTotalCount(AllStoreOrderDataState?.storeOrderCount);
+      setStoreOrderTableList(AllStoreOrderDataState?.StoreOrderData)
+    }
+    
+  }, [AllStoreOrderDataState?.storeOrderCount,AllStoreOrderDataState?.StoreOrderData]);
 
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
@@ -178,6 +183,17 @@ const StoreOrderList = (props) => {
     const formattedDate = date.toLocaleDateString('en-US', dateOptions);
     const formattedTime = date.toLocaleTimeString('en-US', timeOptions);
     return `${formattedDate} ${formattedTime}`;
+  };
+
+  const sortByItemName = (type, name) => {
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      storeOrderTableList,
+      type,
+      name,
+      sortOrder
+    );
+    setStoreOrderTableList(sortedItems);
+    setSortOrder(newOrder);
   };
 
   return (
@@ -219,27 +235,75 @@ const StoreOrderList = (props) => {
             ) : (
               <>
                 {AllStoreOrderDataState.StoreOrderData &&
-                AllStoreOrderDataState.StoreOrderData.length >= 1 &&
-                Array.isArray(AllStoreOrderDataState.StoreOrderData) ? (
+                storeOrderTableList.length >= 1 &&
+                Array.isArray(storeOrderTableList) ? (
                   <TableContainer>
                     <StyledTable
                       sx={{ minWidth: 500 }}
                       aria-label="customized table"
                     >
                       <TableHead>
-                        <StyledTableCell>Store Order Info</StyledTableCell>
-                        <StyledTableCell>Date</StyledTableCell>
-                        <StyledTableCell>Order ID</StyledTableCell>
-                        <StyledTableCell>Order Status</StyledTableCell>
-                        <StyledTableCell>Fail Result</StyledTableCell>
-                        <StyledTableCell>Merchant</StyledTableCell>
+                        <StyledTableCell>
+                        <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("str", "cname")}
+                          >
+                            <p>Store Order Info</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                          </StyledTableCell>
+                        <StyledTableCell>
+                        <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("date", "date_time")}
+                          >
+                            <p>Date</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                          </StyledTableCell>
+                        <StyledTableCell>
+                        <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("str", "order_id")}
+                          >
+                            <p>Order ID</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                         </StyledTableCell>
+                        <StyledTableCell>
+                        <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("str", "order_status")}
+                          >
+                            <p>Order Status</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                          </StyledTableCell>
+                        <StyledTableCell>
+                        <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("str", "failResult")}
+                          >
+                            <p>Fail Result</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                          </StyledTableCell>
+                        <StyledTableCell>
+                        <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("str", "merchant_name")}
+                          >
+                            <p>Merchant</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                          </StyledTableCell>
                       </TableHead>
                       <TableBody>
-                        {console.log(
+                        {/* {console.log(
                           "AllStoreOrderDataState.StoreOrderData: ",
                           AllStoreOrderDataState?.StoreOrderData
-                        )}
-                        {AllStoreOrderDataState?.StoreOrderData.map(
+                        )} */}
+                        {storeOrderTableList.map(
                           (StoreData, index) => (
                             <StyledTableRow key={StoreData.id}>
                               {
