@@ -544,7 +544,7 @@ export default function SettingStoreOption() {
                 >
                   <Grid item>
                     <div className="store-setting-gry Admin_std store-setting-inline-block">
-                      Enable NCA
+                    Enable Cash Discounting
                     </div>
                   </Grid>
                   <Grid item>
