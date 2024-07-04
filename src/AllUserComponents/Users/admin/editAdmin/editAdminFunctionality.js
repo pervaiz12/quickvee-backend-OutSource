@@ -5,6 +5,7 @@ import {
   GET_EDIT_ADMIN,
   CHECK_ADMIN_EMAIL,
   UPDATE_ADMIN_RECORD,
+  ADMIN_CHECK_USER,
 } from "../../../../Constants/Config";
 import { useNavigate } from "react-router-dom";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
@@ -28,6 +29,7 @@ const EditAdminFunctionality = (handleClick) => {
     owner_name: "",
     phone: "",
     email: "",
+    password1: "",
   });
   const [loader, setLoader] = useState(false);
   const [loaderEdit, setLoaderEdit] = useState(false);
@@ -60,6 +62,28 @@ const EditAdminFunctionality = (handleClick) => {
     }
   };
   // ============================================
+  const passwordValidate = async (email, password) => {
+    const { token, ...newData } = userTypeData;
+    const dataNew = { email: email, password: password, ...newData };
+
+    try {
+      const response = await axios.post(BASE_URL + ADMIN_CHECK_USER, dataNew, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.error("Error validating email:", error);
+      // console.log("hellooo", error?.message);
+      // dispatch(getAuthInvalidMessage(error?.message));
+      handleCoockieExpire();
+      throw error;
+    }
+  };
+
   const emailValidate = async (data) => {
     const { token, ...newData } = userTypeData;
 
@@ -115,6 +139,28 @@ const EditAdminFunctionality = (handleClick) => {
       }
     }
   };
+  const handleBlurPassword = async (name) => {
+    if (name == "password1") {
+      if (
+        errors.email == "" &&
+        editData.email !== "" &&
+        editData.password1 !== ""
+      ) {
+        let result = await passwordValidate(editData.email, editData.password1);
+        if (result == true) {
+          setErrors((prev) => ({
+            ...prev,
+            password1: "Password already exists",
+          }));
+        } else {
+          setErrors((prev) => ({
+            ...prev,
+            password1: "",
+          }));
+        }
+      }
+    }
+  };
   // ============================================
   const handleChangeAdmin = (e) => {
     const { name, value } = e.target;
@@ -140,10 +186,13 @@ const EditAdminFunctionality = (handleClick) => {
             ? "Please enter a valid email"
             : "";
     }
+    if (name == "password1") {
+      updatedErrors[name] = value === "" ? "" : "";
+    }
     if (name === "phone") {
       const numericValue = value.replace(/[^0-9]/g, "");
       if (numericValue == "") {
-        updatedErrors[name] = `Phone is required`;
+        updatedErrors[name] = ``;
       } else if (numericValue.length !== 10) {
         updatedErrors[name] = "Phone number must be 10 digits";
       } else {
@@ -168,57 +217,162 @@ const EditAdminFunctionality = (handleClick) => {
       e.preventDefault();
     }
   };
+
+  // ===========
   const validateForm = async () => {
     let error = false;
     let updatedErrors = { ...errors };
-    if (editData.owner_name == "") {
+
+    // Validate Owner Name
+    if (!editData.owner_name) {
       updatedErrors.owner_name = "Owner Name is required";
       error = true;
+    } else {
+      updatedErrors.owner_name = "";
     }
-    if (editData.email == "") {
+
+    // Validate Email
+    if (!editData.email) {
       updatedErrors.email = "Email is required";
       error = true;
     } else {
       try {
-        if (errors.email == "") {
-          setLoader(true);
-          const emailValid = await emailValidate(editData.email);
-          if (emailValid == true) {
-            setLoader(false);
-            if (ExitEmail !== editData.email) {
-              updatedErrors.email = "Email already exists";
-              error = false;
-            } else {
-              updatedErrors.email = "";
-              error = true;
-            }
+        setLoader(true);
+        const emailValid = await emailValidate(editData.email);
+        setLoader(false);
+        if (emailValid) {
+          if (ExitEmail !== editData.email) {
+            updatedErrors.email = "Email already exists";
+            error = true;
           } else {
             updatedErrors.email = "";
-            error = true;
           }
         } else {
-          error = false;
+          updatedErrors.email = "";
         }
-      } catch (error) {
-        console.error("Error validating email:", error);
-        error = false;
+      } catch (validationError) {
+        console.error("Error validating email:", validationError);
+        updatedErrors.email = "Error validating email";
+        error = true;
       }
     }
 
-    // if (editData.phone == "") {
-    //   updatedErrors.phone = "Please fill the phone field";
-    //   error = true;
-    // }
-
-    // setErrors({ ...errors, updatedErrors });
-    setErrors(updatedErrors);
-    // console.log(errors);
-    if (error == true) {
-      return false;
+    // Validate Password
+    if (!editData.password1) {
+      updatedErrors.password1 = "";
     } else {
-      return true;
+      try {
+        setLoader(true);
+        const passwordValid = await passwordValidate(
+          editData.email,
+          editData.password1
+        );
+        setLoader(false);
+        if (passwordValid) {
+          updatedErrors.password1 = "Password already exists";
+          error = true;
+        } else {
+          updatedErrors.password1 = "";
+        }
+      } catch (validationError) {
+        console.error("Error validating password:", validationError);
+        updatedErrors.password1 = "Error validating password";
+        error = true;
+      }
     }
+
+    // Set errors and return validation status
+    setErrors(updatedErrors);
+    console.log(error);
+    return !error;
   };
+
+  // ===========
+  // const validateForm = async () => {
+  //   let error = false;
+  //   let updatedErrors = { ...errors };
+  //   if (editData.owner_name == "") {
+  //     updatedErrors.owner_name = "Owner Name is required";
+  //     error = true;
+  //   }
+  //   if (editData.email == "") {
+  //     updatedErrors.email = "Email is required";
+  //     error = true;
+  //   } else {
+  //     try {
+  //       if (errors.email == "") {
+  //         setLoader(true);
+  //         const emailValid = await emailValidate(editData.email);
+  //         if (emailValid == true) {
+  //           setLoader(false);
+  //           if (ExitEmail !== editData.email) {
+  //             updatedErrors.email = "Email already exists";
+  //             error = false;
+  //           } else {
+  //             updatedErrors.email = "";
+  //             error = true;
+  //           }
+  //         } else {
+  //           updatedErrors.email = "";
+  //           error = true;
+  //         }
+  //       } else {
+  //         error = false;
+  //       }
+  //     } catch (error) {
+  //       console.error("Error validating email:", error);
+  //       error = false;
+  //     }
+  //   }
+  //   if (editData.password1 == "") {
+  //     updatedErrors.password1 = "";
+  //     error = false;
+  //   } else {
+  //     try {
+  //       if (
+  //         errors.password1 == "" &&
+  //         editData.email !== "" &&
+  //         editData.password1 !== ""
+  //       ) {
+  //         setLoader(true);
+  //         const emailValid = await passwordValidate(
+  //           editData.email,
+  //           editData.password1
+  //         );
+
+  //         if (emailValid == true) {
+  //           console.log("111111");
+  //           setLoader(false);
+  //           updatedErrors.password1 = "Password already exists";
+  //           error = false;
+  //         } else {
+  //           console.log("222222");
+  //           updatedErrors.password1 = "";
+  //           error = true;
+  //         }
+  //       } else {
+  //         console.log("333333333");
+  //         error = false;
+  //       }
+  //     } catch (error) {
+  //       error = false;
+  //     }
+  //   }
+
+  //   // if (editData.phone == "") {
+  //   //   updatedErrors.phone = "Please fill the phone field";
+  //   //   error = true;
+  //   // }
+
+  //   // setErrors({ ...errors, updatedErrors });
+  //   setErrors(updatedErrors);
+  //   // console.log(errors);
+  //   if (error == true) {
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // };
   // --------------------------------------
   // ==============
   const keyEnter = (event) => {
@@ -259,7 +413,7 @@ const EditAdminFunctionality = (handleClick) => {
     };
     let validate = Object.values(errors).filter((error) => error !== "").length;
     const validateBlank = await validateForm();
-    if (!validateBlank) {
+    if (validateBlank == true) {
       if (validate == 0) {
         setLoader(true);
         try {
@@ -280,7 +434,7 @@ const EditAdminFunctionality = (handleClick) => {
                 password: "",
               });
               setExitEmail("");
-              ToastifyAlert(result?.data?.message, "success");
+              ToastifyAlert("Updated Successfully", "success");
               // handleClick();
               navigate("/users/admin");
             });
@@ -302,6 +456,7 @@ const EditAdminFunctionality = (handleClick) => {
     loaderEdit,
     handleBlur,
     keyEnter,
+    handleBlurPassword,
   };
 };
 export default EditAdminFunctionality;

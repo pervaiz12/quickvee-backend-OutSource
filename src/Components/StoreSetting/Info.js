@@ -31,10 +31,12 @@ const Info = () => {
     handleSubmitChangePassword,
     qrCodeBoolean,
     receieptLogoBool,
-
+    user_id,
+    merchant_idNew,
   } = InfoFunction();
   let data = {
-    id: 100, //dynamic id give
+    id: user_id,
+    merchant_id: merchant_idNew, //dynamic id give
   };
   useEffect(() => {
     handleEditRecord(data);
