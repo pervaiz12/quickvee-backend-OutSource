@@ -252,9 +252,12 @@ const CateDuplicateStore = () => {
         setSelectedStorefrom("-- Select Store --");
         setSelectedStoreto("-- Select Store --");
         // ToastifyAlert("Duplicate Inventory Success!", "success");
-        setTimeout(()=>{setLoader(false);
-          ToastifyAlert("Added Successfully", "success");
-        },2000)
+        ToastifyAlert("Added Successfully", "success");
+        showModal("Your Inventory has been copied to your other location.  Please verify and make any changes as needed.");
+        setLoader(false)
+        // setTimeout(()=>{setLoader(false);
+        //   ToastifyAlert("Duplicate Inventory Success!", "success");
+        // },2000)
         setUserInput("")
         setStorefrom(null);
         setStoreto(null);

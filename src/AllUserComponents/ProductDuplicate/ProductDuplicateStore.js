@@ -19,6 +19,10 @@ import AlertModal from "../../reuseableComponents/AlertModal";
 import { LuRefreshCw } from "react-icons/lu";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import PasswordShow from "./../../Common/passwordShow";
+import CircularProgress from "@mui/material/CircularProgress";
+import ConfirmModal from "../../reuseableComponents/ConfirmModal";
+import FinalConfirm from "../../reuseableComponents/FinalConfirm";
+
 const ProductDuplicateStore = () => {
   const [storeFromError, setStoreFromError] = useState("");
   const [storeToError, setStoreToError] = useState("");
@@ -32,12 +36,20 @@ const ProductDuplicateStore = () => {
   const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
   const [userInput, setUserInput] = useState(''); 
   const [captchaText, setCaptchaText] = useState(''); 
+  const [loader, setLoader] = useState(false);
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [confirmfinalModalOpen, setConfirmFinalModalOpen] = useState(false);
 
   const handlFocusCategory = () => {
     setCategoryFocus(true);
   };
 
   const showModal = (headerText) => {
+    setAlertModalHeaderText(headerText);
+    setAlertModalOpen(true);
+  };
+
+  const productshowModal = async (headerText) => {
     setAlertModalHeaderText(headerText);
     setAlertModalOpen(true);
   };
@@ -212,6 +224,85 @@ const ProductDuplicateStore = () => {
     setexcludedproducts();
   };
 
+  const confirmfun = () => {
+    setConfirmModalOpen(false)
+    setConfirmFinalModalOpen(true)
+  }
+
+  const confirmFinalfun = async () => {
+    const upcCheckbox = document.getElementById("upc_check");
+      // Check if the checkbox is present and get its value
+      const isUpcChecked = upcCheckbox ? upcCheckbox.checked : false;
+      const productValues = selectedProducts.map((product) => product.value);
+      if (productValues.length === 0) {
+        // alert("Please select at least one Product");
+        showModal("Please select at least on product")
+        return;
+      } else if (productValues.includes("No Products found")) {
+        // alert("No Products found is not a Product");
+        showModal("No Products found is not a Product")
+        return;
+      }
+    const data = {
+      store_name_from: storefrom,
+      store_name_to: storeto,
+      product_id: productValues,
+      upc_check: isUpcChecked,
+      ...userTypeDataNew,
+    };
+    setConfirmFinalModalOpen(false)
+    setLoader(true);
+    try {
+      const response = await axios.post(
+        BASE_URL + PRODUCT_INVENTORY_DUPLICATE,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.status == true) {
+        const temp_excludedproducts = response.data.existing_products;
+        const commaSeparatedString = temp_excludedproducts.join(",");
+        setexcludedproducts(commaSeparatedString);
+        setsubmitmessage("Products Copied successfully ");
+        setUserInput("")
+        setSelectedStorefrom("-- Select Store --");
+        setSelectedStoreto("-- Select Store --");
+        // ToastifyAlert("Duplicate Inventory Success!", "success");
+        if (temp_excludedproducts.length > 0) {
+          alert(temp_excludedproducts)
+          // productshowModal(temp_excludedproducts)
+          setAlertModalHeaderText(temp_excludedproducts);
+          setAlertModalOpen(true);
+        }
+        showModal("Your Inventory has been copied to your other location. Please verify and make any changes as needed.");
+        ToastifyAlert("Added Successfully", "success");
+        setLoader(false)
+        setStorefrom(null);
+        setStoreto(null);
+        setProductOptions([
+          { value: "Select Product", label: "Select Product" },
+        ]);
+        setselectedProducts([]);
+        setIsSelectClicked(false);
+      } else if (response.data.status === "Failed") {
+        ToastifyAlert("Duplicate Inventory Failed!", "error");
+        setsubmitmessage("Something Went Wrong");
+      }
+    } catch (error) {
+      // console.log('33 catch err');
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
+      ToastifyAlert("Error!", "error");
+      return new Error(error);
+    }
+    setLoader(false)
+  }
+
   const dupplicateProductInventory = async (e) => {
     e.preventDefault();
 
@@ -242,55 +333,55 @@ const ProductDuplicateStore = () => {
       }
 
       if (userInput === captchaText) { 
+        setConfirmModalOpen(true);
+      // const data = {
+      //   store_name_from: storefrom,
+      //   store_name_to: storeto,
+      //   product_id: productValues,
+      //   upc_check: isUpcChecked,
+      //   ...userTypeDataNew,
+      // };
 
-      const data = {
-        store_name_from: storefrom,
-        store_name_to: storeto,
-        product_id: productValues,
-        upc_check: isUpcChecked,
-        ...userTypeDataNew,
-      };
+      // try {
+      //   const response = await axios.post(
+      //     BASE_URL + PRODUCT_INVENTORY_DUPLICATE,
+      //     data,
+      //     {
+      //       headers: {
+      //         "Content-Type": "multipart/form-data",
+      //         Authorization: `Bearer ${token}`,
+      //       },
+      //     }
+      //   );
 
-      try {
-        const response = await axios.post(
-          BASE_URL + PRODUCT_INVENTORY_DUPLICATE,
-          data,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (response.data.status == true) {
-          const temp_excludedproducts = response.data.existing_products;
-          const commaSeparatedString = temp_excludedproducts.join(", ");
-          setexcludedproducts(commaSeparatedString);
-          setsubmitmessage("Products Copied successfully ");
-          setUserInput("")
-          setSelectedStorefrom("-- Select Store --");
-          setSelectedStoreto("-- Select Store --");
-          // ToastifyAlert("Duplicate Inventory Success!", "success");
-          ToastifyAlert("Added Successfully", "success");
-          setStorefrom(null);
-          setStoreto(null);
-          setProductOptions([
-            { value: "Select Product", label: "Select Product" },
-          ]);
-          setselectedProducts([]);
-          setIsSelectClicked(false);
-        } else if (response.data.status === "Failed") {
-          ToastifyAlert("Duplicate Inventory Failed!", "error");
-          setsubmitmessage("Something Went Wrong");
-        }
-      } catch (error) {
-        // console.log('33 catch err');
-        handleCoockieExpire()
-        getUnAutherisedTokenMessage()
-        ToastifyAlert("Error!", "error");
-        return new Error(error);
-      }
+      //   if (response.data.status == true) {
+      //     const temp_excludedproducts = response.data.existing_products;
+      //     const commaSeparatedString = temp_excludedproducts.join(", ");
+      //     setexcludedproducts(commaSeparatedString);
+      //     setsubmitmessage("Products Copied successfully ");
+      //     setUserInput("")
+      //     setSelectedStorefrom("-- Select Store --");
+      //     setSelectedStoreto("-- Select Store --");
+      //     // ToastifyAlert("Duplicate Inventory Success!", "success");
+      //     ToastifyAlert("Added Successfully", "success");
+      //     setStorefrom(null);
+      //     setStoreto(null);
+      //     setProductOptions([
+      //       { value: "Select Product", label: "Select Product" },
+      //     ]);
+      //     setselectedProducts([]);
+      //     setIsSelectClicked(false);
+      //   } else if (response.data.status === "Failed") {
+      //     ToastifyAlert("Duplicate Inventory Failed!", "error");
+      //     setsubmitmessage("Something Went Wrong");
+      //   }
+      // } catch (error) {
+      //   // console.log('33 catch err');
+      //   handleCoockieExpire()
+      //   getUnAutherisedTokenMessage()
+      //   ToastifyAlert("Error!", "error");
+      //   return new Error(error);
+      // }
       }else{
         showModal("Please Fill Captcha Correctly!")
         const canvas = canvasRef.current; 
@@ -601,8 +692,9 @@ const ProductDuplicateStore = () => {
             <button
               className="quic-btn quic-btn-save"
               onClick={dupplicateProductInventory}
+              disabled={loader}
             >
-              Duplicate Inventory
+               {loader ? <><CircularProgress color={"inherit"} width={15} size={15}/>Duplicate Inventory</> : "Duplicate Inventory"}
             </button>
           </div>
         </div>
@@ -614,6 +706,18 @@ const ProductDuplicateStore = () => {
       open={alertModalOpen}
       onClose={() => {setAlertModalOpen(false)}}
        />
+       <ConfirmModal
+            headerText="The existing Variants of the selected Store 2 Must be same as selected Store 1 Variants. Do you want to proceed?"
+            open={confirmModalOpen}
+            onClose={() => {setConfirmModalOpen(false)}}
+            onConfirm={confirmfun}
+        />
+        <FinalConfirm
+            headerText="Final Confirmation!!!"
+            open={confirmfinalModalOpen}
+            onClose={() => {setConfirmFinalModalOpen(false)}}
+            onConfirm={confirmFinalfun}
+        />
     </>
   );
 };
