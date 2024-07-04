@@ -20,7 +20,8 @@ import useDebounce from "../../../hooks/useDebouncs";
 import Pagination from "../UnverifeDetails/Pagination";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import PasswordShow from "../../../Common/passwordShow";
-
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import sortIcon from "../../../Assests/Category/SortingW.svg";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -58,6 +59,7 @@ export default function Manager() {
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+  const [sortOrder, setSortOrder] = useState("asc");
   const debouncedValue = useDebounce(searchRecord);
 
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -93,8 +95,11 @@ export default function Manager() {
 
   // on load setting count of Verified Merchant list & on every change...
   useEffect(() => {
-    setTotalCount(managerList.managerRecordsCount);
-  }, [managerList.managerRecordsCount]);
+    if (!managerList.loading && managerList) {
+      setTotalCount(managerList?.managerRecordsCount);
+      setManagerTable(managerList?.ManagerRecord);
+    }
+  }, [managerList?.managerRecordsCount, managerList?.ManagerRecord]);
 
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
@@ -104,7 +109,16 @@ export default function Manager() {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const columns = ["Name", "Email", "Phone", "View"];
-
+  const sortByItemName = (type, name) => {
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      managerTable,
+      type,
+      name,
+      sortOrder
+    );
+    setManagerTable(sortedItems);
+    setSortOrder(newOrder);
+  };
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -159,22 +173,46 @@ export default function Manager() {
             ) : (
               <>
                 {managerList.ManagerRecord &&
-                managerList.ManagerRecord.length > 0 &&
-                Array.isArray(managerList.ManagerRecord) ? (
+                managerTable.length > 0 &&
+                Array.isArray(managerTable) ? (
                   <TableContainer>
                     <StyledTable
                       sx={{ minWidth: 500 }}
                       aria-label="customized table"
                     >
                       <TableHead>
-                        <StyledTableCell>Name</StyledTableCell>
-                        <StyledTableCell>Email</StyledTableCell>
-                        <StyledTableCell>Phone</StyledTableCell>
+                        <StyledTableCell>
+                          <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("str", "name")}
+                          >
+                            <p>Name</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("str", "email")}
+                          >
+                            <p>Email</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("num", "phone")}
+                          >
+                            <p>Phone</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                        </StyledTableCell>
                         <StyledTableCell>View</StyledTableCell>
                       </TableHead>
                       <TableBody>
-                        {managerList.ManagerRecord?.length
-                          ? managerList.ManagerRecord?.map((data, index) => {
+                        {managerTable?.length
+                          ? managerTable?.map((data, index) => {
                               return (
                                 <StyledTableRow key={data.id}>
                                   <StyledTableCell>

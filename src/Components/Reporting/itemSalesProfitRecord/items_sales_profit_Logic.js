@@ -57,6 +57,7 @@ export default function Items_sales_profit_Logic() {
           } else {
             setgetMessageRecord(res?.data?.msg);
             setLoading(false);
+            setItemRecord([])
           }
         });
     } catch (error) {

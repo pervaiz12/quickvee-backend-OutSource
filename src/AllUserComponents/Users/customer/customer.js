@@ -24,6 +24,8 @@ import Delete from "../../../Assests/VerifiedMerchant/Delete.svg";
 import useDebounce from "../../../hooks/useDebouncs";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import PasswordShow from "../../../Common/passwordShow";
+import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import sortIcon from "../../../Assests/Category/SortingW.svg";
 const Customer = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -31,10 +33,11 @@ const Customer = () => {
 
   // states
   const [searchRecord, setSearchRecord] = useState("");
-  // const [customersDataState, setCustomersDataState] = useState([]);
+  const [customersDataState, setCustomersDataState] = useState([]);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
+  const [sortOrder, setSortOrder] = useState("asc");
   const customerRecord = useSelector((state) => state.customerRecord);
   const customerRecordCount = useSelector(
     (state) => state.customerRecord.CustomerRecordCount
@@ -50,11 +53,11 @@ const Customer = () => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  // useEffect(() => {
-  //   if (customerRecord.CustomerRecord?.length >= 1) {
-  //     setCustomersDataState(customerRecord.CustomerRecord);
-  //   }
-  // }, [customerRecord.CustomerRecord]);
+  useEffect(() => {
+    if (!customerRecord.loading && customerRecord.CustomerRecord?.length >= 1) {
+      setCustomersDataState(customerRecord.CustomerRecord);
+    }
+  }, [customerRecord.CustomerRecord]);
 
   // on load setting count of Customers list & on every change...
   useEffect(() => {
@@ -146,7 +149,16 @@ const Customer = () => {
   };
 
   const columns = ["Customer Name", "Email", "Phone", "User Type", ""];
-
+  const sortByItemName = (type, name) => {
+    const { sortedItems, newOrder } = SortTableItemsHelperFun(
+      customersDataState,
+      type,
+      name,
+      sortOrder
+    );
+    setCustomersDataState(sortedItems);
+    setSortOrder(newOrder);
+  };
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -213,22 +225,54 @@ const Customer = () => {
             ) : (
               <>
                 {customerRecord.CustomerRecord &&
-                Array.isArray(customerRecord.CustomerRecord) &&
-                customerRecord.CustomerRecord?.length > 0 ? (
+                Array.isArray(customersDataState) &&
+                customersDataState?.length > 0 ? (
                   <TableContainer>
                     <StyledTable
                       sx={{ minWidth: 500 }}
                       aria-label="customized table"
                     >
                       <TableHead>
-                        <StyledTableCell>Customer Name</StyledTableCell>
-                        <StyledTableCell>Email</StyledTableCell>
-                        <StyledTableCell>Phone</StyledTableCell>
-                        <StyledTableCell>User Type</StyledTableCell>
+                        <StyledTableCell>
+                          <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("str", "name")}
+                          >
+                            <p>Customer Name</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                        <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("str", "email")}
+                          >
+                            <p>Email</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                          </StyledTableCell>
+                        <StyledTableCell>
+                        <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("num", "phone")}
+                          >
+                            <p>Phone</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                          </StyledTableCell>
+                        <StyledTableCell>
+                        <button
+                            className="flex items-center"
+                            onClick={() => sortByItemName("str", "user_type")}
+                          >
+                            <p>User Type</p>
+                            <img src={sortIcon} alt="" className="pl-1" />
+                          </button>
+                         </StyledTableCell>
                         {/* <StyledTableCell>Action</StyledTableCell> */}
                       </TableHead>
                       <TableBody>
-                        {customerRecord.CustomerRecord?.map((data, index) => (
+                        {customersDataState?.map((data, index) => (
                           <StyledTableRow key={data.id}>
                             <StyledTableCell>
                               <div class="text-[#000000] order_method capitalize">
