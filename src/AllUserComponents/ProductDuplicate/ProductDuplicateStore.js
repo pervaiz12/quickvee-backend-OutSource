@@ -293,6 +293,9 @@ const ProductDuplicateStore = () => {
         ToastifyAlert("Duplicate Inventory Failed!", "error");
         setsubmitmessage("Something Went Wrong");
       }
+      const canvas = canvasRef.current; 
+        const ctx = canvas.getContext('2d'); 
+        initializeCaptcha(ctx); 
     } catch (error) {
       // console.log('33 catch err');
       handleCoockieExpire()
