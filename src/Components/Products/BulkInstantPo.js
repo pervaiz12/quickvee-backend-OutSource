@@ -100,13 +100,7 @@ const BulkInstantPo = ({
 
     let qtyfieldValue;
     if (name === "qty") {
-      qtyfieldValue = value
-        // Remove extra dots and ensure only one dot exists at most
-        .replace(/[^\d.]/g, "") // Allow digits and dots only
-        .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
-        .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
-
-      let inputStr = qtyfieldValue.replace(/\D/g, "");
+      let inputStr = value.replace(/[^0-9.-]|^(?=.*-.*-)/g, "");
       // inputStr = inputStr.replace(/^+/, "");
       if (inputStr == "0") {
         qtyfieldValue = "0";
@@ -155,13 +149,7 @@ const BulkInstantPo = ({
 
     let qtyfieldValue;
     if (name === "qty") {
-      qtyfieldValue = value
-        // Remove extra dots and ensure only one dot exists at most
-        .replace(/[^\d.]/g, "") // Allow digits and dots only
-        .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
-        .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
-
-      let inputStr = qtyfieldValue.replace(/\D/g, "");
+      let inputStr = value.replace(/[^0-9.-]|^(?=.*-.*-)/g, "");
       // inputStr = inputStr.replace(/^+/, "");
       if (inputStr == "0") {
         qtyfieldValue = "0";
@@ -470,7 +458,7 @@ const BulkInstantPo = ({
                         />
                         {error ? (
                           <span className="error-alert mb-2">
-                            description is required
+                            Description is required
                           </span>
                         ) : (
                           ""
@@ -554,7 +542,7 @@ const BulkInstantPo = ({
                         />
                         {error ? (
                           <span className="error-alert mb-2">
-                            description is required
+                            Description is required
                           </span>
                         ) : (
                           ""
