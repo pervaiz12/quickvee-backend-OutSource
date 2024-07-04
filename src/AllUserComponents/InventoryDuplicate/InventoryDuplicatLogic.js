@@ -29,6 +29,11 @@ const InventoryExportLogic = () => {
   const [userInput, setUserInput] = useState(''); 
   const [captchaText, setCaptchaText] = useState(''); 
   const [loader, setLoader] = useState(false);
+  const [loadersetting, setLoaderSetting] = useState(false);
+  const [confirmModalOpensetting, setConfirmModalOpensetting] = useState(false);
+  const [confirmfinalModalOpensetting, setConfirmFinalModalOpensetting] = useState(false);
+  const [confirmModalOpen, setConfirmModalOpen] = useState(false);
+  const [confirmfinalModalOpen, setConfirmFinalModalOpen] = useState(false);
 
   const handleStoreInput = async (event) => {
     let { errors } = values;
@@ -70,6 +75,44 @@ const InventoryExportLogic = () => {
 
   const { token, ...userTypeDataNew } = userTypeData;
 
+  const confirmFinalLogic = async (e) => {
+    const data = {
+      store_name_from: values.store_name_from,
+      store_name_to: values.store_name_to,
+      upc_check: values.upc_check,
+      ...userTypeDataNew,
+    };
+          setConfirmModalOpen(true);
+
+    setConfirmFinalModalOpen(false)
+    setLoader(true);
+    try {
+      const response = await axios.post(
+        BASE_URL + INVENTORY_DUPLICATE,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (response.data) {
+        setsubmitmessage(response.data);
+        ToastifyAlert("Duplicate Inventory Success!", "success");
+      } else {
+        setsubmitmessage(response.data);
+      }
+    } catch (error) {
+      // console.log('33 catch err');
+      ToastifyAlert("Error!", "error");
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
+      return new Error(error);
+    }
+    setLoader(false);
+  }
+
   const dupplicateInventory = async (e) => {
     e.preventDefault();
     let { errors } = values;
@@ -84,37 +127,38 @@ const InventoryExportLogic = () => {
         return false;
       }else {
         if (userInput === captchaText) { 
-          const data = {
-            store_name_from: values.store_name_from,
-            store_name_to: values.store_name_to,
-            upc_check: values.upc_check,
-            ...userTypeDataNew,
-          };
-          setLoader(true);
-          try {
-            const response = await axios.post(
-              BASE_URL + INVENTORY_DUPLICATE,
-              data,
-              {
-                headers: {
-                  "Content-Type": "multipart/form-data",
-                  Authorization: `Bearer ${token}`,
-                },
-              }
-            );
-            if (response.data) {
-              setsubmitmessage(response.data);
-              ToastifyAlert("Duplicate Inventory Success!", "success");
-            } else {
-              setsubmitmessage(response.data);
-            }
-          } catch (error) {
-            // console.log('33 catch err');
-            ToastifyAlert("Error!", "error");
-            handleCoockieExpire()
-            getUnAutherisedTokenMessage()
-            return new Error(error);
-          }
+          setConfirmModalOpen(true);
+          // const data = {
+          //   store_name_from: values.store_name_from,
+          //   store_name_to: values.store_name_to,
+          //   upc_check: values.upc_check,
+          //   ...userTypeDataNew,
+          // };
+          // setLoader(true);
+          // try {
+          //   const response = await axios.post(
+          //     BASE_URL + INVENTORY_DUPLICATE,
+          //     data,
+          //     {
+          //       headers: {
+          //         "Content-Type": "multipart/form-data",
+          //         Authorization: `Bearer ${token}`,
+          //       },
+          //     }
+          //   );
+          //   if (response.data) {
+          //     setsubmitmessage(response.data);
+          //     ToastifyAlert("Duplicate Inventory Success!", "success");
+          //   } else {
+          //     setsubmitmessage(response.data);
+          //   }
+          // } catch (error) {
+          //   // console.log('33 catch err');
+          //   ToastifyAlert("Error!", "error");
+          //   handleCoockieExpire()
+          //   getUnAutherisedTokenMessage()
+          //   return new Error(error);
+          // }
         }else{
           setModalHeaderText("Please Fill Captcha Correctly!")
           setAlertOpen(true)
@@ -129,6 +173,46 @@ const InventoryExportLogic = () => {
       errors,
     }));
   };
+
+
+  const confirmFinalSettingLogic = async (e) => {
+    const data = {
+      store_name_from: values.store_name_from,
+      store_name_to: values.store_name_to,
+      //   upc_check: values.upc_check,
+      ...userTypeDataNew,
+    };
+    setConfirmFinalModalOpensetting(false)
+    setLoaderSetting(true);
+    try {
+      const response = await axios.post(
+        BASE_URL + SETTINGS_DUPLICATE,
+        data,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data) {
+        setsubmitmessage(response.data);
+        // ToastifyAlert("Duplicate Settings Success!", "success");
+        ToastifyAlert("Duplicate Settings Success!", "success");
+      } else {
+        setsubmitmessage(response.data);
+      }
+    } catch (error) {
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
+      ToastifyAlert("Error!", "error");
+      // console.log('33 catch err');
+      return new Error(error);
+    }
+    setLoaderSetting(false);
+  }
+
   const dupplicateSettings = async (e) => {
     e.preventDefault();
     let { errors } = values;
@@ -143,39 +227,40 @@ const InventoryExportLogic = () => {
         return false;
       } else {
         if (userInput === captchaText) { 
-        const data = {
-          store_name_from: values.store_name_from,
-          store_name_to: values.store_name_to,
-          //   upc_check: values.upc_check,
-          ...userTypeDataNew,
-        };
-        setLoader(true);
-        try {
-          const response = await axios.post(
-            BASE_URL + SETTINGS_DUPLICATE,
-            data,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${token}`,
-              },
-            }
-          );
+          setConfirmModalOpensetting(true);
+        // const data = {
+        //   store_name_from: values.store_name_from,
+        //   store_name_to: values.store_name_to,
+        //   //   upc_check: values.upc_check,
+        //   ...userTypeDataNew,
+        // };
+        // setLoader(true);
+        // try {
+        //   const response = await axios.post(
+        //     BASE_URL + SETTINGS_DUPLICATE,
+        //     data,
+        //     {
+        //       headers: {
+        //         "Content-Type": "multipart/form-data",
+        //         Authorization: `Bearer ${token}`,
+        //       },
+        //     }
+        //   );
 
-          if (response.data) {
-            setsubmitmessage(response.data);
-            // ToastifyAlert("Duplicate Settings Success!", "success");
-            ToastifyAlert("Added Successfully", "success");
-          } else {
-            setsubmitmessage(response.data);
-          }
-        } catch (error) {
-          handleCoockieExpire()
-          getUnAutherisedTokenMessage()
-          ToastifyAlert("Error!", "error");
-          // console.log('33 catch err');
-          return new Error(error);
-        }
+        //   if (response.data) {
+        //     setsubmitmessage(response.data);
+        //     // ToastifyAlert("Duplicate Settings Success!", "success");
+        //     ToastifyAlert("Added Successfully", "success");
+        //   } else {
+        //     setsubmitmessage(response.data);
+        //   }
+        // } catch (error) {
+        //   handleCoockieExpire()
+        //   getUnAutherisedTokenMessage()
+        //   ToastifyAlert("Error!", "error");
+        //   // console.log('33 catch err');
+        //   return new Error(error);
+        // }
         }else{
           setModalHeaderText("Please Fill Captcha Correctly!")
           setAlertOpen(true)
@@ -203,7 +288,20 @@ const InventoryExportLogic = () => {
     setUserInput,
     captchaText,
     setCaptchaText,
-    loader
+    loader,
+    setLoader,
+    loadersetting,
+    setLoaderSetting,
+    confirmModalOpen,
+    setConfirmModalOpen,
+    setConfirmFinalModalOpen,
+    confirmfinalModalOpen,
+    confirmModalOpensetting,
+    confirmfinalModalOpensetting,
+    setConfirmModalOpensetting,
+    setConfirmFinalModalOpensetting,
+    confirmFinalLogic,
+    confirmFinalSettingLogic
   };
 };
 
