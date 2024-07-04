@@ -164,9 +164,9 @@ const FilterProduct = ({
     <>
       <div className="box">
         <div className="box_shadow_input">
-          <Grid container sx={{px: 3.5,pt:2.5}}>
+          <Grid container sx={{ px: 3.5, pt: 2.5 }}>
             <Grid item xs={12}>
-              <h1 style={{marginBottom: 0}} className="heading ">
+              <h1 style={{ marginBottom: 0 }} className="heading ">
                 Products
               </h1>
             </Grid>
@@ -175,11 +175,11 @@ const FilterProduct = ({
             <Grid container>
               <Grid item xs={12} className="px-5">
                 <InputTextSearch
-                  placeholder="Search orders by order ID, last 4 digits on payment card, or invoice ID"
+                  placeholder="Search products by Name or UPC Code"
                   value={searchId}
-                  handleChange={setSearchId}
-                  handleSearchButton={handleSearch}
-                  handlefocus={handlefocus}
+                  handleChange={handleSearch}
+                  // handleSearchButton={handleSearch}
+                  // handlefocus={handlefocus}
                 />
               </Grid>
             </Grid>
@@ -209,7 +209,7 @@ const FilterProduct = ({
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={4}>
-                <label>Listing Type {selectedListingType}</label>
+                <label>Listing Type</label>
                 <SelectDropDown
                   heading={"Select listing"}
                   title={"title"}

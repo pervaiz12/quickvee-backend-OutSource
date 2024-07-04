@@ -30,7 +30,7 @@ const initialState = {
   // showType initial state
   showType: 3,
 
-  varientProduct:[],
+  varientProduct: [],
 };
 // Generate pening , fulfilled and rejected action type
 export const fetchAllProducts = createAsyncThunk(
@@ -69,7 +69,8 @@ export const fetchProductsData = createAsyncThunk(
           Authorization: `Bearer ${token}`,
         },
       });
-      // console.log(response)
+      // console.log("api products: ", response.data);
+
       if (response.status === 200) {
         return response.data;
       }
@@ -98,8 +99,8 @@ export const updateProductsType = createAsyncThunk(
 export const getInventorySetting = createAsyncThunk(
   "products/getInventorySetting",
   async (payload) => {
-    const token = payload.get('token'); // Extract the token from FormData
-    payload.delete('token');
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
     try {
       const response = await axios.post(
         BASE_URL + "Profile_setup/inventory_register_setting",
@@ -122,8 +123,8 @@ export const getInventorySetting = createAsyncThunk(
 export const getInventorySettingOnVarient = createAsyncThunk(
   "products/getInventorySettingOnVarient",
   async (payload) => {
-    const token = payload.get('token'); // Extract the token from FormData
-    payload.delete('token');
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
     try {
       const response = await axios.post(
         BASE_URL + "Profile_setup/inventory_register_setting",
@@ -146,8 +147,8 @@ export const getInventorySettingOnVarient = createAsyncThunk(
 export const editProductData = createAsyncThunk(
   "products/editProduct",
   async (payload) => {
-    const token = payload.get('token'); // Extract the token from FormData
-    payload.delete('token');
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/edit_produt",
@@ -170,8 +171,8 @@ export const editProductData = createAsyncThunk(
 export const addProduct = createAsyncThunk(
   "products/addProduct",
   async (payload) => {
-    const token = payload.get('token'); // Extract the token from FormData
-    payload.delete('token');
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/add_product",
@@ -194,7 +195,7 @@ export const addProduct = createAsyncThunk(
 export const fetchVarientList = createAsyncThunk(
   "products/fetchVarientList",
   async (payload) => {
-    const {token, ...newData} = payload;
+    const { token, ...newData } = payload;
     try {
       const response = await axios.post(
         BASE_URL + "Varient_react_api/varients_list",
@@ -261,9 +262,9 @@ export const fetchProductList = createAsyncThunk(
 export const fetchProductsDataById = createAsyncThunk(
   "products/fetchProductData",
   async (payload) => {
-    const token = payload.get('token'); // Extract the token from FormData
-    payload.delete('token');
-    
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
+
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/get_productdata_ById",
@@ -285,12 +286,13 @@ export const fetchProductsDataById = createAsyncThunk(
 export const checkProductTitle = createAsyncThunk(
   "products/checkProductTitle",
   async (payload) => {
-    const token = payload.get('token'); // Extract the token from FormData
-    payload.delete('token');
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/check_productTitle",
-        payload,{
+        payload,
+        {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${token}`,
@@ -307,8 +309,8 @@ export const checkProductTitle = createAsyncThunk(
 export const fetchVendorList = createAsyncThunk(
   "products/fetchVendorList",
   async (payload) => {
-    const token = payload.get('token'); // Extract the token from FormData
-    payload.delete('token');
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/product_vendors_list",
@@ -345,9 +347,9 @@ export const filterVendorAPI = createAsyncThunk(
 export const assignProductVendor = createAsyncThunk(
   "products/assignProductVendor",
   async (payload) => {
-    const token = payload.get('token'); // Extract the token from FormData
-    payload.delete('token');
-    
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
+
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/assign_product_vendors",
@@ -369,8 +371,8 @@ export const assignProductVendor = createAsyncThunk(
 export const fetchSalesHistory = createAsyncThunk(
   "products/fetchSalesHistory",
   async (payload) => {
-    const token = payload.get('token'); // Extract the token from FormData
-    payload.delete('token');
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/saleshistory",
@@ -422,10 +424,9 @@ export const deleteProductVendor = createAsyncThunk(
 export const saveVendorList = createAsyncThunk(
   "products/saveVendorList",
   async (payload) => {
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
 
- const token = payload.get('token'); // Extract the token from FormData
- payload.delete('token');
- 
     try {
       const response = await axios.post(
         BASE_URL + "Productapi/save_vendor_list",
@@ -447,9 +448,9 @@ export const saveVendorList = createAsyncThunk(
 export const getAlreadyAssignVendor = createAsyncThunk(
   "products/getAlreadyAssignVendor",
   async (payload) => {
-    const token = payload.get('token'); // Extract the token from FormData
-    payload.delete('token');
-    
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
+
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/assign_product_vendors_list",
@@ -471,8 +472,8 @@ export const getAlreadyAssignVendor = createAsyncThunk(
 export const bulkVendorAssign = createAsyncThunk(
   "products/bulkVendorAssign",
   async (payload) => {
-    const token = payload.get('token'); // Extract the token from FormData
-    payload.delete('token');
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/bulk_assign_vendors",
@@ -494,9 +495,9 @@ export const bulkVendorAssign = createAsyncThunk(
 export const saveSingleVarientPO = createAsyncThunk(
   "products/saveSingleVarientPO",
   async (payload) => {
-    const token = payload.get('token'); // Extract the token from FormData
-    payload.delete('token');
-    
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
+
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/save_instant_po",
@@ -518,9 +519,9 @@ export const saveSingleVarientPO = createAsyncThunk(
 export const saveBulkInstantPo = createAsyncThunk(
   "products/saveBulkInstantPo",
   async (payload) => {
-    const token = payload.get('token'); // Extract the token from FormData
-    payload.delete('token');
-    
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
+
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/bulk_instant_po",
@@ -542,7 +543,7 @@ export const saveBulkInstantPo = createAsyncThunk(
 export const changeOnlineOrderMethod = createAsyncThunk(
   "products/changeOnlineOrderMethod",
   async (payload) => {
-    const {token, ...payloadNew} = payload;
+    const { token, ...payloadNew } = payload;
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/product_show_status_update",
@@ -561,12 +562,10 @@ export const changeOnlineOrderMethod = createAsyncThunk(
   }
 );
 
-
-
 export const changeShowStatusProduct = createAsyncThunk(
   "products/changeShowStatusProduct",
   async (payload) => {
-    const {token, ...payloadNew} = payload;
+    const { token, ...payloadNew } = payload;
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/update_show_status",
@@ -588,8 +587,8 @@ export const changeShowStatusProduct = createAsyncThunk(
 export const deleteProductAPI = createAsyncThunk(
   "products/deleteProductAPI",
   async (payload) => {
-    const token = payload.get('token'); // Extract the token from FormData
-    payload.delete('token');
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/delete_product",
@@ -619,7 +618,7 @@ export const checkUpcCodeMultiple = createAsyncThunk(
         payload,
         {
           headers: {
-            "Content-Type": "multipart/form-data"
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -641,7 +640,7 @@ export const checkUpcCodeSingle = createAsyncThunk(
         payload,
         {
           headers: {
-            "Content-Type": "multipart/form-data"
+            "Content-Type": "multipart/form-data",
           },
         }
       );
@@ -652,13 +651,12 @@ export const checkUpcCodeSingle = createAsyncThunk(
   }
 );
 
-
 export const checkUpcOnVarientEdit = createAsyncThunk(
   "products/checkUpcOnVarientEdit",
   async (payload) => {
     // const token = payload.get('token'); // Extract the token from FormData
     // payload.delete('token');
-    const {token, ...newData} = payload;
+    const { token, ...newData } = payload;
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/check_upc_new",
@@ -677,13 +675,12 @@ export const checkUpcOnVarientEdit = createAsyncThunk(
   }
 );
 
-
 export const updateEditVarient = createAsyncThunk(
   "products/updateEditVarient",
   async (payload) => {
     // const token = payload.get('token'); // Extract the token from FormData
     // payload.delete('token');
-    const {token, ...newData} = payload;
+    const { token, ...newData } = payload;
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/update_variant",
@@ -702,14 +699,12 @@ export const updateEditVarient = createAsyncThunk(
   }
 );
 
-
-
 export const fetchVarietDataById = createAsyncThunk(
   "products/fetchVarietDataById",
   async (payload) => {
-    const token = payload.get('token'); // Extract the token from FormData
-    payload.delete('token');
-    
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
+
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/get_variantdata_ById",
@@ -732,6 +727,7 @@ const productsSlice = createSlice({
   initialState,
   reducers: {
     emptyProduct: (state, action) => {
+      // console.log("empty action payload: ", action.payload);
       state.productsData = action.payload;
       state.offset = 0;
       state.limit = 10;
@@ -755,24 +751,23 @@ const productsSlice = createSlice({
     updateFormValue: (state, action) => {
       state.formData = action?.payload;
     },
-    changeShowType: (state, action)=>{
+    changeShowType: (state, action) => {
       const { id, updateValue } = action.payload;
-      const obj = state.productsData?.find(obj => obj.id === id);
+      const obj = state.productsData?.find((obj) => obj.id === id);
       if (obj) {
-          obj.show_type = updateValue;
+        obj.show_type = updateValue;
       }
     },
-    changeShowStatus: (state, action)=>{
+    changeShowStatus: (state, action) => {
       const { id, showStatus } = action.payload;
-      const obj = state.productsData?.find(obj => obj.id === id);
+      const obj = state.productsData?.find((obj) => obj.id === id);
       if (obj) {
-          obj.show_status = showStatus;
+        obj.show_status = showStatus;
       }
     },
-    setVarientList: (state, action)=>{
+    setVarientList: (state, action) => {
       state.varientProduct = action.payload;
-    }
-    
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchAllProducts.pending, (state) => {
@@ -798,10 +793,15 @@ const productsSlice = createSlice({
       }
       // Append new items to the productsData array
       // console.log(state);
-      const productIds = new Set(state.productsData.map(product => product.title));
-  
+      const productIds = new Set(
+        state.productsData.map((product) => product.title)
+      );
+
+      // console.log("action.payload: ", action.payload);
+      // console.log("product ids: ", productIds);
+
       // Append new items to the productsData array if they are not already present
-      action.payload.forEach(product => {
+      action.payload.forEach((product) => {
         if (!productIds.has(product.title)) {
           state.productsData.push(product);
           productIds.add(product.title);
@@ -872,6 +872,12 @@ const productsSlice = createSlice({
   },
 });
 
-export const { editProduct, emptyProduct, updateFormValue, changeShowType, setVarientList, changeShowStatus } =
-  productsSlice.actions;
+export const {
+  editProduct,
+  emptyProduct,
+  updateFormValue,
+  changeShowType,
+  setVarientList,
+  changeShowStatus,
+} = productsSlice.actions;
 export default productsSlice.reducer;

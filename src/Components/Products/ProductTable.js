@@ -30,6 +30,7 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import axios from "axios";
 import { fetchStoreSettingSetupData } from "../../Redux/features/SettingSetup/SettingSetupSlice";
 import { changeShowStatus } from "../../Redux/features/Product/ProductSlice";
+import { color } from "@mui/system";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -69,18 +70,30 @@ const ProductTable = ({
 }) => {
   let listing_type = 0;
   const ProductsListDataState = useSelector((state) => state.productsListData);
+
+  // useEffect(() => {
+  //   console.log("products: ", ProductsListDataState.productsData);
+  // }, [ProductsListDataState.productsData]);
+
   const { hasMore, offset, limit, loading } = useSelector(
     (state) => state.productsListData
   );
-  const { userTypeData, LoginGetDashBoardRecordJson,  LoginAllStore , GetSessionLogin } = useAuthDetails();
+  const {
+    userTypeData,
+    LoginGetDashBoardRecordJson,
+    LoginAllStore,
+    GetSessionLogin,
+  } = useAuthDetails();
 
   const { getUnAutherisedTokenMessage } = PasswordShow();
   const navigate = useNavigate();
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
+  const [checkApproved, setCheckApproved] = useState(false);
+  const [checkReject, setCheckReject] = useState(false);
 
   const [productList, setproductsList] = useState([]);
   const [inventoryApproval, setInventoryApproval] = useState();
-
+  const [checkboxState, setCheckboxState] = useState({}); 
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -106,22 +119,26 @@ const ProductTable = ({
     if (payloadData) {
       dispatch(fetchProductsData(payloadData));
     }
-    
-    dispatch(fetchStoreSettingSetupData({merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id})).then((res)=>{
-      setInventoryApproval(Boolean(+res?.payload?.inventory_approval))
-    })
+
+    dispatch(
+      fetchStoreSettingSetupData({
+        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+      })
+    ).then((res) => {
+      setInventoryApproval(Boolean(+res?.payload?.inventory_approval));
+    });
   }, []);
 
   const checkStatus = (status) => {
     switch (status) {
       case "1":
-        return { text: "Approved", color: "#0A64F9" };
+        return { text: "Approved", color: "green" };
       case "2":
-        return { text: "Rejected", color: "#F90A0A" };
+        return { text: "Rejected", color: "red" };
       case "0":
-        return { text: "Pending", color: "#FF8800" };
+        return { text: "Pending", color: "yellow" };
       default:
-        return { text: "Pending", color: "#FF8800" };
+        return { text: "Pending", color: "yellow" };
     }
   };
 
@@ -162,9 +179,16 @@ const ProductTable = ({
     });
   };
 
-
   const update_status = (event, showStatus) => {
-    const { name, value, id } = event?.target;
+    const userConfirmed = window.confirm(
+      "Are you sure you want to delete this vendor?"
+    );
+
+    if (!userConfirmed) {
+      return; // If the user clicks "No", exit the function
+    }
+
+    const { name, id } = event?.target;
 
     const data = {
       product_id: id,
@@ -174,9 +198,23 @@ const ProductTable = ({
     };
     dispatch(changeShowStatusProduct(data)).then((res) => {
       if (res?.payload?.status) {
+        setCheckboxState((prevState) => ({
+          ...prevState,
+          [id]: {
+            approved: showStatus === 1,
+            rejected: showStatus === 2,
+          },
+        }));
         dispatch(changeShowStatus({ showStatus, id }));
       } else {
-        ToastifyAlert("show status unable to change", "error");
+        setCheckboxState((prevState) => ({
+          ...prevState,
+          [id]: {
+            approved: false,
+            rejected: false,
+          },
+        }));
+        ToastifyAlert("Show status unable to change", "error");
       }
     });
   };
@@ -204,9 +242,8 @@ const ProductTable = ({
       page: page,
       ...userTypeData,
     };
-    if (data1) {
-      dispatch(fetchProductsData(data1));
-    }
+
+    dispatch(fetchProductsData(data1));
 
     // setTimeout(() => {
     //   setItems(items.concat(Array.from({ length: 15 })));
@@ -246,21 +283,28 @@ const ProductTable = ({
   };
 
   const handleNavigate = (id, varientName, productData) => {
-    let varientTitle = '';
-    if (varientName?.includes('/')) {
-      const splitVarient = varientName?.split('/');
-      varientTitle = splitVarient?.join('-') || '';
+    let varientTitle = "";
+    if (varientName?.includes("/")) {
+      const splitVarient = varientName?.split("/");
+      varientTitle = splitVarient?.join("-") || "";
     } else {
       varientTitle = varientName;
     }
 
-    if (selectedListingType === "Variant listing" && productData?.isvarient === "1") {
-      navigate(`/inventory/products/varient-edit/${id}/${varientName ? varientTitle : null}`, { state: productData });
+    if (
+      selectedListingType === "Variant listing" &&
+      productData?.isvarient === "1"
+    ) {
+      navigate(
+        `/inventory/products/varient-edit/${id}/${
+          varientName ? varientTitle : null
+        }`,
+        { state: productData }
+      );
     } else {
       navigate(`/inventory/products/edit/${id}`);
     }
   };
-
 
   const onDragEnd = async (result) => {
     const { source, destination } = result;
@@ -278,7 +322,6 @@ const ProductTable = ({
       return; // If user cancels, do nothing
     }
 
-
     // Reorder the items
     const reorderedItems = Array.from(productList);
     const removed = reorderedItems.splice(source.index, 1)[0];
@@ -287,35 +330,38 @@ const ProductTable = ({
     setproductsList(reorderedItems);
     // Optionally, you can dispatch an action to update the order in your store
 
-      // Example of how to prepare payload for API call
+    // Example of how to prepare payload for API call
 
-      const values = {};
-      const payload = {
-        table: "product",
-        merchant_id: "MAL0100CA",
-        token_id: 5022,
-        login_type: "superadmin",
-      };
-  
-      reorderedItems.forEach((item, index) => {
-        values[`values[${item.id}]`] = item.title; // Adjust according to your data structure
-      });
+    const values = {};
+    const payload = {
+      table: "product",
+      merchant_id: "MAL0100CA",
+      token_id: 5022,
+      login_type: "superadmin",
+    };
 
+    reorderedItems.forEach((item, index) => {
+      values[`values[${item.id}]`] = item.title; // Adjust according to your data structure
+    });
 
-      // Example API call after successful reorder
+    // Example API call after successful reorder
     // Replace with your actual API call method (e.g., fetch or axios)
 
     try {
       // Send POST request using axios
-      const response = await axios.post(BASE_URL + SORT_CATOGRY_DATA, {...payload, ...values}, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-  
+      const response = await axios.post(
+        BASE_URL + SORT_CATOGRY_DATA,
+        { ...payload, ...values },
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
       // Handle API response
       ToastifyAlert("Reordered Successfully", "success");
-  
+
       // Additional logic after successful reorder and API call
       // For example, update state or trigger additional actions
     } catch (error) {
@@ -324,7 +370,6 @@ const ProductTable = ({
       // Handle specific error cases if needed
     }
   };
-
 
   return (
     <>
@@ -391,7 +436,8 @@ const ProductTable = ({
                             <TableBody>
                               {productList?.length >= 1 &&
                                 productList.map((product, index) => {
-                                  const getVarientName = product?.title?.split(/~~?/) || [];
+                                  const getVarientName =
+                                    product?.title?.split(/~~?/) || [];
                                   return (
                                     <Draggable
                                       key={product?.id}
@@ -405,7 +451,11 @@ const ProductTable = ({
                                           {...provided.dragHandleProps}
                                         >
                                           <StyledTableCell>
-                                            <img src={SortIcon} alt="" className="" />
+                                            <img
+                                              src={SortIcon}
+                                              alt=""
+                                              className=""
+                                            />
                                           </StyledTableCell>
                                           <StyledTableCell>
                                             <p
@@ -415,7 +465,7 @@ const ProductTable = ({
                                                 handleNavigate(
                                                   product?.id,
                                                   getVarientName[1],
-                                                  product,
+                                                  product
                                                 )
                                               }
                                             >
@@ -444,7 +494,7 @@ const ProductTable = ({
                                                     name="delivery_check"
                                                     checked={
                                                       product.show_type == 0 ||
-                                                        product.show_type == 2
+                                                      product.show_type == 2
                                                         ? true
                                                         : false
                                                     }
@@ -472,7 +522,7 @@ const ProductTable = ({
                                                     name="pickup_check"
                                                     checked={
                                                       product.show_type == 0 ||
-                                                        product.show_type == 1
+                                                      product.show_type == 1
                                                         ? true
                                                         : false
                                                     }
@@ -491,8 +541,10 @@ const ProductTable = ({
                                           </StyledTableCell>
                                           <StyledTableCell>
                                             <p className="categories-title">
-                                              {
-                                                userTypeData?.login_type === "superadmin" && inventoryApproval && product?.show_status === "0"  ? 
+                                              {userTypeData?.login_type ===
+                                                "superadmin" &&
+                                              inventoryApproval &&
+                                              product?.show_status === "0" ? (
                                                 <div className="categories-title">
                                                 <div className="flex flex-wrap gap-3 ">
                                                   <label
@@ -507,12 +559,14 @@ const ProductTable = ({
                                                       type="checkbox"
                                                       id={product.id}
                                                       name="approved"
+                                                      
                                                       // checked={
                                                       //   product.show_status == 0 ||
                                                       //     product.show_status == 2
                                                       //     ? true
                                                       //     : false
                                                       // }
+                                                      checked={checkboxState[product.id]?.approved || false}
                                                       value={product.show_status}
                                                       onChange={(event) => {
                                                         update_status(
@@ -541,6 +595,7 @@ const ProductTable = ({
                                                       //     ? true
                                                       //     : false
                                                       // }
+                                                      checked={checkboxState[product.id]?.rejected || false}
                                                       value={product.show_status}
                                                       onChange={(event) => {
                                                         update_status(
@@ -552,8 +607,8 @@ const ProductTable = ({
                                                     <span className="checkmark"></span>
                                                   </label>
                                                 </div>
-                                              </div>:
-                                              checkStatus(product.show_status.toString())?.text
+                                              </div>):
+                                              <span style={{color: checkStatus(product.show_status.toString())?.color}}>{checkStatus(product.show_status.toString())?.text}</span> 
                                               }
                                             </p>
                                           </StyledTableCell>
@@ -581,11 +636,16 @@ const ProductTable = ({
                                                     />
                                                   ))}
                                               </div>
-                                              {product?.media?.split(",").length > 4 ? (
+                                              {product?.media?.split(",")
+                                                .length > 4 ? (
                                                 <div className="mt-3 text-sm font-medium">
-                                                  <a href="#" className="text-blue-500">
+                                                  <a
+                                                    href="#"
+                                                    className="text-blue-500"
+                                                  >
                                                     +{" "}
-                                                    {product.media.split(",").length - 4}{" "}
+                                                    {product.media.split(",")
+                                                      .length - 4}{" "}
                                                     others
                                                   </a>
                                                 </div>
@@ -594,7 +654,8 @@ const ProductTable = ({
                                               )}
                                             </div>
                                           </StyledTableCell>
-                                          {selectedListingType === "Variant listing" ? (
+                                          {selectedListingType ===
+                                          "Variant listing" ? (
                                             ""
                                           ) : (
                                             <StyledTableCell>
@@ -608,7 +669,9 @@ const ProductTable = ({
                                                   alt=" "
                                                   className="w-8 h-8"
                                                   onClick={() =>
-                                                    handleDeleteProduct(product?.id)
+                                                    handleDeleteProduct(
+                                                      product?.id
+                                                    )
                                                   }
                                                 />
                                               </p>
