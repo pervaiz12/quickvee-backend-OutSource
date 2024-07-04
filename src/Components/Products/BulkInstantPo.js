@@ -79,7 +79,6 @@ const BulkInstantPo = ({
       .replace(/[^\d.]/g, "") // Allow digits and dots only
       .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
       .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
-    
 
     let inputStr = fieldValue.replace(/\D/g, "");
     if (name === "cost" && inputStr.trim() === "0") {
@@ -100,28 +99,28 @@ const BulkInstantPo = ({
     }
 
     let qtyfieldValue;
-    if(name === 'qty'){
+    if (name === "qty") {
       qtyfieldValue = value
-      // Remove extra dots and ensure only one dot exists at most
-      .replace(/[^\d.]/g, "") // Allow digits and dots only
-      .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
-      .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+        // Remove extra dots and ensure only one dot exists at most
+        .replace(/[^\d.]/g, "") // Allow digits and dots only
+        .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
+        .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
 
-    let inputStr = qtyfieldValue.replace(/\D/g, "");
-    // inputStr = inputStr.replace(/^+/, "");
-    if (inputStr == "0") {
-      qtyfieldValue = "0";
-    } else {
-      qtyfieldValue = inputStr;
-    }
-    }
-    else if(name === "description"){
-      qtyfieldValue = value
+      let inputStr = qtyfieldValue.replace(/\D/g, "");
+      // inputStr = inputStr.replace(/^+/, "");
+      if (inputStr == "0") {
+        qtyfieldValue = "0";
+      } else {
+        qtyfieldValue = inputStr;
+      }
+    } else if (name === "description") {
+      qtyfieldValue = value;
     }
 
     setInstantPoSingle((prev) => ({
       ...prev,
-      [name]: name !== "description" && name !== "qty" ? fieldValue : qtyfieldValue,
+      [name]:
+        name !== "description" && name !== "qty" ? fieldValue : qtyfieldValue,
     }));
   };
 
@@ -155,20 +154,20 @@ const BulkInstantPo = ({
     }
 
     let qtyfieldValue;
-    if(name === 'qty'){
+    if (name === "qty") {
       qtyfieldValue = value
-      // Remove extra dots and ensure only one dot exists at most
-      .replace(/[^\d.]/g, "") // Allow digits and dots only
-      .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
-      .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+        // Remove extra dots and ensure only one dot exists at most
+        .replace(/[^\d.]/g, "") // Allow digits and dots only
+        .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
+        .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
 
-    let inputStr = qtyfieldValue.replace(/\D/g, "");
-    // inputStr = inputStr.replace(/^+/, "");
-    if (inputStr == "0") {
-      qtyfieldValue = "0";
-    } else {
-      qtyfieldValue = inputStr;
-    }
+      let inputStr = qtyfieldValue.replace(/\D/g, "");
+      // inputStr = inputStr.replace(/^+/, "");
+      if (inputStr == "0") {
+        qtyfieldValue = "0";
+      } else {
+        qtyfieldValue = inputStr;
+      }
     }
 
     if (name !== "description") {
@@ -205,7 +204,7 @@ const BulkInstantPo = ({
           [name]: `${
             name === "qty"
               ? "Quantity"
-              : name.charAt(0).toUpperCase() + name.slice(1) + 'PerItem'
+              : name.charAt(0).toUpperCase() + name.slice(1) + " Per Item"
           } is required`,
         }));
       }
@@ -219,7 +218,9 @@ const BulkInstantPo = ({
         newRequired[index][name] =
           name === "qty"
             ? "Quantity is required"
-            : `${name.charAt(0).toUpperCase() + name.slice(1)}PerItem is required`;
+            : `${
+                name.charAt(0).toUpperCase() + name.slice(1)
+              } Per Item is required`;
       }
       setRequired(newRequired);
     }
@@ -234,7 +235,7 @@ const BulkInstantPo = ({
         hasError = true;
       }
       if (!item.cost) {
-        itemErrors.cost = "CostPerItem is required";
+        itemErrors.cost = "Cost Per Item is required";
         hasError = true;
       }
       return itemErrors;
@@ -266,7 +267,7 @@ const BulkInstantPo = ({
       if (!instantPoSingle?.cost) {
         setRequired((prev) => ({
           ...prev,
-          cost: "CostPerItem is required",
+          cost: "Cost Per Item is required",
         }));
         error = true;
       }
