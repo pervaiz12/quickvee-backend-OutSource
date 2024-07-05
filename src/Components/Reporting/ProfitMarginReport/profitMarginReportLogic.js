@@ -161,7 +161,7 @@ export default function ProfitMarginReportLogic() {
 
       if (response?.data.length) {
         setLoader(false);
-        //   console.log(response?.data);
+        console.log(response?.data);
         setsearchProduct([...searchProduct, ...response?.data]);
         if (selectCategoryId == "all" && response?.data.length >= 10) {
           setLoadMoreData(true);
@@ -172,6 +172,7 @@ export default function ProfitMarginReportLogic() {
         }
       } else {
         setLoader(false);
+        setLoadMoreData(false);
         setMessage("No record found");
         setsearchProduct([]);
       }
