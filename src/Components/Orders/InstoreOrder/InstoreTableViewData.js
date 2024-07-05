@@ -57,7 +57,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const InstoreTableViewData = (props, searchId) => {
   // console.log(props)
   const navigate = useNavigate();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
@@ -158,7 +159,7 @@ const InstoreTableViewData = (props, searchId) => {
             getUnAutherisedTokenMessage();
             handleCoockieExpire();
           } else if (error.status == "Network Error") {
-            alert("Please check your internet connection and try again.");
+            getNetworkError();
           }
         }
       }

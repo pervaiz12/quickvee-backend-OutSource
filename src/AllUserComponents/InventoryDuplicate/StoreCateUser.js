@@ -183,8 +183,8 @@ const StoreCateUser = () => {
       showModal("Please select Store To");
     } else {
       await dupplicateInventory(e);
-      setSelectedStorefrom("-- Select Store --");
-      setSelectedStoreto("-- Select Store --");
+      // setSelectedStorefrom("-- Select Store --");
+      // setSelectedStoreto("-- Select Store --");
     }
   };
 
@@ -198,8 +198,8 @@ const StoreCateUser = () => {
       showModal("Please select Store To");
     } else {
       await dupplicateSettings(e);
-      setSelectedStorefrom("-- Select Store --");
-      setSelectedStoreto("-- Select Store --");
+      // setSelectedStorefrom("-- Select Store --");
+      // setSelectedStoreto("-- Select Store --");
     }
   };
 

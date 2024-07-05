@@ -286,6 +286,10 @@ const ProductTable = ({
     formData.append("login_type", userTypeData?.login_type);
     formData.append("token_id", userTypeData?.token_id);
     formData.append("token", userTypeData?.token);
+    formData.append(
+      "merchant_id",
+      LoginGetDashBoardRecordJson?.data?.merchant_id
+    );
 
     dispatch(deleteProductAPI(formData))
       .then(async (res) => {

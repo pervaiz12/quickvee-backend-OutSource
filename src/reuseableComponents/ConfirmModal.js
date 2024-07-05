@@ -1,6 +1,7 @@
 import React, { useState, forwardRef } from "react";
 import { Box, Modal } from "@mui/material";
-import Bothsame from "../Assests/ModalImages/bothsame.svg";
+import Copy from "../Assests/AlertModal/copy.svg";
+import Storesetting from "../Assests/AlertModal/storesetting.svg";
 import Slide from "@mui/material/Slide";
 
 const ConfirmModal = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
@@ -12,6 +13,18 @@ const ConfirmModal = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
     transform: "translate(-50%, -50%)",
     fontFamily: "'CircularSTDMedium', sans-serif !important",
   };
+  const imageDisplay = (headerText) => {
+    switch (headerText) {
+      case "The existing Variants of the selected Store 2 Must be same as selected Store 1 Variants. Do you want to proceed?":
+        return Copy;
+      case "The existing setting of the selected Store 2 will be erased and your setting will be copied from Store 1 to the selected Store 2. Do you want to proceed?":
+        return Storesetting;
+      default:
+        return Copy;
+      
+    }
+  }
+
   return (
     <>
       <Modal
@@ -25,7 +38,7 @@ const ConfirmModal = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
           <Box className="delete-Box-modal" style={myStyles}>
             <div className="delete-modal">
               <div className="delete-modal-content">
-                <img src={Bothsame} alt={`Delete-icon`} loading="lazy" />
+                <img src={imageDisplay(headerText)} alt={`Copy-icon`} loading="lazy" />
                 <span>
                   {headerText ? <>{headerText}</> :""}
                 </span>
@@ -34,7 +47,7 @@ const ConfirmModal = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
                 <button onClick={onClose}>Cancel</button>
                 <button
                   onClick={onConfirm}
-                  style={{ background: " #FF4040", color: "#fff" }}
+                  style={{ background: "#0a64f9", color: "#fff" }}
                 >
                   OK
                 </button>

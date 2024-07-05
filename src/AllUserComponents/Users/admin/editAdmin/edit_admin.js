@@ -42,6 +42,12 @@ export default function EditAdmin({ EditAdminId, setVisible }) {
   useEffect(() => {
     handleEditAdmin({ admin_id: id, ...userTypeData });
   }, [id]);
+  const handleKeyPressNew = (event) => {
+    const allowedChars = /^\S+$/;
+    if (!allowedChars.test(event.key)) {
+      event.preventDefault();
+    }
+  };
   return (
     <>
       {loaderEdit ? (
@@ -114,6 +120,7 @@ export default function EditAdmin({ EditAdminId, setVisible }) {
                       onChange={handleChangeAdmin}
                       onBlur={() => handleBlurPassword("password1")}
                       autoComplete="off"
+                      onKeyPress={handleKeyPressNew}
                       // value={store.email}
                     />
                     {jsxData(editData.password1)}

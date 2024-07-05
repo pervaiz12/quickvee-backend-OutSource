@@ -274,9 +274,9 @@ const ProductDuplicateStore = () => {
         setSelectedStoreto("-- Select Store --");
         // ToastifyAlert("Duplicate Inventory Success!", "success");
         if (temp_excludedproducts.length > 0) {
-          alert(temp_excludedproducts)
+          alert(temp_excludedproducts + '. These products have been excluded')
           // productshowModal(temp_excludedproducts)
-          setAlertModalHeaderText(temp_excludedproducts);
+          setAlertModalHeaderText(temp_excludedproducts + '. These products have been excluded');
           setAlertModalOpen(true);
         }
         showModal("Your Inventory has been copied to your other location. Please verify and make any changes as needed.");

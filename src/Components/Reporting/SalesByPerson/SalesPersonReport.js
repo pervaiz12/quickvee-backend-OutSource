@@ -16,6 +16,7 @@ import { Grid } from "@mui/material";
 import { priceFormate } from "../../../hooks/priceFormate";
 import SortIconW from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import PasswordShow from "../../../Common/passwordShow";
 // ==================== TABLE STYLE ADDED ===================================================
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -46,17 +47,16 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   // },
 }));
 // ==================== END TABLE STYLE ADDED ===================================================
-const orderType = (type)=>{
-  if(type === "Online Order"){
-    return "Online"
+const orderType = (type) => {
+  if (type === "Online Order") {
+    return "Online";
   }
-  if(type === "Store Order"){
-    return "Offline"
+  if (type === "Store Order") {
+    return "Offline";
+  } else {
+    return type;
   }
-  else{
-    return type
-  }
-}
+};
 const SalesPersonReport = (props) => {
   const {
     LoginGetDashBoardRecordJson,
@@ -64,6 +64,8 @@ const SalesPersonReport = (props) => {
     userTypeData,
     GetSessionLogin,
   } = useAuthDetails();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
   // console.log(props);
   const dispatch = useDispatch();
@@ -73,24 +75,35 @@ const SalesPersonReport = (props) => {
   );
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   const [totalRecord, setTotalRecord] = React.useState("");
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   useEffect(() => {
-  
-    if (props && props.selectedDateRange) {
-      let data = {
-        merchant_id,
-        start_date: props.selectedDateRange.start_date,
-        end_date: props.selectedDateRange.end_date,
-        order_typ: props.OrderTypeData,
-        order_env: orderType(props.OrderSourceData),
-        employee_id: props.SelectEmpListData,
-        ...userTypeData,
-      };
-      if (data) {
-        dispatch(fetchSalePersonData(data));
+    getSalePersonData();
+  }, [props]);
+  const getSalePersonData = async () => {
+    try {
+      if (props && props.selectedDateRange) {
+        let data = {
+          merchant_id,
+          start_date: props.selectedDateRange.start_date,
+          end_date: props.selectedDateRange.end_date,
+          order_typ: props.OrderTypeData,
+          order_env: orderType(props.OrderSourceData),
+          employee_id: props.SelectEmpListData,
+          ...userTypeData,
+        };
+        if (data) {
+          await dispatch(fetchSalePersonData(data)).unwrap();
+        }
+      }
+    } catch (error) {
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
-  }, [props]);
+  };
 
   useEffect(() => {
     if (
@@ -199,14 +212,16 @@ const SalesPersonReport = (props) => {
                           <img src={SortIconW} alt="" className="pl-1" />
                         </button>
                       </StyledTableCell>
-                      <StyledTableCell  align="center">
+                      <StyledTableCell align="center">
                         <button
                           className=""
                           onClick={() => sortByItemName("num", "amt")}
                         >
-                          <div className="flex items-center"> <p>Total</p>
-                          <img src={SortIconW} alt="" className="pl-1" /></div>
-                          
+                          <div className="flex items-center">
+                            {" "}
+                            <p>Total</p>
+                            <img src={SortIconW} alt="" className="pl-1" />
+                          </div>
                         </button>
                       </StyledTableCell>
                     </TableHead>
@@ -218,7 +233,16 @@ const SalesPersonReport = (props) => {
                               to={`/order/store-reporting/order-summary/${merchant_id}/${SalesData.order_id}`}
                               target="_blank"
                             > */}
-                              <span className="cursor-pointer text-[#0A64F9]" onClick={()=>navigate(`/order/store-reporting/order-summary/${merchant_id}/${SalesData.order_id}`)}>{SalesData.order_id}</span>
+                            <span
+                              className="cursor-pointer text-[#0A64F9]"
+                              onClick={() =>
+                                navigate(
+                                  `/order/store-reporting/order-summary/${merchant_id}/${SalesData.order_id}`
+                                )
+                              }
+                            >
+                              {SalesData.order_id}
+                            </span>
                             {/* </Link> */}
                           </StyledTableCell>
                           <StyledTableCell

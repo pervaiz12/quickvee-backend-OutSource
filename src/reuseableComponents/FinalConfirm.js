@@ -1,6 +1,6 @@
 import React, { useState, forwardRef } from "react";
 import { Box, Modal } from "@mui/material";
-import Bothsame from "../Assests/ModalImages/bothsame.svg";
+import Final from "../Assests/AlertModal/final.svg";
 import Slide from "@mui/material/Slide";
 
 const FinalConfirm = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
@@ -25,7 +25,7 @@ const FinalConfirm = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
           <Box className="delete-Box-modal" style={myStyles}>
             <div className="delete-modal">
               <div className="delete-modal-content">
-                <img src={Bothsame} alt={`Delete-icon`} loading="lazy" />
+                <img src={Final} alt={`Delete-icon`} loading="lazy" />
                 <span>
                   {headerText ? <>{headerText}</> :""}
                 </span>
@@ -34,7 +34,7 @@ const FinalConfirm = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
                 <button onClick={onClose}>Cancel</button>
                 <button
                   onClick={onConfirm}
-                  style={{ background: " #FF4040", color: "#fff" }}
+                  style={{ background: " #0a64f9", color: "#fff" }}
                 >
                   OK
                 </button>

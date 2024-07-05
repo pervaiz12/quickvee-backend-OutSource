@@ -19,7 +19,8 @@ import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 const AddVendors = ({ setVisible }) => {
   const navigate = useNavigate();
   const [allvendors, setallvendors] = useState([]);
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   const [states, setStates] = useState([]);
   const {
@@ -59,7 +60,7 @@ const AddVendors = ({ setVisible }) => {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
-        alert("Please check your internet connection and try again.");
+        getNetworkError();
       }
     }
   };
