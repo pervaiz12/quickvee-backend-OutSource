@@ -8,7 +8,7 @@ import { padding } from "@mui/system";
 import dayjs from "dayjs";
 import { Grid } from "@mui/material";
 import { useMediaQuery } from "@mui/material";
-const DateRangeComponent = ({ onDateRangeChange }) => {
+const DateRangeComponent = ({ onDateRangeChange, selectedDateRange }) => {
   const isDesktopWtdth = useMediaQuery("(max-width:710px)");
   // console.log("isDesktopWtdth : ", isDesktopWtdth);
   const today = dayjs();
@@ -85,9 +85,22 @@ const DateRangeComponent = ({ onDateRangeChange }) => {
         break;
     }
   };
-
+  useEffect(() => {
+    // console.log("inside date range selectedDateRange", selectedDateRange);
+    let count = 0;
+    if (selectedDateRange && selectedDateRange && count <= 0) {
+      console.log("inside date range selectedDateRange", selectedDateRange);
+      setStartDate(new Date(selectedDateRange.start_date));
+      setEndDate(new Date(selectedDateRange.end_date));
+      // onDateRangeChange({start_date:selectedDateRange.start_date,end_date:selectedDateRange.end_date});
+      count++;
+    
+    }
+  }, [selectedDateRange]);
+  // console.log("inside date range selectedDateRange", selectedDateRange);
   useEffect(() => {
     handleSearch();
+
     setDatesBasedOnOption(activeOption);
   }, [activeOption]);
   return (

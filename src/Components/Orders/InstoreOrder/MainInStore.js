@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import FilterEmp from "./FilterEmp";
 import DateRange from "./DateRange";
 import ContentList from "./ContentList";
@@ -7,18 +7,21 @@ import OnlineTableViewData from "../OnlineOrder/OnlineTableViewData";
 import MainOnline from "../OnlineOrder/MainOnline";
 import {useAuthDetails} from "../../../Common/cookiesHelper"
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
+import { useParams } from "react-router-dom";
 
 const MainInStore = () => {
+  const { start_date, end_date, order_env } = useParams();
   const [activeTab, setActiveTab] = useState("offline");
 
   const [OrderSourceData, setOrderSourceData] = useState(null);
-  const [OrderTypeData, setOrderTypeData] = useState("New");
+  const [OrderTypeData, setOrderTypeData] = useState(order_env === "5" ? "Closed" : "New");
   const [OnlSearchIdData, setOnlSearchIdData] = useState("");
   const [OffSearchIdData, setOffSearchIdData] = useState("");
   const [EmployeeIDData, setEmployeeIDData] = useState(null);
   const [searchId, setSearchId] = useState("");
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const [isloading, setIsLoading] = useState(false);
+  const [dateRangefromorderTypePage, setDateRangeFromOrderTypePage] = useState({})
   const{LoginGetDashBoardRecordJson,LoginAllStore,userTypeData,GetSessionLogin}=useAuthDetails()
   const merchant_id=LoginGetDashBoardRecordJson?.data?.merchant_id
   const handleDateRangeChange = (dateRange) => {
@@ -29,6 +32,14 @@ const MainInStore = () => {
     setActiveTab(tab);
   };
 
+  
+  // console.log("OrderTypeData",OrderTypeData)
+  useEffect(()=>{
+    setActiveTab(order_env === "5" ? "online" : "offline");
+    start_date && setSelectedDateRange({start_date, end_date})
+    // order_env === "5" && setOrderTypeData("Closed")
+  },[order_env,start_date,end_date])
+console.log("dateRangefromorderTypePage",dateRangefromorderTypePage)
   const handleFilterDataChange = (OrderSource, OrderType, SearchId) => {
     setOrderSourceData(OrderSource);
     setOrderTypeData(OrderType);
@@ -49,6 +60,7 @@ const MainInStore = () => {
             onFilterDataChange={handleFilterDataChange}
             searchId={searchId}
             setSearchId={setSearchId}
+            order_env={order_env}
           />
         </>
       );
@@ -101,7 +113,7 @@ const MainInStore = () => {
           {!searchId && (
             <>
               <div className="q_dateRange_header">
-                <DateRangeComponent isloading={isloading} onDateRangeChange={handleDateRangeChange} />
+                <DateRangeComponent isloading={isloading} selectedDateRange={selectedDateRange} onDateRangeChange={handleDateRangeChange} />
               </div>
               <div className="q_dateRange_header">
                 <ContentList />
@@ -128,6 +140,7 @@ const MainInStore = () => {
                 selectedDateRange={selectedDateRange}
                 merchant_id={merchant_id}
                 userTypeData={userTypeData}
+                order_env={order_env}
               />
             )}
           </div>

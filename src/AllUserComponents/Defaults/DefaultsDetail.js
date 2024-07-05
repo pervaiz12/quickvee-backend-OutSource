@@ -27,7 +27,7 @@ import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
 import PasswordShow from "./../../Common/passwordShow";
 
-const DefaultsDetail = ({ setVisible,setDefaultEditId }) => {
+const DefaultsDetail = ({ setVisible, setDefaultEditId }) => {
   const myStyles = {
     left: "1rem",
     // transform: "translate(0px, 5px)",
@@ -43,35 +43,34 @@ const DefaultsDetail = ({ setVisible,setDefaultEditId }) => {
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
 
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   useEffect(() => {
-      // let data = {
-      //   // merchant_id: merchant_id,
-      //   ...userTypeData,
-      // };
-      // if (data) {
-      //   dispatch(fetchdefaultsData(data));
-      // }
+    // let data = {
+    //   // merchant_id: merchant_id,
+    //   ...userTypeData,
+    // };
+    // if (data) {
+    //   dispatch(fetchdefaultsData(data));
+    // }
 
-    getfetchdefaultsDataData()
+    getfetchdefaultsDataData();
   }, []);
 
-  const getfetchdefaultsDataData=async()=>{
-    try{
+  const getfetchdefaultsDataData = async () => {
+    try {
       let data = {
         ...userTypeData,
       };
       if (data) {
         await dispatch(fetchdefaultsData(data)).unwrap();
       }
-  }catch(error){
-    handleCoockieExpire()
-    getUnAutherisedTokenMessage()
-  }
-}
+    } catch (error) {
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
+    }
+  };
 
   useEffect(() => {
-
     if (
       !defaultsDataState.loading &&
       Array.isArray(defaultsDataState.defaultsData)
@@ -90,7 +89,7 @@ const DefaultsDetail = ({ setVisible,setDefaultEditId }) => {
       !defaultsDataState.loading &&
       Array.isArray(defaultsDataState.defaultsData)
     ) {
-      const updatedDefaults = defaultsDataState.defaultsData.map((item) => ({
+      const updatedDefaults = defaultsDataState?.defaultsData?.map((item) => ({
         ...item,
         isChecked: false, // Initialize the isChecked property
       }));
@@ -155,7 +154,6 @@ const DefaultsDetail = ({ setVisible,setDefaultEditId }) => {
     setDeleteModalOpen(true);
   };
 
-
   // for selected check box item Delete start
   /*
   const handleDeleteDefaultSelected = () => {
@@ -181,53 +179,57 @@ const DefaultsDetail = ({ setVisible,setDefaultEditId }) => {
         console.log("Deletion canceled by Default");
       }
     }
-  };*/ 
-  
+  };*/
+
   const [deleteSelectDefaultId, setDeleteSelectDefaultId] = useState([]);
   const handleDeleteDefaultSelected = () => {
     const checkedIds = defaults
       .filter((item) => item.isChecked)
       .map((checkedItem) => checkedItem.id);
     if (checkedIds.length === 0) {
-        // alert("Please select defaults for delete");
-        showModal("Please select defaults for delete")
-    }else{
+      // alert("Please select defaults for delete");
+      showModal("Please select defaults for delete");
+    } else {
       setDeleteSelectDefaultId(checkedIds);
       setDeleteModalOpen(true);
     }
   };
 
   const confirmDeleteCategory = async () => {
-    try{
-      if(deleteDefaultId){
+    try {
+      if (deleteDefaultId) {
         const data = {
           id: deleteDefaultId,
           ...userTypeData,
         };
         if (data) {
-          await dispatch(deleteDefaultsData(data)).unwrap().then(() => {
-            dispatch(fetchdefaultsData({ merchant_id, ...userTypeData }));
-          });
-          ToastifyAlert("Deleted Successfully", "success");
-        }
-      }else if(deleteSelectDefaultId){
-          const data = {
-            selectedIds: deleteSelectDefaultId,
-            ...userTypeData,
-          };
-          if (data) {
-            ToastifyAlert("Deleted Successfully", "success");
-            await dispatch(deleteDefaultsMultiData(data)).unwrap().then(() => {
+          await dispatch(deleteDefaultsData(data))
+            .unwrap()
+            .then(() => {
               dispatch(fetchdefaultsData({ merchant_id, ...userTypeData }));
             });
-          }
+          ToastifyAlert("Deleted Successfully", "success");
+        }
+      } else if (deleteSelectDefaultId) {
+        const data = {
+          selectedIds: deleteSelectDefaultId,
+          ...userTypeData,
+        };
+        if (data) {
+          ToastifyAlert("Deleted Successfully", "success");
+          await dispatch(deleteDefaultsMultiData(data))
+            .unwrap()
+            .then(() => {
+              dispatch(fetchdefaultsData({ merchant_id, ...userTypeData }));
+            });
+        }
       }
       setDeleteSelectDefaultId([]);
-      setDeleteDefaultId(null)
+      setDeleteDefaultId(null);
       setDeleteModalOpen(false);
-    } catch(error){
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+    } catch (error) {
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
     }
   };
 
@@ -290,10 +292,12 @@ const DefaultsDetail = ({ setVisible,setDefaultEditId }) => {
               <Grid container direction="row" alignItems="center">
                 <Grid item>
                   <div className="q-category-bottom-header">
-                    <p onClick={() =>
-                      //  setVisible("DefaultsAlert")
-                       navigate("/unapprove/defaults/add-defaults")
-                       }>
+                    <p
+                      onClick={() =>
+                        //  setVisible("DefaultsAlert")
+                        navigate("/unapprove/defaults/add-defaults")
+                      }
+                    >
                       Add Default <img src={AddIcon} alt="add-icon" />
                     </p>
                   </div>
@@ -331,72 +335,77 @@ const DefaultsDetail = ({ setVisible,setDefaultEditId }) => {
                   <StyledTableCell>Name</StyledTableCell>
                   <StyledTableCell>Type </StyledTableCell>
                   <StyledTableCell>
-                  <div className="default-Edit-Delete ">
-                    <img
-                      src={DeleteIconAll}
-                      alt="delete-icon"
-                      onClick={() => handleDeleteDefaultSelected()} style={{transform: "translate(-5px, 0px)"}}
-                    />
+                    <div className="default-Edit-Delete ">
+                      <img
+                        src={DeleteIconAll}
+                        alt="delete-icon"
+                        onClick={() => handleDeleteDefaultSelected()}
+                        style={{ transform: "translate(-5px, 0px)" }}
+                      />
                     </div>
                   </StyledTableCell>
                 </TableHead>
                 <TableBody>
-                  {defaults.map((data, index) => (
-                    <StyledTableRow>
-                      <StyledTableCell>
-                        <div className="category-checkmark-div" style={{ width: "unset !important" }}>
-                          <label className="category-checkmark-label">
-                            <input
-                              type="checkbox"
-                              checked={data.isChecked}
-                              onChange={() => handleCheckboxChange(index)}
-                            />
-                            <span
-                              className="category-checkmark"
-                              // style={myStyles}
-                              style={{
-                                left: "1rem",
-                                transform: "translate(0px, -10px)",
-                              }}
-                            ></span>
-                          </label>
-                        </div>
-                      </StyledTableCell>
+                  {defaults.length > 0 &&
+                    defaults?.map((data, index) => (
+                      <StyledTableRow>
+                        <StyledTableCell>
+                          <div
+                            className="category-checkmark-div"
+                            style={{ width: "unset !important" }}
+                          >
+                            <label className="category-checkmark-label">
+                              <input
+                                type="checkbox"
+                                checked={data.isChecked}
+                                onChange={() => handleCheckboxChange(index)}
+                              />
+                              <span
+                                className="category-checkmark"
+                                // style={myStyles}
+                                style={{
+                                  left: "1rem",
+                                  transform: "translate(0px, -10px)",
+                                }}
+                              ></span>
+                            </label>
+                          </div>
+                        </StyledTableCell>
 
-                      <StyledTableCell>
-                        <div class="text-[#000000] order_method ">
-                          {data.name || ""}
-                        </div>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <div class="text-[#000000] order_method capitalize">
-                          {data.type === "1"
-                            ? "Collection"
-                            : // : defaultsdata.type === "2"
-                              //   ? "Sauce"
-                              //   : defaultsdata.type === "3"
-                              //     ? "Topping"
-                              ""}
-                        </div>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <div className="default-Edit-Delete ">
-                          <img
-                            className="mx-1 edit cursor-pointer"
-                            onClick={() => handleEditDefault(data.id)}
-                            src={EditIcon}
-                            alt="Edit"
-                          />
-                          <img
-                            class="mx-1 delete cursor-pointer"
-                            onClick={() => handleDeleteDefaults(data.id)}
-                            src={DeleteIcon}
-                            alt="Delete"
-                          />
-                        </div>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  ))}
+                        <StyledTableCell>
+                          <div class="text-[#000000] order_method ">
+                            {data.name || ""}
+                          </div>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <div class="text-[#000000] order_method capitalize">
+                            {data.type === "1"
+                              ? "Collection"
+                              : // : defaultsdata.type === "2"
+                                //   ? "Sauce"
+                                //   : defaultsdata.type === "3"
+                                //     ? "Topping"
+                                ""}
+                          </div>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <div className="default-Edit-Delete ">
+                            <img
+                              className="mx-1 edit cursor-pointer"
+                              onClick={() => handleEditDefault(data.id)}
+                              src={EditIcon}
+                              alt="Edit"
+                            />
+                            <img
+                              class="mx-1 delete cursor-pointer"
+                              onClick={() => handleDeleteDefaults(data.id)}
+                              src={DeleteIcon}
+                              alt="Delete"
+                            />
+                          </div>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
                 </TableBody>
               </StyledTable>
             </TableContainer>
@@ -404,18 +413,20 @@ const DefaultsDetail = ({ setVisible,setDefaultEditId }) => {
         </Grid>
       </Grid>
       <DeleteModal
-            headerText="Default"
-            open={deleteModalOpen}
-            onClose={() => {setDeleteModalOpen(false)}}
-            onConfirm={confirmDeleteCategory}
-          />
+        headerText="Default"
+        open={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+        }}
+        onConfirm={confirmDeleteCategory}
+      />
       <AlertModal
-      headerText={alertModalHeaderText}
-      open={alertModalOpen}
-      onClose={() => {setAlertModalOpen(false)}}
-       />
-
-
+        headerText={alertModalHeaderText}
+        open={alertModalOpen}
+        onClose={() => {
+          setAlertModalOpen(false);
+        }}
+      />
     </>
   );
 };

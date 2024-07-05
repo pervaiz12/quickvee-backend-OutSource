@@ -15,6 +15,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import PasswordShow from "../../../Common/passwordShow";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -52,7 +53,7 @@ const Itemdatadetails = ({ data }) => {
     PasswordShow();
 
   const orderReportDataState = useSelector((state) => state.orderTypeList);
-  console.log(data.start_date);
+  console.log("data", orderReportDataState.loading);
 
   useEffect(() => {
     // Dispatch the action to fetch data when the component mounts
@@ -177,7 +178,10 @@ const Itemdatadetails = ({ data }) => {
                         </p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <Link to={`/order`} target="_blank">
+                        <Link
+                          to={`/order/${data.start_date}/${data.end_date}/${data.order_env}`}
+                          // target="_blank"
+                        >
                           <p className="q-employee-in">Details</p>
                         </Link>
                       </StyledTableCell>
@@ -192,7 +196,24 @@ const Itemdatadetails = ({ data }) => {
     }
   };
 
-  return <>{renderDataTable()}</>;
+  return (
+    <>
+      {orderReportDataState.loading ? (
+        <SkeletonTable
+          columns={[
+            "Name",
+            "# Of Payments",
+            "Net Revenue Without Tips",
+            "Tips",
+            "Net Revenue With Tips",
+            "Details",
+          ]}
+        />
+      ) : (
+        renderDataTable()
+      )}
+    </>
+  );
 };
 
 export default Itemdatadetails;
