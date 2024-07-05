@@ -10,11 +10,11 @@ import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent"
 import { useParams } from "react-router-dom";
 
 const MainInStore = () => {
-  const { start_date, end_date, order_env } = useParams();
+  const { start_date, end_date, order_env,order_method } = useParams();
   const [activeTab, setActiveTab] = useState("offline");
 
   const [OrderSourceData, setOrderSourceData] = useState(null);
-  const [OrderTypeData, setOrderTypeData] = useState(order_env === "5" ? "Closed" : "New");
+  const [OrderTypeData, setOrderTypeData] = useState(order_env ? "Closed" : "New");
   const [OnlSearchIdData, setOnlSearchIdData] = useState("");
   const [OffSearchIdData, setOffSearchIdData] = useState("");
   const [EmployeeIDData, setEmployeeIDData] = useState(null);
@@ -141,6 +141,7 @@ console.log("dateRangefromorderTypePage",dateRangefromorderTypePage)
                 merchant_id={merchant_id}
                 userTypeData={userTypeData}
                 order_env={order_env}
+                order_method={order_method}
               />
             )}
           </div>

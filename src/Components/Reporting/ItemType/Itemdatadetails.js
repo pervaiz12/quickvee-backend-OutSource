@@ -179,7 +179,7 @@ const Itemdatadetails = ({ data }) => {
                       </StyledTableCell>
                       <StyledTableCell>
                         <Link
-                          to={`/order/${data.start_date}/${data.end_date}/${data.order_env}`}
+                          to={`/order/${data.start_date}/${data.end_date}/${data.order_env}/${orderReportDa.order_method}`}
                           // target="_blank"
                         >
                           <p className="q-employee-in">Details</p>

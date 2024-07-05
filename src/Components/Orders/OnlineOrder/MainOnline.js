@@ -36,7 +36,7 @@ const MainOnline = ({ onFilterDataChange, searchId, setSearchId,order_env }) => 
   // const [selectedEmployee, setSelectedEmployee] = useState("All");
   const [selectedTransaction, setSelectedTransaction] = useState("Both");
   const [selectedOrderStatus, setSelectedOrderStatus] = useState(
-    order_env === "5" ? "Closed" : "New"
+    order_env ? "Closed" : "New"
   );
   
   // const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
