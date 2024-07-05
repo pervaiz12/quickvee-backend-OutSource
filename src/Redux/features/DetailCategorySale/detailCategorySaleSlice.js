@@ -16,7 +16,7 @@ const initialState = {
 
 export const fetchdetailCategorySaleData = createAsyncThunk(
   "detailCategorySale/fetchdetailCategorySaleData",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     const { token, ...newData } = data;
     try {
       const response = await axios.post(
@@ -44,7 +44,13 @@ export const fetchdetailCategorySaleData = createAsyncThunk(
         throw new Error(response.data.message);
       }
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error(error.response.data.message);
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );

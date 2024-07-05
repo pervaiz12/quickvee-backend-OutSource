@@ -61,7 +61,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const VendorsDetail = ({ setVisible }) => {
   const label = { inputProps: { "aria-label": "Switch demo" } };
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const navigate = useNavigate();
   const [allvendors, setallvendors] = useState([]);
   const AllVendorsDataState = useSelector((state) => state.vendors);
@@ -83,7 +84,7 @@ const VendorsDetail = ({ setVisible }) => {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
-        alert("Please check your internet connection and try again.");
+        getNetworkError();
       }
     }
   };
