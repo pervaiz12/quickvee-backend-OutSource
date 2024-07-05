@@ -178,6 +178,7 @@ export default function InventoryLogic() {
         }
       } else {
         setLoader(false);
+        setLoadMoreData(false);
         setMessage("No record found");
         setsearchProduct([]);
       }

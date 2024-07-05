@@ -295,7 +295,7 @@
   opacity: 1;
   padding: 20px;
   box-sizing: border-box;
-  overflow-y: scroll;
+  overflow-y: auto;
 }
 
 .product-varient-form {

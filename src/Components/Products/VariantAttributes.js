@@ -368,6 +368,7 @@ const VariantAttributes = ({
                                     inputValue.trim().toLowerCase()
                                 )
                               }
+                              backspaceRemovesValue={false}
                             />
                           </div>
                           {!!varientError?.error &&
