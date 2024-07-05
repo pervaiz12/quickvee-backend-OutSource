@@ -143,8 +143,10 @@ const OrderCountList = () => {
           // setLoader(false);
         }
       } catch (error) {
-        handleCoockieExpire();
-        getUnAutherisedTokenMessage();
+        if(error.response.status === 401){
+          handleCoockieExpire();
+          getUnAutherisedTokenMessage();
+        }
         setLoader(false);
         ToastifyAlert("Something wents wrong", "error")
       }

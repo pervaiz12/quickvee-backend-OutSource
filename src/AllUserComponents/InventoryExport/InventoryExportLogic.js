@@ -62,10 +62,11 @@ const InventoryExportLogic = () => {
               ToastifyAlert("Something Went Wrong","warn")
             }
           } catch (error) {
-            // console.log('33 catch err');
-            handleCoockieExpire()
-            getUnAutherisedTokenMessage()
-            return new Error(error)
+            if(error.response.status === 401){
+              handleCoockieExpire();
+              getUnAutherisedTokenMessage();
+            }
+            // return new Error(error)
           }
         }
       };

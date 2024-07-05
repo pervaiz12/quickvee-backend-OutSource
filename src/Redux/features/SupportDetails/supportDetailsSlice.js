@@ -13,7 +13,7 @@ const initialState = {
 
 
 // Generate pening , fulfilled and rejected action type
-export const fetchsupportDetailsData = createAsyncThunk('supportDetail/fetchsuppoertDetailsData', async (data) => {
+export const fetchsupportDetailsData = createAsyncThunk('supportDetail/fetchsuppoertDetailsData', async (data, { rejectWithValue }) => {
     const {token, ...dataNew}= data;
     try {
         const response = await axios.post(BASE_URL + SUPPORT_DETAILS_LIST, dataNew, {
@@ -26,7 +26,13 @@ export const fetchsupportDetailsData = createAsyncThunk('supportDetail/fetchsupp
            return response.data.json_data
         }
     } catch (error) {
-        throw new Error(error.response.data.message);
+        // throw new Error(error.response.data);
+        const customError = {
+            message: error.message,
+            status: error.response ? error.response.status : "Network Error",
+            data: error.response ? error.response.data : null,
+          };
+          return rejectWithValue(customError);
     }
 })
 // Generate pening , fulfilled and rejected action type

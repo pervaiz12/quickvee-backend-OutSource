@@ -67,8 +67,10 @@ const  MainSupportDetails = () => {
         await dispatch(fetchsupportDetailsData(data)).unwrap();
       }
     }catch(error){
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      if(error.status === 401){
+        handleCoockieExpire()
+        getUnAutherisedTokenMessage()
+      }
     }
   }
   useEffect(() => { 
@@ -180,20 +182,22 @@ const  MainSupportDetails = () => {
               await dispatch(fetchsupportDetailsData(data)).unwrap();
             }
           }catch(error){
-            handleCoockieExpire()
-            getUnAutherisedTokenMessage()
+            if(error.response.status === 401){
+              handleCoockieExpire();
+              getUnAutherisedTokenMessage();
+            }
           }
           ToastifyAlert("Updated Successfully", "success");
           handleClose()
         } else {
           ToastifyAlert(response.data.message, "error");
         }
-      
-
       } catch (error) {
         console.error("API Error:", error);
-        handleCoockieExpire()
-        getUnAutherisedTokenMessage()
+        if(error.response.status === 401){
+          handleCoockieExpire();
+          getUnAutherisedTokenMessage();
+        }
       }
       setLoader(false);
   }
