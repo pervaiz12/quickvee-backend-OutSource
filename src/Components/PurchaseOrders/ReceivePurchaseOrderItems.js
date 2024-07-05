@@ -391,10 +391,10 @@ const ReceivePurchaseOrderItems = () => {
                   )}
                 <StyledTableCell>Item Name</StyledTableCell>
                 <StyledTableCell>Qty</StyledTableCell>
-                {purchaseOrder?.is_void === "0" &&
-                  purchaseOrder?.received_status !== "2" && (
-                    <StyledTableCell>To Receive</StyledTableCell>
-                  )}
+                {/* && purchaseOrder?.received_status !== "2" */}
+                {purchaseOrder?.is_void === "0" && (
+                  <StyledTableCell>To Receive</StyledTableCell>
+                )}
                 {purchaseOrder?.is_void === "0" && (
                   <StyledTableCell>After</StyledTableCell>
                 )}
@@ -451,76 +451,74 @@ const ReceivePurchaseOrderItems = () => {
                         </span>
                       </StyledTableCell>
                       <StyledTableCell>{data?.required_qty}</StyledTableCell>
-                      {purchaseOrder?.is_void === "0" &&
-                        purchaseOrder?.received_status !== "2" && (
-                          <StyledTableCell>
-                            <TextField
-                              id="outlined-basic"
-                              inputProps={{ type: "number" }}
-                              value={
-                                data.pending_qty === "0"
-                                  ? 0
-                                  : data?.toReceiveQty
-                              }
-                              onChange={(e) => {
-                                if (
-                                  Number(e.target.value) >= 0 &&
-                                  Number(e.target.value) <=
-                                    (Number(data?.required_qty) || 0) -
-                                      (Number(data?.recieved_qty) || 0)
-                                ) {
-                                  setPurchaseOrder((prev) => ({
-                                    ...prev,
-                                    order_items: purchaseOrder.order_items.map(
-                                      (item) =>
-                                        item.id === data.id
-                                          ? {
-                                              ...item,
-                                              toReceiveQtyError: "",
-                                              toReceiveQty: e.target.value,
-                                              newPendingQty: e.target.value
-                                                ? (Number(item.pending_qty) ||
-                                                    0) -
-                                                  (Number(e.target.value) || 0)
-                                                : Number(item.pending_qty),
-                                              newReceivedQty: Number(
-                                                e.target.value
-                                              ),
-                                            }
-                                          : item
-                                    ),
-                                  }));
-                                } else {
-                                  const requiredQty =
-                                    (Number(data?.required_qty) || 0) -
-                                    (Number(data?.recieved_qty) || 0);
+                      {/* && purchaseOrder?.received_status !== "2"  */}
+                      {purchaseOrder?.is_void === "0" && (
+                        <StyledTableCell>
+                          <TextField
+                            id="outlined-basic"
+                            inputProps={{ type: "number" }}
+                            value={
+                              data.pending_qty === "0" ? 0 : data?.toReceiveQty
+                            }
+                            onChange={(e) => {
+                              if (
+                                Number(e.target.value) >= 0 &&
+                                Number(e.target.value) <=
+                                  (Number(data?.required_qty) || 0) -
+                                    (Number(data?.recieved_qty) || 0)
+                              ) {
+                                setPurchaseOrder((prev) => ({
+                                  ...prev,
+                                  order_items: purchaseOrder.order_items.map(
+                                    (item) =>
+                                      item.id === data.id
+                                        ? {
+                                            ...item,
+                                            toReceiveQtyError: "",
+                                            toReceiveQty: e.target.value,
+                                            newPendingQty: e.target.value
+                                              ? (Number(item.pending_qty) ||
+                                                  0) -
+                                                (Number(e.target.value) || 0)
+                                              : Number(item.pending_qty),
+                                            newReceivedQty: Number(
+                                              e.target.value
+                                            ),
+                                          }
+                                        : item
+                                  ),
+                                }));
+                              } else {
+                                const requiredQty =
+                                  (Number(data?.required_qty) || 0) -
+                                  (Number(data?.recieved_qty) || 0);
 
-                                  setPurchaseOrder((prev) => ({
-                                    ...prev,
-                                    order_items: purchaseOrder.order_items.map(
-                                      (item) =>
-                                        item.id === data.id
-                                          ? {
-                                              ...item,
-                                              toReceiveQtyError: `Receive Quantity cannot be more than ${requiredQty}`,
-                                            }
-                                          : item
-                                    ),
-                                  }));
-                                }
-                              }}
-                              placeholder="Received Qty"
-                              variant="outlined"
-                              size="small"
-                              disabled={Number(data.pending_qty) <= 0}
-                            />
-                            {data?.toReceiveQtyError && (
-                              <p className="error-message">
-                                {data?.toReceiveQtyError}
-                              </p>
-                            )}
-                          </StyledTableCell>
-                        )}
+                                setPurchaseOrder((prev) => ({
+                                  ...prev,
+                                  order_items: purchaseOrder.order_items.map(
+                                    (item) =>
+                                      item.id === data.id
+                                        ? {
+                                            ...item,
+                                            toReceiveQtyError: `Receive Quantity cannot be more than ${requiredQty}`,
+                                          }
+                                        : item
+                                  ),
+                                }));
+                              }
+                            }}
+                            placeholder="Received Qty"
+                            variant="outlined"
+                            size="small"
+                            disabled={Number(data.pending_qty) <= 0}
+                          />
+                          {data?.toReceiveQtyError && (
+                            <p className="error-message">
+                              {data?.toReceiveQtyError}
+                            </p>
+                          )}
+                        </StyledTableCell>
+                      )}
                       {purchaseOrder?.is_void === "0" && (
                         <StyledTableCell>
                           {(Number(data?.toReceiveQty) || 0) +

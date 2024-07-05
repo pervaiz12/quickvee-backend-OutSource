@@ -88,7 +88,7 @@ const PurchaseTable = ({ seVisible }) => {
   useEffect(() => {
     if (!AllpurchaseDataState.loading && AllpurchaseDataState) {
       setTotalCount(AllpurchaseDataState?.purchaseDataCount);
-      const updatedList = AllpurchaseDataState?.purchaseData.map((item) => {
+      const updatedList = AllpurchaseDataState?.purchaseData?.map((item) => {
         let status, textColor, icon;
         if (item.is_void === "1") {
           status = "Void";
@@ -270,7 +270,7 @@ const PurchaseTable = ({ seVisible }) => {
                                 </Link>
                               </StyledTableCell>
 
-                              <StyledTableCell >
+                              <StyledTableCell>
                                 <div className="flex">
                                   {/* {purchaseData.is_void === "1" ? (
                                     <p className="purchase-data-sort  text-[#F90A0A]">
@@ -304,7 +304,7 @@ const PurchaseTable = ({ seVisible }) => {
                                   </p>
                                 </div>
                               </StyledTableCell>
-                              <StyledTableCell >
+                              <StyledTableCell>
                                 {/* <div className="flex justify-center">
                                   {purchaseData.is_void === "1" ? (
                                     <p className="purchase-data-sort "></p>
@@ -345,7 +345,7 @@ const PurchaseTable = ({ seVisible }) => {
                                   )}
                                 </div>
                               </StyledTableCell>
-                              <StyledTableCell >
+                              <StyledTableCell>
                                 <div className="flex ">
                                   <p className="purchase-data-sort purchaseData ">
                                     {priceFormate(
@@ -354,7 +354,7 @@ const PurchaseTable = ({ seVisible }) => {
                                   </p>
                                 </div>
                               </StyledTableCell>
-                              <StyledTableCell >
+                              <StyledTableCell>
                                 <div className="flex">
                                   <p className="  purchaseData text-center">
                                     {purchaseData.vendor_name}
@@ -389,7 +389,6 @@ const PurchaseTable = ({ seVisible }) => {
                                         })}
                                   </p>
                                 </div>
-                               
                               </StyledTableCell>
                               <StyledTableCell>
                                 {/* <div className="flex justify-center">
