@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="104" height="104" viewBox="0 0 104 104">
+  <defs>
+    <clipPath id="clip-path">
+      <path id="path1929" d="M0-682.665H48v48H0Z" transform="translate(0 682.665)"/>
+    </clipPath>
+  </defs>
+  <g id="Group_6017" data-name="Group 6017" transform="translate(-908 -401)">
+    <circle id="Ellipse_329" data-name="Ellipse 329" cx="52" cy="52" r="52" transform="translate(908 401)" fill="#e8f1ff"/>
+    <g id="g1923" transform="translate(936 1112.665)">
+      <g id="g1925" transform="translate(0 -682.665)">
+        <g id="g1927" clip-path="url(#clip-path)">
+          <g id="g1933" transform="translate(1.875 1.875)">
+            <path id="path1935" d="M-585.082-242.958v-9a9.375,9.375,0,0,0-9.375-9.375h-25.5a9.375,9.375,0,0,0-9.375,9.375v25.5a9.375,9.375,0,0,0,9.375,9.375h9.375" transform="translate(629.332 261.333)" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"/>
+          </g>
+          <g id="g1937" transform="translate(19.219 10.313)">
+            <path id="path1939" d="M0,0H9.563" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"/>
+          </g>
+          <g id="g1941" transform="translate(24.563 24.562)">
+            <path id="path1943" d="M-276.7-190.9a10.786,10.786,0,0,1-10.145,7.125,10.781,10.781,0,0,1-10.781-10.781,10.781,10.781,0,0,1,10.781-10.781,10.777,10.777,0,0,1,4.5,1.031" transform="translate(297.623 205.333)" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"/>
+          </g>
+          <g id="g1945" transform="translate(32.063 29.063)">
+            <path id="path1947" d="M0-61.979l2.636,2.7a2.876,2.876,0,0,0,4.109,0l7.317-7.386" transform="translate(0 66.667)" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"/>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
