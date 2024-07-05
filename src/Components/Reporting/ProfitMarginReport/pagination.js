@@ -79,16 +79,22 @@ export default function Pagination(props) {
                       <p>{result?.category_name}</p>
                     </StyledTableCell>
                     <StyledTableCell sx={{ width: "20%" }}>
-                      <p>{`$${priceFormate(result?.costperItem)}`}</p>
+                      <p>{`$${priceFormate(
+                        !!result?.costperItem ? result?.costperItem : "0.00"
+                      )}`}</p>
                     </StyledTableCell>
                     <StyledTableCell sx={{ width: "10%" }}>
-                      <p>{`$${priceFormate(result?.price)}`}</p>
+                      <p>{`$${priceFormate(
+                        !!result?.price ? result?.price : "0.00"
+                      )}`}</p>
                     </StyledTableCell>
                     <StyledTableCell sx={{ width: "10%" }}>
                       <p>{`${result?.margin}%`}</p>
                     </StyledTableCell>
                     <StyledTableCell>
-                      <p>{`$${priceFormate(result?.profit)}`}</p>
+                      <p>{`$${priceFormate(
+                        !!result?.profit ? result?.profit : "0.00"
+                      )}`}</p>
                     </StyledTableCell>
                   </StyledTableRow>
                 ))
