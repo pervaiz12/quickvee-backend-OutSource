@@ -20,7 +20,6 @@ const BulkVarientEdit = ({
     reorderLevel: "",
   });
 
-
   const setInputMaxLength = (fieldname) => {
     switch (fieldname) {
       case "costPerItem":
@@ -75,13 +74,13 @@ const BulkVarientEdit = ({
 
       // Check if the dynamic priceKey is greater than the dynamic compareAtPriceKey
       if (type === "isCompareAtGreaterThanAllPrice") {
-        if (+bulkVarient[lastKey] === 0 || +bulkVarient[lastKey] === 0.00) {
+        if (+bulkVarient[lastKey] === 0 || +bulkVarient[lastKey] === 0.0) {
           return false;
         } else {
           return +nestedObject[firstKey] >= +bulkVarient[lastKey];
         }
       } else if (type === "isPriceLessThanAllCompareAtPrice") {
-        if (+nestedObject[firstKey] === 0 || +nestedObject[firstKey] === 0.00) {
+        if (+nestedObject[firstKey] === 0 || +nestedObject[firstKey] === 0.0) {
           return false;
         } else {
           return +nestedObject[firstKey] <= +bulkVarient[lastKey];
@@ -163,7 +162,7 @@ const BulkVarientEdit = ({
     // if both value exist then check Compare At Price must be greater than price in all variants.and check inside form that compare value is greater than all price
     else if (bulkVarient["compareAtPrice"] && bulkVarient["price"]) {
       // compare inside modal
-      if (+bulkVarient["compareAtPrice"] < +bulkVarient["price"]) {
+      if (+bulkVarient["compareAtPrice"] <= +bulkVarient["price"]) {
         alert("Compare At Price must be greater than price in all variants.");
         handleCopyAllVarientValue(copyValue);
       }

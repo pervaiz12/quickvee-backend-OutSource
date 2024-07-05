@@ -132,6 +132,8 @@ const AddProducts = () => {
   const [varientId, setVarientId] = useState("");
   const [isVarientEdit, setIsVarientEdit] = useState(false);
   const [enbaledSubmit, setDisabledSubmit] = useState(false);
+  const [singleVarientPageLoading, setSingleVarientPageLoading] =
+    useState(false);
 
   // close alert
   const handleCloseAlertModal = () => {
@@ -1645,6 +1647,7 @@ const AddProducts = () => {
   const fetchSingleVarientData = () => {
     const data = location?.state;
     const formData = new FormData();
+    setSingleVarientPageLoading(true);
 
     formData.append("id", data?.var_id);
     formData.append("single_product", 0);
@@ -1708,7 +1711,8 @@ const AddProducts = () => {
         getUnAutherisedTokenMessage();
       })
       .finally(() => {
-        setFetchDataLoading(false);
+        // setFetchDataLoading(false);
+        setSingleVarientPageLoading(false);
       });
   };
 
@@ -2258,7 +2262,6 @@ const AddProducts = () => {
           }
         });
       }
-      console.log("errorsList", errorsList);
       setError(errorsList);
     }
   };
@@ -2790,73 +2793,87 @@ const AddProducts = () => {
         </>
       ) : (
         <div class="q-attributes-main-page box_shadow_div">
-          <div class="q-add-categories-section">
-            <div class="q-add-categories-section-middle-form">
-              <div className="mt_card_header">
-                <EditPage
-                  openEditModal={openEditModal}
-                  handleCloseEditModal={handleCloseEditModal}
-                  productData={productData}
-                  modalType={modalType}
-                  varientData={varientData}
-                  varientIndex={varientIndex}
-                  formData={formValue}
-                  handleCopyAllVarientValue={handleCopyAllVarientValue}
-                  inventoryData={inventoryData}
-                  fetchProductDataById={fetchProductDataById}
-                  isVarientEdit={isVarientEdit}
-                  fetchSingleVarientData={fetchSingleVarientData}
-                />
-                <GeneratePUC
-                  handleVarientTitleBasedItemList={
-                    handleVarientTitleBasedItemList
-                  }
-                  error={error}
-                  handleGenerateUPC={handleGenerateUPC}
-                  handleOnChange={handleOnChange}
-                  formValue={formValue}
-                  handleBlur={handleBlur}
-                  isMultipleVarient={isMultipleVarient}
-                  productInfo={productInfo}
-                  inventoryData={inventoryData}
-                  handleCloseEditModal={handleCloseEditModal}
-                  productData={productData}
-                  // varientData={varientData}
-                  isVarientEdit={isVarientEdit}
-                />
-              </div>
-              <div
-                className="q-category-bottom-header varient-box"
-                style={{ marginRight: "0px" }}
+          <div class="q-add-categories-section single-varient-form">
+            {singleVarientPageLoading ? (
+              <Box
+                sx={{
+                  display: "flex",
+                  flexDirection: "column",
+                  alignItems: "center",
+                  width: "100%",
+                }}
               >
-                <button
-                  className="quic-btn quic-btn-save submit-btn-click"
-                  onClick={handleUpdateVarient}
-                  disabled={varientLoading || enbaledSubmit}
-                  style={{
-                    backgroundColor:
-                      varientLoading || enbaledSubmit ? "#878787" : "#0A64F9",
-                  }}
+                <CircularProgress />
+                <p style={{ marginTop: "20px" }}>Fetching Data...</p>
+              </Box>
+            ) : (
+              <div class="q-add-categories-section-middle-form ">
+                <div className="mt_card_header">
+                  <EditPage
+                    openEditModal={openEditModal}
+                    handleCloseEditModal={handleCloseEditModal}
+                    productData={productData}
+                    modalType={modalType}
+                    varientData={varientData}
+                    varientIndex={varientIndex}
+                    formData={formValue}
+                    handleCopyAllVarientValue={handleCopyAllVarientValue}
+                    inventoryData={inventoryData}
+                    fetchProductDataById={fetchProductDataById}
+                    isVarientEdit={isVarientEdit}
+                    fetchSingleVarientData={fetchSingleVarientData}
+                  />
+                  <GeneratePUC
+                    handleVarientTitleBasedItemList={
+                      handleVarientTitleBasedItemList
+                    }
+                    error={error}
+                    handleGenerateUPC={handleGenerateUPC}
+                    handleOnChange={handleOnChange}
+                    formValue={formValue}
+                    handleBlur={handleBlur}
+                    isMultipleVarient={isMultipleVarient}
+                    productInfo={productInfo}
+                    inventoryData={inventoryData}
+                    handleCloseEditModal={handleCloseEditModal}
+                    productData={productData}
+                    // varientData={varientData}
+                    isVarientEdit={isVarientEdit}
+                  />
+                </div>
+                <div
+                  className="q-category-bottom-header varient-box"
+                  style={{ marginRight: "0px" }}
                 >
-                  {varientLoading || enbaledSubmit ? (
-                    <Box className="loader-box">
-                      <CircularProgress />
-                    </Box>
-                  ) : (
-                    "Update"
-                  )}
-                </button>
-                <button
-                  className="quic-btn quic-btn-cancle"
-                  onClick={() => {
-                    navigate("/inventory/products");
-                  }}
-                  style={{ marginLeft: "20px" }}
-                >
-                  Cancel
-                </button>
+                  <button
+                    className="quic-btn quic-btn-save submit-btn-click"
+                    onClick={handleUpdateVarient}
+                    disabled={varientLoading || enbaledSubmit}
+                    style={{
+                      backgroundColor:
+                        varientLoading || enbaledSubmit ? "#878787" : "#0A64F9",
+                    }}
+                  >
+                    {varientLoading || enbaledSubmit ? (
+                      <Box className="loader-box">
+                        <CircularProgress />
+                      </Box>
+                    ) : (
+                      "Update"
+                    )}
+                  </button>
+                  <button
+                    className="quic-btn quic-btn-cancle"
+                    onClick={() => {
+                      navigate("/inventory/products");
+                    }}
+                    style={{ marginLeft: "20px" }}
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       )}
