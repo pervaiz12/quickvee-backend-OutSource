@@ -93,7 +93,7 @@ const ProductTable = ({
 
   const [productList, setproductsList] = useState([]);
   const [inventoryApproval, setInventoryApproval] = useState();
-  const [checkboxState, setCheckboxState] = useState({}); 
+  const [checkboxState, setCheckboxState] = useState({});
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -265,6 +265,10 @@ const ProductTable = ({
     formData.append("login_type", userTypeData?.login_type);
     formData.append("token_id", userTypeData?.token_id);
     formData.append("token", userTypeData?.token);
+    formData.append(
+      "merchant_id",
+      LoginGetDashBoardRecordJson?.data?.merchant_id
+    );
 
     dispatch(deleteProductAPI(formData))
       .then(async (res) => {
@@ -546,70 +550,94 @@ const ProductTable = ({
                                               inventoryApproval &&
                                               product?.show_status === "0" ? (
                                                 <div className="categories-title">
-                                                <div className="flex flex-wrap gap-3 ">
-                                                  <label
-                                                    className="q_resigter_setting_section"
-                                                    style={{
-                                                      color: "#000",
-                                                      fontSize: "18px",
-                                                    }}
-                                                  >
-                                                    Approve
-                                                    <input
-                                                      type="checkbox"
-                                                      id={product.id}
-                                                      name="approved"
-                                                      
-                                                      // checked={
-                                                      //   product.show_status == 0 ||
-                                                      //     product.show_status == 2
-                                                      //     ? true
-                                                      //     : false
-                                                      // }
-                                                      checked={checkboxState[product.id]?.approved || false}
-                                                      value={product.show_status}
-                                                      onChange={(event) => {
-                                                        update_status(
-                                                          event,
-                                                          1,
-                                                        );
+                                                  <div className="flex flex-wrap gap-3 ">
+                                                    <label
+                                                      className="q_resigter_setting_section"
+                                                      style={{
+                                                        color: "#000",
+                                                        fontSize: "18px",
                                                       }}
-                                                    />
-                                                    <span className="checkmark"></span>
-                                                  </label>
-                                                  <label
-                                                    className="q_resigter_setting_section"
-                                                    style={{
-                                                      color: "#000",
-                                                      fontSize: "18px",
-                                                    }}
-                                                  >
-                                                    Reject
-                                                    <input
-                                                      type="checkbox"
-                                                      id={product.id}
-                                                      name="reject"
-                                                      // checked={
-                                                      //   product.show_status == 0 ||
-                                                      //     product.show_status == 1
-                                                      //     ? true
-                                                      //     : false
-                                                      // }
-                                                      checked={checkboxState[product.id]?.rejected || false}
-                                                      value={product.show_status}
-                                                      onChange={(event) => {
-                                                        update_status(
-                                                          event,
-                                                          2,
-                                                        );
+                                                    >
+                                                      Approve
+                                                      <input
+                                                        type="checkbox"
+                                                        id={product.id}
+                                                        name="approved"
+                                                        // checked={
+                                                        //   product.show_status == 0 ||
+                                                        //     product.show_status == 2
+                                                        //     ? true
+                                                        //     : false
+                                                        // }
+                                                        checked={
+                                                          checkboxState[
+                                                            product.id
+                                                          ]?.approved || false
+                                                        }
+                                                        value={
+                                                          product.show_status
+                                                        }
+                                                        onChange={(event) => {
+                                                          update_status(
+                                                            event,
+                                                            1
+                                                          );
+                                                        }}
+                                                      />
+                                                      <span className="checkmark"></span>
+                                                    </label>
+                                                    <label
+                                                      className="q_resigter_setting_section"
+                                                      style={{
+                                                        color: "#000",
+                                                        fontSize: "18px",
                                                       }}
-                                                    />
-                                                    <span className="checkmark"></span>
-                                                  </label>
+                                                    >
+                                                      Reject
+                                                      <input
+                                                        type="checkbox"
+                                                        id={product.id}
+                                                        name="reject"
+                                                        // checked={
+                                                        //   product.show_status == 0 ||
+                                                        //     product.show_status == 1
+                                                        //     ? true
+                                                        //     : false
+                                                        // }
+                                                        checked={
+                                                          checkboxState[
+                                                            product.id
+                                                          ]?.rejected || false
+                                                        }
+                                                        value={
+                                                          product.show_status
+                                                        }
+                                                        onChange={(event) => {
+                                                          update_status(
+                                                            event,
+                                                            2
+                                                          );
+                                                        }}
+                                                      />
+                                                      <span className="checkmark"></span>
+                                                    </label>
+                                                  </div>
                                                 </div>
-                                              </div>):
-                                              <span style={{color: checkStatus(product.show_status.toString())?.color}}>{checkStatus(product.show_status.toString())?.text}</span> 
-                                              }
+                                              ) : (
+                                                <span
+                                                  style={{
+                                                    color: checkStatus(
+                                                      product.show_status.toString()
+                                                    )?.color,
+                                                  }}
+                                                >
+                                                  {
+                                                    checkStatus(
+                                                      product.show_status.toString()
+                                                    )?.text
+                                                  }
+                                                </span>
+                                              )}
                                             </p>
                                           </StyledTableCell>
                                           <StyledTableCell align={"center"}>

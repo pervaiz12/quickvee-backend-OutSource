@@ -100,10 +100,19 @@ const BulkInstantPo = ({
 
     let qtyfieldValue;
     if (name === "qty") {
-      let inputStr = value.replace(/[^0-9.-]|^(?=.*-.*-)/g, "");
-      // inputStr = inputStr.replace(/^+/, "");
-      if (inputStr == "0") {
-        qtyfieldValue = "0";
+      // Remove all characters that are not digits, minus sign, or decimal point
+      let cleanedValue = value.replace(/[^0-9.-]/g, "");
+
+      // Ensure only one minus sign at the start and only one decimal point
+      if (cleanedValue.indexOf("-") > 0 || cleanedValue.split("-").length > 2) {
+        cleanedValue = cleanedValue.replace(/-/g, ""); // Remove all minus signs
+      }
+      if (cleanedValue.indexOf("-") === -1 && value[0] === "-") {
+        cleanedValue = "-" + cleanedValue; // Add a single minus sign at the start if needed
+      }
+      let validNumberRegex = /^-?\d*(\.\d+)?$/;
+      if (validNumberRegex.test(cleanedValue)) {
+        qtyfieldValue = cleanedValue;
       } else {
         qtyfieldValue = inputStr;
       }
@@ -149,10 +158,19 @@ const BulkInstantPo = ({
 
     let qtyfieldValue;
     if (name === "qty") {
-      let inputStr = value.replace(/[^0-9.-]|^(?=.*-.*-)/g, "");
-      // inputStr = inputStr.replace(/^+/, "");
-      if (inputStr == "0") {
-        qtyfieldValue = "0";
+      // Remove all characters that are not digits, minus sign, or decimal point
+      let cleanedValue = value.replace(/[^0-9.-]/g, "");
+
+      // Ensure only one minus sign at the start and only one decimal point
+      if (cleanedValue.indexOf("-") > 0 || cleanedValue.split("-").length > 2) {
+        cleanedValue = cleanedValue.replace(/-/g, ""); // Remove all minus signs
+      }
+      if (cleanedValue.indexOf("-") === -1 && value[0] === "-") {
+        cleanedValue = "-" + cleanedValue; // Add a single minus sign at the start if needed
+      }
+      let validNumberRegex = /^-?\d*(\.\d+)?$/;
+      if (validNumberRegex.test(cleanedValue)) {
+        qtyfieldValue = cleanedValue;
       } else {
         qtyfieldValue = inputStr;
       }
