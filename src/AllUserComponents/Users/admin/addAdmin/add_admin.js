@@ -20,6 +20,12 @@ export default function Add_Admin({ setVisible }) {
     navigate(-1);
     // setVisible("AdminView")
   };
+  const handleKeyPressNew = (event) => {
+    const allowedChars = /^\S+$/;
+    if (!allowedChars.test(event.key)) {
+      event.preventDefault();
+    }
+  };
   const navigate = useNavigate();
   const { showpPassword, jsxData } = PasswordShow();
   return (
@@ -94,6 +100,7 @@ export default function Add_Admin({ setVisible }) {
                       onChange={handleChange}
                       onKeyDown={keyEnter}
                       onBlur={() => handleBlurPassword("password")}
+                      onKeyPress={handleKeyPressNew}
                     />
                     {jsxData(addAdminData.password)}
                     {addAdminData.errors.password && (
