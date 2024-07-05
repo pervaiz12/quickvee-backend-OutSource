@@ -10,6 +10,7 @@ import SearchIcon from "../../Assests/Filter/Search.svg";
 import CategoryListDropDown from "../../CommonComponents/CategoryListDropDown";
 import UpArrow from "../../Assests/Dashboard/Up.svg";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
+import MassInventoryUpdateModal from "./MassInventoryUpdateModal";
 
 const FilterProduct = ({
   handleOptionClick,
@@ -95,6 +96,7 @@ const FilterProduct = ({
   };
 
   const [isTablet, setIsTablet] = useState(false);
+  const [showModal, setShowModal] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
@@ -160,6 +162,10 @@ const FilterProduct = ({
     };
   }, []);
 
+  const handleClose = () => {
+    setShowModal(false);
+  };
+
   return (
     <>
       <div className="box">
@@ -188,7 +194,7 @@ const FilterProduct = ({
                 <h1 className="text-xl font-medium">Filter By</h1>
               </Grid>
             </Grid>
-            <Grid container spacing={2}>
+            <Grid container spacing={2} className="place-items-end">
               <Grid item xs={12} sm={6} md={4}>
                 <CategoryListDropDown
                   type="category"
@@ -232,10 +238,28 @@ const FilterProduct = ({
                   dropdownFor={"del_pic"}
                 />
               </Grid>
+              <Grid item xs={12} sm={6} md={4}>
+                <button
+                  style={{ height: "40px", padding: "0px 0px" }}
+                  className="quic-btn quic-btn-draft attributeUpdateBTN w-full"
+                  onClick={() => setShowModal(true)}
+                >
+                  Mass Inventory Update
+                </button>
+              </Grid>
             </Grid>
           </div>
         </div>
       </div>
+      <MassInventoryUpdateModal
+        {...{
+          showModal,
+          handleClose,
+          handleCategoryChange,
+          searchId,
+          selectedStatus,
+        }}
+      />
     </>
   );
 };

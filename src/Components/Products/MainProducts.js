@@ -50,6 +50,7 @@ const MainProducts = () => {
   useEffect(() => {
     let data = {
       merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+      format: "json",
       category_id: categoryId === "All" ? "all" : categoryId,
       show_status: selectedStatus,
       name: debouncedValue,
@@ -61,6 +62,8 @@ const MainProducts = () => {
       page: 0,
       ...userTypeData,
     };
+
+    // console.log("1st time calling...");
 
     dispatch(emptyProduct([]));
     dispatch(fetchProductsData(data));
@@ -231,7 +234,7 @@ const MainProducts = () => {
         <ProductTable
           {...{
             selectedListingType,
-
+            debouncedValue,
             offset,
             setoffset,
             limit,
