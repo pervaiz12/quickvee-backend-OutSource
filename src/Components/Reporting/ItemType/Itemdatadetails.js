@@ -14,6 +14,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
+import PasswordShow from "../../../Common/passwordShow";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 
 const StyledTable = styled(Table)(({ theme }) => ({
@@ -48,14 +49,28 @@ const Itemdatadetails = ({ data }) => {
   const dispatch = useDispatch();
 
   const [orderReport, setorderReport] = useState([]);
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   const orderReportDataState = useSelector((state) => state.orderTypeList);
   console.log("data", orderReportDataState.loading);
 
   useEffect(() => {
     // Dispatch the action to fetch data when the component mounts
-    dispatch(fetchOrderTypeData(data));
+    getOrderTypeData();
   }, [dispatch, data]);
+  const getOrderTypeData = async () => {
+    try {
+      await dispatch(fetchOrderTypeData(data)).unwrap();
+    } catch (error) {
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    }
+  };
 
   useEffect(() => {
     if (!orderReportDataState.loading && orderReportDataState.orderTypeData) {
@@ -90,6 +105,45 @@ const Itemdatadetails = ({ data }) => {
     } else if (orderReport && orderReport.length >= 1) {
       return (
         <>
+          {/* <div className="q-attributes-bottom-detail-section text-center">
+            <div className="q-attributes-bottom-attriButes-header text-center">
+              <p className="q-employee-item">Name</p>
+              <p className="q-employee-in text-center"># Of Payments </p>
+              <p className="q-employee-in text-right">
+                {" "}
+                Net Revenue Without Tips
+              </p>
+              <p className="q-employee-in text-right"> Tips</p>
+              <p className="q-employee-in text-right"> Net Revenue With Tips</p>
+
+              <p className="q-employee-in text-right">Details</p>
+            </div>
+            {orderReport.map((orderReportDa, index) => (
+              <div
+                className="q-attributes-bottom-attriButes-listing "
+                key={index}
+              >
+                <div className="q-employee-bottom-attriButes-single-attributes ">
+                  <p className="q-employee-item">
+                    {orderReportDa.order_method}
+                  </p>
+                  <p className="q-employee-in">{priceFormate(orderReportDa.total_count)}</p>
+                  <p className="q-employee-in">
+                    {priceFormate(orderReportDa.amt_without_tip)}
+                  </p>
+                  <p className="q-employee-in">{priceFormate(orderReportDa.tip)}</p>
+                  <p className="q-employee-in">
+                    {priceFormate(orderReportDa.amount_with_tip)}
+                  </p>
+                  <Link  to={`/Order`} >
+                    <p className="q-employee-in">Details</p>
+                  </Link>
+
+                </div>
+              </div>
+            ))}
+          </div> */}
+
           <div className="q-attributes-bottom-detail-section text-center">
             <TableContainer>
               <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">

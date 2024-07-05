@@ -243,7 +243,7 @@ const MerchantFunction = () => {
     if (e?.target?.name) {
       let emailRegex =
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      let reg = /^[0-9\b]+$/;
+      const noSpacesRegex = /^\S+$/;
       // console.log(value);
 
       if (name === "storename") {

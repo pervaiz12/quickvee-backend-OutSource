@@ -16,6 +16,9 @@ import Move from "../Assests/ModalImages/moved.svg";
 import calender from "../Assests/ModalImages/calender.svg";
 import timestop from "../Assests/ModalImages/timestop.svg";
 import time from "../Assests/ModalImages/time.svg";
+import Product from "../Assests/AlertModal/product.svg";
+import Setting from "../Assests/AlertModal/setting.svg";
+import Copy from "../Assests/AlertModal/copy.svg";
 
 const AlertModal = ({ headerText, otherMSG, open, onClose }) => {
   const myStyles = {
@@ -73,6 +76,13 @@ const AlertModal = ({ headerText, otherMSG, open, onClose }) => {
       case "The selected time range overlaps with an existing slot":
       case "Pickup Minimum Time should be less than Maximum Time":
         return time;
+      case "Your Inventory has been copied to your other location.  Please verify and make any changes as needed.":
+        return Product;
+      case "Your setting has been copied to your other location.  Please verify and make any changes as needed.":
+        return Setting;
+      case "Your Inventory has been copied to your other location.  Please verify and make any changes as needed..":
+      case "Your Inventory has been copied to your other location. Please verify and make any changes as needed.":
+        return Copy;
 
       default:
         return Categorie;

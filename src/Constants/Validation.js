@@ -14,6 +14,7 @@ const Validation = () => {
   const NameSpace = /^[a-zA-Z\s]+$/;
   const Numberval = /^\d*$/;
   const Characterval = /^[A-Za-z\s]+$/;
+  const disallowedCharactersRegex = /[~\/\\,]/;
 
   const validateEmail = (email, updatedErrors) => {
     if (email === "") {
@@ -612,9 +613,11 @@ const Validation = () => {
 
   const validatTitle = (value, updateError) => {
     if (value === "") {
-      updateError.title = "This Field is Required";
+      updateError.title = "Title is required";
     } else if (emoji.test(value)) {
       updateError.title = "Emoji not allowed";
+    } else if (disallowedCharactersRegex.test(value)) {
+      updateError.title = "Title contains invalid characters";
     } else {
       updateError.title = "";
     }

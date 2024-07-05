@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="104" height="104" viewBox="0 0 104 104">
+  <g id="Group_6017" data-name="Group 6017" transform="translate(-908 -401)">
+    <circle id="Ellipse_329" data-name="Ellipse 329" cx="52" cy="52" r="52" transform="translate(908 401)" fill="#e8f1ff"/>
+    <g id="Group_9" data-name="Group 9" transform="translate(930.333 428.183)">
+      <g id="Group_10" data-name="Group 10">
+        <path id="Path_11" data-name="Path 11" d="M72.276,28.395,70.209,23.91A6.723,6.723,0,0,0,64.1,20H28.787a6.723,6.723,0,0,0-6.106,3.91l-2.067,4.485A6.7,6.7,0,0,0,20,31.206c0,3.713,2.562,6.723,6.275,6.723A6.723,6.723,0,0,0,33,31.206a6.723,6.723,0,1,0,13.447,0,6.723,6.723,0,0,0,13.447,0,6.723,6.723,0,0,0,6.723,6.723c3.713,0,6.275-3.01,6.275-6.723A6.7,6.7,0,0,0,72.276,28.395Z" transform="translate(-17.759 -17.759)" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"/>
+        <line id="Line_3" data-name="Line 3" y2="27.276" transform="translate(6.723 19.787)" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"/>
+        <line id="Line_4" data-name="Line 4" x2="30.926" transform="translate(2.241 47.063)" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"/>
+        <line id="Line_5" data-name="Line 5" y1="6.53" transform="translate(50.649 20.787)" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"/>
+        <path id="Path_12" data-name="Path 12" d="M140,277.929V264.482A4.482,4.482,0,0,1,144.482,260h4.482a4.482,4.482,0,0,1,4.482,4.482v13.447" transform="translate(-124.312 -230.866)" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-linejoin="round" stroke-width="3.5"/>
+        <line id="Line_6" data-name="Line 6" x2="19" transform="translate(38.167 33.317)" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-width="3.5"/>
+        <line id="Line_12" data-name="Line 12" x2="19" transform="translate(38.167 49.317)" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-width="3.5"/>
+        <line id="Line_7" data-name="Line 7" x2="19" transform="translate(38.167 41.317)" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-width="3.5"/>
+        <line id="Line_9" data-name="Line 9" y2="6" transform="translate(51.167 38.317)" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-width="3.5"/>
+        <line id="Line_10" data-name="Line 10" y2="6" transform="translate(44.167 30.317)" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-width="3.5"/>
+        <line id="Line_11" data-name="Line 11" y2="6" transform="translate(44.167 46.317)" fill="none" stroke="#0a64f9" stroke-linecap="round" stroke-width="3.5"/>
+      </g>
+    </g>
+  </g>
+</svg>

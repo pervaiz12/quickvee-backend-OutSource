@@ -38,6 +38,7 @@ import useDebounce from "../../../hooks/useDebouncs";
 import AskConform from "../../../reuseableComponents/AskConform";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import PasswordShow from "../../../Common/passwordShow";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -69,6 +70,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const OnlineTableViewData = (props) => {
   const navigate = useNavigate();
   // console.log(props)
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [allOnlineStoreOrder, setAllOnlineStoreOrders] = useState([]);
   // console.log("allOnlineStoreOrder", allOnlineStoreOrder);
   const AllInStoreDataState = useSelector((state) => state.onlineStoreOrder);
@@ -80,38 +83,6 @@ const OnlineTableViewData = (props) => {
   const dispatch = useDispatch();
   // const debouncedValue = useDebounce(searchId);
   useEffect(() => {
-    const transactionType = (type) => {
-      if (type === "Cash Payment") {
-        return "Cash";
-      }
-      if (type === "Card Payment") {
-        return "Online";
-      } else {
-        return type;
-      }
-    };
-    const fetchData = async () => {
-      if (props?.selectedDateRange?.start_date) {
-        let data = {
-          merchant_id: props.merchant_id,
-          order_type: props.OrderTypeData,
-          trans_type: transactionType(props.OrderSourceData),
-          start_date: props.selectedDateRange?.start_date,
-          end_date: props.selectedDateRange?.end_date,
-          customer_id: "0",
-          search_by:
-            props?.OnlSearchIdData !== "" ? props?.OnlSearchIdData : null,
-          perpage: rowsPerPage,
-          page: debouncedValue === "" ? currentPage : "1",
-          // search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
-          ...props.userTypeData,
-        };
-
-        if (data) {
-          dispatch(fetchOnlieStoreOrderData(data));
-        }
-      }
-    };
     fetchData();
   }, [
     dispatch,
@@ -122,6 +93,47 @@ const OnlineTableViewData = (props) => {
     rowsPerPage, //
     // AllInStoreDataState.OrderListCount,
   ]);
+  const fetchData = async () => {
+    const transactionType = (type) => {
+      if (type === "Cash Payment") {
+        return "Cash";
+      }
+      if (type === "Card Payment") {
+        return "Online";
+      } else {
+        return type;
+      }
+    };
+    if (props?.selectedDateRange?.start_date) {
+      let data = {
+        merchant_id: props.merchant_id,
+        order_type: props.OrderTypeData,
+        trans_type: transactionType(props.OrderSourceData),
+        start_date: props.selectedDateRange?.start_date,
+        end_date: props.selectedDateRange?.end_date,
+        customer_id: "0",
+        search_by:
+          props?.OnlSearchIdData !== "" ? props?.OnlSearchIdData : null,
+        perpage: rowsPerPage,
+        page: debouncedValue === "" ? currentPage : "1",
+        // search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+        ...props.userTypeData,
+      };
+
+      if (data) {
+        try {
+          await dispatch(fetchOnlieStoreOrderData(data)).unwrap();
+        } catch (error) {
+          if (error.status == 401) {
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          } else if (error.status == "Network Error") {
+            getNetworkError();
+          }
+        }
+      }
+    }
+  };
 
   useEffect(() => {
     setCurrentPage(1);
@@ -545,7 +557,7 @@ const OnlineTableViewData = (props) => {
                     : order
                 );
               }
-              ToastifyAlert(res.payload, "success");
+              ToastifyAlert("Updated Successfully", "success");
               return updatedOrders;
             } else {
               ToastifyAlert(res.payload, "error");

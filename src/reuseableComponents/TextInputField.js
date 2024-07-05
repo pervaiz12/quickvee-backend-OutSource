@@ -18,7 +18,7 @@ export default function BasicTextFields({
   rows,
   maxRows,
   onFocusData,
-  autoComplete
+  autoComplete,
 }) {
   return (
     <FormControl fullWidth>

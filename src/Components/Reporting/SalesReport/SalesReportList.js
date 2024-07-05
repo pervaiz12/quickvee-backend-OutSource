@@ -42,7 +42,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const SalesReportList = (props) => {
   const dispatch = useDispatch();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const {
     LoginGetDashBoardRecordJson,
     LoginAllStore,
@@ -74,8 +75,12 @@ const SalesReportList = (props) => {
         try {
           await dispatch(fetchSalesReportData(data)).unwrap();
         } catch (error) {
-          getUnAutherisedTokenMessage();
-          handleCoockieExpire();
+          if (error.status == 401) {
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          } else if (error.status == "Network Error") {
+            getNetworkError();
+          }
         }
       }
     }

@@ -64,6 +64,12 @@ export default function AddMerchan() {
   // const handleMouseUp = () => {
   //   setShowPassword(false);
   // };
+  const handleKeyPressNew = (event) => {
+    const allowedChars = /^\S+$/;
+    if (!allowedChars.test(event.key)) {
+      event.preventDefault();
+    }
+  };
 
   return (
     <>
@@ -323,6 +329,7 @@ export default function AddMerchan() {
                       onBlurFunction={() => handleBlur("password")}
                       sx={{ pt: 0.5, pt: 0 }}
                       onKeyDown={keyEnter}
+                      onKeyPressFun={handleKeyPressNew}
                     />
                     {jsxData(store.password)}
                   </div>

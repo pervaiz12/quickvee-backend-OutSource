@@ -12,7 +12,8 @@ import PasswordShow from "../../Common/passwordShow";
 export default function DashboardFunctionality() {
   const [dashboardCount, setDashboardCount] = React.useState("");
   const [dashboardRecord, setDashboardRecord] = React.useState([]);
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   const {
     LoginGetDashBoardRecordJson,
@@ -21,10 +22,12 @@ export default function DashboardFunctionality() {
     GetSessionLogin,
   } = useAuthDetails();
   const { token, ...newData } = userTypeData;
+  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   let data = {
     ...newData,
-    merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+    merchant_id: merchant_id,
   };
+  console.log(data);
   const getDashboardCountRecord = async () => {
     try {
       const response = await axios.post(
@@ -45,7 +48,7 @@ export default function DashboardFunctionality() {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error?.message == "Network Error") {
-        alert("Please check your internet connection and try again.");
+        getNetworkError();
       }
     }
   };
@@ -89,8 +92,16 @@ export default function DashboardFunctionality() {
   };
 
   useEffect(() => {
-    getDashboardCountRecord();
-    getDashboardTableRecord();
-  }, [LoginGetDashBoardRecordJson?.data?.merchant_id]);
+    // getDashboardCountRecord();
+    // getDashboardTableRecord();
+    // CountDashboardInterval();
+    const fetchData = async () => {
+      await getDashboardCountRecord();
+      await getDashboardTableRecord();
+    };
+    fetchData();
+    const interval = setInterval(fetchData, 5000);
+    return () => clearInterval(interval);
+  }, [merchant_id]);
   return { dashboardCount, dashboardRecord, sortByItemName };
 }

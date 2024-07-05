@@ -40,6 +40,7 @@ export default function SettingStoreOption() {
 
   const [storeData, setStoreData] = useState({});
   const [userData, setUserData] = useState({});
+  const [VoidOrder, setVoidOrder] = useState(false);
   const [userOptionData, setUserOptionData] = useState({});
   const checkBoxList = [
     "orderNumebrEnabled",
@@ -151,9 +152,13 @@ export default function SettingStoreOption() {
       dispatch(fetchStoreSettingOptionData(data))
         .then((res) => {
           if (res?.payload?.status) {
+            console.log(res?.payload);
             setStoreData(res?.payload);
             setUserData(res?.payload?.user_data);
             setUserOptionData(res?.payload?.user_option_data);
+            res?.payload?.user_option_data?.enable_void_order == "0"
+              ? setVoidOrder(false)
+              : setVoidOrder(true);
           }
         })
         .catch(() => {
@@ -260,6 +265,7 @@ export default function SettingStoreOption() {
         enable_dispatch: orderState?.enabledDispatchCenter ? "1" : "0",
         email_notification: orderState?.enabledEmailNotification ? "1" : "0",
         sms_notification: orderState?.enabledSmsNotification ? "1" : "0",
+        enable_void_order: VoidOrder ? "1" : "0",
         ...userTypeData,
       };
       const data = newItem;
@@ -284,6 +290,10 @@ export default function SettingStoreOption() {
           setLoading(false);
         });
     }
+  };
+
+  const handleVoidOrder = (e) => {
+    setVoidOrder(!VoidOrder);
   };
 
   return (
@@ -544,7 +554,7 @@ export default function SettingStoreOption() {
                 >
                   <Grid item>
                     <div className="store-setting-gry Admin_std store-setting-inline-block">
-                      Enable NCA
+                      Enable Cash Discounting
                     </div>
                   </Grid>
                   <Grid item>
@@ -678,7 +688,7 @@ export default function SettingStoreOption() {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid container sx={{ p: 2,mb:14 }} className="box_shadow_div">
+            <Grid container sx={{ p: 2, mb: 14 }} className="box_shadow_div">
               <Grid item xs={12}>
                 <Grid
                   container
@@ -702,6 +712,34 @@ export default function SettingStoreOption() {
                         checked={orderState?.enabledGuestCheckout}
                         name="enabledGuestCheckout"
                         onChange={handleOrderChange}
+                      />
+                    </span>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid container sx={{ p: 2, mb: 14 }} className="box_shadow_div">
+              <Grid item xs={12}>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="space-between"
+                  alignItems="center"
+                  sx={{ pb: 1.5 }}
+                >
+                  <Grid item>
+                    <h2 className="store-setting-h1">
+                      <b> void orders</b>
+                    </h2>
+                  </Grid>
+                  <Grid item>
+                    <span className="store-setting-switch">
+                      <Switch
+                        {...label}
+                        checked={VoidOrder}
+                        // checked={orderState?.enabledGuestCheckout}
+                        name="enabledGuestCheckout"
+                        onChange={handleVoidOrder}
                       />
                     </span>
                   </Grid>

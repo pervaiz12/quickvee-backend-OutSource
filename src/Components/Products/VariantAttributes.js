@@ -8,7 +8,6 @@ import Validation from "../../Constants/Validation";
 import { components } from "react-select";
 import SearchIcon from "@mui/icons-material/Search"; // Import MUI icon
 
-
 const VariantAttributes = ({
   filterOptionList,
   handleFilterDropdownOption,
@@ -57,6 +56,7 @@ const VariantAttributes = ({
       padding: "3px 6px 3px 10px !important",
     }),
   };
+  // console.log("varientLength", varientLength);
 
   const dropDownStyle = {
     clearIndicator: (provided) => ({
@@ -120,31 +120,33 @@ const VariantAttributes = ({
     let filterValue;
     // if value comes from createble varient
     if (Array.isArray(value)) {
-      filterValue = value?.filter((item) => {
-        let checkApostrophe = !(
-          item?.label?.split("").filter((p) => p === "'")?.length > 1
-        );
+      filterValue = value
+        ?.filter((item) => {
+          let checkApostrophe = !(
+            item?.label?.split("").filter((p) => p === "'")?.length > 1
+          );
 
-        let checkDoubleQuotes = !item?.label?.includes(`"`);
-        if (!checkApostrophe) {
-          alert("Only one apostrophe is allowed in selected values.");
-        } else if (!checkDoubleQuotes) {
-          alert("No Double quotes allowed in selected values.");
-        } 
-        
-        return (
-          !(item?.label?.split("").filter((p) => p === "'")?.length > 1) &&
-          !item?.label?.includes(`"`) &&
-          !item?.label?.includes(`,`) &&
-          !item?.label?.includes(`~`) &&
-          !item?.label?.includes(`-`) &&
-          !item?.label?.includes(`<`) &&
-          !item?.label?.includes(`>`) &&
-          !item?.label?.includes(`/`) && 
-          !item?.label?.includes(`\\`) &&
-          !item?.label?.includes(`;`)
-        );
-      });
+          let checkDoubleQuotes = !item?.label?.includes(`"`);
+          if (!checkApostrophe) {
+            alert("Only one apostrophe is allowed in selected values.");
+          } else if (!checkDoubleQuotes) {
+            alert("No Double quotes allowed in selected values.");
+          }
+
+          return (
+            !(item?.label?.split("").filter((p) => p === "'")?.length > 1) &&
+            !item?.label?.includes(`"`) &&
+            !item?.label?.includes(`,`) &&
+            !item?.label?.includes(`~`) &&
+            !item?.label?.includes(`-`) &&
+            !item?.label?.includes(`<`) &&
+            !item?.label?.includes(`>`) &&
+            !item?.label?.includes(`/`) &&
+            !item?.label?.includes(`\\`) &&
+            !item?.label?.includes(`;`)
+          );
+        })
+        .map((item) => ({ ...item, label: item?.label?.trim() }));
     } else {
       filterValue = value;
     }
@@ -271,14 +273,18 @@ const VariantAttributes = ({
         ) : (
           ""
         )}
-        {
-          pageUrl === "inventory/products/edit" && isMultipleVarient ? 
+        {pageUrl === "inventory/products/edit" && isMultipleVarient ? (
           <div className="product-note-section">
-          <p class="product-note">Note : After making any change, please update the page.</p>
-          <p class="product-note">Note : You cannot remove existing variants.</p>
+            <p class="product-note">
+              Note : After making any change, please update the page.
+            </p>
+            <p class="product-note">
+              Note : You cannot remove existing variants.
+            </p>
           </div>
-          :""
-        }
+        ) : (
+          ""
+        )}
         {isMultipleVarient ? (
           <div className="varient-select-section">
             <div className="">
@@ -321,7 +327,6 @@ const VariantAttributes = ({
                                 index + 1 < varientLength?.length ||
                                 pageUrl === "inventory/products/edit"
                               }
-                              
                             />
                           </div>
                         </div>
@@ -351,6 +356,18 @@ const VariantAttributes = ({
                               isClearable={varient?.varientAttributeList?.some(
                                 (v) => !v.isFixed
                               )}
+                              isValidNewOption={(
+                                inputValue,
+                                selectValue,
+                                selectOptions
+                              ) =>
+                                inputValue.trim().length > 0 && // Ensure trimmed value is valid
+                                !selectOptions.find(
+                                  (option) =>
+                                    option.label.trim().toLowerCase() ===
+                                    inputValue.trim().toLowerCase()
+                                )
+                              }
                             />
                           </div>
                           {!!varientError?.error &&

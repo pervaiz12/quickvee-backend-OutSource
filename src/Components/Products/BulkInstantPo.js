@@ -79,7 +79,6 @@ const BulkInstantPo = ({
       .replace(/[^\d.]/g, "") // Allow digits and dots only
       .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
       .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
-    
 
     let inputStr = fieldValue.replace(/\D/g, "");
     if (name === "cost" && inputStr.trim() === "0") {
@@ -100,28 +99,31 @@ const BulkInstantPo = ({
     }
 
     let qtyfieldValue;
-    if(name === 'qty'){
-      qtyfieldValue = value
-      // Remove extra dots and ensure only one dot exists at most
-      .replace(/[^\d.]/g, "") // Allow digits and dots only
-      .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
-      .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+    if (name === "qty") {
+      // Remove all characters that are not digits, minus sign, or decimal point
+      let cleanedValue = value.replace(/[^0-9.-]/g, "");
 
-    let inputStr = qtyfieldValue.replace(/\D/g, "");
-    // inputStr = inputStr.replace(/^+/, "");
-    if (inputStr == "0") {
-      qtyfieldValue = "0";
-    } else {
-      qtyfieldValue = inputStr;
-    }
-    }
-    else if(name === "description"){
-      qtyfieldValue = value
+      // Ensure only one minus sign at the start and only one decimal point
+      if (cleanedValue.indexOf("-") > 0 || cleanedValue.split("-").length > 2) {
+        cleanedValue = cleanedValue.replace(/-/g, ""); // Remove all minus signs
+      }
+      if (cleanedValue.indexOf("-") === -1 && value[0] === "-") {
+        cleanedValue = "-" + cleanedValue; // Add a single minus sign at the start if needed
+      }
+      let validNumberRegex = /^-?\d*(\.\d+)?$/;
+      if (validNumberRegex.test(cleanedValue)) {
+        qtyfieldValue = cleanedValue;
+      } else {
+        qtyfieldValue = inputStr;
+      }
+    } else if (name === "description") {
+      qtyfieldValue = value;
     }
 
     setInstantPoSingle((prev) => ({
       ...prev,
-      [name]: name !== "description" && name !== "qty" ? fieldValue : qtyfieldValue,
+      [name]:
+        name !== "description" && name !== "qty" ? fieldValue : qtyfieldValue,
     }));
   };
 
@@ -155,20 +157,23 @@ const BulkInstantPo = ({
     }
 
     let qtyfieldValue;
-    if(name === 'qty'){
-      qtyfieldValue = value
-      // Remove extra dots and ensure only one dot exists at most
-      .replace(/[^\d.]/g, "") // Allow digits and dots only
-      .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
-      .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+    if (name === "qty") {
+      // Remove all characters that are not digits, minus sign, or decimal point
+      let cleanedValue = value.replace(/[^0-9.-]/g, "");
 
-    let inputStr = qtyfieldValue.replace(/\D/g, "");
-    // inputStr = inputStr.replace(/^+/, "");
-    if (inputStr == "0") {
-      qtyfieldValue = "0";
-    } else {
-      qtyfieldValue = inputStr;
-    }
+      // Ensure only one minus sign at the start and only one decimal point
+      if (cleanedValue.indexOf("-") > 0 || cleanedValue.split("-").length > 2) {
+        cleanedValue = cleanedValue.replace(/-/g, ""); // Remove all minus signs
+      }
+      if (cleanedValue.indexOf("-") === -1 && value[0] === "-") {
+        cleanedValue = "-" + cleanedValue; // Add a single minus sign at the start if needed
+      }
+      let validNumberRegex = /^-?\d*(\.\d+)?$/;
+      if (validNumberRegex.test(cleanedValue)) {
+        qtyfieldValue = cleanedValue;
+      } else {
+        qtyfieldValue = inputStr;
+      }
     }
 
     if (name !== "description") {
@@ -205,7 +210,7 @@ const BulkInstantPo = ({
           [name]: `${
             name === "qty"
               ? "Quantity"
-              : name.charAt(0).toUpperCase() + name.slice(1) + 'PerItem'
+              : name.charAt(0).toUpperCase() + name.slice(1) + " Per Item"
           } is required`,
         }));
       }
@@ -219,7 +224,9 @@ const BulkInstantPo = ({
         newRequired[index][name] =
           name === "qty"
             ? "Quantity is required"
-            : `${name.charAt(0).toUpperCase() + name.slice(1)}PerItem is required`;
+            : `${
+                name.charAt(0).toUpperCase() + name.slice(1)
+              } Per Item is required`;
       }
       setRequired(newRequired);
     }
@@ -234,7 +241,7 @@ const BulkInstantPo = ({
         hasError = true;
       }
       if (!item.cost) {
-        itemErrors.cost = "CostPerItem is required";
+        itemErrors.cost = "Cost Per Item is required";
         hasError = true;
       }
       return itemErrors;
@@ -266,7 +273,7 @@ const BulkInstantPo = ({
       if (!instantPoSingle?.cost) {
         setRequired((prev) => ({
           ...prev,
-          cost: "CostPerItem is required",
+          cost: "Cost Per Item is required",
         }));
         error = true;
       }
@@ -469,7 +476,7 @@ const BulkInstantPo = ({
                         />
                         {error ? (
                           <span className="error-alert mb-2">
-                            description is required
+                            Description is required
                           </span>
                         ) : (
                           ""
@@ -553,7 +560,7 @@ const BulkInstantPo = ({
                         />
                         {error ? (
                           <span className="error-alert mb-2">
-                            description is required
+                            Description is required
                           </span>
                         ) : (
                           ""

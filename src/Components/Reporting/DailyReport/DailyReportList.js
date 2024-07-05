@@ -48,7 +48,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const DailyReportList = ({ data }) => {
   const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
   const dispatch = useDispatch();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const {
     LoginGetDashBoardRecordJson,
     LoginAllStore,
@@ -74,8 +75,14 @@ const DailyReportList = ({ data }) => {
 
       await dispatch(fetchdailyreportData(newData)).unwrap();
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+      // getUnAutherisedTokenMessage();
+      // handleCoockieExpire();
     }
   };
 

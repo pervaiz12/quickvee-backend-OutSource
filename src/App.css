@@ -801,13 +801,13 @@ a.days_filter {
 }
 
 /* width */
-::-webkit-scrollbar {
+.custom-scroll::-webkit-scrollbar {
   width: 2px;
   height: auto;
 }
 
 /* Track */
-::-webkit-scrollbar-track {
+.custom-scroll::-webkit-scrollbar-track {
   box-shadow: inset 0 0 5px grey;
   border-radius: 10px;
 }
@@ -1225,26 +1225,24 @@ div.q_label_details::after {
   vertical-align: cen;
   padding-top: 5px !important;
 }
-.w-store{
+.w-store {
   width: 100px;
 }
 
-.error-message-stocktake{
+.error-message-stocktake {
   color: red;
-  font-family: "Roboto","Helvetica","Arial",sans-serif !important;
+  font-family: "Roboto", "Helvetica", "Arial", sans-serif !important;
 }
 
-.fixed-bottom{
+.fixed-bottom {
   position: fixed;
   bottom: 0;
   right: 0;
   left: 0;
   z-index: 1;
   padding-left: 16rem;
-  padding-right:0rem;
-  
+  padding-right: 0rem;
 }
 
 @media screen {
-  
 }

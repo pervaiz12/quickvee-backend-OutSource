@@ -321,7 +321,7 @@ module.exports = Object.freeze({
   CHECK_EXIST_STORENAME: "UserController/check_merchant",
   CHECK_EXISTING_PIN: "StoreReact_setting_api/check_pin",
 
-  // Support Details 
+  // Support Details
   SUPPORT_DETAILS_LIST: "Support_details_react_api/view_support_details",
   SUPPORT_DETAILS_EDIT: "Support_details_react_api/update_support_details",
 });

@@ -44,7 +44,7 @@ export default function ProfitMarginReportLogic() {
     // const { token, ...newData } = userTypeData;
     try {
       setLoader(true);
-      let packet = { ...newData, name: inventory, merchant_id };
+      let packet = { ...newData, name: inventory, merchant_id ,offset: 0,limit,format: "json",listing_type: listingType};
       if (name == "product") {
         let response = await axios.post(BASE_URL + INVENTORY_LIST, packet, {
           headers: {
