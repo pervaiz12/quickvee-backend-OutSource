@@ -70,7 +70,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const OnlineTableViewData = (props) => {
   const navigate = useNavigate();
   // console.log(props)
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [allOnlineStoreOrder, setAllOnlineStoreOrders] = useState([]);
   console.log("allOnlineStoreOrder", allOnlineStoreOrder);
   const AllInStoreDataState = useSelector((state) => state.onlineStoreOrder);
@@ -127,7 +128,7 @@ const OnlineTableViewData = (props) => {
             getUnAutherisedTokenMessage();
             handleCoockieExpire();
           } else if (error.status == "Network Error") {
-            alert("Please check your internet connection and try again.");
+            getNetworkError();
           }
         }
       }
@@ -551,7 +552,7 @@ const OnlineTableViewData = (props) => {
                     : order
                 );
               }
-              ToastifyAlert(res.payload, "success");
+              ToastifyAlert("Updated Successfully", "success");
               return updatedOrders;
             } else {
               ToastifyAlert(res.payload, "error");

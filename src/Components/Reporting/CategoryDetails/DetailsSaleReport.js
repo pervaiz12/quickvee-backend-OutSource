@@ -49,7 +49,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const DetailsSaleReport = ({ data }) => {
   const dispatch = useDispatch();
 
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const {
     LoginGetDashBoardRecordJson,
     LoginAllStore,
@@ -87,8 +88,15 @@ const DetailsSaleReport = ({ data }) => {
         await dispatch(fetchdetailCategorySaleData(NewData)).unwrap();
       }
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+
+      // getUnAutherisedTokenMessage();
+      // handleCoockieExpire();
     }
   };
 

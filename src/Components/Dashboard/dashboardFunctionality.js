@@ -12,7 +12,8 @@ import PasswordShow from "../../Common/passwordShow";
 export default function DashboardFunctionality() {
   const [dashboardCount, setDashboardCount] = React.useState("");
   const [dashboardRecord, setDashboardRecord] = React.useState([]);
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   const {
     LoginGetDashBoardRecordJson,
@@ -47,7 +48,7 @@ export default function DashboardFunctionality() {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error?.message == "Network Error") {
-        alert("Please check your internet connection and try again.");
+        getNetworkError();
       }
     }
   };

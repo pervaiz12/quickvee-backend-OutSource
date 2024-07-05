@@ -25,7 +25,8 @@ import CircularProgress from "@mui/material/CircularProgress";
 import PasswordShow from "../../../Common/passwordShow";
 const EmployeeList = ({ setVisible, setEmployeeId }) => {
   const employeeListDataState = useSelector((state) => state.employeelistData);
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [employeeList, setemployeeList] = useState([]);
   const dispatch = useDispatch();
   // const [allemployee, setallemployee] = useState([]);
@@ -63,7 +64,7 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
-        alert("Please check your internet connection and try again.");
+        getNetworkError();
       }
     }
   };

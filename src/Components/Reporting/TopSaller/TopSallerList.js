@@ -47,7 +47,8 @@ const TopSallerList = ({ data }) => {
 
   const [topsaller, settopsaller] = useState([]);
   const topsallerDataState = useSelector((state) => state.topsaller);
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   useEffect(() => {
     getTopSellerData();
@@ -61,8 +62,12 @@ const TopSallerList = ({ data }) => {
         await dispatch(fetchtopsallerData(data)).unwrap();
       }
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 

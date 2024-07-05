@@ -9,14 +9,13 @@ import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
-import { styled } from '@mui/system';
+import { styled } from "@mui/system";
 
 const CustomGrid = styled(Grid)(({ theme }) => ({
-  '& > .MuiGrid-item': {
+  "& > .MuiGrid-item": {
     paddingTop: 0, // Remove the padding-top
   },
 }));
-
 
 const MainCatedetails = () => {
   const [filteredData, setFilteredData] = useState({ category_id: "all" });
@@ -80,8 +79,6 @@ const MainCatedetails = () => {
   const [selectedOrderType, setSelectedOrderType] = useState("All");
   const [selectedLCategoryType, setselectedLCategoryType] = useState("All");
 
- 
-
   const handleOptionClick = (option, dropdown) => {
     console.log("handleOptionClick", option, dropdown);
     switch (dropdown) {
@@ -107,7 +104,7 @@ const MainCatedetails = () => {
         } else {
           const category_id = option.id;
           setselectedLCategoryType(option.title);
-  
+
           setFilteredData({
             ...filteredData,
             category_id,
@@ -171,22 +168,22 @@ const MainCatedetails = () => {
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
           <Grid container sx={{ padding: 2.5 }}>
-            <Grid  item xs={12}>
+            <Grid item xs={12}>
               <div className="q_details_header">Category Sale Report</div>
             </Grid>
           </Grid>
-          <Grid container sx={{px:2.5}}>
+          <Grid container sx={{ px: 2.5 }}>
             <Grid item xs={12}>
               <div className="q_details_header ">Filter by</div>
             </Grid>
           </Grid>
-          <Grid container spacing={2} sx={{px:2.5,pb:2.5}}>
-            <Grid item  xs={12} sm={6} md={4}>
+          <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
+            <Grid item xs={12} sm={6} md={4}>
               <label
                 className="q-details-page-label"
                 htmlFor="orderSourceFilter"
               >
-                Order Source 
+                Order Source
               </label>
               <SelectDropDown
                 listItem={orderSourceList.map((item) => ({ title: item }))}
@@ -224,7 +221,6 @@ const MainCatedetails = () => {
           </Grid>
         </Grid>
       </Grid>
-   
 
       <div className="q-category-main-page">
         <div className="box">

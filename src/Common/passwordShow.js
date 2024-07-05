@@ -36,9 +36,14 @@ export default function PasswordShow() {
     localStorage.removeItem("AllStore");
     navigate("/login");
   };
-  const getUnAutherisedTokenMessage=()=>{
-    dispatch(getAuthInvalidMessage("Your session has expired. Please log in again."))
-  }
+  const getUnAutherisedTokenMessage = () => {
+    dispatch(
+      getAuthInvalidMessage("Your session has expired. Please log in again.")
+    );
+  };
+  const getNetworkError = () => {
+    alert("Please check your internet connection and try again.");
+  };
 
   return {
     showpPassword,
@@ -47,5 +52,6 @@ export default function PasswordShow() {
     jsxData,
     handleCoockieExpire,
     getUnAutherisedTokenMessage,
+    getNetworkError,
   };
 }

@@ -8,11 +8,13 @@ import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
+import PasswordShow from "../../../Common/passwordShow";
 
 const TopSallerReport = () => {
   const [filteredData, setFilteredData] = useState({ category_id: "all" });
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   const handleDataFiltered = (data) => {
@@ -138,6 +140,10 @@ const TopSallerReport = () => {
         setCategoryOptions(mappedOptions);
         setLoadingCategories(false);
       } catch (error) {
+        if (error.response.status == 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        }
         console.error("Error fetching categories:", error);
         setLoadingCategories(false);
       }
@@ -153,9 +159,7 @@ const TopSallerReport = () => {
         <Grid item xs={12}>
           <Grid container sx={{ padding: 2.5 }}>
             <Grid item xs={12}>
-              <div className="q_details_header">
-                Top Sellers
-              </div>
+              <div className="q_details_header">Top Sellers</div>
             </Grid>
           </Grid>
           <Grid container sx={{ px: 2.5 }}>
@@ -210,7 +214,7 @@ const TopSallerReport = () => {
       </Grid>
 
       <DateRangeComponent onDateRangeChange={handleDataFiltered} />
-      
+
       <TopSallerList data={filteredData} />
     </>
   );

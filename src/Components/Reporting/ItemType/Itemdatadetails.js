@@ -14,7 +14,7 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-
+import PasswordShow from "../../../Common/passwordShow";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -48,14 +48,28 @@ const Itemdatadetails = ({ data }) => {
   const dispatch = useDispatch();
 
   const [orderReport, setorderReport] = useState([]);
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   const orderReportDataState = useSelector((state) => state.orderTypeList);
   console.log(data.start_date);
 
   useEffect(() => {
     // Dispatch the action to fetch data when the component mounts
-    dispatch(fetchOrderTypeData(data));
+    getOrderTypeData();
   }, [dispatch, data]);
+  const getOrderTypeData = async () => {
+    try {
+      await dispatch(fetchOrderTypeData(data)).unwrap();
+    } catch (error) {
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    }
+  };
 
   useEffect(() => {
     if (!orderReportDataState.loading && orderReportDataState.orderTypeData) {
@@ -82,11 +96,14 @@ const Itemdatadetails = ({ data }) => {
       orderReport.success === false &&
       orderReport.message === "No data found for the specified criteria"
     ) {
-      return <Grid container sx={{p:2.5}} className="box_shadow_div">No data available</Grid>;
+      return (
+        <Grid container sx={{ p: 2.5 }} className="box_shadow_div">
+          No data available
+        </Grid>
+      );
     } else if (orderReport && orderReport.length >= 1) {
       return (
         <>
-        
           {/* <div className="q-attributes-bottom-detail-section text-center">
             <div className="q-attributes-bottom-attriButes-header text-center">
               <p className="q-employee-item">Name</p>
@@ -127,52 +144,48 @@ const Itemdatadetails = ({ data }) => {
           </div> */}
 
           <div className="q-attributes-bottom-detail-section text-center">
-
-          <TableContainer>
-                <StyledTable
-                  sx={{ minWidth: 500 }}
-                  aria-label="customized table"
-                >
-                  <TableHead>
-                    <StyledTableCell>Name</StyledTableCell>
-                    <StyledTableCell># Of Payments</StyledTableCell>
-                    <StyledTableCell>Net Revenue Without Tips</StyledTableCell>
-                    <StyledTableCell>Tips</StyledTableCell>
-                    <StyledTableCell>Net Revenue With Tips</StyledTableCell>
-                    <StyledTableCell>Details</StyledTableCell>
-                  </TableHead>
-                  <TableBody>
+            <TableContainer>
+              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
+                <TableHead>
+                  <StyledTableCell>Name</StyledTableCell>
+                  <StyledTableCell># Of Payments</StyledTableCell>
+                  <StyledTableCell>Net Revenue Without Tips</StyledTableCell>
+                  <StyledTableCell>Tips</StyledTableCell>
+                  <StyledTableCell>Net Revenue With Tips</StyledTableCell>
+                  <StyledTableCell>Details</StyledTableCell>
+                </TableHead>
+                <TableBody>
                   {orderReport.map((orderReportDa, index) => (
                     <StyledTableRow key={index}>
-                    <StyledTableCell>
-                      <p>
-                        {orderReportDa.order_method}
-                      </p>
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      <p>{priceFormate(orderReportDa.total_count)}</p>
-                    </StyledTableCell>
-                    <StyledTableCell>
-                    <p>${Number(orderReportDa.amt_without_tip).toFixed(2)}</p>
-                    </StyledTableCell>
-                    <StyledTableCell>
-                    <p>${Number(orderReportDa.tip).toFixed(2)}</p>
-                    </StyledTableCell>
-                    <StyledTableCell>
-                    <p>${Number(orderReportDa.amount_with_tip).toFixed(2)}</p>
-                    </StyledTableCell>
-                    <StyledTableCell>
-                    <Link   to={`/order`}  target="_blank" >
-                     <p className="q-employee-in">Details</p>
-                    </Link>
-                    </StyledTableCell>
-                  </StyledTableRow>
-    
+                      <StyledTableCell>
+                        <p>{orderReportDa.order_method}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{priceFormate(orderReportDa.total_count)}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>
+                          ${Number(orderReportDa.amt_without_tip).toFixed(2)}
+                        </p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>${Number(orderReportDa.tip).toFixed(2)}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>
+                          ${Number(orderReportDa.amount_with_tip).toFixed(2)}
+                        </p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <Link to={`/order`} target="_blank">
+                          <p className="q-employee-in">Details</p>
+                        </Link>
+                      </StyledTableCell>
+                    </StyledTableRow>
                   ))}
-                   
-                  </TableBody>
-                </StyledTable>
-          </TableContainer>
+                </TableBody>
+              </StyledTable>
+            </TableContainer>
           </div>
         </>
       );
