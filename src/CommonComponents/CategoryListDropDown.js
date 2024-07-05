@@ -11,7 +11,13 @@ import UpArrow from "../Assests/Dashboard/Up.svg";
 import DownIcon from "../Assests/Dashboard/Down.svg";
 import { useAuthDetails } from "../Common/cookiesHelper";
 
-const CategoryListDropDown = ({ type, onCategoryChange, selectedStatus, searchId }) => {
+const CategoryListDropDown = ({
+  type,
+  onCategoryChange,
+  selectedStatus,
+  searchId,
+  listFor,
+}) => {
   let listing_type = 0;
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [categoryDropdownVisible, setCategoryDropdownVisible] = useState(false);
@@ -58,13 +64,17 @@ const CategoryListDropDown = ({ type, onCategoryChange, selectedStatus, searchId
     switch (dropdown) {
       case "category":
         setSelectedCategory(option === "All" ? "All" : option.title);
-        onCategoryChange(option === "All" ? "all" : option.id);
+        if (listFor === "massInventoryUpdate") {
+          onCategoryChange(option === "All" ? "all" : option.id);
+          return;
+        }
         setCategoryDropdownVisible(false);
+
         dispatch(emptyProduct([]));
         let data1 = {
           merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
           format: "json",
-          category_id: option === 'All' ? 'all' : option?.id,
+          category_id: option === "All" ? "all" : option?.id,
           show_status: selectedStatus,
           name: searchId,
           listing_type: listing_type,

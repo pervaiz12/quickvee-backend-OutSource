@@ -264,6 +264,7 @@ module.exports = Object.freeze({
   ALL_PRODUCTS_LIST_WITH_VARIANTS: "Productapi/variant_list",
   PRODUCT_DEFAULT_IMAGE: this.BASE_URL + "upload/products/MaskGroup4542.png",
   UPDATE_TYPE: "Product_api_react/update_type",
+  MASS_INVENTORY_UPDATE: "Product_api_react/mass_update_inventory",
 
   //shiftsummary api
 

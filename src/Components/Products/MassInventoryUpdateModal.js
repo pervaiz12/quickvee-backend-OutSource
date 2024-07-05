@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
-import { Box, Modal } from "@mui/material";
+import { Box, CircularProgress, Modal } from "@mui/material";
 
 import backIcon from "../../Assests/Taxes/Left.svg";
-import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import CategoryListDropDown from "../../CommonComponents/CategoryListDropDown";
+import axios from "axios";
+import { BASE_URL, MASS_INVENTORY_UPDATE } from "../../Constants/Config";
+import { useAuthDetails } from "../../Common/cookiesHelper";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 const myStyles = {
   width: "60%",
@@ -15,13 +18,119 @@ const myStyles = {
   fontFamily: "'CircularSTDMedium', sans-serif !important",
 };
 
-const MassInventoryUpdateModal = ({
-  showModal,
-  handleClose,
-  handleCategoryChange,
-  searchId,
-  selectedStatus,
-}) => {
+const MassInventoryUpdateModal = ({ showModal, handleClose }) => {
+  const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
+  const [categoryId, setCategoryId] = useState("all");
+  const [loaders, setLoaders] = useState({
+    enable: false,
+    disable: false,
+  });
+
+  const [options, setOptions] = useState({
+    trackQuantity: false,
+    continueSelling: false,
+    checkId: false,
+    disable: false,
+    foodStampable: false,
+  });
+
+  const handleCategoryChange = (catId) => {
+    setCategoryId(catId);
+  };
+
+  const handleCheckbox = (type) => {
+    setOptions((prev) => ({ ...prev, [type]: !prev[type] }));
+  };
+
+  const handleSubmit = async (type) => {
+    try {
+      const bool = Object.values(options).every((bool) => !bool);
+
+      if (bool) {
+        ToastifyAlert("Please select atleast one option", "error");
+        return;
+      }
+
+      setLoaders({
+        enable: type === "1",
+        disable: type === "0",
+      });
+
+      const { token } = userTypeData;
+      const formData = new FormData();
+      // formData.append(
+      //   "merchant_id",
+      //   LoginGetDashBoardRecordJson?.data?.merchant_id
+      // );
+
+      const data = [
+        {
+          merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+          token_id: userTypeData.token_id,
+          login_type: userTypeData.login_type,
+          cat_id: categoryId,
+          track_qty: options.trackQuantity ? "1" : "0",
+          continue_sell: options.continueSelling ? "1" : "0",
+          check_id: options.checkId ? "1" : "0",
+          check_dis: options.disable ? "1" : "0",
+          check_food_stampable: options.foodStampable ? "1" : "0",
+          inv_status: type === "1" ? "1" : "0",
+        },
+      ];
+
+      // console.log("data: ", data, type);
+      // return;
+
+      formData.append("data", JSON.stringify(data));
+      // formData.append("login_type", userTypeData.login_type);
+      // formData.append("cat_id", categoryId);
+      // formData.append("track_qty", options.trackQuantity ? 1 : 0);
+      // formData.append("continue_sell", options.continueSelling ? 1 : 0);
+      // formData.append("check_id", options.checkId ? 1 : 0);
+      // formData.append("check_dis", options.disable ? 1 : 0);
+      // formData.append("check_food_stampable", options.foodStampable ? 1 : 0);
+      // formData.append("inv_status", type ? 1 : 0);
+
+      // console.log("data: ", data);
+      // console.log("categoryId: ", categoryId);
+      // console.log("type: ", type);
+      // return;
+
+      const response = await axios.post(
+        BASE_URL + MASS_INVENTORY_UPDATE,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      if (response.data.status) {
+        ToastifyAlert("Data Updated Successfully", "success");
+        handleClose();
+        setOptions({
+          trackQuantity: false,
+          continueSelling: false,
+          checkId: false,
+          disable: false,
+          foodStampable: false,
+        });
+      }
+
+      // console.log("response: ", response);
+    } catch (e) {
+      console.log("Error: ", e);
+    } finally {
+      setLoaders((prev) => ({
+        ...prev,
+        enable: false,
+        disable: false,
+      }));
+    }
+  };
+
   return (
     <>
       <Modal
@@ -54,30 +163,22 @@ const MassInventoryUpdateModal = ({
                   <CategoryListDropDown
                     type="category"
                     onCategoryChange={handleCategoryChange}
-                    searchId={searchId}
-                    selectedStatus={selectedStatus}
+                    listFor={"massInventoryUpdate"}
                   />
                 </Grid>
                 <Grid
                   item
                   xs={12}
                   sm={6}
-                  md={6}
+                  md={4}
                   className="category-checkmark-div"
                 >
                   <label className="category-checkmark-label">
                     Track Quantity
                     <input
                       type="checkbox"
-                      // checked={
-                      //     item.cat_show_status === "0" ||
-                      //     item.cat_show_status === "1"
-                      // }
-                      // onChange={() =>
-                      //   handleOnlineChange(
-                      //     item
-                      //   )
-                      // }
+                      checked={options.trackQuantity}
+                      onChange={() => handleCheckbox("trackQuantity")}
                     />
                     <span className="category-checkmark"></span>
                   </label>
@@ -86,22 +187,15 @@ const MassInventoryUpdateModal = ({
                   item
                   xs={12}
                   sm={6}
-                  md={6}
+                  md={4}
                   className="category-checkmark-div"
                 >
                   <label className="category-checkmark-label">
                     Continue Selling
                     <input
                       type="checkbox"
-                      // checked={
-                      //     item.cat_show_status === "0" ||
-                      //     item.cat_show_status === "1"
-                      // }
-                      // onChange={() =>
-                      //   handleOnlineChange(
-                      //     item
-                      //   )
-                      // }
+                      checked={options.continueSelling}
+                      onChange={() => handleCheckbox("continueSelling")}
                     />
                     <span className="category-checkmark"></span>
                   </label>
@@ -110,22 +204,15 @@ const MassInventoryUpdateModal = ({
                   item
                   xs={12}
                   sm={6}
-                  md={6}
+                  md={4}
                   className="category-checkmark-div"
                 >
                   <label className="category-checkmark-label">
                     Check ID
                     <input
                       type="checkbox"
-                      // checked={
-                      //     item.cat_show_status === "0" ||
-                      //     item.cat_show_status === "1"
-                      // }
-                      // onChange={() =>
-                      //   handleOnlineChange(
-                      //     item
-                      //   )
-                      // }
+                      checked={options.checkId}
+                      onChange={() => handleCheckbox("checkId")}
                     />
                     <span className="category-checkmark"></span>
                   </label>
@@ -134,22 +221,32 @@ const MassInventoryUpdateModal = ({
                   item
                   xs={12}
                   sm={6}
-                  md={6}
+                  md={4}
                   className="category-checkmark-div"
                 >
                   <label className="category-checkmark-label">
                     Disable
                     <input
                       type="checkbox"
-                      // checked={
-                      //     item.cat_show_status === "0" ||
-                      //     item.cat_show_status === "1"
-                      // }
-                      // onChange={() =>
-                      //   handleOnlineChange(
-                      //     item
-                      //   )
-                      // }
+                      checked={options.disable}
+                      onChange={() => handleCheckbox("disable")}
+                    />
+                    <span className="category-checkmark"></span>
+                  </label>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  sm={6}
+                  md={4}
+                  className="category-checkmark-div"
+                >
+                  <label className="category-checkmark-label">
+                    Food Stampable
+                    <input
+                      type="checkbox"
+                      checked={options.foodStampable}
+                      onChange={() => handleCheckbox("foodStampable")}
                     />
                     <span className="category-checkmark"></span>
                   </label>
@@ -159,10 +256,36 @@ const MassInventoryUpdateModal = ({
           </div>
 
           <div className="q-add-categories-section-middle-footer">
-            <button className="quic-btn quic-btn-save attributeUpdateBTN">
+            <button
+              className="quic-btn quic-btn-save attributeUpdateBTN"
+              onClick={() => handleSubmit("1")}
+              disabled={loaders.enable || loaders.disable}
+            >
+              {loaders.enable && (
+                <CircularProgress
+                  color={"inherit"}
+                  className="loaderIcon"
+                  width={15}
+                  size={15}
+                />
+              )}{" "}
               Enable
             </button>
-            <button className="quic-btn quic-btn-cancle">Disable</button>
+            <button
+              className="quic-btn quic-btn-cancle attributeUpdateBTN"
+              onClick={() => handleSubmit("0")}
+              disabled={loaders.enable || loaders.disable}
+            >
+              {loaders.disable && (
+                <CircularProgress
+                  color={"inherit"}
+                  className="loaderIcon"
+                  width={15}
+                  size={15}
+                />
+              )}{" "}
+              Disable
+            </button>
           </div>
         </Box>
       </Modal>
