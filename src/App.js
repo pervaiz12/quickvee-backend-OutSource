@@ -186,7 +186,7 @@ function App() {
           {/* <Route exact path="/manager" element={<Main visible={"manager"} />} /> */}
           <Route index path="/" element={<Main visible={"dashboard"} />} />
           <Route exact path="/order" element={<Main visible={"order"} />} />
-          <Route exact path="/order/:start_date/:end_date/:order_env" element={<Main visible={"order"} />} />
+          <Route exact path="/order/:start_date/:end_date/:order_env/:order_method" element={<Main visible={"order"} />} />
           <Route
             exact
             path="/inventory/category"
