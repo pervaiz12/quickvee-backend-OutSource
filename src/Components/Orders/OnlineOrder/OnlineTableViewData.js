@@ -70,7 +70,7 @@ const OnlineTableViewData = (props) => {
   const navigate = useNavigate();
   // console.log(props)
   const [allOnlineStoreOrder, setAllOnlineStoreOrders] = useState([]);
-  console.log("allOnlineStoreOrder", allOnlineStoreOrder);
+  // console.log("allOnlineStoreOrder", allOnlineStoreOrder);
   const AllInStoreDataState = useSelector((state) => state.onlineStoreOrder);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -166,6 +166,11 @@ const OnlineTableViewData = (props) => {
       !AllInStoreDataState.loading &&
       AllInStoreDataState.onlineStoreOrderData
     ) {
+      const picupOrderOnlyData = AllInStoreDataState.map((order)=>{
+        if(props.env_data === "5" ){
+          
+        }
+      })
       setAllOnlineStoreOrders(AllInStoreDataState.onlineStoreOrderData);
     }
   }, [AllInStoreDataState.loading, AllInStoreDataState.onlineStoreOrderData]);
@@ -766,7 +771,7 @@ const OnlineTableViewData = (props) => {
                         </StyledTableCell>
                         <StyledTableCell></StyledTableCell>
                       </TableHead>
-                      {console.log(allOnlineStoreOrder)}
+                      {/* {console.log(allOnlineStoreOrder)} */}
                       <TableBody>
                         {allOnlineStoreOrder &&
                         Object.entries(allOnlineStoreOrder).length > 0 ? (

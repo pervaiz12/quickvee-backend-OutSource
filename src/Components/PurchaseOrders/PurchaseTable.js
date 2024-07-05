@@ -88,7 +88,7 @@ const PurchaseTable = ({ seVisible }) => {
   useEffect(() => {
     if (!AllpurchaseDataState.loading && AllpurchaseDataState) {
       setTotalCount(AllpurchaseDataState?.purchaseDataCount);
-      const updatedList = AllpurchaseDataState?.purchaseData.map((item) => {
+      const updatedList = AllpurchaseDataState?.purchaseData?.map((item) => {
         let status, textColor, icon;
         if (item.is_void === "1") {
           status = "Void";

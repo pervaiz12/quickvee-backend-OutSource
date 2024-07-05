@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Grid, TextField } from "@mui/material";
 import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
-const MainOnline = ({ onFilterDataChange, searchId, setSearchId }) => {
+const MainOnline = ({ onFilterDataChange, searchId, setSearchId,order_env }) => {
   const transactionsList = [
     {
       title: "Both",
@@ -35,8 +35,10 @@ const MainOnline = ({ onFilterDataChange, searchId, setSearchId }) => {
   const [isTablet, setIsTablet] = useState(false);
   // const [selectedEmployee, setSelectedEmployee] = useState("All");
   const [selectedTransaction, setSelectedTransaction] = useState("Both");
-  const [selectedOrderStatus, setSelectedOrderStatus] = useState("New");
-
+  const [selectedOrderStatus, setSelectedOrderStatus] = useState(
+    order_env === "5" ? "Closed" : "New"
+  );
+  
   // const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
   const [transactionDropdownVisible, setTransactionDropdownVisible] =
     useState(false);

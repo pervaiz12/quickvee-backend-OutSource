@@ -6,7 +6,10 @@ import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import { useLocation } from "react-router-dom";
 const ItemsCategories = () => {
+  const location = useLocation();
+
   const [filteredData, setFilteredData] = useState([]);
   const {
     LoginGetDashBoardRecordJson,
@@ -51,12 +54,11 @@ const ItemsCategories = () => {
 
   const [selectedOrderSource, setSelectedOrderSource] = useState("All");
 
-
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
       case "orderSource":
         setSelectedOrderSource(option.title);
-   
+
         break;
 
       default:
