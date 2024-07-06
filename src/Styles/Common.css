@@ -46,7 +46,7 @@
 .box_shadow_div_order label {
   color: #818181;
   font-size: 14px;
-  font-family: qvbook !important;
+  font-family: CircularMedium !important;
   display: block;
   margin: 0px;
 }
@@ -61,13 +61,7 @@
   padding: 20px;
 }
 
-.box_shadow_div label {
-  color: #818181;
-  font-size: 14px;
-  font-family: qvbook !important;
-  display: block;
-  margin: 0px;
-}
+
 
 .input_area input {
   font-family: qvmedium !important;
@@ -262,7 +256,7 @@
 .box_shadow_div_order label {
   color: #818181;
   font-size: 14px;
-  font-family: qvbook !important;
+  font-family: CircularSTDBook !important;
   display: block;
   margin: 0px;
 }
@@ -271,13 +265,7 @@
   padding: 20px;
 }
 
-.box_shadow_div label {
-  color: #818181;
-  font-size: 14px;
-  font-family: qvbook !important;
-  display: block;
-  margin: 0px;
-}
+
 .input_area {
   width: 100%;
   height: auto;
@@ -392,13 +380,7 @@
   padding: 20px;
 }
 
-.box_shadow_div label {
-  color: #818181;
-  font-size: 14px;
-  font-family: qvbook !important;
-  display: block;
-  margin: 0px;
-}
+
 .input_area {
   width: 100%;
   height: auto;
@@ -826,13 +808,7 @@ input.blue_btn {
   padding: 20px;
 }
 
-.box_shadow_div label {
-  color: #818181;
-  font-size: 14px;
-  font-family: qvbook !important;
-  display: block;
-  margin: 0px;
-}
+
 .input_area {
   width: 100%;
   height: auto;
@@ -933,13 +909,7 @@ input.blue_btn {
   padding: 20px;
 }
 
-.box_shadow_div label {
-  color: #818181;
-  font-size: 14px;
-  font-family: qvbook !important;
-  display: block;
-  margin: 0px;
-}
+
 .input_area {
   width: 100%;
   height: auto;
@@ -1324,11 +1294,11 @@ input.blue_btn {
 
 .q_dashboard_welcom_msg > h1 {
   font-size: 24px;
-  font-family: qvmedium !important;
+  /* font-family: qvmedium !important; */
 }
 .q_dashbaord_netsales > h1 {
   font-size: 20px;
-  font-family: qvmedium !important;
+  /* font-family: qvmedium !important; */
 }
 
 /* select {
@@ -1400,13 +1370,7 @@ select:active {
   padding: 20px;
 }
 
-.box_shadow_div label {
-  color: #818181;
-  font-size: 14px;
-  font-family: qvbook !important;
-  display: block;
-  margin: 0px;
-}
+
 .input_area {
   width: 100%;
   height: auto;
@@ -1511,13 +1475,7 @@ select:active {
   padding: 20px;
 }
 
-.box_shadow_div label {
-  color: #818181;
-  font-size: 14px;
-  font-family: qvbook !important;
-  display: block;
-  margin: 0px;
-}
+
 .input_area {
   width: 100%;
   height: auto;
@@ -1929,13 +1887,7 @@ input.blue_btn {
   padding: 20px;
 }
 
-.box_shadow_div label {
-  color: #818181;
-  font-size: 14px;
-  font-family: qvbook !important;
-  display: block;
-  margin: 0px;
-}
+
 .input_area {
   width: 100%;
   height: auto;
@@ -2039,7 +1991,7 @@ input.blue_btn {
 .box_shadow_div label {
   color: #818181;
   font-size: 14px;
-  font-family: qvbook !important;
+  font-family: CircularSTDBook !important;
   display: block;
   margin: 0px;
 }
@@ -2427,11 +2379,11 @@ input.blue_btn {
 
 .q_dashboard_welcom_msg > h1 {
   font-size: 24px;
-  font-family: qvmedium !important;
+  /* font-family: qvmedium !important; */
 }
 .q_dashbaord_netsales > h1 {
   font-size: 20px;
-  font-family: qvmedium !important;
+  /* font-family: qvmedium !important; */
 }
 
 select {

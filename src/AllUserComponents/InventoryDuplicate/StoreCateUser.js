@@ -52,13 +52,13 @@ const StoreCateUser = () => {
     confirmfinalModalOpensetting,
     setConfirmFinalModalOpensetting,
     confirmFinalLogic,
-    confirmFinalSettingLogic
+    confirmFinalSettingLogic,
   } = InventoryExportLogic();
-  console.log("alertOpen",alertOpen)
-  console.log("modalHeaderText",modalHeaderText)
+  console.log("alertOpen", alertOpen);
+  console.log("modalHeaderText", modalHeaderText);
 
   const { userTypeData } = useAuthDetails();
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const [MerchantList, setMerchantList] = useState();
   const MerchantListData = useSelector((state) => state.ExportInventoryData);
   const dispatch = useDispatch();
@@ -71,22 +71,22 @@ const StoreCateUser = () => {
 
   useEffect(() => {
     // dispatch(fetchMerchantsList(userTypeData));
-    getFetchMerchantsList()
+    getFetchMerchantsList();
   }, []);
 
-  const getFetchMerchantsList=async()=>{
-    try{
+  const getFetchMerchantsList = async () => {
+    try {
       const data = {
-        ...userTypeData
+        ...userTypeData,
       };
       if (data) {
         await dispatch(fetchMerchantsList(data)).unwrap();
       }
-    }catch(error){
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+    } catch (error) {
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
     }
-  }
+  };
 
   // for change dropdown start
   const myStyles = {
@@ -116,28 +116,38 @@ const StoreCateUser = () => {
   const [storeFromError, setStoreFromError] = useState("");
   const [storeToError, setStoreToError] = useState("");
 
-  const showModal = (headerText,img) => {
+  const showModal = (headerText, img) => {
     setAlertModalHeaderText(headerText);
     setAlertModalOpen(true);
   };
 
   useEffect(() => {
-    if(alertOpen){
-      if(modalHeaderText === "Both the stores cannot be same."){
-        setAlertModalHeaderText("Both the stores cannot be same.")
+    if (alertOpen) {
+      if (modalHeaderText === "Both the stores cannot be same.") {
+        setAlertModalHeaderText("Both the stores cannot be same.");
         setAlertModalOpen(alertOpen);
-      }else if(modalHeaderText === "Please Fill Captcha Correctly!"){
-        setAlertModalHeaderText("Please Fill Captcha Correctly!")
+      } else if (modalHeaderText === "Please Fill Captcha Correctly!") {
+        setAlertModalHeaderText("Please Fill Captcha Correctly!");
         setAlertModalOpen(alertOpen);
-      }else if(modalHeaderText === "Your Inventory has been copied to your other location.  Please verify and make any changes as needed."){
-        setAlertModalHeaderText("Your Inventory has been copied to your other location.  Please verify and make any changes as needed.")
+      } else if (
+        modalHeaderText ===
+        "Your Inventory has been copied to your other location.  Please verify and make any changes as needed."
+      ) {
+        setAlertModalHeaderText(
+          "Your Inventory has been copied to your other location.  Please verify and make any changes as needed."
+        );
         setAlertModalOpen(alertOpen);
-      }else if(modalHeaderText === "Your setting has been copied to your other location.  Please verify and make any changes as needed."){
-        setAlertModalHeaderText("Your setting has been copied to your other location.  Please verify and make any changes as needed.")
+      } else if (
+        modalHeaderText ===
+        "Your setting has been copied to your other location.  Please verify and make any changes as needed."
+      ) {
+        setAlertModalHeaderText(
+          "Your setting has been copied to your other location.  Please verify and make any changes as needed."
+        );
         setAlertModalOpen(alertOpen);
       }
     }
-  }, [alertOpen,modalHeaderText]);
+  }, [alertOpen, modalHeaderText]);
 
   // const handleOptionClick = async (option, dropdown) => {
   const handleOptionClick = async (value, dropdown) => {
@@ -170,8 +180,6 @@ const StoreCateUser = () => {
         break;
     }
   };
-
-  
 
   const dupplicateInventoryHandler = async (e) => {
     if (selectedStorefrom === "-- Select Store --") {
@@ -207,88 +215,86 @@ const StoreCateUser = () => {
 
   // for captcha start
 
-  
-   
-    const canvasRef = useRef(null); 
-  
-    useEffect(() => { 
-        const canvas = canvasRef.current; 
-        const ctx = canvas.getContext('2d'); 
-        initializeCaptcha(ctx); 
-    }, []); 
-  
-    const generateRandomChar = (min, max) => 
-        String.fromCharCode(Math.floor 
-            (Math.random() * (max - min + 1) + min)); 
-  
-    const generateCaptchaText = () => { 
-        let captcha = ''; 
-        for (let i = 0; i < 3; i++) { 
-            captcha += generateRandomChar(65, 90); 
-            // captcha += generateRandomChar(97, 122); 
-            captcha += generateRandomChar(48, 57); 
-        } 
-        return captcha.split('').sort( 
-            () => Math.random() - 0.5).join(''); 
-    }; 
-  
-    const drawCaptchaOnCanvas = (ctx, captcha) => { 
-        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); 
-        const textColors = ['rgb(0,0,0)', 'rgb(130,130,130)']; 
-        const letterSpace = 150 / captcha.length; 
-        for (let i = 0; i < captcha.length; i++) { 
-            const xInitialSpace = 25; 
-            ctx.font = '20px Roboto Mono'; 
-            ctx.fillStyle = textColors[Math.floor( 
-                Math.random() * 2)]; 
-            ctx.fillText( 
-                captcha[i], 
-                xInitialSpace + i * letterSpace, 
-                // Randomize Y position slightly 
-                Math.floor(Math.random() * 16 + 25), 
-                100 
-            ); 
-        } 
-    }; 
-  
-    const initializeCaptcha = (ctx) => { 
-        setUserInput(''); 
-        const newCaptcha = generateCaptchaText(); 
-        setCaptchaText(newCaptcha); 
-        drawCaptchaOnCanvas(ctx, newCaptcha); 
-    }; 
-  
-    const handleUserInputChange = (e) => { 
-        setUserInput(e.target.value); 
-    }; 
-   
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    initializeCaptcha(ctx);
+  }, []);
+
+  const generateRandomChar = (min, max) =>
+    String.fromCharCode(Math.floor(Math.random() * (max - min + 1) + min));
+
+  const generateCaptchaText = () => {
+    let captcha = "";
+    for (let i = 0; i < 3; i++) {
+      captcha += generateRandomChar(65, 90);
+      // captcha += generateRandomChar(97, 122);
+      captcha += generateRandomChar(48, 57);
+    }
+    return captcha
+      .split("")
+      .sort(() => Math.random() - 0.5)
+      .join("");
+  };
+
+  const drawCaptchaOnCanvas = (ctx, captcha) => {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    const textColors = ["rgb(0,0,0)", "rgb(130,130,130)"];
+    const letterSpace = 150 / captcha.length;
+    for (let i = 0; i < captcha.length; i++) {
+      const xInitialSpace = 25;
+      ctx.font = "20px Roboto Mono";
+      ctx.fillStyle = textColors[Math.floor(Math.random() * 2)];
+      ctx.fillText(
+        captcha[i],
+        xInitialSpace + i * letterSpace,
+        // Randomize Y position slightly
+        Math.floor(Math.random() * 16 + 25),
+        100
+      );
+    }
+  };
+
+  const initializeCaptcha = (ctx) => {
+    setUserInput("");
+    const newCaptcha = generateCaptchaText();
+    setCaptchaText(newCaptcha);
+    drawCaptchaOnCanvas(ctx, newCaptcha);
+  };
+
+  const handleUserInputChange = (e) => {
+    setUserInput(e.target.value);
+  };
+
   // for captcha End
 
   const confirmfun = () => {
-    setConfirmModalOpen(false)
-    setConfirmFinalModalOpen(true)
-  }
+    setConfirmModalOpen(false);
+    setConfirmFinalModalOpen(true);
+  };
   const confirmFinalfun = async () => {
     await confirmFinalLogic();
     setSelectedStorefrom("-- Select Store --");
     setSelectedStoreto("-- Select Store --");
-    const canvas = canvasRef.current; 
-    const ctx = canvas.getContext('2d'); 
-    initializeCaptcha(ctx); 
-  }
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    initializeCaptcha(ctx);
+  };
 
   const confirmfunsetting = () => {
-    setConfirmModalOpensetting(false)
-    setConfirmFinalModalOpensetting(true)
-  }
+    setConfirmModalOpensetting(false);
+    setConfirmFinalModalOpensetting(true);
+  };
   const confirmFinalfunsetting = async () => {
     await confirmFinalSettingLogic();
     setSelectedStorefrom("-- Select Store --");
     setSelectedStoreto("-- Select Store --");
-    const canvas = canvasRef.current; 
-    const ctx = canvas.getContext('2d'); 
-    initializeCaptcha(ctx); 
-  }
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    initializeCaptcha(ctx);
+  };
 
   return (
     <>
@@ -345,6 +351,7 @@ const StoreCateUser = () => {
                   Copy from this store
                 </label>
                 <SelectDropDown
+                  sx={{ pt: 0.5 }}
                   listItem={
                     MerchantList?.length &&
                     MerchantList?.map((item) => ({
@@ -367,6 +374,7 @@ const StoreCateUser = () => {
                   Paste to this store
                 </label>
                 <SelectDropDown
+                  sx={{ pt: 0.5 }}
                   listItem={
                     MerchantList?.length &&
                     MerchantList?.map((item) => ({
@@ -406,32 +414,42 @@ const StoreCateUser = () => {
             </div>
           </div>
 
-
           {/* for captcha start  */}
 
-              <div className="q-add-inventory-section-header ">
-                  <div className="captue_Img_Reload"> 
-                    <canvas ref={canvasRef} width="200" height="50" onClick={  () => initializeCaptcha(canvasRef.current.getContext('2d'))}> 
-                    </canvas> 
-                    <button id="reload-button" onClick={   () => initializeCaptcha(canvasRef.current.getContext('2d'))}> 
-                        <LuRefreshCw /> 
-                    </button> 
-                  </div>
-              </div>
-              <div className="q-add-inventory-section-header">
-                <Grid container spacing={4} >
-                  <Grid item xs={6} sm={12} md={6}>
-                    <BasicTextFields
-                    type="text"
-                    id="user-input"
-                    name="actual_amt"
-                    onChangeFun={handleUserInputChange}
-                    value={userInput} 
-                    placeholder={"Enter the text in the image"}
-                    /> 
-                  </Grid>
-                </Grid>
-                </div>
+          <div className="q-add-inventory-section-header ">
+            <div className="captue_Img_Reload">
+              <canvas
+                ref={canvasRef}
+                width="200"
+                height="50"
+                onClick={() =>
+                  initializeCaptcha(canvasRef.current.getContext("2d"))
+                }
+              ></canvas>
+              <button
+                id="reload-button"
+                onClick={() =>
+                  initializeCaptcha(canvasRef.current.getContext("2d"))
+                }
+              >
+                <LuRefreshCw />
+              </button>
+            </div>
+          </div>
+          <div className="q-add-inventory-section-header">
+            <Grid container spacing={4}>
+              <Grid item xs={6} sm={12} md={6}>
+                <BasicTextFields
+                  type="text"
+                  id="user-input"
+                  name="actual_amt"
+                  onChangeFun={handleUserInputChange}
+                  value={userInput}
+                  placeholder={"Enter the text in the image"}
+                />
+              </Grid>
+            </Grid>
+          </div>
           {/* for captcha End */}
 
           <div
@@ -444,7 +462,14 @@ const StoreCateUser = () => {
               onClick={(e) => dupplicateInventoryHandler(e)}
               disabled={loader}
             >
-              {loader ? <><CircularProgress color={"inherit"} width={15} size={15}/>Duplicate Inventory</> : "Duplicate Inventory"}
+              {loader ? (
+                <>
+                  <CircularProgress color={"inherit"} width={15} size={15} />
+                  Duplicate Inventory
+                </>
+              ) : (
+                "Duplicate Inventory"
+              )}
             </button>
             <button
               className="quic-btn quic-btn-cancle attributeUpdateBTN"
@@ -452,40 +477,57 @@ const StoreCateUser = () => {
               onClick={(e) => dupplicateSettingsHandler(e)}
               disabled={loadersetting}
             >
-              {loadersetting ? <><CircularProgress color={"inherit"} width={15} size={15}/>Duplicate setting</> : "Duplicate setting"}
+              {loadersetting ? (
+                <>
+                  <CircularProgress color={"inherit"} width={15} size={15} />
+                  Duplicate setting
+                </>
+              ) : (
+                "Duplicate setting"
+              )}
             </button>
           </div>
         </div>
       </div>
       <AlertModal
-      headerText={alertModalHeaderText}
-      open={alertModalOpen}
-      onClose={() => {setAlertModalOpen(false)}}
-       />
-       <ConfirmModal
-            headerText="The existing Variants of the selected Store 2 Must be same as selected Store 1 Variants. Do you want to proceed?"
-            open={confirmModalOpen}
-            onClose={() => {setConfirmModalOpen(false)}}
-            onConfirm={confirmfun}
-        />
-        <FinalConfirm
-            headerText="Final Confirmation!!!"
-            open={confirmfinalModalOpen}
-            onClose={() => {setConfirmFinalModalOpen(false)}}
-            onConfirm={confirmFinalfun}
-        />
-        <ConfirmModal
-            headerText="The existing setting of the selected Store 2 will be erased and your setting will be copied from Store 1 to the selected Store 2. Do you want to proceed?"
-            open={confirmModalOpensetting}
-            onClose={() => {setConfirmModalOpensetting(false)}}
-            onConfirm={confirmfunsetting}
-        />
-        <FinalConfirm
-            headerText="Final Confirmation!!!"
-            open={confirmfinalModalOpensetting}
-            onClose={() => {setConfirmFinalModalOpensetting(false)}}
-            onConfirm={confirmFinalfunsetting}
-        />
+        headerText={alertModalHeaderText}
+        open={alertModalOpen}
+        onClose={() => {
+          setAlertModalOpen(false);
+        }}
+      />
+      <ConfirmModal
+        headerText="The existing Variants of the selected Store 2 Must be same as selected Store 1 Variants. Do you want to proceed?"
+        open={confirmModalOpen}
+        onClose={() => {
+          setConfirmModalOpen(false);
+        }}
+        onConfirm={confirmfun}
+      />
+      <FinalConfirm
+        headerText="Final Confirmation!!!"
+        open={confirmfinalModalOpen}
+        onClose={() => {
+          setConfirmFinalModalOpen(false);
+        }}
+        onConfirm={confirmFinalfun}
+      />
+      <ConfirmModal
+        headerText="The existing setting of the selected Store 2 will be erased and your setting will be copied from Store 1 to the selected Store 2. Do you want to proceed?"
+        open={confirmModalOpensetting}
+        onClose={() => {
+          setConfirmModalOpensetting(false);
+        }}
+        onConfirm={confirmfunsetting}
+      />
+      <FinalConfirm
+        headerText="Final Confirmation!!!"
+        open={confirmfinalModalOpensetting}
+        onClose={() => {
+          setConfirmFinalModalOpensetting(false);
+        }}
+        onConfirm={confirmFinalfunsetting}
+      />
     </>
   );
 };

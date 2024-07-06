@@ -890,7 +890,7 @@ const ModifyPurchaseOrder = () => {
                                     ? product?.product_title
                                     : product?.title
                                       ? product?.title
-                                      : ""}
+                                      : "NULL"}
                                 </p>
 
                                 <p className="font-light text-[15px] mb-2">

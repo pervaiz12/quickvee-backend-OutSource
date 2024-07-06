@@ -177,6 +177,7 @@ const TopSallerReport = () => {
               </label>
 
               <SelectDropDown
+              sx={{pt:0.5}}
                 listItem={orderSourceList.map((item) => ({ title: item }))}
                 title="title"
                 dropdownFor="orderSource"
@@ -189,6 +190,7 @@ const TopSallerReport = () => {
                 Limit
               </label>
               <SelectDropDown
+              sx={{pt:0.5}}
                 listItem={limitList.map((item) => ({ title: item }))}
                 title={"title"}
                 dropdownFor={"limit"}
@@ -201,6 +203,7 @@ const TopSallerReport = () => {
                 Category
               </label>
               <SelectDropDown
+              sx={{pt:0.5}}
                 heading={"All"}
                 listItem={categoryOptions}
                 title={"title"}

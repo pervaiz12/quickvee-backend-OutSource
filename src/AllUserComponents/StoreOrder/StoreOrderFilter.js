@@ -140,6 +140,7 @@ const StoreOrderFilter = ({ onFilterDataChange }) => {
             <Grid item xs={6}>
               <label> Order Status</label>
               <SelectDropDown
+              sx={{pt:0.5}}
                 listItem={OrderStatus}
                 title={"title"}
                 onClickHandler={handleOptionClick}
@@ -150,6 +151,7 @@ const StoreOrderFilter = ({ onFilterDataChange }) => {
             <Grid item xs={6}>
               <label> Order Type</label>
               <SelectDropDown
+              sx={{pt:0.5}}
                 listItem={orderType}
                 title={"title"}
                 onClickHandler={handleOptionClick}

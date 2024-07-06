@@ -281,7 +281,7 @@ const EditCategory = ({ productId,seVisible }) => {
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
   const [deleteCategoryIMG, setDeleteCategoryIMG] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-
+  const [deleteloading, setDeleteloading] = useState(false)
   const handleRemoveBanner = (event, id, removeitem) => {
     event.stopPropagation();
     setDeleteCategoryId(id);
@@ -298,6 +298,7 @@ const EditCategory = ({ productId,seVisible }) => {
       };
       if (data) {
         try {
+          setDeleteloading(true)
          await dispatch(deleteCategorybanner(data)).unwrap();
         } catch (error) {
           handleCoockieExpire()
@@ -318,6 +319,7 @@ const EditCategory = ({ productId,seVisible }) => {
         console.log("Deletion canceled by user");
       }
     }
+    setDeleteloading(false)
     setDeleteCategoryId(null);
     setDeleteCategoryIMG(null);
     setDeleteModalOpen(false);
@@ -469,7 +471,7 @@ const EditCategory = ({ productId,seVisible }) => {
                 ) : (
                   <>
                     {category.image && category.image.length > 0 ? (
-                      <div className="flex-column">
+                      <>
                         <img
                           src={`${BASE_URL}/upload/banner/category_banners/${category.merchant_id}/${category.image}`}
                           alt="Default"
@@ -498,7 +500,7 @@ const EditCategory = ({ productId,seVisible }) => {
                         >
                           <img src={DeleteIcon} alt="delete-icon" />
                         </span>
-                      </div>
+                      </>
                     ) : (
                       <div className="flex-column">
                         <img
@@ -573,7 +575,8 @@ const EditCategory = ({ productId,seVisible }) => {
         </div>
       </div>
       <DeleteModal
-        headerText="Category"
+      deleteloading={deleteloading}
+        headerText="Image"
         open={deleteModalOpen}
         onClose={() => {
           setDeleteModalOpen(false);

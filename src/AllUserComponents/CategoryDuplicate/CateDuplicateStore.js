@@ -514,6 +514,7 @@ const CateDuplicateStore = () => {
                   Copy from this store
                 </label>
                 <SelectDropDown
+                sx={{pt:0.5}}
                   listItem={
                     MerchantList?.length &&
                     MerchantList?.map((item) => ({
@@ -531,7 +532,7 @@ const CateDuplicateStore = () => {
                 />
               </Grid>
               {/* Multiple Select Categories */}
-              <Grid item xs={6} sm={12} md={6}>
+              <Grid sx={{fontFamily:"CircularSTDBook"}} item xs={6} sm={12} md={6}>
                 <div
                   className={`py-0 ${
                     isSelectClicked
@@ -546,7 +547,8 @@ const CateDuplicateStore = () => {
                     Select Categories
                   </label>
                   <Select
-                    className={categoryFocus ? "category-select" : ""}
+                  
+                    className={`${categoryFocus ? "category-select" : ""} mt-1`}
                     isMulti
                     value={selectedCategories}
                     onChange={handleCategoryChange}

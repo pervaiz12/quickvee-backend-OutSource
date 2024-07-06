@@ -197,6 +197,7 @@ const MainInventoryExport = () => {
                   <Grid item xs={6} className="MainInventory">
                       <label className="q-details-page-label">Select Store Name</label>
                         <SelectDropDown
+                          sx={{pt:0.5}}
                           className="MainInventory-selecteDropdown"
                           heading={"-- Select Store --"}
                             listItem={storefrom}

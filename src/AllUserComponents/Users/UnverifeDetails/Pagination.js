@@ -73,10 +73,11 @@ const Pagination = ({
   };
 
   return (
-    <nav className="flex items-center justify-between">
+    <nav className="flex items-center justify-between pagination-div">
       <div className="flex items-center">
         <p className="me-3">Show</p>
         <SelectDropDown
+        
           listItem={pageLength}
           title={"title"}
           selectedOption={rowsPerPage}

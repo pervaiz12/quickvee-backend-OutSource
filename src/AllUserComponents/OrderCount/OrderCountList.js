@@ -77,7 +77,7 @@ const OrderCountList = () => {
   const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
 
   const handleSubmitData = async () => {
-    console.log("Dzvxc")
+    console.log("Dzvxc");
     if (
       selectedStartDate &&
       selectedEndDate &&
@@ -138,17 +138,17 @@ const OrderCountList = () => {
 
           setTimeout(() => {
             setLoader(false);
-            ToastifyAlert("Download Successfully", "success")
+            ToastifyAlert("Download Successfully", "success");
           }, 2000);
           // setLoader(false);
         }
       } catch (error) {
-        if(error.response.status === 401){
+        if (error.response.status === 401) {
           handleCoockieExpire();
           getUnAutherisedTokenMessage();
         }
         setLoader(false);
-        ToastifyAlert("Something wents wrong", "error")
+        ToastifyAlert("Something wents wrong", "error");
       }
     }
   };
@@ -296,7 +296,7 @@ const OrderCountList = () => {
             </div>
             </div> */}
 
-      <div className="box_shadow_div_order ">
+      <div className="box_shadow_div_order">
         <Grid item className="q-category-bottom-header" xs={12}>
           <h1 className="text-xl font-medium">Order Count</h1>
         </Grid>
@@ -304,8 +304,9 @@ const OrderCountList = () => {
         <div className="px-6  ">
           <Grid container spacing={4} className="">
             <Grid item xs={6}>
-              <label className="lable_OrderCount"> Order Status</label>
+              <label className=""> Order Status</label>
               <SelectDropDown
+                sx={{ fontFamily: "inherit" }}
                 listItem={OrderStatus}
                 title={"title"}
                 onClickHandler={handleOptionClick}
@@ -314,8 +315,9 @@ const OrderCountList = () => {
               />
             </Grid>
             <Grid item xs={6}>
-              <label className="lable_OrderCount"> Order Type</label>
+              <label className=""> Order Type</label>
               <SelectDropDown
+                sx={{ pt: 0.5 }}
                 listItem={orderType}
                 title={"title"}
                 onClickHandler={handleOptionClick}
@@ -354,8 +356,10 @@ const OrderCountList = () => {
                         </div> */}
               <label>Start Date</label>
               <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={["DatePicker"]}>
+                <DemoContainer className="" components={["DatePicker"]}>
                   <DatePicker
+                    // sx={{pt:0.2}}
+                 
                     value={dayjs(selectedStartDate)}
                     onChange={handleDateChange(setSelectedStartDate)}
                     maxDate={dayjs()}
@@ -378,7 +382,7 @@ const OrderCountList = () => {
                         />
                       ),
                     }}
-                    className="orderCount_StartDate"
+                    className="orderCount_StartDate date-picker-font"
                   />
                 </DemoContainer>
               </LocalizationProvider>
@@ -434,7 +438,7 @@ const OrderCountList = () => {
                         />
                       ),
                     }}
-                    className="orderCount_StartDate"
+                    className="orderCount_StartDate date-picker-font"
                   />
                 </DemoContainer>
               </LocalizationProvider>
@@ -456,7 +460,7 @@ const OrderCountList = () => {
 
         <div
           style={{
-            paddingLeft: "2rem",
+            paddingLeft: "1.5rem",
             marginTop: "2rem",
           }}
         >

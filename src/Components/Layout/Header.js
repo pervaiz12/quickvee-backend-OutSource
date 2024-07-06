@@ -198,7 +198,7 @@ export default function Header() {
             },
           }}
         >
-          <MenuItem disableTouchRipple={true}>
+          <MenuItem sx={{ fontFamily: "CircularSTDBook" }} disableTouchRipple={true}>
             <div>
               <InputBase
                 placeholder="Search..."
@@ -211,6 +211,7 @@ export default function Header() {
             return (
               <div key={index}>
                 <MenuItem
+                sx={{ fontFamily: "CircularSTDBook" }}
                   onClick={(e) => {
                     handleCloseForDropDown(e);
                     handleChangeMerchant(item?.merchant_id);

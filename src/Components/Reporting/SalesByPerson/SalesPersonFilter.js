@@ -142,6 +142,7 @@ const SalesPersonFilter = ({ onFilterDataChange }) => {
                 Select Employee
               </label>
               <SelectDropDown
+               sx={{pt:0.5}}
                 heading={"All"}
                 listItem={employeeList}
                 title={"title"}
@@ -158,6 +159,7 @@ const SalesPersonFilter = ({ onFilterDataChange }) => {
                 Order Source
               </label>
               <SelectDropDown
+              sx={{pt:0.5}}
                 listItem={orderSourceList.map((item) => ({ title: item }))}
                 title={"title"}
                 selectedOption={selectedOrderSource}
@@ -170,6 +172,7 @@ const SalesPersonFilter = ({ onFilterDataChange }) => {
                 Order Type
               </label>
               <SelectDropDown
+               sx={{pt:0.5}}
                 listItem={orderTypeList.map((item) => ({ title: item }))}
                 title={"title"}
                 selectedOption={selectedOrderType}

@@ -60,6 +60,7 @@ const FilterCatDetails = ({ onFilterDataChange, title, showcat }) => {
                 Order Source
               </label>
               <SelectDropDown
+              sx={{pt:0.5}}
                 listItem={orderSourceList.map((item) => ({ title: item }))}
                 title={"title"}
                 dropdownFor={"orderSource"}
@@ -75,6 +76,7 @@ const FilterCatDetails = ({ onFilterDataChange, title, showcat }) => {
                 Order Source
               </label>
               <SelectDropDown
+              sx={{pt:0.5}}
                 listItem={orderTypeList.map((item) => ({ title: item }))}
                 title={"title"}
                 dropdownFor={"orderType"}

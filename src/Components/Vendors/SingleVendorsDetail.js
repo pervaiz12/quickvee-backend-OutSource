@@ -51,6 +51,7 @@ const SingleVendorsDetail = ({ setVisible }) => {
   const [dateRangeState, setDateRangeState] = useState();
   console.log("dateRangeState", dateRangeState);
   // date range
+  
 
   const [modalData, setModalData] = useState(null);
 
@@ -62,7 +63,7 @@ const SingleVendorsDetail = ({ setVisible }) => {
   const [selectedVendor, setSelectedVendor] = useState(false);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(false);
-  console.log("selectedVendor", selectedVendor);
+  console.log("selectedVendor", userTypeData);
 
   const openModal = (payAmount, id, remark) => {
     setShowModal(true);
@@ -86,6 +87,7 @@ const SingleVendorsDetail = ({ setVisible }) => {
       const { token, ...otherUserData } = userTypeData;
       const data = {
         // merchant_id: 'MAL0100CA',
+        merchant_id,
         id: vendorId,
         start_date: start_date,
         end_date: end_date,

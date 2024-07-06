@@ -71,6 +71,9 @@ input::-webkit-inner-spin-button {
 img {
   max-width: unset !important;
 }
+h3{
+ font-family: "CircularSTDMedium";
+}
 
 /* Firefox */
 input[type="number"] {
@@ -261,6 +264,9 @@ input[type="number"] {
   display: inline-block;
   padding: 10px;
   cursor: pointer;
+  color: #818181;
+  user-select: none;
+  font-family: CircularSTDMedium;
 }
 
 /* Media Queries for Responsive Font Sizes */
@@ -1244,5 +1250,29 @@ div.q_label_details::after {
   padding-right: 0rem;
 }
 
-@media screen {
+.pagination-div{
+  font-family: adminstdbook;
+}
+h1{
+  font-family: CircularMedium !important;
+}
+
+.box_shadow_div label {
+  color: #818181;
+  font-size: 14px;
+  font-family: CircularSTDBook !important;
+  display: block;
+}
+.date-picker-font {
+  font-family:  CircularSTDBook !important;
+}
+
+input{
+  font-family:  CircularSTDBook !important;
+}
+.react-datepicker{
+  font-family:  CircularSTDBook !important;
+}
+.common-font-bold{
+  font-family: CircularSTDBook !important;
 }
