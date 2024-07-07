@@ -74,12 +74,13 @@ const ProductSalesReport = () => {
   const [searchRecord, setSearchRecord] = useState("");
   const [storename, setStorename] = useState();
   const [submitmessage, setsubmitmessage] = useState("");
-  const {getUnAutherisedTokenMessage} = PasswordShow();
+  const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } = PasswordShow();
+
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const debouncedValue = useDebounce(searchRecord);
 
-  useEffect(() => {
+  const fetchSalesData= async()=>{
     const formData = new FormData();
     formData.append("merchant_id", LoginGetDashBoardRecordJson?.data?.merchant_id);
     formData.append("product_id", productId);
@@ -90,20 +91,26 @@ const ProductSalesReport = () => {
     
     
     setLoading(true);
-    dispatch(fetchSalesHistory(formData))
-      .then((res) => {
-        if (res?.payload?.status) {
-          setSalesData(res?.payload?.sales_history);
-          setFilterData(res?.payload?.sales_history);
-        }
-      })
-      .catch((err) => {
-        throw new Error(err?.payload?.message);
+    try {
+      const res = await dispatch(fetchSalesHistory(formData));
+      if (res?.payload?.status) {
+        setSalesData(res?.payload?.sales_history);
+        setFilterData(res?.payload?.sales_history);
+      }
+    }  catch (error) {
+      if (error.status == 401) {
         getUnAutherisedTokenMessage();
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  useEffect(() => {
+    fetchSalesData();
   }, []);
 
   useEffect(() => {

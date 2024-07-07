@@ -1235,7 +1235,7 @@ div.q_label_details::after {
 }
 
 .fixed-bottom {
-  position: fixed;
+  position: fixed !important;
   bottom: 0;
   right: 0;
   left: 0;
@@ -1243,6 +1243,14 @@ div.q_label_details::after {
   padding-left: 16rem;
   padding-right: 0rem;
 }
+
+
+.sticky-box{
+  background-color: #fff !important;
+  width: 100%;
+  box-shadow: 0 5px 10px 1px #ddd;
+}
+
 
 @media screen {
 }

@@ -60,7 +60,7 @@ export const fetchAllProducts = createAsyncThunk(
 // Generate pening , fulfilled and rejected action type
 export const fetchProductsData = createAsyncThunk(
   "products/fetchProductsData",
-  async (data) => {
+  async (data, {rejectWithValue}) => {
     try {
       const { token, ...dataNew } = data;
       const response = await axios.post(BASE_URL + PRODUCTS_LIST, dataNew, {
@@ -75,14 +75,20 @@ export const fetchProductsData = createAsyncThunk(
         return response.data;
       }
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
 
 export const updateProductsType = createAsyncThunk(
   "products/updateProductsType",
-  async (data) => {
+  async (data, {rejectWithValue}) => {
     try {
       const response = await axios.post(BASE_URL + UPDATE_TYPE, data, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -92,13 +98,19 @@ export const updateProductsType = createAsyncThunk(
         return response.data;
       }
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
 export const getInventorySetting = createAsyncThunk(
   "products/getInventorySetting",
-  async (payload) => {
+  async (payload, {rejectWithValue}) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
     try {
@@ -115,14 +127,20 @@ export const getInventorySetting = createAsyncThunk(
 
       return response?.data?.result?.cost_per;
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
 
 export const getInventorySettingOnVarient = createAsyncThunk(
   "products/getInventorySettingOnVarient",
-  async (payload) => {
+  async (payload, {rejectWithValue}) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
     try {
@@ -139,14 +157,20 @@ export const getInventorySettingOnVarient = createAsyncThunk(
 
       return response?.data;
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
 
 export const editProductData = createAsyncThunk(
   "products/editProduct",
-  async (payload) => {
+  async (payload, {rejectWithValue}) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
     try {
@@ -163,14 +187,21 @@ export const editProductData = createAsyncThunk(
 
       return response;
     } catch (error) {
-      throw new Error(error.response.data.message);
+      console.log('error api', error);
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
 
 export const addProduct = createAsyncThunk(
   "products/addProduct",
-  async (payload) => {
+  async (payload, {rejectWithValue}) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
     try {
@@ -186,7 +217,13 @@ export const addProduct = createAsyncThunk(
       );
       return response;
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
@@ -261,7 +298,7 @@ export const fetchProductList = createAsyncThunk(
 
 export const fetchProductsDataById = createAsyncThunk(
   "products/fetchProductData",
-  async (payload) => {
+  async (payload, {rejectWithValue}) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
 
@@ -277,8 +314,17 @@ export const fetchProductsDataById = createAsyncThunk(
         }
       );
       return response?.data;
-    } catch (error) {
-      throw new Error(error.response.data.message);
+    }
+    //  catch (error) {
+    //   throw new Error(error.response.data.message);
+    // }
+    catch (error) {
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
@@ -308,7 +354,7 @@ export const checkProductTitle = createAsyncThunk(
 
 export const fetchVendorList = createAsyncThunk(
   "products/fetchVendorList",
-  async (payload) => {
+  async (payload, {rejectWithValue}) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
     try {
@@ -324,7 +370,13 @@ export const fetchVendorList = createAsyncThunk(
       );
       return response?.data;
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
@@ -346,7 +398,7 @@ export const filterVendorAPI = createAsyncThunk(
 
 export const assignProductVendor = createAsyncThunk(
   "products/assignProductVendor",
-  async (payload) => {
+  async (payload, {rejectWithValue}) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
 
@@ -363,14 +415,20 @@ export const assignProductVendor = createAsyncThunk(
       );
       return response?.data;
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
 
 export const fetchSalesHistory = createAsyncThunk(
   "products/fetchSalesHistory",
-  async (payload) => {
+  async (payload, {rejectWithValue}) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
     try {
@@ -385,15 +443,21 @@ export const fetchSalesHistory = createAsyncThunk(
         }
       );
       return response?.data;
-    } catch (error) {
-      throw new Error(error.response.data.message);
+    }catch (error) {
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
 
 export const assignPrefferedVendor = createAsyncThunk(
   "products/assignPrefferedVendor",
-  async (payload) => {
+  async (payload, {rejectWithValue}) => {
     try {
       const response = await axios.post(
         BASE_URL + "Productapi/assign_preferred_vendor",
@@ -401,7 +465,13 @@ export const assignPrefferedVendor = createAsyncThunk(
       );
       return response?.data;
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
@@ -423,7 +493,7 @@ export const deleteProductVendor = createAsyncThunk(
 
 export const saveVendorList = createAsyncThunk(
   "products/saveVendorList",
-  async (payload) => {
+  async (payload, {rejectWithValue}) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
 
@@ -440,7 +510,13 @@ export const saveVendorList = createAsyncThunk(
       );
       return response?.data;
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
@@ -471,7 +547,7 @@ export const getAlreadyAssignVendor = createAsyncThunk(
 
 export const bulkVendorAssign = createAsyncThunk(
   "products/bulkVendorAssign",
-  async (payload) => {
+  async (payload, {rejectWithValue}) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
     try {
@@ -487,14 +563,20 @@ export const bulkVendorAssign = createAsyncThunk(
       );
       return response?.data;
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
 
 export const saveSingleVarientPO = createAsyncThunk(
   "products/saveSingleVarientPO",
-  async (payload) => {
+  async (payload, {rejectWithValue}) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
 
@@ -511,7 +593,13 @@ export const saveSingleVarientPO = createAsyncThunk(
       );
       return response?.data;
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
@@ -586,7 +674,7 @@ export const changeShowStatusProduct = createAsyncThunk(
 
 export const deleteProductAPI = createAsyncThunk(
   "products/deleteProductAPI",
-  async (payload) => {
+  async (payload, {rejectWithValue}) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
     try {
@@ -602,7 +690,13 @@ export const deleteProductAPI = createAsyncThunk(
       );
       return response?.data;
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
@@ -677,7 +771,7 @@ export const checkUpcOnVarientEdit = createAsyncThunk(
 
 export const updateEditVarient = createAsyncThunk(
   "products/updateEditVarient",
-  async (payload) => {
+  async (payload, {rejectWithValue}) => {
     // const token = payload.get('token'); // Extract the token from FormData
     // payload.delete('token');
     const { token, ...newData } = payload;
@@ -693,15 +787,21 @@ export const updateEditVarient = createAsyncThunk(
         }
       );
       return response?.data;
-    } catch (error) {
-      throw new Error(error.response.data.message);
+    }  catch (error) {
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
 
 export const fetchVarietDataById = createAsyncThunk(
   "products/fetchVarietDataById",
-  async (payload) => {
+  async (payload, {rejectWithValue}) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
 
@@ -717,8 +817,14 @@ export const fetchVarietDataById = createAsyncThunk(
         }
       );
       return response?.data;
-    } catch (error) {
-      throw new Error(error.response.data.message);
+    }  catch (error) {
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
