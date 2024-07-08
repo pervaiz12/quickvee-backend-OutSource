@@ -86,8 +86,8 @@ const ProductTable = ({
     GetSessionLogin,
   } = useAuthDetails();
 
-  
-  const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } = PasswordShow();
+  const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
+    PasswordShow();
   const navigate = useNavigate();
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   const [checkApproved, setCheckApproved] = useState(false);
@@ -118,16 +118,16 @@ const ProductTable = ({
     ...userTypeData,
   };
 
-  const fetchInventoryData= async ()=>{
+  const fetchInventoryData = async () => {
     try {
       const res = await dispatch(
         fetchStoreSettingSetupData({
           merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
         })
       );
-    
+
       setInventoryApproval(Boolean(+res?.payload?.inventory_approval));
-    }  catch (error) {
+    } catch (error) {
       if (error.status == 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
@@ -135,7 +135,7 @@ const ProductTable = ({
         getNetworkError();
       }
     }
-  }
+  };
 
   useEffect(() => {
     // if (payloadData) {
@@ -196,9 +196,7 @@ const ProductTable = ({
   };
 
   const update_status = (event, showStatus) => {
-    const userConfirmed = window.confirm(
-      "Are you sure you want to delete this vendor?"
-    );
+    const userConfirmed = window.confirm("Are you sure want to save changes ?");
 
     if (!userConfirmed) {
       return; // If the user clicks "No", exit the function
@@ -280,16 +278,14 @@ const ProductTable = ({
     try {
       await dispatch(fetchProductsData(data1));
       // Handle response if needed
+    } catch (error) {
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
-    catch (error) {
-             if (error.status == 401) {
-               getUnAutherisedTokenMessage();
-               handleCoockieExpire();
-             } else if (error.status == "Network Error") {
-               getNetworkError();
-             }
-           }
-   
 
     // setTimeout(() => {
     //   setItems(items.concat(Array.from({ length: 15 })));
@@ -325,7 +321,7 @@ const ProductTable = ({
           window.location.reload();
         }, 600);
       }
-    }  catch (error) {
+    } catch (error) {
       if (error.status == 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
@@ -333,7 +329,6 @@ const ProductTable = ({
         getNetworkError();
       }
     }
-    
   };
 
   const handleNavigate = (id, varientName, productData) => {

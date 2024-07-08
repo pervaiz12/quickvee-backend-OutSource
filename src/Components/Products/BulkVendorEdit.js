@@ -1,4 +1,10 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, {
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import SearchableDropdown from "../../CommonComponents/SearchableDropdown";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -44,7 +50,7 @@ const BulkVendorEdit = ({
   const [vendor, setVendor] = useState([]);
   const [loading, setLoading] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
-  console.log("selectedVendor", selectedVendor, vendor);
+  console.log("vendor", vendor);
 
   const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
     PasswordShow();
@@ -61,7 +67,6 @@ const BulkVendorEdit = ({
   };
 
   const [vendorItems, setVendorItems] = useState([]);
-  console.log("vendorItems", vendorItems);
 
   // onchange of costperItem and
   const handleVendorCostPerItem = async (e, index, vendorId) => {
@@ -306,13 +311,12 @@ const BulkVendorEdit = ({
   };
 
   const filterVensorListInBulk = () => {
-    let filterVendorList;
-    vendorItems?.map((p) => {
-      filterVendorList = vendor?.filter((o) => {
-        return o.id !== p?.id;
-      });
-    });
-    console.log("filterVendorList", filterVendorList);
+    const filterVendorList = vendor?.reduce((acc, o) => {
+      if (!vendorItems.some((p) => p.id === o.id)) {
+        acc.push(o);
+      }
+      return acc;
+    }, []);
     setVendor(filterVendorList);
   };
 
@@ -323,7 +327,7 @@ const BulkVendorEdit = ({
   }, [vendorItems]);
 
   // when click on delete icon // delete vendor by Id
-  const handleDeleteVendor = (vendorId) => {
+  const handleDeleteVendor = (vendorId, vendorItem) => {
     /// show prompt before delete the item
     const userConfirmed = window.confirm(
       "Are you sure you want to delete this vendor?"
@@ -373,7 +377,7 @@ const BulkVendorEdit = ({
         (item) => +item?.id !== +vendorId
       );
       setVendorItems(filtervendorList);
-      getVendorsList();
+      setVendor((prev) => [...prev, vendorItem]);
     }
   };
 
@@ -569,7 +573,7 @@ const BulkVendorEdit = ({
                             className=" m-auto d-grid place-content-center"
                             width="30px"
                             style={{ cursor: "pointer" }}
-                            onClick={() => handleDeleteVendor(row?.id)}
+                            onClick={() => handleDeleteVendor(row?.id, row)}
                           />
                         </TableCell>
                       </TableRow>
