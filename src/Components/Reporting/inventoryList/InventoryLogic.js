@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   INVENTORY_LIST,
   BASE_URL,
   LIST_ALL_CATEGORIES,
 } from "../../../Constants/Config";
+import { debounce } from "lodash";
 import { useSelector, useDispatch } from "react-redux";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import axios from "axios";
@@ -29,30 +30,21 @@ export default function InventoryLogic() {
 
   const [loader, setLoader] = useState(false);
 
-  const handleChangeInventory = (e) => {
-    setInventory(e.target.value);
-  };
-  useEffect(() => {
-    getAllCategoryList();
-    handleOptionClick();
-  }, []);
-
-  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-  // search button click function ----
-  const handleBlur = async (name) => {
-    try {
-      const { token, ...newData } = userTypeData;
-      setLoader(true);
-      let packet = {
-        ...newData,
-        name: inventory,
-        merchant_id,
-        offset: 0,
-        limit,
-        format: "json",
-        listing_type: listingType,
-      };
-      if (name == "product") {
+  // ======================
+  const handleSearchProduct = useRef(
+    debounce(async (value) => {
+      try {
+        const { token, ...newData } = userTypeData;
+        let packet = {
+          ...newData,
+          name: value,
+          merchant_id,
+          offset: 0,
+          limit,
+          format: "json",
+          listing_type: listingType,
+        };
+        setLoader(true);
         let response = await axios.post(BASE_URL + INVENTORY_LIST, packet, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -68,12 +60,59 @@ export default function InventoryLogic() {
           setsearchProduct([]);
           setMessage("No record found");
         }
+      } catch (error) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
       }
-    } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
-    }
+    }, 500)
+  );
+  // ======================
+  const handleChangeInventory = (e) => {
+    setInventory(e.target.value);
+    handleSearchProduct.current(e.target.value);
   };
+  useEffect(() => {
+    getAllCategoryList();
+    handleOptionClick();
+  }, []);
+
+  let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
+  // search button click function ----
+  // const handleBlur = async (name) => {
+  //   try {
+  //     const { token, ...newData } = userTypeData;
+  //     setLoader(true);
+  //     let packet = {
+  //       ...newData,
+  //       name: inventory,
+  //       merchant_id,
+  //       offset: 0,
+  //       limit,
+  //       format: "json",
+  //       listing_type: listingType,
+  //     };
+  //     if (name == "product") {
+  //       let response = await axios.post(BASE_URL + INVENTORY_LIST, packet, {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //           Authorization: `Bearer ${userTypeData?.token}`,
+  //         },
+  //       });
+  //       setLoadMoreData(false);
+  //       if (response?.data.length > 0) {
+  //         setLoader(false);
+  //         setsearchProduct(response?.data);
+  //       } else {
+  //         setLoader(false);
+  //         setsearchProduct([]);
+  //         setMessage("No record found");
+  //       }
+  //     }
+  //   } catch (error) {
+  //     getUnAutherisedTokenMessage();
+  //     handleCoockieExpire();
+  //   }
+  // };
   // search button click function ----
 
   const getAllCategoryList = async () => {
@@ -203,7 +242,7 @@ export default function InventoryLogic() {
   return {
     handleChangeInventory,
     inventory,
-    handleBlur,
+    // handleBlur,
     category,
     handleOptionClick,
     selectedCategory,
