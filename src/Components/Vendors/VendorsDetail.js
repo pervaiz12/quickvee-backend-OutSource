@@ -38,14 +38,15 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
     color: theme.palette.common.white,
+    fontFamily: "CircularSTDMedium !important",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    fontFamily: "CircularSTDMedium",
+    fontFamily: "CircularSTDBook !important",
   },
   [`&.${tableCellClasses.table}`]: {
     fontSize: 14,
-    fontFamily: "CircularSTDMedium",
+    fontFamily: "CircularSTDBook !important",
   },
 }));
 
@@ -95,14 +96,18 @@ const VendorsDetail = ({ setVisible }) => {
       AllVendorsDataState.vendorListData &&
       AllVendorsDataState.vendorListData.length >= 1
     ) {
-      setallvendors(AllVendorsDataState.vendorListData[1]);
+      setallvendors(
+        AllVendorsDataState.vendorListData[1].map((vendor) => {
+          return { ...vendor, status: vendor.enabled === "1" ? 1 : 0 };
+        })
+      );
     }
   }, [
     AllVendorsDataState,
     AllVendorsDataState.loading,
     AllVendorsDataState.vendorListData,
   ]);
-
+  console.log("AllVendorsDataState", allvendors);
   const [alertModalOpen, setAlertModalOpen] = useState(false);
   const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
   const showModal = (headerText) => {
@@ -112,8 +117,10 @@ const VendorsDetail = ({ setVisible }) => {
 
   const handleUpdateStatus = async (event, label, vendorId) => {
     try {
+      const newStatus = event.target.checked ? 1 : 0;
       const updData = {
         // merchant_id: "MAL0100CA",
+        merchant_id: merchant_id,
         status: event.target.checked ? 1 : 0,
         id: vendorId,
       };
@@ -132,6 +139,14 @@ const VendorsDetail = ({ setVisible }) => {
       if (response.status === 200) {
         // alert("Vendor Status Updated Successfully.");
         ToastifyAlert("Updated Successfully.", "success");
+        setallvendors(
+          allvendors.map((vendor) => {
+            if (vendor.vendor_id === vendorId) {
+              return { ...vendor, status: newStatus };
+            }
+            return vendor; // add return statement here
+          })
+        );
       } else {
         // alert("something went wrong.");
         showModal("Something went wrong !");
@@ -307,7 +322,7 @@ const VendorsDetail = ({ setVisible }) => {
                                   )
                                 }
                                 {...label}
-                                defaultChecked={singleVendor.enabled === "1"}
+                                checked={singleVendor.status}
                               />
                             </StyledTableCell>
                             <StyledTableCell>

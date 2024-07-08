@@ -246,9 +246,11 @@ const DefaultsDetail = ({ setVisible, setDefaultEditId }) => {
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
+      fontFamily: "CircularSTDBook",
     },
     [`&.${tableCellClasses.table}`]: {
       fontSize: 14,
+      fontFamily: "CircularSTDBook",
     },
   }));
 

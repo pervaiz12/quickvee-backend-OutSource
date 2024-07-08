@@ -40,12 +40,15 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
     color: theme.palette.common.white,
+    fontFamily: "CircularSTDMedium !important",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
+    fontFamily: "CircularSTDBook !important",
   },
   [`&.${tableCellClasses.table}`]: {
     fontSize: 14,
+    fontFamily: "CircularSTDBook !important",
   },
 }));
 

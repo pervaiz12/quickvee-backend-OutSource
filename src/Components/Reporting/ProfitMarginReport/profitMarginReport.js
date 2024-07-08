@@ -21,7 +21,6 @@ export default function ProfitMarginReport() {
     setsearchProduct,
   } = ProfitMarginReportLogic();
 
-
   const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
 
   const sortByItemName = (type, name) => {
@@ -51,9 +50,11 @@ export default function ProfitMarginReport() {
               <div className="q_details_header ">Filter by</div>
             </Grid>
           </Grid> */}
-           <Grid container sx={{p:2.5}}>
+          <Grid container sx={{ p: 2.5 }}>
             <Grid item xs={12}>
-            <h1 style={{marginBottom:0}} className="heading ">Profit Margin Report</h1>
+              <h1 style={{ marginBottom: 0 }} className="heading ">
+                Profit Margin Report
+              </h1>
             </Grid>
           </Grid>
           <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
@@ -69,6 +70,7 @@ export default function ProfitMarginReport() {
                       <label htmlFor="email">Email Address</label>
                     </div> */}
               <BasicTextFields
+                sx={{ pt: 0.5 }}
                 type={"text"}
                 name="product"
                 value={inventory}
@@ -95,6 +97,7 @@ export default function ProfitMarginReport() {
                 Category
               </label>
               <SelectDropDown
+                sx={{ pt: 0.5 }}
                 heading={"All"}
                 listItem={category}
                 title={"title"}

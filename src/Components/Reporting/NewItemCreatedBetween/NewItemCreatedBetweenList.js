@@ -25,11 +25,11 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    fontFamily: "CircularMedium !important",
+    fontFamily: "CircularSTDBook !important",
   },
   [`&.${tableCellClasses.table}`]: {
     fontSize: 14,
-    fontFamily: "CircularMedium !important",
+    fontFamily: "CircularSTDBook !important",
   },
 }));
 

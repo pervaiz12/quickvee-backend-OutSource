@@ -18,15 +18,15 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
     color: theme.palette.common.white,
-    fontFamily: "CircularSTDBook !important",
+    fontFamily: "CircularSTDMedium !important",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    fontFamily: "CircularSTDMedium",
+    fontFamily: "CircularSTDBook !important",
   },
   [`&.${tableCellClasses.table}`]: {
     fontSize: 14,
-    fontFamily: "CircularSTDMedium",
+    fontFamily: "CircularSTDBook !important",
   },
 }));
 

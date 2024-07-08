@@ -58,6 +58,7 @@ const DateRangeComponent = ({ onDateRangeChange, selectedDateRange }) => {
 
   const setDatesBasedOnOption = (option) => {
     const today = new Date();
+    const dayBeforeDay = new Date();
     switch (option) {
       case "Today":
         setStartDate(today);
@@ -71,15 +72,18 @@ const DateRangeComponent = ({ onDateRangeChange, selectedDateRange }) => {
         break;
       case "Last 7 Days":
         const last7Days = new Date();
+        
+        dayBeforeDay.setDate(today.getDate() - 1)
         last7Days.setDate(today.getDate() - 7);
         setStartDate(last7Days);
-        setEndDate(today);
+        setEndDate(dayBeforeDay);
         break;
       case "Last 30 days":
         const thirtyDaysAgo = new Date(today);
         thirtyDaysAgo.setDate(today.getDate() - 30);
+        dayBeforeDay.setDate(today.getDate() - 1)
         setStartDate(thirtyDaysAgo);
-        setEndDate(today);
+        setEndDate(dayBeforeDay);
         break;
       default:
         break;

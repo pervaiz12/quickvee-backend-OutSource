@@ -76,11 +76,11 @@ const Customer = () => {
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,
-      fontFamily: "CircularSTDMedium",
+      fontFamily: "CircularSTDBook !important",
     },
     [`&.${tableCellClasses.table}`]: {
       fontSize: 14,
-      fontFamily: "CircularSTDMedium",
+      fontFamily: "CircularSTDBook !important",
     },
   }));
 

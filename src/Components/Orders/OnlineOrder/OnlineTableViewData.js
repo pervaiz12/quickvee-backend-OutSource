@@ -46,15 +46,15 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
     color: theme.palette.common.white,
-    fontFamily: "CircularSTDBook !important",
+    fontFamily: "CircularSTDMedium !important",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    fontFamily: "CircularSTDMedium",
+    fontFamily: "CircularSTDBook !important",
   },
   [`&.${tableCellClasses.table}`]: {
     fontSize: 14,
-    fontFamily: "CircularSTDMedium",
+    fontFamily: "CircularSTDBook !important",
   },
 }));
 
@@ -103,6 +103,7 @@ const OnlineTableViewData = (props) => {
             props?.OnlSearchIdData !== "" ? props?.OnlSearchIdData : null,
           perpage: rowsPerPage,
           page: debouncedValue === "" ? currentPage : "1",
+          order_method:props.order_method ? props.order_method : "All",
           // search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
           ...props.userTypeData,
         };
@@ -144,6 +145,7 @@ const OnlineTableViewData = (props) => {
         trans_type: transactionType(props.OrderSourceData), //
         start_date: props.selectedDateRange?.start_date, //
         end_date: props.selectedDateRange?.end_date, //
+        order_method:props.order_method ? props.order_method : "All",
         ...props.userTypeData, //
       })
     );
@@ -151,6 +153,7 @@ const OnlineTableViewData = (props) => {
     props.selectedDateRange?.start_date,
     props.selectedDateRange?.end_date,
     debouncedValue,
+    props.order_method
     // props.OrderTypeData,
     // props.OrderSourceData,
     // AllInStoreDataState.OrderListCount,
@@ -168,7 +171,7 @@ const OnlineTableViewData = (props) => {
     ) {
       const picupOrderSortedCanceledList =
         AllInStoreDataState?.onlineStoreOrderData?.filter(
-          (order) => order.m_status !== "5" && order.order_method === "pickup"
+          (order) => order.order_method === "pickup"
         );
 
       const deleveryOrderSortedList =
