@@ -19,6 +19,7 @@ export default function InfoFunction() {
     GetSessionLogin,
     user_id,
   } = useAuthDetails();
+  console.log(LoginGetDashBoardRecordJson);
   let merchant_idNew = LoginGetDashBoardRecordJson?.data?.merchant_id;
   console.log(merchant_idNew);
   const { getUnAutherisedTokenMessage, handleCoockieExpire } = PasswordShow();
@@ -98,7 +99,7 @@ export default function InfoFunction() {
 
         case "confirmPassword":
           if (!value) {
-            stateObj[name] = "Please enter Confirm Password.";
+            stateObj[name] = "Confirm Password is required";
           } else if (
             passwordInput.password &&
             value !== passwordInput.password
@@ -168,21 +169,21 @@ export default function InfoFunction() {
     let isValidate = true;
 
     if (infoRecord.image === "") {
-      errorMessage.imageErrors = "Please select image field";
+      errorMessage.imageErrors = "Image is required";
       isValidate = false;
     } else {
       errorMessage.imageErrors = "";
     }
 
     if (infoRecord.banners === "") {
-      errorMessage.bannerErrors = "Please select banners field";
+      errorMessage.bannerErrors = "Banners is required";
       isValidate = false;
     } else {
       errorMessage.bannerErrors = "";
     }
 
     if (infoRecord.qrCode === "") {
-      errorMessage.qrCodeError = "QR Code field is required.";
+      errorMessage.qrCodeError = "QR Code  is required.";
       isValidate = false;
     } else {
       errorMessage.qrCodeError = "";
@@ -196,35 +197,35 @@ export default function InfoFunction() {
     }
 
     if (infoRecord.address_1 === "") {
-      errorMessage.address_1Error = "Address Line 1 field is required.";
+      errorMessage.address_1Error = "Address Line 1  is required.";
       isValidate = false;
     } else {
       errorMessage.address_1Error = "";
     }
 
     if (infoRecord.city === "") {
-      errorMessage.cityError = "City field is required.";
+      errorMessage.cityError = "City  is required.";
       isValidate = false;
     } else {
       errorMessage.cityError = "";
     }
 
     if (infoRecord.zip === "") {
-      errorMessage.zipCodeError = "Zip Code field is required.";
+      errorMessage.zipCodeError = "Zip Code  is required.";
       isValidate = false;
     } else {
       errorMessage.zipCodeError = "";
     }
 
     if (infoRecord.state === "") {
-      errorMessage.stateNameError = "State field is required.";
+      errorMessage.stateNameError = "State  is required.";
       isValidate = false;
     } else {
       errorMessage.stateNameError = "";
     }
 
     if (infoRecord.phone === "") {
-      errorMessage.phoneError = "Phone field is required.";
+      errorMessage.phoneError = "Phone  is required.";
       isValidate = false;
     } else {
       errorMessage.phoneError = "";
@@ -377,7 +378,7 @@ export default function InfoFunction() {
 
     if (name === "image") {
       if (e.target.value == "") {
-        errorMessage.imageErrors = "Please select image field";
+        errorMessage.imageErrors = "Image is required";
       } else {
         const selectedFile = e.target.files[0];
 
@@ -398,7 +399,7 @@ export default function InfoFunction() {
     }
     if (name == "banners") {
       if (e.target.value == "") {
-        errorMessage.bannerErrors = "Please select Banner field";
+        errorMessage.bannerErrors = "Banner is required";
       } else {
         const selectedFile = e.target.files[0];
 
@@ -422,7 +423,7 @@ export default function InfoFunction() {
     if (name === "qrCode") {
       console.log("QR Code", name);
       if (e.target.value == "") {
-        errorMessage.qrCodeError = "Please select QR Code field";
+        errorMessage.qrCodeError = "QR Code is required";
       } else {
         const selectedFile = e.target.files[0];
 
@@ -471,7 +472,7 @@ export default function InfoFunction() {
       if (value !== "") {
         // console.log(value.length)
         if (value.length !== 10) {
-          errorMessage.phoneError = "Please fill proper number";
+          errorMessage.phoneError = "Invalid number";
         } else {
           errorMessage.phoneError = "";
         }
@@ -565,7 +566,7 @@ export default function InfoFunction() {
             {
               headers: {
                 "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${userTypeData?.token}`,
+                Authorization: `Bearer${userTypeData?.token}`,
               },
             }
           );
@@ -589,14 +590,14 @@ export default function InfoFunction() {
     if (passwordInput.password === "") {
       setPasswordError((prevState) => ({
         ...prevState,
-        password: "Please enter Password.",
+        password: "Password is required",
       }));
       return;
     }
     if (passwordInput.confirmPassword === "") {
       setPasswordError((prevState) => ({
         ...prevState,
-        confirmPassword: "Please enter Confirm Password.",
+        confirmPassword: "Confirm Password is required",
       }));
       return;
     }
@@ -634,8 +635,9 @@ export default function InfoFunction() {
           console.log("password changes");
         }
       } catch (error) {
-        getUnAutherisedTokenMessage();
-        handleCoockieExpire();
+        console.log(error);
+        // getUnAutherisedTokenMessage();
+        // handleCoockieExpire();
       }
     }
   };

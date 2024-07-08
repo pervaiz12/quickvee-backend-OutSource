@@ -12,19 +12,15 @@ const initialState = {
 // Generate pening , fulfilled and rejected action type
 export const fetchRefundData = createAsyncThunk(
   "RefundDataList/fetchRefundData",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     try {
       const { token, ...dataNew } = data;
-      const response = await axios.post(
-        BASE_URL + REFUND_REPORT,
-        dataNew,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
+      const response = await axios.post(BASE_URL + REFUND_REPORT, dataNew, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
       if (response.data.status === true) {
         return response.data.report_data;
       } else if (
@@ -33,9 +29,14 @@ export const fetchRefundData = createAsyncThunk(
       ) {
         return response.data;
       }
-
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error(error.response.data.message);
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
