@@ -72,7 +72,7 @@ const CurrentInventoryValue = () => {
             <div className="font-normal  tracking-normal Admin_std">
               Total Quantity
             </div>
-            <div className="text-[20px] font-bold mt-4">
+            <div className="text-[20px] font-bold mt-4 common-font-bold">
               {/* {priceFormate(formatNumber(currentInventory.final_quantity))} */}
               { currentInventory.final_quantity ?  priceFormate(formatNumber(currentInventory.final_quantity)) : <Skeleton /> }
             </div>
@@ -83,7 +83,7 @@ const CurrentInventoryValue = () => {
             <div className="font-normal  tracking-normal Admin_std">
               Total Selling Price
             </div>
-            <div className="text-[20px] font-bold mt-4">
+            <div className="text-[20px] font-bold mt-4 common-font-bold">
               {/* $ {priceFormate(formatNumber(currentInventory.total_sale_price))} */}
               { currentInventory.total_sale_price ?  "$"+priceFormate(formatNumber(currentInventory.total_sale_price)) : <Skeleton /> }
             </div>
@@ -94,7 +94,7 @@ const CurrentInventoryValue = () => {
             <div className="font-normal  tracking-normal Admin_std">
               Total Cost Per Item
             </div>
-            <div className="text-[20px] font-bold mt-4">
+            <div className="text-[20px] font-bold mt-4 common-font-bold">
               {/* $ {priceFormate(formatNumber(currentInventory.total_cpi_price))} */}
               { currentInventory.total_cpi_price ?  "$"+priceFormate(formatNumber(currentInventory.total_cpi_price)) : <Skeleton /> }
             </div>

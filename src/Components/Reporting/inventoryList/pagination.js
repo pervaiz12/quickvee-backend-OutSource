@@ -18,15 +18,15 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
     color: theme.palette.common.white,
-    fontFamily: "CircularSTDBook !important",
+    fontFamily: "CircularMedium !important",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    fontFamily: "CircularSTDMedium",
+    fontFamily: "CircularMedium",
   },
   [`&.${tableCellClasses.table}`]: {
     fontSize: 14,
-    fontFamily: "CircularSTDMedium",
+    fontFamily: "CircularMedium",
   },
 }));
 
@@ -119,8 +119,9 @@ export default function Pagination(props) {
               //     Load More
               //   </button>
               // </div>
-              <Stack spacing={2} direction="row">
+              <Stack spacing={2}  direction="row">
                 <Button
+                  sx={{fontFamily:"CircularMedium"}}
                   variant="outlined"
                   className="button-load"
                   onClick={props.handleLoadMore}

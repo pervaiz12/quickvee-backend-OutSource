@@ -133,6 +133,7 @@ const DailyTtlReport = () => {
             <Grid item xs={12} sm={6} md={4}>
               <label htmlFor="orderSourceFilter"> Order Source</label>
               <SelectDropDown
+              sx={{pt:0.5}}
                 listItem={orderSourceList.map((orderSource) => ({
                   title: orderSource,
                 }))}
@@ -145,6 +146,7 @@ const DailyTtlReport = () => {
             <Grid item xs={12} sm={6} md={4}>
               <label> Order Type</label>
               <SelectDropDown
+               sx={{pt:0.5}}
                 listItem={orderTypeList.map((orderSource) => ({
                   title: orderSource,
                 }))}

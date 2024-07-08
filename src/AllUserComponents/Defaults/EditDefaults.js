@@ -394,6 +394,7 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
                 <Grid item xs={6}>
                   <label className="q-details-page-label ">Type</label>
                   <SelectDropDown
+                  sx={{pt:0.5}}
                     listItem={category}
                     title={"title"}
                     onClickHandler={handleOptionClick}

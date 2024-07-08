@@ -38,14 +38,17 @@ const SelectDropDown = ({
       <FormControl sx={{ ...sx }} fullWidth>
         <ThemeProvider theme={theme}>
           <Select
+            sx={{ fontFamily: "CircularSTDBook" }}
             size="small"
             value={selectedOption}
             displayEmpty
             defaultValue={listItem[0]}
             renderValue={default_title && ((value) => default_title)}
+            // sx={{fontFamily:"inherit"}}
           >
             {heading && (
               <MenuItem
+                sx={{ fontFamily: "CircularSTDBook" }}
                 onClick={(e) => {
                   onClickHandler(heading, dropdownFor);
                 }}
@@ -59,6 +62,7 @@ const SelectDropDown = ({
               listItem.length > 0 &&
               listItem?.map((item, index) => (
                 <MenuItem
+                  sx={{ fontFamily: "CircularSTDBook" }}
                   key={index}
                   onClick={(e) => {
                     onClickHandler(item, dropdownFor, name);

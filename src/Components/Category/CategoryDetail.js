@@ -112,7 +112,9 @@ const CategoryDetail = ({ seVisible,setProductId }) => {
       if(deleteCategoryId){
         const data = {
           id: deleteCategoryId,
+          merchant_id,
           ...userTypeData,
+          
         };
         if (data) {
           dispatch(deleteCategory(data));

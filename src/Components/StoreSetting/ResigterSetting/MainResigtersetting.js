@@ -367,7 +367,7 @@ const MainResigtersetting = () => {
       </div>
       {/* device  section */}
 
-      <div className="q-attributes-main-page"   style={{marginBottom:50}}>
+      <div className="q-attributes-main-page"   style={{marginBottom:100}}>
         <div className="box">
           <div className="q-resigtersetting-top-detail-section">
             <div>

@@ -242,6 +242,7 @@ const DefaultsDetail = ({ setVisible, setDefaultEditId }) => {
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: "#253338",
       color: theme.palette.common.white,
+      fontFamily: "CircularSTDMedium",
     },
     [`&.${tableCellClasses.body}`]: {
       fontSize: 14,

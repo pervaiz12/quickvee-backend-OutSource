@@ -166,9 +166,10 @@ const DateRangeComponent = ({ onDateRangeChange, selectedDateRange }) => {
 
         <Grid container spacing={2} className="py-5">
           <Grid item xs={12} sm={6} md={4}>
-            <div className="q_date_range_start">Start Date</div>
+            <div className="q_date_range_start date-picker-font">Start Date</div>
             <div className="relative">
               <DatePicker
+              sx={{fontFamily: "CircularSTDBook"}}
                 selected={startDate}
                 onChange={(date) => setStartDate(date)}
                 selectsStart
