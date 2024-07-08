@@ -15,7 +15,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { priceFormate } from "../../../hooks/priceFormate";
-import sortIcon from "../../../Assests/Category/SortingW.svg"
+import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -51,24 +51,23 @@ const OrderRefundReportList = (props) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const dispatch = useDispatch();
-  const{handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow() 
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const [allOrderData, setOrderData] = useState([]);
   const AllOrderRefundData = useSelector((state) => state.OrderRefundList);
   // console.log(AllOrderRefundData)
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
-    getOrderRefundData()
-   
+    getOrderRefundData();
   }, [props]);
-  const getOrderRefundData=async()=>{
-    try{
+  const getOrderRefundData = async () => {
+    try {
       if (props && props.selectedDateRange) {
         // const StartDateData = props.selectedDateRange.startDate.toISOString().split('T')[0];
         // const EndDateData = props.selectedDateRange.endDate.toISOString().split('T')[0];
-  
+
         const StartDateData = props.selectedDateRange.start_date;
         const EndDateData = props.selectedDateRange.end_date;
-  
+
         let data = {
           merchant_id,
           start_date: StartDateData,
@@ -82,13 +81,13 @@ const OrderRefundReportList = (props) => {
           await dispatch(fetchOrderRefundData(data)).unwrap();
         }
       }
-    }catch(error){
-      // console.log("hello main")
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+    } catch (error) {
+      if (error.status == 401) {
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
     }
-
-  }
+  };
 
   useEffect(() => {
     if (!AllOrderRefundData.loading && AllOrderRefundData.OrderRefundData) {
@@ -133,7 +132,7 @@ const OrderRefundReportList = (props) => {
     { type: "id", name: "order_id", label: "Order ID" },
     { type: "date", name: "created_at", label: "Date" },
     { type: "str", name: "employee", label: "Employee" },
-    {type: "str",name: "reason",label: "Reason"},
+    { type: "str", name: "reason", label: "Reason" },
     { type: "num", name: "debit_amt", label: "Debit/Credit" },
     { type: "num", name: "cash_amt", label: "Cash" },
     { type: "num", name: "loyalty_point_amt", label: "LP" },
@@ -152,7 +151,7 @@ const OrderRefundReportList = (props) => {
     );
     setOrderData(sortedItems);
     setSortOrder(newOrder);
-  }
+  };
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -160,30 +159,33 @@ const OrderRefundReportList = (props) => {
           <TableContainer>
             <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
               <TableHead>
-                {tableRow.map((item,index)=>(
+                {tableRow.map((item, index) => (
                   <StyledTableCell key={index}>
                     <button
-                    className="flex items-center"
-                    onClick={()=>sortByItemName(item.type,item.name)}
+                      className="flex items-center"
+                      onClick={() => sortByItemName(item.type, item.name)}
                     >
                       <p>{item.label}</p>
-                      <img src={sortIcon} alt="" className="pl-1"/>
-                      </button>
+                      <img src={sortIcon} alt="" className="pl-1" />
+                    </button>
                   </StyledTableCell>
                 ))}
               </TableHead>
-              
+
               <TableBody>
                 {Array.isArray(allOrderData) &&
                   allOrderData.length > 0 &&
                   allOrderData?.map((CheckData, index) => (
                     <StyledTableRow key={index}>
                       <StyledTableCell>
-                        
-                        <p className="text-[#0A64F9]"><Link to={`/order/store-reporting/order-summary/${merchant_id}/${CheckData.order_id}`}
-                                target="_blank"
-                              >{CheckData.order_id} </Link></p>
-                        
+                        <p className="text-[#0A64F9]">
+                          <Link
+                            to={`/order/store-reporting/order-summary/${merchant_id}/${CheckData.order_id}`}
+                            target="_blank"
+                          >
+                            {CheckData.order_id}{" "}
+                          </Link>
+                        </p>
                       </StyledTableCell>
                       <StyledTableCell>
                         <p>{dateFormattedFunction(CheckData?.created_at)}</p>
@@ -195,16 +197,28 @@ const OrderRefundReportList = (props) => {
                         <p>{CheckData.reason}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>${priceFormate(formatAmount(CheckData.debit_amt))}</p>
+                        <p>
+                          ${priceFormate(formatAmount(CheckData.debit_amt))}
+                        </p>
                       </StyledTableCell>
                       <StyledTableCell>
                         <p>${priceFormate(formatAmount(CheckData.cash_amt))}</p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>${priceFormate(formatAmount(CheckData.loyalty_point_amt))}</p>
+                        <p>
+                          $
+                          {priceFormate(
+                            formatAmount(CheckData.loyalty_point_amt)
+                          )}
+                        </p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <p>${priceFormate(formatAmount(CheckData.store_credit_amt))}</p>
+                        <p>
+                          $
+                          {priceFormate(
+                            formatAmount(CheckData.store_credit_amt)
+                          )}
+                        </p>
                       </StyledTableCell>
                       <StyledTableCell>
                         <p>${priceFormate(formatAmount(CheckData.nca_amt))}</p>
@@ -217,36 +231,37 @@ const OrderRefundReportList = (props) => {
                       </StyledTableCell>
                     </StyledTableRow>
                   ))}
-                  {allOrderData && (
-                    <StyledTableRow>
-                      <StyledTableCell></StyledTableCell>
-                      <StyledTableCell></StyledTableCell>
-                      <StyledTableCell></StyledTableCell>
-                      <StyledTableCell></StyledTableCell>
-                      <StyledTableCell></StyledTableCell>
-                      <StyledTableCell></StyledTableCell>
-                      <StyledTableCell></StyledTableCell>
-                      <StyledTableCell></StyledTableCell>
-                      <StyledTableCell></StyledTableCell>
-                      <StyledTableCell>
-                        <p
-                          style={{
-                            color: "#0A64F9",
-                          }}
-                        >
-                         Grand Total
-                        </p>
-                      </StyledTableCell>
-                      <StyledTableCell style={{ color: "#0A64F9" }}>
-                        ${parseFloat(
-                          calculateGrandTotal(allOrderData, "amount")
-                        ).toLocaleString(undefined, {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        )}
+                {allOrderData && (
+                  <StyledTableRow>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+                    <StyledTableCell>
+                      <p
+                        style={{
+                          color: "#0A64F9",
+                        }}
+                      >
+                        Grand Total
+                      </p>
+                    </StyledTableCell>
+                    <StyledTableCell style={{ color: "#0A64F9" }}>
+                      $
+                      {parseFloat(
+                        calculateGrandTotal(allOrderData, "amount")
+                      ).toLocaleString(undefined, {
+                        minimumFractionDigits: 2,
+                        maximumFractionDigits: 2,
+                      })}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                )}
               </TableBody>
             </StyledTable>
           </TableContainer>
@@ -259,7 +274,7 @@ const OrderRefundReportList = (props) => {
           )}
         </Grid>
       </Grid>
-{/* 
+      {/* 
       {isAllOrderDataValid && (
         <div className="box">
           <div className="q-daily-report-bottom-report-header">

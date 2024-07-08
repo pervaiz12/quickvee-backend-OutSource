@@ -8,9 +8,12 @@ import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent"
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { BASE_URL, TAXE_CATEGORY_LIST } from "../../../Constants/Config";
 import axios from "axios";
+import PasswordShow from "../../../Common/passwordShow";
+
 const RefundSummary = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const [filteredData, setFilteredData] = useState({
     category_id: "all",
     reason_name: "all",
@@ -91,6 +94,8 @@ const RefundSummary = () => {
     "Defective Item",
     "Fraudulent Order",
     "Returned Goods",
+    "Out of Stock",
+    "Other",
   ];
 
   const [categoryOptions, setCategoryOptions] = useState([]);
@@ -129,6 +134,10 @@ const RefundSummary = () => {
         setLoadingCategories(false);
       } catch (error) {
         console.error("Error fetching categories:", error);
+        if (error.response.status == 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        }
         setLoadingCategories(false);
       }
     };

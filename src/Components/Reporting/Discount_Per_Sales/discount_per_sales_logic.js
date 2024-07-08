@@ -13,7 +13,8 @@ import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItems
 
 export default function Discount_per_sales_logic() {
   const dispatch = useDispatch();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [allEmployee, setAllEmployee] = React.useState([]);
   const [selectedEmployee, setSelectedEmployee] = React.useState("");
   const [EmployeeFilterData, setEmployeeFilterData] = React.useState([]);
@@ -32,23 +33,23 @@ export default function Discount_per_sales_logic() {
     token_id: userTypeData?.token_id,
     login_type: userTypeData?.login_type,
   };
-  const getAllEmployeeData = () => {
+  const getAllEmployeeData = async () => {
     try {
-      let response = axios
-        .post(BASE_URL + EMPLOYEE_LIST, merchant_id, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${userTypeData?.token}`,
-          },
-        })
-        .then((res) => {
-          setAllEmployee(res?.data?.result);
-          // Array.isArray(res?.data?.result)
-        });
+      const response = await axios.post(BASE_URL + EMPLOYEE_LIST, merchant_id, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userTypeData?.token}`,
+        },
+      });
+      if (response) {
+        setAllEmployee(response?.data?.result);
+      }
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
       console.error("Error fetching Employee List:", error);
+      if (error.response.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
     }
   };
   useEffect(() => {
@@ -65,7 +66,7 @@ export default function Discount_per_sales_logic() {
       setSelectedOption(option?.f_name);
     }
   };
-  const onDateRangeChange = (data) => {
+  const onDateRangeChange = async (data) => {
     const { token, ...newData } = userTypeData;
     const { start_date, end_date } = data;
 
@@ -78,39 +79,95 @@ export default function Discount_per_sales_logic() {
     };
     setLoader(true);
     try {
-      axios
-        .post(BASE_URL + DISCOUNT_PER_PERSON, pakect, {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`, // Use data?.token directly
-          },
-        })
-        .then((res) => {
-          setLoader(false);
-          if (res?.data?.status == true) {
-            const updatedList = Object.fromEntries(
-              Object.entries(res.data?.report_data).map(([key, value]) => {
-                const updatedValue = value.map((item) => {
-                  return {
-                    ...item,
-                    fullName: item?.f_name + " " + item?.l_name,
-                  };
-                });
-                return [key, updatedValue];
-              })
-            );
-            
-            setEmployeeFilterData(updatedList);
-          }
-        });
-    } catch (error) {
-      console.error("Error fetching Employee List:", error);
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
-    }
+      const res = await axios.post(BASE_URL + DISCOUNT_PER_PERSON, pakect, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`, // Use data?.token directly if available
+        },
+      });
 
-    // console.log(newData);
+      setLoader(false);
+
+      if (res?.data?.status === true) {
+        const updatedList = Object.fromEntries(
+          Object.entries(res.data?.report_data).map(([key, value]) => {
+            const updatedValue = value.map((item) => {
+              return {
+                ...item,
+                fullName: item?.f_name + " " + item?.l_name,
+              };
+            });
+            return [key, updatedValue];
+          })
+        );
+
+        setEmployeeFilterData(updatedList);
+      }
+    } catch (error) {
+      setLoader(false);
+
+      if (error.response && error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.message === "Network Error") {
+        console.log("Network Error");
+        getNetworkError();
+      } else {
+        console.error("An error occurred:", error);
+      }
+    }
   };
+
+  // const onDateRangeChange = (data) => {
+  //   const { token, ...newData } = userTypeData;
+  //   const { start_date, end_date } = data;
+
+  //   let pakect = {
+  //     start_date,
+  //     end_date,
+  //     ...newData,
+  //     employee_id: selectedEmployee == "" ? "all" : selectedEmployee,
+  //     ...merchant_id,
+  //   };
+  //   setLoader(true);
+  //   try {
+  //     axios
+  //       .post(BASE_URL + DISCOUNT_PER_PERSON, pakect, {
+  //         headers: {
+  //           "Content-Type": "multipart/form-data",
+  //           // Authorization: `Bearer ${token}`, // Use data?.token directly
+  //         },
+  //       })
+
+  //       .then((res) => {
+  //
+  //         if (res?.data?.status == true) {
+  //           const updatedList = Object.fromEntries(
+  //             Object.entries(res.data?.report_data).map(([key, value]) => {
+  //               const updatedValue = value.map((item) => {
+  //                 return {
+  //                   ...item,
+  //                   fullName: item?.f_name + " " + item?.l_name,
+  //                 };
+  //               });
+  //               return [key, updatedValue];
+  //             })
+  //           );
+
+  //           setEmployeeFilterData(updatedList);
+  //         }
+  //       });
+  //   } catch (error) {
+  //     if (error.response.status == 401) {
+  //       // getUnAutherisedTokenMessage();
+  //       // handleCoockieExpire();
+  //     } else if (error.status == "Network Error") {
+  //       getNetworkError();
+  //     }
+  //   }
+
+  //   // console.log(newData);
+  // };
   const sortByItemName = (type, name) => {
     const newOrder = sortOrder === "asc" ? "desc" : "asc";
     const updatedList = Object.fromEntries(
