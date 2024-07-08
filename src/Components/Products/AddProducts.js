@@ -51,8 +51,9 @@ const AddProducts = () => {
   const { isLoading, isError, isEditError, isFetchLoading } = useSelector(
     (state) => state?.productsListData
   );
+
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
-  const { getUnAutherisedTokenMessage } = PasswordShow();
+  const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } = PasswordShow();
   const navigate = useNavigate();
 
   const [fetchDataLoading, setFetchDataLoading] = useState(false);
@@ -271,9 +272,9 @@ const AddProducts = () => {
             id: 1,
             varientName: dropdownData?.varientList?.length
               ? {
-                  value: dropdownData?.varientList[0]?.title,
-                  label: dropdownData?.varientList[0]?.title,
-                }
+                value: dropdownData?.varientList[0]?.title,
+                label: dropdownData?.varientList[0]?.title,
+              }
               : "",
             varientAttributeList: [],
           },
@@ -450,9 +451,9 @@ const AddProducts = () => {
           id: prev?.length + 1,
           varientName: filterOptionList?.length
             ? {
-                value: filterOptionList[0]?.title,
-                label: filterOptionList[0]?.title,
-              }
+              value: filterOptionList[0]?.title,
+              label: filterOptionList[0]?.title,
+            }
             : "",
           varientAttributeList: [],
         },
@@ -564,60 +565,98 @@ const AddProducts = () => {
   };
 
   useEffect(() => {
-    // called API
-    const formData = new FormData();
-    formData.append(
-      "merchant_id",
-      LoginGetDashBoardRecordJson?.data?.merchant_id
-    );
-    formData.append("login_type", userTypeData?.login_type);
-    formData.append("token_id", userTypeData?.token_id);
-    formData.append("token", userTypeData?.token);
+    const fetchData = async () => {
+      try {
+        // Called API
+        const formData = new FormData();
+        formData.append(
+          "merchant_id",
+          LoginGetDashBoardRecordJson?.data?.merchant_id
+        );
+        formData.append("login_type", userTypeData?.login_type);
+        formData.append("token_id", userTypeData?.token_id);
+        formData.append("token", userTypeData?.token);
 
-    dispatch(getInventorySetting(formData)).then((res) => {
-      if (!!+res?.payload) {
-        setCostPer(+res?.payload);
+        const inventoryData = new FormData();
+        inventoryData.append(
+          "merchant_id",
+          LoginGetDashBoardRecordJson?.data?.merchant_id
+        );
+
+        const inventoryList = {
+          merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+          ...userTypeData,
+        };
+
+        // Fetch inventory settings
+        try {
+          const res = await dispatch(getInventorySetting(formData));
+          if (!!+res?.payload) {
+            setCostPer(+res?.payload);
+          }
+        } catch (error) {
+          if (error.status == 401) {
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          } else if (error.status == "Network Error") {
+            getNetworkError();
+          }
+        }
+
+        // Fetch variant list
+        try {
+          const res = await dispatch(fetchVarientList(inventoryList));
+          setDropdowndata((prev) => ({
+            ...prev,
+            varientList: res?.payload?.result,
+          }));
+        } catch (err) {
+          console.error("Error fetching variant list:", err);
+        }
+
+        // Fetch category list
+        try {
+          const res = await dispatch(fetchCategoryList(inventoryData));
+          setDropdowndata((prev) => ({
+            ...prev,
+            categoryList: res?.payload?.result,
+          }));
+        } catch (err) {
+          console.error("Error fetching category list:", err);
+        }
+
+        // Fetch tax list
+        try {
+          const res = await dispatch(fetchTaxList(inventoryData));
+          setDropdowndata((prev) => ({
+            ...prev,
+            taxList: res?.payload?.result,
+          }));
+        } catch (err) {
+          console.error("Error fetching tax list:", err);
+        }
+
+        // Fetch product list
+        try {
+          const res = await dispatch(fetchProductList(inventoryData));
+          setDropdowndata((prev) => ({
+            ...prev,
+            relatedProducttList: res?.payload?.result,
+            frequentlyBroughtList: res?.payload?.result,
+          }));
+        } catch (err) {
+          console.error("Error fetching product list:", err);
+        }
+      } catch (err) {
+        console.error("Error in fetching data:", err);
       }
-    });
-
-    const inventoryData = new FormData();
-    inventoryData.append(
-      "merchant_id",
-      LoginGetDashBoardRecordJson?.data?.merchant_id
-    );
-
-    const inventoryList = {
-      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-      ...userTypeData,
     };
 
-    dispatch(fetchVarientList(inventoryList)).then((res) => {
-      setDropdowndata((prev) => ({
-        ...prev,
-        ["varientList"]: res?.payload?.result,
-      }));
-    });
-    dispatch(fetchCategoryList(inventoryData)).then((res) => {
-      setDropdowndata((prev) => ({
-        ...prev,
-        ["categoryList"]: res?.payload?.result,
-      }));
-    });
-    dispatch(fetchTaxList(inventoryData)).then((res) => {
-      setDropdowndata((prev) => ({
-        ...prev,
-        ["taxList"]: res?.payload?.result,
-      }));
-    });
-    dispatch(fetchProductList(inventoryData)).then((res) => {
-      setDropdowndata((prev) => ({
-        ...prev,
-        ["relatedProducttList"]: res?.payload?.result,
-        ["frequentlyBroughtList"]: res?.payload?.result,
-      }));
-    });
+    fetchData();
 
-    return () => dispatch(emptyProduct([]));
+    return () => {
+      dispatch(emptyProduct([]));
+    };
   }, []);
 
   const handleFilterDropdownOption = (updatedDropdownList) => {
@@ -775,17 +814,14 @@ const AddProducts = () => {
     }
     // allowed alphanumeric value in upcCode field but not allowed decimal value
     else if (name === "upcCode") {
-      fieldValue = fieldValue = value
-        // Remove extra dots and ensure only one dot exists at most
-        .replace(/[^\w.]/g, "") // Allow alphanumeric characters, digits, and dots only
-        .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
-        .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+      fieldValue = value
+        // Allow alphanumeric characters only
+        .replace(/[^a-zA-Z0-9]/g, ""); // Adjust regex to include only alphanumeric characters
 
-      let inputStr = fieldValue.replace(/[^\w]/g, "");
-      if (inputStr == "0") {
+      if (fieldValue === "0") {
         fieldValue = "0";
       } else {
-        fieldValue = inputStr.toUpperCase();
+        fieldValue = fieldValue.toUpperCase();
       }
 
       // here check UPCCode Value
@@ -1014,115 +1050,115 @@ const AddProducts = () => {
         if (i > 0) {
           return !["upcCode", "customCode"].includes(name) && item[title]
             ? {
-                ...item,
-                [currentTitle]: {
-                  ...item[currentTitle],
-                  [name]: fieldValue,
-                  price:
-                    name === "price"
-                      ? fieldValue
-                      : item[currentTitle]?.price
-                        ? item[currentTitle]?.price
-                        : "",
-                  margin: costPerItemAndPriceAmountExists()
-                    ? calculatemargin(name, item[currentTitle], fieldValue)
-                    : oldMargin([
-                          item[currentTitle]?.costPerItem,
-                          item[currentTitle]?.margin,
-                          item[currentTitle]?.price,
-                        ])
-                      ? item[currentTitle]?.margin
+              ...item,
+              [currentTitle]: {
+                ...item[currentTitle],
+                [name]: fieldValue,
+                price:
+                  name === "price"
+                    ? fieldValue
+                    : item[currentTitle]?.price
+                      ? item[currentTitle]?.price
                       : "",
-                  profit: costPerItemAndPriceAmountExists()
-                    ? calculateProfit(name, item[currentTitle], fieldValue)
-                    : oldMargin([
-                          item[currentTitle]?.costPerItem,
-                          item[currentTitle]?.margin,
-                          item[currentTitle]?.price,
-                        ])
-                      ? item[currentTitle]?.profit
+                margin: costPerItemAndPriceAmountExists()
+                  ? calculatemargin(name, item[currentTitle], fieldValue)
+                  : oldMargin([
+                    item[currentTitle]?.costPerItem,
+                    item[currentTitle]?.margin,
+                    item[currentTitle]?.price,
+                  ])
+                    ? item[currentTitle]?.margin
+                    : "",
+                profit: costPerItemAndPriceAmountExists()
+                  ? calculateProfit(name, item[currentTitle], fieldValue)
+                  : oldMargin([
+                    item[currentTitle]?.costPerItem,
+                    item[currentTitle]?.margin,
+                    item[currentTitle]?.price,
+                  ])
+                    ? item[currentTitle]?.profit
+                    : "",
+                comparePriceError:
+                  ["price", "compareAtPrice", "costPerItem"]?.includes(
+                    name
+                  ) && showError
+                    ? "Compare Price must be greater than price."
+                    : [
+                      "qty",
+                      "upcCode",
+                      "customCode",
+                      "reorderLevel",
+                      "reorderQty",
+                      "checkId",
+                      "disable",
+                      "isFoodStamble",
+                      "sellOutOfStock",
+                      "trackQuantity",
+                      "costPerItem",
+                    ]?.includes(name) &&
+                      item[currentTitle]?.comparePriceError
+                      ? item[currentTitle]?.comparePriceError
                       : "",
-                  comparePriceError:
-                    ["price", "compareAtPrice", "costPerItem"]?.includes(
-                      name
-                    ) && showError
-                      ? "Compare Price must be greater than price."
-                      : [
-                            "qty",
-                            "upcCode",
-                            "customCode",
-                            "reorderLevel",
-                            "reorderQty",
-                            "checkId",
-                            "disable",
-                            "isFoodStamble",
-                            "sellOutOfStock",
-                            "trackQuantity",
-                            "costPerItem",
-                          ]?.includes(name) &&
-                          item[currentTitle]?.comparePriceError
-                        ? item[currentTitle]?.comparePriceError
-                        : "",
-                },
-              }
+              },
+            }
             : item;
         } else if (i === 0) {
           return !["upcCode", "customCode"].includes(name) &&
             !item[currentTitle][name] &&
             pageUrl === "inventory/products/add"
             ? {
-                ...item,
-                [currentTitle]: {
-                  ...item[currentTitle],
-                  [name]: fieldValue,
-                  price:
-                    name === "price"
-                      ? fieldValue
-                      : item[currentTitle]?.price
-                        ? item[currentTitle]?.price
-                        : "",
-                  margin: costPerItemAndPriceAmountExists()
-                    ? calculatemargin(name, item[currentTitle], fieldValue)
-                    : oldMargin([
-                          item[currentTitle]?.costPerItem,
-                          item[currentTitle]?.margin,
-                          item[currentTitle]?.price,
-                        ])
-                      ? item[currentTitle]?.margin
+              ...item,
+              [currentTitle]: {
+                ...item[currentTitle],
+                [name]: fieldValue,
+                price:
+                  name === "price"
+                    ? fieldValue
+                    : item[currentTitle]?.price
+                      ? item[currentTitle]?.price
                       : "",
-                  profit: costPerItemAndPriceAmountExists()
-                    ? calculateProfit(name, item[currentTitle], fieldValue)
-                    : oldMargin([
-                          item[currentTitle]?.costPerItem,
-                          item[currentTitle]?.margin,
-                          item[currentTitle]?.price,
-                        ])
-                      ? item[currentTitle]?.profit
-                      : "",
+                margin: costPerItemAndPriceAmountExists()
+                  ? calculatemargin(name, item[currentTitle], fieldValue)
+                  : oldMargin([
+                    item[currentTitle]?.costPerItem,
+                    item[currentTitle]?.margin,
+                    item[currentTitle]?.price,
+                  ])
+                    ? item[currentTitle]?.margin
+                    : "",
+                profit: costPerItemAndPriceAmountExists()
+                  ? calculateProfit(name, item[currentTitle], fieldValue)
+                  : oldMargin([
+                    item[currentTitle]?.costPerItem,
+                    item[currentTitle]?.margin,
+                    item[currentTitle]?.price,
+                  ])
+                    ? item[currentTitle]?.profit
+                    : "",
 
-                  comparePriceError:
-                    ["price", "compareAtPrice", "costPerItem"]?.includes(
-                      name
-                    ) && showError
-                      ? "Compare Price must be greater than price."
-                      : [
-                            "qty",
-                            "upcCode",
-                            "customCode",
-                            "reorderLevel",
-                            "reorderQty",
-                            "checkId",
-                            "disable",
-                            "isFoodStamble",
-                            "sellOutOfStock",
-                            "trackQuantity",
-                            "costPerItem",
-                          ]?.includes(name) &&
-                          item[currentTitle]?.comparePriceError
-                        ? item[currentTitle]?.comparePriceError
-                        : "",
-                },
-              }
+                comparePriceError:
+                  ["price", "compareAtPrice", "costPerItem"]?.includes(
+                    name
+                  ) && showError
+                    ? "Compare Price must be greater than price."
+                    : [
+                      "qty",
+                      "upcCode",
+                      "customCode",
+                      "reorderLevel",
+                      "reorderQty",
+                      "checkId",
+                      "disable",
+                      "isFoodStamble",
+                      "sellOutOfStock",
+                      "trackQuantity",
+                      "costPerItem",
+                    ]?.includes(name) &&
+                      item[currentTitle]?.comparePriceError
+                      ? item[currentTitle]?.comparePriceError
+                      : "",
+              },
+            }
             : item;
         }
         //   else {
@@ -1184,19 +1220,16 @@ const AddProducts = () => {
       fieldValue = value;
     }
     // allowed alphanumeric value in upcCode field but not allowed decimal value
+
     else if (name === "upcCode") {
       fieldValue = value
-        // Allow alphanumeric characters, digits, dots, and underscores only
-        .replace(/[^\w._]/g, "") // Adjust regex to include underscores
-        // Remove extra dots and ensure only one dot exists at most
-        .replace(/^(\d*\.)(.*)\./, "$1$2") // Remove extra dots
-        .replace(/^(\d*\.\d*)(.*)\./, "$1$2"); // Remove extra dots after the decimal point
+        // Allow alphanumeric characters only
+        .replace(/[^a-zA-Z0-9]/g, ""); // Adjust regex to include only alphanumeric characters
 
-      let inputStr = fieldValue.replace(/[^\w_]/g, ""); // Adjust regex to include underscores
-      if (inputStr === "0") {
+      if (fieldValue === "0") {
         fieldValue = "0";
       } else {
-        fieldValue = inputStr.toUpperCase();
+        fieldValue = fieldValue.toUpperCase();
       }
     }
     // normal input value format
@@ -1320,61 +1353,61 @@ const AddProducts = () => {
 
         return Object.keys(item).includes(title)
           ? {
-              ...item,
-              [title]: {
-                ...item[title],
-                [name]: type === "checkbox" ? checked : fieldValue,
-                price:
-                  name === "price"
-                    ? fieldValue
-                    : item[title].price
-                      ? item[title].price
-                      : "",
-
-                margin: costPerItemAndPriceAmountExists()
-                  ? calculatemargin(name, item[title], fieldValue)
-                  : oldMargin([
-                        item[title].costPerItem,
-                        item[title].margin,
-                        item[title].price,
-                      ])
-                    ? item[title].margin
+            ...item,
+            [title]: {
+              ...item[title],
+              [name]: type === "checkbox" ? checked : fieldValue,
+              price:
+                name === "price"
+                  ? fieldValue
+                  : item[title].price
+                    ? item[title].price
                     : "",
 
-                profit: costPerItemAndPriceAmountExists()
-                  ? calculateProfit(name, item[title], fieldValue)
-                  : oldMargin([
-                        item[title].costPerItem,
-                        item[title].margin,
-                        item[title].price,
-                      ])
-                    ? item[title].profit
-                    : "",
-                // comparePriceError:
-                //     ((["price", "compareAtPrice", "costPerItem"].includes(name)) && showError)
-                //         ? "Compare Price must be greater than price."
-                //         : ""
-                comparePriceError:
-                  ["price", "compareAtPrice", "costPerItem"]?.includes(name) &&
+              margin: costPerItemAndPriceAmountExists()
+                ? calculatemargin(name, item[title], fieldValue)
+                : oldMargin([
+                  item[title].costPerItem,
+                  item[title].margin,
+                  item[title].price,
+                ])
+                  ? item[title].margin
+                  : "",
+
+              profit: costPerItemAndPriceAmountExists()
+                ? calculateProfit(name, item[title], fieldValue)
+                : oldMargin([
+                  item[title].costPerItem,
+                  item[title].margin,
+                  item[title].price,
+                ])
+                  ? item[title].profit
+                  : "",
+              // comparePriceError:
+              //     ((["price", "compareAtPrice", "costPerItem"].includes(name)) && showError)
+              //         ? "Compare Price must be greater than price."
+              //         : ""
+              comparePriceError:
+                ["price", "compareAtPrice", "costPerItem"]?.includes(name) &&
                   showError
-                    ? "Compare Price must be greater than price."
-                    : [
-                          "qty",
-                          "upcCode",
-                          "customCode",
-                          "reorderLevel",
-                          "reorderQty",
-                          "checkId",
-                          "disable",
-                          "isFoodStamble",
-                          "sellOutOfStock",
-                          "trackQuantity",
-                          "costPerItem",
-                        ]?.includes(name) && item[title]?.comparePriceError
-                      ? item[title]?.comparePriceError
-                      : "",
-              },
-            }
+                  ? "Compare Price must be greater than price."
+                  : [
+                    "qty",
+                    "upcCode",
+                    "customCode",
+                    "reorderLevel",
+                    "reorderQty",
+                    "checkId",
+                    "disable",
+                    "isFoodStamble",
+                    "sellOutOfStock",
+                    "trackQuantity",
+                    "costPerItem",
+                  ]?.includes(name) && item[title]?.comparePriceError
+                    ? item[title]?.comparePriceError
+                    : "",
+            },
+          }
           : item;
       });
     } else {
@@ -1430,21 +1463,21 @@ const AddProducts = () => {
               : "",
           comparePriceError:
             ["price", "compareAtPrice", "costPerItem"]?.includes(name) &&
-            showError
+              showError
               ? "Compare Price must be greater than price."
               : [
-                    "qty",
-                    "upcCode",
-                    "customCode",
-                    "reorderLevel",
-                    "reorderQty",
-                    "checkId",
-                    "disable",
-                    "isFoodStamble",
-                    "sellOutOfStock",
-                    "trackQuantity",
-                    "costPerItem",
-                  ]?.includes(name) && item?.comparePriceError
+                "qty",
+                "upcCode",
+                "customCode",
+                "reorderLevel",
+                "reorderQty",
+                "checkId",
+                "disable",
+                "isFoodStamble",
+                "sellOutOfStock",
+                "trackQuantity",
+                "costPerItem",
+              ]?.includes(name) && item?.comparePriceError
                 ? item?.comparePriceError
                 : "",
         };
@@ -1559,14 +1592,14 @@ const AddProducts = () => {
                   // here when fetching prodcut data and track and sellout was false but still showing true and check that's why using this condition
                   trackQuantity:
                     result?.trackQuantity ||
-                    pageUrl !== "inventory/products/edit"
+                      pageUrl !== "inventory/products/edit"
                       ? true
                       : false || !result?.notEditable
                         ? true
                         : false,
                   sellOutOfStock:
                     result?.sellOutOfStock ||
-                    pageUrl !== "inventory/products/edit"
+                      pageUrl !== "inventory/products/edit"
                       ? true
                       : false || !result?.notEditable
                         ? true
@@ -1608,43 +1641,43 @@ const AddProducts = () => {
     }
   }, [varientLength]);
 
-  const fetchProductDataById = () => {
+  const fetchProductDataById = async () => {
     setFetchDataLoading(true);
     const formData = new FormData();
-    formData.append(
-      "merchant_id",
-      LoginGetDashBoardRecordJson?.data?.merchant_id
-    );
+    formData.append("merchant_id", LoginGetDashBoardRecordJson?.data?.merchant_id);
     formData.append("id", productId?.id);
     formData.append("login_type", userTypeData?.login_type);
     formData.append("token_id", userTypeData?.token_id);
     formData.append("token", userTypeData?.token);
+
     if (!!productId?.id) {
-      dispatch(fetchProductsDataById(formData))
-        .then((res) => {
-          if (res?.payload?.message === "Success") {
-            setProductData(res?.payload?.data?.productdata);
-            setInventoryData(res?.payload?.data?.inventory_setting_data);
-            setOptions(res?.payload?.data?.options);
-            setVarientData(res?.payload?.data?.product_variants);
-            setIsMultipleVaient(
-              Boolean(+res?.payload?.data?.productdata?.isvarient)
-            );
-          }
-        })
-        .catch((err) => {
-          ToastifyAlert("Error while fetch product data!", "error");
+      try {
+        const res = await dispatch(fetchProductsDataById(formData));
+        if (res?.payload?.message === "Success") {
+          setProductData(res?.payload?.data?.productdata);
+          setInventoryData(res?.payload?.data?.inventory_setting_data);
+          setOptions(res?.payload?.data?.options);
+          setVarientData(res?.payload?.data?.product_variants);
+          setIsMultipleVaient(Boolean(+res?.payload?.data?.productdata?.isvarient));
+        }
+      }
+      catch (error) {
+        if (error.status == 401) {
           getUnAutherisedTokenMessage();
-        })
-        .finally(() => {
-          setFetchDataLoading(false);
-        });
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
+        }
+      }
+      finally {
+        setFetchDataLoading(false);
+      }
     } else {
       navigate("/inventory/products");
     }
   };
 
-  const fetchSingleVarientData = () => {
+  const fetchSingleVarientData = async () => {
     const data = location?.state;
     const formData = new FormData();
     setSingleVarientPageLoading(true);
@@ -1665,55 +1698,67 @@ const AddProducts = () => {
     formDataNew.append("token_id", userTypeData?.token_id);
     formDataNew.append("token", userTypeData?.token);
 
-    dispatch(getInventorySettingOnVarient(formDataNew)).then((res) => {
-      if (res?.payload?.status) {
-        setInventoryData(res?.payload?.result);
+    try {
+      const inventorySettingRes = await dispatch(getInventorySettingOnVarient(formDataNew));
+      if (inventorySettingRes?.payload?.status) {
+        setInventoryData(inventorySettingRes?.payload?.result);
       }
-    });
-
-    dispatch(fetchVarietDataById(formData))
-      .then((res) => {
-        if (res?.payload?.status) {
-          const payloadData = res?.payload?.var_data;
-          setProductData(payloadData);
-          setIsMultipleVaient(false);
-          setIsVarientEdit(true);
-          setFormValue([
-            {
-              notEditable: true,
-              costPerItem: payloadData?.costperItem || "",
-              compareAtPrice: payloadData?.compare_price || "",
-              price: payloadData?.price || "",
-              margin: payloadData?.margin || "",
-              // notEditable: payloadData?.notEditable || "",
-              productEditId: payloadData?.id || "",
-              // productEditVarientId: payloadData?.id || "",
-              comparePriceError: payloadData?.comparePriceError || "",
-              upcError: payloadData?.upcError || "",
-              profit: payloadData?.profit || "",
-              qty: payloadData?.quantity || "",
-              upcCode: payloadData?.upc || "",
-              customCode: payloadData?.custom_code || "",
-              reorderQty: payloadData?.reorder_qty || "",
-              reorderLevel: payloadData?.reorder_level || "",
-              trackQuantity: Boolean(+payloadData?.trackqnty) || false,
-              sellOutOfStock: Boolean(+payloadData?.isstockcontinue) || false,
-              checkId: Boolean(+payloadData?.is_tobacco) || false,
-              disable: Boolean(+payloadData?.disable) || false,
-              // itemForAllLinkedLocation: payloadData?.,
-              isFoodStamble: Boolean(+payloadData?.food_stampable) || false,
-            },
-          ]);
-        }
-      })
-      .catch((err) => {
-        ToastifyAlert("Error while fetch product data!", "error");
+    } catch (error) {
+      if (error.status == 401) {
         getUnAutherisedTokenMessage();
-      })
-      .finally(() => {
-        // setFetchDataLoading(false);
-        setSingleVarientPageLoading(false);
-      });
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    }
+
+    try {
+      const res = await dispatch(fetchVarietDataById(formData));
+
+      if (res?.payload?.status) {
+        const payloadData = res?.payload?.var_data;
+        setProductData(payloadData);
+        setIsMultipleVaient(false);
+        setIsVarientEdit(true);
+        setFormValue([
+          {
+            notEditable: true,
+            costPerItem: payloadData?.costperItem || "",
+            compareAtPrice: payloadData?.compare_price || "",
+            price: payloadData?.price || "",
+            margin: payloadData?.margin || "",
+            // notEditable: payloadData?.notEditable || "",
+            productEditId: payloadData?.id || "",
+            // productEditVarientId: payloadData?.id || "",
+            comparePriceError: payloadData?.comparePriceError || "",
+            upcError: payloadData?.upcError || "",
+            profit: payloadData?.profit || "",
+            qty: payloadData?.quantity || "",
+            upcCode: payloadData?.upc || "",
+            customCode: payloadData?.custom_code || "",
+            reorderQty: payloadData?.reorder_qty || "",
+            reorderLevel: payloadData?.reorder_level || "",
+            trackQuantity: Boolean(+payloadData?.trackqnty) || false,
+            sellOutOfStock: Boolean(+payloadData?.isstockcontinue) || false,
+            checkId: Boolean(+payloadData?.is_tobacco) || false,
+            disable: Boolean(+payloadData?.disable) || false,
+            // itemForAllLinkedLocation: payloadData?.,
+            isFoodStamble: Boolean(+payloadData?.food_stampable) || false,
+          },
+        ]);
+      } else {
+        ToastifyAlert("Error while fetch product data!", "error");
+      }
+    } catch (error) {
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        alert("Please check your internet connection and try again.");
+      }
+    } finally {
+      setSingleVarientPageLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -2083,21 +2128,21 @@ const AddProducts = () => {
         : "",
       optionvalue: isMultipleVarient
         ? varientLength[0]?.varientAttributeList
-            ?.map((item) => item)
-            ?.map((i) => i?.value)
-            ?.toString() ?? ""
+          ?.map((item) => item)
+          ?.map((i) => i?.value)
+          ?.toString() ?? ""
         : "",
       optionvalue1: isMultipleVarient
         ? varientLength[1]?.varientAttributeList
-            ?.map((item) => item)
-            ?.map((i) => i?.value)
-            ?.toString() ?? ""
+          ?.map((item) => item)
+          ?.map((i) => i?.value)
+          ?.toString() ?? ""
         : "",
       optionvalue2: isMultipleVarient
         ? varientLength[2]?.varientAttributeList
-            ?.map((item) => item)
-            ?.map((i) => i?.value)
-            ?.toString() ?? ""
+          ?.map((item) => item)
+          ?.map((i) => i?.value)
+          ?.toString() ?? ""
         : "",
       varvarient: isMultipleVarient
         ? varientTitle.filter(Boolean)?.toString()
@@ -2224,33 +2269,33 @@ const AddProducts = () => {
         for (let i = 0; i < uploadImage.length; i++) {
           formdata.append("files[]", uploadImage[i]);
         }
-        pageUrl === "inventory/products/edit"
-          ? dispatch(editProductData(formdata))
-              .then((res) => {
-                if (res?.payload?.data?.status) {
-                  ToastifyAlert("Updated Successfully", "success");
-                  fetchProductDataById();
-                }
-              })
-              .catch((err) => {
-                if (err) {
-                  ToastifyAlert("Error!", "error");
-                }
-                getUnAutherisedTokenMessage();
-              })
-          : dispatch(addProduct(formdata))
-              .then((res) => {
-                if (res?.payload?.data?.status) {
-                  ToastifyAlert("Added Successfully", "success");
-                  navigate("/inventory/products");
-                }
-              })
-              .catch((err) => {
-                if (err) {
-                  ToastifyAlert("Error!", "error");
-                }
-                getUnAutherisedTokenMessage();
-              });
+        try {
+          const res = await (pageUrl === "inventory/products/edit"
+            ? dispatch(editProductData(formdata))
+            : dispatch(addProduct(formdata)));
+
+          if (res?.payload?.data?.status) {
+            ToastifyAlert(
+              pageUrl === "inventory/products/edit"
+                ? "Updated Successfully"
+                : "Added Successfully",
+              "success"
+            );
+
+            if (pageUrl === "inventory/products/edit") {
+              fetchProductDataById();
+            } else {
+              navigate("/inventory/products");
+            }
+          }
+        } catch (error) {
+          if (error.status == 401) {
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          } else if (error.status == "Network Error") {
+            getNetworkError();
+          }
+        }
       }
     } catch (err) {
       let errorsList = {};
@@ -2310,22 +2355,22 @@ const AddProducts = () => {
       // check any error exist in error state and if response success and any productTitleError is exist
       if (!!response && checkFormErrorExist()) {
         setVarientLoading(true);
-        dispatch(updateEditVarient(data))
-          .then((res) => {
-            if (res?.payload?.status) {
-              ToastifyAlert("update Successfully", "success");
-              fetchSingleVarientData();
-            }
-          })
-          .catch((err) => {
-            if (err) {
-              ToastifyAlert("Error!", "error");
-            }
+        try {
+          const res = await dispatch(updateEditVarient(data));
+          if (res?.payload?.status) {
+            ToastifyAlert("Update Successfully", "success");
+            fetchSingleVarientData();
+          }
+        } catch (error) {
+          if (error.status == 401) {
             getUnAutherisedTokenMessage();
-          })
-          .finally(() => {
-            setVarientLoading(false);
-          });
+            handleCoockieExpire();
+          } else if (error.status == "Network Error") {
+            getNetworkError();
+          }
+        } finally {
+          setVarientLoading(false);
+        }
       }
     } catch (err) {
       let errorsList = {};
@@ -2384,7 +2429,7 @@ const AddProducts = () => {
 
           <div
             className="q-attributes-main-page box_shadow_div"
-            style={{ overflow: "unset" }}
+            style={{ overflow: "unset", marginBottom: "110px" }}
           >
             <div className="q-add-categories-section">
               <div className="q-add-categories-section-header">
@@ -2577,54 +2622,9 @@ const AddProducts = () => {
                     <div class="image-list">
                       {productInfo?.files?.length
                         ? productInfo?.files?.map((img, index) => {
-                            // if img type is string
+                          // if img type is string
 
-                            if (typeof img === "string") {
-                              return (
-                                <div
-                                  className="py-10 image-display"
-                                  style={{
-                                    border: "2px solid #0A64F9",
-                                    // width: "20%",
-                                    cursor: "pointer",
-                                  }}
-                                  key={index}
-                                >
-                                  <>
-                                    <span
-                                      className="delete-image-icon img-DeleteIcon"
-                                      // onClick={handleDeleteImage}
-                                      style={{
-                                        position: "absolute",
-                                        top: "7px",
-                                        right: "7px",
-                                      }}
-                                    >
-                                      <img
-                                        src={CloseIcon}
-                                        className="delete-image"
-                                        onClick={() =>
-                                          handleDeleteSelectedImage(
-                                            "string",
-                                            img
-                                          )
-                                        }
-                                      />
-                                    </span>
-                                    <img
-                                      src={
-                                        BASE_URL +
-                                        `/upload/products/${LoginGetDashBoardRecordJson?.data?.merchant_id}/` +
-                                        img
-                                      }
-                                      alt="Preview"
-                                      className="default-img"
-                                    />
-                                  </>
-                                </div>
-                              );
-                            }
-                            // if img type is object
+                          if (typeof img === "string") {
                             return (
                               <div
                                 className="py-10 image-display"
@@ -2649,19 +2649,64 @@ const AddProducts = () => {
                                       src={CloseIcon}
                                       className="delete-image"
                                       onClick={() =>
-                                        handleDeleteSelectedImage("object", img)
+                                        handleDeleteSelectedImage(
+                                          "string",
+                                          img
+                                        )
                                       }
                                     />
                                   </span>
                                   <img
-                                    src={img?.base64}
+                                    src={
+                                      BASE_URL +
+                                      `/upload/products/${LoginGetDashBoardRecordJson?.data?.merchant_id}/` +
+                                      img
+                                    }
                                     alt="Preview"
                                     className="default-img"
                                   />
                                 </>
                               </div>
                             );
-                          })
+                          }
+                          // if img type is object
+                          return (
+                            <div
+                              className="py-10 image-display"
+                              style={{
+                                border: "2px solid #0A64F9",
+                                // width: "20%",
+                                cursor: "pointer",
+                              }}
+                              key={index}
+                            >
+                              <>
+                                <span
+                                  className="delete-image-icon img-DeleteIcon"
+                                  // onClick={handleDeleteImage}
+                                  style={{
+                                    position: "absolute",
+                                    top: "7px",
+                                    right: "7px",
+                                  }}
+                                >
+                                  <img
+                                    src={CloseIcon}
+                                    className="delete-image"
+                                    onClick={() =>
+                                      handleDeleteSelectedImage("object", img)
+                                    }
+                                  />
+                                </span>
+                                <img
+                                  src={img?.base64}
+                                  alt="Preview"
+                                  className="default-img"
+                                />
+                              </>
+                            </div>
+                          );
+                        })
                         : ""}
                     </div>
                   </div>
@@ -2670,7 +2715,7 @@ const AddProducts = () => {
                   ) : (
                     ""
                   )}
-                  {}
+                  { }
                 </div>
 
                 <div className="mt_card_header">
@@ -2709,13 +2754,13 @@ const AddProducts = () => {
                   />
                 </div>
 
-                <div className="box">
+                <div className="box sticky-box fixed-bottom">
                   <div className="variant-attributes-container">
                     {/* Your existing JSX for variant attributes */}
 
-                    <div className="q-add-categories-section-middle-footer  ">
+                    <div className="q-add-categories-section-middle-footer  " style={{ padding: "0px" }}>
                       {pageUrl === "inventory/products/edit" &&
-                      productData?.isvarient === "1" ? (
+                        productData?.isvarient === "1" ? (
                         <div
                           className="q-category-bottom-header"
                           style={{ marginRight: "67px" }}
@@ -2739,40 +2784,59 @@ const AddProducts = () => {
                             className="quic-btn quic-btn-save submit-btn-click"
                             onClick={handleSubmitForm}
                             disabled={isLoading || enbaledSubmit}
-                            style={{
-                              backgroundColor:
-                                isLoading || enbaledSubmit
-                                  ? "#878787"
-                                  : "#0A64F9",
-                            }}
+                          //   style={{
+                          //     backgroundColor:
+                          //       isLoading || enbaledSubmit
+                          //         ? "#878787"
+                          //         : "#0A64F9",
+                          //   }}
+                          // >
+                          style={{backgroundColor:'#0A64F9'}}
                           >
-                            {isLoading || enbaledSubmit ? (
+                            {/* {isLoading || enbaledSubmit ? (
                               <Box className="loader-box">
                                 <CircularProgress />
                               </Box>
                             ) : (
                               "Insert"
-                            )}
+                            )} */}
+
+                            {
+                              isLoading || enbaledSubmit ?
+                                <Box className="loader-box">
+                                  <CircularProgress />
+                                </Box> : ""
+                            }
+                            Insert
                           </button>
                         ) : (
                           <button
                             className="quic-btn quic-btn-update submit-btn-click"
                             onClick={handleSubmitForm}
                             disabled={isLoading || enbaledSubmit}
-                            style={{
-                              backgroundColor:
-                                isLoading || enbaledSubmit
-                                  ? "#878787"
-                                  : "#0A64F9",
-                            }}
+                          // style={{
+                          //   backgroundColor:
+                          //     isLoading || enbaledSubmit
+                          //       ? "#878787"
+                          //       : "#0A64F9",
+                          // }}
+                          style={{backgroundColor:'#0A64F9'}}
                           >
-                            {isLoading || enbaledSubmit ? (
+                            {/* {isLoading || enbaledSubmit ? (
                               <Box className="loader-box">
                                 <CircularProgress />
                               </Box>
                             ) : (
                               "Update"
-                            )}
+                            )} */}
+
+                            {
+                              isLoading || enbaledSubmit ?
+                                <Box className="loader-box">
+                                  <CircularProgress />
+                                </Box> : ""
+                            }
+                            Update
                           </button>
                         )}
                         <button
@@ -2842,25 +2906,35 @@ const AddProducts = () => {
                   />
                 </div>
                 <div
-                  className="q-category-bottom-header varient-box"
+                  className="q-category-bottom-header varient-box "
                   style={{ marginRight: "0px" }}
+
                 >
                   <button
                     className="quic-btn quic-btn-save submit-btn-click"
                     onClick={handleUpdateVarient}
                     disabled={varientLoading || enbaledSubmit}
-                    style={{
-                      backgroundColor:
-                        varientLoading || enbaledSubmit ? "#878787" : "#0A64F9",
-                    }}
+                  // style={{
+                  //   backgroundColor:
+                  //     varientLoading || enbaledSubmit ? "#878787" : "#0A64F9",
+                  // }}
                   >
-                    {varientLoading || enbaledSubmit ? (
+
+                    {/* {varientLoading || enbaledSubmit ? (
                       <Box className="loader-box">
                         <CircularProgress />
                       </Box>
                     ) : (
                       "Update"
-                    )}
+                    )} */}
+
+                    {
+                      varientLoading || enbaledSubmit ?
+                        <Box className="loader-box">
+                          <CircularProgress />
+                        </Box> : ""
+                    }
+                    Update
                   </button>
                   <button
                     className="quic-btn quic-btn-cancle"

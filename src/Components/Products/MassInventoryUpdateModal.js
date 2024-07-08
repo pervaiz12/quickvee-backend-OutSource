@@ -9,6 +9,8 @@ import { BASE_URL, MASS_INVENTORY_UPDATE } from "../../Constants/Config";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
+import CloseIcon from "../../Assests/Dashboard/cross.svg";
+
 const myStyles = {
   width: "60%",
   position: "absolute",
@@ -139,7 +141,15 @@ const MassInventoryUpdateModal = memo(({ showModal, handleClose }) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Box className="view-category-item-modal" style={myStyles}>
+          <>
+        <Box className="view-category-item-modal mass-inventory-modal" style={myStyles}>
+        <div class="cancel-btn">
+            <img
+              src={CloseIcon}
+              className="cancel-image"
+              onClick={() => handleClose()}
+            />
+          </div>
           <div
             className="q-add-categories-section-header text-[18px]"
             style={{
@@ -152,6 +162,7 @@ const MassInventoryUpdateModal = memo(({ showModal, handleClose }) => {
               <span>Mass Inventory Update</span>
             </span>
           </div>
+          
 
           <div className="view-category-item-modal-header">
             <div
@@ -288,6 +299,7 @@ const MassInventoryUpdateModal = memo(({ showModal, handleClose }) => {
             </button>
           </div>
         </Box>
+          </>
       </Modal>
     </>
   );

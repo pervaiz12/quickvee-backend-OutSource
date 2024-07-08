@@ -678,3 +678,27 @@
   display: flex;
   align-items: center;
 }
+
+
+.mass-inventory-modal .cancel-btn{
+  position: absolute;
+  top: 20px;
+  right: 15px;
+  cursor: pointer;
+}
+
+.submit-btn-click{
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+
+.submit-btn-click .loader-box span{
+  color: #fff;
+    position: absolute;
+    left: 11%;
+    width: 19px !important;
+    height: 19px !important;
+    top: 30%;
+}

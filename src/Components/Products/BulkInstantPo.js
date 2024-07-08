@@ -250,7 +250,7 @@ const BulkInstantPo = ({
     return !hasError; // return true if no errors
   };
 
-  const handlSumbitInstantPo = () => {
+  const handlSumbitInstantPo = async () => {
     const formData = new FormData();
     let error = false;
     if (modalType !== "bulk-edit") {
@@ -305,26 +305,29 @@ const BulkInstantPo = ({
         formData.append("token_id", userTypeData?.token_id);
         formData.append("token", userTypeData?.token);
 
-        dispatch(saveSingleVarientPO(formData))
-          .then((res) => {
-            if (res?.payload?.status) {
-              setInstantPoSingle({
-                qty: "",
-                cost: "",
-                description: "",
-              });
-              ToastifyAlert("Updated Successfully", "success");
-              isVarientEdit ? fetchSingleVarientData() : fetchProductDataById();
-              handleCloseEditModal();
+        try {
+          const response = await dispatch(saveSingleVarientPO(formData));
+          
+          if (response?.payload?.status) {
+            setInstantPoSingle({
+              qty: "",
+              cost: "",
+              description: "",
+            });
+            ToastifyAlert("Updated Successfully", "success");
+            if (isVarientEdit) {
+              await fetchSingleVarientData();
+            } else {
+              await fetchProductDataById();
             }
-          })
-          .catch((err) => {
-            ToastifyAlert("Error!", "error");
-            getUnAutherisedTokenMessage();
-          })
-          .finally(() => {
-            setLoading(false);
-          });
+            handleCloseEditModal();
+          }
+        } catch (err) {
+          ToastifyAlert("Error!", "error");
+          getUnAutherisedTokenMessage();
+        } finally {
+          setLoading(false);
+        }
       }
     } else {
       if (!validateFields()) {
@@ -369,25 +372,28 @@ const BulkInstantPo = ({
         formData.append("token_id", userTypeData?.token_id);
         formData.append("token", userTypeData?.token);
 
-        dispatch(saveBulkInstantPo(formData))
-          .then((res) => {
-            if (res?.payload?.status) {
-              setInstancePoMultiple({
-                instantPoState: [],
-                description: "",
-              });
-              ToastifyAlert("Updated Successfully", "success");
-              isVarientEdit ? fetchSingleVarientData() : fetchProductDataById();
-              handleCloseEditModal();
+        try {
+          const response = await dispatch(saveBulkInstantPo(formData));
+      
+          if (response?.payload?.status) {
+            setInstancePoMultiple({
+              instantPoState: [],
+              description: "",
+            });
+            ToastifyAlert("Updated Successfully", "success");
+            if (isVarientEdit) {
+              await fetchSingleVarientData();
+            } else {
+              await fetchProductDataById();
             }
-          })
-          .catch((err) => {
-            ToastifyAlert("Error!", "error");
-            getUnAutherisedTokenMessage();
-          })
-          .finally(() => {
-            setLoading(false);
-          });
+            handleCloseEditModal();
+          }
+        } catch (err) {
+          ToastifyAlert("Error!", "error");
+          getUnAutherisedTokenMessage();
+        } finally {
+          setLoading(false);
+        }
       }
     }
   };

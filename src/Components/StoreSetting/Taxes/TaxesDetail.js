@@ -16,7 +16,8 @@ import PasswordShow from "../../../Common/passwordShow";
 
 const TaxesDetail = () => {
   const [alltaxes, setalltaxes] = useState([]);
-  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } = useAuthDetails();
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
   const AlltaxesDataState = useSelector((state) => state.taxes);
   const dispatch = useDispatch();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
@@ -29,13 +30,13 @@ const TaxesDetail = () => {
     // if (data) {
     //   dispatch(fetchtaxesData(data));
     // }
-    getfetchtaxesDataData()
+    getfetchtaxesDataData();
   }, []);
 
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
 
-  const getfetchtaxesDataData=async()=>{
-    try{
+  const getfetchtaxesDataData = async () => {
+    try {
       let data = {
         merchant_id: merchant_id,
         ...userTypeData,
@@ -43,11 +44,11 @@ const TaxesDetail = () => {
       if (data) {
         await dispatch(fetchtaxesData(data)).unwrap();
       }
-    }catch(error){
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+    } catch (error) {
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
     }
-  }
+  };
 
   useEffect(() => {
     if (!AlltaxesDataState.loading && AlltaxesDataState.taxesData) {
@@ -86,7 +87,7 @@ const TaxesDetail = () => {
     setDeleteModalOpen(true);
   };
   const confirmDeleteCategory = () => {
-    if(deleteTaxeId){
+    if (deleteTaxeId) {
       const data = {
         id: deleteTaxeId,
         merchant_id: merchant_id,
@@ -97,10 +98,9 @@ const TaxesDetail = () => {
         ToastifyAlert("Deleted Successfully", "success");
       }
     }
-    setDeleteTaxeId(null)
+    setDeleteTaxeId(null);
     setDeleteModalOpen(false);
   };
-
 
   const mycur = {
     cursor: "pointer",
@@ -108,7 +108,7 @@ const TaxesDetail = () => {
 
   return (
     <>
-    {/* <div className='box'>
+      {/* <div className='box'>
       <div className="q-category-bottom-detail-section mt-6">
         <div className="q-category-bottom-header-sticky ">
           <div className="q-category-bottom-header">
@@ -170,13 +170,13 @@ const TaxesDetail = () => {
 
       <div className="box">
         <div className="q-category-bottom-detail-section">
-            <div className="">
-              <div className="q-category-bottom-header">
-                <span>Taxes</span>
-                <AddTaxesModal />
-              </div>
-              <DraggableTable
-              tableHead={["Sort", "Title", "Percentage (%)","", ""]}
+          <div className="">
+            <div className="q-category-bottom-header">
+              <span>Taxes</span>
+              <AddTaxesModal />
+            </div>
+            <DraggableTable
+              tableHead={["Sort", "Title", "Percentage (%)", "", ""]}
               tableRow={alltaxes}
               setFunction={setalltaxes}
               editTaxesObj={true}
@@ -187,14 +187,16 @@ const TaxesDetail = () => {
               table={"taxes"}
               className="q-category-bottom-categories-single-category"
             />
-            </div>
           </div>
-          <DeleteModal 
-            headerText="Taxe"
-            open={deleteModalOpen}
-            onClose={() => {setDeleteModalOpen(false)}}
-            onConfirm={confirmDeleteCategory}
-            />
+        </div>
+        <DeleteModal
+          headerText="Taxe"
+          open={deleteModalOpen}
+          onClose={() => {
+            setDeleteModalOpen(false);
+          }}
+          onConfirm={confirmDeleteCategory}
+        />
       </div>
     </>
   );

@@ -47,31 +47,26 @@ const TaxesDetails = ({ data }) => {
   const [taxesreport, settaxesreport] = useState([]);
 
   const taxesreportDataState = useSelector((state) => state.taxesreport);
-  const{handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
 
   useEffect(() => {
     // Dispatch the action to fetch data when the component mounts
-    console.log(data.length)
-    console.log(data)
-    if(data)
-      {
-        getAllReportData()
-
-      }
-    
-    }, [dispatch, data]);
-    const getAllReportData=async()=>{
-      try{
+    console.log(data.length);
+    console.log(data);
+    if (data) {
+      getAllReportData();
+    }
+  }, [dispatch, data]);
+  const getAllReportData = async () => {
+    try {
       await dispatch(fetchtaxesreportData(data)).unwrap();
-
-    }catch(error){
-      console.log("hello rinkesh")
-      console.log(error)
-      handleCoockieExpire()
+    } catch (error) {
+      console.log("hello rinkesh");
+      console.log(error);
+      handleCoockieExpire();
       getUnAutherisedTokenMessage();
     }
-
-  }
+  };
 
   useEffect(() => {
     if (!taxesreportDataState.loading && taxesreportDataState.taxesreportData) {
@@ -139,7 +134,10 @@ const TaxesDetails = ({ data }) => {
                           <StyledTableCell>
                             {taxesreport.data2.final_arr2[key] ? (
                               <p>
-                                ${priceFormate(taxesreport.data2.final_arr2[key].toFixed(2))}
+                                $
+                                {priceFormate(
+                                  taxesreport.data2.final_arr2[key].toFixed(2)
+                                )}
                               </p>
                             ) : (
                               <p>$0.00</p>
@@ -147,7 +145,10 @@ const TaxesDetails = ({ data }) => {
                           </StyledTableCell>
                           <StyledTableCell>
                             <p>
-                              ${priceFormate(taxesreport.data1.final_arr[key].toFixed(2))}
+                              $
+                              {priceFormate(
+                                taxesreport.data1.final_arr[key].toFixed(2)
+                              )}
                             </p>
                           </StyledTableCell>
                         </StyledTableRow>

@@ -10,6 +10,7 @@ import {
 } from "../../Redux/features/Product/ProductSlice";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import useDebounce from "../../hooks/useDebouncs";
+import PasswordShow from "../../Common/passwordShow";
 
 const MainProducts = () => {
   const dispatch = useDispatch();
@@ -23,6 +24,8 @@ const MainProducts = () => {
     useState("Select listing");
 
   const [selectedListingTypeValue, setSelectedListingTypeValue] = useState("0");
+  
+  const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } = PasswordShow();
 
   const [del_picDropdownVisible, setdel_picDropdownVisible] = useState(false);
   const [transactionDropdownVisible, setTransactionDropdownVisible] =
@@ -64,7 +67,18 @@ const MainProducts = () => {
     };
 
     dispatch(emptyProduct([]));
-    dispatch(fetchProductsData(data));
+    try {
+      dispatch(fetchProductsData(data));
+      // Handle response if needed
+    } catch (error) {
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    }
+
   }, [
     dispatch,
     debouncedValue,
@@ -112,30 +126,49 @@ const MainProducts = () => {
             id: option.id,
           };
           if (type_date) {
-            dispatch(updateProductsType(type_date))
-              .then((actionResult) => {
-                const responseData = actionResult.payload;
-
-                if (responseData) {
-                  let del_pic_data = {
-                    merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-                    category_id: categoryId === "All" ? "all" : categoryId,
-                    show_status: selectedStatus,
-                    name: searchId,
-                    listing_type: selectedListingTypeValue,
-                    offset: 0,
-                    limit: 10,
-                    page: 0,
-                    ...userTypeData,
-                  };
-                  if (del_pic_data) {
-                    dispatch(fetchProductsData(del_pic_data));
+            try {
+              dispatch(updateProductsType(type_date))
+                .then((actionResult) => {
+                  const responseData = actionResult.payload;
+  
+                  if (responseData) {
+                    let del_pic_data = {
+                      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+                      category_id: categoryId === "All" ? "all" : categoryId,
+                      show_status: selectedStatus,
+                      name: searchId,
+                      listing_type: selectedListingTypeValue,
+                      offset: 0,
+                      limit: 10,
+                      page: 0,
+                      ...userTypeData,
+                    };
+                    if (del_pic_data) {
+                      try {
+                        dispatch(fetchProductsData(del_pic_data));
+                        // Handle response if needed
+                      } catch (error) {
+                        if (error.status == 401) {
+                          getUnAutherisedTokenMessage();
+                          handleCoockieExpire();
+                        } else if (error.status == "Network Error") {
+                          getNetworkError();
+                        }
+                      }
+                    }
                   }
-                }
-              })
-              .catch((error) => {
-                console.error("Error:", error);
-              });
+                })
+                .catch((error) => {
+                  console.error("Error:", error);
+                });
+            } catch (error) {
+              if (error.status == 401) {
+                getUnAutherisedTokenMessage();
+                handleCoockieExpire();
+              } else if (error.status == "Network Error") {
+                getNetworkError();
+              }
+            }
           }
           setSelectedEmployee("Select");
           setdel_picDropdownVisible(false);

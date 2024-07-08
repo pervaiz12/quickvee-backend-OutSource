@@ -35,16 +35,18 @@ const BulkVendorEdit = ({
   varientIndex,
   modalType,
   handleCloseEditModal,
-  isVarientEdit
+  isVarientEdit,
 }) => {
   const dispatch = useDispatch();
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
-  const {getUnAutherisedTokenMessage} = PasswordShow();
   const [selectedVendor, setSelectedVendor] = useState([]);
   const [fetchDataLoadingVendor, setFetchDataLoadingVendor] = useState(false);
   const [vendor, setVendor] = useState([]);
   const [loading, setLoading] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
+
+  const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
+    PasswordShow();
 
   const productId = useParams();
 
@@ -60,7 +62,7 @@ const BulkVendorEdit = ({
   const [vendorItems, setVendorItems] = useState([]);
 
   // onchange of costperItem and
-  const handleVendorCostPerItem = (e, index, vendorId) => {
+  const handleVendorCostPerItem = async (e, index, vendorId) => {
     const { name, value, type, checked } = e.target;
 
     let updateVandorItems;
@@ -73,8 +75,11 @@ const BulkVendorEdit = ({
       const formData = new FormData();
       formData.append(
         "single_product",
-        isVarientEdit ? 0:
-        !Boolean(+productData?.isvarient) && !isVarientEdit ? 1 : 0
+        isVarientEdit
+          ? 0
+          : !Boolean(+productData?.isvarient) && !isVarientEdit
+            ? 1
+            : 0
       );
       formData.append(
         "varient_id",
@@ -86,16 +91,19 @@ const BulkVendorEdit = ({
       );
       formData.append("vendor_id", vendorId);
 
-      dispatch(assignPrefferedVendor(formData))
-        .then((res) => {
-          if (res?.payload?.status) {
-            ToastifyAlert("Updated Successfully", "success");
-          }
-        })
-        .catch((err) => {
-          ToastifyAlert("Error!", "error");
+      try {
+        const res = await dispatch(assignPrefferedVendor(formData));
+        if (res?.payload?.status) {
+          ToastifyAlert("Updated Successfully", "success");
+        }
+      } catch (error) {
+        if (error.status == 401) {
           getUnAutherisedTokenMessage();
-        });
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
+        }
+      }
     } else if (type === "checkbox" && modalType === "bulk-edit") {
       updateVandorItems = vendorItems.map((item, i) => ({
         ...item,
@@ -134,7 +142,7 @@ const BulkVendorEdit = ({
   };
 
   // fetch data when modal open
-  const fetchBulkVendorData = () => {
+  const fetchBulkVendorData = async () => {
     /// called vendor api for get already assign vendor
     setFetchDataLoadingVendor(true);
     let isVarient = Boolean(+productData?.isvarient);
@@ -151,12 +159,15 @@ const BulkVendorEdit = ({
       "merchant_id",
       LoginGetDashBoardRecordJson?.data?.merchant_id
     );
-    formData.append("single_product", isVarientEdit ? 0 :  isVarient && !isVarientEdit ? 0 : 1);
+    formData.append(
+      "single_product",
+      isVarientEdit ? 0 : isVarient && !isVarientEdit ? 0 : 1
+    );
     formData.append("login_type", userTypeData?.login_type);
     formData.append("token_id", userTypeData?.token_id);
     formData.append("token", userTypeData?.token);
 
-    dispatch(getAlreadyAssignVendor(formData))
+    await dispatch(getAlreadyAssignVendor(formData))
       .then((res) => {
         if (res?.payload?.status) {
           const assign_vendor_data = res?.payload?.result?.map((item) => ({
@@ -171,14 +182,13 @@ const BulkVendorEdit = ({
       .finally(() => setFetchDataLoadingVendor(false));
   };
 
-  // fetch vendor data here...
-  useEffect(() => {
+  const getVendorsList = async () => {
     // initially fetch data from vendor API and fill the dropdown list data
     let isVarient = Boolean(+productData?.isvarient);
     const formData = new FormData();
     formData.append(
       "varient_id",
-      !isVarient 
+      !isVarient
         ? productData?.id
         : modalType === "bulk-edit" && Boolean(+productData?.isvarient)
           ? productData?.id
@@ -188,31 +198,53 @@ const BulkVendorEdit = ({
       "merchant_id",
       LoginGetDashBoardRecordJson?.data?.merchant_id
     );
-    formData.append("single_product", isVarientEdit ? 0 : isVarient && !isVarientEdit ? 0 : 1);
+    formData.append(
+      "single_product",
+      isVarientEdit ? 0 : isVarient && !isVarientEdit ? 0 : 1
+    );
     formData.append("login_type", userTypeData?.login_type);
     formData.append("token_id", userTypeData?.token_id);
     formData.append("token", userTypeData?.token);
 
     // called vendor api for dropdown vendor data
-    dispatch(fetchVendorList(formData)).then((res) => {
-      if (res?.payload?.status) {
-        setVendor(res?.payload?.result);
+    try {
+      const response = await dispatch(fetchVendorList(formData));
+
+      if (response?.payload?.status) {
+        setVendor(response?.payload?.result);
       }
-    });
+    } catch (error) {
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    }
+  };
+
+  // fetch vendor data here...
+
+  useEffect(() => {
+    getVendorsList();
 
     // called function for get already assign vendor data
     fetchBulkVendorData();
   }, []);
 
   // when add vendor button is click
-  const handleAddVendor = () => {
+  const handleAddVendor = async () => {
     setLoading(true);
     if (modalType !== "bulk-edit") {
       const formData = new FormData();
 
       formData.append(
         "single_product",
-        isVarientEdit ? 0: !Boolean(+productData?.isvarient) && !isVarientEdit ? 1 : 0
+        isVarientEdit
+          ? 0
+          : !Boolean(+productData?.isvarient) && !isVarientEdit
+            ? 1
+            : 0
       );
       formData.append(
         "varient_id",
@@ -226,42 +258,44 @@ const BulkVendorEdit = ({
         "vendor_id",
         selectedVendor?.map((item) => item?.id)?.toString()
       );
-            
-            formData.append("login_type", userTypeData?.login_type);
+
+      formData.append("login_type", userTypeData?.login_type);
       formData.append("token_id", userTypeData?.token_id);
       formData.append("token", userTypeData?.token);
-      
-      
 
-      dispatch(assignProductVendor(formData))
-        .then((res) => {
-          if (res?.payload?.status) {
-            setVendorItems((prev) => [
-              ...prev,
-              ...selectedVendor.map((vendor) => ({
-                ...vendor,
-                costPerItem: "",
-                isPreferred: false,
-              })),
-            ]);
-            const formData = new FormData();
-            formData.append(
-              "merchant_id",
-              LoginGetDashBoardRecordJson?.data?.merchant_id
-            );
-            formData.append("id", productId?.id);
+      try {
+        const res = await dispatch(assignProductVendor(formData));
+        if (res?.payload?.status) {
+          setVendorItems((prev) => [
+            ...prev,
+            ...selectedVendor.map((vendor) => ({
+              ...vendor,
+              costPerItem: "",
+              isPreferred: false,
+            })),
+          ]);
+          const formData = new FormData();
+          formData.append(
+            "merchant_id",
+            LoginGetDashBoardRecordJson?.data?.merchant_id
+          );
+          formData.append("id", productId?.id);
 
-            ToastifyAlert("Added Successfully", "success");
+          ToastifyAlert("Added Successfully", "success");
+          getVendorsList();
 
-            setSelectedVendor([]);
-          }
-        })
-        .catch((err) => {
+          setSelectedVendor([]);
+        }
+      } catch (error) {
+        if (error.status == 401) {
           getUnAutherisedTokenMessage();
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
+        }
+      } finally {
+        setLoading(false);
+      }
     } else {
       setVendorItems((prev) => [...prev, ...selectedVendor]);
       setSelectedVendor([]);
@@ -285,7 +319,11 @@ const BulkVendorEdit = ({
       const formData = new FormData();
       formData.append(
         "single_product",
-        isVarientEdit ? 0: !Boolean(+productData?.isvarient) && !isVarientEdit ? 1 : 0
+        isVarientEdit
+          ? 0
+          : !Boolean(+productData?.isvarient) && !isVarientEdit
+            ? 1
+            : 0
       );
       formData.append(
         "varient_id",
@@ -303,7 +341,7 @@ const BulkVendorEdit = ({
               (item) => +item?.id !== +vendorId
             );
             setVendorItems(filtervendorList);
-
+            getVendorsList();
             ToastifyAlert("Deleted Successfully", "success");
           }
         })
@@ -321,7 +359,7 @@ const BulkVendorEdit = ({
 
   // when click on save vendor
   // save all the selected vendor
-  const handleSaveVendorList = () => {
+  const handleSaveVendorList = async () => {
     const formData = new FormData();
     const bulkFormData = new FormData();
     setSubmitLoading(true);
@@ -329,7 +367,11 @@ const BulkVendorEdit = ({
     /// send formData payload when single varient
     formData.append(
       "single_product",
-      isVarientEdit ? 0: !Boolean(+productData?.isvarient) && !isVarientEdit ? 1 : 0
+      isVarientEdit
+        ? 0
+        : !Boolean(+productData?.isvarient) && !isVarientEdit
+          ? 1
+          : 0
     );
     formData.append(
       "variant_id",
@@ -347,7 +389,6 @@ const BulkVendorEdit = ({
     formData.append("login_type", userTypeData?.login_type);
     formData.append("token_id", userTypeData?.token_id);
     formData.append("token", userTypeData?.token);
-    
 
     /// send bulkFormData when multiple varient and bulkModal is open
     bulkFormData.append("product_id", productId?.id);
@@ -371,38 +412,33 @@ const BulkVendorEdit = ({
     bulkFormData.append("token_id", userTypeData?.token_id);
     bulkFormData.append("token", userTypeData?.token);
 
-    if (modalType === "bulk-edit") {
-      formData.append("vendor_id", vendorItems?.map((i) => i?.id).toString());
+    try {
+      if (modalType === "bulk-edit") {
+        formData.append("vendor_id", vendorItems?.map((i) => i?.id).toString());
+        await dispatch(bulkVendorAssign(bulkFormData)).then((res) => {
+          if (res?.payload?.status) {
+            getVendorsList();
+          }
+        });
+      } else {
+        await dispatch(saveVendorList(formData)).then((res) => {
+          if (res?.payload?.status) {
+            getVendorsList();
+          }
+        });
+      }
 
-      dispatch(bulkVendorAssign(bulkFormData))
-        .then((res) => {
-          if (res?.payload?.status) {
-            ToastifyAlert("Updated successfully!", "success");
-            handleCloseEditModal();
-          }
-        })
-        .catch(() => {
-          ToastifyAlert("Error!", "error");
-          getUnAutherisedTokenMessage();
-        })
-        .finally(() => {
-          setSubmitLoading(false);
-        });
-    } else {
-      dispatch(saveVendorList(formData))
-        .then((res) => {
-          if (res?.payload?.status) {
-            ToastifyAlert("Updated successfully!", "success");
-            handleCloseEditModal();
-          }
-        })
-        .catch(() => {
-          ToastifyAlert("Error!", "error");
-          getUnAutherisedTokenMessage();
-        })
-        .finally(() => {
-          setSubmitLoading(false);
-        });
+      ToastifyAlert("Updated successfully!", "success");
+      handleCloseEditModal();
+    } catch (error) {
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    } finally {
+      setSubmitLoading(false);
     }
   };
 

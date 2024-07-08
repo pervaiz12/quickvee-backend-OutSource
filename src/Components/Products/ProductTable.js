@@ -86,7 +86,8 @@ const ProductTable = ({
     GetSessionLogin,
   } = useAuthDetails();
 
-  const { getUnAutherisedTokenMessage } = PasswordShow();
+  
+  const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } = PasswordShow();
   const navigate = useNavigate();
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   const [checkApproved, setCheckApproved] = useState(false);
@@ -117,19 +118,31 @@ const ProductTable = ({
     ...userTypeData,
   };
 
+  const fetchInventoryData= async ()=>{
+    try {
+      const res = await dispatch(
+        fetchStoreSettingSetupData({
+          merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        })
+      );
+    
+      setInventoryApproval(Boolean(+res?.payload?.inventory_approval));
+    }  catch (error) {
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    }
+  }
+
   useEffect(() => {
     // if (payloadData) {
     //   console.log("2nd time calling...");
     //   dispatch(fetchProductsData(payloadData));
     // }
-
-    dispatch(
-      fetchStoreSettingSetupData({
-        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-      })
-    ).then((res) => {
-      setInventoryApproval(Boolean(+res?.payload?.inventory_approval));
-    });
+    fetchInventoryData();
   }, []);
 
   const checkStatus = (status) => {
@@ -222,7 +235,7 @@ const ProductTable = ({
     });
   };
 
-  const fetchMoreData = () => {
+  const fetchMoreData = async () => {
     let page = 0;
     if (productList.length > 0) {
       page = productList.length / 10;
@@ -264,7 +277,19 @@ const ProductTable = ({
       ...userTypeData,
     };
 
-    dispatch(fetchProductsData(data1));
+    try {
+      await dispatch(fetchProductsData(data1));
+      // Handle response if needed
+    }
+    catch (error) {
+             if (error.status == 401) {
+               getUnAutherisedTokenMessage();
+               handleCoockieExpire();
+             } else if (error.status == "Network Error") {
+               getNetworkError();
+             }
+           }
+   
 
     // setTimeout(() => {
     //   setItems(items.concat(Array.from({ length: 15 })));
@@ -291,20 +316,24 @@ const ProductTable = ({
       LoginGetDashBoardRecordJson?.data?.merchant_id
     );
 
-    dispatch(deleteProductAPI(formData))
-      .then(async (res) => {
-        if (res?.payload?.status) {
-          ToastifyAlert("Deleted Successfully", "success");
-          clearTimeout(timer);
-          timer = setTimeout(() => {
-            window.location.reload();
-          }, 600);
-        }
-      })
-      .catch(() => {
-        ToastifyAlert("Error!", "error");
+    try {
+      const res = await dispatch(deleteProductAPI(formData));
+      if (res?.payload?.status) {
+        ToastifyAlert("Deleted Successfully", "success");
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          window.location.reload();
+        }, 600);
+      }
+    }  catch (error) {
+      if (error.status == 401) {
         getUnAutherisedTokenMessage();
-      });
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    }
+    
   };
 
   const handleNavigate = (id, varientName, productData) => {

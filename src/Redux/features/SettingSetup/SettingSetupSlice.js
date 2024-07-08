@@ -11,7 +11,7 @@ const initialState = {
 }
 
 // Generate pening , fulfilled and rejected action type
-export const fetchStoreSettingSetupData = createAsyncThunk('SettingSetupSlice/fetchStoreSettingSetupData.', async (data) => {
+export const fetchStoreSettingSetupData = createAsyncThunk('SettingSetupSlice/fetchStoreSettingSetupData.', async (data, {rejectWithValue}) => {
     try {
         const response = await axios.post(BASE_URL + GET_STORE_SETUP_LIST, data, { headers: { "Content-Type": "multipart/form-data" } })
         // console.log(response)
@@ -19,8 +19,14 @@ export const fetchStoreSettingSetupData = createAsyncThunk('SettingSetupSlice/fe
            return response.data.result
         }
     } catch (error) {
-        throw new Error(error.response.data.message);
-    }
+        // throw new Error("Internal Server Error");
+        const customError = {
+          message: error.message,
+          status: error.response ? error.response.status : "Network Error",
+          data: error.response ? error.response.data : null,
+        };
+        return rejectWithValue(customError);
+      }
 })
 
 
