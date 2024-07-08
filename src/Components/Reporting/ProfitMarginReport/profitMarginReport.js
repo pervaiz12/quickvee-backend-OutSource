@@ -9,7 +9,7 @@ export default function ProfitMarginReport() {
   const {
     handleChangeInventory,
     inventory,
-    handleBlur,
+    // handleBlur,
     category,
     handleOptionClick,
     selectedCategory,
@@ -20,7 +20,6 @@ export default function ProfitMarginReport() {
     loader,
     setsearchProduct,
   } = ProfitMarginReportLogic();
-
 
   const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
 
@@ -51,9 +50,11 @@ export default function ProfitMarginReport() {
               <div className="q_details_header ">Filter by</div>
             </Grid>
           </Grid> */}
-           <Grid container sx={{p:2.5}}>
+          <Grid container sx={{ p: 2.5 }}>
             <Grid item xs={12}>
-            <h1 style={{marginBottom:0}} className="heading ">Profit Margin Report</h1>
+              <h1 style={{ marginBottom: 0 }} className="heading ">
+                Profit Margin Report
+              </h1>
             </Grid>
           </Grid>
           <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
@@ -75,7 +76,7 @@ export default function ProfitMarginReport() {
                 placeholder="Search Product"
                 onChangeFun={handleChangeInventory}
                 required={"required"}
-                onBlurFunction={() => handleBlur("product")}
+                // onBlurFunction={() => handleBlur("product")}
               />
             </Grid>
             {/* <Grid item xs={12} sm={6} md={4}>

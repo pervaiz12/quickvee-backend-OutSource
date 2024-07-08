@@ -8,7 +8,7 @@ export default function InventoryList() {
   const {
     handleChangeInventory,
     inventory,
-    handleBlur,
+    // handleBlur,
     category,
     handleOptionClick,
     selectedCategory,
@@ -17,12 +17,12 @@ export default function InventoryList() {
     handleLoadMore,
     laodMoreData,
     loader,
-    sortByItemName
+    sortByItemName,
   } = InventoryLogic();
   return (
     <>
       <Grid container className="box_shadow_div">
-        <Grid item xs={12} >
+        <Grid item xs={12}>
           {/* <Grid container sx={{ padding: 2.5 }}>
             <Grid item xs={12}>
               <div className="q_details_header">
@@ -35,15 +35,15 @@ export default function InventoryList() {
               <div className="q_details_header ">Filter by</div>
             </Grid>
           </Grid> */}
-          <Grid container sx={{p:2.5}}>
+          <Grid container sx={{ p: 2.5 }}>
             <Grid item xs={12}>
-            <h1 style={{marginBottom:0}} className="heading ">Inventory List Report</h1>
+              <h1 style={{ marginBottom: 0 }} className="heading ">
+                Inventory List Report
+              </h1>
             </Grid>
           </Grid>
-          <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }} >
-            
+          <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
             <Grid item xs={12} sm={6} md={4}>
-              
               <label
                 className="q-details-page-label"
                 htmlFor="orderSourceFilter"
@@ -55,14 +55,14 @@ export default function InventoryList() {
                       <label htmlFor="email">Email Address</label>
                     </div> */}
               <BasicTextFields
-              sx={{pt:0.5}}
+                sx={{ pt: 0.5 }}
                 type={"text"}
                 name="product"
                 value={inventory}
                 placeholder="Search Product"
                 onChangeFun={handleChangeInventory}
                 required={"required"}
-                onBlurFunction={() => handleBlur("product")}
+                // onBlurFunction={() => handleBlur("product")}
               />
             </Grid>
             {/* <Grid item xs={12} sm={6} md={4}>
@@ -82,7 +82,7 @@ export default function InventoryList() {
                 Category
               </label>
               <SelectDropDown
-               sx={{pt:0.5}}
+                sx={{ pt: 0.5 }}
                 heading={"All"}
                 listItem={category}
                 title={"title"}
