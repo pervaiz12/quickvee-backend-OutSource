@@ -60,7 +60,7 @@ export const fetchAllProducts = createAsyncThunk(
 // Generate pening , fulfilled and rejected action type
 export const fetchProductsData = createAsyncThunk(
   "products/fetchProductsData",
-  async (data, {rejectWithValue}) => {
+  async (data, { rejectWithValue }) => {
     try {
       const { token, ...dataNew } = data;
       const response = await axios.post(BASE_URL + PRODUCTS_LIST, dataNew, {
@@ -88,7 +88,7 @@ export const fetchProductsData = createAsyncThunk(
 
 export const updateProductsType = createAsyncThunk(
   "products/updateProductsType",
-  async (data, {rejectWithValue}) => {
+  async (data, { rejectWithValue }) => {
     try {
       const response = await axios.post(BASE_URL + UPDATE_TYPE, data, {
         headers: { "Content-Type": "multipart/form-data" },
@@ -110,7 +110,7 @@ export const updateProductsType = createAsyncThunk(
 );
 export const getInventorySetting = createAsyncThunk(
   "products/getInventorySetting",
-  async (payload, {rejectWithValue}) => {
+  async (payload, { rejectWithValue }) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
     try {
@@ -140,7 +140,7 @@ export const getInventorySetting = createAsyncThunk(
 
 export const getInventorySettingOnVarient = createAsyncThunk(
   "products/getInventorySettingOnVarient",
-  async (payload, {rejectWithValue}) => {
+  async (payload, { rejectWithValue }) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
     try {
@@ -170,7 +170,7 @@ export const getInventorySettingOnVarient = createAsyncThunk(
 
 export const editProductData = createAsyncThunk(
   "products/editProduct",
-  async (payload, {rejectWithValue}) => {
+  async (payload, { rejectWithValue }) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
     try {
@@ -187,7 +187,7 @@ export const editProductData = createAsyncThunk(
 
       return response;
     } catch (error) {
-      console.log('error api', error);
+      console.log("error api", error);
       // throw new Error("Internal Server Error");
       const customError = {
         message: error.message,
@@ -201,7 +201,7 @@ export const editProductData = createAsyncThunk(
 
 export const addProduct = createAsyncThunk(
   "products/addProduct",
-  async (payload, {rejectWithValue}) => {
+  async (payload, { rejectWithValue }) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
     try {
@@ -298,7 +298,7 @@ export const fetchProductList = createAsyncThunk(
 
 export const fetchProductsDataById = createAsyncThunk(
   "products/fetchProductData",
-  async (payload, {rejectWithValue}) => {
+  async (payload, { rejectWithValue }) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
 
@@ -314,11 +314,10 @@ export const fetchProductsDataById = createAsyncThunk(
         }
       );
       return response?.data;
-    }
-    //  catch (error) {
-    //   throw new Error(error.response.data.message);
-    // }
-    catch (error) {
+    } catch (error) {
+      //  catch (error) {
+      //   throw new Error(error.response.data.message);
+      // }
       const customError = {
         message: error.message,
         status: error.response ? error.response.status : "Network Error",
@@ -354,7 +353,7 @@ export const checkProductTitle = createAsyncThunk(
 
 export const fetchVendorList = createAsyncThunk(
   "products/fetchVendorList",
-  async (payload, {rejectWithValue}) => {
+  async (payload, { rejectWithValue }) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
     try {
@@ -398,7 +397,7 @@ export const filterVendorAPI = createAsyncThunk(
 
 export const assignProductVendor = createAsyncThunk(
   "products/assignProductVendor",
-  async (payload, {rejectWithValue}) => {
+  async (payload, { rejectWithValue }) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
 
@@ -428,7 +427,7 @@ export const assignProductVendor = createAsyncThunk(
 
 export const fetchSalesHistory = createAsyncThunk(
   "products/fetchSalesHistory",
-  async (payload, {rejectWithValue}) => {
+  async (payload, { rejectWithValue }) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
     try {
@@ -443,7 +442,7 @@ export const fetchSalesHistory = createAsyncThunk(
         }
       );
       return response?.data;
-    }catch (error) {
+    } catch (error) {
       // throw new Error("Internal Server Error");
       const customError = {
         message: error.message,
@@ -457,7 +456,7 @@ export const fetchSalesHistory = createAsyncThunk(
 
 export const assignPrefferedVendor = createAsyncThunk(
   "products/assignPrefferedVendor",
-  async (payload, {rejectWithValue}) => {
+  async (payload, { rejectWithValue }) => {
     try {
       const response = await axios.post(
         BASE_URL + "Productapi/assign_preferred_vendor",
@@ -493,7 +492,7 @@ export const deleteProductVendor = createAsyncThunk(
 
 export const saveVendorList = createAsyncThunk(
   "products/saveVendorList",
-  async (payload, {rejectWithValue}) => {
+  async (payload, { rejectWithValue }) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
 
@@ -547,7 +546,7 @@ export const getAlreadyAssignVendor = createAsyncThunk(
 
 export const bulkVendorAssign = createAsyncThunk(
   "products/bulkVendorAssign",
-  async (payload, {rejectWithValue}) => {
+  async (payload, { rejectWithValue }) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
     try {
@@ -576,7 +575,7 @@ export const bulkVendorAssign = createAsyncThunk(
 
 export const saveSingleVarientPO = createAsyncThunk(
   "products/saveSingleVarientPO",
-  async (payload, {rejectWithValue}) => {
+  async (payload, { rejectWithValue }) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
 
@@ -674,7 +673,7 @@ export const changeShowStatusProduct = createAsyncThunk(
 
 export const deleteProductAPI = createAsyncThunk(
   "products/deleteProductAPI",
-  async (payload, {rejectWithValue}) => {
+  async (payload, { rejectWithValue }) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
     try {
@@ -771,7 +770,7 @@ export const checkUpcOnVarientEdit = createAsyncThunk(
 
 export const updateEditVarient = createAsyncThunk(
   "products/updateEditVarient",
-  async (payload, {rejectWithValue}) => {
+  async (payload, { rejectWithValue }) => {
     // const token = payload.get('token'); // Extract the token from FormData
     // payload.delete('token');
     const { token, ...newData } = payload;
@@ -787,7 +786,7 @@ export const updateEditVarient = createAsyncThunk(
         }
       );
       return response?.data;
-    }  catch (error) {
+    } catch (error) {
       // throw new Error("Internal Server Error");
       const customError = {
         message: error.message,
@@ -801,7 +800,7 @@ export const updateEditVarient = createAsyncThunk(
 
 export const fetchVarietDataById = createAsyncThunk(
   "products/fetchVarietDataById",
-  async (payload, {rejectWithValue}) => {
+  async (payload, { rejectWithValue }) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
 
@@ -817,7 +816,7 @@ export const fetchVarietDataById = createAsyncThunk(
         }
       );
       return response?.data;
-    }  catch (error) {
+    } catch (error) {
       // throw new Error("Internal Server Error");
       const customError = {
         message: error.message,
