@@ -44,6 +44,7 @@ const BulkVendorEdit = ({
   const [vendor, setVendor] = useState([]);
   const [loading, setLoading] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
+  console.log("selectedVendor", selectedVendor, vendor);
 
   const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
     PasswordShow();
@@ -60,6 +61,7 @@ const BulkVendorEdit = ({
   };
 
   const [vendorItems, setVendorItems] = useState([]);
+  console.log("vendorItems", vendorItems);
 
   // onchange of costperItem and
   const handleVendorCostPerItem = async (e, index, vendorId) => {
@@ -303,6 +305,23 @@ const BulkVendorEdit = ({
     }
   };
 
+  const filterVensorListInBulk = () => {
+    let filterVendorList;
+    vendorItems?.map((p) => {
+      filterVendorList = vendor?.filter((o) => {
+        return o.id !== p?.id;
+      });
+    });
+    console.log("filterVendorList", filterVendorList);
+    setVendor(filterVendorList);
+  };
+
+  useEffect(() => {
+    if (modalType === "bulk-edit") {
+      filterVensorListInBulk();
+    }
+  }, [vendorItems]);
+
   // when click on delete icon // delete vendor by Id
   const handleDeleteVendor = (vendorId) => {
     /// show prompt before delete the item
@@ -354,6 +373,7 @@ const BulkVendorEdit = ({
         (item) => +item?.id !== +vendorId
       );
       setVendorItems(filtervendorList);
+      getVendorsList();
     }
   };
 

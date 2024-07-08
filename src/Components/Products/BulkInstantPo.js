@@ -307,7 +307,7 @@ const BulkInstantPo = ({
 
         try {
           const response = await dispatch(saveSingleVarientPO(formData));
-          
+
           if (response?.payload?.status) {
             setInstantPoSingle({
               qty: "",
@@ -374,7 +374,7 @@ const BulkInstantPo = ({
 
         try {
           const response = await dispatch(saveBulkInstantPo(formData));
-      
+
           if (response?.payload?.status) {
             setInstancePoMultiple({
               instantPoState: [],
@@ -437,7 +437,9 @@ const BulkInstantPo = ({
                                             handleChangeMultiplePo(e, index)
                                           }
                                           onBlur={(e) => handleBlur(e, index)}
-                                          maxLength={9}
+                                          maxLength={
+                                            inp?.name === "qty" ? 6 : 9
+                                          }
                                         />
                                       </div>
                                       {inp?.name === "qty" &&
@@ -522,7 +524,9 @@ const BulkInstantPo = ({
                                             handleChangeSinglePo(e, index)
                                           }
                                           onBlur={(e) => handleBlur(e)}
-                                          maxLength={9}
+                                          maxLength={
+                                            inp?.name === "qty" ? 6 : 9
+                                          }
                                         />
                                         {inp?.name === "qty" &&
                                         !!required?.qty ? (
