@@ -971,7 +971,7 @@ const ModifyPurchaseOrder = () => {
                         <StyledTableCell>
                           <TextField
                             id="outlined-basic"
-                            value={product.newPrice}
+                            value={parseFloat(product.newPrice).toFixed(2)}
                             inputProps={{ type: "number" }}
                             onChange={(e) => {
                               if (e.target.value.length <= 9) {
