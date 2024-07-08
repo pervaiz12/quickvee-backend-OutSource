@@ -15,6 +15,8 @@ import TableRow from "@mui/material/TableRow";
 import { priceFormate } from "../../../hooks/priceFormate";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import PasswordShow from "../../../Common/passwordShow";
+
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -47,6 +49,7 @@ const ReorderInventoryList = (props) => {
   // console.log(props)
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const dispatch = useDispatch();
   const [allReorderInventoryData, setallReorderInventoryData] = useState([]);
   const AllReorderInventoryDataState = useSelector(
@@ -54,15 +57,25 @@ const ReorderInventoryList = (props) => {
   );
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
-    let data = {
-      merchant_id,
-      ...userTypeData,
-      // merchant_id: "JOS0948CA",
-    };
-    if (data) {
-      dispatch(fetchReorderInventoryData(data));
-    }
+    getReorderInventoryData();
   }, []);
+  const getReorderInventoryData = async () => {
+    try {
+      let data = {
+        merchant_id,
+        ...userTypeData,
+        // merchant_id: "JOS0948CA",
+      };
+      if (data) {
+        await dispatch(fetchReorderInventoryData(data)).unwrap();
+      }
+    } catch (error) {
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
+    }
+  };
 
   useEffect(() => {
     if (

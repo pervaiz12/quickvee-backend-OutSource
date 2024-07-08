@@ -13,6 +13,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
 import { priceFormate } from "../../../hooks/priceFormate";
+import PasswordShow from "../../../Common/passwordShow";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -45,6 +46,7 @@ const Employeedetails = (props) => {
   // console.log(props);
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const dispatch = useDispatch();
   const [allEmpWorkingHrsData, setallEmpWorkingHrsData] = useState("");
   const AllEmpWorkingHrsDataState = useSelector(
@@ -54,19 +56,30 @@ const Employeedetails = (props) => {
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   let merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
   useEffect(() => {
-    if (props && props.selectedDateRange) {
-      let data = {
-        merchant_id,
-        start_date: props.selectedDateRange.start_date,
-        end_date: props.selectedDateRange.end_date,
-        employee_id: props.EmpId,
-        ...userTypeData,
-      };
-      if (data) {
-        dispatch(fetchemployeewrkhrs(data));
+    getEmployeewrkhrs();
+  }, [props]);
+  const getEmployeewrkhrs = async () => {
+    try {
+      if (props && props.selectedDateRange) {
+        let data = {
+          merchant_id,
+          start_date: props.selectedDateRange.start_date,
+          end_date: props.selectedDateRange.end_date,
+          employee_id: props.EmpId,
+          ...userTypeData,
+        };
+        if (data) {
+          await dispatch(fetchemployeewrkhrs(data)).unwrap();
+        }
+      }
+    } catch (error) {
+      console.log(error);
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
       }
     }
-  }, [props]);
+  };
 
   useEffect(() => {
     if (
@@ -89,7 +102,6 @@ const Employeedetails = (props) => {
     return hours;
   };
 
-
   const calTotalWork = (totalworkdata) => {
     if (!Array.isArray(totalworkdata)) {
       return 0;
@@ -97,19 +109,19 @@ const Employeedetails = (props) => {
     return totalworkdata.reduce((total, workData) => {
       const parsedSeconds = parseFloat(workData.total_seconds_worked);
       const validSeconds = isNaN(parsedSeconds) ? 0 : parsedSeconds;
-      const totalNew= total + convertSecondsToHours(validSeconds);
-      
+      const totalNew = total + convertSecondsToHours(validSeconds);
+
       return totalNew;
-    }, 0); 
+    }, 0);
   };
-  
 
   const calTotalBreak = (totalbreakdata) => {
     if (!Array.isArray(totalbreakdata)) {
       return 0;
     }
     return totalbreakdata.reduce(
-      (total, workData) => total + convertSecondsToHours(parseFloat(workData.total_seconds_break)),
+      (total, workData) =>
+        total + convertSecondsToHours(parseFloat(workData.total_seconds_break)),
       0
     );
   };
@@ -117,7 +129,7 @@ const Employeedetails = (props) => {
     if (!Array.isArray(totalactualworkdata)) {
       return 0;
     }
-    
+
     return totalactualworkdata.reduce((total, workData) => {
       const parsedSeconds = parseFloat(workData.effective_seconds_worked);
       const validSeconds = isNaN(parsedSeconds) ? 0 : parsedSeconds;
@@ -186,23 +198,41 @@ const Employeedetails = (props) => {
                                   </StyledTableCell>
                                   <StyledTableCell>
                                     <p>
-                                      {priceFormate((parseFloat(
-                                        convertSecondsToHours(workData.total_seconds_worked)
-                                      ) || 0).toFixed(2))}
+                                      {priceFormate(
+                                        (
+                                          parseFloat(
+                                            convertSecondsToHours(
+                                              workData.total_seconds_worked
+                                            )
+                                          ) || 0
+                                        ).toFixed(2)
+                                      )}
                                     </p>
                                   </StyledTableCell>
                                   <StyledTableCell>
                                     <p>
-                                      {priceFormate((parseFloat(
-                                        convertSecondsToHours(workData.total_seconds_break)
-                                      ) || 0).toFixed(2))}
+                                      {priceFormate(
+                                        (
+                                          parseFloat(
+                                            convertSecondsToHours(
+                                              workData.total_seconds_break
+                                            )
+                                          ) || 0
+                                        ).toFixed(2)
+                                      )}
                                     </p>
                                   </StyledTableCell>
                                   <StyledTableCell>
                                     <p>
-                                      {priceFormate((parseFloat(
-                                        convertSecondsToHours(workData.effective_seconds_worked)
-                                      ) || 0).toFixed(2))}
+                                      {priceFormate(
+                                        (
+                                          parseFloat(
+                                            convertSecondsToHours(
+                                              workData.effective_seconds_worked
+                                            )
+                                          ) || 0
+                                        ).toFixed(2)
+                                      )}
                                     </p>
                                   </StyledTableCell>
                                 </StyledTableRow>
@@ -228,7 +258,11 @@ const Employeedetails = (props) => {
                                   color: "#0A64F9",
                                 }}
                               >
-                                {priceFormate(calTotalWork(allEmpWorkingHrsData[employeeName]).toFixed(2))} 
+                                {priceFormate(
+                                  calTotalWork(
+                                    allEmpWorkingHrsData[employeeName]
+                                  ).toFixed(2)
+                                )}
                               </p>
                             </StyledTableCell>
                             <StyledTableCell>
@@ -237,11 +271,13 @@ const Employeedetails = (props) => {
                                   color: "#0A64F9",
                                 }}
                               >
-                                {priceFormate(parseFloat(
-                                  calTotalBreak(
-                                    allEmpWorkingHrsData[employeeName]
-                                  )
-                                ).toFixed(2))}
+                                {priceFormate(
+                                  parseFloat(
+                                    calTotalBreak(
+                                      allEmpWorkingHrsData[employeeName]
+                                    )
+                                  ).toFixed(2)
+                                )}
                               </p>
                             </StyledTableCell>
                             <StyledTableCell>
@@ -250,11 +286,13 @@ const Employeedetails = (props) => {
                                   color: "#0A64F9",
                                 }}
                               >
-                                {priceFormate(parseFloat(
-                                  calTotalActualWork(
-                                    allEmpWorkingHrsData[employeeName]
-                                  )
-                                ).toFixed(2))}
+                                {priceFormate(
+                                  parseFloat(
+                                    calTotalActualWork(
+                                      allEmpWorkingHrsData[employeeName]
+                                    )
+                                  ).toFixed(2)
+                                )}
                               </p>
                             </StyledTableCell>
                           </StyledTableRow>

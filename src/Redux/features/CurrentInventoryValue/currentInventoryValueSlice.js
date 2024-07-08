@@ -15,7 +15,7 @@ const initialState = {
 // Generate pening , fulfilled and rejected action type
 export const fetchcurrentInventoryreportData = createAsyncThunk(
   "currentInventoryreport/fetchcurrentInventoryreportData.",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     try {
       const { token, ...dataNew } = data;
 
@@ -38,7 +38,13 @@ export const fetchcurrentInventoryreportData = createAsyncThunk(
         return response.data;
       }
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error(error.response.data.message);
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
