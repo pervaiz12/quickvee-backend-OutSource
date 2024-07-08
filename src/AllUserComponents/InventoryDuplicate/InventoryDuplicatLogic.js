@@ -104,11 +104,11 @@ const InventoryExportLogic = () => {
               setsubmitmessage(response.data);
             }
           } catch (error) {
-            // console.log('33 catch err');
+            if(error.response.status === 401){
+              handleCoockieExpire();
+              getUnAutherisedTokenMessage();
+            }
             ToastifyAlert("Error!", "error");
-            handleCoockieExpire()
-            getUnAutherisedTokenMessage()
-            return new Error(error);
           }
     setLoader(false);
   }
@@ -197,10 +197,11 @@ const InventoryExportLogic = () => {
         setsubmitmessage(response.data);
       }
     } catch (error) {
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      if(error.response.status === 401){
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
       ToastifyAlert("Error!", "error");
-      // console.log('33 catch err');
       return new Error(error);
     }
     setLoaderSetting(false);

@@ -120,7 +120,10 @@ const ProductDuplicateStore = () => {
               setselectedProducts([]);
             }
           } catch (error) {
-            console.error("API Error:", error);
+            if(error.response.status === 401){
+              handleCoockieExpire();
+              getUnAutherisedTokenMessage();
+            }
           }
         }
         if (value == "-- Select Store --") {
@@ -206,8 +209,10 @@ const ProductDuplicateStore = () => {
         await dispatch(fetchMerchantsList(data)).unwrap();
       }
     }catch(error){
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      if(error.status === 401){
+        handleCoockieExpire()
+        getUnAutherisedTokenMessage()
+      }
     }
   }
 
@@ -298,8 +303,10 @@ const ProductDuplicateStore = () => {
         initializeCaptcha(ctx); 
     } catch (error) {
       // console.log('33 catch err');
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      if(error.response.status === 401){
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
       ToastifyAlert("Error!", "error");
       return new Error(error);
     }

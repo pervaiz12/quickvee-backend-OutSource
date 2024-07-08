@@ -113,7 +113,10 @@ const CateDuplicateStore = () => {
               setSelectedCategories([]);
             }
           } catch (error) {
-            console.error("API Error:", error);
+            if(error.response.status === 401){
+              handleCoockieExpire();
+              getUnAutherisedTokenMessage();
+            }
           }
         }
         if (value == "-- Select Store --") {
@@ -196,8 +199,10 @@ const CateDuplicateStore = () => {
         await dispatch(fetchMerchantsList(data)).unwrap();
       }
     }catch(error){
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      if(error.status === 401){
+        handleCoockieExpire()
+        getUnAutherisedTokenMessage()
+      }
     }
   }
 
@@ -274,10 +279,11 @@ const CateDuplicateStore = () => {
         const ctx = canvas.getContext('2d'); 
         initializeCaptcha(ctx); 
     } catch (error) {
-      // console.log('33 catch err');
+      if(error.response.status === 401){
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
       ToastifyAlert("Error!", "error");
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
       return new Error(error);
     }
   }

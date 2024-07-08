@@ -83,8 +83,10 @@ const StoreCateUser = () => {
         await dispatch(fetchMerchantsList(data)).unwrap();
       }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if(error.status === 401){
+        handleCoockieExpire()
+        getUnAutherisedTokenMessage()
+      }
     }
   };
 
