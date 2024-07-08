@@ -255,9 +255,6 @@ const FilterProduct = ({
         {...{
           showModal,
           handleClose,
-          handleCategoryChange,
-          searchId,
-          selectedStatus,
         }}
       />
     </>

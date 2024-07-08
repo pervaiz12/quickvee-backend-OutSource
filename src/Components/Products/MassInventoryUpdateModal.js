@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { Box, CircularProgress, Modal } from "@mui/material";
 
@@ -18,7 +18,7 @@ const myStyles = {
   fontFamily: "'CircularSTDMedium', sans-serif !important",
 };
 
-const MassInventoryUpdateModal = ({ showModal, handleClose }) => {
+const MassInventoryUpdateModal = memo(({ showModal, handleClose }) => {
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const [categoryId, setCategoryId] = useState("all");
   const [loaders, setLoaders] = useState({
@@ -34,7 +34,7 @@ const MassInventoryUpdateModal = ({ showModal, handleClose }) => {
     foodStampable: false,
   });
 
-  const handleCategoryChange = (catId) => {
+  const handleCategory = (catId) => {
     setCategoryId(catId);
   };
 
@@ -162,7 +162,7 @@ const MassInventoryUpdateModal = ({ showModal, handleClose }) => {
                 <Grid item xs={12}>
                   <CategoryListDropDown
                     type="category"
-                    onCategoryChange={handleCategoryChange}
+                    onCategoryChange={handleCategory}
                     listFor={"massInventoryUpdate"}
                   />
                 </Grid>
@@ -291,6 +291,6 @@ const MassInventoryUpdateModal = ({ showModal, handleClose }) => {
       </Modal>
     </>
   );
-};
+});
 
 export default MassInventoryUpdateModal;
