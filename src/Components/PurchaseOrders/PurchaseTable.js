@@ -26,6 +26,7 @@ import Pagination from "../../AllUserComponents/Users/UnverifeDetails/Pagination
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import { priceFormate } from "../../hooks/priceFormate";
 import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
+import PasswordShow from "./../../Common/passwordShow";
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -49,6 +50,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const PurchaseTable = ({ seVisible }) => {
   // for list Purchase Order
   const navigate = useNavigate();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+
   const [searchId, setSearchId] = useState(""); // State to track search ID
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState(1);
@@ -62,26 +65,50 @@ const PurchaseTable = ({ seVisible }) => {
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
 
   // getting Purchase Order data
+  const getPurchaseOrderData = async () => {
+    try {
+      const data = {
+        ...userTypeData,
+        perpage: rowsPerPage,
+        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        page: currentPage,
+        search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+      };
+      await dispatch(fetchpurchaseData(data)).unwrap();
+    } catch (e) {
+      console.log("e: ", e);
+      if (e.status == 401) {
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
+    }
+  };
+
   useEffect(() => {
-    const data = {
-      ...userTypeData,
-      perpage: rowsPerPage,
-      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-      page: currentPage,
-      search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
-    };
-    dispatch(fetchpurchaseData(data));
+    getPurchaseOrderData();
   }, [currentPage, debouncedValue, rowsPerPage]);
 
   // only when user searches to update the total count
+  const getPurchaseOrderDataCount = async () => {
+    try {
+      await dispatch(
+        getPurchaseOrderCount({
+          ...userTypeData,
+          merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+          search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+        })
+      ).unwrap();
+    } catch (e) {
+      console.log("e: ", e);
+      if (e.status == 401) {
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
+    }
+  };
+
   useEffect(() => {
-    dispatch(
-      getPurchaseOrderCount({
-        ...userTypeData,
-        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-        search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
-      })
-    );
+    getPurchaseOrderDataCount();
   }, [debouncedValue]);
 
   // on load setting count of Verified Merchant list & on every change...
@@ -143,6 +170,7 @@ const PurchaseTable = ({ seVisible }) => {
     setSearchId(value);
     setCurrentPage(1);
   };
+
   const tableRow = [
     { type: "id", name: "po_number", label: "Order#" },
     { type: "str", name: "status", label: "Status" },
@@ -154,6 +182,7 @@ const PurchaseTable = ({ seVisible }) => {
     { type: "date", name: "lastUpdate", label: "Last Update" },
     { type: "str", name: "receviedAt", label: "Received At" },
   ];
+
   // const tableRow = [
   //   "Order#",
   //   "Status",

@@ -19,6 +19,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import dayjs from "dayjs";
+import PasswordShow from "./../../Common/passwordShow";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -62,6 +63,7 @@ const customStyles = {
 const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
 
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const initialState = [
@@ -176,51 +178,59 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
 
   // generating product options once user searches any product name
   const productOptions = async (inputValue) => {
-    let name_data = {
-      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-      category_id: "all",
-      show_status: "all",
-      listing_type: 1,
-      offset: 0,
-      limit: 100000,
-      name: inputValue,
-      page: 0,
-      ...userTypeData,
-    };
+    try {
+      let name_data = {
+        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        category_id: "all",
+        show_status: "all",
+        listing_type: 1,
+        offset: 0,
+        limit: 100000,
+        name: inputValue,
+        page: 0,
+        ...userTypeData,
+      };
 
-    const res = await dispatch(fetchProductsData(name_data));
-    // console.log("api data: ", res.payload);
+      const res = await dispatch(fetchProductsData(name_data));
+      // console.log("api data: ", res.payload);
 
-    const data = res.payload
-      ?.filter((prod) => prod.upc && prod.upc !== "")
-      ?.map((prod) => ({
-        label: prod.title,
-        value: prod.id,
-        variantId: prod.isvarient === "1" ? prod.var_id : null,
-      }));
+      const data = res.payload
+        ?.filter((prod) => prod.upc && prod.upc !== "")
+        ?.map((prod) => ({
+          label: prod.title,
+          value: prod.id,
+          variantId: prod.isvarient === "1" ? prod.var_id : null,
+        }));
 
-    const filteredProducts =
-      data &&
-      data.length > 0 &&
-      data.filter((prod) => {
-        const productFound =
-          selectedProducts &&
-          selectedProducts.length > 0 &&
-          selectedProducts.find(
-            (product) =>
-              (product.id &&
-                product.product_id &&
-                product.id === prod.variantId &&
-                product.product_id === prod.value) ||
-              (product.id && !product.product_id && product.id === prod.value)
-          );
+      const filteredProducts =
+        data &&
+        data.length > 0 &&
+        data.filter((prod) => {
+          const productFound =
+            selectedProducts &&
+            selectedProducts.length > 0 &&
+            selectedProducts.find(
+              (product) =>
+                (product.id &&
+                  product.product_id &&
+                  product.id === prod.variantId &&
+                  product.product_id === prod.value) ||
+                (product.id && !product.product_id && product.id === prod.value)
+            );
 
-        return !productFound;
-      });
+          return !productFound;
+        });
 
-    // console.log("filteredProducts: ", filteredProducts);
+      // console.log("filteredProducts: ", filteredProducts);
 
-    return filteredProducts || [];
+      return filteredProducts || [];
+    } catch (e) {
+      console.log("e: ", e);
+      if (e.status == 401 || e.response.status == 401) {
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
+    }
   };
 
   // on selecting a new product from dropdown fetching its details...
@@ -305,6 +315,10 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
       }
     } catch (e) {
       console.log("e: ", e);
+      if (e.response.status == 401 || e.status == 401) {
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
     }
   };
 
@@ -456,6 +470,10 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
           }
         } catch (e) {
           console.log("Error: ", e);
+          if (e.response.status == 401 || e.status == 401) {
+            handleCoockieExpire();
+            getUnAutherisedTokenMessage();
+          }
         }
       } else {
         if (!purchaseInfoDetails || !issuedDateIsFine) {
@@ -574,6 +592,10 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
       }
     } catch (e) {
       console.log("Error: ", e);
+      if (e.response.status == 401 || e.status == 401) {
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
     } finally {
       setLoaders((prev) => ({ ...prev, autoPo: false }));
     }

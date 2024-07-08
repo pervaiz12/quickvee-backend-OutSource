@@ -17,7 +17,7 @@ const initialState = {
 // Generate pening , fulfilled and rejected action type
 export const fetchpurchaseData = createAsyncThunk(
   "purchase/fetchpurchaseData.",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     try {
       const { token, ...dataNew } = data;
       const response = await axios.post(BASE_URL + LIST_ALL_PARCHASE, dataNew, {
@@ -31,28 +31,43 @@ export const fetchpurchaseData = createAsyncThunk(
         return response.data.result;
       }
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error(error.response.data.message);
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
 
 export const getPurchaseOrderCount = createAsyncThunk(
   "purchase/getPurchaseOrderCount",
-  async (data) => {
-    const { token, ...dataNew } = data;
-    const response = await axios.post(
-      BASE_URL + PURCHASE_ORDER_COUNT,
-      dataNew,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`, // Use data?.token directly
-        },
+  async (data, { rejectWithValue }) => {
+    try {
+      const { token, ...dataNew } = data;
+      const response = await axios.post(
+        BASE_URL + PURCHASE_ORDER_COUNT,
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // Use data?.token directly
+          },
+        }
+      );
+      // console.log("getPurchaseOrderCount: ", response);
+      if (response.status === 200) {
+        return response.data.result;
       }
-    );
-    // console.log("getPurchaseOrderCount: ", response);
-    if (response.status == 200) {
-      return response.data.result;
+    } catch (error) {
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );

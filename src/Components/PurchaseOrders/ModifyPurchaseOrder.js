@@ -37,6 +37,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
+import PasswordShow from "./../../Common/passwordShow";
 
 const theme = createTheme({
   components: {
@@ -98,6 +99,8 @@ const ModifyPurchaseOrder = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { id } = useParams();
+
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
 
   const [purchaseInfo, setPurchaseInfo] = useState({
@@ -175,13 +178,25 @@ const ModifyPurchaseOrder = () => {
   }, [puchaseOrderDetail]);
 
   // fetching Purchase Order details
+  const getPurchaseOrderDetails = async () => {
+    try {
+      const data = {
+        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        po_id: id,
+        ...userTypeData,
+      };
+      await dispatch(fetchPurchaseOrderById(data)).unwrap();
+    } catch (e) {
+      console.log("e: ", e);
+      if (e.status == 401 || e.response.status == 401) {
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
+    }
+  };
+
   useEffect(() => {
-    const data = {
-      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-      po_id: id,
-      ...userTypeData,
-    };
-    dispatch(fetchPurchaseOrderById(data));
+    getPurchaseOrderDetails();
   }, []);
 
   // check each product has required data
@@ -261,6 +276,10 @@ const ModifyPurchaseOrder = () => {
       });
     } catch (e) {
       console.log("Error: ", e);
+      if (e.response.status == 401 || e.status == 401) {
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
     }
   };
 
@@ -361,58 +380,66 @@ const ModifyPurchaseOrder = () => {
 
   // generating product options once user searches any product name
   const productOptions = async (inputValue) => {
-    let name_data = {
-      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-      category_id: "all",
-      show_status: "all",
-      listing_type: 1,
-      offset: 0,
-      limit: 100000,
-      name: inputValue,
-      page: 0,
-      ...userTypeData,
-    };
+    try {
+      let name_data = {
+        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        category_id: "all",
+        show_status: "all",
+        listing_type: 1,
+        offset: 0,
+        limit: 100000,
+        name: inputValue,
+        page: 0,
+        ...userTypeData,
+      };
 
-    const res = await dispatch(fetchProductsData(name_data));
+      const res = await dispatch(fetchProductsData(name_data));
 
-    const data = res.payload
-      ?.filter((prod) => prod.upc && prod.upc !== "")
-      ?.map((prod) => ({
-        label: prod.title,
-        value: prod.id,
-        variantId: prod.isvarient === "1" ? prod.var_id : null,
-      }));
+      const data = res.payload
+        ?.filter((prod) => prod.upc && prod.upc !== "")
+        ?.map((prod) => ({
+          label: prod.title,
+          value: prod.id,
+          variantId: prod.isvarient === "1" ? prod.var_id : null,
+        }));
 
-    // console.log("api data: ", data);
+      // console.log("api data: ", data);
 
-    const filterProducts =
-      data &&
-      data.length > 0 &&
-      data.filter((product) => {
-        const productExists =
-          selectedProducts &&
-          selectedProducts.length > 0 &&
-          selectedProducts.find((item) => {
-            const productIdMatching = item.product_id === product.value;
+      const filterProducts =
+        data &&
+        data.length > 0 &&
+        data.filter((product) => {
+          const productExists =
+            selectedProducts &&
+            selectedProducts.length > 0 &&
+            selectedProducts.find((item) => {
+              const productIdMatching = item.product_id === product.value;
 
-            // item is variant
-            if (
-              (item.isvarient === "1" || Number(item.variant_id) > 0) &&
-              product.variantId
-            ) {
-              const variantIdMatching = item.variant_id === product.variantId;
-              return variantIdMatching && productIdMatching;
-            } else {
-              return productIdMatching;
-            }
-          });
+              // item is variant
+              if (
+                (item.isvarient === "1" || Number(item.variant_id) > 0) &&
+                product.variantId
+              ) {
+                const variantIdMatching = item.variant_id === product.variantId;
+                return variantIdMatching && productIdMatching;
+              } else {
+                return productIdMatching;
+              }
+            });
 
-        return !Boolean(productExists);
-      });
+          return !Boolean(productExists);
+        });
 
-    // console.log("filtered Products: ", filterProducts);
+      // console.log("filtered Products: ", filterProducts);
 
-    return filterProducts;
+      return filterProducts;
+    } catch (e) {
+      console.log("e: ", e);
+      if (e.status == 401 || e.response.status == 401) {
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
+    }
   };
 
   // on selecting a new product from dropdown fetching its details...
@@ -500,7 +527,11 @@ const ModifyPurchaseOrder = () => {
         console.log("Product Not available!");
       }
     } catch (e) {
-      console.log("e: ", e);
+      console.log("Error: ", e);
+      if (e.response.status == 401 || e.status == 401) {
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
     }
   };
 
@@ -699,6 +730,10 @@ const ModifyPurchaseOrder = () => {
         }
       } catch (e) {
         console.log("Error: ", e);
+        if (e.response.status == 401 || e.status == 401) {
+          handleCoockieExpire();
+          getUnAutherisedTokenMessage();
+        }
       } finally {
         setLoading(() => false);
       }
