@@ -11,6 +11,7 @@ import Button from "@mui/material/Button";
 import Loader from "../../../CommonComponents/Loader";
 import { priceFormate } from "../../../hooks/priceFormate";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -22,11 +23,11 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    fontFamily: "CircularMedium",
+    fontFamily: "CircularSTDBook !important",
   },
   [`&.${tableCellClasses.table}`]: {
     fontSize: 14,
-    fontFamily: "CircularMedium",
+    fontFamily: "CircularSTDBook !important",
   },
 }));
 
@@ -39,10 +40,14 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 export default function Pagination(props) {
+  let columns = ["Title", "Category", "Quantity", "Price"];
   return (
     <>
       {props.loader ? (
-        <Loader />
+        // <Loader />
+        <>
+          <SkeletonTable columns={columns} />
+        </>
       ) : (
         <TableContainer>
           <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
@@ -119,9 +124,9 @@ export default function Pagination(props) {
               //     Load More
               //   </button>
               // </div>
-              <Stack spacing={2}  direction="row">
+              <Stack spacing={2} direction="row">
                 <Button
-                  sx={{fontFamily:"CircularMedium"}}
+                  sx={{ fontFamily: "CircularMedium" }}
                   variant="outlined"
                   className="button-load"
                   onClick={props.handleLoadMore}

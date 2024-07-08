@@ -6,7 +6,12 @@ import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 
-const OrderRefundFilter = ({ title, onCategoryChange, onReasonChange,selectedReason }) => {
+const OrderRefundFilter = ({
+  title,
+  onCategoryChange,
+  onReasonChange,
+  selectedReason,
+}) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const Categoryfilter = (event) => {
@@ -23,7 +28,7 @@ const OrderRefundFilter = ({ title, onCategoryChange, onReasonChange,selectedRea
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   const [categoryList, setCategoryList] = useState([]);
-  console.log("categoryList",categoryList)
+  console.log("categoryList", categoryList);
   // useEffect(() => {
   //   const fetchData = async () => {
   //     const { token, ...newData } = userTypeData;
@@ -57,6 +62,8 @@ const OrderRefundFilter = ({ title, onCategoryChange, onReasonChange,selectedRea
     "Defective Item",
     "Fraudulent Order",
     "Returned Goods",
+    "Out of Stock",
+    "Other",
   ];
   return (
     <>
@@ -80,7 +87,7 @@ const OrderRefundFilter = ({ title, onCategoryChange, onReasonChange,selectedRea
               >
                 Select Reason
               </label>
-              <SelectDropDown 
+              <SelectDropDown
                 listItem={ReasonList.map((item) => ({ title: item }))}
                 title={"title"}
                 selectedOption={selectedReason}
@@ -90,7 +97,6 @@ const OrderRefundFilter = ({ title, onCategoryChange, onReasonChange,selectedRea
           </Grid>
         </Grid>
       </Grid>
-  
     </>
   );
 };

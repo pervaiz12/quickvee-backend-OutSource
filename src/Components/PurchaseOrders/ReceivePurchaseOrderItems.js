@@ -23,6 +23,7 @@ import {
 } from "../../Constants/Config";
 import axios from "axios";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import PasswordShow from "./../../Common/passwordShow";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -32,12 +33,15 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
     color: theme.palette.common.white,
+    fontFamily: "CircularSTDMedium !important",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
+    fontFamily: "CircularSTDBook !important",
   },
   [`&.${tableCellClasses.table}`]: {
     fontSize: 14,
+    fontFamily: "CircularSTDBook !important",
   },
 }));
 
@@ -47,7 +51,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
   // hide last border
   "&:last-child td, &:last-child th": {
-    border: 0,
+    // border: 0,
   },
 }));
 
@@ -56,6 +60,7 @@ const ReceivePurchaseOrderItems = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
 
   const [loaders, setLoaders] = useState({
     email: false,
@@ -107,13 +112,25 @@ const ReceivePurchaseOrderItems = () => {
   }, [purchaseOrder.order_items]);
 
   // fetching Purchase Order details
+  const getPurchaseOrderDetails = async () => {
+    try {
+      const data = {
+        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        po_id: id,
+        ...userTypeData,
+      };
+      dispatch(fetchPurchaseOrderById(data)).unwrap();
+    } catch (e) {
+      console.log("e: ", e);
+      if (e.status == 401 || e.response.status == 401) {
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
+    }
+  };
+
   useEffect(() => {
-    const data = {
-      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-      po_id: id,
-      ...userTypeData,
-    };
-    dispatch(fetchPurchaseOrderById(data));
+    getPurchaseOrderDetails();
   }, [isUpdated]);
 
   // voiding a purchase order
@@ -147,6 +164,10 @@ const ReceivePurchaseOrderItems = () => {
       // console.log("response void po: ", response);
     } catch (e) {
       console.log("Error: ", e);
+      if (e.response.status == 401 || e.status == 401) {
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
     } finally {
       setLoaders((prev) => ({ ...prev, void: false }));
     }
@@ -248,6 +269,10 @@ const ReceivePurchaseOrderItems = () => {
       }
     } catch (e) {
       console.log("Error: ", e);
+      if (e.response.status == 401 || e.status == 401) {
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
     } finally {
       setLoaders((prev) => ({ ...prev, receive: false }));
     }
@@ -285,6 +310,10 @@ const ReceivePurchaseOrderItems = () => {
       }
     } catch (e) {
       console.log("Error: ", e);
+      if (e.response.status == 401 || e.status == 401) {
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
     } finally {
       setLoaders((prev) => ({ ...prev, email: false }));
     }

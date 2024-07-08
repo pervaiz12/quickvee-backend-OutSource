@@ -66,8 +66,6 @@ const MainProducts = () => {
       ...userTypeData,
     };
 
-    // console.log("1st time calling...");
-
     dispatch(emptyProduct([]));
     try {
       dispatch(fetchProductsData(data));

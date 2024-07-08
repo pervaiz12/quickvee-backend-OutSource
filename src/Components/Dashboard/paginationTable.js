@@ -23,6 +23,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     paddingTop: "12px",
     paddingLeft: "12px",
     paddingRight: "1px",
+    fontFamily: "CircularSTDBook !important",
+  },
+  [`&.${tableCellClasses.table}`]: {
+    fontSize: 14,
     fontFamily: "CircularSTDMedium",
   },
 }));

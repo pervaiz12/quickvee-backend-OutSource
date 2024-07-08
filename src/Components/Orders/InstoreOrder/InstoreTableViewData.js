@@ -33,15 +33,15 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
     color: theme.palette.common.white,
-    fontFamily: "CircularSTDBook !important",
+    fontFamily: "CircularSTDMedium !important",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    fontFamily: "CircularSTDMedium",
+    fontFamily: "CircularSTDBook !important",
   },
   [`&.${tableCellClasses.table}`]: {
     fontSize: 14,
-    fontFamily: "CircularSTDMedium",
+    fontFamily: "CircularSTDBook !important",
   },
 }));
 
@@ -101,7 +101,7 @@ const InstoreTableViewData = (props, searchId) => {
         trans_type: transactionType(props.OrderSourceData), //
         start_date: props.selectedDateRange?.start_date, //
         end_date: props.selectedDateRange?.end_date, //
-
+        order_method: props.order_method ? props.order_method : "All",
         ...props.userTypeData, //
       })
     );
@@ -109,6 +109,7 @@ const InstoreTableViewData = (props, searchId) => {
     props.selectedDateRange?.start_date,
     props.selectedDateRange?.end_date,
     debouncedValue,
+    props.order_method,
     // props.OrderSourceData,
 
     // AllInStoreDataState.OrderListCount,
@@ -149,6 +150,7 @@ const InstoreTableViewData = (props, searchId) => {
           props?.OffSearchIdData !== "" ? props?.OffSearchIdData : null,
         perpage: rowsPerPage,
         page: debouncedValue === "" ? currentPage : "1",
+        order_method: props.order_method ? props.order_method : "All",
       };
       // console.log("date data", data);
       if (data) {
@@ -347,12 +349,20 @@ const InstoreTableViewData = (props, searchId) => {
                           inStoreOrder?.map((data, index) => (
                             <StyledTableRow key={index}>
                               <StyledTableCell>
-                                <p className="text-[#000000] order_method">
-                                  {data.billing_name || ""}
-                                </p>
-                                <p className="text-[#818181]">
-                                  {data.delivery_phn || ""}
-                                </p>
+                                {data.billing_name || data.delivery_phn ? (
+                                  <>
+                                    <p className="text-[#000000] order_method">
+                                      {data.billing_name || ""}
+                                    </p>
+                                    <p className="text-[#818181]">
+                                      {data.delivery_phn || ""}
+                                    </p>
+                                  </>
+                                ) : (
+                                  <div>
+                                    <p>-</p>
+                                  </div>
+                                )}
                               </StyledTableCell>
                               <StyledTableCell>
                                 <p className="text-[#000000] order_method">

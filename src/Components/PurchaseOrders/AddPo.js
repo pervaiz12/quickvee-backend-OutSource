@@ -16,10 +16,12 @@ import "react-datepicker/dist/react-datepicker.css";
 import dayjs from "dayjs";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { useNavigate } from "react-router-dom";
+import PasswordShow from "./../../Common/passwordShow";
 
 const AddPo = ({ seVisible }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
 
   // const currentDate = dayjs(new Date()).format("MM/DD/YYYY");
@@ -43,12 +45,24 @@ const AddPo = ({ seVisible }) => {
 
   const allVendors = useSelector((state) => state.vendors);
 
+  const getVendors = async () => {
+    try {
+      const data = {
+        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        ...userTypeData,
+      };
+      await dispatch(fetchVendorsListData(data)).unwrap();
+    } catch (e) {
+      console.log("e: ", e);
+      if (e.status == 401 || e.response.status == 401) {
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
+    }
+  };
+
   useEffect(() => {
-    const data = {
-      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-      ...userTypeData,
-    };
-    dispatch(fetchVendorsListData(data));
+    getVendors();
   }, [dispatch]);
 
   const handleVendorClick = (data) => {

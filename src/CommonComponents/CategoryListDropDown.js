@@ -63,13 +63,14 @@ const CategoryListDropDown = ({
   const handleOptionClick = (option, dropdown, value) => {
     switch (dropdown) {
       case "category":
+        // console.log("from dropdown: ", option);
         setSelectedCategory(option === "All" ? "All" : option.title);
+        onCategoryChange(option === "All" ? "all" : option.id);
         if (listFor === "massInventoryUpdate") {
-          onCategoryChange(option === "All" ? "all" : option.id);
           return;
         }
-        setCategoryDropdownVisible(false);
 
+        setCategoryDropdownVisible(false);
         dispatch(emptyProduct([]));
         let data1 = {
           merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
@@ -78,7 +79,7 @@ const CategoryListDropDown = ({
           show_status: selectedStatus,
           name: searchId,
           listing_type: listing_type,
-          offset: offset,
+          offset,
           limit: 10,
         };
         if (data1) {

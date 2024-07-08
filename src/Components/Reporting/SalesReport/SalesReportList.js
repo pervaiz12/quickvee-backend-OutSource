@@ -28,11 +28,11 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    fontFamily: "CircularSTDMedium",
+    fontFamily: "CircularSTDBook !important",
   },
   [`&.${tableCellClasses.table}`]: {
     fontSize: 14,
-    fontFamily: "CircularSTDMedium",
+    fontFamily: "CircularSTDBook !important",
   },
 }));
 
@@ -138,6 +138,11 @@ const SalesReportList = (props) => {
     parseFloat(SalesReportData.cash_collected) +
     parseFloat(SalesReportData.cash_ebt_collected) +
     parseFloat(SalesReportData.food_ebt_collected);
+    
+  
+    const cashbackfee =
+    parseFloat(SalesReportData.cash_back_fee) +
+    parseFloat(SalesReportData.cash_back_fee);
 
   // console.log(discount1)
   // console.log(SalesReportData)
@@ -181,6 +186,10 @@ const SalesReportList = (props) => {
     {
       name: "Non Cash Adjustment Fees",
       amount: cashDiscounting,
+    },
+    {
+      name: "Cashback Fees",
+      amount: cashbackfee,
     },
   ];
 

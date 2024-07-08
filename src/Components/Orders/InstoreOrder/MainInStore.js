@@ -131,6 +131,7 @@ console.log("dateRangefromorderTypePage",dateRangefromorderTypePage)
                 merchant_id={merchant_id}
                 userTypeData={userTypeData}
                 setIsLoading={setIsLoading}
+                 order_method={order_method}
               />
             ) : (
               <OnlineTableViewData

@@ -103,7 +103,7 @@ const ItemsCategories = () => {
 
       <DateRangeComponent onDateRangeChange={handleDataFiltered} />
 
-      <Itemdatadetails data={filteredData} />
+      <Itemdatadetails data={filteredData} selectedOrderSource={selectedOrderSource} />
     </>
   );
 };

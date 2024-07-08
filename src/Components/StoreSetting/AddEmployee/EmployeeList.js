@@ -275,6 +275,7 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
               "Role",
               "Action",
               "",
+              "",
             ]}
             tableRow={employeeList}
             setFunction={setemployeeList}

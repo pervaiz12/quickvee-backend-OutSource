@@ -14,6 +14,7 @@ import { Grid } from "@mui/material";
 import Loader from "../../../CommonComponents/Loader";
 import { priceFormate } from "../../../hooks/priceFormate";
 import SortIconW from "../../../Assests/Category/SortingW.svg";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -22,9 +23,11 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
     color: theme.palette.common.white,
+    fontFamily: "CircularSTDMedium !important",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
+    fontFamily: "CircularSTDBook !important",
   },
 }));
 
@@ -74,18 +77,16 @@ export default function DashboardTables(props) {
     let grandTotal = 0; // Initialize grand total
 
     if (props.EmployeeFilterData) {
-      Object.entries(props.EmployeeFilterData).forEach(
-        ([key, result]) => {
-          if (Array.isArray(result)) {
-            const total = result.reduce((acc, item) => {
-              return acc + (parseFloat(item?.discount) || 0);
-            }, 0);
+      Object.entries(props.EmployeeFilterData).forEach(([key, result]) => {
+        if (Array.isArray(result)) {
+          const total = result.reduce((acc, item) => {
+            return acc + (parseFloat(item?.discount) || 0);
+          }, 0);
 
-            grandTotal += total; // Add total to grand total
-            console.log(total);
-          }
+          grandTotal += total; // Add total to grand total
+          console.log(total);
         }
-      );
+      });
     } else {
       console.log("No report data available");
     }
@@ -104,17 +105,27 @@ export default function DashboardTables(props) {
     const formattedTime = date.toLocaleTimeString("en-US", timeOptions);
     return `${formattedDate} ${formattedTime}`;
   };
+  let columns = [
+    "Employee",
+    "Discount($)",
+    "Discount Type",
+    "Item Discount($)",
+    "Order ID",
+    "Date & Time",
+  ];
 
   return (
     <>
       {props.loader ? (
         <Loader />
       ) : (
+        // <>
+        //   <SkeletonTable columns={columns} />
+        // </>
         <TableContainer component={Paper}>
           {
-            // console.log(props.EmployeeFilterData?.report_data?.length)
-            props.EmployeeFilterData &&
-            props.EmployeeFilterData.length !== 0 ? (
+            // console.log(props.EmployeeFilterData?.report_data?.length) props.EmployeeFilterData.length !== 0
+            Object.keys(props.EmployeeFilterData).length !== 0 ? (
               Object.entries(props.EmployeeFilterData).map(
                 ([key, result], index) => {
                   if (Array.isArray(result)) {
@@ -273,7 +284,9 @@ export default function DashboardTables(props) {
                                       // onClick={() => handleSummeryPage(row.order_id)}
                                       target="_blank"
                                     >
-                                     <p className="text-[#0A64F9]">{item?.order_id}</p>
+                                      <p className="text-[#0A64F9]">
+                                        {item?.order_id}
+                                      </p>
                                     </Link>
                                   </StyledTableCell>
                                   <StyledTableCell>

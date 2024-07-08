@@ -13,6 +13,7 @@ import { fetchRefundData } from "../../../Redux/features/Reports/RefundReport/Re
 import { priceFormate } from "../../../hooks/priceFormate";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import PasswordShow from "../../../Common/passwordShow";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -20,15 +21,15 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
     color: theme.palette.common.white,
-    fontFamily: "CircularSTDBook !important",
+    fontFamily: "CircularSTDMedium !important",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    fontFamily: "CircularSTDMedium",
+    fontFamily: "CircularSTDBook !important",
   },
   [`&.${tableCellClasses.table}`]: {
     fontSize: 14,
-    fontFamily: "CircularSTDMedium",
+    fontFamily: "CircularSTDBook !important",
   },
 }));
 
@@ -44,21 +45,32 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const RefundSummaryList = ({ data }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const dispatch = useDispatch();
   const [refundata, setrefundData] = useState([]);
   const RefundReportData = useSelector((state) => state.RefundDataList);
   const [sortOrder, setSortOrder] = useState("asc");
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
-    if (data) {
-      let fetdata = {
-        ...data,
-        ...userTypeData,
-        merchant_id,
-      };
-      dispatch(fetchRefundData(fetdata));
-    }
+    getRefundData();
   }, [data]);
+  const getRefundData = async () => {
+    try {
+      if (data) {
+        let fetdata = {
+          ...data,
+          ...userTypeData,
+          merchant_id,
+        };
+        await dispatch(fetchRefundData(fetdata)).unwrap();
+      }
+    } catch (error) {
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
+    }
+  };
 
   useEffect(() => {
     if (
@@ -150,7 +162,7 @@ const RefundSummaryList = ({ data }) => {
                     </StyledTableCell>
                   ))}
                 </TableHead>
-              
+
                 <TableBody>
                   {refundata &&
                     refundata.length > 0 &&
