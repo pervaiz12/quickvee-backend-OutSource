@@ -24,15 +24,15 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
     color: theme.palette.common.white,
-    fontFamily: "CircularSTDBook !important",
+    fontFamily: "CircularSTDMedium !important",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
-    fontFamily: "CircularSTDMedium",
+    fontFamily: "CircularSTDBook !important",
   },
   [`&.${tableCellClasses.table}`]: {
     fontSize: 14,
-    fontFamily: "CircularSTDMedium",
+    fontFamily: "CircularSTDBook !important",
   },
 }));
 
@@ -45,7 +45,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const Itemdatadetails = ({ data }) => {
+const Itemdatadetails = ({ data, selectedOrderSource }) => {
   const dispatch = useDispatch();
 
   const [orderReport, setorderReport] = useState([]);
@@ -178,12 +178,14 @@ const Itemdatadetails = ({ data }) => {
                         </p>
                       </StyledTableCell>
                       <StyledTableCell>
-                        <Link
-                          to={`/order/${data.start_date}/${data.end_date}/${data.order_env}/${orderReportDa.order_method}`}
-                          // target="_blank"
-                        >
-                          <p className="q-employee-in">Details</p>
-                        </Link>
+                        {selectedOrderSource !== "All" ? (
+                          <Link
+                            to={`/order/${data.start_date}/${data.end_date}/${data.order_env}/${orderReportDa.order_method}`}
+                            // target="_blank"
+                          >
+                            <p className="q-employee-in">Details</p>
+                          </Link>
+                        ): "-"}
                       </StyledTableCell>
                     </StyledTableRow>
                   ))}

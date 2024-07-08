@@ -70,6 +70,7 @@ export default function ProfitMarginReport() {
                       <label htmlFor="email">Email Address</label>
                     </div> */}
               <BasicTextFields
+                sx={{ pt: 0.5 }}
                 type={"text"}
                 name="product"
                 value={inventory}
@@ -96,6 +97,7 @@ export default function ProfitMarginReport() {
                 Category
               </label>
               <SelectDropDown
+                sx={{ pt: 0.5 }}
                 heading={"All"}
                 listItem={category}
                 title={"title"}

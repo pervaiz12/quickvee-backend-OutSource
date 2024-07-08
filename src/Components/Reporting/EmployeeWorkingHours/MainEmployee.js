@@ -9,7 +9,6 @@ import { useAuthDetails } from "../../../Common/cookiesHelper";
 const MainEmployee = ({ onFilterDataChange }) => {
   const [selectedEmployee, setSelectedEmployee] = useState("All");
 
-
   const [selectedEmployeeID, setSelectedEmployeeID] = useState("All");
   const [filteredEmpData, setFilteredEmpData] = useState({
     category_id: "all",
@@ -17,10 +16,10 @@ const MainEmployee = ({ onFilterDataChange }) => {
   const [employeeList, setemployeeList] = useState([]);
   const [loadingEmpList, setLoadingEmpList] = useState(true);
 
-  const {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData} = useAuthDetails();
-  let AuthDecryptDataDashBoardJSONFormat=LoginGetDashBoardRecordJson
-  const merchant_id=AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id
-
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
+  let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
+  const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
 
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
@@ -28,7 +27,7 @@ const MainEmployee = ({ onFilterDataChange }) => {
         if (option === "All") {
           setSelectedEmployee("All");
           setSelectedEmployeeID("All");
-  
+
           setFilteredEmpData({
             ...filteredEmpData,
             emp_id: "all",
@@ -40,7 +39,7 @@ const MainEmployee = ({ onFilterDataChange }) => {
           const emp_id = option.id;
           setSelectedEmployee(option.title);
           setSelectedEmployeeID(option.id);
-     
+
           setFilteredEmpData({
             ...filteredEmpData,
             emp_id,
@@ -60,8 +59,17 @@ const MainEmployee = ({ onFilterDataChange }) => {
       try {
         const response = await axios.post(
           BASE_URL + EMPLOYEE_LIST,
-          { merchant_id: merchant_id,token_id:userTypeData?.token_id,login_type:userTypeData?.login_type },
-          { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}` } }
+          {
+            merchant_id: merchant_id,
+            token_id: userTypeData?.token_id,
+            login_type: userTypeData?.login_type,
+          },
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${userTypeData?.token}`,
+            },
+          }
         );
         // Assuming the API response has a data property containing the category list
         const EmpList = response.data.result;
@@ -104,11 +112,12 @@ const MainEmployee = ({ onFilterDataChange }) => {
           </Grid>
           <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
             <Grid item xs={12} sm={6} md={4}>
-            <label className="q-details-page-label" htmlFor="employeeFilter">
+              <label className="q-details-page-label" htmlFor="employeeFilter">
                 Employee
               </label>
-              <SelectDropDown 
-              heading={"All"}
+              <SelectDropDown
+                sx={{ pt: 0.5 }}
+                heading={"All"}
                 listItem={employeeList}
                 title={"title"}
                 selectedOption={selectedEmployee}
@@ -119,7 +128,6 @@ const MainEmployee = ({ onFilterDataChange }) => {
           </Grid>
         </Grid>
       </Grid>
-    
     </>
   );
 };
