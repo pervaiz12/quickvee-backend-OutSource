@@ -18,6 +18,7 @@ import TableRow from "@mui/material/TableRow";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import { Link } from "react-router-dom";
+import PasswordShow from "../../../Common/passwordShow";
 const orderEnv = (type) => {
   if (type === "Online Order") {
     return "Online";
@@ -65,6 +66,7 @@ const CheckIDVerifyList = (props) => {
     userTypeData,
     GetSessionLogin,
   } = useAuthDetails();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const [allCheckIDVerifyData, setallCheckIDVerifyData] = useState("");
   const AllCheckIDVerifyDataState = useSelector(
     (state) => state.CheckIDVerifyList
@@ -72,20 +74,30 @@ const CheckIDVerifyList = (props) => {
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   useEffect(() => {
-    if (props && props.selectedDateRange) {
-      let data = {
-        merchant_id,
-        start_date: props.selectedDateRange.start_date,
-        end_date: props.selectedDateRange.end_date,
-        order_typ: props.OrderTypeData,
-        order_env: orderEnv(props.OrderSourceData),
-        ...userTypeData,
-      };
-      if (data) {
-        dispatch(fetchCheckIDVerifyData(data));
+    getCheckIDVerifyData();
+  }, [props]);
+  const getCheckIDVerifyData = async () => {
+    try {
+      if (props && props.selectedDateRange) {
+        let data = {
+          merchant_id,
+          start_date: props.selectedDateRange.start_date,
+          end_date: props.selectedDateRange.end_date,
+          order_typ: props.OrderTypeData,
+          order_env: orderEnv(props.OrderSourceData),
+          ...userTypeData,
+        };
+        if (data) {
+          await dispatch(fetchCheckIDVerifyData(data)).unwrap();
+        }
+      }
+    } catch (error) {
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
       }
     }
-  }, [props]);
+  };
 
   useEffect(() => {
     if (
@@ -142,68 +154,68 @@ const CheckIDVerifyList = (props) => {
   };
   return (
     <>
-    <div className="mb-10">
-    {AllCheckIDVerifyDataState.loading ? (
-        <SkeletonTable columns={tableRow.map((item) => item.label)} />
-      ) : (
-        <>
-          <TableContainer sx={{ }}>
-            <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-              <TableHead>
-                {tableRow.map((item) => (
-                  <StyledTableCell>
-                    <button
-                      className="flex items-center"
-                      onClick={() => sortByItemName(item.type, item.name)}
-                    >
-                      <p>{item.label}</p>
-                      <img src={sortIcon} alt="" className="pl-1" />
-                    </button>
-                  </StyledTableCell>
-                ))}
-              </TableHead>
-              <TableBody>
-                {allCheckIDVerifyData &&
-                  allCheckIDVerifyData.length >= 1 &&
-                  allCheckIDVerifyData.map((CheckData, index) => (
-                    <StyledTableRow key={index}>
-                      <StyledTableCell>
-                        <p>{formatDate(CheckData.merchant_date)}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{formatTime(CheckData.merchant_time)}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p className="">{CheckData.full_name}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <Link
-                          to={`/order/store-reporting/order-summary/${merchant_id}/${CheckData.order_id}`}
-                          // onClick={() => handleSummeryPage(row.order_id)}
-                          target="_blank"
-                        >
-                          <p className="text-[#0A64F9]">
-                            {CheckData?.order_id}
-                          </p>
-                        </Link>
-                        {/* <p className="">{CheckData.order_id}</p> */}
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p className="">{CheckData.name}</p>
-                      </StyledTableCell>
-                    </StyledTableRow>
+      <div className="mb-10">
+        {AllCheckIDVerifyDataState.loading ? (
+          <SkeletonTable columns={tableRow.map((item) => item.label)} />
+        ) : (
+          <>
+            <TableContainer sx={{}}>
+              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
+                <TableHead>
+                  {tableRow.map((item) => (
+                    <StyledTableCell>
+                      <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName(item.type, item.name)}
+                      >
+                        <p>{item.label}</p>
+                        <img src={sortIcon} alt="" className="pl-1" />
+                      </button>
+                    </StyledTableCell>
                   ))}
-              </TableBody>
-            </StyledTable>
-          </TableContainer>
-          {!allCheckIDVerifyData.length >= 1 && (
-            <div className="box_shadow_div" style={{margin:0}}>
-              <div className="q-category-bottom-categories-single-category">
-                <p>No data found</p>
+                </TableHead>
+                <TableBody>
+                  {allCheckIDVerifyData &&
+                    allCheckIDVerifyData.length >= 1 &&
+                    allCheckIDVerifyData.map((CheckData, index) => (
+                      <StyledTableRow key={index}>
+                        <StyledTableCell>
+                          <p>{formatDate(CheckData.merchant_date)}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>{formatTime(CheckData.merchant_time)}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p className="">{CheckData.full_name}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <Link
+                            to={`/order/store-reporting/order-summary/${merchant_id}/${CheckData.order_id}`}
+                            // onClick={() => handleSummeryPage(row.order_id)}
+                            target="_blank"
+                          >
+                            <p className="text-[#0A64F9]">
+                              {CheckData?.order_id}
+                            </p>
+                          </Link>
+                          {/* <p className="">{CheckData.order_id}</p> */}
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p className="">{CheckData.name}</p>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                </TableBody>
+              </StyledTable>
+            </TableContainer>
+            {!allCheckIDVerifyData.length >= 1 && (
+              <div className="box_shadow_div" style={{ margin: 0 }}>
+                <div className="q-category-bottom-categories-single-category">
+                  <p>No data found</p>
+                </div>
               </div>
-            </div>
-          )}
-          {/* <div className="box">
+            )}
+            {/* <div className="box">
             <div className="q-daily-report-bottom-report-header">
               <p className="report-sort">Date</p>
               <p className="report-sort">Time</p>
@@ -242,10 +254,9 @@ const CheckIDVerifyList = (props) => {
               </div>
             </>
           )} */}
-        </>
-      )}
-    </div>
-      
+          </>
+        )}
+      </div>
     </>
   );
 };

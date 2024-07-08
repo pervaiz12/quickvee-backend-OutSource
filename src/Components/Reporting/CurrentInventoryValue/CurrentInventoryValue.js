@@ -5,10 +5,12 @@ import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { Grid } from "@mui/material";
 import { priceFormate } from "../../../hooks/priceFormate";
 import Skeleton from "react-loading-skeleton";
+import PasswordShow from "../../../Common/passwordShow";
 
 const CurrentInventoryValue = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const [currentInventory, setcurrentInventory] = useState([]);
   const currentInventoryreportDataState = useSelector(
     (state) => state.currentInventoryreport
@@ -23,10 +25,13 @@ const CurrentInventoryValue = () => {
           ...userTypeData,
         };
         if (data) {
-          dispatch(fetchcurrentInventoryreportData(data));
+          await dispatch(fetchcurrentInventoryreportData(data)).unwrap();
         }
       } catch (error) {
-        console.error("Error fetching data:", error);
+        if (error.status == 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        }
       }
     };
 
@@ -74,7 +79,11 @@ const CurrentInventoryValue = () => {
             </div>
             <div className="text-[20px] font-bold mt-4 common-font-bold">
               {/* {priceFormate(formatNumber(currentInventory.final_quantity))} */}
-              { currentInventory.final_quantity ?  priceFormate(formatNumber(currentInventory.final_quantity)) : <Skeleton /> }
+              {currentInventory.final_quantity ? (
+                priceFormate(formatNumber(currentInventory.final_quantity))
+              ) : (
+                <Skeleton />
+              )}
             </div>
           </div>
         </Grid>
@@ -85,7 +94,12 @@ const CurrentInventoryValue = () => {
             </div>
             <div className="text-[20px] font-bold mt-4 common-font-bold">
               {/* $ {priceFormate(formatNumber(currentInventory.total_sale_price))} */}
-              { currentInventory.total_sale_price ?  "$"+priceFormate(formatNumber(currentInventory.total_sale_price)) : <Skeleton /> }
+              {currentInventory.total_sale_price ? (
+                "$" +
+                priceFormate(formatNumber(currentInventory.total_sale_price))
+              ) : (
+                <Skeleton />
+              )}
             </div>
           </div>
         </Grid>
@@ -96,7 +110,12 @@ const CurrentInventoryValue = () => {
             </div>
             <div className="text-[20px] font-bold mt-4 common-font-bold">
               {/* $ {priceFormate(formatNumber(currentInventory.total_cpi_price))} */}
-              { currentInventory.total_cpi_price ?  "$"+priceFormate(formatNumber(currentInventory.total_cpi_price)) : <Skeleton /> }
+              {currentInventory.total_cpi_price ? (
+                "$" +
+                priceFormate(formatNumber(currentInventory.total_cpi_price))
+              ) : (
+                <Skeleton />
+              )}
             </div>
           </div>
         </Grid>

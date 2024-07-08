@@ -5,6 +5,7 @@ import axios from "axios";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import PasswordShow from "../../../Common/passwordShow";
 
 const MainEmployee = ({ onFilterDataChange }) => {
   const [selectedEmployee, setSelectedEmployee] = useState("All");
@@ -20,6 +21,7 @@ const MainEmployee = ({ onFilterDataChange }) => {
     useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
 
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
@@ -82,7 +84,10 @@ const MainEmployee = ({ onFilterDataChange }) => {
         setemployeeList(mappedOptions);
         setLoadingEmpList(false);
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        if (error.response.status == 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        }
         setLoadingEmpList(false);
       }
     };

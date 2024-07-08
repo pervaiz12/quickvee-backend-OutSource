@@ -14,6 +14,7 @@ import { Grid } from "@mui/material";
 import { priceFormate } from "../../../hooks/priceFormate";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
+import PasswordShow from "../../../Common/passwordShow";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -51,6 +52,7 @@ const NewItemCreatedBetweenList = (props) => {
     userTypeData,
     GetSessionLogin,
   } = useAuthDetails();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const [allNewItemData, setallNewItemData] = useState([]);
   const AllNewItemDataState = useSelector(
     (state) => state.NewItemCreatedBtnList
@@ -58,18 +60,28 @@ const NewItemCreatedBetweenList = (props) => {
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   useEffect(() => {
-    if (props && props.selectedDateRange) {
-      let data = {
-        merchant_id,
-        start_date: props.selectedDateRange.start_date,
-        end_date: props.selectedDateRange.end_date,
-        ...userTypeData,
-      };
-      if (data) {
-        dispatch(fetchNewItemCreatedBetweenData(data));
+    getNewItemCreatedBetweenData();
+  }, [props]);
+  const getNewItemCreatedBetweenData = async () => {
+    try {
+      if (props && props.selectedDateRange) {
+        let data = {
+          merchant_id,
+          start_date: props.selectedDateRange.start_date,
+          end_date: props.selectedDateRange.end_date,
+          ...userTypeData,
+        };
+        if (data) {
+          await dispatch(fetchNewItemCreatedBetweenData(data)).unwrap();
+        }
+      }
+    } catch (error) {
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
       }
     }
-  }, [props]);
+  };
 
   useEffect(() => {
     if (!AllNewItemDataState.loading && AllNewItemDataState.NewItemData) {
@@ -170,25 +182,23 @@ const NewItemCreatedBetweenList = (props) => {
                   </button>
                 </StyledTableCell>
                 <StyledTableCell>
-                <button
+                  <button
                     className="flex items-center"
                     onClick={() => sortByItemName("str", "item_name")}
                   >
                     <p className="whitespace-nowrap">Item Name</p>
                     <img src={sortIcon} alt="" className="pl-1" />
                   </button>
-                  
-                  </StyledTableCell>
+                </StyledTableCell>
                 <StyledTableCell>
-                <button
+                  <button
                     className="flex items-center"
                     onClick={() => sortByItemName("num", "price")}
                   >
                     <p className="whitespace-nowrap">Price</p>
                     <img src={sortIcon} alt="" className="pl-1" />
                   </button>
-                  
-                  </StyledTableCell>
+                </StyledTableCell>
               </TableHead>
               <TableBody>
                 {allNewItemData && allNewItemData.length >= 1 ? (
