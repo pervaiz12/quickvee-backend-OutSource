@@ -159,7 +159,9 @@ const CheckIDVerifyList = (props) => {
           <SkeletonTable columns={tableRow.map((item) => item.label)} />
         ) : (
           <>
-            <TableContainer sx={{}}>
+            <TableContainer
+              sx={{ borderTopLeftRadius: "10px", borderTopRightRadius: "10px" }}
+            >
               <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
                 <TableHead>
                   {tableRow.map((item) => (

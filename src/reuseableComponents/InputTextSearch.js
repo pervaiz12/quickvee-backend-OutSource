@@ -34,6 +34,11 @@ const InputTextSearch = ({
               </IconButton>
             </InputAdornment>
           }
+          sx={{
+            "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+              borderColor: "black"
+            }
+          }}
         />
       </FormControl>
     </>

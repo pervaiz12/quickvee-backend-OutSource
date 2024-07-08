@@ -841,7 +841,7 @@ const ModifyPurchaseOrder = () => {
                     components={["DatePicker"]}
                   >
                     <DatePicker
-                      sx={{ width: "100%" }}
+                      sx={{ width: "100%", }}
                       className="stock-due-date default-border-color"
                       size="small"
                       slotProps={{
@@ -981,6 +981,13 @@ const ModifyPurchaseOrder = () => {
                         </StyledTableCell>
                         <StyledTableCell>
                           <TextField
+                            sx={{
+                              "& .MuiOutlinedInput-root": {
+                                "&.Mui-focused fieldset": {
+                                  borderColor: "black",
+                                },
+                              },
+                            }}
                             id="outlined-basic"
                             value={product.newQty}
                             inputProps={{
@@ -1008,6 +1015,13 @@ const ModifyPurchaseOrder = () => {
                         </StyledTableCell>
                         <StyledTableCell>
                           <TextField
+                            sx={{
+                              "& .MuiOutlinedInput-root": {
+                                "&.Mui-focused fieldset": {
+                                  borderColor: "black",
+                                },
+                              },
+                            }}
                             id="outlined-basic"
                             value={parseFloat(product.newPrice).toFixed(2)}
                             inputProps={{ type: "number" }}
@@ -1039,6 +1053,13 @@ const ModifyPurchaseOrder = () => {
                         </StyledTableCell>
                         <StyledTableCell>
                           <TextField
+                            sx={{
+                              "& .MuiOutlinedInput-root": {
+                                "&.Mui-focused fieldset": {
+                                  borderColor: "black",
+                                },
+                              },
+                            }}
                             id="outlined-basic"
                             inputProps={{ type: "text" }}
                             value={product.note}
