@@ -145,6 +145,7 @@ const Itemdatadetails = ({ data, selectedOrderSource }) => {
           </div> */}
 
           <div className="q-attributes-bottom-detail-section text-center">
+            <Grid container className="box_shadow_div">
             <TableContainer>
               <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
                 <TableHead>
@@ -192,6 +193,8 @@ const Itemdatadetails = ({ data, selectedOrderSource }) => {
                 </TableBody>
               </StyledTable>
             </TableContainer>
+            </Grid>
+            
           </div>
         </>
       );

@@ -24,7 +24,15 @@ export default function BasicTextFields({
     <FormControl fullWidth>
       <TextField
         id="outlined-basic"
-        sx={{ fontFamily: "inherit", ...sx }}
+        sx={{
+          fontFamily: "inherit",
+          "& .MuiOutlinedInput-root": {
+            "&.Mui-focused fieldset": {
+              borderColor: "black",
+            },
+          },
+          ...sx,
+        }}
         name={name}
         value={value}
         inputProps={{ maxLength: maxLength, type: type, readOnly: readOnly }}

@@ -149,7 +149,7 @@ const PaymentMethodList = ({ data }) => {
     } else if (myArray && myArray.length >= 1) {
       return (
         <>
-          <Grid container className="box_shadow_div">
+          <Grid container style={{marginBottom:0}} className="box_shadow_div">
             <Grid item xs={12}>
               <TableContainer>
                 <StyledTable
@@ -223,7 +223,7 @@ const PaymentMethodList = ({ data }) => {
           })} */}
           {!hasValidData && (
             <>
-              <Grid container sx={{ padding: 2.5 }} className="box_shadow_div">
+              <Grid style={{marginTop:0}}  container sx={{ padding: 2.5 }} className="box_shadow_div">
                 <Grid item xs={12}>
                   <p>No. Data found.</p>
                 </Grid>

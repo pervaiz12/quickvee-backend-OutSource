@@ -38,7 +38,12 @@ const SelectDropDown = ({
       <FormControl sx={{ ...sx }} fullWidth>
         <ThemeProvider theme={theme}>
           <Select
-            sx={{ fontFamily: "CircularSTDBook" }}
+            sx={{
+              fontFamily: "CircularSTDBook",
+              "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+                borderColor: "black",
+              },
+            }}
             size="small"
             value={selectedOption}
             displayEmpty

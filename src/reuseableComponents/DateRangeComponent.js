@@ -72,8 +72,8 @@ const DateRangeComponent = ({ onDateRangeChange, selectedDateRange }) => {
         break;
       case "Last 7 Days":
         const last7Days = new Date();
-        
-        dayBeforeDay.setDate(today.getDate() - 1)
+
+        dayBeforeDay.setDate(today.getDate() - 1);
         last7Days.setDate(today.getDate() - 7);
         setStartDate(last7Days);
         setEndDate(dayBeforeDay);
@@ -81,7 +81,7 @@ const DateRangeComponent = ({ onDateRangeChange, selectedDateRange }) => {
       case "Last 30 days":
         const thirtyDaysAgo = new Date(today);
         thirtyDaysAgo.setDate(today.getDate() - 30);
-        dayBeforeDay.setDate(today.getDate() - 1)
+        dayBeforeDay.setDate(today.getDate() - 1);
         setStartDate(thirtyDaysAgo);
         setEndDate(dayBeforeDay);
         break;
@@ -98,7 +98,6 @@ const DateRangeComponent = ({ onDateRangeChange, selectedDateRange }) => {
       setEndDate(new Date(selectedDateRange.end_date));
       // onDateRangeChange({start_date:selectedDateRange.start_date,end_date:selectedDateRange.end_date});
       count++;
-    
     }
   }, [selectedDateRange]);
   // console.log("inside date range selectedDateRange", selectedDateRange);
@@ -170,10 +169,24 @@ const DateRangeComponent = ({ onDateRangeChange, selectedDateRange }) => {
 
         <Grid container spacing={2} className="py-5">
           <Grid item xs={12} sm={6} md={4}>
-            <div className="q_date_range_start date-picker-font">Start Date</div>
+            <div className="q_date_range_start date-picker-font">
+              Start Date
+            </div>
             <div className="relative">
               <DatePicker
-              sx={{fontFamily: "CircularSTDBook"}}
+                sx={{
+                  fontFamily: "CircularSTDBook",
+                  "& .react-datepicker__input-container input": {
+                    "&:focus": {
+                      borderColor: "black",
+                      outline: "none",
+                    },
+                  },
+                  "& .react-datepicker": {
+                    fontFamily: "CircularSTDBook",
+                    border: "1px solid black",
+                  },
+                }}
                 selected={startDate}
                 onChange={(date) => setStartDate(date)}
                 selectsStart

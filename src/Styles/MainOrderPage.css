@@ -393,11 +393,14 @@
   align-items: flex-start;
 }
 
-.q_input_details:focus {
+/* .q_input_details:focus {
   border-color: #4299e1;
   border: 2px solid #4299e1;
+} */
+.q_input_details:focus {
+  border-color: black;
+  border: 1px solid black;
 }
-
 /* .q_date_range_start{
 color: #818181;
 margin-bottom: 3px;

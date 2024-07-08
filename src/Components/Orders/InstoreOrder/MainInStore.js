@@ -5,25 +5,34 @@ import ContentList from "./ContentList";
 import InstoreTableViewData from "./InstoreTableViewData";
 import OnlineTableViewData from "../OnlineOrder/OnlineTableViewData";
 import MainOnline from "../OnlineOrder/MainOnline";
-import {useAuthDetails} from "../../../Common/cookiesHelper"
+import { useAuthDetails } from "../../../Common/cookiesHelper";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 import { useParams } from "react-router-dom";
 
 const MainInStore = () => {
-  const { start_date, end_date, order_env,order_method } = useParams();
+  const { start_date, end_date, order_env, order_method } = useParams();
   const [activeTab, setActiveTab] = useState("offline");
 
   const [OrderSourceData, setOrderSourceData] = useState(null);
-  const [OrderTypeData, setOrderTypeData] = useState(order_env ? "Closed" : "New");
+  const [OrderTypeData, setOrderTypeData] = useState(
+    order_env ? "Closed" : "New"
+  );
   const [OnlSearchIdData, setOnlSearchIdData] = useState("");
   const [OffSearchIdData, setOffSearchIdData] = useState("");
   const [EmployeeIDData, setEmployeeIDData] = useState(null);
   const [searchId, setSearchId] = useState("");
   const [selectedDateRange, setSelectedDateRange] = useState(null);
   const [isloading, setIsLoading] = useState(false);
-  const [dateRangefromorderTypePage, setDateRangeFromOrderTypePage] = useState({})
-  const{LoginGetDashBoardRecordJson,LoginAllStore,userTypeData,GetSessionLogin}=useAuthDetails()
-  const merchant_id=LoginGetDashBoardRecordJson?.data?.merchant_id
+  const [dateRangefromorderTypePage, setDateRangeFromOrderTypePage] = useState(
+    {}
+  );
+  const {
+    LoginGetDashBoardRecordJson,
+    LoginAllStore,
+    userTypeData,
+    GetSessionLogin,
+  } = useAuthDetails();
+  const merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
   };
@@ -32,14 +41,13 @@ const MainInStore = () => {
     setActiveTab(tab);
   };
 
-  
   // console.log("OrderTypeData",OrderTypeData)
-  useEffect(()=>{
+  useEffect(() => {
     setActiveTab(order_env === "5" ? "online" : "offline");
-    start_date && setSelectedDateRange({start_date, end_date})
+    start_date && setSelectedDateRange({ start_date, end_date });
     // order_env === "5" && setOrderTypeData("Closed")
-  },[order_env,start_date,end_date])
-console.log("dateRangefromorderTypePage",dateRangefromorderTypePage)
+  }, [order_env, start_date, end_date]);
+  console.log("dateRangefromorderTypePage", dateRangefromorderTypePage);
   const handleFilterDataChange = (OrderSource, OrderType, SearchId) => {
     setOrderSourceData(OrderSource);
     setOrderTypeData(OrderType);
@@ -113,7 +121,11 @@ console.log("dateRangefromorderTypePage",dateRangefromorderTypePage)
           {!searchId && (
             <>
               <div className="q_dateRange_header">
-                <DateRangeComponent isloading={isloading} selectedDateRange={selectedDateRange} onDateRangeChange={handleDateRangeChange} />
+                <DateRangeComponent
+                  isloading={isloading}
+                  selectedDateRange={selectedDateRange}
+                  onDateRangeChange={handleDateRangeChange}
+                />
               </div>
               <div className="q_dateRange_header">
                 <ContentList />
@@ -131,7 +143,7 @@ console.log("dateRangefromorderTypePage",dateRangefromorderTypePage)
                 merchant_id={merchant_id}
                 userTypeData={userTypeData}
                 setIsLoading={setIsLoading}
-                 order_method={order_method}
+                order_method={order_method}
               />
             ) : (
               <OnlineTableViewData
