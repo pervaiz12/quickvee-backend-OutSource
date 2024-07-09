@@ -294,7 +294,33 @@ const AddVendors = ({ setVisible }) => {
       e.preventDefault();
     }
   };
-
+  const customStyles = {
+    menu: (provided) => ({
+      ...provided,
+      zIndex: 9999,
+      position: "absolute",
+    }),
+    menuPortal: (base) => ({
+      ...base,
+      zIndex: 9999,
+    }),
+    control: (provided, state) => ({
+      ...provided,
+      borderColor: state.isFocused ? "black" : provided.borderColor,
+      boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
+      "&:hover": {
+        borderColor: state.isFocused ? "black" : provided["&:hover"].borderColor,
+      },
+    }),
+    input: (provided) => ({
+      ...provided,
+      "&:focus": {
+        borderColor: "black",
+        outline: "none",
+      },
+    }),
+    
+  };
   return (
     <>
       <div className="mt-6">
@@ -322,6 +348,7 @@ const AddVendors = ({ setVisible }) => {
                       </div>
                       <CreatableSelect
                         isClearable
+                        styles={customStyles}
                         onChange={handleAutocompleteChange}
                         options={allvendors.map((option, index) => {
                           return {

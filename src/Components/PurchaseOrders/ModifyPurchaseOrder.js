@@ -96,6 +96,25 @@ const customStyles = {
     ...base,
     zIndex: 9999,
   }),
+  control: (provided, state) => ({
+    ...provided,
+    borderColor: state.isFocused ? "black" : provided.borderColor,
+    boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
+    "&:hover": {
+      borderColor: state.isFocused ? "black" : provided["&:hover"].borderColor,
+    },
+  }),
+  input: (provided) => ({
+    ...provided,
+    "&:focus": {
+      borderColor: "black",
+      outline: "none",
+    },
+  }),
+  menuPortal: (provided) => ({
+    ...provided,
+    zIndex: 9999,
+  }),
 };
 
 const ModifyPurchaseOrder = () => {
@@ -901,7 +920,7 @@ const ModifyPurchaseOrder = () => {
         <div className="box">
           <div className="box_shadow_div" style={{ overflow: "unset" }}>
             <Grid container className="z-index-1">
-              <TableContainer>
+              <TableContainer sx={{borderTopLeftRadius:"10px",borderTopRightRadius:"10px"}}>
                 <StyledTable
                   sx={{ minWidth: 500 }}
                   aria-label="customized table"

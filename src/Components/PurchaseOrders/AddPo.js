@@ -185,7 +185,18 @@ const AddPo = ({ seVisible }) => {
                     components={["DatePicker"]}
                   >
                     <DatePicker
-                      sx={{ width: "100%" }}
+                      sx={{
+                        width: "100%",
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                          {
+                            borderColor: "black",
+                            borderWidth: "2px",
+                          },
+                        "& .react-datepicker": {
+                          fontFamily: "CircularSTDBook",
+                          border: "1px solid black",
+                        },
+                      }}
                       className="issued-date default-border-color"
                       size="small"
                       slotProps={{
@@ -221,7 +232,18 @@ const AddPo = ({ seVisible }) => {
                     components={["DatePicker"]}
                   >
                     <DatePicker
-                      sx={{ width: "100%" }}
+                      sx={{
+                        width: "100%",
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                          {
+                            borderColor: "black",
+                            borderWidth: "2px",
+                          },
+                        "& .react-datepicker": {
+                          fontFamily: "CircularSTDBook",
+                          border: "1px solid black",
+                        },
+                      }}
                       className="stock-due-date default-border-color"
                       size="small"
                       slotProps={{

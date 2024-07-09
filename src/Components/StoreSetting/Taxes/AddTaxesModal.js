@@ -23,16 +23,16 @@ const AddTaxesModal = () => {
       title: "",
       percent: "",
     });
-    setErrorMessage("")
-    setErrorTitleMessage("")
-    setErrorPerMessage("")
+    setErrorMessage("");
+    setErrorTitleMessage("");
+    setErrorPerMessage("");
     setOpen(false);
-  }
+  };
   const [errorMessage, setErrorMessage] = useState("");
   const [errorTitleMessage, setErrorTitleMessage] = useState("");
   const [errorPerMessage, setErrorPerMessage] = useState("");
   const [loader, setLoader] = useState(false);
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const dispatch = useDispatch();
 
   const myStyles = {
@@ -46,7 +46,8 @@ const AddTaxesModal = () => {
     width: "6.5rem",
   };
 
-  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } = useAuthDetails();
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   const [taxes, setTaxes] = useState({
     title: "",
@@ -58,15 +59,14 @@ const AddTaxesModal = () => {
 
   const inputChange = (e) => {
     const { name, value } = e.target;
-    const regex = /^[A-Za-z0-9 ]*$/ ;
-    if (name === "title"){
+    const regex = /^[A-Za-z0-9 ]*$/;
+    if (name === "title") {
       if (regex.test(value)) {
         setTaxes({ ...taxes, title: value });
         setErrorTitleMessage(value ? "" : "Title is required");
-        setErrorMessage("")
+        setErrorMessage("");
       }
-    }else{
-
+    } else {
       let fieldValue;
       fieldValue = value
         // Remove extra dots and ensure only one dot exists at most
@@ -98,9 +98,7 @@ const AddTaxesModal = () => {
         setErrorPerMessage("");
       }
       setErrorPerMessage(value ? "" : "Percent is required");
-
     }
-
   };
   const formatPercent = (value) => {
     if (value.match(/^\d{0,2}$/)) {
@@ -131,7 +129,7 @@ const AddTaxesModal = () => {
     formData.append("token_id", userTypeData?.token_id);
     formData.append("login_type", userTypeData?.login_type);
 
-    if(taxes.title === "" || taxes.percent === ""){
+    if (taxes.title === "" || taxes.percent === "") {
       setErrorTitleMessage(taxes.title ? "" : "Title is required");
       setErrorPerMessage(taxes.percent ? "" : "Percent is required");
       return;
@@ -139,7 +137,10 @@ const AddTaxesModal = () => {
     setLoader(true);
     try {
       const res = await axios.post(BASE_URL + ADD_TAXES, formData, {
-        headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}`, },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userTypeData?.token}`,
+        },
       });
       const data = await res.data.status;
       const update_message = await res.data.msg;
@@ -150,7 +151,7 @@ const AddTaxesModal = () => {
         ToastifyAlert("Added Successfully", "success");
         let data = {
           merchant_id: merchant_id,
-          ...userTypeData
+          ...userTypeData,
         };
         if (data) {
           dispatch(fetchtaxesData(data));
@@ -172,8 +173,8 @@ const AddTaxesModal = () => {
       }
     } catch (error) {
       console.error("API Error:", error);
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
     }
     setLoader(false);
   };
@@ -198,13 +199,20 @@ const AddTaxesModal = () => {
       >
         <Box className="view-category-item-modal" style={myStyles}>
           {/* <div className='view-category-item-modal-header'> */}
-          <div className="q-add-categories-section-header" style={{justifyContent:"space-between"}}>
-            
-              <span style={{cursor:"unset"}}>Add Tax</span>
-            
+          <div
+            className="q-add-categories-section-header"
+            style={{ justifyContent: "space-between" }}
+          >
+            <span style={{ cursor: "unset" }}>Add Tax</span>
+
             <div className="float-right">
-              <img src={CrossIcon} alt="icon" className="quic-btn-cancle w-6 h-6 cursor-pointer" onClick={() => handleClose()} />
-              </div>
+              <img
+                src={CrossIcon}
+                alt="icon"
+                className="quic-btn-cancle w-6 h-6 cursor-pointer"
+                onClick={() => handleClose()}
+              />
+            </div>
           </div>
 
           {/* </div> */}
@@ -221,21 +229,20 @@ const AddTaxesModal = () => {
                     value={taxes.title}
                   /> */}
                 </div>
-                  <BasicTextFields
-                    value={taxes.title}
-                    onChangeFun={inputChange}
-                    placeholder="Enter Title"
-                    name="title"
-                    type="text"
-                    // required={true}
-                  />
-                  {errorMessage && (
-                      <p className="error-message">{errorMessage}</p>
-                    )
-                  }
-                  {errorTitleMessage && (
-                    <p className="error-message">{errorTitleMessage}</p>
-                  )}
+                <BasicTextFields
+                  value={taxes.title}
+                  onChangeFun={inputChange}
+                  placeholder="Enter Title"
+                  name="title"
+                  type="text"
+                  // required={true}
+                />
+                {errorMessage && (
+                  <p className="error-message">{errorMessage}</p>
+                )}
+                {errorTitleMessage && (
+                  <p className="error-message">{errorTitleMessage}</p>
+                )}
 
                 <div className="q-add-categories-single-input mt-4">
                   <label for="Percentage">Percentage</label>
@@ -252,27 +259,49 @@ const AddTaxesModal = () => {
                     onKeyPress={handleKeyPress}
                   /> */}
                 </div>
-                  <TextField
-                    id="outlined-basic"
-                    name="percent"
-                    value={taxes.percent}
-                    inputProps={{ maxLength: 5, type: "text" }}
-                    onChange={inputChange}
-                    placeholder="00.00"
-                    variant="outlined"
-                    size="small"
-                    // required={true}
-                    onKeyPress={handleKeyPress}
-                  />
-                  {errorPerMessage && (
-                    <p className="error-message ">{errorPerMessage}</p>
-                  )}
+                <TextField
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "&.Mui-focused fieldset": {
+                        borderColor: "black",
+                      },
+                    },
+                  }}
+                  id="outlined-basic"
+                  name="percent"
+                  value={taxes.percent}
+                  inputProps={{ maxLength: 5, type: "text" }}
+                  onChange={inputChange}
+                  placeholder="00.00"
+                  variant="outlined"
+                  size="small"
+                  // required={true}
+                  onKeyPress={handleKeyPress}
+                />
+                {errorPerMessage && (
+                  <p className="error-message ">{errorPerMessage}</p>
+                )}
               </div>
 
               <div className="q-add-categories-section-middle-footer">
-                <button className="quic-btn quic-btn-save attributeUpdateBTN"  disabled={loader}>
-                  { loader ? <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15}/> Add</> : "Add"}
-                  </button>
+                <button
+                  className="quic-btn quic-btn-save attributeUpdateBTN"
+                  disabled={loader}
+                >
+                  {loader ? (
+                    <>
+                      <CircularProgress
+                        color={"inherit"}
+                        className="loaderIcon"
+                        width={15}
+                        size={15}
+                      />{" "}
+                      Add
+                    </>
+                  ) : (
+                    "Add"
+                  )}
+                </button>
 
                 <button
                   onClick={() => handleClose()}

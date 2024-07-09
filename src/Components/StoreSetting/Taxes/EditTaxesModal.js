@@ -29,12 +29,12 @@ const EditTaxesModal = ({ selectedTaxe }) => {
       title: "",
       percent: "",
     });
-    setErrorMessage("")
-    setErrorTitleMessage("")
-    setErrorPerMessage("")
+    setErrorMessage("");
+    setErrorTitleMessage("");
+    setErrorPerMessage("");
     setOpen(false);
     setSelectedOption("taxchoice");
-  }
+  };
 
   const [errorMessage, setErrorMessage] = useState("");
   const dispatch = useDispatch();
@@ -42,7 +42,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
   const [errorTitleMessage, setErrorTitleMessage] = useState("");
   const [errorPerMessage, setErrorPerMessage] = useState("");
   const [loader, setLoader] = useState(false);
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const myStyles = {
     width: "58rem",
     position: "absolute",
@@ -60,7 +60,8 @@ const EditTaxesModal = ({ selectedTaxe }) => {
     width: "6.5rem",
   };
 
-  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } = useAuthDetails();
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   async function fetchData() {
@@ -86,8 +87,8 @@ const EditTaxesModal = ({ selectedTaxe }) => {
       }
     } catch (error) {
       console.error("Error:", error);
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
     }
   }
 
@@ -104,7 +105,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
           });
         }
       };
-      setApplyToCategory(false)
+      setApplyToCategory(false);
 
       fetchDataAndUpdateState();
     }
@@ -124,7 +125,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
       if (regex.test(value)) {
         setTaxes({ ...taxes, title: value });
         setErrorTitleMessage(value ? "" : "Title is required");
-        setErrorMessage("")
+        setErrorMessage("");
       }
     } else {
       let fieldValue;
@@ -186,8 +187,10 @@ const EditTaxesModal = ({ selectedTaxe }) => {
     // Assuming you have the selected category ID stored in selectedCategory state
     const categoryId = selectedCategory;
 
-
-    if (applyToCategory && (!categoryId || categoryId === "--Select Category--")) {
+    if (
+      applyToCategory &&
+      (!categoryId || categoryId === "--Select Category--")
+    ) {
       setStoreToError("Please select a category");
       return; // Prevent form submission
     } else {
@@ -219,7 +222,10 @@ const EditTaxesModal = ({ selectedTaxe }) => {
       try {
         // Make your API request with axios
         const response = await axios.post(BASE_URL + UPDATE_TAXES, formData, {
-          headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${userTypeData?.token}` },
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${userTypeData?.token}`,
+          },
         });
 
         // Handle the response as needed
@@ -231,7 +237,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
           ToastifyAlert("Updated Successfully", "success");
           let data = {
             merchant_id: merchant_id,
-            ...userTypeData
+            ...userTypeData,
           };
           if (data) {
             dispatch(fetchtaxesData(data));
@@ -249,8 +255,8 @@ const EditTaxesModal = ({ selectedTaxe }) => {
       } catch (error) {
         console.error("Error submitting data:", error);
         // Handle errors as needed
-        handleCoockieExpire()
-        getUnAutherisedTokenMessage()
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
       }
       setLoader(false);
     } else {
@@ -276,7 +282,10 @@ const EditTaxesModal = ({ selectedTaxe }) => {
       try {
         // Make your API request with axios
         const response = await axios.post(BASE_URL + UPDATE_TAXES, formData, {
-          headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${userTypeData?.token}` },
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${userTypeData?.token}`,
+          },
         });
         // Handle the response as needed
         const update_message = response.data.status;
@@ -287,7 +296,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
           ToastifyAlert(msg, "success");
           let data = {
             merchant_id: merchant_id,
-            ...userTypeData
+            ...userTypeData,
           };
           if (data) {
             dispatch(fetchtaxesData(data));
@@ -303,8 +312,8 @@ const EditTaxesModal = ({ selectedTaxe }) => {
         // Close the modal or perform any other actions
       } catch (error) {
         console.error("Error submitting data:", error);
-        handleCoockieExpire()
-        getUnAutherisedTokenMessage()
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
         // Handle errors as needed
       }
       setLoader(false);
@@ -314,16 +323,14 @@ const EditTaxesModal = ({ selectedTaxe }) => {
   // for Apply tax to category
   const [applyToCategory, setApplyToCategory] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("");
-  
-  const [selectedOption, setSelectedOption] = useState('taxchoice');
+
+  const [selectedOption, setSelectedOption] = useState("taxchoice");
 
   const updateTaxByOptions = (e) => {
     const { name } = e.target;
 
-
     setSelectedOption(name);
   };
-
 
   const [categoryOptions, setCategoryOptions] = useState([]);
   const [loadingCategories, setLoadingCategories] = useState(true);
@@ -336,8 +343,14 @@ const EditTaxesModal = ({ selectedTaxe }) => {
       formData.append("login_type", userTypeData?.login_type);
       try {
         const response = await axios.post(
-          BASE_URL + TAXE_CATEGORY_LIST, formData,
-          { headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${userTypeData?.token}` } }
+          BASE_URL + TAXE_CATEGORY_LIST,
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${userTypeData?.token}`,
+            },
+          }
         );
 
         // Assuming the API response has a data property containing the category list
@@ -353,8 +366,8 @@ const EditTaxesModal = ({ selectedTaxe }) => {
       } catch (error) {
         console.error("Error fetching categories:", error);
         setLoadingCategories(false);
-        handleCoockieExpire()
-        getUnAutherisedTokenMessage()
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
       }
     };
 
@@ -424,12 +437,19 @@ const EditTaxesModal = ({ selectedTaxe }) => {
       >
         <Box className="view-category-item-modal" style={myStyles}>
           {/* <div className='view-category-item-modal-header'> */}
-          <div className="q-add-categories-section-header" style={{ justifyContent: "space-between" }}>
-
+          <div
+            className="q-add-categories-section-header"
+            style={{ justifyContent: "space-between" }}
+          >
             <span style={{ cursor: "unset" }}>Edit Tax</span>
 
             <div className="float-right">
-              <img src={CrossIcon} alt="icon" className="quic-btn-cancle w-6 h-6 cursor-pointer" onClick={() => handleClose()} />
+              <img
+                src={CrossIcon}
+                alt="icon"
+                className="quic-btn-cancle w-6 h-6 cursor-pointer"
+                onClick={() => handleClose()}
+              />
             </div>
           </div>
 
@@ -460,9 +480,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                       disable={true}
                     />
                     {errorMessage && (
-                      <span className="error-message" >
-                        {errorMessage}
-                      </span>
+                      <span className="error-message">{errorMessage}</span>
                     )}
                     {errorTitleMessage && (
                       <p className="error-message">{errorTitleMessage}</p>
@@ -487,7 +505,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                       placeholder="Enter Title"
                       name="title"
                       type="text"
-                    // required={true}
+                      // required={true}
                     />
                     {errorMessage && (
                       <span className="error-message" style={{ color: "red" }}>
@@ -517,6 +535,13 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                   /> */}
                 </div>
                 <TextField
+                  sx={{
+                    "& .MuiOutlinedInput-root": {
+                      "&.Mui-focused fieldset": {
+                        borderColor: "black",
+                      },
+                    },
+                  }}
                   id="outlined-basic"
                   name="percent"
                   value={taxes.percent}
@@ -615,7 +640,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                             dropdownFor={"category"}
                           />
 
-                          <span className="input-error error-message" >
+                          <span className="input-error error-message">
                             {storeToError && (
                               <span className="input-error ">
                                 {storeToError}
@@ -635,7 +660,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                         <input
                           type="radio"
                           name="taxchoice"
-                          checked={selectedOption === 'taxchoice'}
+                          checked={selectedOption === "taxchoice"}
                           onChange={updateTaxByOptions}
                         />
                         <span className="checkmark_section"></span>
@@ -645,9 +670,10 @@ const EditTaxesModal = ({ selectedTaxe }) => {
                         <input
                           type="radio"
                           name="taxupdate"
-                          checked={selectedOption === 'taxupdate'}
+                          checked={selectedOption === "taxupdate"}
                           onChange={updateTaxByOptions}
-                        /><span className="checkmark_section"></span>
+                        />
+                        <span className="checkmark_section"></span>
                       </label>
                     </div>
                   </>
@@ -655,8 +681,23 @@ const EditTaxesModal = ({ selectedTaxe }) => {
               </div>
 
               <div className="q-add-categories-section-middle-footer">
-                <button className="quic-btn quic-btn-save attributeUpdateBTN" disabled={loader}>
-                  {loader ? <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15} /> Update</> : "Update"}
+                <button
+                  className="quic-btn quic-btn-save attributeUpdateBTN"
+                  disabled={loader}
+                >
+                  {loader ? (
+                    <>
+                      <CircularProgress
+                        color={"inherit"}
+                        className="loaderIcon"
+                        width={15}
+                        size={15}
+                      />{" "}
+                      Update
+                    </>
+                  ) : (
+                    "Update"
+                  )}
                 </button>
 
                 <button

@@ -484,6 +484,13 @@ const ReceivePurchaseOrderItems = () => {
                       {purchaseOrder?.is_void === "0" && (
                         <StyledTableCell>
                           <TextField
+                            sx={{
+                              "& .MuiOutlinedInput-root": {
+                                "&.Mui-focused fieldset": {
+                                  borderColor: "black",
+                                },
+                              },
+                            }}
                             id="outlined-basic"
                             inputProps={{ type: "number" }}
                             value={

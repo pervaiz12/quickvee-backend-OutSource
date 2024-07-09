@@ -560,7 +560,7 @@ const TimesheetListing = ({ data }) => {
     for (const [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
     }
-    setLoader(true)
+    setLoader(true);
     try {
       const response = await axios.post(
         `${BASE_URL}${ADD_TIME_BREAK}`,
@@ -599,7 +599,7 @@ const TimesheetListing = ({ data }) => {
       getUnAutherisedTokenMessage();
       console.error("API Error:", error);
     }
-    setLoader(false)
+    setLoader(false);
   };
   // for Break Modal End
 
@@ -725,7 +725,7 @@ const TimesheetListing = ({ data }) => {
     setDeleteBreakId(dataTimesheet);
     setModalheadText("Timeclock");
     setDeleteModalOpen(true);
-    setDeleteBreakTime("")
+    setDeleteBreakTime("");
   };
 
   const confirmDeleteCategory = async () => {
@@ -1084,7 +1084,18 @@ const TimesheetListing = ({ data }) => {
                           <img src={caleIcon} alt="calendar-icon" />
                         ),
                       }}
-                      sx={{ width: "100%" }}
+                      sx={{
+                        width: "100%",
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                          {
+                            borderColor: "black",
+                            borderWidth: "2px",
+                          },
+                        "& .react-datepicker": {
+                          fontFamily: "CircularSTDBook",
+                          border: "1px solid black",
+                        },
+                      }}
                     />
                   </LocalizationProvider>
                   {dateStartError && (
@@ -1116,7 +1127,18 @@ const TimesheetListing = ({ data }) => {
                           <img src={TimeIcon} alt="time-icon" />
                         ),
                       }}
-                      sx={{ width: "100%" }}
+                      sx={{
+                        width: "100%",
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                          {
+                            borderColor: "black",
+                            borderWidth: "2px",
+                          },
+                        "& .react-datepicker": {
+                          fontFamily: "CircularSTDBook",
+                          border: "1px solid black",
+                        },
+                      }}
                     />
                   </LocalizationProvider>
 
@@ -1169,7 +1191,18 @@ const TimesheetListing = ({ data }) => {
                           <img src={caleIcon} alt="calendar-icon" />
                         ),
                       }}
-                      sx={{ width: "100%" }}
+                      sx={{
+                        width: "100%",
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                          {
+                            borderColor: "black",
+                            borderWidth: "2px",
+                          },
+                        "& .react-datepicker": {
+                          fontFamily: "CircularSTDBook",
+                          border: "1px solid black",
+                        },
+                      }}
                     />
                   </LocalizationProvider>
                   {dateEndError && (
@@ -1201,7 +1234,18 @@ const TimesheetListing = ({ data }) => {
                           <img src={TimeIcon} alt="time-icon" />
                         ),
                       }}
-                      sx={{ width: "100%" }}
+                      sx={{
+                        width: "100%",
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                          {
+                            borderColor: "black",
+                            borderWidth: "2px",
+                          },
+                        "& .react-datepicker": {
+                          fontFamily: "CircularSTDBook",
+                          border: "1px solid black",
+                        },
+                      }}
                     />
                   </LocalizationProvider>
                   {dateEndTimeError && (
@@ -1227,8 +1271,24 @@ const TimesheetListing = ({ data }) => {
           </div>
 
           <div className="q-add-categories-section-middle-footer">
-            <button className="quic-btn quic-btn-save attributeUpdateBTN" onClick={handleSave} disabled={loader}>
-              { loader ? <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15}/> Add</> : "Add"}
+            <button
+              className="quic-btn quic-btn-save attributeUpdateBTN"
+              onClick={handleSave}
+              disabled={loader}
+            >
+              {loader ? (
+                <>
+                  <CircularProgress
+                    color={"inherit"}
+                    className="loaderIcon"
+                    width={15}
+                    size={15}
+                  />{" "}
+                  Add
+                </>
+              ) : (
+                "Add"
+              )}
             </button>
             <button onClick={closeModal} className="quic-btn quic-btn-cancle">
               Cancel
@@ -1288,7 +1348,18 @@ const TimesheetListing = ({ data }) => {
                           <img src={TimeIcon} alt="time-icon" />
                         ),
                       }}
-                      sx={{ width: "100%" }}
+                      sx={{
+                        width: "100%",
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                          {
+                            borderColor: "black",
+                            borderWidth: "2px",
+                          },
+                        "& .react-datepicker": {
+                          fontFamily: "CircularSTDBook",
+                          border: "1px solid black",
+                        },
+                      }}
                     />
                   </LocalizationProvider>
                   {BreakInTimeError && (
@@ -1311,7 +1382,18 @@ const TimesheetListing = ({ data }) => {
                           <img src={TimeIcon} alt="time-icon" />
                         ),
                       }}
-                      sx={{ width: "100%" }}
+                      sx={{
+                        width: "100%",
+                        "& .MuiOutlinedInput-root.Mui-focused .MuiOutlinedInput-notchedOutline":
+                          {
+                            borderColor: "black",
+                            borderWidth: "2px",
+                          },
+                        "& .react-datepicker": {
+                          fontFamily: "CircularSTDBook",
+                          border: "1px solid black",
+                        },
+                      }}
                     />
                   </LocalizationProvider>
                   {BreakOutTimeError && (
@@ -1343,7 +1425,19 @@ const TimesheetListing = ({ data }) => {
               onClick={handleBreakSave}
               disabled={loader}
             >
-              { loader ? <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15}/> Add</> : "Add"}
+              {loader ? (
+                <>
+                  <CircularProgress
+                    color={"inherit"}
+                    className="loaderIcon"
+                    width={15}
+                    size={15}
+                  />{" "}
+                  Add
+                </>
+              ) : (
+                "Add"
+              )}
             </button>
             <button
               onClick={closeModalBreak}

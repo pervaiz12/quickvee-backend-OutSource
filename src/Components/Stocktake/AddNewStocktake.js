@@ -647,6 +647,22 @@ const AddNewStocktake = ({
       ...base,
       zIndex: 9999,
     }),
+    control: (provided, state) => ({
+      ...provided,
+      borderColor: state.isFocused ? "black" : provided.borderColor,
+      boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
+      "&:hover": {
+        borderColor: state.isFocused ? "black" : provided["&:hover"].borderColor,
+      },
+    }),
+    input: (provided) => ({
+      ...provided,
+      "&:focus": {
+        borderColor: "black",
+        outline: "none",
+      },
+    }),
+    
   };
 
   const handleKeyPress = (e) => {

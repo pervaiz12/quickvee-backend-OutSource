@@ -261,7 +261,7 @@ const DraggableTable = ({
   };
   return (
     <>
-      <TableContainer component={Paper}>
+      <TableContainer sx={{borderTopLeftRadius:"0",borderTopRightRadius:"0"}} component={Paper}>
         <Table sx={{ minWidth: 500 }}>
           <TableHead>
             <TableRow>
