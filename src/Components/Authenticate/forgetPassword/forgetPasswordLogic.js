@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Validate from "../validationFile/validate";
 import axios from "axios";
 import { BASE_URL, EMAIL_VARIFICATION } from "../../../Constants/Config";
@@ -11,22 +11,39 @@ export default function ForgetPasswordLogic(setLoading) {
   const [status, setStatus] = useState("");
   let emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 
+  // const handleOnChange = (e) => {
+  //   const { name, value } = e.target;
+  //   let newErrors = { ...errors }; // Copy errors object to avoid direct state mutation
+
+  //   // // Validate email field
+  //   if (name === "email") {
+  //     newErrors[name] =
+  //       value === ""
+  //         ? `Email is required`
+  //         : !emailRegex.test(value)
+  //           ? `Please enter a valid ${name}`
+  //           : "";
+  //   }
+
+  //   setErrors({ ...newErrors });
+
+  //   setEmail(value.replace(/^\s+/, ""));
+  // };
   const handleOnChange = (e) => {
     const { name, value } = e.target;
-    let newErrors = { ...errors }; // Copy errors object to avoid direct state mutation
+    let newErrors = { ...errors };
 
-    // // Validate email field
+    // Validate email field
     if (name === "email") {
       newErrors[name] =
         value === ""
-          ? `Email is required`
+          ? "Email is required"
           : !emailRegex.test(value)
-            ? `Please enter a valid ${name}`
+            ? "Enter a valid email"
             : "";
     }
 
-    setErrors({ ...newErrors });
-
+    setErrors(newErrors);
     setEmail(value.replace(/^\s+/, ""));
   };
 
@@ -40,20 +57,52 @@ export default function ForgetPasswordLogic(setLoading) {
   const isValidate = () => {
     let newErrors = { ...errors };
     let error = false;
-    if (email == "") {
+
+    if (email === "") {
       newErrors["email"] = "Email is required";
+      error = true;
+    } else if (!emailRegex.test(email)) {
+      newErrors["email"] = "Enter a valid email";
       error = true;
     } else {
       newErrors["email"] = "";
-      error = false;
     }
-    setErrors({ ...newErrors });
-    if (error == true) {
-      return false;
-    } else {
-      return true;
+
+    setErrors(newErrors);
+    return !error;
+  };
+  const keyEnter = (event) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      if (isValidate()) {
+        handleSubmitData(event);
+      }
     }
   };
+
+  useEffect(() => {
+    document.addEventListener("keydown", keyEnter);
+    return () => {
+      document.removeEventListener("keydown", keyEnter);
+    };
+  }, [email, errors]);
+  // const isValidate = () => {
+  //   let newErrors = { ...errors };
+  //   let error = false;
+  //   if (email == "") {
+  //     newErrors["email"] = "Email is required";
+  //     error = true;
+  //   } else {
+  //     newErrors["email"] = "";
+  //     error = false;
+  //   }
+  //   setErrors({ ...newErrors });
+  //   if (error == true) {
+  //     return false;
+  //   } else {
+  //     return true;
+  //   }
+  // };
 
   const handleHideErrorMessage = () => {
     setMessage("");
@@ -78,7 +127,6 @@ export default function ForgetPasswordLogic(setLoading) {
               { headers: { "Content-Type": "multipart/form-data" } }
             );
             // console.log(response?.data?.message_code==1);
-
             if (!!response?.data?.message) {
               setStatus(response?.data?.message_code);
               setMessage(response?.data?.message);
