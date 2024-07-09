@@ -256,7 +256,7 @@ const PurchaseTable = ({ seVisible }) => {
                 {allPurchaseData &&
                 Array.isArray(allPurchaseData) &&
                 allPurchaseData.length >= 1 ? (
-                  <TableContainer component={Paper}>
+                  <TableContainer sx={{borderTopRightRadius:"0",borderTopLeftRadius:"0"}} component={Paper}>
                     <Table aria-label="customized table">
                       <TableHead>
                         <TableRow>

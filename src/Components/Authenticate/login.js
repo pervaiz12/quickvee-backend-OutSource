@@ -196,6 +196,13 @@ export default function Login() {
                 >
                   <FormControl fullWidth>
                     <TextField
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          "&.Mui-focused fieldset": {
+                            borderColor: "black",
+                          },
+                        },
+                      }}
                       className="input-field"
                       label="Password"
                       variant="outlined"
