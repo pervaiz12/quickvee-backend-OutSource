@@ -14,6 +14,9 @@ import PasswordShow from "../../Common/passwordShow";
 
 const MainProducts = () => {
   const dispatch = useDispatch();
+  const { inventory_approval } = useSelector(
+    (state) => state.StoreSetupList.storesetupData
+  );
   const [offset, setoffset] = useState(0);
   const [limit, setlimit] = useState(10);
   const [selectedEmployee, setSelectedEmployee] = useState("Select");
@@ -24,8 +27,9 @@ const MainProducts = () => {
     useState("Select listing");
 
   const [selectedListingTypeValue, setSelectedListingTypeValue] = useState("0");
-  
-  const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } = PasswordShow();
+
+  const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
+    PasswordShow();
 
   const [del_picDropdownVisible, setdel_picDropdownVisible] = useState(false);
   const [transactionDropdownVisible, setTransactionDropdownVisible] =
@@ -78,7 +82,6 @@ const MainProducts = () => {
         getNetworkError();
       }
     }
-
   }, [
     dispatch,
     debouncedValue,
@@ -130,10 +133,11 @@ const MainProducts = () => {
               dispatch(updateProductsType(type_date))
                 .then((actionResult) => {
                   const responseData = actionResult.payload;
-  
+
                   if (responseData) {
                     let del_pic_data = {
-                      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+                      merchant_id:
+                        LoginGetDashBoardRecordJson?.data?.merchant_id,
                       category_id: categoryId === "All" ? "all" : categoryId,
                       show_status: selectedStatus,
                       name: searchId,
@@ -258,9 +262,14 @@ const MainProducts = () => {
           }}
         />
       </div>
-      <div className="q-attributes-main-page">
-        <ProductContent />
-      </div>
+      {userTypeData?.login_type !== "superadmin" &&
+      inventory_approval === "1" ? (
+        <div className="q-attributes-main-page">
+          <ProductContent />
+        </div>
+      ) : (
+        ""
+      )}
       <div className="q-attributes-main-page">
         <ProductTable
           {...{

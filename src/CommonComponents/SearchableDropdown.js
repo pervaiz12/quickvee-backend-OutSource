@@ -19,7 +19,7 @@ const SearchableDropdown = ({
   hideSelectedList,
   placeholder,
   pageUrl,
-  productTitle
+  productTitle,
 }) => {
   const { checkLength } = Validation();
   const [filterOptions, setFilterOptions] = useState(optionList);
@@ -56,13 +56,13 @@ const SearchableDropdown = ({
     }
   }, [selectedOption, hideSelectedValue, hideSelectedList, optionList]);
 
-  useEffect(()=>{
+  useEffect(() => {
     // remove category error if exist.
-    if(selectedOption?.length > 0 && !!handleUpdateError) {
+    if (selectedOption?.length > 0 && !!handleUpdateError) {
       checkLength(keyName, selectedOption, error);
       handleUpdateError(error);
     }
-  }, [selectedOption])
+  }, [selectedOption]);
 
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -77,21 +77,39 @@ const SearchableDropdown = ({
     };
   }, [showOptions]);
 
-  useEffect(()=>{
+  useEffect(() => {
     // set defaultTax in taxes dropdown
-    if(optionList?.length && keyName === "taxes" && pageUrl === "inventory/products/add"){
-      const findOption = optionList?.filter((item)=> item?.title === "DefaultTax");
-      handleSelectProductOptions(findOption[0], keyName)
+    if (
+      optionList?.length &&
+      keyName === "taxes" &&
+      pageUrl === "inventory/products/add"
+    ) {
+      const findOption = optionList?.filter(
+        (item) => item?.title === "DefaultTax"
+      );
+      handleSelectProductOptions(findOption[0], keyName);
     }
-  }, [optionList, keyName, productTitle])
+  }, [optionList, keyName, productTitle]);
 
   const changeFilterableList = () => {
-    const filterOptionList = optionList?.filter((product)=> !product?.title?.toLowerCase().includes(productTitle?.toLowerCase()));
+    const filterOptionList = optionList?.filter(
+      (product) =>
+        !product?.title?.toLowerCase().includes(productTitle?.toLowerCase())
+    );
     // filter incoming optionList items when onchange run
     if (filterOptions?.length) {
-      return  pageUrl === "inventory/products/edit" ? filterOptions?.filter((product)=> !product?.title?.toLowerCase().includes(productTitle?.toLowerCase())): filterOptions;
+      return pageUrl === "inventory/products/edit"
+        ? filterOptions?.filter(
+            (product) =>
+              !product?.title
+                ?.toLowerCase()
+                .includes(productTitle?.toLowerCase())
+          )
+        : filterOptions;
     }
-    return pageUrl === "inventory/products/edit" ? filterOptionList: optionList;
+    return pageUrl === "inventory/products/edit"
+      ? filterOptionList
+      : optionList;
   };
 
   const toggleOption = () => {
@@ -116,13 +134,12 @@ const SearchableDropdown = ({
       await checkLength(keyName, selectedOption, error);
       handleUpdateError(error);
     }
-
   };
   return (
     <>
       {title ? (
         <div className="title-area">
-          <span  className="product-input-title">{title}</span>
+          <span className="product-input-title">{title}</span>
         </div>
       ) : (
         ""
@@ -191,7 +208,7 @@ const SearchableDropdown = ({
           </div>
         </div>
         {showOptions ? (
-          <div className={`options-box`}>
+          <div className="options-box">
             {showOptions
               ? changeFilterableList()?.map((opt) => {
                   if (typeof opt === "string") {

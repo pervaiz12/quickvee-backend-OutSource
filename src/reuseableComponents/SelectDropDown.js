@@ -50,6 +50,16 @@ const SelectDropDown = ({
             defaultValue={listItem[0]}
             renderValue={default_title && ((value) => default_title)}
             // sx={{fontFamily:"inherit"}}
+            MenuProps={{
+              PaperProps: {
+                sx: {
+                  "&::-webkit-scrollbar": {
+                    width: "2px",
+                    height: "auto",
+                  },
+                },
+              },
+            }}
           >
             {heading && (
               <MenuItem
