@@ -715,15 +715,12 @@ const ProductTable = ({
                                               {product?.media?.split(",")
                                                 .length > 4 ? (
                                                 <div className="mt-3 text-sm font-medium">
-                                                  <a
-                                                    href="#"
-                                                    className="text-blue-500"
-                                                  >
+                                                  <span className="text-blue-500">
                                                     +{" "}
                                                     {product.media.split(",")
                                                       .length - 4}{" "}
                                                     others
-                                                  </a>
+                                                  </span>
                                                 </div>
                                               ) : (
                                                 ""

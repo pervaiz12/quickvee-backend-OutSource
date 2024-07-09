@@ -82,6 +82,7 @@ const AddProducts = () => {
     relatedProduct: [],
     frequentlyBought: [],
     files: [],
+    uploadFiles: [],
   });
 
   const [bulkEditPo, setBulkEditPo] = useState([
@@ -233,8 +234,6 @@ const AddProducts = () => {
 
   const [costPer, setCostPer] = useState(null);
   // const [varientTitle, setVarientTitle] = useState([]);
-
-  const [uploadImage, setUploadImage] = useState([]);
 
   const [varientError, setVarientError] = useState({
     error: "",
@@ -472,6 +471,10 @@ const AddProducts = () => {
       deleteImage = productInfo?.files?.filter((img) => {
         return img?.file?.name !== imageToDelete?.file?.name;
       });
+      setProductInfo((prev) => ({
+        ...prev,
+        ["uploadFiles"]: deleteImage,
+      }));
     }
     setProductInfo((prev) => ({
       ...prev,
@@ -511,6 +514,10 @@ const AddProducts = () => {
               ...prevValue,
               ["files"]: [
                 ...prevValue["files"],
+                { file: img, base64: reader.result },
+              ],
+              ["uploadFiles"]: [
+                ...prevValue["uploadFiles"],
                 { file: img, base64: reader.result },
               ],
             }));
@@ -665,7 +672,7 @@ const AddProducts = () => {
   };
 
   const handleImageChange = (e) => {
-    setUploadImage(e.target.files);
+    // setUploadImage(e.target.files);
     let files = [];
     files = [...e?.target?.files];
     if (files?.length) {
@@ -678,6 +685,10 @@ const AddProducts = () => {
               ...prevValue,
               ["files"]: [
                 ...prevValue["files"],
+                { file: img, base64: reader.result },
+              ],
+              ["uploadFiles"]: [
+                ...prevValue["uploadFiles"],
                 { file: img, base64: reader.result },
               ],
             }));
@@ -1488,7 +1499,6 @@ const AddProducts = () => {
   };
 
   // console.log("formvalue", formValue);
-
   const handleVarientTitleBasedItemList = () => {
     if (varientLength.length) {
       if (
@@ -1807,6 +1817,7 @@ const AddProducts = () => {
         files: !!productData?.media
           ? productData?.media?.split(",")?.map((img) => img)
           : [],
+        uploadFiles: [],
       });
 
       // fill the varient options data
@@ -2274,8 +2285,8 @@ const AddProducts = () => {
             formdata.append(i, data[i]);
           }
         }
-        for (let i = 0; i < uploadImage.length; i++) {
-          formdata.append("files[]", uploadImage[i]);
+        for (let i = 0; i < productInfo?.uploadFiles?.length; i++) {
+          formdata.append("files[]", productInfo?.uploadFiles[i]?.file);
         }
         try {
           const res = await (pageUrl === "inventory/products/edit"
@@ -2295,8 +2306,9 @@ const AddProducts = () => {
               setProductInfo((prev) => ({
                 ...prev,
                 files: [],
+                uploadFiles: [],
               }));
-              setUploadImage([]);
+              // setUploadImage([]);
             } else {
               navigate("/inventory/products");
             }

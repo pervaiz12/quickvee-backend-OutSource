@@ -24,7 +24,7 @@ const EditPage = ({
   inventoryData,
   fetchProductDataById,
   isVarientEdit,
-  fetchSingleVarientData
+  fetchSingleVarientData,
 }) => {
   const [value, setValue] = React.useState("1");
 
@@ -37,7 +37,7 @@ const EditPage = ({
       setValue("2");
     } else if (modalType === "single_instant") {
       setValue("3");
-    } else {  
+    } else {
       setValue("1");
     }
   }, [modalType]);
@@ -50,7 +50,7 @@ const EditPage = ({
         aria-labelledby="parent-modal-title"
         aria-describedby="parent-modal-description"
       >
-        <Box className="product-edit-modal">
+        <Box className="product-edit-modal custom-scroll">
           <div class="cancel-btn">
             <img
               src={CloseIcon}
@@ -86,7 +86,14 @@ const EditPage = ({
                       ""
                     )}
                     {modalType !== "single_vendor" ? (
-                      <Tab label={`${modalType !== "single_instant" ? "Bulk Instant PO": "Instant PO"}`} value="3" />
+                      <Tab
+                        label={`${
+                          modalType !== "single_instant"
+                            ? "Bulk Instant PO"
+                            : "Instant PO"
+                        }`}
+                        value="3"
+                      />
                     ) : (
                       ""
                     )}
@@ -122,7 +129,6 @@ const EditPage = ({
                     fetchProductDataById={fetchProductDataById}
                     fetchSingleVarientData={fetchSingleVarientData}
                     inventoryData={inventoryData}
-
                   />
                 </TabPanel>
               </TabContext>

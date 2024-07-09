@@ -63,7 +63,7 @@ const ProductSalesReport = () => {
   const productId = location?.pathname?.split("/")[4];
   const varientId = location?.pathname?.split("/")[5];
   const dispatch = useDispatch();
-  const {userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
+  const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
 
   const [salesData, setSalesData] = useState([]);
   const [filterData, setFilterData] = useState([]);
@@ -77,22 +77,24 @@ const ProductSalesReport = () => {
   const [searchRecord, setSearchRecord] = useState("");
   const [storename, setStorename] = useState();
   const [submitmessage, setsubmitmessage] = useState("");
-  const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } = PasswordShow();
-
+  const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
+    PasswordShow();
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const debouncedValue = useDebounce(searchRecord);
 
-  const fetchSalesData= async()=>{
+  const fetchSalesData = async () => {
     const formData = new FormData();
-    formData.append("merchant_id", LoginGetDashBoardRecordJson?.data?.merchant_id);
+    formData.append(
+      "merchant_id",
+      LoginGetDashBoardRecordJson?.data?.merchant_id
+    );
     formData.append("product_id", productId);
     formData.append("variant_id", !!varientId ? varientId : "");
     formData.append("login_type", userTypeData?.login_type);
     formData.append("token_id", userTypeData?.token_id);
     formData.append("token", userTypeData?.token);
-    
-    
+
     setLoading(true);
     try {
       const res = await dispatch(fetchSalesHistory(formData));
@@ -100,7 +102,7 @@ const ProductSalesReport = () => {
         setSalesData(res?.payload?.sales_history);
         setFilterData(res?.payload?.sales_history);
       }
-    }  catch (error) {
+    } catch (error) {
       if (error.status == 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
@@ -110,7 +112,7 @@ const ProductSalesReport = () => {
     } finally {
       setLoading(false);
     }
-  }
+  };
 
   useEffect(() => {
     fetchSalesData();
@@ -133,13 +135,12 @@ const ProductSalesReport = () => {
     const filterList = salesData?.filter(
       (i) =>
         (i?.order_id).toLowerCase().includes(value.toLowerCase()) ||
-        (i?.create_date).toLowerCase().includes(value.toLowerCase()) || 
-        (i?.create_date).toLowerCase().includes(value.toLowerCase()) 
+        (i?.create_date).toLowerCase().includes(value.toLowerCase()) ||
+        (i?.create_date).toLowerCase().includes(value.toLowerCase())
     );
     setFilterData(filterList?.length ? filterList : []);
     setTotalCount(filterList?.length);
   };
-
 
   return (
     <div className="box">
@@ -148,22 +149,29 @@ const ProductSalesReport = () => {
           <Loader />
         </div>
       ) : (
-   
-
-          <div className="q-attributes-main-page q-category-bottom-detail-section">
-            <div className="q-add-categories-section">
-              <div className="q-add-categories-section-header">
-                <span>
-                  <span style={{ width: "100%", display:'flex' }}  onClick={() => {
-                    navigate(`/inventory/products/edit/${location.pathname.split('/')[4]}`);
-                  }}>
-                    <img src={AddNewCategory} alt="Add-New-Category" />
-                    Sales History - {searchParams.get('title')} {searchParams.get('varientName')? '- '+ searchParams.get('varientName'): ""}
-                  </span>
+        <div className="q-attributes-main-page q-category-bottom-detail-section">
+          <div className="q-add-categories-section">
+            <div className="q-add-categories-section-header">
+              <span>
+                <span
+                  style={{ width: "100%", display: "flex" }}
+                  onClick={() => {
+                    navigate(
+                      `/inventory/products/edit/${
+                        location.pathname.split("/")[4]
+                      }`
+                    );
+                  }}
+                >
+                  <img src={AddNewCategory} alt="Add-New-Category" />
+                  Sales History - {searchParams.get("title")}{" "}
+                  {searchParams.get("varientName")
+                    ? "- " + searchParams.get("varientName")
+                    : ""}
                 </span>
-              </div>
-              {
-                salesData?.length ? 
+              </span>
+            </div>
+            {salesData?.length ? (
               <Grid container sx={{ padding: 2.5 }}>
                 <Grid item xs={12}>
                   <InputTextSearch
@@ -175,95 +183,90 @@ const ProductSalesReport = () => {
                     autoComplete="off"
                   />
                 </Grid>
-              </Grid>:""
-              }
-              <div className="q-add-categories-section-middle-form sales-history-table">
-                    {
-                      salesData?.length ?
-                      
-                    <Grid container sx={{ padding: 2.5 }}>
-                      <Grid item xs={12}>
-                          <Pagination
-                            currentPage={currentPage}
-                            totalItems={totalCount}
-                            itemsPerPage={rowsPerPage}
-                            onPageChange={paginate}
-                            rowsPerPage={rowsPerPage}
-                            setRowsPerPage={setRowsPerPage}
-                            setCurrentPage={setCurrentPage}
-                          />
-                      </Grid>
-                    </Grid>
-                     
-                      :""
-                    }
-                <TableContainer>
-                  <StyledTable
-                    sx={{ minWidth: 500 }}
-                    aria-label="customized table"
-                  >
+              </Grid>
+            ) : (
+              ""
+            )}
+            <div className="q-add-categories-section-middle-form sales-history-table">
+              {/* {salesData?.length ? (
+                <Grid container sx={{ padding: 2.5 }}>
+                  <Grid item xs={12}>
+                    <Pagination
+                      currentPage={currentPage}
+                      totalItems={totalCount}
+                      itemsPerPage={rowsPerPage}
+                      onPageChange={paginate}
+                      rowsPerPage={rowsPerPage}
+                      setRowsPerPage={setRowsPerPage}
+                      setCurrentPage={setCurrentPage}
+                    />
+                  </Grid>
+                </Grid>
+              ) : (
+                ""
+              )} */}
+              <TableContainer>
+                <StyledTable
+                  sx={{ minWidth: 500 }}
+                  aria-label="customized table"
+                >
+                  {filterData?.length ? (
+                    <TableHead>
+                      <StyledTableCell>Date & Time</StyledTableCell>
+                      <StyledTableCell>Order Number</StyledTableCell>
+                      <StyledTableCell>Qty</StyledTableCell>
+                      <StyledTableCell>Price</StyledTableCell>
+                      <StyledTableCell>Cost</StyledTableCell>
+                    </TableHead>
+                  ) : (
+                    ""
+                  )}
+                  <TableBody>
                     {filterData?.length ? (
-                      <TableHead>
-                        <StyledTableCell>Date & Time</StyledTableCell>
-                        <StyledTableCell>Order Number</StyledTableCell>
-                        <StyledTableCell>Qty</StyledTableCell>
-                        <StyledTableCell>Price</StyledTableCell>
-                        <StyledTableCell>Cost</StyledTableCell>
-                      </TableHead>
-                    ) : (
-                      ""
-                    )}
-                    <TableBody>
-                      {filterData?.length ? (
-                        filterData?.map((row, index) => (
-                          <StyledTableRow key={row.id}>
-                            <StyledTableCell>
-                              <div className="flex">
-                                <div className="text-[#000000] order_method capitalize">
-                                  {row?.create_date}
-                                </div>
+                      filterData?.map((row, index) => (
+                        <StyledTableRow key={row.id}>
+                          <StyledTableCell>
+                            <div className="flex">
+                              <div className="text-[#000000] order_method capitalize">
+                                {row?.create_date}
                               </div>
-                              {/* <div className="text-[#818181] lowercase">
+                            </div>
+                            {/* <div className="text-[#818181] lowercase">
                           {row?.order_id}
                         </div>
                         <div className="text-[#818181]">{row?.qty}</div> */}
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <div className="text-[#000000] order_method capitalize">
-                                {row?.order_id}
-                              </div>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <div className="text-[#000000] order_method capitalize">
-                                {row?.qty}
-                              </div>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <div className="text-[#000000] order_method capitalize">
-                                $ {row?.price}
-                              </div>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <div className="text-[#000000] order_method capitalize">
-                                $ {row?.cost_price}
-                              </div>
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        ))
-                      ) : (
-       
-                <span>
-                  No data found
-                </span>
-        
-                      )}
-                    </TableBody>
-                  </StyledTable>
-                </TableContainer>
-              </div>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <div className="text-[#000000] order_method capitalize">
+                              {row?.order_id}
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <div className="text-[#000000] order_method capitalize">
+                              {row?.qty}
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <div className="text-[#000000] order_method capitalize">
+                              $ {row?.price}
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <div className="text-[#000000] order_method capitalize">
+                              $ {row?.cost_price}
+                            </div>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))
+                    ) : (
+                      <span>No data found</span>
+                    )}
+                  </TableBody>
+                </StyledTable>
+              </TableContainer>
             </div>
           </div>
-      
+        </div>
       )}
     </div>
   );
