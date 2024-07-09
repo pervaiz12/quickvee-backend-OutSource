@@ -24,8 +24,9 @@ const MainProducts = () => {
     useState("Select listing");
 
   const [selectedListingTypeValue, setSelectedListingTypeValue] = useState("0");
-  
-  const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } = PasswordShow();
+
+  const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
+    PasswordShow();
 
   const [del_picDropdownVisible, setdel_picDropdownVisible] = useState(false);
   const [transactionDropdownVisible, setTransactionDropdownVisible] =
@@ -68,6 +69,7 @@ const MainProducts = () => {
 
     dispatch(emptyProduct([]));
     try {
+      // console.log("hi from use effect...", data);
       dispatch(fetchProductsData(data));
       // Handle response if needed
     } catch (error) {
@@ -78,7 +80,6 @@ const MainProducts = () => {
         getNetworkError();
       }
     }
-
   }, [
     dispatch,
     debouncedValue,
@@ -130,10 +131,11 @@ const MainProducts = () => {
               dispatch(updateProductsType(type_date))
                 .then((actionResult) => {
                   const responseData = actionResult.payload;
-  
+
                   if (responseData) {
                     let del_pic_data = {
-                      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+                      merchant_id:
+                        LoginGetDashBoardRecordJson?.data?.merchant_id,
                       category_id: categoryId === "All" ? "all" : categoryId,
                       show_status: selectedStatus,
                       name: searchId,
