@@ -110,6 +110,8 @@ const SalesReportList = (props) => {
     SalesReportData.total_loyalty_point_spent
   );
 
+  console.log("SalesReportData",SalesReportDataState.SalesReportData)
+
   const discount1 =
     parseFloat(discount) -
     (parseFloat(total_gift_card_amount) +
@@ -119,8 +121,8 @@ const SalesReportList = (props) => {
     parseFloat(SalesReportData.total_loyalty_point_spent) -
     parseFloat(SalesReportData.loyality_amt_refunded);
   const refunds =
-    parseFloat(SalesReportData.net_refund) +
-    parseFloat(SalesReportData.net_refund1);
+    (parseFloat(SalesReportData.net_refund) +
+    parseFloat(SalesReportData.net_refund1)) - parseFloat(SalesReportData.refunded_all_tax);
   const netSales =
     parseFloat(gross_sale) -
     (parseFloat(discount1) + parseFloat(refunds)) -
@@ -137,13 +139,22 @@ const SalesReportList = (props) => {
     parseFloat(SalesReportData.card_collected) +
     parseFloat(SalesReportData.cash_collected) +
     parseFloat(SalesReportData.cash_ebt_collected) +
-    parseFloat(SalesReportData.food_ebt_collected);
+    parseFloat(SalesReportData.food_ebt_collected) +
+    parseFloat(SalesReportData.cash_back_fee) +
+    parseFloat(SalesReportData.cash_back_amt);
     
   
     const cashbackfee =
-    parseFloat(SalesReportData.cash_back_fee) +
-    parseFloat(SalesReportData.cash_back_fee);
+    parseFloat(SalesReportData.cash_back_fee) || 0;
 
+
+    const CardCollected = parseFloat(SalesReportData.card_collected) + 
+      parseFloat(SalesReportData.cash_back_fee) +
+      parseFloat(SalesReportData.cash_back_amt) ;
+
+
+    const CashCollected = parseFloat(SalesReportData.cash_collected) -
+      parseFloat(SalesReportData.cash_back_amt) ;
   // console.log(discount1)
   // console.log(SalesReportData)
   const SalesSummeryList = [
@@ -196,11 +207,11 @@ const SalesReportList = (props) => {
   const SalesByTenderAndCardTypeList = [
     {
       name: "Credit Cards + Debit Cards",
-      amount: SalesReportData.card_collected,
+      amount: CardCollected,
     },
     {
       name: "Cash",
-      amount: SalesReportData.cash_collected,
+      amount: CashCollected,
     },
     {
       name: "Food EBT Card Collected",

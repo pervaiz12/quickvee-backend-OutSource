@@ -304,7 +304,7 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
                         </Grid>
                         <Grid item>
                           <p className="q_date_details">
-                            ${priceFormate(parseFloat(coupons.maximum_discount).toFixed(2))}
+                            ${priceFormate(parseFloat(coupons.maximum_discount).toFixed(2)) || "0.00"}
                           </p>
                         </Grid>
                       </Grid>

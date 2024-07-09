@@ -31,7 +31,7 @@ export const fetchSalesReportData = createAsyncThunk(
       if (response.data.status === true) {
         // console.log(response.data.sales_data
         //     )
-        return response.data.sales_data;
+        return response.data.result;
       }
     } catch (error) {
       // throw new Error(error.response.data.message);
