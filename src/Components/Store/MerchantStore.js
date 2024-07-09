@@ -3,6 +3,7 @@ import { Grid } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux"; //,localAuthCheck
 import storeDefaultImage from "../../Assests/Vendors/DefaultStore.svg";
+import { BASE_URL } from "../../Constants/Config";
 import {
   getAuthSessionRecord,
   handleGetStoreRecord,
@@ -176,7 +177,7 @@ const StorePage = () => {
                           className="w-store"
                           src={
                             !!store.img
-                              ? ` https://sandbox.quickvee.net/upload/${store.img}`
+                              ? BASE_URL + `upload/${store.img}`
                               : storeDefaultImage
                           }
                           alt="store_image"
@@ -228,7 +229,7 @@ const StorePage = () => {
                         className="w-store"
                         src={
                           !!store.img
-                            ? ` https://sandbox.quickvee.net/upload/${store.img}`
+                            ? BASE_URL + `upload/${store.img}`
                             : storeDefaultImage
                         }
                         alt="store_image"
@@ -275,7 +276,7 @@ const StorePage = () => {
                         className="w-store"
                         src={
                           !!store.img
-                            ? ` https://sandbox.quickvee.net/upload/${store.img}`
+                            ? BASE_URL + `upload/${store.img}`
                             : storeDefaultImage
                         }
                         alt="store_image"
