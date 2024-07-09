@@ -74,11 +74,10 @@ export default function DashboardTables(props) {
             const costItem = (parseFloat(item?.cost_price) || 0) * soldQty;
             const sellingPrice = (parseFloat(item?.price) || 0) * soldQty;
             const profit = sellingPrice - costItem;
-
             return {
               sold: parseInt(acc.sold) + parseInt(soldQty),
-              costTotal: acc.costTotal + costItem,
-              sellingTotal: acc.sellingTotal + sellingPrice,
+              costTotal: parseFloat(acc.costTotal) + costItem,
+              sellingTotal: parseFloat(acc.sellingTotal) + sellingPrice,
               profitTotal: acc.profitTotal + profit,
             };
           },
@@ -169,7 +168,6 @@ export default function DashboardTables(props) {
       ) : (
         <TableContainer sx={{}} aria-label="customized table">
           <StyledTable>
-           
             <TableHead>
               {tableRow.map((item, index) => (
                 <StyledTableCell key={index}>
@@ -188,28 +186,24 @@ export default function DashboardTables(props) {
               props.getItemRecord.length > 0 ? (
                 props.getItemRecord.map((item, index) => (
                   <StyledTableRow key={index}>
-                    <StyledTableCell >
+                    <StyledTableCell>
                       {!!item?.category ? item?.category : "Deleted"}
                     </StyledTableCell>
-                    <StyledTableCell >
-                      {item?.name}
-                    </StyledTableCell>
-                    <StyledTableCell >
-                      {item?.total_qty}
-                    </StyledTableCell>
-                    <StyledTableCell >
+                    <StyledTableCell>{item?.name}</StyledTableCell>
+                    <StyledTableCell>{item?.total_qty}</StyledTableCell>
+                    <StyledTableCell>
                       {/* {`$${priceFormate(
                     parseFloat(item?.cost_price * item?.total_qty).toFixed(2)
                   )}`} */}
                       <p>{formatCurrency(item?.costOfItem)}</p>
                     </StyledTableCell>
-                    <StyledTableCell >
+                    <StyledTableCell>
                       {/* {`$${priceFormate(
                     parseFloat(item?.price * item?.total_qty).toFixed(2)
                   )}`} */}
                       <p>{formatCurrency(item?.sellingPrice)}</p>
                     </StyledTableCell>
-                    <StyledTableCell >
+                    <StyledTableCell>
                       {/* {(() => {
                     const cost_item = item?.cost_price * item?.total_qty;
                     const selling_price = item?.price * item?.total_qty;
@@ -222,7 +216,7 @@ export default function DashboardTables(props) {
                   })()} */}
                       <p>{`${item?.profitMargin} %`}</p>
                     </StyledTableCell>
-                    <StyledTableCell >
+                    <StyledTableCell>
                       {/* {`$${priceFormate(
                     (
                       (item?.price - item?.cost_price) *
@@ -246,7 +240,7 @@ export default function DashboardTables(props) {
                   <StyledTableCell colSpan={2}>
                     <p style={{ color: "#0A64F9" }}>Total</p>
                   </StyledTableCell>
-                  <StyledTableCell >
+                  <StyledTableCell>
                     <p style={{ color: "#0A64F9" }}>
                       {priceFormate(totalCost?.soldQty)}
                     </p>
@@ -266,7 +260,7 @@ export default function DashboardTables(props) {
                       style={{ color: "#0A64F9" }}
                     >{`${totalCost?.profitPercentage}%`}</p>
                   </StyledTableCell>
-                  <StyledTableCell >
+                  <StyledTableCell>
                     <p style={{ color: "#0A64F9" }}>{`$${priceFormate(
                       totalCost?.profit
                     )}`}</p>

@@ -231,19 +231,19 @@ export default function InfoFunction() {
       errorMessage.phoneError = "";
     }
     if (infoRecord.facebookUrl === "") {
-      errorMessage.facebookUrlError = "this field is required.";
+      errorMessage.facebookUrlError = "This field is required.";
       isValidate = false;
     } else {
       errorMessage.facebookUrlError = "";
     }
     if (infoRecord.instagramUrl === "") {
-      errorMessage.instagramUrlError = "this field is required.";
+      errorMessage.instagramUrlError = "This field is required.";
       isValidate = false;
     } else {
       errorMessage.instagramUrlError = "";
     }
     if (infoRecord.promotionalUrl === "") {
-      errorMessage.promotionalUrlError = "this field is required.";
+      errorMessage.promotionalUrlError = "This field is required.";
       isValidate = false;
     } else {
       errorMessage.promotionalUrlError = "";
