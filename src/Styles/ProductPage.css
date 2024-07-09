@@ -463,6 +463,9 @@
   padding: 10px;
   box-sizing: border-box;
   margin-left: 3%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .bulkvendor-table-container .vendor-cost-input {
@@ -477,11 +480,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-right: 10px;
 }
 .vendor-add-loading span {
   color: #fff !important;
-  width: 24px !important;
-  height: 24px !important;
+  width: 20px !important;
+  height: 20px !important;
 }
 
 .no-vendor-text {
@@ -679,26 +683,24 @@
   align-items: center;
 }
 
-
-.mass-inventory-modal .cancel-btn{
+.mass-inventory-modal .cancel-btn {
   position: absolute;
   top: 20px;
   right: 15px;
   cursor: pointer;
 }
 
-.submit-btn-click{
+.submit-btn-click {
   display: flex;
   align-items: center;
   position: relative;
 }
 
-
-.submit-btn-click .loader-box span{
+.submit-btn-click .loader-box span {
   color: #fff;
-    position: absolute;
-    left: 11%;
-    width: 19px !important;
-    height: 19px !important;
-    top: 30%;
+  position: absolute;
+  left: 11%;
+  width: 19px !important;
+  height: 19px !important;
+  top: 30%;
 }
