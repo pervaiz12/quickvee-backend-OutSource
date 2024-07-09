@@ -599,7 +599,7 @@ const BulkInstantPo = ({
                   )}
                   <div className="q-category-bottom-header">
                     <button
-                      className="quic-btn quic-btn-update"
+                      className="quic-btn quic-btn-update submit-btn-click"
                       style={{
                         backgroundColor: "#0A64F9",
                       }}
@@ -611,8 +611,9 @@ const BulkInstantPo = ({
                           <CircularProgress />
                         </Box>
                       ) : (
-                        "Update"
+                        ""
                       )}
+                      Update
                     </button>
                     <button
                       className="quic-btn quic-btn-cancle"

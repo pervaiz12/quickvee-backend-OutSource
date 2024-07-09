@@ -485,20 +485,21 @@ const BulkVendorEdit = ({
               placeholder="Enter vendor Name"
             />
             <button
-              className="quic-btn quic-bulk-vendor-edit"
+              className="quic-btn quic-bulk-vendor-edit submit-btn-click"
               onClick={handleAddVendor}
               style={{
                 backgroundColor: "#0A64F9",
               }}
-              disabled={!selectedVendor?.length}
+              disabled={!selectedVendor?.length || loading}
             >
               {loading ? (
                 <Box className="vendor-add-loading">
                   <CircularProgress />
                 </Box>
               ) : (
-                "Add"
+                ""
               )}
+              Add
             </button>
           </div>
         </div>
@@ -599,7 +600,7 @@ const BulkVendorEdit = ({
                   )}
                   <div className="q-category-bottom-header">
                     <button
-                      className="quic-btn quic-btn-update"
+                      className="quic-btn quic-btn-update submit-btn-click"
                       style={{
                         backgroundColor: "#0A64F9",
                       }}
@@ -611,8 +612,9 @@ const BulkVendorEdit = ({
                           <CircularProgress />
                         </Box>
                       ) : (
-                        "Update"
+                        ""
                       )}
+                      Update
                     </button>
                     <button
                       className="quic-btn quic-btn-cancle"
