@@ -331,6 +331,9 @@ module.exports = Object.freeze({
   SUPPORT_DETAILS_EDIT: "Support_details_react_api/update_support_details",
   Dashboard_URL_REDIRECT: "Dashboard/login_via_superadmin",
   PURCHASE_ORDER_API: "Purchase_orders_api/po_list",
+
+  ORDER_TYPE_ORDER_LIST: "Order_list_api/order_detailed_list",
+  ORDER_TYPE_ORDER_LIST_COUNT: "Order_list_api/order_detailed_count",
 });
 
 // All api calls are initialized in this component for this application
