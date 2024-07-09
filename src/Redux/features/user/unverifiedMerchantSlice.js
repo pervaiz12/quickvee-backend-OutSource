@@ -3,6 +3,7 @@ import {
   BASE_URL,
   GET_VERIFIED_MERCHANT,
   GET_VERIFIED_MERCHANT_COUNT,
+  Dashboard_URL_REDIRECT,
   LOGIN_VIA_SUPERADMIN,
 } from "../../../Constants/Config";
 import Cookies from "js-cookie";
@@ -73,7 +74,7 @@ export const handleMoveDash = createAsyncThunk(
     try {
       const { token, ...dataNew } = data;
       const response = await axios.post(
-        "https://sandbox.quickvee.net/Dashboard/login_via_superadmin",
+        BASE_URL + Dashboard_URL_REDIRECT,
         dataNew,
         {
           headers: {

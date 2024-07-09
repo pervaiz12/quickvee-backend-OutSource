@@ -1,4 +1,7 @@
 // All api calls are initialized in this component for this application
+
+const { Dashboard } = require("@material-ui/icons");
+
 //remove unwanted and credentials of other app
 module.exports = Object.freeze({
   BASE_URL: "https://sandbox.quickvee.net/",
@@ -326,6 +329,8 @@ module.exports = Object.freeze({
   // Support Details
   SUPPORT_DETAILS_LIST: "Support_details_react_api/view_support_details",
   SUPPORT_DETAILS_EDIT: "Support_details_react_api/update_support_details",
+  Dashboard_URL_REDIRECT: "Dashboard/login_via_superadmin",
+  PURCHASE_ORDER_API: "Purchase_orders_api/po_list",
 });
 
 // All api calls are initialized in this component for this application
