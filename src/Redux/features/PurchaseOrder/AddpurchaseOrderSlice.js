@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 // import Cookies from 'js-cookie';
+import { BASE_URL } from "../../../Constants/Config";
 
 import axios from "axios";
 
@@ -17,7 +18,8 @@ export const fetchaddpopurchaseData = createAsyncThunk(
     // console.log("data res: ", dataresult);
     try {
       const response = await axios.post(
-        "https://sandbox.quickvee.net/Purchase_orders_api/po_list",
+        BASE_URL + PURCHASE_ORDER_API,
+        // "https://sandbox.quickvee.net/Purchase_orders_api/po_list",
         dataresult,
         {
           headers: { "Content-Type": "multipart/form-data" },

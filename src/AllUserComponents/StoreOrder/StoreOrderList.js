@@ -119,8 +119,10 @@ const StoreOrderList = (props) => {
         }
       }
   }catch(error){
-    handleCoockieExpire()
-    getUnAutherisedTokenMessage()
+    if(error.status === 401){
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
+    }
   }
 }
 
@@ -151,8 +153,10 @@ const StoreOrderList = (props) => {
         }
       }
   }catch(error){
-    handleCoockieExpire()
-    getUnAutherisedTokenMessage()
+    if(error.status === 401){
+      handleCoockieExpire()
+      getUnAutherisedTokenMessage()
+    }
   }
 }
 

@@ -83,7 +83,7 @@ export default function InfoFunction() {
       switch (name) {
         case "password":
           if (!value) {
-            stateObj[name] = "Please enter Password.";
+            stateObj[name] = "Password is required";
           } else if (
             passwordInput.confirmPassword &&
             value !== passwordInput.confirmPassword
@@ -485,7 +485,7 @@ export default function InfoFunction() {
       case "instagramUrl":
       case "promotionalUrl":
         if (value !== "" && !urlPattern.test(value)) {
-          errorMessage[`${name}Error`] = `Please enter a valid ${name} URL`;
+          errorMessage[`${name}Error`] = `Enter  valid ${name} URL`;
         } else {
           errorMessage[`${name}Error`] = "";
         }
@@ -616,6 +616,7 @@ export default function InfoFunction() {
         confirm_password: passwordInput.confirmPassword,
         merchant_id: infoRecord.merchant_id,
         user_id: user_id,
+        token_id: userTypeData?.token_id,
         login_type: userTypeData?.login_type,
       };
       try {
@@ -635,9 +636,10 @@ export default function InfoFunction() {
           console.log("password changes");
         }
       } catch (error) {
-        console.log(error);
-        // getUnAutherisedTokenMessage();
-        // handleCoockieExpire();
+        if (error.response.status == 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        }
       }
     }
   };

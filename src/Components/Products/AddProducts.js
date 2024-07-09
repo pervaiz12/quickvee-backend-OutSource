@@ -1570,8 +1570,8 @@ const AddProducts = () => {
           const newFormValue = [...new Set(varientTitle)].map(
             (title, index) => {
               const previousData =
-                prevFormValue.find((item) => title in item) || {};
-              const result = previousData[title];
+                prevFormValue.find((item) => title.trim() in item) || {};
+              const result = previousData[title.trim()];
 
               return {
                 [title]: {
@@ -1613,7 +1613,6 @@ const AddProducts = () => {
               };
             }
           );
-
           return newFormValue;
         });
       }
@@ -1890,29 +1889,30 @@ const AddProducts = () => {
         }
 
         setVarientLength([...new Set(varientOptions)]);
-        setFormValue((_) => {
+        setFormValue(() => {
           const newFormValue = varientData?.map((val, index) => {
+            const valueObject = {
+              notEditable: true,
+              productEditId: val?.id,
+              costPerItem: val?.costperItem || "",
+              compareAtPrice: val?.compare_price || "",
+              price: val?.price || "",
+              margin: val?.margin || "",
+              profit: val?.profit || "",
+              qty: val?.quantity || "",
+              upcCode: val?.upc || "",
+              customCode: val?.custom_code || "",
+              reorderQty: val?.reorder_qty || "",
+              reorderLevel: val?.reorder_level || "",
+              trackQuantity: Boolean(+val?.trackqnty) || false,
+              sellOutOfStock: Boolean(+val?.isstockcontinue) || false,
+              checkId: Boolean(+val?.is_tobacco) || false,
+              disable: Boolean(+val?.disable) || false,
+              // itemForAllLinkedLocation: val?.,
+              isFoodStamble: Boolean(+val?.food_stampable) || false,
+            };
             return {
-              [val?.variant]: {
-                notEditable: true,
-                productEditId: val?.id,
-                costPerItem: val?.costperItem || "",
-                compareAtPrice: val?.compare_price || "",
-                price: val?.price || "",
-                margin: val?.margin || "",
-                profit: val?.profit || "",
-                qty: val?.quantity || "",
-                upcCode: val?.upc || "",
-                customCode: val?.custom_code || "",
-                reorderQty: val?.reorder_qty || "",
-                reorderLevel: val?.reorder_level || "",
-                trackQuantity: Boolean(+val?.trackqnty) || false,
-                sellOutOfStock: Boolean(+val?.isstockcontinue) || false,
-                checkId: Boolean(+val?.is_tobacco) || false,
-                disable: Boolean(+val?.disable) || false,
-                // itemForAllLinkedLocation: val?.,
-                isFoodStamble: Boolean(+val?.food_stampable) || false,
-              },
+              [val?.variant]: valueObject,
             };
             // }
           });
