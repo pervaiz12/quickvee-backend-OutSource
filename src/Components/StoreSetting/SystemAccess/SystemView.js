@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import "../../../Styles/StoreSetting.css";
 import "../../../Styles/Settings/SystemAccess.css";
 import CrossIcon from "../../../Assests/Dashboard/cross.svg";
@@ -67,7 +67,6 @@ const SystemAccessData = () => {
     no_of_station: "",
     report_history: "",
   });
-  console.log(systemAccess);
 
   const AllInSystemAccessState = useSelector((state) => state.systemAccessList);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
@@ -108,9 +107,10 @@ const SystemAccessData = () => {
   const [selectedEndDay, setSelectedEndDay] = useState("");
   const [selectedDayAllow, setSelectedDayAllow] = useState("");
   const [selectShiftAssign, setSelectShiftAssign] = useState("");
-  console.log(selectedStartDay);
+
   const dispatch = useDispatch();
-  useEffect(() => {
+
+  const fetchSystemAccessList = () => {
     let data = {
       merchant_id,
       ...userTypeData,
@@ -118,6 +118,10 @@ const SystemAccessData = () => {
     if (data) {
       dispatch(fetchsystemAccessListData(data));
     }
+  };
+
+  useEffect(() => {
+    fetchSystemAccessList();
   }, []);
 
   useEffect(() => {
@@ -258,7 +262,7 @@ const SystemAccessData = () => {
       [name]: value,
       start_time: value === "2" ? "00:00" : prevState.start_time,
     }));
-    console.log("name and value", name, value);
+    // console.log("name and value", name, value);
   };
 
   // Handle End Date
@@ -269,7 +273,7 @@ const SystemAccessData = () => {
       [name]: value,
       end_time: value === "2" ? "00:00" : prevState.end_time,
     }));
-    console.log("name and value", name, value);
+    // console.log("name and value", name, value);
   };
 
   const formatTime = (timeString) => {
@@ -303,7 +307,7 @@ const SystemAccessData = () => {
       ...prevState,
       [name]: value,
     }));
-    console.log("name and value", name, value);
+    // console.log("name and value", name, value);
   };
 
   //Handle No Of Station
@@ -313,7 +317,7 @@ const SystemAccessData = () => {
       ...prevState,
       [name]: value,
     }));
-    console.log("name and value", name, value);
+    // console.log("name and value", name, value);
   };
 
   const handleActualAmtInputChange = (e) => {
@@ -401,6 +405,7 @@ const SystemAccessData = () => {
         ...userTypeData,
       };
       await dispatch(updateSystemAccessData(data)).unwrap();
+      fetchSystemAccessList();
     } catch (error) {
       handleCoockieExpire();
       getUnAutherisedTokenMessage();
@@ -411,19 +416,22 @@ const SystemAccessData = () => {
   //end of day
   const loginType = "login_via_superadmin"; //
   // Condition to check if the button should be shown
-  const shouldShowEndOfDayButton =
-    // loginType == "login_via_superadmin" && systemAccess.shift_assign == 3;
-    (loginType == "login_via_superadmin" && systemAccess.shift_assign == 3) ||
-    systemAccess.shift_assign == 2;
+  // const shouldShowEndOfDayButton =
+  //   (loginType == "login_via_superadmin" && systemAccess.shift_assign == 3) ||
+  //   systemAccess.shift_assign == 2;
 
-  //
-  useEffect(() => {
-    if (shouldShowEndOfDayButton) {
-      console.log(
-        "Executing logic for superadmin with shift_assign 3 on component load"
-      );
-    }
-  }, [shouldShowEndOfDayButton]);
+  const showEODButton = useMemo(() => {
+    const bool =
+      Number(systemAccess?.shift_assign) == 3 &&
+      Number(AllInSystemAccessState?.systemAccessData?.shift_assign) == 3 &&
+      loginType == "login_via_superadmin";
+
+    return bool;
+  }, [
+    systemAccess?.shift_assign,
+    AllInSystemAccessState?.systemAccessData?.shift_assign,
+    loginType,
+  ]);
 
   // start Sumesh
   const handleStartTimeChange = (newTime) => {
@@ -705,7 +713,8 @@ const SystemAccessData = () => {
               />
             </Grid>
           </Grid>
-          {shouldShowEndOfDayButton && (
+
+          {showEODButton && (
             <div className="col-qv-12 mt-4">
               <button className="save_btn" onClick={openModal}>
                 End of Day
@@ -801,7 +810,7 @@ const SystemAccessData = () => {
               </LocalizationProvider>
             </Grid>
           </Grid>
-          {shouldShowEndOfDayButton && (
+          {Number(systemAccess.shift_assign) !== 1 && (
             <Grid container sx={{ pb: 1 }} className="mt-2">
               <Grid item xs={12}>
                 <label>Number of Station</label>
@@ -823,9 +832,17 @@ const SystemAccessData = () => {
       <div className="fixed-bottom">
         <div
           className="box_shadow_div"
-          style={{ display: "flex", justifyContent: "flex-end",marginBottom:0,paddingRight:20 }}
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            marginBottom: 0,
+            paddingRight: 20,
+          }}
         >
-          <button class="save_btn attributeUpdateBTN mt-5 mb-5" onClick={handleSave}>
+          <button
+            class="save_btn attributeUpdateBTN mt-5 mb-5"
+            onClick={handleSave}
+          >
             {loader ? (
               <>
                 <CircularProgress

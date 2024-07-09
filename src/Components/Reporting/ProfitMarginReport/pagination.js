@@ -57,6 +57,10 @@ let columns = [
   "Profit",
 ];
 export default function Pagination(props) {
+  const categoryName = (str) => {
+    const temp = str.split(",");
+    return temp.join(", ");
+  };
   return (
     <>
       {props.loader ? (
@@ -89,7 +93,7 @@ export default function Pagination(props) {
                       <p>{result?.title}</p>
                     </StyledTableCell>
                     <StyledTableCell sx={{ width: "20%" }}>
-                      <p>{result?.category_name}</p>
+                      <p>{categoryName(result?.category_name)}</p>
                     </StyledTableCell>
                     <StyledTableCell sx={{ width: "20%" }}>
                       <p>{`$${priceFormate(
