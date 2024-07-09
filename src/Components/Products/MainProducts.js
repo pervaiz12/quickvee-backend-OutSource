@@ -72,6 +72,7 @@ const MainProducts = () => {
 
     dispatch(emptyProduct([]));
     try {
+      // console.log("hi from use effect...", data);
       dispatch(fetchProductsData(data));
       // Handle response if needed
     } catch (error) {

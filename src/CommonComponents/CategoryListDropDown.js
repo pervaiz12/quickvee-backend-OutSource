@@ -71,7 +71,7 @@ const CategoryListDropDown = ({
         }
 
         setCategoryDropdownVisible(false);
-        dispatch(emptyProduct([]));
+        // dispatch(emptyProduct([]));
         let data1 = {
           merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
           format: "json",
@@ -81,9 +81,11 @@ const CategoryListDropDown = ({
           listing_type: listing_type,
           offset,
           limit: 10,
+          page: 0,
+          ...userTypeData,
         };
         if (data1) {
-          dispatch(fetchProductsData(data1));
+          // dispatch(fetchProductsData(data1));
         }
 
         break;
