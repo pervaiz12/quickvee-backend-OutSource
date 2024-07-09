@@ -127,8 +127,8 @@ const SalesReportList = (props) => {
     parseFloat(SalesReportData.giftcard_amt_collected) -
     parseFloat(SalesReportData.loyality_amt_collected);
   const taxesAndFees =
-    parseFloat(SalesReportData.remain_default_tax) +
-    parseFloat(SalesReportData.remain_other_tax);
+    parseFloat(SalesReportData.remain_default_tax) || 0 +
+    parseFloat(SalesReportData.remain_other_tax) || 0;
   const tip = parseFloat(SalesReportData.tip);
   const serviceCharges =
     parseFloat(SalesReportData.con_fee) + parseFloat(SalesReportData.del_fee);
@@ -169,7 +169,7 @@ const SalesReportList = (props) => {
     },
     {
       name: "Net Sales",
-      amount: netSales,
+      amount: Math.abs(netSales),
     },
     {
       name: "Taxes",
@@ -247,7 +247,7 @@ const SalesReportList = (props) => {
                   <b>Net Sale</b>
                 </div>
                 <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
-                  ${priceFormate(parseFloat(netSales).toFixed(2))}
+                  ${priceFormate(parseFloat(Math.abs(netSales)).toFixed(2))}
                 </div>
                 {/* <div className="flex items-center text-green-500">
                     <BiCaretUp className="mr-1" />

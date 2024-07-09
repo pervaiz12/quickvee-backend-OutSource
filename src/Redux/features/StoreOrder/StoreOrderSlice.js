@@ -17,7 +17,7 @@ const initialState = {
 // Generate pening , fulfilled and rejected action type
 export const fetchStoreOrderData = createAsyncThunk(
   "StoreOrderSlice/fetchStoreOrderData.",
-  async (data) => {
+  async (data , { rejectWithValue }) => {
     const { token, ...dataNew } = data;
     try {
       const response = await axios.post(
@@ -35,28 +35,42 @@ export const fetchStoreOrderData = createAsyncThunk(
         return response.data.store_order_data;
       }
     } catch (error) {
-      throw new Error(error.response.data.message);
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
 
 export const getStoreOrderCount = createAsyncThunk(
   "StoreOrderSlice/getStoreOrderCount",
-  async (data) => {
+  async (data , { rejectWithValue }) => {
     const { token, ...dataNew } = data;
-    const response = await axios.post(
-      BASE_URL + GET_STORE_ORDER_DATA_COUNT,
-      dataNew,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`, // Use data?.token directly
-        },
+    try {
+      const response = await axios.post(
+        BASE_URL + GET_STORE_ORDER_DATA_COUNT,
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // Use data?.token directly
+          },
+        }
+      );
+      console.log("getStoreOrderCount: ", response);
+      if (response.data.status) {
+        return response.data.data_count;
       }
-    );
-    console.log("getStoreOrderCount: ", response);
-    if (response.data.status) {
-      return response.data.data_count;
+    } catch (error) {
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
