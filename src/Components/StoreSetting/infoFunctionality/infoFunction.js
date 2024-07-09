@@ -626,7 +626,7 @@ export default function InfoFunction() {
           {
             headers: {
               "Content-Type": "multipart/form-data",
-              // Authorization: `Bearer ${userTypeData?.token}`,
+              Authorization: `Bearer ${userTypeData?.token}`,
             },
           }
         );
