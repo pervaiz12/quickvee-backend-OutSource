@@ -127,6 +127,7 @@ const MainProducts = () => {
           let type_date = {
             merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
             id: option.id,
+            ...userTypeData,
           };
           if (type_date) {
             try {

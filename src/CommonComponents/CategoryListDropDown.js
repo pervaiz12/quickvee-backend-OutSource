@@ -81,6 +81,7 @@ const CategoryListDropDown = ({
           listing_type: listing_type,
           offset,
           limit: 10,
+          ...userTypeData,
         };
         if (data1) {
           dispatch(fetchProductsData(data1));
