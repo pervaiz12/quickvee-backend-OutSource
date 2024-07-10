@@ -127,9 +127,9 @@ const ProductTable = ({
         fetchStoreSettingSetupData({
           merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
         })
-      );
+      ).unwrap();
 
-      setInventoryApproval(Boolean(+res?.payload?.inventory_approval));
+      setInventoryApproval(Boolean(+res?.inventory_approval));
     } catch (error) {
       if (error.status == 401) {
         getUnAutherisedTokenMessage();
@@ -316,8 +316,8 @@ const ProductTable = ({
     );
 
     try {
-      const res = await dispatch(deleteProductAPI(formData));
-      if (res?.payload?.status) {
+      const res = await dispatch(deleteProductAPI(formData)).unwrap();
+      if (res?.status) {
         ToastifyAlert("Deleted Successfully", "success");
         clearTimeout(timer);
         timer = setTimeout(() => {

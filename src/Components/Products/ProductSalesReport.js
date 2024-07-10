@@ -97,10 +97,10 @@ const ProductSalesReport = () => {
 
     setLoading(true);
     try {
-      const res = await dispatch(fetchSalesHistory(formData));
-      if (res?.payload?.status) {
-        setSalesData(res?.payload?.sales_history);
-        setFilterData(res?.payload?.sales_history);
+      const res = await dispatch(fetchSalesHistory(formData)).unwrap();
+      if (res?.status) {
+        setSalesData(res?.sales_history);
+        setFilterData(res?.sales_history);
       }
     } catch (error) {
       if (error.status == 401) {
