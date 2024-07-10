@@ -34,6 +34,7 @@ export default function SettingStoreOption() {
   // State to track the input box status
   const [isFutureOrderEnabled, setIsFutureOrderEnabled] = useState(false);
   const [error, setError] = useState("");
+  const [advancedayCount, setAdvancedayCount] = useState("");
 
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -81,6 +82,10 @@ export default function SettingStoreOption() {
     enabledGuestCheckout: false,
   });
 
+  useEffect(() => {
+    console.log("orderState.resetOrderNumberTime",orderState.resetOrderNumberTime)
+  }, [orderState.resetOrderNumberTime]);
+
   // onchange
   const handleOrderChange = (e) => {
     const { name, value, checked } = e.target;
@@ -88,7 +93,7 @@ export default function SettingStoreOption() {
     if (checkBoxList?.includes(name)) {
       if (name === "orderNumebrEnabled") {
         updateData[name] = checked;
-        updateData["resetOrderNumberTime"] = "00.00";
+        // updateData["resetOrderNumberTime"] = "00.00";
       } else if (name === "enabledNca") {
         updateData[name] = checked;
         updateData["enabledDualPrice"] = false;
@@ -100,11 +105,18 @@ export default function SettingStoreOption() {
       }
     } else if (inputValueList?.includes(name)) {
       updateData[name] = value;
+      if(value){
+        setAdvancedayCount("")
+      }else{
+        setAdvancedayCount("Advance Day Count is required")
+      }
+      console.log("Time",value)
     } else if (name === "enabledFutureOrder") {
       updateData[name] = checked;
       if (checked === false) {
         updateData["dayCount"] = "";
       }
+      setAdvancedayCount("")
     } else if (name === "enabledDispatchCenter") {
       updateData[name] = checked;
       updateData["enabledEmailNotification"] = false;
@@ -228,73 +240,88 @@ export default function SettingStoreOption() {
 
   // onsubmit
   const handleUpdateSettingOption = async () => {
-    if (
-      userOptionData?.cc_payment === "2" &&
-      !orderState?.enabledCashPaymentDelivery &&
-      !orderState?.enabledCashPaymenyPickup
-    ) {
-      setError("Please Select Cash Payment method.");
-    } else if (orderState?.dayCount > 12) {
-      showModal("Advance day count must be less than 12");
-    } else {
-      setError("");
-      setLoading(true);
-      const newItem = {
-        login_type: userTypeData?.login_type,
-        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-        user_id: LoginGetDashBoardRecordJson?.data?.id,
-        enable_order_number: orderState?.orderNumebrEnabled ? "1" : "0",
-        reset_order_time: orderState?.resetOrderNumberTime,
-        enable_future_order: orderState?.enabledFutureOrder ? "1" : "0",
-        advance_day_count: orderState?.dayCount ? orderState?.dayCount : "0",
-        enable_auto_print_order: orderState?.autoPrintOrder ? "1" : "0",
-        enable_auto_print_payment: orderState?.autoPrintPaymentReceipt
-          ? "1"
-          : "0",
-        enable_guest_checkout: orderState?.enabledGuestCheckout ? "1" : "0",
-        enable_nca: orderState?.enabledNca ? "1" : "0",
-        enable_dp: orderState?.enabledDualPrice ? "1" : "0",
-        credit_card_surcharge_per: orderState?.creditCardSurcharge,
-        debit_card_surcharge_per: orderState?.debitCardSurcharge,
-        onoffswitchcashpayment_del: orderState?.enabledCashPaymentDelivery
-          ? "1"
-          : "0",
-        onoffswitchcashpayment_pic: orderState?.enabledCashPaymenyPickup
-          ? "1"
-          : "0",
-        enable_dispatch: orderState?.enabledDispatchCenter ? "1" : "0",
-        email_notification: orderState?.enabledEmailNotification ? "1" : "0",
-        sms_notification: orderState?.enabledSmsNotification ? "1" : "0",
-        enable_void_order: VoidOrder ? "1" : "0",
-        ...userTypeData,
-      };
-      const data = newItem;
-      dispatch(updateStoreOption(data))
-        .then((res) => {
-          if (res?.payload?.status) {
-            let merchantdata = {
-              merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-              ...userTypeData,
-            };
-            dispatch(fetchStoreSettingOptionData(merchantdata)).catch((err) =>
-              console.log("err", err)
-            );
-            ToastifyAlert("Updated Successfully", "success");
+      if (
+        userOptionData?.cc_payment === "2" &&
+        !orderState?.enabledCashPaymentDelivery &&
+        !orderState?.enabledCashPaymenyPickup
+      ) {
+        setError("Please Select Cash Payment method.");
+      }else if (orderState?.dayCount > 12) {
+        showModal("Advance day count must be less than 12");
+      } else {
+        setError("");
+        if(orderState.enabledFutureOrder){
+          if(orderState?.dayCount=== ""){
+            setAdvancedayCount("Advance Day Count is required")
+            return
+          }else{
+            setAdvancedayCount("")
           }
-        })
-        .catch((err) => {
-          console.log("hhhhhhhhhhhhhhhhhhhhh");
-          ToastifyAlert("Error!", "error");
-        })
-        .finally(() => {
-          setLoading(false);
-        });
-    }
+        }
+
+        setLoading(true);
+        const newItem = {
+          login_type: userTypeData?.login_type,
+          merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+          user_id: LoginGetDashBoardRecordJson?.data?.id,
+          enable_order_number: orderState?.orderNumebrEnabled ? "1" : "0",
+          // reset_order_time: orderState?.resetOrderNumberTime,
+          ...(orderState?.orderNumebrEnabled && { reset_order_time: orderState?.resetOrderNumberTime }),
+          enable_future_order: orderState?.enabledFutureOrder ? "1" : "0",
+          advance_day_count: orderState?.dayCount ? orderState?.dayCount : "0",
+          enable_auto_print_order: orderState?.autoPrintOrder ? "1" : "0",
+          enable_auto_print_payment: orderState?.autoPrintPaymentReceipt
+            ? "1"
+            : "0",
+          enable_guest_checkout: orderState?.enabledGuestCheckout ? "1" : "0",
+          enable_nca: orderState?.enabledNca ? "1" : "0",
+          enable_dp: orderState?.enabledDualPrice ? "1" : "0",
+          credit_card_surcharge_per: orderState?.creditCardSurcharge,
+          debit_card_surcharge_per: orderState?.debitCardSurcharge,
+          onoffswitchcashpayment_del: orderState?.enabledCashPaymentDelivery
+            ? "1"
+            : "0",
+          onoffswitchcashpayment_pic: orderState?.enabledCashPaymenyPickup
+            ? "1"
+            : "0",
+          enable_dispatch: orderState?.enabledDispatchCenter ? "1" : "0",
+          email_notification: orderState?.enabledEmailNotification ? "1" : "0",
+          sms_notification: orderState?.enabledSmsNotification ? "1" : "0",
+          enable_void_order: VoidOrder ? "1" : "0",
+          ...userTypeData,
+        };
+        const data = newItem;
+        dispatch(updateStoreOption(data))
+          .then((res) => {
+            if (res?.payload?.status) {
+              let merchantdata = {
+                merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+                ...userTypeData,
+              };
+              dispatch(fetchStoreSettingOptionData(merchantdata)).catch((err) =>
+                console.log("err", err)
+              );
+              ToastifyAlert("Updated Successfully", "success");
+            }
+          })
+          .catch((err) => {
+            console.log("hhhhhhhhhhhhhhhhhhhhh");
+            ToastifyAlert("Error!", "error");
+          })
+          .finally(() => {
+            setLoading(false);
+          });
+      }
+  
   };
 
   const handleVoidOrder = (e) => {
     setVoidOrder(!VoidOrder);
   };
+
+  const handleKeyPress = (event) => {
+    event.preventDefault();
+  }
 
   return (
     <>
@@ -306,13 +333,20 @@ export default function SettingStoreOption() {
         ) : (
           <>
             <Grid container className="box_shadow_div">
+              <Grid container direction="row" justifyContent="space-between" alignItems="center" className="q-coupon-bottom-header">
+                <Grid item>
+                  <div>
+                    <span>Store Option</span>
+                  </div>
+                </Grid>
+              </Grid>
               <Grid item xs={12}>
                 <Grid
                   container
                   direction="row"
                   justifyContent="space-between"
                   alignItems="center"
-                  sx={{ pt: 2.5, px: 2.5 }}
+                  sx={{ pl: 2.5, pr: 2.5 }}
                 >
                   <Grid item>
                     <h2 className="store-setting-h1 store-setting-inline-block">
@@ -357,6 +391,7 @@ export default function SettingStoreOption() {
                         onChange={handleOrderChange}
                         onClick={(e) => e.target.showPicker()}
                         disabled={!orderState?.orderNumebrEnabled}
+                        onKeyPress={handleKeyPress}
                       />
                       {/* <span>{formatTime(systemAccess.start_time)}</span> */}
                     </div>
@@ -408,6 +443,11 @@ export default function SettingStoreOption() {
                       onChangeFun={handleOrderChange}
                       disable={!orderState?.enabledFutureOrder}
                     />
+                    {advancedayCount && (
+                    <p className="error-message pt-1">
+                      {advancedayCount}
+                    </p>
+                  )}
                   </Grid>
                 </Grid>
               </Grid>
@@ -729,7 +769,7 @@ export default function SettingStoreOption() {
                 >
                   <Grid item>
                     <h2 className="store-setting-h1">
-                      <b> void orders</b>
+                      <b> Void Orders</b>
                     </h2>
                   </Grid>
                   <Grid item>

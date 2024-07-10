@@ -37,12 +37,18 @@ const OnlineOrderingPage = ({ onlineorderstatus,loader }) => {
         direction="row"
         justifyContent="space-between"
         alignItems="center"
-        sx={{ p: 2.5 }}
         className="box_shadow_div"
       >
+      <Grid container direction="row" justifyContent="space-between" alignItems="center" className="q-coupon-bottom-header">
         <Grid item>
-          <Grid container>
-            <Grid item xs={12}>
+          <div>
+            <span>Store Setup</span>
+          </div>
+        </Grid>
+      </Grid>
+        <Grid item sx={{ pl: 2.5, pr: 2.5,pb:2.5 }}>
+          <Grid container >
+            <Grid item xs={12} >
               <h5 style={{ marginBottom: 0 }} className="box_shadow_heading">
                 Online Ordering
               </h5>
@@ -57,7 +63,7 @@ const OnlineOrderingPage = ({ onlineorderstatus,loader }) => {
             </Grid>
           </Grid> */}
         </Grid>
-        <Grid item>
+        <Grid item sx={{ pl: 2.5, pr: 2.5,pb:2.5 }}>
           <div className="fr">
             {loader ? (
               <CircularProgress width={20} size={20} />
