@@ -51,6 +51,11 @@ const EditCoupon = ({couponId,seVisible}) => {
   const [activeTab, setActiveTab] = useState("");
   const [loader, setLoader] = useState(false);
 
+  const [couponStates, setCouponStates] = useState({
+    online: "", //coupon.show_online
+    enablelimit: "", //coupon.enable_limit
+    list_online: "", //coupon.list_online
+  });
   const params = useParams();
   async function fetchData() {
     const getcouponData = {
@@ -103,12 +108,12 @@ const EditCoupon = ({couponId,seVisible}) => {
           flag: res[0]?.flag,
         });
 
-        setCouponStates({
-          ...couponStates,
+        setCouponStates((prev) => ({
+          ...prev,
           online: res[0]?.show_online === "1" ? true : false,
           enablelimit: res[0]?.enable_limit === "1" ? true : false,
           list_online: res[0]?.list_online === "1" ? true : false,
-        });
+        }));
 
         if (res[0]?.flag === "1") {
           setActiveTab("amount");
@@ -119,11 +124,11 @@ const EditCoupon = ({couponId,seVisible}) => {
         } else {
           setActiveTab("percentage");
           if(res[0]?.discount === "100.00"){
-            setCouponStates({
-              ...couponStates,
+            setCouponStates((prev) => ({
+              ...prev,
               online: false,
               list_online: false,
-            })
+            }))
             setSwitchdisable(true)
           }
         }
@@ -212,12 +217,6 @@ const EditCoupon = ({couponId,seVisible}) => {
     time_expire: "",
     count_limit: "",
     flag: "",
-  });
-
-  const [couponStates, setCouponStates] = useState({
-    online: coupon.show_online,
-    enablelimit: coupon.enable_limit,
-    list_online: coupon.list_online,
   });
 
   const handleShowOnlineChange = (e) => {

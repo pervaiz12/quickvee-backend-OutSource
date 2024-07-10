@@ -96,6 +96,13 @@ const EditEmployeeModal = ({ employee, states, employeeList }) => {
                         First Name <span className="Asterisk_error">*</span>
                       </label>
                       <TextField
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "black",
+                            },
+                          },
+                        }}
                         id="outlined-basic"
                         type="text"
                         name="firstname"
@@ -117,6 +124,13 @@ const EditEmployeeModal = ({ employee, states, employeeList }) => {
                     <div className="input_area text-left">
                       <label>Last Name</label>
                       <TextField
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "black",
+                            },
+                          },
+                        }}
                         id="outlined-basic"
                         type="text"
                         name="lastname"
@@ -140,6 +154,13 @@ const EditEmployeeModal = ({ employee, states, employeeList }) => {
                         Email Address <span className="Asterisk_error">*</span>
                       </label>
                       <TextField
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "black",
+                            },
+                          },
+                        }}
                         id="outlined-basic"
                         type="text"
                         name="email"
@@ -163,6 +184,13 @@ const EditEmployeeModal = ({ employee, states, employeeList }) => {
                         Phone Number <span className="Asterisk_error">*</span>
                       </label>
                       <TextField
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "black",
+                            },
+                          },
+                        }}
                         id="outlined-basic"
                         type="text"
                         name="phone"
@@ -185,6 +213,13 @@ const EditEmployeeModal = ({ employee, states, employeeList }) => {
                         PIN <span className="Asterisk_error">*</span>
                       </label>
                       <TextField
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "black",
+                            },
+                          },
+                        }}
                         id="outlined-basic"
                         type="text"
                         name="pin"
@@ -205,6 +240,13 @@ const EditEmployeeModal = ({ employee, states, employeeList }) => {
                     <div className="input_area text-left">
                       <label>Wages ($/hr)</label>
                       <TextField
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "black",
+                            },
+                          },
+                        }}
                         id="outlined-basic"
                         type="text"
                         name="wages"
@@ -226,6 +268,13 @@ const EditEmployeeModal = ({ employee, states, employeeList }) => {
                     <div className="input_area text-left">
                       <label>Address</label>
                       <TextField
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "black",
+                            },
+                          },
+                        }}
                         id="outlined-basic"
                         type="text"
                         name="address_line_1"
@@ -247,6 +296,13 @@ const EditEmployeeModal = ({ employee, states, employeeList }) => {
                   <div className="col-qv-4">
                     <div className="input_area ">
                       <TextField
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          "&.Mui-focused fieldset": {
+                            borderColor: "black",
+                          },
+                        },
+                      }}
                         id="outlined-basic"
                         type="text"
                         name="city"
@@ -265,6 +321,13 @@ const EditEmployeeModal = ({ employee, states, employeeList }) => {
                   <div className="col-qv-4">
                     <div className="input_area ">
                       <TextField
+                      sx={{
+                        "& .MuiOutlinedInput-root": {
+                          "&.Mui-focused fieldset": {
+                            borderColor: "black",
+                          },
+                        },
+                      }}
                         id="outlined-basic"
                         type="text"
                         name="zipcode"

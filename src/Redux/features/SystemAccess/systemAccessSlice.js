@@ -32,9 +32,7 @@ export const addActualAmountData = createAsyncThunk(
           },
         }
       );
-      if (response.data.status === true) {
-        return response.data.data;
-      }
+      return response.data;
     } catch (error) {
       throw new Error(error.response.data.message);
     }
@@ -59,7 +57,7 @@ export const updateSystemAccessData = createAsyncThunk(
       );
 
       if (response.data.success === true) {
-        ToastifyAlert("Updated Successfully!","success");
+        ToastifyAlert("Updated Successfully!", "success");
         return response.data.data;
       }
     } catch (error) {
@@ -139,7 +137,9 @@ const SystemAccessSlice = createSlice({
       })
       .addCase(addActualAmountData.fulfilled, (state, action) => {
         state.loading = false;
-        state.systemAccessData = action.payload;
+        state.systemAccessData = action.payload.status
+          ? action.payload
+          : state.systemAccessData;
         state.error = "";
       })
       .addCase(addActualAmountData.rejected, (state, action) => {

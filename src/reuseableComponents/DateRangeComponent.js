@@ -89,17 +89,17 @@ const DateRangeComponent = ({ onDateRangeChange, selectedDateRange }) => {
         break;
     }
   };
-  useEffect(() => {
-    // console.log("inside date range selectedDateRange", selectedDateRange);
-    let count = 0;
-    if (selectedDateRange && selectedDateRange && count <= 0) {
-      console.log("inside date range selectedDateRange", selectedDateRange);
-      setStartDate(new Date(selectedDateRange.start_date));
-      setEndDate(new Date(selectedDateRange.end_date));
-      // onDateRangeChange({start_date:selectedDateRange.start_date,end_date:selectedDateRange.end_date});
-      count++;
-    }
-  }, [selectedDateRange]);
+  // useEffect(() => {
+  //   // console.log("inside date range selectedDateRange", selectedDateRange);
+  //   let count = 0;
+  //   if (selectedDateRange && selectedDateRange && count <= 0) {
+  //     // console.log("inside date range selectedDateRange", selectedDateRange);
+  //     setStartDate(new Date(selectedDateRange.start_date));
+  //     setEndDate(new Date(selectedDateRange.end_date));
+  //     // onDateRangeChange({start_date:selectedDateRange.start_date,end_date:selectedDateRange.end_date});
+  //     count++;
+  //   }
+  // }, [selectedDateRange]);
   // console.log("inside date range selectedDateRange", selectedDateRange);
   useEffect(() => {
     handleSearch();

@@ -31,7 +31,7 @@ const MainResigtersetting = () => {
     <>
       {/* resigter method */}
       <div className="box">
-      <div className="q-attributes-main-page">
+        <div className="q-attributes-main-page">
           <div className="q-resigtersetting-top-detail-section">
             <div className="">
               <div className="q-resigtersetting-bottom-section">
@@ -367,7 +367,7 @@ const MainResigtersetting = () => {
       </div>
       {/* device  section */}
 
-      <div className="q-attributes-main-page"   style={{marginBottom:100}}>
+      <div className="q-attributes-main-page" style={{ marginBottom: 100 }}>
         <div className="box">
           <div className="q-resigtersetting-top-detail-section">
             <div>
@@ -387,15 +387,22 @@ const MainResigtersetting = () => {
                         placeholder="Enter idle logout"
                       /> */}
                       <TextField
-                          id="outlined-basic"
-                          type="text"
-                          name="idel_logout"
-                          placeholder="Enter idle logout"
-                          onChange={handleRegisterSettingInput}
-                          value={values.idel_logout}
-                          variant="outlined"
-                          size="small"
-                        />
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "black",
+                            },
+                          },
+                        }}
+                        id="outlined-basic"
+                        type="text"
+                        name="idel_logout"
+                        placeholder="Enter idle logout"
+                        onChange={handleRegisterSettingInput}
+                        value={values.idel_logout}
+                        variant="outlined"
+                        size="small"
+                      />
                     </div>
                     <span className="input-error">
                       {values.errors.idel_logout !== ""
@@ -423,8 +430,6 @@ const MainResigtersetting = () => {
                     </span>
                   </div> */}
                 </div>
-
-                    
               </div>
             </div>
           </div>
@@ -484,13 +489,18 @@ const MainResigtersetting = () => {
           </div>
         </div> */}
         <div className="fixed-bottom">
-        <div className="q-resigtersetting-main-page text-end  box_shadow_div"  style={{marginBottom:0,paddingRight:20}}>
-          <button className="store-setting-btn mt-5 mb-5" onClick={handleRegisterSettingSubmit}>
-            Update
-          </button>
+          <div
+            className="q-resigtersetting-main-page text-end  box_shadow_div"
+            style={{ marginBottom: 0, paddingRight: 20 }}
+          >
+            <button
+              className="store-setting-btn mt-5 mb-5"
+              onClick={handleRegisterSettingSubmit}
+            >
+              Update
+            </button>
+          </div>
         </div>
-        </div>
-        
       </div>
     </>
   );

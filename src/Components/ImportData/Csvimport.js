@@ -91,7 +91,7 @@ const FileUpload = () => {
     const file = e.target.files;
     const validFile = checkfile(file[0]);
 
-    // console.log("valid file: ", validFile);
+    // console.log("valid file: ", validFile, file);
 
     if (file && validFile) {
       setfilename(file[0]?.name);
@@ -108,6 +108,7 @@ const FileUpload = () => {
 
   const handleFile = (files) => {
     if (files) {
+      // console.log("set files.. ", files);
       setFileData(files); // Store the selected files
       setfilename(files[0]?.name);
     }
@@ -127,20 +128,20 @@ const FileUpload = () => {
         return;
       }
 
-      // const fileInput = document.getElementById("input-file-upload");
-      // const csvfileData = fileInput.files[0];
+      const fileInput = document.getElementById("input-file-upload");
+      const csvfileData = fileInput.files[0];
 
       // console.log("csvfileData: ", csvfileData);
       // console.log("bool: ", csvfileData == fileData);
       // return;
-      // if (!csvfileData) {
-      //   return showModal("Only files with .CSV extension is supported");
-      // }
+      if (!csvfileData) {
+        return showModal("Only files with .CSV extension is supported");
+      }
 
       const formData = new FormData();
       // Append the merchant_id and the file to the FormData
       formData.append("merchant_id", merchant_id);
-      formData.append("file", fileData);
+      formData.append("file", csvfileData);
       formData.append("token_id", userTypeData?.token_id);
       formData.append("login_type", userTypeData?.login_type);
 
@@ -150,13 +151,16 @@ const FileUpload = () => {
           Authorization: `Bearer ${userTypeData?.token}`,
         },
       });
-      if (response) {
+      // console.log("response: ", response);
+      if (response.data.status) {
         // console.log(response);
-        ToastifyAlert("Added Successfully", "success");
+        ToastifyAlert(response.data.message, "success");
         setfilename("");
         setFileData(null);
+        fileInput.value = "";
       } else {
-        showModal("Something went wrong !");
+        ToastifyAlert(response.data.message, "error");
+        // showModal("Something went wrong !");
       }
     } catch (e) {
       console.log("Error: ", e);

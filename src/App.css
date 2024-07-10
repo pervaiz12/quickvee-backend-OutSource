@@ -1246,9 +1246,10 @@ div.q_label_details::after {
   right: 0;
   left: 0;
   z-index: 1;
-  padding-left: 16rem;
+  padding-left: 0rem;
   padding-right: 0rem;
 }
+
 
 .sticky-box {
   background-color: #fff !important;
@@ -1283,4 +1284,13 @@ div.q_label_details::after {
   .common-font-bold {
     font-family: CircularSTDBook !important;
   }
+}
+
+.custom-input-root.Mui-focused .MuiOutlinedInput-notchedOutline {
+  border-width: 2px;
+  border-color: black;
+}
+
+.custom-input-root.black-border .MuiOutlinedInput-notchedOutline {
+  border-color: black;
 }

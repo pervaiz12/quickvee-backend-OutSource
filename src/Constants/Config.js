@@ -188,7 +188,8 @@ module.exports = Object.freeze({
   DETAIL_CATEGORY_SALE_REPORT: "vendor_report_api/detailed_category_sale",
 
   //  Sales Report List API
-  SALES_REPORT_LIST: "vendor_report_api/sales_report",
+  // SALES_REPORT_LIST: "vendor_report_api/sales_report",
+  SALES_REPORT_LIST: "ReportingReactapi/new_sale_overview",
   // tip report list api
   TIP_REPORT_LIST: "ReportingReactapi/tip_report",
   //coupon report api
@@ -321,6 +322,7 @@ module.exports = Object.freeze({
   STOCKTAKE_LIST_COUNT: "Stocktake_react_api/stocktake_count",
 
   SYNC_DATA: "InventoryReact/syncOI",
+  SEND_FOR_APPROVAL: "Product_api_react/send_approval",
 
   VENDOR_UPDATE_DETAILS: "vendor_api/update_details",
   CHECK_EXIST_STORENAME: "UserController/check_merchant",
@@ -331,6 +333,9 @@ module.exports = Object.freeze({
   SUPPORT_DETAILS_EDIT: "Support_details_react_api/update_support_details",
   Dashboard_URL_REDIRECT: "Dashboard/login_via_superadmin",
   PURCHASE_ORDER_API: "Purchase_orders_api/po_list",
+
+  ORDER_TYPE_ORDER_LIST: "Order_list_api/order_detailed_list",
+  ORDER_TYPE_ORDER_LIST_COUNT: "Order_list_api/order_detailed_count",
 });
 
 // All api calls are initialized in this component for this application

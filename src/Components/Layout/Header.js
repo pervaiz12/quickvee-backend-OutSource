@@ -36,7 +36,7 @@ import { useAuthDetails } from "../../Common/cookiesHelper";
 import { Button, InputBase } from "@mui/material";
 import logoutLogo from "../../Assests/Dashboard/logout.svg";
 import userLogo from "../../Assests/Dashboard/userLogoDropDown.svg";
-import { BASE_URL, SYNC_DATA } from "../../Constants/Config";
+import { BASE_URL, SYNC_DATA, SEND_FOR_APPROVAL } from "../../Constants/Config";
 import axios from "axios";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import PasswordShow from "../../Common/passwordShow";
@@ -48,6 +48,7 @@ export default function Header() {
     LoginAllStore,
     GetSessionLogin,
     userTypeData,
+    inventory_approval,
   } = useAuthDetails();
   const dispatch = useDispatch();
   const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
@@ -198,7 +199,10 @@ export default function Header() {
             },
           }}
         >
-          <MenuItem sx={{ fontFamily: "CircularSTDBook" }} disableTouchRipple={true}>
+          <MenuItem
+            sx={{ fontFamily: "CircularSTDBook" }}
+            disableTouchRipple={true}
+          >
             <div>
               <InputBase
                 placeholder="Search..."
@@ -211,7 +215,7 @@ export default function Header() {
             return (
               <div key={index}>
                 <MenuItem
-                sx={{ fontFamily: "CircularSTDBook" }}
+                  sx={{ fontFamily: "CircularSTDBook" }}
                   onClick={(e) => {
                     handleCloseForDropDown(e);
                     handleChangeMerchant(item?.merchant_id);
@@ -263,6 +267,38 @@ export default function Header() {
     setLoader(false);
   };
 
+  const handleSendForApproval = async (e) => {
+    const Syncdata = {
+      token_id: userTypeData?.token_id,
+      login_type: userTypeData?.login_type,
+      merchant_id: merchant_id,
+      store_name: storename,
+    };
+    setLoader(true);
+
+    try {
+      const res = await axios.post(BASE_URL + SEND_FOR_APPROVAL, Syncdata, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userTypeData?.token}`,
+        },
+      });
+
+      const data = await res.data.status;
+      const update_message = await res.data.message;
+      console.log("res",res)
+      if (data === true) {
+        ToastifyAlert(update_message, "success");
+      } else {
+        ToastifyAlert(update_message, "warn");
+      }
+    } catch (error) {
+      console.error("API Error:", error);
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
+    }
+    setLoader(false);
+  };
   const handleNavigateToNeedHelp = () => [
     // navigate("/users/view/unapprove/need-help"),
     navigate("/need-help"),
@@ -400,28 +436,54 @@ export default function Header() {
                     <p className="ml-2 admin_medium">Online Store</p>
                   </div>
                 </Link>
-                <button
-                  className="cursor-pointer mx-5 flex items-center syncConatiner"
-                  onClick={SyncData}
-                  disabled={loader}
-                >
-                  <CircularProgress
-                    color={"inherit"}
-                    className={` rotaicions ${
-                      loader ? "opacity-1" : "opacity-0"
-                    }`}
-                    width={18}
-                    size={18}
-                  />
-                  <img
-                    src={SynkData}
-                    alt="icon"
-                    className={` syncIcon ${
-                      loader ? "opacity-0" : "opacity-1"
-                    }`}
-                  />
-                  <p className="ml-2 admin_medium">Sync Data</p>
-                </button>
+                {userTypeData?.login_type !== "superadmin" &&
+                inventory_approval === "1" ? (
+                  <button
+                    className="cursor-pointer mx-5 flex items-center syncConatiner"
+                    onClick={handleSendForApproval}
+                  >
+                    <CircularProgress
+                      color={"inherit"}
+                      className={` rotaicions ${
+                        loader ? "opacity-1" : "opacity-0"
+                      }`}
+                      width={18}
+                      size={18}
+                    />
+                    <img
+                      src={SynkData}
+                      alt="icon"
+                      className={` syncIcon ${
+                        loader ? "opacity-0" : "opacity-1"
+                      }`}
+                    />
+                    <p className="ml-2 admin_medium">Send For Approval</p>
+                  </button>
+                ) : (
+                  <button
+                    className="cursor-pointer mx-5 flex items-center syncConatiner"
+                    onClick={SyncData}
+                    disabled={loader}
+                  >
+                    <CircularProgress
+                      color={"inherit"}
+                      className={` rotaicions ${
+                        loader ? "opacity-1" : "opacity-0"
+                      }`}
+                      width={18}
+                      size={18}
+                    />
+
+                    <img
+                      src={SynkData}
+                      alt="icon"
+                      className={` syncIcon ${
+                        loader ? "opacity-0" : "opacity-1"
+                      }`}
+                    />
+                    <p className="ml-2 admin_medium">Sync Data</p>
+                  </button>
+                )}
               </>
             ) : (
               ""

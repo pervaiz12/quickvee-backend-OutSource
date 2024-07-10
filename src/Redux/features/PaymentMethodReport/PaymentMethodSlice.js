@@ -15,7 +15,7 @@ const initialState = {
 // Generate pening , fulfilled and rejected action type
 export const fetchPaymentMethodReportData = createAsyncThunk(
   "paymentReport/fetchPaymentMethodReportData.",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     try {
       const { token, ...dataNew } = data;
       const response = await axios.post(
@@ -39,7 +39,12 @@ export const fetchPaymentMethodReportData = createAsyncThunk(
         return response.data;
       }
     } catch (error) {
-      throw new Error(error.response.data.message);
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );

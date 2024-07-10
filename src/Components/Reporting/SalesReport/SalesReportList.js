@@ -16,6 +16,7 @@ import { useAuthDetails } from "../../../Common/cookiesHelper";
 import PasswordShow from "../../../Common/passwordShow";
 import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
 import { priceFormate } from "../../../hooks/priceFormate";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -110,6 +111,8 @@ const SalesReportList = (props) => {
     SalesReportData.total_loyalty_point_spent
   );
 
+  console.log("SalesReportData",SalesReportDataState.SalesReportData)
+
   const discount1 =
     parseFloat(discount) -
     (parseFloat(total_gift_card_amount) +
@@ -119,8 +122,8 @@ const SalesReportList = (props) => {
     parseFloat(SalesReportData.total_loyalty_point_spent) -
     parseFloat(SalesReportData.loyality_amt_refunded);
   const refunds =
-    parseFloat(SalesReportData.net_refund) +
-    parseFloat(SalesReportData.net_refund1);
+    (parseFloat(SalesReportData.net_refund) +
+    parseFloat(SalesReportData.net_refund1)) - parseFloat(SalesReportData.refunded_all_tax);
   const netSales =
     parseFloat(gross_sale) -
     (parseFloat(discount1) + parseFloat(refunds)) -
@@ -137,13 +140,22 @@ const SalesReportList = (props) => {
     parseFloat(SalesReportData.card_collected) +
     parseFloat(SalesReportData.cash_collected) +
     parseFloat(SalesReportData.cash_ebt_collected) +
-    parseFloat(SalesReportData.food_ebt_collected);
+    parseFloat(SalesReportData.food_ebt_collected) +
+    parseFloat(SalesReportData.cash_back_fee) +
+    parseFloat(SalesReportData.cash_back_amt);
     
   
     const cashbackfee =
-    parseFloat(SalesReportData.cash_back_fee) +
-    parseFloat(SalesReportData.cash_back_fee);
+    parseFloat(SalesReportData.cash_back_fee) || 0;
 
+
+    const CardCollected = parseFloat(SalesReportData.card_collected) + 
+      parseFloat(SalesReportData.cash_back_fee) +
+      parseFloat(SalesReportData.cash_back_amt) ;
+
+
+    const CashCollected = parseFloat(SalesReportData.cash_collected) -
+      parseFloat(SalesReportData.cash_back_amt) ;
   // console.log(discount1)
   // console.log(SalesReportData)
   const SalesSummeryList = [
@@ -196,11 +208,11 @@ const SalesReportList = (props) => {
   const SalesByTenderAndCardTypeList = [
     {
       name: "Credit Cards + Debit Cards",
-      amount: SalesReportData.card_collected,
+      amount: CardCollected,
     },
     {
       name: "Cash",
-      amount: SalesReportData.cash_collected,
+      amount: CashCollected,
     },
     {
       name: "Food EBT Card Collected",
@@ -272,116 +284,130 @@ const SalesReportList = (props) => {
           </Grid>
           <Grid container className="box_shadow_div">
             <Grid item xs={12}>
-              <TableContainer>
-                <StyledTable
-                  sx={{ minWidth: 500 }}
-                  aria-label="customized table"
-                >
-                  <TableHead>
-                    <StyledTableCell>Sales Summary</StyledTableCell>
-                    <StyledTableCell align="right"></StyledTableCell>
-                  </TableHead>
-                  <TableBody>
-                    {SalesSummeryList?.map((item, index) => (
-                      <StyledTableRow key={index}>
-                        <StyledTableCell
-                          sx={{
-                            fontWeight:
-                              item.name === "Gross Sale" ||
-                              item.name === "Net Sales"
-                                ? "bold"
-                                : "normal",
-                            borderRight: "1px solid #E3E3E3",
-                            width: 400,
-                            color:
-                              item.name === "Gross Sale" ||
-                              item.name === "Net Sales"
-                                ? "#0A64F9"
-                                : "",
-                          }}
-                        >
-                          <div className="q_sales_trading_data p-0">
-                            <p>{item.name}</p>
-                          </div>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="left"
-                          sx={{
-                            fontWeight:
-                              item.name === "Gross Sale" ||
-                              item.name === "Net Sales"
-                                ? "bold"
-                                : "normal",
-                            color:
-                              item.name === "Gross Sale" ||
-                              item.name === "Net Sales"
-                                ? "#0A64F9"
-                                : "",
-                          }}
-                        >
-                          <p>
-                            ${priceFormate(parseFloat(item.amount).toFixed(2))}
-                          </p>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    ))}
-                  </TableBody>
-                </StyledTable>
-              </TableContainer>
+              {SalesReportDataState.loading ? (
+                <SkeletonTable columns={["Sales Summary"]} />
+              ) : (
+                <TableContainer>
+                  <StyledTable
+                    sx={{ minWidth: 500 }}
+                    aria-label="customized table"
+                  >
+                    <TableHead>
+                      <StyledTableCell>Sales Summary</StyledTableCell>
+                      <StyledTableCell align="right"></StyledTableCell>
+                    </TableHead>
+                    <TableBody>
+                      {SalesSummeryList?.map((item, index) => (
+                        <StyledTableRow key={index}>
+                          <StyledTableCell
+                            sx={{
+                              fontWeight:
+                                item.name === "Gross Sale" ||
+                                item.name === "Net Sales"
+                                  ? "bold"
+                                  : "normal",
+                              borderRight: "1px solid #E3E3E3",
+                              width: 400,
+                              color:
+                                item.name === "Gross Sale" ||
+                                item.name === "Net Sales"
+                                  ? "#0A64F9"
+                                  : "",
+                            }}
+                          >
+                            <div className="q_sales_trading_data p-0">
+                              <p>{item.name}</p>
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell
+                            align="left"
+                            sx={{
+                              fontWeight:
+                                item.name === "Gross Sale" ||
+                                item.name === "Net Sales"
+                                  ? "bold"
+                                  : "normal",
+                              color:
+                                item.name === "Gross Sale" ||
+                                item.name === "Net Sales"
+                                  ? "#0A64F9"
+                                  : "",
+                            }}
+                          >
+                            <p>
+                              $
+                              {priceFormate(parseFloat(item.amount).toFixed(2))}
+                            </p>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                    </TableBody>
+                  </StyledTable>
+                </TableContainer>
+              )}
             </Grid>
           </Grid>
           <Grid container className="box_shadow_div">
             <Grid item xs={12}>
-              <TableContainer>
-                <StyledTable
-                  sx={{ minWidth: 500 }}
-                  aria-label="customized table"
-                >
-                  <TableHead>
-                    <StyledTableCell>
-                      Sales by Tender and Card Type
-                    </StyledTableCell>
-                    <StyledTableCell align="right"></StyledTableCell>
-                  </TableHead>
-                  <TableBody>
-                    {SalesByTenderAndCardTypeList?.map((item, index) => (
-                      <StyledTableRow key={index}>
-                        <StyledTableCell
-                          sx={{
-                            fontWeight:
-                              item.name === "Amount Collected"
-                                ? "bold"
-                                : "normal",
-                            borderRight: "1px solid #E3E3E3",
-                            width: 400,
-                            color:
-                              item.name === "Amount Collected" ? "#0A64F9" : "",
-                          }}
-                        >
-                          <div className="q_sales_trading_data p-0">
-                            <p>{item.name}</p>
-                          </div>
-                        </StyledTableCell>
-                        <StyledTableCell
-                          align="left"
-                          sx={{
-                            fontWeight:
-                              item.name === "Amount Collected"
-                                ? "bold"
-                                : "normal",
-                            color:
-                              item.name === "Amount Collected" ? "#0A64F9" : "",
-                          }}
-                        >
-                          <p>
-                            ${priceFormate(parseFloat(item.amount).toFixed(2))}
-                          </p>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    ))}
-                  </TableBody>
-                </StyledTable>
-              </TableContainer>
+              {SalesReportDataState.loading ? (
+                <SkeletonTable columns={[" Sales by Tender and Card Type"]} />
+              ) : (
+                <TableContainer>
+                  <StyledTable
+                    sx={{ minWidth: 500 }}
+                    aria-label="customized table"
+                  >
+                    <TableHead>
+                      <StyledTableCell>
+                        Sales by Tender and Card Type
+                      </StyledTableCell>
+                      <StyledTableCell align="right"></StyledTableCell>
+                    </TableHead>
+                    <TableBody>
+                      {SalesByTenderAndCardTypeList?.map((item, index) => (
+                        <StyledTableRow key={index}>
+                          <StyledTableCell
+                            sx={{
+                              fontWeight:
+                                item.name === "Amount Collected"
+                                  ? "bold"
+                                  : "normal",
+                              borderRight: "1px solid #E3E3E3",
+                              width: 400,
+                              color:
+                                item.name === "Amount Collected"
+                                  ? "#0A64F9"
+                                  : "",
+                            }}
+                          >
+                            <div className="q_sales_trading_data p-0">
+                              <p>{item.name}</p>
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell
+                            align="left"
+                            sx={{
+                              fontWeight:
+                                item.name === "Amount Collected"
+                                  ? "bold"
+                                  : "normal",
+                              color:
+                                item.name === "Amount Collected"
+                                  ? "#0A64F9"
+                                  : "",
+                            }}
+                          >
+                            <p>
+                              $
+                              {priceFormate(parseFloat(item.amount).toFixed(2))}
+                            </p>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                    </TableBody>
+                  </StyledTable>
+                </TableContainer>
+              )}
             </Grid>
           </Grid>
           {/* <div className="box">

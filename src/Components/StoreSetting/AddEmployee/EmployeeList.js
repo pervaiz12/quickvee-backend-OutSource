@@ -349,6 +349,13 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
                         First Name <span className="Asterisk_error">*</span>
                       </label>
                       <TextField
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "black",
+                            },
+                          },
+                        }}
                         id="outlined-basic"
                         type="text"
                         name="firstname"
@@ -370,6 +377,13 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
                     <div className="input_area">
                       <label>Last Name</label>
                       <TextField
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "black",
+                            },
+                          },
+                        }}
                         id="outlined-basic"
                         type="text"
                         name="lastname"
@@ -393,6 +407,13 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
                         Email Address <span className="Asterisk_error">*</span>
                       </label>
                       <TextField
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "black",
+                            },
+                          },
+                        }}
                         id="outlined-basic"
                         type="text"
                         name="email"
@@ -416,6 +437,13 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
                         Phone Number <span className="Asterisk_error">*</span>
                       </label>
                       <TextField
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "black",
+                            },
+                          },
+                        }}
                         id="outlined-basic"
                         type="text"
                         name="phone"
@@ -440,6 +468,13 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
                         PIN <span className="Asterisk_error">*</span>
                       </label>
                       <TextField
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "black",
+                            },
+                          },
+                        }}
                         id="outlined-basic"
                         type="text"
                         name="pin"
@@ -471,6 +506,13 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
                             className="q-custom-input-field"
                         /> */}
                       <TextField
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "black",
+                            },
+                          },
+                        }}
                         id="outlined-basic"
                         type="text"
                         name="wages"
@@ -500,6 +542,13 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
                             className="q-custom-input-field"
                         /> */}
                       <TextField
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "black",
+                            },
+                          },
+                        }}
                         id="outlined-basic"
                         type="text"
                         name="address_line_1"
@@ -529,6 +578,13 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
                             className="q-custom-input-field"
                         /> */}
                       <TextField
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "black",
+                            },
+                          },
+                        }}
                         id="outlined-basic"
                         type="text"
                         name="city"
@@ -555,6 +611,13 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
                             className="q-custom-input-field"
                         /> */}
                       <TextField
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "black",
+                            },
+                          },
+                        }}
                         id="outlined-basic"
                         type="text"
                         name="zipcode"

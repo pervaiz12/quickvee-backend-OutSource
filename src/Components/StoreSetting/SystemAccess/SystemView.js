@@ -27,6 +27,7 @@ import { BASE_URL, CHECK_END_DAY } from "../../../Constants/Config";
 import axios from "axios";
 import CircularProgress from "@mui/material/CircularProgress";
 import PasswordShow from "../../../Common/passwordShow";
+import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 
 const SystemAccessData = () => {
   const {
@@ -347,34 +348,34 @@ const SystemAccessData = () => {
         [name]: fieldValue,
       };
     });
-
-    // console.log("Name and Value of AAAA", name, value);
   };
 
-  const handleActualAmtSave = async () => {
-    setLoader(true);
+  const handleActualAmtSave = async (e) => {
     try {
+      setLoader(true);
       const data = {
         merchant_id,
         actual_amt: actualAmount.actual_amt,
         ...userTypeData,
       };
-      // console.log("data",data)
-      // return
-      await dispatch(addActualAmountData(data)).unwrap();
+      const res = await dispatch(addActualAmountData(data));
+      ToastifyAlert(res.payload.msg, res.payload.status ? "success" : "error");
+      // if (res.payload.status) {
+      //   ToastifyAlert(res.payload.msg, "success");
+      // } else {
+      //   ToastifyAlert(res.payload.msg, "error");
+      // }
     } catch (error) {
       handleCoockieExpire();
       getUnAutherisedTokenMessage();
+    } finally {
+      setLoader(false);
+      closeModal();
     }
-    setLoader(false);
   };
-  //   console.log("Actual Amount", actualAmount);
 
   // This is a main Save or Update
   const handleSave = async () => {
-    // console.log("data",data)
-    // return
-    // dispatch(updateSystemAccessData(data));
     setLoader(true);
     try {
       const data = {
@@ -913,7 +914,7 @@ const SystemAccessData = () => {
                 <button
                   onClick={handleActualAmtSave}
                   className="quic-btn quic-btn-save attributeUpdateBTN"
-                  disabled={true}
+                  disabled={loader}
                 >
                   {loader ? (
                     <>

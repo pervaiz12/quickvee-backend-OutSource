@@ -54,6 +54,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const customStyles = {
   menu: (provided) => ({
     ...provided,
+     cursor: 'pointer',
     zIndex: 9999,
     position: "absolute",
   }),
@@ -61,6 +62,22 @@ const customStyles = {
     ...base,
     zIndex: 9999,
   }),
+  control: (provided, state) => ({
+    ...provided,
+    borderColor: state.isFocused || state.isHovered ? 'black' : provided.borderColor,
+    boxShadow: state.isFocused ? '0 0 0 1px black' : provided.boxShadow,
+    '&:hover': {
+      borderColor: 'black',
+    },
+  }),
+  input: (provided) => ({
+    ...provided,
+    '&:focus': {
+      borderColor: 'black',
+      outline: 'none',
+    },
+  }),
+  
 };
 
 const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
@@ -609,7 +626,7 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
       <div className="box">
         <div className="box_shadow_div" style={{ overflow: "unset" }}>
           <Grid container className="z-index-1">
-            <TableContainer>
+            <TableContainer sx={{borderTopLeftRadius:"10px",borderTopRightRadius:"10px"}}>
               <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
                 <TableHead>
                   <StyledTableCell>Item Name</StyledTableCell>
@@ -664,6 +681,13 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
                       </StyledTableCell>
                       <StyledTableCell>
                         <TextField
+                          sx={{
+                            "& .MuiOutlinedInput-root": {
+                              "&.Mui-focused fieldset": {
+                                borderColor: "black",
+                              },
+                            },
+                          }}
                           id="outlined-basic"
                           value={product.newQty}
                           inputProps={{
@@ -690,6 +714,13 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
                       </StyledTableCell>
                       <StyledTableCell>
                         <TextField
+                          sx={{
+                            "& .MuiOutlinedInput-root": {
+                              "&.Mui-focused fieldset": {
+                                borderColor: "black",
+                              },
+                            },
+                          }}
                           id="outlined-basic"
                           value={parseFloat(product.newPrice).toFixed(2)}
                           inputProps={{ type: "number" }}
@@ -715,6 +746,13 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
                       </StyledTableCell>
                       <StyledTableCell>
                         <TextField
+                          sx={{
+                            "& .MuiOutlinedInput-root": {
+                              "&.Mui-focused fieldset": {
+                                borderColor: "black",
+                              },
+                            },
+                          }}
                           id="outlined-basic"
                           inputProps={{ type: "text" }}
                           value={product.notes}

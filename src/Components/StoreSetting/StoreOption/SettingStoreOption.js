@@ -688,7 +688,7 @@ export default function SettingStoreOption() {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid container sx={{ p: 2, mb: 14 }} className="box_shadow_div">
+            <Grid container sx={{ p: 2, mb: 1 }} className="box_shadow_div">
               <Grid item xs={12}>
                 <Grid
                   container

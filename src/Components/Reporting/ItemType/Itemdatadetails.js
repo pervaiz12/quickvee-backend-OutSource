@@ -45,7 +45,11 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-const Itemdatadetails = ({ data, selectedOrderSource }) => {
+const Itemdatadetails = ({
+  data,
+  selectedOrderSource,
+  handleGetDetailsClick,
+}) => {
   const dispatch = useDispatch();
 
   const [orderReport, setorderReport] = useState([]);
@@ -53,12 +57,12 @@ const Itemdatadetails = ({ data, selectedOrderSource }) => {
     PasswordShow();
 
   const orderReportDataState = useSelector((state) => state.orderTypeList);
-  console.log("data", orderReportDataState.loading);
+  console.log("data", data);
 
   useEffect(() => {
     // Dispatch the action to fetch data when the component mounts
     getOrderTypeData();
-  }, [dispatch, data]);
+  }, [dispatch, data,selectedOrderSource]);
   const getOrderTypeData = async () => {
     try {
       await dispatch(fetchOrderTypeData(data)).unwrap();
@@ -105,96 +109,66 @@ const Itemdatadetails = ({ data, selectedOrderSource }) => {
     } else if (orderReport && orderReport.length >= 1) {
       return (
         <>
-          {/* <div className="q-attributes-bottom-detail-section text-center">
-            <div className="q-attributes-bottom-attriButes-header text-center">
-              <p className="q-employee-item">Name</p>
-              <p className="q-employee-in text-center"># Of Payments </p>
-              <p className="q-employee-in text-right">
-                {" "}
-                Net Revenue Without Tips
-              </p>
-              <p className="q-employee-in text-right"> Tips</p>
-              <p className="q-employee-in text-right"> Net Revenue With Tips</p>
-
-              <p className="q-employee-in text-right">Details</p>
-            </div>
-            {orderReport.map((orderReportDa, index) => (
-              <div
-                className="q-attributes-bottom-attriButes-listing "
-                key={index}
-              >
-                <div className="q-employee-bottom-attriButes-single-attributes ">
-                  <p className="q-employee-item">
-                    {orderReportDa.order_method}
-                  </p>
-                  <p className="q-employee-in">{priceFormate(orderReportDa.total_count)}</p>
-                  <p className="q-employee-in">
-                    {priceFormate(orderReportDa.amt_without_tip)}
-                  </p>
-                  <p className="q-employee-in">{priceFormate(orderReportDa.tip)}</p>
-                  <p className="q-employee-in">
-                    {priceFormate(orderReportDa.amount_with_tip)}
-                  </p>
-                  <Link  to={`/Order`} >
-                    <p className="q-employee-in">Details</p>
-                  </Link>
-
-                </div>
-              </div>
-            ))}
-          </div> */}
-
           <div className="q-attributes-bottom-detail-section text-center">
             <Grid container className="box_shadow_div">
-            <TableContainer>
-              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-                <TableHead>
-                  <StyledTableCell>Name</StyledTableCell>
-                  <StyledTableCell># Of Payments</StyledTableCell>
-                  <StyledTableCell>Net Revenue Without Tips</StyledTableCell>
-                  <StyledTableCell>Tips</StyledTableCell>
-                  <StyledTableCell>Net Revenue With Tips</StyledTableCell>
-                  <StyledTableCell>Details</StyledTableCell>
-                </TableHead>
-                <TableBody>
-                  {orderReport.map((orderReportDa, index) => (
-                    <StyledTableRow key={index}>
-                      <StyledTableCell>
-                        <p>{orderReportDa.order_method}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{priceFormate(orderReportDa.total_count)}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>
-                          ${Number(orderReportDa.amt_without_tip).toFixed(2)}
-                        </p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>${Number(orderReportDa.tip).toFixed(2)}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>
-                          ${Number(orderReportDa.amount_with_tip).toFixed(2)}
-                        </p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        {selectedOrderSource !== "All" ? (
+              <TableContainer>
+                <StyledTable
+                  sx={{ minWidth: 500 }}
+                  aria-label="customized table"
+                >
+                  <TableHead>
+                    <StyledTableCell>Name</StyledTableCell>
+                    <StyledTableCell># Of Payments</StyledTableCell>
+                    <StyledTableCell>Net Revenue Without Tips</StyledTableCell>
+                    <StyledTableCell>Tips</StyledTableCell>
+                    <StyledTableCell>Net Revenue With Tips</StyledTableCell>
+                    <StyledTableCell>Details</StyledTableCell>
+                  </TableHead>
+                  <TableBody>
+                    {orderReport.map((orderReportDa, index) => (
+                      <StyledTableRow key={index}>
+                        <StyledTableCell>
+                          <p>{orderReportDa.order_method}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>{priceFormate(orderReportDa.total_count)}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>
+                            ${Number(orderReportDa.amt_without_tip).toFixed(2)}
+                          </p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>${Number(orderReportDa.tip).toFixed(2)}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>
+                            ${Number(orderReportDa.amount_with_tip).toFixed(2)}
+                          </p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          {/* {selectedOrderSource !== "All" ? (
                           <Link
                             to={`/order/${data.start_date}/${data.end_date}/${data.order_env}/${orderReportDa.order_method}`}
-                            // target="_blank"
+                            target="_blank"
                           >
                             <p className="q-employee-in">Details</p>
                           </Link>
-                        ): "-"}
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  ))}
-                </TableBody>
-              </StyledTable>
-            </TableContainer>
+                        ): "-"} */}
+                          {selectedOrderSource !== "All" ? (
+                            <button>
+                              <p className="q-employee-in">View Details</p>
+                            </button>
+                          ) : (
+                            "-"
+                          )}
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))}
+                  </TableBody>
+                </StyledTable>
+              </TableContainer>
             </Grid>
-            
           </div>
         </>
       );
@@ -203,7 +177,7 @@ const Itemdatadetails = ({ data, selectedOrderSource }) => {
 
   return (
     <>
-      {orderReportDataState.loading ? (
+      {/* {orderReportDataState.loading ? (
         <SkeletonTable
           columns={[
             "Name",
@@ -216,7 +190,95 @@ const Itemdatadetails = ({ data, selectedOrderSource }) => {
         />
       ) : (
         renderDataTable()
-      )}
+      )} */}
+      <div className="q-attributes-bottom-detail-section text-center">
+        <Grid container className="box_shadow_div">
+          {orderReportDataState.loading ? (
+            <SkeletonTable
+              columns={[
+                "Name",
+                "# Of Payments",
+                "Net Revenue Without Tips",
+                "Tips",
+                "Net Revenue With Tips",
+                "Details",
+              ]}
+            />
+          ) : (
+            <TableContainer>
+              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
+                <TableHead>
+                  <StyledTableCell>Name</StyledTableCell>
+                  <StyledTableCell># Of Payments</StyledTableCell>
+                  <StyledTableCell>Net Revenue Without Tips</StyledTableCell>
+                  <StyledTableCell>Tips</StyledTableCell>
+                  <StyledTableCell>Net Revenue With Tips</StyledTableCell>
+                  <StyledTableCell>Details</StyledTableCell>
+                </TableHead>
+                <TableBody>
+                  {orderReport.length > 0 ? (
+                    orderReport?.map((orderReportDa, index) => (
+                      <StyledTableRow key={index}>
+                        <StyledTableCell>
+                          <p>{orderReportDa.order_method}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>{priceFormate(orderReportDa.total_count)}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>
+                            ${Number(orderReportDa.amt_without_tip).toFixed(2)}
+                          </p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>${Number(orderReportDa.tip).toFixed(2)}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>
+                            ${Number(orderReportDa.amount_with_tip).toFixed(2)}
+                          </p>
+                        </StyledTableCell>
+                        <StyledTableCell className="">
+                          {/* {selectedOrderSource !== "All" ? (
+                  <Link
+                    to={`/order/${data.start_date}/${data.end_date}/${data.order_env}/${orderReportDa.order_method}`}
+                    target="_blank"
+                  >
+                    <p className="q-employee-in">Details</p>
+                  </Link>
+                ): "-"} */}
+                          {selectedOrderSource !== "All" ? (
+                            <button
+                              onClick={() =>
+                                handleGetDetailsClick(
+                                  data.start_date,
+                                  data.end_date,
+                                  data.order_env,
+                                  orderReportDa.order_method
+                                )
+                              }
+                            >
+                              <p className="q-employee-in whitespace-nowrap">View Details</p>
+                            </button>
+                          ) : (
+                            "-"
+                          )}
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))
+                  ) : (
+                    <Grid container>
+                      <Grid item sx={{ p: 2.5 }}>
+                        <p>No Data Available</p>
+                      </Grid>
+                    </Grid>
+                  )}
+                </TableBody>
+              </StyledTable>
+            </TableContainer>
+          )}
+        </Grid>
+      </div>
     </>
   );
 };
