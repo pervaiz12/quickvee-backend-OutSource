@@ -569,7 +569,10 @@ const MerchantFunction = () => {
 
       return response.data;
     } catch (error) {
-      console.error("Error validating email:");
+      if (error.response.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
     }
   };
 
@@ -590,8 +593,12 @@ const MerchantFunction = () => {
       console.error("Error validating email:", error);
       // console.log("hellooo", error?.message);
       // dispatch(getAuthInvalidMessage(error?.message));
-      handleCoockieExpire();
-      throw error;
+      if (error.response.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
+      // handleCoockieExpire();
+      // throw error;
     }
   };
   // ------------------------
@@ -762,10 +769,10 @@ const MerchantFunction = () => {
         }
       }
     } catch (error) {
-      // console.log("hellooo", error?.message);
-      // dispatch(getAuthInvalidMessage(error?.message));
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if (error.response.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
     }
   };
 

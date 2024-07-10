@@ -29,16 +29,29 @@ export const CustomerUpdate = createAsyncThunk(
 
 export const CustomerFunction = createAsyncThunk(
   "Customer/CustomerFunction",
-  async (data) => {
-    const { token, ...newData } = data;
-    const response = await axios.post(BASE_URL + ADMIN_GET_CUSTOMER, newData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`, // Use data?.token directly
-      },
-    });
-    if (response.data.status === 200) {
-      return response.data.message;
+  async (data, { rejectWithValue }) => {
+    try {
+      const { token, ...newData } = data;
+      const response = await axios.post(
+        BASE_URL + ADMIN_GET_CUSTOMER,
+        newData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // Use data?.token directly
+          },
+        }
+      );
+      if (response.data.status === 200) {
+        return response.data.message;
+      }
+    } catch (error) {
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );

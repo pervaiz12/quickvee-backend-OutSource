@@ -177,6 +177,10 @@ export default function Add_adminFunctionality({ setVisible }) {
 
       return response.data; // Assuming this data indicates whether email is valid or not
     } catch (error) {
+      if (error.response.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
       console.error("Error validating email:", error);
       throw error;
     }
@@ -199,7 +203,11 @@ export default function Add_adminFunctionality({ setVisible }) {
       console.error("Error validating email:", error);
       // console.log("hellooo", error?.message);
       // dispatch(getAuthInvalidMessage(error?.message));
-      handleCoockieExpire();
+      if (error.response.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
+
       throw error;
     }
   };
@@ -435,7 +443,11 @@ export default function Add_adminFunctionality({ setVisible }) {
               setLoader(false);
             });
         } catch (error) {
-          console.log(error);
+          if (error.response.status == 401) {
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          }
+          console.log("errror hai", error);
         }
       }
     }

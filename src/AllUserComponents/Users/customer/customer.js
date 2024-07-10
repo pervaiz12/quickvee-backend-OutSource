@@ -71,7 +71,7 @@ const Customer = () => {
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
     [`&.${tableCellClasses.head}`]: {
       backgroundColor: "#253338",
-      color: theme.palette.common.white,  
+      color: theme.palette.common.white,
       fontFamily: "CircularSTDMedium",
     },
     [`&.${tableCellClasses.body}`]: {
@@ -101,8 +101,10 @@ const Customer = () => {
     try {
       await dispatch(CustomerFunction(data)).unwrap();
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
     }
   };
   useEffect(() => {
@@ -246,32 +248,32 @@ const Customer = () => {
                           </button>
                         </StyledTableCell>
                         <StyledTableCell>
-                        <button
+                          <button
                             className="flex items-center"
                             onClick={() => sortByItemName("str", "email")}
                           >
                             <p>Email</p>
                             <img src={sortIcon} alt="" className="pl-1" />
                           </button>
-                          </StyledTableCell>
+                        </StyledTableCell>
                         <StyledTableCell>
-                        <button
+                          <button
                             className="flex items-center"
                             onClick={() => sortByItemName("num", "phone")}
                           >
                             <p>Phone</p>
                             <img src={sortIcon} alt="" className="pl-1" />
                           </button>
-                          </StyledTableCell>
+                        </StyledTableCell>
                         <StyledTableCell>
-                        <button
+                          <button
                             className="flex items-center"
                             onClick={() => sortByItemName("str", "user_type")}
                           >
                             <p>User Type</p>
                             <img src={sortIcon} alt="" className="pl-1" />
                           </button>
-                         </StyledTableCell>
+                        </StyledTableCell>
                         {/* <StyledTableCell>Action</StyledTableCell> */}
                       </TableHead>
                       <TableBody>

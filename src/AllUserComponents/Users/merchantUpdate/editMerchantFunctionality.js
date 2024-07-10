@@ -88,10 +88,14 @@ export default function EditMerchantFunctionality() {
 
       return response.data;
     } catch (error) {
-      console.error("Error validating email:", error);
-      // console.log("hellooo", error?.message);
-      // dispatch(getAuthInvalidMessage(error?.message));
-      handleCoockieExpire();
+      if (error.response.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
+      // console.error("Error validating email:", error);
+      // // console.log("hellooo", error?.message);
+      // // dispatch(getAuthInvalidMessage(error?.message));
+      // handleCoockieExpire();
       throw error;
     }
   };
@@ -113,7 +117,12 @@ export default function EditMerchantFunctionality() {
 
       return response.data;
     } catch (error) {
-      console.error("Error validating email:");
+      console.log(error);
+      if (error.response.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
+      // console.error("Error validating email:");
     }
   };
 
@@ -329,8 +338,10 @@ export default function EditMerchantFunctionality() {
         });
     } catch (error) {
       // console.log("hehehehheh");
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if (error.response.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
     }
   };
 
@@ -738,8 +749,12 @@ export default function EditMerchantFunctionality() {
             ToastifyAlert("Merchant not Updated!", "warn");
           }
         } catch (e) {
-          console.log("Exception", e);
-          navigate("/");
+          // console.log("Exception", e);
+          if (e.response.status == 401) {
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          }
+          // navigate("/");
         }
       }
     }
