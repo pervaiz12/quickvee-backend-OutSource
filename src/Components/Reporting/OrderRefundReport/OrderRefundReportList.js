@@ -17,6 +17,7 @@ import TableRow from "@mui/material/TableRow";
 import { priceFormate } from "../../../hooks/priceFormate";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -156,121 +157,140 @@ const OrderRefundReportList = (props) => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <TableContainer>
-            <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-              <TableHead>
-                {tableRow.map((item, index) => (
-                  <StyledTableCell key={index}>
-                    <button
-                      className="flex items-center"
-                      onClick={() => sortByItemName(item.type, item.name)}
-                    >
-                      <p>{item.label}</p>
-                      <img src={sortIcon} alt="" className="pl-1" />
-                    </button>
-                  </StyledTableCell>
-                ))}
-              </TableHead>
+          {AllOrderRefundData.loading ? (
+            <SkeletonTable columns={tableRow.map((item) => item.label)} />
+          ) : (
+            <>
+              <TableContainer>
+                <StyledTable
+                  sx={{ minWidth: 500 }}
+                  aria-label="customized table"
+                >
+                  <TableHead>
+                    {tableRow.map((item, index) => (
+                      <StyledTableCell key={index}>
+                        <button
+                          className="flex items-center"
+                          onClick={() => sortByItemName(item.type, item.name)}
+                        >
+                          <p>{item.label}</p>
+                          <img src={sortIcon} alt="" className="pl-1" />
+                        </button>
+                      </StyledTableCell>
+                    ))}
+                  </TableHead>
 
-              <TableBody>
-                {Array.isArray(allOrderData) &&
-                  allOrderData.length > 0 &&
-                  allOrderData?.map((CheckData, index) => (
-                    <StyledTableRow key={index}>
-                      <StyledTableCell>
-                        <p className="text-[#0A64F9]">
-                          <Link
-                            to={`/order/store-reporting/order-summary/${merchant_id}/${CheckData.order_id}`}
-                            target="_blank"
+                  <TableBody>
+                    {Array.isArray(allOrderData) &&
+                      allOrderData.length > 0 &&
+                      allOrderData?.map((CheckData, index) => (
+                        <StyledTableRow key={index}>
+                          <StyledTableCell>
+                            <p className="text-[#0A64F9]">
+                              <Link
+                                to={`/order/store-reporting/order-summary/${merchant_id}/${CheckData.order_id}`}
+                                target="_blank"
+                              >
+                                {CheckData.order_id}{" "}
+                              </Link>
+                            </p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>
+                              {dateFormattedFunction(CheckData?.created_at)}
+                            </p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>{CheckData.employee}</p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>{CheckData.reason}</p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>
+                              ${priceFormate(formatAmount(CheckData.debit_amt))}
+                            </p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>
+                              ${priceFormate(formatAmount(CheckData.cash_amt))}
+                            </p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>
+                              $
+                              {priceFormate(
+                                formatAmount(CheckData.loyalty_point_amt)
+                              )}
+                            </p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>
+                              $
+                              {priceFormate(
+                                formatAmount(CheckData.store_credit_amt)
+                              )}
+                            </p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>
+                              ${priceFormate(formatAmount(CheckData.nca_amt))}
+                            </p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>
+                              ${priceFormate(formatAmount(CheckData.tip_amt))}
+                            </p>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <p>
+                              ${priceFormate(formatAmount(CheckData.amount))}
+                            </p>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                    {allOrderData.length> 0 && (
+                      <StyledTableRow>
+                        <StyledTableCell></StyledTableCell>
+                        <StyledTableCell></StyledTableCell>
+                        <StyledTableCell></StyledTableCell>
+                        <StyledTableCell></StyledTableCell>
+                        <StyledTableCell></StyledTableCell>
+                        <StyledTableCell></StyledTableCell>
+                        <StyledTableCell></StyledTableCell>
+                        <StyledTableCell></StyledTableCell>
+                        <StyledTableCell></StyledTableCell>
+                        <StyledTableCell>
+                          <p
+                            style={{
+                              color: "#0A64F9",
+                            }}
                           >
-                            {CheckData.order_id}{" "}
-                          </Link>
-                        </p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{dateFormattedFunction(CheckData?.created_at)}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{CheckData.employee}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{CheckData.reason}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>
-                          ${priceFormate(formatAmount(CheckData.debit_amt))}
-                        </p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>${priceFormate(formatAmount(CheckData.cash_amt))}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>
+                            Grand Total
+                          </p>
+                        </StyledTableCell>
+                        <StyledTableCell style={{ color: "#0A64F9" }}>
                           $
-                          {priceFormate(
-                            formatAmount(CheckData.loyalty_point_amt)
-                          )}
-                        </p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>
-                          $
-                          {priceFormate(
-                            formatAmount(CheckData.store_credit_amt)
-                          )}
-                        </p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>${priceFormate(formatAmount(CheckData.nca_amt))}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>${priceFormate(formatAmount(CheckData.tip_amt))}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>${priceFormate(formatAmount(CheckData.amount))}</p>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  ))}
-                {allOrderData && (
-                  <StyledTableRow>
-                    <StyledTableCell></StyledTableCell>
-                    <StyledTableCell></StyledTableCell>
-                    <StyledTableCell></StyledTableCell>
-                    <StyledTableCell></StyledTableCell>
-                    <StyledTableCell></StyledTableCell>
-                    <StyledTableCell></StyledTableCell>
-                    <StyledTableCell></StyledTableCell>
-                    <StyledTableCell></StyledTableCell>
-                    <StyledTableCell></StyledTableCell>
-                    <StyledTableCell>
-                      <p
-                        style={{
-                          color: "#0A64F9",
-                        }}
-                      >
-                        Grand Total
-                      </p>
-                    </StyledTableCell>
-                    <StyledTableCell style={{ color: "#0A64F9" }}>
-                      $
-                      {parseFloat(
-                        calculateGrandTotal(allOrderData, "amount")
-                      ).toLocaleString(undefined, {
-                        minimumFractionDigits: 2,
-                        maximumFractionDigits: 2,
-                      })}
-                    </StyledTableCell>
-                  </StyledTableRow>
-                )}
-              </TableBody>
-            </StyledTable>
-          </TableContainer>
-          {!isAllOrderDataValid && (
-            <div className="box">
-              <div className="q-category-bottom-categories-single-category">
-                <p>No data found</p>
-              </div>
-            </div>
+                          {parseFloat(
+                            calculateGrandTotal(allOrderData, "amount")
+                          ).toLocaleString(undefined, {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    )}
+                  </TableBody>
+                </StyledTable>
+              </TableContainer>
+              {!isAllOrderDataValid && (
+                <div className="box">
+                  <div className="q-category-bottom-categories-single-category">
+                    <p>No data found</p>
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </Grid>
       </Grid>

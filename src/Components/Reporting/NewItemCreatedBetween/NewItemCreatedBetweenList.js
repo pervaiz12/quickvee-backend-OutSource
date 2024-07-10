@@ -15,6 +15,7 @@ import { priceFormate } from "../../../hooks/priceFormate";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import PasswordShow from "../../../Common/passwordShow";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -160,76 +161,82 @@ const NewItemCreatedBetweenList = (props) => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <TableContainer>
-            <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-              <TableHead>
-                <StyledTableCell>
-                  <button
-                    className="flex items-center"
-                    onClick={() => sortByItemName("date", "created_on")}
-                  >
-                    <p className="whitespace-nowrap">Date</p>
-                    <img src={sortIcon} alt="" className="pl-1" />
-                  </button>
-                </StyledTableCell>
-                <StyledTableCell>
-                  <button
-                    className="flex items-center"
-                    onClick={() => sortByItemName("str", "category")}
-                  >
-                    <p className="whitespace-nowrap">Category</p>
-                    <img src={sortIcon} alt="" className="pl-1" />
-                  </button>
-                </StyledTableCell>
-                <StyledTableCell>
-                  <button
-                    className="flex items-center"
-                    onClick={() => sortByItemName("str", "item_name")}
-                  >
-                    <p className="whitespace-nowrap">Item Name</p>
-                    <img src={sortIcon} alt="" className="pl-1" />
-                  </button>
-                </StyledTableCell>
-                <StyledTableCell>
-                  <button
-                    className="flex items-center"
-                    onClick={() => sortByItemName("num", "price")}
-                  >
-                    <p className="whitespace-nowrap">Price</p>
-                    <img src={sortIcon} alt="" className="pl-1" />
-                  </button>
-                </StyledTableCell>
-              </TableHead>
-              <TableBody>
-                {allNewItemData && allNewItemData.length >= 1 ? (
-                  allNewItemData.map((ItemData, index) => (
-                    <StyledTableRow key={index}>
-                      <StyledTableCell>
-                        <p className="whitespace-nowrap">
-                          {formatDate(ItemData.created_on)}
-                        </p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{ItemData.category}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{ItemData.item_name}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>${priceFormate(ItemData.price)}</p>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  ))
-                ) : (
-                  <Grid container sx={{ padding: 2.5 }}>
-                    <Grid item xs={12}>
-                      <p>No. Data found.</p>
+          {AllNewItemDataState.loading ? (
+            <SkeletonTable
+              columns={["Date", "Category", "Item Name", "Price"]}
+            />
+          ) : (
+            <TableContainer>
+              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
+                <TableHead>
+                  <StyledTableCell>
+                    <button
+                      className="flex items-center"
+                      onClick={() => sortByItemName("date", "created_on")}
+                    >
+                      <p className="whitespace-nowrap">Date</p>
+                      <img src={sortIcon} alt="" className="pl-1" />
+                    </button>
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <button
+                      className="flex items-center"
+                      onClick={() => sortByItemName("str", "category")}
+                    >
+                      <p className="whitespace-nowrap">Category</p>
+                      <img src={sortIcon} alt="" className="pl-1" />
+                    </button>
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <button
+                      className="flex items-center"
+                      onClick={() => sortByItemName("str", "item_name")}
+                    >
+                      <p className="whitespace-nowrap">Item Name</p>
+                      <img src={sortIcon} alt="" className="pl-1" />
+                    </button>
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <button
+                      className="flex items-center"
+                      onClick={() => sortByItemName("num", "price")}
+                    >
+                      <p className="whitespace-nowrap">Price</p>
+                      <img src={sortIcon} alt="" className="pl-1" />
+                    </button>
+                  </StyledTableCell>
+                </TableHead>
+                <TableBody>
+                  {allNewItemData && allNewItemData.length >= 1 ? (
+                    allNewItemData.map((ItemData, index) => (
+                      <StyledTableRow key={index}>
+                        <StyledTableCell>
+                          <p className="whitespace-nowrap">
+                            {formatDate(ItemData.created_on)}
+                          </p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>{ItemData.category}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>{ItemData.item_name}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>${priceFormate(ItemData.price)}</p>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))
+                  ) : (
+                    <Grid container sx={{ padding: 2.5 }}>
+                      <Grid item xs={12}>
+                        <p>No. Data found.</p>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                )}
-              </TableBody>
-            </StyledTable>
-          </TableContainer>
+                  )}
+                </TableBody>
+              </StyledTable>
+            </TableContainer>
+          )}
         </Grid>
       </Grid>
       {/* <div className="box">
