@@ -590,6 +590,9 @@ const AddProducts = () => {
           "merchant_id",
           LoginGetDashBoardRecordJson?.data?.merchant_id
         );
+        inventoryData.append("login_type", userTypeData?.login_type);
+        inventoryData.append("token_id", userTypeData?.token_id);
+        inventoryData.append("token", userTypeData?.token);
 
         const inventoryList = {
           merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
@@ -766,6 +769,7 @@ const AddProducts = () => {
           upc: value.trim(),
           product_id:
             pageUrl === "inventory/products/edit" ? productId?.id : "",
+          ...userTypeData,
         };
 
         const response = isMultipleVarient
@@ -2289,9 +2293,11 @@ const AddProducts = () => {
           formdata.append("files[]", productInfo?.uploadFiles[i]?.file);
         }
         try {
-          const res = await (pageUrl === "inventory/products/edit"
-            ? dispatch(editProductData(formdata))
-            : dispatch(addProduct(formdata)));
+          const res = (
+            pageUrl === "inventory/products/edit"
+              ? await dispatch(editProductData(formdata)).unwrap()
+              : await dispatch(addProduct(formdata))
+          ).unwrap();
 
           if (res?.payload?.data?.status) {
             ToastifyAlert(
@@ -2314,6 +2320,7 @@ const AddProducts = () => {
             }
           }
         } catch (error) {
+          console.log("frontend error", error);
           if (error.status == 401) {
             getUnAutherisedTokenMessage();
             handleCoockieExpire();
