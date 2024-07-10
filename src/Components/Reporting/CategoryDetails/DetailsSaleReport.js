@@ -18,6 +18,8 @@ import { priceFormate } from "../../../hooks/priceFormate";
 import PasswordShow from "../../../Common/passwordShow";
 import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import Skeleton from "react-loading-skeleton";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -110,17 +112,17 @@ const DetailsSaleReport = ({ data }) => {
     }
   }, [detailCategorySaleDataState]);
 
-  if (!detailCategorySale || Object.keys(detailCategorySale).length === 0) {
-    return (
-      <>
-        <Grid container sx={{ padding: 2.5 }} className="box_shadow_div">
-          <Grid item xs={12}>
-            <p>No. Data found.</p>
-          </Grid>
-        </Grid>
-      </>
-    );
-  }
+  // if (!detailCategorySale || Object.keys(detailCategorySale).length === 0) {
+  //   return (
+  //     <>
+  //       <Grid container sx={{ padding: 2.5 }} className="box_shadow_div">
+  //         <Grid item xs={12}>
+  //           <p>No. Data found.</p>
+  //         </Grid>
+  //       </Grid>
+  //     </>
+  //   );
+  // }
 
   const grandTotal = detailCategorySale
     ? Object.values(detailCategorySale).reduce((acc, category) => {
@@ -167,10 +169,13 @@ const DetailsSaleReport = ({ data }) => {
     setdetailCategorySale(updatedCategorySale);
     setSortOrder(newOrder);
   };
-
+  console.log(
+    "Object.entries(detailCategorySale)",
+    Object.entries(detailCategorySale)
+  );
   return (
     <>
-      {Object.entries(detailCategorySale).map(([category, items]) => (
+      {detailCategorySaleDataState.loading ? (
         <>
           <Grid container className="box_shadow_div">
             <Grid item xs={12}>
@@ -178,100 +183,22 @@ const DetailsSaleReport = ({ data }) => {
                 className="q-attributes-bottom-header bg-[#ffffff] cursor-pointer"
                 onClick={handleCategoryClick}
               >
-                <span>{category}</span>
+                <span>
+                  <Skeleton />
+                </span>
                 <img src={SortIcon} alt="" className="" />
               </div>
-              <TableContainer>
-                <StyledTable
-                  sx={{ minWidth: 500 }}
-                  aria-label="customized table"
-                >
-                  <TableHead>
-                    <StyledTableCell sx={{ width: "55%" }}>
-                      <button
-                        className="flex items-center"
-                        onClick={() => sortByItemName("str", "name")}
-                      >
-                        <p>Item Name</p>
-                        <img src={SortIconW} alt="" className="pl-1" />
-                      </button>
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {/* <p
-                        className="q-catereport-quantity "
-                        onClick={handleQuantityClick}
-                      >
-                        Quantity <img src={SortIconW} alt="" className="pl-1" />
-                      </p> */}
-                      <button
-                        className="flex items-center"
-                        onClick={() => sortByItemName("num", "pro_qty")}
-                      >
-                        <p>Quantity</p>
-                        <img src={SortIconW} alt="" className="pl-1" />
-                      </button>
-                    </StyledTableCell>
-                    <StyledTableCell align="center">
-                      {/* <p
-                        className="attriButes-title"
-                        onClick={handleQuantityClick}
-                      >
-                        Amount <img src={SortIconW} alt="" className="pl-1" />
-                      </p> */}
-                      <button
-                        className="flex items-center"
-                        onClick={() => sortByItemName("num", "product_total")}
-                      >
-                        <p>Amount</p>
-                        <img src={SortIconW} alt="" className="pl-1" />
-                      </button>
-                    </StyledTableCell>
-                  </TableHead>
-                  <TableBody>
-                    {items?.map((item, index) => (
-                      <StyledTableRow key={index}>
-                        <StyledTableCell>
-                          <p className="q-catereport-item">{item.name}</p>
-                        </StyledTableCell>
-                        <StyledTableCell align="left">
-                          <p className="">{item.pro_qty}</p>
-                        </StyledTableCell>
-                        <StyledTableCell align="left">
-                          $
-                          {item.product_total
-                            ? priceFormate(
-                                parseFloat(item.product_total).toFixed(2)
-                              )
-                            : "0.00"}
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    ))}
-                    <StyledTableRow>
-                      <StyledTableCell>
-                        <p>Total</p>
-                      </StyledTableCell>
-                      <StyledTableCell></StyledTableCell>
-                      <StyledTableCell align="left">
-                        $
-                        {priceFormate(
-                          items
-                            .reduce(
-                              (acc, item) =>
-                                acc + parseFloat(item.product_total),
-                              0
-                            )
-                            .toFixed(2)
-                        )}
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  </TableBody>
-                </StyledTable>
-              </TableContainer>
+            </Grid>
+            <Grid item xs={12}>
+              <SkeletonTable columns={["Item Name", "Quantity", "Amount"]} />
             </Grid>
           </Grid>
-          {/* <div className="box" key={category}>
-            <div className="q-attributes-bottom-detail-section ">
-              <div className="mt-6 ">
+        </>
+      ) : Object.entries(detailCategorySale).length > 0 ? (
+        Object.entries(detailCategorySale).map(([category, items]) => (
+          <>
+            <Grid container className="box_shadow_div">
+              <Grid item xs={12}>
                 <div
                   className="q-attributes-bottom-header bg-[#ffffff] cursor-pointer"
                   onClick={handleCategoryClick}
@@ -279,98 +206,131 @@ const DetailsSaleReport = ({ data }) => {
                   <span>{category}</span>
                   <img src={SortIcon} alt="" className="" />
                 </div>
-                <style>
-                  {`.q-catereport-quantity,.attriButes-title{
-                    display: flex !important;
-                    cursor:pointer;
-                  }
-                  .q-catereport-quantity span, .attriButes-title span{
-                    padding-left: 0.75rem;
-                  }
-                  
-                  `}
-                </style>
-                <div className="q-attributes-bottom-attriButes-header">
-                  <p className="q-catereport-item">Item Name</p>
-                  <p
-                    className="q-catereport-quantity "
-                    onClick={handleQuantityClick}
+                <TableContainer>
+                  <StyledTable
+                    sx={{ minWidth: 500 }}
+                    aria-label="customized table"
                   >
-                    Quantity{" "}
-                    <span>
-                      <img src={SortIconW} alt="" className="" />
-                    </span>{" "}
-                  </p>
-                  <p className="attriButes-title" onClick={handleQuantityClick}>
-                    Amount{" "}
-                    <span>
-                      <img src={SortIconW} alt="" className="" />
-                    </span>
-                  </p>
-                </div>
-                {items.map((item, index) => (
-                  <div
-                    className="q-attributes-bottom-attriButes-listing"
-                    key={index}
-                  >
-                    <div className="q-attributes-bottom-attriButes-single-attributes">
-                      <p className="q-catereport-item">{item.name}</p>
-                      <p className="q-catereport-quantity ">{item.pro_qty}</p>
-                      <p className="q-catereport-amount">
-                        $
-                        {item.product_total
-                          ? parseFloat(item.product_total).toFixed(2)
-                          : "0.00"}
-                      </p>
-                    </div>
-                  </div>
-                ))}
-                <div className="q-order-bottom-oder-details-listing">
-                  <div className="q-order-bottom-order-details-single-attributes">
-                    <p className="q-catereport-item">Total</p>
-                    <p className="q-catereport-quantity"></p>
-                    <p className="q-catereport-amount">
-                      $
-                      {items
-                        .reduce(
-                          (acc, item) => acc + parseFloat(item.product_total),
-                          0
-                        )
-                        .toFixed(2)}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> */}
-        </>
-      ))}
-      <Grid container sx={{ marginY: 2.5 }} className="box_shadow_div">
-        <Grid item xs={12}>
-          <TableContainer>
-            <StyledTable>
-              <TableBody>
-                <StyledTableRow>
-                  <StyledTableCell sx={{ width: "50%" }}>
-                    <div className="q-category-bottom-report-listing">
-                      <div>
-                        <p className="">Grand Total</p>
-                      </div>
-                    </div>
-                  </StyledTableCell>
-                  <StyledTableCell></StyledTableCell>
-
-                  <StyledTableCell align="center">
-                    <div className="q-category-bottom-report-listing">
-                      <div>${priceFormate(grandTotal.toFixed(2))}</div>
-                    </div>
-                  </StyledTableCell>
-                </StyledTableRow>
-              </TableBody>
-            </StyledTable>
-          </TableContainer>
+                    <TableHead>
+                      <StyledTableCell sx={{ width: "55%" }}>
+                        <button
+                          className="flex items-center"
+                          onClick={() => sortByItemName("str", "name")}
+                        >
+                          <p>Item Name</p>
+                          <img src={SortIconW} alt="" className="pl-1" />
+                        </button>
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {/* <p
+                        className="q-catereport-quantity "
+                        onClick={handleQuantityClick}
+                      >
+                        Quantity <img src={SortIconW} alt="" className="pl-1" />
+                      </p> */}
+                        <button
+                          className="flex items-center"
+                          onClick={() => sortByItemName("num", "pro_qty")}
+                        >
+                          <p>Quantity</p>
+                          <img src={SortIconW} alt="" className="pl-1" />
+                        </button>
+                      </StyledTableCell>
+                      <StyledTableCell align="center">
+                        {/* <p
+                        className="attriButes-title"
+                        onClick={handleQuantityClick}
+                      >
+                        Amount <img src={SortIconW} alt="" className="pl-1" />
+                      </p> */}
+                        <button
+                          className="flex items-center"
+                          onClick={() => sortByItemName("num", "product_total")}
+                        >
+                          <p>Amount</p>
+                          <img src={SortIconW} alt="" className="pl-1" />
+                        </button>
+                      </StyledTableCell>
+                    </TableHead>
+                    <TableBody>
+                      {items?.map((item, index) => (
+                        <StyledTableRow key={index}>
+                          <StyledTableCell>
+                            <p className="q-catereport-item">{item.name}</p>
+                          </StyledTableCell>
+                          <StyledTableCell align="left">
+                            <p className="">{item.pro_qty}</p>
+                          </StyledTableCell>
+                          <StyledTableCell align="left">
+                            $
+                            {item.product_total
+                              ? priceFormate(
+                                  parseFloat(item.product_total).toFixed(2)
+                                )
+                              : "0.00"}
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                      <StyledTableRow>
+                        <StyledTableCell>
+                          <p>Total</p>
+                        </StyledTableCell>
+                        <StyledTableCell></StyledTableCell>
+                        <StyledTableCell align="left">
+                          $
+                          {priceFormate(
+                            items
+                              .reduce(
+                                (acc, item) =>
+                                  acc + parseFloat(item.product_total),
+                                0
+                              )
+                              .toFixed(2)
+                          )}
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    </TableBody>
+                  </StyledTable>
+                </TableContainer>
+              </Grid>
+            </Grid>
+          </>
+        ))
+      ) : (
+        <Grid container sx={{ padding: 2.5 }} className="box_shadow_div">
+          <Grid item xs={12}>
+            <p>No. Data found.</p>
+          </Grid>
         </Grid>
-      </Grid>
+      )}
+      {Object.entries(detailCategorySale).length > 0 && (
+        <Grid container sx={{ marginY: 2.5 }} className="box_shadow_div">
+          <Grid item xs={12}>
+            <TableContainer>
+              <StyledTable>
+                <TableBody>
+                  <StyledTableRow>
+                    <StyledTableCell sx={{ width: "50%" }}>
+                      <div className="q-category-bottom-report-listing">
+                        <div>
+                          <p className="">Grand Total</p>
+                        </div>
+                      </div>
+                    </StyledTableCell>
+                    <StyledTableCell></StyledTableCell>
+
+                    <StyledTableCell align="center">
+                      <div className="q-category-bottom-report-listing">
+                        <div>${priceFormate(grandTotal.toFixed(2))}</div>
+                      </div>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                </TableBody>
+              </StyledTable>
+            </TableContainer>
+          </Grid>
+        </Grid>
+      )}
     </>
   );
 };

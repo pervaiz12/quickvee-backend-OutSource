@@ -438,7 +438,15 @@ const BulkInstantPo = ({
                                           }
                                           onBlur={(e) => handleBlur(e, index)}
                                           maxLength={
-                                            inp?.name === "qty" ? 6 : 9
+                                            // inp?.name === "qty" ? 6 : 9
+                                            inp?.name === "qty" &&
+                                            instancePoMultiple?.instantPoState?.[
+                                              index
+                                            ]?.[inp?.name].includes("-")
+                                              ? 7
+                                              : inp?.name === "qty"
+                                                ? 6
+                                                : 9
                                           }
                                         />
                                       </div>
@@ -525,7 +533,15 @@ const BulkInstantPo = ({
                                           }
                                           onBlur={(e) => handleBlur(e)}
                                           maxLength={
-                                            inp?.name === "qty" ? 6 : 9
+                                            // inp?.name === "qty" ? 6 : 9
+                                            inp?.name === "qty" &&
+                                            instantPoSingle?.[
+                                              inp?.name
+                                            ]?.includes("-")
+                                              ? 7
+                                              : inp?.name === "qty"
+                                                ? 6
+                                                : 9
                                           }
                                         />
                                         {inp?.name === "qty" &&

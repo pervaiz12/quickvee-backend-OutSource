@@ -137,9 +137,9 @@ const SystemAccessSlice = createSlice({
       })
       .addCase(addActualAmountData.fulfilled, (state, action) => {
         state.loading = false;
-        state.systemAccessData = action.payload.status
-          ? action.payload
-          : state.systemAccessData;
+        // state.systemAccessData = action.payload.status
+        //   ? action.payload
+        //   : state.systemAccessData;
         state.error = "";
       })
       .addCase(addActualAmountData.rejected, (state, action) => {

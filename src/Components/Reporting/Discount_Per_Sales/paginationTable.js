@@ -68,7 +68,7 @@ export default function DashboardTables(props) {
   useEffect(() => {
     console.log(props.EmployeeFilterData);
     if (props.EmployeeFilterData) {
-      console.log("yes");
+      // console.log("yes");
       getDiscountRecord();
     }
   }, [props.EmployeeFilterData]);
@@ -276,7 +276,9 @@ export default function DashboardTables(props) {
                                     )}
                                   </StyledTableCell>
                                   <StyledTableCell>
-                                    {priceFormate(item?.cash_discounting)}
+                                    {parseFloat(
+                                      priceFormate(item?.total_adjust_price)
+                                    ).toFixed(2)}{" "}
                                   </StyledTableCell>
                                   <StyledTableCell>
                                     <Link
