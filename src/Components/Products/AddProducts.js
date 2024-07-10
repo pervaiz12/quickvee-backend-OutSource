@@ -2293,11 +2293,10 @@ const AddProducts = () => {
           formdata.append("files[]", productInfo?.uploadFiles[i]?.file);
         }
         try {
-          const res = (
+          const res =
             pageUrl === "inventory/products/edit"
-              ? await dispatch(editProductData(formdata)).unwrap()
-              : await dispatch(addProduct(formdata))
-          ).unwrap();
+              ? await dispatch(editProductData(formdata))
+              : await dispatch(addProduct(formdata));
 
           if (res?.payload?.data?.status) {
             ToastifyAlert(

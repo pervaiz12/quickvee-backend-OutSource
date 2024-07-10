@@ -1,7 +1,7 @@
 export const SortTableItemsHelperFun = (items, type, name, sortOrder) => {
   const newOrder = sortOrder === "asc" ? "desc" : "asc";
 
-  const sortedItems = [...items].sort((a, b) => {
+  const sortedItems = items.length > 0 && [...items]?.sort((a, b) => {
     const aValue = a[name] || "";
     const bValue = b[name] || "";
 

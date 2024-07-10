@@ -358,6 +358,18 @@ const AddNewStocktake = ({
 
   const handleNewQtyChange = (e, index) => {
     const { value } = e.target;
+    const isValidQty = value === "" || value === "0" || /^[1-9]\d*$/.test(value);
+    if (!isValidQty) {
+      setErrorMessages((prevErrors) => {
+        const updatedErrors = [...prevErrors];
+        updatedErrors[index] = {
+          ...updatedErrors[index],
+          new_qty: "Invalid quantity. Please enter a valid number.",
+        };
+        return updatedErrors;
+      });
+      return
+    }
     setProductList((prevList) => {
       const updatedList = [...prevList];
       const currentQty = updatedList[index].current_qty;

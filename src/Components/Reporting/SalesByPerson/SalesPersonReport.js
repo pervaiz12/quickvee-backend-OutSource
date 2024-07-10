@@ -17,6 +17,8 @@ import { priceFormate } from "../../../hooks/priceFormate";
 import SortIconW from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import PasswordShow from "../../../Common/passwordShow";
+import Skeleton from "react-loading-skeleton";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 // ==================== TABLE STYLE ADDED ===================================================
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -134,17 +136,17 @@ const SalesPersonReport = (props) => {
     return `${formattedDate} ${formattedTime}`;
   };
 
-  if (!allSalesByPersonData || Object.keys(allSalesByPersonData).length === 0) {
-    return (
-      <>
-        <Grid container sx={{ padding: 2.5 }} className="box_shadow_div ">
-          <Grid item xs={12}>
-            No data Found.
-          </Grid>
-        </Grid>
-      </>
-    );
-  }
+  // if (!allSalesByPersonData || Object.keys(allSalesByPersonData).length === 0) {
+  //   return (
+  //     <>
+  //       <Grid container sx={{ padding: 2.5 }} className="box_shadow_div ">
+  //         <Grid item xs={12}>
+  //           No data Found.
+  //         </Grid>
+  //       </Grid>
+  //     </>
+  //   );
+  // }
   let grandTotal = 0;
   Object.keys(allSalesByPersonData).map((EmpData, index) => {
     const totalAmount = allSalesByPersonData[EmpData]?.reduce(
@@ -176,7 +178,20 @@ const SalesPersonReport = (props) => {
   };
   return (
     <>
-      {allSalesByPersonData &&
+      {AllSalesByPersonDataState.loading ? (
+        <Grid container className="box_shadow_div">
+          <Grid item xs={12}>
+            <div className="q-category-bottom-header">
+              <div className="q_details_header ml-2">
+                <Skeleton />
+              </div>
+            </div>
+          </Grid>
+          <Grid item xs={12}>
+            <SkeletonTable columns={["Order ID", "Date", "Total"]} />
+          </Grid>
+        </Grid>
+      ) : Object.entries(allSalesByPersonData).length > 0 ? (
         Object.entries(allSalesByPersonData).map(([EmpData, items]) => (
           <>
             <Grid container className="box_shadow_div">
@@ -288,31 +303,40 @@ const SalesPersonReport = (props) => {
               </Grid>
             </Grid>
           </>
-        ))}
+        ))
+      ) : (
+        <Grid container sx={{ padding: 2.5 }} className="box_shadow_div ">
+          <Grid item xs={12}>
+            No data Found.
+          </Grid>
+        </Grid>
+      )}
 
-      <StyledTable
-        sx={{ minWidth: 500 }}
-        aria-label="customized table"
-        style={{ marginBottom: "1rem", transform: "translate(0rem, -1rem)" }}
-      >
-        <StyledTableRow>
-          <StyledTableCell sx={{ width: "33%" }}></StyledTableCell>
-          <StyledTableCell align="center" sx={{ width: "33%" }}>
-            <div className="q-category-bottom-report-listing">
-              <div>
-                <p className="">Grand Total</p>
+      {Object.entries(allSalesByPersonData).length > 0 && (
+        <StyledTable
+          sx={{ minWidth: 500 }}
+          aria-label="customized table"
+          style={{ marginBottom: "1rem", transform: "translate(0rem, -1rem)" }}
+        >
+          <StyledTableRow>
+            <StyledTableCell sx={{ width: "33%" }}></StyledTableCell>
+            <StyledTableCell align="center" sx={{ width: "33%" }}>
+              <div className="q-category-bottom-report-listing">
+                <div>
+                  <p className="">Grand Total</p>
+                </div>
               </div>
-            </div>
-          </StyledTableCell>
-          <StyledTableCell align="center">
-            <div className="q-category-bottom-report-listing">
-              <div>
-                <p className="">${priceFormate(grandTotal.toFixed(2))}</p>
+            </StyledTableCell>
+            <StyledTableCell align="center">
+              <div className="q-category-bottom-report-listing">
+                <div>
+                  <p className="">${priceFormate(grandTotal.toFixed(2))}</p>
+                </div>
               </div>
-            </div>
-          </StyledTableCell>
-        </StyledTableRow>
-      </StyledTable>
+            </StyledTableCell>
+          </StyledTableRow>
+        </StyledTable>
+      )}
     </>
   );
 };
