@@ -89,9 +89,13 @@ export const fetchProductsData = createAsyncThunk(
 export const updateProductsType = createAsyncThunk(
   "products/updateProductsType",
   async (data, { rejectWithValue }) => {
+    const { token, ...dataNew } = data;
     try {
-      const response = await axios.post(BASE_URL + UPDATE_TYPE, data, {
-        headers: { "Content-Type": "multipart/form-data" },
+      const response = await axios.post(BASE_URL + UPDATE_TYPE, dataNew, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
       });
       // console.log(response)
       if (response.status === 200) {
@@ -254,10 +258,18 @@ export const fetchVarientList = createAsyncThunk(
 export const fetchCategoryList = createAsyncThunk(
   "products/fetchCategoryList",
   async (payload) => {
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
     try {
       const response = await axios.post(
         BASE_URL + "Categoryapi/category_list",
-        payload
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response?.data;
     } catch (error) {
@@ -269,10 +281,18 @@ export const fetchCategoryList = createAsyncThunk(
 export const fetchTaxList = createAsyncThunk(
   "products/fetchTaxList",
   async (payload) => {
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
     try {
       const response = await axios.post(
         BASE_URL + "Settingapi/tax_list",
-        payload
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response?.data;
     } catch (error) {
@@ -284,10 +304,18 @@ export const fetchTaxList = createAsyncThunk(
 export const fetchProductList = createAsyncThunk(
   "products/fetchProductList",
   async (payload) => {
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
     try {
       const response = await axios.post(
         BASE_URL + "Productapi/products_list",
-        payload
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response?.data;
     } catch (error) {
@@ -457,10 +485,18 @@ export const fetchSalesHistory = createAsyncThunk(
 export const assignPrefferedVendor = createAsyncThunk(
   "products/assignPrefferedVendor",
   async (payload, { rejectWithValue }) => {
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
     try {
       const response = await axios.post(
         BASE_URL + "Productapi/assign_preferred_vendor",
-        payload
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response?.data;
     } catch (error) {
@@ -478,10 +514,18 @@ export const assignPrefferedVendor = createAsyncThunk(
 export const deleteProductVendor = createAsyncThunk(
   "products/deleteProductVendor",
   async (payload) => {
+    const token = payload.get("token"); // Extract the token from FormData
+    payload.delete("token");
     try {
       const response = await axios.post(
         BASE_URL + "Productapi/delete_product_vendor",
-        payload
+        payload,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response?.data;
     } catch (error) {
@@ -705,13 +749,15 @@ export const checkUpcCodeMultiple = createAsyncThunk(
   async (payload) => {
     // const token = payload.get('token'); // Extract the token from FormData
     // payload.delete('token');
+    const { token, ...data } = payload;
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/check_upc",
-        payload,
+        data,
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         }
       );
@@ -727,13 +773,15 @@ export const checkUpcCodeSingle = createAsyncThunk(
   async (payload) => {
     // const token = payload.get('token'); // Extract the token from FormData
     // payload.delete('token');
+    const { token, ...data } = payload;
     try {
       const response = await axios.post(
         BASE_URL + "Product_api_react/check_upc_form",
-        payload,
+        data,
         {
           headers: {
             "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
           },
         }
       );

@@ -43,7 +43,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const PaymentMethodList = ({ data }) => {
-  console.log("PaymentMethodList", data);
   const dispatch = useDispatch();
   const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
 
@@ -54,17 +53,20 @@ const PaymentMethodList = ({ data }) => {
   );
 
   useEffect(() => {
-    // Dispatch the action to fetch data when the component mounts
-    // fetchPaymentReportData();
-    dispatch(fetchPaymentMethodReportData(data));
+      fetchPaymentReportData();
   }, [data]);
 
   const fetchPaymentReportData = async () => {
     try {
-      await dispatch(fetchPaymentMethodReportData(data)).unwrap();
+      let newData = { ...data};
+      if (newData?.merchant_id) {
+        await dispatch(fetchPaymentMethodReportData(newData)).unwrap();
+      }
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if(error.status === 401){
+        handleCoockieExpire()
+        getUnAutherisedTokenMessage()
+      }
     }
   };
 
