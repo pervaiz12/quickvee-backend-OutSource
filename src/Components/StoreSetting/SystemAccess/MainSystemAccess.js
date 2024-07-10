@@ -3,9 +3,9 @@ import SystemView from "./SystemView";
 import { Grid } from "@mui/material";
 
 const MainSyastemAccess = () => {
-    return (
-      <>
-       <Grid
+  return (
+    <>
+      {/* <Grid
         container
         sx={{ padding: 2.5, mt: 3.6 }}
         className="box_shadow_div "
@@ -19,12 +19,12 @@ const MainSyastemAccess = () => {
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
-        <div className="q-attributes-main-page">
+      </Grid> */}
+      <div className="q-attributes-main-page">
         <SystemView />
-        </div>
-      </>
-    )
-  }
+      </div>
+    </>
+  );
+};
 
 export default MainSyastemAccess;

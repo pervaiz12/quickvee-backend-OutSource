@@ -635,8 +635,21 @@ const SystemAccessData = () => {
   return (
     <>
       <div className="box">
-        <div className="box_shadow_div" style={{ padding: "20px" }}>
-          <Grid container spacing={4}>
+        <div className="box_shadow_div">
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            className="q-coupon-bottom-header"
+          >
+            <Grid item>
+              <div>
+                <span>System Access</span>
+              </div>
+            </Grid>
+          </Grid>
+          <Grid container spacing={4} style={{ padding: "20px" }}>
             <Grid item md={6} xs={6}>
               <label>Default Cash Drawer Start</label>
               <BasicTextFields
@@ -651,7 +664,10 @@ const SystemAccessData = () => {
               />
             </Grid>
           </Grid>
-          <div className="qv_checkbox">
+          <div
+            className="qv_checkbox"
+            style={{ padding: "0px 20px 20px 20px" }}
+          >
             <label className="qv_checkbox_add_checkmark_label">
               Clock In/Out Receipt
               <input
