@@ -164,94 +164,210 @@ export default function InfoFunction() {
       }
     }
   };
-  let validate = () => {
-    let errorMessage = { ...errors }; // Assuming errors is already defined elsewhere
+
+  const validate = () => {
+    let errorMessage = { ...errors };
     let isValidate = true;
 
-    if (infoRecord.image === "") {
+    if (!infoRecord.image) {
       errorMessage.imageErrors = "Image is required";
       isValidate = false;
-    } else {
-      errorMessage.imageErrors = "";
+      console.log("1");
     }
 
-    if (infoRecord.banners === "") {
-      errorMessage.bannerErrors = "Banners is required";
+    // if (!infoRecord.banners) {
+    //   errorMessage.bannerErrors = "Banner is required";
+    //   isValidate = false;
+    //   console.log("2");
+    // }
+
+    // if (!infoRecord.qrCode) {
+    //   errorMessage.qrCodeError = "QR Code is required";
+    //   isValidate = false;
+    //   console.log("3");
+    // }
+
+    // if (!infoRecord.receieptLogo) {
+    //   errorMessage.receieptLogoError = "Receipt Logo is required";
+    //   isValidate = false;
+    //   console.log("4");
+    // }
+
+    if (!infoRecord.phone || infoRecord.phone.length !== 10) {
+      errorMessage.phoneError = "Invalid phone number";
       isValidate = false;
-    } else {
-      errorMessage.bannerErrors = "";
+      console.log("5");
     }
 
-    if (infoRecord.qrCode === "") {
-      errorMessage.qrCodeError = "QR Code  is required.";
+    if (!infoRecord.facebookUrl || !urlPattern.test(infoRecord.facebookUrl)) {
+      errorMessage.facebookUrlError = "Enter a valid Facebook URL";
       isValidate = false;
-    } else {
-      errorMessage.qrCodeError = "";
+      console.log("6");
     }
 
-    if (infoRecord.receieptLogo === "") {
-      errorMessage.receieptLogoError = "QR Reciept logo is required.";
+    if (!infoRecord.instagramUrl || !urlPattern.test(infoRecord.instagramUrl)) {
+      errorMessage.instagramUrlError = "Enter a valid Instagram URL";
       isValidate = false;
-    } else {
-      errorMessage.receieptLogoError = "";
+      console.log("7");
     }
 
-    if (infoRecord.address_1 === "") {
-      errorMessage.address_1Error = "Address Line 1  is required.";
+    if (
+      !infoRecord.promotionalUrl ||
+      !urlPattern.test(infoRecord.promotionalUrl)
+    ) {
+      errorMessage.promotionalUrlError = "Enter a valid Promotional URL";
       isValidate = false;
-    } else {
-      errorMessage.address_1Error = "";
+      console.log("8");
     }
 
-    if (infoRecord.city === "") {
-      errorMessage.cityError = "City  is required.";
-      isValidate = false;
-    } else {
-      errorMessage.cityError = "";
-    }
-
-    if (infoRecord.zip === "") {
-      errorMessage.zipCodeError = "Zip Code  is required.";
-      isValidate = false;
-    } else {
-      errorMessage.zipCodeError = "";
-    }
-
-    if (infoRecord.state === "") {
-      errorMessage.stateNameError = "State  is required.";
-      isValidate = false;
-    } else {
-      errorMessage.stateNameError = "";
-    }
-
-    if (infoRecord.phone === "") {
-      errorMessage.phoneError = "Phone  is required.";
-      isValidate = false;
-    } else {
-      errorMessage.phoneError = "";
-    }
-    if (infoRecord.facebookUrl === "") {
-      errorMessage.facebookUrlError = "This field is required.";
-      isValidate = false;
-    } else {
-      errorMessage.facebookUrlError = "";
-    }
-    if (infoRecord.instagramUrl === "") {
-      errorMessage.instagramUrlError = "This field is required.";
-      isValidate = false;
-    } else {
-      errorMessage.instagramUrlError = "";
-    }
-    if (infoRecord.promotionalUrl === "") {
-      errorMessage.promotionalUrlError = "This field is required.";
-      isValidate = false;
-    } else {
-      errorMessage.promotionalUrlError = "";
-    }
     setErrors(errorMessage);
-
     return isValidate;
   };
+
+  // const validate = () => {
+  //   let errorMessage = { ...errors };
+  //   let isValidate = true;
+
+  //   if (infoRecord.image == "") {
+  //     errorMessage.imageErrors = "Image is required";
+  //     isValidate = false;
+  //   }
+
+  //   if (infoRecord.banners == "") {
+  //     errorMessage.bannerErrors = "Banner is required";
+  //     isValidate = false;
+  //   }
+
+  //   if (infoRecord.qrCode == "") {
+  //     errorMessage.qrCodeError = "QR Code is required";
+  //     isValidate = false;
+  //   }
+
+  //   if (infoRecord.receieptLogo == "") {
+  //     errorMessage.receieptLogoError = "Receipt Logo is required";
+  //     isValidate = false;
+  //   }
+
+  //   if (infoRecord.phone == "" || infoRecord.phone.length !== 10) {
+  //     errorMessage.phoneError = "Invalid phone number";
+  //     isValidate = false;
+  //   }
+
+  //   if (
+  //     infoRecord.facebookUrl == "" &&
+  //     !urlPattern.test(infoRecord.facebookUrl)
+  //   ) {
+  //     errorMessage.facebookUrlError = "Enter a valid Facebook URL";
+  //     isValidate = false;
+  //   }
+
+  //   if (
+  //     infoRecord.instagramUrl == "" &&
+  //     !urlPattern.test(infoRecord.instagramUrl)
+  //   ) {
+  //     errorMessage.instagramUrlError = "Enter a valid Instagram URL";
+  //     isValidate = false;
+  //   }
+
+  //   if (
+  //     infoRecord.promotionalUrl == "" &&
+  //     !urlPattern.test(infoRecord.promotionalUrl)
+  //   ) {
+  //     errorMessage.promotionalUrlError = "Enter a valid Promotional URL";
+  //     isValidate = false;
+  //   }
+
+  //   setErrors(errorMessage);
+  //   return isValidate;
+  // };
+  // let validate = () => {
+  //   let errorMessage = { ...errors }; // Assuming errors is already defined elsewhere
+  //   let isValidate = true;
+
+  //   if (infoRecord.image === "") {
+  //     errorMessage.imageErrors = "Image is required";
+  //     isValidate = false;
+  //   } else {
+  //     errorMessage.imageErrors = "";
+  //   }
+
+  //   if (infoRecord.banners === "") {
+  //     errorMessage.bannerErrors = "Banners is required";
+  //     isValidate = false;
+  //   } else {
+  //     errorMessage.bannerErrors = "";
+  //   }
+
+  //   if (infoRecord.qrCode === "") {
+  //     errorMessage.qrCodeError = "QR Code  is required.";
+  //     isValidate = false;
+  //   } else {
+  //     errorMessage.qrCodeError = "";
+  //   }
+
+  //   if (infoRecord.receieptLogo === "") {
+  //     errorMessage.receieptLogoError = "QR Reciept logo is required.";
+  //     isValidate = false;
+  //   } else {
+  //     errorMessage.receieptLogoError = "";
+  //   }
+
+  //   if (infoRecord.address_1 === "") {
+  //     errorMessage.address_1Error = "Address Line 1  is required.";
+  //     isValidate = false;
+  //   } else {
+  //     errorMessage.address_1Error = "";
+  //   }
+
+  //   if (infoRecord.city === "") {
+  //     errorMessage.cityError = "City  is required.";
+  //     isValidate = false;
+  //   } else {
+  //     errorMessage.cityError = "";
+  //   }
+
+  //   if (infoRecord.zip === "") {
+  //     errorMessage.zipCodeError = "Zip Code  is required.";
+  //     isValidate = false;
+  //   } else {
+  //     errorMessage.zipCodeError = "";
+  //   }
+
+  //   if (infoRecord.state === "") {
+  //     errorMessage.stateNameError = "State  is required.";
+  //     isValidate = false;
+  //   } else {
+  //     errorMessage.stateNameError = "";
+  //   }
+
+  //   if (infoRecord.phone === "") {
+  //     errorMessage.phoneError = "Phone  is required.";
+  //     isValidate = false;
+  //   } else {
+  //     errorMessage.phoneError = "";
+  //   }
+  //   if (infoRecord.facebookUrl === "") {
+  //     errorMessage.facebookUrlError = "This field is required.";
+  //     isValidate = false;
+  //   } else {
+  //     errorMessage.facebookUrlError = "";
+  //   }
+  //   if (infoRecord.instagramUrl === "") {
+  //     errorMessage.instagramUrlError = "This field is required.";
+  //     isValidate = false;
+  //   } else {
+  //     errorMessage.instagramUrlError = "";
+  //   }
+  //   if (infoRecord.promotionalUrl === "") {
+  //     errorMessage.promotionalUrlError = "This field is required.";
+  //     isValidate = false;
+  //   } else {
+  //     errorMessage.promotionalUrlError = "";
+  //   }
+  //   setErrors(errorMessage);
+
+  //   return isValidate;
+  // };
 
   const handleEditRecord = async (dataRecord) => {
     // console.log(data.id) datat
@@ -367,8 +483,10 @@ export default function InfoFunction() {
         }));
       }
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if (error.response.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
     }
   };
 
@@ -398,74 +516,74 @@ export default function InfoFunction() {
       }
     }
     if (name == "banners") {
-      if (e.target.value == "") {
-        errorMessage.bannerErrors = "Banner is required";
-      } else {
-        const selectedFile = e.target.files[0];
+      // if (e.target.value == "") {
+      //   errorMessage.bannerErrors = "Banner is required";
+      // } else {
+      const selectedFile = e.target.files[0];
 
-        if (selectedFile) {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            setInfoRecord((prevState) => ({
-              ...prevState,
-              banners: reader.result,
-              is_banner_change:
-                prevState.banners === selectedFile.name ? "0" : "1",
-            }));
-          };
+      if (selectedFile) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setInfoRecord((prevState) => ({
+            ...prevState,
+            banners: reader.result,
+            is_banner_change:
+              prevState.banners === selectedFile.name ? "0" : "1",
+          }));
+        };
 
-          reader.readAsDataURL(selectedFile);
-          setBannersBoolean(true);
-        }
-        errorMessage.bannerErrors = "";
+        reader.readAsDataURL(selectedFile);
+        setBannersBoolean(true);
+        // }
+        // errorMessage.bannerErrors = "";
       }
     }
     if (name === "qrCode") {
       console.log("QR Code", name);
-      if (e.target.value == "") {
-        errorMessage.qrCodeError = "QR Code is required";
-      } else {
-        const selectedFile = e.target.files[0];
+      // if (e.target.value == "") {
+      //   errorMessage.qrCodeError = "QR Code is required";
+      // } else {
+      const selectedFile = e.target.files[0];
 
-        if (selectedFile) {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            setInfoRecord((prevState) => ({
-              ...prevState,
-              qrCode: reader.result,
-              is_qr_code_change:
-                prevState.qrCode === selectedFile.name ? "0" : "1",
-            }));
-          };
+      if (selectedFile) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setInfoRecord((prevState) => ({
+            ...prevState,
+            qrCode: reader.result,
+            is_qr_code_change:
+              prevState.qrCode === selectedFile.name ? "0" : "1",
+          }));
+        };
 
-          reader.readAsDataURL(selectedFile);
-          setQrCodeBoolean(true);
-        }
-        errorMessage.qrCodeError = "";
+        reader.readAsDataURL(selectedFile);
+        setQrCodeBoolean(true);
+        // }
+        // errorMessage.qrCodeError = "";
       }
     }
     if (name === "receieptLogo") {
-      console.log("receieptLogo", name);
-      if (e.target.value == "") {
-        errorMessage.receieptLogoError = "Please select Receipt Logo field";
-      } else {
-        const selectedFile = e.target.files[0];
+      // console.log("receieptLogo", name);
+      // if (e.target.value == "") {
+      //   errorMessage.receieptLogoError = "Receipt Logo is required";
+      // } else {
+      const selectedFile = e.target.files[0];
 
-        if (selectedFile) {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            setInfoRecord((prevState) => ({
-              ...prevState,
-              receieptLogo: reader.result,
-              is_receipt_logo_change:
-                prevState.receieptLogo === selectedFile.name ? "0" : "1",
-            }));
-          };
+      if (selectedFile) {
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          setInfoRecord((prevState) => ({
+            ...prevState,
+            receieptLogo: reader.result,
+            is_receipt_logo_change:
+              prevState.receieptLogo === selectedFile.name ? "0" : "1",
+          }));
+        };
 
-          reader.readAsDataURL(selectedFile);
-          setReceieptLogoBool(true);
-        }
-        errorMessage.receieptLogoError = "";
+        reader.readAsDataURL(selectedFile);
+        setReceieptLogoBool(true);
+        // }
+        // errorMessage.receieptLogoError = "";
       }
     }
     if (name == "phone") {
@@ -528,11 +646,13 @@ export default function InfoFunction() {
     e.preventDefault();
     let validateData = validate();
     let currentValidate = CurrentValidate(errors);
+    console.log(validateData);
+    console.log(currentValidate);
     try {
       if (validateData == true) {
         if (currentValidate == true) {
           const packect = {
-            login_type: userTypeData?.login_type, //
+            //
             merchant_id: infoRecord.merchant_id, //
             user_id: infoRecord.user_id, //
             menu_link: infoRecord.menuLink, //
@@ -541,7 +661,7 @@ export default function InfoFunction() {
             is_banner_change: infoRecord.is_banner_change, //
             logo_img: infoRecord.image, //
             is_logo_change: infoRecord.is_logo_change, //
-            qr_code: infoRecord.qrCode, //
+            qr_code: !!infoRecord.qrCode ? infoRecord.qrCode : "", //
             receipt_logo: infoRecord.receieptLogo || "",
             is_qr_code_change: infoRecord.is_qr_code_change, //
             is_receipt_logo_change: infoRecord.is_receipt_logo_change,
@@ -559,14 +679,16 @@ export default function InfoFunction() {
             // approve: approve,
 
             token_id: userTypeData?.token_id,
+            login_type: userTypeData?.login_type,
           };
+
           let response = await axios.post(
             BASE_URL + UPDATE_STORE_INFO,
             packect,
             {
               headers: {
                 "Content-Type": "multipart/form-data",
-                Authorization: `Bearer${userTypeData?.token}`,
+                Authorization: `Bearer ${userTypeData?.token}`,
               },
             }
           );
@@ -582,8 +704,10 @@ export default function InfoFunction() {
         }
       }
     } catch (e) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if (e.response.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
     }
   };
   const currentPassordValidate = (passwordError) => {
