@@ -149,7 +149,11 @@ const PaymentMethodList = ({ data }) => {
     } else if (myArray && myArray.length >= 1) {
       return (
         <>
-          <Grid container style={{marginBottom:0}} className="box_shadow_div">
+          <Grid
+            container
+            style={{ marginBottom: 0 }}
+            className="box_shadow_div"
+          >
             <Grid item xs={12}>
               <TableContainer>
                 <StyledTable
@@ -191,39 +195,15 @@ const PaymentMethodList = ({ data }) => {
               </TableContainer>
             </Grid>
           </Grid>
-          {/* <div className="box">
-            <div className="q-daily-report-bottom-report-header">
-              <p className="report-sort">Card type</p>
-              <p className="report-title">Total</p>
-            </div>
-          </div>
-          {myArray.map((paymentData, index) => {
-            if (paymentData.amt > 0) {
-              hasValidData = true;
-              return (
-                <div className="box">
-                  <div
-                    className="q-category-bottom-categories-listing"
-                    key={index}
-                  >
-                    <div className="q-category-bottom-categories-single-category">
-                      <p className="report-title">{paymentData.card_type}</p>
-                      <p className="report-title">
-                        {typeof paymentData.amt != ""
-                          ? `$${Number(paymentData.amt).toFixed(2)}`
-                          : "N/A"}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              );
-            } else {
-              return null;
-            }
-          })} */}
+          
           {!hasValidData && (
             <>
-              <Grid style={{marginTop:0}}  container sx={{ padding: 2.5 }} className="box_shadow_div">
+              <Grid
+                style={{ marginTop: 0 }}
+                container
+                sx={{ padding: 2.5 }}
+                className="box_shadow_div"
+              >
                 <Grid item xs={12}>
                   <p>No. Data found.</p>
                 </Grid>
@@ -235,7 +215,51 @@ const PaymentMethodList = ({ data }) => {
     }
   };
 
-  return <>{renderDataTable()}</>;
+  // return <>{renderDataTable()}</>;
+  return (
+    <>
+      <Grid container style={{ marginBottom: 0 }} className="box_shadow_div">
+        <Grid item xs={12}>
+          
+          <TableContainer>
+            <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
+              <TableHead>
+                <StyledTableCell>Card type</StyledTableCell>
+                <StyledTableCell>Total</StyledTableCell>
+              </TableHead>
+              <TableBody>
+                {myArray.map((paymentData, index) => {
+                  if (paymentData.amt > 0) {
+                   const hasValidData = true;
+                    return (
+                      <StyledTableRow key={index}>
+                        <StyledTableCell>
+                          <p className="report-title">
+                            {paymentData.card_type}
+                          </p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p className="report-title">
+                            {typeof paymentData.amt != ""
+                              ? `$${priceFormate(
+                                  Number(paymentData.amt).toFixed(2)
+                                )}`
+                              : "N/A"}
+                          </p>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    );
+                  } else {
+                    return null;
+                  }
+                })}
+              </TableBody>
+            </StyledTable>
+          </TableContainer>
+        </Grid>
+      </Grid>
+    </>
+  );
 };
 
 export default PaymentMethodList;
