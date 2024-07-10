@@ -89,17 +89,17 @@ const ItemsCategories = () => {
     order_method
   ) => {
     setOrderDetailData({ start_date, end_date, order_env, order_method });
-    setVisible(true)
+    setVisible(true);
   };
-  useEffect(()=>{
-    const getData =async ()=>{
+  useEffect(() => {
+    const getData = async () => {
       const returnOrderType = (data) => {
         if (data === 5) {
           return "Closed";
         }
         if (data === 6) {
           return "Offline";
-        }else{
+        } else {
           return "All";
         }
       };
@@ -110,8 +110,8 @@ const ItemsCategories = () => {
           merchant_id,
           order_type: returnOrderType(orderDetailData.order_env),
           trans_type: "Both",
-          start_date:orderDetailData.start_date,
-          end_date:orderDetailData.end_date,
+          start_date: orderDetailData.start_date,
+          end_date: orderDetailData.end_date,
           emp_id: "All",
           customer_id: "0",
           perpage: rowsPerPage,
@@ -141,8 +141,8 @@ const ItemsCategories = () => {
           order_type: returnOrderType(orderDetailData.order_env),
           search_by: null,
           trans_type: "All",
-          start_date:orderDetailData.start_date,
-          end_date:orderDetailData.end_date,
+          start_date: orderDetailData.start_date,
+          end_date: orderDetailData.end_date,
           order_method: orderDetailData.order_method,
           ...otherdata,
         };
@@ -162,10 +162,10 @@ const ItemsCategories = () => {
         }
         setLoading(false);
       } catch (error) {}
-    }
+    };
 
-    getData()
-  },[orderDetailData,currentPage,rowsPerPage])
+    getData();
+  }, [orderDetailData, currentPage, rowsPerPage]);
   const orderSourceList = ["All", "Online Order", "Store Order"];
   return (
     <>
@@ -209,19 +209,19 @@ const ItemsCategories = () => {
         selectedOrderSource={selectedOrderSource}
         handleGetDetailsClick={handleGetDetailsClick}
       />
-      {visible &&
-      <OrderDetailTableList
-      orderDetailDataList={orderDetailDataList}
-      totalCount={totalCount}
-      currentPage={currentPage}
-      setCurrentPage={setCurrentPage}
-      rowsPerPage={rowsPerPage}
-      setRowsPerPage={setRowsPerPage}
-      paginate={paginate}
-      loading={loading}
-      merchant_id={merchant_id}
-      />
-    }
+      {visible && (
+        <OrderDetailTableList
+          orderDetailDataList={orderDetailDataList}
+          totalCount={totalCount}
+          currentPage={currentPage}
+          setCurrentPage={setCurrentPage}
+          rowsPerPage={rowsPerPage}
+          setRowsPerPage={setRowsPerPage}
+          paginate={paginate}
+          loading={loading}
+          merchant_id={merchant_id}
+        />
+      )}
     </>
   );
 };
