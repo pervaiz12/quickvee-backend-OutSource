@@ -387,8 +387,8 @@ const AddProducts = () => {
       // Call the API after one second
       titleTimeoutId = setTimeout(async () => {
         try {
-          const res = await dispatch(checkProductTitle(formData));
-          if (res?.payload?.status) {
+          const res = await dispatch(checkProductTitle(formData)).unwrap();
+          if (res?.status) {
             SetProductTitleError(false);
           } else {
             SetProductTitleError(true);
@@ -601,9 +601,9 @@ const AddProducts = () => {
 
         // Fetch inventory settings
         try {
-          const res = await dispatch(getInventorySetting(formData));
-          if (!!+res?.payload) {
-            setCostPer(+res?.payload);
+          const res = await dispatch(getInventorySetting(formData)).unwrap();
+          if (!!+res) {
+            setCostPer(+res);
           }
         } catch (error) {
           if (error.status == 401) {
@@ -616,10 +616,10 @@ const AddProducts = () => {
 
         // Fetch variant list
         try {
-          const res = await dispatch(fetchVarientList(inventoryList));
+          const res = await dispatch(fetchVarientList(inventoryList)).unwrap();
           setDropdowndata((prev) => ({
             ...prev,
-            varientList: res?.payload?.result,
+            varientList: res?.result,
           }));
         } catch (err) {
           console.error("Error fetching variant list:", err);
@@ -627,10 +627,10 @@ const AddProducts = () => {
 
         // Fetch category list
         try {
-          const res = await dispatch(fetchCategoryList(inventoryData));
+          const res = await dispatch(fetchCategoryList(inventoryData)).unwrap();
           setDropdowndata((prev) => ({
             ...prev,
-            categoryList: res?.payload?.result,
+            categoryList: res?.result,
           }));
         } catch (err) {
           console.error("Error fetching category list:", err);
@@ -638,10 +638,10 @@ const AddProducts = () => {
 
         // Fetch tax list
         try {
-          const res = await dispatch(fetchTaxList(inventoryData));
+          const res = await dispatch(fetchTaxList(inventoryData)).unwrap();
           setDropdowndata((prev) => ({
             ...prev,
-            taxList: res?.payload?.result,
+            taxList: res?.result,
           }));
         } catch (err) {
           console.error("Error fetching tax list:", err);
@@ -649,11 +649,11 @@ const AddProducts = () => {
 
         // Fetch product list
         try {
-          const res = await dispatch(fetchProductList(inventoryData));
+          const res = await dispatch(fetchProductList(inventoryData)).unwrap();
           setDropdowndata((prev) => ({
             ...prev,
-            relatedProducttList: res?.payload?.result,
-            frequentlyBroughtList: res?.payload?.result,
+            relatedProducttList: res?.result,
+            frequentlyBroughtList: res?.result,
           }));
         } catch (err) {
           console.error("Error fetching product list:", err);
@@ -720,12 +720,13 @@ const AddProducts = () => {
             merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
             upc: value.trim(),
             id: pageUrl === "inventory/products/edit" ? productId?.id : "",
+            ...userTypeData,
           };
 
           const response = isMultipleVarient
-            ? await dispatch(checkUpcCodeMultiple(data))
-            : await dispatch(checkUpcCodeSingle(data));
-          if (response?.payload === true) {
+            ? await dispatch(checkUpcCodeMultiple(data)).unwrap()
+            : await dispatch(checkUpcCodeSingle(data)).unwrap();
+          if (response === true) {
             setDisabledSubmit(false);
             isAllowed = true;
           }
@@ -738,9 +739,9 @@ const AddProducts = () => {
             ...userTypeData,
           };
 
-          const response = await dispatch(checkUpcOnVarientEdit(data));
+          const response = await dispatch(checkUpcOnVarientEdit(data)).unwrap();
 
-          if (response?.payload?.status === "true") {
+          if (response?.status === "true") {
             setDisabledSubmit(false);
             isAllowed = true;
           }
@@ -773,13 +774,13 @@ const AddProducts = () => {
         };
 
         const response = isMultipleVarient
-          ? await dispatch(checkUpcCodeMultiple(data))
-          : await dispatch(checkUpcCodeSingle(data));
+          ? await dispatch(checkUpcCodeMultiple(data)).unwrap()
+          : await dispatch(checkUpcCodeSingle(data)).unwrap();
 
-        if (response?.payload?.status === "true") {
+        if (response?.status === "true") {
           setDisabledSubmit(false);
           isAllowed = true;
-        } else if (response?.payload?.status === "false") {
+        } else if (response?.status === "false") {
           setDisabledSubmit(false);
           // setIsUpcExists(true);
           isAllowed = false;
@@ -1668,15 +1669,13 @@ const AddProducts = () => {
 
     if (!!productId?.id) {
       try {
-        const res = await dispatch(fetchProductsDataById(formData));
-        if (res?.payload?.message === "Success") {
-          setProductData(res?.payload?.data?.productdata);
-          setInventoryData(res?.payload?.data?.inventory_setting_data);
-          setOptions(res?.payload?.data?.options);
-          setVarientData(res?.payload?.data?.product_variants);
-          setIsMultipleVaient(
-            Boolean(+res?.payload?.data?.productdata?.isvarient)
-          );
+        const res = await dispatch(fetchProductsDataById(formData)).unwrap();
+        if (res?.message === "Success") {
+          setProductData(res?.data?.productdata);
+          setInventoryData(res?.data?.inventory_setting_data);
+          setOptions(res?.data?.options);
+          setVarientData(res?.data?.product_variants);
+          setIsMultipleVaient(Boolean(+res?.data?.productdata?.isvarient));
         }
       } catch (error) {
         if (error.status == 401) {
@@ -1717,9 +1716,9 @@ const AddProducts = () => {
     try {
       const inventorySettingRes = await dispatch(
         getInventorySettingOnVarient(formDataNew)
-      );
-      if (inventorySettingRes?.payload?.status) {
-        setInventoryData(inventorySettingRes?.payload?.result);
+      ).unwrap();
+      if (inventorySettingRes?.status) {
+        setInventoryData(inventorySettingRes?.result);
       }
     } catch (error) {
       if (error.status == 401) {
@@ -1731,10 +1730,9 @@ const AddProducts = () => {
     }
 
     try {
-      const res = await dispatch(fetchVarietDataById(formData));
-
-      if (res?.payload?.status) {
-        const payloadData = res?.payload?.var_data;
+      const res = await dispatch(fetchVarietDataById(formData)).unwrap();
+      if (res?.status) {
+        const payloadData = res?.var_data;
         setProductData(payloadData);
         setIsMultipleVaient(false);
         setIsVarientEdit(true);
@@ -2295,10 +2293,10 @@ const AddProducts = () => {
         try {
           const res =
             pageUrl === "inventory/products/edit"
-              ? await dispatch(editProductData(formdata))
-              : await dispatch(addProduct(formdata));
+              ? await dispatch(editProductData(formdata)).unwrap()
+              : await dispatch(addProduct(formdata)).unwrap();
 
-          if (res?.payload?.data?.status) {
+          if (res?.data?.status) {
             ToastifyAlert(
               pageUrl === "inventory/products/edit"
                 ? "Updated Successfully"
@@ -2387,8 +2385,8 @@ const AddProducts = () => {
       if (!!response && checkFormErrorExist()) {
         setVarientLoading(true);
         try {
-          const res = await dispatch(updateEditVarient(data));
-          if (res?.payload?.status) {
+          const res = await dispatch(updateEditVarient(data)).unwrap();
+          if (res?.status) {
             ToastifyAlert("Update Successfully", "success");
             fetchSingleVarientData();
           }

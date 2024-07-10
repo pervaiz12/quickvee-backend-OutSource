@@ -306,9 +306,11 @@ const BulkInstantPo = ({
         formData.append("token", userTypeData?.token);
 
         try {
-          const response = await dispatch(saveSingleVarientPO(formData));
+          const response = await dispatch(
+            saveSingleVarientPO(formData)
+          ).unwrap();
 
-          if (response?.payload?.status) {
+          if (response?.status) {
             setInstantPoSingle({
               qty: "",
               cost: "",
@@ -373,9 +375,9 @@ const BulkInstantPo = ({
         formData.append("token", userTypeData?.token);
 
         try {
-          const response = await dispatch(saveBulkInstantPo(formData));
+          const response = await dispatch(saveBulkInstantPo(formData)).unwrap();
 
-          if (response?.payload?.status) {
+          if (response?.status) {
             setInstancePoMultiple({
               instantPoState: [],
               description: "",
