@@ -13,16 +13,25 @@ const initialState = {
 };
 export const AdminFunction = createAsyncThunk(
   "adminRecord/AdminFunction",
-  async (data) => {
-    const { token, ...newData } = data;
-    const response = await axios.post(BASE_URL + GET_ADMIN_RECORD, newData, {
-      headers: {
-        "Content-Type": "multipart/form-data",
-        Authorization: `Bearer ${token}`,
-      },
-    });
-    if (response.data.status == 200) {
-      return response.data.message;
+  async (data, { rejectWithValue }) => {
+    try {
+      const { token, ...newData } = data;
+      const response = await axios.post(BASE_URL + GET_ADMIN_RECORD, newData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data.status == 200) {
+        return response.data.message;
+      }
+    } catch (error) {
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );

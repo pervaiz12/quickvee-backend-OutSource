@@ -49,8 +49,10 @@ export default function AdminView({ setVisible, setEditAdminId }) {
     try {
       await dispatch(AdminFunction(data)).unwrap();
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
     }
   };
   useEffect(() => {

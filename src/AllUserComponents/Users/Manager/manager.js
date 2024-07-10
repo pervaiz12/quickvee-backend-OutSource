@@ -71,8 +71,10 @@ export default function Manager() {
     try {
       await dispatch(ManagerRecord(data)).unwrap();
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
     }
   };
 

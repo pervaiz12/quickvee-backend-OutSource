@@ -121,8 +121,11 @@ export default function Verified({ setVisible, setMerchantId }) {
     try {
       await dispatch(getVerifiedMerchant(data_verified)).unwrap();
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      // console.log(error);
+      if (error.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
     }
   };
   useEffect(() => {
@@ -224,6 +227,10 @@ export default function Verified({ setVisible, setMerchantId }) {
           console.error(response);
         }
       } catch (error) {
+        if (error.response.status == 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        }
         console.error(error);
       }
     }
@@ -257,7 +264,10 @@ export default function Verified({ setVisible, setMerchantId }) {
           console.error(response);
         }
       } catch (error) {
-        console.error(error);
+        if (error.response.status == 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        }
       }
       setDeleteMerchantId(null);
       setDislikeModalOpen(false);

@@ -36,22 +36,31 @@ export const getVerifiedMerchantCount = createAsyncThunk(
 
 export const getVerifiedMerchant = createAsyncThunk(
   "Verified/getVerifiedMerchant",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     // console.log(data)
-    const { token, ...dataNew } = data;
-    const response = await axios.post(
-      BASE_URL + GET_VERIFIED_MERCHANT,
-      dataNew,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`, // Use data?.token directly
-        },
+    try {
+      const { token, ...dataNew } = data;
+      const response = await axios.post(
+        BASE_URL + GET_VERIFIED_MERCHANT,
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // Use data?.token directly
+          },
+        }
+      );
+      //    console.log(response)
+      if (response.data.status == 200) {
+        return response.data.message;
       }
-    );
-    //    console.log(response)
-    if (response.data.status == 200) {
-      return response.data.message;
+    } catch (error) {
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );

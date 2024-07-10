@@ -57,8 +57,11 @@ const EditAdminFunctionality = (handleClick) => {
           }
         });
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      console.log("error in edit", error);
+      if (error.response.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
     }
   };
   // ============================================
@@ -76,10 +79,11 @@ const EditAdminFunctionality = (handleClick) => {
 
       return response.data;
     } catch (error) {
+      if (error.response.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
       console.error("Error validating email:", error);
-      // console.log("hellooo", error?.message);
-      // dispatch(getAuthInvalidMessage(error?.message));
-      handleCoockieExpire();
       throw error;
     }
   };
@@ -99,10 +103,10 @@ const EditAdminFunctionality = (handleClick) => {
 
       return response.data; // Assuming this data indicates whether email is valid or not
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
-      // console.error("Error validating email:", error);
-      // throw error;
+      if (error.response.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
     }
   };
   const handleBlur = async (name) => {
@@ -439,8 +443,10 @@ const EditAdminFunctionality = (handleClick) => {
               navigate("/users/admin");
             });
         } catch (error) {
-          getUnAutherisedTokenMessage();
-          handleCoockieExpire();
+          if (error.response.status == 401) {
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          }
         }
       }
     }
