@@ -70,16 +70,25 @@ const ItemsCategories = () => {
 
   const [selectedOrderSource, setSelectedOrderSource] = useState("All");
 
-  const handleOptionClick = (option, dropdown) => {
-    switch (dropdown) {
-      case "orderSource":
-        setSelectedOrderSource(option.title);
+  const handleOptionClick = (option) => {
+    setSelectedOrderSource(option.title);
+    setFilteredData((prevData) => {
+      const orderEnvValue = {
+        "All": 9,
+        "Online Order":5,
+        "Store Order": 6
+      }[option.title] || 9;
 
-        break;
+      const updatedData = {
+        ...prevData,
+        merchant_id,
+        order_env: orderEnvValue,
+        ...userTypeData,
+      };
 
-      default:
-        break;
-    }
+      // handleDataFiltered(updatedData); // Call handleDataFiltered with the current filteredData
+      return updatedData
+    });
   };
 
   const handleGetDetailsClick = async (
@@ -209,7 +218,7 @@ const ItemsCategories = () => {
         selectedOrderSource={selectedOrderSource}
         handleGetDetailsClick={handleGetDetailsClick}
       />
-      {visible && (
+      {visible && selectedOrderSource !== "All" && (
         <OrderDetailTableList
           orderDetailDataList={orderDetailDataList}
           totalCount={totalCount}
