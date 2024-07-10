@@ -35,6 +35,7 @@ export default function SettingStoreOption() {
   const [isFutureOrderEnabled, setIsFutureOrderEnabled] = useState(false);
   const [error, setError] = useState("");
   const [advancedayCount, setAdvancedayCount] = useState("");
+  const [startTime, setStartTime] = useState("");
 
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -82,9 +83,6 @@ export default function SettingStoreOption() {
     enabledGuestCheckout: false,
   });
 
-  useEffect(() => {
-    console.log("orderState.resetOrderNumberTime",orderState.resetOrderNumberTime)
-  }, [orderState.resetOrderNumberTime]);
 
   // onchange
   const handleOrderChange = (e) => {
@@ -94,6 +92,8 @@ export default function SettingStoreOption() {
       if (name === "orderNumebrEnabled") {
         updateData[name] = checked;
         // updateData["resetOrderNumberTime"] = "00.00";
+      }else if(name === "resetOrderNumberTime"){
+        setStartTime("")
       } else if (name === "enabledNca") {
         updateData[name] = checked;
         updateData["enabledDualPrice"] = false;
@@ -110,7 +110,6 @@ export default function SettingStoreOption() {
       }else{
         setAdvancedayCount("Advance Day Count is required")
       }
-      console.log("Time",value)
     } else if (name === "enabledFutureOrder") {
       updateData[name] = checked;
       if (checked === false) {
@@ -258,7 +257,14 @@ export default function SettingStoreOption() {
             setAdvancedayCount("")
           }
         }
-
+        if(orderState?.orderNumebrEnabled){
+          if(orderState.resetOrderNumberTime === ""){
+            setStartTime("Select Time is required")
+            return
+          }else{
+            setStartTime("")
+          }
+        }
         setLoading(true);
         const newItem = {
           login_type: userTypeData?.login_type,
@@ -291,6 +297,8 @@ export default function SettingStoreOption() {
           ...userTypeData,
         };
         const data = newItem;
+        // console.log("update Data",data)
+        // return
         dispatch(updateStoreOption(data))
           .then((res) => {
             if (res?.payload?.status) {
@@ -319,9 +327,9 @@ export default function SettingStoreOption() {
     setVoidOrder(!VoidOrder);
   };
 
-  const handleKeyPress = (event) => {
-    event.preventDefault();
-  }
+  // const handleKeyPress = (event) => {
+  //   event.preventDefault();
+  // }
 
   return (
     <>
@@ -391,9 +399,14 @@ export default function SettingStoreOption() {
                         onChange={handleOrderChange}
                         onClick={(e) => e.target.showPicker()}
                         disabled={!orderState?.orderNumebrEnabled}
-                        onKeyPress={handleKeyPress}
+                        // onKeyPress={handleKeyPress}
                       />
                       {/* <span>{formatTime(systemAccess.start_time)}</span> */}
+                      {startTime && (
+                        <p className="error-message pt-1">
+                          {startTime}
+                        </p>
+                      )}
                     </div>
                   </Grid>
                 </Grid>
