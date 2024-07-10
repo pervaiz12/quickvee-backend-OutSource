@@ -65,10 +65,10 @@ const MainInstantDetails = ({ data }) => {
         instantactivityDataState.instantactivityData.map((item) => {
           const AfterAdjustQty =
             parseInt(item.current_qty, 10) + parseInt(item.qty, 10);
-          console.log("AfterAdjustQtyAddedList", AfterAdjustQty);
+          // console.log("AfterAdjustQtyAddedList", AfterAdjustQty);
           const calculatedTotal =
             parseInt(item.qty, 10) * parseFloat(item.price);
-          console.log("calculatedTotal", calculatedTotal.toFixed(2));
+          // console.log("calculatedTotal", calculatedTotal.toFixed(2));
           return {
             ...item,
             afterAdjustQty: AfterAdjustQty,
@@ -298,10 +298,12 @@ const MainInstantDetails = ({ data }) => {
                             <StyledTableCell>
                               <p>
                                 $
-                                {priceFormate(
-                                  isNaN(instantactivity.calculatedTotal)
-                                    ? 0
-                                    : instantactivity.calculatedTotal
+                                {Math.abs(
+                                  priceFormate(
+                                    isNaN(instantactivity.calculatedTotal)
+                                      ? 0
+                                      : instantactivity.calculatedTotal
+                                  )
                                 )}
                                 {/* $
                 {instantactivity.calculatedTotal % 1 !== 0
