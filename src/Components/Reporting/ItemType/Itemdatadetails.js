@@ -57,12 +57,12 @@ const Itemdatadetails = ({
     PasswordShow();
 
   const orderReportDataState = useSelector((state) => state.orderTypeList);
-  console.log("data", orderReportDataState.loading);
+  console.log("data", data);
 
   useEffect(() => {
     // Dispatch the action to fetch data when the component mounts
     getOrderTypeData();
-  }, [dispatch, data]);
+  }, [dispatch, data,selectedOrderSource]);
   const getOrderTypeData = async () => {
     try {
       await dispatch(fetchOrderTypeData(data)).unwrap();

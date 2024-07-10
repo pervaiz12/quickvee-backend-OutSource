@@ -322,6 +322,7 @@ module.exports = Object.freeze({
   STOCKTAKE_LIST_COUNT: "Stocktake_react_api/stocktake_count",
 
   SYNC_DATA: "InventoryReact/syncOI",
+  SEND_FOR_APPROVAL: "Product_api_react/send_approval",
 
   VENDOR_UPDATE_DETAILS: "vendor_api/update_details",
   CHECK_EXIST_STORENAME: "UserController/check_merchant",
