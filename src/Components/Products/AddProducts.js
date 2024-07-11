@@ -621,8 +621,13 @@ const AddProducts = () => {
             ...prev,
             varientList: res?.result,
           }));
-        } catch (err) {
-          console.error("Error fetching variant list:", err);
+        } catch (error) {
+          if (error.status == 401) {
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          } else if (error.status == "Network Error") {
+            getNetworkError();
+          }
         }
 
         // Fetch category list
@@ -632,8 +637,13 @@ const AddProducts = () => {
             ...prev,
             categoryList: res?.result,
           }));
-        } catch (err) {
-          console.error("Error fetching category list:", err);
+        } catch (error) {
+          if (error.status == 401) {
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          } else if (error.status == "Network Error") {
+            getNetworkError();
+          }
         }
 
         // Fetch tax list
