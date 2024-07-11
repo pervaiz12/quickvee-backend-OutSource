@@ -26,6 +26,7 @@ import DeleteModal from "../../reuseableComponents/DeleteModal";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
 import PasswordShow from "./../../Common/passwordShow";
+import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 
 const DefaultsDetail = ({ setVisible, setDefaultEditId }) => {
   const myStyles = {
@@ -43,7 +44,8 @@ const DefaultsDetail = ({ setVisible, setDefaultEditId }) => {
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
 
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   useEffect(() => {
     // let data = {
     //   // merchant_id: merchant_id,
@@ -65,8 +67,12 @@ const DefaultsDetail = ({ setVisible, setDefaultEditId }) => {
         await dispatch(fetchdefaultsData(data)).unwrap();
       }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 
@@ -228,8 +234,12 @@ const DefaultsDetail = ({ setVisible, setDefaultEditId }) => {
       setDeleteDefaultId(null);
       setDeleteModalOpen(false);
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 
@@ -274,7 +284,8 @@ const DefaultsDetail = ({ setVisible, setDefaultEditId }) => {
 
   return (
     <>
-      {/* for ajinkya table start  */}
+      {/* for aj***** table start  */}
+
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
           <Grid
@@ -310,108 +321,138 @@ const DefaultsDetail = ({ setVisible, setDefaultEditId }) => {
           </Grid>
 
           <Grid container>
-            <TableContainer>
-              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-                <TableHead>
-                  <StyledTableCell>
-                    <div
-                      className="category-checkmark-div defaultCheckbox-div"
-                      style={{ width: "unset !important" }}
-                    >
-                      <label className="category-checkmark-label">
-                        <input
-                          type="checkbox"
-                          id="selectAll"
-                          checked={headerCheckboxChecked}
-                          onChange={handleHeaderCheckboxChange}
+            {defaultsDataState.loading ? (
+              <SkeletonTable
+                columns={[
+                  <div
+                    className="category-checkmark-div defaultCheckbox-div"
+                    style={{ width: "unset !important" }}
+                  >
+                    <label className="category-checkmark-label">
+                      <input type="checkbox" id="selectAll" />
+                      <span
+                        className="category-checkmark"
+                        style={{
+                          left: "1rem",
+                          transform: "translate(0px, -10px)",
+                        }}
+                      ></span>
+                    </label>
+                  </div>,
+                  "Name",
+                  "Type",
+                  <div className="default-Edit-Delete ">
+                    <img src={DeleteIconAll} alt="delete-icon" />
+                  </div>,
+                ]}
+              />
+            ) : (
+              <TableContainer>
+                <StyledTable
+                  sx={{ minWidth: 500 }}
+                  aria-label="customized table"
+                >
+                  <TableHead>
+                    <StyledTableCell>
+                      <div
+                        className="category-checkmark-div defaultCheckbox-div"
+                        style={{ width: "unset !important" }}
+                      >
+                        <label className="category-checkmark-label">
+                          <input
+                            type="checkbox"
+                            id="selectAll"
+                            checked={headerCheckboxChecked}
+                            onChange={handleHeaderCheckboxChange}
+                          />
+                          <span
+                            className="category-checkmark"
+                            style={{
+                              left: "1rem",
+                              transform: "translate(0px, -10px)",
+                            }}
+                          ></span>
+                        </label>
+                      </div>
+                    </StyledTableCell>
+                    <StyledTableCell>Name</StyledTableCell>
+                    <StyledTableCell>Type </StyledTableCell>
+                    <StyledTableCell>
+                      <div className="default-Edit-Delete ">
+                        <img
+                          src={DeleteIconAll}
+                          alt="delete-icon"
+                          onClick={() => handleDeleteDefaultSelected()}
+                          style={{ transform: "translate(-5px, 0px)" }}
                         />
-                        <span
-                          className="category-checkmark"
-                          style={{
-                            left: "1rem",
-                            transform: "translate(0px, -10px)",
-                          }}
-                        ></span>
-                      </label>
-                    </div>
-                  </StyledTableCell>
-                  <StyledTableCell>Name</StyledTableCell>
-                  <StyledTableCell>Type </StyledTableCell>
-                  <StyledTableCell>
-                    <div className="default-Edit-Delete ">
-                      <img
-                        src={DeleteIconAll}
-                        alt="delete-icon"
-                        onClick={() => handleDeleteDefaultSelected()}
-                        style={{ transform: "translate(-5px, 0px)" }}
-                      />
-                    </div>
-                  </StyledTableCell>
-                </TableHead>
-                <TableBody>
-                  {defaults.length > 0 &&
-                    defaults?.map((data, index) => (
-                      <StyledTableRow>
-                        <StyledTableCell>
-                          <div
-                            className="category-checkmark-div"
-                            style={{ width: "unset !important" }}
-                          >
-                            <label className="category-checkmark-label">
-                              <input
-                                type="checkbox"
-                                checked={data.isChecked}
-                                onChange={() => handleCheckboxChange(index)}
-                              />
-                              <span
-                                className="category-checkmark"
-                                // style={myStyles}
-                                style={{
-                                  left: "1rem",
-                                  transform: "translate(0px, -10px)",
-                                }}
-                              ></span>
-                            </label>
-                          </div>
-                        </StyledTableCell>
+                      </div>
+                    </StyledTableCell>
+                  </TableHead>
+                  <TableBody>
+                    {defaults.length > 0 &&
+                      defaults?.map((data, index) => (
+                        <StyledTableRow>
+                          <StyledTableCell>
+                            <div
+                              className="category-checkmark-div"
+                              style={{ width: "unset !important" }}
+                            >
+                              <label className="category-checkmark-label">
+                                <input
+                                  type="checkbox"
+                                  checked={data.isChecked}
+                                  onChange={() => handleCheckboxChange(index)}
+                                />
+                                <span
+                                  className="category-checkmark"
+                                  // style={myStyles}
+                                  style={{
+                                    left: "1rem",
+                                    transform: "translate(0px, -10px)",
+                                  }}
+                                ></span>
+                              </label>
+                            </div>
+                          </StyledTableCell>
 
-                        <StyledTableCell>
-                          <div class="text-[#000000] order_method ">
-                            {data.name || ""}
-                          </div>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <div class="text-[#000000] order_method capitalize">
-                            {data.type === "1"
-                              ? "Collection"
-                              : // : defaultsdata.type === "2"
-                                //   ? "Sauce"
-                                //   : defaultsdata.type === "3"
-                                //     ? "Topping"
-                                ""}
-                          </div>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <div className="default-Edit-Delete ">
-                            <img
-                              className="mx-1 edit cursor-pointer"
-                              onClick={() => handleEditDefault(data.id)}
-                              src={EditIcon}
-                              alt="Edit"
-                            />
-                            <img
-                              class="mx-1 delete cursor-pointer"
-                              onClick={() => handleDeleteDefaults(data.id)}
-                              src={DeleteIcon}
-                              alt="Delete"
-                            />
-                          </div>
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    ))}
-                </TableBody>
-              </StyledTable>
-            </TableContainer>
+                          <StyledTableCell>
+                            <div class="text-[#000000] order_method ">
+                              {data.name || ""}
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <div class="text-[#000000] order_method capitalize">
+                              {data.type === "1"
+                                ? "Collection"
+                                : // : defaultsdata.type === "2"
+                                  //   ? "Sauce"
+                                  //   : defaultsdata.type === "3"
+                                  //     ? "Topping"
+                                  ""}
+                            </div>
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <div className="default-Edit-Delete ">
+                              <img
+                                className="mx-1 edit cursor-pointer"
+                                onClick={() => handleEditDefault(data.id)}
+                                src={EditIcon}
+                                alt="Edit"
+                              />
+                              <img
+                                class="mx-1 delete cursor-pointer"
+                                onClick={() => handleDeleteDefaults(data.id)}
+                                src={DeleteIcon}
+                                alt="Delete"
+                              />
+                            </div>
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))}
+                  </TableBody>
+                </StyledTable>
+              </TableContainer>
+            )}
           </Grid>
         </Grid>
       </Grid>

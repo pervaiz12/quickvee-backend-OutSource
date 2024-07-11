@@ -45,10 +45,11 @@ export default function Discount_per_sales_logic() {
         setAllEmployee(response?.data?.result);
       }
     } catch (error) {
-      console.error("Error fetching Employee List:", error);
-      if (error.response.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };
@@ -106,14 +107,11 @@ export default function Discount_per_sales_logic() {
     } catch (error) {
       setLoader(false);
 
-      if (error.response && error.response.status === 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
-      } else if (error.message === "Network Error") {
-        console.log("Network Error");
+      } else if (error.status == "Network Error") {
         getNetworkError();
-      } else {
-        console.error("An error occurred:", error);
       }
     }
   };

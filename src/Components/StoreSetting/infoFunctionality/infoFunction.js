@@ -23,7 +23,8 @@ export default function InfoFunction() {
   console.log(LoginGetDashBoardRecordJson);
   let merchant_idNew = LoginGetDashBoardRecordJson?.data?.merchant_id;
   let store_email = LoginGetDashBoardRecordJson?.data?.email;
-  const { getUnAutherisedTokenMessage, handleCoockieExpire } = PasswordShow();
+  const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
+    PasswordShow();
   const [successsMessage, setSuccessMessage] = useState("");
   const [hideSucess, setHideSuccess] = useState(false);
   const [image, setImage] = useState("");
@@ -555,9 +556,11 @@ export default function InfoFunction() {
         }));
       }
     } catch (error) {
-      if (error.response.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };
@@ -811,10 +814,12 @@ export default function InfoFunction() {
           }
         }
       }
-    } catch (e) {
-      if (e.response.status == 401) {
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };

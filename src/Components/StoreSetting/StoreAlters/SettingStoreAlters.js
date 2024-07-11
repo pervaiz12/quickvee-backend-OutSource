@@ -13,7 +13,8 @@ import PasswordShow from "../../../Common/passwordShow";
 import CircularProgress from "@mui/material/CircularProgress";
 
 export default function SettingStoreAlters() {
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [formData, setFormData] = useState({
     bccemail: "",
     msg_no: "",
@@ -514,15 +515,19 @@ export default function SettingStoreAlters() {
         // setsubmitmessage(response.data.msg);
       }
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
     setLoader(false);
   };
 
   return (
     <>
-      <div className="box" style={{marginBottom:"110px"}}>
+      <div className="box" style={{ marginBottom: "110px" }}>
         {/* Online Order Notifications */}
         <div className="store-setting-main-div">
           <h2 className="store-setting-h2">
@@ -1079,24 +1084,27 @@ export default function SettingStoreAlters() {
           </p>
         </div>
       </div>
-      <div className="fixed-bottom"> 
-      <div className="box_shadow_div" style={{marginBottom:0,paddingRight:20}}>
-        <button
-          className="store-setting-btn mt-5 mb-5 attributeUpdateBTN"
-          onClick={handleUpdateSettingAlerts}
-          disabled={loader}
+      <div className="fixed-bottom">
+        <div
+          className="box_shadow_div"
+          style={{ marginBottom: 0, paddingRight: 20 }}
         >
-          {loader ? (
-            <>
-              <CircularProgress color={"inherit"} width={15} size={15} /> Update
-            </>
-          ) : (
-            "Update"
-          )}
-        </button>
+          <button
+            className="store-setting-btn mt-5 mb-5 attributeUpdateBTN"
+            onClick={handleUpdateSettingAlerts}
+            disabled={loader}
+          >
+            {loader ? (
+              <>
+                <CircularProgress color={"inherit"} width={15} size={15} />{" "}
+                Update
+              </>
+            ) : (
+              "Update"
+            )}
+          </button>
+        </div>
       </div>
-      </div>
-     
     </>
   );
 }

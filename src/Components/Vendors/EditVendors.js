@@ -34,7 +34,8 @@ const vendorFormValues = {
 const EditVendors = ({ setVisible }) => {
   const Navigate = useNavigate();
   const location = useLocation();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const searchParams = new URLSearchParams(location.search);
   const [allvendors, setallvendors] = useState([]);
   const AllVendorsDataState = useSelector((state) => state.vendors);
@@ -177,9 +178,12 @@ const EditVendors = ({ setVisible }) => {
         return newData;
       });
     } catch (error) {
-      console.error("Error:", error);
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   }
 
@@ -261,11 +265,11 @@ const EditVendors = ({ setVisible }) => {
         ToastifyAlert("Updated Successfully.", "success");
         setLoader(false);
       } catch (error) {
-        console.error("Error updating data:", error);
-        if (error.response.status == 401) {
-          handleCoockieExpire();
+        if (error.status == 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
-          setLoader(false);
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
         }
       }
     }
@@ -391,21 +395,6 @@ const EditVendors = ({ setVisible }) => {
                   </Grid>
                   <Grid item xs={12} sm={6} md={4}>
                     <div className="qvrowmain my-1">
-                      <label htmlFor="city">Zip</label>
-                    </div>
-                    <BasicTextFields
-                      type={"text"}
-                      name={"zip_code"}
-                      value={vendorData.zip_code}
-                      onChangeFun={handleOnChange}
-                      // required={"required"}
-                    />
-                    {errorMessage.zip_code && (
-                      <span className="error"> {errorMessage.zip_code}</span>
-                    )}
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <div className="qvrowmain my-1">
                       <label htmlFor="city">State</label>
                     </div>
                     <SelectDropDown
@@ -421,6 +410,21 @@ const EditVendors = ({ setVisible }) => {
                       <span className="error">{errorMessage.state}</span>
                     )}
                   </Grid>
+                  <Grid item xs={12} sm={6} md={4}>
+                    <div className="qvrowmain my-1">
+                      <label htmlFor="city">Zip</label>
+                    </div>
+                    <BasicTextFields
+                      type={"text"}
+                      name={"zip_code"}
+                      value={vendorData.zip_code}
+                      onChangeFun={handleOnChange}
+                      // required={"required"}
+                    />
+                    {errorMessage.zip_code && (
+                      <span className="error"> {errorMessage.zip_code}</span>
+                    )}
+                  </Grid> 
                 </Grid>
                 <Grid
                   container

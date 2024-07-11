@@ -13,7 +13,7 @@ const initialState = {
 
 
 // Generate pening , fulfilled and rejected action type
-export const fetchdefaultsData = createAsyncThunk('defaults/fetchdefaultsData', async (data) => {
+export const fetchdefaultsData = createAsyncThunk('defaults/fetchdefaultsData', async (data, { rejectWithValue }) => {
     const {token, ...dataNew}= data;
     try {
         const response = await axios.post(BASE_URL + LIST_ALL_Defaults, dataNew, {
@@ -30,13 +30,18 @@ export const fetchdefaultsData = createAsyncThunk('defaults/fetchdefaultsData', 
             return response.data
         }
     } catch (error) {
-        throw new Error(error.response.data.message);
+        const customError = {
+            message: error.message,
+            status: error.response ? error.response.status : "Network Error",
+            data: error.response ? error.response.data : null,
+          };
+          return rejectWithValue(customError);
     }
 })
 // Generate pening , fulfilled and rejected action type
 
 
-export const deleteDefaultsData = createAsyncThunk('defaults/deleteDefaultsData', async (data) => {
+export const deleteDefaultsData = createAsyncThunk('defaults/deleteDefaultsData', async (data, { rejectWithValue }) => {
     const {token, ...dataNew}= data;
     try {
         const response = await axios.post(BASE_URL + DELETE_SINGLE_DEFAULTS, dataNew, {
@@ -53,13 +58,18 @@ export const deleteDefaultsData = createAsyncThunk('defaults/deleteDefaultsData'
       }
         
     } catch (error) {
-        throw new Error(error.response.data.message);
+        const customError = {
+            message: error.message,
+            status: error.response ? error.response.status : "Network Error",
+            data: error.response ? error.response.data : null,
+          };
+          return rejectWithValue(customError);
     }
 });
 
 
 // for multiple delete default menu start 
-export const deleteDefaultsMultiData = createAsyncThunk('defaults/deleteDefaultsMultiData', async (data) => {
+export const deleteDefaultsMultiData = createAsyncThunk('defaults/deleteDefaultsMultiData', async (data, { rejectWithValue }) => {
     const {token, ...dataNew}= data;
     try {
         const response = await axios.post(BASE_URL + DELETE_MULTI_DEFAULTS, dataNew, {
@@ -76,7 +86,12 @@ export const deleteDefaultsMultiData = createAsyncThunk('defaults/deleteDefaults
       }
         
     } catch (error) {
-        throw new Error(error.response.data.message);
+        const customError = {
+            message: error.message,
+            status: error.response ? error.response.status : "Network Error",
+            data: error.response ? error.response.data : null,
+          };
+          return rejectWithValue(customError);
     }
 });
 

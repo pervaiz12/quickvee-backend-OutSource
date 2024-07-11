@@ -54,7 +54,7 @@ const MainProducts = () => {
     setSearchId(val);
   };
 
-  useEffect(() => {
+  const filterCategoryOnDropDown = async () => {
     let data = {
       merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
       format: "json",
@@ -73,16 +73,20 @@ const MainProducts = () => {
     dispatch(emptyProduct([]));
     try {
       // console.log("hi from use effect...", data);
-      dispatch(fetchProductsData(data));
+      await dispatch(fetchProductsData(data)).unwrap();
       // Handle response if needed
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
         getNetworkError();
       }
     }
+  };
+
+  useEffect(() => {
+    filterCategoryOnDropDown();
   }, [
     dispatch,
     debouncedValue,
@@ -133,7 +137,7 @@ const MainProducts = () => {
           if (type_date) {
             try {
               dispatch(updateProductsType(type_date))
-                .then((actionResult) => {
+                .then(async (actionResult) => {
                   const responseData = actionResult.payload;
 
                   if (responseData) {
@@ -151,10 +155,15 @@ const MainProducts = () => {
                     };
                     if (del_pic_data) {
                       try {
-                        dispatch(fetchProductsData(del_pic_data));
+                        await dispatch(
+                          fetchProductsData(del_pic_data)
+                        ).unwrap();
                         // Handle response if needed
                       } catch (error) {
-                        if (error.status == 401) {
+                        if (
+                          error.status == 401 ||
+                          error.response.status === 401
+                        ) {
                           getUnAutherisedTokenMessage();
                           handleCoockieExpire();
                         } else if (error.status == "Network Error") {
@@ -168,7 +177,7 @@ const MainProducts = () => {
                   console.error("Error:", error);
                 });
             } catch (error) {
-              if (error.status == 401) {
+              if (error.status == 401 || error.response.status === 401) {
                 getUnAutherisedTokenMessage();
                 handleCoockieExpire();
               } else if (error.status == "Network Error") {

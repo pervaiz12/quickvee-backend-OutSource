@@ -34,7 +34,8 @@
 }
 
 .q-resigtersetting-top-detail-section {
-    padding: 30px;
+
+    padding-bottom: 30px;
     background: #FFFFFF;
     box-shadow: 0px 3px 6px #0000001F;
     border-radius: 8px;
@@ -240,7 +241,7 @@
     display: flex;
     flex-wrap: wrap;
     width: 100%;
- 
+
 }
 
 .q_resigter_checkboxfiled>li {
@@ -348,12 +349,13 @@
 
 label.q_resigter_setting_section {
     color: #6A6A6A;
-font-family: CircularSTDBook !important ;}
+    font-family: CircularSTDBook !important;
+}
 
-    label.q_setting_radio_resigter {
-        color: #6A6A6A;
-        
-    }
+label.q_setting_radio_resigter {
+    color: #6A6A6A;
+
+}
 
 
 .q_resigter_setting_section input:checked~.checkmark:after {
@@ -405,33 +407,33 @@ font-family: CircularSTDBook !important ;}
     width: 18px;
     background-color: #eee;
     border-radius: 50%;
-  }
-  
-  /* On mouse-over, add a grey background color */
-  .q_setting_radio_resigter:hover input ~ .checkmark_section {
+}
+
+/* On mouse-over, add a grey background color */
+.q_setting_radio_resigter:hover input~.checkmark_section {
     background-color: #ccc;
-  }
-  
-  /* When the radio button is checked, add a blue background */
-  .q_setting_radio_resigter input:checked ~ .checkmark_section {
+}
+
+/* When the radio button is checked, add a blue background */
+.q_setting_radio_resigter input:checked~.checkmark_section {
     background-color: unset;
     border: 1px solid #0A64F9;
-  }
-  
-  /* Create the indicator (the dot/circle - hidden when not checked) */
-  .checkmark_section:after {
+}
+
+/* Create the indicator (the dot/circle - hidden when not checked) */
+.checkmark_section:after {
     content: "";
     position: absolute;
     display: none;
-  }
-  
-  /* Show the indicator (dot/circle) when checked */
-  .q_setting_radio_resigter input:checked ~ .checkmark_section:after {
+}
+
+/* Show the indicator (dot/circle) when checked */
+.q_setting_radio_resigter input:checked~.checkmark_section:after {
     display: block;
-  }
-  
-  /* Style the indicator (dot/circle) */
-  .q_setting_radio_resigter .checkmark_section:after {
+}
+
+/* Style the indicator (dot/circle) */
+.q_setting_radio_resigter .checkmark_section:after {
     background: #0a64f9;
     border-radius: 100%;
     content: "";
@@ -442,9 +444,9 @@ font-family: CircularSTDBook !important ;}
     position: absolute;
     transition: all .2s ease;
 }
-  
 
-  .q_resigter_setting_section .checkmark:after {
+
+.q_resigter_setting_section .checkmark:after {
     left: 7px;
     top: 4px;
     width: 7px;
@@ -453,5 +455,3 @@ font-family: CircularSTDBook !important ;}
     border-width: 0 3px 3px 0;
     transform: rotate(45deg);
 }
-
-

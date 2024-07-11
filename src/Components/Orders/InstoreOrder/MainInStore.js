@@ -31,12 +31,14 @@ const MainInStore = () => {
     LoginAllStore,
     userTypeData,
     GetSessionLogin,
+    future_date
   } = useAuthDetails();
+  // let futureDate = "5"
   const merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
   };
-
+  
   const handleTabClick = (tab) => {
     setActiveTab(tab);
   };
@@ -47,7 +49,7 @@ const MainInStore = () => {
     start_date && setSelectedDateRange({ start_date, end_date });
     // order_env === "5" && setOrderTypeData("Closed")
   }, [order_env, start_date, end_date]);
-  console.log("dateRangefromorderTypePage", dateRangefromorderTypePage);
+  // console.log("dateRangefromorderTypePage", dateRangefromorderTypePage);
   const handleFilterDataChange = (OrderSource, OrderType, SearchId) => {
     setOrderSourceData(OrderSource);
     setOrderTypeData(OrderType);
@@ -59,7 +61,7 @@ const MainInStore = () => {
     setEmployeeIDData(EmployeeID);
     setOffSearchIdData(SearchId);
   };
-
+  
   const renderInStoreContent = () => {
     if (activeTab === "online") {
       return (
@@ -125,6 +127,7 @@ const MainInStore = () => {
                   isloading={isloading}
                   selectedDateRange={selectedDateRange}
                   onDateRangeChange={handleDateRangeChange}
+                  future_date={future_date}
                 />
               </div>
               <div className="q_dateRange_header">

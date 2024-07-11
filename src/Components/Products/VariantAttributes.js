@@ -52,8 +52,15 @@ const VariantAttributes = ({
       color: "#000", // Text color for selected items
       padding: "0 10px", // Padding for label within the selected item
       fontSize: "13px",
+      fontWeight: 500,
       textAlign: "center",
       padding: "3px 6px 3px 10px !important",
+    }),
+    placeholder: (provided, state) => ({
+      ...provided,
+      color: "#999", // Change this to your desired placeholder text color
+      fontSize: "14px", // Change this to your desired placeholder font size
+      // Add more CSS properties as needed
     }),
   };
   // console.log("varientLength", varientLength);
@@ -66,6 +73,22 @@ const VariantAttributes = ({
     indicatorSeparator: (provided, state) => ({
       ...provided,
       display: "none",
+    }),
+    singleValue: (provided, state) => ({
+      ...provided,
+      color: "#000", // Change this to your desired color
+      fontWeight: "500", // Change this to your desired font weight
+      fontSize: "15px", // Change this to your desired font size
+      // Add more CSS properties as needed
+    }),
+    option: (provided, state) => ({
+      ...provided,
+      backgroundColor: "#fff", // Change the background color of selected item
+      color: "#000", // Change the text color of selected item
+    }),
+    menu: (provided, state) => ({
+      ...provided,
+      zIndex: 1000, // Change this to a higher value to ensure the dropdown is on top
     }),
   };
   const pageUrl =
@@ -315,6 +338,7 @@ const VariantAttributes = ({
                               onChange={(e) =>
                                 handlechange(e, index, "varientName")
                               }
+                              className="dropdown"
                               options={filterDefaultvalue()}
                               isSearchable
                               isClearable
@@ -337,7 +361,7 @@ const VariantAttributes = ({
                               // isValidNewOption={isValidNewOption}
                               components={{
                                 ...animatedComponents,
-                                DropdownIndicator: SearchIndicator, // Replace DropdownIndicator with SearchIndicator
+                                DropdownIndicator: null, // Replace DropdownIndicator with SearchIndicator
                               }}
                               styles={styles}
                               value={varient?.varientAttributeList}
@@ -350,7 +374,7 @@ const VariantAttributes = ({
                                   actionMeta
                                 );
                               }}
-                              placeholder="Select Varient..."
+                              placeholder="Select Variant..."
                               onKeyDown={handleOnBlurAttributes}
                               isMulti
                               isClearable={varient?.varientAttributeList?.some(
@@ -368,6 +392,7 @@ const VariantAttributes = ({
                                     inputValue.trim().toLowerCase()
                                 )
                               }
+                              className="createable"
                               backspaceRemovesValue={false}
                             />
                           </div>
@@ -414,7 +439,7 @@ const VariantAttributes = ({
               pageUrl !== "inventory/products/edit" ? (
                 <div className="flex">
                   <button
-                    className="px-4 py-2 bg-[#0A64F9] text-white rounded-md"
+                    className="px-4 py-2 bg-[#0A64F9] text-white rounded-md varient-attribute-btn"
                     // onClick={handleAddAttribute}
                     onClick={addMoreVarientItems}
                   >

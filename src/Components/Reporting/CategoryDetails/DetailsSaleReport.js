@@ -97,9 +97,6 @@ const DetailsSaleReport = ({ data }) => {
       } else if (error.status == "Network Error") {
         getNetworkError();
       }
-
-      // getUnAutherisedTokenMessage();
-      // handleCoockieExpire();
     }
   };
 

@@ -46,7 +46,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const RefundSummaryList = ({ data }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const dispatch = useDispatch();
   const [refundata, setrefundData] = useState([]);
   const [totalRefundAmountState, setTotalRefundAmount] = useState(0);
@@ -68,9 +69,11 @@ const RefundSummaryList = ({ data }) => {
         await dispatch(fetchRefundData(fetdata)).unwrap();
       }
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };

@@ -47,7 +47,8 @@ const TimesheetListing = ({ data }) => {
     useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   useEffect(() => {
     // if (!data.merchant_id) {
     //   console.log("empty");
@@ -65,8 +66,12 @@ const TimesheetListing = ({ data }) => {
         await dispatch(fetchtimeSheetData(data)).unwrap();
       }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 
@@ -113,9 +118,12 @@ const TimesheetListing = ({ data }) => {
         }));
         setemployeeList(mappedOptions);
       } catch (error) {
-        handleCoockieExpire();
-        getUnAutherisedTokenMessage();
-        console.error("Error fetching Employee List:", error);
+        if (error.status == 401 || error.response.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
+        }
       }
     };
     fetchData();
@@ -422,9 +430,12 @@ const TimesheetListing = ({ data }) => {
         setShowModal(true);
       }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
-      console.error("API Error:", error);
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
     setLoader(false);
   };
@@ -453,13 +464,16 @@ const TimesheetListing = ({ data }) => {
   const [BreakOutTimeError, setBreakOutTimeError] = useState("");
   const [addBreakMsg, setaddBreakMsg] = useState("");
 
+  const [BreakModalInTime, setBreakModalInTime] = useState("");
+  const [BreakModalOutTime, setBreakModalOutTime] = useState("");
+
   const [addbreak, setaddbreak] = useState({
     modalDate: modalDate,
     addbreakIn: "",
     addbreakOut: "",
   });
 
-  const openModalBreak = (title, id, date, out_date) => {
+  const openModalBreak = (title, id, date, out_date,data) => {
     setEmployeeName(title);
     setModalAddBreakID(id);
     setModalDate(formatDate(date));
@@ -471,6 +485,8 @@ const TimesheetListing = ({ data }) => {
       addbreakIn: "",
       addbreakOut: "",
     });
+    setBreakModalInTime(data.check_in_time);
+    setBreakModalOutTime(data.check_out_time);
     setShowModalBreak(true);
   };
 
@@ -481,6 +497,8 @@ const TimesheetListing = ({ data }) => {
       addbreakIn: "",
       addbreakOut: "",
     });
+    setBreakModalInTime("");
+    setBreakModalOutTime("");
     setShowModalBreak(false);
   };
 
@@ -552,16 +570,41 @@ const TimesheetListing = ({ data }) => {
     const formData = new FormData();
     formData.append("merchant_id", merchant_id);
     formData.append("employee_id", modalAddBreakID);
-    formData.append("break_in_date", formatDatePayload(modalDate));
+    // formData.append("break_in_date", formatDatePayload(modalDate));
     formData.append("break_out_date", modalDateOUT);
     formData.append("break_in_time", addbreak.addbreakIn);
     formData.append("break_out_time", addbreak.addbreakOut);
     formData.append("token_id", userTypeData.token_id);
     formData.append("login_type", userTypeData.login_type);
 
+    
+    const breakInDate = new Date(modalDate);
+    const breakOutDate = new Date(formatDatePayload(modalDateOUT));
+    const ModalBreakInDateTime = new Date(`${breakInDate.toDateString()} ${BreakModalInTime}`);
+    const ModalBreakOutDateTime = new Date(`${breakOutDate.toDateString()} ${BreakModalOutTime}`);
+    const breakInDateTime = new Date(`${breakInDate.toDateString()} ${addbreak.addbreakIn}`);
+    const breakOutDateTime = new Date(`${breakOutDate.toDateString()} ${addbreak.addbreakOut}`);
+    
+    // If breakInDate and breakOutDate are not the same, increment breakInDate by one day
+    if (breakInDate.toDateString() !== breakOutDate.toDateString()) {
+      console.log("Database Add Break ModalBreakInDateTime",ModalBreakInDateTime)
+      console.log("Database Add Break ModalBreakOutDateTime",ModalBreakOutDateTime)
+      console.log("Var breakInDateTime",breakInDateTime)
+      console.log("var breakOutDateTime",breakOutDateTime)
+      if(ModalBreakInDateTime > breakInDateTime){
+        breakInDate.setDate(breakInDate.getDate() + 1);
+        formData.append("break_in_date", formatDatePayload(breakInDate));
+        console.log("Var Change  breakInDate",breakInDate)
+      }else {
+        formData.append("break_in_date", formatDatePayload(modalDate));
+      }
+    }else {
+      formData.append("break_in_date", formatDatePayload(modalDate));
+    }
     for (const [key, value] of formData.entries()) {
       console.log(`${key}: ${value}`);
     }
+    // return
     setLoader(true);
     try {
       const response = await axios.post(
@@ -597,9 +640,12 @@ const TimesheetListing = ({ data }) => {
         setShowModalBreak(true);
       }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
-      console.error("API Error:", error);
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
     setLoader(false);
   };
@@ -663,9 +709,12 @@ const TimesheetListing = ({ data }) => {
         setBreakDetails([]);
       }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
-      console.error("API Error:", error);
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 
@@ -890,7 +939,15 @@ const TimesheetListing = ({ data }) => {
                   </p>
                 </div>
               </Grid>
-              <SkeletonTable columns={["box_shadow_div","Wage Rate","Clock In","Clock Out",""]} />
+              <SkeletonTable
+                columns={[
+                  "box_shadow_div",
+                  "Wage Rate",
+                  "Clock In",
+                  "Clock Out",
+                  "",
+                ]}
+              />
             </Grid>
           ) : (
             <div className="box" key={employee.id}>
@@ -961,7 +1018,8 @@ const TimesheetListing = ({ data }) => {
                                 employee.title,
                                 employee.id,
                                 entry.attendance_date,
-                                entry.out_date
+                                entry.out_date,
+                                entry
                               );
                               e.stopPropagation();
                             }}
@@ -1343,7 +1401,7 @@ const TimesheetListing = ({ data }) => {
             </span>
             <div className="viewTextBark">
               <span className="borderRight ">
-                {modalDate} - {modalDateOUT ? formatDate(modalDateOUT) : "-"}
+                {modalDate} - {modalDateOUT ? formDateOUtDate(modalDateOUT) : "-"}
               </span>{" "}
               <span className="pl-1"> Break-in/Break-out</span>
             </div>

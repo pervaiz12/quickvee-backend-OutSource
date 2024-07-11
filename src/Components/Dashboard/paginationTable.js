@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 import { priceFormate } from "../../hooks/priceFormate";
 import sortIcon from "../../Assests/Category/SortingW.svg";
 import Summery from "../../Assests/Category/Summery.svg";
+import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
+import Skeleton from "react-loading-skeleton";
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     backgroundColor: "#253338",
@@ -121,109 +123,128 @@ export default function DashboardTables(props) {
   };
 
   return (
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>
-              <button
-                className="flex items-center"
-                onClick={() => props.sortByItemName("str", "billing_name")}
-              >
-                <p className="whitespace-nowrap">Customer Name</p>
-                <img src={sortIcon} alt="" className="pl-1" />
-              </button>
-            </StyledTableCell>
-            <StyledTableCell className="whitespace-nowrap">
-              Customer No.
-            </StyledTableCell>
-            <StyledTableCell>
-              <button
-                className="flex items-center"
-                onClick={() => props.sortByItemName("date", "date_time")}
-              >
-                <p>Order Date & Time</p>
-                <img src={sortIcon} alt="" className="pl-1" />
-              </button>
-            </StyledTableCell>
-            <StyledTableCell>
-              <button
-                className="flex items-center"
-                onClick={() => props.sortByItemName("id", "order_id")}
-              >
-                <p> Order Id</p>
-                <img src={sortIcon} alt="" className="pl-1" />
-              </button>
-            </StyledTableCell>
-            <StyledTableCell>
-              <button
-                className="flex items-center"
-                onClick={() => props.sortByItemName("str", "order_method")}
-              >
-                <p className="whitespace-nowrap"> Order Type</p>
-                <img src={sortIcon} alt="" className="pl-1" />
-              </button>
-            </StyledTableCell>
-            <StyledTableCell>
-              <button
-                className="flex items-center"
-                onClick={() => props.sortByItemName("str", "m_status")}
-              >
-                <p>Status</p>
-                <img src={sortIcon} alt="" className="pl-1" />
-              </button>
-            </StyledTableCell>
-            <StyledTableCell>
-              <button
-                className="flex items-center"
-                onClick={() => props.sortByItemName("num", "amt")}
-              >
-                <p> Amount</p>
-                <img src={sortIcon} alt="" className="pl-1" />
-              </button>
-            </StyledTableCell>
-            <StyledTableCell>Order Details</StyledTableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {props.dashboardRecord &&
-          Array.isArray(props.dashboardRecord) &&
-          props.dashboardRecord.length > 0 ? (
-            props.dashboardRecord.map((row) => (
-              <StyledTableRow key={row.id}>
+    <>
+      {props.loading ? (
+        <SkeletonTable
+          columns={[
+            "Customer Name",
+            "Customer No.",
+            "Order Date & Time",
+            "Order Id",
+            " Order Type",
+            "Status",
+            "Amount",
+            "Order Details",
+          ]}
+        />
+      ) : (
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 700 }} aria-label="customized table">
+            <TableHead>
+              <TableRow>
                 <StyledTableCell>
-                  {getCustomerName(row.deliver_name, row.billing_name)}
-                </StyledTableCell>
-                <StyledTableCell>{row.delivery_phn}</StyledTableCell>
-                <StyledTableCell>
-                  <p className="whitespace-nowrap">
-                    {formatDateTime(row.date_time)}
-                  </p>
-                </StyledTableCell>
-                <StyledTableCell>{row.order_id}</StyledTableCell>
-                <StyledTableCell>{row.order_method}</StyledTableCell>
-                <StyledTableCell>
-                  {getStatus(row.order_method, row.m_status)}
-                </StyledTableCell>
-                <StyledTableCell>{`$${priceFormate(row.amt)}`}</StyledTableCell>
-                <StyledTableCell>
-                  <Link
-                    className="whitespace-nowrap text-[#0A64F9]"
-                    to={`/order/store-reporting/order-summary/${props.merchant_id}/${row.order_id}`}
-                    // onClick={() => handleSummeryPage(row.order_id)}
-                    target="_blank"
+                  <button
+                    className="flex items-center"
+                    onClick={() => props.sortByItemName("str", "billing_name")}
                   >
-                    {/* Order Summery */}
-                    <img src={Summery} alt="" className="pl-1" />
-                  </Link>
+                    <p className="whitespace-nowrap">Customer Name</p>
+                    <img src={sortIcon} alt="" className="pl-1" />
+                  </button>
                 </StyledTableCell>
-              </StyledTableRow>
-            ))
-          ) : (
-            <p className="p-2">No record found</p>
-          )}
-        </TableBody>
-      </Table>
-    </TableContainer>
+                <StyledTableCell className="whitespace-nowrap">
+                  Customer No.
+                </StyledTableCell>
+                <StyledTableCell>
+                  <button
+                    className="flex items-center"
+                    onClick={() => props.sortByItemName("date", "date_time")}
+                  >
+                    <p>Order Date & Time</p>
+                    <img src={sortIcon} alt="" className="pl-1" />
+                  </button>
+                </StyledTableCell>
+                <StyledTableCell>
+                  <button
+                    className="flex items-center"
+                    onClick={() => props.sortByItemName("id", "order_id")}
+                  >
+                    <p>Order Id</p>
+                    <img src={sortIcon} alt="" className="pl-1" />
+                  </button>
+                </StyledTableCell>
+                <StyledTableCell>
+                  <button
+                    className="flex items-center"
+                    onClick={() => props.sortByItemName("str", "order_method")}
+                  >
+                    <p className="whitespace-nowrap">Order Type</p>
+                    <img src={sortIcon} alt="" className="pl-1" />
+                  </button>
+                </StyledTableCell>
+                <StyledTableCell>
+                  <button
+                    className="flex items-center"
+                    onClick={() => props.sortByItemName("str", "m_status")}
+                  >
+                    <p>Status</p>
+                    <img src={sortIcon} alt="" className="pl-1" />
+                  </button>
+                </StyledTableCell>
+                <StyledTableCell>
+                  <button
+                    className="flex items-center"
+                    onClick={() => props.sortByItemName("num", "amt")}
+                  >
+                    <p>Amount</p>
+                    <img src={sortIcon} alt="" className="pl-1" />
+                  </button>
+                </StyledTableCell>
+                <StyledTableCell>Order Details</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {props.dashboardRecord &&
+              Array.isArray(props.dashboardRecord) &&
+              props.dashboardRecord.length > 0 ? (
+                props.dashboardRecord.map((row) => (
+                  <StyledTableRow key={row.id}>
+                    <StyledTableCell>
+                      {getCustomerName(row.deliver_name, row.billing_name)}
+                    </StyledTableCell>
+                    <StyledTableCell>{row.delivery_phn}</StyledTableCell>
+                    <StyledTableCell>
+                      <p className="whitespace-nowrap">
+                        {formatDateTime(row.date_time)}
+                      </p>
+                    </StyledTableCell>
+                    <StyledTableCell>{row.order_id}</StyledTableCell>
+                    <StyledTableCell>{row.order_method}</StyledTableCell>
+                    <StyledTableCell>
+                      {getStatus(row.order_method, row.m_status)}
+                    </StyledTableCell>
+                    <StyledTableCell>{`$${priceFormate(
+                      row.amt
+                    )}`}</StyledTableCell>
+                    <StyledTableCell>
+                      <Link
+                        className="whitespace-nowrap text-[#0A64F9]"
+                        to={`/order/store-reporting/order-summary/${props.merchant_id}/${row.order_id}`}
+                        // onClick={() => handleSummeryPage(row.order_id)}
+                        target="_blank"
+                      >
+                        {/* Order Summery */}
+                        <img src={Summery} alt="" className="pl-1" />
+                      </Link>
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))
+              ) : (
+                <p className="p-2">No record found</p>
+              )}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      )}
+    </>
   );
 }

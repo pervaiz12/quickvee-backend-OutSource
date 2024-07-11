@@ -9,11 +9,13 @@ import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { BASE_URL, TAXE_CATEGORY_LIST } from "../../../Constants/Config";
 import axios from "axios";
 import PasswordShow from "../../../Common/passwordShow";
+import CustomHeader from "../../../reuseableComponents/CustomHeader";
 
 const RefundSummary = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [filteredData, setFilteredData] = useState({
     category_id: "all",
     reason_name: "all",
@@ -133,11 +135,13 @@ const RefundSummary = () => {
         setCategoryOptions(mappedOptions);
         setLoadingCategories(false);
       } catch (error) {
-        console.error("Error fetching categories:", error);
-        if (error.response.status == 401) {
+        if (error.status == 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
         }
+      } finally {
         setLoadingCategories(false);
       }
     };
@@ -146,19 +150,16 @@ const RefundSummary = () => {
   }, []); // Fetch categories only once when the component mounts
   return (
     <>
-      <Grid container sx={{ padding: 2.5 }} className="box_shadow_div ">
+      <Grid container sx={{ pb: 2.5 }} className="box_shadow_div ">
         <Grid item xs={12}>
-          <Grid container>
-            <Grid item xs={12}>
-              <h1 className="heading">Item Refund Report</h1>
-            </Grid>
-          </Grid>
-          <Grid container>
+          <CustomHeader>Item Refund Report</CustomHeader>
+
+          <Grid container sx={{px:2.5,pt:1}}>
             <Grid item xs={12}>
               <h1 className="heading">Filter By</h1>
             </Grid>
           </Grid>
-          <Grid container spacing={2}>
+          <Grid container sx={{px:2.5}} spacing={2}>
             <Grid item xs={12} sm={6} md={4}>
               <label className="q-details-page-label" htmlFor="orderTypeFilter">
                 Category

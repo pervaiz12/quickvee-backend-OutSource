@@ -355,6 +355,9 @@ const InstoreTableViewData = (props, searchId) => {
                                       {data.billing_name || ""}
                                     </p>
                                     <p className="text-[#818181]">
+                                      {data.email || ""}
+                                    </p>
+                                    <p className="text-[#818181]">
                                       {data.delivery_phn || ""}
                                     </p>
                                   </>

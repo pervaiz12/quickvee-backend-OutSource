@@ -16,7 +16,8 @@ export default function EditMerchantFunctionality() {
   const navigate = useNavigate();
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   const [getEditMerchant, setEditMerchant] = useState({
     id: "",
@@ -88,15 +89,12 @@ export default function EditMerchantFunctionality() {
 
       return response.data;
     } catch (error) {
-      if (error.response.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
-      // console.error("Error validating email:", error);
-      // // console.log("hellooo", error?.message);
-      // // dispatch(getAuthInvalidMessage(error?.message));
-      // handleCoockieExpire();
-      throw error;
     }
   };
   // ------------------------------------------------------
@@ -117,12 +115,12 @@ export default function EditMerchantFunctionality() {
 
       return response.data;
     } catch (error) {
-      console.log(error);
-      if (error.response.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
-      // console.error("Error validating email:");
     }
   };
 
@@ -337,10 +335,11 @@ export default function EditMerchantFunctionality() {
           }
         });
     } catch (error) {
-      // console.log("hehehehheh");
-      if (error.response.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };
@@ -748,13 +747,13 @@ export default function EditMerchantFunctionality() {
             setLoader(false);
             ToastifyAlert("Merchant not Updated!", "warn");
           }
-        } catch (e) {
-          // console.log("Exception", e);
-          if (e.response.status == 401) {
+        } catch (error) {
+          if (error.status == 401 || error.response.status === 401) {
             getUnAutherisedTokenMessage();
             handleCoockieExpire();
+          } else if (error.status == "Network Error") {
+            getNetworkError();
           }
-          // navigate("/");
         }
       }
     }

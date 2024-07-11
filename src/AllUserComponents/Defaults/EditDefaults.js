@@ -32,7 +32,8 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
     type: "",
     image: "",
   });
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [alertModalOpen, setAlertModalOpen] = useState(false);
   const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
   const showModal = (headerText) => {
@@ -64,9 +65,12 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
         return response.data.result;
       }
     } catch (error) {
-      console.error("Error:", error);
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   }
 
@@ -92,12 +96,12 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
 
   const inputChange = (e) => {
     const { name, value } = e.target;
-    const regex = /^[A-Za-z0-9 ]*$/ ;
-    if (name === "name"){
+    const regex = /^[A-Za-z0-9 ]*$/;
+    if (name === "name") {
       if (regex.test(value)) {
         setDefaults({ ...defaults, name: value });
       }
-    }else{
+    } else {
       setDefaults((preValue) => {
         return {
           ...preValue,
@@ -169,7 +173,7 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
       if (data == "Success") {
         ToastifyAlert("Updated Successfully", "success");
         // navigate("/users/view/unapprove/menu/defaults");
-        navigate(-1)
+        navigate(-1);
       } else if (
         data == "Failed" &&
         update_message == "Default Title Already Exist!"
@@ -177,9 +181,12 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
         setErrorMessage(update_message);
       }
     } catch (error) {
-      console.error("API Error:", error);
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
     setLoader(false);
   };
@@ -224,7 +231,7 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
         //   file.name +
         //     " is not an image. Only jpeg, png, jpg files can be uploaded."
         // );
-        showModal("Only jpeg, png, jpg files can be uploaded")
+        showModal("Only jpeg, png, jpg files can be uploaded");
       } else {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -245,7 +252,7 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
     e.stopPropagation();
     const fileInput = document.getElementById("filesBanner");
     if (fileInput) {
-        fileInput.value = "";
+      fileInput.value = "";
     }
     setDefaults((prevValue) => ({
       ...prevValue,
@@ -322,7 +329,7 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
       <div className="q-category-main-page ">
         <div className="q-add-categories-section">
           <div className="mt-10 mb-4">
-            <form  enctype="multipart/form-data">
+            <form enctype="multipart/form-data">
               <div className="q-add-categories-section-header">
                 <span
                   onClick={() => {
@@ -394,7 +401,7 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
                 <Grid item xs={6}>
                   <label className="q-details-page-label ">Type</label>
                   <SelectDropDown
-                  sx={{pt:0.5}}
+                    sx={{ pt: 0.5 }}
                     listItem={category}
                     title={"title"}
                     onClickHandler={handleOptionClick}
@@ -472,16 +479,35 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
               </div>
 
               <div className="q-add-categories-section-middle-footer">
-                <button onClick={handleSubmit} className="quic-btn quic-btn-save attributeUpdateBTN" disabled={loader}>
-                { loader ? <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15}/> Update</> : "Update"}
-                </button>
-                <div
-                
+                <button
+                  onClick={handleSubmit}
+                  className="quic-btn quic-btn-save attributeUpdateBTN"
+                  disabled={loader}
                 >
-                  <button   onClick={() => {
-                    // setVisible("DefaultsDetail");
-                    navigate("/unapprove/defaults");
-                  }}  className="quic-btn quic-btn-cancle">Cancel</button>
+                  {loader ? (
+                    <>
+                      <CircularProgress
+                        color={"inherit"}
+                        className="loaderIcon"
+                        width={15}
+                        size={15}
+                      />{" "}
+                      Update
+                    </>
+                  ) : (
+                    "Update"
+                  )}
+                </button>
+                <div>
+                  <button
+                    onClick={() => {
+                      // setVisible("DefaultsDetail");
+                      navigate("/unapprove/defaults");
+                    }}
+                    className="quic-btn quic-btn-cancle"
+                  >
+                    Cancel
+                  </button>
                 </div>
               </div>
             </form>

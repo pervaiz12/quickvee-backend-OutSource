@@ -10,7 +10,8 @@ import PasswordShow from "../../../Common/passwordShow";
 const CurrentInventoryValue = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [currentInventory, setcurrentInventory] = useState([]);
   const currentInventoryreportDataState = useSelector(
     (state) => state.currentInventoryreport
@@ -28,9 +29,11 @@ const CurrentInventoryValue = () => {
           await dispatch(fetchcurrentInventoryreportData(data)).unwrap();
         }
       } catch (error) {
-        if (error.status == 401) {
+        if (error.status == 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
         }
       }
     };

@@ -25,10 +25,11 @@ import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 import PasswordShow from "../../Common/passwordShow";
 
-const CategoryDetail = ({ seVisible,setProductId }) => {
+const CategoryDetail = ({ seVisible, setProductId }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [allcategories, setallcategories] = useState([]);
   const [reorderedItems, setreorderedItems] = useState([]);
 
@@ -51,10 +52,10 @@ const CategoryDetail = ({ seVisible,setProductId }) => {
     //   // console.log(data)
     //   dispatch(fetchCategoriesData(data));
     // }
-    getfetchCategorieData()
+    getfetchCategorieData();
   }, []);
-  const getfetchCategorieData=async()=>{
-    try{
+  const getfetchCategorieData = async () => {
+    try {
       let data = {
         merchant_id: merchant_id,
         ...userTypeData,
@@ -62,11 +63,15 @@ const CategoryDetail = ({ seVisible,setProductId }) => {
       if (data) {
         await dispatch(fetchCategoriesData(data)).unwrap();
       }
-    }catch(error){
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
-  }
+  };
 
   useEffect(() => {
     if (
@@ -109,23 +114,26 @@ const CategoryDetail = ({ seVisible,setProductId }) => {
   };
   const confirmDeleteCategory = () => {
     try {
-      if(deleteCategoryId){
+      if (deleteCategoryId) {
         const data = {
           id: deleteCategoryId,
           merchant_id,
           ...userTypeData,
-          
         };
         if (data) {
           dispatch(deleteCategory(data));
           ToastifyAlert("Deleted Successfully", "success");
         }
       }
-      setDeleteCategoryId(null)
+      setDeleteCategoryId(null);
       setDeleteModalOpen(false);
     } catch (error) {
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 
@@ -162,7 +170,7 @@ const CategoryDetail = ({ seVisible,setProductId }) => {
     const isRegisterChecked =
       category.cat_show_status === "0" || category.cat_show_status === "2";
 
-      console.log('alls', category, isOnlineChecked, isRegisterChecked)
+    console.log("alls", category, isOnlineChecked, isRegisterChecked);
 
     if (!isOnlineChecked && !isRegisterChecked) {
       // console.log(isOnlineChecked);
@@ -239,9 +247,9 @@ const CategoryDetail = ({ seVisible,setProductId }) => {
             <div className="q-category-bottom-header">
               <span>Category</span>
               <Link to={`/inventory/category/add`}>
-              <p>
-                Add Category <img src={AddIcon} alt="add-icon" />{" "}
-              </p>
+                <p>
+                  Add Category <img src={AddIcon} alt="add-icon" />{" "}
+                </p>
               </Link>
             </div>
             <DraggableTable
@@ -479,7 +487,9 @@ const CategoryDetail = ({ seVisible,setProductId }) => {
           <DeleteModal
             headerText="Category"
             open={deleteModalOpen}
-            onClose={() => {setDeleteModalOpen(false)}}
+            onClose={() => {
+              setDeleteModalOpen(false);
+            }}
             onConfirm={confirmDeleteCategory}
           />
         </div>

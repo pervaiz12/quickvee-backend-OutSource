@@ -15,6 +15,7 @@ const InputTextSearch = ({
     <>
       <FormControl fullWidth>
         <OutlinedInput
+          
           size="small"
           placeholder={placeholder}
           value={value}
@@ -26,6 +27,7 @@ const InputTextSearch = ({
           endAdornment={
             <InputAdornment position="end">
               <IconButton
+              sx={{padding:"0"}}
                 onClick={() => {
                   handleSearchButton && handleSearchButton();
                 }}
@@ -37,7 +39,8 @@ const InputTextSearch = ({
           sx={{
             "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
               borderColor: "black"
-            }
+            },
+            paddingRight:"14px"
           }}
         />
       </FormControl>

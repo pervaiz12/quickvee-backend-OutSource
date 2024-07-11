@@ -31,7 +31,8 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
     setold_title(attribute.title);
     setErrorMessage("");
   };
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const closeModal = () => {
     setShowModal(false);
   };
@@ -42,10 +43,12 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
     const inputValue = event.target.value;
     const regex = /^[A-Za-z0-9 ]*$/;
     const space = /^(?!\s).*/;
-    if(space.test(inputValue)){
-      if (regex.test(inputValue) || inputValue === "" ) {
+    if (space.test(inputValue)) {
+      if (regex.test(inputValue) || inputValue === "") {
         setNewAttribute(inputValue);
-        const nameExists = allattributes.some((item) => item.title === inputValue && item.id !== attribute.id);
+        const nameExists = allattributes.some(
+          (item) => item.title === inputValue && item.id !== attribute.id
+        );
         if (nameExists) {
           setErrorMessage("Attribute name already exists");
           setNameExists(true);
@@ -53,7 +56,7 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
           setErrorMessage("");
           setNameExists(false);
         }
-      }else{
+      } else {
         setErrorMessage("Special characters are not allowed");
       }
     }
@@ -92,8 +95,12 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
         setsubmitmessage(response.data.message);
       }
     } catch (error) {
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
     setLoader(false);
   };
@@ -216,7 +223,19 @@ const EditDeliveryAddress = ({ attribute, allattributes }) => {
                 className="quic-btn quic-btn-save attributeUpdateBTN"
                 disabled={loader}
               >
-                { loader ? <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15}/> Update</> : "Update"}
+                {loader ? (
+                  <>
+                    <CircularProgress
+                      color={"inherit"}
+                      className="loaderIcon"
+                      width={15}
+                      size={15}
+                    />{" "}
+                    Update
+                  </>
+                ) : (
+                  "Update"
+                )}
                 {/* Update */}
               </button>
               <button onClick={closeModal} className="quic-btn quic-btn-cancle">

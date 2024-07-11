@@ -61,13 +61,13 @@ const Itemdatadetails = ({
 
   useEffect(() => {
     // Dispatch the action to fetch data when the component mounts
-    getOrderTypeData();
+    data && getOrderTypeData();
   }, [dispatch, data,selectedOrderSource]);
   const getOrderTypeData = async () => {
     try {
       await dispatch(fetchOrderTypeData(data)).unwrap();
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -84,6 +84,7 @@ const Itemdatadetails = ({
     orderReportDataState,
     orderReportDataState.loading,
     orderReportDataState.orderTypeData,
+    data
   ]);
 
   if (!data || data.length === 0) {
@@ -258,7 +259,9 @@ const Itemdatadetails = ({
                                 )
                               }
                             >
-                              <p className="q-employee-in whitespace-nowrap">View Details</p>
+                              <p className="q-employee-in whitespace-nowrap">
+                                View Details
+                              </p>
                             </button>
                           ) : (
                             "-"

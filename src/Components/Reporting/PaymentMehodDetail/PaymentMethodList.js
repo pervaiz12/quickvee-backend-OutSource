@@ -45,7 +45,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const PaymentMethodList = ({ data }) => {
   const dispatch = useDispatch();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   const [paymentReport, setpaymentReport] = useState([]);
   const [total, setTotal] = useState(0);
@@ -55,19 +56,21 @@ const PaymentMethodList = ({ data }) => {
   );
 
   useEffect(() => {
-      fetchPaymentReportData();
+    fetchPaymentReportData();
   }, [data]);
 
   const fetchPaymentReportData = async () => {
     try {
-      let newData = { ...data};
+      let newData = { ...data };
       if (newData?.merchant_id) {
         await dispatch(fetchPaymentMethodReportData(newData)).unwrap();
       }
     } catch (error) {
-      if(error.status === 401){
-        handleCoockieExpire()
-        getUnAutherisedTokenMessage()
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };

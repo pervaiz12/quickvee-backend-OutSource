@@ -6,6 +6,7 @@ import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import PasswordShow from "../../../Common/passwordShow";
+import CustomHeader from "../../../reuseableComponents/CustomHeader";
 
 const MainEmployee = ({ onFilterDataChange }) => {
   const [selectedEmployee, setSelectedEmployee] = useState("All");
@@ -21,7 +22,8 @@ const MainEmployee = ({ onFilterDataChange }) => {
     useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
@@ -84,10 +86,13 @@ const MainEmployee = ({ onFilterDataChange }) => {
         setemployeeList(mappedOptions);
         setLoadingEmpList(false);
       } catch (error) {
-        if (error.response.status == 401) {
+        if (error.status == 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
         }
+      } finally {
         setLoadingEmpList(false);
       }
     };
@@ -102,17 +107,10 @@ const MainEmployee = ({ onFilterDataChange }) => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <Grid container sx={{ padding: 2.5 }}>
+          <CustomHeader>Employee Working Hours (Clock In/Out)</CustomHeader>
+          <Grid container sx={{ px: 2.5, py: 1 }}>
             <Grid item xs={12}>
-              <div className="q_details_header">
-                {" "}
-                Employee Working Hours (Clock In/Out)
-              </div>
-            </Grid>
-          </Grid>
-          <Grid container sx={{ px: 2.5 }}>
-            <Grid item xs={12}>
-              <div className="q_details_header ">Filter by</div>
+              <div className="heading">Filter By</div>
             </Grid>
           </Grid>
           <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
