@@ -432,22 +432,6 @@ const AddVendors = ({ setVisible }) => {
                     </Grid>
                     <Grid item xs={12} sm={6} md={4}>
                       <div className="my-1 qvrowmain">
-                        <label htmlFor="zip">Zip</label>
-                      </div>
-                      <BasicTextFields
-                        type={"text"}
-                        name="zip_code"
-                        value={vendor.zip_code}
-                        placeholder="Zip"
-                        onChangeFun={inputChange}
-                        maxLength={5}
-                      />
-                      {errorMessage.zip_code && (
-                        <span className="error"> {errorMessage.zip_code}</span>
-                      )}
-                    </Grid>
-                    <Grid item xs={12} sm={6} md={4}>
-                      <div className="my-1 qvrowmain">
                         <label htmlFor="State">State</label>
                       </div>
                       <SelectDropDown
@@ -463,6 +447,22 @@ const AddVendors = ({ setVisible }) => {
                       />
                       {errorMessage.state && (
                         <span className="error">{errorMessage.state}</span>
+                      )}
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                      <div className="my-1 qvrowmain">
+                        <label htmlFor="zip">Zip</label>
+                      </div>
+                      <BasicTextFields
+                        type={"text"}
+                        name="zip_code"
+                        value={vendor.zip_code}
+                        placeholder="Zip"
+                        onChangeFun={inputChange}
+                        maxLength={5}
+                      />
+                      {errorMessage.zip_code && (
+                        <span className="error"> {errorMessage.zip_code}</span>
                       )}
                     </Grid>
                   </Grid>
