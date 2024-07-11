@@ -5,6 +5,7 @@ import { BASE_URL, ORDER_REFUND_REPORT } from "../../../Constants/Config";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
+import CustomHeader from "../../../reuseableComponents/CustomHeader";
 
 const OrderRefundFilter = ({
   title,
@@ -69,14 +70,11 @@ const OrderRefundFilter = ({
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <Grid container sx={{ padding: 2.5 }}>
+          <CustomHeader>Order Refund Report</CustomHeader>
+
+          <Grid container sx={{ px: 2.5,pt:1 }}>
             <Grid item xs={12}>
-              <div className="q_details_header">Order Refund Report</div>
-            </Grid>
-          </Grid>
-          <Grid container sx={{ px: 2.5 }}>
-            <Grid item xs={12}>
-              <div className="q_details_header ">Filter by</div>
+              <div className="heading">Filter By</div>
             </Grid>
           </Grid>
           <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>

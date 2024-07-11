@@ -10,6 +10,7 @@ import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 import { styled } from "@mui/system";
+import CustomHeader from "../../../reuseableComponents/CustomHeader";
 
 const CustomGrid = styled(Grid)(({ theme }) => ({
   "& > .MuiGrid-item": {
@@ -167,14 +168,12 @@ const MainCatedetails = () => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <Grid container sx={{ padding: 2.5 }}>
-            <Grid item xs={12}>
-              <div className="q_details_header">Category Sale Report</div>
-            </Grid>
+          <Grid container>
+            <CustomHeader>Category Sale Report</CustomHeader>
           </Grid>
-          <Grid container sx={{ px: 2.5 }}>
+          <Grid container sx={{ px: 2.5, pt: 1 }}>
             <Grid item xs={12}>
-              <div className="q_details_header ">Filter by</div>
+              <div className="heading">Filter By</div>
             </Grid>
           </Grid>
           <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>

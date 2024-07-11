@@ -14,6 +14,7 @@ import {
   ORDER_TYPE_ORDER_LIST,
   ORDER_TYPE_ORDER_LIST_COUNT,
 } from "../../../Constants/Config";
+import CustomHeader from "../../../reuseableComponents/CustomHeader";
 const ItemsCategories = () => {
   const location = useLocation();
 
@@ -75,11 +76,12 @@ const ItemsCategories = () => {
   const handleOptionClick = (option) => {
     setSelectedOrderSource(option.title);
     setFilteredData((prevData) => {
-      const orderEnvValue = {
-        "All": 9,
-        "Online Order":5,
-        "Store Order": 6
-      }[option.title] || 9;
+      const orderEnvValue =
+        {
+          All: 9,
+          "Online Order": 5,
+          "Store Order": 6,
+        }[option.title] || 9;
 
       const updatedData = {
         ...prevData,
@@ -89,7 +91,7 @@ const ItemsCategories = () => {
       };
 
       // handleDataFiltered(updatedData); // Call handleDataFiltered with the current filteredData
-      return updatedData
+      return updatedData;
     });
   };
 
@@ -182,14 +184,11 @@ const ItemsCategories = () => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <Grid container sx={{ p: 2.5 }}>
+          <CustomHeader>Order Type</CustomHeader>
+
+          <Grid container sx={{ px: 2.5,pt:1 }}>
             <Grid item xs={12}>
-              <div className="q_details_header ml-2">Order Type</div>
-            </Grid>
-          </Grid>
-          <Grid container sx={{ px: 2.5 }}>
-            <Grid item xs={12}>
-              <div className="q_details_header">Filter by</div>
+              <div className="heading">Filter By</div>
             </Grid>
           </Grid>
           <Grid container sx={{ px: 2.5, pb: 2.5 }}>
@@ -213,7 +212,10 @@ const ItemsCategories = () => {
         </Grid>
       </Grid>
 
-      <DateRangeComponent onDateRangeChange={handleDataFiltered} future_date={future_date} />
+      <DateRangeComponent
+        onDateRangeChange={handleDataFiltered}
+        future_date={future_date}
+      />
 
       <Itemdatadetails
         data={filteredData}
