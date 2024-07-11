@@ -71,7 +71,8 @@ const SystemAccessData = () => {
 
   const AllInSystemAccessState = useSelector((state) => state.systemAccessList);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const startDay = (day) => {
     if (day == 1) {
       return "Yesterday";
@@ -366,8 +367,12 @@ const SystemAccessData = () => {
       //   ToastifyAlert(res.payload.msg, "error");
       // }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     } finally {
       setLoader(false);
       closeModal();
@@ -408,8 +413,12 @@ const SystemAccessData = () => {
       await dispatch(updateSystemAccessData(data)).unwrap();
       fetchSystemAccessList();
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
     setLoader(false);
   };
@@ -635,8 +644,21 @@ const SystemAccessData = () => {
   return (
     <>
       <div className="box">
-        <div className="box_shadow_div" style={{ padding: "20px" }}>
-          <Grid container spacing={4}>
+        <div className="box_shadow_div">
+          <Grid
+            container
+            direction="row"
+            justifyContent="space-between"
+            alignItems="center"
+            className="q-coupon-bottom-header"
+          >
+            <Grid item>
+              <div>
+                <span>System Access</span>
+              </div>
+            </Grid>
+          </Grid>
+          <Grid container spacing={4} style={{ padding: "20px" }}>
             <Grid item md={6} xs={6}>
               <label>Default Cash Drawer Start</label>
               <BasicTextFields
@@ -651,7 +673,10 @@ const SystemAccessData = () => {
               />
             </Grid>
           </Grid>
-          <div className="qv_checkbox">
+          <div
+            className="qv_checkbox"
+            style={{ padding: "0px 20px 20px 20px" }}
+          >
             <label className="qv_checkbox_add_checkmark_label">
               Clock In/Out Receipt
               <input

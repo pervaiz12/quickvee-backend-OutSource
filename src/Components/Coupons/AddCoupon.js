@@ -28,35 +28,38 @@ import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
 import PasswordShow from "../../Common/passwordShow";
 import CircularProgress from "@mui/material/CircularProgress";
-import { Link,useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 
 const AddCoupon = ({ seVisible }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-    const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [activeTab, setActiveTab] = useState("amount");
   const [switchdisable, setSwitchdisable] = useState(false);
 
   const [couponStates, setCouponStates] = useState({
     online: false,
     enable_limit: false,
-    list_online:false,
+    list_online: false,
   });
 
   const handleCheckboxChange = (couponName) => (e) => {
-    if(switchdisable && (couponName === "online" || couponName === "list_online" )){
+    if (
+      switchdisable &&
+      (couponName === "online" || couponName === "list_online")
+    ) {
       setCouponStates({
         ...couponStates,
         online: false,
-        list_online:false, 
-      })
-    }else{
+        list_online: false,
+      });
+    } else {
       setCouponStates({
         ...couponStates,
         [couponName]: e.target.checked ? 1 : 0,
       });
-
     }
   };
 
@@ -101,9 +104,12 @@ const AddCoupon = ({ seVisible }) => {
         );
       }
     } catch (error) {
-      console.error("Error checking name uniqueness", error);
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 
@@ -133,10 +139,10 @@ const AddCoupon = ({ seVisible }) => {
 
   const handleTabChange = (tab) => {
     setActiveTab(tab);
-    setCoupon({ ...coupon, discount: "" })
+    setCoupon({ ...coupon, discount: "" });
     setDateMaxDisAMTError("");
     setDiscountError("");
-    setSwitchdisable(false)
+    setSwitchdisable(false);
   };
 
   const minutes = Math.round(dayjs().minute() / 15) * 15;
@@ -155,7 +161,7 @@ const AddCoupon = ({ seVisible }) => {
     maximum_discount: "",
     date_valid: "",
     date_expire: "",
-    count_limit:"",
+    count_limit: "",
     time_valid: dayjs().format("HH:mm:ss"),
     time_expire: dayjs().format("HH:mm:ss"),
 
@@ -249,9 +255,7 @@ const AddCoupon = ({ seVisible }) => {
   //   }
   // };
 
-
   const handleStartDateChange = (newDate) => {
-
     if (!newDate || !newDate.isValid()) {
       // showModal("Buss");
       setDateStartError("Invalid date. Please select a valid date.");
@@ -265,7 +269,7 @@ const AddCoupon = ({ seVisible }) => {
     const dayjsDate = dayjs(formattedStartDate);
     const today = dayjs().format("YYYY-MM-DD");
     const endDate = coupon.date_expire;
-  
+
     // Check if the start date is before today's date
     if (formattedStartDate < today) {
       setCoupon({
@@ -273,7 +277,7 @@ const AddCoupon = ({ seVisible }) => {
         date_valid: "",
       });
       setDateStartError("Start Date cannot be before the current date");
-    }else if (endDate && dayjsDate.isAfter(dayjs(endDate))) {
+    } else if (endDate && dayjsDate.isAfter(dayjs(endDate))) {
       // showModal("Start date cannot be greater than the end date");
       setCoupon({
         ...coupon,
@@ -282,7 +286,7 @@ const AddCoupon = ({ seVisible }) => {
       });
       setDateStartError("");
       setDateEndError("End Date is required");
-    }else {
+    } else {
       setCoupon({
         ...coupon,
         date_valid: formattedStartDate,
@@ -292,7 +296,6 @@ const AddCoupon = ({ seVisible }) => {
     }
     // console.log("coupon StartDate", coupon.date_valid);
   };
-  
 
   const handleEndDateChange = (newDate) => {
     if (!newDate || !newDate.isValid()) {
@@ -308,7 +311,7 @@ const AddCoupon = ({ seVisible }) => {
     const dayjsEndDate = dayjs(formattedEndDate);
     const today = dayjs().format("YYYY-MM-DD");
     const startDate = coupon.date_valid;
-  
+
     // Check if the end date is before today's date
     if (formattedEndDate < today) {
       setCoupon({
@@ -316,7 +319,7 @@ const AddCoupon = ({ seVisible }) => {
         date_expire: "",
       });
       setDateEndError("End Date cannot be before the current date");
-    } 
+    }
     // Check if the end date is less than the start date
     else if (startDate && dayjsEndDate.isBefore(dayjs(startDate))) {
       // showModal("End date cannot be less than the start date");
@@ -326,7 +329,7 @@ const AddCoupon = ({ seVisible }) => {
       });
       // setDateEndError("End Date is required");
       setDateEndError("End Date cannot be less than the start date");
-    } 
+    }
     // If the end date is valid
     else {
       setCoupon({
@@ -345,7 +348,7 @@ const AddCoupon = ({ seVisible }) => {
   const [dateMaxDisAMTError, setDateMaxDisAMTError] = useState("");
   const [countLimitError, setCountLimitError] = useState("");
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const handleAddButtonClick = async (e) => {
     e.preventDefault();
     const today = new Date().toISOString().split("T")[0];
@@ -358,7 +361,6 @@ const AddCoupon = ({ seVisible }) => {
       setErrorMessage("");
     }
 
- 
     if (!coupon.min_amount) {
       setMinOrderAmountError("Minimum Order Amount is required");
       // return; // Stop further execution
@@ -379,7 +381,9 @@ const AddCoupon = ({ seVisible }) => {
         setDiscountError("");
       }
       if (parseFloat(coupon.min_amount) <= parseFloat(coupon.discount)) {
-        showModal("Minimum order amount must be greater than the discount amount.");
+        showModal(
+          "Minimum order amount must be greater than the discount amount."
+        );
         setDiscountError("Discount Amount is required");
         setCoupon({ ...coupon, discount: "0.00" });
         return; // Stop further execution
@@ -410,14 +414,18 @@ const AddCoupon = ({ seVisible }) => {
       // return; // Stop further execution
     }
     if (activeTab === "percentage") {
-      if(+coupon.discount > 100){
+      if (+coupon.discount > 100) {
         setDiscountError("Discount Percentage is cannot exceed 100.00%");
-        return
+        return;
       }
-      if (!coupon.discount == null || coupon.discount === "" || coupon.discount === "0.00") {
+      if (
+        !coupon.discount == null ||
+        coupon.discount === "" ||
+        coupon.discount === "0.00"
+      ) {
         setDiscountError("Discount Amount Percentage is required");
-        return
-      }else {
+        return;
+      } else {
         setDiscountError("");
       }
     }
@@ -444,7 +452,11 @@ const AddCoupon = ({ seVisible }) => {
       couponStates.enable_limit ? "1" : "0"
     );
     if (couponStates.enable_limit > 0) {
-      if (!coupon.count_limit === "0" || !coupon.count_limit === "00" || !coupon.count_limit === "000") {
+      if (
+        !coupon.count_limit === "0" ||
+        !coupon.count_limit === "00" ||
+        !coupon.count_limit === "000"
+      ) {
         setCountLimitError("Please enter a value greater than or equal to 1.");
         return; // Stop further execution
       }
@@ -460,7 +472,12 @@ const AddCoupon = ({ seVisible }) => {
         setCountLimitError("");
       }
 
-      if (coupon.count_limit === null || coupon.count_limit === "0" || coupon.count_limit === "00" || coupon.count_limit === "000") {
+      if (
+        coupon.count_limit === null ||
+        coupon.count_limit === "0" ||
+        coupon.count_limit === "00" ||
+        coupon.count_limit === "000"
+      ) {
         setCountLimitError("Please enter a value greater than or equal to 1.");
         return; // Stop further execution
       }
@@ -492,9 +509,9 @@ const AddCoupon = ({ seVisible }) => {
       dateEndError === "End Date is required" ||
       // dateMaxDisAMTError === "Maximum Discount Amount is required" ||
       dateStartError === "Start Date cannot be before the current date" ||
-      dateEndError === "End Date cannot be before the Start date" || 
-      dateEndError === "End Date cannot be less than the start date"  ||
-      discountError === "Discount Percentage is cannot exceed 100.00%"  
+      dateEndError === "End Date cannot be before the Start date" ||
+      dateEndError === "End Date cannot be less than the start date" ||
+      discountError === "Discount Percentage is cannot exceed 100.00%"
     ) {
       return;
     }
@@ -539,15 +556,17 @@ const AddCoupon = ({ seVisible }) => {
       } else if (
         data == false &&
         update_message === "Coupon not added, please try again."
-        
       ) {
         setErrorMessage(update_message);
         ToastifyAlert(update_message, "error");
       }
     } catch (error) {
-      console.error("API Error:", error);
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
     setLoader(false);
   };
@@ -567,41 +586,41 @@ const AddCoupon = ({ seVisible }) => {
 
   const handleDiscountAmountChange = (e) => {
     if (!isNaN(e.target.value)) {
-    const { value } = e.target;
-    const formattedValue = CurrencyInputHelperFun(value);
-    if (formattedValue === "0.00") {
-      setDiscountError("Discount Amount is required");
-    } else {
-      setDiscountError("");
+      const { value } = e.target;
+      const formattedValue = CurrencyInputHelperFun(value);
+      if (formattedValue === "0.00") {
+        setDiscountError("Discount Amount is required");
+      } else {
+        setDiscountError("");
+      }
+      setCoupon({ ...coupon, discount: formattedValue });
     }
-    setCoupon({ ...coupon, discount: formattedValue });
-    }
-    setSwitchdisable(false)
+    setSwitchdisable(false);
   };
 
   const handleDiscountPercentChange = (e) => {
     if (!isNaN(e.target.value)) {
-    const { value } = e.target;
-    const formattedValue = CurrencyInputHelperFun(value);
-    if (formattedValue === "0.00") {
-      setDiscountError("Discount Percentage is required");
-    } else {
-      setDiscountError("");
-    }
-    if(+formattedValue > 100){
-      setDiscountError("Discount Percentage is cannot exceed 100.00%");
-    }
-    if(+formattedValue === 100 || +formattedValue > 100){  
-      setCouponStates({
-        ...couponStates,
-        online: false,
-        list_online:false,
-      })
-      setSwitchdisable(true)
-    }else{
-      setSwitchdisable(false)
-    }
-    setCoupon({ ...coupon, discount: formattedValue });
+      const { value } = e.target;
+      const formattedValue = CurrencyInputHelperFun(value);
+      if (formattedValue === "0.00") {
+        setDiscountError("Discount Percentage is required");
+      } else {
+        setDiscountError("");
+      }
+      if (+formattedValue > 100) {
+        setDiscountError("Discount Percentage is cannot exceed 100.00%");
+      }
+      if (+formattedValue === 100 || +formattedValue > 100) {
+        setCouponStates({
+          ...couponStates,
+          online: false,
+          list_online: false,
+        });
+        setSwitchdisable(true);
+      } else {
+        setSwitchdisable(false);
+      }
+      setCoupon({ ...coupon, discount: formattedValue });
     }
   };
 
@@ -629,8 +648,8 @@ const AddCoupon = ({ seVisible }) => {
           inputStr.slice(0, inputStr.length - 2) + "." + inputStr.slice(-2);
       }
       if (fieldValue.trim() === "") {
-          // setDateMaxDisAMTError("Maximum Discount Amount is required");
-          setCoupon({ ...coupon, maximum_discount: "" });
+        // setDateMaxDisAMTError("Maximum Discount Amount is required");
+        setCoupon({ ...coupon, maximum_discount: "" });
       } else {
         setCoupon({ ...coupon, maximum_discount: fieldValue });
         setDateMaxDisAMTError("");
@@ -640,12 +659,7 @@ const AddCoupon = ({ seVisible }) => {
 
   const preventKeyPress = (event) => {
     event.preventDefault();
-    const forbiddenKeys = [
-      "ArrowUp",
-      "ArrowDown",
-      "ArrowLeft",
-      "ArrowRight",
-    ];
+    const forbiddenKeys = ["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight"];
     if (forbiddenKeys.includes(event.key)) {
       event.preventDefault();
     }
@@ -657,8 +671,8 @@ const AddCoupon = ({ seVisible }) => {
         <div className="box_shadow_div">
           <div className="q-add-categories-section">
             <div className="q-add-categories-section-header">
-            <Link to={`/coupons`}>
-              {/* <span
+              <Link to={`/coupons`}>
+                {/* <span
                 onClick={() => seVisible("CouponDiscount")}
                 className="add_coupon_span"
               > */}
@@ -668,7 +682,7 @@ const AddCoupon = ({ seVisible }) => {
                   className="h-9 w-9"
                 />
                 <span className="textIMG">Add Coupon</span>
-              {/* </span> */}
+                {/* </span> */}
               </Link>
             </div>
             <form onSubmit={handleAddButtonClick}>
@@ -836,10 +850,14 @@ const AddCoupon = ({ seVisible }) => {
                 <Grid container sx={{ marginTop: 0.5, marginBottom: 0.5 }}>
                   <Grid item xs={6}>
                     {/* <label htmlFor="coupon">Start Date & Time</label> */}
-                    <label htmlFor="coupon" className="mb-2">Start Date</label>
+                    <label htmlFor="coupon" className="mb-2">
+                      Start Date
+                    </label>
                   </Grid>
                   <Grid item xs={6}>
-                  <label htmlFor="coupon" className="pl-2 mb-2">Expire Date</label>
+                    <label htmlFor="coupon" className="pl-2 mb-2">
+                      Expire Date
+                    </label>
                   </Grid>
                 </Grid>
                 <Grid container spacing={2}>
@@ -864,7 +882,7 @@ const AddCoupon = ({ seVisible }) => {
                                 textField: {
                                   placeholder: "Start Date",
                                   size: "small",
-                                  onKeyPress: preventKeyPress, 
+                                  onKeyPress: preventKeyPress,
                                 },
                               }}
                               components={{
@@ -934,7 +952,7 @@ const AddCoupon = ({ seVisible }) => {
                               }
                               shouldDisableDate={(date) => {
                                 const start = coupon.date_valid;
-                                return date.format("YYYY-MM-DD") < start ;
+                                return date.format("YYYY-MM-DD") < start;
                               }}
                               // value={coupon.date_expire}
                               format={"MMMM DD, YYYY"}
@@ -944,7 +962,7 @@ const AddCoupon = ({ seVisible }) => {
                                 textField: {
                                   placeholder: "End Date",
                                   size: "small",
-                                  onKeyPress: preventKeyPress, 
+                                  onKeyPress: preventKeyPress,
                                 },
                               }}
                               components={{
@@ -997,7 +1015,6 @@ const AddCoupon = ({ seVisible }) => {
                     </Grid>
                   </Grid>
                 </Grid>
-                
 
                 <Grid
                   container
@@ -1010,7 +1027,6 @@ const AddCoupon = ({ seVisible }) => {
                       checked={couponStates.enable_limit}
                       onChangeFun={handleCheckboxChange("enable_limit")}
                     />
-                   
                   </Grid>
                 </Grid>
 
@@ -1051,14 +1067,28 @@ const AddCoupon = ({ seVisible }) => {
               </div>
 
               <div className="q-add-categories-section-middle-footer">
-                <button className="quic-btn quic-btn-save" disabled={loader}> {loader ? <><CircularProgress color={"inherit"} width={15} size={15}/>Add</> : "Add"}</button>
-                <Link to={`/coupons`}>
-                <button
-                  // onClick={() => seVisible("CouponDiscount")}
-                  className="quic-btn quic-btn-cancle"
-                >
-                  Cancel
+                <button className="quic-btn quic-btn-save" disabled={loader}>
+                  {" "}
+                  {loader ? (
+                    <>
+                      <CircularProgress
+                        color={"inherit"}
+                        width={15}
+                        size={15}
+                      />
+                      Add
+                    </>
+                  ) : (
+                    "Add"
+                  )}
                 </button>
+                <Link to={`/coupons`}>
+                  <button
+                    // onClick={() => seVisible("CouponDiscount")}
+                    className="quic-btn quic-btn-cancle"
+                  >
+                    Cancel
+                  </button>
                 </Link>
               </div>
             </form>
@@ -1066,10 +1096,12 @@ const AddCoupon = ({ seVisible }) => {
         </div>
       </div>
       <AlertModal
-      headerText={alertModalHeaderText}
-      open={alertModalOpen}
-      onClose={() => {setAlertModalOpen(false)}}
-       />
+        headerText={alertModalHeaderText}
+        open={alertModalOpen}
+        onClose={() => {
+          setAlertModalOpen(false);
+        }}
+      />
     </>
   );
 };

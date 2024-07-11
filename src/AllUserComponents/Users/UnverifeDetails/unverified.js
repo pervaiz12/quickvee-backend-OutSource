@@ -67,7 +67,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   },
   [`&.${tableCellClasses.table}`]: {
     fontSize: 14,
-    fontFamily: "CircularSTDBook !important", 
+    fontFamily: "CircularSTDBook !important",
   },
 }));
 
@@ -80,7 +80,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function Unverified({ setMerchantId, setVisible }) {
   //  ============== DEFINED REDUX STATES ============================
-  const { getUnAutherisedTokenMessage, handleCoockieExpire } = PasswordShow();
+  const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
+    PasswordShow();
   const UnVerifiedMerchantList = useSelector(
     (state) => state.unverifiedMerchantRecord
   );
@@ -165,7 +166,12 @@ export default function Unverified({ setMerchantId, setVisible }) {
           console.error(response);
         }
       } catch (error) {
-        console.error(error);
+        if (error.status == 401 || error.response.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
+        }
       }
     }
     setDeleteModalOpen(false);
@@ -192,8 +198,12 @@ export default function Unverified({ setMerchantId, setVisible }) {
     try {
       await dispatch(getUnVerifiedMerchant(unverify_data)).unwrap();
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
   useEffect(() => {
@@ -293,12 +303,17 @@ export default function Unverified({ setMerchantId, setVisible }) {
           }
         );
         if (response) {
-          dispatch(getUnVerifiedMerchant(unverify_data));
+          dispatch(getUnVerifiedMerchant(unverify_data)).unwrap();
         } else {
           console.error(response);
         }
       } catch (error) {
-        console.error(error);
+        if (error.status == 401 || error.response.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
+        }
       }
       setDeleteMerchantId(null);
       setDislikeModalOpen(false);
@@ -345,7 +360,12 @@ export default function Unverified({ setMerchantId, setVisible }) {
         setLoader(false);
       }
     } catch (error) {
-      console.error(error);
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 

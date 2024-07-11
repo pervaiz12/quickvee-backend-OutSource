@@ -25,20 +25,20 @@ import { priceFormate } from "../../hooks/priceFormate";
 import PasswordShow from "../../Common/passwordShow";
 import AlertModal from "../../reuseableComponents/AlertModal";
 
-const CouponDiscount = ({ seVisible,setCouponId }) => {
+const CouponDiscount = ({ seVisible, setCouponId }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-    const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [isChecked, setIsChecked] = useState(true);
 
   const dispatch = useDispatch();
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
     getCouponList();
-    
   }, []);
-  const getCouponList=async()=>{
-    try{
+  const getCouponList = async () => {
+    try {
       let data = {
         merchant_id,
         ...userTypeData,
@@ -46,11 +46,15 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
       if (data) {
         await dispatch(fetchCouponList(data)).unwrap();
       }
-    }catch(error){
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
-  }
+  };
 
   const [couponList, setAllCoupon] = useState([]);
   const AllCouponDataState = useSelector((state) => state.couponList);
@@ -75,10 +79,10 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
 
   const handleCheckboxChange = useCallback(
     async (couponId, isChecked, coupons) => {
-      if(+coupons?.flag === 0 && +coupons?.discount === 100){
+      if (+coupons?.flag === 0 && +coupons?.discount === 100) {
         showModal("Discount Percentage must always be less than 100%.");
-        return
-      } else if(isChecked) {
+        return;
+      } else if (isChecked) {
         try {
           const data = {
             merchant_id,
@@ -137,17 +141,17 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
   const [deleteCouponId, setDeleteCouponId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
-  const handleEditCoupon =(id) =>{
-      seVisible("EditCopon")
-      setCouponId(id)
-  }
+  const handleEditCoupon = (id) => {
+    seVisible("EditCopon");
+    setCouponId(id);
+  };
 
   const handleDeleteCoupon = (id) => {
     setDeleteCouponId(id);
     setDeleteModalOpen(true);
   };
   const confirmDeleteCategory = () => {
-    if(deleteCouponId){
+    if (deleteCouponId) {
       const data = {
         coupon_id: deleteCouponId,
         merchant_id: merchant_id,
@@ -158,7 +162,7 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
         ToastifyAlert("Deleted Successfully", "success");
       }
     }
-    setDeleteCouponId(null)
+    setDeleteCouponId(null);
     setDeleteModalOpen(false);
   };
 
@@ -181,11 +185,11 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
             </Grid>
             <Grid item>
               <Link to={`/coupons/add`}>
-              <p 
-              // onClick={() => seVisible("AddCoupon")}
-              >
-                Add New Coupon <img src={AddIcon} alt="add-icon" />
-              </p>
+                <p
+                // onClick={() => seVisible("AddCoupon")}
+                >
+                  Add New Coupon <img src={AddIcon} alt="add-icon" />
+                </p>
               </Link>
             </Grid>
           </Grid>
@@ -218,12 +222,16 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
                           <Grid container spacing={1}>
                             <Grid item>
                               <Link to={`/coupons/edit-coupons/${coupons.id}`}>
-                              <span 
-                              // to={`/coupons/edit-coupons/${coupons.id}`}
-                              // onClick={()=> {handleEditCoupon(coupons.id)}}
-                              >
-                                <img src={Edit} alt="" className="h-8 w-8  cursor-pointer" />
-                              </span>
+                                <span
+                                // to={`/coupons/edit-coupons/${coupons.id}`}
+                                // onClick={()=> {handleEditCoupon(coupons.id)}}
+                                >
+                                  <img
+                                    src={Edit}
+                                    alt=""
+                                    className="h-8 w-8  cursor-pointer"
+                                  />
+                                </span>
                               </Link>
                             </Grid>
                             <Grid item>
@@ -245,9 +253,12 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
                           >
                             <div className="">
                               {coupons.flag == 1 ? "$" : ""}
-                              {priceFormate(coupons.discount)} {coupons.flag == 0 ? "%" : ""}{" "}
-                              OFF on minimum order of $
-                              {priceFormate(parseFloat(coupons.min_amount).toFixed(2))}
+                              {priceFormate(coupons.discount)}{" "}
+                              {coupons.flag == 0 ? "%" : ""} OFF on minimum
+                              order of $
+                              {priceFormate(
+                                parseFloat(coupons.min_amount).toFixed(2)
+                              )}
                             </div>
                           </div>
                         </Grid>
@@ -274,13 +285,13 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
                         >
                           <p className="q_date_details">
                             {/* {moment(coupons.date_valid).format("MM/DD/YYYY")} -{" "} */}
-                            {moment(coupons.date_valid).format("MMMM D, YYYY")} {" "}
+                            {moment(coupons.date_valid).format("MMMM D, YYYY")}{" "}
                             {/* {moment(coupons.time_valid, "HH:mm:ss").format(
                               "hh:mm A"
                             )}{" "} */}
                             to{" "}
                             {/* {moment(coupons.date_expire).format("MM/DD/YYYY")} -{" "} */}
-                            {moment(coupons.date_expire).format("MMMM D, YYYY")} {" "}
+                            {moment(coupons.date_expire).format("MMMM D, YYYY")}{" "}
                             {/* {moment(coupons.time_expire, "HH:mm:ss").format(
                               "hh:mm A"
                             )} */}
@@ -304,7 +315,10 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
                         </Grid>
                         <Grid item>
                           <p className="q_date_details">
-                            ${priceFormate(parseFloat(coupons.maximum_discount).toFixed(2)) || "0.00"}
+                            $
+                            {priceFormate(
+                              parseFloat(coupons.maximum_discount).toFixed(2)
+                            ) || "0.00"}
                           </p>
                         </Grid>
                       </Grid>
@@ -404,17 +418,21 @@ const CouponDiscount = ({ seVisible,setCouponId }) => {
           </Grid>
         </Grid>
       </Grid>
-      <div>              
-        <DeleteModal 
-        headerText="Coupon"
-        open={deleteModalOpen}
-        onClose={() => {setDeleteModalOpen(false)}}
-        onConfirm={confirmDeleteCategory}
+      <div>
+        <DeleteModal
+          headerText="Coupon"
+          open={deleteModalOpen}
+          onClose={() => {
+            setDeleteModalOpen(false);
+          }}
+          onConfirm={confirmDeleteCategory}
         />
-         <AlertModal
-        headerText={alertModalHeaderText}
-        open={alertModalOpen}
-        onClose={() => {setAlertModalOpen(false)}}
+        <AlertModal
+          headerText={alertModalHeaderText}
+          open={alertModalOpen}
+          onClose={() => {
+            setAlertModalOpen(false);
+          }}
         />
       </div>
     </>

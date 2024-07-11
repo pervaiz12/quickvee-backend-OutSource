@@ -14,7 +14,8 @@ import PasswordShow from "../../../../Common/passwordShow";
 export default function Add_adminFunctionality({ setVisible }) {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   const navigate = useNavigate();
   const [addAdminData, setAddAdminData] = useState({
@@ -177,8 +178,12 @@ export default function Add_adminFunctionality({ setVisible }) {
 
       return response.data; // Assuming this data indicates whether email is valid or not
     } catch (error) {
-      console.error("Error validating email:", error);
-      throw error;
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 
@@ -196,11 +201,12 @@ export default function Add_adminFunctionality({ setVisible }) {
 
       return response.data;
     } catch (error) {
-      console.error("Error validating email:", error);
-      // console.log("hellooo", error?.message);
-      // dispatch(getAuthInvalidMessage(error?.message));
-      handleCoockieExpire();
-      throw error;
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
   // ====================================
@@ -435,7 +441,12 @@ export default function Add_adminFunctionality({ setVisible }) {
               setLoader(false);
             });
         } catch (error) {
-          console.log(error);
+          if (error.status == 401 || error.response.status === 401) {
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          } else if (error.status == "Network Error") {
+            getNetworkError();
+          }
         }
       }
     }

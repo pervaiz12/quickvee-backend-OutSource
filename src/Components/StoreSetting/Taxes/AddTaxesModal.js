@@ -32,7 +32,8 @@ const AddTaxesModal = () => {
   const [errorTitleMessage, setErrorTitleMessage] = useState("");
   const [errorPerMessage, setErrorPerMessage] = useState("");
   const [loader, setLoader] = useState(false);
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const dispatch = useDispatch();
 
   const myStyles = {
@@ -172,9 +173,12 @@ const AddTaxesModal = () => {
         setErrorMessage(update_message);
       }
     } catch (error) {
-      console.error("API Error:", error);
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
     setLoader(false);
   };

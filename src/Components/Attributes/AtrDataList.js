@@ -18,7 +18,8 @@ import PasswordShow from "../../Common/passwordShow";
 
 const AtrDataList = ({ seVisible }) => {
   const [showModal, setShowModal] = useState(false);
-  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } = useAuthDetails();
+  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
+    useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
   const dispatch = useDispatch();
@@ -32,7 +33,8 @@ const AtrDataList = ({ seVisible }) => {
     // }
     getfetchAttributesData();
   }, []);
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const getfetchAttributesData = async () => {
     try {
       let data = {
@@ -43,10 +45,14 @@ const AtrDataList = ({ seVisible }) => {
         await dispatch(fetchAttributesData(data)).unwrap();
       }
     } catch (error) {
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
-  }
+  };
 
   const openModal = () => {
     setShowModal(true);
@@ -84,18 +90,18 @@ const AtrDataList = ({ seVisible }) => {
 
   const changeTittleHandler = (event) => {
     let value = event.target.value;
-    const regex = /^[A-Za-z0-9 ]*$/ ;
+    const regex = /^[A-Za-z0-9 ]*$/;
     const space = /^(?!\s).*/;
-    if(space.test(value)){
-      if (regex.test(value) || value === "" ) {
-          setNewAttribute(value);
-          const nameExists = allattributes.some((item) => item.title === value);
-          if (nameExists) {
-            setErrorMessage("Attribute name already exists");
-            setNameExists(true);
-          } else {
-            setErrorMessage("");
-            setNameExists(false);
+    if (space.test(value)) {
+      if (regex.test(value) || value === "") {
+        setNewAttribute(value);
+        const nameExists = allattributes.some((item) => item.title === value);
+        if (nameExists) {
+          setErrorMessage("Attribute name already exists");
+          setNameExists(true);
+        } else {
+          setErrorMessage("");
+          setNameExists(false);
         }
       } else {
         setErrorMessage("Special characters are not allowed");
@@ -121,7 +127,10 @@ const AtrDataList = ({ seVisible }) => {
       };
       const data = newItem;
       const response = await axios.post(BASE_URL + ADD_ATTRIBUTE, newItem, {
-        headers: { "Content-Type": "multipart/form-data", Authorization: `Bearer ${userTypeData?.token}` },
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userTypeData?.token}`,
+        },
       });
       if (response) {
         setShowModal(false);
@@ -139,8 +148,12 @@ const AtrDataList = ({ seVisible }) => {
         setNewAttribute("");
       }
     } catch (error) {
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 
@@ -211,7 +224,6 @@ const AtrDataList = ({ seVisible }) => {
               ))}
           </div> */}
 
-
           {/* <Modal  onClose={closeModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description"  >
             <div className="q-custom-modal-container" id="addtributes_">
               <div className="q-custom-modal-content" style={{ height: "max-content", top: "unset" }} >
@@ -244,26 +256,37 @@ const AtrDataList = ({ seVisible }) => {
             </div>
           </Modal> */}
 
-
-
           <Modal
-          open={showModal}
-          onClose={handleClose}
-          aria-labelledby="modal-modal-title"
-          aria-describedby="modal-modal-description"
-        >
-          <Box className="view-category-item-modal" style={myStyles}>
-            <div className="q-add-categories-section-header text-[18px]" style={{ justifyContent:"space-between" ,fontFamily:"CircularSTDBook" }}>
-              
-                <span style={{cursor:"unset"}}>Add New Attribute</span>
-              
-              <div>
-              <img src={CrossIcon} alt="icon" className="  quic-btn-cancle w-6 h-6 cursor-pointer" onClick={() => handleClose()} />
-              </div>
-            </div>
+            open={showModal}
+            onClose={handleClose}
+            aria-labelledby="modal-modal-title"
+            aria-describedby="modal-modal-description"
+          >
+            <Box className="view-category-item-modal" style={myStyles}>
+              <div
+                className="q-add-categories-section-header text-[18px]"
+                style={{
+                  justifyContent: "space-between",
+                  fontFamily: "CircularSTDBook",
+                }}
+              >
+                <span style={{ cursor: "unset" }}>Add New Attribute</span>
 
-            <div className="view-category-item-modal-header">
-              <div className="title_attributes_section " style={{margin: "1rem 1rem"}}>
+                <div>
+                  <img
+                    src={CrossIcon}
+                    alt="icon"
+                    className="  quic-btn-cancle w-6 h-6 cursor-pointer"
+                    onClick={() => handleClose()}
+                  />
+                </div>
+              </div>
+
+              <div className="view-category-item-modal-header">
+                <div
+                  className="title_attributes_section "
+                  style={{ margin: "1rem 1rem" }}
+                >
                   <label className="mb-2">Title</label>
                   <BasicTextFields
                     value={newAttribute}
@@ -275,16 +298,24 @@ const AtrDataList = ({ seVisible }) => {
                     {errorMessage !== "" ? errorMessage : ""}
                   </span>
                 </div>
-            </div>
+              </div>
 
-            <div className="q-add-categories-section-middle-footer">
-                  <button onClick={handleAddAttribute} className="quic-btn quic-btn-save" >Add</button>
-                  <button onClick={closeModal} className="quic-btn quic-btn-cancle">Cancel</button>
-            </div>
-          </Box>
-        </Modal>
-
-
+              <div className="q-add-categories-section-middle-footer">
+                <button
+                  onClick={handleAddAttribute}
+                  className="quic-btn quic-btn-save"
+                >
+                  Add
+                </button>
+                <button
+                  onClick={closeModal}
+                  className="quic-btn quic-btn-cancle"
+                >
+                  Cancel
+                </button>
+              </div>
+            </Box>
+          </Modal>
         </div>
       </div>
     </>

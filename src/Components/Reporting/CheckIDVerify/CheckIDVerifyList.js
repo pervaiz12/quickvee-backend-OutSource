@@ -66,7 +66,8 @@ const CheckIDVerifyList = (props) => {
     userTypeData,
     GetSessionLogin,
   } = useAuthDetails();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [allCheckIDVerifyData, setallCheckIDVerifyData] = useState("");
   const AllCheckIDVerifyDataState = useSelector(
     (state) => state.CheckIDVerifyList
@@ -92,9 +93,11 @@ const CheckIDVerifyList = (props) => {
         }
       }
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };

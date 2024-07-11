@@ -32,7 +32,8 @@ const AddCategory = ({ seVisible }) => {
   const [alertModalOpen, setAlertModalOpen] = useState(false);
   const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
   const [loader, setLoader] = useState(false);
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [category, setCategory] = useState({
     title: "",
     description: "",
@@ -186,9 +187,12 @@ const AddCategory = ({ seVisible }) => {
           navigate("/inventory/category");
         }
       } catch (error) {
-        console.error("API Error:", error);
-        handleCoockieExpire()
-        getUnAutherisedTokenMessage()
+        if (error.status == 401 || error.response.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
+        }
       }
       setLoader(false);
     }

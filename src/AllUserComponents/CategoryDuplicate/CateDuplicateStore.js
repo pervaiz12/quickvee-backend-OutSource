@@ -1,4 +1,4 @@
-import React, { useEffect, useState,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Box, Collapse, Alert, IconButton, Grid } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -23,9 +23,9 @@ import CircularProgress from "@mui/material/CircularProgress";
 import ConfirmModal from "../../reuseableComponents/ConfirmModal";
 import FinalConfirm from "../../reuseableComponents/FinalConfirm";
 
-
 const CateDuplicateStore = () => {
-  const [selectedStorefrom, setSelectedStorefrom] = useState("-- Select Store --");
+  const [selectedStorefrom, setSelectedStorefrom] =
+    useState("-- Select Store --");
   const [selectedStoreto, setSelectedStoreto] = useState("-- Select Store --");
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [storeFromDropdownVisible, setStoreFromDropdownVisible] =
@@ -46,7 +46,8 @@ const CateDuplicateStore = () => {
         break;
     }
   };
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const { userTypeData } = useAuthDetails();
   const { token, ...userTypeDataNew } = userTypeData;
   const [loader, setLoader] = useState(false);
@@ -56,8 +57,8 @@ const CateDuplicateStore = () => {
   const [storeFromError, setStoreFromError] = useState("");
   const [storeToError, setStoreToError] = useState("");
   const [categoryFocus, setCategoryFocus] = useState(false);
-  const [userInput, setUserInput] = useState(''); 
-  const [captchaText, setCaptchaText] = useState(''); 
+  const [userInput, setUserInput] = useState("");
+  const [captchaText, setCaptchaText] = useState("");
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [confirmfinalModalOpen, setConfirmFinalModalOpen] = useState(false);
 
@@ -113,9 +114,11 @@ const CateDuplicateStore = () => {
               setSelectedCategories([]);
             }
           } catch (error) {
-            if(error.response.status === 401){
-              handleCoockieExpire();
+            if (error.status == 401 || error.response.status === 401) {
               getUnAutherisedTokenMessage();
+              handleCoockieExpire();
+            } else if (error.status == "Network Error") {
+              getNetworkError();
             }
           }
         }
@@ -187,24 +190,26 @@ const CateDuplicateStore = () => {
 
   useEffect(() => {
     // dispatch(fetchMerchantsList(userTypeData));
-    getFetchMerchantsList()
+    getFetchMerchantsList();
   }, []);
 
-  const getFetchMerchantsList=async()=>{
-    try{
+  const getFetchMerchantsList = async () => {
+    try {
       const data = {
-        ...userTypeData
+        ...userTypeData,
       };
       if (data) {
         await dispatch(fetchMerchantsList(data)).unwrap();
       }
-    }catch(error){
-      if(error.status === 401){
-        handleCoockieExpire()
-        getUnAutherisedTokenMessage()
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
-  }
+  };
 
   const myStyles = {
     height: "300px",
@@ -218,15 +223,13 @@ const CateDuplicateStore = () => {
   };
 
   const confirmfun = () => {
-    setConfirmModalOpen(false)
-    setConfirmFinalModalOpen(true)
-  }
+    setConfirmModalOpen(false);
+    setConfirmFinalModalOpen(true);
+  };
   const confirmFinalfun = async () => {
     const upcCheckbox = document.getElementById("upc_check");
     const isUpcChecked = upcCheckbox ? upcCheckbox.checked : false;
-    const categoryValues = selectedCategories.map(
-      (category) => category.value
-    );
+    const categoryValues = selectedCategories.map((category) => category.value);
     if (categoryValues.length === 0) {
       return;
     } else if (categoryValues.includes("No categories found")) {
@@ -239,7 +242,7 @@ const CateDuplicateStore = () => {
       upc_check: isUpcChecked,
       ...userTypeDataNew,
     };
-    setConfirmFinalModalOpen(false)
+    setConfirmFinalModalOpen(false);
     setLoader(true);
     try {
       const response = await axios.post(
@@ -258,12 +261,14 @@ const CateDuplicateStore = () => {
         setSelectedStoreto("-- Select Store --");
         // ToastifyAlert("Duplicate Inventory Success!", "success");
         ToastifyAlert("Added Successfully", "success");
-        showModal("Your Inventory has been copied to your other location.  Please verify and make any changes as needed.");
-        setLoader(false)
+        showModal(
+          "Your Inventory has been copied to your other location.  Please verify and make any changes as needed."
+        );
+        setLoader(false);
         // setTimeout(()=>{setLoader(false);
         //   ToastifyAlert("Duplicate Inventory Success!", "success");
         // },2000)
-        setUserInput("")
+        setUserInput("");
         setStorefrom(null);
         setStoreto(null);
         setCategoryOptions([
@@ -275,18 +280,18 @@ const CateDuplicateStore = () => {
         ToastifyAlert("Duplicate Inventory Failed!", "error");
         setsubmitmessage(response.data.msg);
       }
-        const canvas = canvasRef.current; 
-        const ctx = canvas.getContext('2d'); 
-        initializeCaptcha(ctx); 
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+      initializeCaptcha(ctx);
     } catch (error) {
-      if(error.response.status === 401){
-        handleCoockieExpire();
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
-      ToastifyAlert("Error!", "error");
-      return new Error(error);
     }
-  }
+  };
 
   const dupplicateCategoryInventory = async (e) => {
     e.preventDefault();
@@ -299,7 +304,7 @@ const CateDuplicateStore = () => {
       showModal("Please select Store To");
     } else if (selectedStorefrom === selectedStoreto) {
       // alert("Both the selected store are same.");
-      showModal("Both the stores cannot be same.")
+      showModal("Both the stores cannot be same.");
     } else {
       const upcCheckbox = document.getElementById("upc_check");
 
@@ -310,14 +315,14 @@ const CateDuplicateStore = () => {
       );
       if (categoryValues.length === 0) {
         // alert("Please select at least one category");
-        showModal("Please select at least on category")
+        showModal("Please select at least on category");
         return;
       } else if (categoryValues.includes("No categories found")) {
         // alert("No categories found is not a Category");
-        showModal("No categories found is not a Category")
+        showModal("No categories found is not a Category");
         return;
       }
-      if (userInput === captchaText) { 
+      if (userInput === captchaText) {
         const data = {
           store_name_from: storefrom,
           store_name_to: storeto,
@@ -339,7 +344,7 @@ const CateDuplicateStore = () => {
         //       },
         //     }
         //   );
-  
+
         //   if (response.data.status === "Success") {
         //     setsubmitmessage(response.data.msg);
         //     setSelectedStorefrom("-- Select Store --");
@@ -367,78 +372,78 @@ const CateDuplicateStore = () => {
         //   getUnAutherisedTokenMessage()
         //   return new Error(error);
         // }
-      } else { 
-          showModal("Please Fill Captcha Correctly!")
-          const canvas = canvasRef.current; 
-          const ctx = canvas.getContext('2d'); 
-          initializeCaptcha(ctx); 
-      } 
+      } else {
+        showModal("Please Fill Captcha Correctly!");
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext("2d");
+        initializeCaptcha(ctx);
+      }
 
-      setTimeout(()=>{setLoader(false);},2000)
+      setTimeout(() => {
+        setLoader(false);
+      }, 2000);
     }
   };
   const goToClose = () => {
     setOpenAlert(false);
   };
 
-   // for captcha start
+  // for captcha start
 
-  
-   
-   const canvasRef = useRef(null); 
-  
-   useEffect(() => { 
-       const canvas = canvasRef.current; 
-       const ctx = canvas.getContext('2d'); 
-       initializeCaptcha(ctx); 
-   }, []); 
- 
-   const generateRandomChar = (min, max) => 
-       String.fromCharCode(Math.floor 
-           (Math.random() * (max - min + 1) + min)); 
- 
-   const generateCaptchaText = () => { 
-       let captcha = ''; 
-       for (let i = 0; i < 3; i++) { 
-           captcha += generateRandomChar(65, 90); 
-           // captcha += generateRandomChar(97, 122); 
-           captcha += generateRandomChar(48, 57); 
-       } 
-       return captcha.split('').sort( 
-           () => Math.random() - 0.5).join(''); 
-   }; 
- 
-   const drawCaptchaOnCanvas = (ctx, captcha) => { 
-       ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); 
-       const textColors = ['rgb(0,0,0)', 'rgb(130,130,130)']; 
-       const letterSpace = 150 / captcha.length; 
-       for (let i = 0; i < captcha.length; i++) { 
-           const xInitialSpace = 25; 
-           ctx.font = '20px Roboto Mono'; 
-           ctx.fillStyle = textColors[Math.floor( 
-               Math.random() * 2)]; 
-           ctx.fillText( 
-               captcha[i], 
-               xInitialSpace + i * letterSpace, 
-               // Randomize Y position slightly 
-               Math.floor(Math.random() * 16 + 25), 
-               100 
-           ); 
-       } 
-   }; 
- 
-   const initializeCaptcha = (ctx) => { 
-       setUserInput(''); 
-       const newCaptcha = generateCaptchaText(); 
-       setCaptchaText(newCaptcha); 
-       drawCaptchaOnCanvas(ctx, newCaptcha); 
-   }; 
- 
-   const handleUserInputChange = (e) => { 
-       setUserInput(e.target.value); 
-   }; 
-  
- // for captcha End
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    initializeCaptcha(ctx);
+  }, []);
+
+  const generateRandomChar = (min, max) =>
+    String.fromCharCode(Math.floor(Math.random() * (max - min + 1) + min));
+
+  const generateCaptchaText = () => {
+    let captcha = "";
+    for (let i = 0; i < 3; i++) {
+      captcha += generateRandomChar(65, 90);
+      // captcha += generateRandomChar(97, 122);
+      captcha += generateRandomChar(48, 57);
+    }
+    return captcha
+      .split("")
+      .sort(() => Math.random() - 0.5)
+      .join("");
+  };
+
+  const drawCaptchaOnCanvas = (ctx, captcha) => {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    const textColors = ["rgb(0,0,0)", "rgb(130,130,130)"];
+    const letterSpace = 150 / captcha.length;
+    for (let i = 0; i < captcha.length; i++) {
+      const xInitialSpace = 25;
+      ctx.font = "20px Roboto Mono";
+      ctx.fillStyle = textColors[Math.floor(Math.random() * 2)];
+      ctx.fillText(
+        captcha[i],
+        xInitialSpace + i * letterSpace,
+        // Randomize Y position slightly
+        Math.floor(Math.random() * 16 + 25),
+        100
+      );
+    }
+  };
+
+  const initializeCaptcha = (ctx) => {
+    setUserInput("");
+    const newCaptcha = generateCaptchaText();
+    setCaptchaText(newCaptcha);
+    drawCaptchaOnCanvas(ctx, newCaptcha);
+  };
+
+  const handleUserInputChange = (e) => {
+    setUserInput(e.target.value);
+  };
+
+  // for captcha End
 
   return (
     <>
@@ -520,7 +525,7 @@ const CateDuplicateStore = () => {
                   Copy from this store
                 </label>
                 <SelectDropDown
-                sx={{pt:0.5}}
+                  sx={{ pt: 0.5 }}
                   listItem={
                     MerchantList?.length &&
                     MerchantList?.map((item) => ({
@@ -538,7 +543,13 @@ const CateDuplicateStore = () => {
                 />
               </Grid>
               {/* Multiple Select Categories */}
-              <Grid sx={{fontFamily:"CircularSTDBook"}} item xs={6} sm={12} md={6}>
+              <Grid
+                sx={{ fontFamily: "CircularSTDBook" }}
+                item
+                xs={6}
+                sm={12}
+                md={6}
+              >
                 <div
                   className={`py-0 ${
                     isSelectClicked
@@ -553,7 +564,6 @@ const CateDuplicateStore = () => {
                     Select Categories
                   </label>
                   <Select
-                  
                     className={`${categoryFocus ? "category-select" : ""} mt-1`}
                     isMulti
                     value={selectedCategories}
@@ -618,7 +628,6 @@ const CateDuplicateStore = () => {
                       id: item?.merchant_id,
                     }))
                   }
-
                   heading={"-- Select Store --"}
                   title={"title"}
                   selectedOption={selectedStoreto}
@@ -644,28 +653,39 @@ const CateDuplicateStore = () => {
           {/* for captcha start  */}
 
           <div className="q-add-inventory-section-header ">
-                  <div className="captue_Img_Reload"> 
-                    <canvas ref={canvasRef} width="200" height="50" onClick={  () => initializeCaptcha(canvasRef.current.getContext('2d'))}> 
-                    </canvas> 
-                    <button id="reload-button" onClick={   () => initializeCaptcha(canvasRef.current.getContext('2d'))}> 
-                        <LuRefreshCw /> 
-                    </button> 
-                  </div>
-              </div>
-              <div className="q-add-inventory-section-header">
-                <Grid container spacing={4} >
-                  <Grid item xs={6} sm={12} md={6}>
-                    <BasicTextFields
-                    type="text"
-                    id="user-input"
-                    name="actual_amt"
-                    onChangeFun={handleUserInputChange}
-                    value={userInput} 
-                    placeholder={"Enter the text in the image"}
-                    /> 
-                  </Grid>
-                </Grid>
-                </div>
+            <div className="captue_Img_Reload">
+              <canvas
+                ref={canvasRef}
+                width="200"
+                height="50"
+                onClick={() =>
+                  initializeCaptcha(canvasRef.current.getContext("2d"))
+                }
+              ></canvas>
+              <button
+                id="reload-button"
+                onClick={() =>
+                  initializeCaptcha(canvasRef.current.getContext("2d"))
+                }
+              >
+                <LuRefreshCw />
+              </button>
+            </div>
+          </div>
+          <div className="q-add-inventory-section-header">
+            <Grid container spacing={4}>
+              <Grid item xs={6} sm={12} md={6}>
+                <BasicTextFields
+                  type="text"
+                  id="user-input"
+                  name="actual_amt"
+                  onChangeFun={handleUserInputChange}
+                  value={userInput}
+                  placeholder={"Enter the text in the image"}
+                />
+              </Grid>
+            </Grid>
+          </div>
           {/* for captcha End */}
 
           <div
@@ -677,29 +697,42 @@ const CateDuplicateStore = () => {
               onClick={dupplicateCategoryInventory}
               disabled={loader}
             >
-              {loader ? <><CircularProgress color={"inherit"} width={15} size={15}/>Duplicate Inventory</> : "Duplicate Inventory"}
+              {loader ? (
+                <>
+                  <CircularProgress color={"inherit"} width={15} size={15} />
+                  Duplicate Inventory
+                </>
+              ) : (
+                "Duplicate Inventory"
+              )}
             </button>
           </div>
         </div>
       </div>
       <AlertModal
-      headerText={alertModalHeaderText}
-      open={alertModalOpen}
-      onClose={() => {setAlertModalOpen(false)}}
-       />
+        headerText={alertModalHeaderText}
+        open={alertModalOpen}
+        onClose={() => {
+          setAlertModalOpen(false);
+        }}
+      />
 
       <ConfirmModal
-            headerText="The existing Variants of the selected Store 2 Must be same as selected Store 1 Variants. Do you want to proceed?"
-            open={confirmModalOpen}
-            onClose={() => {setConfirmModalOpen(false)}}
-            onConfirm={confirmfun}
-        />
-        <FinalConfirm
-            headerText="Final Confirmation!!!"
-            open={confirmfinalModalOpen}
-            onClose={() => {setConfirmFinalModalOpen(false)}}
-            onConfirm={confirmFinalfun}
-        />
+        headerText="The existing Variants of the selected Store 2 Must be same as selected Store 1 Variants. Do you want to proceed?"
+        open={confirmModalOpen}
+        onClose={() => {
+          setConfirmModalOpen(false);
+        }}
+        onConfirm={confirmfun}
+      />
+      <FinalConfirm
+        headerText="Final Confirmation!!!"
+        open={confirmfinalModalOpen}
+        onClose={() => {
+          setConfirmFinalModalOpen(false);
+        }}
+        onConfirm={confirmFinalfun}
+      />
     </>
   );
 };

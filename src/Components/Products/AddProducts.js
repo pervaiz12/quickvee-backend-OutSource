@@ -606,7 +606,7 @@ const AddProducts = () => {
             setCostPer(+res);
           }
         } catch (error) {
-          if (error.status == 401) {
+          if (error.status == 401 || error.response.status === 401) {
             getUnAutherisedTokenMessage();
             handleCoockieExpire();
           } else if (error.status == "Network Error") {
@@ -1688,7 +1688,7 @@ const AddProducts = () => {
           setIsMultipleVaient(Boolean(+res?.data?.productdata?.isvarient));
         }
       } catch (error) {
-        if (error.status == 401) {
+        if (error.status == 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();
         } else if (error.status == "Network Error") {
@@ -1731,7 +1731,7 @@ const AddProducts = () => {
         setInventoryData(inventorySettingRes?.result);
       }
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -1776,11 +1776,11 @@ const AddProducts = () => {
         ToastifyAlert("Error while fetch product data!", "error");
       }
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
-        alert("Please check your internet connection and try again.");
+        getNetworkError();
       }
     } finally {
       setSingleVarientPageLoading(false);
@@ -2327,8 +2327,7 @@ const AddProducts = () => {
             }
           }
         } catch (error) {
-          console.log("frontend error", error);
-          if (error.status == 401) {
+          if (error.status == 401 || error.response.status === 401) {
             getUnAutherisedTokenMessage();
             handleCoockieExpire();
           } else if (error.status == "Network Error") {
@@ -2401,7 +2400,7 @@ const AddProducts = () => {
             fetchSingleVarientData();
           }
         } catch (error) {
-          if (error.status == 401) {
+          if (error.status == 401 || error.response.status === 401) {
             getUnAutherisedTokenMessage();
             handleCoockieExpire();
           } else if (error.status == "Network Error") {

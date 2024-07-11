@@ -15,6 +15,8 @@ import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { priceFormate } from "../../../hooks/priceFormate";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import SortIconW from "../../../Assests/Category/SortingW.svg";
+import Skeleton from "react-loading-skeleton";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -124,143 +126,152 @@ const VendorSalesReportList = (props) => {
   };
   return (
     <>
-      {allVendorData && Object.keys(allVendorData).length >= 1 ? (
+      {AllVendorDataState.loading ? (
+        <Grid container className="box_shadow_div">
+          <Grid item xs={12}>
+            <div className="q-attributes-bottom-header bg-[#ffffff] ">
+              <span>{<Skeleton />}</span>
+            </div>
+          </Grid>
+          <Grid item xs={12}>
+            <SkeletonTable
+              columns={["Transaction Date", "Description", "Amount"]}
+            />
+          </Grid>
+        </Grid>
+      ) : (
         <>
-          {/* <div className="box">
+          {allVendorData && Object.keys(allVendorData).length >= 1 ? (
+            <>
+              {/* <div className="box">
             <div className="q-category-bottom-categories-listing"> */}
-          {Object.entries(allVendorData).map(([vendorName, vendorIndex]) => (
-            <React.Fragment key={vendorName}>
-              <Grid container className="box_shadow_div">
-                <Grid item xs={12}>
-                  <div className="q-attributes-bottom-header bg-[#ffffff] ">
-                    <span>{vendorName}</span>
-                  </div>
-                  <TableContainer>
-                    <StyledTable
-                      sx={{ minWidth: 500 }}
-                      aria-label="customized table"
-                    >
-                      <TableHead>
-                        {/* <StyledTableCell>
+              {Object.entries(allVendorData).map(
+                ([vendorName, vendorIndex]) => (
+                  <React.Fragment key={vendorName}>
+                    <Grid container className="box_shadow_div">
+                      <Grid item xs={12}>
+                        <div className="q-attributes-bottom-header bg-[#ffffff] ">
+                          <span>{vendorName}</span>
+                        </div>
+                        <TableContainer>
+                          <StyledTable
+                            sx={{ minWidth: 500 }}
+                            aria-label="customized table"
+                          >
+                            <TableHead>
+                              {/* <StyledTableCell>
                           <p>Sr. No</p>
                         </StyledTableCell> */}
-                        <StyledTableCell>
-                          <button
-                            className="flex items-center"
-                            onClick={() =>
-                              sortByItemName("date", "payment_datetime")
-                            }
-                          >
-                            <p>Transaction Date</p>
-                            <img src={SortIconW} alt="" className="pl-1" />
-                          </button>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <button
-                            className="flex items-center"
-                            onClick={() => sortByItemName("str", "remark")}
-                          >
-                            <p>Description</p>
-                            <img src={SortIconW} alt="" className="pl-1" />
-                          </button>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <button
-                            className="flex items-center"
-                            onClick={() => sortByItemName("num", "pay_amount")}
-                          >
-                            <p>Amount</p>
-                            <img src={SortIconW} alt="" className="pl-1" />
-                          </button>
-                        </StyledTableCell>
-                      </TableHead>
-                      <TableBody>
-                        {vendorIndex?.map((salesData, index) => (
-                          <StyledTableRow key={index}>
-                            {/* <StyledTableCell>
+                              <StyledTableCell>
+                                <button
+                                  className="flex items-center"
+                                  onClick={() =>
+                                    sortByItemName("date", "payment_datetime")
+                                  }
+                                >
+                                  <p>Transaction Date</p>
+                                  <img
+                                    src={SortIconW}
+                                    alt=""
+                                    className="pl-1"
+                                  />
+                                </button>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <button
+                                  className="flex items-center"
+                                  onClick={() =>
+                                    sortByItemName("str", "remark")
+                                  }
+                                >
+                                  <p>Description</p>
+                                  <img
+                                    src={SortIconW}
+                                    alt=""
+                                    className="pl-1"
+                                  />
+                                </button>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <button
+                                  className="flex items-center"
+                                  onClick={() =>
+                                    sortByItemName("num", "pay_amount")
+                                  }
+                                >
+                                  <p>Amount</p>
+                                  <img
+                                    src={SortIconW}
+                                    alt=""
+                                    className="pl-1"
+                                  />
+                                </button>
+                              </StyledTableCell>
+                            </TableHead>
+                            <TableBody>
+                              {vendorIndex?.map((salesData, index) => (
+                                <StyledTableRow key={index}>
+                                  {/* <StyledTableCell>
                               <p>{`${index + 1}`}</p>
                             </StyledTableCell> */}
-                            <StyledTableCell>
-                              <p>
-                                {formatDateTime(salesData.payment_datetime)}
-                              </p>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <p>{salesData.remark}</p>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <p>
-                                $
-                                {priceFormate(
-                                  parseFloat(salesData.pay_amount).toFixed(2)
-                                )}
-                              </p>
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        ))}
-                        <StyledTableRow>
-                          {/* <StyledTableCell> </StyledTableCell> */}
-                          <StyledTableCell> </StyledTableCell>
-                          <StyledTableCell align="right">
-                            <p style={{ color: "#0A64F9" }}>Total</p>
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <p style={{ color: "#0A64F9" }}>
-                              $
-                              {priceFormate(
-                                parseFloat(
-                                  calculateTotal(allVendorData[vendorName])
-                                ).toFixed(2)
-                              )}{" "}
-                            </p>
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      </TableBody>
-                    </StyledTable>
-                  </TableContainer>
-                </Grid>
-              </Grid>
-              {/* <h2 className="q-category-bottom-categories-single-category">
-                {vendorName}
-              </h2>
-              <div className="q-daily-report-bottom-report-header">
-                <p className="report-sort">Sr. No</p>
-                <p className="report-sort">Transaction Date</p>
-                <p className="report-sort">Remark</p>
-                <p className="report-sort">Amount</p>
-         
+                                  <StyledTableCell>
+                                    <p>
+                                      {formatDateTime(
+                                        salesData.payment_datetime
+                                      )}
+                                    </p>
+                                  </StyledTableCell>
+                                  <StyledTableCell>
+                                    <p>{salesData.remark}</p>
+                                  </StyledTableCell>
+                                  <StyledTableCell>
+                                    <p>
+                                      $
+                                      {priceFormate(
+                                        parseFloat(
+                                          salesData.pay_amount
+                                        ).toFixed(2)
+                                      )}
+                                    </p>
+                                  </StyledTableCell>
+                                </StyledTableRow>
+                              ))}
+                              <StyledTableRow>
+                                {/* <StyledTableCell> </StyledTableCell> */}
+                                <StyledTableCell> </StyledTableCell>
+                                <StyledTableCell align="right">
+                                  <p style={{ color: "#0A64F9" }}>Total</p>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <p style={{ color: "#0A64F9" }}>
+                                    $
+                                    {priceFormate(
+                                      parseFloat(
+                                        calculateTotal(
+                                          allVendorData[vendorName]
+                                        )
+                                      ).toFixed(2)
+                                    )}{" "}
+                                  </p>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            </TableBody>
+                          </StyledTable>
+                        </TableContainer>
+                      </Grid>
+                    </Grid>
+                  </React.Fragment>
+                )
+              )}
+            </>
+          ) : (
+            <div className="box_shadow_div ">
+              <div className="m-5">
+                <p>No data found</p>
               </div>
-              {allVendorData[vendorName].map((salesData, index) => (
-                <div
-                  key={index}
-                  className="q-category-bottom-categories-single-category"
-                >
-                  <p className="report-title">{`${index + 1}`}</p>
-                  <p className="report-title">{salesData.payment_datetime}</p>
-                  <p className="report-title">{salesData.remark}</p>
-                  <p className="report-title">
-                    ${parseFloat(salesData.pay_amount).toFixed(2)}
-                  </p>
-                </div>
-              ))}
-
-              <div className="q-category-bottom-categories-single-category">
-                <p className="report-title">
-                  Total: $
-                  {parseFloat(
-                    calculateTotal(allVendorData[vendorName])
-                  ).toFixed(2)}
-                </p>
-              </div> */}
-            </React.Fragment>
-          ))}
+            </div>
+          )}
         </>
-      ) : (
-        <div className="box">
-          <div className="q-category-bottom-categories-single-category">
-            <p>No data found</p>
-          </div>
-        </div>
       )}
     </>
   );

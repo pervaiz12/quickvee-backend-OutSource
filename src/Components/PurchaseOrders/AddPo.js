@@ -53,7 +53,6 @@ const AddPo = ({ seVisible }) => {
       };
       await dispatch(fetchVendorsListData(data)).unwrap();
     } catch (e) {
-      console.log("e: ", e);
       if (e.status == 401 || e.response.status == 401) {
         handleCoockieExpire();
         getUnAutherisedTokenMessage();
@@ -159,7 +158,7 @@ const AddPo = ({ seVisible }) => {
             </span>
           </div>
 
-          <div className="px-6 py-7">
+          <div style={{ padding: "20px" }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6} md={4}>
                 <label>Vendor</label>

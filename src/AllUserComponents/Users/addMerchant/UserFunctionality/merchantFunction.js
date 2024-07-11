@@ -23,7 +23,8 @@ const MerchantFunction = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
 
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [store, setStore] = useState({
     storename: "",
     ownerName: "",
@@ -569,7 +570,12 @@ const MerchantFunction = () => {
 
       return response.data;
     } catch (error) {
-      console.error("Error validating email:");
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 
@@ -587,11 +593,12 @@ const MerchantFunction = () => {
 
       return response.data;
     } catch (error) {
-      console.error("Error validating email:", error);
-      // console.log("hellooo", error?.message);
-      // dispatch(getAuthInvalidMessage(error?.message));
-      handleCoockieExpire();
-      throw error;
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
   // ------------------------
@@ -762,10 +769,12 @@ const MerchantFunction = () => {
         }
       }
     } catch (error) {
-      // console.log("hellooo", error?.message);
-      // dispatch(getAuthInvalidMessage(error?.message));
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 

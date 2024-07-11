@@ -104,7 +104,7 @@ const BulkVendorEdit = ({
           ToastifyAlert("Updated Successfully", "success");
         }
       } catch (error) {
-        if (error.status == 401) {
+        if (error.status == 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();
         } else if (error.status == "Network Error") {
@@ -221,7 +221,7 @@ const BulkVendorEdit = ({
         setVendor(response?.result);
       }
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -294,7 +294,7 @@ const BulkVendorEdit = ({
           setSelectedVendor([]);
         }
       } catch (error) {
-        if (error.status == 401) {
+        if (error.status == 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();
         } else if (error.status == "Network Error") {
@@ -455,7 +455,7 @@ const BulkVendorEdit = ({
       ToastifyAlert("Updated successfully!", "success");
       handleCloseEditModal();
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {

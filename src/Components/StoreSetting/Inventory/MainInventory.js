@@ -4,7 +4,7 @@ import { Grid } from "@mui/material";
 function MainInventory() {
   return (
     <>
-      <Grid
+      {/* <Grid
         container
         sx={{ padding: 2.5, mt: 3.6 }}
         className="box_shadow_div "
@@ -18,7 +18,7 @@ function MainInventory() {
             </Grid>
           </Grid>
         </Grid>
-      </Grid>
+      </Grid> */}
       <div className="q-category-main-page">
         <InventoryView />
       </div>

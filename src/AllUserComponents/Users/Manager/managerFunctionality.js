@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { GET_MANAGER_MERCHANT, BASE_URL } from "../../../Constants/Config";
 import axios from "axios";
+import PasswordShow from "../../../Common/passwordShow";
 
 export default function ManagerFunctionality() {
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [showMerchant, setShowMerchant] = useState(false);
   const [showMerchantData, setShowMerchantData] = useState([]);
   const [name, setName] = useState("");
@@ -74,7 +77,12 @@ export default function ManagerFunctionality() {
         setShowMerchantData(sports);
         setShowMerchant(true);
       } catch (error) {
-        console.error("Error fetching data:", error);
+        if (error.status == 401 || error.response.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
+        }
       }
     }
   };

@@ -16,6 +16,7 @@ import { priceFormate } from "../../../hooks/priceFormate";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import PasswordShow from "../../../Common/passwordShow";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -49,7 +50,8 @@ const ReorderInventoryList = (props) => {
   // console.log(props)
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const dispatch = useDispatch();
   const [allReorderInventoryData, setallReorderInventoryData] = useState([]);
   const AllReorderInventoryDataState = useSelector(
@@ -70,9 +72,11 @@ const ReorderInventoryList = (props) => {
         await dispatch(fetchReorderInventoryData(data)).unwrap();
       }
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };
@@ -120,62 +124,83 @@ const ReorderInventoryList = (props) => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <TableContainer>
-            <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-              <TableHead>
-                {columns.map((column) => (
-                  <StyledTableCell key={column.name}>
-                    <button
-                      className="flex items-center"
-                      onClick={() => sortByItemName(column.type, column.name)}
-                    >
-                      <p>{column.label}</p>
-                      <img src={sortIcon} alt="" className="pl-1" />
-                    </button>
-                  </StyledTableCell>
-                ))}
-              </TableHead>
-              <TableBody>
-                {allReorderInventoryData &&
-                allReorderInventoryData?.length > 0 ? (
-                  allReorderInventoryData.map((InvData, index) => (
-                    <StyledTableRow>
-                      <StyledTableCell>
-                        <p>{InvData.item_name}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{InvData.variant}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{InvData.category}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{InvData.cost_vendor}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{priceFormate(InvData.instock)}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>${priceFormate(InvData.item_price)}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{priceFormate(InvData.reorder_level)}</p>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <p>{priceFormate(InvData.reorder_qty)}</p>
-                      </StyledTableCell>
-                    </StyledTableRow>
-                  ))
-                ) : (
-                  <Grid container sx={{ padding: 2.5 }}>
-                    <Grid item xs={12}>
-                      <p>No. Data found.</p>
+          {AllReorderInventoryDataState.loading ? (
+            <SkeletonTable columns={columns.map((item) => item.label)} />
+          ) : (
+            <TableContainer>
+              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
+                <TableHead>
+                  {columns.map((column) => (
+                    <StyledTableCell key={column.name}>
+                      <button
+                        className="flex items-center"
+                        onClick={() => sortByItemName(column.type, column.name)}
+                      >
+                        <p>{column.label}</p>
+                        <img src={sortIcon} alt="" className="pl-1" />
+                      </button>
+                    </StyledTableCell>
+                  ))}
+                </TableHead>
+                <TableBody>
+                  {allReorderInventoryData &&
+                  allReorderInventoryData?.length > 0 ? (
+                    allReorderInventoryData?.map((InvData, index) => (
+                      <StyledTableRow>
+                        <StyledTableCell>
+                          <p>{InvData.item_name}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>{InvData.variant}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>{InvData.category}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>{InvData.cost_vendor}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>
+                            {InvData?.instock
+                              ? priceFormate(InvData?.instock)
+                              : "0"}
+                          </p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>
+                            $
+                            {InvData?.item_price
+                              ? priceFormate(InvData?.item_price)
+                              : "$0.00"}
+                          </p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>
+                            {InvData?.reorder_level
+                              ? priceFormate(InvData?.reorder_level)
+                              : "0"}
+                          </p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p>
+                            {InvData?.reorder_level
+                              ? priceFormate(InvData?.reorder_qty)
+                              : "0"}
+                          </p>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))
+                  ) : (
+                    <Grid container sx={{ padding: 2.5 }}>
+                      <Grid item xs={12}>
+                        <p>No. Data found.</p>
+                      </Grid>
                     </Grid>
-                  </Grid>
-                )}
-              </TableBody>
-            </StyledTable>
-          </TableContainer>
+                  )}
+                </TableBody>
+              </StyledTable>
+            </TableContainer>
+          )}
         </Grid>
       </Grid>
       {/* <div className="box">

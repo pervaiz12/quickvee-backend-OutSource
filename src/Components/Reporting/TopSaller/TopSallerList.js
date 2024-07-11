@@ -64,7 +64,7 @@ const TopSallerList = ({ data }) => {
         await dispatch(fetchtopsallerData(data)).unwrap();
       }
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -280,11 +280,7 @@ const TopSallerList = ({ data }) => {
                       </StyledTableRow>
                     ))
                   ) : (
-                    <Grid
-                      container
-                      sx={{ padding: 2.5 }}
-                      
-                    >
+                    <Grid container sx={{ padding: 2.5 }}>
                       <Grid item xs={12}>
                         <p>No. Data found.</p>
                       </Grid>

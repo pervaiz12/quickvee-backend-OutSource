@@ -40,8 +40,12 @@ export const getUnVerifiedMerchant = createAsyncThunk(
         return response.data.message;
       }
     } catch (error) {
-      console.log(error);
-      return rejectWithValue(error.response?.data || error.message);
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
