@@ -179,6 +179,7 @@ const Employeedetails = (props) => {
                   "Clock Out",
                   "Total Worked (Hr)",
                   "Total Break (Hr)",
+                  "Actual Worked (Hr)",
                 ]}
               />
             </Grid>
