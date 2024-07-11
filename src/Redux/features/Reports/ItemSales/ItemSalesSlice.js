@@ -12,7 +12,7 @@ const initialState = {
 // Generate pening , fulfilled and rejected action type
 export const fetchItemSalesData = createAsyncThunk(
   "ItemSalesSlice/fetchItemSalesData.",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     try {
       const { token, ...dataNew } = data;
 
@@ -36,7 +36,13 @@ export const fetchItemSalesData = createAsyncThunk(
         ];
       }
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error(error.response.data.message);
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );

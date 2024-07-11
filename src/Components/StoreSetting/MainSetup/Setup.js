@@ -193,15 +193,17 @@ const Setup = () => {
         ToastifyAlert(response.data.msg, "unsuccess");
       }
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if (error.response.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
       setLoader(false);
     }
   };
 
   return (
     <>
-      <Grid sx={{pb:11}}>
+      <Grid sx={{ pb: 11 }}>
         <OnlineOrderingPage
           loader={loader}
           onlineorderstatus={handleonlineorderstatus}
