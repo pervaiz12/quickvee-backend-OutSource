@@ -36,6 +36,7 @@ const InventoryExportLogic = () => {
   const [confirmModalOpensetting, setConfirmModalOpensetting] = useState(false);
   const [confirmfinalModalOpensetting, setConfirmFinalModalOpensetting] =
     useState(false);
+  const [checkedUPCInventory, setcheckedUPCInventory] = useState(true);
 
   const handleStoreInput = async (event) => {
     let { errors } = values;
@@ -81,7 +82,8 @@ const InventoryExportLogic = () => {
     const data = {
       store_name_from: values.store_name_from,
       store_name_to: values.store_name_to,
-      upc_check: values.upc_check,
+      // upc_check: values.upc_check,
+      upc_check: "1",
       ...userTypeDataNew,
     };
     setConfirmFinalModalOpen(false);
@@ -104,12 +106,11 @@ const InventoryExportLogic = () => {
         setsubmitmessage(response.data);
       }
     } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
-        getUnAutherisedTokenMessage();
+      if (error.response.status === 401) {
         handleCoockieExpire();
-      } else if (error.status == "Network Error") {
-        getNetworkError();
+        getUnAutherisedTokenMessage();
       }
+      ToastifyAlert("Error!", "error");
     }
     setLoader(false);
   };
@@ -296,6 +297,7 @@ const InventoryExportLogic = () => {
     setConfirmFinalModalOpensetting,
     confirmFinalLogic,
     confirmFinalSettingLogic,
+    checkedUPCInventory,
   };
 };
 
