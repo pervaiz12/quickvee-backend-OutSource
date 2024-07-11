@@ -300,7 +300,7 @@ const StoreWorkingHrs = ({ days, setDays, setLastCloseTimeState,merchant_id }) =
         <Grid item xs={12}>
           <Grid container sx={{ p: 2.5 }}>
             <Grid item xs={12}>
-              <h5 className="box_shadow_heading" style={{ marginBottom: "0" }}>
+              <h5 className="StoreSetting_heading-menu" style={{ marginBottom: "0" }}>
                 Store Working Hours
               </h5>
             </Grid>

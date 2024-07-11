@@ -207,7 +207,7 @@ const PickupDeliveryDetails = ({
       <Grid container className="box" ref={pickupDeliveryDetailsRef}>
         <Grid item xs={12} sx={{ padding: 2.5 }} className="box_shadow_div">
           <Grid container>
-            <h5 class="box_shadow_heading">Pickup & Delivery Details</h5>
+            <h5 class="StoreSetting_heading-menu">Pickup & Delivery Details</h5>
           </Grid>
           <Grid
             container
@@ -217,7 +217,7 @@ const PickupDeliveryDetails = ({
             sx={{ marginTop: 3 }}
           >
             <Grid item>
-              <h5 style={{ marginBottom: 0 }} className="box_shadow_heading">
+              <h5 style={{ marginBottom: 0 }} className="StoreSetting_heading-menu">
                 Enable Pickup
               </h5>
             </Grid>
@@ -280,7 +280,7 @@ const PickupDeliveryDetails = ({
             sx={{ marginTop: 3 }}
           >
             <Grid item>
-              <h5 style={{ marginBottom: 0 }} class="box_shadow_heading">
+              <h5 style={{ marginBottom: 0 }} class="StoreSetting_heading-menu">
                 Enable Delivery
               </h5>
             </Grid>
