@@ -6,6 +6,7 @@ import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import CustomHeader from "../../../reuseableComponents/CustomHeader";
 const DailyTtlReport = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -115,23 +116,18 @@ const DailyTtlReport = () => {
   const orderTypeList = ["All", "Pickup", "Delivery"];
   return (
     <>
-      <Grid container sx={{ padding: 2.5 }} className="box_shadow_div ">
+      <Grid container sx={{ pb: 2.5 }} className="box_shadow_div ">
         <Grid item xs={12}>
-          <Grid container>
-            <Grid item xs={12}>
-              <div className="q-category-bottom-header">
-                <span>Daily Total Report</span>
-              </div>
-            </Grid>
-          </Grid>
-          <Grid container>
+          <CustomHeader>Daily Total Report</CustomHeader>
+
+          <Grid container sx={{px:2.5,pt:1}}>
             <Grid item xs={12}>
               <h1 className="heading">Filter By</h1>
             </Grid>
           </Grid>
-          <Grid container spacing={2}>
+          <Grid container sx={{ px: 2.5 }} spacing={2}>
             <Grid item xs={12} sm={6} md={4}>
-              <label htmlFor="orderSourceFilter"> Order Source</label>
+              <label htmlFor="orderSourceFilter">Order Source</label>
               <SelectDropDown
                 sx={{ pt: 0.5 }}
                 listItem={orderSourceList.map((orderSource) => ({

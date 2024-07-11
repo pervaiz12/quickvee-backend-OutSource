@@ -24,8 +24,9 @@ import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import InputTextSearch from "../../reuseableComponents/InputTextSearch";
 import { priceFormate } from "../../hooks/priceFormate";
 import PasswordShow from "../../Common/passwordShow";
-import sortIcon from "../../Assests/Category/SortingW.svg"
+import sortIcon from "../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
+import CustomHeader from "../../reuseableComponents/CustomHeader";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -120,9 +121,12 @@ const LoyaltyProgramList = () => {
       !loyaltyprogramDataState.loading &&
       loyaltyprogramDataState.loyaltyprogramData
     ) {
-      setLoyaltyprogram(loyaltyprogramDataState.loyaltyprogramData.map((item)=>(
-        {...item,fullName: `${item.f_name || ""}  ${item.l_name || ""}`}
-      )));
+      setLoyaltyprogram(
+        loyaltyprogramDataState.loyaltyprogramData.map((item) => ({
+          ...item,
+          fullName: `${item.f_name || ""}  ${item.l_name || ""}`,
+        }))
+      );
     }
   }, [
     loyaltyprogramDataState.loading,
@@ -210,9 +214,8 @@ const LoyaltyProgramList = () => {
     </div> */}
 
       <Grid container className="box_shadow_div">
-        <Grid item className="q-category-bottom-header" xs={12}>
-          <h1 className="text-xl font-medium">Loyalty Program</h1>
-        </Grid>
+        <CustomHeader>Loyalty Program</CustomHeader>
+
         <Grid item xs={12}>
           <Grid container sx={{ padding: 2.5 }}>
             <Grid item xs={12}>
@@ -271,7 +274,7 @@ const LoyaltyProgramList = () => {
                           </StyledTableCell>
                         ))}
                       </TableHead>
-                      
+
                       <TableBody>
                         {loyaltyprogram.map((Loyaltydata, index) => (
                           <StyledTableRow key={Loyaltydata.id}>

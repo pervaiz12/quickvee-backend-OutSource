@@ -6,6 +6,7 @@ import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
+import CustomHeader from "../../../reuseableComponents/CustomHeader";
 
 const PaymentMethodReport = () => {
   const [filteredData, setFilteredData] = useState([]);
@@ -40,7 +41,7 @@ const PaymentMethodReport = () => {
         order_env: orderEnvValue,
         ...userTypeData,
       };
-      console.log("updatedData",updatedData);
+      console.log("updatedData", updatedData);
       setFilteredData(updatedData);
     } else {
       // Handle other cases or log an error
@@ -67,17 +68,10 @@ const PaymentMethodReport = () => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <Grid container sx={{ padding: 2.5 }}>
+          <CustomHeader>Payment Method Daily Report</CustomHeader>
+          <Grid container sx={{ px: 2.5, pt: 1 }}>
             <Grid item xs={12}>
-              <div className="q_details_header">
-                {" "}
-                Payment Method Daily Report
-              </div>
-            </Grid>
-          </Grid>
-          <Grid container sx={{ px: 2.5 }}>
-            <Grid item xs={12}>
-              <div className="q_details_header ">Filter by</div>
+              <div className="heading">Filter By</div>
             </Grid>
           </Grid>
           <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>

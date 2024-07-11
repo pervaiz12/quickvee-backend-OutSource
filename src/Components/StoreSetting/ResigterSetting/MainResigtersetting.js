@@ -5,6 +5,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import { Input } from "@material-tailwind/react";
 import RegisterSettingFormLogic from "./RegisterSettingFormLogic";
 import TextField from "@mui/material/TextField";
+import CustomHeader from "../../../reuseableComponents/CustomHeader";
 
 const MainResigtersetting = () => {
   // const [alertmsg, setAlertMsg] = useState('');
@@ -34,10 +35,10 @@ const MainResigtersetting = () => {
         <div className="q-attributes-main-page">
           <div className="q-resigtersetting-top-detail-section">
             <div className="">
+              <CustomHeader>Register Settings</CustomHeader>
               <div className="q-resigtersetting-bottom-section">
-                <div className="heading">Register Settings</div>
-
-                <div className="q_resigter_checkboxfiled flex-wrap mt-8">
+                
+                <div className="q_resigter_checkboxfiled flex-wrap mt-8 px-7">
                   <ul className="custom-checkbox-list flex space-x-5">
                     <label className="q_resigter_setting_section">
                       Stock Prompt
@@ -99,6 +100,174 @@ const MainResigtersetting = () => {
                     </label>
                   </ul>
                 </div>
+                <div className="q-resigtersetting-bottom-section mt-8 px-7">
+                  <div className="heading">Payment Method</div>
+
+                  <div className="q_resigter_checkboxfiled mt-8">
+                    <ul className="custom-checkbox-list flex space-x-5">
+                      <label className="q_resigter_setting_section">
+                        Food EBT
+                        {/* <input type="checkbox" checked="checked" />  */}
+                        <input
+                          type="checkbox"
+                          name="ebt_type[]"
+                          value="1"
+                          checked={values.ebt_type.split(",").includes("1")}
+                          onChange={handleRegisterSettingInput}
+                        />
+                        <span className="checkmark"></span>
+                      </label>
+
+                      <label className="q_resigter_setting_section">
+                        Cash EBT
+                        <input
+                          type="checkbox"
+                          name="ebt_type[]"
+                          value="2"
+                          checked={values.ebt_type.split(",").includes("2")}
+                          onChange={handleRegisterSettingInput}
+                        />
+                        <span className="checkmark"></span>
+                      </label>
+
+                      <label className="q_resigter_setting_section">
+                        Gift Card
+                        <input
+                          type="checkbox"
+                          name="ebt_type[]"
+                          value="3"
+                          checked={values.ebt_type.split(",").includes("3")}
+                          onChange={handleRegisterSettingInput}
+                        />
+                        <span className="checkmark"></span>
+                      </label>
+                    </ul>
+                  </div>
+                </div>
+                <div className="q-resigtersetting-bottom-section mt-8 px-7">
+                  <div className="heading">Quick Add</div>
+
+                  <div className="text-sm text-[#545454] CircularSTDBook">
+                    Quick Add If bar code scanned is not found
+                  </div>
+                  <div className="q_resigter flex-wrap mt-8">
+                    <ul className="custom-checkbox-list flex space-x-5">
+                      <label className="q_setting_radio_resigter">
+                        Display ‘Item not Found’
+                        <input
+                          type="radio"
+                          name="barcode_msg"
+                          value="1"
+                          onChange={handleRegisterSettingInput}
+                          checked={values.barcode_msg === "1"}
+                        />
+                        <span className="checkmark_section"></span>
+                      </label>
+
+                      <label className="q_setting_radio_resigter">
+                        Quick Enter, Forced
+                        <input
+                          type="radio"
+                          name="barcode_msg"
+                          value="2"
+                          onChange={handleRegisterSettingInput}
+                          checked={values.barcode_msg === "2"}
+                        />
+                        <span className="checkmark_section"></span>
+                      </label>
+                      <label className="q_setting_radio_resigter">
+                        Quick Enter, Prompt
+                        <input
+                          type="radio"
+                          name="barcode_msg"
+                          value="3"
+                          onChange={handleRegisterSettingInput}
+                          checked={values.barcode_msg === "3"}
+                        />
+                        <span className="checkmark_section"></span>
+                      </label>
+                      <label className="q_setting_radio_resigter">
+                        Full Enter, Forced
+                        <input
+                          type="radio"
+                          name="barcode_msg"
+                          value="4"
+                          onChange={handleRegisterSettingInput}
+                          checked={values.barcode_msg === "4"}
+                        />
+                        <span className="checkmark_section"></span>
+                      </label>
+                      <label className="q_setting_radio_resigter">
+                        Full Enter, Prompt
+                        <input
+                          type="radio"
+                          name="barcode_msg"
+                          value="5"
+                          onChange={handleRegisterSettingInput}
+                          checked={values.barcode_msg === "5"}
+                        />
+                        <span className="checkmark_section"></span>
+                      </label>
+                    </ul>
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-8 px-7">
+                  <div className="q_resigter_label">
+                    <label className="text-[#6A6A6A] " htmlFor="idlelogout">
+                      Idle Logout Minutes
+                    </label>
+                    <div className="w-full mt-2">
+                      {/* <Input
+                        className="q_input_resigter"
+                        name="idel_logout"
+                        onChange={handleRegisterSettingInput}
+                        value={values.idel_logout}
+                        placeholder="Enter idle logout"
+                      /> */}
+                      <TextField
+                        sx={{
+                          "& .MuiOutlinedInput-root": {
+                            "&.Mui-focused fieldset": {
+                              borderColor: "black",
+                            },
+                          },
+                        }}
+                        id="outlined-basic"
+                        type="text"
+                        name="idel_logout"
+                        placeholder="Enter idle logout"
+                        onChange={handleRegisterSettingInput}
+                        value={values.idel_logout}
+                        variant="outlined"
+                        size="small"
+                      />
+                    </div>
+                    <span className="input-error">
+                      {values.errors.idel_logout !== ""
+                        ? values.errors.idel_logout
+                        : ""}
+                    </span>
+                  </div>
+                  {/* <div className="q_resigter_label">
+                    <label className="text-[#6A6A6A] ml-2" htmlFor="devicename">
+                      device name
+                    </label>
+                    <div className="w-full">
+                      <Input
+                        className="q_input_resigter"
+                        name="device_name"
+                        onChange={handleRegisterSettingInput}
+                        value={values.device_name}
+                        placeholder="Enter device name"
+                      />
+                    </div>
+                    <span className="input-error">
+                      {values.errors.device_name !== ""
+                        ? values.errors.device_name
+                        : ""}
+                    </span>
+                  </div> */}
+                </div>
               </div>
             </div>
           </div>
@@ -106,59 +275,6 @@ const MainResigtersetting = () => {
       </div>
 
       {/* payment method */}
-
-      <div className="q-attributes-main-page">
-        <div className="box">
-          <div className="q-resigtersetting-top-detail-section">
-            <div>
-              <div className="q-resigtersetting-bottom-section">
-                <div className="heading">Payment Method</div>
-
-                <div className="q_resigter_checkboxfiled mt-8">
-                  <ul className="custom-checkbox-list flex space-x-5">
-                    <label className="q_resigter_setting_section">
-                      Food EBT
-                      {/* <input type="checkbox" checked="checked" />  */}
-                      <input
-                        type="checkbox"
-                        name="ebt_type[]"
-                        value="1"
-                        checked={values.ebt_type.split(",").includes("1")}
-                        onChange={handleRegisterSettingInput}
-                      />
-                      <span className="checkmark"></span>
-                    </label>
-
-                    <label className="q_resigter_setting_section">
-                      Cash EBT
-                      <input
-                        type="checkbox"
-                        name="ebt_type[]"
-                        value="2"
-                        checked={values.ebt_type.split(",").includes("2")}
-                        onChange={handleRegisterSettingInput}
-                      />
-                      <span className="checkmark"></span>
-                    </label>
-
-                    <label className="q_resigter_setting_section">
-                      Gift Card
-                      <input
-                        type="checkbox"
-                        name="ebt_type[]"
-                        value="3"
-                        checked={values.ebt_type.split(",").includes("3")}
-                        onChange={handleRegisterSettingInput}
-                      />
-                      <span className="checkmark"></span>
-                    </label>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* discount promote */}
       {/* <div className="q-resigtersetting-main-page">
@@ -290,151 +406,8 @@ const MainResigtersetting = () => {
         </div>
       </div> */}
       {/* quick add */}
-      <div className="q-attributes-main-page">
-        <div className="box">
-          <div className="q-resigtersetting-top-detail-section">
-            <div className="">
-              <div className="q-resigtersetting-bottom-section">
-                <div className="heading">Quick Add</div>
 
-                <div className="text-sm text-[#545454] CircularSTDBook">
-                  Quick Add If bar code scanned is not found
-                </div>
-                <div className="q_resigter flex-wrap mt-8">
-                  <ul className="custom-checkbox-list flex space-x-5">
-                    <label className="q_setting_radio_resigter">
-                      Display ‘Item not Found’
-                      <input
-                        type="radio"
-                        name="barcode_msg"
-                        value="1"
-                        onChange={handleRegisterSettingInput}
-                        checked={values.barcode_msg === "1"}
-                      />
-                      <span className="checkmark_section"></span>
-                    </label>
-
-                    <label className="q_setting_radio_resigter">
-                      Quick Enter, Forced
-                      <input
-                        type="radio"
-                        name="barcode_msg"
-                        value="2"
-                        onChange={handleRegisterSettingInput}
-                        checked={values.barcode_msg === "2"}
-                      />
-                      <span className="checkmark_section"></span>
-                    </label>
-                    <label className="q_setting_radio_resigter">
-                      Quick Enter, Prompt
-                      <input
-                        type="radio"
-                        name="barcode_msg"
-                        value="3"
-                        onChange={handleRegisterSettingInput}
-                        checked={values.barcode_msg === "3"}
-                      />
-                      <span className="checkmark_section"></span>
-                    </label>
-                    <label className="q_setting_radio_resigter">
-                      Full Enter, Forced
-                      <input
-                        type="radio"
-                        name="barcode_msg"
-                        value="4"
-                        onChange={handleRegisterSettingInput}
-                        checked={values.barcode_msg === "4"}
-                      />
-                      <span className="checkmark_section"></span>
-                    </label>
-                    <label className="q_setting_radio_resigter">
-                      Full Enter, Prompt
-                      <input
-                        type="radio"
-                        name="barcode_msg"
-                        value="5"
-                        onChange={handleRegisterSettingInput}
-                        checked={values.barcode_msg === "5"}
-                      />
-                      <span className="checkmark_section"></span>
-                    </label>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       {/* device  section */}
-
-      <div className="q-attributes-main-page" style={{ marginBottom: 100 }}>
-        <div className="box">
-          <div className="q-resigtersetting-top-detail-section">
-            <div>
-              <div className="q-resigtersetting-bottom-section">
-                <div className="q_setting_main_Section"></div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="q_resigter_label">
-                    <label className="text-[#6A6A6A] " htmlFor="idlelogout">
-                      Idle Logout Minutes
-                    </label>
-                    <div className="w-full mt-2">
-                      {/* <Input
-                        className="q_input_resigter"
-                        name="idel_logout"
-                        onChange={handleRegisterSettingInput}
-                        value={values.idel_logout}
-                        placeholder="Enter idle logout"
-                      /> */}
-                      <TextField
-                        sx={{
-                          "& .MuiOutlinedInput-root": {
-                            "&.Mui-focused fieldset": {
-                              borderColor: "black",
-                            },
-                          },
-                        }}
-                        id="outlined-basic"
-                        type="text"
-                        name="idel_logout"
-                        placeholder="Enter idle logout"
-                        onChange={handleRegisterSettingInput}
-                        value={values.idel_logout}
-                        variant="outlined"
-                        size="small"
-                      />
-                    </div>
-                    <span className="input-error">
-                      {values.errors.idel_logout !== ""
-                        ? values.errors.idel_logout
-                        : ""}
-                    </span>
-                  </div>
-                  {/* <div className="q_resigter_label">
-                    <label className="text-[#6A6A6A] ml-2" htmlFor="devicename">
-                      device name
-                    </label>
-                    <div className="w-full">
-                      <Input
-                        className="q_input_resigter"
-                        name="device_name"
-                        onChange={handleRegisterSettingInput}
-                        value={values.device_name}
-                        placeholder="Enter device name"
-                      />
-                    </div>
-                    <span className="input-error">
-                      {values.errors.device_name !== ""
-                        ? values.errors.device_name
-                        : ""}
-                    </span>
-                  </div> */}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
 
       {/* customer loyalty promote */}
       <div className="q-resigtersetting-main-page">
