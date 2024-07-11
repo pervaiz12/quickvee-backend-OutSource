@@ -275,6 +275,22 @@ export default function InfoFunction() {
       errorMessage.promotionalUrlError = "Enter a valid Promotional URL";
       isValidate = false;
     }
+    if (infoRecord.address_1 == "") {
+      errorMessage.address_1Error = "Address 1 is required";
+      isValidate = false;
+    }
+    if (infoRecord.city == "") {
+      errorMessage.cityError = "City is required";
+      isValidate = false;
+    }
+    if (infoRecord.zip == "") {
+      errorMessage.zipCodeError = "Zip is required";
+      isValidate = false;
+    }
+    if (infoRecord.state == "") {
+      errorMessage.stateNameError = "State is required";
+      isValidate = false;
+    }
 
     setErrors(errorMessage);
     return isValidate;
@@ -650,8 +666,42 @@ export default function InfoFunction() {
         } else {
           errorMessage.phoneError = "";
         }
+      } else if (value == "") {
+        errorMessage.phoneError = "Phone is required";
       } else {
         errorMessage.phoneError = "";
+      }
+    }
+    if (name == "address_1") {
+      if (value == "") {
+        // console.log(value.length)
+        errorMessage.address_1Error = "Address 1 is required";
+      } else {
+        errorMessage.address_1Error = "";
+      }
+    }
+    if (name == "city") {
+      if (value == "") {
+        // console.log(value.length)
+        errorMessage.cityError = "City is required";
+      } else {
+        errorMessage.cityError = "";
+      }
+    }
+    if (name == "zip") {
+      if (value == "") {
+        // console.log(value.length)
+        errorMessage.zipCodeError = "Zip is required";
+      } else {
+        errorMessage.zipCodeError = "";
+      }
+    }
+    if (name == "state") {
+      if (value == "") {
+        // console.log(value.length)
+        errorMessage.stateNameError = "State is required";
+      } else {
+        errorMessage.stateNameError = "";
       }
     }
     switch (name) {
@@ -690,8 +740,10 @@ export default function InfoFunction() {
   let CurrentValidate = (error) => {
     if (
       error.imageErrors == "" &&
-      error.bannerErrors == "" &&
-      error.phoneError == ""
+      error.phoneError == "" &&
+      error.address_1Error == "" &&
+      error.cityError == "" &&
+      error.zipCodeError == ""
     ) {
       return true;
     } else {
