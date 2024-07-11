@@ -61,8 +61,8 @@ const Itemdatadetails = ({
 
   useEffect(() => {
     // Dispatch the action to fetch data when the component mounts
-    getOrderTypeData();
-  }, [dispatch, data, selectedOrderSource]);
+    data && getOrderTypeData();
+  }, [dispatch, data,selectedOrderSource]);
   const getOrderTypeData = async () => {
     try {
       await dispatch(fetchOrderTypeData(data)).unwrap();
@@ -84,6 +84,7 @@ const Itemdatadetails = ({
     orderReportDataState,
     orderReportDataState.loading,
     orderReportDataState.orderTypeData,
+    data
   ]);
 
   if (!data || data.length === 0) {

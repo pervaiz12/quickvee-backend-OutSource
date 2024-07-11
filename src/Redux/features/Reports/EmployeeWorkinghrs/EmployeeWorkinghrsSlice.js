@@ -21,7 +21,7 @@ export const fetchemployeewrkhrs = createAsyncThunk(
         {
           headers: {
             "Content-Type": "multipart/form-data",
-            // Authorization: `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
         }
       );

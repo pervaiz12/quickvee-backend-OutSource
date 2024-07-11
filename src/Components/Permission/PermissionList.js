@@ -32,6 +32,7 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableRow from "@mui/material/TableRow";
 import PasswordShow from "./../../Common/passwordShow";
+import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -247,73 +248,77 @@ const PermissionList = () => {
               </Grid>
             </Grid> */}
             <Grid container>
-              <TableContainer>
-                <StyledTable
-                  sx={{ minWidth: 500 }}
-                  aria-label="customized table"
-                >
-                  <TableHead>
-                    {/* {TableRow.map((row) => (
-                    <StyledTableCell>{row}</StyledTableCell>
-                  ))} */}
-                    <StyledTableCell>Sub Permission</StyledTableCell>
-                    <StyledTableCell>Permission</StyledTableCell>
-                    <StyledTableCell></StyledTableCell>
-                    <StyledTableCell></StyledTableCell>
-                  </TableHead>
-                  <TableBody>
-                    {allpermission?.length
-                      ? allpermission?.map((data, index) => {
-                          return (
-                            <StyledTableRow>
-                              {/* <StyledTableCell>
-                              <div class="flex">
-                                <div class="text-[#000000] order_method capitalize">
-                                  {data?.sub_permission}
-                                </div>
-                                <div class="mx-2 ">(State: {data.a_state})</div>
-                              </div>
-                              <div class="text-[#818181] lowercase">
-                                {data?.permission?.length < 18
-                                  ? data?.permission
-                                  : data?.permission?.slice(0, 18) + `...` ||
-                                    ""}
-                              </div>
-                            </StyledTableCell> */}
-                              <StyledTableCell>
-                                <div class="text-[#000000] order_method ">
-                                  {data?.sub_permission}
-                                </div>
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                <div class="text-[#000000] order_method capitalize">
-                                  {data?.permission?.length < 18
-                                    ? data?.permission
-                                    : data?.permission?.slice(0, 18) + `...` ||
-                                      ""}
-                                </div>
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                <EditPermissionModal selected={data} />
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                <img
-                                  class="delete cursor-pointer"
-                                  data-id="${[data.id,data.merchant_id,]}"
-                                  onClick={() =>
-                                    handleDeletePermission(data?.id)
-                                  }
-                                  src={Delete}
-                                  alt="Delete"
-                                />
-                              </StyledTableCell>
-                            </StyledTableRow>
-                          );
-                        })
-                      : ""}
-                  </TableBody>
-                </StyledTable>
-              </TableContainer>
+              {AllPermissionDataState.loading ? (
+                <SkeletonTable columns={["Sub Permission","Permission","",""]}/>
+              ) : (
+                <TableContainer>
+                  <StyledTable
+                    sx={{ minWidth: 500 }}
+                    aria-label="customized table"
+                  >
+                    <TableHead>
+                      {/* {TableRow.map((row) => (
+                     <StyledTableCell>{row}</StyledTableCell>
+                   ))} */}
+                      <StyledTableCell>Sub Permission</StyledTableCell>
+                      <StyledTableCell>Permission</StyledTableCell>
+                      <StyledTableCell></StyledTableCell>
+                      <StyledTableCell></StyledTableCell>
+                    </TableHead>
+                    <TableBody>
+                      {allpermission?.length
+                        ? allpermission?.map((data, index) => {
+                            return (
+                              <StyledTableRow>
+                                {/* <StyledTableCell>
+                               <div class="flex">
+                                 <div class="text-[#000000] order_method capitalize">
+                                   {data?.sub_permission}
+                                 </div>
+                                 <div class="mx-2 ">(State: {data.a_state})</div>
+                               </div>
+                               <div class="text-[#818181] lowercase">
+                                 {data?.permission?.length < 18
+                                   ? data?.permission
+                                   : data?.permission?.slice(0, 18) + `...` ||
+                                     ""}
+                               </div>
+                             </StyledTableCell> */}
+                                <StyledTableCell>
+                                  <div class="text-[#000000] order_method ">
+                                    {data?.sub_permission}
+                                  </div>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <div class="text-[#000000] order_method capitalize">
+                                    {data?.permission?.length < 18
+                                      ? data?.permission
+                                      : data?.permission?.slice(0, 18) +
+                                          `...` || ""}
+                                  </div>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <EditPermissionModal selected={data} />
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <img
+                                    class="delete cursor-pointer"
+                                    data-id="${[data.id,data.merchant_id,]}"
+                                    onClick={() =>
+                                      handleDeletePermission(data?.id)
+                                    }
+                                    src={Delete}
+                                    alt="Delete"
+                                  />
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            );
+                          })
+                        : ""}
+                    </TableBody>
+                  </StyledTable>
+                </TableContainer>
+              )}
             </Grid>
           </Grid>
         </Grid>

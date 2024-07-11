@@ -8,17 +8,21 @@ import { padding } from "@mui/system";
 import dayjs from "dayjs";
 import { Grid } from "@mui/material";
 import { useMediaQuery } from "@mui/material";
-const DateRangeComponent = ({ onDateRangeChange, selectedDateRange }) => {
+const DateRangeComponent = ({
+  onDateRangeChange,
+  selectedDateRange,
+  future_date,
+}) => {
   const isDesktopWtdth = useMediaQuery("(max-width:710px)");
   // console.log("isDesktopWtdth : ", isDesktopWtdth);
   const today = dayjs();
   const [isTablet, setIsTablet] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-
+  const [futureDateState, setFutureDate] = useState(new Date());
   const startDateRef = React.useRef(null);
   const endDateRef = React.useRef(null);
-
+  console.log("futureDateState", new Date(futureDateState));
   const handleStartDateIconClick = () => {
     startDateRef.current.setOpen(true);
   };
@@ -101,6 +105,15 @@ const DateRangeComponent = ({ onDateRangeChange, selectedDateRange }) => {
   //   }
   // }, [selectedDateRange]);
   // console.log("inside date range selectedDateRange", selectedDateRange);
+  useEffect(() => {
+    const today = new Date();
+    let gotFurureDate = new Date();
+    future_date &&
+      setFutureDate(
+        gotFurureDate.setDate(today.getDate() + (parseInt(future_date)+1))
+      );
+  }, [future_date]);
+  
   useEffect(() => {
     handleSearch();
 
@@ -216,7 +229,7 @@ const DateRangeComponent = ({ onDateRangeChange, selectedDateRange }) => {
                 startDate={startDate}
                 endDate={endDate}
                 minDate={startDate}
-                maxDate={new Date()} // Set maxDate to today's date
+                maxDate={futureDateState ? futureDateState : new Date()} // Set maxDate to today's date
                 dateFormat="MMMM d, yyyy"
                 className="q_input_details ml-0"
                 ref={endDateRef}
