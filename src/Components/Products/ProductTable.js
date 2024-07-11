@@ -280,7 +280,7 @@ const ProductTable = ({
     };
 
     try {
-      await dispatch(fetchProductsData(data1));
+      await dispatch(fetchProductsData(data1)).unwrap();
       // Handle response if needed
     } catch (error) {
       if (error.status == 401 || error.response.status === 401) {
@@ -472,7 +472,7 @@ const ProductTable = ({
                         )
                       }
                     >
-                      <DragDropContext onDragEnd={onDragEnd}>
+                      <DragDropContext onDragEnd={null}>
                         <Droppable droppableId="productTable">
                           {(provided) => (
                             <StyledTable
@@ -613,7 +613,7 @@ const ProductTable = ({
                                               <p className="categories-title">
                                                 {userTypeData?.login_type ===
                                                   "superadmin" &&
-                                                inventoryApproval &&
+                                                // inventoryApproval &&
                                                 product?.show_status === "0" ? (
                                                   <div className="categories-title">
                                                     <div className="flex flex-wrap gap-3 ">

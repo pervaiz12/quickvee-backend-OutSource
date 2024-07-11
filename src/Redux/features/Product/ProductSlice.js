@@ -235,7 +235,7 @@ export const addProduct = createAsyncThunk(
 // dropdown content
 export const fetchVarientList = createAsyncThunk(
   "products/fetchVarientList",
-  async (payload) => {
+  async (payload, { rejectWithValue }) => {
     const { token, ...newData } = payload;
     try {
       const response = await axios.post(
@@ -250,14 +250,20 @@ export const fetchVarientList = createAsyncThunk(
       );
       return response?.data;
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
 
 export const fetchCategoryList = createAsyncThunk(
   "products/fetchCategoryList",
-  async (payload) => {
+  async (payload, { rejectWithValue }) => {
     const token = payload.get("token"); // Extract the token from FormData
     payload.delete("token");
     try {
@@ -273,7 +279,13 @@ export const fetchCategoryList = createAsyncThunk(
       );
       return response?.data;
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error("Internal Server Error");
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );

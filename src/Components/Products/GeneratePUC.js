@@ -137,8 +137,8 @@ const GeneratePUC = ({
             {/* <span className="varient-edit-text"> {isVarientEdit ? "Variants" : ''}</span> */}
           </div>
           {formValue?.length ? (
-            <div className="q-category-bottom-header">
-              <span>
+            <div className="q-category-bottom-header varient-generateUpc-row">
+              <span className="variant-title">
                 {isMultipleVarient
                   ? "Variants"
                   : productInfo?.title
@@ -149,7 +149,10 @@ const GeneratePUC = ({
               </span>
               <span></span>
               {!isVarientEdit ? (
-                <p onClick={() => handleGenerateUPC(20)}>
+                <p
+                  onClick={() => handleGenerateUPC(20)}
+                  className="generateUpc"
+                >
                   Generate UPC
                   {/* <img src={AddIcon} alt="add-icon" />{" "} */}
                 </p>
@@ -165,7 +168,7 @@ const GeneratePUC = ({
                 return (
                   <div className="qvrow product-varient-form" key={index}>
                     {isMultipleVarient ? (
-                      <div className="mx-4 my-4">
+                      <div className="my-4 varient-title-name">
                         {productInfo?.title
                           ? productInfo?.title + "  -  " + varientTitle[index]
                           : varientTitle[index]}
@@ -178,9 +181,16 @@ const GeneratePUC = ({
                         ? formData?.map((inp, i) => {
                             return (
                               // <div className="col-qv-2" key={i}>
-                              <Grid item xs={6} sm={4} md={3} lg={2.4}>
+                              <Grid
+                                item
+                                xs={6}
+                                sm={4}
+                                md={3}
+                                lg={2.4}
+                                className="varient-form"
+                              >
                                 <div className="q-add-categories-single-input">
-                                  <label>{inp?.label}</label>
+                                  <label clas>{inp?.label}</label>
                                   <div className="input_area">
                                     <input
                                       class="varient-input-field"
