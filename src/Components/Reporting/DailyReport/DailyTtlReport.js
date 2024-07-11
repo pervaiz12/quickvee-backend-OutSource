@@ -8,7 +8,7 @@ import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent"
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 const DailyTtlReport = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
-  useAuthDetails();
+    useAuthDetails();
   const [filteredData, setFilteredData] = useState([]);
   const [isTablet, setIsTablet] = useState(false);
 
@@ -53,7 +53,7 @@ const DailyTtlReport = () => {
         order_env: orderEnvValue,
         order_typ: orderTypValue,
       };
-      
+
       setFilteredData(updatedData);
     } else {
       // Handle other cases or log an error
@@ -68,8 +68,6 @@ const DailyTtlReport = () => {
     useState(false);
   const [orderTypeDropdownVisible, setOrderTypeDropdownVisible] =
     useState(false);
-
-
 
   const toggleDropdown = (dropdown) => {
     switch (dropdown) {
@@ -121,7 +119,9 @@ const DailyTtlReport = () => {
         <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
-              <h1 className="heading">Daily Total Report</h1>
+              <div className="q-category-bottom-header">
+                <span>Daily Total Report</span>
+              </div>
             </Grid>
           </Grid>
           <Grid container>
@@ -133,7 +133,7 @@ const DailyTtlReport = () => {
             <Grid item xs={12} sm={6} md={4}>
               <label htmlFor="orderSourceFilter"> Order Source</label>
               <SelectDropDown
-              sx={{pt:0.5}}
+                sx={{ pt: 0.5 }}
                 listItem={orderSourceList.map((orderSource) => ({
                   title: orderSource,
                 }))}
@@ -146,7 +146,7 @@ const DailyTtlReport = () => {
             <Grid item xs={12} sm={6} md={4}>
               <label> Order Type</label>
               <SelectDropDown
-               sx={{pt:0.5}}
+                sx={{ pt: 0.5 }}
                 listItem={orderTypeList.map((orderSource) => ({
                   title: orderSource,
                 }))}

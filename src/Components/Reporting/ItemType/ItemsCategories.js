@@ -23,7 +23,7 @@ const ItemsCategories = () => {
   const [loading, setLoading] = useState(false);
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const [visible, setVisible] = useState(false);
-  const [filteredData, setFilteredData] = useState([]);
+  const [filteredData, setFilteredData] = useState(null);
   const [orderDetailData, setOrderDetailData] = useState({});
   const [orderDetailDataList, setOrderDetailDataList] = useState([]);
   console.log("orderDetailData", orderDetailDataList);
@@ -32,7 +32,9 @@ const ItemsCategories = () => {
     LoginAllStore,
     userTypeData,
     GetSessionLogin,
+    future_date,
   } = useAuthDetails();
+
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   const handleDataFiltered = (data) => {
     if (typeof data === "object") {
@@ -211,7 +213,7 @@ const ItemsCategories = () => {
         </Grid>
       </Grid>
 
-      <DateRangeComponent onDateRangeChange={handleDataFiltered} />
+      <DateRangeComponent onDateRangeChange={handleDataFiltered} future_date={future_date} />
 
       <Itemdatadetails
         data={filteredData}

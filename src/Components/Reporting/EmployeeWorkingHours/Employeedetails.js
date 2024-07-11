@@ -14,6 +14,8 @@ import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
 import { priceFormate } from "../../../hooks/priceFormate";
 import PasswordShow from "../../../Common/passwordShow";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import Skeleton from "react-loading-skeleton";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -146,170 +148,201 @@ const Employeedetails = (props) => {
     return formattedDate;
   };
 
-  if (!allEmpWorkingHrsData || Object.keys(allEmpWorkingHrsData).length === 0) {
-    return (
-      <>
-        <Grid container sx={{ padding: 2.5 }} className="box_shadow_div">
-          <Grid item xs={12}>
-            <p>No. Data found.</p>
-          </Grid>
-        </Grid>
-      </>
-    );
-  }
+  // if (!allEmpWorkingHrsData || Object.keys(allEmpWorkingHrsData).length === 0) {
+  //   return (
+  //     <>
+  //       <Grid container sx={{ padding: 2.5 }} className="box_shadow_div">
+  //         <Grid item xs={12}>
+  //           <p>No. Data found.</p>
+  //         </Grid>
+  //       </Grid>
+  //     </>
+  //   );
+  // }
   return (
     <>
       <div className="box">
-        {allEmpWorkingHrsData &&
-          Object.keys(allEmpWorkingHrsData).map((employeeName, index) => (
-            <>
-              <Grid container className="box_shadow_div">
-                <Grid item xs={12}>
-                  <div className="q-attributes-bottom-header">
-                    <span>{employeeName}</span>
-                  </div>
-                  <TableContainer>
-                    <StyledTable
-                      sx={{ minWidth: 500 }}
-                      aria-label="customized table"
-                    >
-                      <TableHead>
-                        <StyledTableCell>Date Worked</StyledTableCell>
-                        <StyledTableCell>Clock In</StyledTableCell>
-                        <StyledTableCell>Clock Out</StyledTableCell>
-                        <StyledTableCell>Total Worked (Hr)</StyledTableCell>
-                        <StyledTableCell>Total Break (Hr)</StyledTableCell>
-                        <StyledTableCell>Actual Worked (Hr)</StyledTableCell>
-                      </TableHead>
-                      <TableBody>
-                        {Array.isArray(allEmpWorkingHrsData[employeeName]) &&
-                          allEmpWorkingHrsData[employeeName].map(
-                            (workData, dataIndex) => (
-                              <>
-                                <StyledTableRow>
-                                  <StyledTableCell>
-                                    <p>{formatDate(workData.work_date)}</p>
-                                  </StyledTableCell>
-                                  <StyledTableCell>
-                                    <p>{workData.first_check_in_time}</p>
-                                  </StyledTableCell>
-                                  <StyledTableCell>
-                                    <p>{workData.last_check_out_time}</p>
-                                  </StyledTableCell>
-                                  <StyledTableCell>
-                                    <p>
-                                      {priceFormate(
-                                        (
-                                          parseFloat(
-                                            convertSecondsToHours(
-                                              workData.total_seconds_worked
-                                            )
-                                          ) || 0
-                                        ).toFixed(2)
-                                      )}
-                                    </p>
-                                  </StyledTableCell>
-                                  <StyledTableCell>
-                                    <p>
-                                      {priceFormate(
-                                        (
-                                          parseFloat(
-                                            convertSecondsToHours(
-                                              workData.total_seconds_break
-                                            )
-                                          ) || 0
-                                        ).toFixed(2)
-                                      )}
-                                    </p>
-                                  </StyledTableCell>
-                                  <StyledTableCell>
-                                    <p>
-                                      {priceFormate(
-                                        (
-                                          parseFloat(
-                                            convertSecondsToHours(
-                                              workData.effective_seconds_worked
-                                            )
-                                          ) || 0
-                                        ).toFixed(2)
-                                      )}
-                                    </p>
-                                  </StyledTableCell>
-                                </StyledTableRow>
-                              </>
-                            )
-                          )}
-                        {Array.isArray(allEmpWorkingHrsData[employeeName]) && (
-                          <StyledTableRow>
-                            <StyledTableCell></StyledTableCell>
-                            <StyledTableCell></StyledTableCell>
-                            <StyledTableCell>
-                              <p
-                                style={{
-                                  color: "#0A64F9",
-                                }}
-                              >
-                                Total
-                              </p>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <p
-                                style={{
-                                  color: "#0A64F9",
-                                }}
-                              >
-                                {priceFormate(
-                                  calTotalWork(
-                                    allEmpWorkingHrsData[employeeName]
-                                  ).toFixed(2)
-                                )}
-                              </p>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <p
-                                style={{
-                                  color: "#0A64F9",
-                                }}
-                              >
-                                {priceFormate(
-                                  parseFloat(
-                                    calTotalBreak(
-                                      allEmpWorkingHrsData[employeeName]
-                                    )
-                                  ).toFixed(2)
-                                )}
-                              </p>
-                            </StyledTableCell>
-                            <StyledTableCell>
-                              <p
-                                style={{
-                                  color: "#0A64F9",
-                                }}
-                              >
-                                {priceFormate(
-                                  parseFloat(
-                                    calTotalActualWork(
-                                      allEmpWorkingHrsData[employeeName]
-                                    )
-                                  ).toFixed(2)
-                                )}
-                              </p>
-                            </StyledTableCell>
-                          </StyledTableRow>
-                        )}
-                        {!Array.isArray(allEmpWorkingHrsData[employeeName]) && (
-                          <Grid container sx={{ padding: 2.5 }}>
-                            <Grid item xs={12}>
-                              <p>No. Data found.</p>
-                            </Grid>
-                          </Grid>
-                        )}
-                      </TableBody>
-                    </StyledTable>
-                  </TableContainer>
-                </Grid>
+        {AllEmpWorkingHrsDataState.loading ? (
+          <>
+            <Grid container className="box_shadow_div">
+              <Grid item xs={12}>
+                <div className="q-attributes-bottom-header">
+                  <span>
+                    <Skeleton />
+                  </span>
+                </div>
               </Grid>
-              {/* <div
+              <SkeletonTable
+                columns={[
+                  "Date Worked",
+                  "Clock In",
+                  "Clock Out",
+                  "Total Worked (Hr)",
+                  "Total Break (Hr)",
+                ]}
+              />
+            </Grid>
+          </>
+        ) : (
+          <>
+            {allEmpWorkingHrsData &&
+              Object.keys(allEmpWorkingHrsData).map((employeeName, index) => (
+                <>
+                  <Grid container className="box_shadow_div">
+                    <Grid item xs={12}>
+                      <div className="q-attributes-bottom-header">
+                        <span>{employeeName}</span>
+                      </div>
+                      <TableContainer>
+                        <StyledTable
+                          sx={{ minWidth: 500 }}
+                          aria-label="customized table"
+                        >
+                          <TableHead>
+                            <StyledTableCell>Date Worked</StyledTableCell>
+                            <StyledTableCell>Clock In</StyledTableCell>
+                            <StyledTableCell>Clock Out</StyledTableCell>
+                            <StyledTableCell>Total Worked (Hr)</StyledTableCell>
+                            <StyledTableCell>Total Break (Hr)</StyledTableCell>
+                            <StyledTableCell>
+                              Actual Worked (Hr)
+                            </StyledTableCell>
+                          </TableHead>
+                          <TableBody>
+                            {Array.isArray(
+                              allEmpWorkingHrsData[employeeName]
+                            ) && allEmpWorkingHrsData[employeeName].length &&
+                              allEmpWorkingHrsData[employeeName].map(
+                                (workData, dataIndex) => (
+                                  <>
+                                    <StyledTableRow>
+                                      <StyledTableCell>
+                                        <p>{formatDate(workData.work_date)}</p>
+                                      </StyledTableCell>
+                                      <StyledTableCell>
+                                        <p>{workData.first_check_in_time}</p>
+                                      </StyledTableCell>
+                                      <StyledTableCell>
+                                        <p>{workData.last_check_out_time}</p>
+                                      </StyledTableCell>
+                                      <StyledTableCell>
+                                        <p>
+                                          {priceFormate(
+                                            (
+                                              parseFloat(
+                                                convertSecondsToHours(
+                                                  workData.total_seconds_worked
+                                                )
+                                              ) || 0
+                                            ).toFixed(2)
+                                          )}
+                                        </p>
+                                      </StyledTableCell>
+                                      <StyledTableCell>
+                                        <p>
+                                          {priceFormate(
+                                            (
+                                              parseFloat(
+                                                convertSecondsToHours(
+                                                  workData.total_seconds_break
+                                                )
+                                              ) || 0
+                                            ).toFixed(2)
+                                          )}
+                                        </p>
+                                      </StyledTableCell>
+                                      <StyledTableCell>
+                                        <p>
+                                          {priceFormate(
+                                            (
+                                              parseFloat(
+                                                convertSecondsToHours(
+                                                  workData.effective_seconds_worked
+                                                )
+                                              ) || 0
+                                            ).toFixed(2)
+                                          )}
+                                        </p>
+                                      </StyledTableCell>
+                                    </StyledTableRow>
+                                  </>
+                                )
+                              )}
+                            {Array.isArray(
+                              allEmpWorkingHrsData[employeeName]
+                            ) && (
+                              <StyledTableRow>
+                                <StyledTableCell></StyledTableCell>
+                                <StyledTableCell></StyledTableCell>
+                                <StyledTableCell>
+                                  <p
+                                    style={{
+                                      color: "#0A64F9",
+                                    }}
+                                  >
+                                    Total
+                                  </p>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <p
+                                    style={{
+                                      color: "#0A64F9",
+                                    }}
+                                  >
+                                    {priceFormate(
+                                      calTotalWork(
+                                        allEmpWorkingHrsData[employeeName]
+                                      ).toFixed(2)
+                                    )}
+                                  </p>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <p
+                                    style={{
+                                      color: "#0A64F9",
+                                    }}
+                                  >
+                                    {priceFormate(
+                                      parseFloat(
+                                        calTotalBreak(
+                                          allEmpWorkingHrsData[employeeName]
+                                        )
+                                      ).toFixed(2)
+                                    )}
+                                  </p>
+                                </StyledTableCell>
+                                <StyledTableCell>
+                                  <p
+                                    style={{
+                                      color: "#0A64F9",
+                                    }}
+                                  >
+                                    {priceFormate(
+                                      parseFloat(
+                                        calTotalActualWork(
+                                          allEmpWorkingHrsData[employeeName]
+                                        )
+                                      ).toFixed(2)
+                                    )}
+                                  </p>
+                                </StyledTableCell>
+                              </StyledTableRow>
+                            )}
+                            {!Array.isArray(
+                              allEmpWorkingHrsData[employeeName]
+                            ) && (
+                              <Grid container sx={{ padding: 2.5 }}>
+                                <Grid item xs={12}>
+                                  <p>No. Data found.</p>
+                                </Grid>
+                              </Grid>
+                            )}
+                          </TableBody>
+                        </StyledTable>
+                      </TableContainer>
+                    </Grid>
+                  </Grid>
+                  {/* <div
                 key={index}
                 className="q-attributes-bottom-detail-section mb-3"
               >
@@ -383,8 +416,10 @@ const Employeedetails = (props) => {
                   </div>
                 </div>
               </div> */}
-            </>
-          ))}
+                </>
+              ))}
+          </>
+        )}
       </div>
     </>
   );
