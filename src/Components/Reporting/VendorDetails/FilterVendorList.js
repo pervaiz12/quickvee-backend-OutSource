@@ -5,8 +5,9 @@ import { BASE_URL, VENDORS_LIST } from "../../../Constants/Config";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
+import CustomHeader from "../../../reuseableComponents/CustomHeader";
 
-const FilterVendorList = ({ title, onVendorChange, }) => {
+const FilterVendorList = ({ title, onVendorChange }) => {
   const {
     LoginGetDashBoardRecordJson,
     LoginAllStore,
@@ -49,14 +50,12 @@ const FilterVendorList = ({ title, onVendorChange, }) => {
     }
   };
   const handleOnChangeFunction = (option) => {
-    if(option === "All") {
+    if (option === "All") {
       setSelectedOption(option);
-
-    }else{
+    } else {
       setSelectedOption(option.name);
     }
-    onVendorChange(option)
-   
+    onVendorChange(option);
   };
 
   useEffect(() => {
@@ -74,14 +73,11 @@ const FilterVendorList = ({ title, onVendorChange, }) => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <Grid container sx={{ padding: 2.5 }}>
+          <CustomHeader>{title}</CustomHeader>
+          
+          <Grid container sx={{ px: 2.5,pt:1 }}>
             <Grid item xs={12}>
-              <div className="q_details_header">{title}</div>
-            </Grid>
-          </Grid>
-          <Grid container sx={{ px: 2.5 }}>
-            <Grid item xs={12}>
-              <div className="q_details_header ">Filter by</div>
+              <div className="heading">Filter by</div>
             </Grid>
           </Grid>
           <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>

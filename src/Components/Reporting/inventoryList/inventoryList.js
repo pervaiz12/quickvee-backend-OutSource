@@ -4,6 +4,7 @@ import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import BasicTextFields from "../../../reuseableComponents/TextInputField";
 import InventoryLogic from "./InventoryLogic";
 import Pagination from "./pagination";
+import CustomHeader from "../../../reuseableComponents/CustomHeader";
 export default function InventoryList() {
   const {
     handleChangeInventory,
@@ -22,27 +23,9 @@ export default function InventoryList() {
   return (
     <>
       <Grid container className="box_shadow_div">
+        <CustomHeader>Inventory List Report</CustomHeader>
         <Grid item xs={12}>
-          {/* <Grid container sx={{ padding: 2.5 }}>
-            <Grid item xs={12}>
-              <div className="q_details_header">
-                Top Sellers - Overall Top 10
-              </div>
-            </Grid>
-          </Grid> */}
-          {/* <Grid container sx={{ px: 2.5 }}>
-            <Grid xs={12} sm={6} md={4}>
-              <div className="q_details_header ">Filter by</div>
-            </Grid>
-          </Grid> */}
-          <Grid container sx={{ p: 2.5 }}>
-            <Grid item xs={12}>
-              <h1 style={{ marginBottom: 0 }} className="heading ">
-                Inventory List Report
-              </h1>
-            </Grid>
-          </Grid>
-          <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
+          <Grid container spacing={2} sx={{ px: 2.5, py: 2.5 }}>
             <Grid item xs={12} sm={6} md={4}>
               <label
                 className="q-details-page-label"

@@ -8,6 +8,7 @@ import Discount_per_sales_logic from "./discount_per_sales_logic";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import DashboardTables from "./paginationTable";
 import { Grid } from "@mui/material";
+import CustomHeader from "../../../reuseableComponents/CustomHeader";
 
 export default function Discount_Per_Sales() {
   const {
@@ -25,16 +26,11 @@ export default function Discount_Per_Sales() {
     <>
       <Grid container>
         <Grid item xs={12}>
-          <Grid container sx={{ padding: 2.5 }} className="box_shadow_div">
+          <Grid container sx={{ pb: 2.5 }} className="box_shadow_div">
             <Grid item xs={12}>
-              <Grid container sx={{}}>
-                <Grid item xs={12}>
-                  <h1 style={{  }} className="heading ">
-                    Discount Per Sales Person Report
-                  </h1>
-                </Grid>
-              </Grid>
-              <Grid container>
+              <CustomHeader>Discount Per Sales Person Report</CustomHeader>
+
+              <Grid container sx={{px:2.5,pt:2.5}}>
                 <Grid item xs={6}>
                   <label htmlFor="orderSourceFilter">Select Employee</label>
                   <SelectDropDown
@@ -60,7 +56,6 @@ export default function Discount_Per_Sales() {
                 loader={loader}
                 merchant_id={merchant_new_id}
                 sortByItemName={sortByItemName}
-                
               />
             </Grid>
           </Grid>

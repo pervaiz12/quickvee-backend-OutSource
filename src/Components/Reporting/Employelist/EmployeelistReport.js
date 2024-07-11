@@ -15,6 +15,7 @@ import TableRow from "@mui/material/TableRow";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import CustomHeader from "../../../reuseableComponents/CustomHeader";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -106,16 +107,20 @@ const EmployeelistReport = () => {
   return (
     <>
       <Grid container className="box_shadow_div">
+        <CustomHeader>Employee List </CustomHeader>
         <Grid item xs={12}>
-          <Grid container sx={{ padding: 2.5 }}>
-            <Grid item xs={12}>
-              <div className="q_details_header">Employee List </div>
-            </Grid>
-          </Grid>
           <Grid container>
             <Grid item xs={12}>
               {AllEmployeeListState.loading ? (
-                <SkeletonTable columns={["Employee Name","PIN","Contact","Email","Address"]}/>
+                <SkeletonTable
+                  columns={[
+                    "Employee Name",
+                    "PIN",
+                    "Contact",
+                    "Email",
+                    "Address",
+                  ]}
+                />
               ) : (
                 <TableContainer>
                   <StyledTable

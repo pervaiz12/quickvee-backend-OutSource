@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
+import CustomHeader from "../../../reuseableComponents/CustomHeader";
 
 const FilterCatDetails = ({ onFilterDataChange, title, showcat }) => {
   const [selectedOrderSource, setSelectedOrderSource] = useState("All");
@@ -40,15 +41,11 @@ const FilterCatDetails = ({ onFilterDataChange, title, showcat }) => {
   return (
     <>
       <Grid container className="box_shadow_div">
+        <CustomHeader>{title}</CustomHeader>
         <Grid item xs={12}>
-          <Grid container sx={{ padding: 2.5 }}>
+          <Grid container sx={{ px: 2.5, pt: 1 }}>
             <Grid item xs={12}>
-              <div className="q_details_header">{title}</div>
-            </Grid>
-          </Grid>
-          <Grid container sx={{ px: 2.5 }}>
-            <Grid item xs={12}>
-              <div className="q_details_header ">Filter by</div>
+              <div className="heading">Filter By</div>
             </Grid>
           </Grid>
           <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
@@ -60,7 +57,7 @@ const FilterCatDetails = ({ onFilterDataChange, title, showcat }) => {
                 Order Source
               </label>
               <SelectDropDown
-              sx={{pt:0.5}}
+                sx={{ pt: 0.5 }}
                 listItem={orderSourceList.map((item) => ({ title: item }))}
                 title={"title"}
                 dropdownFor={"orderSource"}
@@ -76,7 +73,7 @@ const FilterCatDetails = ({ onFilterDataChange, title, showcat }) => {
                 Order Source
               </label>
               <SelectDropDown
-              sx={{pt:0.5}}
+                sx={{ pt: 0.5 }}
                 listItem={orderTypeList.map((item) => ({ title: item }))}
                 title={"title"}
                 dropdownFor={"orderType"}
