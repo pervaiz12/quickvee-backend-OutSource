@@ -20,7 +20,8 @@ import AlertModal from "../../../reuseableComponents/AlertModal";
 import PasswordShow from "../../../Common/passwordShow";
 const Setup = () => {
   // const [updateDetails, setUpdateDetails] = useState(true);
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [OnlineOrderStatus, setOnlineOrderStatus] = useState("");
   const [EnableOrderNumber, setEnableOrderNumber] = useState("");
   const [MinPickData, setMinPickData] = useState("");
@@ -193,15 +194,20 @@ const Setup = () => {
         ToastifyAlert(response.data.msg, "unsuccess");
       }
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    } finally {
       setLoader(false);
     }
   };
 
   return (
     <>
-      <Grid sx={{pb:11}}>
+      <Grid sx={{ pb: 11 }}>
         <OnlineOrderingPage
           loader={loader}
           onlineorderstatus={handleonlineorderstatus}

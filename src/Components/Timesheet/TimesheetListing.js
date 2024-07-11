@@ -34,6 +34,8 @@ import { priceFormate } from "../../hooks/priceFormate";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import PasswordShow from "../../Common/passwordShow";
+import Skeleton from "react-loading-skeleton";
+import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 
 const TimesheetListing = ({ data }) => {
   const dispatch = useDispatch();
@@ -45,7 +47,8 @@ const TimesheetListing = ({ data }) => {
     useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   useEffect(() => {
     // if (!data.merchant_id) {
     //   console.log("empty");
@@ -63,8 +66,12 @@ const TimesheetListing = ({ data }) => {
         await dispatch(fetchtimeSheetData(data)).unwrap();
       }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 
@@ -111,9 +118,12 @@ const TimesheetListing = ({ data }) => {
         }));
         setemployeeList(mappedOptions);
       } catch (error) {
-        handleCoockieExpire();
-        getUnAutherisedTokenMessage();
-        console.error("Error fetching Employee List:", error);
+        if (error.status == 401 || error.response.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
+        }
       }
     };
     fetchData();
@@ -420,9 +430,12 @@ const TimesheetListing = ({ data }) => {
         setShowModal(true);
       }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
-      console.error("API Error:", error);
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
     setLoader(false);
   };
@@ -595,9 +608,12 @@ const TimesheetListing = ({ data }) => {
         setShowModalBreak(true);
       }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
-      console.error("API Error:", error);
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
     setLoader(false);
   };
@@ -661,9 +677,12 @@ const TimesheetListing = ({ data }) => {
         setBreakDetails([]);
       }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
-      console.error("API Error:", error);
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 
@@ -875,95 +894,125 @@ const TimesheetListing = ({ data }) => {
 
     const renderEmployeeData = (employee, timesheetEntries) => {
       return (
-        <div className="box" key={employee.id}>
-          <div className="q-attributes-bottom-detail-section">
-            <div className="mt-6">
-              <div className="q-attributes-bottom-header bg-[#ffffff]">
-                <span>{employee.title}</span>
-                <p onClick={() => openModal(employee.title, employee.id)}>
-                  {" "}
-                  Add Clock-in/Clock-out
-                  <img src={AddIcon} alt="add-icon" />{" "}
-                </p>
-              </div>
-              <div className="q-attributes-bottom-attriButes-header">
-                <p className="q-catereport-item">Date Worked</p>
-                <p className="q-catereport-item">Wage Rate</p>
-                <p className="q-catereport-item">Clock In</p>
-                <p className="q-catereport-item">Clock Out</p>
-                <p className="q-catereport-item"></p>
-              </div>
-              {timesheetEntries.length > 0 ? (
-                timesheetEntries.map((entry, index) => (
-                  <div
-                    className="q-attributes-bottom-attriButes-single-attributes TimesheetRow cursor-pointer"
-                    key={index}
-                    onClick={() => openModalViewBreak(employee.title, entry)}
-                  >
-                    <p className="q-catereport-item">
-                      {formatDate(entry.attendance_date)}
-                    </p>
-                    <p className="q-catereport-item">
-                      {entry.wages_per_hr && entry.wages_per_hr > 0
-                        ? `$${priceFormate(entry.wages_per_hr)}/hr`
-                        : "-"}{" "}
-                    </p>
-                    {/* <p className="q-catereport-item">{formatTime(entry.check_in_time)}</p> */}
-                    {/* <p className="q-catereport-item">{formatTime(entry.check_out_time)}</p> */}
-                    {entry.incomplete === true ? (
-                      <>
-                        <p className="q-catereport-item">
-                          {formatTime(entry.time_entered)}
-                        </p>
-                        <p className="q-catereport-item">pending</p>
-                      </>
-                    ) : (
-                      <>
-                        <p className="q-catereport-item">
-                          {formatTime(entry.check_in_time)}
-                        </p>
-                        <p className="q-catereport-item">
-                          {formatTime(entry.check_out_time)}
-                          {entry.date_diff > 0 &&
-                            new Date(entry.attendance_date).toDateString() !==
-                              new Date(entry.out_date).toDateString() &&
-                            ` (+${entry.date_diff})`}
-                        </p>
-                      </>
-                    )}
-                    <p className="q-catereport-item">
-                      <div
-                        className="q-attributes-bottom-header viewTimesheet-AddBreak timesheet bg-[#ffffff]"
-                        onClick={(e) => {
-                          openModalBreak(
-                            employee.title,
-                            employee.id,
-                            entry.attendance_date,
-                            entry.out_date
-                          );
-                          e.stopPropagation();
-                        }}
-                      >
-                        <p>
-                          Add Break
-                          <img src={AddIcon} alt="add-icon" />{" "}
-                        </p>
-                      </div>
+        <>
+          {timeSheetDataState.loading ? (
+            <Grid container className="box_shadow_div">
+              <Grid item xs={12}>
+                <div className="q-attributes-bottom-header bg-[#ffffff]">
+                  <span>
+                    <Skeleton />
+                  </span>
+                  <p onClick={() => openModal(employee.title, employee.id)}>
+                    <Skeleton />
+                  </p>
+                </div>
+              </Grid>
+              <SkeletonTable
+                columns={[
+                  "box_shadow_div",
+                  "Wage Rate",
+                  "Clock In",
+                  "Clock Out",
+                  "",
+                ]}
+              />
+            </Grid>
+          ) : (
+            <div className="box" key={employee.id}>
+              <div className="q-attributes-bottom-detail-section">
+                <div className="mt-6">
+                  <div className="q-attributes-bottom-header bg-[#ffffff]">
+                    <span>{employee.title}</span>
+                    <p onClick={() => openModal(employee.title, employee.id)}>
+                      {" "}
+                      Add Clock-in/Clock-out
+                      <img src={AddIcon} alt="add-icon" />{" "}
                     </p>
                   </div>
-                ))
-              ) : (
-                <div className="q-attributes-bottom-attriButes-single-attributes TimesheetRow ">
-                  <p className="q-catereport-item">-</p>
-                  <p className="q-catereport-item">-</p>
-                  <p className="q-catereport-item">-</p>
-                  <p className="q-catereport-item">-</p>
-                  <p className="q-catereport-item"></p>
+                  <div className="q-attributes-bottom-attriButes-header">
+                    <p className="q-catereport-item">Date Worked</p>
+                    <p className="q-catereport-item">Wage Rate</p>
+                    <p className="q-catereport-item">Clock In</p>
+                    <p className="q-catereport-item">Clock Out</p>
+                    <p className="q-catereport-item"></p>
+                  </div>
+                  {timesheetEntries.length > 0 ? (
+                    timesheetEntries.map((entry, index) => (
+                      <div
+                        className="q-attributes-bottom-attriButes-single-attributes TimesheetRow cursor-pointer"
+                        key={index}
+                        onClick={() =>
+                          openModalViewBreak(employee.title, entry)
+                        }
+                      >
+                        <p className="q-catereport-item">
+                          {formatDate(entry.attendance_date)}
+                        </p>
+                        <p className="q-catereport-item">
+                          {entry.wages_per_hr && entry.wages_per_hr > 0
+                            ? `$${priceFormate(entry.wages_per_hr)}/hr`
+                            : "-"}{" "}
+                        </p>
+                        {/* <p className="q-catereport-item">{formatTime(entry.check_in_time)}</p> */}
+                        {/* <p className="q-catereport-item">{formatTime(entry.check_out_time)}</p> */}
+                        {entry.incomplete === true ? (
+                          <>
+                            <p className="q-catereport-item">
+                              {formatTime(entry.time_entered)}
+                            </p>
+                            <p className="q-catereport-item">pending</p>
+                          </>
+                        ) : (
+                          <>
+                            <p className="q-catereport-item">
+                              {formatTime(entry.check_in_time)}
+                            </p>
+                            <p className="q-catereport-item">
+                              {formatTime(entry.check_out_time)}
+                              {entry.date_diff > 0 &&
+                                new Date(
+                                  entry.attendance_date
+                                ).toDateString() !==
+                                  new Date(entry.out_date).toDateString() &&
+                                ` (+${entry.date_diff})`}
+                            </p>
+                          </>
+                        )}
+                        <p className="q-catereport-item">
+                          <div
+                            className="q-attributes-bottom-header viewTimesheet-AddBreak timesheet bg-[#ffffff]"
+                            onClick={(e) => {
+                              openModalBreak(
+                                employee.title,
+                                employee.id,
+                                entry.attendance_date,
+                                entry.out_date
+                              );
+                              e.stopPropagation();
+                            }}
+                          >
+                            <p>
+                              Add Break
+                              <img src={AddIcon} alt="add-icon" />{" "}
+                            </p>
+                          </div>
+                        </p>
+                      </div>
+                    ))
+                  ) : (
+                    <div className="q-attributes-bottom-attriButes-single-attributes TimesheetRow ">
+                      <p className="q-catereport-item">-</p>
+                      <p className="q-catereport-item">-</p>
+                      <p className="q-catereport-item">-</p>
+                      <p className="q-catereport-item">-</p>
+                      <p className="q-catereport-item"></p>
+                    </div>
+                  )}
                 </div>
-              )}
+              </div>
             </div>
-          </div>
-        </div>
+          )}
+        </>
       );
     };
 

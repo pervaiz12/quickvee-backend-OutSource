@@ -17,6 +17,7 @@ import PasswordShow from "../../../Common/passwordShow";
 import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
 import { priceFormate } from "../../../hooks/priceFormate";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import Skeleton from "react-loading-skeleton";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -79,7 +80,7 @@ const SalesReportList = (props) => {
         try {
           await dispatch(fetchSalesReportData(data)).unwrap();
         } catch (error) {
-          if (error.status == 401) {
+          if (error.status == 401 || error.response.status === 401) {
             getUnAutherisedTokenMessage();
             handleCoockieExpire();
           } else if (error.status == "Network Error") {
@@ -111,7 +112,7 @@ const SalesReportList = (props) => {
     SalesReportData.total_loyalty_point_spent
   );
 
-  console.log("SalesReportData",SalesReportDataState.SalesReportData)
+  // console.log("SalesReportData",SalesReportDataState.SalesReportData)
 
   const discount1 =
     parseFloat(discount) -
@@ -122,16 +123,18 @@ const SalesReportList = (props) => {
     parseFloat(SalesReportData.total_loyalty_point_spent) -
     parseFloat(SalesReportData.loyality_amt_refunded);
   const refunds =
-    (parseFloat(SalesReportData.net_refund) +
-    parseFloat(SalesReportData.net_refund1)) - parseFloat(SalesReportData.refunded_all_tax);
+    parseFloat(SalesReportData.net_refund) +
+    parseFloat(SalesReportData.net_refund1) -
+    parseFloat(SalesReportData.refunded_all_tax);
   const netSales =
     parseFloat(gross_sale) -
     (parseFloat(discount1) + parseFloat(refunds)) -
     parseFloat(SalesReportData.giftcard_amt_collected) -
     parseFloat(SalesReportData.loyality_amt_collected);
   const taxesAndFees =
-    parseFloat(SalesReportData.remain_default_tax) || 0 +
-    parseFloat(SalesReportData.remain_other_tax) || 0;
+    parseFloat(SalesReportData.remain_default_tax) ||
+    0 + parseFloat(SalesReportData.remain_other_tax) ||
+    0;
   const tip = parseFloat(SalesReportData.tip);
   const serviceCharges =
     parseFloat(SalesReportData.con_fee) + parseFloat(SalesReportData.del_fee);
@@ -143,19 +146,17 @@ const SalesReportList = (props) => {
     parseFloat(SalesReportData.food_ebt_collected) +
     parseFloat(SalesReportData.cash_back_fee) +
     parseFloat(SalesReportData.cash_back_amt);
-    
-  
-    const cashbackfee =
-    parseFloat(SalesReportData.cash_back_fee) || 0;
 
+  const cashbackfee = parseFloat(SalesReportData.cash_back_fee) || 0;
 
-    const CardCollected = parseFloat(SalesReportData.card_collected) + 
-      parseFloat(SalesReportData.cash_back_fee) +
-      parseFloat(SalesReportData.cash_back_amt) ;
+  const CardCollected =
+    parseFloat(SalesReportData.card_collected) +
+    parseFloat(SalesReportData.cash_back_fee) +
+    parseFloat(SalesReportData.cash_back_amt);
 
-
-    const CashCollected = parseFloat(SalesReportData.cash_collected) -
-      parseFloat(SalesReportData.cash_back_amt) ;
+  const CashCollected =
+    parseFloat(SalesReportData.cash_collected) -
+    parseFloat(SalesReportData.cash_back_amt);
   // console.log(discount1)
   // console.log(SalesReportData)
   const SalesSummeryList = [
@@ -234,7 +235,59 @@ const SalesReportList = (props) => {
   });
   return (
     <>
-      {SalesReportData && SalesReportData.subtotal > 0 ? (
+      {SalesReportDataState.loading ? (
+        <>
+          <Grid container sx={{ padding: 0 }} spacing={2}>
+            <Grid item xs={4}>
+              <div className="box_shadow_div mt_card_header">
+                <div className="text-[#707070] font-normal lg:text-[18px]  sm:text-[14px] tracking-normal opacity-100 Admin_std">
+                  <Skeleton />
+                </div>
+                <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
+                  <Skeleton />
+                  {/* ${formatter.format(gross_sale)} */}
+                  {/* {format("2000000.00")} */}
+                </div>
+                {/* <div className="flex items-center text-green-500">
+              <BiCaretUp className="mr-1" />
+              <span className="text-green-500 Admin_std">+21.00%</span>
+              </div> */}
+              </div>
+            </Grid>
+            <Grid item xs={4}>
+              <div className="box_shadow_div mt_card_header">
+                <div className="text-[#707070] font-normal  lg:text-[18px]  sm:text-[14px] tracking-normal opacity-100 Admin_std">
+                  <Skeleton />
+                </div>
+                <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
+                  <Skeleton />
+                </div>
+                {/* <div className="flex items-center text-green-500">
+              <BiCaretUp className="mr-1" />
+              <span className="text-green-500 Admin_std">+21.00%</span>
+              </div> */}
+              </div>
+            </Grid>
+            <Grid item xs={4}>
+              <div className="box_shadow_div mt_card_header">
+                <div className="text-[#707070] font-normal  lg:text-[18px]  sm:text-[14px] tracking-normal opacity-100 Admin_std">
+                  <Skeleton />
+                </div>
+                <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
+                  <Skeleton />
+                </div>
+                {/* <div className="flex items-center text-green-500">
+                  <BiCaretUp className="mr-1" />
+                  <span className="text-green-500 Admin_std">+21.00%</span>
+                  </div> */}
+              </div>
+            </Grid>
+          </Grid>
+          <Grid sx={{ pt: 2.5 }}>
+            <SkeletonTable columns={[""]} />
+          </Grid>
+        </>
+      ) : SalesReportData && SalesReportData.subtotal > 0 ? (
         <>
           <Grid container sx={{ padding: 0 }} spacing={2}>
             <Grid item xs={4}>
@@ -410,164 +463,6 @@ const SalesReportList = (props) => {
               )}
             </Grid>
           </Grid>
-          {/* <div className="box">
-            <div className="qvrow">
-              <div className="col-span-4 col-qv-4 lg:col-span-1">
-                <div className="box_shadow_div mt_card_header">
-                  <div className="text-[#707070] font-normal lg:text-[18px]  sm:text-[14px] tracking-normal opacity-100 Admin_std">
-                    <b>Gross Sale</b>
-                  </div>
-                  <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
-                    ${parseFloat(gross_sale).toFixed(2)}
-                  </div>
-                
-                </div>
-              </div>
-
-              <div className="col-span-4 col-qv-4 lg:col-span-1">
-                <div className="box_shadow_div mt_card_header">
-                  <div className="text-[#707070] font-normal  lg:text-[18px]  sm:text-[14px] tracking-normal opacity-100 Admin_std">
-                    <b>Net Sale</b>
-                  </div>
-                  <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
-                    ${parseFloat(netSales).toFixed(2)}
-                  </div>
-                </div>
-              </div>
-
-              <div className="col-span-4 col-qv-4 lg:col-span-1">
-                <div className="box_shadow_div mt_card_header ">
-                  <div className="text-[#707070] font-normal  lg:text-[18px]  sm:text-[14px] tracking-normal opacity-100 Admin_std">
-                    <b>Amount Collected</b>
-                  </div>
-                  <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
-                    ${parseFloat(amountCollected).toFixed(2)}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="qvrow">
-              <div className="col-qv-12">
-                <div className="box_shadow_div">
-                  <div className="q_saleitem_header">
-                    <h1>
-                      <b>Sales Summary</b>
-                    </h1>
-                  </div>
-                  <div className="q_background_status">
-                    <div className="q_sales_trading_data">
-                      <p>
-                        <b>Gross Sale</b>
-                      </p>
-                      <p>
-                        <b>${parseFloat(gross_sale).toFixed(2)}</b>
-                      </p>
-                    </div>
-                    <div className="q_sales_trading_data">
-                      <p>Loyalty Point Redeemed</p>
-                      <p>${parseFloat(loyaltyPoint).toFixed(2)}</p>
-                    </div>
-                    <div className="q_sales_trading_data">
-                      <p>Gift Card Amount Redeemed</p>
-                      <p>
-                        $
-                        {parseFloat(
-                          SalesReportData.giftcard_amt_collected
-                        ).toFixed(2)}
-                      </p>
-                    </div>
-                    <div className="q_sales_trading_data">
-                      <p>Discount</p>
-                      <p>${parseFloat(discount1).toFixed(2)}</p>
-                    </div>
-                    <div className="q_sales_trading_data">
-                      <p>Refunds</p>
-                      <p>${parseFloat(refunds).toFixed(2)}</p>
-                    </div>
-                    <div className="q_sales_trading_data">
-                      <p>
-                        <b>Net Sales</b>
-                      </p>
-                      <p>
-                        <b>${parseFloat(netSales).toFixed(2)}</b>
-                      </p>
-                    </div>
-                    <div className="q_sales_trading_data">
-                      <p>Taxes</p>
-                      <p>${parseFloat(taxesAndFees).toFixed(2)}</p>
-                    </div>
-                    <div className="q_sales_trading_data">
-                      <p>Tips</p>
-                      <p>${parseFloat(tip).toFixed(2)}</p>
-                    </div>
-                    <div className="q_sales_trading_data">
-                      <p>Services Charges</p>
-                      <p>${parseFloat(serviceCharges).toFixed(2)}</p>
-                    </div>
-                    <div className="q_sales_trading_data">
-                      <p>Non Cash Adjustment Fees</p>
-                      <p>${parseFloat(cashDiscounting).toFixed(2)}</p>
-                    </div>
-
-                    <div className="box_shadow_div">
-                      <div className="q_saleitem_header">
-                        <h1>
-                          <b>Sales by Tender and Card Type</b>
-                        </h1>
-                      </div>
-                      <div className="q_background_status">
-                        <div className="q_sales_trading_data">
-                          <p>Credit Cards + Debit Cards</p>
-                          <p>
-                            $
-                            {parseFloat(SalesReportData.card_collected).toFixed(
-                              2
-                            )}
-                          </p>
-                        </div>
-                        <div className="q_sales_trading_data">
-                          <p>Cash</p>
-                          <p>
-                            $
-                            {parseFloat(SalesReportData.cash_collected).toFixed(
-                              2
-                            )}
-                          </p>
-                        </div>
-                        <div className="q_sales_trading_data">
-                          <p>Food EBT Card Collected</p>
-                          <p>
-                            $
-                            {parseFloat(
-                              SalesReportData.food_ebt_collected
-                            ).toFixed(2)}
-                          </p>
-                        </div>
-                        <div className="q_sales_trading_data">
-                          <p>Cash EBT Card Collected</p>
-                          <p>
-                            $
-                            {parseFloat(
-                              SalesReportData.cash_ebt_collected
-                            ).toFixed(2)}
-                          </p>
-                        </div>
-                        <div className="q_sales_trading_data">
-                          <p>
-                            <b>Amount Collected</b>
-                          </p>
-                          <p>
-                            <b>${parseFloat(amountCollected).toFixed(2)}</b>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div> */}
         </>
       ) : (
         <Grid sx={{ padding: 2.5, margin: 0 }} className="box_shadow_div">
@@ -575,15 +470,6 @@ const SalesReportList = (props) => {
             <p>No record found.</p>
           </Grid>
         </Grid>
-        // <div>
-        //   <table className="table table-bordered my_new_table">
-        //     <tbody>
-        //       <tr>
-        //         <td>No record found.</td>
-        //       </tr>
-        //     </tbody>
-        //   </table>
-        // </div>
       )}
     </>
   );

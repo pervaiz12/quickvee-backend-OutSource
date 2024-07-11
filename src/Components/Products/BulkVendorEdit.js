@@ -99,12 +99,12 @@ const BulkVendorEdit = ({
       formData.append("vendor_id", vendorId);
 
       try {
-        const res = await dispatch(assignPrefferedVendor(formData));
-        if (res?.payload?.status) {
+        const res = await dispatch(assignPrefferedVendor(formData)).unwrap();
+        if (res?.status) {
           ToastifyAlert("Updated Successfully", "success");
         }
       } catch (error) {
-        if (error.status == 401) {
+        if (error.status == 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();
         } else if (error.status == "Network Error") {
@@ -215,13 +215,13 @@ const BulkVendorEdit = ({
 
     // called vendor api for dropdown vendor data
     try {
-      const response = await dispatch(fetchVendorList(formData));
+      const response = await dispatch(fetchVendorList(formData)).unwrap();
 
-      if (response?.payload?.status) {
-        setVendor(response?.payload?.result);
+      if (response?.status) {
+        setVendor(response?.result);
       }
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -271,8 +271,8 @@ const BulkVendorEdit = ({
       formData.append("token", userTypeData?.token);
 
       try {
-        const res = await dispatch(assignProductVendor(formData));
-        if (res?.payload?.status) {
+        const res = await dispatch(assignProductVendor(formData)).unwrap();
+        if (res?.status) {
           setVendorItems((prev) => [
             ...prev,
             ...selectedVendor.map((vendor) => ({
@@ -294,7 +294,7 @@ const BulkVendorEdit = ({
           setSelectedVendor([]);
         }
       } catch (error) {
-        if (error.status == 401) {
+        if (error.status == 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();
         } else if (error.status == "Network Error") {
@@ -455,7 +455,7 @@ const BulkVendorEdit = ({
       ToastifyAlert("Updated successfully!", "success");
       handleCloseEditModal();
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {

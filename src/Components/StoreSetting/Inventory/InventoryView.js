@@ -11,6 +11,7 @@ import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 import Loader from "../../../CommonComponents/Loader";
 import { Box, CircularProgress } from "@mui/material";
+import { Grid } from "@mui/material";
 
 const InventoryData = () => {
   const {
@@ -277,8 +278,15 @@ const InventoryData = () => {
           </div>
         ) : (
           <>
-            <div className="box_shadow_div" style={{ padding: "20px" }}>
-              <div className=" qvrow-inventory-row">
+            <div className="box_shadow_div" >
+            <Grid container direction="row" justifyContent="space-between" alignItems="center" className="q-coupon-bottom-header">
+              <Grid item>
+                <div>
+                  <span>Inventory</span>
+                </div>
+              </Grid>
+            </Grid>
+              <div className=" qvrow-inventory-row" style={{ paddingLeft: "20px", paddingRight:"20px",paddingBottom:"20px" }}>
                 <h5
                   className="box_shadow_heading "
                   style={{ marginBottom: "0px" }}

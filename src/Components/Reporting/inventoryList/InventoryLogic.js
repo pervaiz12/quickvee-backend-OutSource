@@ -15,7 +15,8 @@ export default function InventoryLogic() {
   const dispatch = useDispatch();
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [inventory, setInventory] = useState("");
   const [category, setCategory] = useState([]);
   const [searchProduct, setsearchProduct] = useState([]); // invenotry list display
@@ -61,8 +62,12 @@ export default function InventoryLogic() {
           setMessage("No record found");
         }
       } catch (error) {
-        getUnAutherisedTokenMessage();
-        handleCoockieExpire();
+        if (error.status == 401 || error.response.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
+        }
       }
     }, 500)
   );
@@ -131,8 +136,12 @@ export default function InventoryLogic() {
         //   setSelectCategoryId(response?.data?.result[0].id);
       }
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
   // category click button function-----------------------
@@ -177,8 +186,12 @@ export default function InventoryLogic() {
         setsearchProduct([]);
       }
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
   //   category click button function---------------------
@@ -222,8 +235,12 @@ export default function InventoryLogic() {
         setsearchProduct([]);
       }
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
   const [sortOrder, setSortOrder] = useState("asc");

@@ -33,7 +33,8 @@ const TaxesDetail = () => {
     getfetchtaxesDataData();
   }, []);
 
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   const getfetchtaxesDataData = async () => {
     try {
@@ -45,8 +46,12 @@ const TaxesDetail = () => {
         await dispatch(fetchtaxesData(data)).unwrap();
       }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 

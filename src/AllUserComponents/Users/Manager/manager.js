@@ -54,7 +54,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export default function Manager() {
   const dispatch = useDispatch();
   const managerList = useSelector((state) => state.managerRecord);
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   // ========================= DEFIENED STATES ========================================
   const [managerTable, setManagerTable] = useState([]);
@@ -71,8 +72,12 @@ export default function Manager() {
     try {
       await dispatch(ManagerRecord(data)).unwrap();
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 

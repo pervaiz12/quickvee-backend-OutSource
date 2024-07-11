@@ -14,7 +14,8 @@ import PasswordShow from "../../../../Common/passwordShow";
 
 const EditAdminFunctionality = (handleClick) => {
   const navigate = useNavigate();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [editData, setEditData] = useState({
     owner_name: "",
     email: "",
@@ -57,8 +58,12 @@ const EditAdminFunctionality = (handleClick) => {
           }
         });
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
   // ============================================
@@ -76,11 +81,12 @@ const EditAdminFunctionality = (handleClick) => {
 
       return response.data;
     } catch (error) {
-      console.error("Error validating email:", error);
-      // console.log("hellooo", error?.message);
-      // dispatch(getAuthInvalidMessage(error?.message));
-      handleCoockieExpire();
-      throw error;
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 
@@ -99,10 +105,12 @@ const EditAdminFunctionality = (handleClick) => {
 
       return response.data; // Assuming this data indicates whether email is valid or not
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
-      // console.error("Error validating email:", error);
-      // throw error;
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
   const handleBlur = async (name) => {
@@ -133,8 +141,12 @@ const EditAdminFunctionality = (handleClick) => {
             }));
           }
         } catch (error) {
-          getUnAutherisedTokenMessage();
-          handleCoockieExpire();
+          if (error.status == 401 || error.response.status === 401) {
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          } else if (error.status == "Network Error") {
+            getNetworkError();
+          }
         }
       }
     }
@@ -439,8 +451,12 @@ const EditAdminFunctionality = (handleClick) => {
               navigate("/users/admin");
             });
         } catch (error) {
-          getUnAutherisedTokenMessage();
-          handleCoockieExpire();
+          if (error.status == 401 || error.response.status === 401) {
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          } else if (error.status == "Network Error") {
+            getNetworkError();
+          }
         }
       }
     }

@@ -16,6 +16,7 @@ import { priceFormate } from "../../../hooks/priceFormate";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import PasswordShow from "../../../Common/passwordShow";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -51,9 +52,25 @@ const MainInstantDetails = ({ data }) => {
   const instantactivityDataState = useSelector(
     (state) => state.instantactivity
   );
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
+  const getInstantActivityData = async () => {
+    try {
+      if (data?.merchant_id) {
+        await dispatch(fetchinstantactivityData(data));
+      }
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    }
+  };
   useEffect(() => {
-    dispatch(fetchinstantactivityData(data));
+    getInstantActivityData();
   }, [dispatch, data]);
 
   useEffect(() => {

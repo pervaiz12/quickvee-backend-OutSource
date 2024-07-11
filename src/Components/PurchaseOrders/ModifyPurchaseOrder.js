@@ -122,7 +122,8 @@ const ModifyPurchaseOrder = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
 
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
 
   const [purchaseInfo, setPurchaseInfo] = useState({
@@ -208,11 +209,12 @@ const ModifyPurchaseOrder = () => {
         ...userTypeData,
       };
       await dispatch(fetchPurchaseOrderById(data)).unwrap();
-    } catch (e) {
-      console.log("e: ", e);
-      if (e.status == 401 || e.response.status == 401) {
-        handleCoockieExpire();
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };
@@ -296,11 +298,12 @@ const ModifyPurchaseOrder = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-    } catch (e) {
-      console.log("Error: ", e);
-      if (e.response.status == 401 || e.status == 401) {
-        handleCoockieExpire();
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };
@@ -455,11 +458,12 @@ const ModifyPurchaseOrder = () => {
       // console.log("filtered Products: ", filterProducts);
 
       return filterProducts;
-    } catch (e) {
-      console.log("e: ", e);
-      if (e.status == 401 || e.response.status == 401) {
-        handleCoockieExpire();
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };
@@ -548,11 +552,12 @@ const ModifyPurchaseOrder = () => {
       } else {
         console.log("Product Not available!");
       }
-    } catch (e) {
-      console.log("Error: ", e);
-      if (e.response.status == 401 || e.status == 401) {
-        handleCoockieExpire();
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };
@@ -750,11 +755,12 @@ const ModifyPurchaseOrder = () => {
         } else {
           ToastifyAlert(response.data.message, "error");
         }
-      } catch (e) {
-        console.log("Error: ", e);
-        if (e.response.status == 401 || e.status == 401) {
-          handleCoockieExpire();
+      } catch (error) {
+        if (error.status == 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
         }
       } finally {
         setLoading(() => false);
@@ -860,7 +866,7 @@ const ModifyPurchaseOrder = () => {
                     components={["DatePicker"]}
                   >
                     <DatePicker
-                      sx={{ width: "100%", }}
+                      sx={{ width: "100%" }}
                       className="stock-due-date default-border-color"
                       size="small"
                       slotProps={{
@@ -920,7 +926,12 @@ const ModifyPurchaseOrder = () => {
         <div className="box">
           <div className="box_shadow_div" style={{ overflow: "unset" }}>
             <Grid container className="z-index-1">
-              <TableContainer sx={{borderTopLeftRadius:"10px",borderTopRightRadius:"10px"}}>
+              <TableContainer
+                sx={{
+                  borderTopLeftRadius: "10px",
+                  borderTopRightRadius: "10px",
+                }}
+              >
                 <StyledTable
                   sx={{ minWidth: 500 }}
                   aria-label="customized table"

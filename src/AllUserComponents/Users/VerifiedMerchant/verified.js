@@ -77,7 +77,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export default function Verified({ setVisible, setMerchantId }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   // states
   const [currentPage, setCurrentPage] = useState(1);
@@ -121,8 +122,12 @@ export default function Verified({ setVisible, setMerchantId }) {
     try {
       await dispatch(getVerifiedMerchant(data_verified)).unwrap();
     } catch (error) {
-      getUnAutherisedTokenMessage();
-      handleCoockieExpire();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
   useEffect(() => {
@@ -224,7 +229,12 @@ export default function Verified({ setVisible, setMerchantId }) {
           console.error(response);
         }
       } catch (error) {
-        console.error(error);
+        if (error.status == 401 || error.response.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
+        }
       }
     }
     setDeleteModalOpen(false);
@@ -257,7 +267,12 @@ export default function Verified({ setVisible, setMerchantId }) {
           console.error(response);
         }
       } catch (error) {
-        console.error(error);
+        if (error.status == 401 || error.response.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
+        }
       }
       setDeleteMerchantId(null);
       setDislikeModalOpen(false);

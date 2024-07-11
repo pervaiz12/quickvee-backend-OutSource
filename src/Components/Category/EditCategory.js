@@ -21,7 +21,7 @@ import DeleteModal from "../../reuseableComponents/DeleteModal";
 import AlertModal from "../../reuseableComponents/AlertModal";
 import CircularProgress from "@mui/material/CircularProgress";
 import PasswordShow from "../../Common/passwordShow";
-const EditCategory = ({ productId,seVisible }) => {
+const EditCategory = ({ productId, seVisible }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const {
@@ -31,7 +31,8 @@ const EditCategory = ({ productId,seVisible }) => {
     GetSessionLogin,
   } = useAuthDetails();
   const [loader, setLoader] = useState(false);
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [category, setCategory] = useState({
     collID: "",
     title: "",
@@ -65,9 +66,12 @@ const EditCategory = ({ productId,seVisible }) => {
         return response.data.result;
       }
     } catch (error) {
-      console.error("Error:", error);
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   }
 
@@ -98,12 +102,12 @@ const EditCategory = ({ productId,seVisible }) => {
 
   const inputChange = (e) => {
     const { name, value } = e.target;
-    const regex = /^[A-Za-z0-9 ]*$/ ;
-    if (name === "title"){
+    const regex = /^[A-Za-z0-9 ]*$/;
+    if (name === "title") {
       if (regex.test(value)) {
         setCategory({ ...category, title: value });
       }
-    }else{
+    } else {
       setCategory((preValue) => {
         return {
           ...preValue,
@@ -135,7 +139,7 @@ const EditCategory = ({ productId,seVisible }) => {
         //   file.name +
         //     " is not an image. Only jpeg, png, jpg files can be uploaded."
         // );
-        showModal("Only jpeg, png, jpg files can be uploaded")
+        showModal("Only jpeg, png, jpg files can be uploaded");
       } else {
         const reader = new FileReader();
         reader.onloadend = () => {
@@ -209,9 +213,12 @@ const EditCategory = ({ productId,seVisible }) => {
         setErrorMessage(update_message);
       }
     } catch (error) {
-      console.error("API Error:", error);
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
     setLoader(false);
   };
@@ -281,7 +288,7 @@ const EditCategory = ({ productId,seVisible }) => {
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
   const [deleteCategoryIMG, setDeleteCategoryIMG] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-  const [deleteloading, setDeleteloading] = useState(false)
+  const [deleteloading, setDeleteloading] = useState(false);
   const handleRemoveBanner = (event, id, removeitem) => {
     event.stopPropagation();
     setDeleteCategoryId(id);
@@ -298,11 +305,15 @@ const EditCategory = ({ productId,seVisible }) => {
       };
       if (data) {
         try {
-          setDeleteloading(true)
-         await dispatch(deleteCategorybanner(data)).unwrap();
+          setDeleteloading(true);
+          await dispatch(deleteCategorybanner(data)).unwrap();
         } catch (error) {
-          handleCoockieExpire()
-          getUnAutherisedTokenMessage()
+          if (error.status == 401 || error.response.status === 401) {
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          } else if (error.status == "Network Error") {
+            getNetworkError();
+          }
         }
         ToastifyAlert("Category Image Deleted", "success");
         setSelectedImage(null);
@@ -319,7 +330,7 @@ const EditCategory = ({ productId,seVisible }) => {
         console.log("Deletion canceled by user");
       }
     }
-    setDeleteloading(false)
+    setDeleteloading(false);
     setDeleteCategoryId(null);
     setDeleteCategoryIMG(null);
     setDeleteModalOpen(false);
@@ -359,7 +370,7 @@ const EditCategory = ({ productId,seVisible }) => {
   const handleDeleteImage = (e) => {
     const fileInput = document.getElementById("filesBanner");
     if (fileInput) {
-        fileInput.value = "";
+      fileInput.value = "";
     }
     e.stopPropagation();
     setCategory((prevValue) => ({
@@ -372,7 +383,7 @@ const EditCategory = ({ productId,seVisible }) => {
   };
   const back = () => {
     navigate("/inventory/category");
-  }
+  };
 
   return (
     <div className="q-category-main-page">
@@ -393,10 +404,10 @@ const EditCategory = ({ productId,seVisible }) => {
         <div className="q-add-categories-section">
           <form>
             <div className="q-add-categories-section-header">
-              <span   onClick={back}>
+              <span onClick={back}>
                 <span style={myStyles}>
                   <img src={AddNewCategory} alt="Add-New-Category" />
-                  <span >Edit Category</span>
+                  <span>Edit Category</span>
                 </span>
               </span>
             </div>
@@ -565,17 +576,35 @@ const EditCategory = ({ productId,seVisible }) => {
             </div>
 
             <div className="q-add-categories-section-middle-footer">
-              <button className="quic-btn quic-btn-save attributeUpdateBTN" onClick={handleSubmit} disabled={loader}>
-                 { loader ? <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15}/> Save</> : "Save"}
+              <button
+                className="quic-btn quic-btn-save attributeUpdateBTN"
+                onClick={handleSubmit}
+                disabled={loader}
+              >
+                {loader ? (
+                  <>
+                    <CircularProgress
+                      color={"inherit"}
+                      className="loaderIcon"
+                      width={15}
+                      size={15}
+                    />{" "}
+                    Save
+                  </>
+                ) : (
+                  "Save"
+                )}
               </button>
 
-                <button className="quic-btn quic-btn-cancle"  onClick={back}>Cancel</button>
+              <button className="quic-btn quic-btn-cancle" onClick={back}>
+                Cancel
+              </button>
             </div>
           </form>
         </div>
       </div>
       <DeleteModal
-      deleteloading={deleteloading}
+        deleteloading={deleteloading}
         headerText="Image"
         open={deleteModalOpen}
         onClose={() => {

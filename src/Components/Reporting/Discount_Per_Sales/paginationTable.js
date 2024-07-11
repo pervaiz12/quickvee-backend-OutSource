@@ -15,6 +15,7 @@ import Loader from "../../../CommonComponents/Loader";
 import { priceFormate } from "../../../hooks/priceFormate";
 import SortIconW from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import Skeleton from "react-loading-skeleton";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -68,7 +69,7 @@ export default function DashboardTables(props) {
   useEffect(() => {
     console.log(props.EmployeeFilterData);
     if (props.EmployeeFilterData) {
-      console.log("yes");
+      // console.log("yes");
       getDiscountRecord();
     }
   }, [props.EmployeeFilterData]);
@@ -117,12 +118,23 @@ export default function DashboardTables(props) {
   return (
     <>
       {props.loader ? (
-        <Loader />
+        // <Loader />
+        <Grid container className="box_shadow_div">
+          <Grid item xs={12}>
+            <h1 className="heading p-4 pb-0">
+              <Skeleton />
+            </h1>
+          </Grid>
+          <Grid item xs={12}>
+            <SkeletonTable columns={columns} />
+          </Grid>
+        </Grid>
       ) : (
         // <>
         //   <SkeletonTable columns={columns} />
         // </>
-        <TableContainer component={Paper}>
+
+        <TableContainer>
           {
             // console.log(props.EmployeeFilterData?.report_data?.length) props.EmployeeFilterData.length !== 0
             Object.keys(props.EmployeeFilterData).length !== 0 ? (
@@ -131,125 +143,133 @@ export default function DashboardTables(props) {
                   if (Array.isArray(result)) {
                     return (
                       <>
-                        <h1 className="heading p-4 pb-0">{key}</h1>
-                        <TableContainer sx={{}} aria-label="customized table">
-                          <StyledTable>
-                            <TableHead>
-                              <StyledTableCell>
-                                {/* <button
+                        <Grid container className="box_shadow_div">
+                          <Grid item xs={12}>
+                            <h1 className="heading p-4 pb-0">{key}</h1>
+                            <TableContainer
+                              sx={{}}
+                              aria-label="customized table"
+                            >
+                              <StyledTable>
+                                <TableHead>
+                                  <StyledTableCell>
+                                    {/* <button
                                   className="flex items-center"
                                   onClick={() =>
                                     props.sortByItemName("str", "fullName")
                                   }
                                 > */}
-                                <p>Employee</p>
-                                {/* <img
+                                    <p>Employee</p>
+                                    {/* <img
                                     src={SortIconW}
                                     alt=""
                                     className="pl-1"
                                   />
                                 </button> */}
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                <button
-                                  className="flex items-center"
-                                  onClick={() =>
-                                    props.sortByItemName("num", "discount")
-                                  }
-                                >
-                                  <p>Discount($)</p>
-                                  <img
-                                    src={SortIconW}
-                                    alt=""
-                                    className="pl-1"
-                                  />
-                                </button>
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                <button
-                                  className="flex items-center"
-                                  onClick={() =>
-                                    props.sortByItemName("num", "coupon_code")
-                                  }
-                                >
-                                  <p> Discount Type</p>
-                                  <img
-                                    src={SortIconW}
-                                    alt=""
-                                    className="pl-1"
-                                  />
-                                </button>
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                <button
-                                  className="flex items-center"
-                                  onClick={() =>
-                                    props.sortByItemName(
-                                      "num",
-                                      "line_item_discount"
-                                    )
-                                  }
-                                >
-                                  <p>Item Discount($)</p>
-                                  <img
-                                    src={SortIconW}
-                                    alt=""
-                                    className="pl-1"
-                                  />
-                                </button>
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                <button
-                                  className="flex items-center"
-                                  onClick={() =>
-                                    props.sortByItemName(
-                                      "num",
-                                      "cash_discounting"
-                                    )
-                                  }
-                                >
-                                  <p>Adjusted Item Price($)</p>
-                                  <img
-                                    src={SortIconW}
-                                    alt=""
-                                    className="pl-1"
-                                  />
-                                </button>
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                <button
-                                  className="flex items-center"
-                                  onClick={() =>
-                                    props.sortByItemName("id", "order_id")
-                                  }
-                                >
-                                  <p> Order ID</p>
-                                  <img
-                                    src={SortIconW}
-                                    alt=""
-                                    className="pl-1"
-                                  />
-                                </button>
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                <button
-                                  className="flex items-center"
-                                  onClick={() =>
-                                    props.sortByItemName(
-                                      "date",
-                                      "merchant_time"
-                                    )
-                                  }
-                                >
-                                  <p>Date & Time</p>
-                                  <img
-                                    src={SortIconW}
-                                    alt=""
-                                    className="pl-1"
-                                  />
-                                </button>
-                              </StyledTableCell>
-                              {/* <StyledTableCell align="center">
+                                  </StyledTableCell>
+                                  <StyledTableCell>
+                                    <button
+                                      className="flex items-center"
+                                      onClick={() =>
+                                        props.sortByItemName("num", "discount")
+                                      }
+                                    >
+                                      <p>Discount($)</p>
+                                      <img
+                                        src={SortIconW}
+                                        alt=""
+                                        className="pl-1"
+                                      />
+                                    </button>
+                                  </StyledTableCell>
+                                  <StyledTableCell>
+                                    <button
+                                      className="flex items-center"
+                                      onClick={() =>
+                                        props.sortByItemName(
+                                          "str",
+                                          "coupon_code"
+                                        )
+                                      }
+                                    >
+                                      <p> Discount Type</p>
+                                      <img
+                                        src={SortIconW}
+                                        alt=""
+                                        className="pl-1"
+                                      />
+                                    </button>
+                                  </StyledTableCell>
+                                  <StyledTableCell>
+                                    <button
+                                      className="flex items-center"
+                                      onClick={() =>
+                                        props.sortByItemName(
+                                          "num",
+                                          "line_item_discount"
+                                        )
+                                      }
+                                    >
+                                      <p>Item Discount($)</p>
+                                      <img
+                                        src={SortIconW}
+                                        alt=""
+                                        className="pl-1"
+                                      />
+                                    </button>
+                                  </StyledTableCell>
+                                  <StyledTableCell>
+                                    <button
+                                      className="flex items-center"
+                                      onClick={() =>
+                                        props.sortByItemName(
+                                          "num",
+                                          "cash_discounting"
+                                        )
+                                      }
+                                    >
+                                      <p>Adjusted Item Price($)</p>
+                                      <img
+                                        src={SortIconW}
+                                        alt=""
+                                        className="pl-1"
+                                      />
+                                    </button>
+                                  </StyledTableCell>
+                                  <StyledTableCell>
+                                    <button
+                                      className="flex items-center"
+                                      onClick={() =>
+                                        props.sortByItemName("id", "order_id")
+                                      }
+                                    >
+                                      <p> Order ID</p>
+                                      <img
+                                        src={SortIconW}
+                                        alt=""
+                                        className="pl-1"
+                                      />
+                                    </button>
+                                  </StyledTableCell>
+                                  <StyledTableCell>
+                                    <button
+                                      className="flex items-center"
+                                      onClick={() =>
+                                        props.sortByItemName(
+                                          "date",
+                                          "merchant_time"
+                                        )
+                                      }
+                                    >
+                                      <p>Date & Time</p>
+                                      <img
+                                        src={SortIconW}
+                                        alt=""
+                                        className="pl-1"
+                                      />
+                                    </button>
+                                  </StyledTableCell>
+                                  {/* <StyledTableCell align="center">
                                 Order Details
                               </StyledTableCell> */}
                             </TableHead>
@@ -276,7 +296,9 @@ export default function DashboardTables(props) {
                                     )}
                                   </StyledTableCell>
                                   <StyledTableCell>
-                                    {priceFormate(item?.cash_discounting)}
+                                    {parseFloat(
+                                      priceFormate(item?.total_adjust_price)
+                                    ).toFixed(2)}{" "}
                                   </StyledTableCell>
                                   <StyledTableCell>
                                     <Link
@@ -301,60 +323,65 @@ export default function DashboardTables(props) {
                                       Order Summery
                                     </Link>
                                   </StyledTableCell> */}
-                                </StyledTableRow>
-                              ))}
-                              <StyledTableRow>
-                                <StyledTableCell>
-                                  Total Discount
-                                </StyledTableCell>
-                                <StyledTableCell>
-                                  {`$${priceFormate(
-                                    result
-                                      .reduce((total, item) => {
-                                        return (
-                                          total +
-                                          (parseFloat(item?.discount) || 0)
-                                        );
-                                      }, 0)
-                                      .toFixed(2)
-                                  )}`}
-                                </StyledTableCell>
-                                <StyledTableCell></StyledTableCell>
-                                <StyledTableCell></StyledTableCell>
-                                <StyledTableCell></StyledTableCell>
-                                <StyledTableCell></StyledTableCell>
-                                <StyledTableCell></StyledTableCell>
-                              </StyledTableRow>
-                              {Object.entries(props.EmployeeFilterData).length -
-                                1 ===
-                                index && (
-                                <StyledTableRow>
-                                  <StyledTableCell>
-                                    <div className="q-category-bottom-report-listing">
-                                      <div>
-                                        <p className="">Final Discount Total</p>
-                                      </div>
-                                    </div>
-                                  </StyledTableCell>
-                                  <StyledTableCell>
-                                    <div className="q-category-bottom-report-listing">
-                                      <div>
-                                        <p className="">
-                                          ${priceFormate(totalRecord)}
-                                        </p>
-                                      </div>
-                                    </div>
-                                  </StyledTableCell>
-                                  <StyledTableCell></StyledTableCell>
-                                  <StyledTableCell></StyledTableCell>
-                                  <StyledTableCell></StyledTableCell>
-                                  <StyledTableCell></StyledTableCell>
-                                  <StyledTableCell></StyledTableCell>
-                                </StyledTableRow>
-                              )}
-                            </TableBody>
-                          </StyledTable>
-                        </TableContainer>
+                                    </StyledTableRow>
+                                  ))}
+                                  <StyledTableRow>
+                                    <StyledTableCell>
+                                      Total Discount
+                                    </StyledTableCell>
+                                    <StyledTableCell>
+                                      {`$${priceFormate(
+                                        result
+                                          .reduce((total, item) => {
+                                            return (
+                                              total +
+                                              (parseFloat(item?.discount) || 0)
+                                            );
+                                          }, 0)
+                                          .toFixed(2)
+                                      )}`}
+                                    </StyledTableCell>
+                                    <StyledTableCell></StyledTableCell>
+                                    <StyledTableCell></StyledTableCell>
+                                    <StyledTableCell></StyledTableCell>
+                                    <StyledTableCell></StyledTableCell>
+                                    <StyledTableCell></StyledTableCell>
+                                  </StyledTableRow>
+                                  {Object.entries(props.EmployeeFilterData)
+                                    .length -
+                                    1 ===
+                                    index && (
+                                    <StyledTableRow>
+                                      <StyledTableCell>
+                                        <div className="q-category-bottom-report-listing">
+                                          <div>
+                                            <p className="">
+                                              Final Discount Total
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </StyledTableCell>
+                                      <StyledTableCell>
+                                        <div className="q-category-bottom-report-listing">
+                                          <div>
+                                            <p className="">
+                                              ${priceFormate(totalRecord)}
+                                            </p>
+                                          </div>
+                                        </div>
+                                      </StyledTableCell>
+                                      <StyledTableCell></StyledTableCell>
+                                      <StyledTableCell></StyledTableCell>
+                                      <StyledTableCell></StyledTableCell>
+                                      <StyledTableCell></StyledTableCell>
+                                      <StyledTableCell></StyledTableCell>
+                                    </StyledTableRow>
+                                  )}
+                                </TableBody>
+                              </StyledTable>
+                            </TableContainer>
+                          </Grid>
+                        </Grid>
                       </>
                     );
                   } else {
@@ -363,9 +390,9 @@ export default function DashboardTables(props) {
                 }
               )
             ) : (
-              <Grid container sx={{ padding: 2.5 }}>
-                <Grid item>
-                  <p>no record found </p>
+              <Grid container sx={{mt:0}} className="box_shadow_div">
+                <Grid item sx={{p:2.5}}>
+                  <p>No tecord found </p>
                 </Grid>
               </Grid>
             )

@@ -46,7 +46,8 @@ const Employeedetails = (props) => {
   // console.log(props);
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const dispatch = useDispatch();
   const [allEmpWorkingHrsData, setallEmpWorkingHrsData] = useState("");
   const AllEmpWorkingHrsDataState = useSelector(
@@ -73,10 +74,11 @@ const Employeedetails = (props) => {
         }
       }
     } catch (error) {
-      console.log(error);
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };

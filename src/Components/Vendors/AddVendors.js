@@ -56,7 +56,7 @@ const AddVendors = ({ setVisible }) => {
       };
       await dispatch(fetchVendorsListData(data)).unwrap();
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -270,22 +270,20 @@ const AddVendors = ({ setVisible }) => {
         });
 
         if (response) {
-          // setVisible("VendorsDetail");
           navigate("/vendors");
           ToastifyAlert("Added Successfully", "success");
-          // alert(response.data.message);
-          setLoader(false);
         } else {
           console.error(response);
-          setLoader(false);
-          // alert(response.data.message);
         }
       } catch (error) {
-        if (error.response.status == 401) {
-          handleCoockieExpire();
+        if (error.status == 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
-          setLoader(false);
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
         }
+      } finally {
+        setLoader(false);
       }
     }
   };
@@ -309,7 +307,9 @@ const AddVendors = ({ setVisible }) => {
       borderColor: state.isFocused ? "black" : provided.borderColor,
       boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
       "&:hover": {
-        borderColor: state.isFocused ? "black" : provided["&:hover"].borderColor,
+        borderColor: state.isFocused
+          ? "black"
+          : provided["&:hover"].borderColor,
       },
     }),
     input: (provided) => ({
@@ -319,7 +319,6 @@ const AddVendors = ({ setVisible }) => {
         outline: "none",
       },
     }),
-    
   };
   return (
     <>

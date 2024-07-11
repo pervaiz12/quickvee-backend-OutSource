@@ -14,6 +14,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -88,7 +89,7 @@ const EmployeelistReport = () => {
       // console.log(AllInventoryAccessState.employeeListData)
       setAllEmployeeData(updatedData);
     }
-  }, [AllEmployeeListState.loading,AllEmployeeListState.employeeListData]);
+  }, [AllEmployeeListState.loading, AllEmployeeListState.employeeListData]);
 
   // console.log(employeeData)
   const [sortOrder, setSortOrder] = useState("asc");
@@ -113,86 +114,89 @@ const EmployeelistReport = () => {
           </Grid>
           <Grid container>
             <Grid item xs={12}>
-              <TableContainer>
-                <StyledTable
-                  sx={{ minWidth: 500 }}
-                  aria-label="customized table"
-                >
-                  <TableHead>
-                    <StyledTableCell>
-                      <button
-                        className="flex items-center"
-                        onClick={() => sortByItemName("str", "fullName")}
-                      >
-                        <p>Employee Name</p>
-                        <img src={sortIcon} alt="" className="pl-1" />
-                      </button>
-                    </StyledTableCell>
-                    <StyledTableCell>
-                    <button
-                        className="flex items-center"
-                        onClick={() => sortByItemName("num", "pin")}
-                      >
-                        <p>PIN</p>
-                        <img src={sortIcon} alt="" className="pl-1" />
-                      </button>
+              {AllEmployeeListState.loading ? (
+                <SkeletonTable columns={["Employee Name","PIN","Contact","Email","Address"]}/>
+              ) : (
+                <TableContainer>
+                  <StyledTable
+                    sx={{ minWidth: 500 }}
+                    aria-label="customized table"
+                  >
+                    <TableHead>
+                      <StyledTableCell>
+                        <button
+                          className="flex items-center"
+                          onClick={() => sortByItemName("str", "fullName")}
+                        >
+                          <p>Employee Name</p>
+                          <img src={sortIcon} alt="" className="pl-1" />
+                        </button>
                       </StyledTableCell>
-                    <StyledTableCell>Contact</StyledTableCell>
-                    <StyledTableCell>
-                    <button
-                        className="flex items-center"
-                        onClick={() => sortByItemName("str", "email")}
-                      >
-                        <p>Email</p>
-                        <img src={sortIcon} alt="" className="pl-1" />
-                      </button>
+                      <StyledTableCell>
+                        <button
+                          className="flex items-center"
+                          onClick={() => sortByItemName("num", "pin")}
+                        >
+                          <p>PIN</p>
+                          <img src={sortIcon} alt="" className="pl-1" />
+                        </button>
                       </StyledTableCell>
-                    <StyledTableCell>
-                      Address</StyledTableCell>
-                  </TableHead>
-                  <TableBody>
-                    {employeeData && employeeData?.length >= 1 ? (
-                      employeeData?.map((employee, index) => (
-                        <StyledTableRow key={index}>
-                          <StyledTableCell>
-                            <p>{employee?.fullName}</p>
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <p>{employee?.pin}</p>
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <p>{employee?.phone}</p>
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <p>{employee?.email}</p>
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <p>
-                              {" "}
-                              {employee
-                                ? [
-                                    employee.address,
-                                    employee.city,
-                                    employee.state,
-                                    employee.zipcode,
-                                  ]
-                                    .filter(Boolean)
-                                    .join(", ")
-                                : ""}
-                            </p>
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      ))
-                    ) : (
-                      <Grid container sx={{ padding: 2.5 }}>
-                        <Grid item xs={12}>
-                          <p>No. Data found.</p>
+                      <StyledTableCell>Contact</StyledTableCell>
+                      <StyledTableCell>
+                        <button
+                          className="flex items-center"
+                          onClick={() => sortByItemName("str", "email")}
+                        >
+                          <p>Email</p>
+                          <img src={sortIcon} alt="" className="pl-1" />
+                        </button>
+                      </StyledTableCell>
+                      <StyledTableCell>Address</StyledTableCell>
+                    </TableHead>
+                    <TableBody>
+                      {employeeData && employeeData?.length >= 1 ? (
+                        employeeData?.map((employee, index) => (
+                          <StyledTableRow key={index}>
+                            <StyledTableCell>
+                              <p>{employee?.fullName}</p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <p>{employee?.pin}</p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <p>{employee?.phone}</p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <p>{employee?.email}</p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <p>
+                                {" "}
+                                {employee
+                                  ? [
+                                      employee.address,
+                                      employee.city,
+                                      employee.state,
+                                      employee.zipcode,
+                                    ]
+                                      .filter(Boolean)
+                                      .join(", ")
+                                  : ""}
+                              </p>
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        ))
+                      ) : (
+                        <Grid container sx={{ padding: 2.5 }}>
+                          <Grid item xs={12}>
+                            <p>No. Data found.</p>
+                          </Grid>
                         </Grid>
-                      </Grid>
-                    )}
-                  </TableBody>
-                </StyledTable>
-              </TableContainer>
+                      )}
+                    </TableBody>
+                  </StyledTable>
+                </TableContainer>
+              )}
             </Grid>
           </Grid>
         </Grid>

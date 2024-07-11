@@ -231,7 +231,8 @@ export default function Header() {
     );
   }
 
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [loader, setLoader] = useState(false);
 
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
@@ -260,9 +261,12 @@ export default function Header() {
         ToastifyAlert(update_message, "warn");
       }
     } catch (error) {
-      console.error("API Error:", error);
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
     setLoader(false);
   };
@@ -286,16 +290,18 @@ export default function Header() {
 
       const data = await res.data.status;
       const update_message = await res.data.message;
-      console.log("res",res)
       if (data === true) {
         ToastifyAlert(update_message, "success");
       } else {
         ToastifyAlert(update_message, "warn");
       }
     } catch (error) {
-      console.error("API Error:", error);
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
     setLoader(false);
   };

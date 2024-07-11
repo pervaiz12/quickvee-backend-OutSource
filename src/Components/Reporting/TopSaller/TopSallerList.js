@@ -15,6 +15,7 @@ import PasswordShow from "../../../Common/passwordShow";
 import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import SortIcon from "../../../Assests/Category/SortingW.svg";
+import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -63,7 +64,7 @@ const TopSallerList = ({ data }) => {
         await dispatch(fetchtopsallerData(data)).unwrap();
       }
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -202,7 +203,97 @@ const TopSallerList = ({ data }) => {
     }
   };
 
-  return <>{renderDataTable()}</>;
+  // return <>{renderDataTable()}</>;
+  return (
+    <>
+      <Grid container className="box_shadow_div">
+        <Grid item xs={12}>
+          {topsallerDataState.loading ? (
+            <SkeletonTable
+              columns={[
+                "Item Name",
+                "Category",
+                "Varient Name",
+                "Quantity Sold",
+              ]}
+            />
+          ) : (
+            <TableContainer>
+              <StyledTable>
+                <TableHead>
+                  <StyledTableCell>
+                    <button
+                      className="flex items-center"
+                      onClick={() => sortByItemName("str", "real_name")}
+                    >
+                      <p>Item Name</p>
+                      <img src={SortIcon} alt="" className="pl-1" />
+                    </button>
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <button
+                      className="flex items-center"
+                      onClick={() => sortByItemName("str", "categoryss")}
+                    >
+                      <p>Category</p>
+                      <img src={SortIcon} alt="" className="pl-1" />
+                    </button>
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <button
+                      className="flex items-center"
+                      onClick={() => sortByItemName("str", "variant")}
+                    >
+                      <p>Varient Name</p>
+                      <img src={SortIcon} alt="" className="pl-1" />
+                    </button>
+                  </StyledTableCell>
+                  <StyledTableCell>
+                    <button
+                      className="flex items-center"
+                      onClick={() => sortByItemName("num", "total_sold")}
+                    >
+                      <p>Quantity Sold</p>
+                      <img src={SortIcon} alt="" className="pl-1" />
+                    </button>
+                  </StyledTableCell>
+                </TableHead>
+
+                <TableBody>
+                  {topsaller.length > 0 ? (
+                    topsaller?.map((topsaller, index) => (
+                      <StyledTableRow>
+                        <StyledTableCell>
+                          <p className="report-title ">{topsaller.real_name}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p className="report-title">{topsaller.categoryss}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p className="report-title">{topsaller.variant}</p>
+                        </StyledTableCell>
+                        <StyledTableCell>
+                          <p className="report-title">
+                            {priceFormate(topsaller.total_sold)}
+                          </p>
+                        </StyledTableCell>
+                      </StyledTableRow>
+                    ))
+                  ) : (
+                    <Grid container sx={{ padding: 2.5 }}>
+                      <Grid item xs={12}>
+                        <p>No. Data found.</p>
+                      </Grid>
+                    </Grid>
+                  )}
+                </TableBody>
+              </StyledTable>
+            </TableContainer>
+          )}
+        </Grid>
+      </Grid>
+    </>
+  );
 };
 
 export default TopSallerList;

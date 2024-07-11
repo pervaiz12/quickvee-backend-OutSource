@@ -74,7 +74,8 @@ const OrderCountList = () => {
     }
   };
   const { userTypeData } = useAuthDetails();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   const handleSubmitData = async () => {
     console.log("Dzvxc");
@@ -143,9 +144,11 @@ const OrderCountList = () => {
           // setLoader(false);
         }
       } catch (error) {
-        if (error.response.status === 401) {
-          handleCoockieExpire();
+        if (error.status == 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
         }
         setLoader(false);
         ToastifyAlert("Something wents wrong", "error");
@@ -359,7 +362,7 @@ const OrderCountList = () => {
                 <DemoContainer className="" components={["DatePicker"]}>
                   <DatePicker
                     // sx={{pt:0.2}}
-                 
+
                     value={dayjs(selectedStartDate)}
                     onChange={handleDateChange(setSelectedStartDate)}
                     maxDate={dayjs()}

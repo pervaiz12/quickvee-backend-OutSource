@@ -81,7 +81,7 @@ const VendorsDetail = ({ setVisible }) => {
       };
       await dispatch(fetchVendorsListData(data)).unwrap();
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -149,11 +149,15 @@ const VendorsDetail = ({ setVisible }) => {
         );
       } else {
         // alert("something went wrong.");
-        showModal("Something went wrong !");
+        showModal("Something went wrong!");
       }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 

@@ -58,7 +58,8 @@ const StoreCateUser = () => {
   console.log("modalHeaderText", modalHeaderText);
 
   const { userTypeData } = useAuthDetails();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [MerchantList, setMerchantList] = useState();
   const MerchantListData = useSelector((state) => state.ExportInventoryData);
   const dispatch = useDispatch();
@@ -83,9 +84,11 @@ const StoreCateUser = () => {
         await dispatch(fetchMerchantsList(data)).unwrap();
       }
     } catch (error) {
-      if(error.status === 401){
-        handleCoockieExpire()
-        getUnAutherisedTokenMessage()
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };

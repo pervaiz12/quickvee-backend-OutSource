@@ -79,14 +79,12 @@ const DailyReportList = ({ data }) => {
 
       await dispatch(fetchdailyreportData(newData)).unwrap();
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
         getNetworkError();
       }
-      // getUnAutherisedTokenMessage();
-      // handleCoockieExpire();
     }
   };
 
@@ -120,17 +118,17 @@ const DailyReportList = ({ data }) => {
     setdailyreport(sortedItems);
     setSortOrder(newOrder);
   };
-  if (!data || data.length === 0) {
-    return (
-      <>
-        <Grid container sx={{ padding: 2.5 }} className="box_shadow_div ">
-          <Grid item xs={12}>
-            No data Found.
-          </Grid>
-        </Grid>
-      </>
-    );
-  }
+  // if (!data || data.length === 0) {
+  //   return (
+  //     <>
+  //       <Grid container sx={{ padding: 2.5 }} className="box_shadow_div ">
+  //         <Grid item xs={12}>
+  //           No data Found.
+  //         </Grid>
+  //       </Grid>
+  //     </>
+  //   );
+  // }
 
   const formatDate = (dateString) => {
     const options = { day: "2-digit", month: "short", year: "numeric" };
