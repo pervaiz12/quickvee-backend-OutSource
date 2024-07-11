@@ -14,7 +14,8 @@ import CustomHeader from "../../../reuseableComponents/CustomHeader";
 const RefundSummary = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [filteredData, setFilteredData] = useState({
     category_id: "all",
     reason_name: "all",
@@ -134,11 +135,13 @@ const RefundSummary = () => {
         setCategoryOptions(mappedOptions);
         setLoadingCategories(false);
       } catch (error) {
-        console.error("Error fetching categories:", error);
-        if (error.response.status == 401) {
+        if (error.status == 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
         }
+      } finally {
         setLoadingCategories(false);
       }
     };

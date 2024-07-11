@@ -50,7 +50,8 @@ const ReorderInventoryList = (props) => {
   // console.log(props)
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const dispatch = useDispatch();
   const [allReorderInventoryData, setallReorderInventoryData] = useState([]);
   const AllReorderInventoryDataState = useSelector(
@@ -71,9 +72,11 @@ const ReorderInventoryList = (props) => {
         await dispatch(fetchReorderInventoryData(data)).unwrap();
       }
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };

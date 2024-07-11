@@ -32,10 +32,11 @@ import AlertModal from "../../reuseableComponents/AlertModal";
 import PasswordShow from "../../Common/passwordShow";
 import CircularProgress from "@mui/material/CircularProgress";
 
-const EditCoupon = ({couponId,seVisible}) => {
+const EditCoupon = ({ couponId, seVisible }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const myStyles = {
     display: "flex",
   };
@@ -60,7 +61,7 @@ const EditCoupon = ({couponId,seVisible}) => {
   async function fetchData() {
     const getcouponData = {
       merchant_id,
-      coupon_id:params?.couponsCode,
+      coupon_id: params?.couponsCode,
       ...userTypeData,
     };
 
@@ -117,19 +118,19 @@ const EditCoupon = ({couponId,seVisible}) => {
 
         if (res[0]?.flag === "1") {
           setActiveTab("amount");
-          if(res[0]?.discount === "0.00"){
+          if (res[0]?.discount === "0.00") {
             setDiscountError("Discount Amount is required");
           }
-          setSwitchdisable(false)
+          setSwitchdisable(false);
         } else {
           setActiveTab("percentage");
-          if(res[0]?.discount === "100.00"){
+          if (res[0]?.discount === "100.00") {
             setCouponStates((prev) => ({
               ...prev,
               online: false,
               list_online: false,
-            }))
-            setSwitchdisable(true)
+            }));
+            setSwitchdisable(true);
           }
         }
 
@@ -221,12 +222,12 @@ const EditCoupon = ({couponId,seVisible}) => {
 
   const handleShowOnlineChange = (e) => {
     const status = e.target.checked;
-    if(switchdisable ){
+    if (switchdisable) {
       setCouponStates({
         ...couponStates,
         online: false,
-      })
-    }else{
+      });
+    } else {
       setCouponStates({
         ...couponStates,
         online: status,
@@ -242,23 +243,23 @@ const EditCoupon = ({couponId,seVisible}) => {
     });
     setCoupon({
       ...coupon,
-      count_limit:"1"
-    })
+      count_limit: "1",
+    });
   };
   const handleListOnlineChange = (e) => {
-      const status = e.target.checked;
-      if(switchdisable ){
-        setCouponStates({
-          ...couponStates,
-          list_online:false, 
-        })
-      }else{
-        setCouponStates({
-          ...couponStates,
-          list_online: status,
-        });
-      }
-    };
+    const status = e.target.checked;
+    if (switchdisable) {
+      setCouponStates({
+        ...couponStates,
+        list_online: false,
+      });
+    } else {
+      setCouponStates({
+        ...couponStates,
+        list_online: status,
+      });
+    }
+  };
 
   const navigate = useNavigate();
 
@@ -282,26 +283,32 @@ const EditCoupon = ({couponId,seVisible}) => {
       // } else {
       //   setDateMaxDisAMTError("");
       // }
-      if(+coupon.discount > 100){
-        console.log("coupon.discount",coupon.discount)
+      if (+coupon.discount > 100) {
+        console.log("coupon.discount", coupon.discount);
         setDiscountError("Discount Percentage is cannot exceed 100.00%");
-        return
+        return;
       }
-      if (!coupon.discount == null || coupon.discount === "" || coupon.discount === "0.00") {
+      if (
+        !coupon.discount == null ||
+        coupon.discount === "" ||
+        coupon.discount === "0.00"
+      ) {
         setDiscountError("Discount Amount Percentage is required");
-        return
+        return;
       } else {
         setDiscountError("");
       }
     }
     if (activeTab === "amount") {
       if (parseFloat(coupon.min_amount) <= parseFloat(coupon.discount)) {
-        showModal("Minimum order amount must be greater than the discount amount.");
+        showModal(
+          "Minimum order amount must be greater than the discount amount."
+        );
         setCoupon({ ...coupon, discount: "0.00" });
         setDiscountError("Discount Amount is required");
         return; // Stop further execution
       }
-      if(coupon.discount === "0.00"){
+      if (coupon.discount === "0.00") {
         setDiscountError("Discount Amount is required");
         return;
       }
@@ -312,7 +319,12 @@ const EditCoupon = ({couponId,seVisible}) => {
         setCountLimitError("Please enter a value greater than or equal to 1.");
         return; // Stop further execution
       }
-      if (!coupon.count_limit  || coupon.count_limit === "0" || coupon.count_limit === "00" || coupon.count_limit === "000") {
+      if (
+        !coupon.count_limit ||
+        coupon.count_limit === "0" ||
+        coupon.count_limit === "00" ||
+        coupon.count_limit === "000"
+      ) {
         setCountLimitError("Please enter a value greater than or equal to 1.");
         return; // Stop further execution
       }
@@ -363,7 +375,6 @@ const EditCoupon = ({couponId,seVisible}) => {
     } else {
       setDateEndError("");
     }
-
 
     const formData = new FormData();
 
@@ -450,9 +461,12 @@ const EditCoupon = ({couponId,seVisible}) => {
         setErrorMessage(update_message);
       }
     } catch (error) {
-      console.error("API Error:", error);
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
     setLoader(false);
   };
@@ -539,7 +553,6 @@ const EditCoupon = ({couponId,seVisible}) => {
   //   }
   // };
 
-
   const handleStartDateChange = (newDate) => {
     if (!newDate || !newDate.isValid()) {
       // showModal("Buss");
@@ -554,7 +567,7 @@ const EditCoupon = ({couponId,seVisible}) => {
     const dayjsDate = dayjs(formattedStartDate);
     const today = dayjs().format("YYYY-MM-DD");
     const endDate = coupon.date_expire;
-  
+
     // Check if the start date is before today's date
     if (formattedStartDate < today) {
       setCoupon({
@@ -562,7 +575,7 @@ const EditCoupon = ({couponId,seVisible}) => {
         date_valid: "",
       });
       setDateStartError("Start Date cannot be before the current date");
-    }else if (endDate && dayjsDate.isAfter(dayjs(endDate))) {
+    } else if (endDate && dayjsDate.isAfter(dayjs(endDate))) {
       // showModal("Start date cannot be greater than the end date");
       setCoupon({
         ...coupon,
@@ -571,7 +584,7 @@ const EditCoupon = ({couponId,seVisible}) => {
       });
       setDateStartError("");
       setDateEndError("End Date is required");
-    }else {
+    } else {
       setCoupon({
         ...coupon,
         date_valid: formattedStartDate,
@@ -581,7 +594,6 @@ const EditCoupon = ({couponId,seVisible}) => {
     }
     // console.log("coupon StartDate", coupon.date_valid);
   };
-  
 
   const handleEndDateChange = (newDate) => {
     if (!newDate || !newDate.isValid()) {
@@ -597,7 +609,7 @@ const EditCoupon = ({couponId,seVisible}) => {
     const dayjsEndDate = dayjs(formattedEndDate);
     const today = dayjs().format("YYYY-MM-DD");
     const startDate = coupon.date_valid;
-  
+
     // Check if the end date is before today's date
     if (formattedEndDate < today) {
       setCoupon({
@@ -605,7 +617,7 @@ const EditCoupon = ({couponId,seVisible}) => {
         date_expire: "",
       });
       setDateEndError("End Date cannot be before the current date");
-    } 
+    }
     // Check if the end date is less than the start date
     else if (startDate && dayjsEndDate.isBefore(dayjs(startDate))) {
       // showModal("End date cannot be less than the start date");
@@ -615,7 +627,7 @@ const EditCoupon = ({couponId,seVisible}) => {
       });
       // setDateEndError("End Date is required");
       setDateEndError("End Date cannot be less than the start date");
-    } 
+    }
     // If the end date is valid
     else {
       setCoupon({
@@ -661,18 +673,18 @@ const EditCoupon = ({couponId,seVisible}) => {
       } else {
         setDiscountError("");
       }
-      if(+formattedValue > 100){
+      if (+formattedValue > 100) {
         setDiscountError("Discount Percentage is cannot exceed 100.00%");
       }
-      if(+formattedValue === 100 || +formattedValue > 100){  
+      if (+formattedValue === 100 || +formattedValue > 100) {
         setCouponStates({
           ...couponStates,
           online: false,
-          list_online:false,
-        })
-        setSwitchdisable(true)
-      }else{
-        setSwitchdisable(false)
+          list_online: false,
+        });
+        setSwitchdisable(true);
+      } else {
+        setSwitchdisable(false);
       }
       setCoupon({ ...coupon, discount: formattedValue });
     }
@@ -693,14 +705,14 @@ const EditCoupon = ({couponId,seVisible}) => {
   };
 
   const handleTabChange = (tab) => {
-    if(coupon.discount === "0.00" || coupon.discount === ""){
+    if (coupon.discount === "0.00" || coupon.discount === "") {
       setActiveTab(tab);
-      setCoupon({ ...coupon, discount: "" })
+      setCoupon({ ...coupon, discount: "" });
       setDateMaxDisAMTError("");
       setDiscountError("");
-      setSwitchdisable(false)
-    }else{
-      return
+      setSwitchdisable(false);
+    } else {
+      return;
     }
   };
 
@@ -1133,18 +1145,18 @@ const EditCoupon = ({couponId,seVisible}) => {
         <div className="box ">
           <div className="box_shadow_div">
             <div className="q-add-categories-section">
-              <div className="q-add-categories-section-header" >
-                <Link to={`/coupons`} >
-                <div  className="cursor-pointer">
-                  <span style={myStyles}>
-                  <img
-                  src={AddNewCategory}
-                  alt="Add-New-Category"
-                  className="h-9 w-9"
-                />
-                    <span className="textIMG">Edit Coupon</span>
-                  </span>
-                </div>
+              <div className="q-add-categories-section-header">
+                <Link to={`/coupons`}>
+                  <div className="cursor-pointer">
+                    <span style={myStyles}>
+                      <img
+                        src={AddNewCategory}
+                        alt="Add-New-Category"
+                        className="h-9 w-9"
+                      />
+                      <span className="textIMG">Edit Coupon</span>
+                    </span>
+                  </div>
                 </Link>
               </div>
               <div className="q-add-categories-section-middle-form">
@@ -1211,11 +1223,11 @@ const EditCoupon = ({couponId,seVisible}) => {
                   ></textarea>
                 </div>
 
-                <Grid container spacing={2} >
+                <Grid container spacing={2}>
                   <Grid item md={6} xs={12}>
                     <div className="q_coupon_minium input_area mt-2">
                       <label for="minorder_amt">Minimum Order Amount</label>
-                       <BasicTextFields
+                      <BasicTextFields
                         type={"number"}
                         value={coupon.min_amount}
                         onChangeFun={handleMinAmountChange}
@@ -1233,7 +1245,7 @@ const EditCoupon = ({couponId,seVisible}) => {
                           {activeTab === "amount" && (
                             <div className="q_coupon_minium input_area">
                               <label for="discount_amt">Discount Amount</label>
-                               <BasicTextFields
+                              <BasicTextFields
                                 type={"number"}
                                 value={coupon.discount}
                                 placeholder="Enter Discount Amount"
@@ -1303,13 +1315,13 @@ const EditCoupon = ({couponId,seVisible}) => {
                       Maximum Discount Amount
                     </label>
                     <BasicTextFields
-                        type={"text"}
-                        maxLength={7}
-                        value={coupon.maximum_discount}
-                        placeholder="Enter Maximum Discount Amount"
-                        onChangeFun={handleMaxDiscountChange}
-                        sx={{ mt: 0.5 }}
-                      />
+                      type={"text"}
+                      maxLength={7}
+                      value={coupon.maximum_discount}
+                      placeholder="Enter Maximum Discount Amount"
+                      onChangeFun={handleMaxDiscountChange}
+                      sx={{ mt: 0.5 }}
+                    />
                     {dateMaxDisAMTError && (
                       <p className="error-message">{dateMaxDisAMTError}</p>
                     )}
@@ -1484,10 +1496,14 @@ const EditCoupon = ({couponId,seVisible}) => {
                 <Grid container sx={{ marginTop: 0.5, marginBottom: 0.5 }}>
                   <Grid item xs={6}>
                     {/* <label htmlFor="coupon">Start Date & Time</label> */}
-                    <label htmlFor="coupon" className="mb-2">Start Date</label>
+                    <label htmlFor="coupon" className="mb-2">
+                      Start Date
+                    </label>
                   </Grid>
                   <Grid item xs={6}>
-                  <label htmlFor="coupon" className="pl-2 mb-2">Expire Date</label>
+                    <label htmlFor="coupon" className="pl-2 mb-2">
+                      Expire Date
+                    </label>
                   </Grid>
                 </Grid>
 
@@ -1519,7 +1535,7 @@ const EditCoupon = ({couponId,seVisible}) => {
                                 textField: {
                                   placeholder: "Start Date",
                                   size: "small",
-                                  onKeyPress: preventKeyPress, 
+                                  onKeyPress: preventKeyPress,
                                 },
                               }}
                               components={{
@@ -1589,7 +1605,7 @@ const EditCoupon = ({couponId,seVisible}) => {
                               }
                               shouldDisableDate={(date) => {
                                 const start = coupon.date_valid;
-                                return date.format("YYYY-MM-DD") < start ;
+                                return date.format("YYYY-MM-DD") < start;
                               }}
                               value={dayjs(
                                 new Date(Date.parse(coupon.date_expire))
@@ -1601,7 +1617,7 @@ const EditCoupon = ({couponId,seVisible}) => {
                                 textField: {
                                   placeholder: "End Date",
                                   size: "small",
-                                  onKeyPress: preventKeyPress, 
+                                  onKeyPress: preventKeyPress,
                                 },
                               }}
                               components={{
@@ -1660,25 +1676,25 @@ const EditCoupon = ({couponId,seVisible}) => {
                   sx={{ marginTop: 2 }}
                   className="q-add-coupon-single-input"
                 >
-                <div className="q-add-coupon-single-input">
-                  <div className="q_coupon_Add_status_btn">
-                    <p>Enable Redemption Limit?</p>
-                    <Switch
-                      name="enable_limit"
-                      id="enable_limit"
-                      checked={couponStates.enablelimit === true}
-                      onChange={handleEnableLimitChange}
-                      sx={{
-                        "& .MuiSwitch-switchBase.Mui-checked": {
-                          color: "#0A64F9", // Change color when switch is checked
-                        },
-                        "& .MuiSwitch-track": {
-                          backgroundColor: "#0A64F9", // Change background color of the track
-                        },
-                      }}
-                    />
+                  <div className="q-add-coupon-single-input">
+                    <div className="q_coupon_Add_status_btn">
+                      <p>Enable Redemption Limit?</p>
+                      <Switch
+                        name="enable_limit"
+                        id="enable_limit"
+                        checked={couponStates.enablelimit === true}
+                        onChange={handleEnableLimitChange}
+                        sx={{
+                          "& .MuiSwitch-switchBase.Mui-checked": {
+                            color: "#0A64F9", // Change color when switch is checked
+                          },
+                          "& .MuiSwitch-track": {
+                            backgroundColor: "#0A64F9", // Change background color of the track
+                          },
+                        }}
+                      />
+                    </div>
                   </div>
-                </div>
                 </Grid>
 
                 {couponStates.enablelimit > 0 && (
@@ -1703,30 +1719,47 @@ const EditCoupon = ({couponId,seVisible}) => {
                         })
                       }
                     />
-                     {countLimitError && (
+                    {countLimitError && (
                       <p className="error-message">{countLimitError}</p>
                     )}
                   </div>
                 )}
 
-                 <Grid
+                <Grid
                   container
                   direction="row"
                   justifyContent="flex-end"
                   alignItems="center"
-                  sx={{  pb: 2.5 }}
+                  sx={{ pb: 2.5 }}
                 >
-                  <Grid item sx={{px:2}}>
-                    <button className="quic-btn quic-btn-save attributeUpdateBTN" onClick={handleSave} disabled={loader}>
-                      {loader ? <><CircularProgress color={"inherit"} width={15} size={15} /> Save</> : "Save"}
+                  <Grid item sx={{ px: 2 }}>
+                    <button
+                      className="quic-btn quic-btn-save attributeUpdateBTN"
+                      onClick={handleSave}
+                      disabled={loader}
+                    >
+                      {loader ? (
+                        <>
+                          <CircularProgress
+                            color={"inherit"}
+                            width={15}
+                            size={15}
+                          />{" "}
+                          Save
+                        </>
+                      ) : (
+                        "Save"
+                      )}
                     </button>
                   </Grid>
                   <Grid item>
-                  <Link to={`/coupons`} >
-                    {/* <spam onClick={()=>{seVisible("CouponDiscount")}}> */}
-                      <button className="quic-btn quic-btn-cancle">Cancel</button>
-                    {/* </spam> */}
-                  </Link>
+                    <Link to={`/coupons`}>
+                      {/* <spam onClick={()=>{seVisible("CouponDiscount")}}> */}
+                      <button className="quic-btn quic-btn-cancle">
+                        Cancel
+                      </button>
+                      {/* </spam> */}
+                    </Link>
                   </Grid>
                 </Grid>
               </div>
@@ -1735,10 +1768,12 @@ const EditCoupon = ({couponId,seVisible}) => {
         </div>
       </div>
       <AlertModal
-      headerText={alertModalHeaderText}
-      open={alertModalOpen}
-      onClose={() => {setAlertModalOpen(false)}}
-       />
+        headerText={alertModalHeaderText}
+        open={alertModalOpen}
+        onClose={() => {
+          setAlertModalOpen(false);
+        }}
+      />
     </>
   );
 };

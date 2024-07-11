@@ -84,7 +84,7 @@ const DelveryPickupDetails = ({ DeliveryPickupData }) => {
         <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
-              <h5 className="box_shadow_heading">Delivery & Pickup Details</h5>
+              <h5 className="StoreSetting_heading-menu">Delivery & Pickup Details</h5>
             </Grid>
           </Grid>
           <Grid
@@ -94,7 +94,7 @@ const DelveryPickupDetails = ({ DeliveryPickupData }) => {
             alignItems="center"
           >
             <Grid item>
-              <h5 style={{ marginBottom: 0 }} className="box_shadow_heading">
+              <h5 style={{ marginBottom: 0 }} className="StoreSetting_heading-menu">
                 Enable Tip
               </h5>
             </Grid>

@@ -5,7 +5,7 @@ const StoreHeading = ({hideSucess,successsMessage,infoRecord}) => {
     <Grid container className="box_shadow_div">
       <Grid container direction="row" justifyContent="space-between" alignItems="center" className="q-coupon-bottom-header">
         <Grid item>
-          <div>
+          <div className="StoreSetting_heading">
             <span>Store Info</span>
           </div>
         </Grid>

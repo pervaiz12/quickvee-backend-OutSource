@@ -15,7 +15,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import PasswordShow from "./../../Common/passwordShow";
 
 const AddDefaults = ({ setVisible }) => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -38,15 +38,16 @@ const AddDefaults = ({ setVisible }) => {
   };
   const [loader, setLoader] = useState(false);
 
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const inputChange = (e) => {
     const { name, value } = e.target;
-    const regex = /^[A-Za-z0-9 ]*$/ ;
-    if (name === "name"){
+    const regex = /^[A-Za-z0-9 ]*$/;
+    if (name === "name") {
       if (regex.test(value)) {
         setDefaults({ ...defaults, name: value });
       }
-    }else{
+    } else {
       setDefaults((preValue) => {
         return {
           ...preValue,
@@ -126,7 +127,7 @@ const AddDefaults = ({ setVisible }) => {
       const update_message = await res.data.msg;
       if (data === "Success") {
         ToastifyAlert("Added Successfully", "success");
-        navigate(-1)
+        navigate(-1);
       } else if (
         data === "Failed" &&
         update_message === "Default Menu Entered Already Exits"
@@ -134,9 +135,12 @@ const AddDefaults = ({ setVisible }) => {
         setErrorMessage("Default Menu Already Exits");
       }
     } catch (error) {
-      console.error("API Error:", error);
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
     setLoader(false);
   };
@@ -192,7 +196,7 @@ const AddDefaults = ({ setVisible }) => {
         //   `${file.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`
         // );
         // showModal(`${file.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`)
-        showModal("Only jpeg, png, jpg files can be uploaded")
+        showModal("Only jpeg, png, jpg files can be uploaded");
         e.target.value = null;
       }
     }
@@ -202,7 +206,7 @@ const AddDefaults = ({ setVisible }) => {
     e.stopPropagation();
     const fileInput = document.getElementById("filesBanner");
     if (fileInput) {
-        fileInput.value = "";
+      fileInput.value = "";
     }
     setDefaults((prevValue) => ({
       ...prevValue,
@@ -218,7 +222,7 @@ const AddDefaults = ({ setVisible }) => {
     if (/\d/.test(e.key)) {
       e.preventDefault(); // Prevent input of numbers
       // alert("Only Alphabets are allowed.");
-      showModal("Only alphabet characters are allowed")
+      showModal("Only alphabet characters are allowed");
     }
   };
 
@@ -286,10 +290,12 @@ const AddDefaults = ({ setVisible }) => {
           <div className="mt-10 mb-4">
             <form onSubmit={handleSubmit} enctype="multipart/form-data">
               <div className="q-add-categories-section-header">
-                <span onClick={() =>
-                  //  setVisible("DefaultsDetail")
-                  navigate(-1)
-                   }>
+                <span
+                  onClick={() =>
+                    //  setVisible("DefaultsDetail")
+                    navigate(-1)
+                  }
+                >
                   <img src={AddNewCategory} alt="Add-New-Category" />
                   <span>Add New Defaults</span>
                 </span>
@@ -353,7 +359,7 @@ const AddDefaults = ({ setVisible }) => {
                 <Grid item xs={6}>
                   <label className="q-details-page-label">Type</label>
                   <SelectDropDown
-                  sx={{pt:0.5}}
+                    sx={{ pt: 0.5 }}
                     listItem={category}
                     title={"title"}
                     onClickHandler={handleOptionClick}
@@ -414,13 +420,25 @@ const AddDefaults = ({ setVisible }) => {
               </div>
 
               <div className="q-add-categories-section-middle-footer">
-                <button className="quic-btn quic-btn-save attributeUpdateBTN" disabled={loader}>{loader ? 
-                ( <> <CircularProgress color={"inherit"} className="loaderIcon"  width={15}size={15}/>{" "}
-                  Add
-                </>
-              ) : (
-                "Add"
-              )}</button>
+                <button
+                  className="quic-btn quic-btn-save attributeUpdateBTN"
+                  disabled={loader}
+                >
+                  {loader ? (
+                    <>
+                      {" "}
+                      <CircularProgress
+                        color={"inherit"}
+                        className="loaderIcon"
+                        width={15}
+                        size={15}
+                      />{" "}
+                      Add
+                    </>
+                  ) : (
+                    "Add"
+                  )}
+                </button>
                 <button
                   onClick={() => navigate(-1)}
                   className="quic-btn quic-btn-cancle"
@@ -433,10 +451,12 @@ const AddDefaults = ({ setVisible }) => {
         </div>
       </div>
       <AlertModal
-      headerText={alertModalHeaderText}
-      open={alertModalOpen}
-      onClose={() => {setAlertModalOpen(false)}}
-       />
+        headerText={alertModalHeaderText}
+        open={alertModalOpen}
+        onClose={() => {
+          setAlertModalOpen(false);
+        }}
+      />
     </>
   );
 };

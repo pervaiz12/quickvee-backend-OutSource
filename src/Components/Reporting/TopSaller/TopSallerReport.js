@@ -15,7 +15,8 @@ const TopSallerReport = () => {
   const [filteredData, setFilteredData] = useState({ category_id: "all" });
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   const handleDataFiltered = (data) => {
@@ -141,11 +142,13 @@ const TopSallerReport = () => {
         setCategoryOptions(mappedOptions);
         setLoadingCategories(false);
       } catch (error) {
-        if (error.response.status == 401) {
+        if (error.status == 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
         }
-        console.error("Error fetching categories:", error);
+      } finally {
         setLoadingCategories(false);
       }
     };

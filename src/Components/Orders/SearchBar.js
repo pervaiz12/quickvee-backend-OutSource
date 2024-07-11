@@ -16,7 +16,7 @@ function SearchBar({ onSearch }) {
                 <div className="flex border  rounded-md overflow-hidden">
                     <input
                         type="text"
-                        placeholder="Search orders by order ID, last 4 digits on payment card, or invoice ID"
+                        placeholder="Search orders by order ID, or invoice ID"
                         value={searchId}
                         onChange={(e) => setSearchId(e.target.value)}
                         className="w-full px-4 py-2 border-none focus:outline-none place_text_search  cursor-pointer"

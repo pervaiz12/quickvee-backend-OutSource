@@ -22,7 +22,8 @@ const MainEmployee = ({ onFilterDataChange }) => {
     useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
@@ -85,10 +86,13 @@ const MainEmployee = ({ onFilterDataChange }) => {
         setemployeeList(mappedOptions);
         setLoadingEmpList(false);
       } catch (error) {
-        if (error.response.status == 401) {
+        if (error.status == 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
         }
+      } finally {
         setLoadingEmpList(false);
       }
     };

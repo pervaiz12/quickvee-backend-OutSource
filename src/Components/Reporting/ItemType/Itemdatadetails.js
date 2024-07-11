@@ -67,7 +67,7 @@ const Itemdatadetails = ({
     try {
       await dispatch(fetchOrderTypeData(data)).unwrap();
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -259,7 +259,9 @@ const Itemdatadetails = ({
                                 )
                               }
                             >
-                              <p className="q-employee-in whitespace-nowrap">View Details</p>
+                              <p className="q-employee-in whitespace-nowrap">
+                                View Details
+                              </p>
                             </button>
                           ) : (
                             "-"

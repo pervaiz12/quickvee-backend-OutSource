@@ -13,6 +13,7 @@ const ChangePasswordForm = ({
   handleSubmitChangePassword,
   passwordInput,
   passwordError,
+  handleBlurPassword,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -44,6 +45,7 @@ const ChangePasswordForm = ({
                   type={showPassword ? "text" : "password"}
                   variant="outlined"
                   size="small"
+                  onBlur={() => handleBlurPassword("password")}
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton

@@ -74,7 +74,8 @@ const LoyaltyProgramList = () => {
 
   const [sortOrder, setSortOrder] = useState("asc");
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  const { getUnAutherisedTokenMessage, handleCoockieExpire } = PasswordShow();
+  const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
+    PasswordShow();
 
   useEffect(() => {
     // let data = {
@@ -99,8 +100,12 @@ const LoyaltyProgramList = () => {
       };
       await dispatch(fetchloyaltyprogramData(data)).unwrap();
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 

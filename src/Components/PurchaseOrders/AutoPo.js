@@ -30,10 +30,12 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
     backgroundColor: "#253338",
     color: theme.palette.common.white,
     fontFamily: "CircularSTDMedium !important",
+    padding: "16px 20px",
   },
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
     fontFamily: "CircularSTDBook !important",
+    padding: "16px 20px",
   },
   [`&.${tableCellClasses.table}`]: {
     fontSize: 14,
@@ -54,7 +56,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const customStyles = {
   menu: (provided) => ({
     ...provided,
-     cursor: 'pointer',
+    cursor: "pointer",
     zIndex: 9999,
     position: "absolute",
   }),
@@ -64,26 +66,27 @@ const customStyles = {
   }),
   control: (provided, state) => ({
     ...provided,
-    borderColor: state.isFocused || state.isHovered ? 'black' : provided.borderColor,
-    boxShadow: state.isFocused ? '0 0 0 1px black' : provided.boxShadow,
-    '&:hover': {
-      borderColor: 'black',
+    borderColor:
+      state.isFocused || state.isHovered ? "black" : provided.borderColor,
+    boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
+    "&:hover": {
+      borderColor: "black",
     },
   }),
   input: (provided) => ({
     ...provided,
-    '&:focus': {
-      borderColor: 'black',
-      outline: 'none',
+    "&:focus": {
+      borderColor: "black",
+      outline: "none",
     },
   }),
-  
 };
 
 const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const initialState = [
@@ -244,11 +247,12 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
       // console.log("filteredProducts: ", filteredProducts);
 
       return filteredProducts || [];
-    } catch (e) {
-      console.log("e: ", e);
-      if (e.status == 401 || e.response.status == 401) {
-        handleCoockieExpire();
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };
@@ -333,11 +337,12 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
       } else {
         console.log("Product Not available!");
       }
-    } catch (e) {
-      console.log("e: ", e);
-      if (e.response.status == 401 || e.status == 401) {
-        handleCoockieExpire();
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };
@@ -488,11 +493,12 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
           } else {
             ToastifyAlert(response.data.message, "error");
           }
-        } catch (e) {
-          console.log("Error: ", e);
-          if (e.response.status == 401 || e.status == 401) {
-            handleCoockieExpire();
+        } catch (error) {
+          if (error.status == 401 || error.response.status === 401) {
             getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          } else if (error.status == "Network Error") {
+            getNetworkError();
           }
         }
       } else {
@@ -610,11 +616,12 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
       } else {
         ToastifyAlert("Please Select a Vendor", "error");
       }
-    } catch (e) {
-      console.log("Error: ", e);
-      if (e.response.status == 401 || e.status == 401) {
-        handleCoockieExpire();
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     } finally {
       setLoaders((prev) => ({ ...prev, autoPo: false }));
@@ -626,7 +633,9 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
       <div className="box">
         <div className="box_shadow_div" style={{ overflow: "unset" }}>
           <Grid container className="z-index-1">
-            <TableContainer sx={{borderTopLeftRadius:"10px",borderTopRightRadius:"10px"}}>
+            <TableContainer
+              sx={{ borderTopLeftRadius: "10px", borderTopRightRadius: "10px" }}
+            >
               <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
                 <TableHead>
                   <StyledTableCell>Item Name</StyledTableCell>
@@ -782,7 +791,10 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
           </Grid>
 
           {purchaseInfo.selectedVendor || selectedProducts.length > 0 ? (
-            <div className="flex justify-between w-full py-4 px-6">
+            <div
+              className="flex justify-between w-full"
+              style={{ padding: "20px" }}
+            >
               <div className="button-container start gap-4">
                 {purchaseInfo.selectedVendor && (
                   <button

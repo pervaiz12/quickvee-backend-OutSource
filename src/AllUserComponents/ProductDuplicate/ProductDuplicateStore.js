@@ -1,4 +1,4 @@
-import React, { useEffect, useState ,useRef } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Box, Collapse, Alert, IconButton, Grid } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -34,8 +34,8 @@ const ProductDuplicateStore = () => {
   const [categoryFocus, setCategoryFocus] = useState(false);
   const [alertModalOpen, setAlertModalOpen] = useState(false);
   const [alertModalHeaderText, setAlertModalHeaderText] = useState("");
-  const [userInput, setUserInput] = useState(''); 
-  const [captchaText, setCaptchaText] = useState(''); 
+  const [userInput, setUserInput] = useState("");
+  const [captchaText, setCaptchaText] = useState("");
   const [loader, setLoader] = useState(false);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [confirmfinalModalOpen, setConfirmFinalModalOpen] = useState(false);
@@ -53,10 +53,11 @@ const ProductDuplicateStore = () => {
     setAlertModalHeaderText(headerText);
     setAlertModalOpen(true);
   };
-  
+
   const { userTypeData } = useAuthDetails();
   const { token, ...userTypeDataNew } = userTypeData;
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [storeFromDropdownVisible, setStoreFromDropdownVisible] =
     useState(false);
   const [storeToDropdownVisible, setStoreToDropdownVisible] = useState(false);
@@ -120,9 +121,11 @@ const ProductDuplicateStore = () => {
               setselectedProducts([]);
             }
           } catch (error) {
-            if(error.response.status === 401){
-              handleCoockieExpire();
+            if (error.status == 401 || error.response.status === 401) {
               getUnAutherisedTokenMessage();
+              handleCoockieExpire();
+            } else if (error.status == "Network Error") {
+              getNetworkError();
             }
           }
         }
@@ -156,7 +159,7 @@ const ProductDuplicateStore = () => {
       setselectedProducts(selectedOptions);
     } else {
       // alert("You can select up to 5 options.");
-      showModal("You can select up to 5 options.")
+      showModal("You can select up to 5 options.");
     }
     // setselectedProducts(selectedOptions);
   };
@@ -198,23 +201,25 @@ const ProductDuplicateStore = () => {
 
   useEffect(() => {
     // dispatch(fetchMerchantsList(userTypeData));
-    getFetchMerchantsList()
+    getFetchMerchantsList();
   }, []);
-  const getFetchMerchantsList=async()=>{
-    try{
+  const getFetchMerchantsList = async () => {
+    try {
       const data = {
-        ...userTypeData
+        ...userTypeData,
       };
       if (data) {
         await dispatch(fetchMerchantsList(data)).unwrap();
       }
-    }catch(error){
-      if(error.status === 401){
-        handleCoockieExpire()
-        getUnAutherisedTokenMessage()
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
-  }
+  };
 
   const myStyles = {
     height: "300px",
@@ -230,24 +235,24 @@ const ProductDuplicateStore = () => {
   };
 
   const confirmfun = () => {
-    setConfirmModalOpen(false)
-    setConfirmFinalModalOpen(true)
-  }
+    setConfirmModalOpen(false);
+    setConfirmFinalModalOpen(true);
+  };
 
   const confirmFinalfun = async () => {
     const upcCheckbox = document.getElementById("upc_check");
-      // Check if the checkbox is present and get its value
-      const isUpcChecked = upcCheckbox ? upcCheckbox.checked : false;
-      const productValues = selectedProducts.map((product) => product.value);
-      if (productValues.length === 0) {
-        // alert("Please select at least one Product");
-        showModal("Please select at least on product")
-        return;
-      } else if (productValues.includes("No Products found")) {
-        // alert("No Products found is not a Product");
-        showModal("No Products found is not a Product")
-        return;
-      }
+    // Check if the checkbox is present and get its value
+    const isUpcChecked = upcCheckbox ? upcCheckbox.checked : false;
+    const productValues = selectedProducts.map((product) => product.value);
+    if (productValues.length === 0) {
+      // alert("Please select at least one Product");
+      showModal("Please select at least on product");
+      return;
+    } else if (productValues.includes("No Products found")) {
+      // alert("No Products found is not a Product");
+      showModal("No Products found is not a Product");
+      return;
+    }
     const data = {
       store_name_from: storefrom,
       store_name_to: storeto,
@@ -255,7 +260,7 @@ const ProductDuplicateStore = () => {
       upc_check: isUpcChecked,
       ...userTypeDataNew,
     };
-    setConfirmFinalModalOpen(false)
+    setConfirmFinalModalOpen(false);
     setLoader(true);
     try {
       const response = await axios.post(
@@ -274,19 +279,23 @@ const ProductDuplicateStore = () => {
         const commaSeparatedString = temp_excludedproducts.join(",");
         setexcludedproducts(commaSeparatedString);
         setsubmitmessage("Products Copied successfully ");
-        setUserInput("")
+        setUserInput("");
         setSelectedStorefrom("-- Select Store --");
         setSelectedStoreto("-- Select Store --");
         // ToastifyAlert("Duplicate Inventory Success!", "success");
         if (temp_excludedproducts.length > 0) {
-          alert(temp_excludedproducts + '. These products have been excluded')
+          alert(temp_excludedproducts + ". These products have been excluded");
           // productshowModal(temp_excludedproducts)
-          setAlertModalHeaderText(temp_excludedproducts + '. These products have been excluded');
+          setAlertModalHeaderText(
+            temp_excludedproducts + ". These products have been excluded"
+          );
           setAlertModalOpen(true);
         }
-        showModal("Your Inventory has been copied to your other location. Please verify and make any changes as needed.");
+        showModal(
+          "Your Inventory has been copied to your other location. Please verify and make any changes as needed."
+        );
         ToastifyAlert("Added Successfully", "success");
-        setLoader(false)
+        setLoader(false);
         setStorefrom(null);
         setStoreto(null);
         setProductOptions([
@@ -298,20 +307,19 @@ const ProductDuplicateStore = () => {
         ToastifyAlert("Duplicate Inventory Failed!", "error");
         setsubmitmessage("Something Went Wrong");
       }
-      const canvas = canvasRef.current; 
-        const ctx = canvas.getContext('2d'); 
-        initializeCaptcha(ctx); 
+      const canvas = canvasRef.current;
+      const ctx = canvas.getContext("2d");
+      initializeCaptcha(ctx);
     } catch (error) {
-      // console.log('33 catch err');
-      if(error.response.status === 401){
-        handleCoockieExpire();
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
-      ToastifyAlert("Error!", "error");
-      return new Error(error);
     }
-    setLoader(false)
-  }
+    setLoader(false);
+  };
 
   const dupplicateProductInventory = async (e) => {
     e.preventDefault();
@@ -324,8 +332,7 @@ const ProductDuplicateStore = () => {
       showModal("Please select Store To");
     } else if (selectedStorefrom === selectedStoreto) {
       // alert("Both the selected store are same.");
-      showModal("Both the stores cannot be same.")
-
+      showModal("Both the stores cannot be same.");
     } else {
       const upcCheckbox = document.getElementById("upc_check");
 
@@ -334,126 +341,124 @@ const ProductDuplicateStore = () => {
       const productValues = selectedProducts.map((product) => product.value);
       if (productValues.length === 0) {
         // alert("Please select at least one Product");
-        showModal("Please select at least on product")
+        showModal("Please select at least on product");
         return;
       } else if (productValues.includes("No Products found")) {
         // alert("No Products found is not a Product");
-        showModal("No Products found is not a Product")
+        showModal("No Products found is not a Product");
         return;
       }
 
-      if (userInput === captchaText) { 
+      if (userInput === captchaText) {
         setConfirmModalOpen(true);
-      // const data = {
-      //   store_name_from: storefrom,
-      //   store_name_to: storeto,
-      //   product_id: productValues,
-      //   upc_check: isUpcChecked,
-      //   ...userTypeDataNew,
-      // };
+        // const data = {
+        //   store_name_from: storefrom,
+        //   store_name_to: storeto,
+        //   product_id: productValues,
+        //   upc_check: isUpcChecked,
+        //   ...userTypeDataNew,
+        // };
 
-      // try {
-      //   const response = await axios.post(
-      //     BASE_URL + PRODUCT_INVENTORY_DUPLICATE,
-      //     data,
-      //     {
-      //       headers: {
-      //         "Content-Type": "multipart/form-data",
-      //         Authorization: `Bearer ${token}`,
-      //       },
-      //     }
-      //   );
+        // try {
+        //   const response = await axios.post(
+        //     BASE_URL + PRODUCT_INVENTORY_DUPLICATE,
+        //     data,
+        //     {
+        //       headers: {
+        //         "Content-Type": "multipart/form-data",
+        //         Authorization: `Bearer ${token}`,
+        //       },
+        //     }
+        //   );
 
-      //   if (response.data.status == true) {
-      //     const temp_excludedproducts = response.data.existing_products;
-      //     const commaSeparatedString = temp_excludedproducts.join(", ");
-      //     setexcludedproducts(commaSeparatedString);
-      //     setsubmitmessage("Products Copied successfully ");
-      //     setUserInput("")
-      //     setSelectedStorefrom("-- Select Store --");
-      //     setSelectedStoreto("-- Select Store --");
-      //     // ToastifyAlert("Duplicate Inventory Success!", "success");
-      //     ToastifyAlert("Added Successfully", "success");
-      //     setStorefrom(null);
-      //     setStoreto(null);
-      //     setProductOptions([
-      //       { value: "Select Product", label: "Select Product" },
-      //     ]);
-      //     setselectedProducts([]);
-      //     setIsSelectClicked(false);
-      //   } else if (response.data.status === "Failed") {
-      //     ToastifyAlert("Duplicate Inventory Failed!", "error");
-      //     setsubmitmessage("Something Went Wrong");
-      //   }
-      // } catch (error) {
-      //   // console.log('33 catch err');
-      //   handleCoockieExpire()
-      //   getUnAutherisedTokenMessage()
-      //   ToastifyAlert("Error!", "error");
-      //   return new Error(error);
-      // }
-      }else{
-        showModal("Please Fill Captcha Correctly!")
-        const canvas = canvasRef.current; 
-        const ctx = canvas.getContext('2d'); 
-        initializeCaptcha(ctx); 
+        //   if (response.data.status == true) {
+        //     const temp_excludedproducts = response.data.existing_products;
+        //     const commaSeparatedString = temp_excludedproducts.join(", ");
+        //     setexcludedproducts(commaSeparatedString);
+        //     setsubmitmessage("Products Copied successfully ");
+        //     setUserInput("")
+        //     setSelectedStorefrom("-- Select Store --");
+        //     setSelectedStoreto("-- Select Store --");
+        //     // ToastifyAlert("Duplicate Inventory Success!", "success");
+        //     ToastifyAlert("Added Successfully", "success");
+        //     setStorefrom(null);
+        //     setStoreto(null);
+        //     setProductOptions([
+        //       { value: "Select Product", label: "Select Product" },
+        //     ]);
+        //     setselectedProducts([]);
+        //     setIsSelectClicked(false);
+        //   } else if (response.data.status === "Failed") {
+        //     ToastifyAlert("Duplicate Inventory Failed!", "error");
+        //     setsubmitmessage("Something Went Wrong");
+        //   }
+        // } catch (error) {
+        //   // console.log('33 catch err');
+        //   handleCoockieExpire()
+        //   getUnAutherisedTokenMessage()
+        //   ToastifyAlert("Error!", "error");
+        //   return new Error(error);
+        // }
+      } else {
+        showModal("Please Fill Captcha Correctly!");
+        const canvas = canvasRef.current;
+        const ctx = canvas.getContext("2d");
+        initializeCaptcha(ctx);
       }
     }
   };
 
-
-
   // for captcha start
-  const canvasRef = useRef(null); 
-  useEffect(() => { 
-      const canvas = canvasRef.current; 
-      const ctx = canvas.getContext('2d'); 
-      initializeCaptcha(ctx); 
-  }, []); 
+  const canvasRef = useRef(null);
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext("2d");
+    initializeCaptcha(ctx);
+  }, []);
 
-  const generateRandomChar = (min, max) => 
-      String.fromCharCode(Math.floor 
-          (Math.random() * (max - min + 1) + min)); 
-  const generateCaptchaText = () => { 
-      let captcha = ''; 
-      for (let i = 0; i < 3; i++) { 
-          captcha += generateRandomChar(65, 90); 
-          // captcha += generateRandomChar(97, 122); 
-          captcha += generateRandomChar(48, 57); 
-      } 
-      return captcha.split('').sort( 
-          () => Math.random() - 0.5).join(''); 
-  }; 
-  const drawCaptchaOnCanvas = (ctx, captcha) => { 
-      ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height); 
-      const textColors = ['rgb(0,0,0)', 'rgb(130,130,130)']; 
-      const letterSpace = 150 / captcha.length; 
-      for (let i = 0; i < captcha.length; i++) { 
-          const xInitialSpace = 25; 
-          ctx.font = '20px Roboto Mono'; 
-          ctx.fillStyle = textColors[Math.floor( 
-              Math.random() * 2)]; 
-          ctx.fillText( 
-              captcha[i], 
-              xInitialSpace + i * letterSpace, 
-              // Randomize Y position slightly 
-              Math.floor(Math.random() * 16 + 25), 
-              100 
-          ); 
-      } 
-  }; 
-  const initializeCaptcha = (ctx) => { 
-      setUserInput(''); 
-      const newCaptcha = generateCaptchaText(); 
-      setCaptchaText(newCaptcha); 
-      drawCaptchaOnCanvas(ctx, newCaptcha); 
-  }; 
+  const generateRandomChar = (min, max) =>
+    String.fromCharCode(Math.floor(Math.random() * (max - min + 1) + min));
+  const generateCaptchaText = () => {
+    let captcha = "";
+    for (let i = 0; i < 3; i++) {
+      captcha += generateRandomChar(65, 90);
+      // captcha += generateRandomChar(97, 122);
+      captcha += generateRandomChar(48, 57);
+    }
+    return captcha
+      .split("")
+      .sort(() => Math.random() - 0.5)
+      .join("");
+  };
+  const drawCaptchaOnCanvas = (ctx, captcha) => {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    const textColors = ["rgb(0,0,0)", "rgb(130,130,130)"];
+    const letterSpace = 150 / captcha.length;
+    for (let i = 0; i < captcha.length; i++) {
+      const xInitialSpace = 25;
+      ctx.font = "20px Roboto Mono";
+      ctx.fillStyle = textColors[Math.floor(Math.random() * 2)];
+      ctx.fillText(
+        captcha[i],
+        xInitialSpace + i * letterSpace,
+        // Randomize Y position slightly
+        Math.floor(Math.random() * 16 + 25),
+        100
+      );
+    }
+  };
+  const initializeCaptcha = (ctx) => {
+    setUserInput("");
+    const newCaptcha = generateCaptchaText();
+    setCaptchaText(newCaptcha);
+    drawCaptchaOnCanvas(ctx, newCaptcha);
+  };
 
-  const handleUserInputChange = (e) => { 
-      setUserInput(e.target.value); 
-  }; 
+  const handleUserInputChange = (e) => {
+    setUserInput(e.target.value);
+  };
 
-// for captcha End
+  // for captcha End
 
   return (
     <>
@@ -551,7 +556,7 @@ const ProductDuplicateStore = () => {
                   Copy from this store
                 </label>
                 <SelectDropDown
-                 sx={{pt:0.5}}
+                  sx={{ pt: 0.5 }}
                   listItem={
                     MerchantList?.length &&
                     MerchantList?.map((item) => ({
@@ -568,7 +573,13 @@ const ProductDuplicateStore = () => {
                 />
               </Grid>
               {/* Multiple Select Categories */}
-              <Grid sx={{fontFamily:"CircularSTDBook"}} item xs={6} sm={12} md={6}>
+              <Grid
+                sx={{ fontFamily: "CircularSTDBook" }}
+                item
+                xs={6}
+                sm={12}
+                md={6}
+              >
                 <div
                   className={`py-0 ${
                     isSelectClicked
@@ -658,7 +669,6 @@ const ProductDuplicateStore = () => {
             </Grid>
           </div>
 
-
           <div className="q-add-inventory-section-header mx-2">
             <div className="qv_checkbox">
               <label className="qv_checkbox_add_checkmark_label">
@@ -672,28 +682,39 @@ const ProductDuplicateStore = () => {
           {/* for captcha start  */}
 
           <div className="q-add-inventory-section-header ">
-                  <div className="captue_Img_Reload"> 
-                    <canvas ref={canvasRef} width="200" height="50" onClick={  () => initializeCaptcha(canvasRef.current.getContext('2d'))}> 
-                    </canvas> 
-                    <button id="reload-button" onClick={   () => initializeCaptcha(canvasRef.current.getContext('2d'))}> 
-                        <LuRefreshCw /> 
-                    </button> 
-                  </div>
-              </div>
-              <div className="q-add-inventory-section-header">
-                <Grid container spacing={4} >
-                  <Grid item xs={6} sm={12} md={6}>
-                    <BasicTextFields
-                    type="text"
-                    id="user-input"
-                    name="actual_amt"
-                    onChangeFun={handleUserInputChange}
-                    value={userInput} 
-                    placeholder={"Enter the text in the image"}
-                    /> 
-                  </Grid>
-                </Grid>
-                </div>
+            <div className="captue_Img_Reload">
+              <canvas
+                ref={canvasRef}
+                width="200"
+                height="50"
+                onClick={() =>
+                  initializeCaptcha(canvasRef.current.getContext("2d"))
+                }
+              ></canvas>
+              <button
+                id="reload-button"
+                onClick={() =>
+                  initializeCaptcha(canvasRef.current.getContext("2d"))
+                }
+              >
+                <LuRefreshCw />
+              </button>
+            </div>
+          </div>
+          <div className="q-add-inventory-section-header">
+            <Grid container spacing={4}>
+              <Grid item xs={6} sm={12} md={6}>
+                <BasicTextFields
+                  type="text"
+                  id="user-input"
+                  name="actual_amt"
+                  onChangeFun={handleUserInputChange}
+                  value={userInput}
+                  placeholder={"Enter the text in the image"}
+                />
+              </Grid>
+            </Grid>
+          </div>
           {/* for captcha End */}
 
           <div
@@ -705,7 +726,14 @@ const ProductDuplicateStore = () => {
               onClick={dupplicateProductInventory}
               disabled={loader}
             >
-               {loader ? <><CircularProgress color={"inherit"} width={15} size={15}/>Duplicate Inventory</> : "Duplicate Inventory"}
+              {loader ? (
+                <>
+                  <CircularProgress color={"inherit"} width={15} size={15} />
+                  Duplicate Inventory
+                </>
+              ) : (
+                "Duplicate Inventory"
+              )}
             </button>
           </div>
         </div>
@@ -713,22 +741,28 @@ const ProductDuplicateStore = () => {
 
       {/* </div> */}
       <AlertModal
-      headerText={alertModalHeaderText}
-      open={alertModalOpen}
-      onClose={() => {setAlertModalOpen(false)}}
-       />
-       <ConfirmModal
-            headerText="The existing Variants of the selected Store 2 Must be same as selected Store 1 Variants. Do you want to proceed?"
-            open={confirmModalOpen}
-            onClose={() => {setConfirmModalOpen(false)}}
-            onConfirm={confirmfun}
-        />
-        <FinalConfirm
-            headerText="Final Confirmation!!!"
-            open={confirmfinalModalOpen}
-            onClose={() => {setConfirmFinalModalOpen(false)}}
-            onConfirm={confirmFinalfun}
-        />
+        headerText={alertModalHeaderText}
+        open={alertModalOpen}
+        onClose={() => {
+          setAlertModalOpen(false);
+        }}
+      />
+      <ConfirmModal
+        headerText="The existing Variants of the selected Store 2 Must be same as selected Store 1 Variants. Do you want to proceed?"
+        open={confirmModalOpen}
+        onClose={() => {
+          setConfirmModalOpen(false);
+        }}
+        onConfirm={confirmfun}
+      />
+      <FinalConfirm
+        headerText="Final Confirmation!!!"
+        open={confirmfinalModalOpen}
+        onClose={() => {
+          setConfirmFinalModalOpen(false);
+        }}
+        onConfirm={confirmFinalfun}
+      />
     </>
   );
 };

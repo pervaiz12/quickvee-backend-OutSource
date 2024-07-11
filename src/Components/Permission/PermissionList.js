@@ -80,7 +80,8 @@ const PermissionList = () => {
 
   const AllPermissionDataState = useSelector((state) => state.permissionRed);
   const { userTypeData } = useAuthDetails();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -95,8 +96,12 @@ const PermissionList = () => {
         await dispatch(fetchPermissionData(userTypeData)).unwrap();
       }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 
@@ -147,8 +152,12 @@ const PermissionList = () => {
       setDeletePermissionId(null);
       setDeleteModalOpen(false);
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 

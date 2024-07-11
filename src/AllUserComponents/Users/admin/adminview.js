@@ -30,7 +30,8 @@ export default function AdminView({ setVisible, setEditAdminId }) {
   const { userTypeData } = useAuthDetails();
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [sortOrder, setSortOrder] = useState("asc");
   // states
   const [searchRecord, setSearchRecord] = useState("");
@@ -49,9 +50,11 @@ export default function AdminView({ setVisible, setEditAdminId }) {
     try {
       await dispatch(AdminFunction(data)).unwrap();
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };

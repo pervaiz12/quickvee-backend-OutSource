@@ -78,11 +78,11 @@ export default function DashboardFunctionality() {
         setDashboardRecord([]);
       }
     } catch (error) {
-      if (error?.response?.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
-      } else if (error?.message == "Network Error") {
-        // alert("Please check your internet connection and try again.");
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };

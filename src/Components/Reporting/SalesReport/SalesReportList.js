@@ -80,7 +80,7 @@ const SalesReportList = (props) => {
         try {
           await dispatch(fetchSalesReportData(data)).unwrap();
         } catch (error) {
-          if (error.status == 401) {
+          if (error.status == 401 || error.response.status === 401) {
             getUnAutherisedTokenMessage();
             handleCoockieExpire();
           } else if (error.status == "Network Error") {
@@ -283,7 +283,7 @@ const SalesReportList = (props) => {
               </div>
             </Grid>
           </Grid>
-          <Grid  sx={{pt:2.5}}>
+          <Grid sx={{ pt: 2.5 }}>
             <SkeletonTable columns={[""]} />
           </Grid>
         </>

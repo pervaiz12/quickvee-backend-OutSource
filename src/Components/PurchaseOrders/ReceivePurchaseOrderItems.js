@@ -60,7 +60,8 @@ const ReceivePurchaseOrderItems = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   const [loaders, setLoaders] = useState({
     email: false,
@@ -120,11 +121,12 @@ const ReceivePurchaseOrderItems = () => {
         ...userTypeData,
       };
       dispatch(fetchPurchaseOrderById(data)).unwrap();
-    } catch (e) {
-      console.log("e: ", e);
-      if (e.status == 401 || e.response.status == 401) {
-        handleCoockieExpire();
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };
@@ -162,11 +164,12 @@ const ReceivePurchaseOrderItems = () => {
       }
 
       // console.log("response void po: ", response);
-    } catch (e) {
-      console.log("Error: ", e);
-      if (e.response.status == 401 || e.status == 401) {
-        handleCoockieExpire();
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     } finally {
       setLoaders((prev) => ({ ...prev, void: false }));
@@ -267,11 +270,12 @@ const ReceivePurchaseOrderItems = () => {
       } else {
         ToastifyAlert("Please Select an Item to Receive", "error");
       }
-    } catch (e) {
-      console.log("Error: ", e);
-      if (e.response.status == 401 || e.status == 401) {
-        handleCoockieExpire();
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     } finally {
       setLoaders((prev) => ({ ...prev, receive: false }));
@@ -308,11 +312,12 @@ const ReceivePurchaseOrderItems = () => {
       if (response.data.status) {
         ToastifyAlert(response.data.message, "success");
       }
-    } catch (e) {
-      console.log("Error: ", e);
-      if (e.response.status == 401 || e.status == 401) {
-        handleCoockieExpire();
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     } finally {
       setLoaders((prev) => ({ ...prev, email: false }));

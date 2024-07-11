@@ -53,20 +53,21 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: 0,
   },
 }));
-const orderType =(type)=>{
-  if(type === "Online Order"){
+const orderType = (type) => {
+  if (type === "Online Order") {
     return "Online";
-  }if(type === "Store Order"){
-    return "Offline"
-  }else{
-    return type
   }
-}
+  if (type === "Store Order") {
+    return "Offline";
+  } else {
+    return type;
+  }
+};
 const StoreOrderList = (props) => {
   const dispatch = useDispatch();
 
   const AllStoreOrderDataState = useSelector((state) => state.StoreOrderList);
-  console.log("AllStoreOrderDataState: ",AllStoreOrderDataState)
+  console.log("AllStoreOrderDataState: ", AllStoreOrderDataState);
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
@@ -76,7 +77,8 @@ const StoreOrderList = (props) => {
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
   const [sortOrder, setSortOrder] = useState("asc");
   const { userTypeData } = useAuthDetails();
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   useEffect(() => {
     // if (props && props.OrderStatusData && props.OrderTypeData) {
@@ -93,7 +95,7 @@ const StoreOrderList = (props) => {
     //     dispatch(fetchStoreOrderData(data));
     //   }
     // }
-    getfetchStoreOrderData()
+    getfetchStoreOrderData();
   }, [
     props.OrderStatusData,
     props.OrderTypeData,
@@ -102,13 +104,12 @@ const StoreOrderList = (props) => {
     rowsPerPage,
   ]);
 
-  const getfetchStoreOrderData=async()=>{
-   
-    try{
-      if(props && props.OrderStatusData && props.OrderTypeData){
+  const getfetchStoreOrderData = async () => {
+    try {
+      if (props && props.OrderStatusData && props.OrderTypeData) {
         let data = {
           pay_status: props.OrderStatusData,
-          order_env:  orderType(props.OrderTypeData),
+          order_env: orderType(props.OrderTypeData),
           page: currentPage,
           perpage: rowsPerPage,
           search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
@@ -118,13 +119,15 @@ const StoreOrderList = (props) => {
           await dispatch(fetchStoreOrderData(data)).unwrap();
         }
       }
-  }catch(error){
-    if(error.status === 401){
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
-  }
-}
+  };
 
   // only when user searches
   useEffect(() => {
@@ -137,11 +140,11 @@ const StoreOrderList = (props) => {
 
     // dispatch(getStoreOrderCount(data));
     getStoreOrderCountFun();
-  }, [debouncedValue,props.OrderTypeData]);
+  }, [debouncedValue, props.OrderTypeData]);
 
-  const getStoreOrderCountFun=async()=>{
-    try{
-      if(props && props.OrderStatusData && props.OrderTypeData){
+  const getStoreOrderCountFun = async () => {
+    try {
+      if (props && props.OrderStatusData && props.OrderTypeData) {
         const data = {
           pay_status: props.OrderStatusData,
           order_env: orderType(props.OrderTypeData),
@@ -152,22 +155,26 @@ const StoreOrderList = (props) => {
           await dispatch(getStoreOrderCount(data)).unwrap();
         }
       }
-  }catch(error){
-    if(error.status === 401){
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
-  }
-}
+  };
 
   // on load setting count of Verified Merchant list & on every change...
   useEffect(() => {
-    if(!AllStoreOrderDataState.loading && AllStoreOrderDataState){
+    if (!AllStoreOrderDataState.loading && AllStoreOrderDataState) {
       setTotalCount(AllStoreOrderDataState?.storeOrderCount);
-      setStoreOrderTableList(AllStoreOrderDataState?.StoreOrderData)
+      setStoreOrderTableList(AllStoreOrderDataState?.StoreOrderData);
     }
-    
-  }, [AllStoreOrderDataState?.storeOrderCount,AllStoreOrderDataState?.StoreOrderData]);
+  }, [
+    AllStoreOrderDataState?.storeOrderCount,
+    AllStoreOrderDataState?.StoreOrderData,
+  ]);
 
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
@@ -185,10 +192,10 @@ const StoreOrderList = (props) => {
 
   const formatDateTime = (dateTimeString) => {
     const date = new Date(dateTimeString);
-    const dateOptions = { year: 'numeric', month: 'short', day: 'numeric' };
-    const timeOptions = { hour: 'numeric', minute: 'numeric', hour12: true };
-    const formattedDate = date.toLocaleDateString('en-US', dateOptions);
-    const formattedTime = date.toLocaleTimeString('en-US', timeOptions);
+    const dateOptions = { year: "numeric", month: "short", day: "numeric" };
+    const timeOptions = { hour: "numeric", minute: "numeric", hour12: true };
+    const formattedDate = date.toLocaleDateString("en-US", dateOptions);
+    const formattedTime = date.toLocaleTimeString("en-US", timeOptions);
     return `${formattedDate} ${formattedTime}`;
   };
 
@@ -251,88 +258,94 @@ const StoreOrderList = (props) => {
                     >
                       <TableHead>
                         <StyledTableCell>
-                        <button
+                          <button
                             className="flex items-center"
                             onClick={() => sortByItemName("str", "cname")}
                           >
                             <p>Store Order Info</p>
                             <img src={sortIcon} alt="" className="pl-1" />
                           </button>
-                          </StyledTableCell>
+                        </StyledTableCell>
                         <StyledTableCell>
-                        <button
+                          <button
                             className="flex items-center"
                             onClick={() => sortByItemName("date", "date_time")}
                           >
                             <p>Date</p>
                             <img src={sortIcon} alt="" className="pl-1" />
                           </button>
-                          </StyledTableCell>
+                        </StyledTableCell>
                         <StyledTableCell>
-                        <button
+                          <button
                             className="flex items-center"
                             onClick={() => sortByItemName("str", "order_id")}
                           >
                             <p>Order ID</p>
                             <img src={sortIcon} alt="" className="pl-1" />
                           </button>
-                         </StyledTableCell>
+                        </StyledTableCell>
                         <StyledTableCell>
-                        <button
+                          <button
                             className="flex items-center"
-                            onClick={() => sortByItemName("str", "order_status")}
+                            onClick={() =>
+                              sortByItemName("str", "order_status")
+                            }
                           >
                             <p>Order Status</p>
                             <img src={sortIcon} alt="" className="pl-1" />
                           </button>
-                          </StyledTableCell>
+                        </StyledTableCell>
                         <StyledTableCell>
-                        <button
+                          <button
                             className="flex items-center"
                             onClick={() => sortByItemName("str", "failResult")}
                           >
                             <p>Fail Result</p>
                             <img src={sortIcon} alt="" className="pl-1" />
                           </button>
-                          </StyledTableCell>
+                        </StyledTableCell>
                         <StyledTableCell>
-                        <button
+                          <button
                             className="flex items-center"
-                            onClick={() => sortByItemName("str", "merchant_name")}
+                            onClick={() =>
+                              sortByItemName("str", "merchant_name")
+                            }
                           >
                             <p>Merchant</p>
                             <img src={sortIcon} alt="" className="pl-1" />
                           </button>
-                          </StyledTableCell>
+                        </StyledTableCell>
                       </TableHead>
                       <TableBody>
                         {/* {console.log(
                           "AllStoreOrderDataState.StoreOrderData: ",
                           AllStoreOrderDataState?.StoreOrderData
                         )} */}
-                        {storeOrderTableList.map(
-                          (StoreData, index) => (
-                            <StyledTableRow key={StoreData.id}>
-                              {
-                                StoreData.cname || StoreData.email || StoreData.delivery_phn ? 
-                                <StyledTableCell>
-                                   <div className="flex">
-                                      <div className="text-[#000000] order_method capitalize">
-                                        {StoreData.cname.length < 18
-                                          ? StoreData.cname
-                                          : StoreData.cname.slice(0, 18) + `...` ||
-                                            ""}
-                                      </div>
-                                    </div>
-                                    <div className="text-[#818181] lowercase">
-                                      {StoreData.email || ""}
-                                    </div>
-                                    <div className="text-[#818181]">
-                                      {StoreData.delivery_phn || ""}
-                                    </div>
-                                </StyledTableCell>: <StyledTableCell>-</StyledTableCell>
-                              }
-                              {/* <StyledTableCell>
+                        {storeOrderTableList.map((StoreData, index) => (
+                          <StyledTableRow key={StoreData.id}>
+                            {StoreData.cname ||
+                            StoreData.email ||
+                            StoreData.delivery_phn ? (
+                              <StyledTableCell>
+                                <div className="flex">
+                                  <div className="text-[#000000] order_method capitalize">
+                                    {StoreData.cname.length < 18
+                                      ? StoreData.cname
+                                      : StoreData.cname.slice(0, 18) + `...` ||
+                                        ""}
+                                  </div>
+                                </div>
+                                <div className="text-[#818181] lowercase">
+                                  {StoreData.email || ""}
+                                </div>
+                                <div className="text-[#818181]">
+                                  {StoreData.delivery_phn || ""}
+                                </div>
+                              </StyledTableCell>
+                            ) : (
+                              <StyledTableCell>-</StyledTableCell>
+                            )}
+                            {/* <StyledTableCell>
                                 <div className="flex">
                                   <div className="text-[#000000] order_method capitalize">
                                     {StoreData.cname.length < 18
@@ -348,36 +361,35 @@ const StoreOrderList = (props) => {
                                   {StoreData.delivery_phn || ""}
                                 </div>
                               </StyledTableCell> */}
-                              <StyledTableCell>
-                                <div className="text-[#000000] order_method capitalize">
-                                  {formatDateTime(StoreData.date_time)}
-                                </div>
-                              </StyledTableCell>
-                              <StyledTableCell>
+                            <StyledTableCell>
+                              <div className="text-[#000000] order_method capitalize">
+                                {formatDateTime(StoreData.date_time)}
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell>
                               {/* <Link  to={`/store-reporting/order-summary/${StoreData.merchant_id}/${StoreData.order_id}`} target="_blank" > */}
-                                <div className="text-[#000000] capitalize">
-                                  {StoreData.order_id}
-                                </div>
-                                {/* </Link> */}
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                <div className="text-[#000000] order_method capitalize">
-                                  {StoreData.order_status}
-                                </div>
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                <div className="text-[#000000] order_method capitalize">
-                                  {StoreData.failResult}
-                                </div>
-                              </StyledTableCell>
-                              <StyledTableCell>
-                                <div className="text-[#000000] order_method capitalize">
-                                  {StoreData.merchant_name}
-                                </div>
-                              </StyledTableCell>
-                            </StyledTableRow>
-                          )
-                        )}
+                              <div className="text-[#000000] capitalize">
+                                {StoreData.order_id}
+                              </div>
+                              {/* </Link> */}
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <div className="text-[#000000] order_method capitalize">
+                                {StoreData.order_status}
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <div className="text-[#000000] order_method capitalize">
+                                {StoreData.failResult}
+                              </div>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <div className="text-[#000000] order_method capitalize">
+                                {StoreData.merchant_name}
+                              </div>
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        ))}
                       </TableBody>
                     </StyledTable>
                   </TableContainer>

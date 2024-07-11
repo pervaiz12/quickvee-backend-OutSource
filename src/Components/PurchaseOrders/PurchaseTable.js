@@ -52,7 +52,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 const PurchaseTable = ({ seVisible }) => {
   // for list Purchase Order
   const navigate = useNavigate();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   const [searchId, setSearchId] = useState(""); // State to track search ID
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -77,11 +78,12 @@ const PurchaseTable = ({ seVisible }) => {
         search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
       };
       await dispatch(fetchpurchaseData(data)).unwrap();
-    } catch (e) {
-      console.log("e: ", e);
-      if (e.status == 401) {
-        handleCoockieExpire();
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };
@@ -100,11 +102,12 @@ const PurchaseTable = ({ seVisible }) => {
           search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
         })
       ).unwrap();
-    } catch (e) {
-      console.log("e: ", e);
-      if (e.status == 401) {
-        handleCoockieExpire();
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };
@@ -256,7 +259,10 @@ const PurchaseTable = ({ seVisible }) => {
                 {allPurchaseData &&
                 Array.isArray(allPurchaseData) &&
                 allPurchaseData.length >= 1 ? (
-                  <TableContainer sx={{borderTopRightRadius:"0",borderTopLeftRadius:"0"}} component={Paper}>
+                  <TableContainer
+                    sx={{ borderTopRightRadius: "0", borderTopLeftRadius: "0" }}
+                    component={Paper}
+                  >
                     <Table aria-label="customized table">
                       <TableHead>
                         <TableRow>
