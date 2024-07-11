@@ -470,7 +470,7 @@ const ProductTable = ({
                   <InfiniteScroll
                     dataLength={productList.length}
                     next={fetchMoreData}
-                    hasMore={!!searchId ? false : hasMore}
+                    hasMore={hasMore}
                     loader={
                       <h4 className="all-product-list">{renderLoader()}</h4>
                     }
@@ -478,10 +478,6 @@ const ProductTable = ({
                     endMessage={
                       loading ? (
                         <h3 className="all-product-list">Loading...</h3>
-                      ) : productList?.length ? (
-                        <h3 className="all-product-list">
-                          ALL products have been listed above
-                        </h3>
                       ) : (
                         <h3 className="all-product-list">No Result Found</h3>
                       )
