@@ -134,7 +134,7 @@ const MainOnline = ({ onFilterDataChange, searchId, setSearchId,order_env }) => 
           <Grid container className="mt-5">
             <Grid item xs={12} className="">
               <InputTextSearch
-                placeholder="Search orders by order ID, last 4 digits on payment card, or invoice ID"
+                placeholder="Search orders by order ID, or invoice ID"
                 value={searchId}
                 handleChange={setSearchId}
                 handleSearchButton={handleSearch}
