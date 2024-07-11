@@ -5,6 +5,7 @@ import BasicTextFields from "../../../reuseableComponents/TextInputField";
 import ProfitMarginReportLogic from "./profitMarginReportLogic";
 import Pagination from "./pagination";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import CustomHeader from "../../../reuseableComponents/CustomHeader";
 export default function ProfitMarginReport() {
   const {
     handleChangeInventory,
@@ -37,27 +38,10 @@ export default function ProfitMarginReport() {
   return (
     <>
       <Grid container className="box_shadow_div">
+        <CustomHeader>Profit Margin Report</CustomHeader>
         <Grid item xs={12}>
-          {/* <Grid container sx={{ padding: 2.5 }}>
-            <Grid item xs={12}>
-              <div className="q_details_header">
-                Top Sellers - Overall Top 10
-              </div>
-            </Grid>
-          </Grid> */}
-          {/* <Grid container sx={{ px: 2.5 }}>
-            <Grid xs={12} sm={6} md={4}>
-              <div className="q_details_header ">Filter by</div>
-            </Grid>
-          </Grid> */}
-          <Grid container sx={{ p: 2.5 }}>
-            <Grid item xs={12}>
-              <h1 style={{ marginBottom: 0 }} className="heading ">
-                Profit Margin Report
-              </h1>
-            </Grid>
-          </Grid>
-          <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
+          
+          <Grid container spacing={2} sx={{ px: 2.5, py: 2.5 }}>
             <Grid item xs={12} sm={6} md={4}>
               <label
                 className="q-details-page-label"

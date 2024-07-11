@@ -26,6 +26,7 @@ import { priceFormate } from "../../hooks/priceFormate";
 import PasswordShow from "../../Common/passwordShow";
 import sortIcon from "../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
+import CustomHeader from "../../reuseableComponents/CustomHeader";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -218,9 +219,8 @@ const LoyaltyProgramList = () => {
     </div> */}
 
       <Grid container className="box_shadow_div">
-        <Grid item className="q-category-bottom-header" xs={12}>
-          <h1 className="text-xl font-medium">Loyalty Program</h1>
-        </Grid>
+        <CustomHeader>Loyalty Program</CustomHeader>
+
         <Grid item xs={12}>
           <Grid container sx={{ padding: 2.5 }}>
             <Grid item xs={12}>

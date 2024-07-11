@@ -5,6 +5,7 @@ import axios from "axios";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
+import CustomHeader from "../../../reuseableComponents/CustomHeader";
 
 const SalesPersonFilter = ({ onFilterDataChange }) => {
   const {
@@ -90,8 +91,17 @@ const SalesPersonFilter = ({ onFilterDataChange }) => {
     try {
       const response = await axios.post(
         BASE_URL + EMPLOYEE_LIST,
-        { merchant_id: merchant_id,token_id:userTypeData?.token_id,login_type:userTypeData?.login_type },
-        { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${userTypeData?.token}` } }
+        {
+          merchant_id: merchant_id,
+          token_id: userTypeData?.token_id,
+          login_type: userTypeData?.login_type,
+        },
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${userTypeData?.token}`,
+          },
+        }
       );
 
       // Assuming the API response has a data property containing the category list
@@ -126,14 +136,11 @@ const SalesPersonFilter = ({ onFilterDataChange }) => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <Grid container sx={{ p: 2.5 }}>
+          <CustomHeader>Detailed Sales Person Report</CustomHeader>
+
+          <Grid container sx={{ px: 2.5,pt:1 }}>
             <Grid item xs={12}>
-              <div className="q_details_header">Detailed Sales Person Report</div>
-            </Grid>
-          </Grid>
-          <Grid container sx={{ px: 2.5 }}>
-            <Grid item xs={12}>
-              <div className="q_details_header">Filter by</div>
+              <div className="heading">Filter By</div>
             </Grid>
           </Grid>
           <Grid container sx={{ px: 2.5, pb: 2.5 }} spacing={2}>
@@ -142,7 +149,7 @@ const SalesPersonFilter = ({ onFilterDataChange }) => {
                 Select Employee
               </label>
               <SelectDropDown
-               sx={{pt:0.5}}
+                sx={{ pt: 0.5 }}
                 heading={"All"}
                 listItem={employeeList}
                 title={"title"}
@@ -159,7 +166,7 @@ const SalesPersonFilter = ({ onFilterDataChange }) => {
                 Order Source
               </label>
               <SelectDropDown
-              sx={{pt:0.5}}
+                sx={{ pt: 0.5 }}
                 listItem={orderSourceList.map((item) => ({ title: item }))}
                 title={"title"}
                 selectedOption={selectedOrderSource}
@@ -172,7 +179,7 @@ const SalesPersonFilter = ({ onFilterDataChange }) => {
                 Order Type
               </label>
               <SelectDropDown
-               sx={{pt:0.5}}
+                sx={{ pt: 0.5 }}
                 listItem={orderTypeList.map((item) => ({ title: item }))}
                 title={"title"}
                 selectedOption={selectedOrderType}
