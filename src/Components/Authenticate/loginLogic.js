@@ -10,6 +10,7 @@ import {
 import { LOGIN_AUTHENICATE_API, BASE_URL } from "../../Constants/Config";
 
 import { useNavigate } from "react-router-dom";
+import PasswordShow from "../../Common/passwordShow";
 
 export default function LoginLogic(setLoading) {
   const navigate = useNavigate();
@@ -29,6 +30,8 @@ export default function LoginLogic(setLoading) {
   const { UsernameValidate, validatePassword, validateForm, validateOTP } =
     Validate({ formData, setErrors, errors });
   const [errorMessage, setErrorMessage] = React.useState("");
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   const emailValidate = async (userdata) => {
     const data = { username: userdata };
@@ -158,7 +161,12 @@ export default function LoginLogic(setLoading) {
         });
       }
     } catch (error) {
-      console.log("Error: ", e);
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     } finally {
       setLoading(() => false);
     }

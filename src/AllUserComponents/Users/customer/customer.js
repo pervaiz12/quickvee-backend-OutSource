@@ -122,14 +122,27 @@ const Customer = () => {
   }, [currentPage, debouncedValue, rowsPerPage]);
 
   // only when user searches
+  const fetchCustomerCount = async () => {
+    try {
+      await dispatch(
+        getCustomersCount({
+          ...userTypeData,
+          type: 2,
+          search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+        })
+      );
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    }
+  };
+
   useEffect(() => {
-    dispatch(
-      getCustomersCount({
-        ...userTypeData,
-        type: 2,
-        search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
-      })
-    );
+    fetchCustomerCount();
   }, [debouncedValue]);
 
   // useEffect(() => {

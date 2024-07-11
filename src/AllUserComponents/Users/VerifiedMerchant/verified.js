@@ -135,14 +135,28 @@ export default function Verified({ setVisible, setMerchantId }) {
   }, [currentPage, debouncedValue, rowsPerPage]);
 
   // only when user searches VerifiedMerchantListState
+
+  const fetchVerifiedMerchantCount = async () => {
+    try {
+      await dispatch(
+        getVerifiedMerchantCount({
+          type: "approve",
+          ...userTypeData,
+          search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+        })
+      ).unwrap();
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    }
+  };
+
   useEffect(() => {
-    dispatch(
-      getVerifiedMerchantCount({
-        type: "approve",
-        ...userTypeData,
-        search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
-      })
-    );
+    fetchVerifiedMerchantCount();
   }, [debouncedValue]);
 
   // on load setting the verified merchant list and whenever the List changes.
@@ -214,12 +228,6 @@ export default function Verified({ setVisible, setMerchantId }) {
         );
 
         if (response) {
-          // const updatedVendorDetails =
-          //   verifiedMerchantList.verifiedMerchantData.filter(
-          //     (vendor) => vendor.id !== tableData.id
-          //   );
-          // setVerifiedMerchantListState(updatedVendorDetails);
-          // setFilteredMerchants(updatedVendorDetails);
           setDeleteLoader(false);
           setDeletedId("");
           dispatch(getVerifiedMerchant(data_verified));
@@ -302,8 +310,13 @@ export default function Verified({ setVisible, setMerchantId }) {
           navigate("/login");
         }
       });
-    } catch (e) {
-      console.log("Error: ", e);
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     } finally {
       setLoaders({ view: { id: "", isLoading: false } });
     }

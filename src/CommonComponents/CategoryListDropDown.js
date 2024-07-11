@@ -10,6 +10,7 @@ import SelectDropDown from "../reuseableComponents/SelectDropDown";
 import UpArrow from "../Assests/Dashboard/Up.svg";
 import DownIcon from "../Assests/Dashboard/Down.svg";
 import { useAuthDetails } from "../Common/cookiesHelper";
+import PasswordShow from "../Common/passwordShow";
 
 const CategoryListDropDown = ({
   type,
@@ -28,16 +29,32 @@ const CategoryListDropDown = ({
   const [isTablet, setIsTablet] = useState(false);
   const dispatch = useDispatch();
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
+
+  const getCategories = async () => {
+    try {
+      let cat_data = {
+        merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+        ...userTypeData,
+      };
+      if (cat_data) {
+        await dispatch(fetchCategoriesData(cat_data)).unwrap();
+      }
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    }
+  };
 
   useEffect(() => {
-    let cat_data = {
-      merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-      ...userTypeData,
-    };
-    if (cat_data) {
-      dispatch(fetchCategoriesData(cat_data));
-    }
+    getCategories();
   }, []);
+
   useEffect(() => {
     if (
       !AllCategoriesDataState.loading &&
