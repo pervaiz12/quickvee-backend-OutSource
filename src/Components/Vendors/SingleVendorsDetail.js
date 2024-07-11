@@ -38,7 +38,8 @@ const options = [
 
 const SingleVendorsDetail = ({ setVisible }) => {
   const Navigate = useNavigate();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
@@ -51,7 +52,6 @@ const SingleVendorsDetail = ({ setVisible }) => {
   const [dateRangeState, setDateRangeState] = useState();
   console.log("dateRangeState", dateRangeState);
   // date range
-  
 
   const [modalData, setModalData] = useState(null);
 
@@ -115,10 +115,14 @@ const SingleVendorsDetail = ({ setVisible }) => {
         setLoading(false);
       }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    } finally {
       setLoading(false);
-      ToastifyAlert("Something went wrong", "error");
     }
   };
 

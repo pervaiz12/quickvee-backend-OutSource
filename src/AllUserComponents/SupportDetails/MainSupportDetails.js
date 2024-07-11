@@ -19,7 +19,7 @@ import CircularProgress from "@mui/material/CircularProgress";
 import axios from "axios";
 import { BASE_URL, SUPPORT_DETAILS_EDIT } from "../../Constants/Config";
 
-const  MainSupportDetails = () => {
+const MainSupportDetails = () => {
   const StyledTable = styled(Table)(({ theme }) => ({
     padding: 2, // Adjust padding as needed
   }));
@@ -49,55 +49,63 @@ const  MainSupportDetails = () => {
     },
   }));
 
-
   const dispatch = useDispatch();
   const [supportDetail, setSupportDetail] = useState("");
   const suppoertDetailDataState = useSelector((state) => state.supportDetail);
   const { userTypeData } = useAuthDetails();
- 
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   useEffect(() => {
-    getfetchsupportDetailDataData()
+    getfetchsupportDetailDataData();
   }, []);
 
-  const getfetchsupportDetailDataData=async()=>{
-    try{
+  const getfetchsupportDetailDataData = async () => {
+    try {
       let data = {
         ...userTypeData,
       };
       if (data) {
         await dispatch(fetchsupportDetailsData(data)).unwrap();
       }
-    }catch(error){
-      if(error.status === 401){
-        handleCoockieExpire()
-        getUnAutherisedTokenMessage()
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
-  }
-  useEffect(() => { 
-    if (!suppoertDetailDataState.loading && suppoertDetailDataState.supportDetailsData){
+  };
+  useEffect(() => {
+    if (
+      !suppoertDetailDataState.loading &&
+      suppoertDetailDataState.supportDetailsData
+    ) {
       setSupportDetail(suppoertDetailDataState.supportDetailsData);
     }
-  }, [ suppoertDetailDataState, suppoertDetailDataState.loading,suppoertDetailDataState.supportDetailsData]);
+  }, [
+    suppoertDetailDataState,
+    suppoertDetailDataState.loading,
+    suppoertDetailDataState.supportDetailsData,
+  ]);
 
   const [loader, setLoader] = useState(false);
   const [open, setOpen] = useState(false);
   const handleClose = () => setOpen(false);
-  
 
   const handleOpen = () => {
     setSupportfield({
       id: supportDetail.id,
       phone: supportDetail.phone,
       option_text: supportDetail.option_text,
-    })
+    });
     setOpen(true);
-    setError({  
+    setError({
       phone: "",
       option_text: "",
-     });
+    });
   };
   const [error, setError] = useState({
     phone: "",
@@ -105,7 +113,7 @@ const  MainSupportDetails = () => {
   });
 
   const [supportfield, setSupportfield] = useState({
-    id:"",
+    id: "",
     phone: "",
     option_text: "",
   });
@@ -114,9 +122,15 @@ const  MainSupportDetails = () => {
     if (name === "phone") {
       if (value === "" || /^[0-9\b]+$/.test(value)) {
         if (value === "") {
-          setError((prevError) => ({ ...prevError, phone: "Phone is required" }));
+          setError((prevError) => ({
+            ...prevError,
+            phone: "Phone is required",
+          }));
         } else if (value.length !== 10) {
-          setError((prevError) => ({ ...prevError, phone: "Phone number must be exactly 10 digits" }));
+          setError((prevError) => ({
+            ...prevError,
+            phone: "Phone number must be exactly 10 digits",
+          }));
         } else {
           setError((prevError) => ({ ...prevError, phone: "" }));
         }
@@ -127,7 +141,10 @@ const  MainSupportDetails = () => {
       }
     } else if (name === "option_text") {
       if (value === "") {
-        setError((prevError) => ({ ...prevError, option_text: "Option Text is required" }));
+        setError((prevError) => ({
+          ...prevError,
+          option_text: "Option Text is required",
+        }));
       } else {
         setError((prevError) => ({ ...prevError, option_text: "" }));
       }
@@ -140,70 +157,88 @@ const  MainSupportDetails = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if(supportfield.phone === ""){
+    if (supportfield.phone === "") {
       setError((prevError) => ({ ...prevError, phone: "Phone is required" }));
-      if(supportfield.option_text === ""){
-        setError((prevError) => ({ ...prevError, option_text: "Option Text is required" }));
-      } 
+      if (supportfield.option_text === "") {
+        setError((prevError) => ({
+          ...prevError,
+          option_text: "Option Text is required",
+        }));
+      }
       return;
     }
     if (supportfield.phone.length !== 10) {
-      setError((prevError) => ({ ...prevError, phone: "Phone number must be exactly 10 digits" }));
+      setError((prevError) => ({
+        ...prevError,
+        phone: "Phone number must be exactly 10 digits",
+      }));
       // return;
     }
-    if(supportfield.option_text === ""){
-      setError((prevError) => ({ ...prevError, option_text: "Option Text is required" }));
+    if (supportfield.option_text === "") {
+      setError((prevError) => ({
+        ...prevError,
+        option_text: "Option Text is required",
+      }));
       // return;
     }
-    if(error.phone === "Phone is required" || 
-      error.phone === "Phone number must be exactly 10 digits" || 
-      error.option_text === "Option Text is required" ){
-      return
+    if (
+      error.phone === "Phone is required" ||
+      error.phone === "Phone number must be exactly 10 digits" ||
+      error.option_text === "Option Text is required"
+    ) {
+      return;
     }
     const formData = new FormData();
-      // Append your tax data
-      formData.append("id",supportfield.id);
-      formData.append("phone",supportfield.phone);
-      formData.append("option_text",supportfield.option_text);
-      formData.append("token_id",userTypeData?.token_id);
-      formData.append("login_type",userTypeData?.login_type);
+    // Append your tax data
+    formData.append("id", supportfield.id);
+    formData.append("phone", supportfield.phone);
+    formData.append("option_text", supportfield.option_text);
+    formData.append("token_id", userTypeData?.token_id);
+    formData.append("login_type", userTypeData?.login_type);
 
-      setLoader(true);
-      try {
-        const response = await axios.post(BASE_URL + SUPPORT_DETAILS_EDIT, formData, {
+    setLoader(true);
+    try {
+      const response = await axios.post(
+        BASE_URL + SUPPORT_DETAILS_EDIT,
+        formData,
+        {
           headers: {
             "Content-Type": "multipart/form-data",
             Authorization: `Bearer ${userTypeData?.token}`,
           },
-        });
-        if (response.data.status === true) {
-          try{
-            let data = {
-              ...userTypeData,
-            };
-            if (data) {
-              await dispatch(fetchsupportDetailsData(data)).unwrap();
-            }
-          }catch(error){
-            if(error.response.status === 401){
-              handleCoockieExpire();
-              getUnAutherisedTokenMessage();
-            }
+        }
+      );
+      if (response.data.status === true) {
+        try {
+          let data = {
+            ...userTypeData,
+          };
+          if (data) {
+            await dispatch(fetchsupportDetailsData(data)).unwrap();
           }
-          ToastifyAlert("Updated Successfully", "success");
-          handleClose()
-        } else {
-          ToastifyAlert(response.data.message, "error");
+        } catch (error) {
+          if (error.status == 401 || error.response.status === 401) {
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          } else if (error.status == "Network Error") {
+            getNetworkError();
+          }
         }
-      } catch (error) {
-        console.error("API Error:", error);
-        if(error.response.status === 401){
-          handleCoockieExpire();
-          getUnAutherisedTokenMessage();
-        }
+        ToastifyAlert("Updated Successfully", "success");
+        handleClose();
+      } else {
+        ToastifyAlert(response.data.message, "error");
       }
-      setLoader(false);
-  }
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    }
+    setLoader(false);
+  };
 
   const myStyles = {
     width: "60%",
@@ -215,7 +250,7 @@ const  MainSupportDetails = () => {
 
   return (
     <>
-    <Grid container className="box_shadow_div">
+      <Grid container className="box_shadow_div">
         <Grid item xs={12}>
           <Grid
             container
@@ -243,37 +278,36 @@ const  MainSupportDetails = () => {
                 </TableHead>
                 <TableBody>
                   <StyledTableRow>
-                      <StyledTableCell>
-                        <div class="text-[#000000] order_method ">
-                          {supportDetail?.phone || ""}
-                        </div>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <div class="text-[#000000] order_method ">
-                          {supportDetail?.option_text || ""}
-                        </div>
-                      </StyledTableCell>
-                      <StyledTableCell>
-                        <div className="default-Edit-Delete ">
-                          <img
-                            className="mx-1 edit cursor-pointer"
-                            onClick={handleOpen}
-                            src={EditIcon}
-                            alt="Edit"
-                          />
-                        </div>
-                      </StyledTableCell>
-                    </StyledTableRow>
+                    <StyledTableCell>
+                      <div class="text-[#000000] order_method ">
+                        {supportDetail?.phone || ""}
+                      </div>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <div class="text-[#000000] order_method ">
+                        {supportDetail?.option_text || ""}
+                      </div>
+                    </StyledTableCell>
+                    <StyledTableCell>
+                      <div className="default-Edit-Delete ">
+                        <img
+                          className="mx-1 edit cursor-pointer"
+                          onClick={handleOpen}
+                          src={EditIcon}
+                          alt="Edit"
+                        />
+                      </div>
+                    </StyledTableCell>
+                  </StyledTableRow>
                 </TableBody>
               </StyledTable>
             </TableContainer>
           </Grid>
         </Grid>
       </Grid>
-    
 
       {/* for modal Edit start */}
-        <Modal
+      <Modal
         open={open}
         onClose={handleClose}
         aria-labelledby="modal-modal-title"
@@ -303,12 +337,12 @@ const  MainSupportDetails = () => {
 
           {/* </div> */}
           <div className="view-category-item-modal-header">
-            <form  enctype="multipart/form-data">
+            <form enctype="multipart/form-data">
               <div className="q-add-categories-section-middle-form">
                 <div className="qvrow">
                   <Grid item xs={12} sm={6} md={6}>
                     <div className=" qvrowmain my-1">
-                      <label >Phone</label>
+                      <label>Phone</label>
                     </div>
                     <BasicTextFields
                       type="text"
@@ -322,7 +356,7 @@ const  MainSupportDetails = () => {
                       {error.phone !== "" ? error.phone : ""}
                     </span>
                     <div className=" qvrowmain my-1">
-                      <label >Option Text</label>
+                      <label>Option Text</label>
                     </div>
                     <BasicTextFields
                       type="text"
@@ -331,7 +365,7 @@ const  MainSupportDetails = () => {
                       onChangeFun={handleChange}
                       value={supportfield.option_text}
                     />
-                     <span className="input-error">
+                    <span className="input-error">
                       {error.option_text !== "" ? error.option_text : ""}
                     </span>
                   </Grid>
@@ -339,19 +373,39 @@ const  MainSupportDetails = () => {
               </div>
 
               <div className="q-add-categories-section-middle-footer">
-                <button className="quic-btn quic-btn-save attributeUpdateBTN" disabled={loader}  onClick={handleSubmit}>
-                {loader ? ( <><CircularProgress color={"inherit"} className="loaderIcon" width={15} size={15} />{" "}  Update </>) : ("Update")}
+                <button
+                  className="quic-btn quic-btn-save attributeUpdateBTN"
+                  disabled={loader}
+                  onClick={handleSubmit}
+                >
+                  {loader ? (
+                    <>
+                      <CircularProgress
+                        color={"inherit"}
+                        className="loaderIcon"
+                        width={15}
+                        size={15}
+                      />{" "}
+                      Update{" "}
+                    </>
+                  ) : (
+                    "Update"
+                  )}
                 </button>
-                <button onClick={() => handleClose()}  className="quic-btn quic-btn-cancle">Cancel</button>
+                <button
+                  onClick={() => handleClose()}
+                  className="quic-btn quic-btn-cancle"
+                >
+                  Cancel
+                </button>
               </div>
             </form>
           </div>
         </Box>
       </Modal>
       {/* for modal Edit End */}
-
     </>
-  )
-}
+  );
+};
 
-export default MainSupportDetails
+export default MainSupportDetails;

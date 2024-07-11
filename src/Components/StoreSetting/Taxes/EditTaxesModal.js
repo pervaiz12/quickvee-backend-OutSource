@@ -42,7 +42,8 @@ const EditTaxesModal = ({ selectedTaxe }) => {
   const [errorTitleMessage, setErrorTitleMessage] = useState("");
   const [errorPerMessage, setErrorPerMessage] = useState("");
   const [loader, setLoader] = useState(false);
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const myStyles = {
     width: "58rem",
     position: "absolute",
@@ -86,9 +87,12 @@ const EditTaxesModal = ({ selectedTaxe }) => {
         return response.data.tax_data;
       }
     } catch (error) {
-      console.error("Error:", error);
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   }
 
@@ -253,10 +257,12 @@ const EditTaxesModal = ({ selectedTaxe }) => {
         // Close the modal or perform any other actions
         handleClose();
       } catch (error) {
-        console.error("Error submitting data:", error);
-        // Handle errors as needed
-        handleCoockieExpire();
-        getUnAutherisedTokenMessage();
+        if (error.status == 401 || error.response.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
+        }
       }
       setLoader(false);
     } else {
@@ -311,10 +317,12 @@ const EditTaxesModal = ({ selectedTaxe }) => {
 
         // Close the modal or perform any other actions
       } catch (error) {
-        console.error("Error submitting data:", error);
-        handleCoockieExpire();
-        getUnAutherisedTokenMessage();
-        // Handle errors as needed
+        if (error.status == 401 || error.response.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
+        }
       }
       setLoader(false);
     }
@@ -364,10 +372,14 @@ const EditTaxesModal = ({ selectedTaxe }) => {
         setCategoryOptions(mappedOptions);
         setLoadingCategories(false);
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        if (error.status == 401 || error.response.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
+        }
+      } finally {
         setLoadingCategories(false);
-        handleCoockieExpire();
-        getUnAutherisedTokenMessage();
       }
     };
 

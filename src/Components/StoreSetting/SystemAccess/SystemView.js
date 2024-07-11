@@ -71,7 +71,8 @@ const SystemAccessData = () => {
 
   const AllInSystemAccessState = useSelector((state) => state.systemAccessList);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const startDay = (day) => {
     if (day == 1) {
       return "Yesterday";
@@ -366,8 +367,12 @@ const SystemAccessData = () => {
       //   ToastifyAlert(res.payload.msg, "error");
       // }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     } finally {
       setLoader(false);
       closeModal();
@@ -408,8 +413,12 @@ const SystemAccessData = () => {
       await dispatch(updateSystemAccessData(data)).unwrap();
       fetchSystemAccessList();
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
     setLoader(false);
   };

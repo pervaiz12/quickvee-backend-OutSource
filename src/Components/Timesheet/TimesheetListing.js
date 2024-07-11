@@ -47,7 +47,8 @@ const TimesheetListing = ({ data }) => {
     useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   useEffect(() => {
     // if (!data.merchant_id) {
     //   console.log("empty");
@@ -65,8 +66,12 @@ const TimesheetListing = ({ data }) => {
         await dispatch(fetchtimeSheetData(data)).unwrap();
       }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 
@@ -113,9 +118,12 @@ const TimesheetListing = ({ data }) => {
         }));
         setemployeeList(mappedOptions);
       } catch (error) {
-        handleCoockieExpire();
-        getUnAutherisedTokenMessage();
-        console.error("Error fetching Employee List:", error);
+        if (error.status == 401 || error.response.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
+        }
       }
     };
     fetchData();
@@ -422,9 +430,12 @@ const TimesheetListing = ({ data }) => {
         setShowModal(true);
       }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
-      console.error("API Error:", error);
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
     setLoader(false);
   };
@@ -597,9 +608,12 @@ const TimesheetListing = ({ data }) => {
         setShowModalBreak(true);
       }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
-      console.error("API Error:", error);
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
     setLoader(false);
   };
@@ -663,9 +677,12 @@ const TimesheetListing = ({ data }) => {
         setBreakDetails([]);
       }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
-      console.error("API Error:", error);
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 
@@ -890,7 +907,15 @@ const TimesheetListing = ({ data }) => {
                   </p>
                 </div>
               </Grid>
-              <SkeletonTable columns={["box_shadow_div","Wage Rate","Clock In","Clock Out",""]} />
+              <SkeletonTable
+                columns={[
+                  "box_shadow_div",
+                  "Wage Rate",
+                  "Clock In",
+                  "Clock Out",
+                  "",
+                ]}
+              />
             </Grid>
           ) : (
             <div className="box" key={employee.id}>

@@ -48,7 +48,8 @@ const TaxesDetails = ({ data }) => {
   const [taxesreport, settaxesreport] = useState([]);
 
   const taxesreportDataState = useSelector((state) => state.taxesreport);
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   useEffect(() => {
     // Dispatch the action to fetch data when the component mounts
@@ -62,10 +63,12 @@ const TaxesDetails = ({ data }) => {
     try {
       await dispatch(fetchtaxesreportData(data)).unwrap();
     } catch (error) {
-      console.log("hello rinkesh");
-      console.log(error);
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 

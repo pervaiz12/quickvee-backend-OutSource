@@ -80,7 +80,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 export default function Unverified({ setMerchantId, setVisible }) {
   //  ============== DEFINED REDUX STATES ============================
-  const { getUnAutherisedTokenMessage, handleCoockieExpire } = PasswordShow();
+  const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
+    PasswordShow();
   const UnVerifiedMerchantList = useSelector(
     (state) => state.unverifiedMerchantRecord
   );
@@ -165,11 +166,12 @@ export default function Unverified({ setMerchantId, setVisible }) {
           console.error(response);
         }
       } catch (error) {
-        if (error.response.status == 401) {
+        if (error.status == 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
         }
-        console.error(error);
       }
     }
     setDeleteModalOpen(false);
@@ -196,9 +198,11 @@ export default function Unverified({ setMerchantId, setVisible }) {
     try {
       await dispatch(getUnVerifiedMerchant(unverify_data)).unwrap();
     } catch (error) {
-      if (error.status == 401) {
-        handleCoockieExpire();
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };
@@ -304,11 +308,12 @@ export default function Unverified({ setMerchantId, setVisible }) {
           console.error(response);
         }
       } catch (error) {
-        if (error.status == 401) {
+        if (error.status == 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
         }
-        console.error(error);
       }
       setDeleteMerchantId(null);
       setDislikeModalOpen(false);
@@ -355,11 +360,12 @@ export default function Unverified({ setMerchantId, setVisible }) {
         setLoader(false);
       }
     } catch (error) {
-      if (error.response.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
-      console.error(error);
     }
   };
 

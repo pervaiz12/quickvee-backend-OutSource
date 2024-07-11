@@ -77,11 +77,12 @@ export default function ManagerFunctionality() {
         setShowMerchantData(sports);
         setShowMerchant(true);
       } catch (error) {
-        if (error.response.status == 401) {
+        if (error.status == 401 || error.response.status === 401) {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
         }
-        console.error("Error fetching data:", error);
       }
     }
   };

@@ -132,7 +132,7 @@ const ProductTable = ({
 
       setInventoryApproval(Boolean(+res?.inventory_approval));
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -283,7 +283,7 @@ const ProductTable = ({
       await dispatch(fetchProductsData(data1));
       // Handle response if needed
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -326,7 +326,7 @@ const ProductTable = ({
         }, 600);
       }
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {

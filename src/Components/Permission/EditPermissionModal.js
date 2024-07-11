@@ -62,7 +62,8 @@ const EditPermissionModal = ({ selected }) => {
   const { userTypeData } = useAuthDetails();
 
   const { token, ...userTypeDataAlter } = userTypeData;
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [states, setStates] = useState([
     "Select",
     "Register",
@@ -235,11 +236,12 @@ const EditPermissionModal = ({ selected }) => {
       // Close the modal or perform any other actions
       handleClose();
     } catch (error) {
-      console.error("Error submitting data:", error);
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
-      // ToastifyAlert("Error!", "error");
-      // Handle errors as needed
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
     // }
     setLoader(false);

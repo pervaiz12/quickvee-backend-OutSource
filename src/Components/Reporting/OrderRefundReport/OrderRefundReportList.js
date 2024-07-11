@@ -52,7 +52,8 @@ const OrderRefundReportList = (props) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const dispatch = useDispatch();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [allOrderData, setOrderData] = useState([]);
   const AllOrderRefundData = useSelector((state) => state.OrderRefundList);
   // console.log(AllOrderRefundData)
@@ -83,9 +84,11 @@ const OrderRefundReportList = (props) => {
         }
       }
     } catch (error) {
-      if (error.status == 401) {
-        handleCoockieExpire();
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };
@@ -249,7 +252,7 @@ const OrderRefundReportList = (props) => {
                           </StyledTableCell>
                         </StyledTableRow>
                       ))}
-                    {allOrderData.length> 0 && (
+                    {allOrderData.length > 0 && (
                       <StyledTableRow>
                         <StyledTableCell></StyledTableCell>
                         <StyledTableCell></StyledTableCell>

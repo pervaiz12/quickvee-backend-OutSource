@@ -79,26 +79,30 @@ const PermissionList = () => {
 
   const AllPermissionDataState = useSelector((state) => state.permissionRed);
   const { userTypeData } = useAuthDetails();
-  const {handleCoockieExpire,getUnAutherisedTokenMessage}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const dispatch = useDispatch();
 
-  useEffect(  () => {
-   
-    getpermissionData()
+  useEffect(() => {
+    getpermissionData();
   }, []);
-  const getpermissionData = async() =>{
+  const getpermissionData = async () => {
     try {
       let data = {
         ...userTypeData,
       };
-      if(data){
+      if (data) {
         await dispatch(fetchPermissionData(userTypeData)).unwrap();
       }
     } catch (error) {
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
-  }
+  };
 
   useEffect(() => {
     if (
@@ -134,7 +138,6 @@ const PermissionList = () => {
     setDeleteModalOpen(true);
   };
   const confirmDeleteCategory = async () => {
-   
     try {
       if (deletePermissionId) {
         const data = {
@@ -142,14 +145,18 @@ const PermissionList = () => {
           ...userTypeData,
         };
         if (data) {
-         await dispatch(deletePermission(data)).unwrap();
+          await dispatch(deletePermission(data)).unwrap();
         }
       }
       setDeletePermissionId(null);
       setDeleteModalOpen(false);
     } catch (error) {
-      handleCoockieExpire()
-      getUnAutherisedTokenMessage()
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 
@@ -287,12 +294,18 @@ const PermissionList = () => {
                                 </div>
                               </StyledTableCell>
                               <StyledTableCell>
-                                  <EditPermissionModal selected={data} />
+                                <EditPermissionModal selected={data} />
                               </StyledTableCell>
                               <StyledTableCell>
-                                <img class="delete cursor-pointer" data-id="${[data.id,data.merchant_id,]}"
-                                  onClick={() => handleDeletePermission(data?.id)} 
-                                  src={Delete} alt="Delete" />
+                                <img
+                                  class="delete cursor-pointer"
+                                  data-id="${[data.id,data.merchant_id,]}"
+                                  onClick={() =>
+                                    handleDeletePermission(data?.id)
+                                  }
+                                  src={Delete}
+                                  alt="Delete"
+                                />
                               </StyledTableCell>
                             </StyledTableRow>
                           );

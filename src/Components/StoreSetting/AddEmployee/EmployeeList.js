@@ -60,7 +60,7 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
     try {
       await dispatch(fetchEmployeeListsData(data)).unwrap();
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {

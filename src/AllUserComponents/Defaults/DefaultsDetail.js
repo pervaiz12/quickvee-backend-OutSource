@@ -43,7 +43,8 @@ const DefaultsDetail = ({ setVisible, setDefaultEditId }) => {
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
 
-  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   useEffect(() => {
     // let data = {
     //   // merchant_id: merchant_id,
@@ -65,8 +66,12 @@ const DefaultsDetail = ({ setVisible, setDefaultEditId }) => {
         await dispatch(fetchdefaultsData(data)).unwrap();
       }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 
@@ -228,8 +233,12 @@ const DefaultsDetail = ({ setVisible, setDefaultEditId }) => {
       setDeleteDefaultId(null);
       setDeleteModalOpen(false);
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     }
   };
 

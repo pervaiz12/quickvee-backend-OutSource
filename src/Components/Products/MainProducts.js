@@ -76,7 +76,7 @@ const MainProducts = () => {
       dispatch(fetchProductsData(data));
       // Handle response if needed
     } catch (error) {
-      if (error.status == 401) {
+      if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -154,7 +154,10 @@ const MainProducts = () => {
                         dispatch(fetchProductsData(del_pic_data));
                         // Handle response if needed
                       } catch (error) {
-                        if (error.status == 401) {
+                        if (
+                          error.status == 401 ||
+                          error.response.status === 401
+                        ) {
                           getUnAutherisedTokenMessage();
                           handleCoockieExpire();
                         } else if (error.status == "Network Error") {
@@ -168,7 +171,7 @@ const MainProducts = () => {
                   console.error("Error:", error);
                 });
             } catch (error) {
-              if (error.status == 401) {
+              if (error.status == 401 || error.response.status === 401) {
                 getUnAutherisedTokenMessage();
                 handleCoockieExpire();
               } else if (error.status == "Network Error") {
