@@ -62,10 +62,10 @@ const TaxesDetails = ({ data }) => {
     try {
       await dispatch(fetchtaxesreportData(data)).unwrap();
     } catch (error) {
-      console.log("hello rinkesh");
-      console.log(error);
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401) {
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
     }
   };
 

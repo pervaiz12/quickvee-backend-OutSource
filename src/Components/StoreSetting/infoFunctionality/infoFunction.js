@@ -7,6 +7,7 @@ import {
   // UPDATE_STORE_INFO,
   CHANGE_PASSWORD_STORE,
   UPDATE_STORE_INFO,
+  ADMIN_CHECK_USER,
 } from "../../../Constants/Config";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
@@ -21,7 +22,7 @@ export default function InfoFunction() {
   } = useAuthDetails();
   console.log(LoginGetDashBoardRecordJson);
   let merchant_idNew = LoginGetDashBoardRecordJson?.data?.merchant_id;
-  console.log(merchant_idNew);
+  let store_email = LoginGetDashBoardRecordJson?.data?.email;
   const { getUnAutherisedTokenMessage, handleCoockieExpire } = PasswordShow();
   const [successsMessage, setSuccessMessage] = useState("");
   const [hideSucess, setHideSuccess] = useState(false);
@@ -116,6 +117,61 @@ export default function InfoFunction() {
     });
   };
   // ======================= end password ==========================
+  // ======================= password check ========================
+  const passwordValidate = async () => {
+    const { token, ...newData } = userTypeData;
+    let errorFlag = false;
+    const dataNew = {
+      email: store_email,
+      password: passwordInput?.password,
+      ...newData,
+    };
+    try {
+      const response = await axios.post(BASE_URL + ADMIN_CHECK_USER, dataNew, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      if (response.data) {
+        setPasswordError((prev) => ({
+          ...prev,
+          password: "Password already exists",
+        }));
+        errorFlag = true;
+      } else {
+        setPasswordError((prev) => ({
+          ...prev,
+          password: "",
+        }));
+        errorFlag = false;
+      }
+      if (errorFlag) {
+        return false;
+      } else {
+        return true;
+      }
+
+      // // return response.data;
+      // console.log(response.data);
+    } catch (error) {
+      console.error("Error validating email:", error);
+      // console.log("hellooo", error?.message);
+      // dispatch(getAuthInvalidMessage(error?.message));
+      if (error.response.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
+
+      throw error;
+    }
+  };
+  const handleBlurPassword = (name) => {
+    if (name == "password") {
+      passwordValidate();
+    }
+  };
+  // ======================= password check ========================
 
   const [errors, setErrors] = useState({
     imageErrors: "",
@@ -139,7 +195,7 @@ export default function InfoFunction() {
   const [approve, setApprove] = useState("");
   const handleDelete = (data) => {
     if (data === "banners") {
-      setInfoRecord({ ...infoRecord, banners: "" });
+      setInfoRecord({ ...infoRecord, banners: "", is_banner_change: "1" });
       const fileInput = document.getElementById("fileInput3");
       if (fileInput) {
         fileInput.value = "";
@@ -151,13 +207,17 @@ export default function InfoFunction() {
         fileInput.value = "";
       }
     } else if (data === "qrCode") {
-      setInfoRecord({ ...infoRecord, qrCode: "" });
+      setInfoRecord({ ...infoRecord, qrCode: "", is_qr_code_change: "1" });
       const fileInput = document.getElementById("file-input5");
       if (fileInput) {
         fileInput.value = "";
       }
     } else if (data === "receieptLogo") {
-      setInfoRecord({ ...infoRecord, receieptLogo: "" });
+      setInfoRecord({
+        ...infoRecord,
+        receieptLogo: "",
+        is_receipt_logo_change: "1",
+      });
       const fileInput = document.getElementById("file-input4");
       if (fileInput) {
         fileInput.value = "";
@@ -196,19 +256,16 @@ export default function InfoFunction() {
     if (!infoRecord.phone || infoRecord.phone.length !== 10) {
       errorMessage.phoneError = "Invalid phone number";
       isValidate = false;
-      console.log("5");
     }
 
     if (!infoRecord.facebookUrl || !urlPattern.test(infoRecord.facebookUrl)) {
       errorMessage.facebookUrlError = "Enter a valid Facebook URL";
       isValidate = false;
-      console.log("6");
     }
 
     if (!infoRecord.instagramUrl || !urlPattern.test(infoRecord.instagramUrl)) {
       errorMessage.instagramUrlError = "Enter a valid Instagram URL";
       isValidate = false;
-      console.log("7");
     }
 
     if (
@@ -217,7 +274,6 @@ export default function InfoFunction() {
     ) {
       errorMessage.promotionalUrlError = "Enter a valid Promotional URL";
       isValidate = false;
-      console.log("8");
     }
 
     setErrors(errorMessage);
@@ -734,35 +790,37 @@ export default function InfoFunction() {
   const handleSubmitChangePassword = async (e) => {
     e.preventDefault();
     let CurrentPassordValidate = currentPassordValidate(passwordError);
-    if (CurrentPassordValidate === true) {
-      let data = {
-        new_password: passwordInput.password,
-        confirm_password: passwordInput.confirmPassword,
-        merchant_id: infoRecord.merchant_id,
-        user_id: user_id,
-        token_id: userTypeData?.token_id,
-        login_type: userTypeData?.login_type,
-      };
-      try {
-        let response = await axios.post(
-          BASE_URL + CHANGE_PASSWORD_STORE,
-          data,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${userTypeData?.token}`,
-            },
+    let isExistPassword = await passwordValidate(passwordInput);
+    // console.log(isExistPassword);
+    if (isExistPassword) {
+      if (CurrentPassordValidate === true) {
+        let data = {
+          new_password: passwordInput.password,
+          confirm_password: passwordInput.confirmPassword,
+          merchant_id: infoRecord.merchant_id,
+          user_id: user_id,
+          token_id: userTypeData?.token_id,
+          login_type: userTypeData?.login_type,
+        };
+        try {
+          let response = await axios.post(
+            BASE_URL + CHANGE_PASSWORD_STORE,
+            data,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+                Authorization: `Bearer ${userTypeData?.token}`,
+              },
+            }
+          );
+          if (response.status == 200) {
+            ToastifyAlert(response.data.msg, "success");
           }
-        );
-        if (response.status == 200) {
-          ToastifyAlert(response.data.msg, "success");
-
-          console.log("password changes");
-        }
-      } catch (error) {
-        if (error.response.status == 401) {
-          getUnAutherisedTokenMessage();
-          handleCoockieExpire();
+        } catch (error) {
+          if (error.response.status == 401) {
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          }
         }
       }
     }
@@ -789,5 +847,6 @@ export default function InfoFunction() {
     receieptLogoBool,
     user_id,
     merchant_idNew,
+    handleBlurPassword,
   };
 }
