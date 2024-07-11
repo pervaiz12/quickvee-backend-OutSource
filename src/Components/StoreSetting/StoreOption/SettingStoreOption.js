@@ -357,8 +357,8 @@ export default function SettingStoreOption() {
                   sx={{ pl: 2.5, pr: 2.5 }}
                 >
                   <Grid item>
-                    <h2 className="store-setting-h1 store-setting-inline-block">
-                      <b>Enable Order Number</b>
+                    <h2 className="store-setting-h1 store-setting-inline-block -menu">
+                      <sapn className="StoreSetting_heading">Enable Order Number</sapn>
                     </h2>
                   </Grid>
                   <Grid item>
@@ -423,7 +423,7 @@ export default function SettingStoreOption() {
                 >
                   <Grid item>
                     <h2 className="store-setting-h1 store-setting-inline-block">
-                      <b>Future Order</b>
+                      <span className="StoreSetting_heading-menu">Future Order</span>
                     </h2>
                     <div className="store-setting-gry Admin_std store-setting-inline-block ">
                       Enable future orders?
@@ -470,7 +470,7 @@ export default function SettingStoreOption() {
                 <Grid container sx={{ pb: 1.5 }}>
                   <Grid item xs={12}>
                     <h2 className="store-setting-h1  store-setting-inline-block">
-                      <b>Dispatch Center</b>
+                      <span className="StoreSetting_heading-menu">Dispatch Center</span>
                     </h2>
                   </Grid>
                 </Grid>
@@ -539,7 +539,7 @@ export default function SettingStoreOption() {
                 <Grid container sx={{ pb: 1.5 }}>
                   <Grid item xs={12}>
                     <h2 className="store-setting-h1">
-                      <b>Payment Options</b>
+                      <sapn className="StoreSetting_heading-menu">Payment Options</sapn>
                     </h2>
                   </Grid>
                 </Grid>
@@ -689,7 +689,7 @@ export default function SettingStoreOption() {
                 <Grid container sx={{ pb: 1.5 }}>
                   <Grid item xs={12}>
                     <h2 className="store-setting-h1">
-                      <b>Printing</b>
+                      <span className="StoreSetting_heading-menu">Printing</span>
                     </h2>
                   </Grid>
                 </Grid>
@@ -752,7 +752,7 @@ export default function SettingStoreOption() {
                 >
                   <Grid item>
                     <h2 className="store-setting-h1">
-                      <b>Guest Checkout</b>
+                      <span className="StoreSetting_heading-menu">Guest Checkout</span>
                     </h2>
                     <div className="store-setting-gry Admin_std">
                       Enable Guest Checkout for Online Order?
@@ -782,7 +782,7 @@ export default function SettingStoreOption() {
                 >
                   <Grid item>
                     <h2 className="store-setting-h1">
-                      <b> Void Orders</b>
+                      <span className="StoreSetting_heading-menu"> Void Orders</span>
                     </h2>
                   </Grid>
                   <Grid item>

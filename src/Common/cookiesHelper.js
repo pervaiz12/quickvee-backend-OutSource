@@ -22,6 +22,9 @@ export const useAuthDetails=()=>{
    const token= LoginGetDashBoardRecordJson?.token
    const user_id=LoginGetDashBoardRecordJson?.data?.id;
    const inventory_approval = LoginGetDashBoardRecordJson?.data?.inventory_approval;
+   const future_ordering = LoginGetDashBoardRecordJson?.data?.future_ordering;
+   const future_day_count = LoginGetDashBoardRecordJson?.data?.future_day_count;
+   const future_date = future_ordering ==="1" ? future_day_count : null;
    let userTypeData={token_id,login_type,token}
 //  ------------  username and password save data-----------------
     let UserLoginDataStringFy=Cookies.get('user_auth_record') !==undefined ? Cookies.get('user_auth_record') :[]
@@ -32,5 +35,5 @@ export const useAuthDetails=()=>{
 
 // ---------------------------------------------------------------
    
-    return {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData,GetSessionLogin,user_id,inventory_approval}
+    return {LoginGetDashBoardRecordJson,LoginAllStore,userTypeData,GetSessionLogin,user_id,inventory_approval,future_date}
 }

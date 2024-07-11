@@ -11,6 +11,7 @@ import InventoryExportLogic from "./InventoryExportLogic";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { Grid } from '@mui/material';
+import PasswordShow from "../../Common/passwordShow";
 
 const MainInventoryExport = () => {
   const [openAlert, setOpenAlert] = useState(true);
@@ -21,7 +22,7 @@ const MainInventoryExport = () => {
   const goToTop = () => {
     setsubmitmessage();
   };
-  
+  const {handleCoockieExpire,getUnAutherisedTokenMessage,getNetworkError}=PasswordShow()
   const [selectedStorefrom, setSelectedStorefrom] =
     useState("-- Select Store --");
 
@@ -81,8 +82,26 @@ const MainInventoryExport = () => {
 
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(fetchMerchantsList(userTypeData));
+    // dispatch(fetchMerchantsList(userTypeData));
+    getfetchMerchantsList();
   }, []);
+  const getfetchMerchantsList=async()=>{
+    try{
+      const data = {
+        ...userTypeData
+      };
+      if (data) {
+        await dispatch(fetchMerchantsList(data)).unwrap();
+      }
+    }catch(error){
+      if(error.status === 401){
+        handleCoockieExpire()
+        getUnAutherisedTokenMessage()
+      }else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    }
+  }
 
   const storefrom = MerchantList.length > 0 ? MerchantList.map((merchant) => ({
     title: `${merchant.name}-${merchant.merchant_id}`,

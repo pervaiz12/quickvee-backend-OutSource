@@ -24,12 +24,12 @@ import DeleteModal from "../../reuseableComponents/DeleteModal";
 import { priceFormate } from "../../hooks/priceFormate";
 import PasswordShow from "../../Common/passwordShow";
 import AlertModal from "../../reuseableComponents/AlertModal";
+import Skeleton from "react-loading-skeleton";
 
 const CouponDiscount = ({ seVisible, setCouponId }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
-    PasswordShow();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage } = PasswordShow();
   const [isChecked, setIsChecked] = useState(true);
 
   const dispatch = useDispatch();
@@ -47,12 +47,8 @@ const CouponDiscount = ({ seVisible, setCouponId }) => {
         await dispatch(fetchCouponList(data)).unwrap();
       }
     } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
-        getUnAutherisedTokenMessage();
-        handleCoockieExpire();
-      } else if (error.status == "Network Error") {
-        getNetworkError();
-      }
+      handleCoockieExpire();
+      getUnAutherisedTokenMessage();
     }
   };
 
@@ -194,227 +190,315 @@ const CouponDiscount = ({ seVisible, setCouponId }) => {
             </Grid>
           </Grid>
           <Grid container spacing={3} sx={{ p: 2.5 }}>
-            {Object.values(couponList) &&
-              Object.values(couponList).length >= 1 &&
-              Object.values(couponList).map((coupons, index) => (
-                <Grid item xs={12} sm={6}>
-                  <Grid
-                    container
-                    key={index}
-                    className={`q_copuon_header w-full ${
-                      coupons.show_online == 1 ? "active" : ""
-                    }`}
-                  >
-                    <Grid item xs={12}>
+            {AllCouponDataState.loading ? (
+              <>
+                {Object.values(couponList).length >= 1 &&
+                  [1, 2, 3, 4].map((coupons, index) => (
+                    <Grid item xs={12} sm={6}>
                       <Grid
                         container
-                        direction="row"
-                        justifyContent="space-between"
-                        alignItems="center"
-                        sx={{ p: 1 }}
+                        key={index}
+                        className={`q_copuon_header w-full`}
                       >
-                        <Grid item>
-                          <div style={{ padding: 0 }} className="q_coupon_code">
-                            <p>{coupons.name}</p>
-                          </div>
-                        </Grid>
-                        <Grid item>
-                          <Grid container spacing={1}>
+                        <Grid item xs={12}>
+                          <Grid
+                            container
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            sx={{ p: 1 }}
+                          >
                             <Grid item>
-                              <Link to={`/coupons/edit-coupons/${coupons.id}`}>
-                                <span
-                                // to={`/coupons/edit-coupons/${coupons.id}`}
-                                // onClick={()=> {handleEditCoupon(coupons.id)}}
-                                >
-                                  <img
-                                    src={Edit}
-                                    alt=""
-                                    className="h-8 w-8  cursor-pointer"
-                                  />
-                                </span>
-                              </Link>
+                              <div
+                                style={{ padding: 0 }}
+                                className="q_coupon_code"
+                              >
+                                <p>
+                                  <Skeleton />
+                                </p>
+                              </div>
                             </Grid>
                             <Grid item>
-                              <img
-                                src={DeletIcon}
-                                alt="delet"
-                                className="h-8 w-8 delet-icon"
-                                onClick={() => handleDeleteCoupon(coupons.id)}
-                              />
+                              <Grid container spacing={1}>
+                                <Grid item>
+                                  <div
+                                    style={{ padding: 0 }}
+                                    className="q_coupon_code"
+                                  >
+                                    <p>
+                                      <Skeleton />
+                                    </p>
+                                  </div>
+                                </Grid>
+                                <Grid item>
+                                  <div
+                                    style={{ padding: 0 }}
+                                    className="q_coupon_code"
+                                  >
+                                    <p>
+                                      <Skeleton />
+                                    </p>
+                                  </div>
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                          <Grid container sx={{ px: 1 }}>
+                            <Grid item xs={12}>
+                              <div
+                                style={{ paddingLeft: "0 !important" }}
+                                className="q_discount_coupon_Code"
+                              >
+                                <div className="">
+                                  <Skeleton />
+                                </div>
+                              </div>
+                            </Grid>
+                          </Grid>
+                          <Grid
+                            container
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            sx={{ p: 1 }}
+                          >
+                            <Grid item>
+                              <div
+                                style={{ padding: 0 }}
+                                className="q_coupon_deatails_validtimes"
+                              >
+                                <p>
+                                  {" "}
+                                  <Skeleton />
+                                </p>
+                              </div>
+                            </Grid>
+                            <Grid
+                              item
+                              style={{ padding: 0 }}
+                              className="q_coupon_deatails_validtimes"
+                            >
+                              <p className="q_date_details">
+                                <Skeleton />
+                              </p>
+                            </Grid>
+                          </Grid>
+
+                          <Grid
+                            container
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            sx={{ px: 1 }}
+                          >
+                            <Grid
+                              item
+                              sx={{ p: 0 }}
+                              className="q_coupon_discountCode"
+                            >
+                              <p>
+                                {" "}
+                                <Skeleton />
+                              </p>
+                            </Grid>
+                            <Grid item>
+                              <Skeleton />
+                            </Grid>
+                          </Grid>
+                          <Grid container>
+                            <Grid item xs={12}>
+                              <div className="q_coupon_status_btn">
+                                <p>
+                                  <Skeleton />
+                                </p>
+
+                                <Skeleton />
+                              </div>
                             </Grid>
                           </Grid>
                         </Grid>
                       </Grid>
-                      <Grid container sx={{ px: 1 }}>
-                        <Grid item xs={12}>
-                          <div
-                            style={{ paddingLeft: "0 !important" }}
-                            className="q_discount_coupon_Code"
-                          >
-                            <div className="">
-                              {coupons.flag == 1 ? "$" : ""}
-                              {priceFormate(coupons.discount)}{" "}
-                              {coupons.flag == 0 ? "%" : ""} OFF on minimum
-                              order of $
-                              {priceFormate(
-                                parseFloat(coupons.min_amount).toFixed(2)
-                              )}
-                            </div>
-                          </div>
-                        </Grid>
-                      </Grid>
+                    </Grid>
+                  ))}
+              </>
+            ) : (
+              <>
+                {Object.values(couponList) &&
+                  Object.values(couponList).length >= 1 &&
+                  Object.values(couponList).map((coupons, index) => (
+                    <Grid item xs={12} sm={6}>
                       <Grid
                         container
-                        direction="row"
-                        justifyContent="space-between"
-                        alignItems="center"
-                        sx={{ p: 1 }}
+                        key={index}
+                        className={`q_copuon_header w-full ${
+                          coupons.show_online == 1 ? "active" : ""
+                        }`}
                       >
-                        <Grid item>
-                          <div
-                            style={{ padding: 0 }}
-                            className="q_coupon_deatails_validtimes"
+                        <Grid item xs={12}>
+                          <Grid
+                            container
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            sx={{ p: 1 }}
                           >
-                            <p>Valid from</p>
-                          </div>
-                        </Grid>
-                        <Grid
-                          item
-                          style={{ padding: 0 }}
-                          className="q_coupon_deatails_validtimes"
-                        >
-                          <p className="q_date_details">
-                            {/* {moment(coupons.date_valid).format("MM/DD/YYYY")} -{" "} */}
-                            {moment(coupons.date_valid).format("MMMM D, YYYY")}{" "}
-                            {/* {moment(coupons.time_valid, "HH:mm:ss").format(
+                            <Grid item>
+                              <div
+                                style={{ padding: 0 }}
+                                className="q_coupon_code"
+                              >
+                                <p>{coupons.name}</p>
+                              </div>
+                            </Grid>
+                            <Grid item>
+                              <Grid container spacing={1}>
+                                <Grid item>
+                                  <Link
+                                    to={`/coupons/edit-coupons/${coupons.id}`}
+                                  >
+                                    <span
+                                    // to={`/coupons/edit-coupons/${coupons.id}`}
+                                    // onClick={()=> {handleEditCoupon(coupons.id)}}
+                                    >
+                                      <img
+                                        src={Edit}
+                                        alt=""
+                                        className="h-8 w-8  cursor-pointer"
+                                      />
+                                    </span>
+                                  </Link>
+                                </Grid>
+                                <Grid item>
+                                  <img
+                                    src={DeletIcon}
+                                    alt="delet"
+                                    className="h-8 w-8 delet-icon"
+                                    onClick={() =>
+                                      handleDeleteCoupon(coupons.id)
+                                    }
+                                  />
+                                </Grid>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+                          <Grid container sx={{ px: 1 }}>
+                            <Grid item xs={12}>
+                              <div
+                                style={{ paddingLeft: "0 !important" }}
+                                className="q_discount_coupon_Code"
+                              >
+                                <div className="">
+                                  {coupons.flag == 1 ? "$" : ""}
+                                  {priceFormate(coupons.discount)}{" "}
+                                  {coupons.flag == 0 ? "%" : ""} OFF on minimum
+                                  order of $
+                                  {priceFormate(
+                                    parseFloat(coupons.min_amount).toFixed(2)
+                                  )}
+                                </div>
+                              </div>
+                            </Grid>
+                          </Grid>
+                          <Grid
+                            container
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            sx={{ p: 1 }}
+                          >
+                            <Grid item>
+                              <div
+                                style={{ padding: 0 }}
+                                className="q_coupon_deatails_validtimes"
+                              >
+                                <p>Valid from</p>
+                              </div>
+                            </Grid>
+                            <Grid
+                              item
+                              style={{ padding: 0 }}
+                              className="q_coupon_deatails_validtimes"
+                            >
+                              <p className="q_date_details">
+                                {/* {moment(coupons.date_valid).format("MM/DD/YYYY")} -{" "} */}
+                                {moment(coupons.date_valid).format(
+                                  "MMMM D, YYYY"
+                                )}{" "}
+                                {/* {moment(coupons.time_valid, "HH:mm:ss").format(
                               "hh:mm A"
                             )}{" "} */}
-                            to{" "}
-                            {/* {moment(coupons.date_expire).format("MM/DD/YYYY")} -{" "} */}
-                            {moment(coupons.date_expire).format("MMMM D, YYYY")}{" "}
-                            {/* {moment(coupons.time_expire, "HH:mm:ss").format(
+                                to{" "}
+                                {/* {moment(coupons.date_expire).format("MM/DD/YYYY")} -{" "} */}
+                                {moment(coupons.date_expire).format(
+                                  "MMMM D, YYYY"
+                                )}{" "}
+                                {/* {moment(coupons.time_expire, "HH:mm:ss").format(
                               "hh:mm A"
                             )} */}
-                          </p>
+                              </p>
+                            </Grid>
+                          </Grid>
+
+                          <Grid
+                            container
+                            direction="row"
+                            justifyContent="space-between"
+                            alignItems="center"
+                            sx={{ px: 1 }}
+                          >
+                            <Grid
+                              item
+                              sx={{ p: 0 }}
+                              className="q_coupon_discountCode"
+                            >
+                              <p>Max Discount</p>
+                            </Grid>
+                            <Grid item>
+                              <p className="q_date_details">
+                                $
+                                {priceFormate(
+                                  parseFloat(coupons.maximum_discount).toFixed(
+                                    2
+                                  )
+                                ) || "0.00"}
+                              </p>
+                            </Grid>
+                          </Grid>
+                          <Grid container>
+                            <Grid item xs={12}>
+                              <div className="q_coupon_status_btn">
+                                <p>Show online</p>
+
+                                <Switch
+                                  checked={
+                                    coupons.show_online == 1 ? true : false
+                                  }
+                                  onChange={(e) =>
+                                    handleCheckboxChange(
+                                      coupons.id,
+                                      e.target.checked,
+                                      coupons
+                                    )
+                                  }
+                                  // disabled={+coupons?.flag === 0 && +coupons?.discount === 100}
+                                  sx={{
+                                    "& .MuiSwitch-switchBase.Mui-checked": {
+                                      color: "#0A64F9", // Change color when switch is checked
+                                    },
+                                    "& .MuiSwitch-track": {
+                                      backgroundColor: "#0A64F9", // Change background color of the track
+                                    },
+                                  }}
+                                />
+                              </div>
+                            </Grid>
+                          </Grid>
                         </Grid>
                       </Grid>
-
-                      <Grid
-                        container
-                        direction="row"
-                        justifyContent="space-between"
-                        alignItems="center"
-                        sx={{ px: 1 }}
-                      >
-                        <Grid
-                          item
-                          sx={{ p: 0 }}
-                          className="q_coupon_discountCode"
-                        >
-                          <p>Max Discount</p>
-                        </Grid>
-                        <Grid item>
-                          <p className="q_date_details">
-                            $
-                            {priceFormate(
-                              parseFloat(coupons.maximum_discount).toFixed(2)
-                            ) || "0.00"}
-                          </p>
-                        </Grid>
-                      </Grid>
-                      <Grid container>
-                        <Grid item xs={12}>
-                          <div className="q_coupon_status_btn">
-                            <p>Show online</p>
-
-                            <Switch
-                              checked={coupons.show_online == 1 ? true : false}
-                              onChange={(e) =>
-                                handleCheckboxChange(
-                                  coupons.id,
-                                  e.target.checked,
-                                  coupons
-                                )
-                              }
-                              // disabled={+coupons?.flag === 0 && +coupons?.discount === 100}
-                              sx={{
-                                "& .MuiSwitch-switchBase.Mui-checked": {
-                                  color: "#0A64F9", // Change color when switch is checked
-                                },
-                                "& .MuiSwitch-track": {
-                                  backgroundColor: "#0A64F9", // Change background color of the track
-                                },
-                              }}
-                            />
-                          </div>
-                        </Grid>
-                      </Grid>
-                      {/* <div className=" flex justify-between w-full">
-                        <div className="q_coupon_code">
-                          <p>{coupons.name}</p>
-                        </div>
-                        <div className="flex space-x-2 p-4">
-                          <Link to={`/coupons/edit-coupons/${coupons.id}`}>
-                            <img src={Edit} alt="" className="h-8 w-8" />
-                          </Link>
-                          <img
-                            src={DeletIcon}
-                            alt="delet"
-                            className="h-8 w-8 delet-icon"
-                            onClick={() => handleDeleteCoupon(coupons.id)}
-                          />
-                        </div>
-                      </div>
-                      <div className="q_discount_coupon_Code">
-                        <div className="">
-                          {coupons.flag == 1 ? "$" : ""}
-                          {coupons.discount} {coupons.flag == 0 ? "%" : ""} OFF
-                          on minimum order of $
-                          {parseFloat(coupons.min_amount).toFixed(2)}
-                        </div>
-                      </div>
-                      <div className="q_coupon_deatails_validtimes">
-                        <p>Valid from</p>
-                        <p className="q_date_details">
-                          {moment(coupons.date_valid).format("MM/DD/YYYY")} -{" "}
-                          {moment(coupons.time_valid, "HH:mm:ss").format(
-                            "hh:mm A"
-                          )}{" "}
-                          to {moment(coupons.date_expire).format("MM/DD/YYYY")}{" "}
-                          -{" "}
-                          {moment(coupons.time_expire, "HH:mm:ss").format(
-                            "hh:mm A"
-                          )}
-                        </p>
-                      </div>
-                      <div className="q_coupon_discountCode">
-                        <p>Max Discount</p>
-                        <p className="q_date_details">
-                          ${parseFloat(coupons.maximum_discount).toFixed(2)}
-                        </p>
-                      </div>
-                      <div className="q_coupon_status_btn">
-                        <p>Show online</p>
-
-                        <Switch
-                          checked={coupons.show_online == 1 ? true : false}
-                          onChange={(e) =>
-                            handleCheckboxChange(coupons.id, e.target.checked)
-                          }
-                          sx={{
-                            "& .MuiSwitch-switchBase.Mui-checked": {
-                              color: "#0A64F9", // Change color when switch is checked
-                            },
-                            "& .MuiSwitch-track": {
-                              backgroundColor: "#0A64F9", // Change background color of the track
-                            },
-                          }}
-                        />
-                      </div> */}
                     </Grid>
-                  </Grid>
-                </Grid>
-              ))}
+                  ))}
+              </>
+            )}
           </Grid>
         </Grid>
       </Grid>

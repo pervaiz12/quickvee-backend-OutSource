@@ -12,7 +12,7 @@ import DashboardFunctionality from "./dashboardFunctionality";
 import DashboardTables from "./paginationTable";
 import { useAuthDetails } from "./../../Common/cookiesHelper";
 const DashboardMain = () => {
-  const { dashboardCount, dashboardRecord,sortByItemName } = DashboardFunctionality();
+  const { dashboardCount, dashboardRecord,sortByItemName,loading } = DashboardFunctionality();
   const {
     LoginGetDashBoardRecordJson,
     LoginAllStore,
@@ -56,6 +56,7 @@ const DashboardMain = () => {
           dashboardRecord={dashboardRecord}
           merchant_id={merchant_id}
           sortByItemName={sortByItemName}
+          loading={loading}
         />
       </div>
       <div className="q-category-main-page">{/* <SellItems /> */}</div>

@@ -33,6 +33,7 @@ const Info = () => {
     receieptLogoBool,
     user_id,
     merchant_idNew,
+    handleBlurPassword,
   } = InfoFunction();
   let data = {
     id: user_id,
@@ -83,6 +84,7 @@ const Info = () => {
         handleSubmitChangePassword={handleSubmitChangePassword}
         passwordInput={passwordInput}
         passwordError={passwordError}
+        handleBlurPassword={handleBlurPassword}
       />
     </>
   );

@@ -17,7 +17,7 @@ const initialState = {
 // Generate pening , fulfilled and rejected action type
 export const fetchPermissionData = createAsyncThunk(
   "permission/fetchPermissionData",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     const { token, ...userData } = data;
     try {
       const response = await axios.post(
@@ -36,14 +36,19 @@ export const fetchPermissionData = createAsyncThunk(
         return response.data.data;
       }
     } catch (error) {
-      throw new Error(error.response.data.message);
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
 
 export const deletePermission = createAsyncThunk(
   "permission/deletePermission",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     const { token, ...dataNew } = data;
     try {
       const response = await axios.post(
@@ -64,9 +69,12 @@ export const deletePermission = createAsyncThunk(
           id: data.id,
         };
       }
-    } catch (error) {
-      ToastifyAlert("Error!", "error");
-      throw new Error(error.response.data.message);
+    } catch (error) {const customError = {
+      message: error.message,
+      status: error.response ? error.response.status : "Network Error",
+      data: error.response ? error.response.data : null,
+    };
+    return rejectWithValue(customError);
     }
   }
 );
