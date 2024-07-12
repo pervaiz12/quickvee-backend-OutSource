@@ -15,6 +15,7 @@ import TableRow from "@mui/material/TableRow";
 import { priceFormate } from "../../../hooks/priceFormate";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import PasswordShow from "../../../Common/passwordShow";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -46,6 +47,8 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 const CouponReportList = (props) => {
   const dispatch = useDispatch();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   const {
     LoginGetDashBoardRecordJson,
@@ -58,38 +61,49 @@ const CouponReportList = (props) => {
   const CouponReportDataState = useSelector((state) => state.CouponReportList);
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
+    getCouponReportData();
+  }, [props, dispatch]);
+  const getCouponReportData = async () => {
     if (props && props.selectedDateRange) {
-      const startDateData = props.selectedDateRange.start_date;
-      const endDateData = props.selectedDateRange.end_date;
-      let data = {
-        merchant_id,
-        start_date: startDateData,
-        end_date: endDateData,
-        ...userTypeData,
-      };
+      try {
+        const startDateData = props.selectedDateRange.start_date;
+        const endDateData = props.selectedDateRange.end_date;
+        let data = {
+          merchant_id,
+          start_date: startDateData,
+          end_date: endDateData,
+          ...userTypeData,
+        };
 
-      if (data) {
-        dispatch(fetchCouponReportData(data));
+        if (data) {
+          await dispatch(fetchCouponReportData(data)).unwrap();
+        }
+      } catch (error) {
+        console.log(error);
+        if (error.status == 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        }
       }
     }
-  }, [props, dispatch]);
+  };
 
   useEffect(() => {
     if (
       !CouponReportDataState.loading &&
       CouponReportDataState.CouponReportData
     ) {
-      const uodatedList = CouponReportDataState?.CouponReportData.map(
-        (item) => {
-          return {
-            ...item,
-            couponName:
-              item.coupon_type === "Discount"
-                ? "Direct Discount By App"
-                : item.coupon_type,
-          };
-        }
-      );
+      const uodatedList = Array.isArray(CouponReportDataState?.CouponReportData)
+        ? CouponReportDataState?.CouponReportData?.map((item) => {
+            return {
+              ...item,
+              couponName:
+                item.coupon_type === "Discount"
+                  ? "Direct Discount By App"
+                  : item.coupon_type,
+            };
+          })
+        : "";
       setCouponReportData(uodatedList);
     } else {
       setCouponReportData([]);

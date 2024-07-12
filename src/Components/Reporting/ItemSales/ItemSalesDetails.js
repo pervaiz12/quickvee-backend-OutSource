@@ -15,6 +15,7 @@ import { priceFormate } from "../../../hooks/priceFormate";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
+import PasswordShow from "../../../Common/passwordShow";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -47,6 +48,8 @@ const ItemSalesDetails = (props) => {
   const dispatch = useDispatch();
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [sortOrder, setSortOrder] = useState("asc");
   const [allItemSalesData, setallItemSalesData] = useState("");
   const AllItemSalesDataState = useSelector(
@@ -54,21 +57,45 @@ const ItemSalesDetails = (props) => {
   );
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
+    getFetchItemSalesData();
+    // if (props && props.selectedDateRange) {
+    //   let data = {
+    //     merchant_id,
+    //     start_date: props.selectedDateRange.start_date,
+    //     end_date: props.selectedDateRange.end_date,
+    //     order_typ: props.OrderTypeData,
+    //     order_env: props.OrderSourceData,
+    //     cat_name: props.SelectCatData,
+    //     ...userTypeData,
+    //   };
+    //   if (data) {
+    //     dispatch(fetchItemSalesData(data));
+    //   }
+    // }
+  }, [props]);
+  const getFetchItemSalesData = async () => {
     if (props && props.selectedDateRange) {
-      let data = {
-        merchant_id,
-        start_date: props.selectedDateRange.start_date,
-        end_date: props.selectedDateRange.end_date,
-        order_typ: props.OrderTypeData,
-        order_env: props.OrderSourceData,
-        cat_name: props.SelectCatData,
-        ...userTypeData,
-      };
-      if (data) {
-        dispatch(fetchItemSalesData(data));
+      try {
+        let data = {
+          merchant_id,
+          start_date: props.selectedDateRange.start_date,
+          end_date: props.selectedDateRange.end_date,
+          order_typ: props.OrderTypeData,
+          order_env: props.OrderSourceData,
+          cat_name: props.SelectCatData,
+          ...userTypeData,
+        };
+        if (data) {
+          await dispatch(fetchItemSalesData(data)).unwrap();
+        }
+      } catch (error) {
+        if (error.status == 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        }
       }
     }
-  }, [props]);
+  };
 
   useEffect(() => {
     if (
