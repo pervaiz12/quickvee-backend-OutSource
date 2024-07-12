@@ -207,7 +207,7 @@ const AddEmployeeFormLogic = ({ employee, employeeList }) => {
         });
         console.log(response.data);
         if (response.data.status === true) {
-          ToastifyAlert(response?.data?.message, "success");
+          ToastifyAlert("Updated Successfully", "success");
           dispatch(editEmployee(data));
           setLoader(false);
           setShowModal(false);

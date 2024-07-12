@@ -256,7 +256,7 @@ const InventoryData = () => {
         if (
           res?.payload?.message === "Inventory settings Updated Successfully"
         ) {
-          ToastifyAlert("Inventory Data Updated Successfully!", "success");
+          ToastifyAlert("Updated Successfully", "success");
           // called fetch APi again
           fetchInventoryData();
         }
@@ -413,15 +413,16 @@ const InventoryData = () => {
                 style={{ marginBottom: 0 }}
               >
                 <button
-                  className="save_btn float-right mt-5 mb-5 "
+                  className="save_btn float-right mt-5 mb-5 attributeUpdateBTN"
                   onClick={handleSave}
                   disabled={loading}
                   style={{ width: "140px", marginRight: "20px" }}
                 >
                   {loading ? (
-                    <Box className="loader-box">
-                      <CircularProgress />
-                    </Box>
+                    <>
+                      <CircularProgress color={"inherit"} width={15} size={15} />{" "}
+                      Save
+                    </>
                   ) : (
                     "Save"
                   )}
