@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { fetchPurchaseOrderById } from "../../Redux/features/PurchaseOrder/purchaseOrderByIdSlice";
 import { useSelector } from "react-redux";
-import { formatDate } from "../../Constants/utils";
+import { disableZeroOnFirstIndex, formatDate } from "../../Constants/utils";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -508,6 +508,11 @@ const ReceivePurchaseOrderItems = () => {
                                   (Number(data?.required_qty) || 0) -
                                     (Number(data?.recieved_qty) || 0)
                               ) {
+                                const disable = disableZeroOnFirstIndex(
+                                  e.target.value
+                                );
+                                if (disable) return;
+
                                 setPurchaseOrder((prev) => ({
                                   ...prev,
                                   order_items: purchaseOrder.order_items.map(

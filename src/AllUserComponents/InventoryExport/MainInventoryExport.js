@@ -25,7 +25,6 @@ const MainInventoryExport = () => {
   const goToTop = () => {
     setsubmitmessage();
   };
-  const {handleCoockieExpire,getUnAutherisedTokenMessage,getNetworkError}=PasswordShow()
   const [selectedStorefrom, setSelectedStorefrom] =
     useState("-- Select Store --");
 
@@ -107,23 +106,6 @@ const MainInventoryExport = () => {
   useEffect(() => {
     getMerchantList();
   }, []);
-  const getfetchMerchantsList=async()=>{
-    try{
-      const data = {
-        ...userTypeData
-      };
-      if (data) {
-        await dispatch(fetchMerchantsList(data)).unwrap();
-      }
-    }catch(error){
-      if(error.status === 401){
-        handleCoockieExpire()
-        getUnAutherisedTokenMessage()
-      }else if (error.status == "Network Error") {
-        getNetworkError();
-      }
-    }
-  }
 
   const storefrom =
     MerchantList.length > 0

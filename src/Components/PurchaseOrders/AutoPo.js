@@ -7,7 +7,7 @@ import { useAuthDetails } from "../../Common/cookiesHelper";
 import AsyncSelect from "react-select/async";
 import { AUTO_PO_LIST, BASE_URL, SAVE_PO } from "../../Constants/Config";
 import axios from "axios";
-import { createdAt } from "../../Constants/utils";
+import { createdAt, disableZeroOnFirstIndex } from "../../Constants/utils";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -708,6 +708,10 @@ const AutoPo = ({ purchaseInfo, setPurchaseInfoErrors }) => {
                               e.target.value.length <= 6 &&
                               !isNaN(e.target.value)
                             ) {
+                              const disable = disableZeroOnFirstIndex(
+                                e.target.value
+                              );
+                              if (disable) return;
                               handleProduct(e, product.id, "newQty");
                             }
                           }}
