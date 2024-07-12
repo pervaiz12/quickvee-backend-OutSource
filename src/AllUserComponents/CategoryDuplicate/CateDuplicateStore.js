@@ -238,7 +238,8 @@ const CateDuplicateStore = () => {
       store_name_from: storefrom,
       store_name_to: storeto,
       category_name: categoryValues,
-      upc_check: isUpcChecked,
+      // upc_check: isUpcChecked,
+      upc_check: "1",
       ...userTypeDataNew,
     };
     setConfirmFinalModalOpen(false);
@@ -326,7 +327,8 @@ const CateDuplicateStore = () => {
           store_name_from: storefrom,
           store_name_to: storeto,
           category_name: categoryValues,
-          upc_check: isUpcChecked,
+          // upc_check: isUpcChecked,
+          upc_check: "1",
           ...userTypeDataNew,
         };
         setConfirmModalOpen(true);
@@ -643,7 +645,7 @@ const CateDuplicateStore = () => {
             <div className="qv_checkbox">
               <label className="qv_checkbox_add_checkmark_label">
                 Want to Replicate UPC's for inventory
-                <input type="checkbox" id="upc_check" name="upc_check" />
+                <input type="checkbox" id="upc_check" name="upc_check" checked={true} />
                 <span className="qv_add_checkmark"></span>
               </label>
             </div>
