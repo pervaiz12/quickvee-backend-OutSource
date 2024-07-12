@@ -111,6 +111,66 @@ const Setup = () => {
     setdelDefTip(delDefTip);
   };
 
+  const validateData = () => {
+    let errorrecord = { ...errors };
+    let errorStatus = false;
+    // console.log(MinPickData);
+    // console.log(MaxPickData);
+    // EnableOrderNumber
+    if (
+      EnableOrderNumber == "Yes" &&
+      (MinPickData == null || MinPickData == "")
+    ) {
+      errorrecord.minPickupTimeError = "Minimum Time is required";
+      errorStatus = true;
+    }
+    //  else {
+    //   setMinPickData("");
+    // }
+    if (
+      EnableOrderNumber == "Yes" &&
+      (MaxPickData == null || MaxPickData == "")
+    ) {
+      errorrecord.maxPickupTimeError = "Maximum Time is required";
+      errorStatus = true;
+    }
+    // else {
+    //   setMaxPickData("");
+    // }
+    if (DelEnbale == "Yes" && (MinDelData == null || MinDelData == "")) {
+      errorrecord.minDeliveryTimeError = "Minimum Delivery Time is required";
+      errorStatus = true;
+    }
+    // else {
+    //   setMinDelData("");
+    // }
+    if (DelEnbale == "Yes" && (MaxDelData == null || MaxDelData == "")) {
+      errorrecord.maxDeliveryTimeError = "Maximum Delivery Time is required";
+      errorStatus = true;
+    }
+    //  else {
+    //   setMaxDelData("");
+    // }
+    // if()
+    // {
+    // }
+    setErrors(errorrecord);
+    if (errorStatus) {
+      return false;
+    } else {
+      return true;
+    }
+    // MinPickData,
+    // MaxPickData,
+
+    //  const [errors, setErrors] = useState({
+    //   minDeliveryTimeError: "",
+    //   maxDeliveryTimeError: "",
+    //   minPickupTimeError: "",
+    //   maxPickupTimeError: "",
+    // });
+  };
+
   const handleUpdateClick = async (e) => {
     if (lastCloseTimeState === false) {
       showModal("End time cannot be empty");
@@ -139,66 +199,68 @@ const Setup = () => {
     }
 
     e.preventDefault();
-
-    const FormData = {
-      merchant_id: merchant_id, //
-      user_id: user_id, //
-      enable_online_order: OnlineOrderStatus,
-      is_pickup: EnableOrderNumber, //
-      is_deliver: DelEnbale, //
-      pickup_min_time: MinPickData, //
-      pickup_max_time: MaxPickData, //
-      deliver_min_time: MinDelData, //
-      deliver_max_time: MaxDelData, //
-      min_delivery_amt: MinAmtdel, //
-      max_delivery_radius: rateDel, //
-      cf_pik_price: convData, //
-      cf_del_price: conepikData, //
-      float_fee: FeeData, //
-      delivery_fee: delChange, //
-      rate_per_miles: delRates, //
-      enable_tip: delpickData, //
-      default_tip_pickup: pickDefTip, //
-      default_tip_delivery: delDefTip, //
-      day_data: JSON.stringify(days),
-      cf_pik: parseFloat(convData) > 0 ? "1" : "0",
-      cf_del: parseFloat(conepikData) > 0 ? "1" : "0",
-    };
-    try {
-      setLoader(true);
-      const { token, ...otherUserData } = userTypeData;
-      const response = await axios.post(
-        BASE_URL + UPDATE_STORE_SETUP,
-        { ...FormData, ...otherUserData },
-        {
-          headers: {
-            "Content-Type": "multipart/form-data",
-            Authorization: `Bearer ${token}`,
-          },
+    let is_validate = validateData();
+    if (is_validate) {
+      const FormData = {
+        merchant_id: merchant_id, //
+        user_id: user_id, //
+        enable_online_order: OnlineOrderStatus,
+        is_pickup: EnableOrderNumber, //
+        is_deliver: DelEnbale, //
+        pickup_min_time: MinPickData, //
+        pickup_max_time: MaxPickData, //
+        deliver_min_time: MinDelData, //
+        deliver_max_time: MaxDelData, //
+        min_delivery_amt: MinAmtdel, //
+        max_delivery_radius: rateDel, //
+        cf_pik_price: convData, //
+        cf_del_price: conepikData, //
+        float_fee: FeeData, //
+        delivery_fee: delChange, //
+        rate_per_miles: delRates, //
+        enable_tip: delpickData, //
+        default_tip_pickup: pickDefTip, //
+        default_tip_delivery: delDefTip, //
+        day_data: JSON.stringify(days),
+        cf_pik: parseFloat(convData) > 0 ? "1" : "0",
+        cf_del: parseFloat(conepikData) > 0 ? "1" : "0",
+      };
+      try {
+        setLoader(true);
+        const { token, ...otherUserData } = userTypeData;
+        const response = await axios.post(
+          BASE_URL + UPDATE_STORE_SETUP,
+          { ...FormData, ...otherUserData },
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        if (response.data.status === true) {
+          ToastifyAlert("Updated Successfully", "success");
+          setLoader(false);
+          let merchantdata = {
+            merchant_id: merchant_id,
+          };
+          if (merchantdata) {
+            dispatch(fetchSettingReceiptData(merchantdata));
+          }
+        } else {
+          setLoader(false);
+          ToastifyAlert(response.data.msg, "unsuccess");
         }
-      );
-      if (response.data.status === true) {
-        ToastifyAlert("Updated Successfully", "success");
-        setLoader(false);
-        let merchantdata = {
-          merchant_id: merchant_id,
-        };
-        if (merchantdata) {
-          dispatch(fetchSettingReceiptData(merchantdata));
+      } catch (error) {
+        if (error.status == 401 || error.response.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
         }
-      } else {
+      } finally {
         setLoader(false);
-        ToastifyAlert(response.data.msg, "unsuccess");
       }
-    } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
-        getUnAutherisedTokenMessage();
-        handleCoockieExpire();
-      } else if (error.status == "Network Error") {
-        getNetworkError();
-      }
-    } finally {
-      setLoader(false);
     }
   };
 

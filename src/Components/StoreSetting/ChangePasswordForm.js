@@ -14,7 +14,7 @@ const ChangePasswordForm = ({
   passwordInput,
   passwordError,
   handleBlurPassword,
-  handleClose
+  handleClose,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -112,7 +112,7 @@ const ChangePasswordForm = ({
             sx={{ pt: 3 }}
           >
             <Grid item>
-              <div className="info-update" onClick={handleClose}>
+              <div className="info-update">
                 <input
                   type="button"
                   className="blue_btn inforecord-email"

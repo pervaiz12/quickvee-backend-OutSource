@@ -19,6 +19,7 @@ export default function InfoFunction() {
     userTypeData,
     GetSessionLogin,
     user_id,
+    // handleCloseModel,
   } = useAuthDetails();
   console.log(LoginGetDashBoardRecordJson);
   let merchant_idNew = LoginGetDashBoardRecordJson?.data?.merchant_id;
@@ -77,10 +78,9 @@ export default function InfoFunction() {
     validatePasswordInput(e);
   };
   const handleCloseModel = () => {
-    setPassowordInput({ password: '', confirmPassword: '' });
-    setPasswordError({ password: '', confirmPassword: '' });
+    setPassowordInput({ password: "", confirmPassword: "" });
+    setPasswordError({ password: "", confirmPassword: "" });
   };
-
 
   const validatePasswordInput = (e) => {
     let { name, value } = e.target;
@@ -131,7 +131,7 @@ export default function InfoFunction() {
     const dataNew = {
       email: store_email,
       password: passwordInput?.password,
-      merchant_id:merchant_idNew,
+      merchant_id: merchant_idNew,
       ...newData,
     };
     try {
@@ -141,19 +141,22 @@ export default function InfoFunction() {
           Authorization: `Bearer ${token}`,
         },
       });
+
       if (response.data) {
+        console.log("111");
         setPasswordError((prev) => ({
           ...prev,
           password: "Password already exists",
         }));
         errorFlag = true;
-      } else {
-        setPasswordError((prev) => ({
-          ...prev,
-          password: "",
-        }));
-        errorFlag = false;
       }
+      // else {
+      //   setPasswordError((prev) => ({
+      //     ...prev,
+      //     password: "",
+      //   }));
+      //   errorFlag = false;
+      // }
       if (errorFlag) {
         return false;
       } else {
@@ -583,16 +586,25 @@ export default function InfoFunction() {
         const selectedFile = e.target.files[0];
 
         if (selectedFile) {
-          const reader = new FileReader();
-          reader.onloadend = () => {
-            setInfoRecord((prevState) => ({
-              ...prevState,
-              image: reader.result,
-              is_logo_change: prevState.image === selectedFile.name ? "0" : "1",
-            }));
-          };
-          reader.readAsDataURL(selectedFile);
-          setImageBoolean(true);
+          const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+          if (allowedTypes.includes(selectedFile.type)) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+              setInfoRecord((prevState) => ({
+                ...prevState,
+                image: reader.result,
+                is_logo_change:
+                  prevState.image === selectedFile.name ? "0" : "1",
+              }));
+            };
+            reader.readAsDataURL(selectedFile);
+            setImageBoolean(true);
+          } else {
+            alert(
+              `${selectedFile.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`
+            );
+            e.target.value = null;
+          }
         }
         errorMessage.imageErrors = "";
       }
@@ -604,44 +616,59 @@ export default function InfoFunction() {
       const selectedFile = e.target.files[0];
 
       if (selectedFile) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setInfoRecord((prevState) => ({
-            ...prevState,
-            banners: reader.result,
-            is_banner_change:
-              prevState.banners === selectedFile.name ? "0" : "1",
-          }));
-        };
+        const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+        if (allowedTypes.includes(selectedFile.type)) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setInfoRecord((prevState) => ({
+              ...prevState,
+              banners: reader.result,
+              is_banner_change:
+                prevState.banners === selectedFile.name ? "0" : "1",
+            }));
+          };
 
-        reader.readAsDataURL(selectedFile);
-        setBannersBoolean(true);
-        // }
-        // errorMessage.bannerErrors = "";
+          reader.readAsDataURL(selectedFile);
+          setBannersBoolean(true);
+          // }
+          // errorMessage.bannerErrors = "";
+        }
+      } else {
+        alert(
+          `${selectedFile.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`
+        );
+        e.target.value = null;
       }
     }
     if (name === "qrCode") {
-      console.log("QR Code", name);
       // if (e.target.value == "") {
       //   errorMessage.qrCodeError = "QR Code is required";
       // } else {
       const selectedFile = e.target.files[0];
 
       if (selectedFile) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setInfoRecord((prevState) => ({
-            ...prevState,
-            qrCode: reader.result,
-            is_qr_code_change:
-              prevState.qrCode === selectedFile.name ? "0" : "1",
-          }));
-        };
+        const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+        if (allowedTypes.includes(selectedFile.type)) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setInfoRecord((prevState) => ({
+              ...prevState,
+              qrCode: reader.result,
+              is_qr_code_change:
+                prevState.qrCode === selectedFile.name ? "0" : "1",
+            }));
+          };
 
-        reader.readAsDataURL(selectedFile);
-        setQrCodeBoolean(true);
-        // }
-        // errorMessage.qrCodeError = "";
+          reader.readAsDataURL(selectedFile);
+          setQrCodeBoolean(true);
+          // }
+          // errorMessage.qrCodeError = "";
+        } else {
+          alert(
+            `${selectedFile.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`
+          );
+          e.target.value = null;
+        }
       }
     }
     if (name === "receieptLogo") {
@@ -652,20 +679,28 @@ export default function InfoFunction() {
       const selectedFile = e.target.files[0];
 
       if (selectedFile) {
-        const reader = new FileReader();
-        reader.onloadend = () => {
-          setInfoRecord((prevState) => ({
-            ...prevState,
-            receieptLogo: reader.result,
-            is_receipt_logo_change:
-              prevState.receieptLogo === selectedFile.name ? "0" : "1",
-          }));
-        };
+        const allowedTypes = ["image/jpeg", "image/png", "image/jpg"];
+        if (allowedTypes.includes(selectedFile.type)) {
+          const reader = new FileReader();
+          reader.onloadend = () => {
+            setInfoRecord((prevState) => ({
+              ...prevState,
+              receieptLogo: reader.result,
+              is_receipt_logo_change:
+                prevState.receieptLogo === selectedFile.name ? "0" : "1",
+            }));
+          };
 
-        reader.readAsDataURL(selectedFile);
-        setReceieptLogoBool(true);
-        // }
-        // errorMessage.receieptLogoError = "";
+          reader.readAsDataURL(selectedFile);
+          setReceieptLogoBool(true);
+          // }
+          // errorMessage.receieptLogoError = "";
+        } else {
+          alert(
+            `${selectedFile.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`
+          );
+          e.target.value = null;
+        }
       }
     }
     if (name == "phone") {
@@ -716,10 +751,22 @@ export default function InfoFunction() {
     }
     switch (name) {
       case "facebookUrl":
+        if (value !== "" && !urlPattern.test(value)) {
+          errorMessage[`${name}Error`] = `Enter  valid Facebook URL`;
+        } else {
+          errorMessage[`${name}Error`] = "";
+        }
+        break;
       case "instagramUrl":
+        if (value !== "" && !urlPattern.test(value)) {
+          errorMessage[`${name}Error`] = `Enter  valid Instagram URL`;
+        } else {
+          errorMessage[`${name}Error`] = "";
+        }
+        break;
       case "promotionalUrl":
         if (value !== "" && !urlPattern.test(value)) {
-          errorMessage[`${name}Error`] = `Enter  valid ${name} URL`;
+          errorMessage[`${name}Error`] = `Enter  valid Promotional URL`;
         } else {
           errorMessage[`${name}Error`] = "";
         }
@@ -767,7 +814,7 @@ export default function InfoFunction() {
     console.log(validateData);
     console.log(currentValidate);
     try {
-      setSubmitLoading(true)
+      setSubmitLoading(true);
       if (validateData == true) {
         if (currentValidate == true) {
           const packect = {
@@ -880,7 +927,11 @@ export default function InfoFunction() {
             }
           );
           if (response.status == 200) {
-            ToastifyAlert(response.data.msg, "success");
+            // setPassowordInput({ password: "", confirmPassword: "" });
+            ToastifyAlert("Update Successfully", "success");
+            handleCloseModel();
+            setPassowordInput({ password: "", confirmPassword: "" });
+            setPasswordError({ password: "", confirmPassword: "" });
           }
         } catch (error) {
           if (error.response.status == 401) {

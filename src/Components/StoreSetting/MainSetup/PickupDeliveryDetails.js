@@ -32,8 +32,8 @@ const PickupDeliveryDetails = ({
   const [conveniencepik, SetConveniencepik] = useCurrencyInput("0.00");
   const [amountdelivery, setAmountdelivery] = useState();
   const [rateDelivery, SetRateDelivery] = useCurrencyInput("0.00");
-  const [MinPickupTime, setMinPickupTime] = useState();
-  const [MaxPickupTime, setMaxPickupTime] = useState();
+  const [MinPickupTime, setMinPickupTime] = useState("");
+  const [MaxPickupTime, setMaxPickupTime] = useState("");
   const [MinDeliveryTime, setMinDeliveryTime] = useState();
   const [MaxDeliveryTime, setMaxDeliveryTime] = useState();
   const [MinAmountdelivery, setMinAmountdelivery] = useCurrencyInput("0.00");
@@ -41,10 +41,18 @@ const PickupDeliveryDetails = ({
 
   const handleCheckedSwitch = (e) => {
     setisEnableOrderNumber(e.target.checked ? "Yes" : "No");
+    if (!e.target.checked) {
+      setMinPickupTime("");
+      setMaxPickupTime("");
+    }
   };
 
   const handleCheckedclicked = (e) => {
     setIsDelveryEnbale(e.target.checked ? "Yes" : "No");
+    if (!e.target.checked) {
+      setMinDeliveryTime("");
+      setMaxDeliveryTime("");
+    }
   };
 
   useEffect(() => {
@@ -237,7 +245,7 @@ const PickupDeliveryDetails = ({
             <Grid item xs={6}>
               <Grid container spacing={3}>
                 <Grid item xs={6}>
-                  <label>Minimum Time(in-Min):</label>
+                  <label>Minimum Time(Minutes):</label>
                   <BasicTextFields
                     type="text"
                     value={MinPickupTime}
@@ -249,7 +257,7 @@ const PickupDeliveryDetails = ({
                   )}
                 </Grid>
                 <Grid item xs={6}>
-                  <label>Maximum Time(in-Min):</label>
+                  <label>Maximum Time(Minutes):</label>
                   <BasicTextFields
                     type="text"
                     value={MaxPickupTime}
@@ -326,7 +334,7 @@ const PickupDeliveryDetails = ({
             <Grid item xs={6}>
               <Grid container spacing={3}>
                 <Grid item xs={6}>
-                  <label> Delivery Time (Min)</label>
+                  <label> Delivery Time (Minutes)</label>
                   <BasicTextFields
                     type="text"
                     value={MinDeliveryTime}
@@ -340,7 +348,7 @@ const PickupDeliveryDetails = ({
                   )}
                 </Grid>
                 <Grid item xs={6}>
-                  <label>Delivery Time (Max)</label>
+                  <label>Delivery Time (Minutes)</label>
                   <BasicTextFields
                     type="text"
                     value={MaxDeliveryTime}

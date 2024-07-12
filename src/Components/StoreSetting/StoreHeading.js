@@ -18,7 +18,7 @@ const StoreHeading = ({ hideSucess, successsMessage, infoRecord }) => {
         </Grid>
       </Grid>
       <Grid item xs={12}>
-        {hideSucess ? <Alert severity="success">{successsMessage}</Alert> : ""}
+        {/* {hideSucess ? <Alert severity="success">{successsMessage}</Alert> : ""} */}
         <Grid
           container
           direction="row"
@@ -33,7 +33,7 @@ const StoreHeading = ({ hideSucess, successsMessage, infoRecord }) => {
             <p className="inforecord-email">{infoRecord.email}</p>
           </Grid>
         </Grid>
-        <Grid container sx={{px:2.5,pb:2.5}}>
+        <Grid container sx={{ px: 2.5, pb: 2.5 }}>
           <Grid item xs={12}>
             <ChangePasswordModal />
           </Grid>
