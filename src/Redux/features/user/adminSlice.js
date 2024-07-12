@@ -38,20 +38,29 @@ export const AdminFunction = createAsyncThunk(
 
 export const getAdminRecordCount = createAsyncThunk(
   "Verified/getAdminRecordCount",
-  async (data) => {
-    const { token, ...dataNew } = data;
-    const response = await axios.post(
-      BASE_URL + GET_ADMIN_RECORD_COUNT,
-      dataNew,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`, // Use data?.token directly
-        },
+  async (data, { rejectWithValue }) => {
+    try {
+      const { token, ...dataNew } = data;
+      const response = await axios.post(
+        BASE_URL + GET_ADMIN_RECORD_COUNT,
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // Use data?.token directly
+          },
+        }
+      );
+      if (response.data.status == 200) {
+        return response.data.data_count;
       }
-    );
-    if (response.data.status == 200) {
-      return response.data.data_count;
+    } catch (error) {
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );

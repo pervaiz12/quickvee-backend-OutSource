@@ -147,7 +147,7 @@ const initialState = {
 // Async thunk to handle user authentication
 export const handleUserType = createAsyncThunk(
   "LoginAuth/handleUserType",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     try {
       const response = await axios.post(
         BASE_URL + LOGIN_OTP_SUBMIT_AUTHENTICATION,
@@ -175,8 +175,12 @@ export const handleUserType = createAsyncThunk(
         return response.data;
       }
     } catch (error) {
-      console.error("Error validating email:", error.message);
-      throw error;
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );

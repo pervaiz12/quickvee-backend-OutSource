@@ -131,8 +131,6 @@ const Setup = () => {
       maxPickupTimeError,
     ].every((error) => error === "");
 
-    // console.log("pickupDeliveryDetailsRef: ", pickupDeliveryDetailsRef);
-
     if (!errorFree) {
       pickupDeliveryDetailsRef.current.scrollIntoView({
         behavior: "smooth",
@@ -179,7 +177,6 @@ const Setup = () => {
           },
         }
       );
-      console.log(response);
       if (response.data.status === true) {
         ToastifyAlert("Updated Successfully", "success");
         setLoader(false);

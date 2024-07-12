@@ -403,7 +403,7 @@ const StoreCateUser = () => {
 
           <div className="q-add-inventory-section-header mx-2">
             <div class="qv_checkbox">
-              <label class="qv_checkbox_add_checkmark_label">
+              <label class="qv_checkbox_add_checkmark_label cursor-disabled">
                 Want to Replicated UPC's for inventory
                 <input
                   type="checkbox"

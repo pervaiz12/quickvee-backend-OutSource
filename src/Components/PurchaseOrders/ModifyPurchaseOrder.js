@@ -27,7 +27,7 @@ import { createTheme } from "@mui/material/styles";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import MenuItem from "@mui/material/MenuItem";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
-import { createdAt } from "../../Constants/utils";
+import { createdAt, disableZeroOnFirstIndex } from "../../Constants/utils";
 import CircularProgress from "@mui/material/CircularProgress";
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -1029,6 +1029,10 @@ const ModifyPurchaseOrder = () => {
                                 e.target.value.length <= 6 &&
                                 !isNaN(e.target.value)
                               ) {
+                                const disable = disableZeroOnFirstIndex(
+                                  e.target.value
+                                );
+                                if (disable) return;
                                 handleProduct(e, product.id, "newQty");
                               }
                             }}

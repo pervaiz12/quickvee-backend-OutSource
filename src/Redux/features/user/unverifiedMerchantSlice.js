@@ -52,21 +52,30 @@ export const getUnVerifiedMerchant = createAsyncThunk(
 
 export const getUnVerifiedMerchantCount = createAsyncThunk(
   "UnVerified/getUnVerifiedMerchantCount",
-  async (data) => {
-    const { token, ...dataNew } = data;
-    const response = await axios.post(
-      BASE_URL + GET_VERIFIED_MERCHANT_COUNT,
-      dataNew,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`, // Use data?.token directly
-        },
+  async (data, { rejectWithValue }) => {
+    try {
+      const { token, ...dataNew } = data;
+      const response = await axios.post(
+        BASE_URL + GET_VERIFIED_MERCHANT_COUNT,
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // Use data?.token directly
+          },
+        }
+      );
+      console.log("unverifiedMerchantDataCount: ", response);
+      if (response.data.status == 200) {
+        return response.data.data_count;
       }
-    );
-    console.log("unverifiedMerchantDataCount: ", response);
-    if (response.data.status == 200) {
-      return response.data.data_count;
+    } catch (error) {
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
@@ -74,7 +83,7 @@ export const getUnVerifiedMerchantCount = createAsyncThunk(
 //https://sandbox.quickvee.net/Dashboard/login_via_superadmin
 export const handleMoveDash = createAsyncThunk(
   "UnVerified/handleMoveDash",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     try {
       const { token, ...dataNew } = data;
       const response = await axios.post(
@@ -117,8 +126,12 @@ export const handleMoveDash = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      console.error("Error occurred:", error);
-      throw error;
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );

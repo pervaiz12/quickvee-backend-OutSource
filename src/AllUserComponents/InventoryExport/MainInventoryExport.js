@@ -10,19 +10,21 @@ import { useSelector } from "react-redux";
 import InventoryExportLogic from "./InventoryExportLogic";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
-import { Grid } from '@mui/material';
-import PasswordShow from "../../Common/passwordShow";
+import { Grid } from "@mui/material";
+import PasswordShow from "./../../Common/passwordShow";
 
 const MainInventoryExport = () => {
   const [openAlert, setOpenAlert] = useState(true);
   const [MerchantList, setMerchantList] = useState([]);
   const MerchantListData = useSelector((state) => state.ExportInventoryData);
   const { userTypeData } = useAuthDetails();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
+
   //console.log(MerchantListData);
   const goToTop = () => {
     setsubmitmessage();
   };
-  const {handleCoockieExpire,getUnAutherisedTokenMessage,getNetworkError}=PasswordShow()
   const [selectedStorefrom, setSelectedStorefrom] =
     useState("-- Select Store --");
 
@@ -50,7 +52,7 @@ const MainInventoryExport = () => {
         if (option === "-- Select Store --") {
           setSelectedStorefrom("-- Select Store --");
           setStoreFromError("This field is required");
-          return; 
+          return;
         }
         setSelectedStorefrom(option.title);
         setStoreFromDropdownVisible(false);
@@ -70,8 +72,14 @@ const MainInventoryExport = () => {
     }
   };
 
-  const { handleStoreInput, handleSubmit, submitmessage, setsubmitmessage ,storeFromError,setStoreFromError} =
-    InventoryExportLogic();
+  const {
+    handleStoreInput,
+    handleSubmit,
+    submitmessage,
+    setsubmitmessage,
+    storeFromError,
+    setStoreFromError,
+  } = InventoryExportLogic();
 
   useEffect(() => {
     if (!MerchantListData.loading && MerchantListData.MerchantListData) {
@@ -81,39 +89,37 @@ const MainInventoryExport = () => {
   }, [MerchantListData, MerchantListData.loading]);
 
   const dispatch = useDispatch();
-  useEffect(() => {
-    // dispatch(fetchMerchantsList(userTypeData));
-    getfetchMerchantsList();
-  }, []);
-  const getfetchMerchantsList=async()=>{
-    try{
-      const data = {
-        ...userTypeData
-      };
-      if (data) {
-        await dispatch(fetchMerchantsList(data)).unwrap();
-      }
-    }catch(error){
-      if(error.status === 401){
-        handleCoockieExpire()
-        getUnAutherisedTokenMessage()
-      }else if (error.status == "Network Error") {
+
+  const getMerchantList = async () => {
+    try {
+      await dispatch(fetchMerchantsList(userTypeData)).unwrap();
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
         getNetworkError();
       }
     }
-  }
+  };
 
-  const storefrom = MerchantList.length > 0 ? MerchantList.map((merchant) => ({
-    title: `${merchant.name}-${merchant.merchant_id}`,
-    merchant_id: merchant.merchant_id,
-  })) : [];
+  useEffect(() => {
+    getMerchantList();
+  }, []);
+
+  const storefrom =
+    MerchantList.length > 0
+      ? MerchantList.map((merchant) => ({
+          title: `${merchant.name}-${merchant.merchant_id}`,
+          merchant_id: merchant.merchant_id,
+        }))
+      : [];
 
   return (
     <>
-    
-        <div className="box_shadow_div_order">
-          <div className="">
-            {/* <div className="alert">
+      <div className="box_shadow_div_order">
+        <div className="">
+          {/* <div className="alert">
               {submitmessage && (
                 <Box
                   sx={{
@@ -146,16 +152,16 @@ const MainInventoryExport = () => {
                 </Box>
               )}
             </div> */}
-            <div className="q-add-categories-section-header">
-              <span>
-                {" "}
-                {/* <img src={()} alt="Add-New-Category" /> */}
-                <span>Inventory Export</span>
-              </span>
-            </div>
+          <div className="q-add-categories-section-header">
+            <span>
+              {" "}
+              {/* <img src={()} alt="Add-New-Category" /> */}
+              <span>Inventory Export</span>
+            </span>
+          </div>
 
-            <div className="q-order-page-container ml-8 md:flex-col">
-              {/* <div className="col-qv-6 mt-6">
+          <div className="q-order-page-container ml-8 md:flex-col">
+            {/* <div className="col-qv-6 mt-6">
                 <label
                   className="q-details-page-label"
                   htmlFor="storefromFilter"
@@ -211,44 +217,43 @@ const MainInventoryExport = () => {
                   )}
                 </span>
               </div> */}
-            </div>
-            <Grid container sx={{ padding: 2.5 }}>
-                  <Grid item xs={6} className="MainInventory">
-                      <label className="q-details-page-label">Select Store Name</label>
-                        <SelectDropDown
-                          sx={{pt:0.5}}
-                          className="MainInventory-selecteDropdown"
-                          heading={"-- Select Store --"}
-                            listItem={storefrom}
-                            title={"title"}
-                            onClickHandler={handleOptionClick}
-                            selectedOption={selectedStorefrom}
-                            dropdownFor={"storefrom"}
-                            
-                        />
-                  </Grid>
-                </Grid>
+          </div>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={6} className="MainInventory">
+              <label className="q-details-page-label">Select Store Name</label>
+              <SelectDropDown
+                sx={{ pt: 0.5 }}
+                className="MainInventory-selecteDropdown"
+                heading={"-- Select Store --"}
+                listItem={storefrom}
+                title={"title"}
+                onClickHandler={handleOptionClick}
+                selectedOption={selectedStorefrom}
+                dropdownFor={"storefrom"}
+              />
+            </Grid>
+          </Grid>
 
-              <span className="input-error " style={{ transform: "translate(15px, -6px)" }}>
-                  {storeFromError && (
-                    <span className="input-error ">{storeFromError}</span>
-                  )}
-              </span>
+          <span
+            className="input-error "
+            style={{ transform: "translate(15px, -6px)" }}
+          >
+            {storeFromError && (
+              <span className="input-error ">{storeFromError}</span>
+            )}
+          </span>
 
-            <div
-              className="q-add-categories-section-middle-footer "
-              style={{ justifyContent: "start" }}
-            >
-              <button className="save_btn" onClick={handleSubmit}>
-                {" "}
-                Export{" "}
-              </button>
-            </div>
+          <div
+            className="q-add-categories-section-middle-footer "
+            style={{ justifyContent: "start" }}
+          >
+            <button className="save_btn" onClick={handleSubmit}>
+              {" "}
+              Export{" "}
+            </button>
           </div>
         </div>
-
-     
-
+      </div>
     </>
   );
 };

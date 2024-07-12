@@ -39,12 +39,7 @@ const initialState = {
 // })
 export const fetchCategoriesData = createAsyncThunk(
   "categories/fetchCategoriesData",
-  async (data) => {
-    // let dataNew = {
-    //     merchant_id: data?.merchant_id,
-    //     login_type: data?.login_type,
-    //     token_id: data?.token_id
-    // };
+  async (data, { rejectWithValue }) => {
     const { token, ...dataNew } = data;
     try {
       const response = await axios.post(
@@ -62,7 +57,12 @@ export const fetchCategoriesData = createAsyncThunk(
         return response.data.result;
       }
     } catch (error) {
-      throw new Error(error.response.data.message);
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
@@ -86,7 +86,7 @@ export const fetchCategoriesData = createAsyncThunk(
 */
 export const deleteCategory = createAsyncThunk(
   "categories/deleteCategory",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     try {
       const { token, ...dataNew } = data;
       const response = await axios.post(
@@ -106,7 +106,12 @@ export const deleteCategory = createAsyncThunk(
         };
       }
     } catch (error) {
-      throw new Error(error.response.data.message);
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
@@ -142,7 +147,7 @@ export const deleteCategorybanner = createAsyncThunk(
 //  updating category status
 export const updateCategoryStatus = createAsyncThunk(
   "categories/updateCategoryStatus",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     try {
       const { token, ...dataNew } = data;
       const response = await axios.post(BASE_URL + CATEGORIE_STATUS, dataNew, {
@@ -153,7 +158,12 @@ export const updateCategoryStatus = createAsyncThunk(
       });
       return response.data.status;
     } catch (error) {
-      throw error;
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );

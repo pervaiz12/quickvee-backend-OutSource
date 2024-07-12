@@ -47,21 +47,30 @@ export const ManagerRecord = createAsyncThunk(
 
 export const getManagerRecordCount = createAsyncThunk(
   "Manager/getManagerRecordCount",
-  async (data) => {
-    const { token, ...dataNew } = data;
-    const response = await axios.post(
-      BASE_URL + GET_MANAGER_RECORD_COUNT,
-      dataNew,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`, // Use data?.token directly
-        },
+  async (data, { rejectWithValue }) => {
+    try {
+      const { token, ...dataNew } = data;
+      const response = await axios.post(
+        BASE_URL + GET_MANAGER_RECORD_COUNT,
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // Use data?.token directly
+          },
+        }
+      );
+      console.log("GET_MANAGER_RECORD_COUNT: ", response);
+      if (response.data.status == 200) {
+        return response.data.data_count;
       }
-    );
-    console.log("GET_MANAGER_RECORD_COUNT: ", response);
-    if (response.data.status == 200) {
-      return response.data.data_count;
+    } catch (error) {
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );

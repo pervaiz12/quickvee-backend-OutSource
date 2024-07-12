@@ -15,21 +15,29 @@ let initialState = {
 
 export const getVerifiedMerchantCount = createAsyncThunk(
   "Verified/getVerifiedMerchantCount",
-  async (data) => {
-    // console.log(data)
-    const { token, ...dataNew } = data;
-    const response = await axios.post(
-      BASE_URL + GET_VERIFIED_MERCHANT_COUNT,
-      dataNew,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-          Authorization: `Bearer ${token}`, // Use data?.token directly
-        },
+  async (data, { rejectWithValue }) => {
+    try {
+      const { token, ...dataNew } = data;
+      const response = await axios.post(
+        BASE_URL + GET_VERIFIED_MERCHANT_COUNT,
+        dataNew,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`, // Use data?.token directly
+          },
+        }
+      );
+      if (response.data.status == 200) {
+        return response.data.total_count;
       }
-    );
-    if (response.data.status == 200) {
-      return response.data.total_count;
+    } catch (error) {
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
