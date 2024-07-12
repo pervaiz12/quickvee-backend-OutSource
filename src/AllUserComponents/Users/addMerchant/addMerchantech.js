@@ -10,6 +10,7 @@ import PasswordShow from "../../../Common/passwordShow";
 import { Grid } from "@mui/material";
 import BasicTextFields from "../../../reuseableComponents/TextInputField";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
+import SwitchToBackButton from '../../../reuseableComponents/SwitchToBackButton';
 
 export default function AddMerchan() {
   const {
@@ -77,7 +78,11 @@ export default function AddMerchan() {
         <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
-              <div className="q-add-categories-section-header">
+              <SwitchToBackButton
+                linkTo={location.state?.from}
+                title={`Add ${location.state && location.state?.heading}`}
+              />
+              {/* <div className="q-add-categories-section-header">
                 <span
                   onClick={() => {
                     if (location.state?.from) {
@@ -95,7 +100,7 @@ export default function AddMerchan() {
                   )}
                   <span>Add {location.state && location.state?.heading}</span>
                 </span>
-              </div>
+              </div> */}
             </Grid>
           </Grid>
           <Grid container sx={{ px: 2.5, pt: 2.5 }}>

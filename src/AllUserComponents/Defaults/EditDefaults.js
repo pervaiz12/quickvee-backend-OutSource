@@ -15,6 +15,7 @@ import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
 import CircularProgress from "@mui/material/CircularProgress";
 import PasswordShow from "./../../Common/passwordShow";
+import SwitchToBackButton from "../../reuseableComponents/SwitchToBackButton";
 const EditDefaults = ({ setVisible, defaultEditId }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -330,7 +331,11 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
         <div className="q-add-categories-section">
           <div className="mt-10 mb-4">
             <form enctype="multipart/form-data">
-              <div className="q-add-categories-section-header">
+            <SwitchToBackButton 
+              linkTo={"/unapprove/defaults"}
+              title={"Edit Defaults"}
+            />
+              {/* <div className="q-add-categories-section-header">
                 <span
                   onClick={() => {
                     // setVisible("DefaultsDetail");
@@ -343,7 +348,7 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
                     <span>Edit Defaults</span>
                   </span>
                 </span>
-              </div>
+              </div> */}
               <div className="q-add-categories-section-middle-form">
                 <div className="q-add-categories-single-input">
                   <label htmlFor="name">Name</label>

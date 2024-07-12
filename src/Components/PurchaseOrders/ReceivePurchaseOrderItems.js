@@ -24,6 +24,7 @@ import {
 import axios from "axios";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import PasswordShow from "./../../Common/passwordShow";
+import SwitchToBackButton from "../../reuseableComponents/SwitchToBackButton";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -344,12 +345,16 @@ const ReceivePurchaseOrderItems = () => {
   return (
     <div className="box">
       <div className="box_shadow_div">
-        <div className="q-add-categories-section-header">
+        <SwitchToBackButton 
+          linkTo={"/purchase-data"}
+          title={"Update Purchase Order"}
+        />
+        {/* <div className="q-add-categories-section-header">
           <Link to="/purchase-data" style={{ display: "flex" }}>
             <img src={backLinkSvg} alt="Add New Category" className="w-6 h-6" />
             <span>Update Purchase Order</span>
           </Link>
-        </div>
+        </div> */}
 
         <div className="px-6 py-7">
           <Grid container spacing={2}>

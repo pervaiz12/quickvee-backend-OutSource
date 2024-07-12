@@ -307,12 +307,10 @@ const AddVendors = ({ setVisible }) => {
       ...provided,
       borderColor: state.isFocused ? "black" : provided.borderColor,
       boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
-      height: 40, 
-      minHeight: 40, 
+      height: 40,
+      minHeight: 40,
       "&:hover": {
-        borderColor: "black"
-          ? "black"
-          : provided["&:hover"].borderColor,
+        borderColor: "black" ? "black" : provided["&:hover"].borderColor,
       },
     }),
     input: (provided) => ({
@@ -327,19 +325,20 @@ const AddVendors = ({ setVisible }) => {
     <>
       <div className="mt-6">
         <Grid container className="box">
-          
           <Grid item xs={12} className="q-add-categories-section">
             <Grid container>
-              <Grid item xs={12}>
+              <SwitchToBackButton
+                linkTo={"/vendors"}
+                title={"Add New Vendors"}
+              />
+              {/* <Grid item xs={12}>
                 <div className="q-add-categories-section-header">
                   <Link to={`/vendors`}>
-                    {/* <span onClick={() => setVisible("VendorsDetail")}> */}
                     <img src={AddNewVendors} alt="Add-New-Vendors" />
                     <span>Add New Vendors</span>
-                    {/* </span> */}
                   </Link>
                 </div>
-              </Grid>
+              </Grid> */}
             </Grid>
             <Grid container sx={{ padding: 2.5 }}>
               <Grid item xs={12}>

@@ -31,6 +31,7 @@ import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
 import PasswordShow from "../../Common/passwordShow";
 import CircularProgress from "@mui/material/CircularProgress";
+import SwitchToBackButton from "../../reuseableComponents/SwitchToBackButton";
 
 const EditCoupon = ({ couponId, seVisible }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -1145,7 +1146,11 @@ const EditCoupon = ({ couponId, seVisible }) => {
         <div className="box ">
           <div className="box_shadow_div">
             <div className="q-add-categories-section">
-              <div className="q-add-categories-section-header">
+              <SwitchToBackButton 
+                linkTo={"/coupons"}
+                title={"Edit Coupon"}
+              />
+              {/* <div className="q-add-categories-section-header">
                 <Link to={`/coupons`}>
                   <div className="cursor-pointer">
                     <span style={myStyles}>
@@ -1158,7 +1163,7 @@ const EditCoupon = ({ couponId, seVisible }) => {
                     </span>
                   </div>
                 </Link>
-              </div>
+              </div> */}
               <div className="q-add-categories-section-middle-form">
                 <div className="q_coupon_Add_status_btn">
                   <p>Show Online</p>
