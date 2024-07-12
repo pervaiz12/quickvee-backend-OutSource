@@ -165,12 +165,13 @@ export default function SettingStoreOption() {
       dispatch(fetchStoreSettingOptionData(data))
         .unwrap()
         .then((res) => {
-          if (res?.payload?.status) {
-            console.log(res?.payload);
-            setStoreData(res?.payload);
-            setUserData(res?.payload?.user_data);
-            setUserOptionData(res?.payload?.user_option_data);
-            res?.payload?.user_option_data?.enable_void_order == "0"
+          console.log(res);
+          if (res?.status) {
+            console.log(res);
+            setStoreData(res);
+            setUserData(res?.user_data);
+            setUserOptionData(res?.user_option_data);
+            res?.user_option_data?.enable_void_order == "0"
               ? setVoidOrder(false)
               : setVoidOrder(true);
           }
@@ -253,7 +254,7 @@ export default function SettingStoreOption() {
     ) {
       setError("Please Select Cash Payment method.");
     } else if (orderState?.dayCount > 12) {
-      showModal("Advance day count must be less than 12");
+      showModal("Advance day count must be less than 12 or Equal to 12");
     } else {
       setError("");
       if (orderState.enabledFutureOrder) {
@@ -265,8 +266,13 @@ export default function SettingStoreOption() {
         }
       }
       if (orderState?.orderNumebrEnabled) {
-        if (orderState.resetOrderNumberTime === "") {
-          setStartTime("Select Time is required");
+        console.log(orderState.resetOrderNumberTime);
+        if (
+          orderState.resetOrderNumberTime === "" ||
+          orderState.resetOrderNumberTime == null ||
+          orderState.resetOrderNumberTime == undefined
+        ) {
+          setStartTime("Time is required");
           return;
         } else {
           setStartTime("");
@@ -306,12 +312,13 @@ export default function SettingStoreOption() {
         ...userTypeData,
       };
       const data = newItem;
-      // console.log("update Data",data)
-      // return
+      // console.log("update Data", data);
+      // return;
       dispatch(updateStoreOption(data))
         .unwrap()
         .then((res) => {
-          if (res?.payload?.status) {
+          if (res?.status) {
+            setStartTime("");
             let merchantdata = {
               merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
               ...userTypeData,
@@ -376,7 +383,9 @@ export default function SettingStoreOption() {
                 >
                   <Grid item>
                     <h2 className="store-setting-h1 store-setting-inline-block -menu">
-                      <sapn className="StoreSetting_heading">Enable Order Number</sapn>
+                      <sapn className="StoreSetting_heading">
+                        Enable Order Number
+                      </sapn>
                     </h2>
                   </Grid>
                   <Grid item>
@@ -439,7 +448,9 @@ export default function SettingStoreOption() {
                 >
                   <Grid item>
                     <h2 className="store-setting-h1 store-setting-inline-block">
-                      <span className="StoreSetting_heading-menu">Future Order</span>
+                      <span className="StoreSetting_heading-menu">
+                        Future Order
+                      </span>
                     </h2>
                     <div className="store-setting-gry Admin_std store-setting-inline-block ">
                       Enable future orders?
@@ -484,7 +495,9 @@ export default function SettingStoreOption() {
                 <Grid container sx={{ pb: 1.5 }}>
                   <Grid item xs={12}>
                     <h2 className="store-setting-h1  store-setting-inline-block">
-                      <span className="StoreSetting_heading-menu">Dispatch Center</span>
+                      <span className="StoreSetting_heading-menu">
+                        Dispatch Center
+                      </span>
                     </h2>
                   </Grid>
                 </Grid>
@@ -553,7 +566,9 @@ export default function SettingStoreOption() {
                 <Grid container sx={{ pb: 1.5 }}>
                   <Grid item xs={12}>
                     <h2 className="store-setting-h1">
-                      <sapn className="StoreSetting_heading-menu">Payment Options</sapn>
+                      <sapn className="StoreSetting_heading-menu">
+                        Payment Options
+                      </sapn>
                     </h2>
                   </Grid>
                 </Grid>
@@ -703,7 +718,9 @@ export default function SettingStoreOption() {
                 <Grid container sx={{ pb: 1.5 }}>
                   <Grid item xs={12}>
                     <h2 className="store-setting-h1">
-                      <span className="StoreSetting_heading-menu">Printing</span>
+                      <span className="StoreSetting_heading-menu">
+                        Printing
+                      </span>
                     </h2>
                   </Grid>
                 </Grid>
@@ -766,7 +783,9 @@ export default function SettingStoreOption() {
                 >
                   <Grid item>
                     <h2 className="store-setting-h1">
-                      <span className="StoreSetting_heading-menu">Guest Checkout</span>
+                      <span className="StoreSetting_heading-menu">
+                        Guest Checkout
+                      </span>
                     </h2>
                     <div className="store-setting-gry Admin_std">
                       Enable Guest Checkout for Online Order?
@@ -796,7 +815,10 @@ export default function SettingStoreOption() {
                 >
                   <Grid item>
                     <h2 className="store-setting-h1">
-                      <span className="StoreSetting_heading-menu"> Void Orders</span>
+                      <span className="StoreSetting_heading-menu">
+                        {" "}
+                        Void Orders
+                      </span>
                     </h2>
                   </Grid>
                   <Grid item>

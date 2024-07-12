@@ -217,7 +217,10 @@ const PickupDeliveryDetails = ({
             sx={{ marginTop: 3 }}
           >
             <Grid item>
-              <h5 style={{ marginBottom: 0 }} className="StoreSetting_heading-menu">
+              <h5
+                style={{ marginBottom: 0 }}
+                className="StoreSetting_heading-menu"
+              >
                 Enable Pickup
               </h5>
             </Grid>
@@ -234,7 +237,7 @@ const PickupDeliveryDetails = ({
             <Grid item xs={6}>
               <Grid container spacing={3}>
                 <Grid item xs={6}>
-                  <label>Minimum Time:</label>
+                  <label>Minimum Time(in-Min):</label>
                   <BasicTextFields
                     type="text"
                     value={MinPickupTime}
@@ -246,7 +249,7 @@ const PickupDeliveryDetails = ({
                   )}
                 </Grid>
                 <Grid item xs={6}>
-                  <label>Maximum Time</label>
+                  <label>Maximum Time(in-Min):</label>
                   <BasicTextFields
                     type="text"
                     value={MaxPickupTime}

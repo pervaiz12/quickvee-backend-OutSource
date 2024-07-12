@@ -15,7 +15,7 @@ const initialState = {
 
 export const fetchCouponList = createAsyncThunk(
   "couponList/fetchCouponList.",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     try {
       const { token, ...dataNew } = data;
       const response = await axios.post(BASE_URL + COUPON_LIST, dataNew, {
@@ -28,7 +28,13 @@ export const fetchCouponList = createAsyncThunk(
         return response.data.result;
       }
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error(error.response.data.message);
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );
