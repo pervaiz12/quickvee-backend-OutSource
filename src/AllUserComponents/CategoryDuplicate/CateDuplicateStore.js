@@ -238,9 +238,11 @@ const CateDuplicateStore = () => {
       store_name_from: storefrom,
       store_name_to: storeto,
       category_name: categoryValues,
-      upc_check: isUpcChecked,
+      upc_check:true,
       ...userTypeDataNew,
     };
+    // console.log("data",data)
+    // return
     setConfirmFinalModalOpen(false);
     setLoader(true);
     try {
@@ -326,7 +328,8 @@ const CateDuplicateStore = () => {
           store_name_from: storefrom,
           store_name_to: storeto,
           category_name: categoryValues,
-          upc_check: isUpcChecked,
+          // upc_check: isUpcChecked,
+          upc_check:true,
           ...userTypeDataNew,
         };
         setConfirmModalOpen(true);
@@ -641,9 +644,9 @@ const CateDuplicateStore = () => {
 
           <div className="q-add-inventory-section-header mx-2">
             <div className="qv_checkbox">
-              <label className="qv_checkbox_add_checkmark_label">
+              <label className="qv_checkbox_add_checkmark_label cursor-disabled">
                 Want to Replicate UPC's for inventory
-                <input type="checkbox" id="upc_check" name="upc_check" />
+                <input type="checkbox" id="upc_check" name="upc_check" checked={true} />
                 <span className="qv_add_checkmark"></span>
               </label>
             </div>

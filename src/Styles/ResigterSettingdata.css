@@ -299,7 +299,8 @@
 
 
 .q_resigter_setting_section {
-    display: block;
+    display: flex;
+    justify-content: center;
     position: relative;
     padding-left: 35px;
     margin-bottom: 12px;
@@ -310,7 +311,9 @@
     -ms-user-select: none;
     user-select: none;
 }
-
+.q_resigter_setting_section p{
+    margin-top: 2px;
+}
 .q_resigter_setting_section input {
     position: absolute;
     opacity: 0;

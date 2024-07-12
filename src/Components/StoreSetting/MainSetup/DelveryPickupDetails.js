@@ -13,9 +13,6 @@ const DelveryPickupDetails = ({ DeliveryPickupData }) => {
   const [deliveryTipDropDownTitle, setDeliveryTipDropDownTitle] =
     useState("None");
 
-  const handleCheckedenbale = (e) => {
-    setDelverypickup(e.target.checked ? "1" : "0");
-  };
   const TipList = [
     {
       title: "None",
@@ -74,6 +71,19 @@ const DelveryPickupDetails = ({ DeliveryPickupData }) => {
     setDeliveryDefaultTip(option.value);
   };
 
+  const handleCheckedenbale = (e) => {
+    setDelverypickup(e.target.checked ? "1" : "0");
+
+    if (!e.target.checked) {
+      const obj = {
+        title: "None",
+        value: "0",
+      };
+      handlePickupDefaultTipChange(obj);
+      handleDeliveryDefaultTipChange(obj);
+    }
+  };
+
   useEffect(() => {
     DeliveryPickupData(delverypickup, pickupDefaultTip, deliveryDefaultTip);
   }, [delverypickup, pickupDefaultTip, deliveryDefaultTip]);
@@ -84,7 +94,9 @@ const DelveryPickupDetails = ({ DeliveryPickupData }) => {
         <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
-              <h5 className="StoreSetting_heading-menu">Delivery & Pickup Details</h5>
+              <h5 className="StoreSetting_heading-menu">
+                Delivery & Pickup Details
+              </h5>
             </Grid>
           </Grid>
           <Grid
@@ -94,14 +106,16 @@ const DelveryPickupDetails = ({ DeliveryPickupData }) => {
             alignItems="center"
           >
             <Grid item>
-              <h5 style={{ marginBottom: 0 }} className="StoreSetting_heading-menu">
+              <h5
+                style={{ marginBottom: 0 }}
+                className="StoreSetting_heading-menu"
+              >
                 Enable Tip
               </h5>
             </Grid>
             <Grid item>
               <div className="fr">
                 <Switch
-                  // {...label}
                   name="cost_method"
                   onChange={handleCheckedenbale}
                   checked={delverypickup === "1"}
@@ -117,6 +131,7 @@ const DelveryPickupDetails = ({ DeliveryPickupData }) => {
                 title={"title"}
                 selectedOption={pickupTipDropDownTitle}
                 onClickHandler={handlePickupDefaultTipChange}
+                disabled={delverypickup === "0"}
               />
             </Grid>
             <Grid item xs={12} sm={6}>
@@ -126,6 +141,7 @@ const DelveryPickupDetails = ({ DeliveryPickupData }) => {
                 title={"title"}
                 selectedOption={deliveryTipDropDownTitle}
                 onClickHandler={handleDeliveryDefaultTipChange}
+                disabled={delverypickup === "0"}
               />
             </Grid>
           </Grid>

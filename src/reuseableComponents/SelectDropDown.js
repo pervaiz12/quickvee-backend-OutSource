@@ -32,10 +32,11 @@ const SelectDropDown = ({
   default_title,
   sx,
   name,
+  disabled = false,
 }) => {
   return (
     <>
-      <FormControl sx={{ ...sx }} fullWidth>
+      <FormControl sx={{ ...sx }} disabled={disabled} fullWidth>
         <ThemeProvider theme={theme}>
           <Select
             sx={{

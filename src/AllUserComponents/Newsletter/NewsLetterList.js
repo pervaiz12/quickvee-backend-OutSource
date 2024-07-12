@@ -12,6 +12,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import PasswordShow from "../../Common/passwordShow";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -48,11 +49,26 @@ const NewsLetterList = (props) => {
   const [allNewsData, setAllNewsData] = useState([]);
   const AllNewsDataState = useSelector((state) => state.NewsLetterList);
   const [currentPage, setCurrentPage] = useState(1);
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
 
   const { userTypeData } = useAuthDetails();
 
+  const getNewsLetterList = async () => {
+    try {
+      await dispatch(fetchNewsLetterListData({ ...userTypeData })).unwrap();
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    }
+  };
+
   useEffect(() => {
-    dispatch(fetchNewsLetterListData({ ...userTypeData }));
+    getNewsLetterList();
   }, [dispatch]);
 
   useEffect(() => {

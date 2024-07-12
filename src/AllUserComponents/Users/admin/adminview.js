@@ -69,13 +69,25 @@ export default function AdminView({ setVisible, setEditAdminId }) {
   }, [currentPage, debouncedValue, rowsPerPage]);
 
   // only when user searches to update the total count
+  const fetchAdminRecordCount = async () => {
+    try {
+      await dispatch(
+        getAdminRecordCount({
+          ...userTypeData,
+          search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+        })
+      );
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    }
+  };
   useEffect(() => {
-    dispatch(
-      getAdminRecordCount({
-        ...userTypeData,
-        search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
-      })
-    );
+    fetchAdminRecordCount();
   }, [debouncedValue]);
 
   useEffect(() => {

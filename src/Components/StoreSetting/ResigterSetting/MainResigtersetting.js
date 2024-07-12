@@ -22,7 +22,7 @@ const MainResigtersetting = () => {
   } = RegisterSettingFormLogic();
 
   useEffect(() => {
-    console.log(values);
+    console.log("values", values);
   }, [values]);
 
   const goToTop = () => {
@@ -37,11 +37,18 @@ const MainResigtersetting = () => {
             <div className="">
               <CustomHeader>Register Settings</CustomHeader>
               <div className="q-resigtersetting-bottom-section">
-                
                 <div className="q_resigter_checkboxfiled flex-wrap mt-8 px-7">
                   <ul className="custom-checkbox-list flex space-x-5">
                     <label className="q_resigter_setting_section">
-                      Stock Prompt
+                      <p
+                        className={`${
+                          values.regi_setting.split(",").includes("1")
+                            ? "text-black"
+                            : ""
+                        } `}
+                      >
+                        Stock Prompt
+                      </p>
                       <input
                         type="checkbox"
                         name="regi_setting[]"
@@ -53,7 +60,15 @@ const MainResigtersetting = () => {
                     </label>
 
                     <label className="q_resigter_setting_section">
-                      Combine Lines
+                      <p
+                        className={`${
+                          values.regi_setting.split(",").includes("2")
+                            ? "text-black"
+                            : ""
+                        } `}
+                      >
+                        Combine Lines
+                      </p>
                       <input
                         type="checkbox"
                         name="regi_setting[]"
@@ -65,7 +80,15 @@ const MainResigtersetting = () => {
                     </label>
 
                     <label className="q_resigter_setting_section">
-                      Customer Last Price Prompt
+                      <p
+                        className={`${
+                          values.regi_setting.split(",").includes("3")
+                            ? "text-black"
+                            : ""
+                        } `}
+                      >
+                        Customer Last Price Prompt
+                      </p>
                       <input
                         type="checkbox"
                         name="regi_setting[]"
@@ -77,7 +100,15 @@ const MainResigtersetting = () => {
                     </label>
 
                     <label className="q_resigter_setting_section">
-                      Prompt Customer Info on PinPad
+                      <p
+                        className={`${
+                          values.regi_setting.split(",").includes("4")
+                            ? "text-black"
+                            : ""
+                        } `}
+                      >
+                        Prompt Customer Info on PinPad
+                      </p>
                       <input
                         type="checkbox"
                         name="regi_setting[]"
@@ -89,7 +120,13 @@ const MainResigtersetting = () => {
                     </label>
 
                     <label className="q_resigter_setting_section">
-                      Denomination
+                      <p
+                        className={`${
+                          values.denomination ? "text-black" : ""
+                        } `}
+                      >
+                        Denomination
+                      </p>
                       <input
                         type="checkbox"
                         name="denomination"
@@ -106,7 +143,15 @@ const MainResigtersetting = () => {
                   <div className="q_resigter_checkboxfiled mt-8">
                     <ul className="custom-checkbox-list flex space-x-5">
                       <label className="q_resigter_setting_section">
-                        Food EBT
+                        <p
+                          className={`${
+                            values.ebt_type.split(",").includes("1")
+                              ? "text-black"
+                              : ""
+                          } `}
+                        >
+                          Food EBT
+                        </p>
                         {/* <input type="checkbox" checked="checked" />  */}
                         <input
                           type="checkbox"
@@ -119,7 +164,15 @@ const MainResigtersetting = () => {
                       </label>
 
                       <label className="q_resigter_setting_section">
-                        Cash EBT
+                        <p
+                          className={`${
+                            values.ebt_type.split(",").includes("2")
+                              ? "text-black"
+                              : ""
+                          } `}
+                        >
+                          Cash EBT
+                        </p>
                         <input
                           type="checkbox"
                           name="ebt_type[]"
@@ -131,7 +184,15 @@ const MainResigtersetting = () => {
                       </label>
 
                       <label className="q_resigter_setting_section">
-                        Gift Card
+                        <p
+                          className={`${
+                            values.ebt_type.split(",").includes("3")
+                              ? "text-black"
+                              : ""
+                          } `}
+                        >
+                          Gift Card
+                        </p>
                         <input
                           type="checkbox"
                           name="ebt_type[]"
@@ -153,7 +214,13 @@ const MainResigtersetting = () => {
                   <div className="q_resigter flex-wrap mt-8">
                     <ul className="custom-checkbox-list flex space-x-5">
                       <label className="q_setting_radio_resigter">
-                        Display ‘Item not Found’
+                        <p
+                          className={`${
+                            values.barcode_msg === "1" ? "text-black" : ""
+                          } `}
+                        >
+                          Display ‘Item not Found’
+                        </p>
                         <input
                           type="radio"
                           name="barcode_msg"
@@ -165,7 +232,13 @@ const MainResigtersetting = () => {
                       </label>
 
                       <label className="q_setting_radio_resigter">
-                        Quick Enter, Forced
+                        <p
+                          className={`${
+                            values.barcode_msg === "2" ? "text-black" : ""
+                          } `}
+                        >
+                          Quick Enter, Forced
+                        </p>
                         <input
                           type="radio"
                           name="barcode_msg"
@@ -176,7 +249,13 @@ const MainResigtersetting = () => {
                         <span className="checkmark_section"></span>
                       </label>
                       <label className="q_setting_radio_resigter">
-                        Quick Enter, Prompt
+                        <p
+                          className={`${
+                            values.barcode_msg === "3" ? "text-black" : ""
+                          } `}
+                        >
+                          Quick Enter, Prompt
+                        </p>
                         <input
                           type="radio"
                           name="barcode_msg"
@@ -187,7 +266,13 @@ const MainResigtersetting = () => {
                         <span className="checkmark_section"></span>
                       </label>
                       <label className="q_setting_radio_resigter">
-                        Full Enter, Forced
+                        <p
+                          className={`${
+                            values.barcode_msg === "4" ? "text-black" : ""
+                          } `}
+                        >
+                          Full Enter, Forced
+                        </p>
                         <input
                           type="radio"
                           name="barcode_msg"
@@ -198,7 +283,13 @@ const MainResigtersetting = () => {
                         <span className="checkmark_section"></span>
                       </label>
                       <label className="q_setting_radio_resigter">
+                       <p
+                         className={`${
+                          values.barcode_msg === "5" ? "text-black" : ""
+                        } `}
+                       >
                         Full Enter, Prompt
+                        </p> 
                         <input
                           type="radio"
                           name="barcode_msg"

@@ -112,7 +112,7 @@ const CategoryDetail = ({ seVisible, setProductId }) => {
     setDeleteCategoryId(id);
     setDeleteModalOpen(true);
   };
-  const confirmDeleteCategory = () => {
+  const confirmDeleteCategory = async () => {
     try {
       if (deleteCategoryId) {
         const data = {
@@ -121,7 +121,7 @@ const CategoryDetail = ({ seVisible, setProductId }) => {
           ...userTypeData,
         };
         if (data) {
-          dispatch(deleteCategory(data));
+          await dispatch(deleteCategory(data)).unwrap();
           ToastifyAlert("Deleted Successfully", "success");
         }
       }
@@ -139,23 +139,32 @@ const CategoryDetail = ({ seVisible, setProductId }) => {
 
   // for  Category Status update
   const handleToggleStatus = async (id, status) => {
-    console.log("category id and status: " + id, status);
-    const data = {
-      id: id,
-      status: status,
-      merchant_id,
-      ...userTypeData,
-    };
-
-    const rep = await dispatch(updateCategoryStatus(data));
-    if (rep.payload === "Success") {
-      // alert("Status Success Updated");
-      ToastifyAlert("Updated Successfully", "success");
-      let datas = {
+    try {
+      console.log("category id and status: " + id, status);
+      const data = {
+        id: id,
+        status: status,
         merchant_id,
+        ...userTypeData,
       };
-      if (datas) {
-        dispatch(fetchCategoriesData(data));
+
+      const rep = await dispatch(updateCategoryStatus(data)).unwrap();
+      if (rep.payload === "Success") {
+        // alert("Status Success Updated");
+        ToastifyAlert("Updated Successfully", "success");
+        let datas = {
+          merchant_id,
+        };
+        if (datas) {
+          await dispatch(fetchCategoriesData(data)).unwrap();
+        }
+      }
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
       }
     }
   };

@@ -79,13 +79,13 @@ const Info = () => {
         />
       </form>
 
-      <ChangePasswordForm
+      {/* <ChangePasswordForm
         onPasswordInputChange={onPasswordInputChange}
         handleSubmitChangePassword={handleSubmitChangePassword}
         passwordInput={passwordInput}
         passwordError={passwordError}
         handleBlurPassword={handleBlurPassword}
-      />
+      /> */}
     </>
   );
 };

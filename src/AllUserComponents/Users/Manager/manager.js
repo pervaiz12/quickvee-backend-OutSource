@@ -68,6 +68,7 @@ export default function Manager() {
 
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+
   const getManagerData = async (data) => {
     try {
       await dispatch(ManagerRecord(data)).unwrap();
@@ -92,13 +93,26 @@ export default function Manager() {
   }, [currentPage, debouncedValue, rowsPerPage]);
 
   // only when user searches to update the total count
+  const fetchManagerRecordCount = async () => {
+    try {
+      await dispatch(
+        getManagerRecordCount({
+          ...userTypeData,
+          search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+        })
+      ).unwrap();
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    }
+  };
+
   useEffect(() => {
-    dispatch(
-      getManagerRecordCount({
-        ...userTypeData,
-        search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
-      })
-    );
+    fetchManagerRecordCount();
   }, [debouncedValue]);
 
   // on load setting count of Verified Merchant list & on every change...

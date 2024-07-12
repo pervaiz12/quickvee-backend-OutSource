@@ -16,7 +16,7 @@ const initialState = {
 // Generate pening , fulfilled and rejected action type
 export const fetchStoreSettingOptionData = createAsyncThunk(
   "StoreSettingOptionSlice/fetchStoreSettingOptionData.",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     const { token, ...dataNew } = data;
     try {
       const response = await axios.post(
@@ -33,24 +33,41 @@ export const fetchStoreSettingOptionData = createAsyncThunk(
         return response.data;
       }
     } catch (error) {
-      throw new Error(error.response.data.message);
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
+      // throw new Error(error.response.data.message);
     }
   }
 );
 
 export const updateStoreOption = createAsyncThunk(
   "StoreSettingOptionSlice/updateStoreOption",
-  async (data) => {
+  async (data, { rejectWithValue }) => {
     const { token, ...dataNew } = data;
     try {
       const response = await axios.post(
         BASE_URL + UPDATE_STORE_OPTIONS_DATA,
         dataNew,
-        { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${token}`, } }
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${token}`,
+          },
+        }
       );
       return response?.data;
     } catch (error) {
-      throw new Error(error.response.data.message);
+      // throw new Error(error.response.data.message);
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
   }
 );

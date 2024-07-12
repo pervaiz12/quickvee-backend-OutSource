@@ -212,14 +212,27 @@ export default function Unverified({ setMerchantId, setVisible }) {
   }, [currentPage, debouncedValue, rowsPerPage]);
 
   // only when user searches
+  const fetchUnverifiedMerchantCount = async () => {
+    try {
+      await dispatch(
+        getUnVerifiedMerchantCount({
+          type: "unapprove",
+          ...userTypeData,
+          search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
+        })
+      ).unwrap();
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    }
+  };
+
   useEffect(() => {
-    dispatch(
-      getUnVerifiedMerchantCount({
-        type: "unapprove",
-        ...userTypeData,
-        search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
-      })
-    );
+    fetchUnverifiedMerchantCount();
   }, [debouncedValue]);
 
   // on load setting count of Verified Merchant list & on every change...
@@ -252,8 +265,6 @@ export default function Unverified({ setMerchantId, setVisible }) {
         ...userTypeData,
       };
 
-      // const formdata = new FormData();
-
       await dispatch(handleMoveDash(data)).then((result) => {
         // console.log(result?.payload)
         if (result?.payload?.status == true) {
@@ -271,8 +282,13 @@ export default function Unverified({ setMerchantId, setVisible }) {
           navigate("/login");
         }
       });
-    } catch (e) {
-      console.log("Error: ", e);
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
     } finally {
       setLoaders({ view: { id: "", isLoading: false } });
     }
@@ -303,7 +319,7 @@ export default function Unverified({ setMerchantId, setVisible }) {
           }
         );
         if (response) {
-          dispatch(getUnVerifiedMerchant(unverify_data)).unwrap();
+          dispatch(getUnVerifiedMerchant(unverify_data));
         } else {
           console.error(response);
         }

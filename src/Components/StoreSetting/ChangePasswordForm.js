@@ -26,14 +26,14 @@ const ChangePasswordForm = ({
   };
 
   return (
-    <Grid sx={{ p: 2.5 }} className="box_shadow_div">
+    <Grid sx={{ p: 2.5 }} className="">
       <Grid item xs={12}>
         <form>
-          <Grid container>
+          {/* <Grid container>
             <Grid item xs={12}>
               <h1 className="info-menu">Change Password</h1>
             </Grid>
-          </Grid>
+          </Grid> */}
           <Grid container spacing={2} sx={{ pt: 1 }}>
             <Grid item xs={12} sm={6}>
               <FormControl fullWidth>

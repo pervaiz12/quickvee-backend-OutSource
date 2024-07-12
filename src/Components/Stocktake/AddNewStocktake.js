@@ -375,7 +375,7 @@ const AddNewStocktake = ({
       const currentQty = updatedList[index].current_qty;
       const newQty = value;
       const unitPrice = updatedList[index]?.price;
-      const parsedCurrentQty = Math.abs(parseInt(currentQty, 10));
+      const parsedCurrentQty =parseInt(currentQty);
       const discrepancy = newQty
         ? parseInt(newQty) - parseInt(parsedCurrentQty)
         : 0;

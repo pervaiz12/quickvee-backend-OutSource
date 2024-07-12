@@ -60,3 +60,12 @@ export const CurrencyInputHelperFun = (value) => {
   const decimalPart = val.slice(val.length - 2);
   return `${integerPart}.${decimalPart}`;
 };
+
+export const disableZeroOnFirstIndex = (value) => {
+  const charAtZero = value.charAt(0);
+  const startByZero = charAtZero == 0;
+  const isBlank = value === "";
+  const bool = startByZero && !isBlank;
+
+  return bool;
+};
