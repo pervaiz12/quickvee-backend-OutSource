@@ -45,69 +45,62 @@ function ViewAdmin({ email, name, userTypeData }) {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <Box  className="view-category-item-modal"  style={myStyles}>
-         
-            
+          <Box className="view-category-item-modal" style={myStyles}>
+            <div
+              className="q-add-categories-section-header text-[18px]"
+              style={{
+                justifyContent: "space-between",
+                fontFamily: "CircularSTDBook",
+              }}
+            >
+              <p className="">{adminName}</p>
+              <div>
                 <div
-                  className="q-add-categories-section-header text-[18px]"
-                  style={{
-                    justifyContent: "space-between",
-                    fontFamily: "CircularSTDBook",
-                  }}
+                  className="flex justify-between gap-4"
+                  style={{ cursor: "pointer" }}
                 >
-                  <p className="">{adminName}</p>
-                  <div>
-                    <div
-                      className="flex justify-between gap-4"
-                      style={{ cursor: "pointer" }}
-                    >
-                      <img
-                        src={CrossIcon}
-                        alt="icon"
-                        className="  quic-btn-cancle w-6 h-6"
-                        onClick={() => handleClose()}
-                      />
-                    </div>
-                  </div>
+                  <img
+                    src={CrossIcon}
+                    alt="icon"
+                    className="  quic-btn-cancle w-6 h-6"
+                    onClick={() => handleClose()}
+                  />
                 </div>
-                <div className="view-category-item-modal-header viewModal-width">
-                  <Table striped>
-                    <div className="  p-2 my-2">
-                      {Array.isArray(showMerchantData) ? (
-                        showMerchantData &&
-                        showMerchantData?.map((item, index) => (
-                          <>
-                            <p
-                              className="q_view_modal_details"
-                              key={index}
-                              style={{
-                                fontFamily: "CircularSTDMedium !important",
-                              }}
-                            >
-                              {item?.name}
-                            </p>
-                          </>
-                        ))
-                      ) : (
-                        <p className="q_view_modal_details">
-                          {/* {showMerchantData} */}
-                        No Data Available
+              </div>
+            </div>
+            <div className="view-category-item-modal-header viewModal-width">
+              <Table striped>
+                <div className="  p-2 my-2">
+                  {Array.isArray(showMerchantData) ? (
+                    showMerchantData &&
+                    showMerchantData?.map((item, index) => (
+                      <>
+                        <p
+                          className="q_view_modal_details"
+                          key={index}
+                          style={{
+                            fontFamily: "CircularSTDMedium !important",
+                          }}
+                        >
+                          {item?.name}
                         </p>
-                      )}
-                    </div>
-                  </Table>
+                      </>
+                    ))
+                  ) : (
+                    <p className="q_view_modal_details">
+                      {/* {showMerchantData} */}
+                      No Data Available
+                    </p>
+                  )}
                 </div>
-                <span className="input-error"></span>
-                <div className="q-add-categories-section-middle-footer">
-                  <button
-                    onClick={handleClose}
-                    className="quic-btn quic-btn-ok"
-                  >
-                    Ok
-                  </button>
-                </div>
-    
-            
+              </Table>
+            </div>
+            <span className="input-error"></span>
+            <div className="q-add-categories-section-middle-footer">
+              <button onClick={handleClose} className="quic-btn quic-btn-ok">
+                Ok
+              </button>
+            </div>
           </Box>
         </Modal>
       </div>
