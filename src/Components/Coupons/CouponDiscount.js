@@ -47,8 +47,10 @@ const CouponDiscount = ({ seVisible, setCouponId }) => {
         await dispatch(fetchCouponList(data)).unwrap();
       }
     } catch (error) {
-      handleCoockieExpire();
-      getUnAutherisedTokenMessage();
+      if (error.status == 401) {
+        handleCoockieExpire();
+        getUnAutherisedTokenMessage();
+      }
     }
   };
 

@@ -54,7 +54,7 @@ const AlertModal = ({ headerText, otherMSG, open, onClose }) => {
       case "Only jpeg, png, jpg files can be uploaded":
         return Image;
       case "Minimum order amount must be greater than the discount amount.":
-      case "Advance day count must be less than 12":
+      case "Advance day count must be less than 12 or Equal to 12":
         return Less;
       case "Only files with .CSV extension is supported":
         return Csv;
