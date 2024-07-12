@@ -29,6 +29,7 @@ export default function InfoFunction() {
   const [hideSucess, setHideSuccess] = useState(false);
   const [image, setImage] = useState("");
   const [imageBanner, setImageBanner] = useState("");
+  const [submitLoading, setSubmitLoading] = useState(false);
   const [infoRecord, setInfoRecord] = useState({
     merchant_id: "",
     store: "",
@@ -75,6 +76,11 @@ export default function InfoFunction() {
     }));
     validatePasswordInput(e);
   };
+  const handleCloseModel = () => {
+    setPassowordInput({ password: '', confirmPassword: '' });
+    setPasswordError({ password: '', confirmPassword: '' });
+  };
+
 
   const validatePasswordInput = (e) => {
     let { name, value } = e.target;
@@ -125,6 +131,7 @@ export default function InfoFunction() {
     const dataNew = {
       email: store_email,
       password: passwordInput?.password,
+      merchant_id:merchant_idNew,
       ...newData,
     };
     try {
@@ -760,6 +767,7 @@ export default function InfoFunction() {
     console.log(validateData);
     console.log(currentValidate);
     try {
+      setSubmitLoading(true)
       if (validateData == true) {
         if (currentValidate == true) {
           const packect = {
@@ -805,7 +813,7 @@ export default function InfoFunction() {
           );
           console.log(response.data);
           if (response.data.status === true) {
-            ToastifyAlert(response.data.msg, "success");
+            ToastifyAlert("Updated Successfully", "success");
             setSuccessMessage(response.data.message);
             setHideSuccess(true);
             handleSuccessMessage();
@@ -822,6 +830,7 @@ export default function InfoFunction() {
         getNetworkError();
       }
     }
+    setSubmitLoading(false);
   };
   const currentPassordValidate = (passwordError) => {
     if (passwordInput.password === "") {
@@ -854,7 +863,7 @@ export default function InfoFunction() {
         let data = {
           new_password: passwordInput.password,
           confirm_password: passwordInput.confirmPassword,
-          merchant_id: infoRecord.merchant_id,
+          merchant_id: merchant_idNew,
           user_id: user_id,
           token_id: userTypeData?.token_id,
           login_type: userTypeData?.login_type,
@@ -905,5 +914,7 @@ export default function InfoFunction() {
     user_id,
     merchant_idNew,
     handleBlurPassword,
+    handleCloseModel,
+    submitLoading,
   };
 }

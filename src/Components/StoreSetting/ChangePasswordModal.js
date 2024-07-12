@@ -17,22 +17,27 @@ const myStyles = {
 };
 
 export default function ChangePasswordModal() {
-  const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
-
   const {
     onPasswordInputChange,
     handleSubmitChangePassword,
     passwordInput,
     passwordError,
     handleBlurPassword,
+    handleCloseModel,
   } = InfoFunction();
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    setOpen(false);
+    handleCloseModel();
+  };
 
   return (
     <>
       <div>
-        <button className="text-[#0A64F9]" onClick={handleOpen}>Change Password</button>
+        <button className="text-[#0A64F9]" onClick={handleOpen}>
+          Change Password
+        </button>
         <Modal
           open={open}
           onClose={handleClose}
@@ -40,6 +45,7 @@ export default function ChangePasswordModal() {
           aria-describedby="modal-modal-description"
         >
           <Box className="view-category-item-modal" sx={myStyles}>
+            
             <div
               className="q-add-categories-section-header text-[18px]"
               style={{
@@ -47,6 +53,7 @@ export default function ChangePasswordModal() {
                 fontFamily: "CircularSTDBook",
               }}
             >
+                
               <p className="">Change Password</p>
               <div>
                 <div
@@ -69,6 +76,7 @@ export default function ChangePasswordModal() {
               passwordInput={passwordInput}
               passwordError={passwordError}
               handleBlurPassword={handleBlurPassword}
+              handleClose={handleClose}
             />
           </Box>
         </Modal>

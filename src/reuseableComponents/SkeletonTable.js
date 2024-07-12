@@ -37,6 +37,9 @@ export const SkeletonTable = ({ columns }) => {
     "&:last-child td, &:last-child th": {
       border: 0,
     },
+    "& td, & th": {
+    border: "none",
+  },
   }));
 
   return (

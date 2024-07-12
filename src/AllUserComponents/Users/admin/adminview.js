@@ -137,6 +137,9 @@ export default function AdminView({ setVisible, setEditAdminId }) {
     "&:last-child td, &:last-child th": {
       border: 0,
     },
+    "& td, & th": {
+    border: "none",
+  },
   }));
 
   const columns = ["Name", "Email", "Phone", "View", "Action"];

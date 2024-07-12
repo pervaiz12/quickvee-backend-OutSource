@@ -47,6 +47,9 @@ const MainSupportDetails = () => {
     "&:last-child td, &:last-child th": {
       border: 0,
     },
+    "& td, & th": {
+    border: "none",
+  },
   }));
 
   const dispatch = useDispatch();

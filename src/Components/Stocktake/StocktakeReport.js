@@ -41,6 +41,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
   },
   "&:last-child td, &:last-child th": {},
+  "& td, & th": {
+    border: "none",
+  },
 }));
 
 const StocktakeReport = ({ setVisible }) => {

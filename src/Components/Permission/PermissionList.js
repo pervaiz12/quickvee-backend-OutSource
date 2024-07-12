@@ -61,6 +61,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:last-child td, &:last-child th": {
     border: 0,
   },
+  "& td, & th": {
+    border: "none",
+  },
 }));
 
 const PermissionList = () => {
