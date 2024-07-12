@@ -53,6 +53,7 @@ const StoreCateUser = () => {
     setConfirmFinalModalOpensetting,
     confirmFinalLogic,
     confirmFinalSettingLogic,
+    checkedUPCInventory,
   } = InventoryExportLogic();
   console.log("alertOpen", alertOpen);
   console.log("modalHeaderText", modalHeaderText);
@@ -410,6 +411,7 @@ const StoreCateUser = () => {
                   name="upc_check"
                   value={values.upc_check}
                   onChange={handleStoreInput}
+                  checked={checkedUPCInventory}
                 />
                 <span class="qv_add_checkmark"></span>
               </label>

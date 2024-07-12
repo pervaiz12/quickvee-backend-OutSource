@@ -46,8 +46,7 @@ const CateDuplicateStore = () => {
         break;
     }
   };
-  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
-    PasswordShow();
+  const {handleCoockieExpire,getUnAutherisedTokenMessage,getNetworkError}=PasswordShow()
   const { userTypeData } = useAuthDetails();
   const { token, ...userTypeDataNew } = userTypeData;
   const [loader, setLoader] = useState(false);

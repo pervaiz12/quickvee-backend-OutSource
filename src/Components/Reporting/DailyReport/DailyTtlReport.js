@@ -6,9 +6,10 @@ import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
+import CustomHeader from "../../../reuseableComponents/CustomHeader";
 const DailyTtlReport = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
-  useAuthDetails();
+    useAuthDetails();
   const [filteredData, setFilteredData] = useState([]);
   const [isTablet, setIsTablet] = useState(false);
 
@@ -53,7 +54,7 @@ const DailyTtlReport = () => {
         order_env: orderEnvValue,
         order_typ: orderTypValue,
       };
-      
+
       setFilteredData(updatedData);
     } else {
       // Handle other cases or log an error
@@ -68,8 +69,6 @@ const DailyTtlReport = () => {
     useState(false);
   const [orderTypeDropdownVisible, setOrderTypeDropdownVisible] =
     useState(false);
-
-
 
   const toggleDropdown = (dropdown) => {
     switch (dropdown) {
@@ -117,23 +116,20 @@ const DailyTtlReport = () => {
   const orderTypeList = ["All", "Pickup", "Delivery"];
   return (
     <>
-      <Grid container sx={{ padding: 2.5 }} className="box_shadow_div ">
+      <Grid container sx={{ pb: 2.5 }} className="box_shadow_div ">
         <Grid item xs={12}>
-          <Grid container>
-            <Grid item xs={12}>
-              <h1 className="heading">Daily Total Report</h1>
-            </Grid>
-          </Grid>
-          <Grid container>
+          <CustomHeader>Daily Total Report</CustomHeader>
+
+          <Grid container sx={{px:2.5,pt:1}}>
             <Grid item xs={12}>
               <h1 className="heading">Filter By</h1>
             </Grid>
           </Grid>
-          <Grid container spacing={2}>
+          <Grid container sx={{ px: 2.5 }} spacing={2}>
             <Grid item xs={12} sm={6} md={4}>
-              <label htmlFor="orderSourceFilter"> Order Source</label>
+              <label htmlFor="orderSourceFilter">Order Source</label>
               <SelectDropDown
-              sx={{pt:0.5}}
+                sx={{ pt: 0.5 }}
                 listItem={orderSourceList.map((orderSource) => ({
                   title: orderSource,
                 }))}
@@ -146,7 +142,7 @@ const DailyTtlReport = () => {
             <Grid item xs={12} sm={6} md={4}>
               <label> Order Type</label>
               <SelectDropDown
-               sx={{pt:0.5}}
+                sx={{ pt: 0.5 }}
                 listItem={orderTypeList.map((orderSource) => ({
                   title: orderSource,
                 }))}

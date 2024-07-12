@@ -362,3 +362,14 @@ color: #000000 !important;
 opacity: 1 !important;
 font-weight: 500;
 }
+
+.StoreSetting_heading span {
+    color: #000;
+    font-family: CircularSTDMedium !important;
+    font-size: 18px;
+}
+
+.StoreSetting_heading-menu {
+    font-size: 16px;
+    font-family: CircularSTDMedium !important;
+}

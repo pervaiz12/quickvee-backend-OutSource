@@ -395,21 +395,6 @@ const EditVendors = ({ setVisible }) => {
                   </Grid>
                   <Grid item xs={12} sm={6} md={4}>
                     <div className="qvrowmain my-1">
-                      <label htmlFor="city">Zip</label>
-                    </div>
-                    <BasicTextFields
-                      type={"text"}
-                      name={"zip_code"}
-                      value={vendorData.zip_code}
-                      onChangeFun={handleOnChange}
-                      // required={"required"}
-                    />
-                    {errorMessage.zip_code && (
-                      <span className="error"> {errorMessage.zip_code}</span>
-                    )}
-                  </Grid>
-                  <Grid item xs={12} sm={6} md={4}>
-                    <div className="qvrowmain my-1">
                       <label htmlFor="city">State</label>
                     </div>
                     <SelectDropDown
@@ -425,6 +410,21 @@ const EditVendors = ({ setVisible }) => {
                       <span className="error">{errorMessage.state}</span>
                     )}
                   </Grid>
+                  <Grid item xs={12} sm={6} md={4}>
+                    <div className="qvrowmain my-1">
+                      <label htmlFor="city">Zip</label>
+                    </div>
+                    <BasicTextFields
+                      type={"text"}
+                      name={"zip_code"}
+                      value={vendorData.zip_code}
+                      onChangeFun={handleOnChange}
+                      // required={"required"}
+                    />
+                    {errorMessage.zip_code && (
+                      <span className="error"> {errorMessage.zip_code}</span>
+                    )}
+                  </Grid> 
                 </Grid>
                 <Grid
                   container

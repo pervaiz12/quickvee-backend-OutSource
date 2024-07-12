@@ -49,7 +49,7 @@ const OnlineOrderingPage = ({ onlineorderstatus,loader }) => {
         <Grid item sx={{ pl: 2.5, pr: 2.5,pb:2.5 }}>
           <Grid container >
             <Grid item xs={12} >
-              <h5 style={{ marginBottom: 0 }} className="box_shadow_heading">
+              <h5 style={{ marginBottom: 0 }} className="StoreSetting_heading-menu">
                 Online Ordering
               </h5>
             </Grid>

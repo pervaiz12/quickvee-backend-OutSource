@@ -9,6 +9,7 @@ import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
 import PasswordShow from "../../../Common/passwordShow";
+import CustomHeader from "../../../reuseableComponents/CustomHeader";
 
 const TopSallerReport = () => {
   const [filteredData, setFilteredData] = useState({ category_id: "all" });
@@ -160,14 +161,11 @@ const TopSallerReport = () => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <Grid container sx={{ padding: 2.5 }}>
-            <Grid item xs={12}>
-              <div className="q_details_header">Top Sellers</div>
-            </Grid>
-          </Grid>
-          <Grid container sx={{ px: 2.5 }}>
+          <CustomHeader>Top Sellers</CustomHeader>
+
+          <Grid container sx={{ px: 2.5,pt:1 }}>
             <Grid xs={12} sm={6} md={4}>
-              <div className="q_details_header ">Filter by</div>
+              <div className="heading">Filter By</div>
             </Grid>
           </Grid>
           <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>

@@ -7,11 +7,12 @@ import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
+import CustomHeader from "../../../reuseableComponents/CustomHeader";
 
 const MainTaxesReport = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-  const [filteredData, setFilteredData] = useState('');
+  const [filteredData, setFilteredData] = useState("");
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   const handleDataFiltered = (data) => {
     if (typeof data === "object") {
@@ -96,14 +97,11 @@ const MainTaxesReport = () => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <Grid container sx={{ padding: 2.5 }}>
+          <CustomHeader>Taxes</CustomHeader>
+
+          <Grid container sx={{ px: 2.5,py:1 }}>
             <Grid item xs={12}>
-              <div className="q_details_header">Taxes</div>
-            </Grid>
-          </Grid>
-          <Grid container sx={{ px: 2.5 }}>
-            <Grid item xs={12}>
-              <div className="q_details_header ">Filter by</div>
+              <div className="heading">Filter by</div>
             </Grid>
           </Grid>
           <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>

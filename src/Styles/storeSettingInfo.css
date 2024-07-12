@@ -172,8 +172,8 @@
 }
 
 .store-name {
-  font-size: 22px;
-  font-family: qvbold;
+  font-size: 16px;
+  font-family: CircularSTDMedium !important;
 }
 
 .inforecord-email {
@@ -183,8 +183,8 @@
 }
 
 .info-menu {
-  font-size: 18px;
-  font-family: qvstdmedium;
+  font-size: 16px;
+  font-family: CircularSTDMedium !important;
 
 }
 

@@ -68,8 +68,6 @@ const MassInventoryUpdateModal = memo(({ showModal, handleClose }) => {
       const data = [
         {
           merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-          token_id: userTypeData.token_id,
-          login_type: userTypeData.login_type,
           cat_id: categoryId,
           track_qty: options.trackQuantity ? "1" : "0",
           continue_sell: options.continueSelling ? "1" : "0",
@@ -84,6 +82,9 @@ const MassInventoryUpdateModal = memo(({ showModal, handleClose }) => {
       // return;
 
       formData.append("data", JSON.stringify(data));
+      formData.append("token_id", userTypeData?.token_id);
+      formData.append("login_type", userTypeData?.login_type);
+
       // formData.append("login_type", userTypeData.login_type);
       // formData.append("cat_id", categoryId);
       // formData.append("track_qty", options.trackQuantity ? 1 : 0);
@@ -141,165 +142,167 @@ const MassInventoryUpdateModal = memo(({ showModal, handleClose }) => {
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-          <>
-        <Box className="view-category-item-modal mass-inventory-modal" style={myStyles}>
-        <div class="cancel-btn">
-            <img
-              src={CloseIcon}
-              className="cancel-image"
-              onClick={() => handleClose()}
-            />
-          </div>
-          <div
-            className="q-add-categories-section-header text-[18px]"
-            style={{
-              justifyContent: "space-between",
-              fontFamily: "CircularSTDBook",
-            }}
+        <>
+          <Box
+            className="view-category-item-modal mass-inventory-modal"
+            style={myStyles}
           >
-            <span onClick={() => handleClose()}>
-              <img src={backIcon} alt="Timesheet" className="w-6 h-6" />
-              <span>Mass Inventory Update</span>
-            </span>
-          </div>
-          
-
-          <div className="view-category-item-modal-header">
-            <div
-              className="title_attributes_section "
-              style={{ margin: "1rem 1rem" }}
-            >
-              <Grid container spacing={3}>
-                <Grid item xs={12}>
-                  <CategoryListDropDown
-                    type="category"
-                    onCategoryChange={handleCategory}
-                    listFor={"massInventoryUpdate"}
-                  />
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  className="category-checkmark-div"
-                >
-                  <label className="category-checkmark-label">
-                    Track Quantity
-                    <input
-                      type="checkbox"
-                      checked={options.trackQuantity}
-                      onChange={() => handleCheckbox("trackQuantity")}
-                    />
-                    <span className="category-checkmark"></span>
-                  </label>
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  className="category-checkmark-div"
-                >
-                  <label className="category-checkmark-label">
-                    Continue Selling
-                    <input
-                      type="checkbox"
-                      checked={options.continueSelling}
-                      onChange={() => handleCheckbox("continueSelling")}
-                    />
-                    <span className="category-checkmark"></span>
-                  </label>
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  className="category-checkmark-div"
-                >
-                  <label className="category-checkmark-label">
-                    Check ID
-                    <input
-                      type="checkbox"
-                      checked={options.checkId}
-                      onChange={() => handleCheckbox("checkId")}
-                    />
-                    <span className="category-checkmark"></span>
-                  </label>
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  className="category-checkmark-div"
-                >
-                  <label className="category-checkmark-label">
-                    Disable
-                    <input
-                      type="checkbox"
-                      checked={options.disable}
-                      onChange={() => handleCheckbox("disable")}
-                    />
-                    <span className="category-checkmark"></span>
-                  </label>
-                </Grid>
-                <Grid
-                  item
-                  xs={12}
-                  sm={6}
-                  md={4}
-                  className="category-checkmark-div"
-                >
-                  <label className="category-checkmark-label">
-                    Food Stampable
-                    <input
-                      type="checkbox"
-                      checked={options.foodStampable}
-                      onChange={() => handleCheckbox("foodStampable")}
-                    />
-                    <span className="category-checkmark"></span>
-                  </label>
-                </Grid>
-              </Grid>
+            <div class="cancel-btn">
+              <img
+                src={CloseIcon}
+                className="cancel-image"
+                onClick={() => handleClose()}
+              />
             </div>
-          </div>
+            <div
+              className="q-add-categories-section-header text-[18px]"
+              style={{
+                justifyContent: "space-between",
+                fontFamily: "CircularSTDBook",
+              }}
+            >
+              <span onClick={() => handleClose()}>
+                <img src={backIcon} alt="Timesheet" className="w-6 h-6" />
+                <span>Mass Inventory Update</span>
+              </span>
+            </div>
 
-          <div className="q-add-categories-section-middle-footer">
-            <button
-              className="quic-btn quic-btn-save attributeUpdateBTN"
-              onClick={() => handleSubmit("1")}
-              disabled={loaders.enable || loaders.disable}
-            >
-              {loaders.enable && (
-                <CircularProgress
-                  color={"inherit"}
-                  className="loaderIcon"
-                  width={15}
-                  size={15}
-                />
-              )}{" "}
-              Enable
-            </button>
-            <button
-              className="quic-btn quic-btn-cancle attributeUpdateBTN"
-              onClick={() => handleSubmit("0")}
-              disabled={loaders.enable || loaders.disable}
-            >
-              {loaders.disable && (
-                <CircularProgress
-                  color={"inherit"}
-                  className="loaderIcon"
-                  width={15}
-                  size={15}
-                />
-              )}{" "}
-              Disable
-            </button>
-          </div>
-        </Box>
-          </>
+            <div className="view-category-item-modal-header">
+              <div
+                className="title_attributes_section "
+                style={{ margin: "1rem 1rem" }}
+              >
+                <Grid container spacing={3}>
+                  <Grid item xs={12}>
+                    <CategoryListDropDown
+                      type="category"
+                      onCategoryChange={handleCategory}
+                      listFor={"massInventoryUpdate"}
+                    />
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    className="category-checkmark-div"
+                  >
+                    <label className="category-checkmark-label">
+                      Track Quantity
+                      <input
+                        type="checkbox"
+                        checked={options.trackQuantity}
+                        onChange={() => handleCheckbox("trackQuantity")}
+                      />
+                      <span className="category-checkmark"></span>
+                    </label>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    className="category-checkmark-div"
+                  >
+                    <label className="category-checkmark-label">
+                      Continue Selling
+                      <input
+                        type="checkbox"
+                        checked={options.continueSelling}
+                        onChange={() => handleCheckbox("continueSelling")}
+                      />
+                      <span className="category-checkmark"></span>
+                    </label>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    className="category-checkmark-div"
+                  >
+                    <label className="category-checkmark-label">
+                      Check ID
+                      <input
+                        type="checkbox"
+                        checked={options.checkId}
+                        onChange={() => handleCheckbox("checkId")}
+                      />
+                      <span className="category-checkmark"></span>
+                    </label>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    className="category-checkmark-div"
+                  >
+                    <label className="category-checkmark-label">
+                      Disable
+                      <input
+                        type="checkbox"
+                        checked={options.disable}
+                        onChange={() => handleCheckbox("disable")}
+                      />
+                      <span className="category-checkmark"></span>
+                    </label>
+                  </Grid>
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    className="category-checkmark-div"
+                  >
+                    <label className="category-checkmark-label">
+                      Food Stampable
+                      <input
+                        type="checkbox"
+                        checked={options.foodStampable}
+                        onChange={() => handleCheckbox("foodStampable")}
+                      />
+                      <span className="category-checkmark"></span>
+                    </label>
+                  </Grid>
+                </Grid>
+              </div>
+            </div>
+
+            <div className="q-add-categories-section-middle-footer">
+              <button
+                className="quic-btn quic-btn-save attributeUpdateBTN"
+                onClick={() => handleSubmit("1")}
+                disabled={loaders.enable || loaders.disable}
+              >
+                {loaders.enable && (
+                  <CircularProgress
+                    color={"inherit"}
+                    className="loaderIcon"
+                    width={15}
+                    size={15}
+                  />
+                )}{" "}
+                Enable
+              </button>
+              <button
+                className="quic-btn quic-btn-cancle attributeUpdateBTN"
+                onClick={() => handleSubmit("0")}
+                disabled={loaders.enable || loaders.disable}
+              >
+                {loaders.disable && (
+                  <CircularProgress
+                    color={"inherit"}
+                    className="loaderIcon"
+                    width={15}
+                    size={15}
+                  />
+                )}{" "}
+                Disable
+              </button>
+            </div>
+          </Box>
+        </>
       </Modal>
     </>
   );

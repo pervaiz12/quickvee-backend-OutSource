@@ -5,10 +5,14 @@ import axios from "axios";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
+import CustomHeader from "../../../reuseableComponents/CustomHeader";
+import PasswordShow from "../../../Common/passwordShow";
 
 const ItemSalesFilter = ({ onFilterDataChange }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const [selectedOrderSource, setSelectedOrderSource] = useState("All");
   const [selectedOrderType, setSelectedOrderType] = useState("All");
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -87,7 +91,11 @@ const ItemSalesFilter = ({ onFilterDataChange }) => {
         setCategoryOptions(mappedOptions);
         setLoadingCategories(false);
       } catch (error) {
-        console.error("Error fetching categories:", error);
+        // console.error("Error fetching categories:", error);
+        if (error.response.status == 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        }
         setLoadingCategories(false);
       }
     };
@@ -109,14 +117,11 @@ const ItemSalesFilter = ({ onFilterDataChange }) => {
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
-          <Grid container sx={{ padding: 2.5 }}>
+          <CustomHeader>Item Sales</CustomHeader>
+
+          <Grid container sx={{ px: 2.5, pt: 1 }}>
             <Grid item xs={12}>
-              <div className="q_details_header">Item Sales</div>
-            </Grid>
-          </Grid>
-          <Grid container sx={{ px: 2.5 }}>
-            <Grid item xs={12}>
-              <div className="q_details_header ">Filter by</div>
+              <div className="heading">Filter By</div>
             </Grid>
           </Grid>
           <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>

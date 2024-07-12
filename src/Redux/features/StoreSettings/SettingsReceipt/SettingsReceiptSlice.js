@@ -15,11 +15,11 @@ export const fetchSettingReceiptData = createAsyncThunk(
   async (data) => {
     const { userTypeData } = useAuthDetails();
     try {
-        const { token, ...otherUserData } = userTypeData;
-      
+      const { token, ...otherUserData } = userTypeData;
+
       const response = await axios.post(
         BASE_URL + GET_STORE_RECEIPT_DATA,
-        {...data,...otherUserData},
+        { ...data, ...otherUserData },
         {
           headers: {
             "Content-Type": "multipart/form-data",

@@ -280,6 +280,7 @@ const InventoryData = () => {
           <>
             <div className="box_shadow_div" >
             <Grid container direction="row" justifyContent="space-between" alignItems="center" className="q-coupon-bottom-header">
+              
               <Grid item>
                 <div>
                   <span>Inventory</span>
