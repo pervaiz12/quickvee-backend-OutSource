@@ -51,6 +51,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:last-child td, &:last-child th": {
     // backgroundColor: "#F5F5F5",
   },
+  "& td, & th": {
+    border: "none",
+  },
 }));
 const AddNewStocktake = ({
   setVisible,
@@ -663,8 +666,10 @@ const AddNewStocktake = ({
       ...provided,
       borderColor: state.isFocused ? "black" : provided.borderColor,
       boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
+      height: 40, 
+      minHeight: 40,
       "&:hover": {
-        borderColor: state.isFocused ? "black" : provided["&:hover"].borderColor,
+        borderColor: "black" ? "black" : provided["&:hover"].borderColor,
       },
     }),
     input: (provided) => ({

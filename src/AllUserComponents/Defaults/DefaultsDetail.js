@@ -272,6 +272,9 @@ const DefaultsDetail = ({ setVisible, setDefaultEditId }) => {
     "&:last-child td, &:last-child th": {
       border: 0,
     },
+    "& td, & th": {
+    border: "none",
+  },
   }));
 
   const navigate = useNavigate();

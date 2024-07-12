@@ -1,5 +1,5 @@
 // import * as React from "react";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import Quick from "../../Assests/Dashboard/quickveeLG.png";
 import { BiMenu, BiChevronDown } from "react-icons/bi";
 // import { useSelector, useDispatch } from "react-redux";
@@ -51,6 +51,7 @@ export default function Header() {
     inventory_approval,
   } = useAuthDetails();
   const dispatch = useDispatch();
+  const inputRef = useRef(null);
   const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
   const isDropdownOpen = useSelector(
     (state) => state.NavBarToggle.isDropdownOpen
@@ -83,6 +84,12 @@ export default function Header() {
 
   const handleMenuOpen = (event) => {
     setAnchorElForDropDown(event.currentTarget);
+    setTimeout(() => {
+      console.log("inside menu open")
+      if (inputRef.current) {
+        inputRef.current.focus();
+      }
+    }, 0); 
   };
 
   const handleCloseForDropDown = (e) => {
@@ -162,6 +169,7 @@ export default function Header() {
   };
 
   function renderDashboardDropDown() {
+    
     const displayOptions = (
       JSON.parse(localStorage.getItem("AllStore")) || allStoresData
     )
@@ -208,6 +216,8 @@ export default function Header() {
                 placeholder="Search..."
                 onChange={handleSearchChange}
                 value={searchText}
+                inputRef={inputRef}
+                
               />
             </div>
           </MenuItem>

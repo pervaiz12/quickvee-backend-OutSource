@@ -52,6 +52,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:last-child td, &:last-child th": {
     // backgroundColor: "#F5F5F5",
   },
+  "& td, & th": {
+    border: "none",
+  },
 }));
 const StocktakeList = ({
   setVisible,

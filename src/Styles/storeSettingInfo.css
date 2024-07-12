@@ -78,8 +78,9 @@
 }
 
 .info-banner-image-div {
+  position: relative;
   width: 95%;
-  margin: 0 auto;
+  /* margin: 0 auto; */
   height: auto;
 }
 
@@ -146,9 +147,9 @@
 .info-delete {
   position: absolute;
   z-index: 1;
-  left: 170px;
+  left: 140px;
   color: #ff0000;
-  top: 20px;
+  top: 10px;
 }
 
 .info-delete-banner {

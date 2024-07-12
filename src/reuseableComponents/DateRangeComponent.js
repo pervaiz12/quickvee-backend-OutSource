@@ -22,7 +22,7 @@ const DateRangeComponent = ({
   const [futureDateState, setFutureDate] = useState(new Date());
   const startDateRef = React.useRef(null);
   const endDateRef = React.useRef(null);
-  console.log("futureDateState", new Date(futureDateState));
+  // console.log("futureDateState", new Date(futureDateState));
   const handleStartDateIconClick = () => {
     startDateRef.current.setOpen(true);
   };

@@ -60,14 +60,7 @@ const SocialMediaForm = ({
           sx={{ pt: 1 }}
         >
           <Grid item>
-            <div className="info-update">
-              <input
-                type="button"
-                className="blue_btn inforecord-email"
-                value="Update"
-                onClick={handleSubmitInfo}
-              />
-            </div>
+            
           </Grid>
         </Grid>
       </Grid>

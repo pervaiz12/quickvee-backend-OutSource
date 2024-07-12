@@ -49,7 +49,10 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
   // hide last border
   "&:last-child td, &:last-child th": {
-    border: 0,
+    // border: 0,
+  },
+  "& td, & th": {
+    border: "none",
   },
 }));
 
@@ -69,6 +72,8 @@ const customStyles = {
     borderColor:
       state.isFocused || state.isHovered ? "black" : provided.borderColor,
     boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
+    height: 40, 
+      minHeight: 40,
     "&:hover": {
       borderColor: "black",
     },

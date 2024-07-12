@@ -16,6 +16,7 @@ import { useAuthDetails } from "../../Common/cookiesHelper";
 import PasswordShow from "../../Common/passwordShow";
 import { Link, useNavigate } from "react-router-dom";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import SwitchToBackButton from "../../reuseableComponents/SwitchToBackButton";
 const AddVendors = ({ setVisible }) => {
   const navigate = useNavigate();
   const [allvendors, setallvendors] = useState([]);
@@ -306,8 +307,10 @@ const AddVendors = ({ setVisible }) => {
       ...provided,
       borderColor: state.isFocused ? "black" : provided.borderColor,
       boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
+      height: 40, 
+      minHeight: 40, 
       "&:hover": {
-        borderColor: state.isFocused
+        borderColor: "black"
           ? "black"
           : provided["&:hover"].borderColor,
       },
@@ -324,6 +327,7 @@ const AddVendors = ({ setVisible }) => {
     <>
       <div className="mt-6">
         <Grid container className="box">
+          
           <Grid item xs={12} className="q-add-categories-section">
             <Grid container>
               <Grid item xs={12}>
@@ -337,7 +341,7 @@ const AddVendors = ({ setVisible }) => {
                 </div>
               </Grid>
             </Grid>
-            <Grid container sx={{ padding: 3 }}>
+            <Grid container sx={{ padding: 2.5 }}>
               <Grid item xs={12}>
                 <form onSubmit={handleSubmit}>
                   <Grid container spacing={2}>
