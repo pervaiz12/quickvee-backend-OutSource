@@ -483,6 +483,7 @@ const BulkVendorEdit = ({
               hideSelectedList={vendorItems}
               name="name"
               placeholder="Enter vendor Name"
+              modalType={modalType}
             />
             <button
               className="quic-btn quic-bulk-vendor-edit submit-btn-click"

@@ -14,7 +14,7 @@ const Validation = () => {
   const NameSpace = /^[a-zA-Z\s]+$/;
   const Numberval = /^\d*$/;
   const Characterval = /^[A-Za-z\s]+$/;
-  const disallowedCharactersRegex = /[~\/\\,]/;
+  const disallowedCharactersRegex = /[~\/\\,-]/;
 
   const validateEmail = (email, updatedErrors) => {
     if (email === "") {

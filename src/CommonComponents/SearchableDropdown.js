@@ -20,6 +20,7 @@ const SearchableDropdown = ({
   placeholder,
   pageUrl,
   productTitle,
+  modalType,
 }) => {
   const { checkLength } = Validation();
   const [filterOptions, setFilterOptions] = useState(optionList);
@@ -146,7 +147,9 @@ const SearchableDropdown = ({
       )}
       <div
         className="dropdownBox"
-        style={{ padding: showOptions ? "10px" : "7px 8px 0px 8px" }}
+        style={{
+          padding: showOptions ? "10px" : !!modalType ? "" : "7px 8px 0px 8px",
+        }}
         onBlur={handleBlurOption}
         name={keyName}
         ref={dropdownRef}
@@ -157,7 +160,14 @@ const SearchableDropdown = ({
           name={keyName}
           onBlur={handleBlurOption}
         >
-          <div className="search-selected-item" onClick={handleFocus}>
+          <div
+            className={
+              !!modalType
+                ? "search-selected-item-without-padding"
+                : "search-selected-item"
+            }
+            onClick={handleFocus}
+          >
             <div className="selected-item">
               {selectedOption?.length
                 ? selectedOption?.map((option) => {

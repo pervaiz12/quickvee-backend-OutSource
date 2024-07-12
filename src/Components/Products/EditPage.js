@@ -65,6 +65,7 @@ const EditPage = ({
                   <TabList
                     onChange={handleChange}
                     aria-label="lab API tabs example"
+                    className="tab-list"
                   >
                     {modalType !== "single_vendor" &&
                     modalType !== "single_instant" ? (

@@ -188,7 +188,7 @@ const AddProducts = () => {
     formValue: !isMultipleVarient ? formInnerSchemaOnSingle : formValueSchema,
   });
 
-  const disallowedCharactersRegex = /[~\/\\,]/;
+  const disallowedCharactersRegex = /[~\/\\,-]/;
 
   // formschema for validation
   const formSchema = yup.object().shape({
@@ -1713,6 +1713,10 @@ const AddProducts = () => {
     formData.append("login_type", userTypeData?.login_type);
     formData.append("token_id", userTypeData?.token_id);
     formData.append("token", userTypeData?.token);
+    formData.append(
+      "merchant_id",
+      LoginGetDashBoardRecordJson?.data?.merchant_id
+    );
 
     const formDataNew = new FormData();
     formDataNew.append(

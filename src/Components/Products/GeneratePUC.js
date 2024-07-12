@@ -116,7 +116,7 @@ const GeneratePUC = ({
   return (
     <>
       <div className="mx-0">
-        <div className="q-add-categories-single-input">
+        <div className="">
           <div
             className="q-category-bottom-header"
             style={{ padding: "1px 20px" }}
@@ -189,7 +189,7 @@ const GeneratePUC = ({
                                 lg={2.4}
                                 className="varient-form"
                               >
-                                <div className="q-add-categories-single-input">
+                                <div className="">
                                   <label clas>{inp?.label}</label>
                                   <div className="input_area">
                                     <input
@@ -262,7 +262,7 @@ const GeneratePUC = ({
                           })
                         : ""}
                     </Grid>
-                    <div className="flex flex-wrap gap-3 ">
+                    <div className="flex flex-wrap gap-3 check-box-area">
                       <label
                         class="q_resigter_setting_section"
                         style={{ color: "#000", fontSize: "18px" }}
@@ -276,6 +276,7 @@ const GeneratePUC = ({
                           checked={
                             formValue?.[index]?.[title]?.["trackQuantity"]
                           }
+                          className="checkbox-input"
                         />
                         <span class="checkmark"></span>
                       </label>
@@ -296,6 +297,7 @@ const GeneratePUC = ({
                               ? true
                               : false
                           }
+                          className="checkbox-input"
                         />
                         <span class="checkmark"></span>
                       </label>
@@ -314,6 +316,7 @@ const GeneratePUC = ({
                               ? true
                               : false
                           }
+                          className="checkbox-input"
                         />
                         <span class="checkmark"></span>
                       </label>
@@ -445,7 +448,7 @@ const GeneratePUC = ({
                       return (
                         // <div className="col-qv-2" key={i}>
                         <Grid item xs={6} sm={4} md={3} lg={2.4}>
-                          <div className="q-add-categories-single-input">
+                          <div className="">
                             <label>{inp?.label}</label>
                             <div className="input_area">
                               <input
@@ -495,7 +498,7 @@ const GeneratePUC = ({
               </Grid>
               <div className="flex flex-wrap gap-3 ">
                 <label
-                  class="q_resigter_setting_section"
+                  class="q_resigter_setting_section check-box-area"
                   style={{ color: "#000", fontSize: "18px" }}
                 >
                   Track Quantity
