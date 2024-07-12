@@ -196,6 +196,10 @@ export default function SettingStoreAlters() {
 
   const UserEmailEnabledtoggleInput = () => {
     setIsUserEmailEnabled(!isUserEmailEnabled);
+    setErrors({
+      ...errors,
+      bccemail: "",
+    });
   };
   const BccEmailtoggleInput = (event) => {
     setIsBccEmail(event.target.value);
@@ -204,9 +208,17 @@ export default function SettingStoreAlters() {
       ...formData,
       [name]: value,
     });
+    setErrors({
+      ...errors,
+      bccemail: "",
+    });
   };
   const UserMsgEnabledtoggleInput = () => {
     setIsUserMsgEnabled(!isUserMsgEnabled);
+    setErrors({
+      ...errors,
+      msg_no: "",
+    });
   };
   const UserMsgNumbertoggleInput = (event) => {
     setIsUserMsgNumber(event.target.value);
@@ -340,41 +352,57 @@ export default function SettingStoreAlters() {
 
   const handleUpdateSettingAlerts = async (e) => {
     e.preventDefault();
-    if (isBccEmail != "") {
-      if (!validateEmail(isBccEmail)) {
+    if(isUserEmailEnabled){
+      // for Email Required
+      if (isBccEmail == "") {
         setErrors({
           ...errors,
-          bccemail: "Please enter a valid email address.",
+          bccemail: "Email is required",
         });
         return;
+      } else if (isBccEmail != "") {
+        if (!validateEmail(isBccEmail)) {
+          setErrors({
+            ...errors,
+            bccemail: "Please enter a valid email address.",
+          });
+          return;
+        }
+      } else {
+        setErrors({
+          ...errors,
+          bccemail: "",
+        });
       }
     }
     if (isstoreName == "") {
       setErrors({
         ...errors,
-        store_name: "This field is required.",
+        store_name: "Store Name is required.",
       });
       return;
     }
-    if (isUserMsgNumber == "") {
-      setErrors({
-        ...errors,
-        msg_no: "This field is required.",
-      });
-      return;
-    } else if (isUserMsgNumber != "") {
-      if (!validateMobile(isUserMsgNumber)) {
+    if(isUserMsgEnabled){
+      if (isUserMsgNumber == "") {
         setErrors({
           ...errors,
-          msg_no: "Please enter a valid 10-digit mobile number.",
+          msg_no: "Phone Number is required.",
         });
         return;
+      } else if (isUserMsgNumber != "") {
+        if (!validateMobile(isUserMsgNumber)) {
+          setErrors({
+            ...errors,
+            msg_no: "Please enter a valid 10-digit mobile number.",
+          });
+          return;
+        }
+      } else {
+        setErrors({
+          ...errors,
+          msg_no: "",
+        });
       }
-    } else {
-      setErrors({
-        ...errors,
-        msg_no: "",
-      });
     }
     if (isReportEmailId != "") {
       if (!validateEmail1(isReportEmailId)) {
@@ -389,7 +417,7 @@ export default function SettingStoreAlters() {
     if (isOnlinePhoneNumber == "") {
       setErrors({
         ...errors,
-        phn_num: "This field is required.",
+        phn_num: "Phone Number is required.",
       });
       return;
     } else if (isOnlinePhoneNumber != "") {
@@ -453,9 +481,11 @@ export default function SettingStoreAlters() {
       store_name: isstoreName,
       // timeZone: istimeZone,
       enable_email: isUserEmailEnabled ? "1" : "0",
-      bcc_email: isBccEmail,
+      // bcc_email: isBccEmail,  
+      ...(isUserEmailEnabled && { bcc_email: isBccEmail }),
       enable_message: isUserMsgEnabled ? "1" : "0",
-      msg_no: isUserMsgNumber,
+      ...(isUserMsgEnabled && { msg_no: isUserMsgNumber }),
+      // msg_no: isUserMsgNumber,
       // emailaccepted: isEmailAccepted ? "1" : "0",
       // emailpackaging: isEmailPackaging ? "1" : "0",
       // emaildeliveryready: isEmailDeliveryReady ? "1" : "0",
@@ -480,7 +510,7 @@ export default function SettingStoreAlters() {
       login_type: userTypeData?.login_type,
       ol_fcm_notify: isOnlineOrderNotify ? "1" : "0",
     };
-    console.log(FormData);
+    // console.log("Save Alert Data",FormData);
     // return
     setLoader(true);
     try {

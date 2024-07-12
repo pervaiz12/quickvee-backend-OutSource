@@ -83,7 +83,7 @@ const InventoryExportLogic = () => {
       store_name_from: values.store_name_from,
       store_name_to: values.store_name_to,
       // upc_check: values.upc_check,
-      upc_check: "1",
+      upc_check:true,
       ...userTypeDataNew,
     };
     setConfirmFinalModalOpen(false);

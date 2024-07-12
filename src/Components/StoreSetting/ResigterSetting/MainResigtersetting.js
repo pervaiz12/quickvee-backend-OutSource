@@ -6,6 +6,7 @@ import { Input } from "@material-tailwind/react";
 import RegisterSettingFormLogic from "./RegisterSettingFormLogic";
 import TextField from "@mui/material/TextField";
 import CustomHeader from "../../../reuseableComponents/CustomHeader";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const MainResigtersetting = () => {
   // const [alertmsg, setAlertMsg] = useState('');
@@ -17,8 +18,9 @@ const MainResigtersetting = () => {
     submitmessage,
     // showModal,
     // setShowModal,
-    // scrollRef,
+    // scrollRef,,
     setsubmitmessage,
+    loader
   } = RegisterSettingFormLogic();
 
   useEffect(() => {
@@ -558,10 +560,19 @@ const MainResigtersetting = () => {
             style={{ marginBottom: 0, paddingRight: 20 }}
           >
             <button
-              className="store-setting-btn mt-5 mb-5"
+              className="store-setting-btn mt-5 mb-5 attributeUpdateBTN"
               onClick={handleRegisterSettingSubmit}
+              disabled={loader}
             >
-              Update
+              {/* Update */}
+              {loader ? (
+                    <>
+                      <CircularProgress color={"inherit"} width={15} size={15} />{" "}
+                      Update
+                    </>
+                  ) : (
+                    "Update"
+                  )}
             </button>
           </div>
         </div>

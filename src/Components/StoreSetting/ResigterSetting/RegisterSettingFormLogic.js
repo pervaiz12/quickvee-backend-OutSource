@@ -17,6 +17,7 @@ const RegisterSettingFormLogic = () => {
   const [registerData, setRegisterData] = useState();
   const RegisterSettings = useSelector((state) => state.RegisterSettingsData);
   const dispatch = useDispatch();
+  const [loader, setLoader] = useState(false);
 
   // console.log(RegisterSettings_data);
   const { isNumber, isText } = Validation();
@@ -202,7 +203,7 @@ const RegisterSettingFormLogic = () => {
         login_type: userTypeData?.login_type,
       };
       // console.log(data);
-
+      setLoader(true);
       try {
         const response = await axios.post(
           BASE_URL + UPDATE_REGISTER_SETTINGS,
@@ -216,7 +217,8 @@ const RegisterSettingFormLogic = () => {
         );
 
         if (response.data.status === true) {
-          ToastifyAlert(response?.data?.message, "success");
+          // ToastifyAlert(response?.data?.message, "success");
+          ToastifyAlert("Updated Successfully", "success");
           setsubmitmessage(response.data.message);
         } else {
           setsubmitmessage(response.data.message);
@@ -225,6 +227,7 @@ const RegisterSettingFormLogic = () => {
         // console.log('33 catch err');
         return new Error(error);
       }
+      setLoader(false);
     }
 
     setValues((prevState) => ({
@@ -242,6 +245,7 @@ const RegisterSettingFormLogic = () => {
     showModal,
     setShowModal,
     scrollRef,
+    loader
   };
 };
 

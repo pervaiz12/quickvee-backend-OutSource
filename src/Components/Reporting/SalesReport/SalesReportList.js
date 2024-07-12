@@ -131,10 +131,8 @@ const SalesReportList = (props) => {
     (parseFloat(discount1) + parseFloat(refunds)) -
     parseFloat(SalesReportData.giftcard_amt_collected) -
     parseFloat(SalesReportData.loyality_amt_collected);
-  const taxesAndFees =
-    parseFloat(SalesReportData.remain_default_tax) ||
-    0 + parseFloat(SalesReportData.remain_other_tax) ||
-    0;
+  const taxesAndFees = (SalesReportData?.remain_default_tax ?  parseFloat(SalesReportData?.remain_default_tax) : 0) +
+    parseFloat(SalesReportData?.remain_other_tax);
   const tip = parseFloat(SalesReportData.tip);
   const serviceCharges =
     parseFloat(SalesReportData.con_fee) + parseFloat(SalesReportData.del_fee);

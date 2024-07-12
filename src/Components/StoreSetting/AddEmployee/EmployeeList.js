@@ -158,7 +158,7 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
       };
       if (data) {
         const response = await dispatch(deleteEmployee(data)).unwrap();
-        ToastifyAlert(response.message, "success");
+        ToastifyAlert("Deleted Successfully", "success");
       }
     }
     setDeleteEmployeeId(null);
