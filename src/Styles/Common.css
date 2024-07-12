@@ -292,6 +292,10 @@
   -ms-user-select: none;
   user-select: none;
 }
+.qv_checkbox .cursor-disabled{
+  opacity: 0.5 !important;
+  cursor: no-drop !important;
+}
 
 .qv_checkbox .qv_checkbox_add_checkmark_label input {
   position: absolute;

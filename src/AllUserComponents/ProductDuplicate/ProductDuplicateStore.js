@@ -39,6 +39,7 @@ const ProductDuplicateStore = () => {
   const [loader, setLoader] = useState(false);
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
   const [confirmfinalModalOpen, setConfirmFinalModalOpen] = useState(false);
+  const [checkedUPCInventory, setCheckedUPCInventory] = useState(true);
 
   const handlFocusCategory = () => {
     setCategoryFocus(true);
@@ -242,7 +243,7 @@ const ProductDuplicateStore = () => {
   const confirmFinalfun = async () => {
     const upcCheckbox = document.getElementById("upc_check");
     // Check if the checkbox is present and get its value
-    const isUpcChecked = upcCheckbox ? upcCheckbox.checked : false;
+    const isUpcChecked = upcCheckbox ? upcCheckbox.checked : true;
     const productValues = selectedProducts.map((product) => product.value);
     if (productValues.length === 0) {
       // alert("Please select at least one Product");
@@ -671,9 +672,14 @@ const ProductDuplicateStore = () => {
 
           <div className="q-add-inventory-section-header mx-2">
             <div className="qv_checkbox">
-              <label className="qv_checkbox_add_checkmark_label">
+              <label className="qv_checkbox_add_checkmark_label cursor-disabled">
                 Want to Replicate UPC's for inventory
-                <input type="checkbox" id="upc_check" name="upc_check" />
+                <input
+                  type="checkbox"
+                  id="upc_check"
+                  name="upc_check"
+                  checked={checkedUPCInventory}
+                />
                 <span className="qv_add_checkmark"></span>
               </label>
             </div>
