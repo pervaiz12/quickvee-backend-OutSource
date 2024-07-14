@@ -51,11 +51,10 @@ const EditPage = ({
         aria-describedby="parent-modal-description"
       >
         <Box className="product-edit-modal custom-scroll">
-          <div class="cancel-btn">
+          <div class="cancel-btn" onClick={handleCloseEditModal}>
             <img
               src={CloseIcon}
               className="cancel-image"
-              onClick={handleCloseEditModal}
             />
           </div>
           <div class="modal-content">
