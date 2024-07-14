@@ -58,7 +58,6 @@ export default function InfoFunction() {
   });
   const urlPattern =
     /^(https:\/\/www\.instagram\.com\/|https:\/\/www\.facebook\.com\/|https:\/\/[a-z0-9]+(\.[a-z0-9]+)+\/).*$/;
-  console.log("infoRecord.image === selectedFile.name", infoRecord);
   // ============================password ======================
   const [passwordInput, setPassowordInput] = useState({
     password: "",
@@ -269,21 +268,24 @@ export default function InfoFunction() {
       isValidate = false;
     }
 
-    if (!infoRecord.facebookUrl || !urlPattern.test(infoRecord.facebookUrl)) {
-      errorMessage.facebookUrlError = "Enter a valid Facebook URL";
+    if (infoRecord.facebookUrl && !urlPattern.test(infoRecord.facebookUrl)) {
+      // !infoRecord.facebookUrl ||
+      errorMessage.facebookUrlError = "Enter valid Facebook URL";
       isValidate = false;
     }
 
-    if (!infoRecord.instagramUrl || !urlPattern.test(infoRecord.instagramUrl)) {
-      errorMessage.instagramUrlError = "Enter a valid Instagram URL";
+    if (infoRecord.instagramUrl && !urlPattern.test(infoRecord.instagramUrl)) {
+      // !infoRecord.instagramUrl ||
+      errorMessage.instagramUrlError = "Enter valid Instagram URL";
       isValidate = false;
     }
 
     if (
-      !infoRecord.promotionalUrl ||
+      infoRecord.promotionalUrl &&
       !urlPattern.test(infoRecord.promotionalUrl)
     ) {
-      errorMessage.promotionalUrlError = "Enter a valid Promotional URL";
+      // !infoRecord.promotionalUrl ||
+      errorMessage.promotionalUrlError = "Enter valid Promotional URL";
       isValidate = false;
     }
     if (infoRecord.address_1 == "") {
@@ -752,21 +754,21 @@ export default function InfoFunction() {
     switch (name) {
       case "facebookUrl":
         if (value !== "" && !urlPattern.test(value)) {
-          errorMessage[`${name}Error`] = `Enter  valid Facebook URL`;
+          errorMessage[`${name}Error`] = `Enter valid Facebook URL`;
         } else {
           errorMessage[`${name}Error`] = "";
         }
         break;
       case "instagramUrl":
         if (value !== "" && !urlPattern.test(value)) {
-          errorMessage[`${name}Error`] = `Enter  valid Instagram URL`;
+          errorMessage[`${name}Error`] = `Enter valid Instagram URL`;
         } else {
           errorMessage[`${name}Error`] = "";
         }
         break;
       case "promotionalUrl":
         if (value !== "" && !urlPattern.test(value)) {
-          errorMessage[`${name}Error`] = `Enter  valid Promotional URL`;
+          errorMessage[`${name}Error`] = `Enter valid Promotional URL`;
         } else {
           errorMessage[`${name}Error`] = "";
         }

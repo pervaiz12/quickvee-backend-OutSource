@@ -44,6 +44,12 @@ const PickupDeliveryDetails = ({
     if (!e.target.checked) {
       setMinPickupTime("");
       setMaxPickupTime("");
+
+      setErrors((prev) => ({
+        ...prev,
+        minPickupTimeError: "",
+        maxPickupTimeError: "",
+      }));
     }
   };
 
@@ -52,6 +58,12 @@ const PickupDeliveryDetails = ({
     if (!e.target.checked) {
       setMinDeliveryTime("");
       setMaxDeliveryTime("");
+
+      setErrors((prev) => ({
+        ...prev,
+        minDeliveryTimeError: "",
+        maxDeliveryTimeError: "",
+      }));
     }
   };
 
@@ -116,7 +128,10 @@ const PickupDeliveryDetails = ({
 
     setErrors((prev) => ({
       ...prev,
-      minPickupTimeError: e.target.value ? "" : "Minimum Time is required",
+      minPickupTimeError:
+        isEnableOrderNumber === "Yes" && !e.target.value
+          ? "Minimum Time is required"
+          : "",
       maxPickupTimeError: timeError
         ? "Maximum Time should be greater than Minimum Time"
         : "",
@@ -135,7 +150,10 @@ const PickupDeliveryDetails = ({
 
     setErrors((prev) => ({
       ...prev,
-      minDeliveryTimeError: e.target.value ? "" : "Minimum Time is required",
+      minDeliveryTimeError:
+        isDelveryEnbale === "Yes" && !e.target.value
+          ? "Minimum Time is required"
+          : "",
       maxDeliveryTimeError: timeError
         ? "Maximum Time should be greater than Minimum Time"
         : "",
@@ -154,11 +172,12 @@ const PickupDeliveryDetails = ({
 
     setErrors((prev) => ({
       ...prev,
-      maxPickupTimeError: !e.target.value
-        ? "Maximum Time is required"
-        : timeError
-          ? "Maximum Time should be greater than Minimum Time"
-          : "",
+      maxPickupTimeError:
+        isEnableOrderNumber === "Yes" && !e.target.value
+          ? "Maximum Time is required"
+          : timeError
+            ? "Maximum Time should be greater than Minimum Time"
+            : "",
     }));
 
     setMaxPickupTime(e.target.value);
@@ -174,11 +193,12 @@ const PickupDeliveryDetails = ({
 
     setErrors((prev) => ({
       ...prev,
-      maxDeliveryTimeError: !e.target.value
-        ? "Maximum Time is required"
-        : timeError
-          ? "Maximum Time should be greater than Minimum Time"
-          : "",
+      maxDeliveryTimeError:
+        isDelveryEnbale === "Yes" && !e.target.value
+          ? "Maximum Time is required"
+          : timeError
+            ? "Maximum Time should be greater than Minimum Time"
+            : "",
     }));
 
     setMaxDeliveryTime(e.target.value);

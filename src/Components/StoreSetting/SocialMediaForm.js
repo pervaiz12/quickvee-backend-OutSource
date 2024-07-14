@@ -59,9 +59,7 @@ const SocialMediaForm = ({
           alignItems="center"
           sx={{ pt: 1 }}
         >
-          <Grid item>
-            
-          </Grid>
+          <Grid item></Grid>
         </Grid>
       </Grid>
     </Grid>
