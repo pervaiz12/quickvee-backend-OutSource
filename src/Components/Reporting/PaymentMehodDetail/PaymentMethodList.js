@@ -89,9 +89,14 @@ const PaymentMethodList = ({ data }) => {
           amt: paymentReportDataState?.paymentMethodData[key],
         })
       );
+      console.log("arr");
       setpaymentReport(arr);
-      const gotTotal = arr.reduce((acc, item) => acc + parseFloat(item.amt), 0);
+      const gotTotal = arr.reduce((acc, item) => {
+        console.log("item.amt",item.amt,"acc",acc)
+        return acc + (isNaN(parseFloat(item.amt)) ? 0 : parseFloat(item.amt));
+      }, 0);
       setTotal(gotTotal);
+      console.log("gotTotal", gotTotal);
     }
   }, [
     paymentReportDataState,
@@ -125,7 +130,7 @@ const PaymentMethodList = ({ data }) => {
                   <StyledTableCell>Total</StyledTableCell>
                 </TableHead>
                 <TableBody>
-                  {total > 0 ? (
+                  {total ? (
                     paymentReport.map((paymentData, index) => {
                       if (paymentData.amt > 0) {
                         return (
