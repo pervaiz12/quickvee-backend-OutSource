@@ -88,6 +88,39 @@ export default function SettingStoreOption() {
     autoPrintPaymentReceipt: false,
     enabledGuestCheckout: false,
   });
+  // ==================
+  // const handleKeyPress = (event) => {
+  //   const charCode = event.charCode;
+  //   const char = String.fromCharCode(charCode);
+  //   console.log(event.target.value);
+  //   // Prevent '-' and '0' characters
+  //   if (char === "-" || char === "0") {
+  //     event.preventDefault();
+  //   } else if (event.target.value < 1 && event.target.value > 15) {
+  //     event.preventDefault();
+  //   }
+  // };
+  const handleKeyPress = (event) => {
+    const charCode = event.charCode;
+    const char = String.fromCharCode(charCode);
+
+    // Allow only digit characters, except '0' unless it forms '10'
+    if (
+      !/^\d$/.test(char) ||
+      (char === "0" &&
+        event.target.value !== "1" &&
+        event.target.value !== "-1")
+    ) {
+      event.preventDefault();
+    }
+  };
+  const handleKeyDown = (event) => {
+    // Prevent use of up and down arrow keys
+    if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+      event.preventDefault();
+    }
+  };
+  // ==================
 
   const handleOrderChange = (e) => {
     const { name, value, checked } = e.target;
@@ -255,8 +288,8 @@ export default function SettingStoreOption() {
       !orderState?.enabledCashPaymenyPickup
     ) {
       setError("Please Select Cash Payment method.");
-    } else if (orderState?.dayCount > 12) {
-      showModal("Advance day count must be less than 12 or Equal to 12");
+    } else if (orderState?.dayCount > 15) {
+      showModal("Advance day count must be less than 12 or Equal to 15");
     } else {
       setError("");
       if (orderState.enabledFutureOrder) {
@@ -484,6 +517,7 @@ export default function SettingStoreOption() {
                       name={"dayCount"}
                       onChangeFun={handleOrderChange}
                       disable={!orderState?.enabledFutureOrder}
+                      onKeyPressFun={handleKeyPress}
                     />
                     {advancedayCount && (
                       <p className="error-message pt-1">{advancedayCount}</p>
