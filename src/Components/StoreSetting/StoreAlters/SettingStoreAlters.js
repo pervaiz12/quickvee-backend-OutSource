@@ -352,7 +352,7 @@ export default function SettingStoreAlters() {
 
   const handleUpdateSettingAlerts = async (e) => {
     e.preventDefault();
-    if(isUserEmailEnabled){
+    if (isUserEmailEnabled) {
       // for Email Required
       if (isBccEmail == "") {
         setErrors({
@@ -382,7 +382,7 @@ export default function SettingStoreAlters() {
       });
       return;
     }
-    if(isUserMsgEnabled){
+    if (isUserMsgEnabled) {
       if (isUserMsgNumber == "") {
         setErrors({
           ...errors,
@@ -414,13 +414,14 @@ export default function SettingStoreAlters() {
       }
     }
     // setErrors("");
-    if (isOnlinePhoneNumber == "") {
-      setErrors({
-        ...errors,
-        phn_num: "Phone Number is required.",
-      });
-      return;
-    } else if (isOnlinePhoneNumber != "") {
+    // if (isOnlinePhoneNumber == "") {
+    //   setErrors({
+    //     ...errors,
+    //     phn_num: "Phone Number is required.",
+    //   });
+    //   return;
+    // } else
+    if (isOnlinePhoneNumber != "") {
       if (!validateMobile1(isOnlinePhoneNumber)) {
         setErrors({
           ...errors,
@@ -481,7 +482,7 @@ export default function SettingStoreAlters() {
       store_name: isstoreName,
       // timeZone: istimeZone,
       enable_email: isUserEmailEnabled ? "1" : "0",
-      // bcc_email: isBccEmail,  
+      // bcc_email: isBccEmail,
       ...(isUserEmailEnabled && { bcc_email: isBccEmail }),
       enable_message: isUserMsgEnabled ? "1" : "0",
       ...(isUserMsgEnabled && { msg_no: isUserMsgNumber }),

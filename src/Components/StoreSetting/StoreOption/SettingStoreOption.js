@@ -79,8 +79,8 @@ export default function SettingStoreOption() {
     enabledCashPaymenyPickup: false,
     enabledNca: false,
     enabledDualPrice: false,
-    creditCardSurcharge: "",
-    debitCardSurcharge: "",
+    creditCardSurcharge: "0.00",
+    debitCardSurcharge: "0.00",
     autoPrintOrder: false,
     autoPrintPaymentReceipt: false,
     enabledGuestCheckout: false,
@@ -237,12 +237,17 @@ export default function SettingStoreOption() {
           : userOptionData?.is_surcharge === "1"
             ? false
             : true,
-      ["creditCardSurcharge"]: userOptionData?.surcharge_per,
-      ["debitCardSurcharge"]: userOptionData?.debit_surcharge,
+      ["creditCardSurcharge"]: userOptionData?.surcharge_per
+        ? userOptionData?.surcharge_per
+        : "0.00",
+      ["debitCardSurcharge"]: userOptionData?.debit_surcharge
+        ? userOptionData?.debit_surcharge
+        : "0.00",
       ["autoPrintOrder"]: Boolean(+userData?.auto_print_kitchen),
       ["autoPrintPaymentReceipt"]: Boolean(+userData?.auto_print_payment),
       ["enabledGuestCheckout"]: Boolean(+userOptionData?.is_guest_checkout),
     }));
+    console.log("userOptionData: ", userOptionData);
   }, [userData, storeData, userOptionData]);
 
   // onsubmit
