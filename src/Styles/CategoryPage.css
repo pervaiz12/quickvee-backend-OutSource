@@ -497,6 +497,8 @@
 
 .select-cat-unique .css-1xc3v61-indicatorContainer {
   padding: 0px 4px;
+  align-self: flex-start !important;
+  
 }
 
 .select-cat-unique .category-select .css-1xc3v61-indicatorContainer {

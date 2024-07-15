@@ -153,7 +153,7 @@ const StocktakeReport = ({ setVisible }) => {
                 }}
                 className="text-center items-center"
               >
-                <img src={AddSvg} alt="Add-New-Category" className="h-9 w-9" />
+                <img src={AddSvg} alt="Add-New-Category"  />
 
                 <span>Stocktake Report - {singleStocktakeState?.st_id}</span>
               </span>

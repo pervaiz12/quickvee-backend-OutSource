@@ -30,6 +30,7 @@ import PasswordShow from "../../Common/passwordShow";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Link, useNavigate } from "react-router-dom";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import SwitchToBackButton from "../../reuseableComponents/SwitchToBackButton";
 
 const AddCoupon = ({ seVisible }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -670,21 +671,25 @@ const AddCoupon = ({ seVisible }) => {
       <div className="box">
         <div className="box_shadow_div">
           <div className="q-add-categories-section">
-            <div className="q-add-categories-section-header">
+            <SwitchToBackButton 
+              linkTo={"/coupons"}
+              title={"Add Coupon"}
+            />
+            {/* <div className="q-add-categories-section-header">
               <Link to={`/coupons`}>
-                {/* <span
+                <span
                 onClick={() => seVisible("CouponDiscount")}
                 className="add_coupon_span"
-              > */}
+              >
                 <img
                   src={AddNewCategory}
                   alt="Add-New-Category"
                   className="h-9 w-9"
                 />
                 <span className="textIMG">Add Coupon</span>
-                {/* </span> */}
+                </span>
               </Link>
-            </div>
+            </div> */}
             <form onSubmit={handleAddButtonClick}>
               <div className="q-add-categories-section-middle-form">
                 <div className="q_coupon_Add_status_btn">

@@ -19,6 +19,7 @@ import AlertModal from "../../reuseableComponents/AlertModal";
 import { Link, useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import PasswordShow from "../../Common/passwordShow";
+import SwitchToBackButton from "../../reuseableComponents/SwitchToBackButton";
 const AddCategory = ({ seVisible }) => {
   const {
     LoginGetDashBoardRecordJson,
@@ -302,7 +303,11 @@ const AddCategory = ({ seVisible }) => {
         </div>
         <div className="q-add-categories-section mb-5">
           {/* <form enctype="multipart/form-data"> */}
-          <div className="q-add-categories-section-header">
+          <SwitchToBackButton 
+            linkTo={"/inventory/category"}
+            title={"Add New Category"}
+          />
+          {/* <div className="q-add-categories-section-header">
             <span onClick={back}>
               <img
                 src={AddNewCategory}
@@ -311,7 +316,7 @@ const AddCategory = ({ seVisible }) => {
               />
               <span>Add New Category</span>
             </span>
-          </div>
+          </div> */}
           <div className="q-add-categories-section-middle-form">
             <div
               className="q-add-categories-single-input mb-2"

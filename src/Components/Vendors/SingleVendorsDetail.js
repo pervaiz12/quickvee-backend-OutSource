@@ -27,6 +27,7 @@ import { useParams } from "react-router-dom";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import PasswordShow from "../../Common/passwordShow";
+import SwitchToBackButton from "../../reuseableComponents/SwitchToBackButton";
 const options = [
   "Select Range",
   "Today",
@@ -261,7 +262,11 @@ const SingleVendorsDetail = ({ setVisible }) => {
       <Grid container sx={{ marginY: 2 }} className="q-add-categories-section">
         <Grid xs={12} item>
           <Grid item xs={12}>
-            <div className="q-add-categories-section-header">
+            <SwitchToBackButton 
+              linkTo={"/vendors"}
+              title={vendor_name}
+            />
+            {/* <div className="q-add-categories-section-header">
               <span
                 onClick={() => {
                   Navigate(-1);
@@ -270,7 +275,7 @@ const SingleVendorsDetail = ({ setVisible }) => {
                 <img src={LeftArrow} />
                 <span>{vendor_name}</span>
               </span>
-            </div>
+            </div> */}
           </Grid>
           <Grid container>
             <Grid item xs={12}>

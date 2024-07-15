@@ -13,6 +13,7 @@ import AlertModal from "../../reuseableComponents/AlertModal";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import PasswordShow from "./../../Common/passwordShow";
+import SwitchToBackButton from "../../reuseableComponents/SwitchToBackButton";
 
 const AddDefaults = ({ setVisible }) => {
   const navigate = useNavigate();
@@ -289,7 +290,11 @@ const AddDefaults = ({ setVisible }) => {
         <div className="q-add-categories-section">
           <div className="mt-10 mb-4">
             <form onSubmit={handleSubmit} enctype="multipart/form-data">
-              <div className="q-add-categories-section-header">
+            <SwitchToBackButton
+                linkTo={-1}
+                title={"Add New Defaults"}
+              />
+              {/* <div className="q-add-categories-section-header">
                 <span
                   onClick={() =>
                     //  setVisible("DefaultsDetail")
@@ -299,7 +304,7 @@ const AddDefaults = ({ setVisible }) => {
                   <img src={AddNewCategory} alt="Add-New-Category" />
                   <span>Add New Defaults</span>
                 </span>
-              </div>
+              </div> */}
               <div className="q-add-categories-section-middle-form">
                 <div className="q-add-categories-single-input">
                   <label htmlFor="name">Name</label>

@@ -11,6 +11,7 @@ import AddSvg from "../../../Assests/Dashboard/Left.svg";
 import BasicTextFields from "../../../reuseableComponents/TextInputField";
 import PasswordShow from "../../../Common/passwordShow";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
+import SwitchToBackButton from "../../../reuseableComponents/SwitchToBackButton";
 // import { useParams } from 'react-router-dom';
 export default function EditMerchant({
   merchantId,
@@ -96,7 +97,11 @@ export default function EditMerchant({
         <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
-              <div className="q-add-categories-section-header">
+              <SwitchToBackButton 
+                linkTo={-1}
+                title={"Edit Merchant"}
+              />
+              {/* <div className="q-add-categories-section-header">
                 <span
                   onClick={() => {
                     // setVisible(currentMerchant);
@@ -111,7 +116,7 @@ export default function EditMerchant({
                   />
                   <span>Edit Merchant</span>
                 </span>
-              </div>
+              </div> */}
             </Grid>
           </Grid>
           <Grid container spacing={3} sx={{ px: 2.5, py: 2.5 }}>

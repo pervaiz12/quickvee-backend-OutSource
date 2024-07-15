@@ -20,6 +20,7 @@ import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import PasswordShow from "../../Common/passwordShow";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import SwitchToBackButton from "../../reuseableComponents/SwitchToBackButton";
 const vendorFormValues = {
   merchant_id: "",
   id: "",
@@ -296,7 +297,11 @@ const EditVendors = ({ setVisible }) => {
         <Grid item xs={12} className="q-add-categories-section ">
           <Grid container sx={{ marginTop: 0, marginLeft: 0 }}>
             <Grid item xs={12}>
-              <div
+              <SwitchToBackButton 
+                linkTo={"/vendors"}
+                title={"Edit Vendors"}
+              />
+              {/* <div
                 onClick={() => {
                   Navigate(-1);
                 }}
@@ -308,7 +313,7 @@ const EditVendors = ({ setVisible }) => {
                   style={{ cursor: "pointer" }}
                 />
                 <span>Edit Vendors</span>
-              </div>
+              </div> */}
             </Grid>
           </Grid>
           <Grid container sx={{ padding: 2.5 }}>
