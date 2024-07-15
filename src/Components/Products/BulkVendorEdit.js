@@ -89,6 +89,10 @@ const BulkVendorEdit = ({
             : 0
       );
       formData.append(
+        "merchant_id",
+        LoginGetDashBoardRecordJson?.data?.merchant_id
+      );
+      formData.append(
         "varient_id",
         !Boolean(+productData?.isvarient)
           ? productData?.id
@@ -265,6 +269,10 @@ const BulkVendorEdit = ({
         "vendor_id",
         selectedVendor?.map((item) => item?.id)?.toString()
       );
+      formData.append(
+        "merchant_id",
+        LoginGetDashBoardRecordJson?.data?.merchant_id
+      );
 
       formData.append("login_type", userTypeData?.login_type);
       formData.append("token_id", userTypeData?.token_id);
@@ -356,6 +364,10 @@ const BulkVendorEdit = ({
             ? productData?.id
             : varientIndex
       );
+      formData.append(
+        "merchant_id",
+        LoginGetDashBoardRecordJson?.data?.merchant_id
+      );
       formData.append("vendor_id", vendorId);
       dispatch(deleteProductVendor(formData))
         .then((res) => {
@@ -413,6 +425,10 @@ const BulkVendorEdit = ({
     formData.append("login_type", userTypeData?.login_type);
     formData.append("token_id", userTypeData?.token_id);
     formData.append("token", userTypeData?.token);
+    formData.append(
+      "merchant_id",
+      LoginGetDashBoardRecordJson?.data?.merchant_id
+    );
 
     /// send bulkFormData when multiple varient and bulkModal is open
     bulkFormData.append("product_id", productId?.id);
@@ -515,7 +531,11 @@ const BulkVendorEdit = ({
               component={Paper}
               className="bulkvendor-table-container"
             >
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <Table
+                sx={{ minWidth: 650 }}
+                aria-label="simple table"
+                className="bulk-vendor-table"
+              >
                 <TableHead>
                   <TableRow>
                     <TableCell>Vendors</TableCell>

@@ -308,6 +308,10 @@
   overflow-y: auto;
 }
 
+.product-edit-modal .css-13xfq8m-MuiTabPanel-root {
+  padding: 0px !important;
+}
+
 .product-varient-form {
   margin-bottom: 22px;
 }
@@ -316,8 +320,10 @@
   width: 24px;
   height: 24px;
   position: absolute;
-  right: 14px;
-  top: 14px;
+  right: 10px;
+  top: 15px;
+  cursor: pointer;
+  z-index: 99;
 }
 
 .bulk-edit-note {
@@ -485,6 +491,7 @@
   align-items: start;
   flex-wrap: wrap;
   justify-content: center;
+  padding: 24px !important;
 }
 
 .vendor-add-input .dropdownBox {
@@ -508,6 +515,10 @@
 }
 
 .vendor-add-input button {
+}
+
+.bulkvendor-table-container {
+  box-shadow: none;
 }
 
 .bulkvendor-table-container .vendor-cost-input {
@@ -535,9 +546,9 @@
   box-sizing: border-box;
 }
 
-/* .bulk-varient-edit-form {
+.bulk-varient-edit-form {
   padding: 24px !important;
-} */
+}
 .bulk-varient-edit-form .q-add-categories-section-middle-footer {
   display: flex;
   justify-content: space-between;
@@ -560,6 +571,9 @@
   border: 1px solid #e3e3e3;
   border-radius: 4px;
   opacity: 1;
+}
+
+.bulk-vendor-table {
 }
 
 /* alert toast css */
