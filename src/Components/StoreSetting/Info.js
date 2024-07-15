@@ -35,6 +35,8 @@ const Info = () => {
     merchant_idNew,
     handleBlurPassword,
     submitLoading,
+    stateList,
+    onDropDownChangeHandle,
   } = InfoFunction();
   let data = {
     id: user_id,
@@ -72,6 +74,8 @@ const Info = () => {
               errors={errors}
               infoRecord={infoRecord}
               onChangeHandle={onChangeHandle}
+              stateList={stateList}
+              onDropDownChangeHandle={onDropDownChangeHandle}
             />
 
             <SocialMediaForm

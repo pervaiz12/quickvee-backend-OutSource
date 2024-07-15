@@ -294,7 +294,7 @@ export default function SettingStoreOption() {
     ) {
       setError("Please Select Cash Payment method.");
     } else if (orderState?.dayCount > 15) {
-      showModal("Advance day count must be less than 12 or Equal to 15");
+      showModal("Advance day count must be between 1 to 15");
     } else {
       setError("");
       if (orderState.enabledFutureOrder) {
