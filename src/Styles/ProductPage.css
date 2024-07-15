@@ -45,7 +45,7 @@
   align-items: center;
   width: 95%;
   flex-wrap: wrap;
-  padding: 4px 0px 10px 0px;
+  padding: 5px 0px 5px 0px;
 }
 
 .search-selected-item-without-padding {
@@ -657,7 +657,7 @@
   font-size: 14px;
   opacity: 1;
   font-family: CircularSTDBook !important;
-  margin-bottom: 7px !important;
+  /* margin-bottom: 7px !important; */
 }
 
 .image-list h1 {

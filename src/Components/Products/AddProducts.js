@@ -44,6 +44,7 @@ import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import CkEditorInput from "../../CommonComponents/CkEditorInput";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import PasswordShow from "../../Common/passwordShow";
+import SwitchToBackButton from "../../reuseableComponents/SwitchToBackButton";
 
 const AddProducts = () => {
   const fileUploadRef = useRef();
@@ -1594,10 +1595,11 @@ const AddProducts = () => {
         setFormValue((prevFormValue) => {
           const newFormValue = [...new Set(varientTitle)].map(
             (title, index) => {
-              let trimmedTitle = title.replace(/\s*\/\s*/, '/').trim();
+              let trimmedTitle = title.replace(/\s*\/\s*/, "/").trim();
               const previousData =
                 prevFormValue.find((item) => trimmedTitle in item) || {};
-              const result = previousData[title.replace(/\s*\/\s*/, '/').trim()];
+              const result =
+                previousData[title.replace(/\s*\/\s*/, "/").trim()];
 
               return {
                 [title]: {
@@ -2475,7 +2477,13 @@ const AddProducts = () => {
             style={{ overflow: "unset", marginBottom: "110px" }}
           >
             <div className="q-add-categories-section">
-              <div className="q-add-categories-section-header">
+              <SwitchToBackButton
+                linkTo={"/inventory/products"}
+                title={`${
+                  pageUrl === "inventory/products/edit" ? "Edit" : "Add"
+                }Product`}
+              />
+              {/* <div className="q-add-categories-section-header">
                 <span
                   onClick={() => {
                     navigate("/inventory/products");
@@ -2488,9 +2496,9 @@ const AddProducts = () => {
                     Product
                   </span>
                 </span>
-              </div>
-              <div className="q-add-categories-section-middle-form">
-                <div className="q-add-categories-single-input">
+              </div> */}
+              <div className="q-add-categories-section-middle-form mt-1">
+                <div className="q-add-categories-single-input ">
                   <label htmlFor="title" className="product-input-title">
                     Title
                   </label>
@@ -2516,13 +2524,18 @@ const AddProducts = () => {
                 </div>
 
                 <div className="q-add-categories-single-input">
-                  <label htmlFor="description" className="product-input-title">
+                  <label
+                    htmlFor="description"
+                    className="mb-1 product-input-title"
+                  >
                     Description
                   </label>
-                  <CkEditorInput
-                    value={productInfo?.description}
-                    onChange={handleProductInfo}
-                  />
+                  <div className="mt-2">
+                    <CkEditorInput
+                      value={productInfo?.description}
+                      onChange={handleProductInfo}
+                    />
+                  </div>
                 </div>
                 {/* <div className="q-add-categories-single-input">
                     <textarea
