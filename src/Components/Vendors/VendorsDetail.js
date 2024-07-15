@@ -290,7 +290,17 @@ const VendorsDetail = ({ setVisible }) => {
                         allvendors.map((singleVendor, index) => (
                           <StyledTableRow key={index}>
                             <StyledTableCell>
-                              <p>{singleVendor.vendor_name}</p>
+                              <p
+                                className="text-[#0A64F9] cursor-pointer"
+                                onClick={() => {
+                                  handleEditClick(
+                                    singleVendor.vendor_name,
+                                    singleVendor.vendor_id
+                                  );
+                                }}
+                              >
+                                {singleVendor.vendor_name}
+                              </p>
                             </StyledTableCell>
                             <StyledTableCell>
                               <p>{priceFormate(singleVendor.pay_count)}</p>
@@ -306,18 +316,7 @@ const VendorsDetail = ({ setVisible }) => {
                               </p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              <p className="text-[#0A64F9] cursor-pointer">
-                                <div
-                                  onClick={() => {
-                                    handleEditClick(
-                                      singleVendor.vendor_name,
-                                      singleVendor.vendor_id
-                                    );
-                                  }}
-                                >
-                                  {singleVendor.recent_trans}
-                                </div>
-                              </p>
+                              <p>{singleVendor.recent_trans}</p>
                             </StyledTableCell>
                             <StyledTableCell>
                               <Switch

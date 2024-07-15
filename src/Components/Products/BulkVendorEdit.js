@@ -531,7 +531,11 @@ const BulkVendorEdit = ({
               component={Paper}
               className="bulkvendor-table-container"
             >
-              <Table sx={{ minWidth: 650 }} aria-label="simple table">
+              <Table
+                sx={{ minWidth: 650 }}
+                aria-label="simple table"
+                className="bulk-vendor-table"
+              >
                 <TableHead>
                   <TableRow>
                     <TableCell>Vendors</TableCell>
