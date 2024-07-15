@@ -43,6 +43,9 @@ export default function SettingStoreOption() {
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
 
+  const login_type = LoginGetDashBoardRecordJson?.login_type;
+  console.log(login_type);
+
   const [storeData, setStoreData] = useState({});
   const [userData, setUserData] = useState({});
   const [VoidOrder, setVoidOrder] = useState(false);
@@ -495,229 +498,233 @@ export default function SettingStoreOption() {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid container sx={{ p: 2 }} className="box_shadow_div">
-              <Grid item xs={12}>
-                <Grid container sx={{ pb: 1.5 }}>
+            {login_type?.toString()?.toLowerCase() == "superadmin" ? (
+              <>
+                <Grid container sx={{ p: 2 }} className="box_shadow_div">
                   <Grid item xs={12}>
-                    <h2 className="store-setting-h1  store-setting-inline-block">
-                      <span className="StoreSetting_heading-menu">
-                        Dispatch Center
-                      </span>
-                    </h2>
+                    <Grid container sx={{ pb: 1.5 }}>
+                      <Grid item xs={12}>
+                        <h2 className="store-setting-h1  store-setting-inline-block">
+                          <span className="StoreSetting_heading-menu">
+                            Dispatch Center
+                          </span>
+                        </h2>
+                      </Grid>
+                    </Grid>
+
+                    <Grid
+                      container
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                    >
+                      <Grid item>
+                        <div className="store-setting-gry Admin_std store-setting-inline-block">
+                          Enable Dispatch Center
+                        </div>
+                      </Grid>
+                      <Grid item>
+                        <span className="store-setting-switch">
+                          <Switch
+                            {...label}
+                            name="enabledDispatchCenter"
+                            checked={orderState?.enabledDispatchCenter}
+                            onChange={handleOrderChange}
+                          />
+                        </span>
+                      </Grid>
+                    </Grid>
+                    <Grid container sx={{ py: 1 }}>
+                      <Grid item xs={12}>
+                        <label className="q_resigter_setting_section">
+                          Enable Email Notification
+                          <input
+                            type="checkbox"
+                            name="enabledEmailNotification"
+                            value={orderState?.enabledEmailNotification}
+                            checked={orderState?.enabledEmailNotification}
+                            onChange={handleOrderChange}
+                            disabled={!orderState?.enabledDispatchCenter}
+                          />
+                          <span className="checkmark"></span>
+                        </label>
+                      </Grid>
+                    </Grid>
+                    <Grid container sx={{ py: 1 }}>
+                      <Grid item xs={12}>
+                        <label className="q_resigter_setting_section">
+                          Enable SMS Notification
+                          <input
+                            type="checkbox"
+                            name="enabledSmsNotification"
+                            value={orderState?.enabledSmsNotification}
+                            checked={orderState?.enabledSmsNotification}
+                            disabled={!orderState?.enabledDispatchCenter}
+                            onChange={handleOrderChange}
+                          />
+                          <span className="checkmark"></span>
+                        </label>
+                      </Grid>
+                    </Grid>
                   </Grid>
                 </Grid>
 
-                <Grid
-                  container
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                >
-                  <Grid item>
-                    <div className="store-setting-gry Admin_std store-setting-inline-block">
-                      Enable Dispatch Center
-                    </div>
-                  </Grid>
-                  <Grid item>
-                    <span className="store-setting-switch">
-                      <Switch
-                        {...label}
-                        name="enabledDispatchCenter"
-                        checked={orderState?.enabledDispatchCenter}
-                        onChange={handleOrderChange}
-                      />
-                    </span>
-                  </Grid>
-                </Grid>
-                <Grid container sx={{ py: 1 }}>
+                <Grid container sx={{ p: 2 }} className="box_shadow_div">
                   <Grid item xs={12}>
-                    <label className="q_resigter_setting_section">
-                      Enable Email Notification
-                      {/* <input type="checkbox" checked="checked" />  */}
-                      <input
-                        type="checkbox"
-                        name="enabledEmailNotification"
-                        value={orderState?.enabledEmailNotification}
-                        checked={orderState?.enabledEmailNotification}
-                        // checked={values.ebt_type.split(",").includes("1")}
-                        onChange={handleOrderChange}
-                        disabled={!orderState?.enabledDispatchCenter}
-                      />
-                      <span className="checkmark"></span>
-                    </label>
-                  </Grid>
-                </Grid>
-                <Grid container sx={{ py: 1 }}>
-                  <Grid item xs={12}>
-                    <label className="q_resigter_setting_section">
-                      Enable SMS Notification
-                      <input
-                        type="checkbox"
-                        name="enabledSmsNotification"
-                        value={orderState?.enabledSmsNotification}
-                        checked={orderState?.enabledSmsNotification}
-                        disabled={!orderState?.enabledDispatchCenter}
-                        // checked={values.ebt_type.split(",").includes("2")}
-                        onChange={handleOrderChange}
-                      />
-                      <span className="checkmark"></span>
-                    </label>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid container sx={{ p: 2 }} className="box_shadow_div">
-              <Grid item xs={12}>
-                <Grid container sx={{ pb: 1.5 }}>
-                  <Grid item xs={12}>
-                    <h2 className="store-setting-h1">
-                      <sapn className="StoreSetting_heading-menu">
-                        Payment Options
-                      </sapn>
-                    </h2>
-                  </Grid>
-                </Grid>
-                <Grid
-                  container
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  sx={{ py: 0.5 }}
-                >
-                  <Grid item>
-                    <div className="store-setting-gry Admin_std store-setting-inline-block">
-                      Enable Cash Payment For Delivery
-                    </div>
-                  </Grid>
-                  <Grid item>
-                    <span className="store-setting-switch">
-                      <Switch
-                        {...label}
-                        checked={orderState?.enabledCashPaymentDelivery}
-                        name="enabledCashPaymentDelivery"
-                        onChange={handleOrderChange}
-                        disabled={
-                          +storeData?.user_option_data?.cc_payment === 0 ||
-                          +storeData?.user_option_data?.cc_payment === 1
-                        }
-                      />
-                    </span>
-                  </Grid>
-                </Grid>
-                <Grid
-                  container
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  sx={{ py: 0.5 }}
-                >
-                  <Grid item>
-                    <div className="store-setting-gry Admin_std store-setting-inline-block">
-                      Enable Cash Payment For Pickup
-                    </div>
-                  </Grid>
-                  <Grid item>
-                    <span className="store-setting-switch">
-                      <Switch
-                        {...label}
-                        checked={orderState?.enabledCashPaymenyPickup}
-                        name="enabledCashPaymenyPickup"
-                        onChange={handleOrderChange}
-                        disabled={
-                          +storeData?.user_option_data?.cc_payment === 0 ||
-                          +storeData?.user_option_data?.cc_payment === 1
-                        }
-                      />
-                    </span>
-                  </Grid>
-                </Grid>
-                {!!error ? <p className="error-alert">{error}</p> : ""}
-                <Grid
-                  container
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  sx={{ py: 0.5 }}
-                >
-                  <Grid item>
-                    <div className="store-setting-gry Admin_std store-setting-inline-block">
-                      Enable Cash Discounting
-                    </div>
-                  </Grid>
-                  <Grid item>
-                    <span className="store-setting-switch">
-                      <Switch
-                        {...label}
-                        checked={orderState?.enabledNca}
-                        name="enabledNca"
-                        onChange={handleOrderChange}
-                      />
-                    </span>
-                  </Grid>
-                </Grid>
-                <Grid
-                  container
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  sx={{ py: 0.5 }}
-                >
-                  <Grid item>
-                    <div className="store-setting-gry Admin_std store-setting-inline-block">
-                      Enable Dual Price
-                    </div>
-                  </Grid>
-                  <Grid item>
-                    <span className="store-setting-switch">
-                      <Switch
-                        {...label}
-                        checked={orderState?.enabledDualPrice}
-                        name="enabledDualPrice"
-                        onChange={handleOrderChange}
-                      />
-                    </span>
-                  </Grid>
-                </Grid>
-                <Grid container spacing={2} sx={{ py: 0.5 }}>
-                  <Grid item xs={12} sm={6}>
-                    <Grid container>
-                      <Grid Item xs={12}>
-                        <div className="store-setting-gry Admin_std">
-                          Credit Card Surcharge %
-                        </div>
-                      </Grid>
-                      <Grid xs={12}>
-                        <BasicTextFields
-                          type={"number"}
-                          value={orderState?.creditCardSurcharge}
-                          name={"creditCardSurcharge"}
-                          onChangeFun={handleOrderChange}
-                          placeholder={"0.00"}
-                        />
+                    <Grid container sx={{ pb: 1.5 }}>
+                      <Grid item xs={12}>
+                        <h2 className="store-setting-h1">
+                          <sapn className="StoreSetting_heading-menu">
+                            Payment Options
+                          </sapn>
+                        </h2>
                       </Grid>
                     </Grid>
-                  </Grid>
-                  <Grid item xs={12} sm={6}>
-                    <Grid container>
-                      <Grid Item xs={12}>
-                        <div className="store-setting-gry Admin_std">
-                          Debit Card Surcharge %
+                    <Grid
+                      container
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      sx={{ py: 0.5 }}
+                    >
+                      <Grid item>
+                        <div className="store-setting-gry Admin_std store-setting-inline-block">
+                          Enable Cash Payment For Delivery
                         </div>
                       </Grid>
-                      <Grid xs={12}>
-                        <BasicTextFields
-                          type={"number"}
-                          name={"debitCardSurcharge"}
-                          value={orderState?.debitCardSurcharge}
-                          onChangeFun={handleOrderChange}
-                          placeholder="0.00"
-                        />
+                      <Grid item>
+                        <span className="store-setting-switch">
+                          <Switch
+                            {...label}
+                            checked={orderState?.enabledCashPaymentDelivery}
+                            name="enabledCashPaymentDelivery"
+                            onChange={handleOrderChange}
+                            disabled={
+                              +storeData?.user_option_data?.cc_payment === 0 ||
+                              +storeData?.user_option_data?.cc_payment === 1
+                            }
+                          />
+                        </span>
+                      </Grid>
+                    </Grid>
+                    <Grid
+                      container
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      sx={{ py: 0.5 }}
+                    >
+                      <Grid item>
+                        <div className="store-setting-gry Admin_std store-setting-inline-block">
+                          Enable Cash Payment For Pickup
+                        </div>
+                      </Grid>
+                      <Grid item>
+                        <span className="store-setting-switch">
+                          <Switch
+                            {...label}
+                            checked={orderState?.enabledCashPaymenyPickup}
+                            name="enabledCashPaymenyPickup"
+                            onChange={handleOrderChange}
+                            disabled={
+                              +storeData?.user_option_data?.cc_payment === 0 ||
+                              +storeData?.user_option_data?.cc_payment === 1
+                            }
+                          />
+                        </span>
+                      </Grid>
+                    </Grid>
+                    {!!error ? <p className="error-alert">{error}</p> : ""}
+                    <Grid
+                      container
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      sx={{ py: 0.5 }}
+                    >
+                      <Grid item>
+                        <div className="store-setting-gry Admin_std store-setting-inline-block">
+                          Enable Cash Discounting
+                        </div>
+                      </Grid>
+                      <Grid item>
+                        <span className="store-setting-switch">
+                          <Switch
+                            {...label}
+                            checked={orderState?.enabledNca}
+                            name="enabledNca"
+                            onChange={handleOrderChange}
+                          />
+                        </span>
+                      </Grid>
+                    </Grid>
+                    <Grid
+                      container
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      sx={{ py: 0.5 }}
+                    >
+                      <Grid item>
+                        <div className="store-setting-gry Admin_std store-setting-inline-block">
+                          Enable Dual Price
+                        </div>
+                      </Grid>
+                      <Grid item>
+                        <span className="store-setting-switch">
+                          <Switch
+                            {...label}
+                            checked={orderState?.enabledDualPrice}
+                            name="enabledDualPrice"
+                            onChange={handleOrderChange}
+                          />
+                        </span>
+                      </Grid>
+                    </Grid>
+                    <Grid container spacing={2} sx={{ py: 0.5 }}>
+                      <Grid item xs={12} sm={6}>
+                        <Grid container>
+                          <Grid Item xs={12}>
+                            <div className="store-setting-gry Admin_std">
+                              Credit Card Surcharge %
+                            </div>
+                          </Grid>
+                          <Grid xs={12}>
+                            <BasicTextFields
+                              type={"number"}
+                              value={orderState?.creditCardSurcharge}
+                              name={"creditCardSurcharge"}
+                              onChangeFun={handleOrderChange}
+                              placeholder={"0.00"}
+                            />
+                          </Grid>
+                        </Grid>
+                      </Grid>
+                      <Grid item xs={12} sm={6}>
+                        <Grid container>
+                          <Grid Item xs={12}>
+                            <div className="store-setting-gry Admin_std">
+                              Debit Card Surcharge %
+                            </div>
+                          </Grid>
+                          <Grid xs={12}>
+                            <BasicTextFields
+                              type={"number"}
+                              name={"debitCardSurcharge"}
+                              value={orderState?.debitCardSurcharge}
+                              onChangeFun={handleOrderChange}
+                              placeholder="0.00"
+                            />
+                          </Grid>
+                        </Grid>
                       </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
-            </Grid>
+              </>
+            ) : (
+              ""
+            )}
             <Grid container sx={{ p: 2 }} className="box_shadow_div">
               <Grid item xs={12}>
                 <Grid container sx={{ pb: 1.5 }}>
@@ -777,7 +784,15 @@ export default function SettingStoreOption() {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid container sx={{ p: 2, mb: 1 }} className="box_shadow_div">
+            <Grid
+              container
+              sx={
+                login_type?.toString()?.toLowerCase() !== "superadmin"
+                  ? { p: 2, mb: 14 }
+                  : { p: 2, mb: 1 }
+              }
+              className="box_shadow_div"
+            >
               <Grid item xs={12}>
                 <Grid
                   container
@@ -809,37 +824,41 @@ export default function SettingStoreOption() {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid container sx={{ p: 2, mb: 14 }} className="box_shadow_div">
-              <Grid item xs={12}>
-                <Grid
-                  container
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  sx={{ pb: 1.5 }}
-                >
-                  <Grid item>
-                    <h2 className="store-setting-h1">
-                      <span className="StoreSetting_heading-menu">
-                        {" "}
-                        Void Orders
+            {login_type?.toString()?.toLowerCase() == "superadmin" ? (
+              <Grid container sx={{ p: 2, mb: 14 }} className="box_shadow_div">
+                <Grid item xs={12}>
+                  <Grid
+                    container
+                    direction="row"
+                    justifyContent="space-between"
+                    alignItems="center"
+                    sx={{ pb: 1.5 }}
+                  >
+                    <Grid item>
+                      <h2 className="store-setting-h1">
+                        <span className="StoreSetting_heading-menu">
+                          {" "}
+                          Void Orders
+                        </span>
+                      </h2>
+                    </Grid>
+                    <Grid item>
+                      <span className="store-setting-switch">
+                        <Switch
+                          {...label}
+                          checked={VoidOrder}
+                          // checked={orderState?.enabledGuestCheckout}
+                          name="enabledGuestCheckout"
+                          onChange={handleVoidOrder}
+                        />
                       </span>
-                    </h2>
-                  </Grid>
-                  <Grid item>
-                    <span className="store-setting-switch">
-                      <Switch
-                        {...label}
-                        checked={VoidOrder}
-                        // checked={orderState?.enabledGuestCheckout}
-                        name="enabledGuestCheckout"
-                        onChange={handleVoidOrder}
-                      />
-                    </span>
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>
-            </Grid>
+            ) : (
+              ""
+            )}
             <Grid className="fixed-bottom">
               <Grid
                 container
