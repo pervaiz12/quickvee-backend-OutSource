@@ -63,6 +63,7 @@ export default function SettingStoreAlters() {
     useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
+  const login_type = LoginGetDashBoardRecordJson?.login_type;
 
   useEffect(() => {
     let data = {
@@ -352,7 +353,7 @@ export default function SettingStoreAlters() {
 
   const handleUpdateSettingAlerts = async (e) => {
     e.preventDefault();
-    if(isUserEmailEnabled){
+    if (isUserEmailEnabled) {
       // for Email Required
       if (isBccEmail == "") {
         setErrors({
@@ -382,7 +383,7 @@ export default function SettingStoreAlters() {
       });
       return;
     }
-    if(isUserMsgEnabled){
+    if (isUserMsgEnabled) {
       if (isUserMsgNumber == "") {
         setErrors({
           ...errors,
@@ -481,7 +482,7 @@ export default function SettingStoreAlters() {
       store_name: isstoreName,
       // timeZone: istimeZone,
       enable_email: isUserEmailEnabled ? "1" : "0",
-      // bcc_email: isBccEmail,  
+      // bcc_email: isBccEmail,
       ...(isUserEmailEnabled && { bcc_email: isBccEmail }),
       enable_message: isUserMsgEnabled ? "1" : "0",
       ...(isUserMsgEnabled && { msg_no: isUserMsgNumber }),
@@ -973,22 +974,27 @@ export default function SettingStoreAlters() {
             />
             <span className="store-setting-error">{errors.phn_num}</span>
           </div>
-
-          <div
-            style={{ MarginLeft: "2rem", MarginRight: "2rem" }}
-            className="storeAlert_Enable_SMS"
-          >
-            <h2 className="store-setting-h2">
-              <b>Default Enable Receiving SMS Notification For Order Status</b>
-            </h2>
-            <span className="store-setting-switch float-right">
-              <Switch
-                {...label}
-                checked={isDefaultOnlineOrderNotify}
-                onChange={DefaultOnlineOrderNotifytoggleInput}
-              />
-            </span>
-          </div>
+          {login_type?.toString().toLowerCase() == "superadmin" ? (
+            <div
+              style={{ MarginLeft: "2rem", MarginRight: "2rem" }}
+              className="storeAlert_Enable_SMS"
+            >
+              <h2 className="store-setting-h2">
+                <b>
+                  Default Enable Receiving SMS Notification For Order Status
+                </b>
+              </h2>
+              <span className="store-setting-switch float-right">
+                <Switch
+                  {...label}
+                  checked={isDefaultOnlineOrderNotify}
+                  onChange={DefaultOnlineOrderNotifytoggleInput}
+                />
+              </span>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
         {/* for Design Change End  */}
 
