@@ -149,6 +149,7 @@ const CategoryListDropDown = ({
     <>
       <label htmlFor="categoryFilter">Category</label>
       <SelectDropDown
+        sx={{pt:0.5}}
         heading={"All"}
         title={"title"}
         listItem={allcategories}
