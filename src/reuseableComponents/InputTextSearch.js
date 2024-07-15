@@ -4,18 +4,19 @@ import OutlinedInput from "@mui/material/OutlinedInput";
 import { IconButton } from "@mui/material";
 import InputAdornment from "@mui/material/InputAdornment";
 import SearchIcon from "../Assests/Filter/Search.svg";
+import { useSelector } from "react-redux";
 const InputTextSearch = ({
   placeholder,
   value,
   handleChange,
   handleSearchButton,
-  handlefocus
+  handlefocus,
 }) => {
+  const { loading } = useSelector((state) => state.productsListData);
   return (
     <>
-      <FormControl fullWidth>
+      <FormControl fullWidth disabled={loading}>
         <OutlinedInput
-          
           size="small"
           placeholder={placeholder}
           value={value}
@@ -27,7 +28,7 @@ const InputTextSearch = ({
           endAdornment={
             <InputAdornment position="end">
               <IconButton
-              sx={{padding:"0"}}
+                sx={{ padding: "0" }}
                 onClick={() => {
                   handleSearchButton && handleSearchButton();
                 }}
@@ -38,9 +39,9 @@ const InputTextSearch = ({
           }
           sx={{
             "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
-              borderColor: "black"
+              borderColor: "black",
             },
-            paddingRight:"14px"
+            paddingRight: "14px",
           }}
         />
       </FormControl>

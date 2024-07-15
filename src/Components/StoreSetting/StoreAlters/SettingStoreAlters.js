@@ -63,6 +63,7 @@ export default function SettingStoreAlters() {
     useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
+  const login_type = LoginGetDashBoardRecordJson?.login_type;
 
   useEffect(() => {
     let data = {
@@ -215,6 +216,7 @@ export default function SettingStoreAlters() {
   };
   const UserMsgEnabledtoggleInput = () => {
     setIsUserMsgEnabled(!isUserMsgEnabled);
+    setIsUserMsgNumber("");
     setErrors({
       ...errors,
       msg_no: "",
@@ -352,89 +354,60 @@ export default function SettingStoreAlters() {
 
   const handleUpdateSettingAlerts = async (e) => {
     e.preventDefault();
-    if (isUserEmailEnabled) {
-      // for Email Required
-      if (isBccEmail == "") {
-        setErrors({
-          ...errors,
-          bccemail: "Email is required",
-        });
-        return;
-      } else if (isBccEmail != "") {
-        if (!validateEmail(isBccEmail)) {
-          setErrors({
-            ...errors,
-            bccemail: "Please enter a valid email address.",
-          });
-          return;
-        }
-      } else {
-        setErrors({
-          ...errors,
-          bccemail: "",
-        });
-      }
-    }
-    if (isstoreName == "") {
-      setErrors({
-        ...errors,
-        store_name: "Store Name is required.",
-      });
-      return;
-    }
-    if (isUserMsgEnabled) {
-      if (isUserMsgNumber == "") {
-        setErrors({
-          ...errors,
-          msg_no: "Phone Number is required.",
-        });
-        return;
-      } else if (isUserMsgNumber != "") {
-        if (!validateMobile(isUserMsgNumber)) {
-          setErrors({
-            ...errors,
-            msg_no: "Please enter a valid 10-digit mobile number.",
-          });
-          return;
-        }
-      } else {
-        setErrors({
-          ...errors,
-          msg_no: "",
-        });
-      }
-    }
-    if (isReportEmailId != "") {
-      if (!validateEmail1(isReportEmailId)) {
-        setErrors({
-          ...errors,
-          report_email_id: "Please enter a valid email address.",
-        });
-        return;
-      }
-    }
-    // setErrors("");
-    // if (isOnlinePhoneNumber == "") {
-    //   setErrors({
-    //     ...errors,
-    //     phn_num: "Phone Number is required.",
-    //   });
-    //   return;
-    // } else
-    if (isOnlinePhoneNumber != "") {
-      if (!validateMobile1(isOnlinePhoneNumber)) {
-        setErrors({
-          ...errors,
-          phn_num: "Please enter a valid 10-digit mobile number.",
-        });
-        return;
-      }
-    } else {
-      setErrors({
-        ...errors,
-        phn_num: "",
-      });
-    }
+
+    const emailIssue =
+      (isUserEmailEnabled && isBccEmail === "") ||
+      (isUserEmailEnabled && isBccEmail !== "" && !validateEmail(isBccEmail));
+    const storeNameIssue = isstoreName === "";
+    const msgNoIssue =
+      (isUserMsgEnabled && isUserMsgNumber === "") ||
+      (isUserMsgEnabled &&
+        isUserMsgNumber !== "" &&
+        !validateMobile(isUserMsgNumber));
+    const reportEmailIssue =
+      isReportEmailId !== "" && !validateEmail1(isReportEmailId);
+    const phoneNumberIssue =
+      isOnlinePhoneNumber !== "" && !validateMobile1(isOnlinePhoneNumber);
+
+    const bool = [
+      emailIssue,
+      storeNameIssue,
+      msgNoIssue,
+      reportEmailIssue,
+      phoneNumberIssue,
+    ].some((val) => Boolean(val));
+
+    setErrors({
+      ...errors,
+      bccemail:
+        isUserEmailEnabled && isBccEmail === ""
+          ? "Email is required"
+          : isUserEmailEnabled &&
+              isBccEmail !== "" &&
+              !validateEmail(isBccEmail)
+            ? "Please enter a valid email address."
+            : "",
+      store_name: isstoreName === "" ? "Store Name is required." : "",
+      msg_no:
+        isUserMsgEnabled && isUserMsgNumber === ""
+          ? "Phone Number is required."
+          : isUserMsgEnabled &&
+              isUserMsgNumber !== "" &&
+              !validateMobile(isUserMsgNumber)
+            ? "Please enter a valid 10-digit mobile number."
+            : "",
+      report_email_id:
+        isReportEmailId !== "" && !validateEmail1(isReportEmailId)
+          ? "Please enter a valid email address."
+          : "",
+      phn_num:
+        isOnlinePhoneNumber !== "" && !validateMobile1(isOnlinePhoneNumber)
+          ? "Please enter a valid 10-digit mobile number."
+          : "",
+    });
+
+    if (bool) return;
+
     const isEmailAccepted = document.getElementById("isEmailAccepted").checked;
     const isEmailPackaging =
       document.getElementById("isEmailPackaging").checked;
@@ -617,18 +590,23 @@ export default function SettingStoreAlters() {
             />
             <span className="store-setting-error">{errors.msg_no}</span>
           </div>
-          <div className="store-setting-head-div">Store Name:</div>
-          <div className="store-setting-input-div">
-            <input
-              type="text"
-              name="store_name"
-              value={isstoreName}
-              className="store-setting-alert-input"
-              onChange={Userstore_nameInput}
-              //   disabled={!isUserMsgEnabled}
-            />
-            <span className="store-setting-error">{errors.store_name}</span>
-          </div>
+          {login_type?.toString().toLowerCase() == "superadmin" ? (
+            <>
+              <div className="store-setting-head-div">Store Name:</div>
+              <div className="store-setting-input-div">
+                <input
+                  type="text"
+                  name="store_name"
+                  value={isstoreName}
+                  className="store-setting-alert-input"
+                  onChange={Userstore_nameInput}
+                />
+                <span className="store-setting-error">{errors.store_name}</span>
+              </div>
+            </>
+          ) : (
+            ""
+          )}
         </div>
 
         {/* Online Order Status(Customers) */}
@@ -974,22 +952,27 @@ export default function SettingStoreAlters() {
             />
             <span className="store-setting-error">{errors.phn_num}</span>
           </div>
-
-          <div
-            style={{ MarginLeft: "2rem", MarginRight: "2rem" }}
-            className="storeAlert_Enable_SMS"
-          >
-            <h2 className="store-setting-h2">
-              <b>Default Enable Receiving SMS Notification For Order Status</b>
-            </h2>
-            <span className="store-setting-switch float-right">
-              <Switch
-                {...label}
-                checked={isDefaultOnlineOrderNotify}
-                onChange={DefaultOnlineOrderNotifytoggleInput}
-              />
-            </span>
-          </div>
+          {login_type?.toString().toLowerCase() == "superadmin" ? (
+            <div
+              style={{ MarginLeft: "2rem", MarginRight: "2rem" }}
+              className="storeAlert_Enable_SMS"
+            >
+              <h2 className="store-setting-h2">
+                <b>
+                  Default Enable Receiving SMS Notification For Order Status
+                </b>
+              </h2>
+              <span className="store-setting-switch float-right">
+                <Switch
+                  {...label}
+                  checked={isDefaultOnlineOrderNotify}
+                  onChange={DefaultOnlineOrderNotifytoggleInput}
+                />
+              </span>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
         {/* for Design Change End  */}
 

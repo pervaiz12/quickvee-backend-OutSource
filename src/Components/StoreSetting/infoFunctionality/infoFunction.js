@@ -268,22 +268,37 @@ export default function InfoFunction() {
       errorMessage.phoneError = "Invalid phone number";
       isValidate = false;
     }
-
-    if (!infoRecord.facebookUrl || !urlPattern.test(infoRecord.facebookUrl)) {
-      errorMessage.facebookUrlError = "Enter a valid Facebook URL";
-      isValidate = false;
-    }
-
-    if (!infoRecord.instagramUrl || !urlPattern.test(infoRecord.instagramUrl)) {
-      errorMessage.instagramUrlError = "Enter a valid Instagram URL";
-      isValidate = false;
-    }
-
+    // if (infoRecord.facebookUrl == "") {
+    //   errorMessage.facebookUrlError = "Facebook URL is required";
+    //   isValidate = false;
+    // } else
     if (
-      !infoRecord.promotionalUrl ||
+      infoRecord.facebookUrl !== "" &&
+      !urlPattern.test(infoRecord.facebookUrl)
+    ) {
+      errorMessage.facebookUrlError = "Enter valid Facebook URL";
+      isValidate = false;
+    }
+    // if (infoRecord.instagramUrl == "") {
+    //   errorMessage.instagramUrlError = "Instagram URL is required";
+    //   isValidate = false;
+    // } else
+    if (
+      infoRecord.instagramUrl !== "" &&
+      !urlPattern.test(infoRecord.instagramUrl)
+    ) {
+      errorMessage.instagramUrlError = "Enter valid Instagram URL";
+      isValidate = false;
+    }
+    // if (infoRecord.promotionalUrl == "") {
+    //   errorMessage.promotionalUrlError = "Promotional URL is required";
+    //   isValidate = false;
+    // } else
+    if (
+      infoRecord.promotionalUrl !== "" &&
       !urlPattern.test(infoRecord.promotionalUrl)
     ) {
-      errorMessage.promotionalUrlError = "Enter a valid Promotional URL";
+      errorMessage.promotionalUrlError = "Enter valid Promotional URL";
       isValidate = false;
     }
     if (infoRecord.address_1 == "") {

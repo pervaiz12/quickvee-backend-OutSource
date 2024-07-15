@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AiOutlineSearch } from "react-icons/ai";
 import DownIcon from "../../Assests/Dashboard/Down.svg";
 import { useRef } from "react";
-import Grid from "@mui/system/Unstable_Grid/Grid";
+import { Grid } from "@mui/material";
 import InputTextSearch from "../../reuseableComponents/InputTextSearch";
 
 import SearchIcon from "../../Assests/Filter/Search.svg";
@@ -12,6 +12,8 @@ import UpArrow from "../../Assests/Dashboard/Up.svg";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import MassInventoryUpdateModal from "./MassInventoryUpdateModal";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import { useSelector } from "react-redux";
+import CustomHeader from "../../reuseableComponents/CustomHeader";
 
 const FilterProduct = ({
   handleOptionClick,
@@ -36,6 +38,7 @@ const FilterProduct = ({
   setSearchId,
 }) => {
   const { userTypeData } = useAuthDetails();
+  const { loading } = useSelector((state) => state.productsListData);
   const productStatusList = [
     {
       id: "all",
@@ -170,93 +173,93 @@ const FilterProduct = ({
 
   return (
     <>
-      <div className="box">
-        <div className="box_shadow_input">
-          <Grid container sx={{ px: 3.5, pt: 2.5 }}>
+      <Grid container className="box_shadow_input">
+        <Grid item xs={12}>
+          <CustomHeader>Products</CustomHeader>
+          <Grid container sx={{ px: 2.5, pt: 2.5 }}>
             <Grid item xs={12}>
-              <h1 style={{ marginBottom: 0 }} className="heading ">
-                Products
-              </h1>
+              <InputTextSearch
+                placeholder="Search products by Name or UPC Code"
+                value={searchId}
+                handleChange={handleSearch}
+                // handleSearchButton={handleSearch}
+                // handlefocus={handlefocus}
+              />
             </Grid>
           </Grid>
-          <div className="q_main_data_range">
-            <Grid container>
-              <Grid item xs={12} className="px-5">
-                <InputTextSearch
-                  placeholder="Search products by Name or UPC Code"
-                  value={searchId}
-                  handleChange={handleSearch}
-                  // handleSearchButton={handleSearch}
-                  // handlefocus={handlefocus}
-                />
-              </Grid>
+          <Grid container sx={{ px: 2.5, pt: 2.5 }}>
+            <Grid item className="mt-5" xs={12}>
+              <h1 className="heading">Filter By</h1>
             </Grid>
-            <Grid container>
-              <Grid item className="mt-5" xs={12}>
-                <h1 className="text-xl font-medium">Filter By</h1>
-              </Grid>
+          </Grid>
+          <Grid
+            container
+            sx={{ px: 2.5, pb: 2.5 }}
+            spacing={2}
+            className="place-items-end"
+          >
+            <Grid item xs={12} sm={6} md={4}>
+              <CategoryListDropDown
+                type="category"
+                onCategoryChange={handleCategoryChange}
+                searchId={searchId}
+                selectedStatus={selectedStatus}
+              />
             </Grid>
-            <Grid container spacing={2} className="place-items-end">
-              <Grid item xs={12} sm={6} md={4}>
-                <CategoryListDropDown
-                  type="category"
-                  onCategoryChange={handleCategoryChange}
-                  searchId={searchId}
-                  selectedStatus={selectedStatus}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={4}>
-                <label>Product Status</label>
-                <SelectDropDown
-                  // heading={null}
-                  title={"title"}
-                  listItem={productStatusList}
-                  selectedOption={selectedStatusValue}
-                  onClickHandler={handleOptionClick}
-                  dropdownFor={"status"}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={4}>
-                <label>Listing Type</label>
-                <SelectDropDown
-                  heading={"Select listing"}
-                  title={"title"}
-                  listItem={listingTypeList}
-                  selectedOption={selectedListingType}
-                  onClickHandler={handleOptionClick}
-                  dropdownFor={"listingType"}
-                />
-              </Grid>
-              <Grid item xs={12} sm={6} md={4}>
-                <label style={{ whiteSpace: "nowrap" }}>
-                  Enable Product for Delivery/Pickup
-                </label>
-                <SelectDropDown
-                  heading={"Select"}
-                  title={"title"}
-                  listItem={deliveryPickupList}
-                  selectedOption={selectedEmployee}
-                  onClickHandler={handleOptionClick}
-                  dropdownFor={"del_pic"}
-                />
-              </Grid>
-              {userTypeData?.login_type === "superadmin" ? (
-                <Grid item xs={12} sm={6} md={4}>
-                  <button
-                    style={{ height: "40px", padding: "0px 0px" }}
-                    className="quic-btn quic-btn-draft attributeUpdateBTN w-full"
-                    onClick={() => setShowModal(true)}
-                  >
-                    Mass Inventory Update
-                  </button>
-                </Grid>
-              ) : (
-                ""
-              )}
+            <Grid item xs={12} sm={6} md={4}>
+              <label>Product Status</label>
+              <SelectDropDown
+                sx={{ pt: 0.5 }}
+                // heading={null}
+                title={"title"}
+                listItem={productStatusList}
+                selectedOption={selectedStatusValue}
+                onClickHandler={handleOptionClick}
+                dropdownFor={"status"}
+              />
             </Grid>
-          </div>
-        </div>
-      </div>
+            <Grid item xs={12} sm={6} md={4}>
+              <label>Listing Type</label>
+              <SelectDropDown
+                sx={{ pt: 0.5 }}
+                heading={"Select listing"}
+                title={"title"}
+                listItem={listingTypeList}
+                selectedOption={selectedListingType}
+                onClickHandler={handleOptionClick}
+                dropdownFor={"listingType"}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4}>
+              <label style={{ whiteSpace: "nowrap" }}>
+                Enable Product for Delivery/Pickup
+              </label>
+              <SelectDropDown
+                sx={{ pt: 0.5 }}
+                heading={"Select"}
+                title={"title"}
+                listItem={deliveryPickupList}
+                selectedOption={selectedEmployee}
+                onClickHandler={handleOptionClick}
+                dropdownFor={"del_pic"}
+              />
+            </Grid>
+            {userTypeData?.login_type === "superadmin" ? (
+              <Grid item xs={12} sm={6} md={4}>
+                <button
+                  style={{ height: "40px", padding: "0px 0px" }}
+                  className="quic-btn quic-btn-draft attributeUpdateBTN w-full"
+                  onClick={() => setShowModal(true)}
+                >
+                  Mass Inventory Update
+                </button>
+              </Grid>
+            ) : (
+              ""
+            )}
+          </Grid>
+        </Grid>
+      </Grid>
       <MassInventoryUpdateModal
         {...{
           showModal,

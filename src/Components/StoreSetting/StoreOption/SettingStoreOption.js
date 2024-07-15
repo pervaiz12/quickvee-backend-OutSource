@@ -88,8 +88,40 @@ export default function SettingStoreOption() {
     autoPrintPaymentReceipt: false,
     enabledGuestCheckout: false,
   });
+  // ==================
+  // const handleKeyPress = (event) => {
+  //   const charCode = event.charCode;
+  //   const char = String.fromCharCode(charCode);
+  //   console.log(event.target.value);
+  //   // Prevent '-' and '0' characters
+  //   if (char === "-" || char === "0") {
+  //     event.preventDefault();
+  //   } else if (event.target.value < 1 && event.target.value > 15) {
+  //     event.preventDefault();
+  //   }
+  // };
+  const handleKeyPress = (event) => {
+    const charCode = event.charCode;
+    const char = String.fromCharCode(charCode);
 
-  // onchange
+    // Allow only digit characters, except '0' unless it forms '10'
+    if (
+      !/^\d$/.test(char) ||
+      (char === "0" &&
+        event.target.value !== "1" &&
+        event.target.value !== "-1")
+    ) {
+      event.preventDefault();
+    }
+  };
+  const handleKeyDown = (event) => {
+    // Prevent use of up and down arrow keys
+    if (event.key === "ArrowUp" || event.key === "ArrowDown") {
+      event.preventDefault();
+    }
+  };
+  // ==================
+
   const handleOrderChange = (e) => {
     const { name, value, checked } = e.target;
     const updateData = { ...orderState };
@@ -261,8 +293,8 @@ export default function SettingStoreOption() {
       !orderState?.enabledCashPaymenyPickup
     ) {
       setError("Please Select Cash Payment method.");
-    } else if (orderState?.dayCount > 12) {
-      showModal("Advance day count must be less than 12 or Equal to 12");
+    } else if (orderState?.dayCount > 15) {
+      showModal("Advance day count must be less than 12 or Equal to 15");
     } else {
       setError("");
       if (orderState.enabledFutureOrder) {
@@ -490,6 +522,7 @@ export default function SettingStoreOption() {
                       name={"dayCount"}
                       onChangeFun={handleOrderChange}
                       disable={!orderState?.enabledFutureOrder}
+                      onKeyPressFun={handleKeyPress}
                     />
                     {advancedayCount && (
                       <p className="error-message pt-1">{advancedayCount}</p>
@@ -784,78 +817,85 @@ export default function SettingStoreOption() {
                 </Grid>
               </Grid>
             </Grid>
-            <Grid
-              container
-              sx={
-                login_type?.toString()?.toLowerCase() !== "superadmin"
-                  ? { p: 2, mb: 14 }
-                  : { p: 2, mb: 1 }
-              }
-              className="box_shadow_div"
-            >
-              <Grid item xs={12}>
+            {login_type?.toString()?.toLowerCase() == "superadmin" ? (
+              <>
                 <Grid
                   container
-                  direction="row"
-                  justifyContent="space-between"
-                  alignItems="center"
-                  sx={{ pb: 1.5 }}
+                  sx={
+                    login_type?.toString()?.toLowerCase() !== "superadmin"
+                      ? { p: 2, mb: 14 }
+                      : { p: 2, mb: 1 }
+                  }
+                  className="box_shadow_div"
                 >
-                  <Grid item>
-                    <h2 className="store-setting-h1">
-                      <span className="StoreSetting_heading-menu">
-                        Guest Checkout
-                      </span>
-                    </h2>
-                    <div className="store-setting-gry Admin_std">
-                      Enable Guest Checkout for Online Order?
-                    </div>
-                  </Grid>
-                  <Grid item>
-                    <span className="store-setting-switch">
-                      <Switch
-                        {...label}
-                        checked={orderState?.enabledGuestCheckout}
-                        name="enabledGuestCheckout"
-                        onChange={handleOrderChange}
-                      />
-                    </span>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-            {login_type?.toString()?.toLowerCase() == "superadmin" ? (
-              <Grid container sx={{ p: 2, mb: 14 }} className="box_shadow_div">
-                <Grid item xs={12}>
-                  <Grid
-                    container
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                    sx={{ pb: 1.5 }}
-                  >
-                    <Grid item>
-                      <h2 className="store-setting-h1">
-                        <span className="StoreSetting_heading-menu">
-                          {" "}
-                          Void Orders
+                  <Grid item xs={12}>
+                    <Grid
+                      container
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      sx={{ pb: 1.5 }}
+                    >
+                      <Grid item>
+                        <h2 className="store-setting-h1">
+                          <span className="StoreSetting_heading-menu">
+                            Guest Checkout
+                          </span>
+                        </h2>
+                        <div className="store-setting-gry Admin_std">
+                          Enable Guest Checkout for Online Order?
+                        </div>
+                      </Grid>
+                      <Grid item>
+                        <span className="store-setting-switch">
+                          <Switch
+                            {...label}
+                            checked={orderState?.enabledGuestCheckout}
+                            name="enabledGuestCheckout"
+                            onChange={handleOrderChange}
+                          />
                         </span>
-                      </h2>
-                    </Grid>
-                    <Grid item>
-                      <span className="store-setting-switch">
-                        <Switch
-                          {...label}
-                          checked={VoidOrder}
-                          // checked={orderState?.enabledGuestCheckout}
-                          name="enabledGuestCheckout"
-                          onChange={handleVoidOrder}
-                        />
-                      </span>
+                      </Grid>
                     </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
+
+                <Grid
+                  container
+                  sx={{ p: 2, mb: 14 }}
+                  className="box_shadow_div"
+                >
+                  <Grid item xs={12}>
+                    <Grid
+                      container
+                      direction="row"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      sx={{ pb: 1.5 }}
+                    >
+                      <Grid item>
+                        <h2 className="store-setting-h1">
+                          <span className="StoreSetting_heading-menu">
+                            {" "}
+                            Void Orders
+                          </span>
+                        </h2>
+                      </Grid>
+                      <Grid item>
+                        <span className="store-setting-switch">
+                          <Switch
+                            {...label}
+                            checked={VoidOrder}
+                            // checked={orderState?.enabledGuestCheckout}
+                            name="enabledGuestCheckout"
+                            onChange={handleVoidOrder}
+                          />
+                        </span>
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </>
             ) : (
               ""
             )}

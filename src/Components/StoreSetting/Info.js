@@ -34,7 +34,7 @@ const Info = () => {
     user_id,
     merchant_idNew,
     handleBlurPassword,
-    submitLoading
+    submitLoading,
   } = InfoFunction();
   let data = {
     id: user_id,

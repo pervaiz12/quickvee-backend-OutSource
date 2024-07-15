@@ -148,7 +148,7 @@ const SearchableDropdown = ({
       <div
         className="dropdownBox"
         style={{
-          padding: showOptions ? "10px" : !!modalType ? "" : "7px 8px 0px 8px",
+          padding: showOptions ? "0px 8px 8px 8px" : !!modalType ? "" : "0px 8px 0px 8px",
         }}
         onBlur={handleBlurOption}
         name={keyName}

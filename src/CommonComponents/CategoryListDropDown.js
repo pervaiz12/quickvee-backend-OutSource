@@ -31,6 +31,7 @@ const CategoryListDropDown = ({
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
+  const { loading } = useSelector((state) => state.productsListData);
 
   const getCategories = async () => {
     try {
@@ -149,12 +150,14 @@ const CategoryListDropDown = ({
     <>
       <label htmlFor="categoryFilter">Category</label>
       <SelectDropDown
+        sx={{pt:0.5}}
         heading={"All"}
         title={"title"}
         listItem={allcategories}
         selectedOption={selectedCategory}
         onClickHandler={handleOptionClick}
         dropdownFor={"category"}
+        disabled={loading}
       />
       {/* <div
       // className={`Card_admin ${isTablet ? "col-qv-12" : "col-qv-4"}`}

@@ -12,7 +12,7 @@ export default function CustomHeader({ children }) {
         sx={{borderBottom:"1px solid #E8E8E8",}}
        
       >
-        <Grid item>
+        <Grid item xs={12}>
           <div  className="q-category-bottom-header">
             <span>{children}</span>
           </div>

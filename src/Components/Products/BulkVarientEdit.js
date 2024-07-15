@@ -130,7 +130,7 @@ const BulkVarientEdit = ({
       } else {
         handleCopyAllVarientValue(copyAllValue);
         ToastifyAlert(
-          "Updated Successfully. Plase Click on Update for Save!",
+          "Updated Successfully. Please Click on Update for Save!",
           "success"
         );
         handleCloseEditModal();
@@ -152,7 +152,7 @@ const BulkVarientEdit = ({
       } else {
         handleCopyAllVarientValue(copyAllValue);
         ToastifyAlert(
-          "Updated Successfully. Plase Click on Update for Save!",
+          "Updated Successfully. Please Click on Update for Save!",
           "success"
         );
         handleCloseEditModal();
@@ -170,7 +170,7 @@ const BulkVarientEdit = ({
       else {
         handleCopyAllVarientValue(copyAllValue);
         ToastifyAlert(
-          "Updated Successfully. Plase Click on Update for Save!",
+          "Updated Successfully. Please Click on Update for Save!",
           "success"
         );
         handleCloseEditModal();
@@ -185,7 +185,7 @@ const BulkVarientEdit = ({
     ) {
       handleCopyAllVarientValue(copyValue);
       ToastifyAlert(
-        "Updated Successfully. Plase Click on Update for Save!",
+        "Updated Successfully. Please Click on Update for Save!",
         "success"
       );
       handleCloseEditModal();
