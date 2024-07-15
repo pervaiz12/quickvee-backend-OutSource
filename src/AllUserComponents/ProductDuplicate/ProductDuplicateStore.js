@@ -460,6 +460,38 @@ const ProductDuplicateStore = () => {
   };
 
   // for captcha End
+  const customStyles = {
+    menu: (provided) => ({
+      ...provided,
+      zIndex: 9999,
+      position: "absolute",
+    }),
+    menuPortal: (base) => ({
+      ...base,
+      zIndex: 9999,
+    }),
+    control: (provided, state) => ({
+      ...provided,
+      borderColor: state.isFocused ? "black" : provided.borderColor,
+      boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
+      // height: 40,
+      minHeight: 40,
+      "&:hover": {
+        borderColor: "black" ? "black" : provided["&:hover"].borderColor,
+      },
+    }),
+    input: (provided) => ({
+      ...provided,
+      "&:focus": {
+        borderColor: "black",
+        outline: "none",
+      },
+    }),
+    valueContainer: (provided) => ({
+      ...provided,
+      paddingLeft: 10,
+    }),
+  };
 
   return (
     <>
@@ -599,6 +631,7 @@ const ProductDuplicateStore = () => {
                     className={`${categoryFocus ? "category-select" : ""} mt-1`}
                     isMulti
                     value={selectedProducts}
+                    styles={customStyles}
                     onChange={handleProductChange}
                     options={productOptions}
                     isCreatable={true}
@@ -608,10 +641,11 @@ const ProductDuplicateStore = () => {
                     components={{
                       MultiValue: ({ data, innerProps }) => (
                         <div
-                          className="css-wsp0cs-MultiValueGeneric"
+                          className="css-wsp0cs-MultiValueGeneric flex"
+                          
                           {...innerProps}
                         >
-                          {data.label}
+                          <p>{data.label}</p>
                           <button
                             type="button"
                             className="cancel-button "
@@ -620,7 +654,7 @@ const ProductDuplicateStore = () => {
                             <img
                               src={CrossIcons}
                               alt=""
-                              className="w-4 h-4 ml-6 pt-1"
+                              className="w-4 h-4 ml-6"
                             />
                           </button>
                         </div>
@@ -630,16 +664,16 @@ const ProductDuplicateStore = () => {
                           {children}
                         </div>
                       ),
-                      Control: ({ children, innerProps }) => (
-                        <div
-                          className={`css-13cymwt-control ${
-                            isSelectClicked ? "select-clicked" : ""
-                          }`}
-                          {...innerProps}
-                        >
-                          {children}
-                        </div>
-                      ),
+                      // Control: ({ children, innerProps }) => (
+                      //   <div
+                      //     className={`css-13cymwt-control ${
+                      //       isSelectClicked ? "select-clicked" : ""
+                      //     }`}
+                      //     {...innerProps}
+                      //   >
+                      //     {children}
+                      //   </div>
+                      // ),
                     }}
                   />
                 </div>
