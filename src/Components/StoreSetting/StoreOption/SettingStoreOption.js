@@ -517,12 +517,13 @@ export default function SettingStoreOption() {
                 <Grid container sx={{ px: 2.5, pb: 2.5 }}>
                   <Grid item xs={12}>
                     <BasicTextFields
-                      type={"number"}
+                      type={"text"}
                       value={orderState?.dayCount}
                       name={"dayCount"}
                       onChangeFun={handleOrderChange}
                       disable={!orderState?.enabledFutureOrder}
                       onKeyPressFun={handleKeyPress}
+                      maxLength={2}
                     />
                     {advancedayCount && (
                       <p className="error-message pt-1">{advancedayCount}</p>
