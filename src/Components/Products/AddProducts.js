@@ -1594,9 +1594,10 @@ const AddProducts = () => {
         setFormValue((prevFormValue) => {
           const newFormValue = [...new Set(varientTitle)].map(
             (title, index) => {
+              let trimmedTitle = title.replace(/\s*\/\s*/, '/').trim();
               const previousData =
-                prevFormValue.find((item) => title.trim() in item) || {};
-              const result = previousData[title.trim()];
+                prevFormValue.find((item) => trimmedTitle in item) || {};
+              const result = previousData[title.replace(/\s*\/\s*/, '/').trim()];
 
               return {
                 [title]: {

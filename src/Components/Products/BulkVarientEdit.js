@@ -180,7 +180,8 @@ const BulkVarientEdit = ({
     // if any from reorderQty or reorderLevel is not empty
     else if (
       bulkVarient["reorderQty"] !== "" ||
-      bulkVarient["reorderLevel"] !== ""
+      bulkVarient["reorderLevel"] !== "" ||
+      bulkVarient["costPerItem"]
     ) {
       handleCopyAllVarientValue(copyValue);
       ToastifyAlert(
