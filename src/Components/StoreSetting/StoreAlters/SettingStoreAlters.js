@@ -63,6 +63,7 @@ export default function SettingStoreAlters() {
     useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
+  const login_type = LoginGetDashBoardRecordJson?.login_type;
 
   useEffect(() => {
     let data = {
@@ -589,18 +590,23 @@ export default function SettingStoreAlters() {
             />
             <span className="store-setting-error">{errors.msg_no}</span>
           </div>
-          <div className="store-setting-head-div">Store Name:</div>
-          <div className="store-setting-input-div">
-            <input
-              type="text"
-              name="store_name"
-              value={isstoreName}
-              className="store-setting-alert-input"
-              onChange={Userstore_nameInput}
-              //   disabled={!isUserMsgEnabled}
-            />
-            <span className="store-setting-error">{errors.store_name}</span>
-          </div>
+          {login_type?.toString().toLowerCase() == "superadmin" ? (
+            <>
+              <div className="store-setting-head-div">Store Name:</div>
+              <div className="store-setting-input-div">
+                <input
+                  type="text"
+                  name="store_name"
+                  value={isstoreName}
+                  className="store-setting-alert-input"
+                  onChange={Userstore_nameInput}
+                />
+                <span className="store-setting-error">{errors.store_name}</span>
+              </div>
+            </>
+          ) : (
+            ""
+          )}
         </div>
 
         {/* Online Order Status(Customers) */}
@@ -946,22 +952,27 @@ export default function SettingStoreAlters() {
             />
             <span className="store-setting-error">{errors.phn_num}</span>
           </div>
-
-          <div
-            style={{ MarginLeft: "2rem", MarginRight: "2rem" }}
-            className="storeAlert_Enable_SMS"
-          >
-            <h2 className="store-setting-h2">
-              <b>Default Enable Receiving SMS Notification For Order Status</b>
-            </h2>
-            <span className="store-setting-switch float-right">
-              <Switch
-                {...label}
-                checked={isDefaultOnlineOrderNotify}
-                onChange={DefaultOnlineOrderNotifytoggleInput}
-              />
-            </span>
-          </div>
+          {login_type?.toString().toLowerCase() == "superadmin" ? (
+            <div
+              style={{ MarginLeft: "2rem", MarginRight: "2rem" }}
+              className="storeAlert_Enable_SMS"
+            >
+              <h2 className="store-setting-h2">
+                <b>
+                  Default Enable Receiving SMS Notification For Order Status
+                </b>
+              </h2>
+              <span className="store-setting-switch float-right">
+                <Switch
+                  {...label}
+                  checked={isDefaultOnlineOrderNotify}
+                  onChange={DefaultOnlineOrderNotifytoggleInput}
+                />
+              </span>
+            </div>
+          ) : (
+            ""
+          )}
         </div>
         {/* for Design Change End  */}
 
