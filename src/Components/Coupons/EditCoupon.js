@@ -84,6 +84,10 @@ const EditCoupon = ({ couponId, seVisible }) => {
         return response?.data?.result;
       }
     } catch (error) {
+      if (error.response.status == 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      }
       console.error("Error:", error);
     }
   }

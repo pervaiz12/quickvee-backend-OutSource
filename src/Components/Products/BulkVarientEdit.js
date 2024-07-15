@@ -180,7 +180,8 @@ const BulkVarientEdit = ({
     // if any from reorderQty or reorderLevel is not empty
     else if (
       bulkVarient["reorderQty"] !== "" ||
-      bulkVarient["reorderLevel"] !== ""
+      bulkVarient["reorderLevel"] !== "" ||
+      bulkVarient["costPerItem"]
     ) {
       handleCopyAllVarientValue(copyValue);
       ToastifyAlert(
@@ -198,7 +199,7 @@ const BulkVarientEdit = ({
           {bulkVarientEdit?.length
             ? bulkVarientEdit?.map((inp, index) => {
                 return (
-                  <div className="col-qv-5" key={index}>
+                  <div className="col-qv-6" key={index}>
                     <div className="q-add-categories-single-input">
                       <label>{inp?.label}</label>
                       <div className="input_area">

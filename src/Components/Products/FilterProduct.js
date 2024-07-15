@@ -11,6 +11,7 @@ import CategoryListDropDown from "../../CommonComponents/CategoryListDropDown";
 import UpArrow from "../../Assests/Dashboard/Up.svg";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import MassInventoryUpdateModal from "./MassInventoryUpdateModal";
+import { useAuthDetails } from "../../Common/cookiesHelper";
 
 const FilterProduct = ({
   handleOptionClick,
@@ -34,6 +35,7 @@ const FilterProduct = ({
   searchId,
   setSearchId,
 }) => {
+  const { userTypeData } = useAuthDetails();
   const productStatusList = [
     {
       id: "all",
@@ -238,15 +240,19 @@ const FilterProduct = ({
                   dropdownFor={"del_pic"}
                 />
               </Grid>
-              <Grid item xs={12} sm={6} md={4}>
-                <button
-                  style={{ height: "40px", padding: "0px 0px" }}
-                  className="quic-btn quic-btn-draft attributeUpdateBTN w-full"
-                  onClick={() => setShowModal(true)}
-                >
-                  Mass Inventory Update
-                </button>
-              </Grid>
+              {userTypeData?.login_type === "superadmin" ? (
+                <Grid item xs={12} sm={6} md={4}>
+                  <button
+                    style={{ height: "40px", padding: "0px 0px" }}
+                    className="quic-btn quic-btn-draft attributeUpdateBTN w-full"
+                    onClick={() => setShowModal(true)}
+                  >
+                    Mass Inventory Update
+                  </button>
+                </Grid>
+              ) : (
+                ""
+              )}
             </Grid>
           </div>
         </div>

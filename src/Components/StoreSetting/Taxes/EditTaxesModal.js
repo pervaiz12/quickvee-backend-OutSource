@@ -299,7 +299,7 @@ const EditTaxesModal = ({ selectedTaxe }) => {
         console.log(update_message);
         if (update_message == "Success") {
           // alert(msg)
-          ToastifyAlert(msg, "success");
+          ToastifyAlert("Updated Successfully", "success");
           let data = {
             merchant_id: merchant_id,
             ...userTypeData,

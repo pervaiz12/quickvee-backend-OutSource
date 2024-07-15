@@ -45,7 +45,6 @@ export default function ChangePasswordModal() {
           aria-describedby="modal-modal-description"
         >
           <Box className="view-category-item-modal" sx={myStyles}>
-            
             <div
               className="q-add-categories-section-header text-[18px]"
               style={{
@@ -53,7 +52,6 @@ export default function ChangePasswordModal() {
                 fontFamily: "CircularSTDBook",
               }}
             >
-                
               <p className="">Change Password</p>
               <div>
                 <div

@@ -48,20 +48,29 @@
   padding: 4px 0px 10px 0px;
 }
 
+.search-selected-item-without-padding {
+  display: flex;
+  align-items: center;
+  width: 95%;
+  flex-wrap: wrap;
+}
 .selected-item {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 12px;
 }
-.search-selected-item input.search-item {
+.search-selected-item input.search-item,
+.search-selected-item-without-padding input.search-item {
   border: none !important;
   border-radius: 0px !important;
   margin-top: 3px;
   /* padding: 0px 0px 0px 5px; */
   margin: 0px;
+  width: 270px;
 }
-.search-selected-item input.search-item::placeholder {
+.search-selected-item input.search-item::placeholder,
+.search-selected-item-without-padding input.search-item::placeholder {
   font-size: 14px !important;
   letter-spacing: normal;
   text-align: left;
@@ -70,7 +79,8 @@
   opacity: 1;
   font-family: CircularSTDBook !important;
 }
-.search-selected-item .search-item:focus {
+.search-selected-item .search-item:focus,
+.search-selected-item-without-padding .search-item:focus {
   border-left: 2px solid #2e5eff !important;
 }
 .input_area .css-t3ipsp-control {
@@ -281,9 +291,9 @@
 
 /* product page edit modal css */
 .product-edit-modal {
-  width: 70%;
+  width: 80%;
   margin: 0 auto;
-  height: 70%;
+  height: 65%;
   position: absolute;
   top: 50%;
   left: 50%;
@@ -293,7 +303,7 @@
   box-shadow: 0px 3px 6px #0000001f;
   border-radius: 8px;
   opacity: 1;
-  padding: 20px;
+  /* padding: 20px; */
   box-sizing: border-box;
   overflow-y: auto;
 }
@@ -305,8 +315,11 @@
 .product-edit-modal .cancel-btn {
   width: 24px;
   height: 24px;
-  float: right;
+  position: absolute;
+  right: 10px;
+  top: 15px;
   cursor: pointer;
+  z-index: 99;
 }
 
 .bulk-edit-note {
@@ -392,6 +405,33 @@
   color: #fff !important;
 }
 
+.product-edit-modal .tab-list {
+  padding: 15px 15px 0px 15px;
+  box-sizing: border-box;
+}
+
+.tab-list button {
+  letter-spacing: normal;
+  color: #6a6a6a;
+  font-weight: 400;
+  font-family: CircularSTDBook !important;
+  letter-spacing: 0px;
+  opacity: 1;
+  font-size: 16px;
+  text-transform: capitalize;
+}
+.tab-list button.Mui-selected {
+  border: 0px solid transparent;
+  background: #ebf2ff;
+  border-radius: 4px 4px 0px 0px;
+  opacity: 1;
+  color: #0a64f9;
+  font-weight: 400;
+}
+
+.tab-list .MuiTabs-indicator {
+  display: none !important;
+}
 /* sales history page css */
 
 .sales-history-table thead {
@@ -450,22 +490,26 @@
 }
 
 .vendor-add-input .dropdownBox {
-  width: 80%;
+  width: 82%;
   margin-top: 0px;
 }
 .vendor-add-input .quic-bulk-vendor-edit {
-  width: 16%;
+  width: 15%;
   background: #0a64f9 0% 0% no-repeat padding-box;
   background: #0a64f9 0% 0% no-repeat padding-box;
   border-radius: 4px;
   opacity: 1;
   color: #fff;
-  padding: 10px;
+  padding: 8px;
   box-sizing: border-box;
-  margin-left: 3%;
+  margin-left: 2%;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
+}
+
+.vendor-add-input button {
 }
 
 .bulkvendor-table-container .vendor-cost-input {
@@ -493,12 +537,33 @@
   box-sizing: border-box;
 }
 
+/* .bulk-varient-edit-form {
+  padding: 24px !important;
+} */
 .bulk-varient-edit-form .q-add-categories-section-middle-footer {
   display: flex;
   justify-content: space-between;
   padding: 0px 30px 20px 30px;
   box-sizing: border-box;
 }
+
+.bulk-varient-edit-form label {
+  letter-spacing: normal;
+  text-align: left;
+  font-family: CircularSTDBook !important;
+  letter-spacing: 0px;
+  font-weight: 400;
+  font-size: 14px;
+  color: #818181;
+  opacity: 1;
+}
+
+.bulk-varient-edit-form input {
+  border: 1px solid #e3e3e3;
+  border-radius: 4px;
+  opacity: 1;
+}
+
 /* alert toast css */
 .toast-modal {
   position: absolute;
@@ -555,7 +620,7 @@
 }
 
 .all-product-list {
-  font-family: CircularSTDMedium;
+  font-family: CircularSTDMedium !important;
   padding: 10px;
   box-sizing: border-box;
   font-size: 16px;
@@ -579,7 +644,7 @@
   color: #6a6a6a !important;
   font-size: 14px;
   opacity: 1;
-  font-family: CircularSTDBook;
+  font-family: CircularSTDBook !important;
   margin-bottom: 7px !important;
 }
 
@@ -590,7 +655,7 @@
   letter-spacing: 0px;
   color: #000000;
   opacity: 1;
-  font-family: CircularBold;
+  font-family: CircularBold !important;
   margin-bottom: 7px;
   line-height: normal;
   margin-top: 12px;
@@ -602,7 +667,7 @@
   color: #6a6a6a;
   opacity: 1;
   font-size: 12px !important;
-  font-family: CircularSTDBook;
+  font-family: CircularSTDBook !important;
 }
 
 .varient-block .multiple-items {
@@ -618,7 +683,7 @@
   color: #000000;
   opacity: 1;
   font-size: 16px;
-  font-family: CircularBold;
+  font-family: CircularBold !important;
   margin-right: 18px;
 }
 
@@ -638,7 +703,7 @@
   color: #000000;
   opacity: 1;
   font-size: 14px;
-  font-family: CircularSTDBook;
+  font-family: CircularSTDBook !important;
 }
 
 .varient-select-section {
@@ -711,7 +776,7 @@
   text-align: left;
   color: #000000;
   opacity: 1;
-  font-family: CircularSTDBook;
+  font-family: CircularSTDBook !important;
 }
 
 .varient-attribute-btn {
@@ -725,7 +790,7 @@
   letter-spacing: normal;
   font-weight: 400;
   font-size: 15px;
-  font-family: CircularSTDBook;
+  font-family: CircularSTDBook !important;
   cursor: pointer;
   padding: 12px 55px;
   box-sizing: border-box;
@@ -748,7 +813,7 @@
 .varient-generateUpc-row .variant-title {
   letter-spacing: normal;
   text-align: left;
-  font-family: CircularSTDMedium;
+  font-family: CircularSTDMedium !important;
   letter-spacing: 0px;
   color: #000000;
   opacity: 1;
@@ -759,7 +824,7 @@
 .varient-generateUpc-row .generateUpc {
   letter-spacing: normal;
   text-align: left;
-  font-family: CircularSTDMedium;
+  font-family: CircularSTDMedium !important;
   letter-spacing: 0px;
   color: #0a64f9;
   opacity: 1;
@@ -770,7 +835,7 @@
 .varient-title-name {
   letter-spacing: normal;
   text-align: left;
-  font-family: CircularSTDMedium;
+  font-family: CircularSTDMedium !important;
   letter-spacing: 0px;
   color: #000;
   opacity: 1;
@@ -794,4 +859,14 @@
   border: 1px solid #dfdfdf !important;
   border-radius: 3px !important;
   opacity: 1;
+  letter-spacing: normal;
+  text-align: left;
+  color: #000000;
+  opacity: 1;
+  font-size: 14px;
+  font-family: CircularSTDMedium !important;
+}
+
+.check-box-area {
+  margin-top: 20px;
 }

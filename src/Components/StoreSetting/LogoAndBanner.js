@@ -15,7 +15,7 @@ const LogoAndBanner = ({
     <Grid container sx={{ p: 2.5 }} className="box_shadow_div">
       <Grid item xs={12}>
         <Grid container>
-          <Grid item sx={{mr:2.5}}>
+          <Grid item sx={{ mr: 2.5 }}>
             <Grid container sx={{ mb: 1 }}>
               <h1 className="info-menu">Logo</h1>
             </Grid>
@@ -82,8 +82,11 @@ const LogoAndBanner = ({
                 </div>
               </Grid>
             </Grid>
+            {errors.imageErrors && (
+              <span className="error">{errors.imageErrors}</span>
+            )}
           </Grid>
-          <Grid item sx={{mx:2.5}}>
+          <Grid item sx={{ mx: 2.5 }}>
             <Grid container sx={{ mb: 1 }}>
               <Grid item xs={12}>
                 <h1 className="info-menu">QR Code</h1>
@@ -161,7 +164,7 @@ const LogoAndBanner = ({
               </Grid>
             </Grid>
           </Grid>
-          <Grid item sx={{mx:2.5}}>
+          <Grid item sx={{ mx: 2.5 }}>
             <Grid container sx={{ mb: 1 }}>
               <Grid item xs={12}>
                 <h1 className="info-menu">Receipt Logo</h1>
@@ -238,7 +241,7 @@ const LogoAndBanner = ({
             </Grid>
           </Grid>
         </Grid>
-        <Grid container sx={{ mb: 1,mt:2.5 }}>
+        <Grid container sx={{ mb: 1, mt: 2.5 }}>
           <Grid item xs={12}>
             <h1 className="info-menu">Banner</h1>
           </Grid>
@@ -286,9 +289,7 @@ const LogoAndBanner = ({
                 />
               </div>
             </div>
-            {errors.imageErrors && (
-              <span className="error">{errors.imageErrors}</span>
-            )}
+
             {errors.bannerErrors && <br />}
             {errors.bannerErrors && (
               <span className="error">{errors.bannerErrors}</span>

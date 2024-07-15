@@ -209,7 +209,7 @@ export default function InventoryLogic() {
         ...userTypeData,
       };
       const { token, ...newData } = packet;
-      setLoader(true);
+      // setLoader(true);
       let response = await axios.post(BASE_URL + INVENTORY_LIST, newData, {
         headers: {
           "Content-Type": "multipart/form-data",
