@@ -2156,30 +2156,30 @@ const AddProducts = () => {
       //created_on:
       //productid:111
       optionarray: isMultipleVarient
-        ? varientLength[0]?.varientName?.value ?? ""
+        ? varientLength[0]?.varientName?.value.trim() ?? ""
         : "",
       optionarray1: isMultipleVarient
-        ? varientLength[1]?.varientName?.value ?? ""
+        ? varientLength[1]?.varientName?.value.trim() ?? ""
         : "",
       optionarray2: isMultipleVarient
-        ? varientLength[2]?.varientName?.value ?? ""
+        ? varientLength[2]?.varientName?.value.trim() ?? ""
         : "",
       optionvalue: isMultipleVarient
         ? varientLength[0]?.varientAttributeList
             ?.map((item) => item)
-            ?.map((i) => i?.value)
+            ?.map((i) => i?.value?.trim())
             ?.toString() ?? ""
         : "",
       optionvalue1: isMultipleVarient
         ? varientLength[1]?.varientAttributeList
             ?.map((item) => item)
-            ?.map((i) => i?.value)
+            ?.map((i) => i?.value?.trim())
             ?.toString() ?? ""
         : "",
       optionvalue2: isMultipleVarient
         ? varientLength[2]?.varientAttributeList
             ?.map((item) => item)
-            ?.map((i) => i?.value)
+            ?.map((i) => i?.value?.trim())
             ?.toString() ?? ""
         : "",
       varvarient: isMultipleVarient
