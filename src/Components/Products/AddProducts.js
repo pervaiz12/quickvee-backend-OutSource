@@ -2619,7 +2619,7 @@ const AddProducts = () => {
                   />
                 </div>
 
-                <div className="q-add-categories-single-input image-list">
+                <div className="q-add-categories-single-input image-list mt-6">
                   <div className="q_dashbaord_netsales ">
                     <h1>Product Images</h1>
                   </div>
@@ -2774,7 +2774,7 @@ const AddProducts = () => {
                   {}
                 </div>
 
-                <div className="mt_card_header">
+                <div className="mt-6">
                   <VariantAttributes
                     varientDropdownList={dropdownData?.varientList}
                     varientError={varientError}
@@ -2790,7 +2790,7 @@ const AddProducts = () => {
                   />
                 </div>
 
-                <div className="mt_card_header">
+                <div className="">
                   <GeneratePUC
                     handleVarientTitleBasedItemList={
                       handleVarientTitleBasedItemList
