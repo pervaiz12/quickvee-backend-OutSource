@@ -610,6 +610,11 @@ function App() {
             path="/import-data"
             element={<Main visible={"import-data"} />}
           />
+           <Route
+            exact
+            path="/Digital-marketing-tags"
+            element={<Main visible={"Digital-marketing-tags"} />}
+          />
         </Route>
 
         {/* ------------------------Superadmin---------------- */}
