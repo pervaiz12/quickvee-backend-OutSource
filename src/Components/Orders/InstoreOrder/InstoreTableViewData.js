@@ -257,7 +257,7 @@ const InstoreTableViewData = (props, searchId) => {
     is_split_payment
   ) {
     // return string.charAt(0).toUpperCase() + string.slice(1);
-    return payment_id !== "Cash" && payment_id !== "" && is_split_payment == "0"
+    return payment_id !== "Cash" && is_split_payment == "0"
       ? "Pax-Pad"
       : payment_id == "Cash"
         ? "Cash-Paid"

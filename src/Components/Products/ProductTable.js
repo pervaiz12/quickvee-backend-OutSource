@@ -438,9 +438,9 @@ const ProductTable = ({
             ))}
           </TableHead> */}
           <TableBody>
-            {[1, 2, 3, 4, 5, 6, 7, 8].map((row) => (
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((row) => (
               <StyledTableRow key={row}>
-                {["", "", ""].map((col) => (
+                {["", "", "", "", "", "", ""].map((col) => (
                   <StyledTableCell key={col}>
                     <Skeleton />
                   </StyledTableCell>
@@ -467,7 +467,10 @@ const ProductTable = ({
                 </p>
               </Link>
             </div>
-            <div className="q-category-bottom-detail-section">
+            <div
+              style={{ marginTop: 0 }}
+              className="q-category-bottom-detail-section"
+            >
               <div className="q-category-bottom-header-sticky">
                 <TableContainer>
                   <InfiniteScroll
@@ -541,7 +544,7 @@ const ProductTable = ({
                                           </StyledTableCell>
                                           <StyledTableCell>
                                             <p
-                                              className="categories-title"
+                                              className="categories-title text-[#0A64F9]"
                                               style={{ cursor: "pointer" }}
                                               onClick={() =>
                                                 handleNavigate(
@@ -556,7 +559,17 @@ const ProductTable = ({
                                           </StyledTableCell>
                                           <StyledTableCell>
                                             <p className="categories-title">
-                                              {product.category_name}
+                                              {product?.category_name
+                                                ? `${(product?.category_name).slice(
+                                                    0,
+                                                    30
+                                                  )} ${
+                                                    product?.category_name
+                                                      .length > 30
+                                                      ? "..."
+                                                      : ""
+                                                  }`
+                                                : ""}
                                             </p>
                                           </StyledTableCell>
                                           <StyledTableCell>
@@ -566,7 +579,7 @@ const ProductTable = ({
                                                   className="q_resigter_setting_section"
                                                   style={{
                                                     color: "#000",
-                                                    fontSize: "18px",
+                                                    fontSize: "14px",
                                                   }}
                                                 >
                                                   Delivery
@@ -594,7 +607,7 @@ const ProductTable = ({
                                                   className="q_resigter_setting_section"
                                                   style={{
                                                     color: "#000",
-                                                    fontSize: "18px",
+                                                    fontSize: "14px",
                                                   }}
                                                 >
                                                   Pickup
@@ -633,7 +646,7 @@ const ProductTable = ({
                                                       className="q_resigter_setting_section"
                                                       style={{
                                                         color: "#000",
-                                                        fontSize: "18px",
+                                                        fontSize: "14px",
                                                       }}
                                                     >
                                                       Approve
@@ -668,7 +681,7 @@ const ProductTable = ({
                                                       className="q_resigter_setting_section"
                                                       style={{
                                                         color: "#000",
-                                                        fontSize: "18px",
+                                                        fontSize: "14px",
                                                       }}
                                                     >
                                                       Reject
@@ -721,25 +734,56 @@ const ProductTable = ({
                                           <StyledTableCell align={"center"}>
                                             <div className="categories-items">
                                               <div className="flex items-center space-x-2 text-base"></div>
-                                              <div className="mt-3 flex -space-x-2 overflow-hidden">
+                                              <div className="mt-3 flex -space-x-9 overflow-hidden">
                                                 {product?.media
                                                   ?.split(",")
                                                   .slice(0, 4)
                                                   .map((item, index) => (
-                                                    <img
-                                                      key={index}
-                                                      className="inline-block h-12 w-12 rounded-full ring-2 ring-white"
-                                                      src={
-                                                        BASE_URL +
-                                                        `upload/products/${LoginGetDashBoardRecordJson?.data?.merchant_id}/` +
-                                                        item
-                                                      }
-                                                      onError={(e) => {
-                                                        e.target.onerror = null; // prevents looping
-                                                        e.target.src = `${BASE_URL}upload/products/MaskGroup4542.png`;
-                                                      }}
-                                                      alt=""
-                                                    />
+                                                    <>
+                                                      <div className="relative">
+                                                        <img
+                                                          key={index}
+                                                          className="inline-block h-12 w-12 rounded-full ring-2 ring-white"
+                                                          src={
+                                                            BASE_URL +
+                                                            `upload/products/${LoginGetDashBoardRecordJson?.data?.merchant_id}/` +
+                                                            item
+                                                          }
+                                                          onError={(e) => {
+                                                            e.target.onerror =
+                                                              null; // prevents looping
+                                                            e.target.src = `${BASE_URL}upload/products/MaskGroup4542.png`;
+                                                          }}
+                                                          alt=""
+                                                        />
+                                                        {(index === 3 &&
+                                                          product?.media
+                                                            ?.length > 4 )? (
+                                                            <div
+                                                              className="flex justify-center items-center
+                                                          absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full"
+                                                              style={{
+                                                                backgroundColor:
+                                                                  "rgb(0 0 0 / 48%)",
+                                                                height: "100%",
+                                                                width: "100%",
+                                                              }}
+                                                            >
+                                                              <div>
+                                                                <p className="text-white text-[10px]">
+                                                                  +
+                                                                  {product
+                                                                    ?.media
+                                                                    .length - 4}
+                                                                </p>
+                                                                <p className="text-white text-[10px]">
+                                                                  Images
+                                                                </p>
+                                                              </div>
+                                                            </div>
+                                                          ):""}
+                                                      </div>
+                                                    </>
                                                   ))}
                                               </div>
                                               {product?.media?.split(",")

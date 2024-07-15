@@ -252,7 +252,7 @@ const StoreOrderList = (props) => {
             ) : (
               <>
                 {AllStoreOrderDataState.StoreOrderData &&
-                storeOrderTableList.length >= 1 &&
+                storeOrderTableList?.length >= 1 &&
                 Array.isArray(storeOrderTableList) ? (
                   <TableContainer>
                     <StyledTable
@@ -332,7 +332,7 @@ const StoreOrderList = (props) => {
                               <StyledTableCell>
                                 <div className="flex">
                                   <div className="text-[#000000] order_method capitalize">
-                                    {StoreData.cname.length < 18
+                                    {StoreData?.cname?.length < 18
                                       ? StoreData.cname
                                       : StoreData.cname.slice(0, 18) + `...` ||
                                         ""}

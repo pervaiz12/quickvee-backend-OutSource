@@ -46,7 +46,8 @@ const CateDuplicateStore = () => {
         break;
     }
   };
-  const {handleCoockieExpire,getUnAutherisedTokenMessage,getNetworkError}=PasswordShow()
+  const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
+    PasswordShow();
   const { userTypeData } = useAuthDetails();
   const { token, ...userTypeDataNew } = userTypeData;
   const [loader, setLoader] = useState(false);
@@ -238,7 +239,7 @@ const CateDuplicateStore = () => {
       store_name_from: storefrom,
       store_name_to: storeto,
       category_name: categoryValues,
-      upc_check:true,
+      upc_check: true,
       ...userTypeDataNew,
     };
     // console.log("data",data)
@@ -329,7 +330,7 @@ const CateDuplicateStore = () => {
           store_name_to: storeto,
           category_name: categoryValues,
           // upc_check: isUpcChecked,
-          upc_check:true,
+          upc_check: true,
           ...userTypeDataNew,
         };
         setConfirmModalOpen(true);
@@ -443,6 +444,42 @@ const CateDuplicateStore = () => {
 
   const handleUserInputChange = (e) => {
     setUserInput(e.target.value);
+  };
+
+  const customStyles = {
+    menu: (provided) => ({
+      ...provided,
+      zIndex: 9999,
+      position: "absolute",
+    }),
+    menuPortal: (base) => ({
+      ...base,
+      zIndex: 9999,
+    }),
+    control: (provided, state) => ({
+      ...provided,
+      borderColor: state.isFocused ? "black" : provided.borderColor,
+      boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
+      // height: 40,
+      minHeight: 40,
+      "&:hover": {
+        borderColor: "black" ? "black" : provided["&:hover"].borderColor,
+      },
+    }),
+    input: (provided) => ({
+      ...provided,
+      "&:focus": {
+        borderColor: "black",
+        outline: "none",
+      },
+    }),
+    multiValue: (provided) => ({
+      ...provided,
+      backgroundColor: 'lightgray',
+      display: 'flex',
+      alignItems: 'flex-start',
+    }),
+  
   };
 
   // for captcha End
@@ -565,11 +602,25 @@ const CateDuplicateStore = () => {
                   >
                     Select Categories
                   </label>
-                  <Select
-                    className={`${categoryFocus ? "category-select" : ""} mt-1`}
+                  {/* <Select
+                    // defaultValue={[colourOptions[2], colourOptions[3]]}
                     isMulti
+                    name="colors"
+                    // options={colourOptions}
+                    className={`${
+                      categoryFocus ? "category-select" : ""
+                    } mt-1 basic-multi-select`}
+                    classNamePrefix="select"
+                  /> */}
+                  <Select
+                    className={`${
+                      categoryFocus ? "category-select" : ""
+                    } mt-1 basic-multi-select`}
+                    isMulti
+                    classNamePrefix="select"
                     value={selectedCategories}
                     onChange={handleCategoryChange}
+                    styles={customStyles}
                     options={categoryOptions}
                     isCreatable={true}
                     onClick={handleSelectClick}
@@ -578,19 +629,20 @@ const CateDuplicateStore = () => {
                     components={{
                       MultiValue: ({ data, innerProps }) => (
                         <div
-                          className="css-wsp0cs-MultiValueGeneric"
+                          className="css-wsp0cs-MultiValueGeneric flex self-start"
+                          style={{alignSelf:"flex-start"}}
                           {...innerProps}
                         >
-                          {data.label}
+                          <p>{data.label}</p>
                           <button
                             type="button"
-                            className="cancel-button "
+                            className="cancel-button"
                             onClick={() => handleCancelClick(data.value)}
                           >
                             <img
                               src={CrossIcons}
                               alt=""
-                              className="w-4 h-4 ml-6 pt-1"
+                              className="w-4 h-4 ml-6"
                             />
                           </button>
                         </div>
@@ -600,16 +652,16 @@ const CateDuplicateStore = () => {
                           {children}
                         </div>
                       ),
-                      Control: ({ children, innerProps }) => (
-                        <div
-                          className={`css-13cymwt-control ${
-                            isSelectClicked ? "select-clicked" : ""
-                          }`}
-                          {...innerProps}
-                        >
-                          {children}
-                        </div>
-                      ),
+                      // Control: ({ children, innerProps }) => (
+                      //   <div
+                      //     className={`css-13cymwt-control${
+                      //       isSelectClicked ? "select-clicked" : ""
+                      //     }`}
+                      //     {...innerProps}
+                      //   >
+                      //     {children}
+                      //   </div>
+                      // ),
                     }}
                   />
                 </div>
@@ -646,7 +698,12 @@ const CateDuplicateStore = () => {
             <div className="qv_checkbox">
               <label className="qv_checkbox_add_checkmark_label cursor-disabled">
                 Want to Replicate UPC's for inventory
-                <input type="checkbox" id="upc_check" name="upc_check" checked={true} />
+                <input
+                  type="checkbox"
+                  id="upc_check"
+                  name="upc_check"
+                  checked={true}
+                />
                 <span className="qv_add_checkmark"></span>
               </label>
             </div>

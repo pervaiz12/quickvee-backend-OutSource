@@ -6,6 +6,7 @@ import AddSvg from "../../../../Assests/Dashboard/Left.svg";
 import CircularProgress from "@mui/material/CircularProgress";
 import PasswordShow from "../../../../Common/passwordShow";
 import Loader from "../../../../CommonComponents/Loader";
+import SwitchToBackButton from "../../../../reuseableComponents/SwitchToBackButton";
 
 export default function EditAdmin({ EditAdminId, setVisible }) {
   const handleClick = () => {
@@ -59,12 +60,16 @@ export default function EditAdmin({ EditAdminId, setVisible }) {
       ) : (
         <div className="box">
           <div className="box_shadow_div">
-            <div className="q-add-categories-section-header">
+            <SwitchToBackButton 
+              linkTo={-1}
+              title={"Edit Admin"}
+            />
+            {/* <div className="q-add-categories-section-header">
               <span onClick={handleClick}>
                 <img src={AddSvg} alt="Add-New-Category" />
                 <span>Edit Admin</span>
               </span>
-            </div>
+            </div> */}
             <div className="pd_20">
               <div className="qvrow">
                 <div className="col-qv-6">

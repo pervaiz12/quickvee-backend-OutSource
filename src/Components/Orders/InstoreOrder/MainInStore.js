@@ -26,21 +26,23 @@ const MainInStore = () => {
   const [dateRangefromorderTypePage, setDateRangeFromOrderTypePage] = useState(
     {}
   );
+
   const {
     LoginGetDashBoardRecordJson,
     LoginAllStore,
     userTypeData,
     GetSessionLogin,
-    future_date
+    future_date,
   } = useAuthDetails();
   // let futureDate = "5"
   const merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   const handleDateRangeChange = (dateRange) => {
     setSelectedDateRange(dateRange);
   };
-  
+
   const handleTabClick = (tab) => {
     setActiveTab(tab);
+    setSearchId("");
   };
 
   // console.log("OrderTypeData",OrderTypeData)
@@ -61,7 +63,7 @@ const MainInStore = () => {
     setEmployeeIDData(EmployeeID);
     setOffSearchIdData(SearchId);
   };
-  
+
   const renderInStoreContent = () => {
     if (activeTab === "online") {
       return (

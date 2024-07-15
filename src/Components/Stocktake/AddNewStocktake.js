@@ -705,8 +705,7 @@ const AddNewStocktake = ({
                 >
                   <img
                     src={AddSvg}
-                    alt="Add-New-Category"
-                    className="h-9 w-9"
+                  
                   />
                   <span>
                     {singleStocktakeState ? "Update" : "New"} Stocktake

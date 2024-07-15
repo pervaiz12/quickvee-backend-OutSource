@@ -21,6 +21,7 @@ import DeleteModal from "../../reuseableComponents/DeleteModal";
 import AlertModal from "../../reuseableComponents/AlertModal";
 import CircularProgress from "@mui/material/CircularProgress";
 import PasswordShow from "../../Common/passwordShow";
+import SwitchToBackButton from "../../reuseableComponents/SwitchToBackButton";
 const EditCategory = ({ productId, seVisible }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -403,14 +404,18 @@ const EditCategory = ({ productId, seVisible }) => {
 
         <div className="q-add-categories-section">
           <form>
-            <div className="q-add-categories-section-header">
+            <SwitchToBackButton 
+              linkTo={"/inventory/category"}
+              title={"Edit Category"}
+            />
+            {/* <div className="q-add-categories-section-header">
               <span onClick={back}>
                 <span style={myStyles}>
                   <img src={AddNewCategory} alt="Add-New-Category" />
                   <span>Edit Category</span>
                 </span>
               </span>
-            </div>
+            </div> */}
             <div className="q-add-categories-section-middle-form">
               <div className="q-add-categories-single-input">
                 <label for="title">Title</label>

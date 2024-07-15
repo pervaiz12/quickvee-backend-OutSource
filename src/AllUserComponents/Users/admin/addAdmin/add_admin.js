@@ -4,6 +4,7 @@ import leftSvg from "../../../../Assests/Dashboard/Left.svg";
 import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import PasswordShow from "../../../../Common/passwordShow";
+import SwitchToBackButton from "../../../../reuseableComponents/SwitchToBackButton";
 
 export default function Add_Admin({ setVisible }) {
   const {
@@ -33,12 +34,16 @@ export default function Add_Admin({ setVisible }) {
       <div className="q-order-min-page">
         <div className="box" style={{ marginTop: "2.5rem" }}>
           <div className="box_shadow_div">
-            <div className="q-add-categories-section-header">
+            <SwitchToBackButton 
+              linkTo={-1}
+              title={"Add New Admin"}
+            />
+            {/* <div className="q-add-categories-section-header">
               <span onClick={handleClick}>
                 <img src={leftSvg} alt="Add-New-Category" />
                 <span>Add New Admin</span>
               </span>
-            </div>
+            </div> */}
             <div className="pd_20">
               <div className="qvrow">
                 <div className="col-qv-6">

@@ -38,6 +38,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 import PasswordShow from "./../../Common/passwordShow";
+import SwitchToBackButton from "../../reuseableComponents/SwitchToBackButton";
 
 const theme = createTheme({
   components: {
@@ -790,12 +791,16 @@ const ModifyPurchaseOrder = () => {
       {/* purchase order basic info */}
       <div className="box">
         <div className="box_shadow_div">
-          <div className="q-add-categories-section-header">
+          <SwitchToBackButton 
+            linkTo={"/purchase-data"}
+            title={"Edit Purchase Order"}
+          />
+          {/* <div className="q-add-categories-section-header">
             <span onClick={() => navigate("/purchase-data")}>
               <img src={backIcon} alt="Add New Category" className="w-6 h-6" />
               <span>Edit Purchase Order</span>
             </span>
-          </div>
+          </div> */}
 
           <div className="px-6 py-7">
             <Grid container spacing={2}>
