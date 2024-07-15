@@ -481,8 +481,10 @@ const ProductTable = ({
                     endMessage={
                       loading ? (
                         <h3 className="all-product-list">Loading...</h3>
-                      ) : (
+                      ) : !productList?.length ? (
                         <h3 className="all-product-list">No Result Found</h3>
+                      ) : (
+                        <h3 className="all-product-list"></h3>
                       )
                     }
                   >

@@ -12,6 +12,7 @@ import UpArrow from "../../Assests/Dashboard/Up.svg";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import MassInventoryUpdateModal from "./MassInventoryUpdateModal";
 import { useAuthDetails } from "../../Common/cookiesHelper";
+import { useSelector } from "react-redux";
 
 const FilterProduct = ({
   handleOptionClick,
@@ -36,6 +37,7 @@ const FilterProduct = ({
   setSearchId,
 }) => {
   const { userTypeData } = useAuthDetails();
+  const { loading } = useSelector((state) => state.productsListData);
   const productStatusList = [
     {
       id: "all",
@@ -214,6 +216,7 @@ const FilterProduct = ({
                   selectedOption={selectedStatusValue}
                   onClickHandler={handleOptionClick}
                   dropdownFor={"status"}
+                  disabled={loading}
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={4}>
@@ -225,6 +228,7 @@ const FilterProduct = ({
                   selectedOption={selectedListingType}
                   onClickHandler={handleOptionClick}
                   dropdownFor={"listingType"}
+                  disabled={loading}
                 />
               </Grid>
               <Grid item xs={12} sm={6} md={4}>
@@ -238,6 +242,7 @@ const FilterProduct = ({
                   selectedOption={selectedEmployee}
                   onClickHandler={handleOptionClick}
                   dropdownFor={"del_pic"}
+                  disabled={loading}
                 />
               </Grid>
               {userTypeData?.login_type === "superadmin" ? (
