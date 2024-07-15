@@ -61,8 +61,8 @@ let columns = [
 ];
 export default function Pagination(props) {
   const categoryName = (str) => {
-    const temp = str.split(",");
-    return temp.join(", ");
+    const temp = str?.split(",");
+    return temp?.join(", ");
   };
   return (
     <>
@@ -76,7 +76,7 @@ export default function Pagination(props) {
           <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
             <TableHead>
               {tableRow.map((row) => (
-                <StyledTableCell>
+                <StyledTableCell key={row.name}>
                   <button
                     className="flex items-center"
                     onClick={() => props.sortByItemName(row.type, row.name)}
