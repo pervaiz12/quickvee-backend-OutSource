@@ -7,6 +7,7 @@ import {
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import { useState } from "react";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
+import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 const ChangePasswordForm = ({
   onPasswordInputChange,
@@ -15,6 +16,7 @@ const ChangePasswordForm = ({
   passwordError,
   handleBlurPassword,
   handleClose,
+  loader,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -112,13 +114,36 @@ const ChangePasswordForm = ({
             sx={{ pt: 3 }}
           >
             <Grid item>
-              <div className="info-update">
+              {/* <div className="info-update">
                 <input
                   type="button"
                   className="blue_btn inforecord-email"
                   value="UPDATE PASSWORD"
                   onClick={handleSubmitChangePassword}
                 />
+              </div> */}
+              <div className="info-update ">
+                <button
+                  disabled={loader}
+                  type="button"
+                  className="blue_btn inforecord-email attributeUpdateBTN"
+                  onClick={handleSubmitChangePassword}
+                >
+                  {loader ? (
+                    <>
+                      <CircularProgress
+                        color="inherit"
+                        className="loaderIcon"
+                        width={15}
+                        size={15}
+                      />
+                      {"  "}
+                      UPDATE PASSWORD
+                    </>
+                  ) : (
+                    "UPDATE PASSWORD"
+                  )}
+                </button>
               </div>
             </Grid>
           </Grid>

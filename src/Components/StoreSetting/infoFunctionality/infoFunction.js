@@ -24,7 +24,7 @@ export default function InfoFunction() {
     user_id,
     // handleCloseModel,
   } = useAuthDetails();
-  console.log(LoginGetDashBoardRecordJson);
+  // console.log(LoginGetDashBoardRecordJson);
   let merchant_idNew = LoginGetDashBoardRecordJson?.data?.merchant_id;
   let store_email = LoginGetDashBoardRecordJson?.data?.email;
   const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
@@ -69,9 +69,10 @@ export default function InfoFunction() {
     confirmPassword: "",
   });
   const [stateList, setStateList] = useState([]);
+  const [loader, setLoader] = useState(false);
   const urlPattern =
     /^(https:\/\/www\.instagram\.com\/|https:\/\/www\.facebook\.com\/|https:\/\/[a-z0-9]+(\.[a-z0-9]+)+\/).*$/;
-  console.log("infoRecord.image === selectedFile.name", infoRecord);
+  // console.log("infoRecord.image === selectedFile.name", infoRecord);
   // ===========================get state=========================
 
   // ==================== get state and admin data---------
@@ -160,6 +161,7 @@ export default function InfoFunction() {
   // ======================= end password ==========================
   // ======================= password check ========================
   const passwordValidate = async () => {
+    // setLoader(true);
     const { token, ...newData } = userTypeData;
     let errorFlag = false;
     const dataNew = {
@@ -184,6 +186,7 @@ export default function InfoFunction() {
         }));
         errorFlag = true;
       }
+
       // else {
       //   setPasswordError((prev) => ({
       //     ...prev,
@@ -192,8 +195,10 @@ export default function InfoFunction() {
       //   errorFlag = false;
       // }
       if (errorFlag) {
+        // setLoader(false);
         return false;
       } else {
+        // setLoader(false);
         return true;
       }
 
@@ -298,7 +303,10 @@ export default function InfoFunction() {
     //   console.log("4");
     // }
 
-    if (!infoRecord.phone || infoRecord.phone.length !== 10) {
+    if (infoRecord.phone == "") {
+      errorMessage.phoneError = "Phone is required";
+      isValidate = false;
+    } else if (infoRecord.phone.length !== 10) {
       errorMessage.phoneError = "Invalid phone number";
       isValidate = false;
     }
@@ -637,6 +645,7 @@ export default function InfoFunction() {
             setErrors((prevState) => ({
               ...prevState,
               cityError: "",
+              stateNameError: "",
             }));
             const option = {
               title: place["state abbreviation"],
@@ -667,7 +676,6 @@ export default function InfoFunction() {
   // ======================
 
   const onChangeHandle = (e) => {
-    console.log(e);
     const { name, value } = e.target;
     let errorMessage = { ...errors };
 
@@ -724,12 +732,12 @@ export default function InfoFunction() {
           setBannersBoolean(true);
           // }
           // errorMessage.bannerErrors = "";
+        } else {
+          alert(
+            `${selectedFile.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`
+          );
+          e.target.value = null;
         }
-      } else {
-        alert(
-          `${selectedFile.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`
-        );
-        e.target.value = null;
       }
     }
     if (name === "qrCode") {
@@ -995,13 +1003,24 @@ export default function InfoFunction() {
       return false;
     }
   };
+
+  // -----------------modal closed-----------------
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => {
+    setOpen(false);
+    handleCloseModel();
+  };
+  // -----------------modal closed-----------------
   const handleSubmitChangePassword = async (e) => {
     e.preventDefault();
+
     let CurrentPassordValidate = currentPassordValidate(passwordError);
     let isExistPassword = await passwordValidate(passwordInput);
     // console.log(isExistPassword);
     if (isExistPassword) {
       if (CurrentPassordValidate === true) {
+        setLoader(true);
         let data = {
           new_password: passwordInput.password,
           confirm_password: passwordInput.confirmPassword,
@@ -1021,18 +1040,21 @@ export default function InfoFunction() {
               },
             }
           );
-          if (response.status == 200) {
-            // setPassowordInput({ password: "", confirmPassword: "" });
+          if (response.data.status === true) {
             ToastifyAlert("Update Successfully", "success");
+            handleClose();
             handleCloseModel();
             setPassowordInput({ password: "", confirmPassword: "" });
             setPasswordError({ password: "", confirmPassword: "" });
           }
         } catch (error) {
+          // setLoader(false);
           if (error.response.status == 401) {
             getUnAutherisedTokenMessage();
             handleCoockieExpire();
           }
+        } finally {
+          setLoader(false);
         }
       }
     }
@@ -1044,7 +1066,8 @@ export default function InfoFunction() {
       state: option.title,
     }));
   };
-  console.log(infoRecord);
+  // console.log(infoRecord);
+
   return {
     handleSubmitInfo,
     imageBanner,
@@ -1072,5 +1095,9 @@ export default function InfoFunction() {
     submitLoading,
     stateList,
     onDropDownChangeHandle,
+    loader,
+    open,
+    handleOpen,
+    handleClose,
   };
 }
