@@ -111,7 +111,7 @@ const LogoAndBanner = ({
                   <div className="info-file-upload">
                     {infoRecord.qrCode === "" ? (
                       <>
-                        <label htmlFor="file-input1" className="file-input1">
+                        <label htmlFor="file-input2" className="file-input1">
                           <img
                             src={infoImage}
                             alt="Upload Image"
@@ -124,7 +124,7 @@ const LogoAndBanner = ({
                           </div>
                         </label>
                         <input
-                          id="file-input1"
+                          id="file-input2"
                           name="qrCode"
                           style={{ display: "none" }}
                           type="file"
