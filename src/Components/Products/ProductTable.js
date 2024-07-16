@@ -161,9 +161,9 @@ const ProductTable = ({
       case "2":
         return { text: "Rejected", color: "red" };
       case "0":
-        return { text: "Pending", color: "yellow" };
+        return { text: "Pending", color: "#0a64f9" };
       default:
-        return { text: "Pending", color: "yellow" };
+        return { text: "Pending", color: "#0a64f9" };
     }
   };
 
