@@ -1,6 +1,6 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
-
+import React, { useState, useEffect, useRef } from "react";
+import { debounce } from "lodash";
 import {
   BASE_URL,
   GET_Edit_STORE_INFO,
@@ -9,10 +9,12 @@ import {
   UPDATE_STORE_INFO,
   ADMIN_CHECK_USER,
   GET_MERCHAN_STATE,
+  GET_ZIP_CODE_CITY,
 } from "../../../Constants/Config";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 import PasswordShow from "../../../Common/passwordShow";
+import { isArray } from "jquery";
 export default function InfoFunction() {
   const {
     LoginGetDashBoardRecordJson,
@@ -57,11 +59,21 @@ export default function InfoFunction() {
     is_qr_code_change: "0",
     is_receipt_logo_change: "0",
   });
+  const [passwordInput, setPassowordInput] = useState({
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [passwordError, setPasswordError] = useState({
+    password: "",
+    confirmPassword: "",
+  });
   const [stateList, setStateList] = useState([]);
   const urlPattern =
     /^(https:\/\/www\.instagram\.com\/|https:\/\/www\.facebook\.com\/|https:\/\/[a-z0-9]+(\.[a-z0-9]+)+\/).*$/;
   console.log("infoRecord.image === selectedFile.name", infoRecord);
   // ===========================get state=========================
+
   // ==================== get state and admin data---------
   useEffect(() => {
     getState();
@@ -90,15 +102,7 @@ export default function InfoFunction() {
   };
   // ===========================get state end=====================
   // ============================password ======================
-  const [passwordInput, setPassowordInput] = useState({
-    password: "",
-    confirmPassword: "",
-  });
 
-  const [passwordError, setPasswordError] = useState({
-    password: "",
-    confirmPassword: "",
-  });
   const onPasswordInputChange = (e) => {
     const { name, value } = e.target;
     setPassowordInput((prev) => ({
@@ -620,6 +624,48 @@ export default function InfoFunction() {
     }
   };
 
+  // ======================
+  const handleGetZipCode = useRef(
+    debounce(async (value) => {
+      try {
+        const response = await axios.get(`${GET_ZIP_CODE_CITY}${value}`);
+        const places = response?.data?.places;
+
+        if (Array.isArray(places)) {
+          places.forEach((place) => {
+            console.log(place);
+            setErrors((prevState) => ({
+              ...prevState,
+              cityError: "",
+            }));
+            const option = {
+              title: place["state abbreviation"],
+              name: "state",
+            };
+            console.log(option);
+            setInfoRecord((prevState) => ({
+              ...prevState,
+              city: place["place name"],
+              state: option.title,
+            }));
+          });
+        } else {
+          console.log("hello");
+        }
+      } catch (error) {
+        // Uncomment and modify the error handling as needed
+        // if (error.response?.status === 401) {
+        //   getUnAutherisedTokenMessage();
+        //   handleCoockieExpire();
+        // } else if (error.message === "Network Error") {
+        //   getNetworkError();
+        // }
+        console.error("Error fetching ZIP code data:", error);
+      }
+    }, 500)
+  );
+  // ======================
+
   const onChangeHandle = (e) => {
     console.log(e);
     const { name, value } = e.target;
@@ -783,8 +829,11 @@ export default function InfoFunction() {
       if (value == "") {
         // console.log(value.length)
         errorMessage.zipCodeError = "Zip is required";
+      } else if (value.length !== 5) {
+        errorMessage.zipCodeError = "Invalid Zip Code";
       } else {
         errorMessage.zipCodeError = "";
+        handleGetZipCode.current(value);
       }
     }
     if (name == "state") {

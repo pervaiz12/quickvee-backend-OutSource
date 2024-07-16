@@ -336,6 +336,7 @@ module.exports = Object.freeze({
 
   ORDER_TYPE_ORDER_LIST: "Order_list_api/order_detailed_list",
   ORDER_TYPE_ORDER_LIST_COUNT: "Order_list_api/order_detailed_count",
+  GET_ZIP_CODE_CITY: "https://api.zippopotam.us/US/",
   
   // Digital Marketing Tags 
   DIGITALMAKRTING_LIST: "Store_setting_react_api/digital_marketing_tags_list",
