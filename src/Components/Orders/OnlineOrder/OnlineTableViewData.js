@@ -153,6 +153,8 @@ const OnlineTableViewData = (props) => {
       })
     );
   }, [
+    dispatch,
+    props.selectedDateRange,
     props.selectedDateRange?.start_date,
     props.selectedDateRange?.end_date,
     debouncedValue,
