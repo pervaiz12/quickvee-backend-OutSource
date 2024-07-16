@@ -739,8 +739,7 @@ const SystemAccessData = () => {
               />
             </Grid>
           </Grid>
-
-          {showEODButton && (
+          {userTypeData?.login_type==="superadmin" && showEODButton && (
             <div className="col-qv-12 mt-4">
               <button className="save_btn" onClick={openModal}>
                 End of Day
