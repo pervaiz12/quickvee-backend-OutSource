@@ -172,8 +172,12 @@ const StorePage = () => {
                         handleSubmitStoreRecord(store?.merchant_id)
                       }
                     >
-                      <div className="me-5">
-                        <img
+                      <div className="me-5 storeImageLogo" style={{
+                        backgroundImage: !!store.img
+                          ? `url(${BASE_URL}upload/${store.img})`
+                          : `url(${storeDefaultImage})`,
+                      }}>
+                        {/* <img
                           className="w-store"
                           src={
                             !!store.img
@@ -185,7 +189,7 @@ const StorePage = () => {
                             e.target.onerror = null;
                             e.target.src = storeDefaultImage;
                           }}
-                        />
+                        /> */}
                       </div>
                       <div className="grid content-center store-items-address">
                         <p className="store-items-store-name">{store.name}</p>
@@ -224,8 +228,12 @@ const StorePage = () => {
                     className="store-item-card border my-2 p-2"
                     onClick={() => handleSubmitStoreRecord(store?.merchant_id)}
                   >
-                    <div className="me-5">
-                      <img
+                    <div className="me-5 storeImageLogo" style={{
+                        backgroundImage: !!store.img
+                          ? `url(${BASE_URL}upload/${store.img})`
+                          : `url(${storeDefaultImage})`,
+                      }}>
+                      {/* <img
                         className="w-store"
                         src={
                           !!store.img
@@ -233,7 +241,7 @@ const StorePage = () => {
                             : storeDefaultImage
                         }
                         alt="store_image"
-                      />
+                      /> */}
                     </div>
                     <div className="grid content-center store-items-address">
                       <p className="store-items-store-name">{store.name}</p>
@@ -271,8 +279,12 @@ const StorePage = () => {
                     className="store-item-card border my-2 p-2"
                     onClick={() => handleSubmitStoreRecord(store?.merchant_id)}
                   >
-                    <div className="me-5">
-                      <img
+                    <div className="me-5 storeImageLogo"  style={{
+                        backgroundImage: !!store.img
+                          ? `url(${BASE_URL}upload/${store.img})`
+                          : `url(${storeDefaultImage})`,
+                      }}>
+                      {/* <img
                         className="w-store"
                         src={
                           !!store.img
@@ -280,7 +292,7 @@ const StorePage = () => {
                             : storeDefaultImage
                         }
                         alt="store_image"
-                      />
+                      /> */}
                     </div>
                     <div className="grid content-center store-items-address">
                       <p className="store-items-store-name">{store.name}</p>

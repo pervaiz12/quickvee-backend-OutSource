@@ -754,8 +754,9 @@ export default function PaymentCalDetails() {
                             ).toFixed(2)}
                         </span>
                       </p>
-                      {orderSummeryData?.order_detail?.del_fee === "" ||
-                      orderSummeryData?.order_detail?.del_fee === "0" ? (
+                      {orderSummeryData?.order_detail?.del_fee ||
+                      parseFloat(orderSummeryData?.order_detail?.del_fee) >
+                        0 ? (
                         " "
                       ) : (
                         <p>
@@ -770,26 +771,27 @@ export default function PaymentCalDetails() {
                           </span>
                         </p>
                       )}
-                      {
-                        // console.log(couponDetails.coupon_code_amt)
-                        couponDetails.coupon_code !== "" &&
-                        !!couponDetails.coupon_code_amt ? (
-                          <p>
-                            Coupon ({couponDetails.coupon_code})
-                            <span>
-                              $
-                              {parseFloat(
-                                couponDetails.coupon_code_amt
-                              ).toFixed(2)}
-                            </span>
-                          </p>
-                        ) : (
-                          ""
-                        )
-                      }
+
+                      {couponDetails.coupon_code !== "" &&
+                      !!couponDetails.coupon_code_amt ? (
+                        <p>
+                          Coupon ({couponDetails.coupon_code})
+                          <span>
+                            $
+                            {parseFloat(couponDetails.coupon_code_amt).toFixed(
+                              2
+                            )}
+                          </span>
+                        </p>
+                      ) : (
+                        ""
+                      )}
+
                       {orderSummeryData &&
                         orderSummeryData.order_detail &&
-                        orderSummeryData.order_detail.con_fee !== "0" && (
+                        orderSummeryData.order_detail.con_fee &&
+                        parseFloat(orderSummeryData.order_detail.con_fee) >
+                          0 && (
                           <p>
                             Convenience Fee
                             <span>
@@ -800,6 +802,7 @@ export default function PaymentCalDetails() {
                             </span>
                           </p>
                         )}
+
                       <p>
                         Sales Tax (
                         {orderSummeryData &&

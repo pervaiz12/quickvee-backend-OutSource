@@ -229,7 +229,10 @@ export default function SettingStoreOption() {
     setOrderState((prev) => ({
       ...prev,
       ["orderNumebrEnabled"]: Boolean(+userData?.enable_order_number),
-      ["resetOrderNumberTime"]: userData?.reset_order_time,
+      ["resetOrderNumberTime"]:
+        userData?.reset_order_time && userData?.reset_order_time !== "00:00:00"
+          ? userData?.reset_order_time
+          : "04:00",
       ["enabledFutureOrder"]: Boolean(+userData?.future_ordering),
       ["dayCount"]:
         Boolean(+userData?.future_ordering) === true
@@ -306,7 +309,6 @@ export default function SettingStoreOption() {
         }
       }
       if (orderState?.orderNumebrEnabled) {
-        console.log(orderState.resetOrderNumberTime);
         if (
           orderState.resetOrderNumberTime === "" ||
           orderState.resetOrderNumberTime == null ||
@@ -389,6 +391,9 @@ export default function SettingStoreOption() {
   // const handleKeyPress = (event) => {
   //   event.preventDefault();
   // }
+  const handlePaste = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <>
@@ -524,6 +529,7 @@ export default function SettingStoreOption() {
                       disable={!orderState?.enabledFutureOrder}
                       onKeyPressFun={handleKeyPress}
                       maxLength={2}
+                      handlePaste={handlePaste}
                     />
                     {advancedayCount && (
                       <p className="error-message pt-1">{advancedayCount}</p>

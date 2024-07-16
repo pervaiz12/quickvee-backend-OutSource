@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="68" height="68" viewBox="0 0 68 68">
   <g id="Group_7759" data-name="Group 7759" transform="translate(-288 -114)">
-    <g id="Rectangle_4150" data-name="Rectangle 4150" transform="translate(288 114)" fill="none" stroke="#f3f3f3" stroke-width="1">
+    <g id="Rectangle_4150" data-name="Rectangle 4150" transform="translate(288 114)" fill="none" stroke="#f3f3f3" stroke-width="1" style="&#10;    stroke: unset;&#10;">
       <rect width="68" height="68" rx="8" stroke="none"/>
       <rect x="0.5" y="0.5" width="67" height="67" rx="7.5" fill="none"/>
     </g>

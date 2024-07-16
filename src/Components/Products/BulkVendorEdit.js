@@ -35,6 +35,7 @@ import Loader from "../../CommonComponents/Loader";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import PasswordShow from "../../Common/passwordShow";
+import DeleteModal from "../../reuseableComponents/DeleteModal";
 
 ///////////////////////////////////////
 import { styled } from "@mui/material/styles";
@@ -372,64 +373,147 @@ const BulkVendorEdit = ({
     }
   }, [vendorItems]);
 
+    // for Delete 
+    const [deleteCategoryId, setDeleteCategoryId] = useState(null);
+    const [deleteVendorItem, setDeleteVendorItem] = useState(null);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [loadingDelete, setLoadingDelete] = useState(false);
+
   // when click on delete icon // delete vendor by Id
   const handleDeleteVendor = (vendorId, vendorItem) => {
-    /// show prompt before delete the item
-    const userConfirmed = window.confirm(
-      "Are you sure you want to delete this vendor?"
-    );
 
-    if (!userConfirmed) {
-      return; // If the user clicks "No", exit the function
-    }
+    setDeleteCategoryId(vendorId);
+    setDeleteVendorItem(vendorItem);
+    setDeleteModalOpen(true);
+    /// show prompt before delete the item
+    // const userConfirmed = window.confirm(
+    //   "Are you sure you want to delete this vendor?"
+    // );
+
+    // if (!userConfirmed) {
+    //   return; // If the user clicks "No", exit the function
+    // }
 
     // formData
-    if (modalType !== "bulk-edit") {
-      const formData = new FormData();
-      formData.append(
-        "single_product",
-        isVarientEdit
-          ? 0
-          : !Boolean(+productData?.isvarient) && !isVarientEdit
-            ? 1
-            : 0
-      );
-      formData.append(
-        "varient_id",
-        !Boolean(+productData?.isvarient)
-          ? productData?.id
-          : modalType === "bulk-edit"
-            ? productData?.id
-            : varientIndex
-      );
-      formData.append(
-        "merchant_id",
-        LoginGetDashBoardRecordJson?.data?.merchant_id
-      );
-      formData.append("vendor_id", vendorId);
-      dispatch(deleteProductVendor(formData))
-        .then((res) => {
-          if (res?.payload?.status) {
-            const filtervendorList = vendorItems?.filter(
-              (item) => +item?.id !== +vendorId
-            );
-            setVendorItems(filtervendorList);
-            getVendorsList();
-            ToastifyAlert("Deleted Successfully", "success");
-          }
-        })
-        .catch((err) => {
-          ToastifyAlert("Error!", "error");
-          getUnAutherisedTokenMessage();
-        });
-    } else {
-      const filtervendorList = vendorItems?.filter(
-        (item) => +item?.id !== +vendorId
-      );
-      setVendorItems(filtervendorList);
-      setVendor((prev) => [...prev, vendorItem]);
-    }
+    // if (modalType !== "bulk-edit") {
+    //   const formData = new FormData();
+    //   formData.append(
+    //     "single_product",
+    //     isVarientEdit
+    //       ? 0
+    //       : !Boolean(+productData?.isvarient) && !isVarientEdit
+    //         ? 1
+    //         : 0
+    //   );
+    //   formData.append(
+    //     "varient_id",
+    //     !Boolean(+productData?.isvarient)
+    //       ? productData?.id
+    //       : modalType === "bulk-edit"
+    //         ? productData?.id
+    //         : varientIndex
+    //   );
+    //   formData.append(
+    //     "merchant_id",
+    //     LoginGetDashBoardRecordJson?.data?.merchant_id
+    //   );
+    //   formData.append("vendor_id", vendorId);
+    //   dispatch(deleteProductVendor(formData))
+    //     .then((res) => {
+    //       if (res?.payload?.status) {
+    //         const filtervendorList = vendorItems?.filter(
+    //           (item) => +item?.id !== +vendorId
+    //         );
+    //         setVendorItems(filtervendorList);
+    //         getVendorsList();
+    //         ToastifyAlert("Deleted Successfully", "success");
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       ToastifyAlert("Error!", "error");
+    //       getUnAutherisedTokenMessage();
+    //     });
+    // } else {
+    //   const filtervendorList = vendorItems?.filter(
+    //     (item) => +item?.id !== +vendorId
+    //   );
+    //   setVendorItems(filtervendorList);
+    //   setVendor((prev) => [...prev, vendorItem]);
+    // }
   };
+
+  const confirmDeleteCategory = async () => {
+    try {
+      setLoadingDelete(true);
+      if (loading) return;
+
+      if (deleteCategoryId) {
+        if (modalType !== "bulk-edit") {
+          const formData = new FormData();
+          formData.append(
+            "single_product",
+            isVarientEdit
+              ? 0
+              : !Boolean(+productData?.isvarient) && !isVarientEdit
+                ? 1
+                : 0
+          );
+          formData.append(
+            "varient_id",
+            !Boolean(+productData?.isvarient)
+              ? productData?.id
+              : modalType === "bulk-edit"
+                ? productData?.id
+                : varientIndex
+          );
+          formData.append(
+            "merchant_id",
+            LoginGetDashBoardRecordJson?.data?.merchant_id
+          );
+          formData.append("vendor_id", deleteCategoryId);
+          // for (const [key, value] of formData.entries()) {
+          //   console.log(`${key}: ${value}`);
+          // }
+          // return
+          dispatch(deleteProductVendor(formData))
+            .then((res) => {
+              if (res?.payload?.status) {
+                const filtervendorList = vendorItems?.filter(
+                  (item) => +item?.id !== +deleteCategoryId
+                );
+                setVendorItems(filtervendorList);
+                getVendorsList();
+                ToastifyAlert("Deleted Successfully", "success");
+              }
+            })
+            .catch((err) => {
+              ToastifyAlert("Error!", "error");
+              getUnAutherisedTokenMessage();
+            });
+        } else {
+          const filtervendorList = vendorItems?.filter(
+            (item) => +item?.id !== +deleteCategoryId
+          );
+          setVendorItems(filtervendorList);
+          setVendor((prev) => [...prev, deleteVendorItem]);
+        }
+      }
+      setDeleteCategoryId(null);
+      setDeleteVendorItem(null);
+      setDeleteModalOpen(false);
+    } catch (error) {
+      if (error.status === 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status === "Network Error") {
+        getNetworkError();
+      }
+    } finally {
+      setLoadingDelete(false);
+    }
+    setDeleteModalOpen(false);
+  };
+
 
   // when click on save vendor
   // save all the selected vendor
@@ -689,6 +773,15 @@ const BulkVendorEdit = ({
           </>
         )}
       </div>
+      <DeleteModal
+            headerText="Vendor"
+            open={deleteModalOpen}
+            onClose={() => {
+              setDeleteModalOpen(false);
+            }}
+            onConfirm={confirmDeleteCategory}
+            deleteloading={loadingDelete}
+          />
     </div>
   );
 };

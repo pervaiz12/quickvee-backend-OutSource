@@ -87,6 +87,7 @@ import AddCategory from "../Category/AddCategory";
 import AddCoupon from "../Coupons/AddCoupon";
 import AddVendors from "../Vendors/AddVendors";
 import NeedHelp from "../NeedHelp/NeedHelp";
+import MainDigitalMarketing from "../StoreSetting/DigitalMarketing/MainDigitalMarketing";
 const LeftSide = ({ visible }) => {
   useEffect(() => {
     window.scrollTo(0, 0);
@@ -120,6 +121,7 @@ const LeftSide = ({ visible }) => {
           {visible === "add-vendors" && <AddVendors />}
           {visible === "timesheet" && <MainTimesheet />}
           {visible === "import-data" && <MainImportData />}
+          {visible === "Digital-marketing-tags" && <MainDigitalMarketing />}
           {visible === "store-setting" && <MainStoreOption />}
           {visible === "store-setting" && <MainStoreOption />}
           {visible === "category-edit-cat" && <EditCategory />}

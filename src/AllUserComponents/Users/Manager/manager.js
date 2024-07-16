@@ -198,7 +198,7 @@ export default function Manager() {
             ) : (
               <>
                 {managerList.ManagerRecord &&
-                managerTable.length > 0 &&
+                managerTable?.length > 0 &&
                 Array.isArray(managerTable) ? (
                   <TableContainer>
                     <StyledTable

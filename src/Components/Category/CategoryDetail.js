@@ -107,6 +107,7 @@ const CategoryDetail = ({ seVisible, setProductId }) => {
 
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handleDeleteCategory = (id) => {
     setDeleteCategoryId(id);
@@ -114,6 +115,9 @@ const CategoryDetail = ({ seVisible, setProductId }) => {
   };
   const confirmDeleteCategory = async () => {
     try {
+      setLoading(true);
+      if (loading) return;
+
       if (deleteCategoryId) {
         const data = {
           id: deleteCategoryId,
@@ -128,19 +132,20 @@ const CategoryDetail = ({ seVisible, setProductId }) => {
       setDeleteCategoryId(null);
       setDeleteModalOpen(false);
     } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
+      if (error.status === 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
-      } else if (error.status == "Network Error") {
+      } else if (error.status === "Network Error") {
         getNetworkError();
       }
+    } finally {
+      setLoading(false);
     }
   };
 
   // for  Category Status update
   const handleToggleStatus = async (id, status) => {
     try {
-      console.log("category id and status: " + id, status);
       const data = {
         id: id,
         status: status,
@@ -149,7 +154,7 @@ const CategoryDetail = ({ seVisible, setProductId }) => {
       };
 
       const rep = await dispatch(updateCategoryStatus(data)).unwrap();
-      if (rep.payload === "Success") {
+      if (rep === "Success") {
         // alert("Status Success Updated");
         ToastifyAlert("Updated Successfully", "success");
         let datas = {
@@ -179,10 +184,7 @@ const CategoryDetail = ({ seVisible, setProductId }) => {
     const isRegisterChecked =
       category.cat_show_status === "0" || category.cat_show_status === "2";
 
-    console.log("alls", category, isOnlineChecked, isRegisterChecked);
-
     if (!isOnlineChecked && !isRegisterChecked) {
-      // console.log(isOnlineChecked);
       status = 1;
     } else if (isOnlineChecked && !isRegisterChecked) {
       status = 3;
@@ -245,7 +247,6 @@ const CategoryDetail = ({ seVisible, setProductId }) => {
     setallcategories(reorderedItems);
 
     alert("Are you sure you want to sort item!");
-    //console.log(result);
   };
 
   return (
@@ -285,214 +286,8 @@ const CategoryDetail = ({ seVisible, setProductId }) => {
               seVisible={seVisible}
               setProductId={setProductId}
             />
-            {/* <div className="q-category-bottom-categories-header">
-              <p className="categories-data-sort">Sort</p>
-              <p className="categories-data-title">Title</p>
-              <p className="categories-data-items">Items</p>
-              <p className="categories-enable-disable">Enable/Disable</p>
-            </div> */}
           </div>
-          {/* <div className="q-category-bottom-categories-listing">
-            
-            {allcategories &&
-              allcategories.length >= 1 &&
-              allcategories.map((category, index) => (
-                <div
-                  key={index}
-                  className="q-category-bottom-categories-single-category"
-                >
-                  <p className="categories-data-sort">
-                    <img src={SortIcon} alt="add-icon" />
-                  </p>
-                  <p className="categories-data-title">{category.title}</p>
-                  <p className="categories-data-items">
-                    <ViewItemsModal
-                      selectedView={category}
-                      onViewClick={handleViewItemsClick}
-                    />
-                  </p>
-                  <p className="categories-enable-disable">
-                    <div className="category-checkmark-div">
-                      <label className="category-checkmark-label">
-                        Online
-                        <input
-                          type="checkbox"
-                          checked={
-                            category.cat_show_status === "0" ||
-                            category.cat_show_status === "1"
-                              ? true
-                              : false
-                          }
-                          onChange={() =>
-                            handleOnlineChange(
-                              category.id,
-                              category.cat_show_status === "0" ||
-                                category.cat_show_status === "1"
-                                ? "1"
-                                : "0",
-                              category
-                            )
-                          }
-                        />
-                        <span className="category-checkmark"></span>
-                      </label>
-                      <label className="category-checkmark-label">
-                        Register
-                        <input
-                          type="checkbox"
-                          checked={
-                            category.cat_show_status === "0" ||
-                            category.cat_show_status === "2"
-                              ? true
-                              : false
-                          }
-                          onChange={() =>
-                            handleRegisterChange(
-                              category.id,
-                              category.cat_show_status === "0" ||
-                                category.cat_show_status === "2"
-                                ? "2"
-                                : "0",
-                              category
-                            )
-                          }
-                        />
-                        <span className="category-checkmark"></span>
-                      </label>
-                    </div>
-                  </p>
-                  <div className="q_cat_del_edit_img">
-                    <Link to={`/category/edit-category/${category.id}`}>
-                      <img
-                        className="edit_center w-8 h-8"
-                        selectedCategory={category}
-                        src={EditIcon}
-                        alt="Edit"
-                      />
-                    </Link>
 
-                    <img
-                      className="edit_center w-8 h-8"
-                      src={DeleteIcon}
-                      alt="delete-icon"
-                      onClick={() => handleDeleteCategory(category.id)}
-                    />
-                  </div>
-                </div>
-              ))}
-          </div> */}
-
-          {/* <DragDropContext onDragEnd={onDragEnd}>
-            <Droppable droppableId="droppable">
-              {(provided) => (
-                <div
-                  className="q-category-bottom-categories-listing"
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                >
-                  {allcategories &&
-                    allcategories.length >= 1 &&
-                    allcategories.map((category, index) => (
-                      <Draggable
-                        key={category.id}
-                        draggableId={category.id}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <div
-                            className="q-category-bottom-categories-single-category"
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                          >
-                            <p className="categories-data-sort">
-                              <img src={SortIcon} alt="add-icon" />
-                            </p>
-                            <p className="categories-data-title">
-                              {category.title}
-                            </p>
-                            <p className="categories-data-items">
-                              <ViewItemsModal
-                                selectedView={category}
-                                onViewClick={handleViewItemsClick}
-                              />
-                            </p>
-                            <p className="categories-enable-disable">
-                              <div className="category-checkmark-div">
-                                <label className="category-checkmark-label">
-                                  Online
-                                  <input
-                                    type="checkbox"
-                                    checked={
-                                      category.cat_show_status === "0" ||
-                                      category.cat_show_status === "1"
-                                    }
-                                    onChange={() =>
-                                      handleOnlineChange(
-                                        // category.id,
-                                        // category.cat_show_status === "0" ||
-                                        //   category.cat_show_status === "1"
-                                        //   ? "1"
-                                        //   : "0",
-                                        category
-                                      )
-                                    }
-                                  />
-                                  <span className="category-checkmark"></span>
-                                </label>
-                                <label className="category-checkmark-label">
-                                  Register
-                                  <input
-                                    type="checkbox"
-                                    checked={
-                                      category.cat_show_status === "0" ||
-                                      category.cat_show_status === "2"
-                                    }
-                                    onChange={() =>
-                                      handleRegisterChange(
-                                        category.id,
-                                        category.cat_show_status === "0" ||
-                                          category.cat_show_status === "2"
-                                          ? "2"
-                                          : "0",
-                                        category
-                                      )
-                                    }
-                                  />
-                                  <span className="category-checkmark"></span>
-                                </label>
-                              </div>
-                            </p>
-                            <div className="q_cat_del_edit_img">
-                              <Link
-                                to={`/category/edit-category/${category.id}`}
-                              >
-                                <img
-                                  className="edit_center w-8 h-8"
-                                  selectedCategory={category}
-                                  src={EditIcon}
-                                  alt="Edit"
-                                />
-                              </Link>
-
-                              <img
-                                className="edit_center w-8 h-8"
-                                src={DeleteIcon}
-                                alt="delete-icon"
-                                onClick={() =>
-                                  handleDeleteCategory(category.id)
-                                }
-                              />
-                            </div>
-                          </div>
-                        )}
-                      </Draggable>
-                    ))}
-                  {provided.placeholder}
-                </div>
-              )}
-            </Droppable>
-          </DragDropContext> */}
           <DeleteModal
             headerText="Category"
             open={deleteModalOpen}
@@ -500,6 +295,7 @@ const CategoryDetail = ({ seVisible, setProductId }) => {
               setDeleteModalOpen(false);
             }}
             onConfirm={confirmDeleteCategory}
+            deleteloading={loading}
           />
         </div>
       </div>

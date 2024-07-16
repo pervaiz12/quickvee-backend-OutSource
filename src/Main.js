@@ -34,6 +34,7 @@ const Main = ({ visible }) => {
 
       {visible === "attributes" && <Layout visible={visible} />}
       {visible === "import-data" && <Layout visible={visible} />}
+      {visible === "Digital-marketing-tags" && <Layout visible={visible} />}
       {visible === "loyalty-program" && <Layout visible={visible} />}
       {visible === "coupons" && <Layout visible={visible} />}
       {visible === "add-coupons" && <Layout visible={visible} />}

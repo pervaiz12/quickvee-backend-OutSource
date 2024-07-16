@@ -65,6 +65,7 @@ import TimesheetSlice from "../features/Timesheet/timesheetSlice";
 import RefundReportSlice from "../features/Reports/RefundReport/RefundReportSlice";
 import StocktakeListSlice from "../features/Stocktake/StocktakeListSlice";
 import SupportDetailsSlice from "../features/SupportDetails/supportDetailsSlice";
+import DigitalMarketingSlice from "../features/DigitalMarketing/digitalMarketingSlice";
 
 const store = configureStore({
   reducer: {
@@ -151,6 +152,7 @@ const store = configureStore({
     RefundDataList: RefundReportSlice,
 
     supportDetail: SupportDetailsSlice,
+    digitalmarketing: DigitalMarketingSlice,
   },
 
   //setting setup

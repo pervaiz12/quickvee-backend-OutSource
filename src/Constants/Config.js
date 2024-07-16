@@ -336,6 +336,13 @@ module.exports = Object.freeze({
 
   ORDER_TYPE_ORDER_LIST: "Order_list_api/order_detailed_list",
   ORDER_TYPE_ORDER_LIST_COUNT: "Order_list_api/order_detailed_count",
+  GET_ZIP_CODE_CITY: "https://api.zippopotam.us/US/",
+  
+  // Digital Marketing Tags 
+  DIGITALMAKRTING_LIST: "Store_setting_react_api/digital_marketing_tags_list",
+  DIGITALMAKRTING_UPDATE: "Store_setting_react_api/add_digital_marketing_tags",
+  DELETE_DIGITALMAKRTING: "Store_setting_react_api/delete_digital_marketing_tags",
+
 });
 
 // All api calls are initialized in this component for this application
