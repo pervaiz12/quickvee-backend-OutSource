@@ -33,6 +33,7 @@ import { changeShowStatus } from "../../Redux/features/Product/ProductSlice";
 import { color } from "@mui/system";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import Skeleton from "react-loading-skeleton";
+import DeleteModal from "../../reuseableComponents/DeleteModal";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -301,40 +302,41 @@ const ProductTable = ({
   };
 
   const handleDeleteProduct = async (id) => {
-    const userConfirmed = window.confirm(
-      "Are you sure you want to delete this product?"
-    );
+    setDeleteCategoryId(id);
+    setDeleteModalOpen(true);
+  };
 
-    if (!userConfirmed) {
-      return; // If the user clicks "No", exit the function
-    }
+  const confirmDeleteCategory = async () => {
+    if (deleteCategoryId) {
+      let timer = null;
+      const formData = new FormData();
+      formData.append("id", deleteCategoryId);
+      formData.append("login_type", userTypeData?.login_type);
+      formData.append("token_id", userTypeData?.token_id);
+      formData.append("token", userTypeData?.token);
+      formData.append(
+        "merchant_id",
+        LoginGetDashBoardRecordJson?.data?.merchant_id
+      );
 
-    let timer = null;
-    const formData = new FormData();
-    formData.append("id", id);
-    formData.append("login_type", userTypeData?.login_type);
-    formData.append("token_id", userTypeData?.token_id);
-    formData.append("token", userTypeData?.token);
-    formData.append(
-      "merchant_id",
-      LoginGetDashBoardRecordJson?.data?.merchant_id
-    );
-
-    try {
-      const res = await dispatch(deleteProductAPI(formData)).unwrap();
-      if (res?.status) {
-        ToastifyAlert("Deleted Successfully", "success");
-        clearTimeout(timer);
-        timer = setTimeout(() => {
-          window.location.reload();
-        }, 600);
-      }
-    } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
-        getUnAutherisedTokenMessage();
-        handleCoockieExpire();
-      } else if (error.status == "Network Error") {
-        getNetworkError();
+      try {
+        const res = await dispatch(deleteProductAPI(formData)).unwrap();
+        if (res?.status) {
+          ToastifyAlert("Deleted Successfully", "success");
+          setDeleteCategoryId(null);
+          setDeleteModalOpen(false);
+          clearTimeout(timer);
+          timer = setTimeout(() => {
+            window.location.reload();
+          }, 600);
+        }
+      } catch (error) {
+        if (error.status == 401 || error.response.status === 401) {
+          getUnAutherisedTokenMessage();
+          handleCoockieExpire();
+        } else if (error.status == "Network Error") {
+          getNetworkError();
+        }
       }
     }
   };
@@ -362,6 +364,9 @@ const ProductTable = ({
       navigate(`/inventory/products/edit/${id}`);
     }
   };
+
+  const [deleteCategoryId, setDeleteCategoryId] = useState(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 
   const onDragEnd = async (result) => {
     const { source, destination } = result;
@@ -756,32 +761,35 @@ const ProductTable = ({
                                                           }}
                                                           alt=""
                                                         />
-                                                        {(index === 3 &&
-                                                          product?.media.split(',')
-                                                            ?.length > 4 )? (
-                                                            <div
-                                                              className="flex justify-center items-center
+                                                        {index === 3 &&
+                                                        product?.media.split(
+                                                          ","
+                                                        )?.length > 4 ? (
+                                                          <div
+                                                            className="flex justify-center items-center
                                                           absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 rounded-full"
-                                                              style={{
-                                                                backgroundColor:
-                                                                  "rgb(0 0 0 / 48%)",
-                                                                height: "100%",
-                                                                width: "100%",
-                                                              }}
-                                                            >
-                                                              <div>
-                                                                <p className="text-white text-[10px]">
-                                                                  +
-                                                                  {product
-                                                                    ?.media.split(',')
-                                                                    .length - 4}
-                                                                </p>
-                                                                <p className="text-white text-[10px]">
-                                                                  Images
-                                                                </p>
-                                                              </div>
+                                                            style={{
+                                                              backgroundColor:
+                                                                "rgb(0 0 0 / 48%)",
+                                                              height: "100%",
+                                                              width: "100%",
+                                                            }}
+                                                          >
+                                                            <div>
+                                                              <p className="text-white text-[10px]">
+                                                                +
+                                                                {product?.media.split(
+                                                                  ","
+                                                                ).length - 4}
+                                                              </p>
+                                                              <p className="text-white text-[10px]">
+                                                                Images
+                                                              </p>
                                                             </div>
-                                                          ):""}
+                                                          </div>
+                                                        ) : (
+                                                          ""
+                                                        )}
                                                       </div>
                                                     </>
                                                   ))}
@@ -842,6 +850,14 @@ const ProductTable = ({
             </div>
           </div>
         </div>
+        <DeleteModal
+          headerText="Category"
+          open={deleteModalOpen}
+          onClose={() => {
+            setDeleteModalOpen(false);
+          }}
+          onConfirm={confirmDeleteCategory}
+        />
       </div>
     </>
   );

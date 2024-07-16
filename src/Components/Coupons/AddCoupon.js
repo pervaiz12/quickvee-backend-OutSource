@@ -671,10 +671,7 @@ const AddCoupon = ({ seVisible }) => {
       <div className="box">
         <div className="box_shadow_div">
           <div className="q-add-categories-section">
-            <SwitchToBackButton 
-              linkTo={"/coupons"}
-              title={"Add Coupon"}
-            />
+            <SwitchToBackButton linkTo={"/coupons"} title={"Add Coupon"} />
             {/* <div className="q-add-categories-section-header">
               <Link to={`/coupons`}>
                 <span

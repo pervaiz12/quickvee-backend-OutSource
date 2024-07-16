@@ -452,7 +452,13 @@ const GeneratePUC = ({
                       )}
                     </div>
 
-                    <div style={{ borderBottom: "1px solid #E8E8E8",marginBottom:"30px",marginTop:"30px" }}></div>
+                    <div
+                      style={{
+                        borderBottom: "1px solid #E8E8E8",
+                        marginBottom: "30px",
+                        marginTop: "30px",
+                      }}
+                    ></div>
                   </>
                 );
               })

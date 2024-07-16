@@ -216,6 +216,7 @@ const FilterProduct = ({
                 selectedOption={selectedStatusValue}
                 onClickHandler={handleOptionClick}
                 dropdownFor={"status"}
+                disabled={loading}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
@@ -228,6 +229,7 @@ const FilterProduct = ({
                 selectedOption={selectedListingType}
                 onClickHandler={handleOptionClick}
                 dropdownFor={"listingType"}
+                disabled={loading}
               />
             </Grid>
             <Grid item xs={12} sm={6} md={4}>
@@ -242,6 +244,7 @@ const FilterProduct = ({
                 selectedOption={selectedEmployee}
                 onClickHandler={handleOptionClick}
                 dropdownFor={"del_pic"}
+                disabled={loading}
               />
             </Grid>
             {userTypeData?.login_type === "superadmin" ? (
