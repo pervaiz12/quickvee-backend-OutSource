@@ -29,6 +29,7 @@ const EditPage = ({
   const [value, setValue] = React.useState("1");
 
   const handleChange = (event, newValue) => {
+    console.log('handleChange',newValue);
     setValue(newValue);
   };
 
@@ -50,7 +51,7 @@ const EditPage = ({
         aria-labelledby="parent-modal-title"
         aria-describedby="parent-modal-description"
       >
-        <Box className="product-edit-modal custom-scroll">
+        <Box  className="product-edit-modal custom-scroll">
           <div class="cancel-btn" onClick={handleCloseEditModal}>
             <img
               src={CloseIcon}
@@ -111,6 +112,7 @@ const EditPage = ({
 
                 <TabPanel value="2">
                   <BulkVendorEdit
+                  
                     productData={productData}
                     varientIndex={varientIndex}
                     isVarientEdit={isVarientEdit}

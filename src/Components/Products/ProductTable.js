@@ -734,7 +734,7 @@ const ProductTable = ({
                                           <StyledTableCell align={"center"}>
                                             <div className="categories-items">
                                               <div className="flex items-center space-x-2 text-base"></div>
-                                              <div className="mt-3 p-2 flex -space-x-9 overflow-hidden">
+                                              <div className="mt-3 flex -space-x-9 overflow-hidden">
                                                 {product?.media
                                                   ?.split(",")
                                                   .slice(0, 4)
@@ -743,7 +743,7 @@ const ProductTable = ({
                                                       <div className="relative">
                                                         <img
                                                           key={index}
-                                                          className="inline-block h-12 w-12 rounded-full ring-2 ring-gray-300"
+                                                          className="inline-block h-12 w-12 rounded-full ring-2 ring-white"
                                                           src={
                                                             BASE_URL +
                                                             `upload/products/${LoginGetDashBoardRecordJson?.data?.merchant_id}/` +

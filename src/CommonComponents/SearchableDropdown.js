@@ -146,7 +146,7 @@ const SearchableDropdown = ({
         ""
       )}
       <div
-        className="dropdownBox"
+        className="dropdownBox "
         style={{
           padding: showOptions ? "0px 8px 8px 8px" : !!modalType ? "" : "0px 8px 0px 8px",
         }}
@@ -168,7 +168,7 @@ const SearchableDropdown = ({
             }
             onClick={handleFocus}
           >
-            <div className="selected-item">
+            <div className="selected-item ">
               {selectedOption?.length
                 ? selectedOption?.map((option) => {
                     return (
@@ -218,7 +218,7 @@ const SearchableDropdown = ({
           </div>
         </div>
         {showOptions ? (
-          <div className="options-box">
+          <div className="options-box custom-scroll">
             {showOptions
               ? changeFilterableList()?.map((opt) => {
                   if (typeof opt === "string") {

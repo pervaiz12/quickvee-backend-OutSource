@@ -113,7 +113,8 @@ const GeneratePUC = ({
       );
     }
   };
-
+  let count = 0
+ 
   return (
     <>
       <Grid container className="mx-0">
@@ -167,6 +168,9 @@ const GeneratePUC = ({
           )}
           {varientTitle?.length && isMultipleVarient
             ? varientTitle?.map((title, index) => {
+              count++;
+              console.log("count of ",count)
+              
                 return (
                   <>
                     <div
@@ -185,6 +189,7 @@ const GeneratePUC = ({
                       <Grid container spacing={2}>
                         {formData?.length
                           ? formData?.map((inp, i) => {
+                           
                               return (
                                 // <div className="col-qv-2" key={i}>
                                 <>
@@ -275,12 +280,12 @@ const GeneratePUC = ({
                             })
                           : ""}
                       </Grid>
-                      <div className="flex flex-wrap gap-3 check-box-area">
+                      <div className="flex flex-wrap gap-3 check-box-area mb-3">
                         <label
                           class="q_resigter_setting_section"
                           style={{ color: "#000", fontSize: "18px" }}
                         >
-                          Track Quantity
+                          Track Quantity 
                           <input
                             type="checkbox"
                             name="trackQuantity"
@@ -451,15 +456,26 @@ const GeneratePUC = ({
                         ""
                       )}
                     </div>
-
-                    <div style={{ borderBottom: "1px solid #E8E8E8",marginBottom:"30px",marginTop:"30px" }}></div>
+                    {varientTitle?.length > count && (
+                      <>
+                      <div
+                        style={{
+                          borderBottom: "1px solid #E8E8E8",
+                          marginBottom: "30px",
+                          marginTop: "30px",
+                        }}
+                      ></div>
+                      </>
+                     
+                      
+                    )}
                   </>
                 );
               })
             : ""}
 
           {!isMultipleVarient ? (
-            <div className="qvrow">
+            <div className="qvrow px-5">
               <div className="mx-4 my-4">{varientTitle?.[0]}</div>
 
               <Grid container spacing={2}>
@@ -516,7 +532,7 @@ const GeneratePUC = ({
                     })
                   : ""}
               </Grid>
-              <div className="flex flex-wrap gap-3 ">
+              <div style={{marginTop:"20px"}} className="flex flex-wrap gap-3 mb-2">
                 <label
                   class="q_resigter_setting_section check-box-area"
                   style={{ color: "#000", fontSize: "18px" }}

@@ -36,6 +36,44 @@ import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import PasswordShow from "../../Common/passwordShow";
 
+///////////////////////////////////////
+import { styled } from "@mui/material/styles";
+
+import { tableCellClasses } from "@mui/material/TableCell";
+
+/////////////////////////////////////////////////
+
+
+const StyledTable = styled(Table)(({ theme }) => ({
+  padding: 2, // Adjust padding as needed
+}));
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    // backgroundColor: "#253338",
+    // color: theme.palette.common.white,
+    fontFamily: "CircularSTDMedium !important",
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+    fontFamily: "CircularSTDBook !important",
+  },
+  [`&.${tableCellClasses.table}`]: {
+    fontSize: 14,
+    fontFamily: "CircularSTDBook !important",
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  "&:last-child td, &:last-child th": {
+    // backgroundColor: "#F5F5F5",
+  },
+  "& td, & th": {
+    border: "none",
+  },
+}));
 const BulkVendorEdit = ({
   productData,
   varientIndex,
@@ -527,91 +565,92 @@ const BulkVendorEdit = ({
           </div>
         ) : (
           <>
-            <TableContainer
-              component={Paper}
-              className="bulkvendor-table-container"
-            >
-              <Table
-                sx={{ minWidth: 650 }}
-                aria-label="simple table"
-                className="bulk-vendor-table"
+            <Paper sx={{ width: "100%", overflow: "hidden",boxShadow:"none" }}>
+              <TableContainer
+                sx={{ minWidth: 650, maxHeight: 300 }}
+                className="bulkvendor-table-container custom-scroll"
               >
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Vendors</TableCell>
-                    <TableCell align="center">Cost Per Item</TableCell>
-                    <TableCell align="center">Preferred Vendor</TableCell>
-                    <TableCell align="center">Delete</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {vendorItems?.length ? (
-                    vendorItems.map((row, index) => (
-                      <TableRow
-                        key={row.id}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell component="th" scope="row">
-                          {row.name}
-                        </TableCell>
-                        <TableCell align="center">
-                          <input
-                            type="text"
-                            className="vendor-cost-input"
-                            placeholder="$ 0.00"
-                            name="costPerItem"
-                            onChange={(e) =>
-                              handleVendorCostPerItem(e, index, row?.id)
-                            }
-                            value={vendorItems[index]["costPerItem"]}
-                            maxLength={9}
-                          />
-                        </TableCell>
-                        <TableCell align="center">
-                          <Switch
-                            name="online"
-                            id="online"
-                            checked={vendorItems[index]["isPreferred"] || false}
-                            onChange={(e) =>
-                              handleVendorCostPerItem(e, index, row?.id)
-                            }
-                            sx={{
-                              "& .MuiSwitch-switchBase.Mui-checked": {
-                                color: "#0A64F9",
-                              },
-                              "& .MuiSwitch-track": {
-                                backgroundColor: "#0A64F9",
-                              },
-                            }}
-                          />
-                        </TableCell>
-                        <TableCell align="center">
-                          {" "}
-                          <img
-                            src={DeleteIcon}
-                            alt=""
-                            className=" m-auto d-grid place-content-center"
-                            width="30px"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => handleDeleteVendor(row?.id, row)}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <p className="no-vendor-text">No Vendor Selected</p>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                <Table stickyHeader aria-label="sticky table" className="bulk-vendor-table">
+                  <TableHead>
+                    <StyledTableRow>
+                      <StyledTableCell>Vendors</StyledTableCell>
+                      <StyledTableCell >Cost Per Item</StyledTableCell>
+                      <StyledTableCell >Preferred Vendor</StyledTableCell>
+                      <StyledTableCell >Delete</StyledTableCell>
+                    </StyledTableRow>
+                  </TableHead>
+                  <TableBody>
+                    {vendorItems?.length ? (
+                      vendorItems.map((row, index) => (
+                        <StyledTableRow
+                          key={row.id}
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
+                        >
+                          <StyledTableCell component="th" scope="row">
+                            {row.name}
+                          </StyledTableCell>
+                          <StyledTableCell >
+                            <input
+                              type="text"
+                              className="vendor-cost-input"
+                              placeholder="$ 0.00"
+                              name="costPerItem"
+                              onChange={(e) =>
+                                handleVendorCostPerItem(e, index, row?.id)
+                              }
+                              value={vendorItems[index]["costPerItem"]}
+                              maxLength={9}
+                            />
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <Switch
+                              name="online"
+                              id="online"
+                              checked={
+                                vendorItems[index]["isPreferred"] || false
+                              }
+                              onChange={(e) =>
+                                handleVendorCostPerItem(e, index, row?.id)
+                              }
+                              sx={{
+                                "& .MuiSwitch-switchBase.Mui-checked": {
+                                  color: "#0A64F9",
+                                },
+                                "& .MuiSwitch-track": {
+                                  backgroundColor: "#0A64F9",
+                                },
+                              }}
+                            />
+                          </StyledTableCell>
+                          <StyledTableCell >
+                            {" "}
+                            <img
+                              src={DeleteIcon}
+                              alt=""
+                              className="d-grid place-content-center"
+                              width="30px"
+                              style={{ cursor: "pointer" }}
+                              onClick={() => handleDeleteVendor(row?.id, row)}
+                            />
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))
+                    ) : (
+                      <p className="no-vendor-text">No Vendor Selected</p>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Paper>
+
             <div className="box">
               <div className="variant-attributes-container">
                 {/* Your existing JSX for variant attributes */}
-                <div className="q-add-categories-section-middle-footer  ">
+                <div style={{justifyContent:`${!!!varientIndex ? "space-between" :""}` ,marginTop:"20px"}} className="q-add-categories-section-middle-footer flex justify-between">
                   {!!!varientIndex ? (
-                    <p className="bulk-edit-note">
+                    <p style={{fontFamily:"CircularSTDBook"}}  className="bulk-edit-note">
                       <span className="note">Note:</span>
                       By clicking on update, it will assign selected vendor as
                       Preferred vendor to all Variants
@@ -619,7 +658,7 @@ const BulkVendorEdit = ({
                   ) : (
                     ""
                   )}
-                  <div className="q-category-bottom-header">
+                  <div style={{padding:"0px"}} className="q-category-bottom-header">
                     <button
                       className="quic-btn quic-btn-update submit-btn-click"
                       style={{
