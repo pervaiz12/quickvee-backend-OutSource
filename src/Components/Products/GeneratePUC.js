@@ -168,199 +168,212 @@ const GeneratePUC = ({
           {varientTitle?.length && isMultipleVarient
             ? varientTitle?.map((title, index) => {
                 return (
-                  
-                  <div className="qvrow product-varient-form px-5" key={index}>
-                    {isMultipleVarient ? (
-                      <div className="my-2 varient-title-name">
-                        {productInfo?.title
-                          ? productInfo?.title + "  -  " + varientTitle[index]
-                          : varientTitle[index]}
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                    <Grid container spacing={2}>
-                      {formData?.length
-                        ? formData?.map((inp, i) => {
-                            return (
-                              // <div className="col-qv-2" key={i}>
-                              <Grid
-                                item
-                                xs={6}
-                                sm={4}
-                                md={3}
-                                lg={2.4}
-                                sx={{paddingTop: 0}}
-                                className="varient-form"
-                              >
-                                <div className="">
-                                  <label clas>{inp?.label}</label>
-                                  <div className="input_area">
-                                    <input
-                                      class="varient-input-field"
-                                      type={inp?.type}
-                                      name={inp?.name}
-                                      value={
-                                        formValue?.[index]?.[title]?.[inp?.name]
-                                      }
-                                      placeholder={inp?.placeholder}
-                                      onChange={(e) =>
-                                        handleOnChange(e, index, title)
-                                      }
-                                      onBlur={(e) =>
-                                        handleBlur(e, index, title)
-                                      }
-                                      maxLength={setInputMaxLength(inp?.name)}
-                                      disabled={disabledInput(
-                                        inp,
-                                        formValue?.[index]?.[title]
-                                      )}
-                                    />
-                                    {!!formValue?.[index]?.[title]?.[
-                                      "comparePriceError"
-                                    ] && inp?.name === "compareAtPrice" ? (
-                                      <span className="error-alert">
-                                        {
-                                          formValue?.[index]?.[title]?.[
-                                            "comparePriceError"
-                                          ]
-                                        }
-                                      </span>
-                                    ) : (
-                                      ""
-                                    )}
-                                    {!!formValue?.[index]?.[title]?.[
-                                      "upcError"
-                                    ] && inp?.name === "upcCode" ? (
-                                      <span
-                                        className="error-alert"
-                                        style={{ display: "block" }}
-                                      >
-                                        {
-                                          formValue?.[index]?.[title]?.[
-                                            "upcError"
-                                          ]
-                                        }
-                                      </span>
-                                    ) : (
-                                      ""
-                                    )}
-                                    {error[
-                                      `formValue[${index}].${title}.${inp?.name}`
-                                    ] ? (
-                                      <span className="error-alert">
-                                        {
-                                          error[
-                                            `formValue[${index}].${title}.${inp?.name}`
-                                          ]
-                                        }
-                                      </span>
-                                    ) : (
-                                      ""
-                                    )}
-                                  </div>
-                                </div>
-                                {/* // </div> */}
-                              </Grid>
-                            );
-                          })
-                        : ""}
-                    </Grid>
-                    <div className="flex flex-wrap gap-3 check-box-area">
-                      <label
-                        class="q_resigter_setting_section"
-                        style={{ color: "#000", fontSize: "18px" }}
-                      >
-                        Track Quantity
-                        <input
-                          type="checkbox"
-                          name="trackQuantity"
-                          value={formValue?.[index]?.[title]?.["trackQuantity"]}
-                          onChange={(e) => handleOnChange(e, index, title)}
-                          checked={
-                            formValue?.[index]?.[title]?.["trackQuantity"]
-                          }
-                          className="checkbox-input"
-                        />
-                        <span class="checkmark"></span>
-                      </label>
-                      <label
-                        class="q_resigter_setting_section"
-                        style={{ color: "#000", fontSize: "18px" }}
-                      >
-                        Continue selling when out of stock
-                        <input
-                          type="checkbox"
-                          name="sellOutOfStock"
-                          value={
-                            formValue?.[index]?.[title]?.["sellOutOfStock"]
-                          }
-                          onChange={(e) => handleOnChange(e, index, title)}
-                          checked={
-                            formValue?.[index]?.[title]?.["sellOutOfStock"]
-                              ? true
-                              : false
-                          }
-                          className="checkbox-input"
-                        />
-                        <span class="checkmark"></span>
-                      </label>
-                      <label
-                        class="q_resigter_setting_section"
-                        style={{ color: "#000", fontSize: "18px" }}
-                      >
-                        Check ID
-                        <input
-                          type="checkbox"
-                          name="checkId"
-                          value={formValue?.[index]?.[title]?.["checkId"]}
-                          onChange={(e) => handleOnChange(e, index, title)}
-                          checked={
-                            formValue?.[index]?.[title]?.["checkId"]
-                              ? true
-                              : false
-                          }
-                          className="checkbox-input"
-                        />
-                        <span class="checkmark"></span>
-                      </label>
-                      <label
-                        class="q_resigter_setting_section"
-                        style={{ color: "#000", fontSize: "18px" }}
-                      >
-                        Disable
-                        <input
-                          type="checkbox"
-                          name="disable"
-                          value={formValue?.[index]?.[title]?.["disable"]}
-                          onChange={(e) => handleOnChange(e, index, title)}
-                          checked={
-                            formValue?.[index]?.[title]?.["disable"]
-                              ? true
-                              : false
-                          }
-                        />
-                        <span class="checkmark"></span>
-                      </label>
-                      <label
-                        class="q_resigter_setting_section"
-                        style={{ color: "#000", fontSize: "18px" }}
-                      >
-                        Food Stampable
-                        <input
-                          type="checkbox"
-                          name="isFoodStamble"
-                          value={formValue?.[index]?.[title]?.["isFoodStamble"]}
-                          onChange={(e) => handleOnChange(e, index, title)}
-                          checked={
-                            formValue?.[index]?.[title]?.["isFoodStamble"]
-                              ? true
-                              : false
-                          }
-                        />
-                        <span class="checkmark"></span>
-                      </label>
-                      {/* <label
+                  <>
+                    <div
+                      className="qvrow product-varient-form px-5"
+                      key={index}
+                    >
+                      {isMultipleVarient ? (
+                        <div className="my-2 varient-title-name">
+                          {productInfo?.title
+                            ? productInfo?.title + "  -  " + varientTitle[index]
+                            : varientTitle[index]}
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                      <Grid container spacing={2}>
+                        {formData?.length
+                          ? formData?.map((inp, i) => {
+                              return (
+                                // <div className="col-qv-2" key={i}>
+                                <>
+                                  <Grid
+                                    item
+                                    xs={6}
+                                    sm={4}
+                                    md={3}
+                                    lg={2.4}
+                                    sx={{ paddingTop: 0 }}
+                                    className="varient-form"
+                                  >
+                                    <div className="">
+                                      <label clas>{inp?.label}</label>
+                                      <div className="input_area">
+                                        <input
+                                          class="varient-input-field"
+                                          type={inp?.type}
+                                          name={inp?.name}
+                                          value={
+                                            formValue?.[index]?.[title]?.[
+                                              inp?.name
+                                            ]
+                                          }
+                                          placeholder={inp?.placeholder}
+                                          onChange={(e) =>
+                                            handleOnChange(e, index, title)
+                                          }
+                                          onBlur={(e) =>
+                                            handleBlur(e, index, title)
+                                          }
+                                          maxLength={setInputMaxLength(
+                                            inp?.name
+                                          )}
+                                          disabled={disabledInput(
+                                            inp,
+                                            formValue?.[index]?.[title]
+                                          )}
+                                        />
+                                        {!!formValue?.[index]?.[title]?.[
+                                          "comparePriceError"
+                                        ] && inp?.name === "compareAtPrice" ? (
+                                          <span className="error-alert">
+                                            {
+                                              formValue?.[index]?.[title]?.[
+                                                "comparePriceError"
+                                              ]
+                                            }
+                                          </span>
+                                        ) : (
+                                          ""
+                                        )}
+                                        {!!formValue?.[index]?.[title]?.[
+                                          "upcError"
+                                        ] && inp?.name === "upcCode" ? (
+                                          <span
+                                            className="error-alert"
+                                            style={{ display: "block" }}
+                                          >
+                                            {
+                                              formValue?.[index]?.[title]?.[
+                                                "upcError"
+                                              ]
+                                            }
+                                          </span>
+                                        ) : (
+                                          ""
+                                        )}
+                                        {error[
+                                          `formValue[${index}].${title}.${inp?.name}`
+                                        ] ? (
+                                          <span className="error-alert">
+                                            {
+                                              error[
+                                                `formValue[${index}].${title}.${inp?.name}`
+                                              ]
+                                            }
+                                          </span>
+                                        ) : (
+                                          ""
+                                        )}
+                                      </div>
+                                    </div>
+                                    {/* // </div> */}
+                                  </Grid>
+                                </>
+                              );
+                            })
+                          : ""}
+                      </Grid>
+                      <div className="flex flex-wrap gap-3 check-box-area">
+                        <label
+                          class="q_resigter_setting_section"
+                          style={{ color: "#000", fontSize: "18px" }}
+                        >
+                          Track Quantity
+                          <input
+                            type="checkbox"
+                            name="trackQuantity"
+                            value={
+                              formValue?.[index]?.[title]?.["trackQuantity"]
+                            }
+                            onChange={(e) => handleOnChange(e, index, title)}
+                            checked={
+                              formValue?.[index]?.[title]?.["trackQuantity"]
+                            }
+                            className="checkbox-input"
+                          />
+                          <span class="checkmark"></span>
+                        </label>
+                        <label
+                          class="q_resigter_setting_section"
+                          style={{ color: "#000", fontSize: "18px" }}
+                        >
+                          Continue selling when out of stock
+                          <input
+                            type="checkbox"
+                            name="sellOutOfStock"
+                            value={
+                              formValue?.[index]?.[title]?.["sellOutOfStock"]
+                            }
+                            onChange={(e) => handleOnChange(e, index, title)}
+                            checked={
+                              formValue?.[index]?.[title]?.["sellOutOfStock"]
+                                ? true
+                                : false
+                            }
+                            className="checkbox-input"
+                          />
+                          <span class="checkmark"></span>
+                        </label>
+                        <label
+                          class="q_resigter_setting_section"
+                          style={{ color: "#000", fontSize: "18px" }}
+                        >
+                          Check ID
+                          <input
+                            type="checkbox"
+                            name="checkId"
+                            value={formValue?.[index]?.[title]?.["checkId"]}
+                            onChange={(e) => handleOnChange(e, index, title)}
+                            checked={
+                              formValue?.[index]?.[title]?.["checkId"]
+                                ? true
+                                : false
+                            }
+                            className="checkbox-input"
+                          />
+                          <span class="checkmark"></span>
+                        </label>
+                        <label
+                          class="q_resigter_setting_section"
+                          style={{ color: "#000", fontSize: "18px" }}
+                        >
+                          Disable
+                          <input
+                            type="checkbox"
+                            name="disable"
+                            value={formValue?.[index]?.[title]?.["disable"]}
+                            onChange={(e) => handleOnChange(e, index, title)}
+                            checked={
+                              formValue?.[index]?.[title]?.["disable"]
+                                ? true
+                                : false
+                            }
+                          />
+                          <span class="checkmark"></span>
+                        </label>
+                        <label
+                          class="q_resigter_setting_section"
+                          style={{ color: "#000", fontSize: "18px" }}
+                        >
+                          Food Stampable
+                          <input
+                            type="checkbox"
+                            name="isFoodStamble"
+                            value={
+                              formValue?.[index]?.[title]?.["isFoodStamble"]
+                            }
+                            onChange={(e) => handleOnChange(e, index, title)}
+                            checked={
+                              formValue?.[index]?.[title]?.["isFoodStamble"]
+                                ? true
+                                : false
+                            }
+                          />
+                          <span class="checkmark"></span>
+                        </label>
+                        {/* <label
                         class="q_resigter_setting_section"
                         style={{ color: "#000", fontSize: "18px" }}
                       >
@@ -380,64 +393,67 @@ const GeneratePUC = ({
                         />
                         <span class="checkmark"></span>
                       </label> */}
+                      </div>
+
+                      {pageUrl === "inventory/products/edit" &&
+                      formValue?.[index]?.[title]?.notEditable ? (
+                        <div class="edit-profile-btns">
+                          <button
+                            className="quic-btn quic-btn-save vendor-btn"
+                            // onClick={handleSubmitForm}
+                            // disabled={isLoading}
+                            style={{
+                              backgroundColor: "#0A64F9",
+                            }}
+                            onClick={() =>
+                              handleCloseEditModal(
+                                "single_vendor",
+                                formValue?.[index]?.[title]?.productEditId
+                              )
+                            }
+                          >
+                            Vendors
+                          </button>
+                          <button
+                            className="quic-btn quic-btn-save"
+                            // onClick={handleSubmitForm}
+                            // disabled={isLoading}
+                            style={{
+                              backgroundColor: "#0A64F9",
+                            }}
+                            onClick={() =>
+                              handleRedirectHistory(
+                                formValue?.[index]?.[title]?.productEditId,
+                                formValue?.[index]
+                              )
+                            }
+                          >
+                            Sales History
+                          </button>
+                          <button
+                            className="quic-btn quic-btn-save edit"
+                            // onClick={handleSubmitForm}
+                            // disabled={isLoading}
+                            style={{
+                              backgroundColor: "#0A64F9",
+                            }}
+                            onClick={() =>
+                              handleCloseEditModal(
+                                "single_instant",
+                                formValue?.[index]?.[title]?.productEditId
+                              )
+                            }
+                          >
+                            Instant PO
+                          </button>
+                        </div>
+                      ) : (
+                        ""
+                      )}
                     </div>
 
-                    {pageUrl === "inventory/products/edit" &&
-                    formValue?.[index]?.[title]?.notEditable ? (
-                      <div class="edit-profile-btns">
-                        <button
-                          className="quic-btn quic-btn-save vendor-btn"
-                          // onClick={handleSubmitForm}
-                          // disabled={isLoading}
-                          style={{
-                            backgroundColor: "#0A64F9",
-                          }}
-                          onClick={() =>
-                            handleCloseEditModal(
-                              "single_vendor",
-                              formValue?.[index]?.[title]?.productEditId
-                            )
-                          }
-                        >
-                          Vendors
-                        </button>
-                        <button
-                          className="quic-btn quic-btn-save"
-                          // onClick={handleSubmitForm}
-                          // disabled={isLoading}
-                          style={{
-                            backgroundColor: "#0A64F9",
-                          }}
-                          onClick={() =>
-                            handleRedirectHistory(
-                              formValue?.[index]?.[title]?.productEditId,
-                              formValue?.[index]
-                            )
-                          }
-                        >
-                          Sales History
-                        </button>
-                        <button
-                          className="quic-btn quic-btn-save edit"
-                          // onClick={handleSubmitForm}
-                          // disabled={isLoading}
-                          style={{
-                            backgroundColor: "#0A64F9",
-                          }}
-                          onClick={() =>
-                            handleCloseEditModal(
-                              "single_instant",
-                              formValue?.[index]?.[title]?.productEditId
-                            )
-                          }
-                        >
-                          Instant PO
-                        </button>
-                      </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
+                    <div style={{ borderBottom: "1px solid #E8E8E8",marginBottom:"30px",marginTop:"30px" }}></div>
+                  </>
                 );
               })
             : ""}
