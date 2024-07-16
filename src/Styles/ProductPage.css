@@ -808,11 +808,13 @@
   box-sizing: border-box;
   margin-top: 10px;
   transition: 0.2s all linear;
+  width: 100%;
+  text-align: center;
 }
 
-.varient-attribute-btn:hover {
+/* .varient-attribute-btn:hover {
   border: 2px solid #0a64f9;
-}
+} */
 
 .varient-generateUpc-row {
   background: #f8f8f8;

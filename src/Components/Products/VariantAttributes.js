@@ -7,6 +7,7 @@ import makeAnimated from "react-select/animated";
 import Validation from "../../Constants/Validation";
 import { components } from "react-select";
 import SearchIcon from "@mui/icons-material/Search"; // Import MUI icon
+import { Grid } from "@mui/material";
 
 const VariantAttributes = ({
   filterOptionList,
@@ -20,6 +21,7 @@ const VariantAttributes = ({
   handleSetVarientLength,
   addMoreVarientItems,
   handleClearFormData,
+  formValue
 }) => {
   const styles = {
     multiValueRemove: (base, state) => {
@@ -62,6 +64,27 @@ const VariantAttributes = ({
       fontSize: "14px", // Change this to your desired placeholder font size
       // Add more CSS properties as needed
     }),
+    control: (provided, state) => ({
+      ...provided,
+      borderColor: state.isFocused ? "black" : provided.borderColor,
+      boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
+      // height: 40,
+      minHeight: 40,
+      "&:hover": {
+        borderColor: "black" ? "black" : provided["&:hover"].borderColor,
+      },
+    }),
+    input: (provided) => ({
+      ...provided,
+      "&:focus": {
+        borderColor: "black",
+        outline: "none",
+      },
+    }),
+    valueContainer: (provided) => ({
+      ...provided,
+      padding: "5px 40px 5px 5px",
+    }),
   };
   // console.log("varientLength", varientLength);
 
@@ -85,10 +108,30 @@ const VariantAttributes = ({
       ...provided,
       backgroundColor: "#fff", // Change the background color of selected item
       color: "#000", // Change the text color of selected item
+      cursor: "pointer",
     }),
     menu: (provided, state) => ({
       ...provided,
       zIndex: 1000, // Change this to a higher value to ensure the dropdown is on top
+      cursor: "pointer",
+    }),
+    control: (provided, state) => ({
+      ...provided,
+      borderColor: state.isFocused ? "black" : provided.borderColor,
+      boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
+      // height: 40,
+      minHeight: 40,
+      "&:hover": {
+        borderColor: "black" ? "black" : provided["&:hover"].borderColor,
+      },
+      cursor: "pointer",
+    }),
+    input: (provided) => ({
+      ...provided,
+      "&:focus": {
+        borderColor: "black",
+        outline: "none",
+      },
     }),
   };
   const pageUrl =
@@ -262,6 +305,34 @@ const VariantAttributes = ({
       </components.DropdownIndicator>
     );
   };
+  const customStyles = {
+    menu: (provided) => ({
+      ...provided,
+      zIndex: 9999,
+      position: "absolute",
+    }),
+    menuPortal: (base) => ({
+      ...base,
+      zIndex: 9999,
+    }),
+    control: (provided, state) => ({
+      ...provided,
+      borderColor: state.isFocused ? "black" : provided.borderColor,
+      boxShadow: state.isFocused ? "0 0 0 1px black" : provided.boxShadow,
+      height: 40,
+      minHeight: 40,
+      "&:hover": {
+        borderColor: "black" ? "black" : provided["&:hover"].borderColor,
+      },
+    }),
+    input: (provided) => ({
+      ...provided,
+      "&:focus": {
+        borderColor: "black",
+        outline: "none",
+      },
+    }),
+  };
 
   return (
     <>
@@ -309,20 +380,27 @@ const VariantAttributes = ({
           ""
         )}
         {isMultipleVarient ? (
-          <div className="varient-select-section">
-            <div className="">
-              <div className="flex">
-                <h2 className="text-[18px] text-black opacity-100 Admin_std mb-4">
-                  Variant Attributes
-                </h2>
-              </div>
+          <Grid container className="varient-select-section">
+            <Grid item xs={12} className="">
+              <Grid
+                container
+                direction="row"
+                justifyContent="flex-start"
+                alignItems="center"
+              >
+                <Grid item>
+                  <h2 className="text-[18px] text-black opacity-100 Admin_std">
+                    Variant Attributes
+                  </h2>
+                </Grid>
+              </Grid>
 
               {varientLength.length > 0
                 ? varientLength?.map((varient, index) => {
                     return (
-                      <div class="qvrow varientAddSection" key={index + 1}>
-                        <div class="col-qv-5">
-                          <div class="input_area">
+                      <>
+                        <Grid container sx={{ mb: 1.3 }} key={index + 1}>
+                          <Grid item xs={12}>
                             {/* <input
                     className=""
                     type="text"
@@ -330,127 +408,135 @@ const VariantAttributes = ({
                     value={newAttribute}
                     onChange={(e) => setNewAttribute(e.target.value)}
                   /> */}
-
-                            <Select
-                              closeMenuOnSelect={true}
-                              components={{ ...animatedComponents }}
-                              value={varient?.varientName}
-                              onChange={(e) =>
-                                handlechange(e, index, "varientName")
-                              }
-                              className="dropdown"
-                              options={filterDefaultvalue()}
-                              isSearchable
-                              isClearable
-                              styles={dropDownStyle}
-                              // defaultValue={{
-                              //   value: varientDropdownList[0]?.title,
-                              //   label: varientDropdownList[0]?.title,
-                              // }}
-                              isDisabled={
-                                index + 1 < varientLength?.length ||
-                                pageUrl === "inventory/products/edit"
-                              }
-                            />
-                          </div>
-                        </div>
-                        <div class="col-qv-5">
-                          <div class="input_area">
-                            <CreatableSelect
-                              closeMenuOnSelect={true}
-                              // isValidNewOption={isValidNewOption}
-                              components={{
-                                ...animatedComponents,
-                                DropdownIndicator: null, // Replace DropdownIndicator with SearchIndicator
-                              }}
-                              styles={styles}
-                              value={varient?.varientAttributeList}
-                              options={varient?.varientAttributeList}
-                              onChange={(e, actionMeta) => {
-                                handlechange(
-                                  e,
-                                  index,
-                                  "varientAttributeList",
-                                  actionMeta
-                                );
-                              }}
-                              placeholder="Select Variant..."
-                              onKeyDown={handleOnBlurAttributes}
-                              isMulti
-                              isClearable={varient?.varientAttributeList?.some(
-                                (v) => !v.isFixed
-                              )}
-                              isValidNewOption={(
-                                inputValue,
-                                selectValue,
-                                selectOptions
-                              ) =>
-                                inputValue.trim().length > 0 && // Ensure trimmed value is valid
-                                !selectOptions.find(
-                                  (option) =>
-                                    option.label.trim().toLowerCase() ===
-                                    inputValue.trim().toLowerCase()
-                                )
-                              }
-                              className="createable"
-                              backspaceRemovesValue={false}
-                            />
-                          </div>
-                          {!!varientError?.error &&
-                          +varientError?.errorIndex === index ? (
-                            <span className="error-alert error-alert-varient">
-                              {varientError?.error}
-                            </span>
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                        {pageUrl !== "inventory/products/edit" ? (
-                          <div className="col-qv-2">
-                            {varientLength[varientLength?.length - 1]?.id ===
-                              varient?.id && varient?.id !== 1 ? (
-                              <button
-                                onClick={() =>
-                                  handleDeleteClick(null, varient?.id)
-                                }
-                                className="ml-auto"
-                              >
-                                <img
-                                  src={DeleteIcon}
-                                  alt=""
-                                  className=" m-auto d-grid place-content-center"
-                                  width="32px"
+                            <Grid container sx={{ mt: 1.5 }}>
+                              <Grid item xs={12}>
+                                <Select
+                                  closeMenuOnSelect={true}
+                                  components={{ ...animatedComponents }}
+                                  value={varient?.varientName}
+                                  onChange={(e) =>
+                                    handlechange(e, index, "varientName")
+                                  }
+                                  className="dropdown"
+                                  options={filterDefaultvalue()}
+                                  isSearchable
+                                  isClearable
+                                  styles={dropDownStyle}
+                                  // defaultValue={{
+                                  //   value: varientDropdownList[0]?.title,
+                                  //   label: varientDropdownList[0]?.title,
+                                  // }}
+                                  isDisabled={
+                                    index + 1 < varientLength?.length ||
+                                    pageUrl === "inventory/products/edit"
+                                  }
                                 />
-                              </button>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                        ) : (
-                          ""
-                        )}
-                      </div>
+                              </Grid>
+                            </Grid>
+                          </Grid>
+
+                          <Grid container sx={{ mt: 1.5 }}>
+                            <Grid item className="relative" xs={12}>
+                              <CreatableSelect
+                                closeMenuOnSelect={true}
+                                // isValidNewOption={isValidNewOption}
+                                components={{
+                                  ...animatedComponents,
+                                  DropdownIndicator: null, // Replace DropdownIndicator with SearchIndicator
+                                }}
+                                styles={styles}
+                                value={varient?.varientAttributeList}
+                                options={varient?.varientAttributeList}
+                                onChange={(e, actionMeta) => {
+                                  handlechange(
+                                    e,
+                                    index,
+                                    "varientAttributeList",
+                                    actionMeta
+                                  );
+                                }}
+                                placeholder="Select Variant..."
+                                onKeyDown={handleOnBlurAttributes}
+                                isMulti
+                                isClearable={varient?.varientAttributeList?.some(
+                                  (v) => !v.isFixed
+                                )}
+                                isValidNewOption={(
+                                  inputValue,
+                                  selectValue,
+                                  selectOptions
+                                ) =>
+                                  inputValue.trim().length > 0 && // Ensure trimmed value is valid
+                                  !selectOptions.find(
+                                    (option) =>
+                                      option.label.trim().toLowerCase() ===
+                                      inputValue.trim().toLowerCase()
+                                  )
+                                }
+                                className="createable"
+                                backspaceRemovesValue={false}
+                              />
+                              {!!varientError?.error &&
+                              +varientError?.errorIndex === index ? (
+                                <span className="error-alert error-alert-varient">
+                                  {varientError?.error}
+                                </span>
+                              ) : (
+                                ""
+                              )}
+                              {pageUrl !== "inventory/products/edit" ? (
+                                <div className="absolute top-1.5 right-2">
+                                  {varientLength[varientLength?.length - 1]
+                                    ?.id === varient?.id &&
+                                  varient?.id !== 1 ? (
+                                    <button
+                                      onClick={() =>
+                                        handleDeleteClick(null, varient?.id)
+                                      }
+                                      className="ml-auto"
+                                    >
+                                      <img
+                                        src={DeleteIcon}
+                                        alt=""
+                                        className=" m-auto d-grid place-content-center"
+                                        width="32px"
+                                      />
+                                    </button>
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+                              ) : (
+                                ""
+                              )}
+                            </Grid>
+                          </Grid>
+                        </Grid>
+                      </>
                     );
                   })
                 : ""}
-
-              {+varientLength?.length < 3 &&
-              pageUrl === "inventory/products/add" &&
-              pageUrl !== "inventory/products/edit" ? (
-                <div className="flex">
-                  <button
-                    className="px-4 py-2 bg-[#0A64F9] text-white rounded-md varient-attribute-btn"
-                    // onClick={handleAddAttribute}
-                    onClick={addMoreVarientItems}
-                  >
-                    Add Variant Attributes +
-                  </button>
-                </div>
-              ) : (
-                ""
-              )}
-            </div>
-          </div>
+              <Grid container sx={{mb:formValue.length ? 1 : 2.5}}>
+                <Grid item xs={12}>
+                  {+varientLength?.length < 3 &&
+                  pageUrl === "inventory/products/add" &&
+                  pageUrl !== "inventory/products/edit" ? (
+                    <div className="flex">
+                      <button
+                        className="px-4 py-2 bg-[#0A64F9] text-white rounded-md varient-attribute-btn"
+                        // onClick={handleAddAttribute}
+                        onClick={addMoreVarientItems}
+                      >
+                        Add Variant Attributes +
+                      </button>
+                    </div>
+                  ) : (
+                    ""
+                  )}
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid>
         ) : (
           ""
         )}

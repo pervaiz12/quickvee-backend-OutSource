@@ -941,7 +941,7 @@ const TimesheetListing = ({ data }) => {
               </Grid>
               <SkeletonTable
                 columns={[
-                  "box_shadow_div",
+                  "Date Worked",
                   "Wage Rate",
                   "Clock In",
                   "Clock Out",

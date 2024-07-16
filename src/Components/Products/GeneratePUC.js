@@ -5,6 +5,7 @@ import { useSelector } from "react-redux";
 import { Grid } from "@mui/material";
 
 import AddNewCategory from "../../Assests/Dashboard/Left.svg";
+import SwitchToBackButton from "../../reuseableComponents/SwitchToBackButton";
 
 const GeneratePUC = ({
   handleVarientTitleBasedItemList,
@@ -115,13 +116,13 @@ const GeneratePUC = ({
 
   return (
     <>
-      <div className="mx-0">
-        <div className="">
-          <div
-            className="q-category-bottom-header"
-            style={{ padding: "1px 20px" }}
-          >
-            {isVarientEdit ? (
+      <Grid container className="mx-0">
+        <Grid item xs={12} className="">
+          {isVarientEdit ? (
+            <div
+              className="q-category-bottom-header"
+              // style={{ padding: "1px 20px" }}
+            >
               <span
                 onClick={() => {
                   navigate("/inventory/products");
@@ -129,16 +130,17 @@ const GeneratePUC = ({
                 className="varient-edit-text"
               >
                 <img src={AddNewCategory} alt="Add-New-Category" />
-                <span className="title">Variants</span>
+                <span className="title">Variants </span>
               </span>
-            ) : (
-              ""
-            )}
-            {/* <span className="varient-edit-text"> {isVarientEdit ? "Variants" : ''}</span> */}
-          </div>
+            </div>
+          ) : (
+            ""
+          )}
+          {/* <span className="varient-edit-text"> {isVarientEdit ? "Variants" : ''}</span> */}
+
           {formValue?.length ? (
-            <div className="q-category-bottom-header varient-generateUpc-row">
-              <span className="variant-title">
+            <div className="q-category-bottom-header varient-generateUpc-row ">
+              <span className="variant-title px-2.5">
                 {isMultipleVarient
                   ? "Variants"
                   : productInfo?.title
@@ -151,7 +153,7 @@ const GeneratePUC = ({
               {!isVarientEdit ? (
                 <p
                   onClick={() => handleGenerateUPC(20)}
-                  className="generateUpc"
+                  className="generateUpc px-2.5"
                 >
                   Generate UPC
                   {/* <img src={AddIcon} alt="add-icon" />{" "} */}
@@ -166,9 +168,10 @@ const GeneratePUC = ({
           {varientTitle?.length && isMultipleVarient
             ? varientTitle?.map((title, index) => {
                 return (
-                  <div className="qvrow product-varient-form" key={index}>
+                  
+                  <div className="qvrow product-varient-form px-5" key={index}>
                     {isMultipleVarient ? (
-                      <div className="my-4 varient-title-name">
+                      <div className="my-2 varient-title-name">
                         {productInfo?.title
                           ? productInfo?.title + "  -  " + varientTitle[index]
                           : varientTitle[index]}
@@ -187,6 +190,7 @@ const GeneratePUC = ({
                                 sm={4}
                                 md={3}
                                 lg={2.4}
+                                sx={{paddingTop: 0}}
                                 className="varient-form"
                               >
                                 <div className="">
@@ -647,8 +651,8 @@ const GeneratePUC = ({
           ) : (
             ""
           )}
-        </div>
-      </div>
+        </Grid>
+      </Grid>
     </>
   );
 };
