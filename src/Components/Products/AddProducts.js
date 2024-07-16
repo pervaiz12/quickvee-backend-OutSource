@@ -566,6 +566,22 @@ const AddProducts = () => {
           }
           // If costPerItem is 0 or not a valid number, do not update margin and profit
         }
+
+        // If the costPerItem key is present and not empty, calculate margin and profit
+        if (values.hasOwnProperty("costPerItem") && values.costPerItem !== "") {
+          let price = parseFloat(nestedObject.price);
+          let costPerItem = parseFloat(values.costPerItem);
+
+          // Check if costPerItem is a valid number and greater than zero
+          if (!isNaN(price) && price > 0) {
+            nestedObject.margin = (
+              ((costPerItem - price) / costPerItem) *
+              100
+            ).toFixed(2);
+            nestedObject.profit = (costPerItem - price).toFixed(2);
+          }
+          // If costPerItem is 0 or not a valid number, do not update margin and profit
+        }
       });
 
       // Return the updated state
@@ -1514,7 +1530,9 @@ const AddProducts = () => {
     setFormValue(updatedValues);
   };
 
-  // console.log("formvalue", formValue);
+  console.log("formvalue", formValue);
+  console.log("error", error);
+
   const handleVarientTitleBasedItemList = () => {
     if (varientLength.length) {
       if (

@@ -8,6 +8,7 @@ import Validation from "../../Constants/Validation";
 import { components } from "react-select";
 import SearchIcon from "@mui/icons-material/Search"; // Import MUI icon
 import { Grid } from "@mui/material";
+import { useSelector } from "react-redux";
 
 const VariantAttributes = ({
   filterOptionList,
@@ -21,8 +22,14 @@ const VariantAttributes = ({
   handleSetVarientLength,
   addMoreVarientItems,
   handleClearFormData,
-  formValue
+  formValue,
 }) => {
+  const {
+    fetchProductLoadingDropdown,
+    fetchCategoryListLoading,
+    fetchTaxListLoading,
+  } = useSelector((state) => state?.productsListData);
+
   const styles = {
     multiValueRemove: (base, state) => {
       return state.data.isFixed ? { ...base, display: "none" } : base;
@@ -447,6 +454,11 @@ const VariantAttributes = ({
                                 styles={styles}
                                 value={varient?.varientAttributeList}
                                 options={varient?.varientAttributeList}
+                                isDisabled={
+                                  fetchProductLoadingDropdown ||
+                                  fetchCategoryListLoading ||
+                                  fetchTaxListLoading
+                                }
                                 onChange={(e, actionMeta) => {
                                   handlechange(
                                     e,
@@ -516,7 +528,7 @@ const VariantAttributes = ({
                     );
                   })
                 : ""}
-              <Grid container sx={{mb:formValue.length ? 1 : 2.5}}>
+              <Grid container sx={{ mb: formValue.length ? 1 : 2.5 }}>
                 <Grid item xs={12}>
                   {+varientLength?.length < 3 &&
                   pageUrl === "inventory/products/add" &&
