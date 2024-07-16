@@ -294,7 +294,7 @@ export default function SettingStoreOption() {
     ) {
       setError("Please Select Cash Payment method.");
     } else if (orderState?.dayCount > 15) {
-      showModal("Advance day count must be less than 12 or Equal to 15");
+      showModal("Advance day count must be between 1 to 15");
     } else {
       setError("");
       if (orderState.enabledFutureOrder) {
@@ -517,12 +517,13 @@ export default function SettingStoreOption() {
                 <Grid container sx={{ px: 2.5, pb: 2.5 }}>
                   <Grid item xs={12}>
                     <BasicTextFields
-                      type={"number"}
+                      type={"text"}
                       value={orderState?.dayCount}
                       name={"dayCount"}
                       onChangeFun={handleOrderChange}
                       disable={!orderState?.enabledFutureOrder}
                       onKeyPressFun={handleKeyPress}
+                      maxLength={2}
                     />
                     {advancedayCount && (
                       <p className="error-message pt-1">{advancedayCount}</p>

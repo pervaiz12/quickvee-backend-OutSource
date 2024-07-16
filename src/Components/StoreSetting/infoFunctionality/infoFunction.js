@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import {
   BASE_URL,
@@ -8,6 +8,7 @@ import {
   CHANGE_PASSWORD_STORE,
   UPDATE_STORE_INFO,
   ADMIN_CHECK_USER,
+  GET_MERCHAN_STATE,
 } from "../../../Constants/Config";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
@@ -56,9 +57,38 @@ export default function InfoFunction() {
     is_qr_code_change: "0",
     is_receipt_logo_change: "0",
   });
+  const [stateList, setStateList] = useState([]);
   const urlPattern =
     /^(https:\/\/www\.instagram\.com\/|https:\/\/www\.facebook\.com\/|https:\/\/[a-z0-9]+(\.[a-z0-9]+)+\/).*$/;
   console.log("infoRecord.image === selectedFile.name", infoRecord);
+  // ===========================get state=========================
+  // ==================== get state and admin data---------
+  useEffect(() => {
+    getState();
+  }, []);
+  const getState = async () => {
+    const { token, ...newData } = userTypeData;
+    const data = { merchant_id: merchant_idNew, ...newData };
+    // console.log(data);
+    await axios
+      .post(BASE_URL + GET_MERCHAN_STATE, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${token}`,
+        },
+      })
+      .then((result) => {
+        console.log("state", result);
+        if (result.status == 200) {
+          setStateList(result?.data?.states);
+          // setAdminList(result.data.admin_list);
+        } else {
+          setStateList([]);
+          // setAdminList([]);
+        }
+      });
+  };
+  // ===========================get state end=====================
   // ============================password ======================
   const [passwordInput, setPassowordInput] = useState({
     password: "",
@@ -591,6 +621,7 @@ export default function InfoFunction() {
   };
 
   const onChangeHandle = (e) => {
+    console.log(e);
     const { name, value } = e.target;
     let errorMessage = { ...errors };
 
@@ -957,6 +988,14 @@ export default function InfoFunction() {
       }
     }
   };
+  const onDropDownChangeHandle = (option) => {
+    console.log(option);
+    setInfoRecord((prev) => ({
+      ...prev,
+      state: option.title,
+    }));
+  };
+  console.log(infoRecord);
   return {
     handleSubmitInfo,
     imageBanner,
@@ -982,5 +1021,7 @@ export default function InfoFunction() {
     handleBlurPassword,
     handleCloseModel,
     submitLoading,
+    stateList,
+    onDropDownChangeHandle,
   };
 }

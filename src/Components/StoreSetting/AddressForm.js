@@ -1,11 +1,14 @@
 import { Grid } from "@mui/material";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
+import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 
 const AddressForm = ({
   infoRecord,
   onChangeHandle,
   errors,
   handleKeyPress,
+  stateList,
+  onDropDownChangeHandle,
 }) => {
   return (
     <Grid container sx={{ p: 2.5 }} className="box_shadow_div">
@@ -67,6 +70,25 @@ const AddressForm = ({
             )}
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
+            {/* <label>
+              State <span className="Asterisk_error">*</span>
+            </label> */}
+            <SelectDropDown
+              placeholder="state"
+              name="state"
+              listItem={stateList.map((state) => ({
+                title: state.State,
+                name: "state",
+              }))}
+              selectedOption={infoRecord.state}
+              title={"title"}
+              onClickHandler={onDropDownChangeHandle}
+            />
+            {errors.stateNameError && (
+              <span className="error">{errors.stateNameError}</span>
+            )}
+          </Grid>
+          {/* <Grid item xs={12} sm={6} md={3}>
             <BasicTextFields
               type="text"
               name="state"
@@ -77,7 +99,7 @@ const AddressForm = ({
             {errors.stateNameError && (
               <span className="error">{errors.stateNameError}</span>
             )}
-          </Grid>
+          </Grid> */}
           <Grid item xs={12} sm={6} md={3}>
             <BasicTextFields
               type="text"
