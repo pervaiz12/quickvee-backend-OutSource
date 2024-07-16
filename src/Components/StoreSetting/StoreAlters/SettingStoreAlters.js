@@ -952,27 +952,25 @@ export default function SettingStoreAlters() {
             />
             <span className="store-setting-error">{errors.phn_num}</span>
           </div>
-          {login_type?.toString().toLowerCase() == "superadmin" ? (
-            <div
-              style={{ MarginLeft: "2rem", MarginRight: "2rem" }}
-              className="storeAlert_Enable_SMS"
-            >
-              <h2 className="store-setting-h2">
-                <b>
-                  Default Enable Receiving SMS Notification For Order Status
-                </b>
-              </h2>
-              <span className="store-setting-switch float-right">
-                <Switch
-                  {...label}
-                  checked={isDefaultOnlineOrderNotify}
-                  onChange={DefaultOnlineOrderNotifytoggleInput}
-                />
-              </span>
-            </div>
-          ) : (
+          {/* {login_type?.toString().toLowerCase() == "superadmin" ? ( */}
+          <div
+            style={{ MarginLeft: "2rem", MarginRight: "2rem" }}
+            className="storeAlert_Enable_SMS"
+          >
+            <h2 className="store-setting-h2">
+              <b>Default Enable Receiving SMS Notification For Order Status</b>
+            </h2>
+            <span className="store-setting-switch float-right">
+              <Switch
+                {...label}
+                checked={isDefaultOnlineOrderNotify}
+                onChange={DefaultOnlineOrderNotifytoggleInput}
+              />
+            </span>
+          </div>
+          {/* ) : (
             ""
-          )}
+          )} */}
         </div>
         {/* for Design Change End  */}
 

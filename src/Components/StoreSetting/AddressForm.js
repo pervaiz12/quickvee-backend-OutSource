@@ -64,6 +64,7 @@ const AddressForm = ({
               placeholder="zip"
               value={infoRecord.zip}
               onChangeFun={onChangeHandle}
+              maxLength={5}
             />
             {errors.zipCodeError && (
               <span className="error">{errors.zipCodeError}</span>

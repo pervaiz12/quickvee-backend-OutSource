@@ -336,6 +336,7 @@ module.exports = Object.freeze({
 
   ORDER_TYPE_ORDER_LIST: "Order_list_api/order_detailed_list",
   ORDER_TYPE_ORDER_LIST_COUNT: "Order_list_api/order_detailed_count",
+  GET_ZIP_CODE_CITY: "https://api.zippopotam.us/US/",
 });
 
 // All api calls are initialized in this component for this application
