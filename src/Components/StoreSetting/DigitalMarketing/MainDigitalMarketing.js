@@ -17,18 +17,23 @@ import PasswordShow from "../../../Common/passwordShow";
 import BasicTextFields from "../../../reuseableComponents/TextInputField";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import DeleteModal from "../../../reuseableComponents/DeleteModal";
+import CircularProgress from "@mui/material/CircularProgress";
 
-
-const MainDigitalMarketing = ({ seVisible }) => {
+const MainDigitalMarketing = () => {
   const [showModal, setShowModal] = useState(false);
   const [showModalEdit, setShowModalEdit] = useState(false);
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
+  const [loader, setLoader] = useState(false);
 
   const [digitalMarketingField, setDigitalMarketingField] = useState({
     id:"",
     tags:"",
     links:"",
     merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+  });
+  const [error, setError] = useState({
+    tags: "",
+    links: "",
   });
   const [errorMessage, setErrorMessage] = useState("");
   const [digitalmarketing, setDigitalmarketing] = useState([]);
@@ -62,10 +67,11 @@ const MainDigitalMarketing = ({ seVisible }) => {
   };
 
   const handleError = (error) => {
-    if (error.status === 401 || error.response.status === 401) {
+    console.log('error', error);
+    if (error?.status === 401 || error?.response?.status === 401) {
       getUnAutherisedTokenMessage();
       handleCoockieExpire();
-    } else if (error.status === "Network Error") {
+    } else if (error?.status === "Network Error") {
       getNetworkError();
     }
   };
@@ -80,30 +86,79 @@ const MainDigitalMarketing = ({ seVisible }) => {
     setErrorMessage("");
   };
 
-  const changeTittleHandler = (event) => {
-    const { name, value } = event.target;
-    const regex = /^[A-Za-z0-9 ]*$/;
-    if (regex.test(value) || value === "") {
-      setDigitalMarketingField({ ...digitalMarketingField, [name]: value });
-      setErrorMessage("");
-    } else {
-      setErrorMessage("Special characters are not allowed");
+  const changeHandler = (e) => {
+    const { name, value } = e.target;
+    const trimmedValue = value;
+    //const trimmedValue = value.trim();
+    if (name === "tags") {
+        if (trimmedValue === "") {
+          setError((prevError) => ({
+            ...prevError,
+            tags: "Tag is required",
+          }));
+        } else {
+          setError((prevError) => ({ ...prevError, tags: "" }));
+        }
+        setDigitalMarketingField((prevState) => ({
+          ...prevState,
+          [name]: trimmedValue,
+        }));
+    } else if (name === "links") {
+      if (trimmedValue === "") {
+        setError((prevError) => ({
+          ...prevError,
+          links: "Link is required",
+        }));
+      } else {
+        setError((prevError) => ({ ...prevError, links: "" }));
+      }
+      setDigitalMarketingField((prevState) => ({
+        ...prevState,
+        [name]: trimmedValue,
+      }));
     }
   };
 
   const handleDigital = async () => {
-    if (!digitalMarketingField.tags.trim()) {
-      setErrorMessage("Tag is required");
-      return;
-    }
-    if (!digitalMarketingField.links.trim()) {
-      setErrorMessage("Link is required");
+    if (digitalMarketingField.tags === "") {
+      setError((prevError) => ({ ...prevError, tags: "Tag is required" }));
+      if (digitalMarketingField.links === "") {
+        setError((prevError) => ({
+          ...prevError,
+          links: "Link is required",
+        }));
+      }
       return;
     }
 
+    if (digitalMarketingField.links === "") {
+      setError((prevError) => ({ ...prevError, links: "Link is required" }));
+      if (digitalMarketingField.links === "") {
+        setError((prevError) => ({
+          ...prevError,
+          links: "Link is required",
+        }));
+      }
+      //return;
+    }
+    if (digitalMarketingField.tags === "") {
+      setError((prevError) => ({
+        ...prevError,
+        tags: "Tag is required",
+      }));
+      // return;
+    }
+    if (
+      error.links === "Link is required" ||
+      error.tags === "Tag is required" 
+    ) {
+      return;
+    }
+
+    setLoader(true);
     try {
       const newItem = {
-        merchant_id,
+        merchant_id:merchant_id,
         tags:digitalMarketingField.tags,
         links:digitalMarketingField.links,
         token_id: userTypeData?.token_id,
@@ -127,6 +182,7 @@ const MainDigitalMarketing = ({ seVisible }) => {
     } catch (error) {
       handleError(error);
     }
+    setLoader(false);
   };
 
   const myStyles = {
@@ -167,9 +223,17 @@ const MainDigitalMarketing = ({ seVisible }) => {
   }));
 
 
-  const handleEdit = (id) => {
+  const handleEdit = (id, tags, links) => {
+    setDigitalMarketingField({
+      id,
+      tags,
+      links,
+    });
     setShowModalEdit(true);
-
+    setError({
+      tags: "",
+      links: "",
+    });
   };
 
   const [deleteDefaultId, setDeleteDefaultId] = useState(null);
@@ -185,12 +249,12 @@ const MainDigitalMarketing = ({ seVisible }) => {
     try {
       if (deleteDefaultId) {
         const data = {
-          tags_id: deleteDefaultId,
+          tags_id:deleteDefaultId,
           merchant_id,
           ...userTypeData,
         };
-        // console.log("confirmDeleteCategory",data)
-        // return
+        //console.log("confirmDeleteCategory",data)
+        //return
         if (data) {
           await dispatch(deleteDigitalMarketing(data)).unwrap();
           ToastifyAlert("Deleted Successfully", "success");
@@ -199,13 +263,10 @@ const MainDigitalMarketing = ({ seVisible }) => {
       setDeleteDefaultId(null);
       setDeleteModalOpen(false);
     } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
-        getUnAutherisedTokenMessage();
-        handleCoockieExpire();
-      } else if (error.status == "Network Error") {
-        getNetworkError();
-      }
+        handleError(error);
     }
+    setDeleteDefaultId(null);
+    setDeleteModalOpen(false);
   };
 
 
@@ -216,11 +277,102 @@ const MainDigitalMarketing = ({ seVisible }) => {
     setErrorMessage("");
   };
 
-  const handleDigitalEdit = () =>{
+  const handleDigitalEdit = async () =>{
+    if (digitalMarketingField.tags === "") {
+      setError((prevError) => ({ ...prevError, tags: "Tag is required" }));
+      if (digitalMarketingField.links === "") {
+        setError((prevError) => ({
+          ...prevError,
+          links: "Link is required",
+        }));
+      }
+      return;
+    }
 
+    if (digitalMarketingField.links === "") {
+      setError((prevError) => ({ ...prevError, links: "Link is required" }));
+      if (digitalMarketingField.links === "") {
+        setError((prevError) => ({
+          ...prevError,
+          links: "Link is required",
+        }));
+      }
+      return;
+    }
+    if (digitalMarketingField.tags === "") {
+      setError((prevError) => ({
+        ...prevError,
+        tags: "Tag is required",
+      }));
+      // return;
+    }
+    if (
+      error.links === "Link is required" ||
+      error.tags === "Tag is required" 
+    ) {
+      return;
+    }
+    const formData = new FormData();
+    // Append your tax data
+    formData.append("tags_id",digitalMarketingField.id);
+    formData.append("tags",digitalMarketingField.tags);
+    formData.append("merchant_id",merchant_id);
+    formData.append("links",digitalMarketingField.links);
+    formData.append("token_id",userTypeData?.token_id);
+    formData.append("login_type",userTypeData?.login_type);
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+    //return
+    setLoader(true);
+    try {
+      const response = await axios.post(
+        BASE_URL + DIGITALMAKRTING_UPDATE,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+            Authorization: `Bearer ${userTypeData?.token}`,
+          },
+        }
+      );
+      if (response.data.status === true) {
+        try {
+          let data = {
+            merchant_id,
+            ...userTypeData,
+          };
+          if (data) {
+            await dispatch(fetchdigitalMarketingData(data)).unwrap();
+          }
+        } catch (error) {
+          if (error.status == 401 || error.response.status === 401) {
+            getUnAutherisedTokenMessage();
+            handleCoockieExpire();
+          } else if (error.status == "Network Error") {
+            getNetworkError();
+          }
+        }
+        ToastifyAlert("Updated Successfully", "success");
+        closeModalEdit();
+      } else {
+        ToastifyAlert(response.data.message, "error");
+      }
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    }
+    setLoader(false);
   }
 
-  console.log("digitalmarketing",digitalmarketing)
+  const columns = [
+    "Tag",
+    "Link",
+  ];
 
   return (
     <>
@@ -229,7 +381,7 @@ const MainDigitalMarketing = ({ seVisible }) => {
           <div className="q-attributes-bottom-header-sticky">
             <div className="q-attributes-bottom-header">
               <span>Digital Marketing</span>
-              {Object.keys(digitalmarketing).length > 0 && (
+              {!digitalmarketing.status &&(
                 <p onClick={openModal}>
                   Add Digital Marketing<img src={AddIcon} alt="add-icon" />
                 </p>
@@ -239,21 +391,7 @@ const MainDigitalMarketing = ({ seVisible }) => {
 
           <Grid container>
             {digitalmarketing.loading ? (
-              <SkeletonTable
-                columns={[
-                  <div className="category-checkmark-div defaultCheckbox-div" style={{ width: "unset !important" }}>
-                    <label className="category-checkmark-label">
-                      <input type="checkbox" id="selectAll" />
-                      <span className="category-checkmark" style={{ left: "1rem", transform: "translate(0px, -10px)" }}></span>
-                    </label>
-                  </div>,
-                  "Tag",
-                  "Link",
-                  <div className="default-Edit-Delete">
-                    <img src={DeleteIconAll} alt="delete-icon" />
-                  </div>,
-                ]}
-              />
+              <SkeletonTable columns={columns} />
             ) : (
               <TableContainer>
                 <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
@@ -264,35 +402,21 @@ const MainDigitalMarketing = ({ seVisible }) => {
                       <StyledTableCell></StyledTableCell>
                     </TableRow>
                   </TableHead>
-                  <TableBody>
-                    {/* {digitalmarketing.length > 0 &&
-                      digitalmarketing.map((data, index) => (
-                        <StyledTableRow key={index}>
-                          <StyledTableCell>{data.tags || ""}</StyledTableCell>
-                          <StyledTableCell>{data.links || ""}</StyledTableCell>
-                          <StyledTableCell>
-                            <div className="default-Edit-Delete">
-                              <img className="mx-1 edit cursor-pointer" src={EditIcon} alt="Edit" />
-                              <img className="mx-1 delete cursor-pointer" src={DeleteIcon} alt="Delete" />
-                            </div>
-                          </StyledTableCell>
-                        </StyledTableRow>
-                      ))} */}
-                      {Object.keys(digitalmarketing).length > 0 && (
-                        <>
-                      <StyledTableCell>{digitalmarketing?.tags || ""}</StyledTableCell>
-                      <StyledTableCell>{digitalmarketing?.links || ""}</StyledTableCell>
-                      <StyledTableCell>
-                            <div className="default-Edit-Delete">
-                              <img className="mx-1 edit cursor-pointer" src={EditIcon} onClick={() => handleEdit(digitalmarketing?.id)} alt="Edit" />
-                              <img className="mx-1 delete cursor-pointer" src={DeleteIcon} onClick={() => handleDelete(digitalmarketing?.id)} alt="Delete" />
-                            </div>
-                          </StyledTableCell>
-                          </>
-                        )}
-                  </TableBody>
+                  {!DigitalMarketingDataState.digitalMarketingData?.status ? 
+                    <StyledTableCell>NO DATA FOUND</StyledTableCell>:
+                    <TableBody>
+                        <StyledTableCell>{digitalmarketing.tags_data?.tags || ""}</StyledTableCell>
+                        <StyledTableCell>{digitalmarketing.tags_data?.links || ""}</StyledTableCell>
+                        <StyledTableCell>
+                          <div className="default-Edit-Delete">
+                            <img className="mx-1 edit cursor-pointer" src={EditIcon}   onClick={() => handleEdit(digitalmarketing.tags_data?.id, digitalmarketing.tags_data?.tags, digitalmarketing.tags_data?.links)} alt="Edit" />
+                            <img className="mx-1 delete cursor-pointer" src={DeleteIcon} onClick={() => handleDelete(digitalmarketing.tags_data?.id)} alt="Delete" />
+                          </div>
+                        </StyledTableCell>
+                    </TableBody>
+                  }
                 </StyledTable>
-              </TableContainer>
+                </TableContainer>
             )}
           </Grid>
 
@@ -305,14 +429,25 @@ const MainDigitalMarketing = ({ seVisible }) => {
               <div className="view-category-item-modal-header">
                 <div className="title_attributes_section" style={{ margin: "1rem 1rem" }}>
                   <label className="mb-2">Tags</label>
-                  <BasicTextFields value={digitalMarketingField.tags} name="tags" onChangeFun={changeTittleHandler} placeholder="Enter Tags" />
+                  <BasicTextFields value={digitalMarketingField.tags} name="tags" onChangeFun={changeHandler} placeholder="Enter Tags" />
+                  <span className="input-error">
+                      {error.tags !== "" ? error.tags : ""}
+                  </span>
                   <label className="mb-2">Links</label>
-                  <BasicTextFields value={digitalMarketingField.links} name="links" onChangeFun={changeTittleHandler} placeholder="Enter Links" />
+                  <BasicTextFields value={digitalMarketingField.links} name="links" onChangeFun={changeHandler} placeholder="Enter Links" />
+                  <span className="input-error">
+                      {error.links !== "" ? error.links : ""}
+                    </span>
                   <span className="input-error">{errorMessage}</span>
                 </div>
               </div>
               <div className="q-add-categories-section-middle-footer">
-                <button onClick={handleDigital} className="quic-btn quic-btn-save">Add</button>
+                <button onClick={handleDigital} disabled={loader} className="quic-btn quic-btn-save attributeUpdateBTN">
+                {loader ? ( <><CircularProgress color={"inherit"} className="loaderIcon"  width={15}  size={15}/>Add{" "} </>
+                  ) : (
+                    "Add"
+                  )}
+                </button>
                 <button onClick={closeModal} className="quic-btn quic-btn-cancle">Cancel</button>
               </div>
             </Box>
@@ -328,14 +463,25 @@ const MainDigitalMarketing = ({ seVisible }) => {
               <div className="view-category-item-modal-header">
                 <div className="title_attributes_section" style={{ margin: "1rem 1rem" }}>
                   <label className="mb-2">Tags</label>
-                  <BasicTextFields value={digitalMarketingField.tags} name="tags" onChangeFun={changeTittleHandler} placeholder="Enter Tags" />
+                  <BasicTextFields value={digitalMarketingField.tags} name="tags" onChangeFun={changeHandler} placeholder="Enter Tags" />
+                  <span className="input-error">
+                      {error.tags !== "" ? error.tags : ""}
+                    </span>
                   <label className="mb-2">Links</label>
-                  <BasicTextFields value={digitalMarketingField.links} name="links"  onChangeFun={changeTittleHandler} placeholder="Enter Links" />
+                  <BasicTextFields value={digitalMarketingField.links} name="links"  onChangeFun={changeHandler} placeholder="Enter Links" />
+                  <span className="input-error">
+                      {error.links !== "" ? error.links : ""}
+                    </span>
                   <span className="input-error">{errorMessage}</span>
                 </div>
               </div>
               <div className="q-add-categories-section-middle-footer">
-                <button onClick={handleDigitalEdit} className="quic-btn quic-btn-save">Update</button>
+                <button onClick={handleDigitalEdit} disabled={loader} className="quic-btn quic-btn-save attributeUpdateBTN">
+                  {loader ? ( <><CircularProgress color={"inherit"} className="loaderIcon"  width={15}  size={15}/>Update{" "} </>
+                  ) : (
+                    "Update"
+                  )}
+                </button>
                 <button onClick={closeModalEdit} className="quic-btn quic-btn-cancle">Cancel</button>
               </div>
             </Box>

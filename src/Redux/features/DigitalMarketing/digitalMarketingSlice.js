@@ -28,8 +28,8 @@ export const fetchdigitalMarketingData = createAsyncThunk(
           },
         }
       );
-      if (response.data.status === true) {
-        return response.data.tags_data;
+      if (response) {
+        return response.data;
       }
     } catch (error) {
       const customError = {
@@ -60,7 +60,7 @@ export const deleteDigitalMarketing = createAsyncThunk(
       if (response) {
         console.log(response);
         return {
-          categoryId: data.id,
+          categoryId: data.tags_id,
         };
       }
     } catch (error) {
@@ -100,10 +100,11 @@ const digitalMarketingSlice = createSlice({
     builder.addCase(deleteDigitalMarketing.fulfilled, (state, action) => {
       state.loading = false;
       state.successMessage = action.payload.message;
-      state.digitalMarketingData = state.digitalMarketingData.filter(
+      // console.log("Xvcbnvc",Object.values(state.digitalMarketingData))
+      // return
+      state.digitalMarketingData = Object.values(state.digitalMarketingData).filter(
         (item) => item && item.id !== action.payload.categoryId
       );
-
       state.error = ""; // Reset the error message
     });
     builder.addCase(deleteDigitalMarketing.rejected, (state, action) => {

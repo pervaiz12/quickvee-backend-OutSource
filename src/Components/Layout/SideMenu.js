@@ -129,7 +129,7 @@ const SideMenu = () => {
       dispatch(setMenuOpen(true));
     } else {
       const updatedMenuItems = [...menuItems];
-      console.log("updatedMenuItems",updatedMenuItems)
+
       if (LoginGetDashBoardRecordJson?.login_type === "superadmin") {
         const newMenuItem = {
           id: 91,
@@ -170,9 +170,22 @@ const SideMenu = () => {
           text: "Digital Marketing Tags",
           link: "/Digital-marketing-tags",
         };
-        updatedMenuItems.splice(updatedMenuItems.length - 2, 0, newMenuItemDigit);
+        const updatedTest = updatedMenuItems.map(item => {
+          if (item.id === 9 && item.dropdownItems) {
+            return {
+              ...item,
+              dropdownItems: [
+                ...item.dropdownItems,
+                newMenuItemDigit
+              ]
+            };
+          }
+          return item;
+        });
+        // console.log("test",updatedTest)
+        setMenuItemSwitcher(updatedTest);
       }
-      setMenuItemSwitcher(updatedMenuItems);
+     
     }
   }, [currentUrl, isStoreActive]);
 
