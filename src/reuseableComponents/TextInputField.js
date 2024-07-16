@@ -19,6 +19,7 @@ export default function BasicTextFields({
   maxRows,
   onFocusData,
   autoComplete,
+  handlePaste,
 }) {
   return (
     <FormControl fullWidth>
@@ -49,6 +50,7 @@ export default function BasicTextFields({
         maxRows={maxRows}
         onFocus={onFocusData}
         autoComplete={false}
+        onPaste={handlePaste}
       />
     </FormControl>
   );

@@ -389,6 +389,9 @@ export default function SettingStoreOption() {
   // const handleKeyPress = (event) => {
   //   event.preventDefault();
   // }
+  const handlePaste = (e) => {
+    e.preventDefault();
+  };
 
   return (
     <>
@@ -524,6 +527,7 @@ export default function SettingStoreOption() {
                       disable={!orderState?.enabledFutureOrder}
                       onKeyPressFun={handleKeyPress}
                       maxLength={2}
+                      handlePaste={handlePaste}
                     />
                     {advancedayCount && (
                       <p className="error-message pt-1">{advancedayCount}</p>
