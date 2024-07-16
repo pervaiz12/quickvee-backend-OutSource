@@ -807,7 +807,7 @@ export default function InfoFunction() {
       if (value !== "") {
         // console.log(value.length)
         if (value.length !== 10) {
-          errorMessage.phoneError = "Invalid number";
+          errorMessage.phoneError = "Invalid phone number";
         } else {
           errorMessage.phoneError = "";
         }
