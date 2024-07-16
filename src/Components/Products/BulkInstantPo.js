@@ -220,7 +220,7 @@ const BulkInstantPo = ({
         newRequired[index][name] = "";
       } else if (name === "cost" && value) {
         newRequired[index][name] = "";
-      } else if ((name === "qty" && !value) || (name === "cost" && !value)) {
+      } else if ((name === "qty" && value) || (name === "cost" && value)) {
         newRequired[index][name] =
           name === "qty"
             ? "Quantity is required"
@@ -231,23 +231,30 @@ const BulkInstantPo = ({
       setRequired(newRequired);
     }
   };
-
   const validateFields = () => {
     let hasError = false;
     const newErrors = instancePoMultiple?.instantPoState?.map((item, index) => {
       const itemErrors = { qty: "", cost: "" };
-      if (!item.qty) {
-        itemErrors.qty = "Quantity is required";
+      if (item.qty && !item.cost) {
+        // itemErrors.qty = "Quantity is required";
+        // hasError = true;
+        itemErrors.cost = "Cost Per Item is required";
         hasError = true;
       }
-      if (!item.cost) {
-        itemErrors.cost = "Cost Per Item is required";
+      if (!item.qty && item.cost) {
+        itemErrors.qty = "Quantity is required";
         hasError = true;
       }
       return itemErrors;
     });
     setRequired(newErrors);
     return !hasError; // return true if no errors
+  };
+
+  const areAllKeysEmpty = (arr) => {
+    return arr.every((obj) => {
+      return Object.values(obj).every((value) => value === "");
+    });
   };
 
   const handlSumbitInstantPo = async () => {
@@ -335,6 +342,17 @@ const BulkInstantPo = ({
       if (!validateFields()) {
         error = true;
       }
+      if (areAllKeysEmpty(instancePoMultiple?.instantPoState)) {
+        error = true;
+        if (
+          inventoryData?.inv_setting?.split(",")?.includes("2") &&
+          !instancePoMultiple?.description
+        ) {
+          error = true;
+        } else {
+          handleCloseEditModal();
+        }
+      }
       if (
         inventoryData?.inv_setting?.split(",")?.includes("2") &&
         !instancePoMultiple?.description
@@ -348,13 +366,62 @@ const BulkInstantPo = ({
       if (!error) {
         setLoading(true);
         setError(false);
+
+        // find varient Id's
+        const getFilledVarDataIds = (dataArr, varDataArr) => {
+          return dataArr.reduce((ids, item, index) => {
+            const allKeysFilled = Object.values(item).every(
+              (value) => value !== ""
+            );
+            if (allKeysFilled && varDataArr[index]?.id) {
+              ids.push(varDataArr[index].id);
+            }
+            return ids;
+          }, []);
+        };
+
+        const filledVarDataIds = getFilledVarDataIds(
+          instancePoMultiple?.instantPoState,
+          varientData
+        );
+
+        // find varient qty
+
+        const getFilledQtys = (instancePoState) => {
+          return instancePoState
+            .filter((item) =>
+              Object.values(item).every((value) => value !== "")
+            ) // Filter filled objects
+            .map((item) => item.qty); // Map to qty values
+        };
+
+        const filledQtys = getFilledQtys(
+          instancePoMultiple.instantPoState
+        ).toString();
+
+        // find price
+
+        const getFillPrice = (instancePoState) => {
+          return instancePoState
+            .filter((item) =>
+              Object.values(item).every((value) => value !== "")
+            ) // Filter filled objects
+            .map((item) => item.cost); // Map to qty values
+        };
+
+        const filledPrice = getFillPrice(
+          instancePoMultiple.instantPoState
+        ).toString();
+
+        // start payload
+
         formData.append("product_id", productId?.id);
         formData.append(
           "variant_id",
           !Boolean(+productData?.isvarient)
             ? ""
             : modalType === "bulk-edit"
-              ? varientData?.map((i) => i?.id)?.toString()
+              ? filledVarDataIds?.map((i) => i)?.toString()
               : varientIndex
         );
         formData.append(
@@ -362,14 +429,8 @@ const BulkInstantPo = ({
           LoginGetDashBoardRecordJson?.data?.merchant_id
         );
         formData.append("description", instancePoMultiple?.description);
-        formData.append(
-          "qty",
-          instancePoMultiple?.instantPoState?.map((i) => i?.qty)?.toString()
-        );
-        formData.append(
-          "price",
-          instancePoMultiple?.instantPoState?.map((i) => i?.cost)?.toString()
-        );
+        formData.append("qty", filledQtys);
+        formData.append("price", filledPrice);
         formData.append("login_type", userTypeData?.login_type);
         formData.append("token_id", userTypeData?.token_id);
         formData.append("token", userTypeData?.token);
