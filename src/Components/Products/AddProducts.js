@@ -2497,8 +2497,8 @@ const AddProducts = () => {
                   </span>
                 </span>
               </div> */}
-              <div className="q-add-categories-section-middle-form mt-1">
-                <div className="q-add-categories-single-input ">
+              <div style={{padding:0}} className="q-add-categories-section-middle-form mt-1">
+                <div className="q-add-categories-single-input px-5">
                   <label htmlFor="title" className="product-input-title">
                     Title
                   </label>
@@ -2523,7 +2523,7 @@ const AddProducts = () => {
                   )}
                 </div>
 
-                <div className="q-add-categories-single-input">
+                <div className="q-add-categories-single-input  px-5">
                   <label
                     htmlFor="description"
                     className="mb-1 product-input-title"
@@ -2552,7 +2552,7 @@ const AddProducts = () => {
                       ""
                     )}
                   </div> */}
-                <div className="">
+                <div className=" px-5">
                   <div className="q-add-categories-single-input">
                     <SearchableDropdown
                       title="Category"
@@ -2569,7 +2569,7 @@ const AddProducts = () => {
                   </div>
                 </div>
 
-                <div className="q-add-categories-single-input">
+                <div className="q-add-categories-single-input  px-5">
                   <SearchableDropdown
                     title="Taxes"
                     keyName="taxes"
@@ -2585,7 +2585,7 @@ const AddProducts = () => {
                   />
                 </div>
 
-                <div className="q-add-categories-single-input">
+                <div className="q-add-categories-single-input  px-5">
                   <SearchableDropdown
                     title="Related Products"
                     keyName="relatedProduct"
@@ -2602,7 +2602,7 @@ const AddProducts = () => {
                   />
                 </div>
 
-                <div className="q-add-categories-single-input">
+                <div className="q-add-categories-single-input  px-5">
                   <SearchableDropdown
                     title="Frequently Bought Together"
                     keyName="frequentlyBought"
@@ -2619,7 +2619,7 @@ const AddProducts = () => {
                   />
                 </div>
 
-                <div className="q-add-categories-single-input image-list mt-6">
+                <div className="q-add-categories-single-input image-list mt-6 px-5">
                   <div className="q_dashbaord_netsales ">
                     <h1>Product Images</h1>
                   </div>
@@ -2715,7 +2715,7 @@ const AddProducts = () => {
                                     <img
                                       src={
                                         BASE_URL +
-                                        `/upload/products/${LoginGetDashBoardRecordJson?.data?.merchant_id}/` +
+                                        `upload/products/${LoginGetDashBoardRecordJson?.data?.merchant_id}/` +
                                         img
                                       }
                                       alt="Preview"
@@ -2774,7 +2774,7 @@ const AddProducts = () => {
                   {}
                 </div>
 
-                <div className="mt-6">
+                <div className="mt-6 px-5">
                   <VariantAttributes
                     varientDropdownList={dropdownData?.varientList}
                     varientError={varientError}
@@ -2787,6 +2787,7 @@ const AddProducts = () => {
                     handleSetVarientLength={handleSetVarientLength}
                     addMoreVarientItems={addMoreVarientItems}
                     handleClearFormData={handleClearFormData}
+                    formValue={formValue}
                   />
                 </div>
 

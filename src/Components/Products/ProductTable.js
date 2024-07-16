@@ -734,7 +734,7 @@ const ProductTable = ({
                                           <StyledTableCell align={"center"}>
                                             <div className="categories-items">
                                               <div className="flex items-center space-x-2 text-base"></div>
-                                              <div className="mt-3 flex -space-x-9 overflow-hidden">
+                                              <div className="mt-3 p-2 flex -space-x-9 overflow-hidden">
                                                 {product?.media
                                                   ?.split(",")
                                                   .slice(0, 4)
@@ -743,7 +743,7 @@ const ProductTable = ({
                                                       <div className="relative">
                                                         <img
                                                           key={index}
-                                                          className="inline-block h-12 w-12 rounded-full ring-2 ring-white"
+                                                          className="inline-block h-12 w-12 rounded-full ring-2 ring-gray-300"
                                                           src={
                                                             BASE_URL +
                                                             `upload/products/${LoginGetDashBoardRecordJson?.data?.merchant_id}/` +
@@ -757,7 +757,7 @@ const ProductTable = ({
                                                           alt=""
                                                         />
                                                         {(index === 3 &&
-                                                          product?.media
+                                                          product?.media.split(',')
                                                             ?.length > 4 )? (
                                                             <div
                                                               className="flex justify-center items-center
@@ -773,7 +773,7 @@ const ProductTable = ({
                                                                 <p className="text-white text-[10px]">
                                                                   +
                                                                   {product
-                                                                    ?.media
+                                                                    ?.media.split(',')
                                                                     .length - 4}
                                                                 </p>
                                                                 <p className="text-white text-[10px]">
@@ -786,7 +786,7 @@ const ProductTable = ({
                                                     </>
                                                   ))}
                                               </div>
-                                              {product?.media?.split(",")
+                                              {/* {product?.media?.split(",")
                                                 .length > 4 ? (
                                                 <div className="mt-3 text-sm font-medium">
                                                   <span className="text-blue-500">
@@ -798,7 +798,7 @@ const ProductTable = ({
                                                 </div>
                                               ) : (
                                                 ""
-                                              )}
+                                              )} */}
                                             </div>
                                           </StyledTableCell>
                                           {selectedListingType ===
