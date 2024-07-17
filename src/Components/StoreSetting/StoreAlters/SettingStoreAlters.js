@@ -590,8 +590,8 @@ export default function SettingStoreAlters() {
             />
             <span className="store-setting-error">{errors.msg_no}</span>
           </div>
-          {login_type?.toString().toLowerCase() == "superadmin" ? (
-            <>
+          {/* {login_type?.toString().toLowerCase() == "superadmin" ? ( */}
+            {/* <> */}
               <div className="store-setting-head-div">Store Name:</div>
               <div className="store-setting-input-div">
                 <input
@@ -603,10 +603,10 @@ export default function SettingStoreAlters() {
                 />
                 <span className="store-setting-error">{errors.store_name}</span>
               </div>
-            </>
+            {/* </>
           ) : (
             ""
-          )}
+          )} */}
         </div>
 
         {/* Online Order Status(Customers) */}
