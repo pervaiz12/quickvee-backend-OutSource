@@ -322,7 +322,7 @@ const SideMenu = () => {
                       }}
                     >
                       {/* {activeItem === item.id ? item.activeIcon : item.icon} */}
-                      {getFirstTwoSegmentsPath(activeItem) ===
+                      {getFirstTwoSegmentsPathIsStoreAvtive(activeItem) ===
                         item.link.trim() || hoveredItem === item.id
                         ? item.activeIcon
                         : item.icon}
@@ -381,7 +381,7 @@ const DropdownMenuItem = ({
       activeDropDownItem(item.id);
     }
     // item.id === currentDropDownItem && dispatch(setIsDropdownOpen(true));
-    dispatch(setIsDropdownOpen(!isTabletNav));
+    isMenuOpenRedux && dispatch(setIsDropdownOpen(!isTabletNav));
   }, [isTabletNav, dropDownItem, isTabletNav, activeItem]);
 
   const handleToggleDropdownItems = (link, e) => {

@@ -1,6 +1,7 @@
 import { Grid } from "@mui/material";
 import { BASE_URL } from "../../Constants/Config";
 import infoImage from "../../image/Group 196.svg";
+import deleteIcon from "../../Assests/Category/deleteIcon.svg"
 const LogoAndBanner = ({
   BannersBoolean,
   infoRecord,
@@ -29,7 +30,7 @@ const LogoAndBanner = ({
                         onClick={() => handleDelete("image")}
                       >
                         {" "}
-                        <img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img>
+                        <img src={deleteIcon} />
                       </div>
                     </div>
                   ) : (
@@ -102,7 +103,7 @@ const LogoAndBanner = ({
                         onClick={() => handleDelete("qrCode")}
                       >
                         {" "}
-                        <img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img>
+                        <img src={deleteIcon}/>
                       </div>
                     </div>
                   ) : (
@@ -180,7 +181,7 @@ const LogoAndBanner = ({
                         onClick={() => handleDelete("receieptLogo")}
                       >
                         {" "}
-                        <img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img>
+                        <img src={deleteIcon}/>
                       </div>
                     </div>
                   ) : (
@@ -266,7 +267,7 @@ const LogoAndBanner = ({
                     onClick={() => handleDelete("banners")}
                   >
                     {" "}
-                    <img src="/static/media/deleteIcon.69bc427992d4100eeff181e798ba9283.svg"></img>
+                    <img src={deleteIcon}/>
                   </div>
                 </div>
               ) : (
