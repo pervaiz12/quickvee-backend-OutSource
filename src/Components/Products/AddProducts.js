@@ -69,6 +69,10 @@ const AddProducts = () => {
     "/" +
     window.location.pathname.split("/")[3];
 
+  const isProductAdd = location.pathname.includes("/products/add");
+  const isProductEdit = location.pathname.includes("/products/edit");
+  const isProductVariant = location.pathname.includes("/products/varient-edit");
+
   // find productId from Url
   const productId = useParams();
   const { validatTitle, validatDescription, addVarientFormValidation } =
@@ -267,7 +271,7 @@ const AddProducts = () => {
         varientLength: "",
         formValue: [],
       });
-      if (pageUrl !== "inventory/product/edit") {
+      if (!isProductEdit) {
         setVarientLength([
           {
             id: 1,
@@ -306,7 +310,7 @@ const AddProducts = () => {
         varientLength: "",
         formValue: [],
       });
-      if (pageUrl !== "inventory/products/edit") {
+      if (!isProductEdit) {
         setFormValue([
           {
             costPerItem: "",
@@ -746,7 +750,7 @@ const AddProducts = () => {
           const data = {
             merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
             upc: value.trim(),
-            id: pageUrl === "inventory/products/edit" ? productId?.id : "",
+            id: isProductEdit ? productId?.id : "",
             ...userTypeData,
           };
 
@@ -795,8 +799,7 @@ const AddProducts = () => {
         const data = {
           merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
           upc: value.trim(),
-          product_id:
-            pageUrl === "inventory/products/edit" ? productId?.id : "",
+          product_id: isProductEdit ? productId?.id : "",
           ...userTypeData,
         };
 
@@ -963,9 +966,7 @@ const AddProducts = () => {
 
           // for single form
           if (isUpcValid && isSubmitCalled && !isLocalDuplicate) {
-            pageUrl === "inventory/products/varient-edit"
-              ? handleUpdateVarient()
-              : handleSubmitForm();
+            isProductVariant ? handleUpdateVarient() : handleSubmitForm();
           }
           return;
         }
@@ -1149,7 +1150,7 @@ const AddProducts = () => {
         } else if (i === 0) {
           return !["upcCode", "customCode"].includes(name) &&
             !item[currentTitle][name] &&
-            pageUrl === "inventory/products/add"
+            isProductAdd
             ? {
                 ...item,
                 [currentTitle]: {
@@ -1637,15 +1638,13 @@ const AddProducts = () => {
                   reorderLevel: result?.reorderLevel || "",
                   // here when fetching prodcut data and track and sellout was false but still showing true and check that's why using this condition
                   trackQuantity:
-                    result?.trackQuantity ||
-                    pageUrl !== "inventory/products/edit"
+                    result?.trackQuantity || !isProductEdit
                       ? true
                       : false || !result?.notEditable
                         ? true
                         : false,
                   sellOutOfStock:
-                    result?.sellOutOfStock ||
-                    pageUrl !== "inventory/products/edit"
+                    result?.sellOutOfStock || !isProductEdit
                       ? true
                       : false || !result?.notEditable
                         ? true
@@ -1814,9 +1813,9 @@ const AddProducts = () => {
 
   useEffect(() => {
     // called fetchproduct data api based on id
-    if (pageUrl === "inventory/products/edit") {
+    if (isProductEdit) {
       fetchProductDataById();
-    } else if (pageUrl === "inventory/products/varient-edit") {
+    } else if (isProductVariant) {
       fetchSingleVarientData();
     }
   }, [pageUrl, location]);
@@ -1830,7 +1829,7 @@ const AddProducts = () => {
   };
 
   useEffect(() => {
-    if (pageUrl === "inventory/products/edit") {
+    if (isProductEdit) {
       // fill data fields after fetcing data
       setProductInfo({
         title: productData?.title,
@@ -2273,7 +2272,7 @@ const AddProducts = () => {
       // reorder_cost: [10, 10, 10, 10],
     };
 
-    if (pageUrl === "inventory/products/edit") {
+    if (isProductEdit) {
       data["productid"] = productData?.id ? productData?.id : "";
       data["var_id"] = isMultipleVarient
         ? varientCategory("productEditId", "", "").join(",").trim()
@@ -2326,20 +2325,17 @@ const AddProducts = () => {
           formdata.append("files[]", productInfo?.uploadFiles[i]?.file);
         }
         try {
-          const res =
-            pageUrl === "inventory/products/edit"
-              ? await dispatch(editProductData(formdata)).unwrap()
-              : await dispatch(addProduct(formdata)).unwrap();
+          const res = isProductEdit
+            ? await dispatch(editProductData(formdata)).unwrap()
+            : await dispatch(addProduct(formdata)).unwrap();
 
           if (res?.data?.status) {
             ToastifyAlert(
-              pageUrl === "inventory/products/edit"
-                ? "Updated Successfully"
-                : "Added Successfully",
+              isProductEdit ? "Updated Successfully" : "Added Successfully",
               "success"
             );
 
-            if (pageUrl === "inventory/products/edit") {
+            if (isProductEdit) {
               fetchProductDataById();
               setProductInfo((prev) => ({
                 ...prev,
@@ -2469,7 +2465,7 @@ const AddProducts = () => {
         <div class="loading-box">
           <Loader />
         </div>
-      ) : pageUrl !== "inventory/products/varient-edit" ? (
+      ) : !isProductVariant ? (
         <>
           <EditPage
             openEditModal={openEditModal}
@@ -2497,9 +2493,7 @@ const AddProducts = () => {
             <div className="q-add-categories-section">
               <SwitchToBackButton
                 linkTo={"/inventory/products"}
-                title={`${
-                  pageUrl === "inventory/products/edit" ? "Edit" : "Add"
-                }Product`}
+                title={`${isProductEdit ? "Edit" : "Add"}Product`}
               />
               {/* <div className="q-add-categories-section-header">
                 <span
@@ -2510,7 +2504,7 @@ const AddProducts = () => {
                   <img src={AddNewCategory} alt="Add-New-Category" />
 
                   <span style={{ width: "153px" }}>
-                    {pageUrl === "inventory/products/edit" ? "Edit" : "Add"}{" "}
+                    {isProductEdit ? "Edit" : "Add"}{" "}
                     Product
                   </span>
                 </span>
@@ -2847,8 +2841,7 @@ const AddProducts = () => {
                         }`,
                       }}
                     >
-                      {pageUrl === "inventory/products/edit" &&
-                      productData?.isvarient === "1" ? (
+                      {isProductEdit && productData?.isvarient === "1" ? (
                         <div
                           className="q-category-bottom-header"
                           style={{ marginLeft: "16rem" }}
@@ -2864,7 +2857,7 @@ const AddProducts = () => {
                         ""
                       )}
                       <div className="q-category-bottom-header">
-                        {pageUrl !== "inventory/products/edit" ? (
+                        {!isProductEdit ? (
                           <button
                             className="quic-btn quic-btn-save submit-btn-click"
                             onClick={handleSubmitForm}

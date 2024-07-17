@@ -63,8 +63,12 @@ const ProductSalesReport = () => {
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location?.search);
 
-  const productId = location?.pathname?.split("/")[4];
-  const varientId = location?.pathname?.split("/")[5];
+  const productId = !!searchParams.get("varientName")
+    ? location?.pathname?.split("/").slice(-2, -1)[0]
+    : location?.pathname?.split("/").slice(-1)[0];
+  const varientId = !!searchParams.get("varientName")
+    ? location?.pathname?.split("/").slice(-1)[0]
+    : "";
   const dispatch = useDispatch();
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
 
