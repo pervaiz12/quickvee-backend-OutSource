@@ -445,6 +445,7 @@ export default function Header() {
                 {/* Online Store and Sync Data section */}
                 <Link
                   to={`https://sandbox.quickvee.com/merchant/${LoginGetDashBoardRecordJson?.data?.merchant_id}?orderMethod=pickup`}
+                  // to={`https://www.quickvee.com/merchant/${LoginGetDashBoardRecordJson?.data?.merchant_id}?orderMethod=pickup`}
                   target="_blank"
                 >
                   <div className="cursor-pointer ml-5 flex items-center">
