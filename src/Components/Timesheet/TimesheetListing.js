@@ -518,10 +518,14 @@ const TimesheetListing = ({ data }) => {
       } else {
         setaddbreak({
           ...addbreak,
-          addbreakIn: null,
+          addbreakIn: newTime.format("HH:mm:ss"),
+          addbreakOut: null,
         });
-        setBreakInTimeError(
-          "Break-In Time should be smaller than Break-In Time."
+        // setBreakInTimeError(
+        //   "Break-In Time should be smaller than Break-In Time."
+        // );
+        setBreakOutTimeError(
+          "Break-Out Time should be greater than Break-In Time."
         );
       }
     }
@@ -1422,6 +1426,11 @@ const TimesheetListing = ({ data }) => {
                       slotProps={{
                         textField: { placeholder: "Select Time" },
                       }}
+                      value={
+                        addbreak.addbreakIn
+                          ? dayjs(addbreak.addbreakIn, "HH:mm")
+                          : null
+                      }
                       onChange={(newTime) =>
                         handleBreakStartTimeChange(newTime)
                       }
@@ -1458,6 +1467,11 @@ const TimesheetListing = ({ data }) => {
                       slotProps={{
                         textField: { placeholder: "Select Time" },
                       }}
+                      value={
+                        addbreak.addbreakOut
+                          ? dayjs(addbreak.addbreakOut, "HH:mm")
+                          : null
+                      }
                       onChange={(newTime) => handleBreakEndTimeChange(newTime)}
                       components={{
                         OpenPickerIcon: () => (
