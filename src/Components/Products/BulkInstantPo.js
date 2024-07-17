@@ -8,7 +8,7 @@ import {
 } from "../../Redux/features/Product/ProductSlice";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import { useAuthDetails } from "../../Common/cookiesHelper";
-import { Box, CircularProgress } from "@mui/material";
+import { Box, CircularProgress, Grid } from "@mui/material";
 import PasswordShow from "../../Common/passwordShow";
 
 const BulkInstantPo = ({
@@ -465,13 +465,14 @@ const BulkInstantPo = ({
     <>
       <div>
         <div class="bulk-instant-po">
-          <div class="varient-form ">
+          <div container class="varient-form custom-scroll">
             {/* for bulk instant PO */}
+
             {modalType !== "single_instant" ? (
               <>
                 {varientData?.map((varient, index) => {
                   return (
-                    <div class="varient-container">
+                    <div class="varient-container px-5">
                       <div class="varientform ">
                         <p className="varientName">{varient?.variant}</p>
                         <div class="form">
@@ -539,7 +540,7 @@ const BulkInstantPo = ({
                     </div>
                   );
                 })}
-                <div class="po-description-area ">
+                <div class="po-description-area px-5">
                   <div className="col-qv-12 inputs">
                     <div className="varient-input-wrapper">
                       <label className="varientName">Description</label>
@@ -569,7 +570,7 @@ const BulkInstantPo = ({
               <>
                 {Array.from({ length: 1 })?.map((_, index) => {
                   return (
-                    <div class="varient-container">
+                    <div class="varient-container px-5">
                       <div class="varientform ">
                         <p className="varientName">
                           {varientData?.[varientIndex]?.variant}
@@ -634,7 +635,7 @@ const BulkInstantPo = ({
                     </div>
                   );
                 })}
-                <div class="po-description-area ">
+                <div class="po-description-area px-5">
                   <div className="col-qv-12 inputs">
                     <div className="varient-input-wrapper">
                       <label className="varientName">Description</label>
@@ -662,45 +663,55 @@ const BulkInstantPo = ({
             )}
 
             {/* for single varient instant PO */}
-
-            <div className="box">
-              <div className="variant-attributes-container">
-                {/* Your existing JSX for variant attributes */}
-                <div className="q-add-categories-section-middle-footer  ">
-                  {!!!varientIndex ? (
-                    <p className="bulk-edit-note">
-                      <span className="note">Note:</span>
-                      By clicking on update, Cost & Quantity of each variant
-                      will be updated
-                    </p>
-                  ) : (
-                    ""
-                  )}
-                  <div className="q-category-bottom-header">
-                    <button
-                      className="quic-btn quic-btn-update submit-btn-click"
-                      style={{
-                        backgroundColor: "#0A64F9",
-                      }}
-                      onClick={handlSumbitInstantPo}
-                      disabled={loading}
-                    >
-                      {loading ? (
-                        <Box className="loader-box">
-                          <CircularProgress />
-                        </Box>
-                      ) : (
-                        ""
-                      )}
-                      Update
-                    </button>
-                    <button
-                      className="quic-btn quic-btn-cancle"
-                      onClick={handleCloseEditModal}
-                    >
-                      Cancel
-                    </button>
-                  </div>
+          </div>
+          <div className="box">
+            <div className="variant-attributes-container">
+              {/* Your existing JSX for variant attributes */}
+              <div
+                style={{
+                  justifyContent: `${!!!varientIndex ? "space-between" : ""}`,
+                }}
+                className="q-add-categories-section-middle-footer  "
+              >
+                {!!!varientIndex ? (
+                  <p
+                    style={{ fontFamily: "CircularSTDBook" }}
+                    className="bulk-edit-note"
+                  >
+                    <span className="note">Note: </span>
+                    By clicking on update, Cost & Quantity of each variant will
+                    be updated
+                  </p>
+                ) : (
+                  ""
+                )}
+                <div
+                  style={{ padding: "0px" }}
+                  className="q-category-bottom-header"
+                >
+                  <button
+                    className="quic-btn quic-btn-update submit-btn-click"
+                    style={{
+                      backgroundColor: "#0A64F9",
+                    }}
+                    onClick={handlSumbitInstantPo}
+                    disabled={loading}
+                  >
+                    {loading ? (
+                      <Box className="loader-box">
+                        <CircularProgress />
+                      </Box>
+                    ) : (
+                      ""
+                    )}
+                    Update
+                  </button>
+                  <button
+                    className="quic-btn quic-btn-cancle"
+                    onClick={handleCloseEditModal}
+                  >
+                    Cancel
+                  </button>
                 </div>
               </div>
             </div>

@@ -3,6 +3,9 @@ import { bulkVarientEdit } from "./data";
 import "../../Styles/ProductPage.css";
 
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
+import { Grid } from "@mui/material";
+
+
 
 const BulkVarientEdit = ({
   formData,
@@ -194,8 +197,8 @@ const BulkVarientEdit = ({
 
   return (
     <>
-      <div class="bulk-varient-edit-form">
-        <div class="qvrow">
+      <Grid container class="bulk-varient-edit-form">
+        <Grid item xs={12} class="qvrow">
           {bulkVarientEdit?.length
             ? bulkVarientEdit?.map((inp, index) => {
                 return (
@@ -223,17 +226,17 @@ const BulkVarientEdit = ({
                 );
               })
             : ""}
-        </div>
+        </Grid>
 
         <div className="box">
           <div className="variant-attributes-container">
             {/* Your existing JSX for variant attributes */}
-            <div className="q-add-categories-section-middle-footer  ">
-              <p className="bulk-edit-note">
-                <span className="note">Note:</span>
+            <div style={{padding:"0"}} className="q-add-categories-section-middle-footer  ">
+              <p style={{fontFamily:"CircularSTDBook"}} className="bulk-edit-note">
+                <span className="note">Note: </span>
                 By clicking on update, it will update values of all Variants
               </p>
-              <div className="q-category-bottom-header">
+              <div style={{padding:"0"}} className="q-category-bottom-header">
                 <button
                   className="quic-btn quic-btn-update"
                   style={{
@@ -253,7 +256,7 @@ const BulkVarientEdit = ({
             </div>
           </div>
         </div>
-      </div>
+      </Grid>
     </>
   );
 };

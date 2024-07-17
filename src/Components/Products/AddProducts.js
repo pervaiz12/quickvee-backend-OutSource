@@ -566,6 +566,22 @@ const AddProducts = () => {
           }
           // If costPerItem is 0 or not a valid number, do not update margin and profit
         }
+
+        // If the costPerItem key is present and not empty, calculate margin and profit
+        if (values.hasOwnProperty("costPerItem") && values.costPerItem !== "") {
+          let price = parseFloat(nestedObject.price);
+          let costPerItem = parseFloat(values.costPerItem);
+
+          // Check if costPerItem is a valid number and greater than zero
+          if (!isNaN(price) && price > 0) {
+            nestedObject.margin = (
+              ((costPerItem - price) / costPerItem) *
+              100
+            ).toFixed(2);
+            nestedObject.profit = (costPerItem - price).toFixed(2);
+          }
+          // If costPerItem is 0 or not a valid number, do not update margin and profit
+        }
       });
 
       // Return the updated state
@@ -1514,7 +1530,9 @@ const AddProducts = () => {
     setFormValue(updatedValues);
   };
 
-  // console.log("formvalue", formValue);
+  console.log("formvalue", formValue);
+  console.log("error", error);
+
   const handleVarientTitleBasedItemList = () => {
     if (varientLength.length) {
       if (
@@ -2497,7 +2515,10 @@ const AddProducts = () => {
                   </span>
                 </span>
               </div> */}
-              <div style={{padding:0}} className="q-add-categories-section-middle-form mt-1">
+              <div
+                style={{ padding: 0 }}
+                className="q-add-categories-section-middle-form mt-1"
+              >
                 <div className="q-add-categories-single-input px-5">
                   <label htmlFor="title" className="product-input-title">
                     Title
@@ -2552,7 +2573,7 @@ const AddProducts = () => {
                       ""
                     )}
                   </div> */}
-                <div className=" px-5">
+                <div className=" mt-2 px-5">
                   <div className="q-add-categories-single-input">
                     <SearchableDropdown
                       title="Category"
@@ -2569,7 +2590,7 @@ const AddProducts = () => {
                   </div>
                 </div>
 
-                <div className="q-add-categories-single-input  px-5">
+                <div className="q-add-categories-single-input mt-3 px-5">
                   <SearchableDropdown
                     title="Taxes"
                     keyName="taxes"
@@ -2585,7 +2606,7 @@ const AddProducts = () => {
                   />
                 </div>
 
-                <div className="q-add-categories-single-input  px-5">
+                <div className="q-add-categories-single-input  mt-3 px-5">
                   <SearchableDropdown
                     title="Related Products"
                     keyName="relatedProduct"
@@ -2602,7 +2623,7 @@ const AddProducts = () => {
                   />
                 </div>
 
-                <div className="q-add-categories-single-input  px-5">
+                <div className="q-add-categories-single-input  mt-3 px-5">
                   <SearchableDropdown
                     title="Frequently Bought Together"
                     keyName="frequentlyBought"
@@ -2817,13 +2838,20 @@ const AddProducts = () => {
 
                     <div
                       className="q-add-categories-section-middle-footer  "
-                      style={{ padding: "0px" }}
+                      style={{
+                        padding: "0px",
+                        justifyContent: `${
+                          productData?.isvarient === "1"
+                            ? "space-between"
+                            : "flex-end"
+                        }`,
+                      }}
                     >
                       {pageUrl === "inventory/products/edit" &&
                       productData?.isvarient === "1" ? (
                         <div
                           className="q-category-bottom-header"
-                          style={{ marginRight: "67px" }}
+                          style={{ marginLeft: "16rem" }}
                         >
                           <button
                             className="quic-btn quic-btn-bulk-edit"
@@ -2835,10 +2863,7 @@ const AddProducts = () => {
                       ) : (
                         ""
                       )}
-                      <div
-                        className="q-category-bottom-header"
-                        style={{ marginRight: "67px" }}
-                      >
+                      <div className="q-category-bottom-header">
                         {pageUrl !== "inventory/products/edit" ? (
                           <button
                             className="quic-btn quic-btn-save submit-btn-click"

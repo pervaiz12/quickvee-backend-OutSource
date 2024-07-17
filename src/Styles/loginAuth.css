@@ -135,3 +135,14 @@
     background-position: center;
   }
 }
+
+.storeImageLogo{
+  width: 100px;
+  height: 100px;
+  background-size: 90%;
+  background-position: center;
+  background-repeat: no-repeat;
+  border: 1px solid #dcdcdc;
+  border-radius: 10px;
+  box-shadow: 0 0 6px #e1e1e1;
+}

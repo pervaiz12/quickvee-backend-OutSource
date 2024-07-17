@@ -35,7 +35,46 @@ import Loader from "../../CommonComponents/Loader";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import PasswordShow from "../../Common/passwordShow";
+import DeleteModal from "../../reuseableComponents/DeleteModal";
 
+///////////////////////////////////////
+import { styled } from "@mui/material/styles";
+
+import { tableCellClasses } from "@mui/material/TableCell";
+
+/////////////////////////////////////////////////
+
+
+const StyledTable = styled(Table)(({ theme }) => ({
+  padding: 2, // Adjust padding as needed
+}));
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    // backgroundColor: "#253338",
+    // color: theme.palette.common.white,
+    fontFamily: "CircularSTDMedium !important",
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+    fontFamily: "CircularSTDBook !important",
+  },
+  [`&.${tableCellClasses.table}`]: {
+    fontSize: 14,
+    fontFamily: "CircularSTDBook !important",
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  "&:last-child td, &:last-child th": {
+    // backgroundColor: "#F5F5F5",
+  },
+  "& td, & th": {
+    border: "none",
+  },
+}));
 const BulkVendorEdit = ({
   productData,
   varientIndex,
@@ -334,64 +373,147 @@ const BulkVendorEdit = ({
     }
   }, [vendorItems]);
 
+    // for Delete 
+    const [deleteCategoryId, setDeleteCategoryId] = useState(null);
+    const [deleteVendorItem, setDeleteVendorItem] = useState(null);
+    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+    const [loadingDelete, setLoadingDelete] = useState(false);
+
   // when click on delete icon // delete vendor by Id
   const handleDeleteVendor = (vendorId, vendorItem) => {
-    /// show prompt before delete the item
-    const userConfirmed = window.confirm(
-      "Are you sure you want to delete this vendor?"
-    );
 
-    if (!userConfirmed) {
-      return; // If the user clicks "No", exit the function
-    }
+    setDeleteCategoryId(vendorId);
+    setDeleteVendorItem(vendorItem);
+    setDeleteModalOpen(true);
+    /// show prompt before delete the item
+    // const userConfirmed = window.confirm(
+    //   "Are you sure you want to delete this vendor?"
+    // );
+
+    // if (!userConfirmed) {
+    //   return; // If the user clicks "No", exit the function
+    // }
 
     // formData
-    if (modalType !== "bulk-edit") {
-      const formData = new FormData();
-      formData.append(
-        "single_product",
-        isVarientEdit
-          ? 0
-          : !Boolean(+productData?.isvarient) && !isVarientEdit
-            ? 1
-            : 0
-      );
-      formData.append(
-        "varient_id",
-        !Boolean(+productData?.isvarient)
-          ? productData?.id
-          : modalType === "bulk-edit"
-            ? productData?.id
-            : varientIndex
-      );
-      formData.append(
-        "merchant_id",
-        LoginGetDashBoardRecordJson?.data?.merchant_id
-      );
-      formData.append("vendor_id", vendorId);
-      dispatch(deleteProductVendor(formData))
-        .then((res) => {
-          if (res?.payload?.status) {
-            const filtervendorList = vendorItems?.filter(
-              (item) => +item?.id !== +vendorId
-            );
-            setVendorItems(filtervendorList);
-            getVendorsList();
-            ToastifyAlert("Deleted Successfully", "success");
-          }
-        })
-        .catch((err) => {
-          ToastifyAlert("Error!", "error");
-          getUnAutherisedTokenMessage();
-        });
-    } else {
-      const filtervendorList = vendorItems?.filter(
-        (item) => +item?.id !== +vendorId
-      );
-      setVendorItems(filtervendorList);
-      setVendor((prev) => [...prev, vendorItem]);
-    }
+    // if (modalType !== "bulk-edit") {
+    //   const formData = new FormData();
+    //   formData.append(
+    //     "single_product",
+    //     isVarientEdit
+    //       ? 0
+    //       : !Boolean(+productData?.isvarient) && !isVarientEdit
+    //         ? 1
+    //         : 0
+    //   );
+    //   formData.append(
+    //     "varient_id",
+    //     !Boolean(+productData?.isvarient)
+    //       ? productData?.id
+    //       : modalType === "bulk-edit"
+    //         ? productData?.id
+    //         : varientIndex
+    //   );
+    //   formData.append(
+    //     "merchant_id",
+    //     LoginGetDashBoardRecordJson?.data?.merchant_id
+    //   );
+    //   formData.append("vendor_id", vendorId);
+    //   dispatch(deleteProductVendor(formData))
+    //     .then((res) => {
+    //       if (res?.payload?.status) {
+    //         const filtervendorList = vendorItems?.filter(
+    //           (item) => +item?.id !== +vendorId
+    //         );
+    //         setVendorItems(filtervendorList);
+    //         getVendorsList();
+    //         ToastifyAlert("Deleted Successfully", "success");
+    //       }
+    //     })
+    //     .catch((err) => {
+    //       ToastifyAlert("Error!", "error");
+    //       getUnAutherisedTokenMessage();
+    //     });
+    // } else {
+    //   const filtervendorList = vendorItems?.filter(
+    //     (item) => +item?.id !== +vendorId
+    //   );
+    //   setVendorItems(filtervendorList);
+    //   setVendor((prev) => [...prev, vendorItem]);
+    // }
   };
+
+  const confirmDeleteCategory = async () => {
+    try {
+      setLoadingDelete(true);
+      if (loading) return;
+
+      if (deleteCategoryId) {
+        if (modalType !== "bulk-edit") {
+          const formData = new FormData();
+          formData.append(
+            "single_product",
+            isVarientEdit
+              ? 0
+              : !Boolean(+productData?.isvarient) && !isVarientEdit
+                ? 1
+                : 0
+          );
+          formData.append(
+            "varient_id",
+            !Boolean(+productData?.isvarient)
+              ? productData?.id
+              : modalType === "bulk-edit"
+                ? productData?.id
+                : varientIndex
+          );
+          formData.append(
+            "merchant_id",
+            LoginGetDashBoardRecordJson?.data?.merchant_id
+          );
+          formData.append("vendor_id", deleteCategoryId);
+          // for (const [key, value] of formData.entries()) {
+          //   console.log(`${key}: ${value}`);
+          // }
+          // return
+          dispatch(deleteProductVendor(formData))
+            .then((res) => {
+              if (res?.payload?.status) {
+                const filtervendorList = vendorItems?.filter(
+                  (item) => +item?.id !== +deleteCategoryId
+                );
+                setVendorItems(filtervendorList);
+                getVendorsList();
+                ToastifyAlert("Deleted Successfully", "success");
+              }
+            })
+            .catch((err) => {
+              ToastifyAlert("Error!", "error");
+              getUnAutherisedTokenMessage();
+            });
+        } else {
+          const filtervendorList = vendorItems?.filter(
+            (item) => +item?.id !== +deleteCategoryId
+          );
+          setVendorItems(filtervendorList);
+          setVendor((prev) => [...prev, deleteVendorItem]);
+        }
+      }
+      setDeleteCategoryId(null);
+      setDeleteVendorItem(null);
+      setDeleteModalOpen(false);
+    } catch (error) {
+      if (error.status === 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status === "Network Error") {
+        getNetworkError();
+      }
+    } finally {
+      setLoadingDelete(false);
+    }
+    setDeleteModalOpen(false);
+  };
+
 
   // when click on save vendor
   // save all the selected vendor
@@ -527,91 +649,92 @@ const BulkVendorEdit = ({
           </div>
         ) : (
           <>
-            <TableContainer
-              component={Paper}
-              className="bulkvendor-table-container"
-            >
-              <Table
-                sx={{ minWidth: 650 }}
-                aria-label="simple table"
-                className="bulk-vendor-table"
+            <Paper sx={{ width: "100%", overflow: "hidden",boxShadow:"none" }}>
+              <TableContainer
+                sx={{ minWidth: 650, maxHeight: 300 }}
+                className="bulkvendor-table-container custom-scroll"
               >
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Vendors</TableCell>
-                    <TableCell align="center">Cost Per Item</TableCell>
-                    <TableCell align="center">Preferred Vendor</TableCell>
-                    <TableCell align="center">Delete</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {vendorItems?.length ? (
-                    vendorItems.map((row, index) => (
-                      <TableRow
-                        key={row.id}
-                        sx={{
-                          "&:last-child td, &:last-child th": { border: 0 },
-                        }}
-                      >
-                        <TableCell component="th" scope="row">
-                          {row.name}
-                        </TableCell>
-                        <TableCell align="center">
-                          <input
-                            type="text"
-                            className="vendor-cost-input"
-                            placeholder="$ 0.00"
-                            name="costPerItem"
-                            onChange={(e) =>
-                              handleVendorCostPerItem(e, index, row?.id)
-                            }
-                            value={vendorItems[index]["costPerItem"]}
-                            maxLength={9}
-                          />
-                        </TableCell>
-                        <TableCell align="center">
-                          <Switch
-                            name="online"
-                            id="online"
-                            checked={vendorItems[index]["isPreferred"] || false}
-                            onChange={(e) =>
-                              handleVendorCostPerItem(e, index, row?.id)
-                            }
-                            sx={{
-                              "& .MuiSwitch-switchBase.Mui-checked": {
-                                color: "#0A64F9",
-                              },
-                              "& .MuiSwitch-track": {
-                                backgroundColor: "#0A64F9",
-                              },
-                            }}
-                          />
-                        </TableCell>
-                        <TableCell align="center">
-                          {" "}
-                          <img
-                            src={DeleteIcon}
-                            alt=""
-                            className=" m-auto d-grid place-content-center"
-                            width="30px"
-                            style={{ cursor: "pointer" }}
-                            onClick={() => handleDeleteVendor(row?.id, row)}
-                          />
-                        </TableCell>
-                      </TableRow>
-                    ))
-                  ) : (
-                    <p className="no-vendor-text">No Vendor Selected</p>
-                  )}
-                </TableBody>
-              </Table>
-            </TableContainer>
+                <Table stickyHeader aria-label="sticky table" className="bulk-vendor-table">
+                  <TableHead>
+                    <StyledTableRow>
+                      <StyledTableCell>Vendors</StyledTableCell>
+                      <StyledTableCell >Cost Per Item</StyledTableCell>
+                      <StyledTableCell >Preferred Vendor</StyledTableCell>
+                      <StyledTableCell >Delete</StyledTableCell>
+                    </StyledTableRow>
+                  </TableHead>
+                  <TableBody>
+                    {vendorItems?.length ? (
+                      vendorItems.map((row, index) => (
+                        <StyledTableRow
+                          key={row.id}
+                          sx={{
+                            "&:last-child td, &:last-child th": { border: 0 },
+                          }}
+                        >
+                          <StyledTableCell component="th" scope="row">
+                            {row.name}
+                          </StyledTableCell>
+                          <StyledTableCell >
+                            <input
+                              type="text"
+                              className="vendor-cost-input"
+                              placeholder="$ 0.00"
+                              name="costPerItem"
+                              onChange={(e) =>
+                                handleVendorCostPerItem(e, index, row?.id)
+                              }
+                              value={vendorItems[index]["costPerItem"]}
+                              maxLength={9}
+                            />
+                          </StyledTableCell>
+                          <StyledTableCell>
+                            <Switch
+                              name="online"
+                              id="online"
+                              checked={
+                                vendorItems[index]["isPreferred"] || false
+                              }
+                              onChange={(e) =>
+                                handleVendorCostPerItem(e, index, row?.id)
+                              }
+                              sx={{
+                                "& .MuiSwitch-switchBase.Mui-checked": {
+                                  color: "#0A64F9",
+                                },
+                                "& .MuiSwitch-track": {
+                                  backgroundColor: "#0A64F9",
+                                },
+                              }}
+                            />
+                          </StyledTableCell>
+                          <StyledTableCell >
+                            {" "}
+                            <img
+                              src={DeleteIcon}
+                              alt=""
+                              className="d-grid place-content-center"
+                              width="30px"
+                              style={{ cursor: "pointer" }}
+                              onClick={() => handleDeleteVendor(row?.id, row)}
+                            />
+                          </StyledTableCell>
+                        </StyledTableRow>
+                      ))
+                    ) : (
+                      <p className="no-vendor-text">No Vendor Selected</p>
+                    )}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </Paper>
+
             <div className="box">
               <div className="variant-attributes-container">
                 {/* Your existing JSX for variant attributes */}
-                <div className="q-add-categories-section-middle-footer  ">
+                <div style={{justifyContent:`${!!!varientIndex ? "space-between" :""}` ,marginTop:"20px"}} className="q-add-categories-section-middle-footer flex justify-between">
                   {!!!varientIndex ? (
-                    <p className="bulk-edit-note">
+                    <p style={{fontFamily:"CircularSTDBook"}}  className="bulk-edit-note">
                       <span className="note">Note:</span>
                       By clicking on update, it will assign selected vendor as
                       Preferred vendor to all Variants
@@ -619,7 +742,7 @@ const BulkVendorEdit = ({
                   ) : (
                     ""
                   )}
-                  <div className="q-category-bottom-header">
+                  <div style={{padding:"0px"}} className="q-category-bottom-header">
                     <button
                       className="quic-btn quic-btn-update submit-btn-click"
                       style={{
@@ -650,6 +773,15 @@ const BulkVendorEdit = ({
           </>
         )}
       </div>
+      <DeleteModal
+            headerText="Vendor"
+            open={deleteModalOpen}
+            onClose={() => {
+              setDeleteModalOpen(false);
+            }}
+            onConfirm={confirmDeleteCategory}
+            deleteloading={loadingDelete}
+          />
     </div>
   );
 };
