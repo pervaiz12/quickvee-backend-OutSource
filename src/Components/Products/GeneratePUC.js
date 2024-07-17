@@ -96,11 +96,11 @@ const GeneratePUC = ({
     let url;
     if (varientIndex === null) {
       window.open(
-        `/inventory/products/saleshistory/${productData?.id}?title=${productInfo?.title}`
+        `/merchants/inventory/products/saleshistory/${productData?.id}?title=${productInfo?.title}`
       );
     } else if (isVarientEdit) {
       window.open(
-        `/inventory/products/saleshistory/${productData?.product_id}/${
+        `/merchants/inventory/products/saleshistory/${productData?.product_id}/${
           productData?.id
         }?title=${
           productData?.product_name?.split("~")?.[0]
@@ -108,7 +108,7 @@ const GeneratePUC = ({
       );
     } else {
       window.open(
-        `/inventory/products/saleshistory/${productData?.id}/${varientIndex}?title=${productInfo?.title}&varientName=${varientName}`
+        `/merchants/inventory/products/saleshistory/${productData?.id}/${varientIndex}?title=${productInfo?.title}&varientName=${varientName}`
       );
     }
   };
