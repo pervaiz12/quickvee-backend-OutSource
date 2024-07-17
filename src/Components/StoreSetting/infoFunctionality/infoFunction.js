@@ -74,7 +74,12 @@ export default function InfoFunction() {
     /^(https:\/\/www\.instagram\.com\/|https:\/\/www\.facebook\.com\/|https:\/\/[a-z0-9]+(\.[a-z0-9]+)+\/).*$/;
   // console.log("infoRecord.image === selectedFile.name", infoRecord);
   // ===========================get state=========================
-
+  const handleKeyPressNew = (event) => {
+    const allowedChars = /^\S+$/;
+    if (!allowedChars.test(event.key)) {
+      event.preventDefault();
+    }
+  };
   // ==================== get state and admin data---------
   useEffect(() => {
     getState();
@@ -700,6 +705,11 @@ export default function InfoFunction() {
             reader.readAsDataURL(selectedFile);
             setImageBoolean(true);
           } else {
+            setInfoRecord((prevState) => ({
+              ...prevState,
+              image: "", // Set qrCode to an empty string
+              is_logo_change: "0",
+            }));
             alert(
               `${selectedFile.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`
             );
@@ -733,6 +743,11 @@ export default function InfoFunction() {
           // }
           // errorMessage.bannerErrors = "";
         } else {
+          setInfoRecord((prevState) => ({
+            ...prevState,
+            banners: "",
+            is_banner_change: "0",
+          }));
           alert(
             `${selectedFile.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`
           );
@@ -764,6 +779,11 @@ export default function InfoFunction() {
           // }
           // errorMessage.qrCodeError = "";
         } else {
+          setInfoRecord((prevState) => ({
+            ...prevState,
+            qrCode: "",
+            is_qr_code_change: "0",
+          }));
           alert(
             `${selectedFile.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`
           );
@@ -796,6 +816,11 @@ export default function InfoFunction() {
           // }
           // errorMessage.receieptLogoError = "";
         } else {
+          setInfoRecord((prevState) => ({
+            ...prevState,
+            receieptLogo: "",
+            is_receipt_logo_change: "0",
+          }));
           alert(
             `${selectedFile.name} is not an image.\nOnly jpeg, png, jpg files can be uploaded`
           );
@@ -934,11 +959,11 @@ export default function InfoFunction() {
             receipt_logo: infoRecord.receieptLogo || "",
             is_qr_code_change: infoRecord.is_qr_code_change, //
             is_receipt_logo_change: infoRecord.is_receipt_logo_change,
-            address_line_1: infoRecord.address_1, //
-            address_line_2: infoRecord.address_2, //
+            address_line_1: infoRecord.address_1.trim(), //
+            address_line_2: infoRecord.address_2.trim(), //
             phone: infoRecord.phone, //
             zip: infoRecord.zip, //
-            city: infoRecord.city, //
+            city: infoRecord.city.trim(), //
             state: infoRecord.state, //
             fb_url: infoRecord.facebookUrl,
             insta_url: infoRecord.instagramUrl,
@@ -970,6 +995,11 @@ export default function InfoFunction() {
           } else {
             ToastifyAlert(response.data.msg, "error");
           }
+          // let data = {
+          //   id: user_id,
+          //   merchant_id: merchant_idNew, //dynamic id give
+          // };
+          // await handleEditRecord(data);
         }
       }
     } catch (error) {
@@ -1099,5 +1129,6 @@ export default function InfoFunction() {
     open,
     handleOpen,
     handleClose,
+    handleKeyPressNew,
   };
 }

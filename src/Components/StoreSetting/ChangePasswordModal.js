@@ -28,6 +28,7 @@ export default function ChangePasswordModal() {
     handleClose,
     open,
     handleOpen,
+    handleKeyPressNew,
   } = InfoFunction();
   // const [open, setOpen] = React.useState(false);
   // const handleOpen = () => setOpen(true);
@@ -80,6 +81,7 @@ export default function ChangePasswordModal() {
               handleBlurPassword={handleBlurPassword}
               handleClose={handleClose}
               loader={loader}
+              handleKeyPressNew={handleKeyPressNew}
             />
           </Box>
         </Modal>
