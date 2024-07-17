@@ -356,7 +356,6 @@ const DropdownMenuItem = ({
   const [dropDownItem, setDropDownItem] = useState(null);
 
   const isTabletNav = useMediaQuery("(max-width:1024px)");
-  const isDeskNav = useMediaQuery("(min-width:1024px)");
   useEffect(() => {
     const foundItem = item?.dropdownItems?.find(
       (item) => item?.link === getFirstTwoSegmentsPath(activeItem)
@@ -382,16 +381,8 @@ const DropdownMenuItem = ({
       activeDropDownItem(item.id);
     }
     // item.id === currentDropDownItem && dispatch(setIsDropdownOpen(true));
-    if(isTabletNav){
-      dispatch(setIsDropdownOpen(!isTabletNav));
-    }
-    console.log("isTabletNav",isTabletNav,"isDeskNav",isDeskNav)
-    if(isMenuOpenRedux){
-      // dispatch(setIsDropdownOpen(isMenuOpenRedux));
-       dispatch(setIsDropdownOpen(isDeskNav));
-    }
-     
-  }, [isTabletNav,isDeskNav, dropDownItem, isTabletNav, activeItem,isMenuOpenRedux]);
+    isMenuOpenRedux && dispatch(setIsDropdownOpen(!isTabletNav));
+  }, [isTabletNav, dropDownItem, isTabletNav, activeItem]);
 
   const handleToggleDropdownItems = (link, e) => {
     if (isTabletNav) {

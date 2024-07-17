@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const initialState = {
     
   isMenuOpen: false, // Initial value based on your useState
-  isDropdownOpen: false,
+  isDropdownOpen: true,
   isNestedDropdown: false,
   isStoreActive: false,
 };
