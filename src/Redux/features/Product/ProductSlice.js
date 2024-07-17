@@ -31,6 +31,9 @@ const initialState = {
   showType: 3,
 
   varientProduct: [],
+  fetchProductLoadingDropdown: false,
+  fetchCategoryListLoading: false,
+  fetchTaxListLoading: false,
 };
 // Generate pening , fulfilled and rejected action type
 export const fetchAllProducts = createAsyncThunk(
@@ -1032,6 +1035,48 @@ const productsSlice = createSlice({
     });
     builder.addCase(fetchProductsDataById.rejected, (state, action) => {
       state.isFetchLoading = false;
+      // state.isEditError = true;
+    });
+
+    // product fetch listing in dropdown
+    builder.addCase(fetchProductList.pending, (state) => {
+      state.fetchProductLoadingDropdown = true;
+      // state.isEditError = false;
+    });
+    builder.addCase(fetchProductList.fulfilled, (state, action) => {
+      state.fetchProductLoadingDropdown = false;
+      // state.isEditError = false;
+    });
+    builder.addCase(fetchProductList.rejected, (state, action) => {
+      state.fetchProductLoadingDropdown = false;
+      // state.isEditError = true;
+    });
+
+    // fetchCategoryList for dropdown options
+    builder.addCase(fetchCategoryList.pending, (state) => {
+      state.fetchCategoryListLoading = true;
+      // state.isEditError = false;
+    });
+    builder.addCase(fetchCategoryList.fulfilled, (state, action) => {
+      state.fetchCategoryListLoading = false;
+      // state.isEditError = false;
+    });
+    builder.addCase(fetchCategoryList.rejected, (state, action) => {
+      state.fetchCategoryListLoading = false;
+      // state.isEditError = true;
+    });
+
+    // fetchTaxList for dropdown options
+    builder.addCase(fetchTaxList.pending, (state) => {
+      state.fetchTaxListLoading = true;
+      // state.isEditError = false;
+    });
+    builder.addCase(fetchTaxList.fulfilled, (state, action) => {
+      state.fetchTaxListLoading = false;
+      // state.isEditError = false;
+    });
+    builder.addCase(fetchTaxList.rejected, (state, action) => {
+      state.fetchTaxListLoading = false;
       // state.isEditError = true;
     });
   },

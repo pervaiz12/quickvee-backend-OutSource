@@ -65,6 +65,7 @@ const AddressForm = ({
               value={infoRecord.zip}
               onChangeFun={onChangeHandle}
               maxLength={5}
+              onKeyPressFun={handleKeyPress}
             />
             {errors.zipCodeError && (
               <span className="error">{errors.zipCodeError}</span>

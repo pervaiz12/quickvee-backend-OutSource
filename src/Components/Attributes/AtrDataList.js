@@ -15,11 +15,13 @@ import ModalCutom from "../../reuseableComponents/ModalCutom";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import PasswordShow from "../../Common/passwordShow";
+import CircularProgress from "@mui/material/CircularProgress";
 
 const AtrDataList = ({ seVisible }) => {
   const [showModal, setShowModal] = useState(false);
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
+  const [loader, setLoader] = useState(false);
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
   const dispatch = useDispatch();
@@ -118,6 +120,7 @@ const AtrDataList = ({ seVisible }) => {
       setErrorMessage("Title is required");
       return;
     }
+    setLoader(true);
     try {
       const newItem = {
         merchant_id: merchant_id,
@@ -154,6 +157,8 @@ const AtrDataList = ({ seVisible }) => {
       } else if (error.status == "Network Error") {
         getNetworkError();
       }
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -303,9 +308,23 @@ const AtrDataList = ({ seVisible }) => {
               <div className="q-add-categories-section-middle-footer">
                 <button
                   onClick={handleAddAttribute}
-                  className="quic-btn quic-btn-save"
+                  className="quic-btn quic-btn-save attributeUpdateBTN"
+                  disabled={loader}
                 >
-                  Add
+                  {loader ? (
+                    <>
+                      <CircularProgress
+                        color={"inherit"}
+                        className="loaderIcon"
+                        width={15}
+                        size={15}
+                      />{" "}
+                      Add
+                    </>
+                  ) : (
+                    "Add"
+                  )}
+                  {/* Add */}
                 </button>
                 <button
                   onClick={closeModal}
