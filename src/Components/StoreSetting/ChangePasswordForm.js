@@ -17,6 +17,7 @@ const ChangePasswordForm = ({
   handleBlurPassword,
   handleClose,
   loader,
+  handleKeyPressNew,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -49,6 +50,7 @@ const ChangePasswordForm = ({
                   variant="outlined"
                   size="small"
                   onBlur={() => handleBlurPassword("password")}
+                  onKeyPress={handleKeyPressNew}
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
@@ -82,6 +84,7 @@ const ChangePasswordForm = ({
                   type={showConfirmPassword ? "text" : "password"}
                   variant="outlined"
                   size="small"
+                  onKeyPress={handleKeyPressNew}
                   endAdornment={
                     <InputAdornment position="end">
                       <IconButton
