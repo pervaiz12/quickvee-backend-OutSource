@@ -7,6 +7,7 @@ import { CircularProgress, FormControl, Grid } from "@mui/material";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import SearchableDropdown from "../../CommonComponents/SearchableDropdown";
 import AddNewCategory from "../../Assests/Dashboard/Left.svg";
+import CrossIcon from "../../Assests/Dashboard/cross.svg";
 import * as yup from "yup";
 
 import "../../Styles/Manager.css";
@@ -215,7 +216,7 @@ created_by_id:  LoginGetDashBoardRecordJson?.data?.user_id,
                      {props?.modalType === 'add' ? 'Add Manager' : 'Edit Manager' }  
                 </span>
                 <img
-                  src="/static/media/cross.02a286778a0b1b3162ac5e3858cdc5f1.svg"
+                  src={CrossIcon}
                   alt="icon"
                   class=" quic-btn-cancle w-6 h-6"
                   style={{ cursor: "pointer" }}
