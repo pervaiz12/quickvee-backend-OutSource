@@ -1294,3 +1294,7 @@ div.q_label_details::after {
 .custom-input-root.black-border .MuiOutlinedInput-notchedOutline {
   border-color: black;
 }
+
+.orderSummeryPageOrderStatus svg{
+  width: 100% !important;
+}

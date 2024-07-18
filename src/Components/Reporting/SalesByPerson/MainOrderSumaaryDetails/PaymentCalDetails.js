@@ -229,7 +229,7 @@ import OrderSummeryBannerMobile1 from "../../../../Assests/NewImage/OrderSummery
 import OrderSummeryBannerMobile2 from "../../../../Assests/NewImage/OrderSummeryBannerMobile2.jpg";
 import OrderSummeryBannerMobile3 from "../../../../Assests/NewImage/OrderSummeryBannerMobile3.jpg";
 import ProductDefaultImage from "../../../../Assests/Products/productDefaultIMage.png";
-import { useMediaQuery } from "@mui/material";
+import { Grid, useMediaQuery } from "@mui/material";
 import Cookies from "js-cookie";
 import Loaderfile from "../../../../Assests/Loader/loaderfile";
 import OrderSummery_pickup_delivery_status from "./OrderSummery_pickup_delivery_status";
@@ -518,7 +518,36 @@ export default function PaymentCalDetails() {
             {/* <TopBar merchantId={merchantId} orderMethod={orderMethod} /> */}
           </div>
           {/* --------------------------- */}
-
+          {/* <Grid container sx={{ p: 2.5 }}>
+            <Grid item xs={6}>
+              <Grid container sx={{ p: 2.5 }}>
+                <Grid item xs={12}>
+                  <h1 className="orderSummery_head">Order Status</h1>
+                  <Grid container sx={{ mt: 2.5 }}>
+                    <Grid item xs={12}>
+                      <OrderSummery_pickup_delivery_status
+                        orderSummeryData={orderSummeryData}
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+            <Grid item xs={6}>
+              <Grid container sx={{ p: 2.5 }}>
+                <Grid item xs={12}>
+                  <h1 className="orderSummery_head">Order Status</h1>
+                  <Grid container sx={{ mt: 2.5 }}>
+                    <Grid item xs={12}>
+                      <OrderSummery_pickup_delivery_status
+                        orderSummeryData={orderSummeryData}
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+              </Grid>
+            </Grid>
+          </Grid> */}
           <div className="mainSection">
             <div className="MidMainSection">
               <div className="LeftMidMainSection">
@@ -1163,17 +1192,22 @@ export default function PaymentCalDetails() {
                             orderSummeryData.order_detail &&
                             orderSummeryData.order_detail?.billing_name}{" "}
                         </h5>
-                        <p>
+                        <p className="flex items-center">
                           {orderSummeryData.order_detail &&
                           !!orderSummeryData.order_detail.delivery_phn ? (
-                            <img src={imagePhone} alt="Pickup phone" />
+                           <div className="pe-1">
+                               <img src={imagePhone} alt="Pickup phone" />
+                           </div>
                           ) : (
                             ""
                           )}
-                          {"    "}
+                          <div>
                           {orderSummeryData &&
                             orderSummeryData.order_detail &&
                             orderSummeryData.order_detail.delivery_phn}
+                          </div>
+                     
+                          
                         </p>
                       </div>
                     )}
