@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import UploadIcon from "../../Assests/Dashboard/upload.svg";
 import { BASE_URL, IMPORT_DATA } from "../../Constants/Config";
@@ -43,11 +43,11 @@ const FileUpload = () => {
     setalertmsg("");
   };
 
-  if (alertmsg) {
-    setTimeout(() => {
-      setalertmsg("");
-    }, 10000);
-  }
+  // if (alertmsg) {
+  //   setTimeout(() => {
+  //     setalertmsg("");
+  //   }, 10000);
+  // }
 
   // validating file
   function checkfile(file) {
@@ -154,7 +154,9 @@ const FileUpload = () => {
       // console.log("response: ", response);
       if (response.data.status) {
         // console.log(response);
-        ToastifyAlert(response.data.message, "success");
+        setOpenAlert(true);
+        setalertmsg(response.data.message);
+        // ToastifyAlert(response.data.message, "success");
         setfilename("");
         setFileData(null);
         fileInput.value = "";
@@ -169,72 +171,81 @@ const FileUpload = () => {
     }
   };
 
+  useEffect(() => {
+    console.log("alertmsg", alertmsg);
+  }, [alertmsg]);
+
   return (
-    <div className="box">
+    <>
       <div
-        onSubmit={(e) => e.preventDefault()}
-        className="importBtn"
-        style={{ boxShadow: "0px 3px 6px #0000001F" }}
+        className=""
+        style={{
+          boxShadow: "0 5px 10px 1px #ddd",
+          margin: "30px 0px",
+          borderRadius: "8px",
+          backgroundColor: "#fff",
+        }}
       >
         {alertmsg && (
-          <Box
-            sx={{ width: "50%", position: "absolute", top: "0", bottom: "0" }}
-            className={alertmsg ? "form-submit-info-message" : ""}
-          >
-            {alertmsg && (
-              <Collapse in={openAlert}>
-                <Alert
-                  severity="info"
-                  action={
-                    <IconButton
-                      className="info-close-icon"
-                      aria-label="close"
-                      color="info"
-                      size="small"
-                      onClick={goToTop}
-                    >
-                      <CloseIcon />
-                    </IconButton>
-                  }
-                  sx={{ mb: 2 }}
-                >
-                  {alertmsg}
-                </Alert>
-              </Collapse>
-            )}
+          <Box className={alertmsg ? "form-submit-info-message" : ""}>
+            {/* <p>kbdvj </p> */}
+            <Collapse in={true}>
+              <Alert
+                severity="info"
+                action={
+                  <IconButton
+                    className="info-close-icon"
+                    aria-label="close"
+                    color="error"
+                    size="small"
+                    onClick={goToTop}
+                  >
+                    <CloseIcon />
+                  </IconButton>
+                }
+              >
+                {alertmsg}
+              </Alert>
+            </Collapse>
           </Box>
         )}
-
-        <label
-          htmlFor="input-file-upload"
-          className={`import_container ${dragActive ? "bg-gray-100" : ""}`}
-          onDragEnter={handleDrag}
-          onDragLeave={handleDrag}
-          onDragOver={handleDrag}
-          onDrop={handleDrop}
+      </div>
+      <div className="box">
+        <div
+          onSubmit={(e) => e.preventDefault()}
+          className="importBtn"
+          style={{ boxShadow: "0px 3px 6px #0000001F" }}
         >
-          <input
-            ref={inputRef}
-            type="file"
-            // accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
-            accept=".csv" // .xlsx, .xls,
-            id="input-file-upload"
-            // multiple={true}
-            name="file"
-            onChange={handleChange}
-            className="mb-4 hidden"
-          />
-          <div className="flex justify-center items-center flex-col">
-            <p className="import_text">Only CSV file import</p>
-            <button className="importcsvbutton" onClick={onButtonClick}>
-              Choose Files
-              <img src={UploadIcon} alt="" className="ml-2 h-6 w-6" />
-            </button>
-            <span>{filename !== "undefined" ? filename : ""}</span>
-          </div>
-        </label>
-        {/* {console.log("dragActive: ", dragActive)} */}
-        {/* {dragActive && (
+          <label
+            htmlFor="input-file-upload"
+            className={`import_container ${dragActive ? "bg-gray-100" : ""}`}
+            onDragEnter={handleDrag}
+            onDragLeave={handleDrag}
+            onDragOver={handleDrag}
+            onDrop={handleDrop}
+          >
+            <input
+              ref={inputRef}
+              type="file"
+              // accept=".csv, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel"
+              accept=".csv" // .xlsx, .xls,
+              id="input-file-upload"
+              // multiple={true}
+              name="file"
+              onChange={handleChange}
+              className="mb-4 hidden"
+            />
+            <div className="flex justify-center items-center flex-col">
+              <p className="import_text">Only CSV file import</p>
+              <button className="importcsvbutton" onClick={onButtonClick}>
+                Choose Files
+                <img src={UploadIcon} alt="" className="ml-2 h-6 w-6" />
+              </button>
+              <span>{filename !== "undefined" ? filename : ""}</span>
+            </div>
+          </label>
+          {/* {console.log("dragActive: ", dragActive)} */}
+          {/* {dragActive && (
           <div
             className="absolute w-full h-full rounded-lg top-0 left-0"
             onDragEnter={handleDrag}
@@ -245,33 +256,34 @@ const FileUpload = () => {
           ></div>
         )} */}
 
-        {/* Moved "Import" button below border-dashed */}
-        <div className=" mb-4">
-          <button
-            onClick={handleSubmit}
-            className="imp_btn attributeUpdateBTN"
-            disabled={loading}
-          >
-            {loading && (
-              <CircularProgress
-                color={"inherit"}
-                className="loaderIcon"
-                width={15}
-                size={15}
-              />
-            )}{" "}
-            Import
-          </button>
+          {/* Moved "Import" button below border-dashed */}
+          <div className=" mb-4">
+            <button
+              onClick={handleSubmit}
+              className="imp_btn attributeUpdateBTN"
+              disabled={loading}
+            >
+              {loading && (
+                <CircularProgress
+                  color={"inherit"}
+                  className="loaderIcon"
+                  width={15}
+                  size={15}
+                />
+              )}{" "}
+              Import
+            </button>
+          </div>
+          <AlertModal
+            headerText={alertModalHeaderText}
+            open={alertModalOpen}
+            onClose={() => {
+              setAlertModalOpen(false);
+            }}
+          />
         </div>
-        <AlertModal
-          headerText={alertModalHeaderText}
-          open={alertModalOpen}
-          onClose={() => {
-            setAlertModalOpen(false);
-          }}
-        />
       </div>
-    </div>
+    </>
   );
 };
 

@@ -138,7 +138,12 @@ const SystemAccessData = () => {
       !AllInSystemAccessState.loading &&
       AllInSystemAccessState.systemAccessData
     ) {
-      setallSystemAccess(AllInSystemAccessState.systemAccessData);
+      const updatedData = {
+        ...AllInSystemAccessState.systemAccessData,
+        clock_in: AllInSystemAccessState.systemAccessData.clock_in === "1" ? true : false,
+        hide_inactive: AllInSystemAccessState.systemAccessData.hide_inactive === "1" ? true : false,
+      }
+      setallSystemAccess(updatedData);
     }
   }, [
     AllInSystemAccessState,

@@ -4,6 +4,7 @@ import "../Styles/ProductPage.css";
 import DownArrow from "../Assests/Dashboard/Down.svg";
 import CloseIcon from "../Assests/Dashboard/cross.svg";
 import Validation from "../Constants/Validation";
+import { useLocation } from "react-router-dom";
 
 const SearchableDropdown = ({
   title,
@@ -22,9 +23,13 @@ const SearchableDropdown = ({
   productTitle,
   modalType,
 }) => {
+  const location = useLocation();
   const { checkLength } = Validation();
   const [filterOptions, setFilterOptions] = useState(optionList);
   const [filterValue, setFilterValue] = useState("");
+  const isProductAdd = location.pathname.includes("/products/add");
+  const isProductEdit = location.pathname.includes("/products/edit");
+
   const handleFilterOptions = (e) => {
     const { value } = e.target;
     setFilterValue(value);
@@ -80,11 +85,7 @@ const SearchableDropdown = ({
 
   useEffect(() => {
     // set defaultTax in taxes dropdown
-    if (
-      optionList?.length &&
-      keyName === "taxes" &&
-      pageUrl === "inventory/products/add"
-    ) {
+    if (optionList?.length && keyName === "taxes" && isProductAdd) {
       const findOption = optionList?.filter(
         (item) => item?.title === "DefaultTax"
       );
@@ -99,7 +100,7 @@ const SearchableDropdown = ({
     );
     // filter incoming optionList items when onchange run
     if (filterOptions?.length) {
-      return pageUrl === "inventory/products/edit"
+      return isProductEdit
         ? filterOptions?.filter(
             (product) =>
               !product?.title
@@ -108,9 +109,7 @@ const SearchableDropdown = ({
           )
         : filterOptions;
     }
-    return pageUrl === "inventory/products/edit"
-      ? filterOptionList
-      : optionList;
+    return isProductEdit ? filterOptionList : optionList;
   };
 
   const toggleOption = () => {
@@ -148,7 +147,11 @@ const SearchableDropdown = ({
       <div
         className="dropdownBox "
         style={{
-          padding: showOptions ? "0px 8px 8px 8px" : !!modalType ? "" : "0px 8px 0px 8px",
+          padding: showOptions
+            ? "0px 8px 8px 8px"
+            : !!modalType
+              ? ""
+              : "0px 8px 0px 8px",
         }}
         onBlur={handleBlurOption}
         name={keyName}

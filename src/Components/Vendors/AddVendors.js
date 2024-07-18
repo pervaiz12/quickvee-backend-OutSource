@@ -85,7 +85,7 @@ const AddVendors = ({ setVisible }) => {
       itemErrors.name = "Please enter a vendor name";
       isValid = false;
     }
-    if (!/\S+@\S+\.\S+/.test(vendor.email)) {
+    if (vendor.email !== "" && !/\S+@\S+\.\S+/.test(vendor.email)) {
       itemErrors.email = "Invalid email address";
       isValid = false;
     }
@@ -124,7 +124,9 @@ const AddVendors = ({ setVisible }) => {
         }
         break;
       case "email":
-        if (!/\S+@\S+\.\S+/.test(value)) {
+        if(value == ""){
+          errorMsg = "";
+        }else if (!/\S+@\S+\.\S+/.test(value)) {
           errorMsg = "Invalid email address";
         }
         break;

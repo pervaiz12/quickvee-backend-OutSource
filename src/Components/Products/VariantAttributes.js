@@ -9,6 +9,7 @@ import { components } from "react-select";
 import SearchIcon from "@mui/icons-material/Search"; // Import MUI icon
 import { Grid } from "@mui/material";
 import { useSelector } from "react-redux";
+import { useLocation } from "react-router-dom";
 
 const VariantAttributes = ({
   filterOptionList,
@@ -29,6 +30,10 @@ const VariantAttributes = ({
     fetchCategoryListLoading,
     fetchTaxListLoading,
   } = useSelector((state) => state?.productsListData);
+
+  const location = useLocation();
+  const isProductAdd = location.pathname.includes("/products/add");
+  const isProductEdit = location.pathname.includes("/products/edit");
 
   const styles = {
     multiValueRemove: (base, state) => {
@@ -355,7 +360,7 @@ const VariantAttributes = ({
       </div>
 
       <div class="varient-block">
-        {pageUrl !== "inventory/products/edit" ? (
+        {!isProductEdit ? (
           <div class="multiple-items">
             <span>Multiple Items?*</span>
             <div class="checkbox-area">
@@ -374,7 +379,7 @@ const VariantAttributes = ({
         ) : (
           ""
         )}
-        {pageUrl === "inventory/products/edit" && isMultipleVarient ? (
+        {isProductEdit && isMultipleVarient ? (
           <div className="product-note-section">
             <p class="product-note">
               Note : After making any change, please update the page.
@@ -435,7 +440,7 @@ const VariantAttributes = ({
                                   // }}
                                   isDisabled={
                                     index + 1 < varientLength?.length ||
-                                    pageUrl === "inventory/products/edit"
+                                    isProductEdit
                                   }
                                 />
                               </Grid>
@@ -496,7 +501,7 @@ const VariantAttributes = ({
                               ) : (
                                 ""
                               )}
-                              {pageUrl !== "inventory/products/edit" ? (
+                              {!isProductEdit ? (
                                 <div className="absolute top-1.5 right-2">
                                   {varientLength[varientLength?.length - 1]
                                     ?.id === varient?.id &&
@@ -531,8 +536,8 @@ const VariantAttributes = ({
               <Grid container sx={{ mb: formValue.length ? 1 : 2.5 }}>
                 <Grid item xs={12}>
                   {+varientLength?.length < 3 &&
-                  pageUrl === "inventory/products/add" &&
-                  pageUrl !== "inventory/products/edit" ? (
+                  isProductAdd &&
+                  !isProductEdit ? (
                     <div className="flex">
                       <button
                         className="px-4 py-2 bg-[#0A64F9] text-white rounded-md varient-attribute-btn"

@@ -266,8 +266,8 @@ const ReceivePurchaseOrderItems = () => {
 
         if (response.data.status) {
           ToastifyAlert(response.data.message, "success");
-          setIsUpdated((prev) => !prev);
-          // navigate("/purchase-data");
+          // setIsUpdated((prev) => !prev);
+          navigate("/purchase-data");
         } else {
           ToastifyAlert(response.data.message, "error");
         }
@@ -345,7 +345,7 @@ const ReceivePurchaseOrderItems = () => {
   return (
     <div className="box">
       <div className="box_shadow_div">
-        <SwitchToBackButton 
+        <SwitchToBackButton
           linkTo={"/purchase-data"}
           title={"Update Purchase Order"}
         />

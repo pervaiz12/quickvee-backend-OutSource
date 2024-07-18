@@ -199,31 +199,31 @@ function App() {
           />
           <Route
             exact
-            path="inventory/products"
+            path="/inventory/products"
             element={<Main visible={"products"} />}
           />
           <Route
             exact
-            path="inventory/products/saleshistory/:id/:varientId"
+            path="/inventory/products/saleshistory/:id/:varientId"
             element={<Main visible={"product-sales"} />}
           />
           <Route path="*" element={<PageNotFound />} />
 
           <Route
             exact
-            path="inventory/products/saleshistory/:id"
+            path="/inventory/products/saleshistory/:id"
             element={<Main visible={"product-sales"} />}
           />
 
           <Route
             exact
-            path="inventory/products/varient-edit/:id/:varientName"
+            path="/inventory/products/varient-edit/:id/:varientName"
             element={<Main visible={"edit-varient"} />}
           />
 
           <Route
             exact
-            path="inventory/products/edit/:id"
+            path="/inventory/products/edit/:id"
             element={<Main visible={"product-edit"} />}
           />
 

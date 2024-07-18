@@ -24,6 +24,10 @@ const GeneratePUC = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
+  const isProductAdd = location.pathname.includes("/products/add");
+  const isProductEdit = location.pathname.includes("/products/edit");
+  const isProductVariant = location.pathname.includes("/products/varient-edit");
+
   const pageUrl =
     window.location.pathname.split("/")[1] +
     "/" +
@@ -59,30 +63,25 @@ const GeneratePUC = ({
   const disabledFieldsOnEdit = ["margin", "profit", "qty"];
 
   const disabledInput = (inp, formDisabledKey) => {
-    if (
-      pageUrl !== "inventory/products/edit" &&
-      disabledFields.includes(inp?.name)
-    ) {
+    if (!isProductEdit && disabledFields.includes(inp?.name)) {
       return true;
     } else if (
-      pageUrl === "inventory/products/edit" &&
+      isProductEdit &&
       inp?.name === "qty" &&
       !formDisabledKey?.notEditable
     ) {
       return false;
     } else if (
-      (pageUrl === "inventory/products/edit" &&
-        disabledFieldsOnEdit.includes(inp?.name)) ||
-      (pageUrl === "inventory/products/varient-edit" &&
-        disabledFieldsOnEdit.includes(inp?.name))
+      (isProductEdit && disabledFieldsOnEdit.includes(inp?.name)) ||
+      (isProductVariant && disabledFieldsOnEdit.includes(inp?.name))
     ) {
       return true;
     } else if (
-      (pageUrl === "inventory/products/edit" &&
+      (isProductEdit &&
         +inventoryData?.cost_method === 1 &&
         inp?.name === "costPerItem" &&
         !!formDisabledKey?.notEditable) ||
-      (pageUrl === "inventory/products/varient-edit" &&
+      (isProductVariant &&
         +inventoryData?.cost_method === 1 &&
         inp?.name === "costPerItem" &&
         !!formDisabledKey?.notEditable)
@@ -97,11 +96,11 @@ const GeneratePUC = ({
     let url;
     if (varientIndex === null) {
       window.open(
-        `/inventory/products/saleshistory/${productData?.id}?title=${productInfo?.title}`
+        `/merchants/inventory/products/saleshistory/${productData?.id}?title=${productInfo?.title}`
       );
     } else if (isVarientEdit) {
       window.open(
-        `/inventory/products/saleshistory/${productData?.product_id}/${
+        `/merchants/inventory/products/saleshistory/${productData?.product_id}/${
           productData?.id
         }?title=${
           productData?.product_name?.split("~")?.[0]
@@ -109,12 +108,12 @@ const GeneratePUC = ({
       );
     } else {
       window.open(
-        `/inventory/products/saleshistory/${productData?.id}/${varientIndex}?title=${productInfo?.title}&varientName=${varientName}`
+        `/merchants/inventory/products/saleshistory/${productData?.id}/${varientIndex}?title=${productInfo?.title}&varientName=${varientName}`
       );
     }
   };
-  let count = 0
- 
+  let count = 0;
+
   return (
     <>
       <Grid container className="mx-0">
@@ -168,9 +167,9 @@ const GeneratePUC = ({
           )}
           {varientTitle?.length && isMultipleVarient
             ? varientTitle?.map((title, index) => {
-              count++;
-              console.log("count of ",count)
-              
+                count++;
+                console.log("count of ", count);
+
                 return (
                   <>
                     <div
@@ -189,7 +188,6 @@ const GeneratePUC = ({
                       <Grid container spacing={2}>
                         {formData?.length
                           ? formData?.map((inp, i) => {
-                           
                               return (
                                 // <div className="col-qv-2" key={i}>
                                 <>
@@ -285,7 +283,7 @@ const GeneratePUC = ({
                           class="q_resigter_setting_section"
                           style={{ color: "#000", fontSize: "18px" }}
                         >
-                          Track Quantity 
+                          Track Quantity
                           <input
                             type="checkbox"
                             name="trackQuantity"
@@ -400,7 +398,7 @@ const GeneratePUC = ({
                       </label> */}
                       </div>
 
-                      {pageUrl === "inventory/products/edit" &&
+                      {isProductEdit &&
                       formValue?.[index]?.[title]?.notEditable ? (
                         <div class="edit-profile-btns">
                           <button
@@ -458,16 +456,14 @@ const GeneratePUC = ({
                     </div>
                     {varientTitle?.length > count && (
                       <>
-                      <div
-                        style={{
-                          borderBottom: "1px solid #E8E8E8",
-                          marginBottom: "30px",
-                          marginTop: "30px",
-                        }}
-                      ></div>
+                        <div
+                          style={{
+                            borderBottom: "1px solid #E8E8E8",
+                            marginBottom: "30px",
+                            marginTop: "30px",
+                          }}
+                        ></div>
                       </>
-                     
-                      
                     )}
                   </>
                 );
@@ -532,7 +528,10 @@ const GeneratePUC = ({
                     })
                   : ""}
               </Grid>
-              <div style={{marginTop:"20px"}} className="flex flex-wrap gap-3 mb-2">
+              <div
+                style={{ marginTop: "20px" }}
+                className="flex flex-wrap gap-3 mb-2"
+              >
                 <label
                   class="q_resigter_setting_section check-box-area"
                   style={{ color: "#000", fontSize: "18px" }}
@@ -623,7 +622,7 @@ const GeneratePUC = ({
                 </label> */}
               </div>
 
-              {pageUrl === "inventory/products/edit" || isVarientEdit ? (
+              {isProductEdit || isVarientEdit ? (
                 <div class="edit-profile-btns">
                   <button
                     className="quic-btn quic-btn-save vendor-btn"

@@ -27,7 +27,7 @@ const AskConform = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
               <div className="delete-modal-content">
                 {/* <img src={DeleteIcon} alt={`Delete-icon`} loading="lazy" /> */}
                 <span>
-                Are you sure you want to <br /> this{" "}
+                Are you sure you want to <br /> {" "}
                   {headerText ? headerText : "delete"} ? {otherMSG ? <><br/>{otherMSG}</> :""}
                 </span>
               </div>
