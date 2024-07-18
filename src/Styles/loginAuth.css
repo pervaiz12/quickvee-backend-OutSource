@@ -112,15 +112,7 @@
     background-position: center;
   }
 
-  30% {
-    /* background: url('../Assets/LoginScreen/LoginBanner2.1.png');
-       */
-    background: url("../Assests//LoginScreen/LoginBanner2.1.webp");
-    background-size: cover;
-    background-position: center;
-  }
-
-  60% {
+  50% {
     /* background: url('../Assets/LoginScreen/LoginBanner3.1.png'); */
     background: url("../Assests/LoginScreen/LoginBanner3.1.webp");
     background-size: cover;

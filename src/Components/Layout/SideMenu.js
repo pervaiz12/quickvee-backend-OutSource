@@ -126,7 +126,7 @@ const SideMenu = () => {
     // console.log("setIsStoreActive setIsStoreActive0,",isStoreActive)
     if (!isStoreActive) {
       setMenuItemSwitcher(SuperAdminMenuItems);
-      dispatch(setMenuOpen(true));
+      // dispatch(setMenuOpen(true));
     } else {
       const updatedMenuItems = [...menuItems];
 
@@ -170,14 +170,11 @@ const SideMenu = () => {
           text: "Digital Marketing Tags",
           link: "/Digital-marketing-tags",
         };
-        const updatedTest = updatedMenuItems.map(item => {
+        const updatedTest = updatedMenuItems.map((item) => {
           if (item.id === 9 && item.dropdownItems) {
             return {
               ...item,
-              dropdownItems: [
-                ...item.dropdownItems,
-                newMenuItemDigit
-              ]
+              dropdownItems: [...item.dropdownItems, newMenuItemDigit],
             };
           }
           return item;
@@ -185,7 +182,6 @@ const SideMenu = () => {
         // console.log("test",updatedTest)
         setMenuItemSwitcher(updatedTest);
       }
-     
     }
   }, [currentUrl, isStoreActive]);
 
@@ -363,7 +359,11 @@ const DropdownMenuItem = ({
 
     if (foundItem) {
       setDropDownItem(foundItem?.link);
-      activeDropDownItem(item?.id);
+      if (isTabletNav) {
+        activeDropDownItem(item?.id);
+      }if(isMenuOpenRedux){
+        activeDropDownItem(item?.id);
+      }
     }
 
     const NesedFoundItem = item?.dropdownItems?.find((nestedItem) => {
@@ -381,8 +381,9 @@ const DropdownMenuItem = ({
       activeDropDownItem(item.id);
     }
     // item.id === currentDropDownItem && dispatch(setIsDropdownOpen(true));
-    isMenuOpenRedux && dispatch(setIsDropdownOpen(!isTabletNav));
-  }, [isTabletNav, dropDownItem, isTabletNav, activeItem]);
+   if(isTabletNav){ dispatch(setIsDropdownOpen(!isTabletNav));}
+   if(isMenuOpenRedux){ dispatch(setIsDropdownOpen(isMenuOpenRedux));}
+  }, [isTabletNav, dropDownItem, isTabletNav, activeItem,isMenuOpenRedux]);
 
   const handleToggleDropdownItems = (link, e) => {
     if (isTabletNav) {
