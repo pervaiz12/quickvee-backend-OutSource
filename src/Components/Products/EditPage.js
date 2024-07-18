@@ -11,6 +11,8 @@ import BulkVarientEdit from "./BulkVarientEdit";
 import BulkVendorEdit from "./BulkVendorEdit";
 import BulkInstantPo from "./BulkInstantPo";
 import { useEffect } from "react";
+import { useMemo } from "react";
+import { useCallback } from "react";
 
 const EditPage = ({
   openEditModal,
@@ -28,10 +30,10 @@ const EditPage = ({
 }) => {
   const [value, setValue] = React.useState("1");
 
-  const handleChange = (event, newValue) => {
-    console.log('handleChange',newValue);
+  const handleChange = useCallback((event, newValue) => {
+    console.log("handleChange", newValue);
     setValue(newValue);
-  };
+  }, []);
 
   useEffect(() => {
     if (modalType === "single_vendor") {
@@ -43,6 +45,50 @@ const EditPage = ({
     }
   }, [modalType]);
 
+  const renderTabList = useMemo(
+    () => (
+      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+        <TabList
+          onChange={handleChange}
+          aria-label="lab API tabs example"
+          className="tab-list"
+        >
+          {modalType !== "single_vendor" && modalType !== "single_instant" ? (
+            <Tab label="Bulk Variant Edit" value="1" />
+          ) : (
+            ""
+          )}
+
+          {modalType !== "single_instant" ? (
+            <Tab
+              label={`${
+                modalType !== "single_vendor"
+                  ? "Bulk Vendor Edit"
+                  : "Vendor Edit"
+              }`}
+              value="2"
+            />
+          ) : (
+            ""
+          )}
+          {modalType !== "single_vendor" ? (
+            <Tab
+              label={`${
+                modalType !== "single_instant"
+                  ? "Bulk Instant PO"
+                  : "Instant PO"
+              }`}
+              value="3"
+            />
+          ) : (
+            ""
+          )}
+        </TabList>
+      </Box>
+    ),
+    [modalType, handleChange]
+  );
+
   return (
     <>
       <Modal
@@ -51,56 +97,14 @@ const EditPage = ({
         aria-labelledby="parent-modal-title"
         aria-describedby="parent-modal-description"
       >
-        <Box  className="product-edit-modal custom-scroll">
+        <Box className="product-edit-modal custom-scroll">
           <div class="cancel-btn" onClick={handleCloseEditModal}>
-            <img
-              src={CloseIcon}
-              className="cancel-image"
-            />
+            <img src={CloseIcon} className="cancel-image" />
           </div>
           <div class="modal-content">
             <Box sx={{ width: "100%", typography: "body1" }}>
               <TabContext value={value}>
-                <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-                  <TabList
-                    onChange={handleChange}
-                    aria-label="lab API tabs example"
-                    className="tab-list"
-                  >
-                    {modalType !== "single_vendor" &&
-                    modalType !== "single_instant" ? (
-                      <Tab label="Bulk Variant Edit" value="1" />
-                    ) : (
-                      ""
-                    )}
-
-                    {modalType !== "single_instant" ? (
-                      <Tab
-                        label={`${
-                          modalType !== "single_vendor"
-                            ? "Bulk Vendor Edit"
-                            : "Vendor Edit"
-                        }`}
-                        value="2"
-                      />
-                    ) : (
-                      ""
-                    )}
-                    {modalType !== "single_vendor" ? (
-                      <Tab
-                        label={`${
-                          modalType !== "single_instant"
-                            ? "Bulk Instant PO"
-                            : "Instant PO"
-                        }`}
-                        value="3"
-                      />
-                    ) : (
-                      ""
-                    )}
-                  </TabList>
-                </Box>
-
+                {renderTabList}
                 <TabPanel value="1">
                   <BulkVarientEdit
                     formData={formData}
@@ -112,7 +116,6 @@ const EditPage = ({
 
                 <TabPanel value="2">
                   <BulkVendorEdit
-                  
                     productData={productData}
                     varientIndex={varientIndex}
                     isVarientEdit={isVarientEdit}

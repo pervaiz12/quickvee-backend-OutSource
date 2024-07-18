@@ -579,10 +579,10 @@ const AddProducts = () => {
           // Check if costPerItem is a valid number and greater than zero
           if (!isNaN(price) && price > 0) {
             nestedObject.margin = (
-              ((costPerItem - price) / costPerItem) *
+              ((price - costPerItem) / price) *
               100
             ).toFixed(2);
-            nestedObject.profit = (costPerItem - price).toFixed(2);
+            nestedObject.profit = (price - costPerItem).toFixed(2);
           }
           // If costPerItem is 0 or not a valid number, do not update margin and profit
         }
@@ -1531,7 +1531,7 @@ const AddProducts = () => {
     setFormValue(updatedValues);
   };
 
-  console.log("formvalue", formValue);
+  // console.log("formvalue", formValue);
   console.log("error", error);
 
   const handleVarientTitleBasedItemList = () => {
