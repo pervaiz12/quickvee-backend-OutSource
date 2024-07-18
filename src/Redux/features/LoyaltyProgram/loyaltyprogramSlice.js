@@ -14,18 +14,23 @@ const initialState = {
 
 
 // Generate pening , fulfilled and rejected action type
-export const fetchloyaltyprogramData = createAsyncThunk('loyaltyprogram/fetchloyaltyprogramData.', async (data) => {
+export const fetchloyaltyprogramData = createAsyncThunk('loyaltyprogram/fetchloyaltyprogramData.', async (data, { rejectWithValue }) => {
     const { token, ...dataNew } = data;
     try {
         const response = await axios.post(BASE_URL + LOYALTY_PROGRAM_LIST, dataNew, { headers: { "Content-Type": "multipart/form-data",Authorization: `Bearer ${token}` } })
         if (response.data.status === "Success") {
 
            return response.data.result
-        }else if(response.data.status === "Failed" && response.data.msg === "No found"){
+        }else if(response.data.status === "Failed" ){
             return response.data
         }
     } catch (error) {
-        throw new Error(error.response.data.message);
+      const customError = {
+        message: error.message,
+        status: error.response ? error.response.status : "Network Error",
+        data: error.response ? error.response.data : null,
+      };
+      return rejectWithValue(customError);
     }
 })
 // Generate pening , fulfilled and rejected action type
@@ -64,7 +69,7 @@ const loyaltyprogramSlice = createSlice({
         })
         builder.addCase(fetchloyaltyprogramData.rejected, (state, action) => {
             state.loading = false;
-            state.loyaltyprogramData = {};
+            state.loyaltyprogramData = [];
             state.error = action.error.message;
         })
         builder.addCase(getLoyaltyCount.fulfilled, (state, action) => {

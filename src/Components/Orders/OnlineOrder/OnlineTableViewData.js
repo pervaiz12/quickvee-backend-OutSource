@@ -79,6 +79,7 @@ const OnlineTableViewData = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const debouncedValue = useDebounce(props?.OnlSearchIdData);
+  const [buttonLoader, setButtonLoader] = useState(false)
   // console.log("debouncedValue", debouncedValue);
   const dispatch = useDispatch();
   // const debouncedValue = useDebounce(searchId);
@@ -532,6 +533,7 @@ const OnlineTableViewData = (props) => {
     // Dispatching an action to change the order status
     if (FormData) {
       try {
+        setButtonLoader(true);
         const res = await dispatch(fetchOrderChangeStatusData(FormData));
         console.log("setAllOnlineStoreOrders", res);
         // Checking if the API call was successful
@@ -603,6 +605,7 @@ const OnlineTableViewData = (props) => {
         console.error("Error while updating order status:", error.message);
         // Handle any network or other errors that may occur during the API call
       }
+      setButtonLoader(false)
     }
 
     setDeleteCategoryId(null);
@@ -948,6 +951,7 @@ const OnlineTableViewData = (props) => {
       )}
       <AskConform
         headerText="change status"
+        loader={buttonLoader}
         open={deleteModalOpen}
         onClose={() => {
           setDeleteModalOpen(false);

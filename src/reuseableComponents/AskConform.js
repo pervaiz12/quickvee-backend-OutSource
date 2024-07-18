@@ -3,7 +3,14 @@ import { Box, Modal } from "@mui/material";
 import DeleteIcon from "../Assests/Category/deleteIcon.svg";
 import Slide from "@mui/material/Slide";
 
-const AskConform = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
+const AskConform = ({
+  headerText,
+  otherMSG,
+  open,
+  onClose,
+  onConfirm,
+  loader,
+}) => {
   const myStyles = {
     width: "45vh",
     position: "absolute",
@@ -27,13 +34,22 @@ const AskConform = ({ headerText, otherMSG, open, onClose, onConfirm }) => {
               <div className="delete-modal-content">
                 {/* <img src={DeleteIcon} alt={`Delete-icon`} loading="lazy" /> */}
                 <span>
-                Are you sure you want to <br /> {" "}
-                  {headerText ? headerText : "delete"} ? {otherMSG ? <><br/>{otherMSG}</> :""}
+                  Are you sure you want to <br />{" "}
+                  {headerText ? headerText : "delete"} ?{" "}
+                  {otherMSG ? (
+                    <>
+                      <br />
+                      {otherMSG}
+                    </>
+                  ) : (
+                    ""
+                  )}
                 </span>
               </div>
               <div className="delete-modal-button">
                 <button onClick={onClose}>Cancel</button>
                 <button
+                  disabled={loader}
                   onClick={onConfirm}
                   style={{ background: " #FF4040", color: "#fff" }}
                 >
