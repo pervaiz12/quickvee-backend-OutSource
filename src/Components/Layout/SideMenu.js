@@ -361,7 +361,8 @@ const DropdownMenuItem = ({
       setDropDownItem(foundItem?.link);
       if (isTabletNav) {
         activeDropDownItem(item?.id);
-      }if(isMenuOpenRedux){
+      }
+      if (isMenuOpenRedux) {
         activeDropDownItem(item?.id);
       }
     }
@@ -381,9 +382,13 @@ const DropdownMenuItem = ({
       activeDropDownItem(item.id);
     }
     // item.id === currentDropDownItem && dispatch(setIsDropdownOpen(true));
-   if(isTabletNav){ dispatch(setIsDropdownOpen(!isTabletNav));}
-   if(isMenuOpenRedux){ dispatch(setIsDropdownOpen(isMenuOpenRedux));}
-  }, [isTabletNav, dropDownItem, isTabletNav, activeItem,isMenuOpenRedux]);
+    if (isTabletNav) {
+      dispatch(setIsDropdownOpen(!isTabletNav));
+    }
+    if (isMenuOpenRedux) {
+      dispatch(setIsDropdownOpen(isMenuOpenRedux));
+    }
+  }, [isTabletNav, dropDownItem, isTabletNav, activeItem, isMenuOpenRedux]);
 
   const handleToggleDropdownItems = (link, e) => {
     if (isTabletNav) {
@@ -569,7 +574,7 @@ const menuItems = [
     activeIcon: (
       <img src={OrderYellow} alt="order" className="h-6 w-10 mt-4 mb-4" />
     ),
-    text: "Order",
+    text: "Orders",
     link: "/order",
   },
   {
@@ -594,11 +599,11 @@ const menuItems = [
     dropdownItems: [
       {
         id: 1,
-        text: "Sales Report",
+        text: "Sales Reports",
         dropDownItems: [
           {
             id: 61,
-            text: "Sales Report",
+            text: "Sales Summary",
             link: "/store-reporting/sales-report",
           },
           {
@@ -628,6 +633,13 @@ const menuItems = [
             text: "Payment Method Details",
             link: "/store-reporting/payment-method-details",
           },
+          {
+            id: 90,
+            text: "Item Sales Profit Report",
+            link: "/store-reporting/item-sale-profit-report",
+          },
+          { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
+
           // {
           //   id: 78,
           //   text: "Discount Per Sales Report",
@@ -690,6 +702,11 @@ const menuItems = [
             text: " Employee Working Hours",
             link: "/store-reporting/employee-working-hours",
           },
+          {
+            id: 89,
+            text: "Discount Per Sales Person",
+            link: "/store-reporting/discount-per-sales-report",
+          },
         ],
       },
       { id: 80, text: "Taxes ", link: "/store-reporting/taxes-report" },
@@ -735,11 +752,11 @@ const menuItems = [
       //   text: "Vendor Sales Report",
       //   link: "/store-reporting/vendors-sales-reports",
       // },
-      {
-        id: 90,
-        text: "Item Sales Profit Report",
-        link: "/store-reporting/item-sale-profit-report",
-      },
+      // {
+      //   id: 90,
+      //   text: "Item Sales Profit Report",
+      //   link: "/store-reporting/item-sale-profit-report",
+      // },
       // {
       //   id: 67,
       //   text: "Credit Debit Sales Report",
@@ -757,14 +774,14 @@ const menuItems = [
       //   link: "/store-settings/payment-method-detail-report",
       // },
 
-      { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
+      // { id: 77, text: " Item Sales ", link: "/store-reporting/item-sales" },
       { id: 87, text: "Tip Report", link: "/store-reporting/tip-report" },
       { id: 88, text: "Coupon Report", link: "/store-reporting/coupon-report" },
-      {
-        id: 89,
-        text: "Discount Per Sales Person",
-        link: "/store-reporting/discount-per-sales-report",
-      },
+      // {
+      //   id: 89,
+      //   text: "Discount Per Sales Person",
+      //   link: "/store-reporting/discount-per-sales-report",
+      // },
     ],
   },
   {

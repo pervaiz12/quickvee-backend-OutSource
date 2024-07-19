@@ -111,9 +111,9 @@ export default function DashboardTables(props) {
   };
   let columns = [
     "Employee",
-    "Discount($)",
+    "Discount Amount",
     "Discount Type",
-    "Item Discount($)",
+    "Item Discount Amount",
     "Order ID",
     "Date & Time",
   ];
@@ -177,7 +177,7 @@ export default function DashboardTables(props) {
                                         props.sortByItemName("num", "discount")
                                       }
                                     >
-                                      <p>Discount($)</p>
+                                      <p>Discount Amount</p>
                                       <img
                                         src={SortIconW}
                                         alt=""
@@ -213,7 +213,7 @@ export default function DashboardTables(props) {
                                         )
                                       }
                                     >
-                                      <p>Item Discount($)</p>
+                                      <p>Item Discount Amount</p>
                                       <img
                                         src={SortIconW}
                                         alt=""
@@ -231,7 +231,7 @@ export default function DashboardTables(props) {
                                         )
                                       }
                                     >
-                                      <p>Adjusted Item Price($)</p>
+                                      <p>Adjusted Item Price</p>
                                       <img
                                         src={SortIconW}
                                         alt=""
@@ -275,49 +275,49 @@ export default function DashboardTables(props) {
                                   {/* <StyledTableCell align="center">
                                 Order Details
                               </StyledTableCell> */}
-                            </TableHead>
-                            <TableBody>
-                              {result.map((item, innerIndex) => (
-                                <StyledTableRow key={innerIndex}>
-                                  <StyledTableCell>
-                                    {/* {item?.f_name + " " + item?.l_name} */}
-                                    <p>{item.fullName}</p>
-                                  </StyledTableCell>
-                                  <StyledTableCell>
-                                    {priceFormate(
-                                      parseFloat(item?.discount).toFixed(2)
-                                    )}
-                                  </StyledTableCell>
-                                  <StyledTableCell>
-                                    {item?.coupon_code}
-                                  </StyledTableCell>
-                                  <StyledTableCell>
-                                    {priceFormate(
-                                      parseFloat(
-                                        item?.line_item_discount
-                                      ).toFixed(2)
-                                    )}
-                                  </StyledTableCell>
-                                  <StyledTableCell>
-                                    {parseFloat(
-                                      priceFormate(item?.total_adjust_price)
-                                    ).toFixed(2)}{" "}
-                                  </StyledTableCell>
-                                  <StyledTableCell>
-                                    <Link
-                                      to={`/order/store-reporting/order-summary/${props.merchant_id}/${item.order_id}`}
-                                      // onClick={() => handleSummeryPage(row.order_id)}
-                                      target="_blank"
-                                    >
-                                      <p className="text-[#0A64F9]">
-                                        {item?.order_id}
-                                      </p>
-                                    </Link>
-                                  </StyledTableCell>
-                                  <StyledTableCell>
-                                    {formatDateTime(item?.merchant_time)}
-                                  </StyledTableCell>
-                                  {/* <StyledTableCell align="center">
+                                </TableHead>
+                                <TableBody>
+                                  {result.map((item, innerIndex) => (
+                                    <StyledTableRow key={innerIndex}>
+                                      <StyledTableCell>
+                                        {/* {item?.f_name + " " + item?.l_name} */}
+                                        <p>{item.fullName}</p>
+                                      </StyledTableCell>
+                                      <StyledTableCell>
+                                        {`$${priceFormate(
+                                          parseFloat(item?.discount).toFixed(2)
+                                        )}`}
+                                      </StyledTableCell>
+                                      <StyledTableCell>
+                                        {item?.coupon_code}
+                                      </StyledTableCell>
+                                      <StyledTableCell>
+                                        {`$${priceFormate(
+                                          parseFloat(
+                                            item?.line_item_discount
+                                          ).toFixed(2)
+                                        )}`}
+                                      </StyledTableCell>
+                                      <StyledTableCell>
+                                        {`$${parseFloat(
+                                          priceFormate(item?.total_adjust_price)
+                                        ).toFixed(2)}`}{" "}
+                                      </StyledTableCell>
+                                      <StyledTableCell>
+                                        <Link
+                                          to={`/order/store-reporting/order-summary/${props.merchant_id}/${item.order_id}`}
+                                          // onClick={() => handleSummeryPage(row.order_id)}
+                                          target="_blank"
+                                        >
+                                          <p className="text-[#0A64F9]">
+                                            {item?.order_id}
+                                          </p>
+                                        </Link>
+                                      </StyledTableCell>
+                                      <StyledTableCell>
+                                        {formatDateTime(item?.merchant_time)}
+                                      </StyledTableCell>
+                                      {/* <StyledTableCell align="center">
                                     <Link
                                       to={`/store-reporting/order-summary/${props.merchant_id}/${item.order_id}`}
                                       // onClick={() => handleSummeryPage(row.order_id)}
@@ -393,8 +393,8 @@ export default function DashboardTables(props) {
                 }
               )
             ) : (
-              <Grid container sx={{mt:0}} className="box_shadow_div">
-                <Grid item sx={{p:2.5}}>
+              <Grid container sx={{ mt: 0 }} className="box_shadow_div">
+                <Grid item sx={{ p: 2.5 }}>
                   <p>No tecord found </p>
                 </Grid>
               </Grid>
