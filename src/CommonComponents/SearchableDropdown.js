@@ -77,11 +77,13 @@ const SearchableDropdown = ({
   };
 
   useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [showOptions]);
+    if (!modalType) {
+      document.addEventListener("mousedown", handleClickOutside);
+      return () => {
+        document.removeEventListener("mousedown", handleClickOutside);
+      };
+    }
+  }, [showOptions, modalType]);
 
   useEffect(() => {
     // set defaultTax in taxes dropdown

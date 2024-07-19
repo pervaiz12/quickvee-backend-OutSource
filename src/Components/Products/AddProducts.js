@@ -2493,7 +2493,7 @@ const AddProducts = () => {
             <div className="q-add-categories-section">
               <SwitchToBackButton
                 linkTo={"/inventory/products"}
-                title={`${isProductEdit ? "Edit" : "Add"}Product`}
+                title={`${isProductEdit ? "Edit" : "Add"} Product`}
               />
               {/* <div className="q-add-categories-section-header">
                 <span

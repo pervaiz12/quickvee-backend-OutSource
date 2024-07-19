@@ -94,8 +94,8 @@ const Customer = () => {
       border: 0,
     },
     "& td, & th": {
-    border: "none",
-  },
+      border: "none",
+    },
   }));
 
   const { userTypeData } = useAuthDetails();
@@ -238,6 +238,8 @@ const Customer = () => {
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
                 setCurrentPage={setCurrentPage}
+                showEntries={true}
+                data={customersDataState}
               />
             </Grid>
           </Grid>
@@ -343,6 +345,21 @@ const Customer = () => {
                 )}
               </>
             )}
+          </Grid>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
+                showEntries={false}
+                data={customersDataState}
+              />
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

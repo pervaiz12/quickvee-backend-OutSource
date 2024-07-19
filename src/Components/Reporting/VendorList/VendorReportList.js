@@ -165,6 +165,8 @@ const VendorReportList = (props) => {
               rowsPerPage={rowsPerPage}
               setRowsPerPage={setRowsPerPage}
               setCurrentPage={setCurrentPage}
+              showEntries={true}
+              data={allVendorData}
             />
           </Grid>
         </Grid>
@@ -245,6 +247,19 @@ const VendorReportList = (props) => {
               )}
             </>
           )}
+        </Grid>
+        <Grid item xs={12}>
+          <Pagination
+            currentPage={currentPage}
+            totalItems={totalCount}
+            itemsPerPage={rowsPerPage}
+            onPageChange={paginate}
+            rowsPerPage={rowsPerPage}
+            setRowsPerPage={setRowsPerPage}
+            setCurrentPage={setCurrentPage}
+            showEntries={false}
+            data={allVendorData}
+          />
         </Grid>
       </Grid>
       {/* <div className="box">

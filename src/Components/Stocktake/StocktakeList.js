@@ -266,6 +266,8 @@ const StocktakeList = ({
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
                 setCurrentPage={setCurrentPage}
+                showEntries={true}
+                data={StocktakeListReducerState?.StocktakeList}
               />
             </Grid>
           </Grid>
@@ -372,6 +374,21 @@ const StocktakeList = ({
                 )}
               </>
             )}
+          </Grid>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
+                showEntries={false}
+                data={StocktakeListReducerState?.StocktakeList}
+              />
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

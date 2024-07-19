@@ -91,9 +91,9 @@ const TipReportList = (props) => {
     totalNetTip += parseFloat(tipData.net_tip);
   });
   const tableRow = [
-    { type: "num", name: "employee_id", label: "Employee ID" },
-    { type: "str", name: "f_name", label: "First Name" },
-    { type: "str", name: "l_name", label: "Last Name" },
+    // { type: "num", name: "employee_id", label: "Employee ID" },
+    { type: "str", name: "f_name", label: "Employee Name" },
+    // { type: "str", name: "l_name", label: "Last Name" },
     { type: "num", name: "net_tip", label: "Net Tip" },
   ];
   const sortByItemName = (type, name) => {
@@ -132,15 +132,20 @@ const TipReportList = (props) => {
                     tipReportData.map((tipData, index) => (
                       <>
                         <StyledTableRow key={index}>
-                          <StyledTableCell>
-                            <p>{priceFormate(tipData.employee_id)}</p>
-                          </StyledTableCell>
-                          <StyledTableCell>
+                          {/* <StyledTableCell>
+                            <p>{tipData.employee_id}</p>
+                          </StyledTableCell> */}
+                          {/* <StyledTableCell>
                             <p>{tipData.f_name}</p>
                           </StyledTableCell>
                           <StyledTableCell>
                             <p>{tipData.l_name}</p>
-                          </StyledTableCell>
+                          </StyledTableCell> */}
+                           <StyledTableCell>
+                        {tipData?.f_name || tipData?.l_name ? (
+                          <p>{tipData?.f_name || ""} {tipData?.l_name || ""}</p>
+                        ) :""}
+                        </StyledTableCell>
                           <StyledTableCell>
                             <p>
                               $
@@ -154,8 +159,8 @@ const TipReportList = (props) => {
                     ))}
                   {tipReportData.length > 0 && (
                     <StyledTableRow>
-                      <StyledTableCell></StyledTableCell>
-                      <StyledTableCell></StyledTableCell>
+                      {/* <StyledTableCell></StyledTableCell> */}
+                      {/* <StyledTableCell></StyledTableCell> */}
                       <StyledTableCell>
                         <p style={{ color: "#0A64F9" }}>Grand Total</p>
                       </StyledTableCell>

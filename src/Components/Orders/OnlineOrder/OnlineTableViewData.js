@@ -69,6 +69,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: "none",
   },
 }));
+const orderType = (type) => {
+      if (type === "Completed") {
+        return "Closed";
+      } else {
+        return type;
+      }
+    };
 const OnlineTableViewData = (props) => {
   const navigate = useNavigate();
   // console.log(props)
@@ -79,16 +86,15 @@ const OnlineTableViewData = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const debouncedValue = useDebounce(props?.OnlSearchIdData);
-  const [buttonLoader, setButtonLoader] = useState(false)
+  const [buttonLoader, setButtonLoader] = useState(false);
   // console.log("debouncedValue", debouncedValue);
   const dispatch = useDispatch();
   // const debouncedValue = useDebounce(searchId);
   useEffect(() => {
     const transactionType = (type) => {
-      if (type === "Cash Payment") {
+      if (type === "Cash") {
         return "Cash";
-      }
-      if (type === "Card Payment") {
+      } else if (type === "Credit Card") {
         return "Online";
       } else {
         return type;
@@ -98,7 +104,7 @@ const OnlineTableViewData = (props) => {
       if (props?.selectedDateRange?.start_date) {
         let data = {
           merchant_id: props.merchant_id,
-          order_type: props.OrderTypeData,
+          order_type: orderType(props.OrderTypeData),
           trans_type: transactionType(props.OrderSourceData),
           start_date: props.selectedDateRange?.start_date,
           end_date: props.selectedDateRange?.end_date,
@@ -107,7 +113,7 @@ const OnlineTableViewData = (props) => {
             props?.OnlSearchIdData !== "" ? props?.OnlSearchIdData : null,
           perpage: rowsPerPage,
           page: debouncedValue === "" ? currentPage : "1",
-          order_method:props.order_method ? props.order_method : "All",
+          order_method: props.order_method ? props.order_method : "All",
           // search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
           ...props.userTypeData,
         };
@@ -131,25 +137,25 @@ const OnlineTableViewData = (props) => {
   useEffect(() => {
     setCurrentPage(1);
     const transactionType = (type) => {
-      if (type === "Cash Payment") {
+      if (type === "Cash") {
         return "Cash";
-      }
-      if (type === "Card Payment") {
+      } else if (type === "Credit Card") {
         return "Online";
       } else {
         return type;
       }
     };
+    
     dispatch(
       getOrderListCount({
         merchant_id: props.merchant_id, //
-        order_type: props.OrderTypeData,
+        order_type: orderType(props.OrderTypeData),
         search_by:
           props?.OnlSearchIdData !== "" ? props?.OnlSearchIdData : null,
         trans_type: transactionType(props.OrderSourceData), //
         start_date: props.selectedDateRange?.start_date, //
         end_date: props.selectedDateRange?.end_date, //
-        order_method:props.order_method ? props.order_method : "All",
+        order_method: props.order_method ? props.order_method : "All",
         ...props.userTypeData, //
       })
     );
@@ -159,7 +165,7 @@ const OnlineTableViewData = (props) => {
     props.selectedDateRange?.start_date,
     props.selectedDateRange?.end_date,
     debouncedValue,
-    props.order_method
+    props.order_method,
     // props.OrderTypeData,
     // props.OrderSourceData,
     // AllInStoreDataState.OrderListCount,
@@ -304,8 +310,8 @@ const OnlineTableViewData = (props) => {
     return payemnt == "Cash" && status == "5"
       ? "Cancelled"
       : payemnt == "Cash"
-        ? "Cash-Paid"
-        : "Online-Paid";
+        ? "Cash"
+        : "Credit Card";
     // return string.charAt(0).toUpperCase() + string.slice(1);
   }
   // console.log(allOnlineStoreOrder);
@@ -605,7 +611,7 @@ const OnlineTableViewData = (props) => {
         console.error("Error while updating order status:", error.message);
         // Handle any network or other errors that may occur during the API call
       }
-      setButtonLoader(false)
+      setButtonLoader(false);
     }
 
     setDeleteCategoryId(null);
@@ -656,10 +662,10 @@ const OnlineTableViewData = (props) => {
     } else if (data.payment_id === "Cash") {
       OrderStatus = "Cash";
     } else {
-      OrderStatus = "Online-Paid";
+      OrderStatus = "Credit Card";
     }
 
-    if (props?.OrderTypeData === "Closed") {
+    if (props?.OrderTypeData === "Completed") {
       // if (
       //   OrderStatus === "Cash" &&
       //   parseFloat(data?.cash_collected)?.toFixed(2) !=
@@ -728,6 +734,8 @@ const OnlineTableViewData = (props) => {
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
                 setCurrentPage={setCurrentPage}
+                showEntries={true}
+                data={AllInStoreDataState?.onlineStoreOrderData}
               />
             </Grid>
           </Grid>
@@ -809,12 +817,12 @@ const OnlineTableViewData = (props) => {
                               } else {
                                 if (data.payment_id === "Cash") {
                                   if (data.m_status === "4") {
-                                    status = "Cash-Paid";
+                                    status = "Cash";
                                   } else {
                                     status = "Cash-Pending";
                                   }
                                 } else {
-                                  status = "Online-Paid";
+                                  status = "Credit card";
                                 }
                               }
                               /////////////////////end of Showing Stat////////////////////////////////
@@ -895,6 +903,21 @@ const OnlineTableViewData = (props) => {
                   </TableContainer>
                 </>
               )}
+            </Grid>
+          </Grid>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
+                showEntries={false}
+                data={AllInStoreDataState?.onlineStoreOrderData}
+              />
             </Grid>
           </Grid>
         </Grid>

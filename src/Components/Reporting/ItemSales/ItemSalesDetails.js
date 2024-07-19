@@ -16,6 +16,9 @@ import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import PasswordShow from "../../../Common/passwordShow";
+import useDebounce from "../../../hooks/useDebouncs";
+
+
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -61,21 +64,8 @@ const ItemSalesDetails = (props) => {
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
     getFetchItemSalesData();
-    // if (props && props.selectedDateRange) {
-    //   let data = {
-    //     merchant_id,
-    //     start_date: props.selectedDateRange.start_date,
-    //     end_date: props.selectedDateRange.end_date,
-    //     order_typ: props.OrderTypeData,
-    //     order_env: props.OrderSourceData,
-    //     cat_name: props.SelectCatData,
-    //     ...userTypeData,
-    //   };
-    //   if (data) {
-    //     dispatch(fetchItemSalesData(data));
-    //   }
-    // }
   }, [props]);
+
   const getFetchItemSalesData = async () => {
     if (props && props.selectedDateRange) {
       try {
@@ -86,6 +76,7 @@ const ItemSalesDetails = (props) => {
           order_typ: props.OrderTypeData,
           order_env: props.OrderSourceData,
           cat_name: props.SelectCatData,
+          search_by: props.items,
           ...userTypeData,
         };
         if (data) {
@@ -214,46 +205,6 @@ const ItemSalesDetails = (props) => {
           )}
         </Grid>
       </Grid>
-      {/* <div className="q-attributes-bottom-detail-section">
-        <div className="q-attributes-bottom-header-sticky">
-          <div className="q-attributes-bottom-header">
-            <span>Item Sales Report</span>
-          </div>
-          <div className="q-attributes-bottom-attriButes-header item_sale_header_div">
-            <p className="q-employee-item">Category</p>
-            <p className="q-employee-in"> Name </p>
-            <p className="q-employee-in"># Sold</p>
-            <p className="q-employee-in">Gross Sales</p>
-            <p className="q-employee-in">Price Override</p>
-
-            <p className="q-employee-out">Discounts</p>
-            <p className="q-employee-worked">Default Tax</p>
-            <p className="q-catereport-break">Other Tax</p>
-            <p className="q-catereport-break">Refunded</p>
-            <p className="q-catereport-break"> Net Sales</p>
-          </div>
-        </div>
-
-        {allItemSalesData &&
-          allItemSalesData.length >= 1 &&
-          allItemSalesData.map((ItemData, index) => (
-            <div key={index} className="q-attributes-bottom-attriButes-listing">
-              <div className="q-employee-bottom-attriButes-single-attributes item_sale_div">
-                <p className="q-employee-item">{ItemData.categoryss}</p>
-                <p className="q-employee-in">{ItemData.name}</p>
-                <p className="q-employee-in">{ItemData.total_qty}</p>
-                <p className="q-employee-in">{ItemData.total_price}</p>
-                <p className="q-employee-in">{ItemData.adjust_price}</p>
-
-                <p className="q-employee-out">{ItemData.discount_amt}</p>
-                <p className="q-employee-worked">{ItemData.saletx}</p>
-                <p className="q-catereport-break">{ItemData.othertx}</p>
-                <p className="q-catereport-break">{ItemData.refund_amount}</p>
-                <p className="q-catereport-break">{ItemData.discount_price}</p>
-              </div>
-            </div>
-          ))}
-      </div> */}
     </>
   );
 };

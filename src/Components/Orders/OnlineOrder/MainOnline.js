@@ -13,10 +13,10 @@ const MainOnline = ({
       title: "Both",
     },
     {
-      title: "Cash Payment",
+      title: "Cash",
     },
     {
-      title: "Card Payment",
+      title: "Credit Card",
     },
   ];
 
@@ -25,7 +25,7 @@ const MainOnline = ({
       title: "New",
     },
     {
-      title: "Closed",
+      title: "Completed",
     },
     {
       title: "Failed",
@@ -40,9 +40,7 @@ const MainOnline = ({
   const [isTablet, setIsTablet] = useState(false);
   // const [selectedEmployee, setSelectedEmployee] = useState("All");
   const [selectedTransaction, setSelectedTransaction] = useState("Both");
-  const [selectedOrderStatus, setSelectedOrderStatus] = useState(
-    order_env ? "Closed" : "New"
-  );
+  const [selectedOrderStatus, setSelectedOrderStatus] = useState("New");
 
   // const [employeeDropdownVisible, setEmployeeDropdownVisible] = useState(false);
   const [transactionDropdownVisible, setTransactionDropdownVisible] =
@@ -155,8 +153,9 @@ const MainOnline = ({
               </Grid>
               <Grid container spacing={2}>
                 <Grid item xs={12} sm={6} md={4}>
-                  <label htmlFor="transactionFilter">Transactions</label>
+                  <label htmlFor="transactionFilter">Payment Type</label>
                   <SelectDropDown
+                    sx={{ pt: 0.5 }}
                     heading={""}
                     listItem={transactionsList}
                     title={"title"}
@@ -168,6 +167,7 @@ const MainOnline = ({
                 <Grid item xs={12} sm={6} md={4}>
                   <label htmlFor="orderStatusFilter">Order Status</label>
                   <SelectDropDown
+                    sx={{ pt: 0.5 }}
                     heading={""}
                     listItem={orderStatusList}
                     title={"title"}

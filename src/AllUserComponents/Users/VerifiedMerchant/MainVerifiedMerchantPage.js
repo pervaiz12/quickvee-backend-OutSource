@@ -9,13 +9,14 @@ const MainVerifiedMerchantPage = () => {
   return (
     <>
       {visible === "verifiedMerchant" && (
-        <Verified
-          setVisible={setVisible}
-          setMerchantId={setMerchantId}
-        />
+        <Verified setVisible={setVisible} setMerchantId={setMerchantId} />
       )}
       {visible === "editVerirmedMerchant" && (
-        <EditMerchant currentMerchant="verifiedMerchant" setVisible={setVisible} merchantId={merchantId} />
+        <EditMerchant
+          currentMerchant="verifiedMerchant"
+          setVisible={setVisible}
+          merchantId={merchantId}
+        />
       )}
     </>
   );

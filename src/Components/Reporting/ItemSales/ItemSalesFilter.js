@@ -7,8 +7,9 @@ import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import CustomHeader from "../../../reuseableComponents/CustomHeader";
 import PasswordShow from "../../../Common/passwordShow";
+import InputTextSearch from "../../../reuseableComponents/InputTextSearch";
 
-const ItemSalesFilter = ({ onFilterDataChange }) => {
+const ItemSalesFilter = ({ onFilterDataChange,searchItems, setSearchRecord,debouncedValue }) => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
@@ -18,6 +19,7 @@ const ItemSalesFilter = ({ onFilterDataChange }) => {
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const [filteredData, setFilteredData] = useState({ category_id: "all" });
+  const [items, setItems] = useState("");
 
   const handleOptionClick = (option, dropdown) => {
     switch (dropdown) {
@@ -56,6 +58,10 @@ const ItemSalesFilter = ({ onFilterDataChange }) => {
       default:
         break;
     }
+  };
+
+  const handleSearchInputChange = (value) => {
+    setSearchRecord(value);
   };
 
   const [categoryOptions, setCategoryOptions] = useState([]);
@@ -107,177 +113,84 @@ const ItemSalesFilter = ({ onFilterDataChange }) => {
     onFilterDataChange(
       selectedOrderSource,
       selectedOrderType,
-      selectedCategory
+      selectedCategory,items
     );
-  }, [selectedOrderSource, selectedOrderType, selectedCategory]);
+  }, [selectedOrderSource, selectedOrderType, selectedCategory,items]);
 
   const orderSourceList = ["All", "Online Order", "Store Order"];
   const orderTypeList = ["All", "Pickup", "Delivery"];
+
+  const handleSearch = () =>{
+  }
   return (
     <>
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
           <CustomHeader>Item Sales</CustomHeader>
+          <Grid item xs={12}  sx={{ px: 2.5,py:2.5 }}>
+              <InputTextSearch
+                placeholder="Search by Items Name"
+                value={searchItems}
+                handleChange={handleSearchInputChange}
+                handleSearchButton={handleSearch}
+              />
+            </Grid>
 
-          <Grid container sx={{ px: 2.5, pt: 1 }}>
-            <Grid item xs={12}>
-              <div className="heading">Filter By</div>
-            </Grid>
-          </Grid>
-          <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
-            <Grid item xs={12} sm={6} md={4}>
-              <label
-                className="q-details-page-label"
-                htmlFor="orderSourceFilter"
-              >
-                Order Source
-              </label>
-              <SelectDropDown
-                listItem={orderSourceList.map((item) => ({ title: item }))}
-                title="title"
-                dropdownFor="odersource"
-                selectedOption={selectedOrderSource}
-                onClickHandler={handleOptionClick}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <label className="q-details-page-label" htmlFor="orderTypeFilter">
-                Order Type
-              </label>
-              <SelectDropDown
-                listItem={orderTypeList.map((item) => ({ title: item }))}
-                title="title"
-                dropdownFor="ordertype"
-                selectedOption={selectedOrderType}
-                onClickHandler={handleOptionClick}
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4}>
-              <label className="q-details-page-label" htmlFor="orderTypeFilter">
-                Category
-              </label>
-              <SelectDropDown
-                heading={"All"}
-                listItem={categoryOptions}
-                title="title"
-                dropdownFor="category"
-                selectedOption={selectedCategory}
-                onClickHandler={handleOptionClick}
-              />
-            </Grid>
-          </Grid>
+            {
+              !debouncedValue ? (
+                <>
+                 <Grid container sx={{ px: 2.5, pt: 1 }}>
+                    <Grid item xs={12}>
+                      <div className="heading">Filter By</div>
+                    </Grid>
+                  </Grid>
+                  <Grid container spacing={2} sx={{ px: 2.5, pb: 2.5 }}>
+                    <Grid item xs={12} sm={6} md={4}>
+                      <label
+                        className="q-details-page-label"
+                        htmlFor="orderSourceFilter"
+                      >
+                        Order Source
+                      </label>
+                      <SelectDropDown
+                        listItem={orderSourceList.map((item) => ({ title: item }))}
+                        title="title"
+                        dropdownFor="odersource"
+                        selectedOption={selectedOrderSource}
+                        onClickHandler={handleOptionClick}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                      <label className="q-details-page-label" htmlFor="orderTypeFilter">
+                        Order Type
+                      </label>
+                      <SelectDropDown
+                        listItem={orderTypeList.map((item) => ({ title: item }))}
+                        title="title"
+                        dropdownFor="ordertype"
+                        selectedOption={selectedOrderType}
+                        onClickHandler={handleOptionClick}
+                      />
+                    </Grid>
+                    <Grid item xs={12} sm={6} md={4}>
+                      <label className="q-details-page-label" htmlFor="orderTypeFilter">
+                        Category
+                      </label>
+                      <SelectDropDown
+                        heading={"All"}
+                        listItem={categoryOptions}
+                        title="title"
+                        dropdownFor="category"
+                        selectedOption={selectedCategory}
+                        onClickHandler={handleOptionClick}
+                      />
+                    </Grid>
+                  </Grid>
+                </>
+              ):("")
+            }
         </Grid>
       </Grid>
-      {/* <div className="q-category-bottom-detail-section">
-        <div className="">
-          <div className="q-category-bottom-header">
-            <div className="q_details_header ml-2">Item Sales</div>
-          </div>
-          <div className="q_details_header ml-8">Filter by</div>
-        </div>
-        <div className="q-order-page-container ml-8">
-          <div className="q-order-page-filter">
-            <label className="q-details-page-label" htmlFor="employeeFilter">
-              Order Source
-            </label>
-            <div className="custom-dropdown">
-              <div
-                className="custom-dropdown-header"
-                onClick={() => toggleDropdown("odersource")}
-              >
-                <span className="selected-option mt-1">
-                  {selectedOrderSource}
-                </span>
-                <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-              </div>
-              {orderSourceVisible && (
-                <div className="dropdown-content">
-                  <div onClick={() => handleOptionClick("All", "odersource")}>
-                    All
-                  </div>
-                  <div
-                    onClick={() =>
-                      handleOptionClick("Online Order", "odersource")
-                    }
-                  >
-                    Online Order
-                  </div>
-                  <div
-                    onClick={() =>
-                      handleOptionClick("Store Order", "odersource")
-                    }
-                  >
-                    Store Order
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-          <div className="q-order-page-filter">
-            <label className="q-details-page-label" htmlFor="employeeFilter">
-              Order Type
-            </label>
-            <div className="custom-dropdown">
-              <div
-                className="custom-dropdown-header"
-                onClick={() => toggleDropdown("ordertype")}
-              >
-                <span className="selected-option mt-1">
-                  {selectedOrderType}
-                </span>
-                <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-              </div>
-              {orderTypeVisible && (
-                <div className="dropdown-content">
-                  <div onClick={() => handleOptionClick("All", "ordertype")}>
-                    All
-                  </div>
-                  <div onClick={() => handleOptionClick("Pickup", "ordertype")}>
-                    Pickup
-                  </div>
-                  <div
-                    onClick={() => handleOptionClick("Delivery", "ordertype")}
-                  >
-                    Delivery
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-
-        
-          <div className="q-order-page-filter">
-            <label className="q-details-page-label" htmlFor="employeeFilter">
-              Category
-            </label>
-            <div className="custom-dropdown">
-              <div
-                className="custom-dropdown-header"
-                onClick={() => toggleDropdown("category")}
-              >
-                <span className="selected-option mt-1">{selectedCategory}</span>
-                <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-              </div>
-              {CategoryVisible && (
-                <div className="dropdown-content">
-                  <div onClick={() => handleOptionClick("All", "category")}>
-                    All
-                  </div>
-                  {categoryOptions.map((option, key) => (
-                    <div
-                      key={key}
-                      onClick={() => handleOptionClick(option, "category")}
-                    >
-                      {option.title}
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-      </div> */}
     </>
   );
 };

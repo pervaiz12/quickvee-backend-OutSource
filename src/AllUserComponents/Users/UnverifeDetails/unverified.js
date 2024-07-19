@@ -482,6 +482,8 @@ export default function Unverified({ setMerchantId, setVisible }) {
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
                 setCurrentPage={setCurrentPage}
+                showEntries={true}
+                data={unverifiedMerchants}
               />
             </Grid>
           </Grid>
@@ -635,6 +637,21 @@ export default function Unverified({ setMerchantId, setVisible }) {
                 )}
               </>
             )}
+          </Grid>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
+                showEntries={false}
+                data={unverifiedMerchants}
+              />
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

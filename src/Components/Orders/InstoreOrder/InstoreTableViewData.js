@@ -86,10 +86,10 @@ const InstoreTableViewData = (props, searchId) => {
   useEffect(() => {
     setCurrentPage(1);
     const transactionType = (type) => {
-      if (type === "Cash Payment") {
+      if (type === "Cash") {
         return "Cash";
       }
-      if (type === "Card Payment") {
+      else if (type === "Credit Card") {
         return "Online";
       } else {
         return type;
@@ -109,6 +109,8 @@ const InstoreTableViewData = (props, searchId) => {
       })
     );
   }, [
+    dispatch,
+    props.selectedDateRange,
     props.selectedDateRange?.start_date,
     props.selectedDateRange?.end_date,
     debouncedValue,
@@ -132,10 +134,10 @@ const InstoreTableViewData = (props, searchId) => {
   ]);
   const fetchData = async () => {
     const transactionType = (type) => {
-      if (type === "Cash Payment") {
+      if (type === "Cash") {
         return "Cash";
       }
-      if (type === "Card Payment") {
+      else if (type === "Credit Card") {
         return "Online";
       } else {
         return type;
@@ -258,11 +260,11 @@ const InstoreTableViewData = (props, searchId) => {
   ) {
     // return string.charAt(0).toUpperCase() + string.slice(1);
     return payment_id !== "Cash" && is_split_payment == "0"
-      ? "Pax-Pad"
+      ? "Credit Card"
       : payment_id == "Cash"
-        ? "Cash-Paid"
+        ? "Cash"
         : is_split_payment == "1"
-          ? "Split-Paid"
+          ? "Split"
           : "";
   }
   const tableRow = ["Customer", "Order", "Amount", ""];
@@ -295,6 +297,8 @@ const InstoreTableViewData = (props, searchId) => {
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
                 setCurrentPage={setCurrentPage}
+                showEntries={true}
+                data={AllInStoreDataState?.inStoreOrderData}
               />
             </Grid>
           </Grid>
@@ -428,6 +432,21 @@ const InstoreTableViewData = (props, searchId) => {
                   </TableContainer>
                 </>
               )}
+            </Grid>
+          </Grid>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
+                showEntries={false}
+                data={AllInStoreDataState?.inStoreOrderData}
+              />
             </Grid>
           </Grid>
         </Grid>
