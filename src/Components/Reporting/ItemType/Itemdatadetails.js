@@ -65,7 +65,7 @@ const Itemdatadetails = ({
   useEffect(() => {
     // Dispatch the action to fetch data when the component mounts
     data && getOrderTypeData();
-  }, [dispatch, data,selectedOrderSource]);
+  }, [dispatch, data, selectedOrderSource]);
   const getOrderTypeData = async () => {
     try {
       await dispatch(fetchOrderTypeData(data)).unwrap();
@@ -87,7 +87,7 @@ const Itemdatadetails = ({
     orderReportDataState,
     orderReportDataState.loading,
     orderReportDataState.orderTypeData,
-    data
+    data,
   ]);
 
   if (!data || data.length === 0) {
@@ -209,79 +209,83 @@ const Itemdatadetails = ({
               ]}
             />
           ) : (
-            <TableContainer>
-              <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-                <TableHead>
-                  <StyledTableCell>Name</StyledTableCell>
-                  <StyledTableCell># Of Payments</StyledTableCell>
-                  <StyledTableCell>Net Revenue Without Tips</StyledTableCell>
-                  <StyledTableCell>Tips</StyledTableCell>
-                  <StyledTableCell>Net Revenue With Tips</StyledTableCell>
-                  <StyledTableCell>Details</StyledTableCell>
-                </TableHead>
-                <TableBody>
-                  {orderReport.length > 0 ? (
-                    orderReport?.map((orderReportDa, index) => (
-                      <StyledTableRow key={index}>
-                        <StyledTableCell>
-                          <p>{orderReportDa.order_method}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>{priceFormate(orderReportDa.total_count)}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>
-                            ${Number(orderReportDa.amt_without_tip).toFixed(2)}
-                          </p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>${Number(orderReportDa.tip).toFixed(2)}</p>
-                        </StyledTableCell>
-                        <StyledTableCell>
-                          <p>
-                            ${Number(orderReportDa.amount_with_tip).toFixed(2)}
-                          </p>
-                        </StyledTableCell>
-                        <StyledTableCell className="">
-                          {/* {selectedOrderSource !== "All" ? (
-                  <Link
-                    to={`/order/${data.start_date}/${data.end_date}/${data.order_env}/${orderReportDa.order_method}`}
-                    target="_blank"
-                  >
-                    <p className="q-employee-in">Details</p>
-                  </Link>
-                ): "-"} */}
-                          {selectedOrderSource !== "All" ? (
-                            <button
-                              onClick={() =>
-                                handleGetDetailsClick(
-                                  data.start_date,
-                                  data.end_date,
-                                  data.order_env,
-                                  orderReportDa.order_method
-                                )
-                              }
-                            >
-                              <p className="q-employee-in whitespace-nowrap">
-                                View Details
+            <>
+              <TableContainer>
+                <StyledTable
+                  sx={{ minWidth: 500 }}
+                  aria-label="customized table"
+                >
+                  <TableHead>
+                    <StyledTableCell>Name</StyledTableCell>
+                    <StyledTableCell># Of Payments</StyledTableCell>
+                    <StyledTableCell>Net Revenue Without Tips</StyledTableCell>
+                    <StyledTableCell>Tips</StyledTableCell>
+                    <StyledTableCell>Net Revenue With Tips</StyledTableCell>
+                    <StyledTableCell>Details</StyledTableCell>
+                  </TableHead>
+                  <TableBody>
+                    {orderReport.length > 0
+                      ? orderReport?.map((orderReportDa, index) => (
+                          <StyledTableRow key={index}>
+                            <StyledTableCell>
+                              <p>{orderReportDa.order_method}</p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <p>{priceFormate(orderReportDa.total_count)}</p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <p>
+                                $
+                                {Number(orderReportDa.amt_without_tip).toFixed(
+                                  2
+                                )}
                               </p>
-                            </button>
-                          ) : (
-                            "-"
-                          )}
-                        </StyledTableCell>
-                      </StyledTableRow>
-                    ))
-                  ) : (
-                    <Grid container>
-                      <Grid item sx={{ p: 2.5 }}>
-                        <p>No Data Available</p>
-                      </Grid>
-                    </Grid>
-                  )}
-                </TableBody>
-              </StyledTable>
-            </TableContainer>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <p>${Number(orderReportDa.tip).toFixed(2)}</p>
+                            </StyledTableCell>
+                            <StyledTableCell>
+                              <p>
+                                $
+                                {Number(orderReportDa.amount_with_tip).toFixed(
+                                  2
+                                )}
+                              </p>
+                            </StyledTableCell>
+                            <StyledTableCell className="">
+                              {selectedOrderSource !== "All" ? (
+                                <button
+                                  onClick={() =>
+                                    handleGetDetailsClick(
+                                      data.start_date,
+                                      data.end_date,
+                                      data.order_env,
+                                      orderReportDa.order_method
+                                    )
+                                  }
+                                >
+                                  <p className="q-employee-in whitespace-nowrap">
+                                    View Details
+                                  </p>
+                                </button>
+                              ) : (
+                                "-"
+                              )}
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        ))
+                      : ""}
+                  </TableBody>
+                </StyledTable>
+              </TableContainer>
+              {!orderReport.length && (
+                <Grid container>
+                  <Grid item sx={{ p: 2.5 }}>
+                    <p>No Data Available</p>
+                  </Grid>
+                </Grid>
+              )}
+            </>
           )}
         </Grid>
       </div>

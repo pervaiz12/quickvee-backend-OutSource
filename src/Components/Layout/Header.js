@@ -31,7 +31,7 @@ import {
   getUserRecordData,
   getUserDashboardRecord,
 } from "../../Redux/features/Authentication/loginSlice";
-import { display } from "@mui/system";
+import { display, useMediaQuery } from "@mui/system";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { Button, InputBase } from "@mui/material";
 import logoutLogo from "../../Assests/Dashboard/logout.svg";
@@ -50,6 +50,7 @@ export default function Header() {
     userTypeData,
     inventory_approval,
   } = useAuthDetails();
+  const isTablet = useMediaQuery("(max-width:831px)");
   const dispatch = useDispatch();
   const inputRef = useRef(null);
   const isMenuOpenRedux = useSelector((state) => state.NavBarToggle.isMenuOpen);
@@ -341,7 +342,7 @@ export default function Header() {
             ""
           )}
           <Link to="/">
-            <img src={Quick} alt="Logo" className="ml-6" />
+            <img src={Quick} alt="Logo" className={`${isTablet ? "ml-2" :"ml-6"} `}  width={isTablet ? '80%' : 'auto'} />
           </Link>
           {
             //  console.log(localStorage.getItem("AllStore"))
@@ -448,15 +449,15 @@ export default function Header() {
                   // to={`https://www.quickvee.com/merchant/${LoginGetDashBoardRecordJson?.data?.merchant_id}?orderMethod=pickup`}
                   target="_blank"
                 >
-                  <div className="cursor-pointer ml-5 flex items-center">
-                    <img src={OnlineData} alt="icon" className="ml-2" />
-                    <p className="ml-2 admin_medium">Online Store</p>
+                  <div className={`cursor-pointer ${isTablet ? "" :"ml-5"} flex items-center`}>
+                    <img src={OnlineData} alt="icon" className={`${isTablet ? "" :"ml-2"}`} />
+                    <p className={`${isTablet ? "" :"ml-2"} admin_medium `}>Online Store</p>
                   </div>
                 </Link>
                 {userTypeData?.login_type !== "superadmin" &&
                 inventory_approval === "1" ? (
                   <button
-                    className="cursor-pointer mx-5 flex items-center syncConatiner"
+                    className={`cursor-pointer ${isTablet ? "mx-2" :"mx-5"} flex items-center syncConatiner`}
                     onClick={handleSendForApproval}
                   >
                     <CircularProgress
@@ -478,7 +479,7 @@ export default function Header() {
                   </button>
                 ) : (
                   <button
-                    className="cursor-pointer mx-5 flex items-center syncConatiner"
+                    className={`cursor-pointer ${isTablet ? "mx-2" :"mx-5"} flex items-center syncConatiner`}
                     onClick={SyncData}
                     disabled={loader}
                   >

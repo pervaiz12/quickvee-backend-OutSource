@@ -11,10 +11,10 @@ const transactionsList = [
     title: "Both",
   },
   {
-    title: "Cash Payment",
+    title: "Cash",
   },
   {
-    title: "Card Payment",
+    title: "Credit Card",
   },
 ];
 
@@ -199,6 +199,7 @@ const FilterEmp = ({ onFilterEmpDataChange, searchId, setSearchId }) => {
                 <Grid item xs={12} sm={6} md={4}>
                   <label>Employee</label>
                   <SelectDropDown
+                   sx={{pt:0.5}}
                     heading={"All"}
                     listItem={employeeList}
                     onClickHandler={handleOptionClick}
@@ -208,8 +209,9 @@ const FilterEmp = ({ onFilterEmpDataChange, searchId, setSearchId }) => {
                   />
                 </Grid>
                 <Grid item xs={12} sm={6} md={4}>
-                  <label htmlFor="transactionFilter">Transactions</label>
+                  <label htmlFor="transactionFilter">Payment Type</label>
                   <SelectDropDown
+                  sx={{pt:0.5}}
                     listItem={transactionsList}
                     onClickHandler={handleOptionClick}
                     selectedOption={selectedTransaction}
