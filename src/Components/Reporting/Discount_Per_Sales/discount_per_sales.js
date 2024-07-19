@@ -30,7 +30,7 @@ export default function Discount_Per_Sales() {
             <Grid item xs={12}>
               <CustomHeader>Discount Per Sales Person Report</CustomHeader>
 
-              <Grid container sx={{px:2.5,pt:2.5}}>
+              <Grid container sx={{ px: 2.5, pt: 2.5 }}>
                 <Grid item xs={6}>
                   <label htmlFor="orderSourceFilter">Select Employee</label>
                   <SelectDropDown
