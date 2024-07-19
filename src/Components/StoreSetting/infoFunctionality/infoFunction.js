@@ -25,6 +25,7 @@ export default function InfoFunction() {
     // handleCloseModel,
   } = useAuthDetails();
   // console.log(LoginGetDashBoardRecordJson);
+  let login_type = LoginGetDashBoardRecordJson?.login_type;
   let merchant_idNew = LoginGetDashBoardRecordJson?.data?.merchant_id;
   let store_email = LoginGetDashBoardRecordJson?.data?.email;
   const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
@@ -1130,5 +1131,6 @@ export default function InfoFunction() {
     handleOpen,
     handleClose,
     handleKeyPressNew,
+    login_type,
   };
 }

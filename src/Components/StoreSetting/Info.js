@@ -37,6 +37,7 @@ const Info = () => {
     submitLoading,
     stateList,
     onDropDownChangeHandle,
+    login_type,
   } = InfoFunction();
   let data = {
     id: user_id,
@@ -67,6 +68,7 @@ const Info = () => {
             errors={errors}
             qrCodeBoolean={qrCodeBoolean}
             receieptLogoBool={receieptLogoBool}
+            login_type={login_type}
           />
           <form>
             <AddressForm
