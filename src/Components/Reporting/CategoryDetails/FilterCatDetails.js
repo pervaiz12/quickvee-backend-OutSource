@@ -70,7 +70,7 @@ const FilterCatDetails = ({ onFilterDataChange, title, showcat }) => {
                 className="q-details-page-label"
                 htmlFor="orderSourceFilter"
               >
-                Order Source
+                Order Type
               </label>
               <SelectDropDown
                 sx={{ pt: 0.5 }}

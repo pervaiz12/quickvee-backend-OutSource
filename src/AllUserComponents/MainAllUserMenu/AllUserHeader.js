@@ -161,8 +161,8 @@ const AllUserHeader = () => {
               aria-expanded={open ? "true" : undefined}
               onClick={handleClick}
             >
-              <img src={UserIcon} alt="" className="w-6 h-6 mr-2" />
-              Superadmin
+              <img src={UserIcon} alt="" className="w-6 h-6 mr-2 " />
+             <p className="admin_medium">Superadmin</p> 
               <img src={DownIcon} alt="" className="w-8 h-8 ml-2" />
             </div>
             <Menu

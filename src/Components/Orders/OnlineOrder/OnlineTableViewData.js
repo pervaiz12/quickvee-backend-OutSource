@@ -69,6 +69,13 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     border: "none",
   },
 }));
+const orderType = (type) => {
+      if (type === "Completed") {
+        return "Closed";
+      } else {
+        return type;
+      }
+    };
 const OnlineTableViewData = (props) => {
   const navigate = useNavigate();
   // console.log(props)
@@ -85,10 +92,9 @@ const OnlineTableViewData = (props) => {
   // const debouncedValue = useDebounce(searchId);
   useEffect(() => {
     const transactionType = (type) => {
-      if (type === "Cash Payment") {
+      if (type === "Cash") {
         return "Cash";
-      }
-      if (type === "Card Payment") {
+      } else if (type === "Credit Card") {
         return "Online";
       } else {
         return type;
@@ -98,7 +104,7 @@ const OnlineTableViewData = (props) => {
       if (props?.selectedDateRange?.start_date) {
         let data = {
           merchant_id: props.merchant_id,
-          order_type: props.OrderTypeData,
+          order_type: orderType(props.OrderTypeData),
           trans_type: transactionType(props.OrderSourceData),
           start_date: props.selectedDateRange?.start_date,
           end_date: props.selectedDateRange?.end_date,
@@ -131,19 +137,19 @@ const OnlineTableViewData = (props) => {
   useEffect(() => {
     setCurrentPage(1);
     const transactionType = (type) => {
-      if (type === "Cash Payment") {
+      if (type === "Cash") {
         return "Cash";
-      }
-      if (type === "Card Payment") {
+      } else if (type === "Credit Card") {
         return "Online";
       } else {
         return type;
       }
     };
+    
     dispatch(
       getOrderListCount({
         merchant_id: props.merchant_id, //
-        order_type: props.OrderTypeData,
+        order_type: orderType(props.OrderTypeData),
         search_by:
           props?.OnlSearchIdData !== "" ? props?.OnlSearchIdData : null,
         trans_type: transactionType(props.OrderSourceData), //
@@ -304,8 +310,8 @@ const OnlineTableViewData = (props) => {
     return payemnt == "Cash" && status == "5"
       ? "Cancelled"
       : payemnt == "Cash"
-        ? "Cash-Paid"
-        : "Online-Paid";
+        ? "Cash"
+        : "Credit Card";
     // return string.charAt(0).toUpperCase() + string.slice(1);
   }
   // console.log(allOnlineStoreOrder);
@@ -656,10 +662,10 @@ const OnlineTableViewData = (props) => {
     } else if (data.payment_id === "Cash") {
       OrderStatus = "Cash";
     } else {
-      OrderStatus = "Online-Paid";
+      OrderStatus = "Credit Card";
     }
 
-    if (props?.OrderTypeData === "Closed") {
+    if (props?.OrderTypeData === "Completed") {
       // if (
       //   OrderStatus === "Cash" &&
       //   parseFloat(data?.cash_collected)?.toFixed(2) !=
@@ -811,12 +817,12 @@ const OnlineTableViewData = (props) => {
                               } else {
                                 if (data.payment_id === "Cash") {
                                   if (data.m_status === "4") {
-                                    status = "Cash-Paid";
+                                    status = "Cash";
                                   } else {
                                     status = "Cash-Pending";
                                   }
                                 } else {
-                                  status = "Online-Paid";
+                                  status = "Credit card";
                                 }
                               }
                               /////////////////////end of Showing Stat////////////////////////////////

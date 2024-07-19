@@ -6368,7 +6368,7 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
   };
   const OrderStatus = getStatus();
   return (
-    <>{isMobile ? OrderStatus?.forMobileSvg : OrderStatus?.forDesktopSvg}</>
+    <div className="orderSummeryPageOrderStatus">{isMobile ? OrderStatus?.forMobileSvg : OrderStatus?.forDesktopSvg}</div>
   );
 };
 
