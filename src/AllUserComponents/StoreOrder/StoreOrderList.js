@@ -240,6 +240,8 @@ const StoreOrderList = (props) => {
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
                 setCurrentPage={setCurrentPage}
+                showEntries={true}
+                data={storeOrderTableList}
               />
             </Grid>
           </Grid>
@@ -401,6 +403,21 @@ const StoreOrderList = (props) => {
                 )}
               </>
             )}
+          </Grid>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
+                showEntries={false}
+                data={storeOrderTableList}
+              />
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

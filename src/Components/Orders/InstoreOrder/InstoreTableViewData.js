@@ -295,6 +295,8 @@ const InstoreTableViewData = (props, searchId) => {
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
                 setCurrentPage={setCurrentPage}
+                showEntries={true}
+                data={AllInStoreDataState?.inStoreOrderData}
               />
             </Grid>
           </Grid>
@@ -428,6 +430,21 @@ const InstoreTableViewData = (props, searchId) => {
                   </TableContainer>
                 </>
               )}
+            </Grid>
+          </Grid>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
+                showEntries={false}
+                data={AllInStoreDataState?.inStoreOrderData}
+              />
             </Grid>
           </Grid>
         </Grid>

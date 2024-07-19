@@ -28,7 +28,7 @@ const EditPage = ({
   isVarientEdit,
   fetchSingleVarientData,
 }) => {
-  const [value, setValue] = React.useState("1");
+  const [value, setValue] = React.useState("");
 
   const handleChange = useCallback((event, newValue) => {
     console.log("handleChange", newValue);
@@ -44,6 +44,10 @@ const EditPage = ({
       setValue("1");
     }
   }, [modalType]);
+
+  useEffect(() => {
+    return () => setValue("");
+  }, []);
 
   const renderTabList = useMemo(
     () => (

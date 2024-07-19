@@ -99,6 +99,8 @@ export default function OrderDetailTableList({
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
                 setCurrentPage={setCurrentPage}
+                showEntries={true}
+                data={orderDetailDataList}
               />
             </Grid>
           </Grid>
@@ -203,6 +205,21 @@ export default function OrderDetailTableList({
                   </TableContainer>
                 </>
               )}
+            </Grid>
+          </Grid>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
+                showEntries={false}
+                data={orderDetailDataList}
+              />
             </Grid>
           </Grid>
         </Grid>
