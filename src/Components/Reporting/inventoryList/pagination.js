@@ -12,6 +12,8 @@ import Loader from "../../../CommonComponents/Loader";
 import { priceFormate } from "../../../hooks/priceFormate";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import Skeleton from "react-loading-skeleton";
+import { Grid } from "@mui/material";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -44,6 +46,25 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 export default function Pagination(props) {
   let columns = ["Title", "Category", "Quantity", "Price"];
+  const renderLoader = () => {
+    return (
+      <TableContainer>
+        <StyledTable aria-label="customized table">
+          <TableBody>
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((row) => (
+              <StyledTableRow key={row}>
+                {["", "", "", ""].map((col) => (
+                  <StyledTableCell key={col}>
+                    <Skeleton />
+                  </StyledTableCell>
+                ))}
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </StyledTable>
+      </TableContainer>
+    );
+  };
   return (
     <>
       {props.loader ? (
@@ -52,73 +73,77 @@ export default function Pagination(props) {
           <SkeletonTable columns={columns} />
         </>
       ) : (
-        <TableContainer>
-          <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
-            <TableHead>
-              <StyledTableCell>
-                <button
-                  className="flex items-center"
-                  onClick={() => props.sortByItemName("str", "title")}
-                >
-                  <p>Title</p>
-                  <img src={sortIcon} alt="" className="pl-1" />
-                </button>
-              </StyledTableCell>
-              <StyledTableCell>
-                <button
-                  className="flex items-center"
-                  onClick={() => props.sortByItemName("str", "category_name")}
-                >
-                  <p>Category</p>
-                  <img src={sortIcon} alt="" className="pl-1" />
-                </button>
-              </StyledTableCell>
-              <StyledTableCell>
-                <button
-                  className="flex items-center"
-                  onClick={() => props.sortByItemName("num", "quantity")}
-                >
-                  <p>Quantity</p>
-                  <img src={sortIcon} alt="" className="pl-1" />
-                </button>
-              </StyledTableCell>
-              <StyledTableCell>
-                <button
-                  className="flex items-center"
-                  onClick={() => props.sortByItemName("num", "price")}
-                >
-                  <p>Price</p>
-                  <img src={sortIcon} alt="" className="pl-1" />
-                </button>
-              </StyledTableCell>
-            </TableHead>
-            <TableBody>
-              {props.searchProduct.length > 0 ? (
-                props.searchProduct?.map((result, index) => (
-                  <StyledTableRow key={index}>
+        <>
+          <TableContainer>
+            <StyledTable sx={{ minWidth: 500 }} aria-label="customized table">
+              <TableHead>
+                <StyledTableCell>
+                  <button
+                    className="flex items-center"
+                    onClick={() => props.sortByItemName("str", "title")}
+                  >
+                    <p>Title</p>
+                    <img src={sortIcon} alt="" className="pl-1" />
+                  </button>
+                </StyledTableCell>
+                <StyledTableCell>
+                  <button
+                    className="flex items-center"
+                    onClick={() => props.sortByItemName("str", "category_name")}
+                  >
+                    <p>Category</p>
+                    <img src={sortIcon} alt="" className="pl-1" />
+                  </button>
+                </StyledTableCell>
+                <StyledTableCell>
+                  <button
+                    className="flex items-center"
+                    onClick={() => props.sortByItemName("num", "quantity")}
+                  >
+                    <p>Quantity</p>
+                    <img src={sortIcon} alt="" className="pl-1" />
+                  </button>
+                </StyledTableCell>
+                <StyledTableCell>
+                  <button
+                    className="flex items-center"
+                    onClick={() => props.sortByItemName("num", "price")}
+                  >
+                    <p>Price</p>
+                    <img src={sortIcon} alt="" className="pl-1" />
+                  </button>
+                </StyledTableCell>
+              </TableHead>
+              <TableBody>
+                {props.searchProduct.length > 0 ? (
+                  props.searchProduct?.map((result, index) => (
+                    <StyledTableRow key={index}>
+                      <StyledTableCell>
+                        <p>{result?.title}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{result?.category_name}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{result?.quantity}</p>
+                      </StyledTableCell>
+                      <StyledTableCell>
+                        <p>{`$${priceFormate(result?.price)}`}</p>
+                      </StyledTableCell>
+                    </StyledTableRow>
+                  ))
+                ) : (
+                  <StyledTableRow>
                     <StyledTableCell>
-                      <p>{result?.title}</p>
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      <p>{result?.category_name}</p>
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      <p>{result?.quantity}</p>
-                    </StyledTableCell>
-                    <StyledTableCell>
-                      <p>{`$${priceFormate(result?.price)}`}</p>
+                      <p>{props.message}</p>
                     </StyledTableCell>
                   </StyledTableRow>
-                ))
-              ) : (
-                <StyledTableRow>
-                  <StyledTableCell>
-                    <p>{props.message}</p>
-                  </StyledTableCell>
-                </StyledTableRow>
-              )}
-            </TableBody>
-            {props.laodMoreData ? (
+                )}
+              </TableBody>
+            </StyledTable>
+          </TableContainer>
+          {props.searchProduct.length ? (
+            props.laodMoreData ? (
               // <div>
               //   <button
               //     className="btn btn-outline"
@@ -127,6 +152,8 @@ export default function Pagination(props) {
               //     Load More
               //   </button>
               // </div>
+              renderLoader()
+            ) : !props.endOfDataList ? (
               <Stack spacing={2} direction="row">
                 <Button
                   sx={{ fontFamily: "CircularMedium" }}
@@ -139,9 +166,15 @@ export default function Pagination(props) {
               </Stack>
             ) : (
               ""
-            )}
-          </StyledTable>
-        </TableContainer>
+            )
+          ) : (
+            <Grid container>
+              <Grid item sx={{ p: 2.5 }}>
+                <p>No Data Available</p>
+              </Grid>
+            </Grid>
+          )}
+        </>
       )}
     </>
   );

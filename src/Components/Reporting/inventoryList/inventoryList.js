@@ -19,6 +19,7 @@ export default function InventoryList() {
     laodMoreData,
     loader,
     sortByItemName,
+    endOfDataList,
   } = InventoryLogic();
   return (
     <>
@@ -86,6 +87,7 @@ export default function InventoryList() {
             laodMoreData={laodMoreData}
             loader={loader}
             sortByItemName={sortByItemName}
+            endOfDataList={endOfDataList}
           />
         </Grid>
       </Grid>
