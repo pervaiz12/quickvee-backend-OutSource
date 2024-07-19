@@ -63,7 +63,7 @@ const LoyaltyProgramList = () => {
   const dispatch = useDispatch();
   const loyaltyprogramDataState = useSelector((state) => state.loyaltyprogram);
   const [loyaltyprogram, setLoyaltyprogram] = useState([]);
-  $.DataTable = require("datatables.net");
+
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
@@ -127,62 +127,22 @@ const LoyaltyProgramList = () => {
   useEffect(() => {
     if (
       !loyaltyprogramDataState.loading &&
-      loyaltyprogramDataState.loyaltyprogramData
+      loyaltyprogramDataState.loyaltyprogramData && loyaltyprogramDataState.loyaltyprogramData.length>0
     ) {
       setLoyaltyprogram(
-        loyaltyprogramDataState.loyaltyprogramData.map((item) => ({
+        loyaltyprogramDataState.loyaltyprogramData?.map((item) => ({
           ...item,
           fullName: `${item.f_name || ""}  ${item.l_name || ""}`,
         }))
       );
+    }else{
+      setLoyaltyprogram([])
     }
   }, [
     loyaltyprogramDataState.loading,
     loyaltyprogramDataState.loyaltyprogramData,
+    debouncedValue
   ]);
-
-  // useEffect(() => {
-  //   const modifiedData = loyaltyprogram.map(user => ({
-  //       "Customer Name": `${user.f_name || ""} ${user.l_name || ""}`,
-  //       "Customer Email": `${user.email || ""}`,
-  //       "Customer Phone": `${user.phone || ""}`,
-  //       "Customer Loyalty": `${user.total_loyalty_pts || ""}`,
-  //       "Customer Store Credit": `${user.total_store_credit || ""}`,
-  //     }));
-
-  //   const table = $('#loyaltyProgramTable').DataTable({
-  //     data: modifiedData,
-  //     columns: [
-  //       { title: "Customer Name", data: "Customer Name", orderable: false },
-  //       { title: "Customer Email", data: "Customer Email", orderable: false },
-  //       { title: "Customer Phone", data: "Customer Phone", orderable: false },
-  //       { title: "Customer Loyalty", data: "Customer Loyalty", orderable: false },
-  //       { title: "Customer Store Credit", data: "Customer Store Credit", orderable: false },
-  //     ],
-  //     destroy: true,
-  //     searching: true,
-  //     dom: "<'row 'l<'col-sm-5'><'col-sm-7'>f<'col-sm-12't>><'row'i<'col-sm-7 mt-5'>p<'col-sm-5'>>",
-  //     lengthMenu: [ 10, 20, 50],
-  //     lengthChange: true,
-  //     ordering: false,
-  //     language: {
-  //       paginate: {
-  //         previous: '<img src="'+Left+'" alt="left" />',
-  //         next: '<img src="'+Right+'" alt="right" />',
-  //       },
-  //       search: '_INPUT_',
-  //         searchPlaceholder: ' Search...'
-  //     }
-  //   });
-
-  //   $('#searchInput').on('input', function () {
-  //     table.search(this.value).draw();
-  //   });
-
-  //   return () => {
-  //     table.destroy();
-  //   }
-  // }, [loyaltyprogram]);
 
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
@@ -196,13 +156,7 @@ const LoyaltyProgramList = () => {
     { type: "num", name: "total_loyalty_pts", label: "Customer Loyalty" },
     { type: "num", name: "total_store_credit", label: "Customer Store Credit" },
   ];
-  const columns = [
-    "Customer Name",
-    "Customer Email",
-    "Customer Phone",
-    "Customer Loyalty",
-    "Customer Store Credit",
-  ];
+
   const sortByItemName = (type, name) => {
     const { sortedItems, newOrder } = SortTableItemsHelperFun(
       loyaltyprogram,
@@ -215,12 +169,6 @@ const LoyaltyProgramList = () => {
   };
   return (
     <>
-      {/* <div className="box">
-         <div className="box_shadow_div">
-            <table  id="loyaltyProgramTable"></table>
-         </div>
-    </div> */}
-
       <Grid container className="box_shadow_div">
         <CustomHeader>Loyalty Program</CustomHeader>
 
