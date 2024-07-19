@@ -127,7 +127,8 @@ const LoyaltyProgramList = () => {
   useEffect(() => {
     if (
       !loyaltyprogramDataState.loading &&
-      loyaltyprogramDataState.loyaltyprogramData && loyaltyprogramDataState.loyaltyprogramData.length>0
+      loyaltyprogramDataState.loyaltyprogramData &&
+      loyaltyprogramDataState.loyaltyprogramData.length > 0
     ) {
       setLoyaltyprogram(
         loyaltyprogramDataState.loyaltyprogramData?.map((item) => ({
@@ -135,13 +136,13 @@ const LoyaltyProgramList = () => {
           fullName: `${item.f_name || ""}  ${item.l_name || ""}`,
         }))
       );
-    }else{
-      setLoyaltyprogram([])
+    } else {
+      setLoyaltyprogram([]);
     }
   }, [
     loyaltyprogramDataState.loading,
     loyaltyprogramDataState.loyaltyprogramData,
-    debouncedValue
+    debouncedValue,
   ]);
 
   const handleSearchInputChange = (value) => {
@@ -196,6 +197,8 @@ const LoyaltyProgramList = () => {
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
                 setCurrentPage={setCurrentPage}
+                showEntries={true}
+                data={loyaltyprogram}
               />
             </Grid>
           </Grid>
@@ -271,6 +274,21 @@ const LoyaltyProgramList = () => {
                 )}
               </>
             )}
+          </Grid>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
+                showEntries={false}
+                data={loyaltyprogram}
+              />
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

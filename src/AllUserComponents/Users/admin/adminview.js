@@ -138,8 +138,8 @@ export default function AdminView({ setVisible, setEditAdminId }) {
       border: 0,
     },
     "& td, & th": {
-    border: "none",
-  },
+      border: "none",
+    },
   }));
 
   const columns = ["Name", "Email", "Phone", "View", "Action"];
@@ -218,6 +218,8 @@ export default function AdminView({ setVisible, setEditAdminId }) {
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
                 setCurrentPage={setCurrentPage}
+                showEntries={true}
+                data={adminsDataState}
               />
             </Grid>
           </Grid>
@@ -328,6 +330,21 @@ export default function AdminView({ setVisible, setEditAdminId }) {
                 )}
               </>
             )}
+          </Grid>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
+                showEntries={false}
+                data={adminsDataState}
+              />
+            </Grid>
           </Grid>
         </Grid>
       </Grid>

@@ -79,7 +79,7 @@ const OnlineTableViewData = (props) => {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const debouncedValue = useDebounce(props?.OnlSearchIdData);
-  const [buttonLoader, setButtonLoader] = useState(false)
+  const [buttonLoader, setButtonLoader] = useState(false);
   // console.log("debouncedValue", debouncedValue);
   const dispatch = useDispatch();
   // const debouncedValue = useDebounce(searchId);
@@ -107,7 +107,7 @@ const OnlineTableViewData = (props) => {
             props?.OnlSearchIdData !== "" ? props?.OnlSearchIdData : null,
           perpage: rowsPerPage,
           page: debouncedValue === "" ? currentPage : "1",
-          order_method:props.order_method ? props.order_method : "All",
+          order_method: props.order_method ? props.order_method : "All",
           // search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
           ...props.userTypeData,
         };
@@ -149,7 +149,7 @@ const OnlineTableViewData = (props) => {
         trans_type: transactionType(props.OrderSourceData), //
         start_date: props.selectedDateRange?.start_date, //
         end_date: props.selectedDateRange?.end_date, //
-        order_method:props.order_method ? props.order_method : "All",
+        order_method: props.order_method ? props.order_method : "All",
         ...props.userTypeData, //
       })
     );
@@ -159,7 +159,7 @@ const OnlineTableViewData = (props) => {
     props.selectedDateRange?.start_date,
     props.selectedDateRange?.end_date,
     debouncedValue,
-    props.order_method
+    props.order_method,
     // props.OrderTypeData,
     // props.OrderSourceData,
     // AllInStoreDataState.OrderListCount,
@@ -605,7 +605,7 @@ const OnlineTableViewData = (props) => {
         console.error("Error while updating order status:", error.message);
         // Handle any network or other errors that may occur during the API call
       }
-      setButtonLoader(false)
+      setButtonLoader(false);
     }
 
     setDeleteCategoryId(null);
@@ -728,6 +728,8 @@ const OnlineTableViewData = (props) => {
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
                 setCurrentPage={setCurrentPage}
+                showEntries={true}
+                data={AllInStoreDataState?.onlineStoreOrderData}
               />
             </Grid>
           </Grid>
@@ -895,6 +897,21 @@ const OnlineTableViewData = (props) => {
                   </TableContainer>
                 </>
               )}
+            </Grid>
+          </Grid>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
+                showEntries={false}
+                data={AllInStoreDataState?.onlineStoreOrderData}
+              />
             </Grid>
           </Grid>
         </Grid>

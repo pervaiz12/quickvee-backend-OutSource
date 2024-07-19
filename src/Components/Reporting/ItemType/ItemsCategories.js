@@ -186,7 +186,7 @@ const ItemsCategories = () => {
         <Grid item xs={12}>
           <CustomHeader>Order Type</CustomHeader>
 
-          <Grid container sx={{ px: 2.5,pt:1 }}>
+          <Grid container sx={{ px: 2.5, pt: 1 }}>
             <Grid item xs={12}>
               <div className="heading">Filter By</div>
             </Grid>

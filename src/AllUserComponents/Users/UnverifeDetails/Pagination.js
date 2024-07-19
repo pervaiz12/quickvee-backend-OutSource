@@ -10,6 +10,8 @@ const Pagination = ({
   rowsPerPage,
   setRowsPerPage,
   setCurrentPage,
+  showEntries,
+  data,
 }) => {
   const totalPages = Math.ceil(totalItems / itemsPerPage);
 
@@ -73,49 +75,62 @@ const Pagination = ({
   };
 
   return (
-    <nav className="flex items-center justify-between pagination-div">
-      <div className="flex items-center">
-        <p className="me-3">Show</p>
-        <SelectDropDown
-        
-          listItem={pageLength}
-          title={"title"}
-          selectedOption={rowsPerPage}
-          onClickHandler={handlePageRowLength}
-        />
-        <p className="ms-3">Entries</p>
-      </div>
-      <ul className="flex justify-end	">
-        <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
-          <button
-            className="page-link"
-            onClick={() => {
-              if (currentPage - 1 > 0) {
-                onPageChange(currentPage - 1);
-              }
-            }}
+    <nav
+      className={
+        showEntries
+          ? "flex items-center justify-between pagination-div"
+          : "justify-end"
+      }
+    >
+      {showEntries ? (
+        <div className="flex items-center">
+          <p className="me-3">Show</p>
+          <SelectDropDown
+            listItem={pageLength}
+            title={"title"}
+            selectedOption={rowsPerPage}
+            onClickHandler={handlePageRowLength}
+          />
+          <p className="ms-3">Entries</p>
+        </div>
+      ) : (
+        ""
+      )}
+      {data?.length >= 10 || (currentPage > 1 && data?.length) ? (
+        <ul className="flex justify-end	">
+          <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+            <button
+              className="page-link"
+              onClick={() => {
+                if (currentPage - 1 > 0) {
+                  onPageChange(currentPage - 1);
+                }
+              }}
+            >
+              <img src={LeftArrow} alt="left arrow" />
+            </button>
+          </li>
+          {renderPaginationItems()}
+          <li
+            className={`page-item ${
+              currentPage === totalPages ? "disabled" : ""
+            }`}
           >
-            <img src={LeftArrow} alt="left arrow" />
-          </button>
-        </li>
-        {renderPaginationItems()}
-        <li
-          className={`page-item ${
-            currentPage === totalPages ? "disabled" : ""
-          }`}
-        >
-          <button
-            className="page-link"
-            onClick={() => {
-              if (totalPages >= currentPage + 1) {
-                onPageChange(currentPage + 1);
-              }
-            }}
-          >
-            <img src={RightArrow} alt="right arrow" />
-          </button>
-        </li>
-      </ul>
+            <button
+              className="page-link"
+              onClick={() => {
+                if (totalPages >= currentPage + 1) {
+                  onPageChange(currentPage + 1);
+                }
+              }}
+            >
+              <img src={RightArrow} alt="right arrow" />
+            </button>
+          </li>
+        </ul>
+      ) : (
+        ""
+      )}
     </nav>
   );
 };

@@ -251,6 +251,8 @@ const PurchaseTable = ({ seVisible }) => {
                 rowsPerPage={rowsPerPage}
                 setRowsPerPage={setRowsPerPage}
                 setCurrentPage={setCurrentPage}
+                showEntries={true}
+                data={allPurchaseData}
               />
             </Grid>
           </Grid>
@@ -490,6 +492,21 @@ const PurchaseTable = ({ seVisible }) => {
                 )}
               </>
             )}
+          </Grid>
+          <Grid container sx={{ padding: 2.5 }}>
+            <Grid item xs={12}>
+              <Pagination
+                currentPage={currentPage}
+                totalItems={totalCount}
+                itemsPerPage={rowsPerPage}
+                onPageChange={paginate}
+                rowsPerPage={rowsPerPage}
+                setRowsPerPage={setRowsPerPage}
+                setCurrentPage={setCurrentPage}
+                showEntries={false}
+                data={allPurchaseData}
+              />
+            </Grid>
           </Grid>
         </div>
       </div>
