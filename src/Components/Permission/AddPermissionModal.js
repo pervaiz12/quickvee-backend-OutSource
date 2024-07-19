@@ -16,6 +16,7 @@ import { toast } from "react-toastify";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import CircularProgress from "@mui/material/CircularProgress";
 import PasswordShow from "./../../Common/passwordShow";
+import addIcon from "../../Assests/Category/addIcon.svg";
 const AddPermissionModal = () => {
   const [open, setOpen] = useState(false);
   // const handleOpen = () => setOpen(true);
@@ -205,7 +206,7 @@ const AddPermissionModal = () => {
         <p>
           Add Sub Permission
           <img
-            src="/static/media/addIcon.554c6e38782178cf6d445d3838e59ad3.svg"
+            src={addIcon}
             alt="add-icon"
           />
         </p>
