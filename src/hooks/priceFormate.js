@@ -1,5 +1,6 @@
 export function priceFormate(input) {
-  if (!input) return;
+  // if (!input) return;
+  if (input === null || input === undefined) return "";
   let string = input?.toString();
   let parts = string?.split(".");
   let integerPart = parts[0];
