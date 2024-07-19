@@ -28,7 +28,7 @@ export default function InventoryLogic() {
   const [message, setMessage] = useState(""); // message display
 
   const [laodMoreData, setLoadMoreData] = useState(false); //load button hide and show
-
+  const [endOfDataList, setEndOfDataList] = useState(false); //
   const [loader, setLoader] = useState(false);
 
   // ======================
@@ -173,10 +173,12 @@ export default function InventoryLogic() {
       if (response?.data.length) {
         setLoader(false);
         setsearchProduct(response?.data);
-        if (id == "all" && response?.data.length >= 10) {
-          setLoadMoreData(true);
+        
+        if (id == "all") {
+          setEndOfDataList(false);
           setOffset(10);
         } else {
+          setEndOfDataList(true);
           setOffset(0);
           setLoadMoreData(false);
         }
@@ -198,6 +200,7 @@ export default function InventoryLogic() {
   // button click when loadmore display
   const handleLoadMore = async () => {
     try {
+      setLoadMoreData(true);
       const packet = {
         // id: selectCategoryId,
         cat_id: selectCategoryId,
@@ -221,16 +224,15 @@ export default function InventoryLogic() {
         setLoader(false);
         //   console.log(response?.data);
         setsearchProduct([...searchProduct, ...response?.data]);
-        if (selectCategoryId == "all" && response?.data.length >= 10) {
-          setLoadMoreData(true);
+        if (selectCategoryId == "all" && response?.data.length !== 10) {
+          setEndOfDataList(true);
           setOffset(offset + 10);
         } else {
           setOffset(0);
-          setLoadMoreData(false);
         }
       } else {
         setLoader(false);
-        setLoadMoreData(false);
+
         setMessage("No record found");
         setsearchProduct([]);
       }
@@ -242,6 +244,7 @@ export default function InventoryLogic() {
         getNetworkError();
       }
     }
+    setLoadMoreData(false);
   };
   const [sortOrder, setSortOrder] = useState("asc");
   const sortByItemName = (type, name) => {
@@ -269,5 +272,6 @@ export default function InventoryLogic() {
     laodMoreData,
     loader,
     sortByItemName,
+    endOfDataList,
   };
 }
