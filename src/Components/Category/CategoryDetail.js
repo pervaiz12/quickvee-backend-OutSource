@@ -8,11 +8,9 @@ import {
 } from "../../Redux/features/Categories/categoriesSlice";
 import { useSelector, useDispatch } from "react-redux";
 
-
 import { Link } from "react-router-dom";
 
 import DraggableTable from "../../reuseableComponents/DraggableTable";
-
 
 import { useAuthDetails } from "./../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";

@@ -3,7 +3,6 @@ import { useSelector, useDispatch } from "react-redux";
 import AddIcon from "../../Assests/Category/addIcon.svg";
 import { Link, useNavigate } from "react-router-dom";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
-// import EditIcon from "../../Assests/Category/editIcon.svg";
 import SortIcon from "../../Assests/Category/Sorting.svg";
 import {
   changeOnlineOrderMethod,
@@ -14,7 +13,6 @@ import {
 } from "../../Redux/features/Product/ProductSlice";
 import { BASE_URL, SORT_CATOGRY_DATA } from "../../Constants/Config";
 import InfiniteScroll from "react-infinite-scroll-component";
-import ProductRow from "./ProductRow";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import { styled } from "@mui/material/styles";
@@ -30,8 +28,6 @@ import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import axios from "axios";
 import { fetchStoreSettingSetupData } from "../../Redux/features/SettingSetup/SettingSetupSlice";
 import { changeShowStatus } from "../../Redux/features/Product/ProductSlice";
-import { color } from "@mui/system";
-import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import Skeleton from "react-loading-skeleton";
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 
@@ -69,31 +65,20 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const ProductTable = ({
-  seVisible,
   selectedListingType,
   selectedListingTypeValue,
   categoryId,
   selectedStatus,
   selectedStatusValue,
-  searchId,
   debouncedValue,
 }) => {
   let listing_type = 0;
   const ProductsListDataState = useSelector((state) => state.productsListData);
 
-  // useEffect(() => {
-  //   console.log("products: ", ProductsListDataState.productsData);
-  // }, [ProductsListDataState.productsData]);
-
-  const { hasMore, offset, limit, loading } = useSelector(
+  const { hasMore, offset, loading } = useSelector(
     (state) => state.productsListData
   );
-  const {
-    userTypeData,
-    LoginGetDashBoardRecordJson,
-    LoginAllStore,
-    GetSessionLogin,
-  } = useAuthDetails();
+  const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
 
   const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
     PasswordShow();
@@ -115,18 +100,6 @@ const ProductTable = ({
     }
   }, [ProductsListDataState, ProductsListDataState?.productsData, dispatch]);
 
-  let payloadData = {
-    merchant_id: merchant_id,
-    format: "json",
-    category_id: categoryId === "All" ? "all" : categoryId,
-    show_status: selectedStatusValue === "All" ? "all" : selectedStatusValue,
-    listing_type: selectedListingTypeValue,
-    offset: 0,
-    limit: 10,
-    page: 0,
-    ...userTypeData,
-  };
-
   const fetchInventoryData = async () => {
     try {
       const res = await dispatch(
@@ -147,10 +120,6 @@ const ProductTable = ({
   };
 
   useEffect(() => {
-    // if (payloadData) {
-    //   console.log("2nd time calling...");
-    //   dispatch(fetchProductsData(payloadData));
-    // }
     fetchInventoryData();
   }, []);
 
@@ -247,27 +216,11 @@ const ProductTable = ({
     if (productList.length > 0) {
       page = productList.length / 10;
     }
-
-    // console.log("selectedListingTypeValue: ", selectedListingTypeValue);
-    // console.log("selectedListingType: ", selectedListingType);
-
     if (selectedListingType == "Variant listing") {
       listing_type = 1;
     } else {
       listing_type = 0;
     }
-    //let page = productList.length / 10 + 1 ;
-    // let data1 = {
-    //   merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-    //   format: "json",
-    //   category_id: categoryId === "All" ? "all" : categoryId,
-    //   show_status: selectedStatusValue === "All" ? "all" : selectedStatusValue,
-    //   listing_type: selectedListingTypeValue?.id,
-    //   offset: offset,
-    //   limit: 10,
-    //   page: page,
-    //   ...userTypeData,
-    // };
 
     let data1 = {
       merchant_id,
@@ -295,10 +248,6 @@ const ProductTable = ({
         getNetworkError();
       }
     }
-
-    // setTimeout(() => {
-    //   setItems(items.concat(Array.from({ length: 15 })));
-    // }, 150);
   };
 
   const handleDeleteProduct = async (id) => {
@@ -437,11 +386,6 @@ const ProductTable = ({
     return (
       <TableContainer>
         <StyledTable aria-label="customized table">
-          {/* <TableHead>
-            {["", "", ""].map((col) => (
-              <StyledTableCell key={col}>{col}</StyledTableCell>
-            ))}
-          </TableHead> */}
           <TableBody>
             {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((row) => (
               <StyledTableRow key={row}>
@@ -659,12 +603,6 @@ const ProductTable = ({
                                                         type="checkbox"
                                                         id={product.id}
                                                         name="approved"
-                                                        // checked={
-                                                        //   product.show_status == 0 ||
-                                                        //     product.show_status == 2
-                                                        //     ? true
-                                                        //     : false
-                                                        // }
                                                         checked={
                                                           checkboxState[
                                                             product.id
@@ -694,12 +632,6 @@ const ProductTable = ({
                                                         type="checkbox"
                                                         id={product.id}
                                                         name="reject"
-                                                        // checked={
-                                                        //   product.show_status == 0 ||
-                                                        //     product.show_status == 1
-                                                        //     ? true
-                                                        //     : false
-                                                        // }
                                                         checked={
                                                           checkboxState[
                                                             product.id
@@ -794,19 +726,6 @@ const ProductTable = ({
                                                     </>
                                                   ))}
                                               </div>
-                                              {/* {product?.media?.split(",")
-                                                .length > 4 ? (
-                                                <div className="mt-3 text-sm font-medium">
-                                                  <span className="text-blue-500">
-                                                    +{" "}
-                                                    {product.media.split(",")
-                                                      .length - 4}{" "}
-                                                    others
-                                                  </span>
-                                                </div>
-                                              ) : (
-                                                ""
-                                              )} */}
                                             </div>
                                           </StyledTableCell>
                                           {selectedListingType ===

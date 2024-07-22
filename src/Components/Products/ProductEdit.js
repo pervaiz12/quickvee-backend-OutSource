@@ -22,8 +22,6 @@ const ProductEdit = () => {
 
   const handleUpdate = (e) => {
     e.preventDefault(); // Prevent form submission
-
-    // Add your logic to update the product data
   };
 
   const categories = [
@@ -39,7 +37,6 @@ const ProductEdit = () => {
     "Coils and Pods",
     "Butane",
     "Nectar Collectors",
-    // Add more categories as needed
   ];
 
   const navigateToCategoryPage = () => {
@@ -130,18 +127,6 @@ const ProductEdit = () => {
                 ))}
               </div>
             </div>
-            {/* <div className="flex flex-col mb-4">
-              <label className="text-sm mb-1" htmlFor="searchKeyword">
-                Search by Keyword
-              </label>
-              <input
-                type="text"
-                id="searchKeyword"
-                value={searchKeyword}
-                onChange={handleSearch}
-                className="border p-2 rounded-md"
-              />
-            </div> */}
 
             {/* Update and Cancel buttons */}
           </form>

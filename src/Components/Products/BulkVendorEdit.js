@@ -1,11 +1,4 @@
-import React, {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
-import SearchableDropdown from "../../CommonComponents/SearchableDropdown";
+import React, { lazy, useEffect, useState } from "react";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
@@ -19,9 +12,7 @@ import {
   assignProductVendor,
   bulkVendorAssign,
   deleteProductVendor,
-  fetchProductsDataById,
   fetchVendorList,
-  filterVendorAPI,
   getAlreadyAssignVendor,
   saveVendorList,
 } from "../../Redux/features/Product/ProductSlice";
@@ -29,7 +20,6 @@ import { useDispatch } from "react-redux";
 import Switch from "@mui/material/Switch";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Box } from "@mui/material";
-import { toast } from "react-toastify";
 import { useParams } from "react-router-dom";
 import Loader from "../../CommonComponents/Loader";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
@@ -41,13 +31,12 @@ import DeleteModal from "../../reuseableComponents/DeleteModal";
 import { styled } from "@mui/material/styles";
 
 import { tableCellClasses } from "@mui/material/TableCell";
+import { Suspense } from "react";
+
+const SearchableDropdown = lazy(() => import("./SearchableDropdown"));
 
 /////////////////////////////////////////////////
 
-
-const StyledTable = styled(Table)(({ theme }) => ({
-  padding: 2, // Adjust padding as needed
-}));
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
     // backgroundColor: "#253338",
@@ -89,7 +78,6 @@ const BulkVendorEdit = ({
   const [vendor, setVendor] = useState([]);
   const [loading, setLoading] = useState(false);
   const [submitLoading, setSubmitLoading] = useState(false);
-  console.log("vendor", vendor);
 
   const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
     PasswordShow();
@@ -373,73 +361,17 @@ const BulkVendorEdit = ({
     }
   }, [vendorItems]);
 
-    // for Delete 
-    const [deleteCategoryId, setDeleteCategoryId] = useState(null);
-    const [deleteVendorItem, setDeleteVendorItem] = useState(null);
-    const [deleteModalOpen, setDeleteModalOpen] = useState(false);
-    const [loadingDelete, setLoadingDelete] = useState(false);
+  // for Delete
+  const [deleteCategoryId, setDeleteCategoryId] = useState(null);
+  const [deleteVendorItem, setDeleteVendorItem] = useState(null);
+  const [deleteModalOpen, setDeleteModalOpen] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
 
   // when click on delete icon // delete vendor by Id
   const handleDeleteVendor = (vendorId, vendorItem) => {
-
     setDeleteCategoryId(vendorId);
     setDeleteVendorItem(vendorItem);
     setDeleteModalOpen(true);
-    /// show prompt before delete the item
-    // const userConfirmed = window.confirm(
-    //   "Are you sure you want to delete this vendor?"
-    // );
-
-    // if (!userConfirmed) {
-    //   return; // If the user clicks "No", exit the function
-    // }
-
-    // formData
-    // if (modalType !== "bulk-edit") {
-    //   const formData = new FormData();
-    //   formData.append(
-    //     "single_product",
-    //     isVarientEdit
-    //       ? 0
-    //       : !Boolean(+productData?.isvarient) && !isVarientEdit
-    //         ? 1
-    //         : 0
-    //   );
-    //   formData.append(
-    //     "varient_id",
-    //     !Boolean(+productData?.isvarient)
-    //       ? productData?.id
-    //       : modalType === "bulk-edit"
-    //         ? productData?.id
-    //         : varientIndex
-    //   );
-    //   formData.append(
-    //     "merchant_id",
-    //     LoginGetDashBoardRecordJson?.data?.merchant_id
-    //   );
-    //   formData.append("vendor_id", vendorId);
-    //   dispatch(deleteProductVendor(formData))
-    //     .then((res) => {
-    //       if (res?.payload?.status) {
-    //         const filtervendorList = vendorItems?.filter(
-    //           (item) => +item?.id !== +vendorId
-    //         );
-    //         setVendorItems(filtervendorList);
-    //         getVendorsList();
-    //         ToastifyAlert("Deleted Successfully", "success");
-    //       }
-    //     })
-    //     .catch((err) => {
-    //       ToastifyAlert("Error!", "error");
-    //       getUnAutherisedTokenMessage();
-    //     });
-    // } else {
-    //   const filtervendorList = vendorItems?.filter(
-    //     (item) => +item?.id !== +vendorId
-    //   );
-    //   setVendorItems(filtervendorList);
-    //   setVendor((prev) => [...prev, vendorItem]);
-    // }
   };
 
   const confirmDeleteCategory = async () => {
@@ -471,10 +403,6 @@ const BulkVendorEdit = ({
             LoginGetDashBoardRecordJson?.data?.merchant_id
           );
           formData.append("vendor_id", deleteCategoryId);
-          // for (const [key, value] of formData.entries()) {
-          //   console.log(`${key}: ${value}`);
-          // }
-          // return
           dispatch(deleteProductVendor(formData))
             .then((res) => {
               if (res?.payload?.status) {
@@ -513,7 +441,6 @@ const BulkVendorEdit = ({
     }
     setDeleteModalOpen(false);
   };
-
 
   // when click on save vendor
   // save all the selected vendor
@@ -609,20 +536,22 @@ const BulkVendorEdit = ({
       <div class="add-vendor-area">
         <div className="q-add-categories-single-input">
           <div class="vendor-add-input">
-            <SearchableDropdown
-              keyName="stores"
-              optionList={vendor}
-              handleSelectProductOptions={handleSelectProductOptions}
-              handleDeleteSelectedOption={handleDeleteSelectedOption}
-              selectedOption={selectedVendor}
-              // error,
-              // handleUpdateError,
-              hideSelectedValue={true}
-              hideSelectedList={vendorItems}
-              name="name"
-              placeholder="Enter vendor Name"
-              modalType={modalType}
-            />
+            <Suspense fallback={<CircularProgress />}>
+              <SearchableDropdown
+                keyName="stores"
+                optionList={vendor}
+                handleSelectProductOptions={handleSelectProductOptions}
+                handleDeleteSelectedOption={handleDeleteSelectedOption}
+                selectedOption={selectedVendor}
+                // error,
+                // handleUpdateError,
+                hideSelectedValue={true}
+                hideSelectedList={vendorItems}
+                name="name"
+                placeholder="Enter vendor Name"
+                modalType={modalType}
+              />
+            </Suspense>
             <button
               className="quic-btn quic-bulk-vendor-edit submit-btn-click"
               onClick={handleAddVendor}
@@ -649,18 +578,24 @@ const BulkVendorEdit = ({
           </div>
         ) : (
           <>
-            <Paper sx={{ width: "100%", overflow: "hidden",boxShadow:"none" }}>
+            <Paper
+              sx={{ width: "100%", overflow: "hidden", boxShadow: "none" }}
+            >
               <TableContainer
                 sx={{ minWidth: 650, maxHeight: 300 }}
                 className="bulkvendor-table-container custom-scroll"
               >
-                <Table stickyHeader aria-label="sticky table" className="bulk-vendor-table">
+                <Table
+                  stickyHeader
+                  aria-label="sticky table"
+                  className="bulk-vendor-table"
+                >
                   <TableHead>
                     <StyledTableRow>
                       <StyledTableCell>Vendors</StyledTableCell>
-                      <StyledTableCell >Cost Per Item</StyledTableCell>
-                      <StyledTableCell >Preferred Vendor</StyledTableCell>
-                      <StyledTableCell >Delete</StyledTableCell>
+                      <StyledTableCell>Cost Per Item</StyledTableCell>
+                      <StyledTableCell>Preferred Vendor</StyledTableCell>
+                      <StyledTableCell>Delete</StyledTableCell>
                     </StyledTableRow>
                   </TableHead>
                   <TableBody>
@@ -675,7 +610,7 @@ const BulkVendorEdit = ({
                           <StyledTableCell component="th" scope="row">
                             {row.name}
                           </StyledTableCell>
-                          <StyledTableCell >
+                          <StyledTableCell>
                             <input
                               type="text"
                               className="vendor-cost-input"
@@ -708,7 +643,7 @@ const BulkVendorEdit = ({
                               }}
                             />
                           </StyledTableCell>
-                          <StyledTableCell >
+                          <StyledTableCell>
                             {" "}
                             <img
                               src={DeleteIcon}
@@ -732,9 +667,18 @@ const BulkVendorEdit = ({
             <div className="box">
               <div className="variant-attributes-container">
                 {/* Your existing JSX for variant attributes */}
-                <div style={{justifyContent:`${!!!varientIndex ? "space-between" :""}` ,marginTop:"20px"}} className="q-add-categories-section-middle-footer flex justify-between">
+                <div
+                  style={{
+                    justifyContent: `${!!!varientIndex ? "space-between" : ""}`,
+                    marginTop: "20px",
+                  }}
+                  className="q-add-categories-section-middle-footer flex justify-between"
+                >
                   {!!!varientIndex ? (
-                    <p style={{fontFamily:"CircularSTDBook"}}  className="bulk-edit-note">
+                    <p
+                      style={{ fontFamily: "CircularSTDBook" }}
+                      className="bulk-edit-note"
+                    >
                       <span className="note">Note:</span>
                       By clicking on update, it will assign selected vendor as
                       Preferred vendor to all Variants
@@ -742,7 +686,10 @@ const BulkVendorEdit = ({
                   ) : (
                     ""
                   )}
-                  <div style={{padding:"0px"}} className="q-category-bottom-header">
+                  <div
+                    style={{ padding: "0px" }}
+                    className="q-category-bottom-header"
+                  >
                     <button
                       className="quic-btn quic-btn-update submit-btn-click"
                       style={{
@@ -774,14 +721,14 @@ const BulkVendorEdit = ({
         )}
       </div>
       <DeleteModal
-            headerText="Vendor"
-            open={deleteModalOpen}
-            onClose={() => {
-              setDeleteModalOpen(false);
-            }}
-            onConfirm={confirmDeleteCategory}
-            deleteloading={loadingDelete}
-          />
+        headerText="Vendor"
+        open={deleteModalOpen}
+        onClose={() => {
+          setDeleteModalOpen(false);
+        }}
+        onConfirm={confirmDeleteCategory}
+        deleteloading={loadingDelete}
+      />
     </div>
   );
 };

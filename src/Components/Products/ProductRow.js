@@ -1,20 +1,17 @@
-import React, { useEffect, useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import AddIcon from "../../Assests/Category/addIcon.svg";
+import React from "react";
 import { Link } from "react-router-dom";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
 import SortIcon from "../../Assests/Category/Sorting.svg";
 
 import { BASE_URL } from "../../Constants/Config";
 
-const  ProductRow = ({
+const ProductRow = ({
   product,
   index,
   Avail_Online,
   checkStatus,
   // handleError,
 }) => {
- 
   return (
     <>
       <div
@@ -25,7 +22,9 @@ const  ProductRow = ({
           <img src={SortIcon} alt="" className="" />
         </p>
         <p className="categories-title">
-          <Link to={`/inventory/products/edit/${product?.id}`}>{product.title}</Link>
+          <Link to={`/inventory/products/edit/${product?.id}`}>
+            {product.title}
+          </Link>
         </p>
         <p className="categories-title">{product.category_name}</p>
 

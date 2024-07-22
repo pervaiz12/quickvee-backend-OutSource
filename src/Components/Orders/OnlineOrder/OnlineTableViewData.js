@@ -2,7 +2,6 @@ import "../../../Styles/TableOrderPage.css";
 import React, { useEffect, useState } from "react";
 import CrossIcon from "../../../Assests/Dashboard/cross.svg";
 
-
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
@@ -21,7 +20,6 @@ import { useSelector, useDispatch } from "react-redux";
 // import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import axios from "axios";
 import { BASE_URL, CLOSE_ORDER_COLLECT_CASH } from "../../../Constants/Config";
-
 
 import $ from "jquery";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
@@ -67,12 +65,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 const orderType = (type) => {
-      if (type === "Completed") {
-        return "Closed";
-      } else {
-        return type;
-      }
-    };
+  if (type === "Completed") {
+    return "Closed";
+  } else {
+    return type;
+  }
+};
 const OnlineTableViewData = (props) => {
   const navigate = useNavigate();
   // console.log(props)
@@ -142,7 +140,7 @@ const OnlineTableViewData = (props) => {
         return type;
       }
     };
-    
+
     dispatch(
       getOrderListCount({
         merchant_id: props.merchant_id, //
@@ -423,7 +421,6 @@ const OnlineTableViewData = (props) => {
               // Order not found, return previous state unchanged
               return prevState;
             }
-
           });
         } else {
           // Handle other status codes or errors if needed
@@ -745,7 +742,6 @@ const OnlineTableViewData = (props) => {
           </Grid>
         </Grid>
       </Grid>
-
 
       {showPriceModal && (
         <div className="q-custom-modal-container" id="addtributes_">

@@ -1,18 +1,21 @@
 import * as React from "react";
 import Modal from "@mui/material/Modal";
-import Button from "@mui/material/Button";
 import CloseIcon from "../../Assests/Dashboard/cross.svg";
 import Box from "@mui/material/Box";
 import Tab from "@mui/material/Tab";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import BulkVarientEdit from "./BulkVarientEdit";
-import BulkVendorEdit from "./BulkVendorEdit";
-import BulkInstantPo from "./BulkInstantPo";
 import { useEffect } from "react";
 import { useMemo } from "react";
 import { useCallback } from "react";
+import { lazy } from "react";
+import { CircularProgress } from "@mui/material";
+import { Suspense } from "react";
+
+const BulkVarientEdit = lazy(() => import("./BulkVarientEdit"));
+const BulkVendorEdit = lazy(() => import("./BulkVendorEdit"));
+const BulkInstantPo = lazy(() => import("./BulkInstantPo"));
 
 const EditPage = ({
   openEditModal,
@@ -31,7 +34,6 @@ const EditPage = ({
   const [value, setValue] = React.useState("");
 
   const handleChange = useCallback((event, newValue) => {
-    console.log("handleChange", newValue);
     setValue(newValue);
   }, []);
 
@@ -110,35 +112,41 @@ const EditPage = ({
               <TabContext value={value}>
                 {renderTabList}
                 <TabPanel value="1">
-                  <BulkVarientEdit
-                    formData={formData}
-                    handleCopyAllVarientValue={handleCopyAllVarientValue}
-                    handleCloseEditModal={handleCloseEditModal}
-                    inventoryData={inventoryData}
-                  />
+                  <Suspense fallback={<CircularProgress />}>
+                    <BulkVarientEdit
+                      formData={formData}
+                      handleCopyAllVarientValue={handleCopyAllVarientValue}
+                      handleCloseEditModal={handleCloseEditModal}
+                      inventoryData={inventoryData}
+                    />
+                  </Suspense>
                 </TabPanel>
 
                 <TabPanel value="2">
-                  <BulkVendorEdit
-                    productData={productData}
-                    varientIndex={varientIndex}
-                    isVarientEdit={isVarientEdit}
-                    modalType={modalType}
-                    handleCloseEditModal={handleCloseEditModal}
-                  />
+                  <Suspense fallback={<CircularProgress />}>
+                    <BulkVendorEdit
+                      productData={productData}
+                      varientIndex={varientIndex}
+                      isVarientEdit={isVarientEdit}
+                      modalType={modalType}
+                      handleCloseEditModal={handleCloseEditModal}
+                    />
+                  </Suspense>
                 </TabPanel>
                 <TabPanel value="3">
-                  <BulkInstantPo
-                    productData={productData}
-                    modalType={modalType}
-                    varientIndex={varientIndex}
-                    isVarientEdit={isVarientEdit}
-                    varientData={varientData}
-                    handleCloseEditModal={handleCloseEditModal}
-                    fetchProductDataById={fetchProductDataById}
-                    fetchSingleVarientData={fetchSingleVarientData}
-                    inventoryData={inventoryData}
-                  />
+                  <Suspense fallback={<CircularProgress />}>
+                    <BulkInstantPo
+                      productData={productData}
+                      modalType={modalType}
+                      varientIndex={varientIndex}
+                      isVarientEdit={isVarientEdit}
+                      varientData={varientData}
+                      handleCloseEditModal={handleCloseEditModal}
+                      fetchProductDataById={fetchProductDataById}
+                      fetchSingleVarientData={fetchSingleVarientData}
+                      inventoryData={inventoryData}
+                    />
+                  </Suspense>
                 </TabPanel>
               </TabContext>
             </Box>

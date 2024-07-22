@@ -98,7 +98,6 @@ const VariantAttributes = ({
       padding: "5px 40px 5px 5px",
     }),
   };
-  // console.log("varientLength", varientLength);
 
   const dropDownStyle = {
     clearIndicator: (provided) => ({
@@ -310,13 +309,6 @@ const VariantAttributes = ({
     }
   };
 
-  const SearchIndicator = (props) => {
-    return (
-      <components.DropdownIndicator {...props}>
-        <SearchIcon />
-      </components.DropdownIndicator>
-    );
-  };
   const customStyles = {
     menu: (provided) => ({
       ...provided,
@@ -413,13 +405,6 @@ const VariantAttributes = ({
                       <>
                         <Grid container sx={{ mb: 1.3 }} key={index + 1}>
                           <Grid item xs={12}>
-                            {/* <input
-                    className=""
-                    type="text"
-                    name="owner_name"
-                    value={newAttribute}
-                    onChange={(e) => setNewAttribute(e.target.value)}
-                  /> */}
                             <Grid container sx={{ mt: 1.5 }}>
                               <Grid item xs={12}>
                                 <Select
@@ -434,10 +419,6 @@ const VariantAttributes = ({
                                   isSearchable
                                   isClearable
                                   styles={dropDownStyle}
-                                  // defaultValue={{
-                                  //   value: varientDropdownList[0]?.title,
-                                  //   label: varientDropdownList[0]?.title,
-                                  // }}
                                   isDisabled={
                                     index + 1 < varientLength?.length ||
                                     isProductEdit
@@ -460,9 +441,11 @@ const VariantAttributes = ({
                                 value={varient?.varientAttributeList}
                                 options={varient?.varientAttributeList}
                                 isDisabled={
-                                  fetchProductLoadingDropdown ||
-                                  fetchCategoryListLoading ||
-                                  fetchTaxListLoading
+                                  isProductEdit
+                                    ? fetchProductLoadingDropdown ||
+                                      fetchCategoryListLoading ||
+                                      fetchTaxListLoading
+                                    : null
                                 }
                                 onChange={(e, actionMeta) => {
                                   handlechange(
@@ -541,7 +524,6 @@ const VariantAttributes = ({
                     <div className="flex">
                       <button
                         className="px-4 py-2 bg-[#0A64F9] text-white rounded-md varient-attribute-btn"
-                        // onClick={handleAddAttribute}
                         onClick={addMoreVarientItems}
                       >
                         Add Variant Attributes +

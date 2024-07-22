@@ -6,7 +6,6 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import { useEffect } from "react";
 import { fetchSalesHistory } from "../../Redux/features/Product/ProductSlice";
 import { useDispatch } from "react-redux";
@@ -17,9 +16,7 @@ import "../../Styles/ProductPage.css";
 import Loader from "../../CommonComponents/Loader";
 import { styled } from "@mui/material/styles";
 import { Grid } from "@mui/material";
-import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 
-import Pagination from "../../AllUserComponents/Users/UnverifeDetails/Pagination";
 import InputTextSearch from "../../reuseableComponents/InputTextSearch";
 import useDebounce from "../../hooks/useDebouncs";
 import { useAuthDetails } from "../../Common/cookiesHelper";
@@ -78,17 +75,10 @@ const ProductSalesReport = () => {
 
   // states
   const [currentPage, setCurrentPage] = useState(1);
-  const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [filteredMerchants, setFilteredMerchants] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [searchRecord, setSearchRecord] = useState("");
-  const [storename, setStorename] = useState();
-  const [submitmessage, setsubmitmessage] = useState("");
   const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
     PasswordShow();
-
-  const paginate = (pageNumber) => setCurrentPage(pageNumber);
-  const debouncedValue = useDebounce(searchRecord);
 
   const fetchSalesData = async () => {
     const formData = new FormData();
@@ -136,7 +126,6 @@ const ProductSalesReport = () => {
   };
 
   const handleFilterHistory = (value) => {
-    // const { value } = e.target;
     setSearchRecord(value);
     setCurrentPage(1);
     const filterList = salesData?.filter(
@@ -195,23 +184,6 @@ const ProductSalesReport = () => {
               ""
             )}
             <div className="q-add-categories-section-middle-form sales-history-table">
-              {/* {salesData?.length ? (
-                <Grid container sx={{ padding: 2.5 }}>
-                  <Grid item xs={12}>
-                    <Pagination
-                      currentPage={currentPage}
-                      totalItems={totalCount}
-                      itemsPerPage={rowsPerPage}
-                      onPageChange={paginate}
-                      rowsPerPage={rowsPerPage}
-                      setRowsPerPage={setRowsPerPage}
-                      setCurrentPage={setCurrentPage}
-                    />
-                  </Grid>
-                </Grid>
-              ) : (
-                ""
-              )} */}
               <TableContainer>
                 <StyledTable
                   sx={{ minWidth: 500 }}
@@ -238,10 +210,6 @@ const ProductSalesReport = () => {
                                 {row?.create_date}
                               </div>
                             </div>
-                            {/* <div className="text-[#818181] lowercase">
-                          {row?.order_id}
-                        </div>
-                        <div className="text-[#818181]">{row?.qty}</div> */}
                           </StyledTableCell>
                           <StyledTableCell>
                             <div className="text-[#000000] order_method capitalize">

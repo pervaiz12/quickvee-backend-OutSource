@@ -1,13 +1,9 @@
-import React, { useEffect, useRef, useState } from "react";
-import AddNewCategory from "../../Assests/Dashboard/Left.svg";
-import VariantAttributes from "./VariantAttributes";
+import React, { useEffect, useRef, useState, lazy, Suspense } from "react";
 import UploadIMG from "../../Assests/Filter/imgupload.svg";
-import GeneratePUC from "./GeneratePUC";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addProduct,
   checkProductTitle,
-  checkUpcCode,
   checkUpcCodeMultiple,
   checkUpcCodeSingle,
   checkUpcOnVarientEdit,
@@ -15,19 +11,15 @@ import {
   emptyProduct,
   fetchCategoryList,
   fetchProductList,
-  fetchProductsData,
   fetchProductsDataById,
   fetchTaxList,
   fetchVarientList,
   fetchVarietDataById,
   getInventorySetting,
   getInventorySettingOnVarient,
-  setVarientList,
   updateEditVarient,
-  updateFormValue,
 } from "../../Redux/features/Product/ProductSlice";
 import Validation from "../../Constants/Validation";
-import SearchableDropdown from "../../CommonComponents/SearchableDropdown";
 import "../../Styles/ProductPage.css";
 import CloseIcon from "../../Assests/Dashboard/cross.svg";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -36,22 +28,22 @@ import * as yup from "yup";
 import AlertModal from "../../CommonComponents/AlertModal";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { BASE_URL } from "../../Constants/Config";
-import EditPage from "./EditPage";
 import Loader from "../../CommonComponents/Loader";
 
-import { toast } from "react-toastify";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import CkEditorInput from "../../CommonComponents/CkEditorInput";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import PasswordShow from "../../Common/passwordShow";
 import SwitchToBackButton from "../../reuseableComponents/SwitchToBackButton";
+import SearchableDropdown from "../../CommonComponents/SearchableDropdown";
+const VariantAttributes = lazy(() => import("./VariantAttributes"));
+const GeneratePUC = lazy(() => import("./GeneratePUC"));
+const EditPage = lazy(() => import("./EditPage"));
 
 const AddProducts = () => {
   const fileUploadRef = useRef();
   const dispatch = useDispatch();
-  const { isLoading, isError, isEditError, isFetchLoading } = useSelector(
-    (state) => state?.productsListData
-  );
+  const { isLoading } = useSelector((state) => state?.productsListData);
 
   const { userTypeData, LoginGetDashBoardRecordJson } = useAuthDetails();
   const { getUnAutherisedTokenMessage, handleCoockieExpire, getNetworkError } =
@@ -89,15 +81,6 @@ const AddProducts = () => {
     files: [],
     uploadFiles: [],
   });
-
-  const [bulkEditPo, setBulkEditPo] = useState([
-    {
-      quantity: "",
-      Cost: "",
-    },
-  ]);
-
-  const [isUpcvalid, setIsUpcvalid] = useState("");
 
   //fetch data states
   const [productData, setProductData] = useState({});
@@ -137,7 +120,6 @@ const AddProducts = () => {
   const [openEditModal, setOpenEditModal] = useState(false);
   const [modalType, setModalType] = useState("");
   const [varientIndex, setVarientIndex] = useState(null);
-  const [varientId, setVarientId] = useState("");
   const [isVarientEdit, setIsVarientEdit] = useState(false);
   const [enbaledSubmit, setDisabledSubmit] = useState(false);
   const [singleVarientPageLoading, setSingleVarientPageLoading] =
@@ -154,10 +136,6 @@ const AddProducts = () => {
     setVarientIndex(varientId);
   };
 
-  // useEffect(()=>{
-  //   const findVarientIndex = varientData?.find((item)=> item?.id === varientIndex);
-  //   setVarientId(findVarientIndex?.productEditId);
-  // }, [handleCloseEditModal, varientData, varientIndex])
   // clear all form input value
   const handleClearFormData = (value) => {
     setClearInput(value);
@@ -209,36 +187,7 @@ const AddProducts = () => {
     formValue: !isMultipleVarient ? formInnerSchemaOnSingle : formValueSchema,
   });
 
-  // add varient form validation fetch previous and add new updated object
-  // useEffect(() => {
-  //   setError((prevState) => ({
-  //     ...prevState,
-  //     formValue: formValue.map((_, index) => {
-  //       const previousData = prevState?.formValue[index] || {};
-  //       return {
-  //         costPerItem: previousData.costPerItem || "",
-  //         compareAtPrice: previousData.compareAtPrice || "",
-  //         price: previousData.price || "",
-  //         margin: previousData.margin || "",
-  //         profit: previousData.profit || "",
-  //         qty: previousData.qty || "",
-  //         upcCode: previousData.upcCode || "",
-  //         customCode: previousData.customCode || "",
-  //         reorderQty: previousData.reorderQty || "",
-  //         reorderLevel: previousData.reorderLevel || "",
-  //         trackQuantity: previousData.trackQuantity || true,
-  //         sellOutOfStock: previousData.sellOutOfStock || true,
-  //         checkId: previousData.checkId || false,
-  //         disable: previousData.disable || false,
-  //         itemForAllLinkedLocation:
-  //           previousData.itemForAllLinkedLocation || false,
-  //       };
-  //     }),
-  //   }));
-  // }, [formValue]);
-
   const [costPer, setCostPer] = useState(null);
-  // const [varientTitle, setVarientTitle] = useState([]);
 
   const [varientError, setVarientError] = useState({
     error: "",
@@ -285,15 +234,6 @@ const AddProducts = () => {
           },
         ]);
         setFormValue({});
-        // setProductInfo({
-        //   title: "",
-        //   description: "",
-        //   category: [],
-        //   taxes: [],
-        //   relatedProduct: [],
-        //   frequentlyBought: [],
-        //   files: [],
-        // });
       }
     } else {
       setIsMultipleVaient((prev) => {
@@ -331,15 +271,6 @@ const AddProducts = () => {
             // itemForAllLinkedLocation: false,
           },
         ]);
-        // setProductInfo({
-        //   title: "",
-        //   description: "",
-        //   category: [],
-        //   taxes: [],
-        //   relatedProduct: [],
-        //   frequentlyBought: [],
-        //   files: [],
-        // });
       }
     }
   };
@@ -421,9 +352,6 @@ const AddProducts = () => {
       case "title":
         await validatTitle(value, error);
         break;
-      // case "description":
-      //   await validatDescription(value, error);
-      //   break;
       default:
         break;
     }
@@ -706,7 +634,6 @@ const AddProducts = () => {
   };
 
   const handleImageChange = (e) => {
-    // setUploadImage(e.target.files);
     let files = [];
     files = [...e?.target?.files];
     if (files?.length) {
@@ -1206,28 +1133,6 @@ const AddProducts = () => {
               }
             : item;
         }
-        //   else {
-        //   return !["upcCode", "customCode"].includes(name) ? {
-        //     ...item,
-        //     [title]: {
-        //       ...title[title],
-        //       [name]: fieldValue,
-        //       price: !isNaN(parseFloat(price_total_value))
-        //         ? parseFloat(price_total_value).toFixed(2)
-        //         : name === "price"
-        //           ? fieldValue
-        //           : item[currentTitle]?.price && (name === "costPerItem" && !fieldValue)
-        //             ? ""
-        //             : item[currentTitle]?.price,
-        //         margin: !isNaN(parseFloat(marginValue)) ? marginValue : oldMargin([item[currentTitle]?.costPerItem, item[currentTitle]?.margin, item[currentTitle]?.price]) ? item[currentTitle]?.margin : "",
-        //         profit: !isNaN(parseFloat(profitValue)) ? profitValue : oldMargin([item[currentTitle]?.costPerItem, item[currentTitle]?.margin, item[currentTitle]?.price]) ? item[currentTitle]?.profit : "",
-        //         comparePriceError:
-        //         ((["price", "compareAtPrice", "costPerItem"]?.includes(name)) && showError)
-        //             ? "Compare Price must be greater than price."
-        //             : (["qty", "upcCode", "customCode", "reorderLevel", "reorderQty"]?.includes(name)) && item[currentTitle]?.comparePriceError ? item[currentTitle]?.comparePriceError : ""
-        //     }
-        //   }: item
-        // }
       });
 
       setFormValue(updatedValues);
@@ -1236,8 +1141,6 @@ const AddProducts = () => {
 
   const handleOnChange = (e, i, title) => {
     const { name, value, type, checked } = e.target;
-
-    const updatedFormValue = [...formValue];
 
     /// convert input value format 0.00
     let fieldValue;
@@ -1294,7 +1197,6 @@ const AddProducts = () => {
     }
 
     // margin and profit calculation
-    let totalPriceValue;
     let marginValue;
     let profitValue;
     let price_total_value;
@@ -1355,7 +1257,6 @@ const AddProducts = () => {
       return marginAmount;
     };
 
-    let showError;
     let updatedValues;
     // manually onchange
     if (isMultipleVarient) {
@@ -1427,10 +1328,6 @@ const AddProducts = () => {
                       ])
                     ? item[title].profit
                     : "",
-                // comparePriceError:
-                //     ((["price", "compareAtPrice", "costPerItem"].includes(name)) && showError)
-                //         ? "Compare Price must be greater than price."
-                //         : ""
                 comparePriceError:
                   ["price", "compareAtPrice", "costPerItem"]?.includes(name) &&
                   showError
@@ -1530,9 +1427,6 @@ const AddProducts = () => {
 
     setFormValue(updatedValues);
   };
-
-  // console.log("formvalue", formValue);
-  console.log("error", error);
 
   const handleVarientTitleBasedItemList = () => {
     if (varientLength.length) {
@@ -1856,12 +1750,6 @@ const AddProducts = () => {
         uploadFiles: [],
       });
 
-      // fill the varient options data
-      // varientData structure below
-      // const [varientLength, setVarientLength] = useState([
-      //   { id: 1, varientName: "", varientAttributeList: [] },
-      // ]);
-
       const varientOptions = [];
       // if first varient values only exist
 
@@ -2149,9 +2037,7 @@ const AddProducts = () => {
           ? formValue[0]?.reorderQty
           : "0"
         : "",
-      // reorder_cost: !isMultipleVarient ? formValue[0]?.reorderQty : "",
-      //ispysical_product:
-      //country_region:
+
       collection: productInfo?.category?.map((item) => item?.id).toString(),
       other_taxes: productInfo?.taxes?.map((item) => item?.id).toString(),
       featured_product: productInfo?.relatedProduct
@@ -2162,16 +2048,9 @@ const AddProducts = () => {
         .toString(),
       files: files,
       previous_media: previous,
-      // files: productInfo?.files?.map((file) => file?.base64),
-      //HS_code:
+
       isvarient: +isMultipleVarient,
 
-      /// multiple varient payload start from here...
-      //featured_product:1,2
-      //multiplefiles[]:product2.png
-      //img_color_lbl:
-      //created_on:
-      //productid:111
       optionarray: isMultipleVarient
         ? varientLength[0]?.varientName?.value.trim() ?? ""
         : "",
@@ -2212,11 +2091,6 @@ const AddProducts = () => {
       varquantity: isMultipleVarient
         ? varientCategory("qty", "", "0").join(",").trim()
         : "",
-      // varsku: formValue?.map((i) => i),
-      //varbarcode[]:123321,5456464
-      //optionarray2:Material
-      //optionvalue2:glass
-      //upc:abcupc
 
       varupc: isMultipleVarient
         ? varientCategory("upcCode").join(",").trim()
@@ -2269,7 +2143,6 @@ const AddProducts = () => {
       varcompareprice: isMultipleVarient
         ? varientCategory("compareAtPrice", "", "0.00").join(",").trim()
         : "",
-      // reorder_cost: [10, 10, 10, 10],
     };
 
     if (isProductEdit) {
@@ -2342,7 +2215,6 @@ const AddProducts = () => {
                 files: [],
                 uploadFiles: [],
               }));
-              // setUploadImage([]);
             } else {
               navigate("/inventory/products");
             }
@@ -2373,28 +2245,18 @@ const AddProducts = () => {
   const handleUpdateVarient = async () => {
     const data = {
       merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-      // token_id: userTypeData?.token_id,
-      // login_type: userTypeData?.login_type,
-      // token: userTypeData?.token,
       variant_id: formValue[0]?.productEditId,
       price: formValue[0]?.price,
       compare_price: formValue[0]?.compareAtPrice,
       costperItem: formValue[0]?.costPerItem,
       ogvarmargin: formValue[0]?.margin,
       ogvarprofit: formValue[0]?.profit,
-      //sku:
-      //barcode:
-      // trackqnty: +formValue[0]?.trackQuantity,
-      // isstockcontinue: +formValue[0]?.sellOutOfStock,
-      // disable: +formValue[0]?.disable,
-      // is_tobacco: +formValue[0]?.checkId,
-      // food_stampable: +formValue[0]?.isFoodStamble,
+
       quantity: formValue[0]?.qty,
       reorder_level: formValue[0]?.reorderLevel,
       upc: formValue[0]?.upcCode,
       custom_code: formValue[0]?.customCode,
       reorder_qty: formValue[0]?.reorderQty,
-      // reorder_cost: formValue[0]?.reordr,
       Track_Quantity: +formValue[0]?.trackQuantity,
       Continue_selling: +formValue[0]?.sellOutOfStock,
       Checkid: +formValue[0]?.checkId,
@@ -2453,11 +2315,6 @@ const AddProducts = () => {
   };
 
   // varient form onchange validation function
-
-  // const handleFormDuplicateFormValidation = async (name, value, index) => {
-  //   await addVarientFormValidation(name, value, index, error);
-  //   handleUpdateError(error);
-  // };
   return (
     <div className="box ">
       {/* edit modal */}
@@ -2467,18 +2324,20 @@ const AddProducts = () => {
         </div>
       ) : !isProductVariant ? (
         <>
-          <EditPage
-            openEditModal={openEditModal}
-            handleCloseEditModal={handleCloseEditModal}
-            productData={productData}
-            modalType={modalType}
-            varientData={varientData}
-            varientIndex={varientIndex}
-            formData={formValue}
-            handleCopyAllVarientValue={handleCopyAllVarientValue}
-            inventoryData={inventoryData}
-            fetchProductDataById={fetchProductDataById}
-          />
+          <Suspense fallback={<CircularProgress />}>
+            <EditPage
+              openEditModal={openEditModal}
+              handleCloseEditModal={handleCloseEditModal}
+              productData={productData}
+              modalType={modalType}
+              varientData={varientData}
+              varientIndex={varientIndex}
+              formData={formValue}
+              handleCopyAllVarientValue={handleCopyAllVarientValue}
+              inventoryData={inventoryData}
+              fetchProductDataById={fetchProductDataById}
+            />
+          </Suspense>
           {/* alert modal */}
           <AlertModal
             openAlertModal={openAlertModal}
@@ -2495,20 +2354,7 @@ const AddProducts = () => {
                 linkTo={"/inventory/products"}
                 title={`${isProductEdit ? "Edit" : "Add"} Product`}
               />
-              {/* <div className="q-add-categories-section-header">
-                <span
-                  onClick={() => {
-                    navigate("/inventory/products");
-                  }}
-                >
-                  <img src={AddNewCategory} alt="Add-New-Category" />
 
-                  <span style={{ width: "153px" }}>
-                    {isProductEdit ? "Edit" : "Add"}{" "}
-                    Product
-                  </span>
-                </span>
-              </div> */}
               <div
                 style={{ padding: 0 }}
                 className="q-add-categories-section-middle-form mt-1"
@@ -2552,21 +2398,7 @@ const AddProducts = () => {
                     />
                   </div>
                 </div>
-                {/* <div className="q-add-categories-single-input">
-                    <textarea
-                    id="description"
-                    name="description"
-                      rows="4"
-                      cols="50"
-                      value={productInfo?.description}
-                      onChange={handleProductInfo}
-                    ></textarea>
-                    {error?.description ? (
-                      <span className="error-alert">{error?.description}</span>
-                    ) : (
-                      ""
-                    )}
-                  </div> */}
+
                 <div className=" mt-2 px-5">
                   <div className="q-add-categories-single-input">
                     <SearchableDropdown
@@ -2709,7 +2541,6 @@ const AddProducts = () => {
                                   <>
                                     <span
                                       className="delete-image-icon img-DeleteIcon"
-                                      // onClick={handleDeleteImage}
                                       style={{
                                         position: "absolute",
                                         top: "7px",
@@ -2754,7 +2585,6 @@ const AddProducts = () => {
                                 <>
                                   <span
                                     className="delete-image-icon img-DeleteIcon"
-                                    // onClick={handleDeleteImage}
                                     style={{
                                       position: "absolute",
                                       top: "7px",
@@ -2790,40 +2620,44 @@ const AddProducts = () => {
                 </div>
 
                 <div className="mt-6 px-5">
-                  <VariantAttributes
-                    varientDropdownList={dropdownData?.varientList}
-                    varientError={varientError}
-                    filterOptionList={filterOptionList}
-                    toggleVarientSection={toggleVarientSection}
-                    isMultipleVarient={isMultipleVarient}
-                    handleOnBlurAttributes={handleOnBlurAttributes}
-                    handleFilterDropdownOption={handleFilterDropdownOption}
-                    varientLength={varientLength}
-                    handleSetVarientLength={handleSetVarientLength}
-                    addMoreVarientItems={addMoreVarientItems}
-                    handleClearFormData={handleClearFormData}
-                    formValue={formValue}
-                  />
+                  <Suspense fallback={<CircularProgress />}>
+                    <VariantAttributes
+                      varientDropdownList={dropdownData?.varientList}
+                      varientError={varientError}
+                      filterOptionList={filterOptionList}
+                      toggleVarientSection={toggleVarientSection}
+                      isMultipleVarient={isMultipleVarient}
+                      handleOnBlurAttributes={handleOnBlurAttributes}
+                      handleFilterDropdownOption={handleFilterDropdownOption}
+                      varientLength={varientLength}
+                      handleSetVarientLength={handleSetVarientLength}
+                      addMoreVarientItems={addMoreVarientItems}
+                      handleClearFormData={handleClearFormData}
+                      formValue={formValue}
+                    />
+                  </Suspense>
                 </div>
 
                 <div className="">
-                  <GeneratePUC
-                    handleVarientTitleBasedItemList={
-                      handleVarientTitleBasedItemList
-                    }
-                    error={error}
-                    handleGenerateUPC={handleGenerateUPC}
-                    handleOnChange={handleOnChange}
-                    formValue={formValue}
-                    handleBlur={handleBlur}
-                    isMultipleVarient={isMultipleVarient}
-                    productInfo={productInfo}
-                    inventoryData={inventoryData}
-                    handleCloseEditModal={handleCloseEditModal}
-                    productData={productData}
-                    varientData={varientData}
-                    isVarientEdit={isVarientEdit}
-                  />
+                  <Suspense fallback={<CircularProgress />}>
+                    <GeneratePUC
+                      handleVarientTitleBasedItemList={
+                        handleVarientTitleBasedItemList
+                      }
+                      error={error}
+                      handleGenerateUPC={handleGenerateUPC}
+                      handleOnChange={handleOnChange}
+                      formValue={formValue}
+                      handleBlur={handleBlur}
+                      isMultipleVarient={isMultipleVarient}
+                      productInfo={productInfo}
+                      inventoryData={inventoryData}
+                      handleCloseEditModal={handleCloseEditModal}
+                      productData={productData}
+                      varientData={varientData}
+                      isVarientEdit={isVarientEdit}
+                    />
+                  </Suspense>
                 </div>
 
                 <div className="box sticky-box fixed-bottom">
@@ -2862,22 +2696,8 @@ const AddProducts = () => {
                             className="quic-btn quic-btn-save submit-btn-click"
                             onClick={handleSubmitForm}
                             disabled={isLoading || enbaledSubmit}
-                            //   style={{
-                            //     backgroundColor:
-                            //       isLoading || enbaledSubmit
-                            //         ? "#878787"
-                            //         : "#0A64F9",
-                            //   }}
-                            // >
                             style={{ backgroundColor: "#0A64F9" }}
                           >
-                            {/* {isLoading || enbaledSubmit ? (
-                              <Box className="loader-box">
-                                <CircularProgress />
-                              </Box>
-                            ) : (
-                              "Insert"
-                            )} */}
                             {isLoading || enbaledSubmit ? (
                               <Box className="loader-box">
                                 <CircularProgress />
@@ -2892,21 +2712,8 @@ const AddProducts = () => {
                             className="quic-btn quic-btn-update submit-btn-click"
                             onClick={handleSubmitForm}
                             disabled={isLoading || enbaledSubmit}
-                            // style={{
-                            //   backgroundColor:
-                            //     isLoading || enbaledSubmit
-                            //       ? "#878787"
-                            //       : "#0A64F9",
-                            // }}
                             style={{ backgroundColor: "#0A64F9" }}
                           >
-                            {/* {isLoading || enbaledSubmit ? (
-                              <Box className="loader-box">
-                                <CircularProgress />
-                              </Box>
-                            ) : (
-                              "Update"
-                            )} */}
                             {isLoading || enbaledSubmit ? (
                               <Box className="loader-box">
                                 <CircularProgress />
@@ -2951,20 +2758,22 @@ const AddProducts = () => {
             ) : (
               <div class="q-add-categories-section-middle-form ">
                 <div className="mt_card_header">
-                  <EditPage
-                    openEditModal={openEditModal}
-                    handleCloseEditModal={handleCloseEditModal}
-                    productData={productData}
-                    modalType={modalType}
-                    varientData={varientData}
-                    varientIndex={varientIndex}
-                    formData={formValue}
-                    handleCopyAllVarientValue={handleCopyAllVarientValue}
-                    inventoryData={inventoryData}
-                    fetchProductDataById={fetchProductDataById}
-                    isVarientEdit={isVarientEdit}
-                    fetchSingleVarientData={fetchSingleVarientData}
-                  />
+                  <Suspense fallback={<CircularProgress />}>
+                    <EditPage
+                      openEditModal={openEditModal}
+                      handleCloseEditModal={handleCloseEditModal}
+                      productData={productData}
+                      modalType={modalType}
+                      varientData={varientData}
+                      varientIndex={varientIndex}
+                      formData={formValue}
+                      handleCopyAllVarientValue={handleCopyAllVarientValue}
+                      inventoryData={inventoryData}
+                      fetchProductDataById={fetchProductDataById}
+                      isVarientEdit={isVarientEdit}
+                      fetchSingleVarientData={fetchSingleVarientData}
+                    />
+                  </Suspense>
                   <GeneratePUC
                     handleVarientTitleBasedItemList={
                       handleVarientTitleBasedItemList
@@ -2991,18 +2800,7 @@ const AddProducts = () => {
                     className="quic-btn quic-btn-save submit-btn-click"
                     onClick={handleUpdateVarient}
                     disabled={varientLoading || enbaledSubmit}
-                    // style={{
-                    //   backgroundColor:
-                    //     varientLoading || enbaledSubmit ? "#878787" : "#0A64F9",
-                    // }}
                   >
-                    {/* {varientLoading || enbaledSubmit ? (
-                      <Box className="loader-box">
-                        <CircularProgress />
-                      </Box>
-                    ) : (
-                      "Update"
-                    )} */}
                     {varientLoading || enbaledSubmit ? (
                       <Box className="loader-box">
                         <CircularProgress />

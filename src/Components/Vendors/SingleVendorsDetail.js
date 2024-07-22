@@ -3,7 +3,6 @@ import axios from "axios";
 
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../Styles/Common.css";
-
 import {
   BASE_URL,
   GET_VENDOR_DETAILS,
@@ -256,10 +255,7 @@ const SingleVendorsDetail = ({ setVisible }) => {
       <Grid container sx={{ marginY: 2 }} className="q-add-categories-section">
         <Grid xs={12} item>
           <Grid item xs={12}>
-            <SwitchToBackButton 
-              linkTo={"/vendors"}
-              title={vendor_name}
-            />
+            <SwitchToBackButton linkTo={"/vendors"} title={vendor_name} />
             {/* <div className="q-add-categories-section-header">
               <span
                 onClick={() => {
