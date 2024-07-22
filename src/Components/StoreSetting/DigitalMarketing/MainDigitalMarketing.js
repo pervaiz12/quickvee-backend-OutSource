@@ -7,7 +7,7 @@ import CrossIcon from "../../../Assests/Dashboard/cross.svg";
 import AddIcon from "../../../Assests/Category/addIcon.svg";
 import DeleteIcon from "../../../Assests/Category/deleteIcon.svg";
 import EditIcon from "../../../Assests/Category/editIcon.svg";
-import DeleteIconAll from "../../../Assests/Defaults/deleteIcon.svg";
+
 
 import { fetchdigitalMarketingData ,deleteDigitalMarketing} from "../../../Redux/features/DigitalMarketing/digitalMarketingSlice";
 import { BASE_URL, DIGITALMAKRTING_UPDATE } from "../../../Constants/Config";

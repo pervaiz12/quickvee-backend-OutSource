@@ -1,10 +1,10 @@
-// import React from "react";
+
 import { useState, useRef, useEffect } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { editEmployee } from "../../../Redux/features/StoreSettings/AddEmployee/AddEmployeeSlice";
 import Validation from "../../../Constants/Validation";
-// import { useNavigate } from "react-router-dom";
+
 import { BASE_URL, ADDEDIT_EMPLOYEE } from "../../../Constants/Config";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";

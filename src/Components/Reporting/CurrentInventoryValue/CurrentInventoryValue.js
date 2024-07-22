@@ -81,7 +81,7 @@ const CurrentInventoryValue = () => {
               Total Quantity
             </div>
             <div className="text-[20px] font-bold mt-4 common-font-bold">
-              {/* {priceFormate(formatNumber(currentInventory.final_quantity))} */}
+              
               {currentInventory.final_quantity ? (
                 priceFormate(formatNumber(currentInventory.final_quantity))
               ) : (
@@ -96,7 +96,7 @@ const CurrentInventoryValue = () => {
               Total Selling Price
             </div>
             <div className="text-[20px] font-bold mt-4 common-font-bold">
-              {/* $ {priceFormate(formatNumber(currentInventory.total_sale_price))} */}
+              
               {currentInventory.total_sale_price ? (
                 "$" +
                 priceFormate(formatNumber(currentInventory.total_sale_price))
@@ -112,7 +112,7 @@ const CurrentInventoryValue = () => {
               Total Cost Per Item
             </div>
             <div className="text-[20px] font-bold mt-4 common-font-bold">
-              {/* $ {priceFormate(formatNumber(currentInventory.total_cpi_price))} */}
+              
               {currentInventory.total_cpi_price ? (
                 "$" +
                 priceFormate(formatNumber(currentInventory.total_cpi_price))

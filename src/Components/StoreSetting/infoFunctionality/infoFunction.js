@@ -14,7 +14,7 @@ import {
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 import PasswordShow from "../../../Common/passwordShow";
-import { isArray } from "jquery";
+
 export default function InfoFunction() {
   const {
     LoginGetDashBoardRecordJson,

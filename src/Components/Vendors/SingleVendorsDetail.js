@@ -1,28 +1,22 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
-import EditIcon from "../../Assests/Category/editIcon.svg";
-import TextField from "@mui/material/TextField";
-import Autocomplete from "@mui/material/Autocomplete";
-import LeftArrow from "../../Assests/Vendors/LeftArrow.svg";
+
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../Styles/Common.css";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import {
   BASE_URL,
   GET_VENDOR_DETAILS,
   UPDATE_SINGLE_VENDOR_DATA,
   DELETE_SINGLE_VENDOR_DATA,
 } from "../../Constants/Config";
-import CrossIcon from "../../Assests/Dashboard/cross.svg";
+
 import dayjs from "dayjs";
 import DateRangeComponent from "../../reuseableComponents/DateRangeComponent";
 import { Grid } from "@mui/material";
 import CustomizedTable from "./CustomizedTable";
 import { useSelector } from "react-redux";
 import { useAuthDetails } from "../../Common/cookiesHelper";
-import { useParams } from "react-router-dom";
+
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import PasswordShow from "../../Common/passwordShow";

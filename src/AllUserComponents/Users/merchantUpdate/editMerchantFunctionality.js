@@ -13,9 +13,7 @@ import { ToastifyAlert } from "../../../CommonComponents/ToastifyAlert";
 import PasswordShow from "../../../Common/passwordShow";
 
 export default function EditMerchantFunctionality() {
-  const navigate = useNavigate();
-  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
-    useAuthDetails();
+  const { userTypeData } = useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
 
@@ -730,19 +728,16 @@ export default function EditMerchantFunctionality() {
             {
               headers: {
                 "Content-Type": "multipart/form-data",
-                Authorization: `Bearer ${token}`, // Use data?.token directly
+                Authorization: `Bearer ${token}`,
               },
             }
           );
           if (response.data.status == 200) {
             setLoader(false);
             ToastifyAlert("Updated Successfully!", "success");
-            // setMessage(response?.data?.message);
             setSuccessMessageHandle(true);
             setLoadDataId(response?.data);
             handleSuccessMessage();
-            // navigate(`/users/editMerchant/${response?.data?.id}`);
-            // navigate(`/users/editMerchant/${getEditMerchant.id}`)
           } else {
             setLoader(false);
             ToastifyAlert("Merchant not Updated!", "warn");

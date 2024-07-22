@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import EditNewVendor from "../../Assests/Dashboard/Left.svg";
+
 import { fetchVendorsListData } from "../../Redux/features/VendorList/vListSlice";
-import Chip from "@mui/material/Chip";
+
 import { useLocation, useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import {
@@ -10,9 +10,7 @@ import {
   EDIT_VENDOR_DATA,
   UPDATE_VENDOR_DATA,
 } from "../../Constants/Config";
-import Autocomplete from "@mui/material/Autocomplete";
-import TextField from "@mui/material/TextField";
-import { Link } from "react-router-dom";
+
 import { CircularProgress, Grid } from "@mui/material";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
@@ -303,19 +301,7 @@ const EditVendors = ({ setVisible }) => {
                 linkTo={"/vendors"}
                 title={"Edit Vendors"}
               />
-              {/* <div
-                onClick={() => {
-                  Navigate(-1);
-                }}
-                className="q-add-categories-section-header"
-              >
-                <img
-                  src={EditNewVendor}
-                  alt="Edit-New-Vendors"
-                  style={{ cursor: "pointer" }}
-                />
-                <span>Edit Vendors</span>
-              </div> */}
+
             </Grid>
           </Grid>
           <Grid container sx={{ padding: 2.5 }}>

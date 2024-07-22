@@ -1,27 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import axios from "axios";
 import Validate from "./validationFile/validate";
-import { useSelector, useDispatch } from "react-redux";
-
+import { useDispatch } from "react-redux";
 import {
   handleUserType,
   getAuthInvalidMessage,
 } from "../../Redux/features/Authentication/loginSlice";
 import { LOGIN_AUTHENICATE_API, BASE_URL } from "../../Constants/Config";
-
 import { useNavigate } from "react-router-dom";
 import PasswordShow from "../../Common/passwordShow";
-
 export default function LoginLogic(setLoading) {
   const navigate = useNavigate();
-
   const dispatch = useDispatch();
   const [formData, setFormData] = React.useState({
     username: "",
     password: "",
     otp: "",
   });
-
   const [errors, setErrors] = React.useState({
     usernameError: "",
     passwordError: "",
@@ -32,7 +27,6 @@ export default function LoginLogic(setLoading) {
   const [errorMessage, setErrorMessage] = React.useState("");
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
-
   const emailValidate = async (userdata) => {
     const data = { username: userdata };
     try {
@@ -43,7 +37,6 @@ export default function LoginLogic(setLoading) {
           headers: { "Content-Type": "multipart/form-data" },
         }
       );
-
       return response.data;
     } catch (error) {
       console.error("Error validating email:", error.message);
@@ -52,7 +45,6 @@ export default function LoginLogic(setLoading) {
   };
   const handleBlur = async (name) => {
     let error = false;
-    // console.log(formData.username)
     if (formData.username.toLowerCase() !== "superadmin") {
       if (name === "username") {
         if (errors.usernameError == "") {
@@ -75,7 +67,6 @@ export default function LoginLogic(setLoading) {
       }
     }
   };
-
   const handleChangeLogin = async (e) => {
     const { name, value } = e.target;
     if (name == "username") {
@@ -94,7 +85,6 @@ export default function LoginLogic(setLoading) {
     }
     if (name == "otp") {
       const numericValue = value.replace(/[^0-9]/g, "");
-
       let userError = validateOTP(numericValue, name);
       setErrors({
         ...errors,
@@ -110,7 +100,6 @@ export default function LoginLogic(setLoading) {
       [name]: value,
     });
   };
-  // ==============
   const keyEnter = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -122,16 +111,12 @@ export default function LoginLogic(setLoading) {
       handleSubmitForm(event);
     }
   };
-
   useEffect(() => {
     document.addEventListener("keydown", keyEnter);
     return () => {
       document.removeEventListener("keydown", keyEnter);
     };
   }, [formData]);
-
-  // ==============
-
   const handleSubmitForm = async (e) => {
     try {
       e.preventDefault();

@@ -1,5 +1,5 @@
 // import react from 'react'
-import react, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import {
   BASE_URL,
@@ -9,20 +9,13 @@ import {
   ADMIN_CHECK_USER,
   CHECK_EXIST_STORENAME,
 } from "../../../../Constants/Config";
-import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../../CommonComponents/ToastifyAlert";
 import PasswordShow from "../../../../Common/passwordShow";
-import { getAuthInvalidMessage } from "../../../../Redux/features/Authentication/loginSlice";
-
 const MerchantFunction = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
-    useAuthDetails();
-
+  const { userTypeData } = useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
   const [store, setStore] = useState({
@@ -42,7 +35,6 @@ const MerchantFunction = () => {
     },
   });
   const [loader, setLoader] = useState(false);
-
   const [merchantStore, setMerchantStore] = useState({
     pin: "",
   });
@@ -54,7 +46,6 @@ const MerchantFunction = () => {
   const [adminId, setAdminId] = useState();
   const [errorAdminId, setErrorAdminId] = useState("");
   const [errorPin, setErrorPin] = useState("");
-  // ==================== get state and admin data---------
   const getState = async () => {
     const { token, ...newData } = userTypeData;
     await axios
@@ -73,19 +64,7 @@ const MerchantFunction = () => {
           setAdminList([]);
         }
       });
-    // console.log('hello')
-    //  await axios.get(BASE_URL+GET_MERCHAN_STATE).then(result=>{
-    //     if(result.status==200)
-    //     {
-    //         setStateList(result.data.states)
-    //         setAdminList(result.data.admin_list)
-    //     }else{
-    //         setStateList([])
-    //         setAdminList([])
-    //     }
-    //  })
   };
-
   useEffect(() => {
     getState();
   }, []);
@@ -117,8 +96,6 @@ const MerchantFunction = () => {
             phone: "",
           },
         });
-        // setErrorPin('')
-
         if (result.data.login_pin !== "") {
           setMerchantStore({
             ...merchantStore,
@@ -133,59 +110,6 @@ const MerchantFunction = () => {
       setErrorAdminId("");
     }
   };
-  // const onChangeAdminId = async (e) => {
-  //     const { name, value } = e.target;
-  //     setAdminId(value);
-
-  //     if (value === '') {
-  //         setErrorAdminId('Please select adminId field');
-  //         return; // No need to proceed further if value is empty
-  //     } else {
-  //         setErrorAdminId('');
-  //     }
-
-  //     const data = { m_id: value };
-
-  //     try {
-  //         const result = await axios.post(BASE_URL + GET_ADMIN_DATA, data, {
-  //             headers: {
-  //                 'Content-Type': 'multipart/form-data'
-  //             }
-  //         });
-
-  //         setStore({
-  //             ...store,
-  //             storename: result.data.own_store,
-  //             state: result.data.a_state,
-  //             phone: result.data.phone,
-  //             ownerName: result.data.owner_name,
-  //             errors: {
-  //                 ownerName: '',
-  //                 state: '',
-  //                 storename: '',
-  //                 email: '',
-  //                 phone: '',
-  //                 password:''
-  //             }
-  //         });
-
-  //         if (result.data.login_pin !== '') {
-  //             setMerchantStore({
-  //                 ...merchantStore,
-  //                 pin: result.data.login_pin
-  //             });
-  //             setErrorPin('');
-  //         }
-  //     } catch (error) {
-  //         console.error('Error fetching admin data:', error);
-  //         // Handle error if necessary
-  //     }
-  // };
-
-  // ==================== get state and admin data---------
-
-  // --------------------radio button---------------------------
-
   const onClickUserRadio = (e) => {
     const { value } = e.target;
     if (value.toLowerCase().trim() == "admin") {
@@ -216,20 +140,15 @@ const MerchantFunction = () => {
     }
     setRadioError("");
   };
-  // -------------------radio button end---------------------------
-
   const handleChangeMerchant = (e) => {
     const { name, value } = e.target;
-
     setMerchantStore({
       ...merchantStore,
       [name]: value,
     });
-
     if (value === "") {
       setErrorPin("Please select pin field");
     } else if (value.length < 4) {
-      // Modified condition to check if length is less than 4
       setErrorPin("Please give proper length");
     } else {
       setErrorPin("");
@@ -237,19 +156,12 @@ const MerchantFunction = () => {
   };
 
   const handleChange = (e) => {
-    // console.log("handleChange, ",e)
     let updatedErrors = { ...store.errors };
-    // const { name, value } = e.target;
     const { name, value } = e.target || {};
     if (e?.target?.name) {
       let emailRegex =
         /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-      const noSpacesRegex = /^\S+$/;
-      // console.log(value);
-
       if (name === "storename") {
-        // console.log(name);
-        // updatedErrors[name] = value === "" ? `Please fill the ${name} field` : "";
         updatedErrors[name] =
           value.trim() === ""
             ? `Store Name is required`
@@ -259,12 +171,6 @@ const MerchantFunction = () => {
       }
       if (name == "ownerName") {
         updatedErrors[name] = value === "" ? `Owner Name is required` : "";
-        // updatedErrors[name] =
-        //   value.trim() === ""
-        //     ? `Please fill in the ${name} field`
-        //     : value[0] === " "
-        //       ? `The ${name} field cannot start with a space`
-        //       : "";
       }
       if (name == "email") {
         updatedErrors[name] =
@@ -308,7 +214,6 @@ const MerchantFunction = () => {
       }));
     }
   };
-  // console.log("store updated ", store);
   const handleKeyPress = (e) => {
     if ((e.charCode < 48 || e.charCode > 57) && e.charCode !== 8) {
       e.preventDefault();
@@ -316,10 +221,7 @@ const MerchantFunction = () => {
   };
 
   const validateForm = (errors) => {
-    // console.log(errors);
-
     if (
-      // errors.storename === '' &&
       errors.state === "" &&
       errors.phone === "" &&
       errors.password === "" &&
@@ -333,7 +235,6 @@ const MerchantFunction = () => {
   };
 
   const validateFormNew = (errors) => {
-    // console.log(errors.password)(errors.storename === '')&&
     if (
       errors.phone == "" &&
       errors.state == "" &&
@@ -347,19 +248,14 @@ const MerchantFunction = () => {
       return false;
     }
   };
-  // =====================================================
   const validate = async () => {
     let error = false;
     let errorMessage = "";
     let errors = { ...store.errors };
-
-    // Check if userRadioData is empty
     if (userRadioData === "") {
       errorMessage = "Please enter the input";
       error = true;
     }
-
-    // Check for specific userRadioData values
     if (
       userRadioData === "" ||
       userRadioData === "admin" ||
@@ -369,7 +265,6 @@ const MerchantFunction = () => {
         errors.storename = "Store Name is required";
         error = true;
       } else {
-        // Validate store name uniqueness
         try {
           if (!errors.storename && !errors.email) {
             setLoader(true);
@@ -389,10 +284,9 @@ const MerchantFunction = () => {
           setLoader(false);
           console.error("Error validating store name:", validationError);
           errors.storename = "Error validating store name";
-          error = true; // Consider this as an error
+          error = true;
         }
       }
-
       if (store.ownerName === "") {
         errors.ownerName = "Owner Name is required";
         error = true;
@@ -407,7 +301,6 @@ const MerchantFunction = () => {
         errors.password = "Password is required";
         error = true;
       } else {
-        // Validate password uniqueness
         try {
           if (!errors.password && !errors.email) {
             setLoader(true);
@@ -427,15 +320,13 @@ const MerchantFunction = () => {
           setLoader(false);
           console.error("Error validating password:", validationError);
           errors.password = "Error validating password";
-          error = true; // Consider this as an error
+          error = true;
         }
       }
-
       if (store.state === "") {
         errors.state = "Please select the State";
         error = true;
       }
-
       if (store.phone === "") {
         errors.phone = "Phone is required";
         error = true;
@@ -445,114 +336,8 @@ const MerchantFunction = () => {
     setRadioError(errorMessage);
     setStore({ ...store, errors });
 
-    return !error; // If error is true, return false; otherwise, return true
+    return !error;
   };
-
-  // =====================================================
-  // const validate = async () => {
-  //   let error = false;
-  //   let errorMessage = "";
-  //   let errors = { ...store.errors };
-  //   if (userRadioData === "") {
-  //     errorMessage = "Please enter the input";
-  //     error = true;
-  //   } else {
-  //     errorMessage = "";
-  //     error = false;
-  //   }
-
-  //   if (
-  //     userRadioData === "" ||
-  //     userRadioData === "admin" ||
-  //     userRadioData === "merchant"
-  //   ) {
-  //     if (store.storename === "") {
-  //       errors.storename = "Store Name is required";
-  //       error = true;
-  //     } else {
-  //       try {
-  //         // console.log('heloo password')
-  //         if (errors.storename === "" && errors.email == "") {
-  //           setLoader(true);
-  //           const emailValid = await StorenameValidate(
-  //             store.email,
-  //             store.storename
-  //           );
-  //           if (emailValid.status == true) {
-  //             setLoader(false);
-  //             errors.storename = "Store already exists";
-  //             error = true;
-  //           } else {
-  //             setLoader(false);
-  //             errors.storename = "";
-  //             error = false;
-  //           }
-  //         }
-  //       } catch (error) {
-  //         console.error("Error validating email:", error);
-  //         // error = true; // You should handle this error case accordingly
-  //       }
-  //     }
-
-  //     if (store.ownerName === "") {
-  //       errors.ownerName = "Owner Name is required";
-  //       error = true;
-  //     }
-
-  //     if (store.email === "") {
-  //       errors.email = "Email is required";
-  //       error = true;
-  //     }
-
-  //     if (store.password === "") {
-  //       errors.password = "Password is required";
-  //       error = true;
-  //     } else {
-  //       try {
-  //         // console.log('heloo password')
-  //         if (errors.password === "" && errors.email == "") {
-  //           setLoader(true);
-  //           const emailValid = await passwordValidate(
-  //             store.email,
-  //             store.password
-  //           );
-  //           if (emailValid == true) {
-  //             setLoader(false);
-  //             errors.password = "Password already exists";
-  //             error = true;
-  //           } else {
-  //             setLoader(false);
-  //             errors.password = "";
-  //             error = false;
-  //           }
-  //         }
-  //       } catch (error) {
-  //         console.error("Error validating email:", error);
-  //         // error = true; // You should handle this error case accordingly
-  //       }
-  //     }
-
-  //     if (store.state === "") {
-  //       errors.state = "Please select the State";
-  //       error = true;
-  //     }
-
-  //     if (store.phone === "") {
-  //       errors.phone = "Phone is required";
-  //       error = true;
-  //     }
-  //   }
-
-  //   setRadioError(errorMessage);
-  //   setStore({ ...store, errors });
-
-  //   if (error == true) {
-  //     return false;
-  //   } else {
-  //     return true;
-  //   }
-  // };
-  //  store check function start -------
   const StorenameValidate = async (email, store) => {
     const { token, ...newData } = userTypeData;
     const dataNew = { email: email, name: store, ...newData };
@@ -601,7 +386,6 @@ const MerchantFunction = () => {
       }
     }
   };
-  // ------------------------
   const handleBlurStoreFound = async () => {
     if (
       store.errors.storename == "" &&
@@ -656,35 +440,6 @@ const MerchantFunction = () => {
       }
     }
   };
-  // ------------------------
-  function validateData() {
-    let error = false;
-    // console.log(adminId)
-    if (adminId == undefined) {
-      setErrorAdminId("Please select admin");
-      error = true;
-    } else if (adminId == "") {
-      setErrorAdminId("Please select admin");
-      error = true;
-    } else {
-      setErrorAdminId("");
-      error = false;
-    }
-    if (merchantStore.pin == "") {
-      setErrorPin("Please enter pin");
-      error = true;
-    } else if (merchantStore.pin !== "" && errorPin == "") {
-      setErrorPin("");
-      error = false;
-    }
-    if (error == true) {
-      return false;
-    } else {
-      return true;
-    }
-  }
-
-  // ==============
   const keyEnter = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -704,12 +459,8 @@ const MerchantFunction = () => {
       document.removeEventListener("keydown", keyEnter);
     };
   }, [store]);
-
-  // ==============
-
   const handleSubmitMerchant = async (e) => {
     e.preventDefault();
-    // let validateMerchant = validateData();
     const currentValidate = validateFormNew(store.errors);
     const isValidate = await validate();
     console.log(isValidate);
@@ -762,9 +513,6 @@ const MerchantFunction = () => {
                 });
                 navigate(`/users/unapprove/editMerchant/${result.data.id}`);
               }
-              // else {
-              //   ToastifyAlert("Merchant not Added!", "warn");
-              // }
             });
         }
       }
@@ -777,17 +525,8 @@ const MerchantFunction = () => {
       }
     }
   };
-
-  // =====================================================
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // const data=[{name:'rinkekse',lastname:'yadav',}]
-
-    // let id='123'
-    // navigate(`/user/editcustomer/${id}`,{ state: data})
-
-    // ====================================================
     const isValidate = await validate();
     const currentValidate = validateForm(store.errors);
     if (userRadioData.toLowerCase() == "admin") {
@@ -824,7 +563,6 @@ const MerchantFunction = () => {
                   phone: "",
                   state: "",
                   errors: {
-                    // storename: "",
                     ownerName: "",
                     email: "",
                     password: "",
@@ -838,9 +576,7 @@ const MerchantFunction = () => {
         }
       }
     }
-    // ===============================================================================
   };
-
   return {
     handleChange,
     store,

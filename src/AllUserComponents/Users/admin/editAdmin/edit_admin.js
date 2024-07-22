@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import EditAdminFunctionality from "./editAdminFunctionality";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
-import AddSvg from "../../../../Assests/Dashboard/Left.svg";
 import CircularProgress from "@mui/material/CircularProgress";
 import PasswordShow from "../../../../Common/passwordShow";
 import Loader from "../../../../CommonComponents/Loader";
@@ -10,7 +9,6 @@ import SwitchToBackButton from "../../../../reuseableComponents/SwitchToBackButt
 
 export default function EditAdmin({ EditAdminId, setVisible }) {
   const handleClick = () => {
-    // setVisible("AdminView")
     navigate(-1);
   };
   const setPositionLoader = {
@@ -33,13 +31,10 @@ export default function EditAdmin({ EditAdminId, setVisible }) {
     keyEnter,
     handleBlurPassword,
   } = EditAdminFunctionality(handleClick);
-  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
-    useAuthDetails();
+  const { userTypeData } = useAuthDetails();
   const { showpPassword, jsxData } = PasswordShow();
-
   const { id } = useParams();
   const navigate = useNavigate();
-
   useEffect(() => {
     handleEditAdmin({ admin_id: id, ...userTypeData });
   }, [id]);
@@ -60,16 +55,7 @@ export default function EditAdmin({ EditAdminId, setVisible }) {
       ) : (
         <div className="box">
           <div className="box_shadow_div">
-            <SwitchToBackButton 
-              linkTo={-1}
-              title={"Edit Admin"}
-            />
-            {/* <div className="q-add-categories-section-header">
-              <span onClick={handleClick}>
-                <img src={AddSvg} alt="Add-New-Category" />
-                <span>Edit Admin</span>
-              </span>
-            </div> */}
+            <SwitchToBackButton linkTo={-1} title={"Edit Admin"} />
             <div className="pd_20">
               <div className="qvrow">
                 <div className="col-qv-6">
@@ -99,13 +85,11 @@ export default function EditAdmin({ EditAdminId, setVisible }) {
                       type="text"
                       name="email"
                       value={editData.email}
-                      // value={customerData && customerData.email}
-                      // value={store.ownerName}
                       onChange={handleChangeAdmin}
                       onBlur={() => handleBlur("email")}
                       onKeyDown={keyEnter}
                       autoComplete="off"
-                      readOnly // Set as readonly initially
+                      readOnly
                       onFocus={(e) => e.target.removeAttribute("readonly")}
                     />
                     <label className="error">{errors.email}</label>
@@ -126,7 +110,6 @@ export default function EditAdmin({ EditAdminId, setVisible }) {
                       onBlur={() => handleBlurPassword("password1")}
                       autoComplete="off"
                       onKeyPress={handleKeyPressNew}
-                      // value={store.email}
                     />
                     {jsxData(editData.password1)}
                     <label className="error">{errors.password1}</label>
@@ -134,10 +117,7 @@ export default function EditAdmin({ EditAdminId, setVisible }) {
                 </div>
                 <div className="col-qv-6">
                   <div className="input_area">
-                    <label>
-                      Phone
-                      {/* <span className="Asterisk_error">*</span> */}
-                    </label>
+                    <label>Phone</label>
                     <input
                       className=""
                       type="text"
@@ -162,7 +142,6 @@ export default function EditAdmin({ EditAdminId, setVisible }) {
                 {loader ? <CircularProgress /> : "Update"}
               </button>
               <button
-                // onClick={() => navigate("/users/admin")}
                 onClick={handleClick}
                 className="quic-btn quic-btn-cancle"
               >

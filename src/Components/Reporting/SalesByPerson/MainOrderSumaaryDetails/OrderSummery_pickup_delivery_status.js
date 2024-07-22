@@ -6,7 +6,7 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
     (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        // xmlns:xlink="http://www.w3.org/1999/xlink"
+        
         width="660"
         height="100.9"
         viewBox="0 0 660 100.9"
@@ -353,7 +353,7 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
         id="d_s_accpted"
         data-name="d s accpted"
         xmlns="http://www.w3.org/2000/svg"
-        //  xmlns:xlink="http://www.w3.org/1999/xlink"
+        
         width="480"
         height="100.9"
         viewBox="0 0 480 100.9"
@@ -622,7 +622,7 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
     (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        // xmlns:xlink="http://www.w3.org/1999/xlink"
+        
         width="660"
         height="104.808"
         viewBox="0 0 660 104.808"
@@ -991,7 +991,7 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
         id="d_s_packed"
         data-name="d s packed"
         xmlns="http://www.w3.org/2000/svg"
-        // xmlns:xlink="http://www.w3.org/1999/xlink"
+        
         width="480"
         height="104.805"
         viewBox="0 0 480 104.805"
@@ -1273,7 +1273,7 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
     (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        // xmlns:xlink="http://www.w3.org/1999/xlink"
+        
         width="660"
         height="104.87"
         viewBox="0 0 660 104.87"
@@ -1646,7 +1646,7 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
         id="d_s_ready"
         data-name="d s ready"
         xmlns="http://www.w3.org/2000/svg"
-        //  xmlns:xlink="http://www.w3.org/1999/xlink"
+        
         width="480"
         height="104.8"
         viewBox="0 0 480 104.8"
@@ -1933,7 +1933,7 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
     (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        // xmlns:xlink="http://www.w3.org/1999/xlink"
+        
         width="665.4"
         height="107.16"
         viewBox="0 0 665.4 107.16"
@@ -2301,7 +2301,7 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
         id="d_s_completed"
         data-name="d s completed"
         xmlns="http://www.w3.org/2000/svg"
-        // xmlns:xlink="http://www.w3.org/1999/xlink"
+        
         width="479.1"
         height="107.1"
         viewBox="0 0 479.1 107.1"
@@ -2587,7 +2587,7 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
     (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        // xmlns:xlink="http://www.w3.org/1999/xlink"
+        
         width="661.072"
         height="103.144"
         viewBox="0 0 661.072 103.144"
@@ -2892,7 +2892,7 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
         id="d_s_canelled"
         data-name="d s canelled"
         xmlns="http://www.w3.org/2000/svg"
-        // xmlns:xlink="http://www.w3.org/1999/xlink"
+        
         width="479.2"
         height="103.2"
         viewBox="0 0 479.2 103.2"
@@ -3142,7 +3142,7 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
     (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        // xmlns:xlink="http://www.w3.org/1999/xlink"
+        
         width="659"
         height="103.144"
         viewBox="0 0 659 103.144"
@@ -3450,7 +3450,7 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
     (
       <svg
         xmlns="http://www.w3.org/2000/svg"
-        // xmlns:xlink="http://www.w3.org/1999/xlink"
+        
         width="659"
         height="103.144"
         viewBox="0 0 659 103.144"
@@ -6360,7 +6360,7 @@ const OrderSummery_pickup_delivery_status = ({ orderSummeryData }) => {
       OrderMethod?.status.find(
         (item) =>
           orderSummeryData?.order_detail &&
-          //   orderSummeryData.order_detail.m_status == item.id,
+          
           ((orderSummeryData?.order_detail?.m_status == 6 && item.id == 2) ||
             orderSummeryData?.order_detail?.m_status == item.id)
       )

@@ -1,24 +1,17 @@
 import React, { useEffect, useState } from "react";
 import AddIcon from "../../Assests/Category/addIcon.svg";
-import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
-import EditIcon from "../../Assests/Category/editIcon.svg";
-import SortIcon from "../../Assests/Category/Sorting.svg";
-import Cookies from "js-cookie";
-import CryptoJS from "crypto-js";
+
 import {
   fetchCategoriesData,
   deleteCategory,
   updateCategoryStatus,
 } from "../../Redux/features/Categories/categoriesSlice";
 import { useSelector, useDispatch } from "react-redux";
-import ViewItemsModal from "./ViewItemsModal";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 
 import { Link } from "react-router-dom";
-import CheckBoxField from "../../reuseableComponents/CheckBoxField";
+
 import DraggableTable from "../../reuseableComponents/DraggableTable";
-import RadioSelect from "./RadioSelect";
-import { BASE_URL, SORT_CATOGRY_DATA } from "../../Constants/Config";
+
 import { useAuthDetails } from "./../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import DeleteModal from "../../reuseableComponents/DeleteModal";

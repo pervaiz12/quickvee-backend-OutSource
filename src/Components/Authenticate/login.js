@@ -1,47 +1,27 @@
-import {
-  FormControl,
-  Button,
-  TextField,
-  InputLabel,
-  InputAdornment,
-  OutlinedInput,
-  Collapse,
-  Alert,
-} from "@mui/material";
-import CircularProgress from "@mui/material/CircularProgress";
+import { FormControl, TextField, Collapse, Alert } from "@mui/material";
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import LoginLogic from "./loginLogic";
 import TextInput from "./commonField/textInput";
 import QSubmitButton from "./commonField/QSubmitButton";
-// import { Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import "../../Styles/loginAuth.css";
-// import Quickvee from "../../../Assets/LoginScreen/quickveeLogo.svg";handleSubmitFormPlace
 import Quickvee from "../../Assests/LoginScreen/quickveeLogo.svg";
-import CryptoJS from "crypto-js";
-import { useNavigate, Navigate, useLocation } from "react-router-dom";
-// import { useLocation } from 'react-router-dom';
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import IconButton from "@mui/material/IconButton";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import CloseIcon from "@mui/icons-material/Close";
 import { getAuthInvalidMessage } from "../../Redux/features/Authentication/loginSlice";
-// import { Route, useNavigate, Navigate, Outlet } from "react-router-dom";
 export default function Login() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
   const currentUrl = location.pathname;
-
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
-  const validLoginTypes = ["superadmin", "manager", "admin", "merchant"];
   const inputRefs = useRef({});
   const merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-
   const [loading, setLoading] = useState(false);
-
   const errorMessageRecord = useSelector(
     (state) => state?.loginAuthentication?.errors
   );
@@ -53,53 +33,31 @@ export default function Login() {
     handleBlur,
     setErrorMessage,
     errorMessage,
-    handleWrongPasswordError,
     keyEnter,
-    // handleKeyDown
   } = LoginLogic(setLoading);
-
-  // const handleEnterKeyPress = (event) => {
-  //   if (event.key === 'Enter') {
-
-  //     handleSubmitForm(event)
-  //   }
-  // };
-  // useEffect(() => {
-  //   document.addEventListener('keydown', handleEnterKeyPress);
-  //   return () => {
-  //     document.removeEventListener('keydown', handleEnterKeyPress);
-  //   };
-  // }, []);
   const listArray = ["superadmin", "merchant", "admin", "manager"];
-
   const greaterElement = listArray.find(
     (ele) =>
       ele ==
       (LoginGetDashBoardRecordJson?.data?.login_type ||
         LoginGetDashBoardRecordJson?.login_type)
   );
-
   useEffect(() => {
     if (currentUrl === "/login") {
       if (
         LoginGetDashBoardRecordJson?.login_type === "superadmin" &&
-        LoginGetDashBoardRecordJson?.data?.merchant_id === ""
+        merchant_id === ""
       ) {
         console.log("1");
         navigate("/users/unapprove");
       } else if (
         !!greaterElement &&
-        LoginGetDashBoardRecordJson?.data?.merchant_id === undefined &&
+        merchant_id === undefined &&
         LoginGetDashBoardRecordJson?.data?.stores.length >= 0
       ) {
         navigate("/store");
-      } else if (
-        !!greaterElement &&
-        LoginGetDashBoardRecordJson?.data?.merchant_id !== ""
-      ) {
+      } else if (!!greaterElement && merchant_id !== "") {
         navigate("/");
-      } else {
-        // console.log('333333333')
       }
     }
   }, []);
@@ -110,28 +68,14 @@ export default function Login() {
   const handleHideErrorMessage = () => {
     setErrorMessage(errorMessageRecord);
     dispatch(getAuthInvalidMessage(""));
-
-    // setErrorMessage("");
   };
-
-  console.log(LoginGetDashBoardRecordJson);
-  // ================================================
-
   const [showPassword, setShowPassword] = useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
-
   const handleTouchStart = () => {
     setShowPassword(true);
   };
-
   const handleTouchEnd = () => {
     setShowPassword(false);
   };
-
   return (
     <>
       <div className="main-authentication-component">
@@ -185,7 +129,6 @@ export default function Login() {
                       onChange={handleChangeLogin}
                       handleBlur={handleBlur}
                       onKeyDown={keyEnter}
-                      // onKeyDown={handleKeyDown}
                     />
                   </FormControl>
                   <span className="input-error">{errors.usernameError}</span>
@@ -206,7 +149,6 @@ export default function Login() {
                       className="input-field"
                       label="Password"
                       variant="outlined"
-                      // size="small"
                       autoComplete="off"
                       type={showPassword === true ? "text" : "password"}
                       onChange={handleChangeLogin}
@@ -215,11 +157,10 @@ export default function Login() {
                       inputProps={{
                         "data-field": "password",
                         autoComplete: "off",
-                        ref: (input) => (inputRefs.current["password"] = input), // Store the ref in a ref object
+                        ref: (input) => (inputRefs.current["password"] = input),
                         selectionstart: formData.password,
                       }}
                       onKeyDown={keyEnter}
-                      // onKeyDown={handleKeyDown}
                     />
                   </FormControl>
                   <span

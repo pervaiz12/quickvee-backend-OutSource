@@ -51,7 +51,7 @@ const StocktakeReportPrint = () => {
   useEffect(() => {
     if (!singleStocktakeState) {
       ToastifyAlert("Sorry, couldn't find Stocktake details!", "error");
-      // navigate(-1);
+      
       return;
     }
 
@@ -153,9 +153,9 @@ const StocktakeReportPrint = () => {
         </Grid>
         <Grid container>
           <Grid item xs={6}>
-            {/* <p className="text-lg font-semibold">Supplier: </p> */}
+            
             <p className="text-sm font-light">
-              {/* {singleStocktakeState?.vendorName} */}
+              
             </p>
           </Grid>
         </Grid>

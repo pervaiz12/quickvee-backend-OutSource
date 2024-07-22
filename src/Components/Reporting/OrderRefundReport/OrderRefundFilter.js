@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-import DownIcon from "../../../Assests/Dashboard/Down.svg";
-import { BASE_URL, ORDER_REFUND_REPORT } from "../../../Constants/Config";
+
+
+
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
@@ -17,45 +17,45 @@ const OrderRefundFilter = ({
     useAuthDetails();
   const Categoryfilter = (event) => {
     const selectedCategoryId = event.target.value;
-    // console.log(selectedCategoryId)
+    
     onCategoryChange(selectedCategoryId);
   };
 
   const reasonfilter = (event) => {
     const selectedReason = event.target.value;
-    // console.log(selectedReason)
+    
     onReasonChange(selectedReason);
   };
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
 
   const [categoryList, setCategoryList] = useState([]);
   console.log("categoryList", categoryList);
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     const { token, ...newData } = userTypeData;
-  //     let data = { merchant_id, ...newData };
-  //     try {
-  //       const response = await axios.post(
-  //         BASE_URL + ORDER_REFUND_REPORT,
-  //         data,
-  //         {
-  //           headers: {
-  //             "Content-Type": "multipart/form-data",
-  //             Authorization: `Bearer ${token}`,
-  //           },
-  //         }
-  //       );
+  
+  
 
-  //       // console.log(response.data['vendor_list']);
 
-  //       setCategoryList(response.data["category_list"]);
-  //     } catch (error) {
-  //       console.error("Error fetching category list:", error);
-  //     }
-  //   };
 
-  //   fetchData();
-  // }, []);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
   const ReasonList = [
     "All",
     "Accidental Charge",

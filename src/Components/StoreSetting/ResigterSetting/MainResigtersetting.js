@@ -1,8 +1,5 @@
 import React, { useState, useEffect } from "react";
 
-import { Box, Collapse, Alert, IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import { Input } from "@material-tailwind/react";
 import RegisterSettingFormLogic from "./RegisterSettingFormLogic";
 import TextField from "@mui/material/TextField";
 import CustomHeader from "../../../reuseableComponents/CustomHeader";
@@ -341,25 +338,7 @@ const MainResigtersetting = () => {
                         : ""}
                     </span>
                   </div>
-                  {/* <div className="q_resigter_label">
-                    <label className="text-[#6A6A6A] ml-2" htmlFor="devicename">
-                      device name
-                    </label>
-                    <div className="w-full">
-                      <Input
-                        className="q_input_resigter"
-                        name="device_name"
-                        onChange={handleRegisterSettingInput}
-                        value={values.device_name}
-                        placeholder="Enter device name"
-                      />
-                    </div>
-                    <span className="input-error">
-                      {values.errors.device_name !== ""
-                        ? values.errors.device_name
-                        : ""}
-                    </span>
-                  </div> */}
+                 
                 </div>
               </div>
             </div>
@@ -369,191 +348,10 @@ const MainResigtersetting = () => {
 
       {/* payment method */}
 
-      {/* discount promote */}
-      {/* <div className="q-resigtersetting-main-page">
-        <div className="box">
-          <div className="q-resigtersetting-top-detail-section">
-            <div>
-              <div className=""> */}
-      {/* <div className="q-resigtersetting-bottom-section">
-                  <div className="q_setting_main_Section">Discount Prompt</div>
 
-                  <div className="q_resigter flex-wrap mt-8">
-                    <ul className="custom-checkbox-list flex space-x-5">
-                      <label className="q_setting_radio_resigter">
-                        No Reason
-                        <input
-                          type="radio"
-                          name="discount_prompt"
-                          value="1"
-                          onChange={handleRegisterSettingInput}
-                          checked={values.discount_prompt === "1"}
-                        />
-                        <span className="checkmark_section"></span>
-                      </label>
 
-                      <label className="q_setting_radio_resigter">
-                        Ask Reason
-                        <input
-                          type="radio"
-                          name="discount_prompt"
-                          value="2"
-                          onChange={handleRegisterSettingInput}
-                          checked={values.discount_prompt === "2"}
-                        />
-                        <span className="checkmark_section"></span>
-                      </label>
-                    </ul>
-                  </div>
-                </div> */}
-
-      {/* <div className="q-resigtersetting-bottom-section mt-8">
-                  <div className="q_setting_main_Section">Round Invoice</div>
-
-                  <div className="q_resigter flex-wrap mt-8">
-                    <ul className="custom-checkbox-list flex space-x-5">
-                      <label className="q_setting_radio_resigter">
-                        Disabled
-                        <input
-                          type="radio"
-                          name="round_invoice"
-                          value="1"
-                          onChange={handleRegisterSettingInput}
-                          checked={values.round_invoice === "1"}
-                        />
-                        <span className="checkmark_section"></span>
-                      </label>
-
-                      <label className="q_setting_radio_resigter">
-                        $0.05
-                        <input
-                          type="radio"
-                          name="round_invoice"
-                          value="2"
-                          onChange={handleRegisterSettingInput}
-                          checked={values.round_invoice === "2"}
-                        />
-                        <span className="checkmark_section"></span>
-                      </label>
-                      <label className="q_setting_radio_resigter">
-                        $0.10
-                        <input
-                          type="radio"
-                          name="round_invoice"
-                          value="3"
-                          onChange={handleRegisterSettingInput}
-                          checked={values.round_invoice === "3"}
-                        />
-                        <span className="checkmark_section"></span>
-                      </label>
-                      <label className="q_setting_radio_resigter">
-                        $1.00
-                        <input
-                          type="radio"
-                          name="round_invoice"
-                          value="4"
-                          onChange={handleRegisterSettingInput}
-                          checked={values.round_invoice === "4"}
-                        />
-                        <span className="checkmark_section"></span>
-                      </label>
-                      <label className="q_setting_radio_resigter">
-                        Nearest $0.05
-                        <input
-                          type="radio"
-                          name="round_invoice"
-                          value="5"
-                          onChange={handleRegisterSettingInput}
-                          checked={values.round_invoice === "5"}
-                        />
-                        <span className="checkmark_section"></span>
-                      </label>
-                      <label className="q_setting_radio_resigter">
-                        Nearest $0.10
-                        <input
-                          type="radio"
-                          name="round_invoice"
-                          value="6"
-                          onChange={handleRegisterSettingInput}
-                          checked={values.round_invoice === "6"}
-                        />
-                        <span className="checkmark_section"></span>
-                      </label>
-                      <label className="q_setting_radio_resigter">
-                        Nearest $1.00
-                        <input
-                          type="radio"
-                          name="round_invoice"
-                          value="7"
-                          onChange={handleRegisterSettingInput}
-                          checked={values.round_invoice === "7"}
-                        />
-                        <span className="checkmark_section"></span>
-                      </label>
-                    </ul>
-                  </div>
-                </div> */}
-      {/* </div>
-            </div>
-          </div>
-        </div>
-      </div> */}
-      {/* quick add */}
-
-      {/* device  section */}
-
-      {/* customer loyalty promote */}
       <div className="q-resigtersetting-main-page">
-        {/* <div className="box">
-          <div className="q-resigtersetting-top-detail-section">
-            <div className="q-resigtersetting-bottom-section">
-              <div className="q_setting_main_Section">
-                Customer Loyalty Prompt
-              </div>
 
-              <div className="text-sm text-[#545454] CircularSTDBook">
-                When a loyalty card is not associated with a Customer:
-              </div>
-              <div className="q_resigter flex-wrap mt-8">
-                <ul className="custom-checkbox-list flex space-x-5">
-                  <label className="q_setting_radio_resigter">
-                    All the Sale
-                    <input
-                      type="radio"
-                      name="customer_loyalty"
-                      value="1"
-                      onChange={handleRegisterSettingInput}
-                      checked={values.customer_loyalty === "1"}
-                    />
-                    <span className="checkmark_section"></span>
-                  </label>
-                  <label className="q_setting_radio_resigter">
-                    Prompt to Create a Customer
-                    <input
-                      type="radio"
-                      name="customer_loyalty"
-                      value="2"
-                      onChange={handleRegisterSettingInput}
-                      checked={values.customer_loyalty === "2"}
-                    />
-                    <span className="checkmark_section"></span>
-                  </label>
-                  <label className="q_setting_radio_resigter">
-                    Require a Customer be Created
-                    <input
-                      type="radio"
-                      name="customer_loyalty"
-                      value="3"
-                      onChange={handleRegisterSettingInput}
-                      checked={values.customer_loyalty === "3"}
-                    />
-                    <span className="checkmark_section"></span>
-                  </label>
-                </ul>
-              </div>
-            </div>
-          </div>
-        </div> */}
         <div className="fixed-bottom">
           <div
             className="q-resigtersetting-main-page text-end  box_shadow_div"
@@ -564,7 +362,6 @@ const MainResigtersetting = () => {
               onClick={handleRegisterSettingSubmit}
               disabled={loader}
             >
-              {/* Update */}
               {loader ? (
                     <>
                       <CircularProgress color={"inherit"} width={15} size={15} />{" "}

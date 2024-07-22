@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import AddNewCategory from "../../Assests/Taxes/Left.svg";
+
 import axios from "axios";
 
 import Upload from "../../Assests/Category/upload.svg";
@@ -132,14 +132,7 @@ const EditCategory = ({ productId, seVisible }) => {
     if (file) {
       const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
       if (!allowedExtensions.exec(file.name)) {
-        // alert(
-        //   file.name +
-        //     " is not an image. Only jpeg, png, jpg files can be uploaded."
-        // );
-        // showModal(
-        //   file.name +
-        //     " is not an image. Only jpeg, png, jpg files can be uploaded."
-        // );
+
         showModal("Only jpeg, png, jpg files can be uploaded");
       } else {
         const reader = new FileReader();
@@ -255,36 +248,7 @@ const EditCategory = ({ productId, seVisible }) => {
     return null;
   };
 
-  // const handleRemoveBanner = (event, id, removeitem) => {
-  //   event.stopPropagation();
-  //   const data = {
-  //     id: id,
-  //     merchant_id,
-  //     removeitem: removeitem,
-  //     ...userTypeData,
-  //   };
-  //   const userConfirmed = window.confirm(
-  //     "Are you sure you want to delete this Category Image ?"
-  //   );
-  //   if (userConfirmed) {
-  //     if (id) {
-  //       dispatch(deleteCategorybanner(data));
-  //       ToastifyAlert("Category Image Deleted", "success");
-  //       setSelectedImage(null);
-  //       setCategory((prevValue) => ({
-  //         ...prevValue,
-  //         image: "",
-  //       }));
-  //     }
-  //   } else {
-  //     event.preventDefault();
-  //     setCategory((prevValue) => ({
-  //       ...prevValue,
-  //       image: category.image,
-  //     }));
-  //     console.log("Deletion canceled by user");
-  //   }
-  // };
+
 
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
   const [deleteCategoryIMG, setDeleteCategoryIMG] = useState(null);
@@ -408,14 +372,6 @@ const EditCategory = ({ productId, seVisible }) => {
               linkTo={"/inventory/category"}
               title={"Edit Category"}
             />
-            {/* <div className="q-add-categories-section-header">
-              <span onClick={back}>
-                <span style={myStyles}>
-                  <img src={AddNewCategory} alt="Add-New-Category" />
-                  <span>Edit Category</span>
-                </span>
-              </span>
-            </div> */}
             <div className="q-add-categories-section-middle-form">
               <div className="q-add-categories-single-input">
                 <label for="title">Title</label>

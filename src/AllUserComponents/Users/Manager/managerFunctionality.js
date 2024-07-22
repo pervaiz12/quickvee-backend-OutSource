@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { GET_MANAGER_MERCHANT, BASE_URL } from "../../../Constants/Config";
 import axios from "axios";
 import PasswordShow from "../../../Common/passwordShow";
@@ -9,48 +9,11 @@ export default function ManagerFunctionality() {
   const [showMerchant, setShowMerchant] = useState(false);
   const [showMerchantData, setShowMerchantData] = useState([]);
   const [name, setName] = useState("");
-
-  // const handleViewMerchant=(data)=>{
-  //     // console.log('hello')
-  //     const dataArray = data.split(',');
-  //     const sports=[];
-  //     // console.log(dataArray)
-
-  //      if(Array.isArray(dataArray))
-  //      {
-
-  //         dataArray.map(async(result)=>{
-  //             const data={merchant_id:result}
-
-  //             await axios.post(BASE_URL+GET_MANAGER_MERCHANT,data,{ headers: { "Content-Type": "multipart/form-data" }}).then(result=>{
-  //                 // console.log('hello')
-  //                 // console.log(result.data.message[0].name)
-
-  //                 if(result.data.status==200)
-  //                 {
-  //                     // console.log(result.data.message)
-  //                     sports.push(result.data.message[0])
-  //                     setShowMerchantData(result.data.message)
-  //                     setShowMerchant(true)
-
-  //                 }
-
-  //             })
-
-  //         })
-
-  //      }
-  //      console.log(sports)
-
-  // }
   const handleViewMerchant = async (data, name, userTypeData) => {
-    // console.log(name)
     setName(name);
     const dataArray = data.split(",");
     const sports = [];
     const { token, ...newData } = userTypeData;
-    // console.log(dataArray)
-
     if (Array.isArray(dataArray)) {
       try {
         await Promise.all(
@@ -72,8 +35,6 @@ export default function ManagerFunctionality() {
             }
           })
         );
-
-        // console.log('hello')
         setShowMerchantData(sports);
         setShowMerchant(true);
       } catch (error) {
@@ -90,7 +51,6 @@ export default function ManagerFunctionality() {
     setShowMerchant([]);
     setShowMerchant(false);
   };
-
   return {
     setShowMerchant,
     showMerchant,

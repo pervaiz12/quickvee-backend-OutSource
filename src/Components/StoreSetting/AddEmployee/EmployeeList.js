@@ -6,16 +6,15 @@ import {
 } from "../../../Redux/features/StoreSettings/AddEmployee/AddEmployeeSlice";
 import { useSelector, useDispatch } from "react-redux";
 import AddIcon from "../../../Assests/Category/addIcon.svg";
-import Permission from "../../../Assests/Employee/Permission.svg";
-import Delete from "../../../Assests/Employee/Delete.svg";
+
 import "../../../Styles/Settings/Employee.css";
-import EditEmployeeModal from "./EditEmployeeModal";
+
 import AddEmployeeFormLogic from "../../StoreSetting/AddEmployee/AddEmployeeFormLogic";
-import { Link } from "react-router-dom";
+
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { Grid } from "@mui/material";
 import DraggableTable from "../../../reuseableComponents/DraggableTable";
-import { Box, Button, Modal } from "@mui/material";
+
 import TextField from "@mui/material/TextField";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
@@ -122,25 +121,7 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
     employeeListDataState.employeelistData,
   ]);
 
-  // const handleDeleteEmployee = async (id) => {
-  //   const del_data = {
-  //       merchant_id:merchant_id,
-  //       employee_id:id,
-  //       ...userTypeData
-  //   }
-  //   const userConfirmed = window.confirm(
-  //     "Are you sure you want to delete this employee?"
-  //   );
-  //   if (userConfirmed) {
-  //     if (id) {
-  //       // dispatch(deleteEmployee(del_data));
-  //       const response = await dispatch(deleteEmployee(del_data)).unwrap();
-  //       ToastifyAlert(response.message, "success");
-  //     }
-  //   } else {
-  //     console.log("Deletion canceled by employee");
-  //   }
-  // };
+
 
   const [deleteEmployeeId, setDeleteEmployeeId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -176,65 +157,7 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
 
   return (
     <>
-      {/* <div className="box">
-       <div className="box_shadow_div">
-        <div className="q-attributes-bottom-header-sticky">
-          <div className="q-attributes-bottom-header">
-            <span>Employee</span>
-            <p className="" onClick={openModal}>
-              Add Employee <img src={AddIcon} alt="add-icon" />
-            </p>
-          </div>
-          <div className="q-attributes-bottom-attriButes-header">
-            <p className="employee-sort">Sort</p>
-            <p className="employee-name">Employee</p>
-            <p className="employee-phone">Phone</p>
-            <p className="employee-email">Email</p>
-            <p className="employee-pin">Pin</p>
-            <p className="employee-role">Role</p>
-            <p className="employee-iconall"></p>            
-          </div>
-        </div>
 
-        <div className="q-attributes-bottom-attriButes-listing">
-            {employeeList &&
-            employeeList.length >= 1 &&
-            employeeList.map((employee, index) => (
-                <div
-                    key={index}
-                    className="q-attributes-bottom-attriButes-single-attributes"
-                >
-                    <p className="employee-sort">A</p>
-                    <p className="employee-name">{employee.f_name} {employee.l_name} </p>
-                    <p className="employee-phone">{employee.phone}</p>
-                    <p className="employee-email">{employee.email}</p>
-                    <p className="employee-pin">{employee.pin}</p>     
-                    <p className="employee-role">{employee.role}</p>      
-                        <div className="qvrow" >
-                            <div className="col-qv-4">
-                                <div>
-                              
-                                    <Link to={`/store-settings/permission/${employee.id}`}>
-                                      <img className="employeeicon" alt="Permission-icon" src={Permission}/>
-                                    </Link>
-                                </div>
-                            </div>
-                            <div className="col-qv-4">
-                                <div>
-                                <EditEmployeeModal  employee={employee} states={states} employeeList={employeeList}/>
-                                </div>
-                            </div>
-                            <div className="col-qv-4">
-                                <div>
-                                    <img className="employeeicon" alt="delete-icon" src={Delete}  onClick={() => handleDeleteEmployee(employee.id) }/>
-                                </div>
-                            </div>
-                        </div> 
-                </div>
-                 ))}  
-            </div>
-        </div>
-        </div> */}
 
       <Grid container className="box_shadow_div">
         <Grid item xs={12}>
@@ -315,17 +238,7 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
               className="q-custom-modal-content modal_custom"
               style={myStyles}
             >
-              {/* <div className="">
-                <p className="q-custom-modal-header ">
-                  Add New Employee
-                  <img
-                    src={CrossIcon}
-                    alt="icon"
-                    className="ml-auto mb-4"
-                    onClick={closeModal}
-                  />
-                </p>
-              </div> */}
+            
               <div
                 className="q-add-categories-section-header"
                 style={{ justifyContent: "space-between" }}
@@ -497,14 +410,7 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
                   <div className="col-qv-4">
                     <div className="input_area">
                       <label>Wages ($/hr)</label>
-                      {/* <input
-                            type="text"
-                            name="wages"
-                            placeholder="Wages Per Hour"
-                            value={values.wages}
-                            onChange={handleAddEmployeeInput}
-                            className="q-custom-input-field"
-                        /> */}
+    
                       <TextField
                         sx={{
                           "& .MuiOutlinedInput-root": {
@@ -533,14 +439,7 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
                   <div className="col-qv-12">
                     <div className="input_area">
                       <label>Address</label>
-                      {/* <input
-                            type="text"
-                            name="address_line_1"
-                            placeholder="Address"
-                            value={values.address_line_1}
-                            onChange={handleAddEmployeeInput}
-                            className="q-custom-input-field"
-                        /> */}
+                    
                       <TextField
                         sx={{
                           "& .MuiOutlinedInput-root": {
@@ -569,14 +468,7 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
 
                   <div className="col-qv-4">
                     <div className="input_area">
-                      {/* <input
-                            type="text"
-                            name="city"
-                            placeholder="City"
-                            value={values.city}
-                            onChange={handleAddEmployeeInput}
-                            className="q-custom-input-field"
-                        /> */}
+                     
                       <TextField
                         sx={{
                           "& .MuiOutlinedInput-root": {
@@ -602,14 +494,7 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
                   </div>
                   <div className="col-qv-4">
                     <div className="input_area">
-                      {/* <input
-                            type="text"
-                            name="zipcode"
-                            placeholder="Zip"
-                            value={values.zipcode}
-                            onChange={handleAddEmployeeInput}
-                            className="q-custom-input-field"
-                        /> */}
+                     
                       <TextField
                         sx={{
                           "& .MuiOutlinedInput-root": {
@@ -638,17 +523,7 @@ const EmployeeList = ({ setVisible, setEmployeeId }) => {
                   </div>
                   <div className="col-qv-4">
                     <div className="input_area addEmployeeState">
-                      {/* <select
-                        name="state"
-                        placeholder="state"
-                        className="q-custom-input-field"
-                        onChange={handleAddEmployeeInput}
-                        >
-                        <option value="" >Select a state</option>
-                        {states && states.map((state, index) => (
-                            <option key={index} value={state.State}>{state.State}</option>
-                        ))}
-                    </select> */}
+                      
 
                       <Select
                         size="small"

@@ -3,11 +3,11 @@ import { useSelector, useDispatch } from "react-redux";
 import dayjs, { Dayjs } from "dayjs";
 import AddIcon from "../../Assests/Category/addIcon.svg";
 import AddNewCategory from "../../Assests/Taxes/Left.svg";
-import CrossIcon from "../../Assests/Dashboard/cross.svg";
+
 import caleIcon from "../../Assests/Filter/Calender.svg";
 import TimeIcon from "../../Assests/Filter/Clock.svg";
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
-import BasicTextFields from "../../reuseableComponents/TextInputField";
+
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import Grid from "@mui/material/Grid";

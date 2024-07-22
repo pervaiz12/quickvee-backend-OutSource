@@ -23,8 +23,7 @@ const EditAdminFunctionality = (handleClick) => {
     phone: "",
     password: "",
   });
-  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
-    useAuthDetails();
+  const { userTypeData } = useAuthDetails();
 
   const [errors, setErrors] = useState({
     owner_name: "",
@@ -38,8 +37,6 @@ const EditAdminFunctionality = (handleClick) => {
 
   const handleEditAdmin = async (data) => {
     const { token, ...newData } = data;
-    // console.log(newData)
-    // const dataNew={admin_id:data,newData}
     try {
       setLoaderEdit(true);
       await axios
@@ -66,11 +63,9 @@ const EditAdminFunctionality = (handleClick) => {
       }
     }
   };
-  // ============================================
   const passwordValidate = async (email, password) => {
     const { token, ...newData } = userTypeData;
     const dataNew = { email: email, password: password, ...newData };
-
     try {
       const response = await axios.post(BASE_URL + ADMIN_CHECK_USER, dataNew, {
         headers: {
@@ -78,7 +73,6 @@ const EditAdminFunctionality = (handleClick) => {
           Authorization: `Bearer ${token}`,
         },
       });
-
       return response.data;
     } catch (error) {
       if (error.status == 401 || error.response.status === 401) {
@@ -89,12 +83,9 @@ const EditAdminFunctionality = (handleClick) => {
       }
     }
   };
-
   const emailValidate = async (data) => {
     const { token, ...newData } = userTypeData;
-
     const dataNew = { email: data, ...newData };
-
     try {
       const response = await axios.post(BASE_URL + CHECK_ADMIN_EMAIL, dataNew, {
         headers: {
@@ -102,8 +93,7 @@ const EditAdminFunctionality = (handleClick) => {
           Authorization: `Bearer ${token}`,
         },
       });
-
-      return response.data; // Assuming this data indicates whether email is valid or not
+      return response.data;
     } catch (error) {
       if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
@@ -120,8 +110,6 @@ const EditAdminFunctionality = (handleClick) => {
         try {
           let result = await emailValidate(editData.email);
           if (result == true) {
-            // console.log(editData.email);
-            // console.log(ExitEmail);
             if (ExitEmail !== editData.email) {
               setErrors((prev) => ({
                 ...prev,
@@ -137,7 +125,7 @@ const EditAdminFunctionality = (handleClick) => {
             console.log("nooo");
             setErrors((prev) => ({
               ...prev,
-              email: "", // Clear the error if email does not exist
+              email: "",
             }));
           }
         } catch (error) {
@@ -173,7 +161,6 @@ const EditAdminFunctionality = (handleClick) => {
       }
     }
   };
-  // ============================================
   const handleChangeAdmin = (e) => {
     const { name, value } = e.target;
     let updatedErrors = { ...errors };
@@ -181,7 +168,6 @@ const EditAdminFunctionality = (handleClick) => {
     console.log(editData);
 
     if (name === "owner_name") {
-      // updatedErrors[name] = value === "" ? `please fill the ${name} field` : "";
       updatedErrors[name] =
         value.trim() === ""
           ? `Owner Name is required`
@@ -210,40 +196,28 @@ const EditAdminFunctionality = (handleClick) => {
       } else {
         updatedErrors[name] = "";
       }
-      //   updatedErrors['phone'] = value === "" ? `please fill the ${name} field` : '';
     }
 
     setErrors(updatedErrors);
-    // const trimmedValue = value.replace(/^\s+|\s+$/g, '')
     setEditData((prevCustomerData) => ({
       ...prevCustomerData,
-      // [name]: trimmedValue,
       [name]: value,
     }));
-
-    // setEditData({...editData,[name]:value})
   };
   const handleKeyPress = (e) => {
-    // Allow only numeric characters (key codes 48 to 57) and backspace (key code 8)
     if ((e.charCode < 48 || e.charCode > 57) && e.charCode !== 8) {
       e.preventDefault();
     }
   };
-
-  // ===========
   const validateForm = async () => {
     let error = false;
     let updatedErrors = { ...errors };
-
-    // Validate Owner Name
     if (!editData.owner_name) {
       updatedErrors.owner_name = "Owner Name is required";
       error = true;
     } else {
       updatedErrors.owner_name = "";
     }
-
-    // Validate Email
     if (!editData.email) {
       updatedErrors.email = "Email is required";
       error = true;
@@ -268,8 +242,6 @@ const EditAdminFunctionality = (handleClick) => {
         error = true;
       }
     }
-
-    // Validate Password
     if (!editData.password1) {
       updatedErrors.password1 = "";
     } else {
@@ -292,101 +264,10 @@ const EditAdminFunctionality = (handleClick) => {
         error = true;
       }
     }
-
-    // Set errors and return validation status
     setErrors(updatedErrors);
     console.log(error);
     return !error;
   };
-
-  // ===========
-  // const validateForm = async () => {
-  //   let error = false;
-  //   let updatedErrors = { ...errors };
-  //   if (editData.owner_name == "") {
-  //     updatedErrors.owner_name = "Owner Name is required";
-  //     error = true;
-  //   }
-  //   if (editData.email == "") {
-  //     updatedErrors.email = "Email is required";
-  //     error = true;
-  //   } else {
-  //     try {
-  //       if (errors.email == "") {
-  //         setLoader(true);
-  //         const emailValid = await emailValidate(editData.email);
-  //         if (emailValid == true) {
-  //           setLoader(false);
-  //           if (ExitEmail !== editData.email) {
-  //             updatedErrors.email = "Email already exists";
-  //             error = false;
-  //           } else {
-  //             updatedErrors.email = "";
-  //             error = true;
-  //           }
-  //         } else {
-  //           updatedErrors.email = "";
-  //           error = true;
-  //         }
-  //       } else {
-  //         error = false;
-  //       }
-  //     } catch (error) {
-  //       console.error("Error validating email:", error);
-  //       error = false;
-  //     }
-  //   }
-  //   if (editData.password1 == "") {
-  //     updatedErrors.password1 = "";
-  //     error = false;
-  //   } else {
-  //     try {
-  //       if (
-  //         errors.password1 == "" &&
-  //         editData.email !== "" &&
-  //         editData.password1 !== ""
-  //       ) {
-  //         setLoader(true);
-  //         const emailValid = await passwordValidate(
-  //           editData.email,
-  //           editData.password1
-  //         );
-
-  //         if (emailValid == true) {
-  //           console.log("111111");
-  //           setLoader(false);
-  //           updatedErrors.password1 = "Password already exists";
-  //           error = false;
-  //         } else {
-  //           console.log("222222");
-  //           updatedErrors.password1 = "";
-  //           error = true;
-  //         }
-  //       } else {
-  //         console.log("333333333");
-  //         error = false;
-  //       }
-  //     } catch (error) {
-  //       error = false;
-  //     }
-  //   }
-
-  //   // if (editData.phone == "") {
-  //   //   updatedErrors.phone = "Please fill the phone field";
-  //   //   error = true;
-  //   // }
-
-  //   // setErrors({ ...errors, updatedErrors });
-  //   setErrors(updatedErrors);
-  //   // console.log(errors);
-  //   if (error == true) {
-  //     return false;
-  //   } else {
-  //     return true;
-  //   }
-  // };
-  // --------------------------------------
-  // ==============
   const keyEnter = (event) => {
     if (event.key === "Enter") {
       event.preventDefault();
@@ -399,21 +280,15 @@ const EditAdminFunctionality = (handleClick) => {
       }
     }
   };
-
   useEffect(() => {
     document.addEventListener("keydown", keyEnter);
     return () => {
       document.removeEventListener("keydown", keyEnter);
     };
   }, [editData]);
-
-  // ==============
-  // --------------------------------------
-
   const handleSubmitAdmin = async (e) => {
     e.preventDefault();
     const { token, ...newData } = userTypeData;
-    // console.log(newData)
     const data = {
       admin_id: editData.id,
       name: editData.owner_name.trim(),
@@ -447,7 +322,6 @@ const EditAdminFunctionality = (handleClick) => {
               });
               setExitEmail("");
               ToastifyAlert("Updated Successfully", "success");
-              // handleClick();
               navigate("/users/admin");
             });
         } catch (error) {

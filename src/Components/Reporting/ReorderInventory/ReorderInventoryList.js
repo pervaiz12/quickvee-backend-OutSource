@@ -42,7 +42,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
   },
   "&:last-child td, &:last-child th": {
-    // backgroundColor: "#F5F5F5",
+    
   },
   "& td, & th": {
     border: "none",
@@ -50,7 +50,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const ReorderInventoryList = (props) => {
-  // console.log(props)
+  
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
@@ -69,7 +69,7 @@ const ReorderInventoryList = (props) => {
       let data = {
         merchant_id,
         ...userTypeData,
-        // merchant_id: "JOS0948CA",
+        
       };
       if (data) {
         await dispatch(fetchReorderInventoryData(data)).unwrap();
@@ -206,43 +206,43 @@ const ReorderInventoryList = (props) => {
           )}
         </Grid>
       </Grid>
-      {/* <div className="box">
-        <div className="q-daily-report-bottom-report-header">
-          <p className="report-sort">Item Name</p>
-          <p className="report-sort">Variant</p>
-          <p className="report-sort">Category</p>
-          <p className="report-sort">Cost of Vendor</p>
-          <p className="report-sort">Instock</p>
-          <p className="report-sort">Item Price</p>
-          <p className="report-sort">Reorder Level</p>
-          <p className="report-sort">Reorder Quantity</p>
-        </div>
-      </div>
+      
+      
 
-      {allReorderInventoryData && allReorderInventoryData.length >= 1 ? (
-        allReorderInventoryData.map((InvData, index) => (
-          <div className="box">
-            <div
-              key={index}
-              className="q-category-bottom-categories-listing"
-              style={{ borderRadius: "unset" }}
-            >
-              <div className="q-category-bottom-categories-single-category">
-                <p className="report-title">{InvData.item_name}</p>
-                <p className="report-title">{InvData.variant}</p>
-                <p className="report-title">{InvData.category}</p>
-                <p className="report-title">{InvData.cost_vendor}</p>
-                <p className="report-title">{InvData.instock}</p>
-                <p className="report-title">{InvData.item_price}</p>
-                <p className="report-title">{InvData.reorder_level}</p>
-                <p className="report-title">{InvData.reorder_qty}</p>
-              </div>
-            </div>
-          </div>
-        ))
-      ) : (
-        <div className="empty-div">No data available</div>
-      )} */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      
     </>
   );
 };

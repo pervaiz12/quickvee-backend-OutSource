@@ -4,11 +4,10 @@ import {
   getLoyaltyCount,
 } from "../../Redux/features/LoyaltyProgram/loyaltyprogramSlice";
 import { useSelector, useDispatch } from "react-redux";
-import $ from "jquery";
+
 import "datatables.net-dt/css/jquery.dataTables.min.css";
 
-import Left from "../../Assests/Taxes/Left.svg";
-import Right from "../../Assests/Taxes/Right.svg";
+
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { Grid } from "@mui/material";
 import { styled } from "@mui/material/styles";

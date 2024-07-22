@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import DownIcon from "../../../Assests/Dashboard/Down.svg";
+
 import { BASE_URL, EMPLOYEE_LIST } from "../../../Constants/Config";
 import axios from "axios";
 import { Grid } from "@mui/material";

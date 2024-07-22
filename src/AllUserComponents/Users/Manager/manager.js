@@ -59,8 +59,6 @@ export default function Manager() {
   const managerList = useSelector((state) => state.managerRecord);
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
-
-  // ========================= DEFIENED STATES ========================================
   const [managerTable, setManagerTable] = useState([]);
   const [searchRecord, setSearchRecord] = useState("");
   const [rowsPerPage, setRowsPerPage] = useState(10);
@@ -68,10 +66,7 @@ export default function Manager() {
   const [totalCount, setTotalCount] = useState(0);
   const [sortOrder, setSortOrder] = useState("asc");
   const debouncedValue = useDebounce(searchRecord);
-
-  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
-    useAuthDetails();
-
+  const { userTypeData } = useAuthDetails();
   const getManagerData = async (data) => {
     try {
       await dispatch(ManagerRecord(data)).unwrap();
@@ -94,8 +89,6 @@ export default function Manager() {
     };
     getManagerData(data);
   }, [currentPage, debouncedValue, rowsPerPage]);
-
-  // only when user searches to update the total count
   const fetchManagerRecordCount = async () => {
     try {
       await dispatch(
@@ -117,8 +110,6 @@ export default function Manager() {
   useEffect(() => {
     fetchManagerRecordCount();
   }, [debouncedValue]);
-
-  // on load setting count of Verified Merchant list & on every change...
   useEffect(() => {
     if (!managerList.loading && managerList) {
       setTotalCount(managerList?.managerRecordsCount);

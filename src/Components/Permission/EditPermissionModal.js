@@ -5,16 +5,15 @@ import { fetchPermissionData } from "../../Redux/features/Permission/PermissionS
 import { useDispatch } from "react-redux";
 
 import axios from "axios";
-import { Form } from "react-bootstrap";
+import CrossIcon from "../../Assests/Dashboard/cross.svg";
 import EditIcon from "../../Assests/Category/editIcon.svg";
-import LeftIcon from "../../Assests/Taxes/Left.svg";
-import { CodeSharp } from "@mui/icons-material";
+
 import CircularProgress from "@mui/material/CircularProgress";
 import { BASE_URL, ADD_UPDATE_PERMISSION } from "../../Constants/Config";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import { useAuthDetails } from "../../Common/cookiesHelper";
-import { toast } from "react-toastify";
+
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import PasswordShow from "./../../Common/passwordShow";
 const EditPermissionModal = ({ selected }) => {
@@ -265,13 +264,6 @@ const EditPermissionModal = ({ selected }) => {
         aria-describedby="modal-modal-description"
       >
         <Box className="view-category-item-modal" style={myStyles}>
-          {/* <div className='view-category-item-modal-header'> */}
-          {/* <div className="q-add-categories-section-header">
-            <span onClick={() => handleClose()} style={width}>
-              <img src={LeftIcon} alt="Add-New-Category" />
-              <span>EDIT SUB PERMISSION</span>
-            </span>
-          </div> */}
 
           <div
             class="q-add-categories-section-header text-[18px]"
@@ -285,7 +277,7 @@ const EditPermissionModal = ({ selected }) => {
             </span>
             <div>
               <img
-                src="/static/media/cross.02a286778a0b1b3162ac5e3858cdc5f1.svg"
+                src={CrossIcon}
                 alt="icon"
                 class="  quic-btn-cancle w-6 h-6"
                 style={{ cursor: "pointer" }}
@@ -332,78 +324,7 @@ const EditPermissionModal = ({ selected }) => {
                       <span className="error-message">{errors.permission}</span>
                     )}
                   </Grid>
-                  {/* <div className="col-qv-6">
-                    <div className="input_area">
-                      <select
-                        name="permission"
-                        placeholder="Permission"
-                        className="q-custom-input-field"
-                        value={permission.permission || ""}
-                        onChange={handlePermissionChange}
-                      >
-                        <option value="">Select</option>
-                        <option
-                          value="Register"
-                          selected={permission.permission == "Register"}
-                        >
-                          Register
-                        </option>
-                        <option
-                          value="Store Stats"
-                          selected={permission.permission == "Store Stats"}
-                        >
-                          Store Stats
-                        </option>
-                        <option
-                          value="Users"
-                          selected={permission.permission == "Users"}
-                        >
-                          Users
-                        </option>
-                        <option
-                          value="Inventory"
-                          selected={permission.permission == "Inventory"}
-                        >
-                          Inventory
-                        </option>
-                        <option
-                          value="Customers"
-                          selected={permission.permission == "Customers"}
-                        >
-                          Customers
-                        </option>
-                        <option
-                          value="Coupons"
-                          selected={permission.permission == "Coupons"}
-                        >
-                          Coupons
-                        </option>
-                        <option
-                          value="Setup"
-                          selected={permission.permission == "Setup"}
-                        >
-                          Setup
-                        </option>
-                        <option
-                          value="Dispatch Center"
-                          selected={permission.permission == "Dispatch Center"}
-                        >
-                          Dispatch Center
-                        </option>
-                        <option
-                          value="Attendance"
-                          selected={permission.permission == "Attendance"}
-                        >
-                          Attendance
-                        </option>
-                      </select>
-                    </div>
-                    {errorMessage && (
-                      <span className="error-message" style={{ color: "red" }}>
-                        {errorMessage}
-                      </span>
-                    )}
-                  </div> */}
+
                 </div>
               </div>
 

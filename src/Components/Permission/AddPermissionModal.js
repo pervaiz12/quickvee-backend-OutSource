@@ -2,17 +2,15 @@ import React, { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
 
 import { Box, Button, Grid, Modal } from "@mui/material";
-import AddIcon from "../../Assests/Category/addIcon.svg";
 import CrossIcon from "../../Assests/Dashboard/cross.svg";
 import { BASE_URL, ADD_UPDATE_PERMISSION } from "../../Constants/Config";
-import EditIcon from "../../Assests/Category/editIcon.svg";
-import LeftIcon from "../../Assests/Taxes/Left.svg";
+
 import { fetchPermissionData } from "../../Redux/features/Permission/PermissionSlice";
 import axios from "axios";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 import { useAuthDetails } from "../../Common/cookiesHelper";
-import { toast } from "react-toastify";
+
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import CircularProgress from "@mui/material/CircularProgress";
 import PasswordShow from "./../../Common/passwordShow";
@@ -231,7 +229,7 @@ const AddPermissionModal = () => {
             </span>
             <div>
               <img
-                src="/static/media/cross.02a286778a0b1b3162ac5e3858cdc5f1.svg"
+                src={CrossIcon}
                 alt="icon"
                 class="  quic-btn-cancle w-6 h-6"
                 style={{ cursor: "pointer" }}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState } from "react";
 import { GET_ADMIN_MERCHANT, BASE_URL } from "../../../Constants/Config";
 import axios from "axios";
 import PasswordShow from "../../../Common/passwordShow";
@@ -41,11 +41,8 @@ export default function AdminFunctionality() {
     }
   };
   const handleCloseAdminModel = () => {
-    // setShowMerchant([])
     setShowAdmin(false);
   };
-  // setShowMerchant,showMerchant,,showMerchantData
-
   return {
     handleCloseAdminModel,
     handleViewAdmin,

@@ -3,9 +3,9 @@ import Switch from "@mui/material/Switch";
 import AddIcon from "../../../Assests/Filter/DeleteSetup.svg";
 import DeleteIcon from "../../../Assests/Filter/AddSetup.svg";
 import CustomItem from "./CustomItem";
-import ClockIcon from "../../../Assests/Filter/Clock.svg";
+
 import { useDispatch, useSelector } from "react-redux";
-import { set } from "date-fns";
+
 import { Grid } from "@mui/material";
 
 import { styled } from "@mui/material/styles";
@@ -13,7 +13,7 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
+
 import TableRow from "@mui/material/TableRow";
 import AlertModal from "../../../reuseableComponents/AlertModal";
 

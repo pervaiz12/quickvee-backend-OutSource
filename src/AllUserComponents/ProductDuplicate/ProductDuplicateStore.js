@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Box, Collapse, Alert, IconButton, Grid } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
+
 import Select from "react-select";
-import DownIcon from "../../Assests/Dashboard/Down.svg";
+
 import CrossIcons from "../../Assests/MultipleUserIcon/crossIcons.svg";
 import axios from "axios";
 import { fetchMerchantsList } from "../../Redux/features/ExportInventory/ExportInventorySlice";
@@ -352,54 +352,7 @@ const ProductDuplicateStore = () => {
 
       if (userInput === captchaText) {
         setConfirmModalOpen(true);
-        // const data = {
-        //   store_name_from: storefrom,
-        //   store_name_to: storeto,
-        //   product_id: productValues,
-        //   upc_check: isUpcChecked,
-        //   ...userTypeDataNew,
-        // };
 
-        // try {
-        //   const response = await axios.post(
-        //     BASE_URL + PRODUCT_INVENTORY_DUPLICATE,
-        //     data,
-        //     {
-        //       headers: {
-        //         "Content-Type": "multipart/form-data",
-        //         Authorization: `Bearer ${token}`,
-        //       },
-        //     }
-        //   );
-
-        //   if (response.data.status == true) {
-        //     const temp_excludedproducts = response.data.existing_products;
-        //     const commaSeparatedString = temp_excludedproducts.join(", ");
-        //     setexcludedproducts(commaSeparatedString);
-        //     setsubmitmessage("Products Copied successfully ");
-        //     setUserInput("")
-        //     setSelectedStorefrom("-- Select Store --");
-        //     setSelectedStoreto("-- Select Store --");
-        //     // ToastifyAlert("Duplicate Inventory Success!", "success");
-        //     ToastifyAlert("Added Successfully", "success");
-        //     setStorefrom(null);
-        //     setStoreto(null);
-        //     setProductOptions([
-        //       { value: "Select Product", label: "Select Product" },
-        //     ]);
-        //     setselectedProducts([]);
-        //     setIsSelectClicked(false);
-        //   } else if (response.data.status === "Failed") {
-        //     ToastifyAlert("Duplicate Inventory Failed!", "error");
-        //     setsubmitmessage("Something Went Wrong");
-        //   }
-        // } catch (error) {
-        //   // console.log('33 catch err');
-        //   handleCoockieExpire()
-        //   getUnAutherisedTokenMessage()
-        //   ToastifyAlert("Error!", "error");
-        //   return new Error(error);
-        // }
       } else {
         showModal("Please Fill Captcha Correctly!");
         const canvas = canvasRef.current;
@@ -504,73 +457,7 @@ const ProductDuplicateStore = () => {
           </li>
         </div>
         <div className=" box_shadow_div_order">
-          {/* <div className="alert">
-            {submitmessage && (
-              <Box
-                sx={{
-                  width: "100%",
-                  position: "relative",
-                  top: "2rem",
-                  marginLeft: "auto",
-                }}
-                className={submitmessage ? "form-submit-info-message" : ""}
-              >
-                <Collapse in={openAlert}>
-                  <Alert
-                    severity="info"
-                    action={
-                      <IconButton
-                        className="info-close-icon"
-                        aria-label="close"
-                        color="info"
-                        size="small"
-                        onClick={goToTop}
-                      >
-                        <CloseIcon />
-                      </IconButton>
-                    }
-                    sx={{ mb: 2 }}
-                  >
-                    {submitmessage}
-                  </Alert>
-                </Collapse>
-              </Box>
-            )}
-          </div> */}
 
-          {/* <div className="alert">
-            {excludedproducts && (
-              <Box
-                sx={{
-                  width: "100%",
-                  position: "relative",
-                  top: "2rem",
-                  marginLeft: "auto",
-                }}
-                className={excludedproducts ? "form-submit-info-message" : ""}
-              >
-                <Collapse in={openAlert}>
-                  <Alert
-                    severity="info"
-                    action={
-                      <IconButton
-                        className="info-close-icon"
-                        aria-label="close"
-                        color="info"
-                        size="small"
-                        onClick={goToTop}
-                      >
-                        <CloseIcon />
-                      </IconButton>
-                    }
-                    sx={{ mb: 2 }}
-                  >
-                    Excluded products : {excludedproducts}
-                  </Alert>
-                </Collapse>
-              </Box>
-            )}
-          </div> */}
 
           <div className="q-add-categories-section-header">
             <span>

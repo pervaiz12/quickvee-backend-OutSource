@@ -2,9 +2,7 @@ import React from "react";
 import { useState, useEffect, useRef } from "react";
 import { useDispatch } from "react-redux";
 import { Box, Collapse, Alert, IconButton, Grid } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import DownIcon from "../../Assests/Dashboard/Down.svg";
-import ReCAPTCHA from "./ReCAPTCHA";
+
 import { fetchMerchantsList } from "../../Redux/features/ExportInventory/ExportInventorySlice";
 import { useSelector } from "react-redux";
 import InventoryExportLogic from "./InventoryDuplicatLogic";

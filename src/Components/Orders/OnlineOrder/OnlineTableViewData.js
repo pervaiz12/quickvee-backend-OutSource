@@ -1,7 +1,6 @@
 import "../../../Styles/TableOrderPage.css";
 import React, { useEffect, useState } from "react";
 import CrossIcon from "../../../Assests/Dashboard/cross.svg";
-// import DefaultPagination from "../onlineStoreOrder/DefaultPagination";
 
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -21,9 +20,6 @@ import { useSelector, useDispatch } from "react-redux";
 // import DownIcon from "../../../Assests/Dashboard/Down.svg";
 import axios from "axios";
 import { BASE_URL, CLOSE_ORDER_COLLECT_CASH } from "../../../Constants/Config";
-import DownIcon from "../../../Assests/Dashboard/Down.svg";
-
-import UpArrow from "../../../Assests/Dashboard/Up.svg";
 
 import $ from "jquery";
 import "datatables.net-dt/css/jquery.dataTables.min.css";
@@ -31,7 +27,7 @@ import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import Pagination from "../../../AllUserComponents/Users/UnverifeDetails/Pagination";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import { useNavigate, Link } from "react-router-dom";
-import EditCashModel from "./EditCashModel";
+
 import { CurrencyInputHelperFun } from "../../../Constants/utils";
 import useDebounce from "../../../hooks/useDebouncs";
 import AskConform from "../../../reuseableComponents/AskConform";
@@ -313,158 +309,6 @@ const OnlineTableViewData = (props) => {
         : "Credit Card";
     // return string.charAt(0).toUpperCase() + string.slice(1);
   }
-  // console.log(allOnlineStoreOrder);
-  // useEffect(() => {
-  //   const modifiedData = Object.entries(allOnlineStoreOrder).map(
-  //     ([key, data], i) => {
-  //       let status = "";
-  //       if (props?.OrderTypeData == "Failed") {
-  //         if (data.is_tried == "0") {
-  //           status = "Incomplete order";
-  //         } else {
-  //           status = "Failed payment";
-  //         }
-  //       } else {
-  //         if (data.payment_id === "Cash") {
-  //           if (data.m_status === "4") {
-  //             status = "Cash-Paid";
-  //           } else {
-  //             status = "Cash-Pending";
-  //           }
-  //         } else {
-  //           status = "Online-Paid";
-  //         }
-  //       }
-
-  //       let PayStatus = "";
-  //       let OrderStatus = "";
-
-  //       if (data.m_status == 5) {
-  //         OrderStatus = "Cancelled";
-  //       } else if (data.payment_id == "Cash") {
-  //         OrderStatus = "Cash";
-  //       } else {
-  //         OrderStatus = "Online-Paid";
-  //       }
-
-  //       if (props?.OrderTypeData == "Closed") {
-  //         if (
-  //           OrderStatus == "Cash" &&
-  //           parseFloat(data?.cash_collected)?.toFixed(2) !=
-  //             parseFloat(data?.amt)?.toFixed(2)
-  //         ) {
-  //           PayStatus = `<a href="#">
-  //           <img class="edit_center" order-id="${data.order_id}" order-amt="${data.amt}" src="/static/media/editIcon.4dccb72a9324ddcac62b9a41d0a042db.svg" alt="Edit">
-  //           </a>`;
-  //         } else if (OrderStatus == "Cancelled") {
-  //           PayStatus = "Cancelled";
-  //         } else {
-  //           PayStatus = "Paid";
-  //         }
-  //       } else if (props?.OrderTypeData == "New") {
-  //         let cancelOption = "";
-  //         if (data.payment_id === "Cash") {
-  //           cancelOption = `<option value="5" ${
-  //             data.m_status == "5" ? `selected` : ""
-  //           }>Cancel</option>`;
-  //         }
-  //         if (data.order_method == "pickup") {
-  //           PayStatus = `<select class="custom-selecttable w-52 cursor-pointer" data-order-id="${
-  //             data.order_id
-  //           }">
-  //             <option value="1" ${
-  //               data.m_status == "1" ? `selected` : ""
-  //             }>Accepted</option>
-  //             <option value="2" ${
-  //               data.m_status == "2" ? `selected` : ""
-  //             }>Packing</option>
-  //             <option value="3" ${
-  //               data.m_status == "3" ? `selected` : ""
-  //             }>Ready</option>
-  //             <option value="4" ${
-  //               data.m_status == "4" ? `selected` : ""
-  //             }>Completed</option>
-  //             ${cancelOption}
-  //           </select>`;
-  //         } else {
-  //           PayStatus = `<select class="custom-selecttable w-52 cursor-pointer" data-order-id="${
-  //             data.order_id
-  //           }">
-  //             <option value="1" ${
-  //               data.m_status == "1" ? `selected` : ""
-  //             }>Accepted</option>
-  //             <option value="2" ${
-  //               data.m_status == "2" ? `selected` : ""
-  //             }>Packing</option>
-  //             <option value="6" ${
-  //               data.m_status == "6" ? `selected` : ""
-  //             }>Ready</option>
-  //             <option value="3" ${
-  //               data.m_status == "3" ? `selected` : ""
-  //             }>Out for Delivery</option>
-  //             <option value="4" ${
-  //               data.m_status == "4" ? `selected` : ""
-  //             }>Delivered</option>
-  //             ${cancelOption}
-  //           </select>`;
-  //         }
-  //       }
-
-  //       return {
-  //         Customer: `<span class="text-[#000000] order_method">${
-  //           data.deliver_name || ""
-  //         }</span><br>${data.delivery_phn || ""}`,
-  //         Order: `<span class="text-[#000000] order_method">${
-  //           data.order_id || ""
-  //         }</span><br><span class="text-[#818181]">${
-  //           data.merchant_time || ""
-  //         }</span><br><span class="text-[#818181] order_method">${
-  //           data.order_method || ""
-  //         }</span>`,
-  //         Amount: `${
-  //           "$" + data.amt || ""
-  //         }<br><span class="text-[#1EC26B]">${capitalizeFirstLetter(
-  //           data.order_status || ""
-  //         )}</span>`,
-  //         Status: status,
-  //         OrderStatus: PayStatus,
-  //         View: `<ahref="/store-reporting/order-summary/${data.order_id}" class="view_details_order">View Details</ahref=>`,
-  //       };
-  //     }
-  //   );
-
-  //   const table = $("#OnlineStoreTable").DataTable({
-  //     data: modifiedData,
-  //     columns: [
-  //       { title: "Customer", data: "Customer", orderable: false },
-  //       { title: "Order", data: "Order", orderable: false },
-  //       { title: "Amount", data: "Amount", orderable: false },
-  //       { title: "Status", data: "Status", orderable: false },
-  //       { title: "Order Status", data: "OrderStatus", orderable: false },
-  //       { title: " ", data: "View", orderable: false },
-  //     ],
-  //     destroy: true,
-  //     searching: true,
-  //     dom: "<'row 'l<'col-sm-12'b>><'row'<'col-sm-7 mt-2'p><'col-sm-5'>>",
-  //     lengthMenu: [10, 20, 50],
-  //     lengthChange: true,
-  //     ordering: false,
-  //     language: {
-  //       paginate: {
-  //         previous: "<",
-  //         next: ">",
-  //       },
-  //     },
-  //   });
-
-  //   $("#searchInput").on("input", function () {
-  //     table.search(this.value).draw();
-  //   });
-
-  //   return () => {
-  //     table.destroy();
-  //   };
-  // }, [allOnlineStoreOrder, props]);
 
   const [deleteCategoryId, setDeleteCategoryId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -577,29 +421,6 @@ const OnlineTableViewData = (props) => {
               // Order not found, return previous state unchanged
               return prevState;
             }
-            // const index = prevState.findIndex(
-            //   (order) => order.order_id === deleteCategoryId.orderId
-            // );
-            // // console.log("setAllOnlineStoreOrders",index)
-
-            // if (index !== -1) {
-            //   // Create a copy of the order object
-            //   const updatedOrder = { ...prevState[index] };
-
-            //   // Update the m_status field with the new value
-            //   updatedOrder.m_status = deleteCategoryId.value;
-
-            //   // Create a new array with updated order object
-            //   const updatedOrders = [...prevState];
-            //   updatedOrders[index] = updatedOrder;
-            //   ToastifyAlert(res.payload, "success");
-
-            //   return updatedOrders;
-            // } else {
-            //   ToastifyAlert(res.payload, "error");
-            //   // Order not found, return previous state unchanged
-            //   return prevState;
-            // }
           });
         } else {
           // Handle other status codes or errors if needed
@@ -921,11 +742,6 @@ const OnlineTableViewData = (props) => {
           </Grid>
         </Grid>
       </Grid>
-      {/* <div className="q-attributes-bottom-detail-section">
-        <div className="q-attributes-bottom-header-sticky">
-          <table className="" id="OnlineStoreTable"></table>
-        </div>
-      </div> */}
 
       {showPriceModal && (
         <div className="q-custom-modal-container" id="addtributes_">

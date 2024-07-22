@@ -40,7 +40,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
   },
   "&:last-child td, &:last-child th": {
-    // backgroundColor: "#F5F5F5",
+   
   },
   "& td, & th": {
     border: "none",
@@ -48,7 +48,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const NewItemCreatedBetweenList = (props) => {
-  // console.log(props)
+
   const dispatch = useDispatch();
   const {
     LoginGetDashBoardRecordJson,
@@ -92,7 +92,7 @@ const NewItemCreatedBetweenList = (props) => {
 
   useEffect(() => {
     if (!AllNewItemDataState.loading && AllNewItemDataState.NewItemData) {
-      // console.log(AllNewItemDataState.NewItemData)
+      
       setallNewItemData(AllNewItemDataState.NewItemData);
     } else {
       setallNewItemData("");
@@ -103,14 +103,14 @@ const NewItemCreatedBetweenList = (props) => {
     AllNewItemDataState.NewItemData,
   ]);
 
-  // const formatDate = (dateString) => {
-  //   const options = { day: "2-digit", month: "short", year: "numeric" };
-  //   const formattedDate = new Date(dateString).toLocaleDateString(
-  //     "en-US",
-  //     options
-  //   );
-  //   return formattedDate;
-  // };
+  
+  
+
+
+
+
+
+
   const formatDate = (dateString) => {
     const [day, month, year] = dateString.split("-");
     const monthNames = [
@@ -245,35 +245,26 @@ const NewItemCreatedBetweenList = (props) => {
           )}
         </Grid>
       </Grid>
-      {/* <div className="box">
-        <div
-          className="q-daily-report-bottom-report-header"
-          style={{ borderRadius: "unset" }}
-        >
-          <p className="report-sort">Date</p>
-          <p className="report-sort">Category</p>
-          <p className="report-sort">Item name</p>
-          <p className="report-sort">Cost</p>
-        </div>
-      </div>
-      {allNewItemData && allNewItemData.length >= 1 ? (
-        allNewItemData.map((ItemData, index) => (
-          <div className="box">
-            <div key={index} className="q-category-bottom-categories-listing">
-              <div className="q-category-bottom-categories-single-category">
-                <p className="report-title">{ItemData.created_on}</p>
-                <p className="report-title">{ItemData.category}</p>
-                <p className="report-title">{ItemData.item_name}</p>
-                <p className="report-title">{ItemData.price}</p>
-              </div>
-            </div>
-          </div>
-        ))
-      ) : (
-        <div className="box">
-          <div className="empty-div">No data available</div>
-        </div>
-      )} */}
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </>
   );
 };

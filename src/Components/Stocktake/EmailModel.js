@@ -95,7 +95,7 @@ const EmailModel = ({singleStocktakeState}) => {
         >
           <button
             onClick={() => {
-              // handleCreateStocktake("1");
+              
             }}
             className="quic-btn quic-btn-save w-32"
           >
