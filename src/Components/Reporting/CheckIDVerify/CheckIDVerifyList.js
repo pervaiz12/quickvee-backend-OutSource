@@ -5,7 +5,7 @@ import { fetchCheckIDVerifyData } from "../../../Redux/features/Reports/CheckIDV
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 
-import { Grid } from "@mui/material";
+
 
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -110,7 +110,7 @@ const CheckIDVerifyList = (props) => {
       !AllCheckIDVerifyDataState.loading &&
       AllCheckIDVerifyDataState.CheckIDVerifyData
     ) {
-      // console.log(AllCheckIDVerifyDataState.CheckIDVerifyData);
+      
       setallCheckIDVerifyData(AllCheckIDVerifyDataState.CheckIDVerifyData);
     } else {
       setallCheckIDVerifyData("");
@@ -199,14 +199,14 @@ const CheckIDVerifyList = (props) => {
                         <StyledTableCell>
                           <Link
                             to={`/order/store-reporting/order-summary/${merchant_id}/${CheckData.order_id}`}
-                            // onClick={() => handleSummeryPage(row.order_id)}
+                            
                             target="_blank"
                           >
                             <p className="text-[#0A64F9]">
                               {CheckData?.order_id}
                             </p>
                           </Link>
-                          {/* <p className="">{CheckData.order_id}</p> */}
+                          
                         </StyledTableCell>
                         <StyledTableCell>
                           <p className="">{CheckData.name}</p>
@@ -223,45 +223,45 @@ const CheckIDVerifyList = (props) => {
                 </div>
               </div>
             )}
-            {/* <div className="box">
-            <div className="q-daily-report-bottom-report-header">
-              <p className="report-sort">Date</p>
-              <p className="report-sort">Time</p>
-              <p className="report-sort">Employee</p>
-              <p className="report-sort">Order ID</p>
-              <p className="report-sort">Item Name</p>
-            </div>
-          </div>
+            
 
-          {allCheckIDVerifyData && allCheckIDVerifyData.length >= 1 ? (
-            allCheckIDVerifyData.map((CheckData, index) => (
-              <div className="box">
-                <div
-                  key={index}
-                  className="q-category-bottom-categories-listing"
-                  style={{ borderRadius: "unset" }}
-                >
-                  <div className="q-category-bottom-categories-single-category">
-                    <p className="report-title">
-                      {formatDate(CheckData.merchant_date)}
-                    </p>
-                    <p className="report-title">
-                      {formatTime(CheckData.merchant_time)}
-                    </p>
-                    <p className="report-title">{CheckData.full_name}</p>
-                    <p className="report-title">{CheckData.order_id}</p>
-                    <p className="report-title">{CheckData.name}</p>
-                  </div>
-                </div>
-              </div>
-            ))
-          ) : (
-            <>
-              <div style={{ margin: 0 }} className="box_shadow_div">
-                <p className="px-5 py-4">No Data Found</p>
-              </div>
-            </>
-          )} */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            
           </>
         )}
       </div>

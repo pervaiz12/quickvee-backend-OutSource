@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import axios from "axios";
 import PasswordShow from "../../../Common/passwordShow";
-import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
+
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 export default function InventoryLogic() {
   const dispatch = useDispatch();
@@ -82,43 +82,43 @@ export default function InventoryLogic() {
   }, []);
 
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-  // search button click function ----
-  // const handleBlur = async (name) => {
-  //   try {
-  //     const { token, ...newData } = userTypeData;
-  //     setLoader(true);
-  //     let packet = {
-  //       ...newData,
-  //       name: inventory,
-  //       merchant_id,
-  //       offset: 0,
-  //       limit,
-  //       format: "json",
-  //       listing_type: listingType,
-  //     };
-  //     if (name == "product") {
-  //       let response = await axios.post(BASE_URL + INVENTORY_LIST, packet, {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //           Authorization: `Bearer ${userTypeData?.token}`,
-  //         },
-  //       });
-  //       setLoadMoreData(false);
-  //       if (response?.data.length > 0) {
-  //         setLoader(false);
-  //         setsearchProduct(response?.data);
-  //       } else {
-  //         setLoader(false);
-  //         setsearchProduct([]);
-  //         setMessage("No record found");
-  //       }
-  //     }
-  //   } catch (error) {
-  //     getUnAutherisedTokenMessage();
-  //     handleCoockieExpire();
-  //   }
-  // };
-  // search button click function ----
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const getAllCategoryList = async () => {
     try {
@@ -132,8 +132,8 @@ export default function InventoryLogic() {
       });
       if (response) {
         setCategory(response?.data?.result);
-        //   setSelectedCategory(response?.data?.result[0].title);
-        //   setSelectCategoryId(response?.data?.result[0].id);
+        
+        
       }
     } catch (error) {
       if (error.status == 401 || error.response.status === 401) {
@@ -202,7 +202,7 @@ export default function InventoryLogic() {
     try {
       setLoadMoreData(true);
       const packet = {
-        // id: selectCategoryId,
+       
         cat_id: selectCategoryId,
         offset,
         limit,
@@ -212,7 +212,7 @@ export default function InventoryLogic() {
         ...userTypeData,
       };
       const { token, ...newData } = packet;
-      // setLoader(true);
+      
       let response = await axios.post(BASE_URL + INVENTORY_LIST, newData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -222,7 +222,7 @@ export default function InventoryLogic() {
 
       if (response?.data.length) {
         setLoader(false);
-        //   console.log(response?.data);
+        
         setsearchProduct([...searchProduct, ...response?.data]);
         if (selectCategoryId == "all" && response?.data.length !== 10) {
           setEndOfDataList(true);
@@ -262,7 +262,7 @@ export default function InventoryLogic() {
   return {
     handleChangeInventory,
     inventory,
-    // handleBlur,
+    
     category,
     handleOptionClick,
     selectedCategory,

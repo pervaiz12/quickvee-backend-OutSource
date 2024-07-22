@@ -29,7 +29,7 @@ const SalesReportMain = () => {
       <div className="q-attributes-main-page">
         <SalesReportList
           selectedDateRange={selectedDateRange}
-          // VendorIdData={VendorIdData}
+          
         />
       </div>
     </>

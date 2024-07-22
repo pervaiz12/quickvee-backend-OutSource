@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import DateRange from "../../Orders/InstoreOrder/DateRange";
+
 import PaymentMethodList from "./PaymentMethodList";
-import DownIcon from "../../../Assests/Dashboard/Down.svg";
+
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import { Grid } from "@mui/material";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";

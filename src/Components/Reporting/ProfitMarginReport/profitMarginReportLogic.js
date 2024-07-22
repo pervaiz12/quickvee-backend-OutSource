@@ -10,7 +10,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import axios from "axios";
 import PasswordShow from "../../../Common/passwordShow";
-import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
+
 export default function ProfitMarginReportLogic() {
   const dispatch = useDispatch();
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -46,15 +46,15 @@ export default function ProfitMarginReportLogic() {
           format: "json",
           listing_type: listingType,
         };
-        // let packet = {
-        //   ...newData,
-        //   name: value,
-        //   merchant_id,
-        //   offset: 0,
-        //   limit,
-        //   format: "json",
-        //   listing_type: listingType,
-        // };
+       
+        
+
+
+
+
+
+
+
         setLoader(true);
         let response = await axios.post(BASE_URL + INVENTORY_LIST, packet, {
           headers: {
@@ -94,38 +94,38 @@ export default function ProfitMarginReportLogic() {
   }, []);
 
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-  // search button click function ----
-  // const handleBlur = async (name) => {
-  //   // const { token, ...newData } = userTypeData;
-  //   try {
-  //     setLoader(true);
-  //     let packet = { ...newData, name: inventory, merchant_id ,offset: 0,limit,format: "json",listing_type: listingType};
-  //     if (name == "product") {
-  //       let response = await axios.post(BASE_URL + INVENTORY_LIST, packet, {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //           Authorization: `Bearer ${userTypeData?.token}`,
-  //         },
-  //       });
-  //       setLoadMoreData(false);
-  //       if (response?.data.length > 0) {
-  //         setLoader(false);
-  //         setsearchProduct(response?.data);
-  //       } else {
-  //         setLoader(false);
-  //         setsearchProduct([]);
-  //         setMessage("No record found");
-  //       }
-  //     }
-  //   } catch (error) {
-  //     getUnAutherisedTokenMessage();
-  //     handleCoockieExpire();
-  //   }
-  // };
-  // search button click function ----
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const getAllCategoryList = async () => {
-    // const { token, ...newData } = userTypeData;
+    
     try {
       const packet = { merchant_id, ...newData };
       let response = await axios.post(BASE_URL + LIST_ALL_CATEGORIES, packet, {
@@ -136,8 +136,8 @@ export default function ProfitMarginReportLogic() {
       });
       if (response) {
         setCategory(response?.data?.result);
-        //   setSelectedCategory(response?.data?.result[0].title);
-        //   setSelectCategoryId(response?.data?.result[0].id);
+        
+        
       }
     } catch (error) {
       if (error.status == 401 || error.response.status === 401) {
@@ -173,7 +173,7 @@ export default function ProfitMarginReportLogic() {
           Authorization: `Bearer ${token}`,
         },
       });
-      // console.log(response?.data.length);
+      
       if (response?.data.length) {
         setLoader(false);
         setsearchProduct(response?.data);
@@ -203,13 +203,13 @@ export default function ProfitMarginReportLogic() {
   const handleLoadMore = async () => {
     try {
       const packet = {
-        // id: selectCategoryId,
+        
         cat_id: selectCategoryId,
         offset,
         limit,
         merchant_id,
         format: "json",
-        // format: "json",
+        
         listing_type: listingType,
         ...userTypeData,
       };
@@ -252,7 +252,7 @@ export default function ProfitMarginReportLogic() {
   return {
     handleChangeInventory,
     inventory,
-    // handleBlur,
+    
     category,
     handleOptionClick,
     selectedCategory,

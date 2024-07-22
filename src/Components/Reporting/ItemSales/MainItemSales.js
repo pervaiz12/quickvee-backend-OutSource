@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ItemSalesFilter from "./ItemSalesFilter";
-import DateRange from "../../Orders/InstoreOrder/DateRange";
+
 import NetSalesFilter from "./NetSalesFilter";
 import ItemSalesDetails from "./ItemSalesDetails";
 import DateRangeComponent from "../../../reuseableComponents/DateRangeComponent";
@@ -31,7 +31,7 @@ const MainItemSales = () => {
     <>
       <ItemSalesFilter onFilterDataChange={handleFilterDataChange} setSearchRecord={setSearchRecord} debouncedValue={debouncedValue} />
         { !debouncedValue ? ( <DateRangeComponent onDateRangeChange={handleDateRangeChange} />):("")}
-      {/* <DateRangeComponent onDateRangeChange={handleDateRangeChange} /> */}
+      
       <NetSalesFilter />
 
       <ItemSalesDetails

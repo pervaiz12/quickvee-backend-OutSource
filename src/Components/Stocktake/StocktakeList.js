@@ -50,7 +50,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
   },
   "&:last-child td, &:last-child th": {
-    // backgroundColor: "#F5F5F5",
+    
   },
   "& td, & th": {
     border: "none",
@@ -58,10 +58,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 const StocktakeList = ({
   setVisible,
-  // singleStocktakeState,
-  // getSingleStocktakeData,
-  // setSingleStocktakeState,
-  // setStocktakeId
+  
 }) => {
   const navigate = useNavigate();
   const [searchId, setSearchId] = useState(""); // State to track search ID
@@ -74,7 +71,7 @@ const StocktakeList = ({
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   const merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
-  // console.log("StocktakeList", StocktakeListReducerState);
+  
   const [StocktakeList, setStocktakeList] = useState([]);
   const dispatch = useDispatch();
 
@@ -152,7 +149,7 @@ const StocktakeList = ({
   const handleStocktakeIdClick = async (id) => {
     setStocltakeId(id);
     setLoader(true);
-    // const result = await getSingleStocktakeData(id);
+    
     const result = await dispatch(
       fetchSingleStocktakeData({ merchant_id, id, userTypeData })
     );
@@ -161,17 +158,17 @@ const StocktakeList = ({
     console.log(loader);
     if (result) {
       if (result?.payload?.result?.status === "0") {
-        // setVisible("StocktakeReoport");
+       
         navigate(`/stocktake/completed/${id}`);
         setLoader(false);
       }
       if (result?.payload?.result?.status === "1") {
-        // setVisible("AddNewStocktake");
+        
         navigate(`/stocktake/UpdateStocktake/${id}`);
         setLoader(false);
       }
       if (result?.payload?.result?.status === "2") {
-        // setVisible("StocktakeReoport");
+        
         navigate(`/stocktake/void/${id}`);
         setLoader(false);
       }
@@ -246,9 +243,9 @@ const StocktakeList = ({
               <div className="q-category-bottom-header">
                 <p
                   onClick={() => {
-                    // setVisible("AddNewStocktake");
+                    
                     navigate("/stocktake/AddStocktake");
-                    // setSingleStocktakeState();
+                    
                   }}
                 >
                   Add New Stocktake <img src={AddIcon} alt="add-icon" />{" "}

@@ -41,7 +41,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
   },
   "&:last-child td, &:last-child th": {
-    // backgroundColor: "#F5F5F5",
+    
   },
   "& td, & th": {
     border: "none",
@@ -168,11 +168,11 @@ const CouponReportList = (props) => {
                           </p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          {/* <p className="report-title">
-                            {couponData.coupon_type === "Discount"
-                              ? "Direct Discount By App"
-                              : couponData.coupon_type}
-                          </p> */}
+                          
+                            
+                              
+                              
+                          
                           <p>{couponData.couponName}</p>
                         </StyledTableCell>
                         <StyledTableCell>
@@ -195,36 +195,35 @@ const CouponReportList = (props) => {
           )}
         </Grid>
       </Grid>
-      {/* <div className="box">
-        <div className="q-daily-report-bottom-report-header">
-          <p className="report-title">Date</p>
-          <p className="report-title">Coupon Type</p>
-          <p className="report-title">Total Coupon Used</p>
-   
-        </div>
-        {CouponReportData.length > 0 ? (
-          CouponReportData.map((couponData, index) => (
-            <div className="q-category-bottom-categories-listing" key={index}>
-              <div className="q-category-bottom-categories-single-category">
-                <p className="report-title">{couponData.date}</p>
-                <p className="report-title">
-                  {couponData.coupon_type === "Discount"
-                    ? "Direct Discount By App"
-                    : couponData.coupon_type}
-                </p>
-                <p className="report-title">{couponData.total_coupons_used}</p>
-     
-              </div>
-            </div>
-          ))
-        ) : (
-          <div className="q-category-bottom-categories-listing">
-            <div className="q-category-bottom-categories-single-category">
-              <p className="report-title">No data found</p>
-            </div>
-          </div>
-        )}
-      </div> */}
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </>
   );
 };

@@ -57,12 +57,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 const AddNewStocktake = ({
   setVisible,
-  // singleStocktakeState,
-  // setSingleStocktakeState,
-  // gotDatafromPo,
+  
   getSingleStocktakeData,
-  // merchant_id,
-  // setDataFromPo,
+  
 }) => {
   const { LoginGetDashBoardRecordJson, userTypeData } = useAuthDetails();
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
@@ -187,8 +184,7 @@ const AddNewStocktake = ({
       }))
       .filter((prod) => {
         const productFound = stocktake_items?.find((product) => {
-          // console.log("product.product_id", product.variant_id);
-          // console.log("prod.variantId", prod.variantId);
+          
           const a =
             (product?.variant &&
               product.variant_id === prod.variantId &&
@@ -256,8 +252,7 @@ const AddNewStocktake = ({
   };
 
   const handleDeleteProduct = (index) => {
-    // const newList = stocktake_items.filter((_, i) => i !== index);
-    // setProductList(newList);
+    
     setDeleteCategoryId(index);
     setDeleteModalOpen(true);
   };
@@ -317,20 +312,9 @@ const AddNewStocktake = ({
         ...deletedSingleStocktakeState,
         formData,
       ]);
-      // const response = await axios.post(
-      //   BASE_URL + "Stocktake_react_api/delete_stocktake_item",
-      //   { ...formData, ...otherUserData },
-      //   {
-      //     headers: {
-      //       "Content-Type": "multipart/form-data",
-      //       Authorization: `Bearer ${token}`,
-      //     },
-      //   }
-      // );
-
-      // if (response.data.status) {
+      
       const newList = stocktake_items.filter((_, i) => i !== deleteCategoryId);
-      // console.log(stocktake_items.length);
+     
       setProductList(newList);
       setSingleStocktakeState({
         ...singleStocktakeState,
@@ -339,21 +323,16 @@ const AddNewStocktake = ({
         total_discrepancy: total_discrepancy,
         total_discrepancy_cost: total_discrepancy_cost,
       });
-      // setProductList(newList);
+     
       ToastifyAlert("Deleted Successfully", "success");
-      // } else {
-      //   console.log("Product Not available!");
-      //   ToastifyAlert(response.data.message, "error");
-      // }
+     
     } else {
-      // If the item is newly added, just remove it from the list
+      
 
       const newList = stocktake_items.filter((_, i) => i !== deleteCategoryId);
       setProductList(newList);
     }
-    // } catch (e) {
-    //   console.log("e: ", e);
-    // }
+    
 
     setDeleteCategoryId(null);
     setDeleteModalOpen(false);
@@ -406,21 +385,9 @@ const AddNewStocktake = ({
     });
   };
   const handleOnChangeSelectDropDown = async (productId, variantId, index) => {
-    // const productExists = stocktake_items.some((item) =>
-    //   item.variant !== ""
-    //     ? item.variant_id === variantId
-    //     : item.product_id === productId
-    // );
-
-    // if (productExists) {
-    //   showModal("Product is already added.");
-
-    //   return;
-    // }
+    
     try {
-      // const formData = new FormData();
-      // formData.append("merchant_id", merchant_id);
-      // formData.append("id", productId);
+      
       const { token, ...otherData } = userTypeData;
       const formData = {
         merchant_id: merchant_id,
@@ -474,7 +441,7 @@ const AddNewStocktake = ({
               price: product?.price || "",
               new_qty: "",
               discrepancy: "0",
-              // variant_id: "",
+              
             };
 
             return updatedList;
@@ -598,7 +565,7 @@ const AddNewStocktake = ({
         };
 
         setLoader(true);
-        // const { token, ...otherUserData } = userTypeData;
+        
         const response = await axios.post(
           BASE_URL + CREATE_UPDATE_STOCKTAKE,
           { ...stocktakeData, ...otherUserData },
@@ -620,7 +587,7 @@ const AddNewStocktake = ({
         console.error("Error creating stocktake:", error);
         setLoader(false);
       }
-      // setVisible("StocktakeList");
+      
       navigate(-1);
     }
   };
@@ -687,11 +654,7 @@ const AddNewStocktake = ({
       e.preventDefault();
     }
   };
-  // console.log("stocktake_items", stocktake_items);
-  // console.log(
-  //   "singleStocktakeState?.stocktake_item",
-  //   singleStocktakeState?.stocktake_item
-  // );
+  
   return (
     <>
       <Grid container className="box_shadow_div">
@@ -802,16 +765,9 @@ const AddNewStocktake = ({
 
                           <StyledTableCell sx={{ verticalAlign: "top" }}>
                             {
-                            // singleStocktakeState?.
+                            
                             stocktake_items.length === 1 
-                            //   &&
-                            // (singleStocktakeState?.stocktake_item[0]?.variant
-                            //   .length > 0
-                            //   ? singleStocktakeState?.stocktake_item[0]
-                            //       ?.variant_id === product?.variant_id
-                            //   : singleStocktakeState?.stocktake_item[0]
-                            //       ?.product_id ===
-                            //     product?.product_id) 
+                            
                                 ? null : (
                               <img
                                 src={DeleteIcon}
@@ -851,10 +807,10 @@ const AddNewStocktake = ({
                 <button
                   className="quic-btn quic-btn-save w-32"
                   onClick={handleAddProduct}
-                  //   disabled={loader}
+                  
                 >
                   Add
-                  {/* {loader ? <CircularProgress /> : "Update"} */}
+                  
                 </button>
               </Grid>
             </Grid>
@@ -900,7 +856,7 @@ const AddNewStocktake = ({
                     "Create"
                   )}
 
-                  {/* {loader ? <CircularProgress /> : "Update"} */}
+                  
                 </button>
               </Grid>
             </Grid>

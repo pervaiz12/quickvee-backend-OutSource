@@ -40,7 +40,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
   },
   "&:last-child td, &:last-child th": {
-    // backgroundColor: "#F5F5F5",
+   
   },
   "& td, & th": {
     border: "none",
@@ -132,15 +132,15 @@ const TipReportList = (props) => {
                     tipReportData.map((tipData, index) => (
                       <>
                         <StyledTableRow key={index}>
-                          {/* <StyledTableCell>
-                            <p>{tipData.employee_id}</p>
-                          </StyledTableCell> */}
-                          {/* <StyledTableCell>
-                            <p>{tipData.f_name}</p>
-                          </StyledTableCell>
-                          <StyledTableCell>
-                            <p>{tipData.l_name}</p>
-                          </StyledTableCell> */}
+                          
+                          
+
+
+
+
+
+
+
                            <StyledTableCell>
                         {tipData?.f_name || tipData?.l_name ? (
                           <p>{tipData?.f_name || ""} {tipData?.l_name || ""}</p>
@@ -159,8 +159,8 @@ const TipReportList = (props) => {
                     ))}
                   {tipReportData.length > 0 && (
                     <StyledTableRow>
-                      {/* <StyledTableCell></StyledTableCell> */}
-                      {/* <StyledTableCell></StyledTableCell> */}
+                      
+                      
                       <StyledTableCell>
                         <p style={{ color: "#0A64F9" }}>Grand Total</p>
                       </StyledTableCell>
@@ -187,46 +187,46 @@ const TipReportList = (props) => {
           )}
         </Grid>
       </Grid>
-      {/* <div className="box">
-        <div className="q-daily-report-bottom-report-header">
-          <p className="report-title">Employee ID</p>
-          <p className="report-title">First Name</p>
-          <p className="report-title">Last Name</p>
-          <p className="report-title">Net Tip</p>
-   
-        </div>
-        {tipReportData.length > 0 ? (
-          tipReportData.map((tipData, index) => (
-            <div className="q-category-bottom-categories-listing" key={index}>
-              <div className="q-category-bottom-categories-single-category">
-                <p className="report-title">{tipData.employee_id}</p>
-                <p className="report-title">{tipData.f_name}</p>
-                <p className="report-title">{tipData.l_name}</p>
-                <p className="report-title">
-                  ${parseFloat(tipData.net_tip).toFixed(2)}
-                </p>
-           
-              </div>
-            </div>
-          ))
-        ) : (
-          <div className="q-category-bottom-categories-listing">
-            <div className="q-category-bottom-categories-single-category">
-              <p className="report-title">No data found</p>
-            </div>
-          </div>
-        )}
-        <div className="q-category-bottom-categories-listing">
-          <div className="q-category-bottom-categories-single-category">
-            <p className="report-title"></p>
-            <p className="report-title"></p>
-  
-            <p className="report-title">Grand Total:</p>
-            <p className="report-title">${totalNetTip.toFixed(2)}</p>
-          </div>
-        </div>
-        <br></br>
-      </div> */}
+     
+     
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
     </>
   );
 };

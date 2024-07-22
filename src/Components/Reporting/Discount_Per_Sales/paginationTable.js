@@ -7,11 +7,11 @@ import TableCell, { tableCellClasses } from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
+
 import { Link } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
-import Loader from "../../../CommonComponents/Loader";
+
 import { priceFormate } from "../../../hooks/priceFormate";
 import SortIconW from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
@@ -64,15 +64,15 @@ export default function DashboardTables(props) {
   const navigate = useNavigate();
   const [totalRecord, setTotalRecord] = React.useState("");
 
-  // const handleSummeryPage = (order_id) => {
-  //   navigate("/store-reporting/order-summary", {
-  //     state: { merchantId: props.merchant_id, order_id: order_id },
-  //   });
-  // };
+  
+  
+
+
+
   useEffect(() => {
     console.log(props.EmployeeFilterData);
     if (props.EmployeeFilterData) {
-      // console.log("yes");
+     
       getDiscountRecord();
     }
   }, [props.EmployeeFilterData]);
@@ -133,13 +133,13 @@ export default function DashboardTables(props) {
           </Grid>
         </Grid>
       ) : (
-        // <>
-        //   <SkeletonTable columns={columns} />
-        // </>
+        
+        
+
 
         <TableContainer>
           {
-            // console.log(props.EmployeeFilterData?.report_data?.length) props.EmployeeFilterData.length !== 0
+            
             Object.keys(props.EmployeeFilterData).length !== 0 ? (
               Object.entries(props.EmployeeFilterData).map(
                 ([key, result], index) => {
@@ -156,19 +156,19 @@ export default function DashboardTables(props) {
                               <StyledTable>
                                 <TableHead>
                                   <StyledTableCell>
-                                    {/* <button
-                                  className="flex items-center"
-                                  onClick={() =>
-                                    props.sortByItemName("str", "fullName")
-                                  }
-                                > */}
+                                  
+
+
+
+
+
                                     <p>Employee</p>
-                                    {/* <img
-                                    src={SortIconW}
-                                    alt=""
-                                    className="pl-1"
-                                  />
-                                </button> */}
+                                  
+
+
+
+
+
                                   </StyledTableCell>
                                   <StyledTableCell>
                                     <button
@@ -272,15 +272,15 @@ export default function DashboardTables(props) {
                                       />
                                     </button>
                                   </StyledTableCell>
-                                  {/* <StyledTableCell align="center">
-                                Order Details
-                              </StyledTableCell> */}
+                                 
+                                 
+
                                 </TableHead>
                                 <TableBody>
                                   {result.map((item, innerIndex) => (
                                     <StyledTableRow key={innerIndex}>
                                       <StyledTableCell>
-                                        {/* {item?.f_name + " " + item?.l_name} */}
+                                  
                                         <p>{item.fullName}</p>
                                       </StyledTableCell>
                                       <StyledTableCell>
@@ -306,7 +306,7 @@ export default function DashboardTables(props) {
                                       <StyledTableCell>
                                         <Link
                                           to={`/order/store-reporting/order-summary/${props.merchant_id}/${item.order_id}`}
-                                          // onClick={() => handleSummeryPage(row.order_id)}
+                                          
                                           target="_blank"
                                         >
                                           <p className="text-[#0A64F9]">
@@ -317,15 +317,15 @@ export default function DashboardTables(props) {
                                       <StyledTableCell>
                                         {formatDateTime(item?.merchant_time)}
                                       </StyledTableCell>
-                                      {/* <StyledTableCell align="center">
-                                    <Link
-                                      to={`/store-reporting/order-summary/${props.merchant_id}/${item.order_id}`}
-                                      // onClick={() => handleSummeryPage(row.order_id)}
-                                      target="_blank"
-                                    >
-                                      Order Summery
-                                    </Link>
-                                  </StyledTableCell> */}
+                                      
+                                      
+
+
+
+
+
+
+
                                     </StyledTableRow>
                                   ))}
                                   <StyledTableRow>

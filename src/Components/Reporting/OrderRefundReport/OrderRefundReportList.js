@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import axios from "axios";
+
 import { useSelector, useDispatch } from "react-redux";
 import { fetchOrderRefundData } from "../../../Redux/features/Reports/OrderRefundReport/OrderRefundReportSlice";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
@@ -42,7 +42,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
   },
   "&:last-child td, &:last-child th": {
-    // backgroundColor: "#F5F5F5",
+    
   },
   "& td, & th": {
     border: "none",
@@ -50,7 +50,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 const OrderRefundReportList = (props) => {
-  // console.log(props)
+  
   const [sortOrder, setSortOrder] = useState("asc");
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
@@ -59,7 +59,7 @@ const OrderRefundReportList = (props) => {
     PasswordShow();
   const [allOrderData, setOrderData] = useState([]);
   const AllOrderRefundData = useSelector((state) => state.OrderRefundList);
-  // console.log(AllOrderRefundData)
+  
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   useEffect(() => {
     getOrderRefundData();
@@ -67,8 +67,7 @@ const OrderRefundReportList = (props) => {
   const getOrderRefundData = async () => {
     try {
       if (props && props.selectedDateRange) {
-        // const StartDateData = props.selectedDateRange.startDate.toISOString().split('T')[0];
-        // const EndDateData = props.selectedDateRange.endDate.toISOString().split('T')[0];
+        
 
         const StartDateData = props.selectedDateRange.start_date;
         const EndDateData = props.selectedDateRange.end_date;
@@ -77,7 +76,7 @@ const OrderRefundReportList = (props) => {
           merchant_id,
           start_date: StartDateData,
           end_date: EndDateData,
-          // category_id: props.categoryId,
+          
           reason_name: props.reasonTitle === "All" ? "all" : props.reasonTitle,
           ...userTypeData,
         };
@@ -300,97 +299,97 @@ const OrderRefundReportList = (props) => {
           )}
         </Grid>
       </Grid>
-      {/* 
-      {isAllOrderDataValid && (
-        <div className="box">
-          <div className="q-daily-report-bottom-report-header">
-            <p className="report-sort">Order ID</p>
-            <p className="report-sort">Date</p>
-            <p className="report-sort">Employee</p>
-            <p className="report-sort">Reason</p>
-            <p className="report-sort">Debit/Credit</p>
-            <p className="report-sort">Cash</p>
-            <p className="report-sort">LP</p>
-            <p className="report-sort">SC</p>
-            <p className="report-sort">NCA</p>
-            <p className="report-sort">TIP</p>
-            <p className="report-sort">Total</p>
-       
-          </div>
-        </div>
-      )} */}
+     
+     
 
-      {/* {isAllOrderDataValid ? (
-        <>
-          {allOrderData.map((CheckData, index) => {
-            return (
-              <div className="box">
-                <div
-                  key={index}
-                  className="q-category-bottom-categories-listing"
-                >
-                  <div className="q-category-bottom-categories-single-category">
-                    <p className="report-title">{CheckData.order_id}</p>
-                    <p className="report-title">
-                      {dateFormattedFunction(CheckData?.created_at)}
-                    </p>
-                    <p className="report-title">{CheckData.employee}</p>
-                    <p className="report-title">{CheckData.reason}</p>
-                    <p className="report-title">
-                      ${formatAmount(CheckData.debit_amt)}
-                    </p>
-                    <p className="report-title">
-                      ${formatAmount(CheckData.cash_amt)}
-                    </p>
-                    <p className="report-title">
-                      ${formatAmount(CheckData.loyalty_point_amt)}
-                    </p>
-                    <p className="report-title">
-                      ${formatAmount(CheckData.store_credit_amt)}
-                    </p>
-                    <p className="report-title">
-                      ${formatAmount(CheckData.nca_amt)}
-                    </p>
-                    <p className="report-title">
-                      ${formatAmount(CheckData.tip_amt)}
-                    </p>
-                    <p className="report-title">
-                      ${formatAmount(CheckData.amount)}
-                    </p>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
 
-        
-          <div className="box">
-            <div className="q-category-bottom-categories-listing">
-              <div className="q-category-bottom-categories-single-category">
-                <p className="report-title"></p>
-                <p className="report-title"></p>
-                <p className="report-title">Grand Total</p>
-                
-                <p className="report-title">
-                  $
-                  {parseFloat(
-                    calculateGrandTotal(allOrderData, "amount")
-                  ).toLocaleString(undefined, {
-                    minimumFractionDigits: 2,
-                    maximumFractionDigits: 2,
-                  })}
-                </p>
-              </div>
-            </div>
-          </div>
-        </>
-      ) : (
-        <div className="box">
-          <div className="q-category-bottom-categories-single-category">
-            <p>No data found</p>
-          </div>
-        </div>
-      )} */}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+     
     </>
   );
 };

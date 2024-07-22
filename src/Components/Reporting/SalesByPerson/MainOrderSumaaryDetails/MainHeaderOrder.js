@@ -5,14 +5,14 @@ import ContactIcon from "../../../../Assests/Dashboard/contact.png";
 import LoactionIcone from "../../../../Assests/Dashboard/location.png";
 
 const MainHeaderOrder = ({ MerchantDetailsData, ShowOrderMethod }) => {
-  // console.log(MerchantDetailsData);
+ 
 
   return (
     <div className="content_order_main bg-[#ffffff]">
       <div className="q_order_bg_img_section">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mx-auto sm:mx-auto md:mx-auto lg:mx-auto xl:mx-auto">
           <div className="q_order_images_details">
-            {/* <img src={OrderImg} alt="Order Image" className="w-full h-auto" /> */}
+            
           </div>
 
           {MerchantDetailsData && MerchantDetailsData.length >= 1 ? (

@@ -9,7 +9,7 @@ export default function InventoryList() {
   const {
     handleChangeInventory,
     inventory,
-    // handleBlur,
+
     category,
     handleOptionClick,
     selectedCategory,
@@ -35,9 +35,9 @@ export default function InventoryList() {
                 Search Product
               </label>
 
-              {/* <div className=" qvrowmain my-1">
-                      <label htmlFor="email">Email Address</label>
-                    </div> */}
+              
+              
+
               <BasicTextFields
                 sx={{ pt: 0.5 }}
                 type={"text"}
@@ -46,21 +46,21 @@ export default function InventoryList() {
                 placeholder="Search Product"
                 onChangeFun={handleChangeInventory}
                 required={"required"}
-                // onBlurFunction={() => handleBlur("product")}
+                
               />
             </Grid>
-            {/* <Grid item xs={12} sm={6} md={4}>
-              <label className="q-details-page-label" htmlFor="limitFilter">
-                Limit
-              </label>
-              <SelectDropDown
-                // listItem={limitList.map((item) => ({ title: item }))}
-                title={"title"}
-                dropdownFor={"limit"}
-                // selectedOption={selectedLimitType}
-                // onClickHandler={handleOptionClick}
-              />
-            </Grid> */}
+            
+            
+
+
+
+
+
+
+
+
+
+            
             <Grid item xs={12} sm={6} md={4}>
               <label className="q-details-page-label" htmlFor="limitFilter">
                 Category

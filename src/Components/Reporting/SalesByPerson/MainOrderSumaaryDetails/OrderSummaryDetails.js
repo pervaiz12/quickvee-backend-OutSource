@@ -13,7 +13,7 @@ const OrderSummaryDetails = () => {
     "/store-reporting/order-summary/",
     ""
   );
-  // console.log(order_id);
+
   const dispatch = useDispatch();
   useEffect(() => {
     let data = {
@@ -36,7 +36,7 @@ const OrderSummaryDetails = () => {
       !AllOrderSummaryDataState.loading &&
       AllOrderSummaryDataState.OrderData
     ) {
-      // console.log(AllOrderSummaryDataState.OrderData)
+      
       setOrderSummaryData(AllOrderSummaryDataState.OrderData);
       setMerchantDetailsData(
         AllOrderSummaryDataState.OrderData.merchant_details

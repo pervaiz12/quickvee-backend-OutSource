@@ -1,198 +1,198 @@
-// import React from "react";
-// import AddressIcon from "../../../../Assests/Defaults/Address.svg";
-// import CallIcon from "../../../../Assests/Defaults/Phone.svg";
-// import MilesIcon from "../../../../Assests/Defaults/Miles.svg";
 
-// const PaymentCalDetails = ({ OrderSummaryData }) => {
-//   // console.log(OrderSummaryData);
-//   const orderDetail = OrderSummaryData.order_detail || {};
-//   const grandTotal =
-//     (parseFloat(orderDetail.amt) || 0) -
-//     (parseFloat(orderDetail.refund_amount) || 0);
 
-//   return (
-//     <>
-//       {/* payment details */}
-//       <div className="payment-details-container">
-//         <div className="payment-header flex justify-between">
-//           <div className="payment-header-text">
-//             <div className="text-[20px] font-normal opacity-100 text-black admin_medium">
-//               Payment Detail1111
-//             </div>
-//           </div>
-//           {OrderSummaryData &&
-//             OrderSummaryData.order_detail &&
-//             OrderSummaryData.order_detail.payment_result == "Approved" && (
-//               <button className="success_btn">SUCCESS</button>
-//             )}
-//         </div>
-//         <div className="border-b-2 mx-2 my-4"></div>
-//         <div className="payment-stepper-checkout-content">
-//           <div className="flex justify-between py-2">
-//             <span>Order Id</span>
-//             <p>
-//               {OrderSummaryData &&
-//                 OrderSummaryData.order_detail &&
-//                 OrderSummaryData.order_detail.order_id}
-//             </p>
-//           </div>
-//           <div className="flex justify-between py-2">
-//             <span>Order Number</span>
-//             <p>
-//               {OrderSummaryData &&
-//                 OrderSummaryData.order_detail &&
-//                 OrderSummaryData.order_detail.order_number}
-//             </p>
-//           </div>
-//           <div className="flex justify-between py-2">
-//             <span>Payment Id</span>
-//             <p>
-//               {OrderSummaryData &&
-//               OrderSummaryData.order_detail &&
-//               OrderSummaryData.order_detail.is_split_payment == "1"
-//                 ? "Split Payment"
-//                 : OrderSummaryData &&
-//                     OrderSummaryData.order_detail &&
-//                     OrderSummaryData.order_detail.payment_id == ""
-//                   ? "Cash"
-//                   : OrderSummaryData &&
-//                     OrderSummaryData.order_detail &&
-//                     OrderSummaryData.order_detail.payment_id}
-//             </p>
-//           </div>
-//           {/* Repeat similar blocks for other coupon and input sections */}
-//           <div className="quickvee-checkout-final-amount flex justify-between">
-//             <span style={{ color: "rgb(20, 174, 45)" }}>Amount</span>
-//             <p style={{ color: "rgb(20, 174, 45)" }}>
-//               ${grandTotal.toFixed(2)}
-//             </p>
-//           </div>
-//         </div>
-//       </div>
 
-//       {OrderSummaryData &&
-//       OrderSummaryData.order_detail &&
-//       OrderSummaryData.order_detail.deliver_name ? (
-//         <>
-//           <div className="border-b-2 mx-2 my-4"></div>
-//           <div className="my-12">
-//             <div className="text-[20px] font-normal opacity-100 text-black admin_medium">
-//               Customer Details
-//             </div>
-//             <div className="border-b-2 mx-2 my-4"></div>
-//             <div className="flex justify-between">
-//               <p>
-//                 {OrderSummaryData &&
-//                   OrderSummaryData.order_detail &&
-//                   OrderSummaryData.order_detail.billing_name}
-//               </p>
-//               {/* <button className="delivery_btn">Delivery Address</button> */}
-//             </div>
-//             {/* <p className="flex space-x-4">
-//             <span>
-//               <img src={AddressIcon} alt="" className="w-4 h-4" />
-//             </span>
-//             <span className="text-[15px] text-[#3A3A3A]">
-//               230 Sterling Drive Suite 260, Tracy, CA 95391
-//             </span>
-//           </p> */}
-//             <p className="flex space-x-4">
-//               <span>
-//                 <img src={CallIcon} alt="" className="w-4 h-4" />
-//               </span>
-//               <span className="text-[15px] text-[#3A3A3A]">
-//                 {OrderSummaryData &&
-//                   OrderSummaryData.order_detail &&
-//                   OrderSummaryData.order_detail.delivery_phn}
-//               </span>
-//               {/* <span>
-//               <img src={MilesIcon} alt="" className="w-4 h-4" />
-//             </span>
-//             <span className="text-[15px] text-[#3A3A3A]">5 Miles away</span> */}
-//             </p>
 
-//             {/* <div className="border-b-2 mx-2 my-4"></div>
 
-//           <div className="my-10">
-//             <div className="flex justify-between">
-//               <p>Sumit Mhatre</p>
-//               <button className="success_btn">Billing Address</button>
-//             </div>
-//             <p className="flex space-x-4">
-//               <span>
-//                 <img src={AddressIcon} alt="" className="w-4 h-4" />
-//               </span>
-//               <span className="text-[15px] text-[#3A3A3A]">
-//                 230 Sterling Drive Suite 260, Tracy, CA 95391
-//               </span>
-//             </p>
-//           </div> */}
-//           </div>
-//         </>
-//       ) : (
-//         <div></div>
-//       )}
 
-//       {OrderSummaryData &&
-//       OrderSummaryData.id_card_detail &&
-//       OrderSummaryData.id_card_detail.i_card_type != "verify_non_id_person" ? (
-//         <>
-//           <div className="my-10">
-//             <div className="text-[20px] font-normal opacity-100 text-black admin_medium">
-//               Identification Card
-//             </div>
-//             <div className="border-b-2 mx-2 my-4"></div>
-//             <div className="flex justify-between py-2">
-//               <span>ID Number</span>
-//               <p>
-//                 {OrderSummaryData &&
-//                   OrderSummaryData.id_card_detail &&
-//                   OrderSummaryData.id_card_detail.i_card_number}
-//               </p>
-//             </div>
 
-//             <div className="flex justify-between py-2">
-//               <span>Expiration Date</span>
-//               <p>
-//                 {OrderSummaryData &&
-//                   OrderSummaryData.id_card_detail &&
-//                   OrderSummaryData.id_card_detail.i_card_ex_date}
-//               </p>
-//             </div>
 
-//             {OrderSummaryData &&
-//               OrderSummaryData.id_card_detail &&
-//               OrderSummaryData.id_card_detail.i_card_dob != "" &&
-//               OrderSummaryData.id_card_detail.i_card_dob != "0000-00-00" && (
-//                 <div className="flex justify-between py-2">
-//                   <span>Date Of Birth</span>
-//                   <p>{OrderSummaryData.id_card_detail.i_card_dob}</p>
-//                 </div>
-//               )}
 
-//             <div className="">
-//               <div className="id-card bg-white p-4 rounded-md shadow-md">
-//                 <img
-//                   src={
-//                     OrderSummaryData.id_card_detail.i_card_front_img
-//                       ? `https://www.quickvees.com/upload/customer/id_proof/${OrderSummaryData.id_card_detail.i_card_front_img}`
-//                       : ""
-//                   }
-//                   alt="ID Card"
-//                   className="w-96 h-96 object-cover"
-//                 />
-//               </div>
-//             </div>
-//           </div>
-//         </>
-//       ) : (
-//         <div></div>
-//       )}
-//     </>
-//   );
-// };
 
-// export default PaymentCalDetails;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 // ----------------------------------order Summery start here ---------------------------------
 import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
@@ -234,7 +234,7 @@ import Cookies from "js-cookie";
 import Loaderfile from "../../../../Assests/Loader/loaderfile";
 import OrderSummery_pickup_delivery_status from "./OrderSummery_pickup_delivery_status";
 import { useParams } from "react-router-dom";
-// import { useAuthDetails } from "./../../../../Common/cookiesHelper";
+
 import Footer from "../../../../Components/Footer/footer";
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   "& .MuiDialogContent-root": {
@@ -244,18 +244,18 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     padding: theme.spacing(1),
   },
 }));
-// import "bootstrap/dist/css/bootstrap.min.css";
 
-// import stripTags from "strip-tags";
-// ==============================================
+
+
+
 
 export default function PaymentCalDetails() {
-  // const {
-  //   LoginGetDashBoardRecordJson,
-  //   LoginAllStore,
-  //   userTypeData,
-  //   GetSessionLogin,
-  // } = useAuthDetails();
+  
+  
+
+
+
+
   const Navigate = useNavigate();
   const OrderSummeryDetails = useSelector((state) => state.orderSummeryList);
   const [orderSummeryloader, setOrderSummeryloader] = useState(true);
@@ -274,33 +274,33 @@ export default function PaymentCalDetails() {
   const [imageLoading, setImageLoading] = useState(true);
 
   const location = useLocation();
-  // const merchantId = location.state?.merchantId || "";
-  // const orderMethod = location.state?.order_id || "";
+  
+  
 
-  // const orderId = location.state?.orderId || "";
+  
   const isMobile = useMediaQuery("(max-width:480px)");
   const { merchant_id, order_id } = useParams();
-  // console.log(merchant_id + " " + order_id);"JAI16179CA""664EE23C1EA26"
+  
   // dynamic required-----------------------------
   const data = {
     merchant_id: merchant_id,
     order_id: order_id,
-    // ...userTypeData,
+    
   };
-  // console.log(data);
-  //console.log(OrderSummeryDetails.OrderSummeryDetails.order_detail)
+  
+  
   // dynamic requierd---------------------
   useEffect(() => {
     if (data) {
       dispatch(FetchOrderSummeryDetails(data));
     }
-    // const intervalId = setInterval(() => {
-    //   // Update the time every second
-    //   dispatch(FetchOrderSummeryDetails(data));
-    // }, 2000);
+    
+    
 
-    // // Cleanup function to clear the interval when the component unmounts
-    // return () => clearInterval(intervalId);
+
+
+    
+    
   }, [data.merchant_id, data.order_id]);
 
   useEffect(() => {
@@ -315,7 +315,7 @@ export default function PaymentCalDetails() {
       let non_refund = orderSummeryData.cart_data?.filter((i) => {
         return i.is_refunded === "0" || i.is_refunded === "2";
       });
-      // console.log('data', refund, non_refund);
+      
       setRefund(refund);
       setNonrefund(non_refund);
 
@@ -324,12 +324,12 @@ export default function PaymentCalDetails() {
           OrderSummeryDetails.orderSummeryDetails.id_card_detail.i_card_ex_date;
         const DateOfBirth =
           OrderSummeryDetails.orderSummeryDetails.id_card_detail.i_card_dob;
-        // console.log('origin', OrderSummeryDetails);
+        
         if (originalDateString !== "0000-00-00") {
           const originalDate = new Date(originalDateString);
-          // console.log(originalDate)
+          
           const formattedDate = format(originalDate, "yyyy  MMM dd");
-          // const formattedDate = format(originalDate, 'dd MMM yyyy');
+          
           setDateFormat(formattedDate);
           DateOfBirthAccessor(DateOfBirth);
         } else {
@@ -337,16 +337,16 @@ export default function PaymentCalDetails() {
           DateOfBirthAccessor("");
         }
 
-        //
+        
         CouponData(
           OrderSummeryDetails.orderSummeryDetails.order_detail.coupon_code
         );
         setPaymentMethod(
           OrderSummeryDetails.orderSummeryDetails.order_detail.payment_id
         );
-        // console.log(OrderSummeryDetails.orderSummeryDetails.cart_data[0].name)
-        // const productDetails = extractProductDetails(OrderSummeryDetails.orderSummeryDetails.cart_data[0].name);
-        // console.log()
+        
+        
+
       }
     }
   }, [
@@ -357,7 +357,7 @@ export default function PaymentCalDetails() {
   ]);
 
   function DateOfBirthAccessor(method) {
-    // console.log(orderSummeryData && orderSummeryData)
+    
     if (method !== "") {
       const originalDate = new Date(method);
       const formattedDate = format(originalDate, "dd MMM yyyy");
@@ -372,25 +372,25 @@ export default function PaymentCalDetails() {
   }
 
   useEffect(() => {
-    //console.log(paymentMethod)
+    
   }, []);
 
-  // -------------------------------------------------
-  // product info start here-----------
-  // const extractProductDetails = (productString) => {
-  //   // console.log(productString)
-  //   const details={}
-  //   const part=productString.split('-')
-  //   for (let i = 1; i < parts.length; i++) {
-  //     const [key, value] = parts[i].split('-');
-  //     if (key && value) {
-  //       details[key] = value;
-  //     }
-  //   }
-  //   return details;
-  //   // console.log(part[1])
-  // }
-  // product info end here-------------
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   const [testData, setTestData] = useState(false);
   const handleClick = () => {
     setTestData(true);
@@ -403,38 +403,38 @@ export default function PaymentCalDetails() {
       </p>
     ));
   };
-  // let carouselImages = [OrderSummeryBanner1, OrderSummeryBanner2];
+  
 
   function removeHtmlTags(str) {
     return str.replace(/<[^>]*>/g, "");
   }
 
-  // -------------------------------
+ 
+  
 
-  // const formatDate = (inputDate) => {
-  //   const months = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC'];
 
-  //   const date = new Date(inputDate);
-  //   const day = date.getDate();
-  //   const month = months[date.getMonth()];
-  //   const year = date.getFullYear();
-  //   const hours = date.getHours();
-  //   const minutes = date.getMinutes();
-  //   let seconds = date.getSeconds();
-  //   let pmTag = ''
-  //   if (hours < 12) {
-  //     pmTag = 'AM'
-  //   } else {
-  //     pmTag = 'PM'
 
-  //   }
 
-  //   if (seconds < 10) {
-  //     seconds = '0' + seconds;
-  //   }
 
-  //   return `${day} ${month} ${year} ${hours}:${minutes}:${seconds} ${pmTag}`;
-  // };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const formatDate = (inputDate) => {
     const parsedTime = new Date(inputDate);
@@ -467,26 +467,26 @@ export default function PaymentCalDetails() {
   const localUserData = Cookies.get("userLoginData");
 
   const currentPath = window.location.pathname.replace(/\/$/, "");
-  //console.log(currentPath)
-  // useEffect(() => {
-  //   if (currentPath == "/orderSummeryPage" && !localUserData && orderId == "") {
-  //     Navigate(-1);
-  //   } else if (
-  //     currentPath === "/orderSummeryPage" &&
-  //     !localUserData &&
-  //     merchantId &&
-  //     orderMethod
-  //   ) {
-  //     Navigate(`/merchant/${merchantId}?orderMethod=${orderMethod}`);
-  //   } else if (
-  //     currentPath == "/orderSummeryPage" &&
-  //     !!localUserData &&
-  //     merchantId == "" &&
-  //     orderMethod == ""
-  //   ) {
-  //     Navigate("/");
-  //   }
-  // }, []);
+  
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   const setPositionLoader = {
     position: "absolute",
     top: "45%",
@@ -496,16 +496,16 @@ export default function PaymentCalDetails() {
 
   return (
     <>
-      {/* {!orderSummeryloader &&
-      orderSummeryData?.id_card_detail?.image_url !== "" &&
-      imageLoading === true &&
-      (refund == undefined || nonrefund == undefined) ? (
-        <div style={setPositionLoader}>
-          <div className="loaderarea">
-           
-          </div>
-        </div> */}
-      {/* ) : ( */}
+      
+      
+
+
+
+
+
+
+
+      
       {OrderSummeryDetails?.loading ? (
         <div style={setPositionLoader}>
           <div className="loaderarea">
@@ -515,39 +515,39 @@ export default function PaymentCalDetails() {
       ) : (
         <>
           <div className="headerSummery">
-            {/* <TopBar merchantId={merchantId} orderMethod={orderMethod} /> */}
+           
           </div>
-          {/* --------------------------- */}
-          {/* <Grid container sx={{ p: 2.5 }}>
-            <Grid item xs={6}>
-              <Grid container sx={{ p: 2.5 }}>
-                <Grid item xs={12}>
-                  <h1 className="orderSummery_head">Order Status</h1>
-                  <Grid container sx={{ mt: 2.5 }}>
-                    <Grid item xs={12}>
-                      <OrderSummery_pickup_delivery_status
-                        orderSummeryData={orderSummeryData}
-                      />
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={6}>
-              <Grid container sx={{ p: 2.5 }}>
-                <Grid item xs={12}>
-                  <h1 className="orderSummery_head">Order Status</h1>
-                  <Grid container sx={{ mt: 2.5 }}>
-                    <Grid item xs={12}>
-                      <OrderSummery_pickup_delivery_status
-                        orderSummeryData={orderSummeryData}
-                      />
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-            </Grid>
-          </Grid> */}
+          
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
           <div className="mainSection">
             <div className="MidMainSection">
               <div className="LeftMidMainSection">
@@ -644,23 +644,23 @@ export default function PaymentCalDetails() {
                                       </div>
                                     </div>
                                   </div>
-                                  {/* <div className="OrderSummeryProductRBottomM">
-                                    {result?.is_refunded === '1'
-                                      ? `X${result?.refund_qty}`
-                                      : `X${result?.qty}`}
-                                  </div>
-                                  <div className="OrderSummeryProductRBottomR">
-                                    <span>
-                                      $
-                                      {result?.is_refunded === '1'
-                                        ? parseFloat(
-                                            result?.refund_qty * result?.price,
-                                          ).toFixed(2)
-                                        : parseFloat(
-                                            result?.qty * result?.price,
-                                          ).toFixed(2)}
-                                    </span>
-                                  </div> */}
+                                  
+                                  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                 </div>
                               );
                             })
