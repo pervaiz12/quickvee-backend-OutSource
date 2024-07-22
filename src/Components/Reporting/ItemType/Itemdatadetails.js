@@ -41,7 +41,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
   },
   "&:last-child td, &:last-child th": {
-    // backgroundColor: "#F5F5F5",
+    
   },
   "& td, & th": {
     border: "none",
@@ -151,14 +151,14 @@ const Itemdatadetails = ({
                           </p>
                         </StyledTableCell>
                         <StyledTableCell>
-                          {/* {selectedOrderSource !== "All" ? (
-                          <Link
-                            to={`/order/${data.start_date}/${data.end_date}/${data.order_env}/${orderReportDa.order_method}`}
-                            target="_blank"
-                          >
-                            <p className="q-employee-in">Details</p>
-                          </Link>
-                        ): "-"} */}
+                          
+                          
+
+
+
+
+
+
                           {selectedOrderSource !== "All" ? (
                             <button>
                               <p className="q-employee-in">View Details</p>
@@ -181,20 +181,20 @@ const Itemdatadetails = ({
 
   return (
     <>
-      {/* {orderReportDataState.loading ? (
-        <SkeletonTable
-          columns={[
-            "Name",
-            "# Of Payments",
-            "Net Revenue Without Tips",
-            "Tips",
-            "Net Revenue With Tips",
-            "Details",
-          ]}
-        />
-      ) : (
-        renderDataTable()
-      )} */}
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+      
       <div className="q-attributes-bottom-detail-section text-center">
         <Grid container className="box_shadow_div">
           {orderReportDataState.loading ? (

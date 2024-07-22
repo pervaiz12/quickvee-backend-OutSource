@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import DownIcon from "../../../Assests/Dashboard/Down.svg";
+
 import { BASE_URL, TAXE_CATEGORY_LIST } from "../../../Constants/Config";
 import axios from "axios";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
@@ -97,7 +97,7 @@ const ItemSalesFilter = ({ onFilterDataChange,searchItems, setSearchRecord,debou
         setCategoryOptions(mappedOptions);
         setLoadingCategories(false);
       } catch (error) {
-        // console.error("Error fetching categories:", error);
+        
         if (error.response.status == 401) {
           getUnAutherisedTokenMessage();
           handleCoockieExpire();

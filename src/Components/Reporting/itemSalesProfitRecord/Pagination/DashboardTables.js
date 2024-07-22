@@ -8,7 +8,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import { Link } from "react-router-dom";
+
 import { useNavigate } from "react-router-dom";
 import { Grid } from "@mui/material";
 import { priceFormate } from "../../../../hooks/priceFormate";
@@ -57,12 +57,12 @@ export default function DashboardTables(props) {
     profit: 0.0,
     profitPercentage: 0.0,
   });
-  //   const [totalRecord, setTotalRecord] = React.useState("");
-  // const handleSummeryPage = (order_id) => {
-  //   navigate("/store-reporting/order-summary", {
-  //     state: { merchantId: props.merchant_id, order_id: order_id },
-  //   });
-  // };
+  
+  
+
+
+
+
   useEffect(() => {
     if (props.getItemRecord) {
       getDiscountRecord();
@@ -86,12 +86,12 @@ export default function DashboardTables(props) {
           },
           { sold: 0, costTotal: 0, sellingTotal: 0, profitTotal: 0 }
         );
-      // soldQty: 0,
-      // costItem: 0.0,
-      // totalSelling: 0.0,
-      // sellingPrice: 0.0,
-      // profit: 0.0,
-      // profitPercentage: 0.0,
+      
+        
+
+
+
+
 
       const profitPercentage = (profitTotal / sellingTotal) * 100 || 0;
       setTotalCost({
@@ -102,51 +102,51 @@ export default function DashboardTables(props) {
         profitPercentage: profitPercentage.toFixed(2),
       });
 
-      // console.log("Sold:", sold);
-      // console.log("Cost Total:", costTotal.toFixed(2));
-      // console.log("Selling Total:", sellingTotal.toFixed(2));
-      // console.log("Total Profit:", profitTotal.toFixed(2));
-      // console.log("Profit Percentage:", profitPercentage.toFixed(2));
+      
+      
 
-      // Uncomment and use the following line if you need to set these values in a state
-      // setTotals({ costTotal: costTotal.toFixed(2), sellingTotal: sellingTotal.toFixed(2), profitPercentage: profitPercentage.toFixed(2) });
+
+
+
+
+
     } else {
       console.log("No report data available");
     }
   };
 
-  // const getDiscountRecord = () => {
-  //   if (Array.isArray(props.getItemRecord) && props.getItemRecord.length > 0) {
-  //     const { sold, costTotal, priceTotal, profit } =
-  //       props.getItemRecord.reduce(
-  //         (acc, item) => {
-  //           const Sold = item?.total_qty;
-  //           const costPrice =
-  //             parseFloat(item?.cost_price * item?.total_qty) || 0;
-  //           const price = parseFloat(item?.price) || 0;
-  //           const itemProfit = price - costPrice;
-  //           return {
-  //             Sold: acc.sold + Sold,
-  //             costTotal: acc.costTotal + costPrice,
-  //             priceTotal: acc.priceTotal + price,
-  //             profit: acc.profit + itemProfit,
-  //           };
-  //         },
-  //         { costTotal: 0, priceTotal: 0, profit: 0 }
-  //       );
-  //     console.log("sold:", sold);
-  //     console.log("Cost Total:", costTotal.toFixed(2));
+  
+  
 
-  //     console.log("Price Total:", priceTotal.toFixed(2));
-  //     console.log("profit Total:", profit.toFixed(2));
-  //     // setTotals({
-  //     //   costTotal: costTotal.toFixed(2),
-  //     //   priceTotal: priceTotal.toFixed(2),
-  //     // });
-  //   } else {
-  //     console.log("No report data available");
-  //   }
-  // };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   const tableRow = [
     { type: "str", name: "category", label: "Category" },
@@ -195,37 +195,37 @@ export default function DashboardTables(props) {
                     <StyledTableCell>{item?.name}</StyledTableCell>
                     <StyledTableCell>{item?.total_qty}</StyledTableCell>
                     <StyledTableCell>
-                      {/* {`$${priceFormate(
-                    parseFloat(item?.cost_price * item?.total_qty).toFixed(2)
-                  )}`} */}
+                      
+                      
+
                       <p>{formatCurrency(item?.costOfItem)}</p>
                     </StyledTableCell>
                     <StyledTableCell>
-                      {/* {`$${priceFormate(
-                    parseFloat(item?.price * item?.total_qty).toFixed(2)
-                  )}`} */}
+                      
+                      
+
                       <p>{formatCurrency(item?.sellingPrice)}</p>
                     </StyledTableCell>
                     <StyledTableCell>
-                      {/* {(() => {
-                    const cost_item = item?.cost_price * item?.total_qty;
-                    const selling_price = item?.price * item?.total_qty;
-                    if (selling_price === 0) {
-                      return "0.00%";
-                    }
-                    const profit_per =
-                      ((selling_price - cost_item) / selling_price) * 100;
-                    return `${profit_per.toFixed(2)}%`;
-                  })()} */}
+                      
+                      
+
+
+
+
+
+
+
+
                       <p>{`${item?.profitMargin} %`}</p>
                     </StyledTableCell>
                     <StyledTableCell>
-                      {/* {`$${priceFormate(
-                    (
-                      (item?.price - item?.cost_price) *
-                      item?.total_qty
-                    ).toFixed(2)
-                  )}`} */}
+                      
+                      
+
+
+
+                      
                       <p>{formatCurrency(item?.profitAmmount)}</p>
                     </StyledTableCell>
                   </StyledTableRow>

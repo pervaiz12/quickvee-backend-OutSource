@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-// import DateRange from "../../Orders/InstoreOrder/DateRange";
+
 import DateRange from "../../../reuseableComponents/DateRangeComponent";
 import CouponReportList from "./CouponReportList";
 import { Grid } from "@mui/material";
@@ -33,7 +33,7 @@ const CouponReportMain = () => {
 
       <CouponReportList
         selectedDateRange={selectedDateRange}
-        // VendorIdData={VendorIdData}
+        
       />
     </>
   );

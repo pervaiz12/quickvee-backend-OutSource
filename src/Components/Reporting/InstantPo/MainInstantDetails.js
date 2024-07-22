@@ -29,7 +29,7 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.body}`]: {
     fontSize: 14,
     fontFamily: "CircularSTDBook !important",
-    // color: "#818181",
+    
   },
   [`&.${tableCellClasses.table}`]: {
     fontSize: 14,
@@ -42,7 +42,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
   },
   "&:last-child td, &:last-child th": {
-    // backgroundColor: "#F5F5F5",
+    
   },
   "& td, & th": {
     border: "none",
@@ -85,10 +85,10 @@ const MainInstantDetails = ({ data }) => {
         instantactivityDataState.instantactivityData.map((item) => {
           const AfterAdjustQty =
             parseInt(item.current_qty, 10) + parseInt(item.qty, 10);
-          // console.log("AfterAdjustQtyAddedList", AfterAdjustQty);
+          
           const calculatedTotal =
             parseInt(item.qty, 10) * parseFloat(item.price);
-          // console.log("calculatedTotal", calculatedTotal.toFixed(2));
+          
           return {
             ...item,
             afterAdjustQty: AfterAdjustQty,
@@ -157,7 +157,7 @@ const MainInstantDetails = ({ data }) => {
                         <img src={sortIcon} alt="" className="pl-1" />
                       </button>
                     </StyledTableCell>
-                    {/* <StyledTableCell>Time</StyledTableCell> */}
+                    
                     <StyledTableCell>
                       <button
                         className="flex items-center"
@@ -167,8 +167,8 @@ const MainInstantDetails = ({ data }) => {
                         <img src={sortIcon} alt="" className="pl-1" />
                       </button>
                     </StyledTableCell>
-                    {/* <StyledTableCell>Product Name</StyledTableCell> */}
-                    {/* <StyledTableCell>Variants Name</StyledTableCell> */}
+                   
+                   
                     <StyledTableCell>
                       <button
                         className="flex items-center"
@@ -243,14 +243,14 @@ const MainInstantDetails = ({ data }) => {
                                     }}
                                     className="me-3"
                                   >
-                                    {/* {new Date(instantactivity.created_at)
-                      .toLocaleDateString("en-US", {
-                        month: "2-digit",
-                        day: "2-digit",
-                        year: "numeric",
-                      })
-                      .split("/")
-                      .join("-")} */}
+                                   
+                                   
+
+
+
+
+
+
                                     {formatDateTime(instantactivity.created_at)}
                                   </p>
                                   <p
@@ -270,18 +270,18 @@ const MainInstantDetails = ({ data }) => {
                                 </div>
                               </div>
                             </StyledTableCell>
-                            {/* <StyledTableCell>
-              <p>
-                {new Date(
-                  instantactivity.created_at
-                ).toLocaleTimeString("en-US", {
-                  hour: "2-digit",
-                  minute: "2-digit",
-                  second: "2-digit",
-                  hour12: true,
-                })}
-              </p>
-            </StyledTableCell> */}
+                            
+                            
+
+
+
+
+
+
+
+
+
+
                             <StyledTableCell>
                               <p>
                                 {instantactivity.emp_name === null ||
@@ -290,12 +290,13 @@ const MainInstantDetails = ({ data }) => {
                                   : instantactivity.emp_name}
                               </p>
                             </StyledTableCell>
-                            {/* <StyledTableCell>
-             <p>{instantactivity.title}</p>
-            </StyledTableCell> */}
-                            {/* <StyledTableCell>
-              <p>{instantactivity.variant}</p>
-            </StyledTableCell> */}
+                           
+                           
+
+
+
+
+                          
                             <StyledTableCell>
                               <p>{priceFormate(instantactivity.current_qty)}</p>
                             </StyledTableCell>
@@ -303,7 +304,7 @@ const MainInstantDetails = ({ data }) => {
                               <p>{priceFormate(instantactivity.qty)}</p>
                             </StyledTableCell>
                             <StyledTableCell>
-                              {/* a <p>{priceFormate(AfterAdjustQty)}</p> */}
+                              
                               <p>
                                 {priceFormate(
                                   isNaN(instantactivity.afterAdjustQty)
@@ -325,13 +326,13 @@ const MainInstantDetails = ({ data }) => {
                                       : instantactivity.calculatedTotal
                                   )
                                 )}
-                                {/* $
-                {instantactivity.calculatedTotal % 1 !== 0
-                  ? priceFormate(
-                      instantactivity.calculatedTotal
-                    ) || "0"
-                  : priceFormate(instantactivity.calculatedTotal) ||
-                    "0"} */}
+                                
+                                
+
+
+
+
+                                
                               </p>
                             </StyledTableCell>
                           </StyledTableRow>

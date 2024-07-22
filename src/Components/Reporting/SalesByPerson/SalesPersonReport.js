@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSalePersonData } from "../../../Redux/features/SalesByPerson/SalesByPersonSlice";
 import { Link, useNavigate } from "react-router-dom";
-import OrderSummaryDetails from "./MainOrderSumaaryDetails/OrderSummaryDetails";
+
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 
 import { styled } from "@mui/material/styles";
@@ -43,10 +43,10 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  // hide last border
-  // "&:last-child td, &:last-child th": {
-  //   backgroundColor:"#F5F5F5"
-  // },
+  
+  
+
+
   "& td, & th": {
     border: "none",
   },
@@ -72,7 +72,7 @@ const SalesPersonReport = (props) => {
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
     PasswordShow();
   const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
-  // console.log(props);
+  
   const dispatch = useDispatch();
   const [allSalesByPersonData, setallSalesByPersonData] = useState("");
   const AllSalesByPersonDataState = useSelector(
@@ -115,7 +115,7 @@ const SalesPersonReport = (props) => {
       !AllSalesByPersonDataState.loading &&
       AllSalesByPersonDataState.SalePersonData
     ) {
-      // console.log(AllSalesByPersonDataState.SalePersonData)
+      
       setallSalesByPersonData(AllSalesByPersonDataState.SalePersonData);
     } else {
       setallSalesByPersonData("");
@@ -139,17 +139,17 @@ const SalesPersonReport = (props) => {
     return `${formattedDate} ${formattedTime}`;
   };
 
-  // if (!allSalesByPersonData || Object.keys(allSalesByPersonData).length === 0) {
-  //   return (
-  //     <>
-  //       <Grid container sx={{ padding: 2.5 }} className="box_shadow_div ">
-  //         <Grid item xs={12}>
-  //           No data Found.
-  //         </Grid>
-  //       </Grid>
-  //     </>
-  //   );
-  // }
+  
+  
+
+
+
+
+
+
+
+
+
   let grandTotal = 0;
   Object.keys(allSalesByPersonData).map((EmpData, index) => {
     const totalAmount = allSalesByPersonData[EmpData]?.reduce(
@@ -247,10 +247,10 @@ const SalesPersonReport = (props) => {
                       {items?.map((SalesData, index) => (
                         <StyledTableRow key={index}>
                           <StyledTableCell sx={{ width: "33%" }}>
-                            {/* <Link
-                              to={`/order/store-reporting/order-summary/${merchant_id}/${SalesData.order_id}`}
-                              target="_blank"
-                            > */}
+                            
+                            
+
+                            
                             <span
                               className="cursor-pointer text-[#0A64F9]"
                               onClick={() =>

@@ -34,7 +34,7 @@ const TipReportMain = () => {
 
       <TipReportList
         selectedDateRange={selectedDateRange}
-        // VendorIdData={VendorIdData}
+       
       />
     </>
   );

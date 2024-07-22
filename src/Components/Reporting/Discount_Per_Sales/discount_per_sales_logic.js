@@ -8,7 +8,7 @@ import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { useAuthDetails } from "./../../../Common/cookiesHelper";
 import PasswordShow from "../../../Common/passwordShow";
-import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
+
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 
 export default function Discount_per_sales_logic() {
@@ -55,7 +55,7 @@ export default function Discount_per_sales_logic() {
   };
   useEffect(() => {
     getAllEmployeeData();
-    // console.log(LoginGetDashBoardRecordJson?.data?.merchant_id);
+    
   }, []);
 
   const handleOptionClick = (option, dropdown) => {
@@ -116,56 +116,56 @@ export default function Discount_per_sales_logic() {
     }
   };
 
-  // const onDateRangeChange = (data) => {
-  //   const { token, ...newData } = userTypeData;
-  //   const { start_date, end_date } = data;
+  
+  
 
-  //   let pakect = {
-  //     start_date,
-  //     end_date,
-  //     ...newData,
-  //     employee_id: selectedEmployee == "" ? "all" : selectedEmployee,
-  //     ...merchant_id,
-  //   };
-  //   setLoader(true);
-  //   try {
-  //     axios
-  //       .post(BASE_URL + DISCOUNT_PER_PERSON, pakect, {
-  //         headers: {
-  //           "Content-Type": "multipart/form-data",
-  //           // Authorization: `Bearer ${token}`, // Use data?.token directly
-  //         },
-  //       })
 
-  //       .then((res) => {
-  //
-  //         if (res?.data?.status == true) {
-  //           const updatedList = Object.fromEntries(
-  //             Object.entries(res.data?.report_data).map(([key, value]) => {
-  //               const updatedValue = value.map((item) => {
-  //                 return {
-  //                   ...item,
-  //                   fullName: item?.f_name + " " + item?.l_name,
-  //                 };
-  //               });
-  //               return [key, updatedValue];
-  //             })
-  //           );
 
-  //           setEmployeeFilterData(updatedList);
-  //         }
-  //       });
-  //   } catch (error) {
-  //     if (error.response.status == 401) {
-  //       // getUnAutherisedTokenMessage();
-  //       // handleCoockieExpire();
-  //     } else if (error.status == "Network Error") {
-  //       getNetworkError();
-  //     }
-  //   }
 
-  //   // console.log(newData);
-  // };
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   const sortByItemName = (type, name) => {
     const newOrder = sortOrder === "asc" ? "desc" : "asc";
     const updatedList = Object.fromEntries(

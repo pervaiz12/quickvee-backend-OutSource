@@ -64,7 +64,7 @@ const SiftSummaryDetails = (props) => {
         <div>
           {Object.keys(allshiftsummary).map((date) => (
             <div key={date}>
-              {/* <h2>{date}</h2> */}
+              
               {allshiftsummary[date] &&
                 allshiftsummary[date].length >= 1 &&
                 allshiftsummary[date].map((shift, index) => (

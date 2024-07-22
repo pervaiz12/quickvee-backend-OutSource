@@ -16,7 +16,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { priceFormate } from "../../../hooks/priceFormate";
 import PasswordShow from "../../../Common/passwordShow";
-import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
+
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import Skeleton from "react-loading-skeleton";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
@@ -42,10 +42,10 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
-    // backgroundColor: theme.palette.action.hover,
+    
   },
   "&:last-child td, &:last-child th": {
-    // backgroundColor: "#F5F5F5",
+    
   },
   "& td, & th": {
     border: "none",
@@ -83,13 +83,13 @@ const DetailsSaleReport = ({ data }) => {
         let NewData = {
           ...data,
           merchant_id,
-          // merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
+          
           order,
           sorting_type,
           ...userTypeData,
         };
-        // console.log(data);
-        // console.log(NewData);
+        
+        
 
         await dispatch(fetchdetailCategorySaleData(NewData)).unwrap();
       }
@@ -112,17 +112,17 @@ const DetailsSaleReport = ({ data }) => {
     }
   }, [detailCategorySaleDataState]);
 
-  // if (!detailCategorySale || Object.keys(detailCategorySale).length === 0) {
-  //   return (
-  //     <>
-  //       <Grid container sx={{ padding: 2.5 }} className="box_shadow_div">
-  //         <Grid item xs={12}>
-  //           <p>No. Data found.</p>
-  //         </Grid>
-  //       </Grid>
-  //     </>
-  //   );
-  // }
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
 
   const grandTotal = detailCategorySale
     ? Object.values(detailCategorySale).reduce((acc, category) => {
@@ -222,12 +222,12 @@ const DetailsSaleReport = ({ data }) => {
                         </button>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        {/* <p
-                        className="q-catereport-quantity "
-                        onClick={handleQuantityClick}
-                      >
-                        Quantity <img src={SortIconW} alt="" className="pl-1" />
-                      </p> */}
+                        
+                        
+                        
+                      
+                      
+                      
                         <button
                           className="flex items-center"
                           onClick={() => sortByItemName("num", "pro_qty")}
@@ -237,12 +237,12 @@ const DetailsSaleReport = ({ data }) => {
                         </button>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        {/* <p
-                        className="attriButes-title"
-                        onClick={handleQuantityClick}
-                      >
-                        Amount <img src={SortIconW} alt="" className="pl-1" />
-                      </p> */}
+                        
+                        
+                        
+                      
+                      
+                      
                         <button
                           className="flex items-center"
                           onClick={() => sortByItemName("num", "product_total")}

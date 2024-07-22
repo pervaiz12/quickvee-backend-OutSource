@@ -8,7 +8,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Stack from "@mui/material/Stack";
 import Button from "@mui/material/Button";
-import Loader from "../../../CommonComponents/Loader";
+
 import { priceFormate } from "../../../hooks/priceFormate";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
@@ -38,7 +38,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
   },
   "&:last-child td, &:last-child th": {
-    // backgroundColor: "#F5F5F5",
+    
   },
   "& td, & th": {
     border: "none",
@@ -68,7 +68,7 @@ export default function Pagination(props) {
   return (
     <>
       {props.loader ? (
-        // <Loader />
+        
         <>
           <SkeletonTable columns={columns} />
         </>
@@ -144,14 +144,15 @@ export default function Pagination(props) {
           </TableContainer>
           {props.searchProduct.length ? (
             props.laodMoreData ? (
-              // <div>
-              //   <button
-              //     className="btn btn-outline"
-              //     onClick={props.handleLoadMore}
-              //   >
-              //     Load More
-              //   </button>
-              // </div>
+              
+              
+
+
+
+
+
+
+              
               renderLoader()
             ) : !props.endOfDataList ? (
               <Stack spacing={2} direction="row">

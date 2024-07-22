@@ -16,7 +16,7 @@ import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import PasswordShow from "../../../Common/passwordShow";
-import useDebounce from "../../../hooks/useDebouncs";
+
 
 
 const StyledTable = styled(Table)(({ theme }) => ({
@@ -43,7 +43,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
   },
   "&:last-child td, &:last-child th": {
-    // backgroundColor: "#F5F5F5",
+   
   },
   "& td, & th": {
     border: "none",
@@ -97,7 +97,7 @@ const ItemSalesDetails = (props) => {
       AllItemSalesDataState.ItemSalesData &&
       AllItemSalesDataState.ItemSalesData[0]
     ) {
-      // console.log(AllItemSalesDataState.ItemSalesData[0])
+      
       setallItemSalesData(AllItemSalesDataState.ItemSalesData[0]);
     } else {
       setallItemSalesData("");
