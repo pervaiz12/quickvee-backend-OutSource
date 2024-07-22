@@ -1,11 +1,9 @@
-import React, { useMemo, useState } from "react";
+import React, { useState } from "react";
 import "../../../Styles/Common.css";
-// import {Col, Form, Row } from 'react-bootstrap'../../Styles/Common.css
 import MerchantFunction from "./UserFunctionality/merchantFunction";
 import AddSvg from "../../../Assests/Dashboard/Left.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
-// import Form from 'react-bootstrap/Form';
 import PasswordShow from "../../../Common/passwordShow";
 import { Grid } from "@mui/material";
 import BasicTextFields from "../../../reuseableComponents/TextInputField";
@@ -34,36 +32,17 @@ export default function AddMerchan() {
     keyEnter,
     handleBlurStoreFound,
   } = MerchantFunction();
-
   const navigate = useNavigate();
-
   const { showpPassword, handleMouseDown, handleMouseUp, jsxData } =
     PasswordShow();
-
   const location = useLocation();
-
-  // console.log("location: ", location);
-
   const [selectedState, setSelectedState] = useState("Select State");
-
   const handleChangedState = (option) => {
     if (option !== "Select State") {
       handleChange(option);
       setSelectedState(option.title);
     }
   };
-
-  // const [showpPassword, setShowPassword] = useState(false);
-
-  // const navigate = useNavigate();
-
-  // const handleMouseDown = () => {
-  //   setShowPassword(true);
-  // };
-
-  // const handleMouseUp = () => {
-  //   setShowPassword(false);
-  // };
   const handleKeyPressNew = (event) => {
     const allowedChars = /^\S+$/;
     if (!allowedChars.test(event.key)) {
@@ -301,17 +280,6 @@ export default function AddMerchan() {
                     onFocusData={(e) => e.target.removeAttribute("readonly")}
                     onKeyDown={keyEnter}
                   />
-                  {/* <input
-                    className=""
-                    type="text"
-                    name="email"
-                    value={store.email}
-                    onChange={handleChange}
-                    onBlur={() => handleBlur("email")}
-                    autoComplete="off"
-                    readOnly
-                    onFocus={(e) => e.target.removeAttribute("readonly")}
-                  /> */}
                   {store.errors.email && (
                     <span className="error">{store.errors.email}</span>
                   )}

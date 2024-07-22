@@ -1,6 +1,5 @@
 import { Box } from "@mui/system";
 import { useState } from "react";
-import Button from "react-bootstrap/Button";
 import Modal from "@mui/material/Modal";
 import Table from "react-bootstrap/Table";
 import CrossIcon from "../../../Assests/Dashboard/cross.svg";
@@ -28,7 +27,6 @@ function ViewAdmin({ email, name, userTypeData }) {
     handleViewAdmin(email, name, userTypeData);
     console.log("sfdsadffds");
     handleOpen(true);
-    // onViewClick(selectedView);
   };
   return (
     <>
@@ -87,10 +85,7 @@ function ViewAdmin({ email, name, userTypeData }) {
                       </>
                     ))
                   ) : (
-                    <p className="q_view_modal_details">
-                      {/* {showMerchantData} */}
-                      No Data Available
-                    </p>
+                    <p className="q_view_modal_details">No Data Available</p>
                   )}
                 </div>
               </Table>

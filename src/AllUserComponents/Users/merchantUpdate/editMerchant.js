@@ -1,25 +1,16 @@
 import React, { useEffect, useMemo } from "react";
 import EditMerchantFunctionality from "./editMerchantFunctionality";
 import Switch from "@mui/material/Switch";
-import Alert from "@mui/material/Alert";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import CircularProgress from "@mui/material/CircularProgress";
-
 import { useNavigate, useParams } from "react-router-dom";
 import { Grid } from "@mui/material";
-import AddSvg from "../../../Assests/Dashboard/Left.svg";
 import BasicTextFields from "../../../reuseableComponents/TextInputField";
 import PasswordShow from "../../../Common/passwordShow";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
 import SwitchToBackButton from "../../../reuseableComponents/SwitchToBackButton";
-// import { useParams } from 'react-router-dom';
-export default function EditMerchant({
-  merchantId,
-  currentMerchant,
-  setVisible,
-}) {
+export default function EditMerchant({ merchantId }) {
   const navigate = useNavigate();
-
   useEffect(() => {
     window.scroll({
       top: 0,
@@ -27,14 +18,7 @@ export default function EditMerchant({
       behavior: "smooth",
     });
   }, []);
-
-  const {
-    LoginGetDashBoardRecordJson,
-    LoginAllStore,
-    userTypeData,
-    GetSessionLogin,
-  } = useAuthDetails();
-
+  const { userTypeData } = useAuthDetails();
   const {
     getEditMerchantData,
     getEditMerchant,
@@ -97,26 +81,7 @@ export default function EditMerchant({
         <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
-              <SwitchToBackButton 
-                linkTo={-1}
-                title={"Edit Merchant"}
-              />
-              {/* <div className="q-add-categories-section-header">
-                <span
-                  onClick={() => {
-                    // setVisible(currentMerchant);
-                    navigate(-1);
-                  }}
-                  className="text-center items-center"
-                >
-                  <img
-                    src={AddSvg}
-                    alt="Add-New-Category"
-                    className="h-9 w-9"
-                  />
-                  <span>Edit Merchant</span>
-                </span>
-              </div> */}
+              <SwitchToBackButton linkTo={-1} title={"Edit Merchant"} />
             </Grid>
           </Grid>
           <Grid container spacing={3} sx={{ px: 2.5, py: 2.5 }}>

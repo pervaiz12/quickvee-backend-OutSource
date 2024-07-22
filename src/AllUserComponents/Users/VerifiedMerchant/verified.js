@@ -45,7 +45,7 @@ import { setIsStoreActive } from "../../../Redux/features/NavBar/MenuSlice";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 const StyledTable = styled(Table)(({ theme }) => ({
-  padding: 2, // Adjust padding as needed
+  padding: 2,
 }));
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -68,7 +68,6 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  // hide last border
   "&:last-child td, &:last-child th": {
     border: 0,
   },
@@ -86,7 +85,6 @@ export default function Verified({ setVisible, setMerchantId }) {
   // states
   const [currentPage, setCurrentPage] = useState(1);
   const [rowsPerPage, setRowsPerPage] = useState(10);
-  const [filteredMerchants, setFilteredMerchants] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [searchRecord, setSearchRecord] = useState("");
   const [storename, setStorename] = useState();
@@ -112,8 +110,6 @@ export default function Verified({ setVisible, setMerchantId }) {
 
   const { userTypeData } = useAuthDetails();
   const debouncedValue = useDebounce(searchRecord);
-
-  // only when user changes Page number, Page size & searches something
   const data_verified = {
     type: "approve",
     ...userTypeData,
@@ -136,9 +132,6 @@ export default function Verified({ setVisible, setMerchantId }) {
   useEffect(() => {
     getVerifiedRecord();
   }, [currentPage, debouncedValue, rowsPerPage]);
-
-  // only when user searches VerifiedMerchantListState
-
   const fetchVerifiedMerchantCount = async () => {
     try {
       await dispatch(
@@ -162,15 +155,6 @@ export default function Verified({ setVisible, setMerchantId }) {
     fetchVerifiedMerchantCount();
   }, [debouncedValue]);
 
-  // on load setting the verified merchant list and whenever the List changes.
-  // useEffect(() => {
-  //   if (verifiedMerchantList.verifiedMerchantData?.length >= 1) {
-  //     setVerifiedMerchantListState(verifiedMerchantList.verifiedMerchantData);
-  //     setFilteredMerchants(verifiedMerchantList.verifiedMerchantData);
-  //   }
-  // }, [verifiedMerchantList.verifiedMerchantData]);
-
-  // on load setting count of Verified Merchant list & on every change...
   useEffect(() => {
     if (!verifiedMerchantList.loading && verifiedMerchantList) {
       setTotalCount(verifiedMerchantList?.verifiedMerchantCount);
@@ -182,18 +166,13 @@ export default function Verified({ setVisible, setMerchantId }) {
   ]);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
-  // when user searches
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
-    // setFilteredMerchants(VerifiedMerchantList);
     setCurrentPage(1);
   };
 
   const handleEditMerchant = (data) => {
     console.log("handleEditMerchant", data);
-    // setMerchantId(data)
-    // setVisible("editVerirmedMerchant")
     navigate(`/users/approve/editMerchant/${data}`);
   };
   const [sortOrder, setSortOrder] = useState("asc");
@@ -328,44 +307,6 @@ export default function Verified({ setVisible, setMerchantId }) {
   const hadleDislikeMerchant = async (merchant_id) => {
     setDeleteMerchantId(merchant_id);
     setDislikeModalOpen(true);
-    /*
-    try {
-      const userConfirmed = window.confirm(
-        "Are you sure you want to unapprove this store"
-      );
-      if (userConfirmed) {
-        const { token, ...otherUserData } = userTypeData;
-        const delVendor = {
-          id: merchant_id,
-          ...otherUserData,
-        };
-
-        const response = await axios.post(
-          BASE_URL + UNAPPROVE_SINGLE_STORE,
-          delVendor,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (response) {
-          // const updatedVendorDetails =
-          //   verifiedMerchantList.verifiedMerchantData.filter(
-          //     (vendor) => vendor.id !== merchant_id
-          //   );
-          // setVerifiedMerchantListState(updatedVendorDetails);
-          // setFilteredMerchants(updatedVendorDetails);
-          dispatch(getVerifiedMerchant(data_verified));
-        } else {
-          console.error(response);
-        }
-      }
-    } catch (error) {
-      console.error(error);
-    }*/
   };
 
   const handleExportTransaction = async (type) => {
@@ -387,20 +328,13 @@ export default function Verified({ setVisible, setMerchantId }) {
       if (response) {
         setLoader(false);
         const csvData = response.data;
-        // Convert the data to a Blob
         const blob = new Blob([csvData], { type: "text/csv" });
-
-        // Create a URL for the Blob
         const fileUrl = URL.createObjectURL(blob);
-
-        // Create a temporary anchor element and trigger a download
         const a = document.createElement("a");
         a.href = fileUrl;
-        a.download = "Inventory_" + storename + ".csv"; // Name of the downloaded file
+        a.download = "Inventory_" + storename + ".csv";
         document.body.appendChild(a);
         a.click();
-
-        // Cleanup: remove the anchor element and revoke the Blob URL
         document.body.removeChild(a);
         URL.revokeObjectURL(fileUrl);
         setsubmitmessage("Inventory Exported Successfully");

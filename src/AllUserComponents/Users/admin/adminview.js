@@ -9,7 +9,6 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Link } from "react-router-dom";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import ViewAdmin from "./viewAdminModal";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
@@ -44,8 +43,6 @@ export default function AdminView({ setVisible, setEditAdminId }) {
   const adminRecordCount = useSelector(
     (state) => state.adminRecord.adminRecordCount
   );
-
-  // only when user changes Page number, Page size & searches something
   const getAdminRecordData = async (data) => {
     try {
       await dispatch(AdminFunction(data)).unwrap();
@@ -67,8 +64,6 @@ export default function AdminView({ setVisible, setEditAdminId }) {
     };
     getAdminRecordData(data);
   }, [currentPage, debouncedValue, rowsPerPage]);
-
-  // only when user searches to update the total count
   const fetchAdminRecordCount = async () => {
     try {
       await dispatch(
@@ -96,21 +91,16 @@ export default function AdminView({ setVisible, setEditAdminId }) {
       setTotalCount(AdminRecord.AdminRecord?.length);
     }
   }, [AdminRecord.AdminRecord]);
-
-  // on load setting count of Verified Merchant list & on every change...
   useEffect(() => {
     setTotalCount(adminRecordCount);
   }, [adminRecordCount]);
-
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
   const handleSearchInputChange = (value) => {
     setSearchRecord(value);
     setCurrentPage(1);
   };
-
   const StyledTable = styled(Table)(({ theme }) => ({
-    padding: 2, // Adjust padding as needed
+    padding: 2,
   }));
 
   const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -128,12 +118,10 @@ export default function AdminView({ setVisible, setEditAdminId }) {
       fontFamily: "CircularSTDBook !important",
     },
   }));
-
   const StyledTableRow = styled(TableRow)(({ theme }) => ({
     "&:nth-of-type(odd)": {
       backgroundColor: theme.palette.action.hover,
     },
-    // hide last border
     "&:last-child td, &:last-child th": {
       border: 0,
     },
@@ -141,18 +129,10 @@ export default function AdminView({ setVisible, setEditAdminId }) {
       border: "none",
     },
   }));
-
   const columns = ["Name", "Email", "Phone", "View", "Action"];
   const handleClick = () => {
-    // setVisible("AddAmin")
     navigate("/users/admin/addAdmin");
   };
-
-  const handleEditAdminClick = (id) => {
-    setEditAdminId(id);
-    setVisible("EditAdmin");
-  };
-
   const sortByItemName = (type, name) => {
     const { sortedItems, newOrder } = SortTableItemsHelperFun(
       adminsDataState,
@@ -186,7 +166,6 @@ export default function AdminView({ setVisible, setEditAdminId }) {
                 <Grid item>
                   <span
                     onClick={handleClick}
-                    // to="/users/addAdmin"
                     className="flex q-category-bottom-header "
                   >
                     <p className="me-2">ADD</p>
@@ -240,7 +219,6 @@ export default function AdminView({ setVisible, setEditAdminId }) {
                       aria-label="customized table"
                     >
                       <TableHead>
-                        {/* <StyledTableCell>Owner Name</StyledTableCell> */}
                         <StyledTableCell>
                           <button
                             className="flex items-center"
@@ -274,13 +252,6 @@ export default function AdminView({ setVisible, setEditAdminId }) {
                       <TableBody>
                         {adminsDataState?.map((data, index) => (
                           <StyledTableRow key={data.id}>
-                            {/* <StyledTableCell>
-                              <div className="text-[#000000] order_method capitalize">
-                                {data.owner_name?.length < 18
-                                  ? data.owner_name
-                                  : data.owner_name?.slice(0, 18) + `...` || ""}
-                              </div>
-                            </StyledTableCell> */}
                             <StyledTableCell>
                               <div className="text-[#000000] order_method capitalize">
                                 {data.name || ""}
@@ -309,8 +280,6 @@ export default function AdminView({ setVisible, setEditAdminId }) {
                                   title="Edit"
                                   className="mx-1 edit cursor-pointer"
                                   onClick={() =>
-                                    // handleEditAdminClick(data.id)
-                                    // setEditAdminId(data.id)
                                     navigate(
                                       `/users/admin/editAdmin/${data.id}`
                                     )

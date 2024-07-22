@@ -1,26 +1,11 @@
 import React, { useEffect, useState } from "react";
 import "../../../../Styles/Common.css";
-// import CustomerFunction from './customerFunction'
-// import{GET_EDIT_CUSTOMER,BASE_URL} from '../../../../Constants/Config'
-import axios from "axios";
-import { useSelector, useDispatch } from "react-redux";
-import {
-  CustomerUpdate,
-  updatecustomerData,
-} from "../../../../Redux/features/user/customerSlice";
-// import { useNavigate } from 'react-router-dom';
 import EditCustomerFunction from "./editCustomerFunction";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Box } from "@mui/material";
 
-import {
-  BrowserRouter as Router,
-  Link,
-  Route,
-  Routes,
-  useParams,
-} from "react-router-dom";
+import { BrowserRouter as Router, useParams } from "react-router-dom";
 
 export default function EditCustomer() {
   const {
@@ -32,15 +17,11 @@ export default function EditCustomer() {
     merchantRadio,
     handleChangeRadio,
     handleSubmitCustomerRecord,
-    successMessage,
     handleKeyPress,
     errors,
-    onhandlePassword,
-    password,
     loader,
   } = EditCustomerFunction();
-  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
-    useAuthDetails();
+  const { userTypeData } = useAuthDetails();
 
   const { id } = useParams();
   useEffect(() => {
@@ -49,7 +30,6 @@ export default function EditCustomer() {
   return (
     <div className="box">
       <div className="box_shadow_div">
-        {/* <p>{successMessage}</p> */}
         <div className="pd_20">
           <h1 className="heading">Edit Customer</h1>
 
@@ -81,7 +61,6 @@ export default function EditCustomer() {
                     disabled
                   />
                 </div>
-                {/* <label>{store.errors.ownerName}</label> */}
               </div>
             </div>
             <div className="qvrow">
@@ -96,7 +75,6 @@ export default function EditCustomer() {
                     value={customerData.reSet}
                   />
                 </div>
-                {/* <label>{store.errors.email}</label> */}
               </div>
               <div className="col-qv-6">
                 <div className="input_area">
@@ -139,7 +117,6 @@ export default function EditCustomer() {
                   value="admin"
                   checked={AdminRadio}
                   onChange={handleChangeRadio}
-                  // onClick={onClickUserRadio}
                 />
                 <label htmlFor="radio2">Admin</label>
               </div>
@@ -152,7 +129,6 @@ export default function EditCustomer() {
                   value="merchant"
                   checked={merchantRadio}
                   onChange={handleChangeRadio}
-                  // onClick={onClickUserRadio}
                 />
                 <label htmlFor="radio1">Merchant</label>
               </div>
@@ -165,11 +141,9 @@ export default function EditCustomer() {
                   value="customer"
                   checked={customerRadio}
                   onChange={handleChangeRadio}
-                  // onClick={onClickUserRadio}customerRadio,AdminRadio,merchantRadio
                 />
                 <label htmlFor="radio3">Customer</label>
               </div>
-              {/* <label>{radioErros}</label> */}
             </div>
           </div>
         </div>

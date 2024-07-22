@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   BASE_URL,
   GET_EDIT_CUSTOMER,
@@ -8,12 +8,9 @@ import {
 import { useNavigate } from "react-router-dom";
 import { useAuthDetails } from "../../../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../../../CommonComponents/ToastifyAlert";
-
 const EditCustomerFunction = () => {
   const navigate = useNavigate();
-  const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
-    useAuthDetails();
-
+  const { userTypeData } = useAuthDetails();
   const [customerData, setCustomerData] = useState({
     name: "",
     email: "",
@@ -38,7 +35,6 @@ const EditCustomerFunction = () => {
 
   const handleEditData = async (data) => {
     const { token, ...newData } = data;
-    // const dataNew={id:data}
     await axios
       .post(BASE_URL + GET_EDIT_CUSTOMER, newData, {
         headers: {
@@ -48,15 +44,11 @@ const EditCustomerFunction = () => {
       })
       .then((response) => {
         if (response.data.status == 200) {
-          // setCustomerData(response.data.message.row)
           setCustomerData({
             ...customerData,
             reSet: "",
             ...response.data.message.row,
           });
-
-          // console.log(response.data.message.row.user_type)
-
           if (response.data.message.row.user_type.toLowerCase() == "customer") {
             setStoreRadio(response.data.message.row.user_type);
             setCustomerRadio(true);
@@ -66,11 +58,6 @@ const EditCustomerFunction = () => {
             setStoreRadio(response.data.message.row.user_type);
             setAdminRadio(true);
           }
-          // else if(response.data.message.user_type.toLowerCase()=="merchant"){
-          //     setStoreRadio(response.data.message.row.user_type)
-          //     setMerchantRadio(true)
-
-          // }
         }
       });
   };
@@ -91,12 +78,9 @@ const EditCustomerFunction = () => {
       } else {
         updatedErrors[name] = "";
       }
-      //   updatedErrors['phone'] = value === "" ? `please fill the ${name} field` : '';
     }
-
     setErrors(updatedErrors);
     const trimmedValue = value.replace(/^\s+|\s+$/g, "");
-
     setCustomerData((prevCustomerData) => ({
       ...prevCustomerData,
       [name]: trimmedValue,
@@ -109,7 +93,6 @@ const EditCustomerFunction = () => {
   };
 
   const handleKeyPress = (e) => {
-    // Allow only numeric characters (key codes 48 to 57) and backspace (key code 8)
     if ((e.charCode < 48 || e.charCode > 57) && e.charCode !== 8) {
       e.preventDefault();
     }
@@ -134,7 +117,6 @@ const EditCustomerFunction = () => {
   };
   const handleSubmitCustomerRecord = async (e) => {
     e.preventDefault();
-    // console.log(customerData.reSet)
     const { token, ...newData } = userTypeData;
     const data = {
       id: customerData.id,
