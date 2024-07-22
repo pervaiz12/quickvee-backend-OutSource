@@ -8,7 +8,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
-import AlertModal from "../../reuseableComponents/AlertModal";
+
 import PasswordShow from "./../../Common/passwordShow";
 import { fetchsupportDetailsData } from "../../Redux/features/SupportDetails/supportDetailsSlice";
 import { useAuthDetails } from "../../Common/cookiesHelper";

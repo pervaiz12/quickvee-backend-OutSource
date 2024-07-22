@@ -1,7 +1,7 @@
-import { event } from "jquery";
+
 import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Container } from "react-bootstrap/Container";
+
 import { Grid } from "@mui/material";
 import BasicTextFields from "../../../reuseableComponents/TextInputField";
 import useCurrencyInput from "../../../hooks/useCurrencyInput";
@@ -125,105 +125,6 @@ const FlatDelivery = ({ DeliveryFeeData }) => {
         </Grid>
       </Grid>
 
-      {/* <div className="box">
-        <div className="box_shadow_div">
-          <div className="" style={{ padding: "20px" }}>
-            <h5 class="box_shadow_heading"></h5>
-
-            <div className="qvrow">
-              <div className="">
-                <div className="" style={{ display: "flex", width: "50%" }}>
-               
-                  <div
-                    className={`cursor-pointer px-12 rounded py-2 text-[14px]  ${
-                      activeTab === "0"
-                        ? "bg-[#0A64F9] text-white"
-                        : "bg-[#F5F5F5] text-[#6A6A6A]"
-                    }`}
-                    onClick={() => handleTabClick("0")}
-                  >
-                    Flat Delivery Fee
-                  </div>
-
-                  <div
-                    className={`cursor-pointer px-12 rounded py-2  text-[14px]  ${
-                      activeTab === "1"
-                        ? "bg-[#0A64F9] text-white"
-                        : "bg-[#F5F5F5] text-[#6A6A6A]"
-                    }`}
-                    onClick={() => handleTabClick("1")}
-                  >
-                    Per Mile Delivery Fee
-                  </div>
-                </div>
-              </div>
-            </div>
-
- 
-            {activeTab === "0" && (
-              <div className="mt-5">
-                <div className="qvrow">
-                  <div className="col-qv-6">
-                    <div className="input_area">
-                      <label>Delivery Fee ($)</label>
-
-                      <input
-                        type="text"
-                        placeholder="%0.00"
-                        maxlength="8"
-                        name="default_delvery_setup"
-                        id="delvery_setup"
-                        value={deleveryChange}
-                        onChange={handleDelChanges}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-qv-6">
-                    <div className="input_area">
-   
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {activeTab === "1" && (
-              <div className="mt-5">
-                <div className="qvrow">
-                  <div className="col-qv-6">
-                    <div className="input_area">
-                      <label>Min Delivery Fee ($)</label>
-                      <input
-                        type="text"
-                        placeholder="%0.00"
-                        maxlength="8"
-                        name="default_delvery_setup"
-                        id="delvery_setup"
-                        value={deleveryChange}
-                        onChange={handleDelChanges}
-                      />
-                    </div>
-                  </div>
-                  <div className="col-qv-6">
-                    <div className="input_area">
-                      <label>Delivery Rate per Miles ($)</label>
-                      <input
-                        type="text"
-                        placeholder="%0.00"
-                        maxlength="8"
-                        name="default_delvery_setup"
-                        id="delvery_setup"
-                        value={delveryRates}
-                        onChange={handleRateMiles}
-                      />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-      </div> */}
     </>
   );
 };

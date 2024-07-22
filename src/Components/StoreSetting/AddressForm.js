@@ -72,9 +72,7 @@ const AddressForm = ({
             )}
           </Grid>
           <Grid item xs={12} sm={6} md={3}>
-            {/* <label>
-              State <span className="Asterisk_error">*</span>
-            </label> */}
+
             <SelectDropDown
               placeholder="state"
               name="state"
@@ -90,18 +88,7 @@ const AddressForm = ({
               <span className="error">{errors.stateNameError}</span>
             )}
           </Grid>
-          {/* <Grid item xs={12} sm={6} md={3}>
-            <BasicTextFields
-              type="text"
-              name="state"
-              placeholder="State"
-              value={infoRecord.state}
-              onChangeFun={onChangeHandle}
-            />
-            {errors.stateNameError && (
-              <span className="error">{errors.stateNameError}</span>
-            )}
-          </Grid> */}
+
           <Grid item xs={12} sm={6} md={3}>
             <BasicTextFields
               type="text"

@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from "react";
-import AddNewCategory from "../../Assests/Dashboard/Left.svg";
-import CustomeDateTime from "./CustomeDateTime";
+
 import axios from "axios";
 import {
   BASE_URL,
@@ -8,16 +7,16 @@ import {
   ADD_COUPON,
 } from "../../Constants/Config";
 import _ from "lodash";
-import Switch from "@mui/material/Switch";
+
 import Grid from "@mui/material/Grid";
 
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { TimePicker } from "@mui/x-date-pickers/TimePicker";
+
 import caleIcon from "../../Assests/Filter/Calender.svg";
-import TimeIcon from "../../Assests/Filter/Clock.svg";
+
 import dayjs, { Dayjs } from "dayjs";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import SwitchLabel from "../../reuseableComponents/SwitchLabel";
@@ -29,7 +28,7 @@ import AlertModal from "../../reuseableComponents/AlertModal";
 import PasswordShow from "../../Common/passwordShow";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Link, useNavigate } from "react-router-dom";
-import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+
 import SwitchToBackButton from "../../reuseableComponents/SwitchToBackButton";
 
 const AddCoupon = ({ seVisible }) => {
@@ -184,77 +183,6 @@ const AddCoupon = ({ seVisible }) => {
     });
   };
 
-  // const handleStartDateChange = (newDate) => {
-  //   const formattedStartDate = newDate.format("YYYY-MM-DD");
-  //   const dayjsDate = dayjs(newDate);
-  //   const today = new Date().toISOString().split("T")[0];
-  //   if (dayjsDate === coupon.date_expire) {
-  //     // showModal("Start date cannot be the same as the end date");
-  //     setCoupon({
-  //       ...coupon,
-  //       date_valid: formattedStartDate,
-  //     });
-  //     setDateStartError("");
-  //     // setDateStartError("Start Date is required");
-  //   } else if (dayjs(dayjsDate).isAfter(dayjs(coupon.date_expire))) {
-  //     // showModal("Start date cannot be greater than the end date");
-  //     setCoupon({
-  //       ...coupon,
-  //       date_valid: formattedStartDate,
-  //       date_expire: "",
-  //     });
-  //     setDateStartError("Start Date is required");
-  //   } else {
-  //     setCoupon({
-  //       ...coupon,
-  //       date_valid: formattedStartDate,
-  //     });
-  //     setDateStartError("");
-  //   }
-  //   if(dayjsDate < today){
-  //     setCoupon({
-  //       ...coupon,
-  //       date_valid: "",
-  //     });
-  //     setDateStartError("Start Date cannot be before the current date");
-  //   }
-  // };
-
-  // const handleEndDateChange = (newDate) => {
-  //   const formattedEndDate = newDate.format("YYYY-MM-DD");
-  //   const dayjsDate = dayjs(newDate);
-  //   const today = new Date().toISOString().split("T")[0];
-  //   if (dayjsDate === coupon.date_valid) {
-  //     // showModal("End date cannot be the same as the start date");
-  //     setCoupon({
-  //       ...coupon,
-  //       date_expire: formattedEndDate,
-  //     });
-  //     // setDateEndError("End Date is required");
-  //     setDateEndError("")
-  //     // return; // Do not update the state
-  //   } else if (dayjs(dayjsDate).isBefore(dayjs(coupon.date_valid))) {
-  //     showModal("End date cannot be less than the start date");
-  //     setCoupon({
-  //       ...coupon,
-  //       date_expire: "",
-  //     });
-  //     setDateEndError("End Date is required");
-  //   } else {
-  //     setCoupon({
-  //       ...coupon,
-  //       date_expire: formattedEndDate,
-  //     });
-  //     setDateEndError("");
-  //   }
-  //   if(dayjsDate < today){
-  //     setCoupon({
-  //       ...coupon,
-  //       date_expire: "",
-  //     });
-  //     setDateEndError("End Date cannot be before the current date");
-  //   }
-  // };
 
   const handleStartDateChange = (newDate) => {
     if (!newDate || !newDate.isValid()) {
@@ -672,21 +600,7 @@ const AddCoupon = ({ seVisible }) => {
         <div className="box_shadow_div">
           <div className="q-add-categories-section">
             <SwitchToBackButton linkTo={"/coupons"} title={"Add Coupon"} />
-            {/* <div className="q-add-categories-section-header">
-              <Link to={`/coupons`}>
-                <span
-                onClick={() => seVisible("CouponDiscount")}
-                className="add_coupon_span"
-              >
-                <img
-                  src={AddNewCategory}
-                  alt="Add-New-Category"
-                  className="h-9 w-9"
-                />
-                <span className="textIMG">Add Coupon</span>
-                </span>
-              </Link>
-            </div> */}
+
             <form onSubmit={handleAddButtonClick}>
               <div className="q-add-categories-section-middle-form">
                 <div className="q_coupon_Add_status_btn">

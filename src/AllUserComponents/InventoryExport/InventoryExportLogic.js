@@ -1,8 +1,6 @@
 // import { useState } from "react";
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import { fetchMerchantsList } from "../../Redux/features/ExportInventory/ExportInventorySlice";
-import { useSelector } from "react-redux";
+
 import { BASE_URL, INVENTORY_EXPORT } from "../../Constants/Config";
 import axios from "axios";
 import { useAuthDetails } from "../../Common/cookiesHelper";

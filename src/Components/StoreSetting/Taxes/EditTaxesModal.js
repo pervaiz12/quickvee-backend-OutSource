@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import { Box, Modal } from "@mui/material";
 import EditIcon from "../../../Assests/Category/editIcon.svg";
 import CrossIcon from "../../../Assests/Dashboard/cross.svg";
-import DownIcon from "../../../Assests/Dashboard/Down.svg";
+
 import { fetchtaxesData } from "../../../Redux/features/Taxes/taxesSlice";
 import { useDispatch } from "react-redux";
 import axios from "axios";

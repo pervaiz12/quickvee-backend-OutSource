@@ -1,14 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import AddIcon from "../../Assests/Category/addIcon.svg";
-import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
-import Viewarrow from "../../Assests/Vendors/viewarrow.png";
+
 import EditIcon from "../../Assests/Category/editIcon.svg";
 
 import { fetchVendorsListData } from "../../Redux/features/VendorList/vListSlice";
 import { useSelector, useDispatch } from "react-redux";
 import { BASE_URL, STATUS_UPD_VENDORS } from "../../Constants/Config";
-import ViewItemsModal from "./ViewItemsModal";
+
 // import EditVendorsModal from './EditVendorsModal';
 import Switch from "@mui/material/Switch";
 import { Link, useNavigate } from "react-router-dom";

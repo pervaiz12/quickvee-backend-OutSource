@@ -1,15 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import "../../Styles/EmployeeList/employeeList.css";
-import AddIcon from "../../Assests/Category/addIcon.svg";
+
 import AddPermissionModal from "./AddPermissionModal";
 import EditPermissionModal from "./EditPermissionModal";
-import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
-import EditIcon from "../../Assests/Category/editIcon.svg";
-import View from "../../Assests/VerifiedMerchant/View.svg";
-import Edit from "../../Assests/VerifiedMerchant/Edit.svg";
+
 import Delete from "../../Assests/Category/deleteIcon.svg";
-import DisLike from "../../Assests/VerifiedMerchant/DisLike.svg";
+
 import DeleteModal from "../../reuseableComponents/DeleteModal";
 
 import {
@@ -117,22 +114,7 @@ const PermissionList = () => {
     }
   }, [AllPermissionDataState.loading, AllPermissionDataState.permissionData]);
 
-  /*const handleDeletePermission = (id) => {
-    const data = {
-      id: id,
-      ...userTypeData,
-    };
-    const userConfirmed = window.confirm(
-      "Are you sure you want to delete this ?"
-    );
-    if (userConfirmed) {
-      if (id) {
-        dispatch(deletePermission(data));
-      }
-    } else {
-      console.log("Deletion canceled by user");
-    }
-  };*/
+
 
   const [deletePermissionId, setDeletePermissionId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
@@ -221,9 +203,7 @@ const PermissionList = () => {
           <Grid item xs={12}>
             <div className="q-attributes-bottom-header">
               <span>Permission</span>
-              {/* <p className="" >
-              Add New Sub Permission <img src={AddIcon} alt="add-icon" /> 
-            </p> */}
+
               <AddPermissionModal />
             </div>
             <Grid container sx={{ padding: 2.5 }}>
@@ -273,20 +253,7 @@ const PermissionList = () => {
                         ? allpermission?.map((data, index) => {
                             return (
                               <StyledTableRow>
-                                {/* <StyledTableCell>
-                               <div class="flex">
-                                 <div class="text-[#000000] order_method capitalize">
-                                   {data?.sub_permission}
-                                 </div>
-                                 <div class="mx-2 ">(State: {data.a_state})</div>
-                               </div>
-                               <div class="text-[#818181] lowercase">
-                                 {data?.permission?.length < 18
-                                   ? data?.permission
-                                   : data?.permission?.slice(0, 18) + `...` ||
-                                     ""}
-                               </div>
-                             </StyledTableCell> */}
+
                                 <StyledTableCell>
                                   <div class="text-[#000000] order_method ">
                                     {data?.sub_permission}
@@ -334,48 +301,6 @@ const PermissionList = () => {
           onConfirm={confirmDeleteCategory}
         />
 
-        {/* <div className="q-attributes-bottom-header-sticky">
-          <div className="q-attributes-bottom-header">
-            <span>Permission</span>
-
-            <AddPermissionModal />
-          </div>
-          <div className="q-daily-report-bottom-report-header">
-            <p className="report-sort">Sr.No</p>
-            <p className="report-title">Sub Permission</p>
-            <p className="report-title">Permission</p>
-            <p className="report-title"></p>
-            <p className="report-title"></p>
-          </div>
-          <div className="q-category-bottom-categories-listing">
-            {allpermission &&
-              allpermission.length >= 1 &&
-              allpermission.map((permission, index) => (
-                <div
-                  className="q-category-bottom-categories-listing"
-                  key={index}
-                >
-                  <div className="q-category-bottom-categories-single-category">
-                    <p className="report-sort">{index + 1}</p>
-                    <p className="report-title">{permission.sub_permission}</p>
-                    <p className="report-title">{permission.permission}</p>
-                    <p className="report-title">
-                      <EditPermissionModal selected={permission} />
-                    </p>
-                    <p className="report-title">
-                      {" "}
-                      <img
-                        src={DeleteIcon}
-                        alt="Delete-icon"
-                        className="h-8 w-8"
-                        onClick={() => handleDeletePermission(permission.id)}
-                      />
-                    </p>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div> */}
       </div>
     </>
   );

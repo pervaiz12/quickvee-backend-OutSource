@@ -1,11 +1,10 @@
 import * as React from "react";
 import Box from "@mui/material/Box";
-import Button from "@mui/material/Button";
-import Typography from "@mui/material/Typography";
+
 import Modal from "@mui/material/Modal";
 import ChangePasswordForm from "./ChangePasswordForm";
 import InfoFunction from "./infoFunctionality/infoFunction";
-import CustomHeader from "../../reuseableComponents/CustomHeader";
+
 import CrossIcon from "../../Assests/Dashboard/cross.svg";
 const myStyles = {
   width: "60%",

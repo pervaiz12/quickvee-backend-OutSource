@@ -1,10 +1,9 @@
-// import React from "react";
+
 import { useState, useRef } from "react";
 import axios from "axios";
 import { useDispatch } from "react-redux";
 import { addToEmployeeList } from "../../../Redux/features/StoreSettings/AddEmployee/AddEmployeeSlice";
 import Validation from "../../../Constants/Validation";
-// import { useNavigate } from "react-router-dom";
 import {
   BASE_URL,
   ADDEDIT_EMPLOYEE,

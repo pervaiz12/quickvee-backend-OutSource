@@ -1,7 +1,7 @@
 import React, { useState, useRef } from "react";
-import AddNewCategory from "../../Assests/Taxes/Left.svg";
+
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
-import DownIcon from "../../Assests/Dashboard/Down.svg";
+
 import { BASE_URL, ADD_DEFAULTS } from "../../Constants/Config";
 import axios from "axios";
 import { useAuthDetails } from "./../../Common/cookiesHelper";
@@ -294,17 +294,7 @@ const AddDefaults = ({ setVisible }) => {
                 linkTo={-1}
                 title={"Add New Defaults"}
               />
-              {/* <div className="q-add-categories-section-header">
-                <span
-                  onClick={() =>
-                    //  setVisible("DefaultsDetail")
-                    navigate(-1)
-                  }
-                >
-                  <img src={AddNewCategory} alt="Add-New-Category" />
-                  <span>Add New Defaults</span>
-                </span>
-              </div> */}
+
               <div className="q-add-categories-section-middle-form">
                 <div className="q-add-categories-single-input">
                   <label htmlFor="name">Name</label>
@@ -323,43 +313,6 @@ const AddDefaults = ({ setVisible }) => {
                   <span className="error-message">{fieldErrors.name}</span>
                 )}
 
-                {/* <div className="q-add-categories-single-input mb-5">
-                  <label
-                    className="q-details-page-label"
-                    htmlFor="orderSourceFilter"
-                  >
-                    Type
-                  </label>
-                  <div className="custom-dropdown">
-                    <div
-                      className="custom-dropdown-header"
-                      onClick={() => toggleDropdown("category")}
-                    >
-                      <span className="selected-option ">
-                        {selectedCatSource}
-                      </span>
-                      <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-                    </div>
-                    {catSourceDropdownVisible && (
-                      <div className="dropdown-content ">
-                        <div
-                          onClick={() =>
-                            handleOptionClick("Select", "category")
-                          }
-                        >
-                          Select
-                        </div>
-                        <div
-                          onClick={() =>
-                            handleOptionClick("Category", "category")
-                          }
-                        >
-                          Category
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div> */}
 
                 <Grid item xs={6}>
                   <label className="q-details-page-label">Type</label>

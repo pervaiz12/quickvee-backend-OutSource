@@ -4,9 +4,9 @@ import {
   OutlinedInput,
   FormControl,
 } from "@mui/material";
-import BasicTextFields from "../../reuseableComponents/TextInputField";
+
 import { useState } from "react";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
+
 import CircularProgress from "@mui/material/CircularProgress";
 import IconButton from "@mui/material/IconButton";
 const ChangePasswordForm = ({
