@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BiCaretUp } from "react-icons/bi";
+
 // import axios from "axios";
 import { useSelector, useDispatch } from "react-redux";
 import { fetchSalesReportData } from "../../../Redux/features/Reports/SalesReport/SalesReportSlice";
@@ -14,7 +14,7 @@ import TableRow from "@mui/material/TableRow";
 import { Grid } from "@mui/material";
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import PasswordShow from "../../../Common/passwordShow";
-import { getAuthInvalidMessage } from "../../../Redux/features/Authentication/loginSlice";
+
 import { priceFormate } from "../../../hooks/priceFormate";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import Skeleton from "react-loading-skeleton";
@@ -61,7 +61,7 @@ const SalesReportList = (props) => {
   const merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   const [SalesReportData, setSalesReportData] = useState({});
   const SalesReportDataState = useSelector((state) => state.SalesReportList);
-  // console.log(props)
+  
   useEffect(() => {
     getAllRecord();
   }, [props, dispatch]);
@@ -78,7 +78,7 @@ const SalesReportList = (props) => {
         order_env: 9,
         order_typ: "both",
       };
-      // console.log(data)
+      
       if (data) {
         try {
           await dispatch(fetchSalesReportData(data)).unwrap();
@@ -96,7 +96,7 @@ const SalesReportList = (props) => {
 
   useEffect(() => {
     if (!SalesReportDataState.loading && SalesReportDataState.SalesReportData) {
-      // console.log(SalesReportDataState.SalesReportData)
+      
       setSalesReportData(SalesReportDataState.SalesReportData);
     } else {
       setSalesReportData({});
@@ -115,7 +115,7 @@ const SalesReportList = (props) => {
     SalesReportData.total_loyalty_point_spent
   );
 
-  // console.log("SalesReportData",SalesReportDataState.SalesReportData)
+  
 
   const discount1 =
     parseFloat(discount) -
@@ -158,8 +158,8 @@ const SalesReportList = (props) => {
   const CashCollected =
     parseFloat(SalesReportData.cash_collected) -
     parseFloat(SalesReportData.cash_back_amt);
-  // console.log(discount1)
-  // console.log(SalesReportData)
+  
+    
   const SalesSummeryList = [
     {
       name: "Gross Sale",
@@ -246,13 +246,13 @@ const SalesReportList = (props) => {
                 </div>
                 <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
                   <Skeleton />
-                  {/* ${formatter.format(gross_sale)} */}
-                  {/* {format("2000000.00")} */}
+                  
+                  
                 </div>
-                {/* <div className="flex items-center text-green-500">
-              <BiCaretUp className="mr-1" />
-              <span className="text-green-500 Admin_std">+21.00%</span>
-              </div> */}
+                
+                
+
+
               </div>
             </Grid>
             <Grid item xs={4}>
@@ -263,10 +263,10 @@ const SalesReportList = (props) => {
                 <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
                   <Skeleton />
                 </div>
-                {/* <div className="flex items-center text-green-500">
-              <BiCaretUp className="mr-1" />
-              <span className="text-green-500 Admin_std">+21.00%</span>
-              </div> */}
+                
+                
+
+
               </div>
             </Grid>
             <Grid item xs={4}>
@@ -277,10 +277,10 @@ const SalesReportList = (props) => {
                 <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
                   <Skeleton />
                 </div>
-                {/* <div className="flex items-center text-green-500">
-                  <BiCaretUp className="mr-1" />
-                  <span className="text-green-500 Admin_std">+21.00%</span>
-                  </div> */}
+                
+                
+
+
               </div>
             </Grid>
           </Grid>
@@ -298,13 +298,13 @@ const SalesReportList = (props) => {
                 </div>
                 <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
                   ${priceFormate(parseFloat(gross_sale).toFixed(2))}
-                  {/* ${formatter.format(gross_sale)} */}
-                  {/* {format("2000000.00")} */}
+                  
+                  
                 </div>
-                {/* <div className="flex items-center text-green-500">
-                    <BiCaretUp className="mr-1" />
-                    <span className="text-green-500 Admin_std">+21.00%</span>
-                    </div> */}
+               
+               
+
+
               </div>
             </Grid>
             <Grid item xs={4}>
@@ -315,10 +315,10 @@ const SalesReportList = (props) => {
                 <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
                   ${priceFormate(parseFloat(Math.abs(netSales)).toFixed(2))}
                 </div>
-                {/* <div className="flex items-center text-green-500">
-                    <BiCaretUp className="mr-1" />
-                    <span className="text-green-500 Admin_std">+21.00%</span>
-                    </div> */}
+                
+                
+
+
               </div>
             </Grid>
             <Grid item xs={4}>
@@ -329,10 +329,10 @@ const SalesReportList = (props) => {
                 <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
                   ${priceFormate(parseFloat(amountCollected).toFixed(2))}
                 </div>
-                {/* <div className="flex items-center text-green-500">
-                        <BiCaretUp className="mr-1" />
-                        <span className="text-green-500 Admin_std">+21.00%</span>
-                        </div> */}
+                
+                
+
+                
               </div>
             </Grid>
           </Grid>

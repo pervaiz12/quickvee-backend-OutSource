@@ -1,15 +1,14 @@
 import React, { useEffect } from "react";
-import infoImage from "../../image/Group 196.svg";
+
 import InfoFunction from "./infoFunctionality/infoFunction";
-import { BASE_URL } from "../../Constants/Config";
-import BasicTextFields from "../../reuseableComponents/TextInputField";
+
 import { CircularProgress, Grid } from "@mui/material";
 import StoreHeading from "./StoreHeading";
 import MenuLink from "./MenuLink";
 import LogoAndBanner from "./LogoAndBanner";
 import AddressForm from "./AddressForm";
 import SocialMediaForm from "./SocialMediaForm";
-import ChangePasswordForm from "./ChangePasswordForm";
+
 const Info = () => {
   const {
     handleSubmitInfo,
@@ -126,14 +125,7 @@ const Info = () => {
               ) : (
                 "Update"
               )}
-              {/* <div className="info-update">
-                <input
-                  type="button"
-                  className="blue_btn inforecord-email"
-                  value="Update"
-                  onClick={handleSubmitInfo}
-                />
-              </div> */}
+
             </button>
           </Grid>
         </Grid>

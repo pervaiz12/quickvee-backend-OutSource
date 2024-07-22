@@ -5,13 +5,11 @@ import { fetchAttributesData } from "../../Redux/features/Attributes/attributesS
 import { useSelector, useDispatch } from "react-redux";
 import { BASE_URL, ADD_ATTRIBUTE } from "../../Constants/Config";
 import AddIcon from "../../Assests/Category/addIcon.svg";
-import EditAttribute from "../Attributes/EditAttribute";
-import SortIcon from "../../Assests/Category/Sorting.svg";
-import EditIcon from "../../Assests/Category/editIcon.svg";
+
 import BasicTextFields from "../../reuseableComponents/TextInputField";
 import DraggableTable from "../../reuseableComponents/DraggableTable";
 import { Box, Modal } from "@mui/material";
-import ModalCutom from "../../reuseableComponents/ModalCutom";
+
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import PasswordShow from "../../Common/passwordShow";
@@ -176,9 +174,7 @@ const AtrDataList = ({ seVisible }) => {
 
   return (
     <>
-      {/* <div className="q-attributes-top-detail-section">
-        <li>{submitmessage}</li>
-      </div>      */}
+
       <div className="box">
         <div className="q-attributes-bottom-detail-section">
           <div className="q-attributes-bottom-header-sticky">
@@ -189,10 +185,7 @@ const AtrDataList = ({ seVisible }) => {
                 Add Attribute <img src={AddIcon} alt="add-icon" />
               </p>
             </div>
-            {/* <div className="q-attributes-bottom-attriButes-header">
-              <p className="attriButes-sort">Sort</p>
-              <p className="attriButes-title">Title</p>
-            </div> */}
+
           </div>
 
           <DraggableTable
@@ -203,63 +196,8 @@ const AtrDataList = ({ seVisible }) => {
             table={"varients"}
           />
 
-          {/* <div className="q-attributes-bottom-attriButes-listing">
-            {allattributes &&
-              allattributes.length >= 1 &&
-              allattributes.map((attribute, index) => (
-                <div
-                  key={index}
-                  className="q-attributes-bottom-attriButes-single-attributes"
-                >
-                  <p className="attriButes-sort">
-                    <img src={SortIcon} alt="add-icon" />
-                  </p>
-                  <p className="attriButes-title">{attribute.title}</p>
 
-                  <p
-                    className="attriButes-enable-disable"
-                    style={{ width: "calc(100% - 32%)" }}
-                  >
-                    <EditAttribute
-                      attribute={attribute}
-                      allattributes={allattributes}
-                    />
-                  </p>
-                </div>
-              ))}
-          </div> */}
 
-          {/* <Modal  onClose={closeModal} aria-labelledby="modal-modal-title" aria-describedby="modal-modal-description"  >
-            <div className="q-custom-modal-container" id="addtributes_">
-              <div className="q-custom-modal-content" style={{ height: "max-content", top: "unset" }} >
-                <p className="q-custom-modal-header ">
-                  <div className="mt_card_header q_dashbaord_netsales">
-                    <h1 className="">Add New Attribute</h1>
-                  </div>
-                  <img src={CrossIcon} alt="icon" className="ml-auto mb-4 cursor-pointer" onClick={closeModal} />
-                </p>
-                <div className="my-2">
-                  <div className="border-b border-[#ccc]"></div>
-                </div>
-
-                <div className="title_attributes_section">
-                  <label className="mb-2">Title</label>
-                  <BasicTextFields
-                    value={newAttribute}
-                    onChangeFun={changeTittleHandler}
-                    placeholder="Enter attribute title"
-                  />
-                  <span className="input-error">
-                    {errorMessage !== "" ? errorMessage : ""}
-                  </span>
-                </div>
-                <div className="q-add-categories-section-middle-footer">
-                  <button onClick={handleAddAttribute} className="quic-btn quic-btn-save" >Add</button>
-                  <button onClick={closeModal} className="quic-btn quic-btn-cancle">Cancel</button>
-                </div>
-              </div>
-            </div>
-          </Modal> */}
 
           <Modal
             open={showModal}

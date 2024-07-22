@@ -156,12 +156,7 @@ const AddPo = ({ seVisible }) => {
             linkTo={"/purchase-data"}
             title={"Create Purchase Order"}
           />
-          {/* <div className="q-add-categories-section-header">
-            <span onClick={() => navigate("/purchase-data")}>
-              <img src={backIcon} alt="Add New Category" className="w-6 h-6" />
-              <span>Create Purchase Order</span>
-            </span>
-          </div> */}
+        
 
           <div style={{ padding: "20px" }}>
             <Grid container spacing={2}>

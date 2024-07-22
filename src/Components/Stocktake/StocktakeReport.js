@@ -148,7 +148,7 @@ const StocktakeReport = ({ setVisible }) => {
             <div className="q-add-categories-section-header">
               <span
                 onClick={() => {
-                  // setVisible("StocktakeList");
+                  
                   navigate(-1);
                 }}
                 className="text-center items-center"
@@ -234,7 +234,7 @@ const StocktakeReport = ({ setVisible }) => {
               <Grid item>
                 <button
                   onClick={() => {
-                    // setVisible("StocktakeList");
+                    
                     navigate(-1);
                   }}
                   className="quic-btn quic-btn-cancle w-32"
@@ -281,10 +281,10 @@ const StocktakeReport = ({ setVisible }) => {
                     className="quic-btn quic-btn-save w-32"
                     onClick={handlePrint}
 
-                    //   disabled={loader}
+                    
                   >
                     Print
-                    {/* {loader ? <CircularProgress /> : "Update"} */}
+                   
                   </button>
                 </Grid>
               </Grid>

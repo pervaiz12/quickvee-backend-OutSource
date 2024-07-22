@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from "react";
-import AddNewCategory from "../../Assests/Taxes/Left.svg";
+
 import DeleteIcon from "../../Assests/Category/deleteIcon.svg";
-import DownIcon from "../../Assests/Dashboard/Down.svg";
+
 import axios from "axios";
 import { useAuthDetails } from "./../../Common/cookiesHelper";
 import Upload from "../../Assests/Category/upload.svg";
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { BASE_URL, DEFAULTDATA, EDIT_DEFAULTS } from "../../Constants/Config";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
@@ -227,11 +227,7 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
     if (file) {
       const allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
       if (!allowedExtensions.exec(file.name)) {
-        // alert(file.name + " is not an image. Only jpeg, png, jpg files can be uploaded.");
-        // showModal(
-        //   file.name +
-        //     " is not an image. Only jpeg, png, jpg files can be uploaded."
-        // );
+
         showModal("Only jpeg, png, jpg files can be uploaded");
       } else {
         const reader = new FileReader();
@@ -335,20 +331,7 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
               linkTo={"/unapprove/defaults"}
               title={"Edit Defaults"}
             />
-              {/* <div className="q-add-categories-section-header">
-                <span
-                  onClick={() => {
-                    // setVisible("DefaultsDetail");
-                    navigate(-1);
-                  }}
-                  // to={`/users/view/unapprove/menu/defaults`}
-                >
-                  <span style={myStyles}>
-                    <img src={AddNewCategory} alt="Add-New-Category" />
-                    <span>Edit Defaults</span>
-                  </span>
-                </span>
-              </div> */}
+
               <div className="q-add-categories-section-middle-form">
                 <div className="q-add-categories-single-input">
                   <label htmlFor="name">Name</label>
@@ -365,43 +348,6 @@ const EditDefaults = ({ setVisible, defaultEditId }) => {
                 {fieldErrors.name && (
                   <span className="error-message">{fieldErrors.name}</span>
                 )}
-                {/* <div className="q-add-categories-single-input mb-5">
-                  <label
-                    className="q-details-page-label"
-                    htmlFor="orderSourceFilter"
-                  >
-                    Type
-                  </label>
-                  <div className="custom-dropdown">
-                    <div
-                      className="custom-dropdown-header"
-                      onClick={() => toggleDropdown("category")}
-                    >
-                      <span className="selected-option ">
-                        {selectedCatSource}
-                      </span>
-                      <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-                    </div>
-                    {catSourceDropdownVisible && (
-                      <div className="dropdown-content ">
-                        <div
-                          onClick={() =>
-                            handleOptionClick("Select", "category")
-                          }
-                        >
-                          Select
-                        </div>
-                        <div
-                          onClick={() =>
-                            handleOptionClick("Category", "category")
-                          }
-                        >
-                          Category
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </div> */}
 
                 <Grid item xs={6}>
                   <label className="q-details-page-label ">Type</label>

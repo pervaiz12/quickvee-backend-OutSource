@@ -65,7 +65,7 @@ const TopSallerReport = () => {
         limit: orderTypValue,
         ...userTypeData,
       };
-      // console.log(updatedData);
+      
       setFilteredData(updatedData);
     } else {
       // Handle other cases or log an error
@@ -84,7 +84,7 @@ const TopSallerReport = () => {
         break;
       case "limit":
         setselectedLimitType(option.title);
-        // setlimitTypeDropdownVisible(false);
+        
         break;
       case "category":
         if (option === "All") {

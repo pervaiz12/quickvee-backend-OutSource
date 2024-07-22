@@ -38,17 +38,6 @@ const SearchField = () => {
             </div>
           </div>
 
-
-
-
-
-
-
-
-
-
-
-
         </div>
       </div>
     </>

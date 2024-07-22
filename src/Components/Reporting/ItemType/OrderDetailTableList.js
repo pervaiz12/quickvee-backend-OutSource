@@ -36,7 +36,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
   },
   "&:last-child td, &:last-child th": {
-    // backgroundColor: "#F5F5F5",
+    
   },
   "& td, & th": {
     border: "none",
@@ -58,13 +58,13 @@ export default function OrderDetailTableList({
   merchant_id,
 }) {
   function capitalizeFirstLetter(string, payemnt, status) {
-    // console.log(payemnt);
+    
     return payemnt == "Cash" && status == "5"
       ? "Cancelled"
       : payemnt == "Cash"
         ? "Cash-Paid"
         : "Online-Paid";
-    // return string.charAt(0).toUpperCase() + string.slice(1);
+    
   }
   const orderStatus = (data) => {
     let PayStatus = "";
@@ -183,12 +183,12 @@ export default function OrderDetailTableList({
                                 <Link
                                   className="whitespace-nowrap text-[#0A64F9]"
                                   to={`/order/store-reporting/order-summary/${merchant_id}/${data?.order_id}`}
-                                  // onClick={() => handleSummeryPage(row.order_id)}
+                                  
                                   target="_blank"
                                 >
                                   View Details
-                                  {/* Order Summery */}
-                                  {/* <img src={Summery} alt="" className="pl-1" /> */}
+                                  
+                                  
                                 </Link>
                               </StyledTableCell>
                             </StyledTableRow>

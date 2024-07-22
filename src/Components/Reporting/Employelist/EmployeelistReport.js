@@ -40,7 +40,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
   },
   "&:last-child td, &:last-child th": {
-    // backgroundColor: "#F5F5F5",
+    
   },
   "& td, & th": {
     border: "none",
@@ -70,14 +70,14 @@ const EmployeelistReport = () => {
     fetchData();
   }, [dispatch]);
 
-  // useEffect(() => {
-  //   if (
-  //     !AllEmployeeListState.loading &&
-  //     AllEmployeeListState.employeeListData
-  //   ) {
-  //     setAllEmployeeData(AllEmployeeListState.employeeListData);
-  //   }
-  // }, [AllEmployeeListState.loading, AllEmployeeListState.employeeListData]);
+  
+  
+
+
+
+
+
+
 
   useEffect(() => {
     if (
@@ -90,12 +90,12 @@ const EmployeelistReport = () => {
           return { ...data, fullName: fullName };
         }
       );
-      // console.log(AllInventoryAccessState.employeeListData)
+      
       setAllEmployeeData(updatedData);
     }
   }, [AllEmployeeListState.loading, AllEmployeeListState.employeeListData]);
 
-  // console.log(employeeData)
+  
   const [sortOrder, setSortOrder] = useState("asc");
   const sortByItemName = (type, name) => {
     const { sortedItems, newOrder } = SortTableItemsHelperFun(
@@ -209,38 +209,38 @@ const EmployeelistReport = () => {
           </Grid>
         </Grid>
       </Grid>
-      {/* <div className="q-attributes-bottom-detail-section">
-        <div className="q-attributes-bottom-header-sticky">
-          <div className="q-attributes-bottom-header">
-            <span>Employee List</span>
-          </div>
-          <div className="q-daily-report-bottom-report-header">
-            <p className="report-sort">Employee Name</p>
-            <p className="report-title">Contact</p>
-            <p className="report-title">Email</p>
-            <p className="report-title">Address</p>
-          </div>
-          <div className="q-category-bottom-categories-listing">
-            {employeeData &&
-              employeeData.length >= 1 &&
-              employeeData.map((employee, index) => (
-                <div
-                  className="q-category-bottom-categories-listing"
-                  key={index}
-                >
-                  <div className="q-category-bottom-categories-single-category">
-                    <p className="report-sort">
-                      {employee.f_name} {employee.l_name}
-                    </p>
-                    <p className="report-title">{employee.phone}</p>
-                    <p className="report-title">{employee.email}</p>
-                    <p className="report-title">{employee.address}</p>
-                  </div>
-                </div>
-              ))}
-          </div>
-        </div>
-      </div> */}
+      
+      
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     </>
   );
 };

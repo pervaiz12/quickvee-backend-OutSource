@@ -3,7 +3,7 @@ import "../../../Styles/StoreSetting.css";
 import "../../../Styles/Settings/SystemAccess.css";
 import CrossIcon from "../../../Assests/Dashboard/cross.svg";
 import TimeIcon from "../../../Assests/Filter/Clock.svg";
-import Switch from "@mui/material/Switch";
+
 import { useAuthDetails } from "../../../Common/cookiesHelper";
 import {
   fetchsystemAccessListData,
@@ -18,9 +18,7 @@ import Grid from "@mui/material/Grid";
 import dayjs from "dayjs";
 import BasicTextFields from "../../../reuseableComponents/TextInputField";
 import SelectDropDown from "../../../reuseableComponents/SelectDropDown";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
-import Select from "@mui/material/Select";
+
 import AlertModal from "../../../reuseableComponents/AlertModal";
 import { Box, Modal } from "@mui/material";
 import { BASE_URL, CHECK_END_DAY } from "../../../Constants/Config";

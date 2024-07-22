@@ -34,8 +34,8 @@ export default function Items_sales_profit_Logic() {
         },
       });
 
-      // .then((res) => {
-      //   console.log(res?.data);
+      
+      
       if (res?.data?.status == "Success") {
         const updatedList = res.data?.profit_data.map((item) => {
           const cost_item =

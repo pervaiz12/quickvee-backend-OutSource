@@ -47,7 +47,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
   },
   "&:last-child td, &:last-child th": {
-    // backgroundColor: "#F5F5F5",
+ 
   },
   "& td, & th": {
     border: "none",
@@ -81,7 +81,7 @@ const VendorReportList = (props) => {
       search_by: Boolean(debouncedValue.trim()) ? debouncedValue : null,
       ...userTypeData,
     };
-    // console.log(data)
+   
     if (data) {
       dispatch(fetchVendorListData(data));
     }
@@ -101,8 +101,7 @@ const VendorReportList = (props) => {
 
   useEffect(() => {
     if (!AllVendorDataState.loading && AllVendorDataState.VendorListData) {
-      // console.log(AllVendorDataState.VendorListData)
-      // setallVendorData(AllVendorDataState.VendorListData);
+      
       const { sortedItems, newOrder } = SortTableItemsHelperFun(
         AllVendorDataState.VendorListData,
         "str",
@@ -262,30 +261,7 @@ const VendorReportList = (props) => {
           />
         </Grid>
       </Grid>
-      {/* <div className="box">
-        <div className="q-daily-report-bottom-report-header">
-          <p className="report-sort">Vendor Name</p>
-          <p className="report-sort">Contact</p>
-          <p className="report-sort">Email</p>
-          <p className="report-sort">Address</p>
-        </div>
-      </div>
-
-      {allVendorData &&
-        allVendorData.length >= 1 &&
-        allVendorData.map((CheckData, index) => (
-          <div className="box">
-            <div key={index} className="q-category-bottom-categories-listing">
-              <div className="q-category-bottom-categories-single-category">
-                <p className="report-title">{CheckData.name}</p>
-                <p className="report-title">{CheckData.phone}</p>
-                <p className="report-title">{CheckData.email}</p>
-                <p className="report-title">{CheckData.full_address}</p>
       
-              </div>
-            </div>
-          </div>
-        ))} */}
     </>
   );
 };

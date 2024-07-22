@@ -6,7 +6,7 @@ import Skeleton from "react-loading-skeleton";
 
 const NetSalesFilter = () => {
   const NetSalesData = useSelector((state) => state.ItemSalesReportList);
-  // console.log(NetSalesData.ItemSalesData)
+  
   return (
     <>
       {NetSalesData && NetSalesData.ItemSalesData && (
@@ -30,7 +30,7 @@ const NetSalesFilter = () => {
                   <div className="flex items-center gap-2 flex-col">
                     <div className="q_details_header ml-5">Net Sales</div>
                     <div className="q_details_header ml-5">
-                      {/* ${priceFormate(Number(NetSalesData.ItemSalesData[1]))} */}
+                      
                       { NetSalesData.loading ? <div style={{width: "5rem"}}><Skeleton /></div> : `$${priceFormate(Number(NetSalesData.ItemSalesData[1]))}`}
                     </div>
                   </div>

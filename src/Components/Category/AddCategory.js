@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import AddNewCategory from "../../Assests/Taxes/Left.svg";
+
 import axios from "axios";
 import {
   BASE_URL,
@@ -16,7 +16,7 @@ import CheckBoxField from "../../reuseableComponents/CheckBoxField";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 import AlertModal from "../../reuseableComponents/AlertModal";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import CircularProgress from "@mui/material/CircularProgress";
 import PasswordShow from "../../Common/passwordShow";
 import SwitchToBackButton from "../../reuseableComponents/SwitchToBackButton";

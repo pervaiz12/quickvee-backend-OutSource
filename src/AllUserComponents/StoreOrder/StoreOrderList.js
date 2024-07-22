@@ -8,8 +8,7 @@ import "../../Styles/StoreOrder.css";
 import { useAuthDetails } from "./../../Common/cookiesHelper";
 import { Grid } from "@mui/material";
 import InputTextSearch from "../../reuseableComponents/InputTextSearch";
-import Left from "../../Assests/Taxes/Left.svg";
-import Right from "../../Assests/Taxes/Right.svg";
+
 
 import { styled } from "@mui/material/styles";
 import Table from "@mui/material/Table";
@@ -22,7 +21,7 @@ import Pagination from "../Users/UnverifeDetails/Pagination";
 import useDebounce from "../../hooks/useDebouncs";
 import { SkeletonTable } from "../../reuseableComponents/SkeletonTable";
 import PasswordShow from "./../../Common/passwordShow";
-import { Link } from "react-router-dom";
+
 import { SortTableItemsHelperFun } from "../../helperFunctions/SortTableItemsHelperFun";
 import sortIcon from "../../Assests/Category/SortingW.svg";
 const StyledTable = styled(Table)(({ theme }) => ({

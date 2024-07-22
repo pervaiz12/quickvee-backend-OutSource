@@ -1,10 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { Box, Collapse, Alert, IconButton } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
-import DownIcon from "../../Assests/Dashboard/Down.svg";
-// import {fetchMerchantsList} from "../../Redux/features/ExportInventory/ExportInventorySlice";
 import { fetchMerchantsList } from "../../Redux/features/ExportInventory/ExportInventorySlice";
 import { useSelector } from "react-redux";
 import InventoryExportLogic from "./InventoryExportLogic";
@@ -119,39 +115,7 @@ const MainInventoryExport = () => {
     <>
       <div className="box_shadow_div_order">
         <div className="">
-          {/* <div className="alert">
-              {submitmessage && (
-                <Box
-                  sx={{
-                    width: "100%",
-                    position: "relative",
-                    top: "2rem",
-                    marginLeft: "auto",
-                  }}
-                  className={submitmessage ? "form-submit-info-message" : ""}
-                >
-                  <Collapse in={openAlert}>
-                    <Alert
-                      severity="info"
-                      action={
-                        <IconButton
-                          className="info-close-icon"
-                          aria-label="close"
-                          color="info"
-                          size="small"
-                          onClick={goToTop}
-                        >
-                          <CloseIcon />
-                        </IconButton>
-                      }
-                      sx={{ mb: 2 }}
-                    >
-                      {submitmessage}
-                    </Alert>
-                  </Collapse>
-                </Box>
-              )}
-            </div> */}
+
           <div className="q-add-categories-section-header">
             <span>
               {" "}
@@ -161,62 +125,7 @@ const MainInventoryExport = () => {
           </div>
 
           <div className="q-order-page-container ml-8 md:flex-col">
-            {/* <div className="col-qv-6 mt-6">
-                <label
-                  className="q-details-page-label"
-                  htmlFor="storefromFilter"
-                >
-                  Select Store Name
-                </label>
-                <div className="custom-dropdown">
-                  <div
-                    className="custom-dropdown-header"
-                    onClick={() => toggleDropdown("storefrom")}
-                  >
-                    <span className="selected-option mt-1">
-                      {selectedStorefrom}
-                    </span>
-                    <img src={DownIcon} alt="Down Icon" className="w-8 h-8" />
-                  </div>
-                  {storeFromDropdownVisible && (
-                    <div className="dropdown-content" style={myStyles}>
-                      <div
-                        onClick={() =>
-                          handleOptionClick(
-                            { label: "-- Select Store --", merchant_id: null },
-                            "storefrom"
-                          )
-                        }
-                      >
-                        -- Select Store --
-                      </div>
-                      {MerchantList?.length &&
-                        MerchantList?.map((merchant) => (
-                          <div
-                            key={merchant.id}
-                            onClick={() =>
-                              handleOptionClick(
-                                {
-                                  label:
-                                    merchant.name + "-" + merchant.merchant_id,
-                                  merchant_id: merchant.merchant_id,
-                                },
-                                "storefrom"
-                              )
-                            }
-                          >
-                            {merchant.name}-{merchant.merchant_id}
-                          </div>
-                        ))}
-                    </div>
-                  )}
-                </div>
-                <span className="input-error ">
-                  {storeFromError && (
-                    <span className="input-error ">{storeFromError}</span>
-                  )}
-                </span>
-              </div> */}
+
           </div>
           <Grid container sx={{ padding: 2.5 }}>
             <Grid item xs={6} className="MainInventory">

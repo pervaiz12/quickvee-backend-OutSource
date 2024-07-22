@@ -41,14 +41,14 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
     backgroundColor: theme.palette.action.hover,
   },
   "&:last-child td, &:last-child th": {
-    // backgroundColor: "#F5F5F5",
+    
   },
   "& td, & th": {
     border: "none",
   },
 }));
 const Employeedetails = (props) => {
-  // console.log(props);
+  
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
     useAuthDetails();
   const { handleCoockieExpire, getUnAutherisedTokenMessage, getNetworkError } =
@@ -58,7 +58,7 @@ const Employeedetails = (props) => {
   const AllEmpWorkingHrsDataState = useSelector(
     (state) => state.EmpWorkinghrsList
   );
-  // console.log(AllEmpWorkingHrsDataState);
+  
   let AuthDecryptDataDashBoardJSONFormat = LoginGetDashBoardRecordJson;
   let merchant_id = AuthDecryptDataDashBoardJSONFormat?.data?.merchant_id;
   useEffect(() => {
@@ -102,9 +102,9 @@ const Employeedetails = (props) => {
     AllEmpWorkingHrsDataState.loading,
     AllEmpWorkingHrsDataState.ItemSalesData,
   ]);
-  // console.log("hahaha", allEmpWorkingHrsData);
+  
   const convertSecondsToHours = (seconds) => {
-    // Calculate hours
+    
     const hours = seconds / 3600;
     return hours;
   };
@@ -153,17 +153,17 @@ const Employeedetails = (props) => {
     return formattedDate;
   };
 
-  // if (!allEmpWorkingHrsData || Object.keys(allEmpWorkingHrsData).length === 0) {
-  //   return (
-  //     <>
-  //       <Grid container sx={{ padding: 2.5 }} className="box_shadow_div">
-  //         <Grid item xs={12}>
-  //           <p>No. Data found.</p>
-  //         </Grid>
-  //       </Grid>
-  //     </>
-  //   );
-  // }
+  
+  
+
+
+
+
+
+
+
+
+
   return (
     <>
       <div className="box">
@@ -348,80 +348,80 @@ const Employeedetails = (props) => {
                       </TableContainer>
                     </Grid>
                   </Grid>
-                  {/* <div
-                key={index}
-                className="q-attributes-bottom-detail-section mb-3"
-              >
-                <div className="q-attributes-bottom-header-sticky">
-                  <div className="q-attributes-bottom-header">
-                    <span>{employeeName}</span>
-                  </div>
-                  <div className="q-attributes-bottom-attriButes-header">
-                    <p className="q-employee-item">Date Worked</p>
-                    <p className="q-employee-in">Clock In </p>
-                    <p className="q-employee-out">Clock Out</p>
-                    <p className="q-employee-worked">Total Worked (Hr)</p>
-                    <p className="q-catereport-break">Total Break (Hr)</p>
-                    <p className="attriButes-title">Actual Worked (Hr)</p>
-                  </div>
-                </div>
-                {Array.isArray(allEmpWorkingHrsData[employeeName]) &&
-                  allEmpWorkingHrsData[employeeName].map(
-                    (workData, dataIndex) => (
-                      <div
-                        key={dataIndex}
-                        className="q-attributes-bottom-attriButes-listing"
-                      >
-                        <div className="q-employee-bottom-attriButes-single-attributes">
-                          <p className="q-employee-item">
-                            {workData.work_date}
-                          </p>
-                          <p className="q-employee-in">
-                            {workData.first_check_in_time}
-                          </p>
-                          <p className="q-employee-out">
-                            {workData.last_check_out_time}
-                          </p>
-                          <p className="q-employee-worked">
-                            {parseFloat(workData.total_seconds_worked).toFixed(
-                              2
-                            )}
-                          </p>
-                          <p className="q-catereport-break">
-                            {parseFloat(workData.total_seconds_break).toFixed(
-                              2
-                            )}
-                          </p>
-                          <p className="attriButes-title">
-                            {parseFloat(
-                              workData.effective_seconds_worked
-                            ).toFixed(2)}
-                          </p>
-                        </div>
-                      </div>
-                    )
-                  )}
-                <div className="q-attributes-bottom-attriButes-listing">
-                  <div className="q-employee-bottom-attriButes-single-attributes">
-                    <p className="q-employee-total text-left">Total</p>
-                    <p className="q-employee-worked">
-                      {parseFloat(
-                        calTotalWork(allEmpWorkingHrsData[employeeName])
-                      ).toFixed(2)}
-                    </p>
-                    <p className="q-catereport-break">
-                      {parseFloat(
-                        calTotalBreak(allEmpWorkingHrsData[employeeName])
-                      ).toFixed(2)}
-                    </p>
-                    <p className="attriButes-title">
-                      {parseFloat(
-                        calTotalActualWork(allEmpWorkingHrsData[employeeName])
-                      ).toFixed(2)}
-                    </p>
-                  </div>
-                </div>
-              </div> */}
+                  
+                  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                  
                 </>
               ))}
           </>

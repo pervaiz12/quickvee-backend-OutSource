@@ -121,21 +121,7 @@ const CouponDiscount = ({ seVisible, setCouponId }) => {
     [dispatch]
   );
 
-  // const handleDeleteCoupon = (id) => {
-  //   const isConfirmed = window.confirm(
-  //     "Are you sure you want to delete this coupon?"
-  //   );
-  //   if (isConfirmed) {
-  //     const data = {
-  //       merchant_id,
-  //       coupon_id: id,
-  //       ...userTypeData,
-  //     };
-  //     if (id) {
-  //       dispatch(deleteCoupon(data));
-  //     }
-  //   }
-  // };
+
   const [deleteCouponId, setDeleteCouponId] = useState(null);
   const [deleteModalOpen, setDeleteModalOpen] = useState(false);
 

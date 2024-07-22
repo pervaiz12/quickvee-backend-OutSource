@@ -33,7 +33,7 @@ const SiftSetting = ({ onFilterDataChange }) => {
           </div>
 
           <div className="q-order-page-container ml-8">
-            {/* Employee Dropdown */}
+            
             <div className="q-order-page-filter">
               <label className="q-details-page-label" htmlFor="employeeFilter">
                 Shift Setting Type

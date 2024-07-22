@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-// import axios from "axios";
+
 import { useSelector, useDispatch } from "react-redux";
 import { fetchVendorSalesData } from "../../../Redux/features/Reports/VendorSales/VendorSalesSlice";
 import { Grid } from "@mui/material";
@@ -60,13 +60,10 @@ const VendorSalesReportList = (props) => {
     GetSessionLogin,
   } = useAuthDetails();
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-  // console.log(AllVendorDataState)
+  
   useEffect(() => {
     if (props && props.selectedDateRange) {
-      // console.log(props.selectedDateRange)
-      // console.log(props.selectedDateRange)
-      // const StartDateData = props.selectedDateRange.startDate.toISOString().split('T')[0];
-      // const EndDateData = props.selectedDateRange.endDate.toISOString().split('T')[0];
+      
       const StartDateData = props.selectedDateRange.start_date;
       const EndDateData = props.selectedDateRange.end_date;
 
@@ -76,7 +73,7 @@ const VendorSalesReportList = (props) => {
         end_date: EndDateData,
         vendor_id: props.VendorIdData,
       };
-      // console.log(data)
+      
       if (data) {
         dispatch(fetchVendorSalesData(data));
       }
@@ -85,7 +82,7 @@ const VendorSalesReportList = (props) => {
 
   useEffect(() => {
     if (!AllVendorDataState.loading && AllVendorDataState.VendorSalesData) {
-      // console.log(AllVendorDataState.VendorSalesData)
+      
       setallVendorData(AllVendorDataState.VendorSalesData);
     } else {
       setallVendorData("");
@@ -146,8 +143,7 @@ const VendorSalesReportList = (props) => {
         <>
           {allVendorData && Object.keys(allVendorData).length >= 1 ? (
             <>
-              {/* <div className="box">
-            <div className="q-category-bottom-categories-listing"> */}
+              
               {Object.entries(allVendorData).map(
                 ([vendorName, vendorIndex]) => (
                   <React.Fragment key={vendorName}>
@@ -162,9 +158,7 @@ const VendorSalesReportList = (props) => {
                             aria-label="customized table"
                           >
                             <TableHead>
-                              {/* <StyledTableCell>
-                          <p>Sr. No</p>
-                        </StyledTableCell> */}
+                             
                               <StyledTableCell>
                                 <button
                                   className="flex items-center"
@@ -214,9 +208,7 @@ const VendorSalesReportList = (props) => {
                             <TableBody>
                               {vendorIndex?.map((salesData, index) => (
                                 <StyledTableRow key={index}>
-                                  {/* <StyledTableCell>
-                              <p>{`${index + 1}`}</p>
-                            </StyledTableCell> */}
+                                  
                                   <StyledTableCell>
                                     <p>
                                       {formatDateTime(
@@ -240,7 +232,7 @@ const VendorSalesReportList = (props) => {
                                 </StyledTableRow>
                               ))}
                               <StyledTableRow>
-                                {/* <StyledTableCell> </StyledTableCell> */}
+                               
                                 <StyledTableCell> </StyledTableCell>
                                 <StyledTableCell align="right">
                                   <p style={{ color: "#0A64F9" }}>Total</p>

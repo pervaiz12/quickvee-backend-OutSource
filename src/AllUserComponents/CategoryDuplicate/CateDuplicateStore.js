@@ -334,47 +334,7 @@ const CateDuplicateStore = () => {
           ...userTypeDataNew,
         };
         setConfirmModalOpen(true);
-        // return
-        // setLoader(true);
-        // try {
-        //   const response = await axios.post(
-        //     BASE_URL + CATEGORY_INVENTORY_DUPLICATE,
-        //     data,
-        //     {
-        //       headers: {
-        //         "Content-Type": "multipart/form-data",
-        //         Authorization: `Bearer ${token}`,
-        //       },
-        //     }
-        //   );
 
-        //   if (response.data.status === "Success") {
-        //     setsubmitmessage(response.data.msg);
-        //     setSelectedStorefrom("-- Select Store --");
-        //     setSelectedStoreto("-- Select Store --");
-        //     // ToastifyAlert("Duplicate Inventory Success!", "success");
-        //     setTimeout(()=>{setLoader(false);
-        //       ToastifyAlert("Added Successfully", "success");
-        //     },2000)
-        //     setUserInput("")
-        //     setStorefrom(null);
-        //     setStoreto(null);
-        //     setCategoryOptions([
-        //       { value: "Select Category", label: "Select Category" },
-        //     ]);
-        //     setSelectedCategories([]);
-        //     setIsSelectClicked(false);
-        //   } else if (response.data.status === "Failed") {
-        //     ToastifyAlert("Duplicate Inventory Failed!", "error");
-        //     setsubmitmessage(response.data.msg);
-        //   }
-        // } catch (error) {
-        //   // console.log('33 catch err');
-        //   ToastifyAlert("Error!", "error");
-        //   handleCoockieExpire()
-        //   getUnAutherisedTokenMessage()
-        //   return new Error(error);
-        // }
       } else {
         showModal("Please Fill Captcha Correctly!");
         const canvas = canvasRef.current;
@@ -496,54 +456,10 @@ const CateDuplicateStore = () => {
 
         <div className=" box_shadow_div_order">
           <div className="alert">
-            {/* <Box
-              sx={{
-                width: "100%",
-                position: "relative",
-                top: "2rem",
-                marginLeft: "auto",
-              }}
-            >
-              <Collapse in={openAlert}>
-                <Alert severity="info" sx={{ mb: 2 }}>
-                  The existing Variants of the selected Store 2 Must be same as
-                  selected Store 1 Variants.
-                </Alert>
-              </Collapse>
-            </Box> */}
+
           </div>
           <div className="alert">
-            {/* {submitmessage && (
-              <Box
-                sx={{
-                  width: "100%",
-                  position: "relative",
-                  top: "2rem",
-                  marginLeft: "auto",
-                }}
-                className={submitmessage ? "form-submit-info-message" : ""}
-              >
-                <Collapse in={openAlert}>
-                  <Alert
-                    severity="success"
-                    action={
-                      <IconButton
-                        className="info-close-icon"
-                        aria-label="close"
-                        color="success"
-                        size="small"
-                        onClick={goToTop}
-                      >
-                        <CloseIcon />
-                      </IconButton>
-                    }
-                    sx={{ mb: 2 }}
-                  >
-                    {submitmessage}
-                  </Alert>
-                </Collapse>
-              </Box>
-            )} */}
+
           </div>
 
           <div className="q-add-categories-section-header ">
