@@ -1,11 +1,9 @@
 import React from "react";
 import { formData } from "./data";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
 import { Grid } from "@mui/material";
 
 import AddNewCategory from "../../Assests/Dashboard/Left.svg";
-import SwitchToBackButton from "../../reuseableComponents/SwitchToBackButton";
 
 const GeneratePUC = ({
   handleVarientTitleBasedItemList,
@@ -19,26 +17,16 @@ const GeneratePUC = ({
   inventoryData,
   handleCloseEditModal,
   productData,
-  varientData,
   isVarientEdit,
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const isProductAdd = location.pathname.includes("/products/add");
   const isProductEdit = location.pathname.includes("/products/edit");
   const isProductVariant = location.pathname.includes("/products/varient-edit");
-
-  const pageUrl =
-    window.location.pathname.split("/")[1] +
-    "/" +
-    window.location.pathname.split("/")[2] +
-    "/" +
-    window.location.pathname.split("/")[3];
 
   const findVarientName = productData?.product_name?.split("~");
 
   const varientTitle = handleVarientTitleBasedItemList();
-  const { varientProduct } = useSelector((state) => state?.productsListData);
   const setInputMaxLength = (fieldname) => {
     switch (fieldname) {
       case "costPerItem":
@@ -93,16 +81,15 @@ const GeneratePUC = ({
 
   const handleRedirectHistory = (varientIndex, varientTitle) => {
     const varientName = varientTitle ? Object.keys(varientTitle)?.[0] : "";
-    let url;
     if (varientIndex === null) {
       window.open(
         `/merchants/inventory/products/saleshistory/${productData?.id}?title=${productInfo?.title}`
       );
     } else if (isVarientEdit) {
       window.open(
-        `/merchants/inventory/products/saleshistory/${productData?.product_id}/${
-          productData?.id
-        }?title=${
+        `/merchants/inventory/products/saleshistory/${
+          productData?.product_id
+        }/${productData?.id}?title=${
           productData?.product_name?.split("~")?.[0]
         }&varientName=${varientTitle}`
       );
@@ -119,10 +106,7 @@ const GeneratePUC = ({
       <Grid container className="mx-0">
         <Grid item xs={12} className="">
           {isVarientEdit ? (
-            <div
-              className="q-category-bottom-header"
-              // style={{ padding: "1px 20px" }}
-            >
+            <div className="q-category-bottom-header">
               <span
                 onClick={() => {
                   navigate("/inventory/products");
@@ -136,7 +120,6 @@ const GeneratePUC = ({
           ) : (
             ""
           )}
-          {/* <span className="varient-edit-text"> {isVarientEdit ? "Variants" : ''}</span> */}
 
           {formValue?.length ? (
             <div className="q-category-bottom-header varient-generateUpc-row ">
@@ -156,7 +139,6 @@ const GeneratePUC = ({
                   className="generateUpc px-2.5"
                 >
                   Generate UPC
-                  {/* <img src={AddIcon} alt="add-icon" />{" "} */}
                 </p>
               ) : (
                 ""
@@ -168,7 +150,6 @@ const GeneratePUC = ({
           {varientTitle?.length && isMultipleVarient
             ? varientTitle?.map((title, index) => {
                 count++;
-                console.log("count of ", count);
 
                 return (
                   <>
@@ -189,7 +170,6 @@ const GeneratePUC = ({
                         {formData?.length
                           ? formData?.map((inp, i) => {
                               return (
-                                // <div className="col-qv-2" key={i}>
                                 <>
                                   <Grid
                                     item
@@ -269,9 +249,34 @@ const GeneratePUC = ({
                                         ) : (
                                           ""
                                         )}
+
+                                        {formValue &&
+                                        formValue[index] &&
+                                        typeof formValue[index] === "object" &&
+                                        Object.keys(formValue[index]) &&
+                                        Object.keys(formValue[index])[0] &&
+                                        formValue[index][
+                                          Object.keys(formValue[index])[0]
+                                        ] &&
+                                        Object.keys(
+                                          formValue[index]
+                                        )[0].includes(".") ? (
+                                          <span className="error-alert">
+                                            {
+                                              error[
+                                                `formValue[${index}][\"${
+                                                  Object.keys(
+                                                    formValue[index]
+                                                  )[0]
+                                                }\"].${inp?.name}`
+                                              ]
+                                            }
+                                          </span>
+                                        ) : (
+                                          ""
+                                        )}
                                       </div>
                                     </div>
-                                    {/* // </div> */}
                                   </Grid>
                                 </>
                               );
@@ -376,26 +381,6 @@ const GeneratePUC = ({
                           />
                           <span class="checkmark"></span>
                         </label>
-                        {/* <label
-                        class="q_resigter_setting_section"
-                        style={{ color: "#000", fontSize: "18px" }}
-                      >
-                        Create this item for all linked locations
-                        <input
-                          type="checkbox"
-                          name="itemForAllLinkedLocation"
-                          value={
-                            formValue?.[index]?.["itemForAllLinkedLocation"]
-                          }
-                          onChange={(e) => handleOnChange(e, index)}
-                          checked={
-                            formValue?.[index]?.["itemForAllLinkedLocation"]
-                              ? true
-                              : false
-                          }
-                        />
-                        <span class="checkmark"></span>
-                      </label> */}
                       </div>
 
                       {isProductEdit &&
@@ -403,8 +388,6 @@ const GeneratePUC = ({
                         <div class="edit-profile-btns">
                           <button
                             className="quic-btn quic-btn-save vendor-btn"
-                            // onClick={handleSubmitForm}
-                            // disabled={isLoading}
                             style={{
                               backgroundColor: "#0A64F9",
                             }}
@@ -419,8 +402,6 @@ const GeneratePUC = ({
                           </button>
                           <button
                             className="quic-btn quic-btn-save"
-                            // onClick={handleSubmitForm}
-                            // disabled={isLoading}
                             style={{
                               backgroundColor: "#0A64F9",
                             }}
@@ -435,8 +416,6 @@ const GeneratePUC = ({
                           </button>
                           <button
                             className="quic-btn quic-btn-save edit"
-                            // onClick={handleSubmitForm}
-                            // disabled={isLoading}
                             style={{
                               backgroundColor: "#0A64F9",
                             }}
@@ -478,7 +457,6 @@ const GeneratePUC = ({
                 {formData?.length
                   ? formData?.map((inp, i) => {
                       return (
-                        // <div className="col-qv-2" key={i}>
                         <Grid item xs={6} sm={4} md={3} lg={2.4}>
                           <div className="">
                             <label>{inp?.label}</label>
@@ -522,7 +500,6 @@ const GeneratePUC = ({
                               )}
                             </div>
                           </div>
-                          {/* // </div> */}
                         </Grid>
                       );
                     })
@@ -602,32 +579,12 @@ const GeneratePUC = ({
                   />
                   <span class="checkmark"></span>
                 </label>
-                {/* <label
-                  class="q_resigter_setting_section"
-                  style={{ color: "#000", fontSize: "18px" }}
-                >
-                  Create this item for all linked locations
-                  <input
-                    type="checkbox"
-                    name="itemForAllLinkedLocation"
-                    value={formValue?.[0]?.["itemForAllLinkedLocation"]}
-                    onChange={(e) => handleOnChange(e, 0)}
-                    checked={
-                      formValue?.[0]?.["itemForAllLinkedLocation"]
-                        ? true
-                        : false
-                    }
-                  />
-                  <span class="checkmark"></span>
-                </label> */}
               </div>
 
               {isProductEdit || isVarientEdit ? (
                 <div class="edit-profile-btns">
                   <button
                     className="quic-btn quic-btn-save vendor-btn"
-                    // onClick={handleSubmitForm}
-                    // disabled={isLoading}
                     style={{
                       backgroundColor: "#0A64F9",
                     }}
@@ -642,8 +599,6 @@ const GeneratePUC = ({
                   </button>
                   <button
                     className="quic-btn quic-btn-save"
-                    // onClick={handleSubmitForm}
-                    // disabled={isLoading}
                     style={{
                       backgroundColor: "#0A64F9",
                     }}
@@ -660,8 +615,6 @@ const GeneratePUC = ({
                   </button>
                   <button
                     className="quic-btn quic-btn-save edit"
-                    // onClick={handleSubmitForm}
-                    // disabled={isLoading}
                     style={{
                       backgroundColor: "#0A64F9",
                     }}

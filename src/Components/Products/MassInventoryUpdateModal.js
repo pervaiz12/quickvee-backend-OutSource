@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useState } from "react";
 import Grid from "@mui/material/Grid";
 import { Box, CircularProgress, Modal } from "@mui/material";
 
@@ -60,10 +60,6 @@ const MassInventoryUpdateModal = memo(({ showModal, handleClose }) => {
 
       const { token } = userTypeData;
       const formData = new FormData();
-      // formData.append(
-      //   "merchant_id",
-      //   LoginGetDashBoardRecordJson?.data?.merchant_id
-      // );
 
       const data = [
         {
@@ -78,26 +74,9 @@ const MassInventoryUpdateModal = memo(({ showModal, handleClose }) => {
         },
       ];
 
-      // console.log("data: ", data, type);
-      // return;
-
       formData.append("data", JSON.stringify(data));
       formData.append("token_id", userTypeData?.token_id);
       formData.append("login_type", userTypeData?.login_type);
-
-      // formData.append("login_type", userTypeData.login_type);
-      // formData.append("cat_id", categoryId);
-      // formData.append("track_qty", options.trackQuantity ? 1 : 0);
-      // formData.append("continue_sell", options.continueSelling ? 1 : 0);
-      // formData.append("check_id", options.checkId ? 1 : 0);
-      // formData.append("check_dis", options.disable ? 1 : 0);
-      // formData.append("check_food_stampable", options.foodStampable ? 1 : 0);
-      // formData.append("inv_status", type ? 1 : 0);
-
-      // console.log("data: ", data);
-      // console.log("categoryId: ", categoryId);
-      // console.log("type: ", type);
-      // return;
 
       const response = await axios.post(
         BASE_URL + MASS_INVENTORY_UPDATE,
@@ -121,8 +100,6 @@ const MassInventoryUpdateModal = memo(({ showModal, handleClose }) => {
           foodStampable: false,
         });
       }
-
-      // console.log("response: ", response);
     } catch (e) {
       console.log("Error: ", e);
     } finally {

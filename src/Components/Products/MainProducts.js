@@ -1,7 +1,5 @@
-import React, { useEffect, useState } from "react";
-import FilterProduct from "./FilterProduct";
+import React, { lazy, useEffect, useState } from "react";
 import ProductContent from "./ProductContent";
-import ProductTable from "./ProductTable";
 import { useSelector, useDispatch } from "react-redux";
 import {
   fetchProductsData,
@@ -11,6 +9,11 @@ import {
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import useDebounce from "../../hooks/useDebouncs";
 import PasswordShow from "../../Common/passwordShow";
+import { CircularProgress } from "@mui/material";
+import { Suspense } from "react";
+
+const FilterProduct = lazy(() => import("./FilterProduct"));
+const ProductTable = lazy(() => import("./ProductTable"));
 
 const MainProducts = () => {
   const dispatch = useDispatch();
@@ -72,7 +75,6 @@ const MainProducts = () => {
 
     dispatch(emptyProduct([]));
     try {
-      // console.log("hi from use effect...", data);
       await dispatch(fetchProductsData(data)).unwrap();
       // Handle response if needed
     } catch (error) {
@@ -96,11 +98,7 @@ const MainProducts = () => {
     categoryId,
   ]);
 
-  const handlefocus = (e) => {
-    // if (e.key === "Enter" || e.keyCode === 13) {
-    //   handleSearch();
-    // }
-  };
+  const handlefocus = (e) => {};
 
   const toggleDropdown = (dropdown) => {
     switch (dropdown) {
@@ -110,9 +108,6 @@ const MainProducts = () => {
       case "status":
         setTransactionDropdownVisible(!transactionDropdownVisible);
         break;
-      // case "category":
-      //   setCategoryDropdownVisible(!categoryDropdownVisible);
-      //   break;
       case "listingType":
         setlistingTypesDropdownVisible(!listingTypesDropdownVisible);
         break;
@@ -198,20 +193,7 @@ const MainProducts = () => {
         setSelectedStatusValue(option.title);
         setTransactionDropdownVisible(false);
         dispatch(emptyProduct([]));
-        // let status_data = {
-        //   merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-        //   category_id: categoryId === "All" ? "all" : categoryId,
-        //   show_status: option.id,
-        //   name: searchId,
-        //   listing_type: selectedListingTypeValue,
-        //   offset: 0,
-        //   limit: 10,
-        //   page: 0,
-        //   ...userTypeData,
-        // };
-        // if (status_data) {
-        //   dispatch(fetchProductsData(status_data));
-        // }
+
         setlistingTypesDropdownVisible(false);
         break;
       case "listingType":
@@ -225,20 +207,7 @@ const MainProducts = () => {
         }
         setSelectedListingTypeValue(option);
         setSearchId("");
-        // let listing_data = {
-        //   merchant_id: LoginGetDashBoardRecordJson?.data?.merchant_id,
-        //   category_id: categoryId === "All" ? "all" : categoryId,
-        //   show_status: selectedStatus,
-        //   name: searchId,
-        //   listing_type: option.id,
-        //   offset: 0,
-        //   limit: 10,
-        //   page: 0,
-        //   ...userTypeData,
-        // };
-        // if (listing_data) {
-        //   dispatch(fetchProductsData(listing_data));
-        // }
+
         setlistingTypesDropdownVisible(false);
         break;
       default:
@@ -249,29 +218,31 @@ const MainProducts = () => {
   return (
     <>
       <div className="q-attributes-main-page">
-        <FilterProduct
-          {...{
-            handleOptionClick,
-            toggleDropdown,
-            selectedEmployee,
-            del_picDropdownVisible,
-            setdel_picDropdownVisible,
-            selectedStatus,
-            setTransactionDropdownVisible,
-            transactionDropdownVisible,
-            selectedListingType,
-            setSelectedListingType,
-            selectedListingTypeValue,
-            listingTypesDropdownVisible,
-            setlistingTypesDropdownVisible,
-            handleCategoryChange,
-            selectedStatusValue,
-            handleSearch,
-            searchId,
-            handlefocus,
-            setSearchId,
-          }}
-        />
+        <Suspense fallback={<CircularProgress />}>
+          <FilterProduct
+            {...{
+              handleOptionClick,
+              toggleDropdown,
+              selectedEmployee,
+              del_picDropdownVisible,
+              setdel_picDropdownVisible,
+              selectedStatus,
+              setTransactionDropdownVisible,
+              transactionDropdownVisible,
+              selectedListingType,
+              setSelectedListingType,
+              selectedListingTypeValue,
+              listingTypesDropdownVisible,
+              setlistingTypesDropdownVisible,
+              handleCategoryChange,
+              selectedStatusValue,
+              handleSearch,
+              searchId,
+              handlefocus,
+              setSearchId,
+            }}
+          />
+        </Suspense>
       </div>
       {userTypeData?.login_type !== "superadmin" &&
       inventory_approval === "1" ? (
@@ -282,22 +253,24 @@ const MainProducts = () => {
         ""
       )}
       <div className="q-attributes-main-page">
-        <ProductTable
-          {...{
-            selectedListingType,
-            debouncedValue,
-            offset,
-            setoffset,
-            limit,
-            setlimit,
-            categoryId,
-            selectedListingTypeValue,
-            selectedStatus,
-            selectedStatusValue,
-            searchId,
-            setSearchId,
-          }}
-        />
+        <Suspense fallback={<CircularProgress />}>
+          <ProductTable
+            {...{
+              selectedListingType,
+              debouncedValue,
+              offset,
+              setoffset,
+              limit,
+              setlimit,
+              categoryId,
+              selectedListingTypeValue,
+              selectedStatus,
+              selectedStatusValue,
+              searchId,
+              setSearchId,
+            }}
+          />
+        </Suspense>
       </div>
     </>
   );

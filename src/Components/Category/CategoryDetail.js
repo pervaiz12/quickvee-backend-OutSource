@@ -13,7 +13,6 @@ import {
 import { useSelector, useDispatch } from "react-redux";
 import ViewItemsModal from "./ViewItemsModal";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
-import { SortableContainer, SortableElement } from "react-sortable-hoc";
 
 import { Link } from "react-router-dom";
 import CheckBoxField from "../../reuseableComponents/CheckBoxField";

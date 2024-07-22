@@ -7,7 +7,6 @@ import Autocomplete from "@mui/material/Autocomplete";
 import LeftArrow from "../../Assests/Vendors/LeftArrow.svg";
 import { useLocation, useNavigate } from "react-router-dom";
 import "../../Styles/Common.css";
-import { DateRangePicker } from "@mui/x-date-pickers-pro/DateRangePicker";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import {
@@ -262,10 +261,7 @@ const SingleVendorsDetail = ({ setVisible }) => {
       <Grid container sx={{ marginY: 2 }} className="q-add-categories-section">
         <Grid xs={12} item>
           <Grid item xs={12}>
-            <SwitchToBackButton 
-              linkTo={"/vendors"}
-              title={vendor_name}
-            />
+            <SwitchToBackButton linkTo={"/vendors"} title={vendor_name} />
             {/* <div className="q-add-categories-section-header">
               <span
                 onClick={() => {

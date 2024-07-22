@@ -17,10 +17,6 @@ const DefaultDrop = ({ options, selectedOptions, updateSelectedOptions }) => {
     setIsDropdownOpen(!isDropdownOpen);
   };
 
-  const closeDropdown = () => {
-    setIsDropdownOpen(false);
-  };
-
   const handleRemoveOption = (option) => {
     updateSelectedOptions((prevSelectedOptions) =>
       prevSelectedOptions.filter((selected) => selected !== option)

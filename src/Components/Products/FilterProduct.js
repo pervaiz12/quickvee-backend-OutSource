@@ -1,41 +1,31 @@
-import React, { useEffect, useState } from "react";
-import { AiOutlineSearch } from "react-icons/ai";
-import DownIcon from "../../Assests/Dashboard/Down.svg";
+import React, { lazy, useEffect, useState } from "react";
 import { useRef } from "react";
-import { Grid } from "@mui/material";
+import { CircularProgress, Grid } from "@mui/material";
 import InputTextSearch from "../../reuseableComponents/InputTextSearch";
 
-import SearchIcon from "../../Assests/Filter/Search.svg";
-
 import CategoryListDropDown from "../../CommonComponents/CategoryListDropDown";
-import UpArrow from "../../Assests/Dashboard/Up.svg";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
-import MassInventoryUpdateModal from "./MassInventoryUpdateModal";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import { useSelector } from "react-redux";
 import CustomHeader from "../../reuseableComponents/CustomHeader";
+import { Suspense } from "react";
+
+const MassInventoryUpdateModal = lazy(
+  () => import("./MassInventoryUpdateModal")
+);
 
 const FilterProduct = ({
   handleOptionClick,
-  toggleDropdown,
   selectedEmployee,
-  del_picDropdownVisible,
   setdel_picDropdownVisible,
   selectedStatus,
   selectedStatusValue,
-  transactionDropdownVisible,
   setTransactionDropdownVisible,
-  selectedCategory,
-  categoryDropdownVisible,
   selectedListingType,
-  setSelectedListingType,
-  listingTypesDropdownVisible,
   setlistingTypesDropdownVisible,
   handleCategoryChange,
   handleSearch,
-  handlefocus,
   searchId,
-  setSearchId,
 }) => {
   const { userTypeData } = useAuthDetails();
   const { loading } = useSelector((state) => state.productsListData);
@@ -96,9 +86,6 @@ const FilterProduct = ({
       title: "Disable All",
     },
   ];
-  const handleFilter = (filterType) => {
-    console.log("Selected filter:", filterType);
-  };
 
   const [isTablet, setIsTablet] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -182,8 +169,6 @@ const FilterProduct = ({
                 placeholder="Search products by Name or UPC Code"
                 value={searchId}
                 handleChange={handleSearch}
-                // handleSearchButton={handleSearch}
-                // handlefocus={handlefocus}
               />
             </Grid>
           </Grid>
@@ -210,7 +195,6 @@ const FilterProduct = ({
               <label>Product Status</label>
               <SelectDropDown
                 sx={{ pt: 0.5 }}
-                // heading={null}
                 title={"title"}
                 listItem={productStatusList}
                 selectedOption={selectedStatusValue}
@@ -263,12 +247,14 @@ const FilterProduct = ({
           </Grid>
         </Grid>
       </Grid>
-      <MassInventoryUpdateModal
-        {...{
-          showModal,
-          handleClose,
-        }}
-      />
+      <Suspense fallback={<CircularProgress />}>
+        <MassInventoryUpdateModal
+          {...{
+            showModal,
+            handleClose,
+          }}
+        />
+      </Suspense>
     </>
   );
 };

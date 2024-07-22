@@ -1,5 +1,4 @@
 import React, { useRef, useState } from "react";
-import Select from "react-select";
 import "../../Styles/ProductPage.css";
 import DownArrow from "../../Assests/Dashboard/Down.svg";
 import CloseIcon from "../../Assests/Dashboard/cross.svg";
@@ -14,7 +13,7 @@ const SearchableDropdown = ({
   selectedOption,
   error,
   handleUpdateError,
-  name
+  name,
 }) => {
   const { checkLength } = Validation();
   const [filterOptions, setFilterOptions] = useState(optionList);
@@ -142,11 +141,6 @@ const SearchableDropdown = ({
           ""
         )}
       </div>
-      {/* {error[keyName] ? (
-        <span className="error-alert">{error[keyName]}</span>
-      ) : (
-        ""
-      )} */}
     </>
   );
 };

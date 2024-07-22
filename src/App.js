@@ -168,7 +168,7 @@ function App() {
         </Route>
         <Route element={<ProtectedStoreRoute visible="manager" />}>
           <Route exact path="/store" element={<Main visible={"store"} />} />
-          
+
           <Route exact path="/manager" element={<Main visible={"manager"} />} />
         </Route>
         <Route path="/print-purchase-order" element={<PrintPurchaseOrder />} />
@@ -186,7 +186,11 @@ function App() {
           {/* <Route exact path="/manager" element={<Main visible={"manager"} />} /> */}
           <Route index path="/" element={<Main visible={"dashboard"} />} />
           <Route exact path="/order" element={<Main visible={"order"} />} />
-          <Route exact path="/order/:start_date/:end_date/:order_env/:order_method" element={<Main visible={"order"} />} />
+          <Route
+            exact
+            path="/order/:start_date/:end_date/:order_env/:order_method"
+            element={<Main visible={"order"} />}
+          />
           <Route
             exact
             path="/inventory/category"
@@ -610,7 +614,7 @@ function App() {
             path="/import-data"
             element={<Main visible={"import-data"} />}
           />
-           <Route
+          <Route
             exact
             path="/Digital-marketing-tags"
             element={<Main visible={"Digital-marketing-tags"} />}

@@ -1,7 +1,6 @@
 import "../../../Styles/TableOrderPage.css";
 import React, { useEffect, useState } from "react";
 import CrossIcon from "../../../Assests/Dashboard/cross.svg";
-// import Pagination from "react-js-pagination";
 // import DefaultPagination from "../onlineStoreOrder/DefaultPagination";
 
 import { styled } from "@mui/material/styles";
@@ -70,12 +69,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 const orderType = (type) => {
-      if (type === "Completed") {
-        return "Closed";
-      } else {
-        return type;
-      }
-    };
+  if (type === "Completed") {
+    return "Closed";
+  } else {
+    return type;
+  }
+};
 const OnlineTableViewData = (props) => {
   const navigate = useNavigate();
   // console.log(props)
@@ -145,7 +144,7 @@ const OnlineTableViewData = (props) => {
         return type;
       }
     };
-    
+
     dispatch(
       getOrderListCount({
         merchant_id: props.merchant_id, //
