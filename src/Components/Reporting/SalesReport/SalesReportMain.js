@@ -15,7 +15,7 @@ const SalesReportMain = () => {
         <Grid item xs={12}>
           <Grid container>
             <Grid item xs={12}>
-              <h1 style={{marginBottom:0}} className="heading ">Sales Report</h1>
+              <h1 style={{marginBottom:0}} className="heading ">Sales Summary</h1>
             </Grid>
           </Grid>
         </Grid>
