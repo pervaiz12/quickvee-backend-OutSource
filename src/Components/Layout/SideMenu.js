@@ -1364,6 +1364,26 @@ const SuperAdminMenuItems = [
   },
 
   {
+    id: 14,
+    icon: (
+      <img
+        src={MerchantIcon}
+        alt="labal"
+        className="h-6 w-10 mt-4 mb-4 hoverable-image"
+      />
+    ),
+    activeIcon: (
+      <img
+        src={MerchantActive}
+        alt="order-retrieve"
+        className="h-6 w-10 mt-4 mb-4"
+      />
+    ),
+    text: "Order Retrieve ",
+    link: "/unapprove/order-retrieve",
+  },
+
+  {
     id: 13,
     icon: (
       <img
