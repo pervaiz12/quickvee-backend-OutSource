@@ -1,32 +1,68 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { Box, Collapse, Alert, IconButton, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 
-import Select from "react-select";
-
-import CrossIcons from "../../Assests/MultipleUserIcon/crossIcons.svg";
 import axios from "axios";
 import { fetchMerchantsList } from "../../Redux/features/ExportInventory/ExportInventorySlice";
 import {
   BASE_URL,
-  LIST_ALL_CATEGORIES_MECHANT_ID,
-  CATEGORY_INVENTORY_DUPLICATE,
+  SPLIT_LIST,
+  ORDERRETRIEVE_SUBMIT,
 } from "../../Constants/Config";
 import { useAuthDetails } from "../../Common/cookiesHelper";
 import SelectDropDown from "../../reuseableComponents/SelectDropDown";
 
-import AlertModal from "../../reuseableComponents/AlertModal";
-
 import PasswordShow from "./../../Common/passwordShow";
 import CircularProgress from "@mui/material/CircularProgress";
 import ConfirmModal from "../../reuseableComponents/ConfirmModal";
-import FinalConfirm from "../../reuseableComponents/FinalConfirm";
 import BasicTextFields from "../../reuseableComponents/TextInputField";
+import { styled } from "@mui/material/styles";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell, { tableCellClasses } from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import CurrencyInputHelperFun from "../../helperFunctions/CurrencyInputHelperFun";
+
+
+
+const StyledTable = styled(Table)(({ theme }) => ({
+  padding: 2, // Adjust padding as needed
+}));
+const StyledTableCell = styled(TableCell)(({ theme }) => ({
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: "#253338",
+    color: theme.palette.common.white,
+    fontFamily: "CircularSTDMedium !important",
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+    fontFamily: "CircularSTDBook !important",
+  },
+  [`&.${tableCellClasses.table}`]: {
+    fontSize: 14,
+    fontFamily: "CircularSTDBook !important",
+  },
+}));
+
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  "&:nth-of-type(odd)": {
+    backgroundColor: theme.palette.action.hover,
+  },
+  // hide last border
+  "&:last-child td, &:last-child th": {
+    border: 0,
+  },
+  "& td, & th": {
+    border: "none",
+  },
+}));
 
 const OrderRetrieve = () => {
-  const [selectedStorefrom, setSelectedStorefrom] =
-    useState("-- Select Store --");
-  const [selectedStoreto, setSelectedStoreto] = useState("-- Select Store --");
+  const [selectedStorefrom, setSelectedStorefrom] =useState("-- Select Store --");
+  const [tableData, setTableData]=useState([]);
+
 
   const [storeFromDropdownVisible, setStoreFromDropdownVisible] =
     useState(false);
@@ -54,7 +90,23 @@ const OrderRetrieve = () => {
   const [storeFromError, setStoreFromError] = useState("");
 
   const [confirmModalOpen, setConfirmModalOpen] = useState(false);
-  const [confirmfinalModalOpen, setConfirmFinalModalOpen] = useState(false);
+
+  const [splitCheckbox, setSplitCheckbox] = useState(false);
+  const [orderData, setOrderData] = useState({
+    merchant_id:'',
+    order_id:"",
+    is_split_payment:"",
+    pay_amt: "",
+    remaining_amt: "",
+    pay_count:""
+  });
+
+  const [fieldErrors, setFieldErrors] = useState({
+    order_id:"",
+    pay_amt: "",
+    remaining_amt: "",
+    pay_count: "",
+  });
 
   const showModal = (headerText) => {
     setAlertModalHeaderText(headerText);
@@ -66,14 +118,20 @@ const OrderRetrieve = () => {
       case "storefrom":
         setSelectedStorefrom(value?.title ? value?.title : value);
         setStoreFromDropdownVisible(false);
-
         // Fetch additional data based on the selected merchant's ID
         if (value !== "-- Select Store --") {
-        }
-        if (value == "-- Select Store --") {
-          setStoreFromError("This field is required");
-        } else {
+          setOrderData((preValue) => ({
+            ...preValue,
+            merchant_id: value.id,
+          }));
           setStoreFromError("");
+        }else{
+          setOrderData((preValue) => ({
+            ...preValue,
+            merchant_id: "",
+          }));
+          setStoreFromError("Store Name is required");
+          setSplitCheckbox(false)
         }
         break;
 
@@ -94,7 +152,6 @@ const OrderRetrieve = () => {
   }, [MerchantListData, MerchantListData.loading]);
 
   useEffect(() => {
-    // dispatch(fetchMerchantsList(userTypeData));
     getFetchMerchantsList();
   }, []);
 
@@ -116,10 +173,6 @@ const OrderRetrieve = () => {
     }
   };
 
-  const myStyles = {
-    height: "300px",
-    overflow: "auto",
-  };
 
   const [openAlert, setOpenAlert] = useState(true);
   const [submitmessage, setsubmitmessage] = useState();
@@ -127,52 +180,182 @@ const OrderRetrieve = () => {
     setsubmitmessage();
   };
 
-  const confirmfun = () => {
-    setConfirmModalOpen(false);
-    setConfirmFinalModalOpen(true);
-  };
-
-  const confirmFinalfun = async () => {};
-
-
-
-  const [splitCheckbox, setSplitCheckbox] = useState(false);
-
-  const [orderData, setOrderData] = useState({
-    id:"",
-    payment: "",
-    remainingAMT: "",
-  });
-  const [fieldErrors, setFieldErrors] = useState({
-    id:"",
-    payment: "",
-    remainingAMT: "",
-  });
   
-  const handleStoreInput = (event) => {
+  const handleStoreInput =  async (event) => {
     const isChecked = event.target.checked;
+
+    if (orderData.merchant_id === "" || orderData.order_id === "") {
+      if(orderData.merchant_id === ""){
+        setStoreFromError("Store Name is required");
+      }
+      setFieldErrors((preValue) => ({
+        ...preValue,
+        order_id: orderData.order_id === "" ? "Order Id is required" : "",
+      }));
+      return; // Prevent checking the checkbox
+    } 
+
     // Perform any additional actions based on the checkbox state
     if (isChecked) {
       console.log("Checkbox is checked");
       setSplitCheckbox(true);
+      setOrderData((preValue) => ({
+        ...preValue,
+        pay_amt: "",
+        remaining_amt: "",
+        pay_count:""
+      }));
+      setFieldErrors((preValue) => ({
+        ...preValue,
+        pay_amt: "",
+        remaining_amt: "",
+        pay_count: "",
+      }));
+      setOrderData((preValue) => ({
+        ...preValue,
+        is_split_payment:1,
+      }));
+      const data = {
+        merchant_id:orderData.merchant_id,
+        order_id:orderData.order_id,
+        is_split_payment:1,
+        ...userTypeData,
+      };
+      const res = await axios.post(BASE_URL + SPLIT_LIST, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userTypeData?.token}`,
+        },
+      });
+      if(res.data.status === true){
+        console.log("xzvb",res)
+        setTableData(res.data.value)
+      }else{
+        setTableData([])
+      }
+
     } else {
-        setSplitCheckbox(false);
       console.log("Checkbox is unchecked");
+        setSplitCheckbox(false);
+        setOrderData((preValue) => ({
+          ...preValue,
+          is_split_payment:0,
+        }));
     }
   }
 
   const handleUserInputChange = (e) => {
     const { name, value } = e.target;
+    let newValue = value;
+    const updatedFieldErrors = { ...fieldErrors };
 
+    if (name === "pay_amt" || name === "remaining_amt") {
+      newValue = CurrencyInputHelperFun(value);
+    } else if (name === "pay_count") {
+      const numberOnlyValue = value.replace(/[^0-9]/g, '');
+      newValue = numberOnlyValue;
+    } else if(name==="order_id"){
+      newValue = value.replace(/[^a-zA-Z0-9]/g, '');
+    }
+
+    if (newValue.trim() === '') {
+      if(name==="order_id"){
+        setSplitCheckbox(false);
+        updatedFieldErrors[name] = `Order Id is required`;
+      }
+      // else if(name==="pay_count"){
+      //   updatedFieldErrors[name] = `Pay Count is required`;
+      // } 
+    } else {
+      updatedFieldErrors[name] = ''; // Clear the error message if the field is not empty
+    }
+  
+    setFieldErrors(updatedFieldErrors);
     setOrderData((preValue) => ({
-        ...preValue,
-        [name]: value,
-      }));
+      ...preValue,
+      [name]: newValue,
+    }));
+
+
   };
   
 
   const submit = async (e) => {
-    
+    if (orderData.merchant_id === "" || orderData.order_id === "") {
+      if(orderData.merchant_id === ""){
+        setStoreFromError("Store Name is required");
+      }
+      setFieldErrors((preValue) => ({
+        ...preValue,
+        order_id: orderData.order_id === "" ? "Order Id is required" : "",
+      }));
+      return; // Prevent checking the checkbox
+    }
+    if (orderData.pay_amt === "" || orderData.remaining_amt === "" || orderData.pay_count === "") {
+      if(orderData.pay_amt === ""){
+        setFieldErrors((preValue) => ({
+          ...preValue,
+          pay_amt: orderData.pay_amt === "" ? "Payment is required" : "",
+        }));
+      }
+      if(orderData.remaining_amt === ""){
+        setFieldErrors((preValue) => ({
+          ...preValue,
+          remaining_amt: orderData.remaining_amt === "" ? "Remaining Amount is required" : "",
+        }));
+      }
+      setFieldErrors((preValue) => ({
+        ...preValue,
+        pay_count: orderData.pay_count === "" ? "Pay Count is required" : "",
+      }));
+
+      return; // Prevent checking the checkbox
+    }
+    setConfirmModalOpen(true);
+  };
+
+
+  const confirmfun = async () => {
+    setConfirmModalOpen(false);
+    const formData = new FormData();
+    formData.append("merchant_id",orderData.merchant_id);
+    formData.append("order_id",orderData.order_id);
+    formData.append("is_split_payment",orderData.is_split_payment);
+    formData.append("pay_amt",orderData.pay_amt);
+    formData.append("remaining_amt",orderData.remaining_amt);
+    formData.append("pay_count",orderData.pay_count);
+    formData.append("token_id",userTypeData?.token_id);
+    formData.append("login_type",userTypeData?.login_type);
+
+    for (const [key, value] of formData.entries()) {
+      console.log(`${key}: ${value}`);
+    }
+    return
+    setLoader(true);
+    try {
+      const res = await axios.post(BASE_URL + ORDERRETRIEVE_SUBMIT, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${userTypeData?.token}`,
+        },
+      });
+
+      // const data = await res.data.status;
+      // const update_message = await res.data.message;
+      // if (data === true) {
+      //   ToastifyAlert("Added Successfully", "success");
+      // } else{
+      //   ToastifyAlert("Added Successfully", "success");
+      // }
+    } catch (error) {
+      if (error.status == 401 || error.response.status === 401) {
+        getUnAutherisedTokenMessage();
+        handleCoockieExpire();
+      } else if (error.status == "Network Error") {
+        getNetworkError();
+      }
+    }
+    setLoader(false);
   };
 
   return (
@@ -189,7 +372,7 @@ const OrderRetrieve = () => {
             {/* StoreFrom Dropdown */}
 
             <Grid container spacing={4} className="">
-              <Grid item xs={6} sm={12} md={6}>
+              <Grid item xs={12} sm={12} md={6}>
                 <label
                   className="q-details-page-label"
                   htmlFor="storefromFilter"
@@ -211,8 +394,11 @@ const OrderRetrieve = () => {
                   onClickHandler={handleOptionClick}
                   dropdownFor={"storefrom"}
                 />
+                {storeFromError && (
+                  <span className="input-error ">{storeFromError}</span>
+                )}
               </Grid>
-              <Grid item xs={6} sm={12} md={6} >
+              <Grid item xs={12} sm={12} md={6} >
                 <label
                   className="q-details-page-label"
                   htmlFor="storefromFilter "
@@ -221,19 +407,22 @@ const OrderRetrieve = () => {
                 </label>
                 <BasicTextFields
                   type="text"
-                  id="id"
-                  name="id"
+                  id="order_id"
+                  name="order_id"
                   onChangeFun={handleUserInputChange}
-                  value={orderData.id}
+                  value={orderData.order_id}
                   placeholder={"Order Id"}
                   sx={{ pt: 0.5 }}
                 />
+                {fieldErrors?.order_id && (
+                  <span className="input-error ">{fieldErrors?.order_id}</span>
+                )}
               </Grid>
             </Grid>
           </div>
     
 
-          <div className="q-add-inventory-section-header mx-2">
+          <div className="q-add-inventory-section-header isSplite_Checkbox mx-2">
             <div className="qv_checkbox">
               <label className="qv_checkbox_add_checkmark_label ">
                 is Split
@@ -251,9 +440,60 @@ const OrderRetrieve = () => {
 
           {splitCheckbox  && (
             <>
+              <div className="q-add-inventory-section-header mx-1">
+              <TableContainer>
+                <StyledTable
+                  sx={{ minWidth: 500 }}
+                  aria-label="customized table"
+                >
+                  <TableHead>
+                    <StyledTableCell>Pay Count</StyledTableCell>
+                    <StyledTableCell>Amount</StyledTableCell>
+                    <StyledTableCell>Remaining</StyledTableCell>
+                    <StyledTableCell>Pay Type</StyledTableCell>
+                  </TableHead>
+                  <TableBody>
+                      {tableData.length > 0 ? (
+                          tableData.map((data, index) => (
+                            <StyledTableRow key={index}>
+                              <StyledTableCell>
+                                <div className="text-[#000000] order_method capitalize">
+                                  {data.pay_count || ""}
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <div className="text-[#000000] order_method">
+                                  {data.pay_amt || ""}
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <div className="text-[#000000] order_method capitalize">
+                                  {data.remaining_amt || ""}
+                                </div>
+                              </StyledTableCell>
+                              <StyledTableCell>
+                                <div className="text-[#000000] order_method capitalize">
+                                  {data.pay_type || ""}
+                                </div>
+                              </StyledTableCell>
+                            </StyledTableRow>
+                          ))
+                        ) : (
+                          <StyledTableRow>
+                            <StyledTableCell colSpan={4} align="center">
+                              No records found
+                            </StyledTableCell>
+                          </StyledTableRow>
+                        )}
+                  </TableBody>
+                </StyledTable>
+              </TableContainer>
+              </div>
+          
+
             <div className="q-order-page-container mx-6  md:flex-col d-flex">
             <Grid container spacing={4}>
-            <Grid item xs={6} sm={12} md={6}>
+            <Grid item xs={12} sm={12} md={4}>
                 <label
                   className="q-details-page-label"
                   htmlFor="storefromFilter"
@@ -262,15 +502,20 @@ const OrderRetrieve = () => {
                 </label>
                 <BasicTextFields
                   type="text"
-                  id="payment"
-                  name="payment"
+                  id="pay_amt"
+                  name="pay_amt"
+                  maxLength={8}
                   onChangeFun={handleUserInputChange}
-                  value={orderData.payment}
+                  value={orderData.pay_amt}
                   placeholder={"Payment"}
                   sx={{ pt: 0.5 }}
                 />
+                 {fieldErrors?.pay_amt && (
+                  <span className="input-error ">{fieldErrors?.pay_amt}</span>
+                )}
               </Grid>
-              <Grid item xs={6} sm={12} md={6} >
+              
+              <Grid item xs={12} sm={12} md={4} >
                 <label
                   className="q-details-page-label"
                   htmlFor="storefromFilter "
@@ -280,13 +525,40 @@ const OrderRetrieve = () => {
                 </label>
                 <BasicTextFields
                   type="text"
-                  id="remainingAMT"
-                  name="remainingAMT"
+                  id="remaining_amt"
+                  name="remaining_amt"
+                  maxLength={8}
                   onChangeFun={handleUserInputChange}
-                  value={orderData.remainingAMT}
+                  value={orderData.remaining_amt}
                   placeholder={"Remaining Amount"}
                   sx={{ pt: 0.5 }}
                 />
+                 {fieldErrors?.remaining_amt && (
+                  <span className="input-error ">{fieldErrors?.remaining_amt}</span>
+                )}
+              </Grid>
+
+              <Grid item xs={12} sm={12} md={4} >
+                <label
+                  className="q-details-page-label"
+                  htmlFor="storefromFilter "
+                  
+                >
+                  Pay Count
+                </label>
+                <BasicTextFields
+                  type="text"
+                  maxLength={5}
+                  id="pay_count"
+                  name="pay_count"
+                  onChangeFun={handleUserInputChange}
+                  value={orderData.pay_count}
+                  placeholder={"Pay Count"}
+                  sx={{ pt: 0.5 }}
+                />
+                {fieldErrors?.pay_count && (
+                  <span className="input-error ">{fieldErrors?.pay_count}</span>
+                )}
               </Grid>
              
             </Grid>
@@ -319,6 +591,15 @@ const OrderRetrieve = () => {
           </div>
         </div>
       </div>
+
+      <ConfirmModal
+        headerText="Are you sure you want to pay?"
+        open={confirmModalOpen}
+        onClose={() => {
+          setConfirmModalOpen(false);
+        }}
+        onConfirm={confirmfun}
+      />
     </>
   );
 };

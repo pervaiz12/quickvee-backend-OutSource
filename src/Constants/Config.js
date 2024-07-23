@@ -344,6 +344,11 @@ module.exports = Object.freeze({
   DIGITALMAKRTING_UPDATE: "Store_setting_react_api/add_digital_marketing_tags",
   DELETE_DIGITALMAKRTING:
     "Store_setting_react_api/delete_digital_marketing_tags",
+
+  // Order Retrieve
+  SPLIT_LIST:"Order_list_api/get_split_records",
+  ORDERRETRIEVE_SUBMIT:"Order_list_api/order_recover",
+
 });
 
 // All api calls are initialized in this component for this application
