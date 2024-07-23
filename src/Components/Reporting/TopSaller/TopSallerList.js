@@ -16,6 +16,7 @@ import PasswordShow from "../../../Common/passwordShow";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import SortIcon from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -261,14 +262,11 @@ const TopSallerList = ({ data }) => {
                       </StyledTableRow>
                     ))
                   ) : (
-                    <Grid container sx={{ padding: 2.5 }}>
-                      <Grid item xs={12}>
-                        <p>No. Data found.</p>
-                      </Grid>
-                    </Grid>
+                    ""
                   )}
                 </TableBody>
               </StyledTable>
+              {!topsaller.length && <NoDataFound /> }
             </TableContainer>
           )}
         </Grid>

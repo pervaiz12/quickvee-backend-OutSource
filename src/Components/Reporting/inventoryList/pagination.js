@@ -14,6 +14,7 @@ import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import Skeleton from "react-loading-skeleton";
 import { Grid } from "@mui/material";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -37,9 +38,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  "&:last-child td, &:last-child th": {
-    
-  },
+  "&:last-child td, &:last-child th": {},
   "& td, & th": {
     border: "none",
   },
@@ -68,7 +67,6 @@ export default function Pagination(props) {
   return (
     <>
       {props.loader ? (
-        
         <>
           <SkeletonTable columns={columns} />
         </>
@@ -133,26 +131,13 @@ export default function Pagination(props) {
                     </StyledTableRow>
                   ))
                 ) : (
-                  <StyledTableRow>
-                    <StyledTableCell>
-                      <p>{props.message}</p>
-                    </StyledTableCell>
-                  </StyledTableRow>
+                  ""
                 )}
               </TableBody>
             </StyledTable>
           </TableContainer>
           {props.searchProduct.length ? (
             props.laodMoreData ? (
-              
-              
-
-
-
-
-
-
-              
               renderLoader()
             ) : !props.endOfDataList ? (
               <Stack spacing={2} direction="row">
@@ -169,11 +154,7 @@ export default function Pagination(props) {
               ""
             )
           ) : (
-            <Grid container>
-              <Grid item sx={{ p: 2.5 }}>
-                <p>No Data Available</p>
-              </Grid>
-            </Grid>
+           <NoDataFound  />
           )}
         </>
       )}

@@ -73,7 +73,7 @@ export default function AdminView({ setVisible, setEditAdminId }) {
         })
       );
     } catch (error) {
-      if (error.status == 401 || error.response.status === 401) {
+      if (error?.status == 401 || error?.response?.status === 401) {
         getUnAutherisedTokenMessage();
         handleCoockieExpire();
       } else if (error.status == "Network Error") {
@@ -88,7 +88,6 @@ export default function AdminView({ setVisible, setEditAdminId }) {
   useEffect(() => {
     if (!AdminRecord.loading && AdminRecord.AdminRecord?.length >= 1) {
       setAdminsDataState(AdminRecord.AdminRecord);
-      setTotalCount(AdminRecord.AdminRecord?.length);
     }
   }, [AdminRecord.AdminRecord]);
   useEffect(() => {

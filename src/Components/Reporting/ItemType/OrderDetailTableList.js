@@ -11,6 +11,7 @@ import { Grid } from "@mui/material";
 import Pagination from "../../../AllUserComponents/Users/UnverifeDetails/Pagination";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import { Link } from "react-router-dom";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -194,14 +195,11 @@ export default function OrderDetailTableList({
                             </StyledTableRow>
                           ))
                         ) : (
-                          <Grid container>
-                            <Grid item xs={12} sx={{ p: 2.5 }}>
-                              <p>No Data Available</p>
-                            </Grid>
-                          </Grid>
+                          ""
                         )}
                       </TableBody>
                     </StyledTable>
+                    {!orderDetailDataList.length && <NoDataFound />}
                   </TableContainer>
                 </>
               )}

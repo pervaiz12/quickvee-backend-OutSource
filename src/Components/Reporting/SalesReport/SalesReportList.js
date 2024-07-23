@@ -18,6 +18,7 @@ import PasswordShow from "../../../Common/passwordShow";
 import { priceFormate } from "../../../hooks/priceFormate";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 import Skeleton from "react-loading-skeleton";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -61,7 +62,7 @@ const SalesReportList = (props) => {
   const merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
   const [SalesReportData, setSalesReportData] = useState({});
   const SalesReportDataState = useSelector((state) => state.SalesReportList);
-  
+
   useEffect(() => {
     getAllRecord();
   }, [props, dispatch]);
@@ -78,7 +79,7 @@ const SalesReportList = (props) => {
         order_env: 9,
         order_typ: "both",
       };
-      
+
       if (data) {
         try {
           await dispatch(fetchSalesReportData(data)).unwrap();
@@ -96,7 +97,6 @@ const SalesReportList = (props) => {
 
   useEffect(() => {
     if (!SalesReportDataState.loading && SalesReportDataState.SalesReportData) {
-      
       setSalesReportData(SalesReportDataState.SalesReportData);
     } else {
       setSalesReportData({});
@@ -115,8 +115,6 @@ const SalesReportList = (props) => {
     SalesReportData.total_loyalty_point_spent
   );
 
-  
-
   const discount1 =
     parseFloat(discount) -
     (parseFloat(total_gift_card_amount) +
@@ -134,8 +132,10 @@ const SalesReportList = (props) => {
     (parseFloat(discount1) + parseFloat(refunds)) -
     parseFloat(SalesReportData.giftcard_amt_collected) -
     parseFloat(SalesReportData.loyality_amt_collected);
-  const taxesAndFees = (SalesReportData?.remain_default_tax ?  parseFloat(SalesReportData?.remain_default_tax) : 0) +
-    parseFloat(SalesReportData?.remain_other_tax);
+  const taxesAndFees =
+    (SalesReportData?.remain_default_tax
+      ? parseFloat(SalesReportData?.remain_default_tax)
+      : 0) + parseFloat(SalesReportData?.remain_other_tax);
   const tip = parseFloat(SalesReportData.tip);
   const serviceCharges =
     parseFloat(SalesReportData.con_fee) + parseFloat(SalesReportData.del_fee);
@@ -158,8 +158,7 @@ const SalesReportList = (props) => {
   const CashCollected =
     parseFloat(SalesReportData.cash_collected) -
     parseFloat(SalesReportData.cash_back_amt);
-  
-    
+
   const SalesSummeryList = [
     {
       name: "Gross Sale",
@@ -246,13 +245,7 @@ const SalesReportList = (props) => {
                 </div>
                 <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
                   <Skeleton />
-                  
-                  
                 </div>
-                
-                
-
-
               </div>
             </Grid>
             <Grid item xs={4}>
@@ -263,10 +256,6 @@ const SalesReportList = (props) => {
                 <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
                   <Skeleton />
                 </div>
-                
-                
-
-
               </div>
             </Grid>
             <Grid item xs={4}>
@@ -277,10 +266,6 @@ const SalesReportList = (props) => {
                 <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
                   <Skeleton />
                 </div>
-                
-                
-
-
               </div>
             </Grid>
           </Grid>
@@ -298,13 +283,7 @@ const SalesReportList = (props) => {
                 </div>
                 <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
                   ${priceFormate(parseFloat(gross_sale).toFixed(2))}
-                  
-                  
                 </div>
-               
-               
-
-
               </div>
             </Grid>
             <Grid item xs={4}>
@@ -315,10 +294,6 @@ const SalesReportList = (props) => {
                 <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
                   ${priceFormate(parseFloat(Math.abs(netSales)).toFixed(2))}
                 </div>
-                
-                
-
-
               </div>
             </Grid>
             <Grid item xs={4}>
@@ -329,10 +304,6 @@ const SalesReportList = (props) => {
                 <div className="text-black lg:text-[40px] sm:text-[24px] font-normal Admin_std mt-1 mb-1">
                   ${priceFormate(parseFloat(amountCollected).toFixed(2))}
                 </div>
-                
-                
-
-                
               </div>
             </Grid>
           </Grid>
@@ -466,11 +437,7 @@ const SalesReportList = (props) => {
           </Grid>
         </>
       ) : (
-        <Grid sx={{ padding: 2.5, margin: 0 }} className="box_shadow_div">
-          <Grid item xs={12}>
-            <p>No record found.</p>
-          </Grid>
-        </Grid>
+        <NoDataFound />
       )}
     </>
   );

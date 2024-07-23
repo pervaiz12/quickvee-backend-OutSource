@@ -20,6 +20,7 @@ import PasswordShow from "../../../Common/passwordShow";
 import { SortTableItemsHelperFun } from "../../../helperFunctions/SortTableItemsHelperFun";
 import Skeleton from "react-loading-skeleton";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
+import NoDataFound from "../../../reuseableComponents/NoDataFound";
 
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
@@ -41,12 +42,8 @@ const StyledTableCell = styled(TableCell)(({ theme }) => ({
 }));
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  "&:nth-of-type(odd)": {
-    
-  },
-  "&:last-child td, &:last-child th": {
-    
-  },
+  "&:nth-of-type(odd)": {},
+  "&:last-child td, &:last-child th": {},
   "& td, & th": {
     border: "none",
   },
@@ -83,13 +80,11 @@ const DetailsSaleReport = ({ data }) => {
         let NewData = {
           ...data,
           merchant_id,
-          
+
           order,
           sorting_type,
           ...userTypeData,
         };
-        
-        
 
         await dispatch(fetchdetailCategorySaleData(NewData)).unwrap();
       }
@@ -111,18 +106,6 @@ const DetailsSaleReport = ({ data }) => {
       setdetailCategorySale(detailCategorySaleDataState.detailCategorySaleData);
     }
   }, [detailCategorySaleDataState]);
-
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
 
   const grandTotal = detailCategorySale
     ? Object.values(detailCategorySale).reduce((acc, category) => {
@@ -222,12 +205,6 @@ const DetailsSaleReport = ({ data }) => {
                         </button>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        
-                        
-                        
-                      
-                      
-                      
                         <button
                           className="flex items-center"
                           onClick={() => sortByItemName("num", "pro_qty")}
@@ -237,12 +214,6 @@ const DetailsSaleReport = ({ data }) => {
                         </button>
                       </StyledTableCell>
                       <StyledTableCell align="center">
-                        
-                        
-                        
-                      
-                      
-                      
                         <button
                           className="flex items-center"
                           onClick={() => sortByItemName("num", "product_total")}
@@ -297,11 +268,10 @@ const DetailsSaleReport = ({ data }) => {
           </>
         ))
       ) : (
-        <Grid container sx={{ padding: 2.5 }} className="box_shadow_div">
-          <Grid item xs={12}>
-            <p>No. Data found.</p>
-          </Grid>
+        <Grid sx={{pt:2.5}}>
+           <NoDataFound />
         </Grid>
+       
       )}
       {Object.entries(detailCategorySale).length > 0 && (
         <Grid container sx={{ marginY: 2.5 }} className="box_shadow_div">

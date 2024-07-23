@@ -82,43 +82,6 @@ export default function InventoryLogic() {
   }, []);
 
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   const getAllCategoryList = async () => {
     try {
@@ -132,8 +95,6 @@ export default function InventoryLogic() {
       });
       if (response) {
         setCategory(response?.data?.result);
-        
-        
       }
     } catch (error) {
       if (error.status == 401 || error.response.status === 401) {
@@ -173,7 +134,7 @@ export default function InventoryLogic() {
       if (response?.data.length) {
         setLoader(false);
         setsearchProduct(response?.data);
-        
+
         if (id == "all") {
           setEndOfDataList(false);
           setOffset(10);
@@ -202,7 +163,6 @@ export default function InventoryLogic() {
     try {
       setLoadMoreData(true);
       const packet = {
-       
         cat_id: selectCategoryId,
         offset,
         limit,
@@ -212,7 +172,7 @@ export default function InventoryLogic() {
         ...userTypeData,
       };
       const { token, ...newData } = packet;
-      
+
       let response = await axios.post(BASE_URL + INVENTORY_LIST, newData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -222,7 +182,7 @@ export default function InventoryLogic() {
 
       if (response?.data.length) {
         setLoader(false);
-        
+
         setsearchProduct([...searchProduct, ...response?.data]);
         if (selectCategoryId == "all" && response?.data.length !== 10) {
           setEndOfDataList(true);
@@ -232,9 +192,9 @@ export default function InventoryLogic() {
         }
       } else {
         setLoader(false);
-
+        setEndOfDataList(true);
         setMessage("No record found");
-        setsearchProduct([]);
+        // setsearchProduct([]);
       }
     } catch (error) {
       if (error.status == 401 || error.response.status === 401) {
@@ -262,7 +222,7 @@ export default function InventoryLogic() {
   return {
     handleChangeInventory,
     inventory,
-    
+
     category,
     handleOptionClick,
     selectedCategory,

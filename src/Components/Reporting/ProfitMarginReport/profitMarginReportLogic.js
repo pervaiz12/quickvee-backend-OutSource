@@ -46,14 +46,6 @@ export default function ProfitMarginReportLogic() {
           format: "json",
           listing_type: listingType,
         };
-       
-        
-
-
-
-
-
-
 
         setLoader(true);
         let response = await axios.post(BASE_URL + INVENTORY_LIST, packet, {
@@ -94,38 +86,8 @@ export default function ProfitMarginReportLogic() {
   }, []);
 
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   const getAllCategoryList = async () => {
-    
     try {
       const packet = { merchant_id, ...newData };
       let response = await axios.post(BASE_URL + LIST_ALL_CATEGORIES, packet, {
@@ -136,8 +98,6 @@ export default function ProfitMarginReportLogic() {
       });
       if (response) {
         setCategory(response?.data?.result);
-        
-        
       }
     } catch (error) {
       if (error.status == 401 || error.response.status === 401) {
@@ -173,7 +133,7 @@ export default function ProfitMarginReportLogic() {
           Authorization: `Bearer ${token}`,
         },
       });
-      
+
       if (response?.data.length) {
         setLoader(false);
         setsearchProduct(response?.data);
@@ -203,13 +163,12 @@ export default function ProfitMarginReportLogic() {
   const handleLoadMore = async () => {
     try {
       const packet = {
-        
         cat_id: selectCategoryId,
         offset,
         limit,
         merchant_id,
         format: "json",
-        
+
         listing_type: listingType,
         ...userTypeData,
       };
@@ -237,7 +196,7 @@ export default function ProfitMarginReportLogic() {
         setLoader(false);
         setLoadMoreData(false);
         setMessage("No record found");
-        setsearchProduct([]);
+        // setsearchProduct([]);
       }
     } catch (error) {
       if (error.status == 401 || error.response.status === 401) {
@@ -252,7 +211,7 @@ export default function ProfitMarginReportLogic() {
   return {
     handleChangeInventory,
     inventory,
-    
+
     category,
     handleOptionClick,
     selectedCategory,
