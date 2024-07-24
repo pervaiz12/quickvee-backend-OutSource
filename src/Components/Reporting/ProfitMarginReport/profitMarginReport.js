@@ -20,6 +20,7 @@ export default function ProfitMarginReport() {
     laodMoreData,
     loader,
     setsearchProduct,
+    endOfDataList
   } = ProfitMarginReportLogic();
 
   const [sortOrder, setSortOrder] = useState("asc"); // "asc" for ascending, "desc" for descending
@@ -102,6 +103,7 @@ export default function ProfitMarginReport() {
             laodMoreData={laodMoreData}
             loader={loader}
             sortByItemName={sortByItemName}
+            endOfDataList={endOfDataList}
           />
         </Grid>
       </Grid>

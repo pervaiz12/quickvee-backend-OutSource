@@ -13,6 +13,10 @@ import { priceFormate } from "../../../hooks/priceFormate";
 import sortIcon from "../../../Assests/Category/SortingW.svg";
 import { SkeletonTable } from "../../../reuseableComponents/SkeletonTable";
 
+import Skeleton from "react-loading-skeleton";
+import { Grid } from "@mui/material";
+
+
 const StyledTable = styled(Table)(({ theme }) => ({
   padding: 2, // Adjust padding as needed
 }));
@@ -36,9 +40,7 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   "&:nth-of-type(odd)": {
     backgroundColor: theme.palette.action.hover,
   },
-  "&:last-child td, &:last-child th": {
-    
-  },
+  "&:last-child td, &:last-child th": {},
   "& td, & th": {
     border: "none",
   },
@@ -64,10 +66,28 @@ export default function Pagination(props) {
     const temp = str?.split(",");
     return temp?.join(", ");
   };
+  const renderLoader = () => {
+    return (
+      <TableContainer>
+        <StyledTable aria-label="customized table">
+          <TableBody>
+            {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((row) => (
+              <StyledTableRow key={row}>
+                {["", "", "", ""].map((col) => (
+                  <StyledTableCell key={col}>
+                    <Skeleton />
+                  </StyledTableCell>
+                ))}
+              </StyledTableRow>
+            ))}
+          </TableBody>
+        </StyledTable>
+      </TableContainer>
+    );
+  };
   return (
     <>
       {props.loader ? (
-        
         <>
           <SkeletonTable columns={columns} />
         </>
@@ -126,16 +146,14 @@ export default function Pagination(props) {
                 </StyledTableRow>
               )}
             </TableBody>
-            {props.laodMoreData ? (
-              
-              
-
-
-
-              
-
+          </StyledTable>
+          {props.searchProduct.length ? (
+            props.laodMoreData ? (
+              renderLoader()
+            ) : !props.endOfDataList ? (
               <Stack spacing={2} direction="row">
                 <Button
+                  sx={{ fontFamily: "CircularMedium" }}
                   variant="outlined"
                   className="button-load"
                   onClick={props.handleLoadMore}
@@ -145,8 +163,14 @@ export default function Pagination(props) {
               </Stack>
             ) : (
               ""
-            )}
-          </StyledTable>
+            )
+          ) : (
+            <Grid container>
+              <Grid item sx={{ p: 2.5 }}>
+                <p>No Data Available</p>
+              </Grid>
+            </Grid>
+          )}
         </TableContainer>
       )}
     </>
