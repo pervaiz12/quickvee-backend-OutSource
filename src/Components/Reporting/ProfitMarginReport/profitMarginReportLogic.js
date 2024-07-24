@@ -46,14 +46,6 @@ export default function ProfitMarginReportLogic() {
           format: "json",
           listing_type: listingType,
         };
-       
-        
-
-
-
-
-
-
 
         setLoader(true);
         let response = await axios.post(BASE_URL + INVENTORY_LIST, packet, {
@@ -94,35 +86,6 @@ export default function ProfitMarginReportLogic() {
   }, []);
 
   let merchant_id = LoginGetDashBoardRecordJson?.data?.merchant_id;
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   const getAllCategoryList = async () => {
     
@@ -214,7 +177,7 @@ export default function ProfitMarginReportLogic() {
         ...userTypeData,
       };
       const { token, ...newData } = packet;
-      setLoader(true);
+      // setLoader(true);
       let response = await axios.post(BASE_URL + INVENTORY_LIST, newData, {
         headers: {
           "Content-Type": "multipart/form-data",
