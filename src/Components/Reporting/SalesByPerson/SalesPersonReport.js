@@ -276,15 +276,15 @@ const SalesPersonReport = (props) => {
                           </StyledTableCell>
                         </StyledTableRow>
                       ))}
-                      <StyledTableRow>
+                      <StyledTableRow className="trBG_Color">
                         <StyledTableCell></StyledTableCell>
                         <StyledTableCell align="center">
-                          <div className="q-category-bottom-report-listing">
+                          <div className=" totalReport">
                             <div>Total </div>
                           </div>
                         </StyledTableCell>
                         <StyledTableCell align="center">
-                          <div className="q-category-bottom-report-listing">
+                          <div className="totalReport">
                             <div>
                               {`$${priceFormate(
                                 allSalesByPersonData[EmpData].reduce(
@@ -321,19 +321,19 @@ const SalesPersonReport = (props) => {
           aria-label="customized table"
           style={{ marginBottom: "1rem", transform: "translate(0rem, -1rem)" }}
         >
-          <StyledTableRow>
+          <StyledTableRow className="trBG_Color">
             <StyledTableCell sx={{ width: "33%" }}></StyledTableCell>
             <StyledTableCell align="center" sx={{ width: "33%" }}>
               <div className="q-category-bottom-report-listing">
                 <div>
-                  <p className="">Grand Total</p>
+                  <p className="totalReport">Grand Total</p>
                 </div>
               </div>
             </StyledTableCell>
             <StyledTableCell align="center">
               <div className="q-category-bottom-report-listing">
                 <div>
-                  <p className="">${priceFormate(grandTotal.toFixed(2))}</p>
+                  <p className="totalReport">${priceFormate(grandTotal.toFixed(2))}</p>
                 </div>
               </div>
             </StyledTableCell>

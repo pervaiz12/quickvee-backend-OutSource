@@ -112,18 +112,6 @@ const RefundSummaryList = ({ data }) => {
     RefundReportData.refundreportData,
   ]);
 
-  
-  
-
-
-
-
-
-
-
-
-
-
   const tableRow = [
     { type: "str", name: "name", label: "Item Name" },
     { type: "str", name: "f_name", label: "Employee Name" },
@@ -150,142 +138,6 @@ const RefundSummaryList = ({ data }) => {
     setrefundData(sortedItems);
     setSortOrder(newOrder);
   };
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   return (
     <>
@@ -346,25 +198,21 @@ const RefundSummaryList = ({ data }) => {
                   </Grid>
                 )}
                 {refundata && (
-                  <StyledTableRow>
+                  <StyledTableRow className="trBG_Color">
                     <StyledTableCell></StyledTableCell>
                     <StyledTableCell></StyledTableCell> 
                     <StyledTableCell></StyledTableCell>
                     <StyledTableCell>
-                      <p
-                        style={{
-                          color: "#0A64F9",
-                        }}
-                      >
+                      <p className="totalReport">
                         Total
                       </p>
                     </StyledTableCell>
-                    <StyledTableCell style={{ color: "#0A64F9" }}>
-                      {priceFormate(total)}
+                    <StyledTableCell >
+                    <p className="totalReport">{priceFormate(total)} </p>
                     </StyledTableCell>
 
                     <StyledTableCell>
-                      <p style={{ color: "#0A64F9" }}>
+                      <p className="totalReport">
                         ${priceFormate(totalRefundAmountState.toFixed(2))}
                       </p>
                     </StyledTableCell>

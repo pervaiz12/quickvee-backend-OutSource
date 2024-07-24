@@ -158,15 +158,15 @@ const TipReportList = (props) => {
                       </>
                     ))}
                   {tipReportData.length > 0 && (
-                    <StyledTableRow>
+                    <StyledTableRow className="trBG_Color">
                       
                       
                       <StyledTableCell>
-                        <p style={{ color: "#0A64F9" }}>Grand Total</p>
+                        <p style={{ color: "#0A64F9" }} className="totalReport">Grand Total</p>
                       </StyledTableCell>
                       <StyledTableCell>
                         <p
-                          className="report-title"
+                          className="report-title totalReport"
                           style={{ color: "#0A64F9" }}
                         >
                           ${priceFormate(totalNetTip.toFixed(2))}

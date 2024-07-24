@@ -115,39 +115,6 @@ export default function DashboardTables(props) {
     }
   };
 
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   const tableRow = [
     { type: "str", name: "category", label: "Category" },
     { type: "str", name: "name", label: "Name" },
@@ -195,37 +162,16 @@ export default function DashboardTables(props) {
                     <StyledTableCell>{item?.name}</StyledTableCell>
                     <StyledTableCell>{item?.total_qty}</StyledTableCell>
                     <StyledTableCell>
-                      
-                      
-
                       <p>{formatCurrency(item?.costOfItem)}</p>
                     </StyledTableCell>
                     <StyledTableCell>
-                      
-                      
-
                       <p>{formatCurrency(item?.sellingPrice)}</p>
                     </StyledTableCell>
                     <StyledTableCell>
-                      
-                      
-
-
-
-
-
-
-
 
                       <p>{`${item?.profitMargin} %`}</p>
                     </StyledTableCell>
                     <StyledTableCell>
-                      
-                      
-
-
-
-                      
                       <p>{formatCurrency(item?.profitAmmount)}</p>
                     </StyledTableCell>
                   </StyledTableRow>
@@ -239,32 +185,32 @@ export default function DashboardTables(props) {
               )}
               {Array.isArray(props.getItemRecord) &&
               props.getItemRecord.length > 0 ? (
-                <StyledTableRow>
+                <StyledTableRow className="trBG_Color">
                   <StyledTableCell colSpan={2}>
-                    <p style={{ color: "#0A64F9" }}>Total</p>
+                    <p className=" totalReport">Total</p>
                   </StyledTableCell>
                   <StyledTableCell>
-                    <p style={{ color: "#0A64F9" }}>
+                    <p className=" totalReport">
                       {priceFormate(totalCost?.soldQty)}
                     </p>
                   </StyledTableCell>
                   <StyledTableCell>
-                    <p style={{ color: "#0A64F9" }}>{`$${priceFormate(
+                    <p className=" totalReport">{`$${priceFormate(
                       totalCost?.costItem
                     )}`}</p>
                   </StyledTableCell>
                   <StyledTableCell>
-                    <p style={{ color: "#0A64F9" }}>{`$${priceFormate(
+                    <p className=" totalReport">{`$${priceFormate(
                       totalCost?.totalSelling
                     )}`}</p>
                   </StyledTableCell>
                   <StyledTableCell>
                     <p
-                      style={{ color: "#0A64F9" }}
+                      className=" totalReport"
                     >{`${totalCost?.profitPercentage}%`}</p>
                   </StyledTableCell>
                   <StyledTableCell>
-                    <p style={{ color: "#0A64F9" }}>{`$${priceFormate(
+                    <p className=" totalReport">{`$${priceFormate(
                       totalCost?.profit
                     )}`}</p>
                   </StyledTableCell>

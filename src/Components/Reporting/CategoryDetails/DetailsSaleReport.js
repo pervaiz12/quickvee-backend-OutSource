@@ -254,17 +254,20 @@ const DetailsSaleReport = ({ data }) => {
                           </StyledTableCell>
                         </StyledTableRow>
                       ))}
-                      <StyledTableRow>
+                      <StyledTableRow className="trBG_Color">
                         <StyledTableCell>
-                          <p>Total</p>
+                          <p className="totalReport">Total</p>
                         </StyledTableCell>
                         <StyledTableCell>
+                          <p className="totalReport">
                           {items.reduce(
                             (acc, item) => acc + parseInt(item.pro_qty) || 0,
                             0
                           )}
+                          </p>
                         </StyledTableCell>
                         <StyledTableCell>
+                        <p className="totalReport">
                           $
                           {priceFormate(
                             items
@@ -275,6 +278,7 @@ const DetailsSaleReport = ({ data }) => {
                               )
                               .toFixed(2)
                           )}
+                          </p>
                         </StyledTableCell>
                       </StyledTableRow>
                     </TableBody>
@@ -296,20 +300,20 @@ const DetailsSaleReport = ({ data }) => {
             <TableContainer>
               <StyledTable>
                 <TableBody>
-                  <StyledTableRow>
+                  <StyledTableRow className="trBG_Color">
                     <StyledTableCell sx={{ width: "55%" }}>
                       <div className="q-category-bottom-report-listing">
                         <div>
-                          <p className="">Grand Total</p>
+                          <p className="totalReport">Grand Total</p>
                         </div>
                       </div>
                     </StyledTableCell>
 
-                    <StyledTableCell sx={{ width: "23%" }}>{grandTotalProductQty}</StyledTableCell>
+                    <StyledTableCell sx={{ width: "23%" }}><p className="q-category-bottom-report-listing totalReport">{grandTotalProductQty}</p></StyledTableCell>
 
                     <StyledTableCell>
                       <div className="q-category-bottom-report-listing">
-                        <div>${priceFormate(grandTotal.toFixed(2))}</div>
+                        <div className="totalReport">${priceFormate(grandTotal.toFixed(2))}</div>
                       </div>
                     </StyledTableCell>
                   </StyledTableRow>

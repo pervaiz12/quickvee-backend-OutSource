@@ -30,30 +30,6 @@ const OrderRefundFilter = ({
 
   const [categoryList, setCategoryList] = useState([]);
   console.log("categoryList", categoryList);
-  
-  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   
   const ReasonList = [

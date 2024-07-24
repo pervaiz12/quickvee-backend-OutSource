@@ -255,7 +255,7 @@ const OrderRefundReportList = (props) => {
                         </StyledTableRow>
                       ))}
                     {allOrderData.length > 0 && (
-                      <StyledTableRow>
+                      <StyledTableRow className="trBG_Color">
                         <StyledTableCell></StyledTableCell>
                         <StyledTableCell></StyledTableCell>
                         <StyledTableCell></StyledTableCell>
@@ -270,11 +270,12 @@ const OrderRefundReportList = (props) => {
                             style={{
                               color: "#0A64F9",
                             }}
+                            className="totalReport"
                           >
                             Grand Total
                           </p>
                         </StyledTableCell>
-                        <StyledTableCell style={{ color: "#0A64F9" }}>
+                        <StyledTableCell style={{ color: "#0A64F9" }} className="totalReport">
                           $
                           {parseFloat(
                             calculateGrandTotal(allOrderData, "amount")
@@ -299,96 +300,6 @@ const OrderRefundReportList = (props) => {
           )}
         </Grid>
       </Grid>
-     
-     
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
      
     </>
   );

@@ -64,11 +64,6 @@ export default function DashboardTables(props) {
   const navigate = useNavigate();
   const [totalRecord, setTotalRecord] = React.useState("");
 
-  
-  
-
-
-
   useEffect(() => {
     console.log(props.EmployeeFilterData);
     if (props.EmployeeFilterData) {
@@ -328,11 +323,12 @@ export default function DashboardTables(props) {
 
                                     </StyledTableRow>
                                   ))}
-                                  <StyledTableRow>
+                                  <StyledTableRow className="trBG_Color">
                                     <StyledTableCell>
-                                      Total Discount
+                                     <p className="totalReport">Total Discount</p>
                                     </StyledTableCell>
                                     <StyledTableCell>
+                                    <p className="totalReport">
                                       {`$${priceFormate(
                                         result
                                           .reduce((total, item) => {
@@ -343,6 +339,7 @@ export default function DashboardTables(props) {
                                           }, 0)
                                           .toFixed(2)
                                       )}`}
+                                      </p>
                                     </StyledTableCell>
                                     <StyledTableCell></StyledTableCell>
                                     <StyledTableCell></StyledTableCell>
@@ -354,23 +351,19 @@ export default function DashboardTables(props) {
                                     .length -
                                     1 ===
                                     index && (
-                                    <StyledTableRow>
+                                    <StyledTableRow className="trBG_Color">
                                       <StyledTableCell>
-                                        <div className="q-category-bottom-report-listing">
-                                          <div>
+                                        <div className="q-category-bottom-report-listing totalReport">
                                             <p className="">
                                               Final Discount Total
                                             </p>
-                                          </div>
                                         </div>
                                       </StyledTableCell>
                                       <StyledTableCell>
-                                        <div className="q-category-bottom-report-listing">
-                                          <div>
+                                        <div className="q-category-bottom-report-listing totalReport">
                                             <p className="">
                                               ${priceFormate(totalRecord)}
                                             </p>
-                                          </div>
                                         </div>
                                       </StyledTableCell>
                                       <StyledTableCell></StyledTableCell>

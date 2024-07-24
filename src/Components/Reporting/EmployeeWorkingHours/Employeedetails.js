@@ -277,24 +277,16 @@ const Employeedetails = (props) => {
                             {Array.isArray(
                               allEmpWorkingHrsData[employeeName]
                             ) && (
-                              <StyledTableRow>
+                              <StyledTableRow className="trBG_Color">
                                 <StyledTableCell></StyledTableCell>
                                 <StyledTableCell></StyledTableCell>
                                 <StyledTableCell>
-                                  <p
-                                    style={{
-                                      color: "#0A64F9",
-                                    }}
-                                  >
+                                  <p className=" totalReport">
                                     Total
                                   </p>
                                 </StyledTableCell>
                                 <StyledTableCell>
-                                  <p
-                                    style={{
-                                      color: "#0A64F9",
-                                    }}
-                                  >
+                                  <p className=" totalReport">
                                     {priceFormate(
                                       calTotalWork(
                                         allEmpWorkingHrsData[employeeName]
@@ -303,11 +295,7 @@ const Employeedetails = (props) => {
                                   </p>
                                 </StyledTableCell>
                                 <StyledTableCell>
-                                  <p
-                                    style={{
-                                      color: "#0A64F9",
-                                    }}
-                                  >
+                                  <p className=" totalReport">
                                     {priceFormate(
                                       parseFloat(
                                         calTotalBreak(
@@ -318,11 +306,7 @@ const Employeedetails = (props) => {
                                   </p>
                                 </StyledTableCell>
                                 <StyledTableCell>
-                                  <p
-                                    style={{
-                                      color: "#0A64F9",
-                                    }}
-                                  >
+                                  <p className=" totalReport">
                                     {priceFormate(
                                       parseFloat(
                                         calTotalActualWork(
@@ -348,80 +332,6 @@ const Employeedetails = (props) => {
                       </TableContainer>
                     </Grid>
                   </Grid>
-                  
-                  
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-                  
                 </>
               ))}
           </>

@@ -231,14 +231,14 @@ const VendorSalesReportList = (props) => {
                                   </StyledTableCell>
                                 </StyledTableRow>
                               ))}
-                              <StyledTableRow>
+                              <StyledTableRow className="trBG_Color">
                                
                                 <StyledTableCell> </StyledTableCell>
                                 <StyledTableCell align="right">
-                                  <p style={{ color: "#0A64F9" }}>Total</p>
+                                  <p className="totalReport">Total</p>
                                 </StyledTableCell>
                                 <StyledTableCell>
-                                  <p style={{ color: "#0A64F9" }}>
+                                  <p className="totalReport">
                                     $
                                     {priceFormate(
                                       parseFloat(
