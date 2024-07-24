@@ -24,6 +24,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import CurrencyInputHelperFun from "../../helperFunctions/CurrencyInputHelperFun";
+import { ToastifyAlert } from "../../CommonComponents/ToastifyAlert";
 
 
 
@@ -95,7 +96,7 @@ const OrderRetrieve = () => {
   const [orderData, setOrderData] = useState({
     merchant_id:'',
     order_id:"",
-    is_split_payment:"",
+    is_split_payment:0,
     pay_amt: "",
     remaining_amt: "",
     pay_count:""
@@ -227,9 +228,8 @@ const OrderRetrieve = () => {
           Authorization: `Bearer ${userTypeData?.token}`,
         },
       });
-      if(res.data.status === true){
-        console.log("xzvb",res)
-        setTableData(res.data.value)
+      if(res.data.status === true && res.data.message === "Split data found."){
+        setTableData(res.data.data)
       }else{
         setTableData([])
       }
@@ -248,10 +248,9 @@ const OrderRetrieve = () => {
     const { name, value } = e.target;
     let newValue = value;
     const updatedFieldErrors = { ...fieldErrors };
-
     if (name === "pay_amt" || name === "remaining_amt") {
       newValue = CurrencyInputHelperFun(value);
-    } else if (name === "pay_count") {
+    }else if(name === "pay_count") {
       const numberOnlyValue = value.replace(/[^0-9]/g, '');
       newValue = numberOnlyValue;
     } else if(name==="order_id"){
@@ -263,9 +262,16 @@ const OrderRetrieve = () => {
         setSplitCheckbox(false);
         updatedFieldErrors[name] = `Order Id is required`;
       }
-      // else if(name==="pay_count"){
-      //   updatedFieldErrors[name] = `Pay Count is required`;
-      // } 
+      if(name === "pay_amt"){
+        if (newValue.trim() === '' || newValue == "0.00") {
+          updatedFieldErrors[name] = `Payment Amount is required`;
+        }
+      }
+      if(name === "pay_count"){
+        if (newValue.trim() === '' || +newValue === 0) {
+          updatedFieldErrors[name] = `Pay Count is required`;
+        } 
+      }
     } else {
       updatedFieldErrors[name] = ''; // Clear the error message if the field is not empty
     }
@@ -276,9 +282,8 @@ const OrderRetrieve = () => {
       [name]: newValue,
     }));
 
-
   };
-  
+
 
   const submit = async (e) => {
     if (orderData.merchant_id === "" || orderData.order_id === "") {
@@ -291,25 +296,27 @@ const OrderRetrieve = () => {
       }));
       return; // Prevent checking the checkbox
     }
-    if (orderData.pay_amt === "" || orderData.remaining_amt === "" || orderData.pay_count === "") {
-      if(orderData.pay_amt === ""){
+    if(orderData.is_split_payment===1){
+      if (orderData.pay_amt === "" || +orderData.pay_amt === 0 || orderData.remaining_amt === "" || orderData.pay_count === "" || +orderData.pay_count === 0) {
+        if(orderData.pay_amt === "" || +orderData.pay_amt == 0){
+          setFieldErrors((preValue) => ({
+            ...preValue,
+            pay_amt: orderData.pay_amt === "" || +orderData.pay_amt == 0 ? "Payment Amount is required" : "",
+          }));
+        }
+        if(orderData.remaining_amt === ""){
+          setFieldErrors((preValue) => ({
+            ...preValue,
+            remaining_amt: orderData.remaining_amt === "" ? "Remaining Amount is required" : "",
+          }));
+        }
         setFieldErrors((preValue) => ({
           ...preValue,
-          pay_amt: orderData.pay_amt === "" ? "Payment is required" : "",
+          pay_count: orderData.pay_count === "" || +orderData.pay_count==0 ? "Pay Count is required" : "",
         }));
+  
+        return; // Prevent checking the checkbox
       }
-      if(orderData.remaining_amt === ""){
-        setFieldErrors((preValue) => ({
-          ...preValue,
-          remaining_amt: orderData.remaining_amt === "" ? "Remaining Amount is required" : "",
-        }));
-      }
-      setFieldErrors((preValue) => ({
-        ...preValue,
-        pay_count: orderData.pay_count === "" ? "Pay Count is required" : "",
-      }));
-
-      return; // Prevent checking the checkbox
     }
     setConfirmModalOpen(true);
   };
@@ -321,16 +328,18 @@ const OrderRetrieve = () => {
     formData.append("merchant_id",orderData.merchant_id);
     formData.append("order_id",orderData.order_id);
     formData.append("is_split_payment",orderData.is_split_payment);
-    formData.append("pay_amt",orderData.pay_amt);
-    formData.append("remaining_amt",orderData.remaining_amt);
-    formData.append("pay_count",orderData.pay_count);
+    if(orderData.is_split_payment===1){
+      formData.append("pay_amt",orderData.pay_amt);
+      formData.append("remaining_amt",orderData.remaining_amt);
+      formData.append("pay_count",orderData.pay_count);
+    }
     formData.append("token_id",userTypeData?.token_id);
     formData.append("login_type",userTypeData?.login_type);
 
-    for (const [key, value] of formData.entries()) {
-      console.log(`${key}: ${value}`);
-    }
-    return
+    // for (const [key, value] of formData.entries()) {
+    //   console.log(`${key}: ${value}`);
+    // }
+    // return
     setLoader(true);
     try {
       const res = await axios.post(BASE_URL + ORDERRETRIEVE_SUBMIT, formData, {
@@ -340,13 +349,23 @@ const OrderRetrieve = () => {
         },
       });
 
-      // const data = await res.data.status;
-      // const update_message = await res.data.message;
-      // if (data === true) {
-      //   ToastifyAlert("Added Successfully", "success");
-      // } else{
-      //   ToastifyAlert("Added Successfully", "success");
-      // }
+      const data = await res.data.status;
+      const update_message = await res.data.message;
+      if (data === true) {
+        setSelectedStorefrom("-- Select Store --")
+        setOrderData((preValue) => ({
+          ...preValue,
+          order_id: "",
+        }));
+        setFieldErrors((preValue) => ({
+          ...preValue,
+          order_id: "",
+        }));
+        setSplitCheckbox(false)
+        ToastifyAlert("Updated Successfully", "success");
+      } else{
+        ToastifyAlert(update_message, "error");
+      }
     } catch (error) {
       if (error.status == 401 || error.response.status === 401) {
         getUnAutherisedTokenMessage();
@@ -463,12 +482,12 @@ const OrderRetrieve = () => {
                               </StyledTableCell>
                               <StyledTableCell>
                                 <div className="text-[#000000] order_method">
-                                  {data.pay_amt || ""}
+                                  {data.pay_amount || ""}
                                 </div>
                               </StyledTableCell>
                               <StyledTableCell>
                                 <div className="text-[#000000] order_method capitalize">
-                                  {data.remaining_amt || ""}
+                                  {data.remaining_amount || ""}
                                 </div>
                               </StyledTableCell>
                               <StyledTableCell>
@@ -498,7 +517,7 @@ const OrderRetrieve = () => {
                   className="q-details-page-label"
                   htmlFor="storefromFilter"
                 >
-                  Payment
+                  Payment Amount
                 </label>
                 <BasicTextFields
                   type="text"
@@ -507,7 +526,7 @@ const OrderRetrieve = () => {
                   maxLength={8}
                   onChangeFun={handleUserInputChange}
                   value={orderData.pay_amt}
-                  placeholder={"Payment"}
+                  placeholder={"Payment Amount"}
                   sx={{ pt: 0.5 }}
                 />
                  {fieldErrors?.pay_amt && (
@@ -593,7 +612,7 @@ const OrderRetrieve = () => {
       </div>
 
       <ConfirmModal
-        headerText="Are you sure you want to pay?"
+        headerText="Are you sure you want to Order Retrieve?"
         open={confirmModalOpen}
         onClose={() => {
           setConfirmModalOpen(false);

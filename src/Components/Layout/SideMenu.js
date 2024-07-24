@@ -70,6 +70,9 @@ import NestedDropdownMenu from "./NestedDropdownMenu";
 import { BASE_URL } from "../../Constants/Config";
 import Support from "../../Assests/Category/Support.svg";
 import Support1 from "../../Assests/Category/Support-1.svg";
+import OrderRetrieve from "../../Assests/OrderRetireve/Order_retrive.svg";
+import OrderRetrievey from "../../Assests/OrderRetireve/Order_retrivey.svg";
+
 
 const SideMenu = () => {
   const { LoginGetDashBoardRecordJson, LoginAllStore, userTypeData } =
@@ -1367,19 +1370,19 @@ const SuperAdminMenuItems = [
     id: 14,
     icon: (
       <img
-        src={MerchantIcon}
+        src={OrderRetrieve}
         alt="labal"
         className="h-6 w-10 mt-4 mb-4 hoverable-image"
       />
     ),
     activeIcon: (
       <img
-        src={MerchantActive}
+        src={OrderRetrievey}
         alt="order-retrieve"
         className="h-6 w-10 mt-4 mb-4"
       />
     ),
-    text: "Order Retrieve ",
+    text: "Order Retrieve",
     link: "/unapprove/order-retrieve",
   },
 

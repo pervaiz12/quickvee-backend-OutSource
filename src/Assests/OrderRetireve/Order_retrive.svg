@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="24" height="24" viewBox="0 0 24 24">
+  <defs>
+    <clipPath id="clip-path">
+      <rect id="Rectangle_2511" data-name="Rectangle 2511" width="24" height="24" transform="translate(19 339)" fill="none" stroke="#707070" stroke-width="1"/>
+    </clipPath>
+  </defs>
+  <g id="Order_retrive_1" data-name="Order retrive 1" transform="translate(-19 -339)" clip-path="url(#clip-path)">
+    <g id="Group_7644" data-name="Group 7644" transform="translate(21.516 341.516)">
+      <g id="Group_7646" data-name="Group 7646" transform="translate(0.651 0.651)">
+        <path id="Path_8243" data-name="Path 8243" d="M111.678,342.994v1.2a1.5,1.5,0,0,1-1.5,1.5H101.5a1.5,1.5,0,0,1-1.5-1.5V340" transform="translate(-97.006 -328.023)" fill="none" stroke="#9e9e9e" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+        <path id="Path_8244" data-name="Path 8244" d="M216,261.5a1.5,1.5,0,1,1,2.994,0,1.5,1.5,0,0,0,1.5,1.5h5.839v-1.5a1.5,1.5,0,0,0-1.5-1.5H217.5" transform="translate(-208.664 -251.017)" fill="none" stroke="#9e9e9e" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+        <path id="Path_8245" data-name="Path 8245" d="M30.33,261.5a1.5,1.5,0,1,0-2.994,0,1.5,1.5,0,0,1-1.5,1.5H20v-1.5a1.5,1.5,0,0,1,1.5-1.5h7.336" transform="translate(-20 -251.017)" fill="none" stroke="#9e9e9e" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+        <path id="Path_8246" data-name="Path 8246" d="M136.256,25.988a4.491,4.491,0,1,1,8.472,0" transform="translate(-131.658 -20)" fill="none" stroke="#9e9e9e" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+        <path id="Path_8247" data-name="Path 8247" d="M323.514,134.777l-2.406,1.782-1.782-2.406" transform="translate(-308.123 -129.881)" fill="none" stroke="#9e9e9e" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      </g>
+    </g>
+  </g>
+</svg>
