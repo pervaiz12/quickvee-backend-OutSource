@@ -184,8 +184,8 @@ export default function InventoryLogic() {
         setLoader(false);
 
         setsearchProduct([...searchProduct, ...response?.data]);
-        if (selectCategoryId == "all" && response?.data.length !== 10) {
-          setEndOfDataList(true);
+        if (selectCategoryId == "all" ) {
+          // setEndOfDataList(true);
           setOffset(offset + 10);
         } else {
           setOffset(0);
